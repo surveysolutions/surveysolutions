@@ -1,0 +1,34 @@
+﻿@using RavenQuestionnaire.Core.Views.Location
+@model LocationBrowseView
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<ul>
+    @foreach (var item in Model.Items)
+    {
+        <li>
+            <strong> @item.Location </strong>
+            @Html.ActionLink("See all " + item.UserCount + " users", "Index", "User", new { LocationId = item.Id }, null)
+            @* <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+           
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreationDate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new {  id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new {  id=item.Id })|
+
+            
+        </td>
+    </tr>*@ </li>
+    }
+</ul>
+<div class="pager">
+    @Html.Pager(Model.PageSize, Model.Page, Model.TotalCount)
+</div>

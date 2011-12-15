@@ -1,0 +1,37 @@
+﻿@using RavenQuestionnaire.Core.Views.Questionnaire
+@model QuestionnaireView
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<fieldset>
+    <legend>@Model.Title</legend>
+    <div class="display-label">
+        Title</div>
+    <div class="display-field">
+        <b>@Html.DisplayFor(model => model.Title)</b>
+    </div>
+    <div class="display-label">
+        Creation Date</div>
+    <div class="display-field">
+        <b>@Html.DisplayFor(model => model.CreationDate)</b>
+    </div>
+    <div class="display-label">
+        Last edit Date</div>
+    <div class="display-field">
+        <b>@Html.DisplayFor(model => model.LastEntryDate)</b>
+    </div>
+    <br/>
+        <div class="display-label">
+        <b>Questions:</b></div>
+    @{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}
+   
+    <div id="addNewQuestion"></div>
+   
+    @Ajax.ActionLink("Add Question", "Create", "Question", new { Model.Id }, new AjaxOptions { UpdateTargetId = "addNewQuestion" }) 
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) | 
+    @*   @Html.ActionLink("Add group", "Manage", "Group", new { qid = Model.Id }, new { }) |*@
+    @*  @Html.ActionLink("Applications", "Manage", "CompletedQre", new { questionnaireId = Model.Id }, new { }) | *@
+    @Html.ActionLink("Back to List of Questionnaires", "Index")
+</p>

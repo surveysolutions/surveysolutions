@@ -1,0 +1,13 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Answer
+@using RavenQuestionnaire.Core.Views.Question
+@model QuestionView
+@foreach (var item in Model.Answers)
+{
+
+    Html.RenderPartial("~/Views/Answer/_EditRow.cshtml", item);
+
+}
+<div id="divNewAnswer">
+</div>
+@Ajax.ActionLink("Add Answer", "Create", "Answer", new { questionPublicKey = Model.PublicKey }, new AjaxOptions { UpdateTargetId = "divNewAnswer", InsertionMode = InsertionMode.InsertBefore })

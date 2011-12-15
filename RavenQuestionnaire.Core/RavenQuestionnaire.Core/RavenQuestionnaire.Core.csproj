@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7E143353-A648-4435-819F-93A748A90704}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RavenQuestionnaire.Core</RootNamespace>
+    <AssemblyName>RavenQuestionnaire.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AsyncCtpLibrary">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB-Embedded.1.0.499\lib\net40\AsyncCtpLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Esent.Interop">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB-Embedded.1.0.499\lib\net40\Esent.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.NRefactory">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB-Embedded.1.0.499\lib\net40\ICSharpCode.NRefactory.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\Newtonsoft.Json.4.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Conventions">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.Extensions.Conventions.2.2.0.5\lib\net40-Full\Ninject.Extensions.Conventions.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Debug">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.1.0.499\lib\net40\Raven.Client.Debug.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB-Embedded.1.0.499\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.MvcIntegration">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.1.0.499\lib\net40\Raven.Client.MvcIntegration.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Database">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB-Embedded.1.0.499\lib\net40\Raven.Database.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Munin">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB-Embedded.1.0.499\lib\net40\Raven.Munin.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Storage.Esent">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB-Embedded.1.0.499\lib\net40\Raven.Storage.Esent.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Storage.Managed">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB-Embedded.1.0.499\lib\net40\Raven.Storage.Managed.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommandHandlers\AddNewQuestionHandler.cs" />
+    <Compile Include="CommandHandlers\CreateNewCompleteQuestionnaireHandler.cs" />
+    <Compile Include="CommandHandlers\CreateNewLocationHandler.cs" />
+    <Compile Include="CommandHandlers\CreateNewQuestionnaireHandler.cs" />
+    <Compile Include="CommandHandlers\CreateNewStatusHandler.cs" />
+    <Compile Include="CommandHandlers\CreateNewUserHandler.cs" />
+    <Compile Include="CommandHandlers\DeleteCompleteQuestionnaireHandler.cs" />
+    <Compile Include="CommandHandlers\DeleteQuestionHandler.cs" />
+    <Compile Include="CommandHandlers\DeleteQuestionnaireHandler.cs" />
+    <Compile Include="CommandHandlers\DeleteUserHandler.cs" />
+    <Compile Include="CommandHandlers\UpdateCompleteQuestionnaireHandler.cs" />
+    <Compile Include="CommandHandlers\UpdateQuestionHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CommandHandlers\UpdateQuestionnaireHandler.cs" />
+    <Compile Include="CommandHandlers\UpdateStatusRestrictionHandler.cs" />
+    <Compile Include="CommandHandlers\UpdateUserHandler.cs" />
+    <Compile Include="CommandInvoker.cs" />
+    <Compile Include="Commands\CreateNewLocationCommand.cs" />
+    <Compile Include="Commands\CreateNewStatusCommand.cs" />
+    <Compile Include="Commands\IComand.cs" />
+    <Compile Include="Commands\AddNewQuestionCommand.cs" />
+    <Compile Include="Commands\CreateNewCompleteQuestionnaireCommand.cs" />
+    <Compile Include="Commands\CreateNewQuestionnaireCommand.cs" />
+    <Compile Include="Commands\CreateNewUserCommand.cs" />
+    <Compile Include="Commands\DeleteCompleteQuestionnaireCommand.cs" />
+    <Compile Include="Commands\DeleteQuestionCommand.cs" />
+    <Compile Include="Commands\DeleteQuestionnaireCommand.cs" />
+    <Compile Include="Commands\DeleteUserCommand.cs" />
+    <Compile Include="Commands\UpdateCompleteQuestionnaireCommand.cs" />
+    <Compile Include="Commands\UpdateQuestionCommand.cs" />
+    <Compile Include="Commands\UpdateQuestionnaireCommand.cs" />
+    <Compile Include="Commands\UpdateStatusRestrictionsCommand.cs" />
+    <Compile Include="Commands\UpdateUserCommand.cs" />
+    <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
+    <Compile Include="Conventions\RegisterGenericTypesOfInterface.cs" />
+    <Compile Include="CoreRegistry.cs" />
+    <Compile Include="Documents\CompleteQuestionnaireDocument.cs" />
+    <Compile Include="Documents\EventDocument.cs" />
+    <Compile Include="Documents\LocationDocument.cs" />
+    <Compile Include="Documents\QuestionnaireDocument.cs" />
+    <Compile Include="Documents\StatusDocument.cs" />
+    <Compile Include="Documents\UserDocument.cs" />
+    <Compile Include="Entities\CompleteQuestionnaire.cs" />
+    <Compile Include="Entities\Event.cs" />
+    <Compile Include="Entities\IEntity.cs" />
+    <Compile Include="Entities\Location.cs" />
+    <Compile Include="Entities\Questionnaire.cs" />
+    <Compile Include="Entities\Status.cs" />
+    <Compile Include="Entities\SubEntities\Answer.cs" />
+    <Compile Include="Entities\SubEntities\AnswerType.cs" />
+    <Compile Include="Entities\SubEntities\CompleteAnswer.cs" />
+    <Compile Include="Entities\SubEntities\LocationWithUserStatistic.cs" />
+    <Compile Include="Entities\SubEntities\Question.cs" />
+    <Compile Include="Entities\SubEntities\QuestionType.cs" />
+    <Compile Include="Entities\SubEntities\Supervisor.cs" />
+    <Compile Include="Entities\SubEntities\UserRoles.cs" />
+    <Compile Include="Entities\User.cs" />
+    <Compile Include="ICommandHandler.cs" />
+    <Compile Include="ICommandInvoker.cs" />
+    <Compile Include="IEntityRepository.cs" />
+    <Compile Include="Indexes\UsersInLocationIndex.cs" />
+    <Compile Include="IViewFactory.cs" />
+    <Compile Include="IViewRepsoitory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\CompleteQuestionnaireRepository.cs" />
+    <Compile Include="Repositories\EntityRepository.cs" />
+    <Compile Include="Repositories\EventRepository.cs" />
+    <Compile Include="Repositories\ICompleteQuestionnaireRepository.cs" />
+    <Compile Include="Repositories\ILocationRepository.cs" />
+    <Compile Include="Repositories\IEventRepository.cs" />
+    <Compile Include="Repositories\IQuestionnaireRepository.cs" />
+    <Compile Include="Repositories\IStatusRepository.cs" />
+    <Compile Include="Repositories\IUserRepository.cs" />
+    <Compile Include="Repositories\LocationRepository.cs" />
+    <Compile Include="Repositories\QuestionnaireRepository.cs" />
+    <Compile Include="Repositories\StatusRepository.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Services\CompleteQuestionnaireUploaderService.cs" />
+    <Compile Include="Services\ICompleteQuestionnaireUploaderService.cs" />
+    <Compile Include="Services\IQuestionnaireService.cs" />
+    <Compile Include="Utility\IdUtil.cs" />
+    <Compile Include="Utility\SimpleHash.cs" />
+    <Compile Include="ViewRepository.cs" />
+    <Compile Include="Views\Answer\AnswerView.cs" />
+    <Compile Include="Views\Answer\CompleteAnswerView.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseView.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseViewFactory.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireView.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewFactory.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
+    <Compile Include="Views\Location\LocationBrowseInputModel.cs" />
+    <Compile Include="Views\Location\LocationBrowseItem.cs" />
+    <Compile Include="Views\Location\LocationBrowseView.cs" />
+    <Compile Include="Views\Location\LocationBrowseViewFactory.cs" />
+    <Compile Include="Views\Event\EventBrowseInputModel.cs" />
+    <Compile Include="Views\Event\EventBrowseItem.cs" />
+    <Compile Include="Views\Event\EventBrowseView.cs" />
+    <Compile Include="Views\Event\EventView.cs" />
+    <Compile Include="Views\Event\EventViewFactory.cs" />
+    <Compile Include="Views\Event\EventViewInputModel.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireBrowseInputModel.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireBrowseView.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireBrowseViewFactory.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireView.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireViewFactory.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireViewInputModel.cs" />
+    <Compile Include="Views\Question\CompleteQuestionView.cs" />
+    <Compile Include="Views\Question\QuestionView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Question\QuestionViewFactory.cs" />
+    <Compile Include="Views\Question\QuestionViewInputModel.cs" />
+    <Compile Include="Views\Status\StatusBrowseInputModel.cs" />
+    <Compile Include="Views\Status\StatusBrowseItem.cs" />
+    <Compile Include="Views\Status\StatusBrowseView.cs" />
+    <Compile Include="Views\Status\StatusBrowseViewFactory.cs" />
+    <Compile Include="Views\Status\StatusView.cs" />
+    <Compile Include="Views\Status\StatusViewFactory.cs" />
+    <Compile Include="Views\Status\StatusViewInputModel.cs" />
+    <Compile Include="Views\Status\SubView\RolePermission.cs" />
+    <Compile Include="Views\Status\SubView\StatusByRole.cs" />
+    <Compile Include="Views\User\UserBrowseInputModel.cs" />
+    <Compile Include="Views\User\UserBrowseItem.cs" />
+    <Compile Include="Views\User\UserBrowseView.cs" />
+    <Compile Include="Views\User\UserBrowseViewFactory.cs" />
+    <Compile Include="Views\User\UserView.cs" />
+    <Compile Include="Views\User\UserViewFactory.cs" />
+    <Compile Include="Views\User\UserViewInputModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

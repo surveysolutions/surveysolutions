@@ -1,0 +1,28 @@
+﻿@using RavenQuestionnaire.Core.Views.Status
+@model StatusBrowseView
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            Title
+        </th>
+        <th>
+        </th>
+    </tr>
+    @foreach (var item in Model.Items)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.ActionLink("Connections", "Edit", new { id = item.Id })
+            </td>
+        </tr>
+    }
+</table>
+<div class="pager">
+    @Html.Pager(Model.PageSize, Model.Page, Model.TotalCount)
+</div>

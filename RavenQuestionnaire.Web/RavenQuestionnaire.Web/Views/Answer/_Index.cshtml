@@ -1,0 +1,7 @@
+﻿@using RavenQuestionnaire.Core.Views.Answer
+@model IEnumerable<AnswerView>
+
+@foreach (var item in Model)
+{
+    Html.RenderPartial("~/Views/Answer/_AnswerRow.cshtml", item);
+}

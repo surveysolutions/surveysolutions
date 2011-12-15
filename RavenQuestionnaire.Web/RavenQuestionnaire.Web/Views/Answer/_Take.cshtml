@@ -1,0 +1,10 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Answer
+@model IEnumerable<CompleteAnswerView>
+@using (Html.BeginCollectionItem("answers"))
+{
+    foreach (var item in Model)
+     {
+         Html.RenderPartial("~/Views/Answer/_TakeRow.cshtml", item);
+     }
+}

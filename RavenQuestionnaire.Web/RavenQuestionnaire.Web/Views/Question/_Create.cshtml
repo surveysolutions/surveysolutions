@@ -1,0 +1,40 @@
+﻿@using RavenQuestionnaire.Core.Views.Question
+@using RavenQuestionnaire.Web.Models
+@model QuestionView
+<div id="divCreateForm">
+<script>
+    function HideCreateQuestionForm() {
+        $('#divCreateForm').remove();
+    }
+</script>
+@using (Ajax.BeginForm("Save", "Question",
+                                         new AjaxOptions
+                                             {
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 UpdateTargetId = "divAllQuestions",
+                                                 OnSuccess = "HideCreateQuestionForm"
+                                             }))
+{
+    @Html.ValidationSummary(true)
+   
+    <div class="editor-label">
+        @Html.LabelFor(model => model.QuestionText)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.QuestionText)
+        @Html.ValidationMessageFor(model => model.QuestionText)
+    </div>
+   if (Model.PublicKey!= Guid.Empty)
+   {
+    <div>
+        @Html.HiddenFor(model => model.PublicKey)
+    </div>}
+    @Html.HiddenFor(model => model.QuestionnaireId)
+    <div style="margin-left: 15px;">
+        @{Html.RenderPartial("~/Views/Answer/_EditAnswers.cshtml", Model);}
+    </div>
+    <p>
+        <input type="submit" value="Save" />
+    </p>
+}
+</div>

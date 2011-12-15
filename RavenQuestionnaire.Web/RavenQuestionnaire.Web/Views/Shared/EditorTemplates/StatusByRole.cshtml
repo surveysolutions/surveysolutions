@@ -1,0 +1,21 @@
+﻿@using RavenQuestionnaire.Core.Views.Status.SubView
+@model  StatusByRole
+<tr>
+    <td>
+        @Html.DisplayTextFor(model => model.Status.Title)
+        
+    </td>
+    @Html.HiddenFor(model => model.Status.Id)
+
+
+
+
+    @Html.EditorFor(model => model.StatusRestriction) 
+    @*@foreach (var statusRestriction in Model.StatusRestriction)
+    {
+        @#1#Html.Hidden(string.Format("StatusRolesMatrix[{0}].Index", Model.Status.Id), statusRestriction.Key)#1#
+        <td style="text-align: center">
+            @Html.CheckBox(string.Format("StatusR[{0}][{1}]", Model.Status.Id, statusRestriction.Key), statusRestriction.Permit)
+        </td>
+    }*@
+    </tr>

@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Utility;
+
+namespace RavenQuestionnaire.Core.Views.Event
+{
+    public class EventBrowseItem
+    {
+
+        public string Id
+        {
+            get { return IdUtil.ParseId(_id); }
+            private set { _id = value; }
+        }
+        private string _id;
+
+        public Guid PublicKey { get; private set; }
+        public DateTime CreationDate { get; private set; }
+        public ICommand Command { get;private set; }
+        
+
+        public EventBrowseItem()
+        {
+        }
+    }
+}

@@ -1,0 +1,16 @@
+﻿@using RavenQuestionnaire.Core.Entities.SubEntities
+@if (Request.IsAuthenticated)
+{
+    <text>Welcome <strong>@User.Identity.Name</strong>!
+    @if (Roles.IsUserInRole(UserRoles.Administrator.ToString()))
+    {     
+        <text> @Html.ActionLink("Administration", "Index", "User") </text>
+        <text> @Html.ActionLink("Dashboard", "Index", "Location") </text>
+    }
+    [ @Html.ActionLink("Log Off", "LogOff", "Account") ]</text>
+
+}
+else
+{
+    @:[ @Html.ActionLink("Log On", "LogOn", "Account") ]
+}

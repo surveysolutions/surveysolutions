@@ -1,0 +1,18 @@
+﻿@using RavenQuestionnaire.Core.Views.Status
+@model StatusView
+Status <strong> @Html.DisplayTextFor(model => model.Title) </strong>
+<table>
+    <tr>
+        <td style="background-color: gainsboro">
+            Statuses\Roles
+        </td>
+        @foreach (var roleItem in ViewBag.AllRoles)
+        {
+            <td>@roleItem
+            </td> 
+        }
+    </tr>
+    @Html.HiddenFor(model => model.Id)
+    @Html.EditorFor(model => model.StatusRolesMatrix)
+</table>
+

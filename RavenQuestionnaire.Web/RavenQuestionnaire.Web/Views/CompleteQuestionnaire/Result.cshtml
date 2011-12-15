@@ -1,0 +1,46 @@
+﻿@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
+@model CompleteQuestionnaireView
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("UpdateResult", "CompleteQuestionnaire"))
+{
+    <fieldset>
+        <legend>@Model.Title</legend>
+        <div class="display-label">
+            Title</div>
+        <div class="display-field">
+            <b>@Html.DisplayFor(model => model.Title)</b>
+        </div>
+        <div class="display-label">
+            Creation Date</div>
+        <div class="display-field">
+            <b>@Html.DisplayFor(model => model.CreationDate)</b>
+        </div>
+        <div class="display-label">
+            Last edit Date</div>
+        <div class="display-field">
+            <b>@Html.DisplayFor(model => model.LastEntryDate)</b>
+        </div>
+        <br />
+
+        <div class="display-label">
+           Status</div>
+        <div class="display-field">
+            <b>@Html.DisplayFor(model => model.Status)</b>
+        </div>
+        <br />
+
+        <div class="display-label">
+            <b>Questions:</b></div>
+        @{ Html.RenderPartial("~/Views/Question/_Take.cshtml", Model.Questions); }
+        @Html.HiddenFor(model => Model.Id)
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+  
+}
+<p>
+    @Html.ActionLink("Back to List of Questionnaires", "Index")
+</p>

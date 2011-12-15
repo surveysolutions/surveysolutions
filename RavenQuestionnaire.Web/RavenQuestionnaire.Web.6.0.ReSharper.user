@@ -1,0 +1,316 @@
+<Configuration>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Repositories/f:IStatusRepository.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Repositories/f:UserRepository.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Repositories/f:StatusRepository.cs" caret="474" fromTop="14" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Repositories/f:EntityRepository.cs" caret="610" fromTop="20" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/f:CreateNewStatusHandler.cs" caret="646" fromTop="18" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:UserDocument.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:QuestionnaireDocument.cs" caret="251" fromTop="9" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/f:IEntityRepository.cs" caret="289" fromTop="10" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/f:UpdateQuestionnaireHandler.cs" caret="714" fromTop="19" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:StatusDocument.cs" caret="240" fromTop="9" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:User.cs" caret="90" fromTop="4" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/f:CommandInvoker.cs" caret="656" fromTop="17" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:Status.cs" caret="215" fromTop="7" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/f:UpdateStatusRestrictionHandler.cs" caret="581" fromTop="18" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusBrowseItem.cs" caret="455" fromTop="19" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusView.cs" caret="518" fromTop="14" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/d:SubView/f:RolePermission.cs" caret="76" fromTop="2" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/d:SubView/f:StatusByRole.cs" caret="185" fromTop="8" />
+      <File id="8E2698A4-1286-4534-BD2C-04C76AE2DA5B/d:Helpers/f:EntityNames.cs" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:UserController.cs" caret="2247" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:App_Start/f:NinjectMVC3.cs" caret="1766" fromTop="37" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/d:EditorTemplates/f:StatusView.cshtml" caret="141" fromTop="3" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Status/f:Edit.cshtml" caret="216" fromTop="9" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/d:EditorTemplates/f:RolePermission.cshtml" caret="113" fromTop="3" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/d:EditorTemplates/f:StatusByRole.cshtml" caret="220" fromTop="9" />
+      <File id="8E2698A4-1286-4534-BD2C-04C76AE2DA5B/d:Helpers/f:ClientIdHelper.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Utility/f:IdUtil.cs" caret="667" fromTop="19" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/f:UpdateUserCommand.cs" caret="790" fromTop="23" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/f:UpdateStatusRestrictionsCommand.cs" caret="512" fromTop="14" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="2617" fromTop="18" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/d:EditorTemplates/f:StatusByRole.cshtml" caret="662" fromTop="19" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/d:EditorTemplates/f:StatusByRole.cshtml" caret="288" fromTop="13" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/d:EditorTemplates/f:RolePermission.cshtml" caret="113" fromTop="3" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:App_Start/f:NinjectMVC3.cs" caret="1766" fromTop="17" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/d:SubView/f:StatusByRole.cs" caret="708" fromTop="25" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/d:SubView/f:StatusByRole.cs" caret="174" fromTop="7" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusBrowseItem.cs" caret="177" fromTop="3" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusBrowseItem.cs" caret="364" fromTop="11" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/d:SubView/f:StatusByRole.cs" caret="349" fromTop="13" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusBrowseItem.cs" caret="455" fromTop="15" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusView.cs" caret="426" fromTop="11" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusView.cs" caret="707" fromTop="18" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="2878" fromTop="18" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="1758" fromTop="17" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/f:UpdateUserCommand.cs" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="2572" fromTop="30" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="2572" fromTop="27" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="2595" fromTop="28" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="3327" fromTop="11" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:StatusDocument.cs" caret="546" fromTop="19" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/f:UpdateStatusRestrictionHandler.cs" caret="683" fromTop="20" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:StatusDocument.cs" caret="696" fromTop="25" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:StatusDocument.cs" caret="492" fromTop="20" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:StatusDocument.cs" caret="383" fromTop="17" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:Status.cs" caret="908" fromTop="29" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:Status.cs" caret="259" fromTop="8" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:User.cs" caret="2406" fromTop="20" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:User.cs" caret="90" fromTop="4" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:StatusDocument.cs" caret="240" fromTop="9" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/f:UpdateStatusRestrictionsCommand.cs" caret="502" fromTop="14" />
+    </RecentEdits>
+  </RecentFiles>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerNUnit>
+    <NUnitInstallDir IsNull="False">
+    </NUnitInstallDir>
+    <UseAddins>Never</UseAddins>
+  </UnitTestRunnerNUnit>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="livetemplates.csharp.usevar">True</setting>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="CSharpCodeCompletionContext">
+      <Item value="Guid`0" priority="159" />
+      <Item value="public" priority="988" />
+      <Item value="DateTime`0" priority="159" />
+      <Item value="AbstractComand`0" priority="95" />
+      <Item value="string" priority="671" />
+      <Item value="EventDocument`0" priority="31" />
+      <Item value="CreationDate" priority="31" />
+      <Item value="PublicKey" priority="31" />
+      <Item value="new" priority="576" />
+      <Item value="interface" priority="30" />
+      <Item value="ISyncAdvancedSessionOperation`0" priority="63" />
+      <Item value="as" priority="31" />
+      <Item value="ICommand" priority="32" />
+      <Item value="command" priority="58" />
+      <Item value="where" priority="31" />
+      <Item value="T`0" priority="31" />
+      <Item value="ICommandHandler" priority="31" />
+      <Item value="Mock`0" priority="31" />
+      <Item value="ICommand`0" priority="158" />
+      <Item value="Mock&lt;ICommand&gt;" priority="28" />
+      <Item value="private" priority="127" />
+      <Item value="IEntity" priority="31" />
+      <Item value="Event`0" priority="95" />
+      <Item value="document" priority="91" />
+      <Item value="return" priority="255" />
+      <Item value="innerDocument" priority="31" />
+      <Item value="IEventRepository`0" priority="31" />
+      <Item value="IEntityRepository" priority="31" />
+      <Item value="Event" priority="29" />
+      <Item value="int" priority="127" />
+      <Item value="Status" priority="64" />
+      <Item value="ResponsibleId" priority="32" />
+      <Item value="this" priority="319" />
+      <Item value="Dictionary" priority="63" />
+      <Item value="RoleStatusList" priority="31" />
+      <Item value="CreateNewStatusDependencyHandler`0" priority="26" />
+      <Item value="StatusDependency" priority="28" />
+      <Item value="ActionResult`0" priority="31" />
+      <Item value="StatusView`0" priority="63" />
+      <Item value="Status`0" priority="58" />
+      <Item value="StatusBrowseItem`0" priority="31" />
+      <Item value="Title" priority="63" />
+      <Item value="IDisposable`0" priority="31" />
+      <Item value="null" priority="122" />
+      <Item value="id" priority="31" />
+      <Item value="title" priority="31" />
+      <Item value="RoleManagerEventArgs`0" priority="31" />
+      <Item value="var" priority="127" />
+      <Item value="Roles`0" priority="31" />
+      <Item value="in" priority="63" />
+      <Item value="questionnaireId" priority="31" />
+      <Item value="Dictionary&lt;string,List&lt;string&gt;&gt;" priority="115" />
+      <Item value="for" priority="93" />
+      <Item value="Html" priority="181" />
+      <Item value="Dictionary&lt;string,object&gt;" priority="28" />
+      <Item value="if" priority="95" />
+      <Item value="else" priority="31" />
+      <Item value="Where`1" priority="26" />
+      <Item value="bool" priority="255" />
+      <Item value="doc" priority="31" />
+      <Item value="StatusRoles" priority="64" />
+      <Item value="statusRoles" priority="31" />
+      <Item value="model" priority="218" />
+      <Item value="true" priority="95" />
+      <Item value="AddRolesListToViewBag`0" priority="31" />
+      <Item value="UserRoles`0" priority="31" />
+      <Item value="Model" priority="214" />
+      <Item value="false" priority="63" />
+      <Item value="IEnumerable" priority="63" />
+      <Item value="foreach" priority="90" />
+      <Item value="DictionaryValueProvider" priority="29" />
+      <Item value="role" priority="122" />
+      <Item value="HttpPost" priority="26" />
+      <Item value="using" priority="59" />
+      <Item value="BeginHtmlFieldPrefixScope`0" priority="3" />
+      <Item value="rowName" priority="31" />
+      <Item value="View`0" priority="31" />
+      <Item value="Dictionary&lt;string,bool&gt;" priority="28" />
+      <Item value="status" priority="32" />
+      <Item value="KeyValuePair" priority="31" />
+      <Item value="RolePermission" priority="28" />
+      <Item value="List&lt;RolePermission&gt;" priority="57" />
+      <Item value="RolePermission`0" priority="31" />
+      <Item value="StatusBrowseItem" priority="57" />
+      <Item value="Id" priority="31" />
+      <Item value="Permit" priority="31" />
+      <Item value="value" priority="95" />
+      <Item value="List&lt;StatusByRole&gt;" priority="28" />
+      <Item value="item" priority="31" />
+      <Item value="roles" priority="31" />
+      <Item value="AddNewQuestionCommand`0" priority="26" />
+      <Item value="List&lt;string&gt;" priority="28" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Guid">
+      <Item value="NewGuid`0" priority="53" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.DateTime">
+      <Item value="UtcNow" priority="53" />
+      <Item value="Now" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Moq.Mock`1">
+      <Item value="Object" priority="161" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.String">
+      <Item value="ToLower`0" priority="110" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Documents.CompleteQuestionnaireDocument">
+      <Item value="Status" priority="22" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.CompleteQuestionnaire.CompleteQuestionnaireView">
+      <Item value="Status" priority="27" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Int32">
+      <Item value="CompareTo`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Entities.StatusDependency">
+      <Item value="innerDocument" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.Status.StatusBrowseItem">
+      <Item value="Id" priority="284" />
+      <Item value="Title" priority="154" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Web.Controllers.StatusController">
+      <Item value="viewRepository" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.Status.StatusView">
+      <Item value="Id" priority="107" />
+      <Item value="Title" priority="26" />
+      <Item value="StatusRoles" priority="107" />
+      <Item value="StatusRolesMatrix" priority="204" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Web.Security.Roles">
+      <Item value="GetAllRoles`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="HtmlCodeCompletionContext">
+      <Item value="style" priority="19" />
+      <Item value="float" priority="6" />
+      <Item value="strong" priority="12" />
+      <Item value="table" priority="18" />
+      <Item value="background-color" priority="6" />
+      <Item value="cyan" priority="4" />
+      <Item value="gainsboro" priority="4" />
+      <Item value="text-align" priority="8" />
+      <Item value="center" priority="8" />
+      <Item value="br" priority="13" />
+      <Item value="tr" priority="5" />
+    </ItemStatistics>
+    <ItemStatistics item="CssCodeCompletionContext">
+      <Item value="float" priority="0" />
+      <Item value="background-color" priority="0" />
+      <Item value="cyan" priority="1" />
+      <Item value="gainsboro" priority="1" />
+      <Item value="text-align" priority="0" />
+      <Item value="center" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="RazorTransitionCompletionContext">
+      <Item value="for" priority="7" />
+      <Item value="Html" priority="41" />
+      <Item value="using" priority="15" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Web.Mvc.HtmlHelper`1">
+      <Item value="CheckBoxFor`1" priority="54" />
+      <Item value="BeginHtmlFieldPrefixScope`0" priority="26" />
+      <Item value="Hidden`0" priority="55" />
+      <Item value="LabelFor`2" priority="22" />
+      <Item value="DisplayTextFor`2" priority="50" />
+      <Item value="EditorFor`2" priority="50" />
+      <Item value="EditorForModel`0" priority="22" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.String">
+      <Item value="IsNullOrEmpty`0" priority="26" />
+      <Item value="Format`0" priority="82" />
+      <Item value="Empty" priority="54" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.IEnumerable`1">
+      <Item value="Where`1" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Documents.StatusDocument">
+      <Item value="IsVisible" priority="26" />
+      <Item value="StatusRoles" priority="45" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Commands.UpdateStatusRestrictionsCommand">
+      <Item value="StatusId" priority="22" />
+      <Item value="StatusRoles" priority="22" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.Dictionary`2">
+      <Item value="Contains`1" priority="22" />
+      <Item value="ContainsKey`0" priority="76" />
+      <Item value="Add`0" priority="81" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.IDictionary`2">
+      <Item value="Add`0" priority="53" />
+      <Item value="Keys" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.List`1">
+      <Item value="Contains`0" priority="26" />
+      <Item value="Add`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.Status.SubView.StatusByRole">
+      <Item value="Status" priority="104" />
+      <Item value="StatusRestriction" priority="76" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.KeyValuePair`2">
+      <Item value="Key" priority="26" />
+      <Item value="Value" priority="22" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.Status.SubView.RolePermission">
+      <Item value="RoleName" priority="103" />
+      <Item value="Permit" priority="103" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@RavenQuestionnaire.Core.Utility.IdUtil">
+      <Item value="CreateStatusId`0" priority="22" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+  <UnitTestSessions>
+    <Session>
+      <Name>Session #1</Name>
+      <Elements>
+        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandInvokerTests" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
+        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandInvokerTests.WhenCommandIsSentAndHandlerIsNotPresent_ExceptionThrown" ParentId="RavenQuestionnaire.Core.Tests.CommandInvokerTests" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandInvokerTests" MethodName="WhenCommandIsSentAndHandlerIsNotPresent_ExceptionThrown" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
+        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandInvokerTests.WhenCommandIsSentAndHandlerIsNotPresent_SessionIsNotFlushed" ParentId="RavenQuestionnaire.Core.Tests.CommandInvokerTests" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandInvokerTests" MethodName="WhenCommandIsSentAndHandlerIsNotPresent_SessionIsNotFlushed" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
+        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandInvokerTests.WhenCommandIsSentAndHandlerIsPresent_HandlerIsInvoked" ParentId="RavenQuestionnaire.Core.Tests.CommandInvokerTests" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandInvokerTests" MethodName="WhenCommandIsSentAndHandlerIsPresent_HandlerIsInvoked" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
+        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandInvokerTests.WhenCommandIsSentAndHandlerIsPresent_SessionIsFlushed" ParentId="RavenQuestionnaire.Core.Tests.CommandInvokerTests" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandInvokerTests" MethodName="WhenCommandIsSentAndHandlerIsPresent_SessionIsFlushed" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
+        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandInvokerTests.WhenCommandIsSentAndHandlerIsPresentButExceptionIsThrown_SessionIsNotFlushed" ParentId="RavenQuestionnaire.Core.Tests.CommandInvokerTests" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandInvokerTests" MethodName="WhenCommandIsSentAndHandlerIsPresentButExceptionIsThrown_SessionIsNotFlushed" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
+      </Elements>
+    </Session>
+  </UnitTestSessions>
+</Configuration>

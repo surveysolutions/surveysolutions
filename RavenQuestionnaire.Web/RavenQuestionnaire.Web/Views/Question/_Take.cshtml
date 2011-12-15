@@ -1,0 +1,6 @@
+﻿@model IEnumerable<RavenQuestionnaire.Core.Views.Question.CompleteQuestionView>
+<div>
+    @foreach (var item in Model)
+    {
+        Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", item);
+    }</div>

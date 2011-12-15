@@ -1,0 +1,18 @@
+﻿@using RavenQuestionnaire.Core.Views.Status
+@model StatusView
+@if (Model != null)
+{
+    using (Html.BeginForm("Update", "Status"))
+    {
+    
+    @Html.ValidationSummary(true)
+    
+    @Html.EditorForModel()
+    <p>
+        <input type="submit" value="Save" />
+    </p>
+    }
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

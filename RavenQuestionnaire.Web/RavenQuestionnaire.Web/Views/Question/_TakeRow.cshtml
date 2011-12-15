@@ -1,0 +1,12 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Question
+@model CompleteQuestionView
+<div>
+    <span><b>@Model.Index)</b> </span><span>
+        @Html.DisplayFor(modelItem => Model.QuestionText)
+    </span>
+    <div style="margin-left: 15px;">
+        @{ Html.RenderPartial("~/Views/Answer/_Take.cshtml", Model.Answers); }
+        <br />
+    </div>
+</div>

@@ -1,0 +1,21 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Question
+@model QuestionView
+@{ var currentRowId = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, Model.PublicKey.ToString()); }
+<div id="@currentRowId">
+    <span><b>@Model.Index)</b> </span><span>
+        @Html.DisplayFor(modelItem => Model.QuestionText)
+    </span><span>
+        @Ajax.ActionLink("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = currentRowId })
+        @Ajax.ActionLink("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" })
+    </span>
+    <div style="margin-left: 15px;">
+        @{Html.RenderPartial("~/Views/Answer/_Index.cshtml", Model.Answers);}
+    </div>
+    @* <div id="divNewAnswer">
+    </div>
+    <div id="addNewAnswer">
+    </div>
+    @Ajax.ActionLink("Edit answer list", "Edit", "Answer", new { Model.Id }, new AjaxOptions() { UpdateTargetId = "addNewAnswer" })
+    @Ajax.ActionLink("Add Answer", "Create", "Answer", new { Model.Id }, new AjaxOptions { UpdateTargetId = "addNewAnswer" })*@
+</div>
