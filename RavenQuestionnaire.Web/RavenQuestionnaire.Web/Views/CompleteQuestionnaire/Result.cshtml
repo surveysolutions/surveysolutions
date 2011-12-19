@@ -8,7 +8,7 @@
     <fieldset>
         <legend>@Model.Title</legend>
         <div class="display-label">
-            Title</div>
+            @Html.LabelFor(model => model.Title)</div>
         <div class="display-field">
             <b>@Html.DisplayFor(model => model.Title)</b>
         </div>
@@ -23,23 +23,27 @@
             <b>@Html.DisplayFor(model => model.LastEntryDate)</b>
         </div>
         <br />
-
-        <div class="display-label">
-           Status</div>
-        <div class="display-field">
-            <b>@Html.DisplayFor(model => model.Status)</b>
-        </div>
-        <br />
-
-        <div class="display-label">
-            <b>Questions:</b></div>
-        @{ Html.RenderPartial("~/Views/Question/_Take.cshtml", Model.Questions); }
+        <fieldset>
+            <legend>Questions</legend>
+            @{ Html.RenderPartial("~/Views/Question/_Take.cshtml", Model.Questions); }
+        </fieldset>
         @Html.HiddenFor(model => Model.Id)
+
+        <div class="display-label">
+            @Html.LabelFor(model => model.Status)</div>
+
+            @Html.DropDownListFor(model => model.Status,
+         new SelectList(ViewBag.AvailableStatuses/*, "Id", "Status", Model.Status*/))
+
+
+        @*<div class="display-field">
+            <b>@Html.DisplayFor(model => model.Status)</b>
+        </div>*@
+        <br />
         <p>
             <input type="submit" value="Save" />
         </p>
     </fieldset>
-  
 }
 <p>
     @Html.ActionLink("Back to List of Questionnaires", "Index")

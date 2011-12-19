@@ -23,7 +23,7 @@ namespace RavenQuestionnaire.Core.Documents
 
         public List<CompleteAnswer> CompletedAnswers { get; set; }
 
-        public int Status { set; get; }
+        public string Status { set; get; }
         public string ResponsibleId { get; set; }
 
         public string StatusChangeComment { get; set; }

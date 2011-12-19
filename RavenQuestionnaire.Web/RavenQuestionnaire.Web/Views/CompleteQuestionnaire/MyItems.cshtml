@@ -15,6 +15,9 @@
             Last edit date
         </th>
         <th>
+            Status
+        </th>
+        <th>
         </th>
     </tr>
     @foreach (var item in Model.Items)
@@ -28,6 +31,9 @@
             </td>            
             <td>
                 @Html.DisplayFor(modelItem => item.LastEntryDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusId)
             </td>
             <td>
                 @Html.ActionLink("Details", "Result", new { id = item.Id })

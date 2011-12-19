@@ -17,20 +17,13 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate{ get; set; }
 
-        public int Status { get; set; }
+        public string Status { get; set; }
+
+        public string ResponsibleId { set; get; }
 
         public CompleteQuestionView[] Questions
         {
             get { return _questions; }
-        /*    set
-            {
-                _questions = value;
-                for (int i = 0; i < this._questions.Length; i++)
-                {
-                    this._questions[i].Index = i + 1;
-                }
-
-            }*/
         }
 
         private CompleteQuestionView[] _questions;
@@ -40,13 +33,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         protected CompleteAnswer[] CompleteAnswers { get; set; }
 
         public CompleteQuestionnaireView(string id, QuestionnaireView template, CompleteAnswer[] answers, DateTime creationDate,
-                                               DateTime lastEntryDate, int status):this(template)
+                                               DateTime lastEntryDate, string status, string responsibleId):this(template)
         {
             this.Id = IdUtil.ParseId(id);
             this.CompleteAnswers = answers;
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
             this.Status = status;
+            this.ResponsibleId = responsibleId;
             MerdgeAnswersWithResults();
 
         }

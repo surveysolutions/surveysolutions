@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void When_GetQuestionnaireResultIsExecuted()
         {
             var output = new CompleteQuestionnaireView("completequestionnairedocuments/cqId", new QuestionnaireView(),
-                                                       new CompleteAnswer[0], DateTime.Now, DateTime.Now, 0);
+                                                       new CompleteAnswer[0], DateTime.Now, DateTime.Now, "0", "0");
             var input = new CompleteQuestionnaireViewInputModel("cqId");
 
             ViewRepositoryMock.Setup(
