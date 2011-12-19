@@ -5,7 +5,7 @@
     @if (Roles.IsUserInRole(UserRoles.Administrator.ToString()))
     {     
         <text> @Html.ActionLink("Administration", "Index", "User") </text>
-        <text> @Html.ActionLink("Dashboard", "Index", "Location") </text>
+        <text> @Html.ActionLink("Locations", "Index", "Location") </text>
     }
     [ @Html.ActionLink("Log Off", "LogOff", "Account") ]</text>
 
