@@ -28,7 +28,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                                                                                             q.QuestionType, q.Answers,
                                                                                             doc.Id))
                                                      ), doc.CompletedAnswers.ToArray(), doc.CreationDate, doc.LastEntryDate,
-                                                     doc.Status);
+                                                     doc.Status, doc.ResponsibleId);
         }
     
     }

@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Core.Entities
                                 {
                                     Questionnaire = ((IEntity<QuestionnaireDocument>) template).GetInnerDocument(),
                                     UserId = userId,
-                                    Status = 0,
+                                    Status = "0",
                                     ResponsibleId = userId,
                                 };
         }

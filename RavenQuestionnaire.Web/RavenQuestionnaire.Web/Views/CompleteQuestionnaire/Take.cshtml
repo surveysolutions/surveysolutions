@@ -5,23 +5,16 @@
 }
 @using (Html.BeginForm("SaveResult", "CompleteQuestionnaire"))
 {
-    <fieldset>
-        <legend>@Model.Title</legend>
-        <div class="display-label">
-            Title</div>
-        <div class="display-field">
-            <b>@Html.DisplayFor(model => model.Title)</b>
-        </div>
-        <br />
-        <div class="display-label">
-            <b>Questions:</b></div>
-        @{Html.RenderPartial("~/Views/Question/_Take.cshtml", Model.Questions);}
-        @Html.HiddenFor(model => Model.Id)
-        <p>
-            <input type="submit" value="Save" />
-        </p>
-    </fieldset>
+    <h1>@Model.Title</h1>
+       
+    <h2>Questions:</h2>
+    Html.RenderPartial("~/Views/Question/_Take.cshtml", Model.Questions);
+    @Html.HiddenFor(model => Model.Id)
     <p>
-        @Html.ActionLink("Back to List of Questionnaires", "Index")
+        <input type="submit" value="Save" class="btn primary" />
     </p>
+
+    <div class="">
+        @Html.ActionLink("Back to List of Questionnaires", "Index", null, new {@class="btn"})
+    </div>
 }

@@ -1,7 +1,8 @@
 ﻿@using RavenQuestionnaire.Core.Views.Location
+@using RavenQuestionnaire.Web.Models
 @model LocationBrowseView
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn small primary" })
 </p>
 <ul>
     @foreach (var item in Model.Items)
@@ -29,6 +30,6 @@
     </tr>*@ </li>
     }
 </ul>
-<div class="pager">
-    @Html.Pager(Model.PageSize, Model.Page, Model.TotalCount)
+<div class="pagination">
+    @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount)
 </div>

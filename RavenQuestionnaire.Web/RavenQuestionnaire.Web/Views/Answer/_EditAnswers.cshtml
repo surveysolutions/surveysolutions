@@ -4,10 +4,16 @@
 @model QuestionView
 @foreach (var item in Model.Answers)
 {
-
     Html.RenderPartial("~/Views/Answer/_EditRow.cshtml", item);
-
 }
 <div id="divNewAnswer">
 </div>
-@Ajax.ActionLink("Add Answer", "Create", "Answer", new { questionPublicKey = Model.PublicKey }, new AjaxOptions { UpdateTargetId = "divNewAnswer", InsertionMode = InsertionMode.InsertBefore })
+<div class="clearfix">
+    <div class="input">
+        @Ajax.ActionLink("Add Answer", "Create", "Answer", new { questionPublicKey = Model.PublicKey }, new AjaxOptions
+                                                                                                {
+                                                                                                    UpdateTargetId = "divNewAnswer",
+                                                                                                    InsertionMode = InsertionMode.InsertBefore
+                                                                                                })
+    </div>
+</div>

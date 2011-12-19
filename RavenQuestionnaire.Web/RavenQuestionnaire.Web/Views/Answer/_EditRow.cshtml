@@ -4,21 +4,18 @@
 @{ var currentRowId = "divEditAnswer" + Model.PublicKey.ToString(); }
 @using (Html.BeginCollectionItem("Answers"))
 {
-   <div id="@currentRowId">
-     <p>
-        ------------------------------------------------------------</p>
-   
-        <div class="editor-label">
+    <div id="@currentRowId">
+        <div class="clearfix">
             @Html.LabelFor(model => Model.AnswerText)
+            <div class="input">
+                <div class="inline-inputs">
+                    @Html.EditorFor(model => Model.AnswerText)
+                    <a href="javascript:void(0)" onclick="$('#@currentRowId').remove()" class="btn small danger">
+                        Delete</a> <span class="help-inline">@Html.ValidationMessageFor(model => Model.AnswerText)</span>
+                </div>
+            </div>
         </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => Model.AnswerText)
-            @Html.ValidationMessageFor(model => Model.AnswerText)
-        </div>
-        <div>
-            @Html.HiddenFor(model => Model.PublicKey)
-        </div>
-        <a href="javascript:void(0)" onclick="$('#@currentRowId').remove()">Delete</a>
+        @Html.HiddenFor(model => Model.PublicKey)
     </div>
     
 }
