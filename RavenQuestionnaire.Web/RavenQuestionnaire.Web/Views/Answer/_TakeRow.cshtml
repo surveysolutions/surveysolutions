@@ -2,6 +2,7 @@
 @using RavenQuestionnaire.Core.Views.Answer
 @model CompleteAnswerView
 <div>
+    @Html.Hidden("QuestionPublicKey", Model.QuestionId)
     <div class="editor-label">
         <span>
             @Html.RadioButton("PublicKey", Model.PublicKey, Model.Selected)</span>

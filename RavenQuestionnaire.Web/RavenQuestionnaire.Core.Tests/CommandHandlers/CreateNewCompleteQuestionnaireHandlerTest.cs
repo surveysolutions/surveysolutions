@@ -49,7 +49,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
 
             CreateNewCompleteQuestionnaireHandler handler = new CreateNewCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object, completeQuestionnaireService);
-            CompleteAnswer[] answers = new CompleteAnswer[] { new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0]) };
+            CompleteAnswer[] answers = new CompleteAnswer[] { new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0], innerDocument.Questionnaire.Questions[0].PublicKey) };
             handler.Handle(new Commands.CreateNewCompleteQuestionnaireCommand("qID", answers, "some id"));
 
             coompleteQuestionnaireRepositoryMock.Verify(x => x.Add(It.IsAny<CompleteQuestionnaire>()), Times.Once());
