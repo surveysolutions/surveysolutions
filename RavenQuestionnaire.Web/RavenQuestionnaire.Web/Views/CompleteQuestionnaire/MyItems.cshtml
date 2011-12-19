@@ -10,6 +10,7 @@
             <th>Id </th>
             <th>Title </th>
             <th>Last edit date </th>
+            <th>Status </th>
             <th></th>
         </tr>
     </thead>
@@ -25,6 +26,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.LastEntryDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StatusId)
                 </td>
                 <td class="buttons">
                     @Html.ActionLink("Details", "Result", new { id = item.Id })

@@ -25,9 +25,19 @@
             <div class="key">
                 Status</div>
             <div class="value">
-                @Html.DisplayFor(model => model.Status)
+                @Html.DropDownListFor(model => model.Status,
+         new SelectList(ViewBag.AvailableStatuses/*, "Id", "Status", Model.Status*/))
             </div>
         </div>
+
+        <div class="clearfix">
+            <div class="key">
+                Responsible</div>
+            <div class="value">
+                @Html.DisplayFor(model => model.ResponsibleId)
+            </div>
+        </div>
+
     </div>
 
     <h3>Questions:</h3>
