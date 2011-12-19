@@ -10,3 +10,7 @@ RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/bin/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/obj/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/bin/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/obj/*
+ExpressionEvaluator/Evaluant.Calculator.Tests/bin/*
+ExpressionEvaluator/Evaluant.Calculator.Tests/obj/*
+ExpressionEvaluator/Evaluant.Calculator/bin/*
+ExpressionEvaluator/Evaluant.Calculator/obj/*
