@@ -5,45 +5,37 @@
 }
 @using (Html.BeginForm("UpdateResult", "CompleteQuestionnaire"))
 {
-    <fieldset>
-        <legend>@Model.Title</legend>
-        <div class="display-label">
-            @Html.LabelFor(model => model.Title)</div>
-        <div class="display-field">
-            <b>@Html.DisplayFor(model => model.Title)</b>
+    <h2>@Model.Title</h2>
+    <div class="pairs">
+        <div class="clearfix">
+            <div class="key">
+                Creation Date</div>
+            <div class="value">
+                @Html.DisplayFor(model => model.CreationDate)
+            </div>
         </div>
-        <div class="display-label">
-            Creation Date</div>
-        <div class="display-field">
-            <b>@Html.DisplayFor(model => model.CreationDate)</b>
+        <div class="clearfix">
+            <div class="key">
+                Last edit Date</div>
+            <div class="value">
+                @Html.DisplayFor(model => model.LastEntryDate)
+            </div>
         </div>
-        <div class="display-label">
-            Last edit Date</div>
-        <div class="display-field">
-            <b>@Html.DisplayFor(model => model.LastEntryDate)</b>
+        <div class="clearfix">
+            <div class="key">
+                Status</div>
+            <div class="value">
+                @Html.DisplayFor(model => model.Status)
+            </div>
         </div>
-        <br />
-        <fieldset>
-            <legend>Questions</legend>
-            @{ Html.RenderPartial("~/Views/Question/_Take.cshtml", Model.Questions); }
-        </fieldset>
-        @Html.HiddenFor(model => Model.Id)
+    </div>
 
-        <div class="display-label">
-            @Html.LabelFor(model => model.Status)</div>
-
-            @Html.DropDownListFor(model => model.Status,
-         new SelectList(ViewBag.AvailableStatuses/*, "Id", "Status", Model.Status*/))
-
-
-        @*<div class="display-field">
-            <b>@Html.DisplayFor(model => model.Status)</b>
-        </div>*@
-        <br />
-        <p>
-            <input type="submit" value="Save" />
-        </p>
-    </fieldset>
+    <h3>Questions:</h3>
+    Html.RenderPartial("~/Views/Question/_Take.cshtml", Model.Questions);
+    @Html.HiddenFor(model => Model.Id)
+    <p>
+        <input type="submit" value="Save" class="btn primary" />
+    </p>
 }
 <p>
     @Html.ActionLink("Back to List of Questionnaires", "Index")

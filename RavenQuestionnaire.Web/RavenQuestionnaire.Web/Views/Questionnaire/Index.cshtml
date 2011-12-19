@@ -1,54 +1,50 @@
 ﻿@using RavenQuestionnaire.Core.Views.Questionnaire
+@using RavenQuestionnaire.Web.Models
 @model QuestionnaireBrowseView
-
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <h2>Index</h2>
-
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn small primary" })
 </p>
-<table>
-    <tr>
-        <th>
-            Id
-        </th>
-        <th>
-            Title
-        </th>
-        <th>Creation date</th>
-        <th>Last edit date</th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model.Items) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreationDate)
-        </td>
-          <td>
-            @Html.DisplayFor(modelItem => item.LastEntryDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new {  id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new {  id=item.Id })|
-
-            <b>@Html.ActionLink("Participate", "Take","CompleteQuestionnaire",  new { id = item.Id }, null)</b>
-        </td>
-    </tr>
-}
-
+<table class="bordered-table zebra-striped">
+    <thead>
+        <tr>
+            <th>Id </th>
+            <th>Title </th>
+            <th>Creation date</th>
+            <th>Last edit date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastEntryDate)
+                </td>
+                <td class="buttons">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn small " })
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn small " })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn small danger" })
+                    @Html.ActionLink("Participate", "Take", "CompleteQuestionnaire", new { id = item.Id }, new { @class = "btn small primary" })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
-<div class="pager">
-    @Html.Pager(Model.PageSize, Model.Page, Model.TotalCount)
+<div class="pagination">
+    @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount)
 </div>

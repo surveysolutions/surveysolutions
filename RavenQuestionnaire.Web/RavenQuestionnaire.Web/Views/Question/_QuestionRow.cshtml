@@ -2,14 +2,13 @@
 @using RavenQuestionnaire.Core.Views.Question
 @model QuestionView
 @{ var currentRowId = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, Model.PublicKey.ToString()); }
-<div id="@currentRowId">
-    <span><b>@Model.Index)</b> </span><span>
-        @Html.DisplayFor(modelItem => Model.QuestionText)
-    </span><span>
-        @Ajax.ActionLink("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = currentRowId })
-        @Ajax.ActionLink("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" })
-    </span>
-    <div style="margin-left: 15px;">
+<div id="@currentRowId" class="question">
+    <h3>@Model.Index) @Html.DisplayFor(modelItem => Model.QuestionText)
+        <span>
+            @Ajax.ActionLink("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = currentRowId, OnSuccess = "OpenModal" }, new {@class="btn primary small"})
+            @Ajax.ActionLink("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn danger small" })
+        </span></h3>
+    <div class="answers">
         @{Html.RenderPartial("~/Views/Answer/_Index.cshtml", Model.Answers);}
     </div>
     @* <div id="divNewAnswer">

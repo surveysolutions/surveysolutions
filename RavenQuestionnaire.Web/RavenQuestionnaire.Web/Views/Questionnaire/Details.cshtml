@@ -3,35 +3,42 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<fieldset>
-    <legend>@Model.Title</legend>
-    <div class="display-label">
-        Title</div>
-    <div class="display-field">
-        <b>@Html.DisplayFor(model => model.Title)</b>
+<script src="../../Scripts/modal.js" type="text/javascript"></script>
+<script>
+    function OpenModal() {
+        $('#divCreateForm').modal({
+                backdrop: false
+            });
+        $('#divCreateForm').modal('show');
+    }
+</script>
+<h1>@Model.Title</h1>
+<div class="pairs">
+    <div class="clearfix">
+        <div class="key">
+            Creation Date:</div>
+        <div class="value">
+            @Html.DisplayFor(model => model.CreationDate)
+        </div>
     </div>
-    <div class="display-label">
-        Creation Date</div>
-    <div class="display-field">
-        <b>@Html.DisplayFor(model => model.CreationDate)</b>
+    <div class="clearfix">
+        <div class="key">
+            Last edit Date:</div>
+        <div class="value">
+            @Html.DisplayFor(model => model.LastEntryDate)
+        </div>
     </div>
-    <div class="display-label">
-        Last edit Date</div>
-    <div class="display-field">
-        <b>@Html.DisplayFor(model => model.LastEntryDate)</b>
-    </div>
-    <br/>
-        <div class="display-label">
-        <b>Questions:</b></div>
-    @{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}
-   
-    <div id="addNewQuestion"></div>
-   
-    @Ajax.ActionLink("Add Question", "Create", "Question", new { Model.Id }, new AjaxOptions { UpdateTargetId = "addNewQuestion" }) 
-</fieldset>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) | 
-    @*   @Html.ActionLink("Add group", "Manage", "Group", new { qid = Model.Id }, new { }) |*@
-    @*  @Html.ActionLink("Applications", "Manage", "CompletedQre", new { questionnaireId = Model.Id }, new { }) | *@
-    @Html.ActionLink("Back to List of Questionnaires", "Index")
-</p>
+</div>
+<h2>Questions</h2>
+@{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}
+<div id="addNewQuestion">
+</div>
+<div class="">
+    @Ajax.ActionLink("Add Question", "Create", "Question", new { Model.Id }, new AjaxOptions
+                                                                                   {
+                                                                                       UpdateTargetId = "addNewQuestion",
+                                                                                       OnSuccess = "OpenModal"
+                                                                                   }, new { @class = "btn" })
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn primary" })
+    @Html.ActionLink("Back to List of Questionnaires", "Index", null, new { @class = "btn" })
+</div>

@@ -4,71 +4,73 @@
 {
     @Html.ValidationSummary(true)
 
-    <fieldset>
-        <legend>Person</legend>
-        <div class="editor-label">
-            @Html.LabelFor(model => model.UserName)
-        </div>
+    <fieldset><legend>Person</legend>
         @if (!string.IsNullOrEmpty(Model.UserId))
         { 
-            <div class="editor-field">
-                @Html.DisplayFor(model => model.UserName)
-            </div>          }
+            <div class="clearfix">
+                @Html.LabelFor(model => model.UserName)
+                <div class="input">
+                    @Html.DisplayFor(model => model.UserName)
+                </div>
+            </div>         
+        }
         else
         {
-            <div class="editor-field">
-                @Html.EditorFor(model => model.UserName)
-                @Html.ValidationMessageFor(model => model.UserName)
-            </div>
-        
+            <div class="clearfix">
+                @Html.LabelFor(model => model.UserName)
+                <div class="input">
+                    @Html.EditorFor(model => model.UserName)
+                    @Html.ValidationMessageFor(model => model.UserName)
+                </div>
+            </div>        
             
-            <div class="editor-label">
+            <div class="clearfix">
                 @Html.LabelFor(model => model.Password)
-            </div>
-            <div class="editor-field">
-                @Html.PasswordFor(model => model.Password)
-                @Html.ValidationMessageFor(model => model.Password)
-            </div>            
+                <div class="input">
+                    @Html.PasswordFor(model => model.Password)
+                    @Html.ValidationMessageFor(model => model.Password)
+                </div>
+            </div>       
         }
-        <div class="editor-label">
+        <div class="clearfix">
             @Html.LabelFor(model => model.Email)
+            <div class="input">
+                @Html.EditorFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
         </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Email)
-            @Html.ValidationMessageFor(model => model.Email)
-        </div>
-        <div class="editor-label">
+        <div class="clearfix">
             @Html.LabelFor(model => model.IsLocked)
+            <div class="input">
+                @Html.EditorFor(model => model.IsLocked)
+                @Html.ValidationMessageFor(model => model.IsLocked)
+            </div>
         </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.IsLocked)
-            @Html.ValidationMessageFor(model => model.IsLocked)
-        </div>
-        <div class="editor-label">
+        <div class="clearfix">
             @Html.LabelFor(model => model.PrimaryRole)
-        </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(model => model.PrimaryRole,
+            <div class="input">
+                @Html.DropDownListFor(model => model.PrimaryRole,
             new SelectList(Roles.GetAllRoles()))
+            </div>
         </div>
-        <div class="editor-label">
+        <div class="clearfix">
             @Html.LabelFor(model => model.LocationId)
-        </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(model => model.LocationId,
+            <div class="input">
+                @Html.DropDownListFor(model => model.LocationId,
 new SelectList(ViewBag.AllLocations, "Id", "Location", Model.LocationId))
+            </div>
         </div>
-        <div class="editor-label">
+        <div class="clearfix">
             @Html.LabelFor(model => model.SupervisorId)
-        </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(model => model.SupervisorId,
+            <div class="input">
+                @Html.DropDownListFor(model => model.SupervisorId,
  new SelectList(ViewBag.Supervisors, "Id", "UserName"))
+            </div>
         </div>
         @Html.HiddenFor(model => model.UserId)
-        <p>
-            <input type="submit" value="Save" />
-        </p>
+        <div class="actions">
+            <input type="submit" value="Save" class="btn" />
+        </div>
     </fieldset>
 }
 <div>
