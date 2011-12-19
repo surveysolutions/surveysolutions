@@ -1,10 +1,8 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Answer
 @model CompleteAnswerView
-<div>
-    <div class="editor-label">
-        <span>
-            @Html.RadioButton("PublicKey", Model.PublicKey, Model.Selected)</span>
-        @Model.AnswerText
-    </div>
+<div class="answer">
+    <span>
+        @Html.RadioButton("PublicKey", Model.PublicKey, Model.Selected)</span>
+    @Model.AnswerText
 </div>

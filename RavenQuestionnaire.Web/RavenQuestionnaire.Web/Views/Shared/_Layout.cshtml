@@ -2,32 +2,28 @@
 <html>
 <head>
     <title>@ViewBag.Title</title>
-    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/main.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/icons.css")" rel="stylesheet" type="text/css" />
     <script src="@Url.Content("~/Scripts/jquery-1.5.1.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
 </head>
 <body>
-    <div class="page">
-        <div id="header">
-            <div id="title">
-                <h1>
-                    Survey</h1>
-            </div>
-            <div id="logindisplay">
-                @Html.Partial("_LogOnPartial")
-            </div>
-            <div id="menucontainer">
-                <ul id="menu">
+    <div class="topbar">
+        <div class="topbar-inner">
+            <div class="container-fluid">
+                <a href="@Url.Action("Index", "Questionnaire")" class="brand">Survay</a>
+                 <ul class="nav">
                     <li>@Html.ActionLink("Dashboard", "MyItems", "CompleteQuestionnaire")</li>
                     <li>@Html.ActionLink("Survey templates", "Index", "Questionnaire")</li>
                     <li>@Html.ActionLink("Servey results", "Index", "CompleteQuestionnaire")</li>
                 </ul>
+                <p class="pull-right">@Html.Partial("_LogOnPartial")</p>
             </div>
         </div>
+    </div>
+    <div class="container-fluid">
         <div id="main">
             @RenderBody()
-        </div>
-        <div id="footer">
         </div>
     </div>
 </body>

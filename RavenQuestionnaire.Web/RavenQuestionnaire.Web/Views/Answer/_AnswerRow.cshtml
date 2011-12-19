@@ -1,15 +1,8 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Answer
 @model AnswerView
-<div>
-    <span>
-    <b>
-        @Model.Index)</b>
-    </span><span>
-        @Html.DisplayFor(modelItem => Model.AnswerText)
-    </span>@*<span>
-        @Html.DisplayFor(modelItem => Model.Mandatory)
-    </span><span>
-        @Html.DisplayFor(modelItem => Model.AnswerType)
-    </span>*@
+<div class="answer">
+    <p>
+        @Model.Index) @Html.DisplayFor(modelItem => Model.AnswerText)
+    </p>
 </div>

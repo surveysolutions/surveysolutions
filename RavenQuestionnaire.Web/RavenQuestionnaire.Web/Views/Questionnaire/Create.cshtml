@@ -3,33 +3,23 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-
 @using (Html.BeginForm("Save", "Questionnaire"))
 {
     @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>Questionnaire</legend>
-
-        <div class="editor-label">
+    <fieldset><legend>Questionnaire</legend>
+        <div class="clearfix">
             @Html.LabelFor(model => model.Title)
+            <div class="input">
+                @Html.EditorFor(model => model.Title)
+                <span class="help-inline">@Html.ValidationMessageFor(model => model.Title)</span>
+            </div>
         </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Title)
-            @Html.ValidationMessageFor(model => model.Title)
-        </div>      
-       
-
         @Html.HiddenFor(model => model.Id)
-
-        <p>
-            <input type="submit" value="Save" />
-        </p>
+        <div class="actions">
+            <input type="submit" value="Save" class="btn primary" />
+        </div>
     </fieldset>
 }
-
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn" })
 </div>
-
-

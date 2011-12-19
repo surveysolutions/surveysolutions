@@ -7,10 +7,10 @@
         <text> @Html.ActionLink("Administration", "Index", "User") </text>
         <text> @Html.ActionLink("Dashboard", "Index", "Location") </text>
     }
-    [ @Html.ActionLink("Log Off", "LogOff", "Account") ]</text>
+    @Html.ActionLink("Log Off", "LogOff", "Account")</text>
 
 }
 else
 {
-    @:[ @Html.ActionLink("Log On", "LogOn", "Account") ]
+    @Html.ActionLink("Log On", "LogOn", "Account")
 }

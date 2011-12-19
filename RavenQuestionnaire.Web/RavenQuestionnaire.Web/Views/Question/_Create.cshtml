@@ -1,40 +1,41 @@
 ﻿@using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Web.Models
 @model QuestionView
-<div id="divCreateForm">
-<script>
-    function HideCreateQuestionForm() {
-        $('#divCreateForm').remove();
-    }
-</script>
-@using (Ajax.BeginForm("Save", "Question",
+<div id="divCreateForm" class="modal hide fade">
+    <script>
+        function HideCreateQuestionForm() {
+            $('#divCreateForm').remove();
+        }
+    </script>
+    @using (Ajax.BeginForm("Save", "Question",
                                          new AjaxOptions
                                              {
                                                  InsertionMode = InsertionMode.Replace,
                                                  UpdateTargetId = "divAllQuestions",
                                                  OnSuccess = "HideCreateQuestionForm"
                                              }))
-{
-    @Html.ValidationSummary(true)
-   
-    <div class="editor-label">
-        @Html.LabelFor(model => model.QuestionText)
-    </div>
-    <div class="editor-field">
-        @Html.EditorFor(model => model.QuestionText)
-        @Html.ValidationMessageFor(model => model.QuestionText)
-    </div>
-   if (Model.PublicKey!= Guid.Empty)
-   {
-    <div>
-        @Html.HiddenFor(model => model.PublicKey)
-    </div>}
-    @Html.HiddenFor(model => model.QuestionnaireId)
-    <div style="margin-left: 15px;">
-        @{Html.RenderPartial("~/Views/Answer/_EditAnswers.cshtml", Model);}
-    </div>
-    <p>
-        <input type="submit" value="Save" />
-    </p>
-}
+    {
+        <div class="modal-header">
+            <h3>Edit question form</h3>
+        </div>
+        <div class="modal-body">
+            @Html.ValidationSummary(true)
+            <div class="clearfix">
+                @Html.LabelFor(model => model.QuestionText)
+                <div class="input">
+                    @Html.EditorFor(model => model.QuestionText)
+                    @Html.ValidationMessageFor(model => model.QuestionText)
+                </div>
+            </div>
+            @if (Model.PublicKey != Guid.Empty)
+            {
+                @Html.HiddenFor(model => model.PublicKey)
+            }
+            @Html.HiddenFor(model => model.QuestionnaireId)
+            @{Html.RenderPartial("~/Views/Answer/_EditAnswers.cshtml", Model);}
+        </div>
+        <div class="modal-footer">
+            <input type="submit" value="Save" class="btn primary" />
+        </div>
+    }
 </div>

@@ -5,41 +5,37 @@
 }
 @using (Html.BeginForm("UpdateResult", "CompleteQuestionnaire"))
 {
-    <fieldset>
-        <legend>@Model.Title</legend>
-        <div class="display-label">
-            Title</div>
-        <div class="display-field">
-            <b>@Html.DisplayFor(model => model.Title)</b>
+    <h2>@Model.Title</h2>
+    <div class="pairs">
+        <div class="clearfix">
+            <div class="key">
+                Creation Date</div>
+            <div class="value">
+                @Html.DisplayFor(model => model.CreationDate)
+            </div>
         </div>
-        <div class="display-label">
-            Creation Date</div>
-        <div class="display-field">
-            <b>@Html.DisplayFor(model => model.CreationDate)</b>
+        <div class="clearfix">
+            <div class="key">
+                Last edit Date</div>
+            <div class="value">
+                @Html.DisplayFor(model => model.LastEntryDate)
+            </div>
         </div>
-        <div class="display-label">
-            Last edit Date</div>
-        <div class="display-field">
-            <b>@Html.DisplayFor(model => model.LastEntryDate)</b>
+        <div class="clearfix">
+            <div class="key">
+                Status</div>
+            <div class="value">
+                @Html.DisplayFor(model => model.Status)
+            </div>
         </div>
-        <br />
+    </div>
 
-        <div class="display-label">
-           Status</div>
-        <div class="display-field">
-            <b>@Html.DisplayFor(model => model.Status)</b>
-        </div>
-        <br />
-
-        <div class="display-label">
-            <b>Questions:</b></div>
-        @{ Html.RenderPartial("~/Views/Question/_Take.cshtml", Model.Questions); }
-        @Html.HiddenFor(model => Model.Id)
-        <p>
-            <input type="submit" value="Save" />
-        </p>
-    </fieldset>
-  
+    <h3>Questions:</h3>
+    Html.RenderPartial("~/Views/Question/_Take.cshtml", Model.Questions);
+    @Html.HiddenFor(model => Model.Id)
+    <p>
+        <input type="submit" value="Save" class="btn primary" />
+    </p>
 }
 <p>
     @Html.ActionLink("Back to List of Questionnaires", "Index")

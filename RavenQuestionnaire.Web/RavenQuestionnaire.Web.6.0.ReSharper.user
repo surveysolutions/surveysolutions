@@ -1,68 +1,68 @@
 <Configuration>
   <RecentFiles>
     <RecentFiles>
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Repositories/f:IStatusRepository.cs" caret="0" fromTop="0" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Repositories/f:UserRepository.cs" caret="0" fromTop="0" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Repositories/f:StatusRepository.cs" caret="474" fromTop="14" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Repositories/f:EntityRepository.cs" caret="610" fromTop="20" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/f:CreateNewStatusHandler.cs" caret="646" fromTop="18" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:UserDocument.cs" caret="0" fromTop="0" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:QuestionnaireDocument.cs" caret="251" fromTop="9" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/f:IEntityRepository.cs" caret="289" fromTop="10" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/f:UpdateQuestionnaireHandler.cs" caret="714" fromTop="19" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:StatusDocument.cs" caret="240" fromTop="9" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:User.cs" caret="90" fromTop="4" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/f:CommandInvoker.cs" caret="656" fromTop="17" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:Status.cs" caret="215" fromTop="7" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/f:UpdateStatusRestrictionHandler.cs" caret="581" fromTop="18" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusBrowseItem.cs" caret="455" fromTop="19" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusView.cs" caret="518" fromTop="14" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/d:SubView/f:RolePermission.cs" caret="76" fromTop="2" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/d:SubView/f:StatusByRole.cs" caret="185" fromTop="8" />
-      <File id="8E2698A4-1286-4534-BD2C-04C76AE2DA5B/d:Helpers/f:EntityNames.cs" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:UserController.cs" caret="2247" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:App_Start/f:NinjectMVC3.cs" caret="1766" fromTop="37" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/d:EditorTemplates/f:StatusView.cshtml" caret="141" fromTop="3" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Status/f:Edit.cshtml" caret="216" fromTop="9" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/d:EditorTemplates/f:RolePermission.cshtml" caret="113" fromTop="3" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/d:EditorTemplates/f:StatusByRole.cshtml" caret="220" fromTop="9" />
-      <File id="8E2698A4-1286-4534-BD2C-04C76AE2DA5B/d:Helpers/f:ClientIdHelper.cs" caret="0" fromTop="0" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Utility/f:IdUtil.cs" caret="667" fromTop="19" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/f:UpdateUserCommand.cs" caret="790" fromTop="23" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/f:UpdateStatusRestrictionsCommand.cs" caret="512" fromTop="14" />
       <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="2617" fromTop="18" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/f:Web.config" caret="630" fromTop="12" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/f:CoreRegistry.cs" caret="1270" fromTop="35" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/f:packages.config" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Models/f:PagingExtensions.cs" caret="229" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Location/f:Create.cshtml" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:Result.cshtml" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Models/f:PagingHelper.cs" caret="4493" fromTop="39" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Status/f:Create.cshtml" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Details.cshtml" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Create.cshtml" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/f:_Index.cshtml" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:User/f:UserBrowseItem.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:User/f:UserView.cs" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:User/f:Manage.cshtml" caret="2072" fromTop="45" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/f:_ViewStart.cshtml" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/f:Global.asax.cs" caret="959" fromTop="28" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/f:icons.css" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_Layout.cshtml" caret="566" fromTop="12" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Question/f:_Index.cshtml" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/f:main.less" caret="55317" fromTop="18" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/f:main.css" caret="55975" fromTop="52" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:Take.cshtml" caret="671" fromTop="19" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_LogOnPartial.cshtml" caret="505" fromTop="14" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Index.cshtml" caret="1142" fromTop="30" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:User/f:Index.cshtml" caret="168" fromTop="5" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Status/f:Index.cshtml" caret="593" fromTop="20" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Location/f:Index.cshtml" caret="204" fromTop="4" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:Index.cshtml" caret="1024" fromTop="32" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:MyItems.cshtml" caret="874" fromTop="28" />
     </RecentFiles>
     <RecentEdits>
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/d:EditorTemplates/f:StatusByRole.cshtml" caret="662" fromTop="19" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/d:EditorTemplates/f:StatusByRole.cshtml" caret="288" fromTop="13" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/d:EditorTemplates/f:RolePermission.cshtml" caret="113" fromTop="3" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:App_Start/f:NinjectMVC3.cs" caret="1766" fromTop="17" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/d:SubView/f:StatusByRole.cs" caret="708" fromTop="25" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/d:SubView/f:StatusByRole.cs" caret="174" fromTop="7" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusBrowseItem.cs" caret="177" fromTop="3" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusBrowseItem.cs" caret="364" fromTop="11" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/d:SubView/f:StatusByRole.cs" caret="349" fromTop="13" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusBrowseItem.cs" caret="455" fromTop="15" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusView.cs" caret="426" fromTop="11" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusView.cs" caret="707" fromTop="18" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="2878" fromTop="18" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="1758" fromTop="17" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/f:UpdateUserCommand.cs" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="2572" fromTop="30" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="2572" fromTop="27" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="2595" fromTop="28" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:StatusController.cs" caret="3327" fromTop="11" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:StatusDocument.cs" caret="546" fromTop="19" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/f:UpdateStatusRestrictionHandler.cs" caret="683" fromTop="20" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:StatusDocument.cs" caret="696" fromTop="25" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:StatusDocument.cs" caret="492" fromTop="20" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:StatusDocument.cs" caret="383" fromTop="17" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:Status.cs" caret="908" fromTop="29" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:Status.cs" caret="259" fromTop="8" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:User.cs" caret="2406" fromTop="20" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:User.cs" caret="90" fromTop="4" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:StatusDocument.cs" caret="240" fromTop="9" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/f:UpdateStatusRestrictionsCommand.cs" caret="502" fromTop="14" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Index.cshtml" caret="1677" fromTop="5" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Index.cshtml" caret="1677" fromTop="14" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Index.cshtml" caret="1692" fromTop="38" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Index.cshtml" caret="352" fromTop="4" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:User/f:Index.cshtml" caret="1615" fromTop="5" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:User/f:Index.cshtml" caret="1615" fromTop="29" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:User/f:Index.cshtml" caret="1630" fromTop="39" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Status/f:Index.cshtml" caret="786" fromTop="7" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Status/f:Index.cshtml" caret="786" fromTop="16" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Status/f:Index.cshtml" caret="774" fromTop="25" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:MyItems.cshtml" caret="1034" fromTop="7" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:MyItems.cshtml" caret="1034" fromTop="22" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:MyItems.cshtml" caret="1024" fromTop="34" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_Layout.cshtml" caret="72" fromTop="4" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_Layout.cshtml" caret="623" fromTop="13" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/f:icons.css" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:Index.cshtml" caret="1246" fromTop="9" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:Index.cshtml" caret="1246" fromTop="22" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:Index.cshtml" caret="1254" fromTop="38" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:User/f:Index.cshtml" caret="1558" fromTop="34" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/f:main.less" caret="55317" fromTop="18" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_LogOnPartial.cshtml" caret="385" fromTop="9" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_LogOnPartial.cshtml" caret="460" fromTop="14" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:User/f:Index.cshtml" caret="208" fromTop="5" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Status/f:Index.cshtml" caret="200" fromTop="4" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Location/f:Index.cshtml" caret="204" fromTop="4" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Index.cshtml" caret="1140" fromTop="30" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Status/f:Index.cshtml" caret="593" fromTop="20" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:Index.cshtml" caret="1024" fromTop="32" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:MyItems.cshtml" caret="874" fromTop="28" />
     </RecentEdits>
   </RecentFiles>
   <NAntValidationSettings>
@@ -87,14 +87,14 @@
   <CompletionStatisticsManager>
     <ItemStatistics item="CSharpCodeCompletionContext">
       <Item value="Guid`0" priority="159" />
-      <Item value="public" priority="988" />
+      <Item value="public" priority="1052" />
       <Item value="DateTime`0" priority="159" />
       <Item value="AbstractComand`0" priority="95" />
-      <Item value="string" priority="671" />
+      <Item value="string" priority="703" />
       <Item value="EventDocument`0" priority="31" />
       <Item value="CreationDate" priority="31" />
       <Item value="PublicKey" priority="31" />
-      <Item value="new" priority="576" />
+      <Item value="new" priority="608" />
       <Item value="interface" priority="30" />
       <Item value="ISyncAdvancedSessionOperation`0" priority="63" />
       <Item value="as" priority="31" />
@@ -129,7 +129,7 @@
       <Item value="StatusBrowseItem`0" priority="31" />
       <Item value="Title" priority="63" />
       <Item value="IDisposable`0" priority="31" />
-      <Item value="null" priority="122" />
+      <Item value="null" priority="186" />
       <Item value="id" priority="31" />
       <Item value="title" priority="31" />
       <Item value="RoleManagerEventArgs`0" priority="31" />
@@ -178,6 +178,9 @@
       <Item value="roles" priority="31" />
       <Item value="AddNewQuestionCommand`0" priority="26" />
       <Item value="List&lt;string&gt;" priority="28" />
+      <Item value="override" priority="31" />
+      <Item value="sb" priority="63" />
+      <Item value="Url" priority="29" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:@System.Guid">
       <Item value="NewGuid`0" priority="53" />
@@ -232,6 +235,12 @@
       <Item value="center" priority="8" />
       <Item value="br" priority="13" />
       <Item value="tr" priority="5" />
+      <Item value="class" priority="12" />
+      <Item value="content" priority="5" />
+      <Item value="pagination" priority="22" />
+      <Item value="thead" priority="29" />
+      <Item value="tbody" priority="23" />
+      <Item value="buttons" priority="6" />
     </ItemStatistics>
     <ItemStatistics item="CssCodeCompletionContext">
       <Item value="float" priority="0" />
@@ -245,6 +254,7 @@
       <Item value="for" priority="7" />
       <Item value="Html" priority="41" />
       <Item value="using" priority="15" />
+      <Item value="Url" priority="7" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Web.Mvc.HtmlHelper`1">
       <Item value="CheckBoxFor`1" priority="54" />
@@ -258,7 +268,7 @@
     <ItemStatistics item="Qualified:@System.String">
       <Item value="IsNullOrEmpty`0" priority="26" />
       <Item value="Format`0" priority="82" />
-      <Item value="Empty" priority="54" />
+      <Item value="Empty" priority="81" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Collections.Generic.IEnumerable`1">
       <Item value="Where`1" priority="26" />
@@ -298,6 +308,10 @@
     </ItemStatistics>
     <ItemStatistics item="Qualified:@RavenQuestionnaire.Core.Utility.IdUtil">
       <Item value="CreateStatusId`0" priority="22" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Text.StringBuilder">
+      <Item value="Append`0" priority="53" />
+      <Item value="AppendFormat`0" priority="22" />
     </ItemStatistics>
   </CompletionStatisticsManager>
   <UnitTestSessions>
