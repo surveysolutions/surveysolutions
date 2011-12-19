@@ -27,6 +27,6 @@ namespace RavenQuestionnaire.Core.Documents
         public string ResponsibleId { get; set; }
 
         public string StatusChangeComment { get; set; }
-
+     
     }
 }

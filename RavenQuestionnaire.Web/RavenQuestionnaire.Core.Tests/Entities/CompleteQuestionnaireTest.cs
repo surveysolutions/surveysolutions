@@ -35,7 +35,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             };
             Assert.Throws<InvalidOperationException>(
                 () =>
-                completeQuestionnaire.AddAnswer(new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0])
+                completeQuestionnaire.AddAnswer(new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0], innerDocument.Questionnaire.Questions[0].PublicKey)
                                                     {CustomAnswer = "test"}));
             /*      completeQuestionnaire.AddAnswer(new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0]));
             Assert.AreEqual(innerDocument.CompletedAnswers[0].CustomAnswer, "answer");*/
@@ -51,7 +51,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                                     PublicKey = innerDocument.Questionnaire.Questions[0].Answers[0].PublicKey,
                                     AnswerText = innerDocument.Questionnaire.Questions[0].Answers[0].AnswerText
                                 };
-            completeQuestionnaire.AddAnswer(new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0]));
+            completeQuestionnaire.AddAnswer(new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0], innerDocument.Questionnaire.Questions[0].PublicKey));
             Assert.AreEqual(innerDocument.CompletedAnswers[0].PublicKey, innerDocument.Questionnaire.Questions[0].Answers[0].PublicKey);
         }
 
@@ -84,6 +84,27 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
             Questionnaire questionnaire = completeQuestionnaire.GetQuestionnaireTemplate();
             Assert.AreEqual(questionnaire.QuestionnaireId, innerDocument.Questionnaire.Id);
+        }
+        [Test]
+        public void GetAllAnswers_ReturnsAllCompleetAnswerList()
+        {
+            CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
+            CompleteQuestionnaireDocument innerDocument =
+               ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
+            var answers = new List<CompleteAnswer>();
+            innerDocument.CompletedAnswers = answers;
+            Assert.AreEqual(completeQuestionnaire.GetAllAnswers(), answers);
+        }
+        [Test]
+        public void GetAllQuestions_ReturnsAllQuestions()
+        {
+            CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
+            CompleteQuestionnaireDocument innerDocument =
+               ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
+            var questions = new List<Question>();
+            innerDocument.Questionnaire = new QuestionnaireDocument();
+            innerDocument.Questionnaire.Questions = questions;
+            Assert.AreEqual(completeQuestionnaire.GetAllQuestions(), questions);
         }
     }
 }

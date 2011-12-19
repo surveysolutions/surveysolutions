@@ -138,6 +138,8 @@
     <Compile Include="Entities\CompleteQuestionnaire.cs" />
     <Compile Include="Entities\Event.cs" />
     <Compile Include="Entities\IEntity.cs" />
+    <Compile Include="Entities\Iterators\Iterator.cs" />
+    <Compile Include="Entities\Iterators\QuestionnaireSimpleIterator.cs" />
     <Compile Include="Entities\Location.cs" />
     <Compile Include="Entities\Questionnaire.cs" />
     <Compile Include="Entities\Status.cs" />
@@ -227,6 +229,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
+      <Project>{5F014003-50D8-49E0-8AFE-91D38DCCC97C}</Project>
+      <Name>NCalc</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using NCalc;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public class Question /*: IEntity<QuestionDocument>*/
+    public class Question /*: IEntity<QuestionDocument>*/ 
     {
 
         public Question()
@@ -25,27 +26,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public QuestionType QuestionType { get; set; }
         public string QuestionnaireId { get; set; }
         public List<Answer> Answers { get; set; }
-
-   /*     private QuestionDocument innerDocument;
-
-        public string QuestionId { get { return innerDocument.Id; } }
-
-        public Question(Questionnaire owner, string text, QuestionType type)
-        {
-            innerDocument = new QuestionDocument() {QuestionText = text, QuestionType = type, QuestionnaireId = owner.QuestionnaireId};
-        }
-
-        public void UpdateQuestion(string text, QuestionType type)
-        {
-            innerDocument.QuestionText = text;
-            innerDocument.QuestionType = type;
-        }
-
-        public Question(QuestionDocument innerDocument)
-        {
-            this.innerDocument = innerDocument;
-        }*/
-
+        public string ConditionExpression { get; private set; }
+        
         public void ClearAnswers()
         {
             Answers.Clear();
@@ -65,6 +47,40 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             {
                 AddAnswer(answer);
             }
+        }
+        public bool EvaluateCondition(IList<CompleteAnswer> answers)
+        {
+            if (string.IsNullOrEmpty(ConditionExpression))
+                return true;
+            var e = new Expression(ConditionExpression);
+            foreach (var answer in answers)
+            {
+               /* var answerData = Answers.Where(a => a.PublicKey.Equals(answer.PublicKey)).FirstOrDefault();
+                if (answerData == null)
+                {
+                    continue;
+                }
+                var answerValue = answerData.AnswerType == AnswerType.Select
+                                      ? answerData.AnswerText
+                                      : answer.CustomAnswer;*/
+                //Answers.Where(a=>a.PublicKey.Equals(answer.PublicKey)).FirstOrDefault().
+                e.Parameters[answer.QuestionPublicKey.ToString()] = answer.CustomAnswer;
+            }
+
+            bool result = false;
+            try
+            {
+                result = (bool) e.Evaluate();
+            }
+            catch (Exception)
+            {
+            }
+            return result;
+        }
+
+        public void SetConditionExpression(string expression)
+        {
+            ConditionExpression = expression;
         }
     }
 }
