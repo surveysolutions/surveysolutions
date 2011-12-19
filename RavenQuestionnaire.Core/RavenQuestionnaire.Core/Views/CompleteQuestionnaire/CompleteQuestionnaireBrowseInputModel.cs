@@ -17,10 +17,10 @@
         private int _pageSize = 5;
 
 
-        public int ResponsibleId
+        public string ResponsibleId
         {
-            get { return _pageSize; }
-            set { _pageSize = value; }
+            get { return _responsibleId; }
+            set { _responsibleId = value; }
         }
 
         private string _responsibleId = "";
