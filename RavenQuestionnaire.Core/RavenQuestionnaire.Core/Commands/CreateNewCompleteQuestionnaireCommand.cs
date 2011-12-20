@@ -10,6 +10,7 @@ namespace RavenQuestionnaire.Core.Commands
         public string QuestionnaireId { get; private set; }
         public string UserId { get; private set; }
         public IEnumerable<CompleteAnswer> CompleteAnswers { get; private set; }
+        public string CompleteQuestionnaireId { get; set; }
 
         public CreateNewCompleteQuestionnaireCommand(string questionnaireId, IEnumerable<CompleteAnswer> answers, string creatorId)
         {

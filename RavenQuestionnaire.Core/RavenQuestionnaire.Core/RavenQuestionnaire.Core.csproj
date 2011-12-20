@@ -102,6 +102,7 @@
     <Compile Include="CommandHandlers\DeleteQuestionHandler.cs" />
     <Compile Include="CommandHandlers\DeleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\DeleteUserHandler.cs" />
+    <Compile Include="CommandHandlers\UpdateAnswerInCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\UpdateCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\UpdateQuestionHandler.cs">
       <SubType>Code</SubType>
@@ -121,6 +122,7 @@
     <Compile Include="Commands\DeleteQuestionCommand.cs" />
     <Compile Include="Commands\DeleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\DeleteUserCommand.cs" />
+    <Compile Include="Commands\UpdateAnswerInCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\UpdateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\UpdateQuestionCommand.cs" />
     <Compile Include="Commands\UpdateQuestionnaireCommand.cs" />
@@ -184,7 +186,9 @@
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseViewFactory.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireEnumerableViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireView.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewEnumerable.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
     <Compile Include="Views\Location\LocationBrowseInputModel.cs" />

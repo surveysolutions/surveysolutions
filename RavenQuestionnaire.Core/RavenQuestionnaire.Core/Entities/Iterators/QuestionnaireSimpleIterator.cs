@@ -55,7 +55,8 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             }
         }
 
-        public bool IsDone{
+        public bool IsDone
+        {
             get { return this.current >= this.questionnaire.GetAllQuestions().Count - 1; }
         }
 
@@ -63,6 +64,35 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
         {
             get { return this.questionnaire.GetAllQuestions()[current]; }
         }
+
+        public Question GetNextAfter(Guid? questionkey)
+        {
+            if (!questionkey.HasValue)
+                return First;
+
+            var question =
+                this.questionnaire.GetAllQuestions().Where(q => q.PublicKey.Equals(questionkey.Value)).FirstOrDefault();
+            current = this.questionnaire.GetAllQuestions().IndexOf(question);
+            if (question != null)
+            {
+                return Next;
+            }
+            return null;
+        }
+        public Question GetPreviousBefoure(Guid? questionkey)
+        {
+            if (!questionkey.HasValue)
+                return First;
+            var question =
+                this.questionnaire.GetAllQuestions().Where(q => q.PublicKey.Equals(questionkey)).FirstOrDefault();
+            current = this.questionnaire.GetAllQuestions().IndexOf(question);
+            if (question != null)
+            {
+                return Previous;
+            }
+            return null;
+        }
+
         private int current = 0;
     }
 }
