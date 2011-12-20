@@ -10,36 +10,41 @@ using RavenQuestionnaire.Core.Views.Questionnaire;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
-    public class CompleteQuestionnaireEnumerableViewFactory : IViewFactory<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>
+    public class CompleteQuestionnaireEnumerableViewFactory :
+        IViewFactory<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>
     {
-          private IDocumentSession documentSession;
+        private IDocumentSession documentSession;
 
-          public CompleteQuestionnaireEnumerableViewFactory(IDocumentSession documentSession)
+        public CompleteQuestionnaireEnumerableViewFactory(IDocumentSession documentSession)
         {
             this.documentSession = documentSession;
         }
-          public CompleteQuestionnaireViewEnumerable Load(CompleteQuestionnaireViewInputModel input)
-          {
-              var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
-              var completeQuestionnaireRoot = new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc);
 
-              var iterator = new QuestionnaireSimpleIterator(completeQuestionnaireRoot);
-              CompleteQuestionView currentViewQuestion = null;
-              var question = input.IsReverse?iterator.GetPreviousBefoure(input.PreviousQuestionPublicKey) : iterator.GetNextAfter(input.PreviousQuestionPublicKey);
-              if (question != null)
-              {
-                  currentViewQuestion = new CompleteQuestionView(
-                      new QuestionView(question.PublicKey,
-                                       question.QuestionText,
-                                       question.QuestionType,
-                                       question.Answers,
-                                       question.QuestionnaireId));
-              }
-              return new CompleteQuestionnaireViewEnumerable(doc.Id, doc.Questionnaire.Title,
-                                                             doc.CompletedAnswers.ToArray(), doc.CreationDate,
-                                                             doc.LastEntryDate,
-                                                             doc.Status, doc.ResponsibleId,
-                                                             currentViewQuestion);
-          }
+        public CompleteQuestionnaireViewEnumerable Load(CompleteQuestionnaireViewInputModel input)
+        {
+            var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
+            var completeQuestionnaireRoot = new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc);
+
+            Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Question, Guid?> iterator =
+                new QuestionnaireSimpleIterator(completeQuestionnaireRoot);
+            CompleteQuestionView currentViewQuestion = null;
+            var question = input.IsReverse
+                               ? iterator.GetPreviousBefoure(input.PreviousQuestionPublicKey)
+                               : iterator.GetNextAfter(input.PreviousQuestionPublicKey);
+            if (question != null)
+            {
+                currentViewQuestion = new CompleteQuestionView(
+                    new QuestionView(question.PublicKey,
+                                     question.QuestionText,
+                                     question.QuestionType,
+                                     question.Answers,
+                                     question.QuestionnaireId));
+            }
+            return new CompleteQuestionnaireViewEnumerable(doc.Id, doc.Questionnaire.Title,
+                                                           doc.CompletedAnswers.ToArray(), doc.CreationDate,
+                                                           doc.LastEntryDate,
+                                                           doc.Status, doc.ResponsibleId,
+                                                           currentViewQuestion);
+        }
     }
 }

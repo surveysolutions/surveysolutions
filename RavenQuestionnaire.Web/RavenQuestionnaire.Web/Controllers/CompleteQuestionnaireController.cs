@@ -127,7 +127,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (answers == null || answers.Length <= 0)
             {
-                return RedirectToAction("Question", new { id = id });
+                return RedirectToAction("Question", new { id = id, order = order == "Previous" });
             }
             if (ModelState.IsValid)
             {
