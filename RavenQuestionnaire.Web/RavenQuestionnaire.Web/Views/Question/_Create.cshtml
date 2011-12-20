@@ -27,6 +27,15 @@
                     @Html.ValidationMessageFor(model => model.QuestionText)
                 </div>
             </div>
+
+             <div class="clearfix">
+                @Html.LabelFor(model => model.ConditionExpression)
+                <div class="input">
+                    @Html.EditorFor(model => model.ConditionExpression)
+                    @Html.ValidationMessageFor(model => model.ConditionExpression)
+                </div>
+            </div>
+
             @if (Model.PublicKey != Guid.Empty)
             {
                 @Html.HiddenFor(model => model.PublicKey)

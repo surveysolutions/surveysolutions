@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object);
             AnswerView[] answers = new AnswerView[]{ new AnswerView(){ AnswerText = "answer", AnswerType = AnswerType.Text} };
-            handler.Handle(new Commands.AddNewQuestionCommand("test", QuestionType.SingleOption, entity.QuestionnaireId,
+            handler.Handle(new Commands.AddNewQuestionCommand("test", QuestionType.SingleOption, entity.QuestionnaireId, string.Empty,
                                                               answers));
 
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());

@@ -23,6 +23,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             var questionnaire = this._questionnaireRepository.Load(command.QuestionnaireId);
             var question = questionnaire.AddQuestion(command.QuestionText, command.QuestionType);
             question.UpdateAnswerList(command.Answers);
+            question.SetConditionExpression(command.ConditionExpression);
         }
     }
 }

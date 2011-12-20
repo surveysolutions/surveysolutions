@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                                                                            q =>
                                                                            new QuestionView(q.PublicKey, q.QuestionText,
                                                                                             q.QuestionType, q.Answers,
-                                                                                            doc.Id))
+                                                                                            doc.Id,q.ConditionExpression))
                                                      ), doc.CompletedAnswers.ToArray(), doc.CreationDate, doc.LastEntryDate,
                                                      doc.Status, doc.ResponsibleId);
         }

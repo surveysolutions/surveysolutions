@@ -25,13 +25,19 @@ namespace RavenQuestionnaire.Core.Commands
             get;
             private set;
         }
+        public string ConditionExpression
+        {
+            get;
+            private set;
+        }
         public Answer[] Answers { get; set; }
        
-        public AddNewQuestionCommand(string text, QuestionType type, string questionnaireId, AnswerView[] answers)
+        public AddNewQuestionCommand(string text, QuestionType type, string questionnaireId, string condition, AnswerView[] answers)
         {
             this.QuestionText = text;
             this.QuestionType = type;
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            this.ConditionExpression = condition;
             this.Answers =
                answers.Select(
                    a =>

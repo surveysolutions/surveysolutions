@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
             
             return new QuestionnaireView(doc.Id,
                                          doc.Title, doc.CreationDate, doc.LastEntryDate,
-                                         doc.Questions.Select(q=> new QuestionView(q.PublicKey,q.QuestionText,q.QuestionType,q.Answers,doc.Id)));
+                                         doc.Questions.Select(q => new QuestionView(q.PublicKey, q.QuestionText, q.QuestionType, q.Answers, doc.Id, q.ConditionExpression)));
         }
     }
 }

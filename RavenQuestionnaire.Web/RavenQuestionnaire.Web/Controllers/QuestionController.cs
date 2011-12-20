@@ -45,18 +45,22 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.PublicKey== Guid.Empty)
+                if (model.PublicKey == Guid.Empty)
                 {
                     AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.QuestionText,
                                                                                     model.QuestionType,
-                                                                                    model.QuestionnaireId, model.Answers);
+                                                                                    model.QuestionnaireId,
+                                                                                    model.ConditionExpression,
+                                                                                    model.Answers);
                     commandInvoker.Execute(createCommand);
 
 
                 }
                 else
                 {
-                    commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId, model.PublicKey, model.QuestionText, model.QuestionType, model.Answers));
+                    commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId, model.PublicKey,
+                                                                     model.QuestionText, model.QuestionType,
+                                                                     model.ConditionExpression, model.Answers));
                 }
                 var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
 

@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
             var question = entity.AddQuestion("question", QuestionType.SingleOption);
             var questionView = new QuestionView(question.PublicKey, question.QuestionText, question.QuestionType,
-                                                question.Answers, question.QuestionnaireId);
+                                                question.Answers, question.QuestionnaireId, question.ConditionExpression);
 
 
             ViewRepositoryMock.Setup(
@@ -61,7 +61,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             var question = entity.AddQuestion("question", QuestionType.SingleOption);
 
             var questionView = new QuestionView(question.PublicKey, question.QuestionText, question.QuestionType,
-                                                question.Answers, question.QuestionnaireId);
+                                                question.Answers, question.QuestionnaireId, question.ConditionExpression);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
             ViewRepositoryMock.Setup(
@@ -101,7 +101,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
             var question = entity.AddQuestion("question", QuestionType.SingleOption);
             var questionView = new QuestionView(question.PublicKey, question.QuestionText, question.QuestionType,
-                                                question.Answers, question.QuestionnaireId);
+                                                question.Answers, question.QuestionnaireId, question.ConditionExpression);
 
             var input = new QuestionViewInputModel(question.PublicKey, entity.QuestionnaireId);
 

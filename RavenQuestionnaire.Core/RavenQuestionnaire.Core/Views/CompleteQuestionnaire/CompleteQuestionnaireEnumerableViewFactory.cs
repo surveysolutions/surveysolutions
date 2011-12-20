@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                                      question.QuestionText,
                                      question.QuestionType,
                                      question.Answers,
-                                     question.QuestionnaireId));
+                                     question.QuestionnaireId, question.ConditionExpression));
             }
             return new CompleteQuestionnaireViewEnumerable(doc.Id, doc.Questionnaire.Title,
                                                            doc.CompletedAnswers.ToArray(), doc.CreationDate,
