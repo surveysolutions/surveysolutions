@@ -12,7 +12,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
             CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(id);
         }
-
+        public CompleteQuestionnaireViewInputModel(string id, Guid? previousQuestion, bool isReverse)
+        {
+            CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(id);
+            PreviousQuestionPublicKey = previousQuestion;
+            IsReverse = isReverse;
+        }
         public string CompleteQuestionnaireId { get; private set; }
+        public Guid? PreviousQuestionPublicKey { get; private set; }
+        public bool IsReverse { get; private set; }
     }
 }

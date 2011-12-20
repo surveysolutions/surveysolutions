@@ -1,0 +1,36 @@
+﻿@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
+@model CompleteQuestionnaireViewEnumerable
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("SaveSingleResult", "CompleteQuestionnaire"))
+{
+    <h1>@Model.Title</h1>
+       
+    <h2>
+        Questions:</h2>
+    
+   if (Model.CurrentQuestion != null)
+   {
+    <div>
+        @{ Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", Model.CurrentQuestion); }
+    </div>
+   }
+   else
+   {
+    <div>
+        Complete</div>
+   }
+
+    @Html.HiddenFor(model => Model.Id)
+    <p>
+        <input type="submit" value="Previous" name="order" class="btn primary" />
+        @if (Model.CurrentQuestion != null)
+        {
+        <input type="submit" value="Next" name="order" class="btn primary" />}
+    </p>
+
+    <div class="">
+        @Html.ActionLink("Back to List of Questionnaires", "Index", null, new { @class = "btn" })
+    </div>
+}

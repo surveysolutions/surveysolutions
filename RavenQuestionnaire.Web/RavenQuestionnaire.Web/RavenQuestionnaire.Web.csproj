@@ -280,6 +280,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\main.less" />
+    <Content Include="Views\CompleteQuestionnaire\Participate.cshtml" />
+    <Content Include="Views\CompleteQuestionnaire\Question.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

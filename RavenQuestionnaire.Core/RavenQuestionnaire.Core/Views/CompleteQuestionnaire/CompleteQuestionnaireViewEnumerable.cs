@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using RavenQuestionnaire.Core.Entities.Iterators;
+using System.Text;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Question;
@@ -8,57 +9,45 @@ using RavenQuestionnaire.Core.Views.Questionnaire;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
-    public class CompleteQuestionnaireView
+    public class CompleteQuestionnaireViewEnumerable
     {
         public string Id { get; set; }
-        public string Title
-        {
-            get { return Questionnaire.Title; }
-        }
+        public string Title { get;  set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate{ get; set; }
 
         public string Status { get; set; }
 
         public string ResponsibleId { set; get; }
+        public CompleteQuestionView CurrentQuestion { get; set; }
 
-        public CompleteQuestionView[] Questions
-        {
-            get { return _questions; }
-        }
-
-        private CompleteQuestionView[] _questions;
-
-        private QuestionnaireView Questionnaire { get; set; }
 
         protected CompleteAnswer[] CompleteAnswers { get; set; }
 
-        public CompleteQuestionnaireView(string id, QuestionnaireView template, CompleteAnswer[] answers, DateTime creationDate,
-                                               DateTime lastEntryDate, string status, string responsibleId):this(template)
+        public CompleteQuestionnaireViewEnumerable(string id,string title, CompleteAnswer[] answers, DateTime creationDate,
+                                               DateTime lastEntryDate, string status, string responsibleId, CompleteQuestionView currentQuestion)
         {
             this.Id = IdUtil.ParseId(id);
+            this.Title = title;
             this.CompleteAnswers = answers;
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
             this.Status = status;
             this.ResponsibleId = responsibleId;
-            MerdgeAnswersWithResults();
+            this.CurrentQuestion = currentQuestion;
+            if (CurrentQuestion != null)
+                MerdgeAnswersWithResults();
 
         }
-        public CompleteQuestionnaireView(QuestionnaireView template)
+        public CompleteQuestionnaireViewEnumerable(QuestionnaireView template)
         {
-            this.Questionnaire = template;
+            this.Title = template.Title;
+            this.CurrentQuestion = new CompleteQuestionView(template.Questions[0]);
             CompleteAnswers = new CompleteAnswer[0];
-            _questions = this.Questionnaire.Questions.Select(q => new CompleteQuestionView(q)).ToArray();
-        }
-
-        public static CompleteQuestionnaireView New(QuestionnaireView template)
-        {
-            return new CompleteQuestionnaireView(template);
         }
         protected void MerdgeAnswersWithResults()
         {
-            foreach (var answer in Questions.SelectMany(q=>q.Answers))
+            foreach (var answer in CurrentQuestion.Answers)
             {
                 var completeAnswer = CompleteAnswers.Where(a => a.PublicKey.Equals(answer.PublicKey)).FirstOrDefault();
                 if(completeAnswer!=null)

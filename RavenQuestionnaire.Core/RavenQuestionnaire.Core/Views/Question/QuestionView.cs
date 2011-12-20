@@ -13,7 +13,6 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public Guid PublicKey { get; set; }
 
-        private string _id;
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
         public AnswerView[] Answers

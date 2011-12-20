@@ -39,7 +39,7 @@
                     @Html.DisplayFor(modelItem => item.ResponsibleId)
                 </td>
                 <td class="buttons">
-                    @Html.ActionLink("Details", "Result", new { id = item.Id }, new { @class = "btn small" })
+                    @Html.ActionLink("Details", "Question", new { id = item.Id }, new { @class = "btn small" })
                     @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn small danger" })
                 </td>
             </tr>

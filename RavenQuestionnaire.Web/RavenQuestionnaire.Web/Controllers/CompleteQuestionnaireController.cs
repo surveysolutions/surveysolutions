@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Questionnaire.Core.Web.Membership;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.CommandHandlers;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
@@ -59,7 +61,24 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             return RedirectToAction("Index");
         }
+        public ActionResult SaveFirstStep(string id, CompleteAnswer[] answers)
+        {
+            if (ModelState.IsValid)
+            {
+                var command = new CreateNewCompleteQuestionnaireCommand(id, answers,
+                                                                        authentication.GetUserIdForCurrentUser());
+                commandInvoker.Execute(command);
 
+
+                return RedirectToAction("Question",
+                                        new
+                                            {
+                                                id = command.CompleteQuestionnaireId,
+                                                question = answers[0].QuestionPublicKey
+                                            });
+            }
+            return RedirectToAction("Participate", new { id });
+        }
         public ActionResult UpdateResult(string id, CompleteAnswer[] answers)
         {
             if (ModelState.IsValid)
@@ -78,7 +97,44 @@ namespace RavenQuestionnaire.Web.Controllers
 
             var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                 new QuestionnaireViewInputModel(id));
-            return View( new CompleteQuestionnaireView(model));
+            return View(new CompleteQuestionnaireView(model));
+        }
+        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
+        public ActionResult Participate(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+
+            var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
+                new QuestionnaireViewInputModel(id));
+
+            ViewBag.ShowPrevious = false;
+            return View(new CompleteQuestionnaireViewEnumerable(model));
+        }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
+        public ActionResult Question(string id, Guid? question, bool? order)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+            var model =
+                viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
+                    new CompleteQuestionnaireViewInputModel(id, question, order?? false));
+            return View( model);
+        }
+
+        public ActionResult SaveSingleResult(string id, CompleteAnswer[] answers, string order)
+        {
+            if (answers == null || answers.Length <= 0)
+            {
+                return RedirectToAction("Question", new { id = id });
+            }
+            if (ModelState.IsValid)
+            {
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, answers[0]));
+            }
+
+            return RedirectToAction("Question", new { id = id, question = answers[0].QuestionPublicKey, order = order == "Previous"});
         }
 
         public ActionResult Delete(string id)

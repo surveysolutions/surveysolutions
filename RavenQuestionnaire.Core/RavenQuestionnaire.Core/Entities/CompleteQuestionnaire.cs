@@ -41,6 +41,8 @@ namespace RavenQuestionnaire.Core.Entities
         }
         public void AddAnswer(CompleteAnswer answer)
         {
+            if(answer.PublicKey== Guid.Empty)
+                return;
             if (innerDocument.CompletedAnswers.Where(a => a.PublicKey.Equals(answer.PublicKey)).Count() > 0)
                 throw new DuplicateNameException("Answer with current public key already exists.");
             var templateAnswer =
@@ -48,13 +50,29 @@ namespace RavenQuestionnaire.Core.Entities
                     a => a.PublicKey.Equals(answer.PublicKey)).FirstOrDefault();
             if (templateAnswer == null)
                 throw new InvalidOperationException("Answer with current public key doesn't exist in question list.");
-            if(!string.IsNullOrEmpty(answer.CustomAnswer) && templateAnswer.AnswerType!= AnswerType.Text)
-                throw new InvalidOperationException("Only answer with type 'Text' can have custom text.");
+           /* if(!string.IsNullOrEmpty(answer.CustomAnswer) && templateAnswer.AnswerType!= AnswerType.Text)
+                throw new InvalidOperationException("Only answer with type 'Text' can have custom text.");*/
+            answer.CustomAnswer = templateAnswer.AnswerText;
             innerDocument.CompletedAnswers.Add(answer);
         }
+        public void UpdateAnswer(CompleteAnswer answer)
+        {
+            var question =
+                innerDocument.Questionnaire.Questions.Where(q => q.PublicKey.Equals(answer.QuestionPublicKey)).
+                    FirstOrDefault();
+            if (question == null)
+                throw new InvalidOperationException("Question does not exist in questionnaire");
+
+            innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey == question.PublicKey);
+            AddAnswer(answer);
+        }
+
         public void UpdateAnswerList(IEnumerable<CompleteAnswer> answers)
         {
             ClearAnswers();
+            if(answers==null)
+                return;
+            
             foreach (var answer in answers)
             {
                 AddAnswer(answer);
