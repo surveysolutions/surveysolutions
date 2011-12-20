@@ -46,7 +46,7 @@ namespace RavenQuestionnaire.Core.Entities
         {
             return innerDocument.Questions.RemoveAll(q => q.PublicKey.Equals(publicKey)) > 0;
         }
-        public void UpdateQuestion(Guid publicKey, string text, QuestionType type, IEnumerable<Answer> answers)
+        public void UpdateQuestion(Guid publicKey, string text, QuestionType type,string condition, IEnumerable<Answer> answers)
         {
             var question = innerDocument.Questions.Where(q => q.PublicKey.Equals(publicKey)).FirstOrDefault();
             if (question == null)
@@ -54,6 +54,7 @@ namespace RavenQuestionnaire.Core.Entities
             question.QuestionText = text;
             question.QuestionType = type;
             question.UpdateAnswerList(answers);
+            question.SetConditionExpression(condition);
             //     return innerDocument.Questions.RemoveAll(q => q.PublicKey.Equals(publicKey)) > 0;
         }
     }
