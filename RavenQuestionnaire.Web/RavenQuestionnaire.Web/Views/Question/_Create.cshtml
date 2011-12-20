@@ -4,6 +4,7 @@
 <div id="divCreateForm" class="modal hide fade">
     <script>
         function HideCreateQuestionForm() {
+            $('#divCreateForm').hide();
             $('#divCreateForm').remove();
         }
     </script>
@@ -31,7 +32,7 @@
              <div class="clearfix">
                 @Html.LabelFor(model => model.ConditionExpression)
                 <div class="input">
-                    @Html.EditorFor(model => model.ConditionExpression)
+                    @Html.TextAreaFor(model => model.ConditionExpression)
                     @Html.ValidationMessageFor(model => model.ConditionExpression)
                 </div>
             </div>
@@ -44,7 +45,9 @@
             @{Html.RenderPartial("~/Views/Answer/_EditAnswers.cshtml", Model);}
         </div>
         <div class="modal-footer">
-            <input type="submit" value="Save" class="btn primary" />
+           
+            <a href="javascript:void(0)" onclick="HideCreateQuestionForm()" class="btn">Cancel</a>
+             <input type="submit" value="Save" class="btn primary" />
         </div>
     }
 </div>

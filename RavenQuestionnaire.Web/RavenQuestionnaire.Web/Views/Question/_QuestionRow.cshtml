@@ -5,7 +5,7 @@
 <div id="@currentRowId" class="question">
     <h3>@Model.Index) @Html.DisplayFor(modelItem => Model.QuestionText) - @Model.PublicKey
         <span>
-            @Ajax.ActionLink("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = currentRowId, OnSuccess = "OpenModal" }, new {@class="btn primary small"})
+            @Ajax.ActionLink("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnSuccess = "OpenModal" }, new { @class = "btn primary small" })
             @Ajax.ActionLink("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn danger small" })
         </span></h3>
     <div class="answers">
