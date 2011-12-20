@@ -19,7 +19,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            questionnaire.AddQuestion("question", QuestionType.SingleOption);
+            questionnaire.AddQuestion("question", QuestionType.SingleOption, string.Empty);
 
             Assert.AreEqual(innerDocument.Questions[0].QuestionText, "question");
             Assert.AreEqual(innerDocument.Questions[0].QuestionType, QuestionType.SingleOption);
@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            questionnaire.AddQuestion("question", QuestionType.SingleOption);
+            questionnaire.AddQuestion("question", QuestionType.SingleOption, string.Empty);
 
             questionnaire.ClearQuestions();
             Assert.AreEqual(innerDocument.Questions.Count, 0);
@@ -49,7 +49,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            var question = questionnaire.AddQuestion("question", QuestionType.SingleOption);
+            var question = questionnaire.AddQuestion("question", QuestionType.SingleOption, string.Empty);
 
             questionnaire.RemoveQuestion(question.PublicKey);
             Assert.AreEqual(innerDocument.Questions.Count, 0);
@@ -59,7 +59,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            var question = questionnaire.AddQuestion("old question title", QuestionType.SingleOption);
+            var question = questionnaire.AddQuestion("old question title", QuestionType.SingleOption, string.Empty);
            
             questionnaire.UpdateQuestion(question.PublicKey, "new question title", QuestionType.MultyOption,string.Empty,
                                          new Answer[]

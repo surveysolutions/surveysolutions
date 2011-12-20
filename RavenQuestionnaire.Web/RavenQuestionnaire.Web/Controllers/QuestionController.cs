@@ -43,31 +43,43 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Save(QuestionView model)
         {
+            
             if (ModelState.IsValid)
             {
-                if (model.PublicKey == Guid.Empty)
+                try
                 {
-                    AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.QuestionText,
-                                                                                    model.QuestionType,
-                                                                                    model.QuestionnaireId,
-                                                                                    model.ConditionExpression,
-                                                                                    model.Answers);
-                    commandInvoker.Execute(createCommand);
 
 
+                    if (model.PublicKey == Guid.Empty)
+                    {
+                        AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.QuestionText,
+                                                                                        model.QuestionType,
+                                                                                        model.QuestionnaireId,
+                                                                                        model.ConditionExpression,
+                                                                                        model.Answers);
+                        commandInvoker.Execute(createCommand);
+
+
+                    }
+                    else
+                    {
+                        commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId, model.PublicKey,
+                                                                         model.QuestionText, model.QuestionType,
+                                                                         model.ConditionExpression, model.Answers));
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId, model.PublicKey,
-                                                                     model.QuestionText, model.QuestionType,
-                                                                     model.ConditionExpression, model.Answers));
+
+                    ModelState.AddModelError("ConditionExpression", e.Message);
+                    return PartialView("_Create", model);
                 }
                 var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
 
                 return PartialView("_Index", questionnaire.Questions);
 
             }
-            return PartialView("_Create" /*, model*/);
+            return PartialView("_Create" , model);
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public string Delete(Guid publicKey, string questionnaireId)

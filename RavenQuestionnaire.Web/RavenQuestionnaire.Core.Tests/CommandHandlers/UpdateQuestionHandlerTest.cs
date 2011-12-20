@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Questionnaire entity = new Questionnaire(innerDocument);
-            Question question = entity.AddQuestion("question", QuestionType.SingleOption);
+            Question question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
             UpdateQuestionHandler handler = new UpdateQuestionHandler(questionnaireRepositoryMock.Object);

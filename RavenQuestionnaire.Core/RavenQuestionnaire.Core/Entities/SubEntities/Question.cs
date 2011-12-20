@@ -55,15 +55,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             var e = new Expression(ConditionExpression);
             foreach (var answer in answers)
             {
-               /* var answerData = Answers.Where(a => a.PublicKey.Equals(answer.PublicKey)).FirstOrDefault();
-                if (answerData == null)
-                {
-                    continue;
-                }
-                var answerValue = answerData.AnswerType == AnswerType.Select
-                                      ? answerData.AnswerText
-                                      : answer.CustomAnswer;*/
-                //Answers.Where(a=>a.PublicKey.Equals(answer.PublicKey)).FirstOrDefault().
                 e.Parameters[answer.QuestionPublicKey.ToString()] = answer.CustomAnswer;
             }
 

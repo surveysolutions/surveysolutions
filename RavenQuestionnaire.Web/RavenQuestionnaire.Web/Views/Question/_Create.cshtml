@@ -1,19 +1,14 @@
 ﻿@using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Web.Models
 @model QuestionView
-<div id="divCreateForm" class="modal hide fade">
-    <script>
-        function HideCreateQuestionForm() {
-            $('#divCreateForm').hide();
-            $('#divCreateForm').remove();
-        }
-    </script>
+      
+<div id="divCreateForm">
+
     @using (Ajax.BeginForm("Save", "Question",
                                          new AjaxOptions
                                              {
-                                                 InsertionMode = InsertionMode.Replace,
-                                                 UpdateTargetId = "divAllQuestions",
-                                                 OnSuccess = "HideCreateQuestionForm"
+                                                 UpdateTargetId = "addNewQuestion",
+                                                 OnComplete = "HideCreateQuestionForm"
                                              }))
     {
         <div class="modal-header">
@@ -29,7 +24,7 @@
                 </div>
             </div>
 
-             <div class="clearfix">
+            <div class="clearfix">
                 @Html.LabelFor(model => model.ConditionExpression)
                 <div class="input">
                     @Html.TextAreaFor(model => model.ConditionExpression)
@@ -46,8 +41,8 @@
         </div>
         <div class="modal-footer">
            
-            <a href="javascript:void(0)" onclick="HideCreateQuestionForm()" class="btn">Cancel</a>
-             <input type="submit" value="Save" class="btn primary" />
+            <a href="javascript:void(0)" onclick=" $('#addNewQuestion').modal('hide')" class="btn">Cancel</a>
+            <input type="submit" value="Save" class="btn primary" />
         </div>
     }
 </div>
