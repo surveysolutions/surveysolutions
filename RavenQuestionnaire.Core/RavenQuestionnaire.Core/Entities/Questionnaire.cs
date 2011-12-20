@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NCalc;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
@@ -30,10 +31,12 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Questions.Clear();
         }
 
-        public Question AddQuestion(string text, QuestionType type)
+        public Question AddQuestion(string text, QuestionType type, string condition)
         {
+            ValidateExpression(condition);
             Question result = new Question()
                                   {QuestionText = text, QuestionType = type, QuestionnaireId = this.QuestionnaireId};
+            result.SetConditionExpression(condition);
             innerDocument.Questions.Add(result);
             return result;
         }
@@ -54,8 +57,20 @@ namespace RavenQuestionnaire.Core.Entities
             question.QuestionText = text;
             question.QuestionType = type;
             question.UpdateAnswerList(answers);
+            ValidateExpression(condition);
             question.SetConditionExpression(condition);
-            //     return innerDocument.Questions.RemoveAll(q => q.PublicKey.Equals(publicKey)) > 0;
+        }
+        public void ValidateExpression(string expression)
+        {
+            if (string.IsNullOrEmpty(expression))
+                return;
+            var e = new Expression(expression);
+            foreach (var question in innerDocument.Questions)
+            {
+                e.Parameters[question.PublicKey.ToString()] = "1";
+            }
+            e.Evaluate();
+
         }
     }
 }
