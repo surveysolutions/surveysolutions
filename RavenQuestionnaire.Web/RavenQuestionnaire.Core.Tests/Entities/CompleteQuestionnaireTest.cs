@@ -20,25 +20,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             innerDocument.Questionnaire= new QuestionnaireDocument();
             CompleteQuestionnaire questionnaire = new CompleteQuestionnaire(innerDocument);
 
-            Assert.Throws<InvalidOperationException>(() => questionnaire.AddAnswer(new CompleteAnswer() { CustomAnswer = "test" }));
-        }
-        [Test]
-        public void WhenAddCompletedAnswerFromQuestionnaireListWithCustonText_InvalidExceptionThrowed()
-        {
-            CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
-            CompleteQuestionnaireDocument innerDocument =
-               ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
-            Answer answer = new Answer()
-            {
-                PublicKey = innerDocument.Questionnaire.Questions[0].Answers[0].PublicKey,
-                AnswerText = innerDocument.Questionnaire.Questions[0].Answers[0].AnswerText
-            };
-            Assert.Throws<InvalidOperationException>(
-                () =>
-                completeQuestionnaire.AddAnswer(new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0], innerDocument.Questionnaire.Questions[0].PublicKey)
-                                                    {CustomAnswer = "test"}));
-            /*      completeQuestionnaire.AddAnswer(new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0]));
-            Assert.AreEqual(innerDocument.CompletedAnswers[0].CustomAnswer, "answer");*/
+            Assert.Throws<InvalidOperationException>(() => questionnaire.AddAnswer(new CompleteAnswer() { PublicKey = Guid.NewGuid(),CustomAnswer = "test" }));
         }
         [Test]
         public void WhenAddCompletedAnswerFromQuestionnaireList_AnswerIsAdded()
