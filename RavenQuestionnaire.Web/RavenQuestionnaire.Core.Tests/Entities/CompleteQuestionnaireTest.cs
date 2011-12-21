@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
@@ -87,6 +88,86 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             innerDocument.Questionnaire = new QuestionnaireDocument();
             innerDocument.Questionnaire.Questions = questions;
             Assert.AreEqual(completeQuestionnaire.GetAllQuestions(), questions);
+        }
+
+        [Test]
+        public void UpdateAnswer_UpdateUnpresentedQuestion_ExceptionIsThrownen()
+        {
+            CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
+            CompleteQuestionnaireDocument innerDocument =
+               ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
+            Assert.Throws<InvalidOperationException>(
+                () => completeQuestionnaire.UpdateAnswer(new CompleteAnswer(new Answer(), Guid.NewGuid())));
+
+        }
+        [Test]
+        public void UpdateAnswer_UpdateQuestion_QuestionIsUpdated()
+        {
+            CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
+            CompleteQuestionnaireDocument innerDocument =
+               ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
+            var firstQuestion = innerDocument.Questionnaire.Questions[0];
+            innerDocument.CompletedAnswers.Add(new CompleteAnswer(firstQuestion.Answers[0], firstQuestion.PublicKey));
+            
+
+            completeQuestionnaire.UpdateAnswer(new CompleteAnswer(firstQuestion.Answers[1], firstQuestion.PublicKey));
+            Assert.AreEqual(innerDocument.CompletedAnswers.Count, 1);
+            Assert.AreEqual(innerDocument.CompletedAnswers[0].PublicKey, firstQuestion.Answers[1].PublicKey);
+
+        }
+
+        [Test]
+        public void AddAnswer_WithEmptyGuid_DoNothing()
+        {
+            CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
+            CompleteQuestionnaireDocument innerDocument =
+               ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
+
+            completeQuestionnaire.AddAnswer(new CompleteAnswer() {PublicKey = Guid.Empty});
+            Assert.AreEqual(innerDocument.CompletedAnswers.Count, 0);
+
+        }
+        [Test]
+        public void AddAnswer_Dublicate_DuplicateNameExceptionIsThrowed()
+        {
+            CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
+            CompleteQuestionnaireDocument innerDocument =
+               ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
+            var firstQuestion = innerDocument.Questionnaire.Questions[0];
+            innerDocument.CompletedAnswers.Add(new CompleteAnswer(firstQuestion.Answers[0], firstQuestion.PublicKey));
+            
+            Assert.Throws<DuplicateNameException>(
+                () =>
+                completeQuestionnaire.AddAnswer(new CompleteAnswer(firstQuestion.Answers[0], firstQuestion.PublicKey)));
+
+        }
+        [Test]
+        public void AddAnswer_UpresentedAnswer_InvalidOperationExceptionIsThrowed()
+        {
+            CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
+            CompleteQuestionnaireDocument innerDocument =
+               ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
+            var firstQuestion = innerDocument.Questionnaire.Questions[0];
+
+
+            Assert.Throws<InvalidOperationException>(
+                () =>
+                completeQuestionnaire.AddAnswer(new CompleteAnswer(new Answer(), firstQuestion.PublicKey)));
+
+        }
+        [Test]
+        public void AddAnswer_CorrectAnswer_AnswerIsAdded()
+        {
+            CompleteQuestionnaire completeQuestionnaire =
+                CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
+            CompleteQuestionnaireDocument innerDocument =
+                ((IEntity<CompleteQuestionnaireDocument>) completeQuestionnaire).GetInnerDocument();
+            var firstQuestion = innerDocument.Questionnaire.Questions[0];
+
+            completeQuestionnaire.AddAnswer(new CompleteAnswer(firstQuestion.Answers[0], firstQuestion.PublicKey));
+            Assert.AreEqual(innerDocument.CompletedAnswers.Count, 1);
+            Assert.AreEqual(innerDocument.CompletedAnswers[0].PublicKey, firstQuestion.Answers[0].PublicKey);
+
         }
     }
 }

@@ -23,6 +23,8 @@ namespace RavenQuestionnaire.Core.Tests.Utils
             });
             Answer answer = new Answer() {AnswerText = "answer", AnswerType = AnswerType.Select};
             innerDocument.Questionnaire.Questions[0].AddAnswer(answer);
+            Answer answer2 = new Answer() { AnswerText = "answer2", AnswerType = AnswerType.Select };
+            innerDocument.Questionnaire.Questions[0].AddAnswer(answer2);
             return new CompleteQuestionnaire(innerDocument);
         }
     }

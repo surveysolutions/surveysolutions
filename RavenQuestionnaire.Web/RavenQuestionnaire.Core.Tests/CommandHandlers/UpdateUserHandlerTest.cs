@@ -35,5 +35,37 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                 innerDocument.Roles.Count == 1 && innerDocument.Roles.Contains(UserRoles.Administrator)); 
 
         }
+
+        [Test]
+        public void WhenCommandIsReceived_UserUserWithSupervisor_UserIsUpdated()
+        {
+            Mock<IUserRepository> userRepositoryMock = new Mock<IUserRepository>();
+
+            UserDocument innerDocument = new UserDocument();
+            innerDocument.Id = "userdocuments/uID";
+            User entity = new User(innerDocument);
+
+            UserDocument supervisorDoc = new UserDocument();
+            supervisorDoc.UserName = "supervisor";
+            supervisorDoc.Password = "1234";
+            supervisorDoc.Roles.Add(UserRoles.Supervisor);
+            supervisorDoc.IsLocked = false;
+            supervisorDoc.Id = "userdocuments/supervisor_id";
+            User supervisor = new User(supervisorDoc);
+            userRepositoryMock.Setup(x => x.Load("userdocuments/supervisor_id")).Returns(supervisor);
+            userRepositoryMock.Setup(x => x.Load("userdocuments/uID")).Returns(entity);
+            Location location = new Location("test");
+            Mock<ILocationRepository> locationRepositoryMock = new Mock<ILocationRepository>();
+            locationRepositoryMock.Setup(x => x.Load("locationdocuments/some_id")).Returns(location);
+
+            UpdateUserHandler handler = new UpdateUserHandler(userRepositoryMock.Object,
+                                                                    locationRepositoryMock.Object);
+            handler.Handle(new Commands.UpdateUserCommand("uID", "email@test.com", false,
+                                                          new UserRoles[] {UserRoles.User},
+                                                          "supervisor_id", "some_id"));
+            Assert.AreEqual(innerDocument.Supervisor.SupervisorId, supervisorDoc.Id);
+            Assert.AreEqual(innerDocument.Supervisor.SupervisorName, supervisorDoc.UserName);
+            userRepositoryMock.Verify(x => x.Load("userdocuments/supervisor_id"));
+        }
     }
 }

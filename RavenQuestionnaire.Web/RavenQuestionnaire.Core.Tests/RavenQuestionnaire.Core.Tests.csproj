@@ -83,6 +83,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
@@ -99,6 +100,7 @@
     <Compile Include="CommandHandlers\DeleteQuestionHandlerTest.cs" />
     <Compile Include="CommandHandlers\DeleteQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\DeleteUserHandlerTest.cs" />
+    <Compile Include="CommandHandlers\UpdateAnswerInCompleteQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateCompleteQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateQuestionHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateQuestionnaireHandlerTest.cs" />
