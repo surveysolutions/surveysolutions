@@ -70,8 +70,6 @@ namespace RavenQuestionnaire.Core.Entities
         public void UpdateAnswerList(IEnumerable<CompleteAnswer> answers)
         {
             ClearAnswers();
-            if(answers==null)
-                return;
             
             foreach (var answer in answers)
             {

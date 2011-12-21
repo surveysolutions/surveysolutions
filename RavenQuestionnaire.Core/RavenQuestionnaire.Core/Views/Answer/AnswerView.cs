@@ -16,7 +16,6 @@ namespace RavenQuestionnaire.Core.Views.Answer
         public AnswerType AnswerType { get; set; }
         public Guid QuestionId { get; set; }
 
-        private string _id;
         public  AnswerView()
         {
         }
