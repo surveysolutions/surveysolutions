@@ -94,16 +94,19 @@
   <ItemGroup>
     <Compile Include="CommandHandlers\AddNewQuestionHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewCompleteQuestionnaireHandler.cs" />
+    <Compile Include="CommandHandlers\CreateNewGroupHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewLocationHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewStatusHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewUserHandler.cs" />
     <Compile Include="CommandHandlers\DeleteCompleteQuestionnaireHandler.cs" />
+    <Compile Include="CommandHandlers\DeleteGroupHandler.cs" />
     <Compile Include="CommandHandlers\DeleteQuestionHandler.cs" />
     <Compile Include="CommandHandlers\DeleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\DeleteUserHandler.cs" />
     <Compile Include="CommandHandlers\UpdateAnswerInCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\UpdateCompleteQuestionnaireHandler.cs" />
+    <Compile Include="CommandHandlers\UpdateGroupHandler.cs" />
     <Compile Include="CommandHandlers\UpdateQuestionHandler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -111,8 +114,10 @@
     <Compile Include="CommandHandlers\UpdateStatusRestrictionHandler.cs" />
     <Compile Include="CommandHandlers\UpdateUserHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
+    <Compile Include="Commands\CreateNewGroupCommand.cs" />
     <Compile Include="Commands\CreateNewLocationCommand.cs" />
     <Compile Include="Commands\CreateNewStatusCommand.cs" />
+    <Compile Include="Commands\DeleteGroupCommand.cs" />
     <Compile Include="Commands\IComand.cs" />
     <Compile Include="Commands\AddNewQuestionCommand.cs" />
     <Compile Include="Commands\CreateNewCompleteQuestionnaireCommand.cs" />
@@ -124,6 +129,7 @@
     <Compile Include="Commands\DeleteUserCommand.cs" />
     <Compile Include="Commands\UpdateAnswerInCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\UpdateCompleteQuestionnaireCommand.cs" />
+    <Compile Include="Commands\UpdateGroupCommand.cs" />
     <Compile Include="Commands\UpdateQuestionCommand.cs" />
     <Compile Include="Commands\UpdateQuestionnaireCommand.cs" />
     <Compile Include="Commands\UpdateStatusRestrictionsCommand.cs" />
@@ -138,6 +144,7 @@
     <Compile Include="Documents\StatusDocument.cs" />
     <Compile Include="Documents\UserDocument.cs" />
     <Compile Include="Entities\CompleteQuestionnaire.cs" />
+    <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\Event.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Iterators\Iterator.cs" />
@@ -148,6 +155,7 @@
     <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\AnswerType.cs" />
     <Compile Include="Entities\SubEntities\CompleteAnswer.cs" />
+    <Compile Include="Entities\SubEntities\Group.cs" />
     <Compile Include="Entities\SubEntities\LocationWithUserStatistic.cs" />
     <Compile Include="Entities\SubEntities\Question.cs" />
     <Compile Include="Entities\SubEntities\QuestionType.cs" />
