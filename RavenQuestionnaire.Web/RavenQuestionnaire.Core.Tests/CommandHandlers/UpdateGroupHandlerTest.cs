@@ -9,32 +9,28 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Repositories;
-using RavenQuestionnaire.Core.Views.Answer;
 
 namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 {
     [TestFixture]
-    public class DeleteQuestionHandlerTest
+    public class UpdateGroupHandlerTest
     {
+
         [Test]
-        public void WhenCommandIsReceived_QuestionnIsDeletedFromRepository()
+        public void WhenCommandIsReceived_NewgroupIsAddedToQuestionanire()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
-
             Questionnaire entity = new Questionnaire(innerDocument);
-            var question = new Question("question", QuestionType.MultyOption);
-            innerDocument.Questions.Add(question);
-            Assert.True(
-                innerDocument.Questions.Count == 1);
+            Group groupForUpdate = new Group();
+            innerDocument.Groups.Add(groupForUpdate);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
-
-            DeleteQuestionHandler handler = new DeleteQuestionHandler(questionnaireRepositoryMock.Object);
-            handler.Handle(new Commands.DeleteQuestionCommand(question.PublicKey, entity.QuestionnaireId));
-
-            Assert.True(
-                innerDocument.Questions.Count == 0);
+            UpdateGroupHandler handler = new UpdateGroupHandler(questionnaireRepositoryMock.Object);
+      /*      AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };*/
+            handler.Handle(new Commands.UpdateGroupCommand("test", entity.QuestionnaireId, groupForUpdate.PublicKey));
+            Assert.AreEqual(innerDocument.Groups[0].GroupText, "test");
+            questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
 
         }
     }

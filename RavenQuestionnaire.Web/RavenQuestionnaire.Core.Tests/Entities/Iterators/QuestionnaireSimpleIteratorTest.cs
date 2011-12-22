@@ -33,9 +33,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
             var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
             questionnaire.GetInnerDocument().Questionnaire = new QuestionnaireDocument();
             questionnaire.GetInnerDocument().Questionnaire.Questions.Add(
-                new Question(questionnaire.GetQuestionnaireTemplate(), "first", QuestionType.DynamicInputList));
+                new Question("first", QuestionType.DynamicInputList));
             questionnaire.GetInnerDocument().Questionnaire.Questions.Add(
-                new Question(questionnaire.GetQuestionnaireTemplate(), "second", QuestionType.DynamicInputList));
+                new Question("second", QuestionType.DynamicInputList));
             var iterator = new QuestionnaireSimpleIterator(questionnaire);
             Assert.AreEqual(iterator.First.QuestionText, "first");
 
@@ -49,9 +49,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
             var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
             questionnaire.GetInnerDocument().Questionnaire = new QuestionnaireDocument();
             questionnaire.GetInnerDocument().Questionnaire.Questions.Add(
-                new Question(questionnaire.GetQuestionnaireTemplate(), "first", QuestionType.DynamicInputList));
+                new Question("first", QuestionType.DynamicInputList));
             questionnaire.GetInnerDocument().Questionnaire.Questions.Add(
-                new Question(questionnaire.GetQuestionnaireTemplate(), "second", QuestionType.DynamicInputList));
+                new Question("second", QuestionType.DynamicInputList));
             var iterator = new QuestionnaireSimpleIterator(questionnaire);
 
            /* Assert.AreEqual(iterator.Next.QuestionText, "first");*/
@@ -69,11 +69,11 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
             questionnaire.GetInnerDocument().Questionnaire = new QuestionnaireDocument();
 
 
-            Question falseConditionQuestion = new Question(questionnaire.GetQuestionnaireTemplate(),"false", QuestionType.DynamicInputList);
+            Question falseConditionQuestion = new Question("false", QuestionType.DynamicInputList);
             falseConditionQuestion.SetConditionExpression("5<1");
-            Question trueConditionQuestion1 = new Question(questionnaire.GetQuestionnaireTemplate(), "true1", QuestionType.DynamicInputList);
+            Question trueConditionQuestion1 = new Question("true1", QuestionType.DynamicInputList);
             trueConditionQuestion1.SetConditionExpression("5>1");
-            Question trueConditionQuestion2 = new Question(questionnaire.GetQuestionnaireTemplate(), "true2", QuestionType.DynamicInputList);
+            Question trueConditionQuestion2 = new Question("true2", QuestionType.DynamicInputList);
             trueConditionQuestion2.SetConditionExpression("5>1");
          
             questionnaire.GetInnerDocument().Questionnaire.Questions.Add(trueConditionQuestion1);

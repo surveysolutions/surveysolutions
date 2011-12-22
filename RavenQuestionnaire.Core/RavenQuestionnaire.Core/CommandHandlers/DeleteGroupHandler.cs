@@ -8,19 +8,18 @@ using RavenQuestionnaire.Core.Repositories;
 
 namespace RavenQuestionnaire.Core.CommandHandlers
 {
-    public class DeleteQuestionHandler : ICommandHandler<DeleteQuestionCommand>
+    public class DeleteGroupHandler : ICommandHandler<DeleteGroupCommand>
     {
-        
         private IQuestionnaireRepository _questionnaireRepository;
-        public DeleteQuestionHandler(IQuestionnaireRepository questionnaireRepository)
+        public DeleteGroupHandler(IQuestionnaireRepository questionnaireRepository)
         {
             this._questionnaireRepository = questionnaireRepository;
         }
 
-        public void Handle(DeleteQuestionCommand command)
+        public void Handle(DeleteGroupCommand command)
         {
             var entity = _questionnaireRepository.Load(command.QuestionnaireId);
-            entity.Remove<Question>(command.QuestionId);
+            entity.Remove<Group>(command.GroupPublicKey);
             //  this._questionRepository.Remove(entity);
             //  entity.
         }

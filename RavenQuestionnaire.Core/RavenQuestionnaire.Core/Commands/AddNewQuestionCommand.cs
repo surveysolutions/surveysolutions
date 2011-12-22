@@ -25,6 +25,11 @@ namespace RavenQuestionnaire.Core.Commands
             get;
             private set;
         }
+        public Guid? GroupPublicKey
+        {
+            get;
+            private set;
+        }
         public string ConditionExpression
         {
             get;
@@ -32,11 +37,12 @@ namespace RavenQuestionnaire.Core.Commands
         }
         public Answer[] Answers { get; set; }
        
-        public AddNewQuestionCommand(string text, QuestionType type, string questionnaireId, string condition, AnswerView[] answers)
+        public AddNewQuestionCommand(string text, QuestionType type, string questionnaireId, Guid? groupPublicKey, string condition, AnswerView[] answers)
         {
             this.QuestionText = text;
             this.QuestionType = type;
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            this.GroupPublicKey = groupPublicKey;
             this.ConditionExpression = condition;
             this.Answers =
                answers.Select(

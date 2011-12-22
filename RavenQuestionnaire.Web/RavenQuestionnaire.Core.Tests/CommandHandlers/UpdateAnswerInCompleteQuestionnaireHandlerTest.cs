@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             CompleteQuestionnaireDocument qDoqument= new CompleteQuestionnaireDocument();
             qDoqument.Questionnaire= new QuestionnaireDocument();
-            Question question = new Question(new Questionnaire(qDoqument.Questionnaire), "q",
+            Question question = new Question( "q",
                                              QuestionType.SingleOption);
             Answer answer= new Answer();
             question.Answers.Add(answer);

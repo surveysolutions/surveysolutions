@@ -36,9 +36,9 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty);
+            var question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty, null);
             var questionView = new QuestionView(question.PublicKey, question.QuestionText, question.QuestionType,
-                                                question.Answers, question.QuestionnaireId, question.ConditionExpression);
+                                                question.Answers, innerDocument.Id, question.ConditionExpression);
 
 
             ViewRepositoryMock.Setup(
@@ -48,7 +48,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                         v => v.QuestionnaireId.Equals("questionnairedocuments/qID"))))
                 .Returns(new QuestionnaireView(innerDocument.Id, innerDocument.Title, innerDocument.CreationDate,
                                                innerDocument.LastEntryDate, new QuestionView[0]));
-            Controller.Save(new QuestionView() {QuestionText = "test", QuestionnaireId = question.QuestionnaireId});
+            Controller.Save(new QuestionView() { QuestionText = "test", QuestionnaireId = innerDocument.Id });
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<AddNewQuestionCommand>()), Times.Once());
         }
 
@@ -58,10 +58,10 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty);
+            var question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty, null);
 
             var questionView = new QuestionView(question.PublicKey, question.QuestionText, question.QuestionType,
-                                                question.Answers, question.QuestionnaireId, question.ConditionExpression);
+                                                question.Answers, innerDocument.Id, question.ConditionExpression);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
             ViewRepositoryMock.Setup(
@@ -82,7 +82,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty);
+            var question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty, null);
 
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
@@ -99,9 +99,9 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty);
+            var question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty, null);
             var questionView = new QuestionView(question.PublicKey, question.QuestionText, question.QuestionType,
-                                                question.Answers, question.QuestionnaireId, question.ConditionExpression);
+                                                question.Answers, innerDocument.Id, question.ConditionExpression);
 
             var input = new QuestionViewInputModel(question.PublicKey, entity.QuestionnaireId);
 
@@ -112,7 +112,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                         v => v.QuestionnaireId.Equals(input.QuestionnaireId) && v.PublickKey.Equals(input.PublickKey))))
                 .Returns(questionView);
 
-            var result = Controller.Edit(question.PublicKey, question.QuestionnaireId);
+            var result = Controller.Edit(question.PublicKey, innerDocument.Id);
             Assert.AreEqual(questionView, ((PartialViewResult)result).ViewData.Model);
         }
      

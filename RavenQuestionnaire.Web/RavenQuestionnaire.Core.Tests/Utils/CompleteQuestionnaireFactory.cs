@@ -17,14 +17,13 @@ namespace RavenQuestionnaire.Core.Tests.Utils
             innerDocument.Questionnaire = new QuestionnaireDocument() { Id = "questionnairedocuments/qID" };
             innerDocument.Questionnaire.Questions.Add(new Question()
             {
-                QuestionnaireId = innerDocument.Questionnaire.Id,
                 QuestionText = "test question",
                 QuestionType = QuestionType.SingleOption
             });
             Answer answer = new Answer() {AnswerText = "answer", AnswerType = AnswerType.Select};
-            innerDocument.Questionnaire.Questions[0].AddAnswer(answer);
+            innerDocument.Questionnaire.Questions[0].Add(answer, null);
             Answer answer2 = new Answer() { AnswerText = "answer2", AnswerType = AnswerType.Select };
-            innerDocument.Questionnaire.Questions[0].AddAnswer(answer2);
+            innerDocument.Questionnaire.Questions[0].Add(answer2, null);
             return new CompleteQuestionnaire(innerDocument);
         }
     }

@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     {
                         AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.QuestionText,
                                                                                         model.QuestionType,
-                                                                                        model.QuestionnaireId,
+                                                                                        model.QuestionnaireId, null,
                                                                                         model.ConditionExpression,
                                                                                         model.Answers);
                         commandInvoker.Execute(createCommand);
