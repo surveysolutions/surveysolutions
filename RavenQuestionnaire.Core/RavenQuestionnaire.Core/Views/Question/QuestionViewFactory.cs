@@ -15,7 +15,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         public QuestionView Load(QuestionViewInputModel input)
         {
             var doc = documentSession.Load<QuestionnaireDocument>(input.QuestionnaireId);
-            var question =doc.Questions.Where(q => q.PublicKey.Equals(input.PublickKey)).FirstOrDefault();
+            var question =doc.Questions.FirstOrDefault(q => q.PublicKey.Equals(input.PublickKey));
             if (question == null)
                 return null;
             return new QuestionView(question.PublicKey, question.QuestionText, question.QuestionType, question.Answers, doc.Id, question.ConditionExpression);

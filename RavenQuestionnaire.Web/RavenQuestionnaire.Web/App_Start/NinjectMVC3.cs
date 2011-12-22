@@ -4,8 +4,10 @@ using Ninject.Extensions.Conventions;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Conventions;
+using FormsAuthentication = Questionnaire.Core.Web.Security.FormsAuthentication;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(RavenQuestionnaire.Web.App_Start.NinjectMVC3), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(RavenQuestionnaire.Web.App_Start.NinjectMVC3), "Stop")]
@@ -79,7 +81,7 @@ namespace RavenQuestionnaire.Web.App_Start
                 s.BindWith(new RegisterFirstInstanceOfInterface());
             });
 
-            kernel.Bind<IFormsAuthentication>().To<Questionnaire.Core.Web.Membership.FormsAuthentication>();
+            kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
         }        
     }
 

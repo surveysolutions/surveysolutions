@@ -42,7 +42,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="dotless.Core">
@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectMVC3.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\CompleteQuestionnaireController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -280,7 +281,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\main.less" />
-    <Content Include="Views\CompleteQuestionnaire\Participate.cshtml" />
+ <Content Include="Views\Administration\Menu.cshtml" />
+   <Content Include="Views\CompleteQuestionnaire\Participate.cshtml" />   
     <Content Include="Views\CompleteQuestionnaire\Question.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

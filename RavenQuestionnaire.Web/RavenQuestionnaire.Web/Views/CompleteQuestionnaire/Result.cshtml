@@ -25,22 +25,22 @@
             <div class="key">
                 Status</div>
             <div class="value">
-                @Html.DropDownListFor(model => model.Status,
-         new SelectList(ViewBag.AvailableStatuses/*, "Id", "Status", Model.Status*/))
+                @Html.DropDownListFor(model => model.Status.Id,
+                new SelectList(ViewBag.AvailableStatuses, "Id", "Name", Model.Status.Id))
             </div>
         </div>
-
         <div class="clearfix">
             <div class="key">
                 Responsible</div>
             <div class="value">
-                @Html.DisplayFor(model => model.ResponsibleId)
+                @Html.DisplayFor(model => model.Responsible.Name)
+                @Html.HiddenFor(model => model.Responsible.Id)
             </div>
         </div>
-
     </div>
 
-    <h3>Questions:</h3>
+    <h3>
+        Questions:</h3>
     Html.RenderPartial("~/Views/Question/_Take.cshtml", Model.Questions);
     @Html.HiddenFor(model => Model.Id)
     <p>

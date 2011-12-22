@@ -28,7 +28,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             if (!String.IsNullOrEmpty(input.ResponsibleId)) //filter result by responsible
             {
                 query = documentSession.Query<CompleteQuestionnaireDocument>()
-                    .Where(x => x.ResponsibleId == input.ResponsibleId)
+                    .Where(x => x.Responsible.Id == input.ResponsibleId)
                     .Skip((input.Page - 1) * input.PageSize)
                     .Take(input.PageSize).ToArray();
             }
@@ -43,7 +43,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                     .Select(
                         x =>
                         new CompleteQuestionnaireBrowseItem(x.Id, x.Questionnaire.Title, x.CreationDate, x.LastEntryDate,
-                                                            x.Status, x.ResponsibleId));
+                                                            x.Status, x.Responsible));
 
                 return new CompleteQuestionnaireBrowseView(
                     input.Page,

@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Security;
-using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Web.Models;
-using FormsAuthentication = System.Web.Security.FormsAuthentication;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
     public class AccountController : Controller
     {
         private IFormsAuthentication authentication;
+
         public AccountController(IFormsAuthentication auth)
         {
             authentication = auth;

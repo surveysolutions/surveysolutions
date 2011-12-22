@@ -63,8 +63,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             handler.Handle(new Commands.UpdateUserCommand("uID", "email@test.com", false,
                                                           new UserRoles[] {UserRoles.User},
                                                           "supervisor_id", "some_id"));
-            Assert.AreEqual(innerDocument.Supervisor.SupervisorId, supervisorDoc.Id);
-            Assert.AreEqual(innerDocument.Supervisor.SupervisorName, supervisorDoc.UserName);
+            Assert.AreEqual(innerDocument.Supervisor.Id, supervisorDoc.Id);
+            Assert.AreEqual(innerDocument.Supervisor.Name, supervisorDoc.UserName);
             userRepositoryMock.Verify(x => x.Load("userdocuments/supervisor_id"));
         }
     }

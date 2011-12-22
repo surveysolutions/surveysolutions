@@ -4,8 +4,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.CommandHandlers;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
@@ -19,6 +19,7 @@ namespace RavenQuestionnaire.Web.Controllers
     {
         private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
+
         private IFormsAuthentication authentication;
 
         public CompleteQuestionnaireController(ICommandInvoker commandInvoker, IViewRepository viewRepository, IFormsAuthentication auth)
@@ -46,9 +47,11 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, 
+                CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
+
             if (model != null)
-                AddAllowedStatusesToViewBag(model.Status);
+                AddAllowedStatusesToViewBag(model.Status.Id, model.Status.Name);
             return View(model);
         }
 
@@ -56,7 +59,10 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new CreateNewCompleteQuestionnaireCommand(id, answers, authentication.GetUserIdForCurrentUser()));
+                var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
+
+                commandInvoker.Execute(new CreateNewCompleteQuestionnaireCommand(id,
+                    answers, authentication.GetCurrentUser(), new SurveyStatus(statusView.Id, statusView.Title)));
 
             }
             return RedirectToAction("Index");
@@ -65,8 +71,11 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
+
                 var command = new CreateNewCompleteQuestionnaireCommand(id, answers,
-                                                                        authentication.GetUserIdForCurrentUser());
+                                                                        authentication.GetCurrentUser(), 
+                                                                        new SurveyStatus(statusView.Id, statusView.Title ));
                 commandInvoker.Execute(command);
 
 
@@ -79,11 +88,11 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             return RedirectToAction("Participate", new { id });
         }
-        public ActionResult UpdateResult(string id, CompleteAnswer[] answers)
+        public ActionResult UpdateResult(string id, CompleteAnswer[] answers, SurveyStatus status)
         {
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, answers));
+                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, answers, status.Id));
 
             }
             return RedirectToAction("Index");
@@ -145,9 +154,9 @@ namespace RavenQuestionnaire.Web.Controllers
 
 
 
-        protected void AddAllowedStatusesToViewBag(string statusId)
+        protected void AddAllowedStatusesToViewBag(string statusId, string statusName)
         {
-            List<string> statuses = new List<string>();
+            List<SurveyStatus> statuses = new List<SurveyStatus>();
 
             StatusView model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(statusId));
             if (model != null)
@@ -163,8 +172,9 @@ namespace RavenQuestionnaire.Web.Controllers
                 }
             }
 
-            if (!statuses.Contains(statusId))
-                statuses.Add(statusId);
+            SurveyStatus currentStatus = new SurveyStatus(statusId, statusName );
+            if (!statuses.Contains(currentStatus))
+                statuses.Add(currentStatus);
 
             ViewBag.AvailableStatuses = statuses;
         }

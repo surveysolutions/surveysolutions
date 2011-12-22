@@ -19,7 +19,8 @@ namespace RavenQuestionnaire.Core.Commands
 
         public string LocationId { get; private set; }
 
-        public UpdateUserCommand(string userId, string email,/* string password,*/ bool isLocked, UserRoles[] rolesList, string supervisorId, string locationId)
+        public UpdateUserCommand(string userId, string email,/* string password,*/ bool isLocked, 
+            UserRoles[] rolesList, string supervisorId, string locationId)
         {
             this.UserId = IdUtil.CreateUserId(userId);
          //   this.Password = password;

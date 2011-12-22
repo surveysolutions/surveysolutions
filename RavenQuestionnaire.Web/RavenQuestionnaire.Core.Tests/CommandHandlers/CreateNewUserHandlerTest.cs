@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                 x.Add(
                     It.Is<User>(
                         u =>
-                        ((IEntity<UserDocument>) u).GetInnerDocument().Supervisor.SupervisorId ==
+                        ((IEntity<UserDocument>) u).GetInnerDocument().Supervisor.Id ==
                         "userdocuments/supervisor_id")), Times.Once());
             userRepositoryMock.Verify(x => x.Load("userdocuments/supervisor_id"));
         }

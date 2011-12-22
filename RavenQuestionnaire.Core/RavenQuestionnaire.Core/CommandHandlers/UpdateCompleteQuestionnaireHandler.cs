@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RavenQuestionnaire.Core.Commands;
+﻿using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Repositories;
-using RavenQuestionnaire.Core.Services;
+using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.CommandHandlers
 {
@@ -13,16 +10,22 @@ namespace RavenQuestionnaire.Core.CommandHandlers
     {
         private ICompleteQuestionnaireRepository _questionnaireRepository;
 
+        private IStatusRepository _statusRepository;
 
-        public UpdateCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository questionnaireRepository)
+        public UpdateCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository questionnaireRepository, IStatusRepository statusRepository)
         {
             this._questionnaireRepository = questionnaireRepository;
+            this._statusRepository = statusRepository;
         }
 
         public void Handle(UpdateCompleteQuestionnaireCommand command)
         {
             CompleteQuestionnaire entity = _questionnaireRepository.Load(command.CompleteQuestionnaireId);
             entity.UpdateAnswerList(command.CompleteAnswers);
+
+            var status = _statusRepository.Load(IdUtil.CreateStatusId(command.StatusId));
+            entity.SetStatus(new SurveyStatus(command.StatusId, status.GetInnerDocument().Title));
+            
         }
     }
 }

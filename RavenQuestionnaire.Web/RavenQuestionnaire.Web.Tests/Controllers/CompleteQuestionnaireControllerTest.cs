@@ -5,6 +5,7 @@ using System.Text;
 using Moq;
 using NUnit.Framework;
 using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -54,7 +55,9 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void When_GetQuestionnaireResultIsExecuted()
         {
             var output = new CompleteQuestionnaireView("completequestionnairedocuments/cqId", new QuestionnaireView(),
-                                                       new CompleteAnswer[0], DateTime.Now, DateTime.Now, "0", "0");
+                                                       new CompleteAnswer[0], DateTime.Now, DateTime.Now, 
+                                                       new SurveyStatus("-1", "dummyStatus"),
+                                                       new UserLight("-1", "dummyUser"));
             var input = new CompleteQuestionnaireViewInputModel("cqId");
 
             ViewRepositoryMock.Setup(

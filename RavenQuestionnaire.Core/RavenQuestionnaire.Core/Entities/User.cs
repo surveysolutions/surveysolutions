@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Roles.Add(firstRole);
             ChangeLockStatus(isLocked);
         }
-        public User(string userName, string password, string email, UserRoles firstRole, bool isLocked, Supervisor supervisor)
+        public User(string userName, string password, string email, UserRoles firstRole, bool isLocked, UserLight supervisor)
             : this(userName, password, email, firstRole, isLocked)
         {
             if (supervisor == null)
@@ -40,15 +40,15 @@ namespace RavenQuestionnaire.Core.Entities
             this.innerDocument.Location=((IEntity<LocationDocument>)location).GetInnerDocument();
         }
 
-        public Supervisor CreateSupervisor()
+        public UserLight CreateSupervisor()
         {
             if (IsUserInRole(UserRoles.Supervisor))
-                return new Supervisor() { SupervisorId = UserId, SupervisorName = innerDocument.UserName };
+                return new UserLight(UserId, innerDocument.UserName );
 
             return null;
         }
 
-        public void SetSupervisor(Supervisor supervisor)
+        public void SetSupervisor(UserLight supervisor)
         {
             this.innerDocument.Supervisor = supervisor;
         }

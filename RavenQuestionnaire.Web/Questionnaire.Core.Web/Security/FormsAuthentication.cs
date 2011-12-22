@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web.Security;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 
-namespace Questionnaire.Core.Web.Membership
+namespace Questionnaire.Core.Web.Security
 {
     public class FormsAuthentication : IFormsAuthentication
     {
@@ -12,14 +10,22 @@ namespace Questionnaire.Core.Web.Membership
 
         public void SignIn(string userName, bool rememberMe)
         {
-            System.Web.Security.FormsAuthentication.SetAuthCookie(userName, rememberMe /* createPersistentCookie */);
+            System.Web.Security.FormsAuthentication.SetAuthCookie(userName, rememberMe);
         }
 
         public void SignOut()
         {
             System.Web.Security.FormsAuthentication.SignOut();
         }
+
         public string GetUserIdForCurrentUser()
+        {
+            UserLight user = GetCurrentUser();
+            return user != null ? user.Id : null;
+        }
+
+
+        public UserLight GetCurrentUser()
         {
             MembershipUser u;
             try
@@ -30,10 +36,15 @@ namespace Questionnaire.Core.Web.Membership
             {
                 u = null;
             }
-            if (u == null) return null;
-            byte[] key = (byte[]) u.ProviderUserKey;
-            return new System.Text.UTF8Encoding().GetString(key);
+            if (u == null)
+                return null;
+
+            byte[] key = (byte[])u.ProviderUserKey;
+
+            return new UserLight(new System.Text.UTF8Encoding().GetString(key), u.UserName);
+
         }
+
 
         #endregion
     }

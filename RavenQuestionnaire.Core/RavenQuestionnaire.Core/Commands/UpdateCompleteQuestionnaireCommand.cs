@@ -8,14 +8,16 @@ namespace RavenQuestionnaire.Core.Commands
     {
         public string CompleteQuestionnaireId { get; private set; }
         public IEnumerable<CompleteAnswer> CompleteAnswers { get; private set; }
+        public string StatusId { get; private set; }
 
 
 
         public UpdateCompleteQuestionnaireCommand(string completeQuestionanireId, 
-                                                  IEnumerable<CompleteAnswer> answers)
+                                                  IEnumerable<CompleteAnswer> answers, string statusId)
         {
             this.CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(completeQuestionanireId);
             this.CompleteAnswers = answers;
+            this.StatusId = statusId;
         }
     }
 }

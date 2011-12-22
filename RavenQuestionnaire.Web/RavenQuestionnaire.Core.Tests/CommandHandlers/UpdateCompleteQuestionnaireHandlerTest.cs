@@ -26,11 +26,14 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Questionnaire qEntity= new Questionnaire(innerDocument.Questionnaire);
             Mock<ICompleteQuestionnaireRepository> coompleteQuestionnaireRepositoryMock = new Mock<ICompleteQuestionnaireRepository>();
 
+            Mock<IStatusRepository> statusRepositoryMock = new Mock<IStatusRepository>();
+
             coompleteQuestionnaireRepositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqID")).Returns(entity);
 
-            UpdateCompleteQuestionnaireHandler handler = new UpdateCompleteQuestionnaireHandler(coompleteQuestionnaireRepositoryMock.Object);
+            UpdateCompleteQuestionnaireHandler handler = new UpdateCompleteQuestionnaireHandler(coompleteQuestionnaireRepositoryMock.Object, 
+                statusRepositoryMock.Object);
 
-            handler.Handle(new Commands.UpdateCompleteQuestionnaireCommand("cqID",  new CompleteAnswer[0]));
+            handler.Handle(new Commands.UpdateCompleteQuestionnaireCommand("cqID",  new CompleteAnswer[0], "-11"));
 
             coompleteQuestionnaireRepositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqID"));
 

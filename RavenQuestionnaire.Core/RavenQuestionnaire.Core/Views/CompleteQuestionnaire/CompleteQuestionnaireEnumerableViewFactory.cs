@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Views.Questionnaire;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
@@ -43,7 +39,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             return new CompleteQuestionnaireViewEnumerable(doc.Id, doc.Questionnaire.Title,
                                                            doc.CompletedAnswers.ToArray(), doc.CreationDate,
                                                            doc.LastEntryDate,
-                                                           doc.Status, doc.ResponsibleId,
+                                                           doc.Status, doc.Creator,
                                                            currentViewQuestion);
         }
     }
