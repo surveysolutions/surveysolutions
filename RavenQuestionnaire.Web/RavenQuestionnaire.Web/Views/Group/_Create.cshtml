@@ -1,0 +1,39 @@
+﻿
+@using RavenQuestionnaire.Core.Views.Group
+@model GroupView
+      
+<div id="divCreateForm">
+
+    @using (Ajax.BeginForm("Save", "Group",
+                                         new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "addNewQuestion",
+                                                 OnComplete = "HideCreateGroupForm"
+                                             }))
+    {
+        <div class="modal-header">
+            <h3>Edit screen form</h3>
+        </div>
+        <div class="modal-body">
+            @Html.ValidationSummary(true)
+            <div class="clearfix">
+                @Html.LabelFor(model => model.GroupText)
+                <div class="input">
+                    @Html.EditorFor(model => model.GroupText)
+                    @Html.ValidationMessageFor(model => model.GroupText)
+                </div>
+            </div>
+
+            @if (Model.PublicKey != Guid.Empty)
+            {
+                @Html.HiddenFor(model => model.PublicKey)
+            }
+            @Html.HiddenFor(model => model.QuestionnaireId)
+        </div>
+        <div class="modal-footer">
+           
+            <a href="javascript:void(0)" onclick=" $('#addNewQuestion').modal('hide')" class="btn">Cancel</a>
+            <input type="submit" value="Save" class="btn primary" />
+        </div>
+    }
+</div>

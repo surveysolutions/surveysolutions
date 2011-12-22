@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using RavenQuestionnaire.Core.Utility;
+
+namespace RavenQuestionnaire.Core.Views.Group
+{
+    public class GroupViewInputModel
+    {
+        public GroupViewInputModel(Guid publicKey, string questionnaireId)
+        {
+            PublickKey = publicKey;
+            QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+        }
+
+        public string QuestionnaireId { get; set; }
+        public Guid PublickKey { get; private set; }
+    }
+}
