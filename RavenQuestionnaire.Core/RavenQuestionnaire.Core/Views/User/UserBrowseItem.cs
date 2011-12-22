@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 
@@ -10,7 +6,7 @@ namespace RavenQuestionnaire.Core.Views.User
 {
     public class UserBrowseItem
     {
-        public UserBrowseItem(string id, string name, string email, DateTime creationDate, bool isLocked, Supervisor supervisor, string location)
+        public UserBrowseItem(string id, string name, string email, DateTime creationDate, bool isLocked, UserLight supervisor, string location)
         {
             this.Id = id;
             this.UserName = name;
@@ -18,7 +14,7 @@ namespace RavenQuestionnaire.Core.Views.User
             this.CreationDate = creationDate;
             this.IsLocked = isLocked;
             if (supervisor != null)
-                this.SupervisorName = supervisor.SupervisorName;
+                this.SupervisorName = supervisor.Name;
             this.LocationName = location;
         }
 

@@ -9,14 +9,17 @@ namespace RavenQuestionnaire.Core.Commands
 
         public string Title { get; private set; }
 
+        public bool IsInitial { get; private set; }
+
 
         /// <summary>
         /// Creates new instance.
         /// </summary>
         /// <param name="title"></param>
-        public CreateNewStatusCommand(string title)
+        public CreateNewStatusCommand(string title, bool isInitial)
         {
             Title = title;
+            IsInitial = isInitial;
         }
 
 

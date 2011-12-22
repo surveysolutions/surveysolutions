@@ -9,9 +9,9 @@ namespace RavenQuestionnaire.Core.Services
 {
     public interface ICompleteQuestionnaireUploaderService
     {
-        CompleteQuestionnaire AddCompleteAnswer(Questionnaire questionnaire, IEnumerable<CompleteAnswer> answers, string userId);
+        CompleteQuestionnaire AddCompleteAnswer(Questionnaire questionnaire, IEnumerable<CompleteAnswer> answers, UserLight user, SurveyStatus status);
 
-        CompleteQuestionnaire UpdateCompleteAnswer(string id, Entities.Questionnaire questionnaire,
+        CompleteQuestionnaire UpdateCompleteAnswer(string id, Questionnaire questionnaire,
                                                    IEnumerable<CompleteAnswer> answers);
     }
 }

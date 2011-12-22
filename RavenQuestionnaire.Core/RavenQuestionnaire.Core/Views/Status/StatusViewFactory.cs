@@ -1,4 +1,5 @@
-﻿using Raven.Client;
+﻿using System.Linq;
+using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
 
 namespace RavenQuestionnaire.Core.Views.Status
@@ -15,14 +16,16 @@ namespace RavenQuestionnaire.Core.Views.Status
 
         public StatusView Load(StatusViewInputModel input)
         {
+            StatusDocument doc = null;
 
-            var doc = documentSession.Load<StatusDocument>(input.StatusId);
-            /*  var questions =
-                  documentSession.Query<QuestionDocument, QuestionnaireContainingQuestions>().Where(
-                      question => question.QuestionnaireId.Equals(doc.Id));*/
+            doc = input.GetDefault 
+                ? documentSession.Query<StatusDocument>().FirstOrDefault(s => s.IsInitial) 
+                : documentSession.Load<StatusDocument>(input.StatusId);
 
-            return new StatusView(doc.Id,doc.Title,doc.IsVisible, doc.StatusRoles);
-        
+
+            return doc == null 
+                ? null 
+                : new StatusView(doc.Id,doc.Title,doc.IsVisible, doc.StatusRoles);
         }
     }
 }

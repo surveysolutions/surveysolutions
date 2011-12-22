@@ -159,7 +159,8 @@
     <Compile Include="Entities\SubEntities\LocationWithUserStatistic.cs" />
     <Compile Include="Entities\SubEntities\Question.cs" />
     <Compile Include="Entities\SubEntities\QuestionType.cs" />
-    <Compile Include="Entities\SubEntities\Supervisor.cs" />
+    <Compile Include="Entities\SubEntities\UserLight.cs" />
+    <Compile Include="Entities\SubEntities\SurveyStatus.cs" />
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="ICommandHandler.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="Views\User\UserViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CommandHandlers\CreateNewCompleteQuestionnaireHandler.cs.orig" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

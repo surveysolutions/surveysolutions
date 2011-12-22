@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
@@ -21,7 +19,7 @@ namespace RavenQuestionnaire.Core.Conventions
         {
             if (type.IsAbstract) { return; }
             if (type.IsInterface) { return; }
-            var originalInterface = type.GetInterfaces().Where(t => t.IsGenericType && t.GetGenericTypeDefinition() == baseInterface).FirstOrDefault();
+            var originalInterface = type.GetInterfaces().FirstOrDefault(t => t.IsGenericType && t.GetGenericTypeDefinition() == baseInterface);
             if (originalInterface == null) return;
 
             Type[] wrappedTypes = originalInterface.GetGenericArguments();

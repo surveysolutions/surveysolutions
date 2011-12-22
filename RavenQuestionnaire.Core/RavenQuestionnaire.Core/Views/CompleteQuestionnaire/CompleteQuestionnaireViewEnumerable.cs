@@ -16,16 +16,16 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate{ get; set; }
 
-        public string Status { get; set; }
+        public SurveyStatus Status { get; set; }
 
-        public string ResponsibleId { set; get; }
+        public UserLight Responsible { set; get; }
         public CompleteQuestionView CurrentQuestion { get; set; }
 
 
         protected CompleteAnswer[] CompleteAnswers { get; set; }
 
         public CompleteQuestionnaireViewEnumerable(string id,string title, CompleteAnswer[] answers, DateTime creationDate,
-                                               DateTime lastEntryDate, string status, string responsibleId, CompleteQuestionView currentQuestion)
+                                               DateTime lastEntryDate, SurveyStatus status, UserLight responsible, CompleteQuestionView currentQuestion)
         {
             this.Id = IdUtil.ParseId(id);
             this.Title = title;
@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
             this.Status = status;
-            this.ResponsibleId = responsibleId;
+            this.Responsible = responsible;
             this.CurrentQuestion = currentQuestion;
             if (CurrentQuestion != null)
                 MerdgeAnswersWithResults();
