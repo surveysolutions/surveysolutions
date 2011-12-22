@@ -199,6 +199,9 @@
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewEnumerable.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
+    <Compile Include="Views\Group\GroupView.cs" />
+    <Compile Include="Views\Group\GroupViewFactory.cs" />
+    <Compile Include="Views\Group\GroupViewInputModel.cs" />
     <Compile Include="Views\Location\LocationBrowseInputModel.cs" />
     <Compile Include="Views\Location\LocationBrowseItem.cs" />
     <Compile Include="Views\Location\LocationBrowseView.cs" />

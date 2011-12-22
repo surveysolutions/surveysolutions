@@ -38,48 +38,28 @@ namespace RavenQuestionnaire.Core.Views.Question
             set { _questionnaireId = value; }
         }
 
+        public Guid? GroupPublicKey { get; set; }
         private string _questionnaireId;
         public QuestionView()
         {
             Answers = new AnswerView[0];
         }
-        public QuestionView(Guid publicKey, 
-            string text, 
-            QuestionType type, 
-            string questionnaireId,
-            string conditionExpression)
+        public QuestionView(string questionnaireId, Guid? groupPublicKey):this()
         {
-            this.PublicKey = publicKey;
-            this.QuestionText = text;
-            this.QuestionType = type;
             this.QuestionnaireId = questionnaireId;
-            this.ConditionExpression = conditionExpression;
+            this.GroupPublicKey = groupPublicKey;
         }
 
-        public QuestionView(Guid publicKey, 
-            string text, 
-            QuestionType type, 
-            IEnumerable<RavenQuestionnaire.Core.Entities.SubEntities.Answer> answers,
-            string questionnaireId,
-            string conditionExpression)
-            : this(publicKey, text, type, questionnaireId, conditionExpression)
+        public QuestionView(string questionnaireId, RavenQuestionnaire.Core.Entities.SubEntities.Question doc)
         {
-            this.Answers = answers.Select(answer => new AnswerView(answer.PublicKey, answer.AnswerText, answer.Mandatory, answer.AnswerType, this.PublicKey)).ToArray();
-           
+            this.PublicKey = doc.PublicKey;
+            this.QuestionText = doc.QuestionText;
+            this.QuestionType = doc.QuestionType;
+            this.QuestionnaireId = questionnaireId;
+            this.ConditionExpression = doc.ConditionExpression;
+            this.Answers = doc.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
         }
-        public QuestionView(Guid publicKey, 
-            string text, 
-            QuestionType type, 
-            IEnumerable<AnswerView> answers,
-            string questionnaireId,
-            string conditionExpression)
-            : this(publicKey, text, type, questionnaireId, conditionExpression)
-        {
-           this.Answers = answers.ToArray();
-        }
-        public static QuestionView New(string questionnaireId)
-        {
-            return new QuestionView() {QuestionnaireId = questionnaireId};
-        }
+
+        
     }
 }

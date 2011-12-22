@@ -23,11 +23,11 @@ namespace RavenQuestionnaire.Core.Commands
             get;
             private set;
         }
-        public UpdateGroupCommand(string groupText, string questionnaireId, Guid parentGroup)
+        public UpdateGroupCommand(string groupText, string questionnaireId, Guid groupPublicKey)
         {
             this.GroupText = groupText;
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
-            this.GroupPublicKey = parentGroup;
+            this.GroupPublicKey = groupPublicKey;
         }
     }
 }

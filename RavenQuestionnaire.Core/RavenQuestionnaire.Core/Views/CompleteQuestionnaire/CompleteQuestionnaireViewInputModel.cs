@@ -8,6 +8,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     public class CompleteQuestionnaireViewInputModel
     {
+        public CompleteQuestionnaireViewInputModel()
+        {
+        }
         public CompleteQuestionnaireViewInputModel(string id)
         {
             CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(id);
@@ -21,5 +24,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public string CompleteQuestionnaireId { get; private set; }
         public Guid? PreviousQuestionPublicKey { get; private set; }
         public bool IsReverse { get; private set; }
+        public string TemplateQuestionanireId
+        {
+            get { return _templateQuestionanireId; }
+            set { _templateQuestionanireId = IdUtil.CreateQuestionnaireId(value); }
+        }
+        private string _templateQuestionanireId;
     }
 }
