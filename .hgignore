@@ -14,3 +14,4 @@ ExpressionEvaluator/Evaluant.Calculator.Tests/bin/*
 ExpressionEvaluator/Evaluant.Calculator.Tests/obj/*
 ExpressionEvaluator/Evaluant.Calculator/bin/*
 ExpressionEvaluator/Evaluant.Calculator/obj/*
+*.orig
