@@ -18,8 +18,8 @@ namespace RavenQuestionnaire.Core.Views.Question
             var question =doc.Questions.Where(q => q.PublicKey.Equals(input.PublickKey)).FirstOrDefault();
             if (question == null)
                 return null;
-            return new QuestionView(question.PublicKey, question.QuestionText, question.QuestionType, question.Answers, doc.Id, question.ConditionExpression);
-        
+            return new QuestionView(doc.Id, question);
+
         }
     }
 }

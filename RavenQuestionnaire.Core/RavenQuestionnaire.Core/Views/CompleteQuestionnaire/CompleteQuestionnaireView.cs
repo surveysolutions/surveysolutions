@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
@@ -33,29 +34,28 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
         protected CompleteAnswer[] CompleteAnswers { get; set; }
 
-        public CompleteQuestionnaireView(string id, QuestionnaireView template, CompleteAnswer[] answers, DateTime creationDate,
-                                               DateTime lastEntryDate, string status, string responsibleId):this(template)
+        public CompleteQuestionnaireView( CompleteQuestionnaireDocument doc)
         {
-            this.Id = IdUtil.ParseId(id);
-            this.CompleteAnswers = answers;
-            this.CreationDate = creationDate;
-            this.LastEntryDate = lastEntryDate;
-            this.Status = status;
-            this.ResponsibleId = responsibleId;
+            this.Id = IdUtil.ParseId(doc.Id);
+            this.Questionnaire = new QuestionnaireView(doc.Questionnaire);
+            this.CompleteAnswers = doc.CompletedAnswers.ToArray();
+            this.CreationDate = doc.CreationDate;
+            this.LastEntryDate = doc.LastEntryDate;
+            this.Status = doc.Status;
+            this.ResponsibleId = doc.ResponsibleId;
+            //TODO _question may be redundant
+            _questions =
+                doc.Questionnaire.Questions.Select(q => new CompleteQuestionView(q, doc.Questionnaire.Id)).ToArray();
             MerdgeAnswersWithResults();
 
         }
-        public CompleteQuestionnaireView(QuestionnaireView template)
+        public CompleteQuestionnaireView(QuestionnaireDocument template)
         {
-            this.Questionnaire = template;
+            this.Questionnaire = new QuestionnaireView(template);
             CompleteAnswers = new CompleteAnswer[0];
-            _questions = this.Questionnaire.Questions.Select(q => new CompleteQuestionView(q)).ToArray();
+            _questions = template.Questions.Select(q => new CompleteQuestionView(q, template.Id)).ToArray();
         }
 
-        public static CompleteQuestionnaireView New(QuestionnaireView template)
-        {
-            return new CompleteQuestionnaireView(template);
-        }
         protected void MerdgeAnswersWithResults()
         {
             foreach (var answer in Questions.SelectMany(q=>q.Answers))

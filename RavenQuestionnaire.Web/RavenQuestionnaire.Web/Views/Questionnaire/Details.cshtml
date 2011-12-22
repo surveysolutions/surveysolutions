@@ -1,4 +1,5 @@
-﻿@using RavenQuestionnaire.Core.Views.Questionnaire
+﻿@using RavenQuestionnaire.Core.Views.Group
+@using RavenQuestionnaire.Core.Views.Questionnaire
 @model QuestionnaireView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,16 +10,23 @@
         backdrop: 'static'
     });
     function OpenModal() {
-       
+
         $('#addNewQuestion').modal('show');
     }
-                   function HideCreateQuestionForm(content) {
-                       //      $('#addNewQuestion').modal('hide');
-                       if (content.responseText.indexOf("divCreateForm") === -1) {
-                           $('#divAllQuestions').html(content.responseText);
-                           $('#addNewQuestion').modal('hide');
-                       }
-                   }
+    function HideCreateQuestionForm(content) {
+        //      $('#addNewQuestion').modal('hide');
+        if (content.responseText.indexOf("divCreateForm") === -1) {
+            $('#divAllQuestions').html(content.responseText);
+            $('#addNewQuestion').modal('hide');
+        }
+    }
+    function HideCreateGroupForm(content) {
+        //      $('#addNewQuestion').modal('hide');
+        if (content.responseText.indexOf("divCreateForm") === -1) {
+            $('#divAllGroups').html(content.responseText);
+            $('#addNewQuestion').modal('hide');
+        }
+    }
 </script>
 <h1>@Model.Title</h1>
 <div class="pairs">
@@ -37,12 +45,20 @@
         </div>
     </div>
 </div>
-<h2>Questions</h2>
+<h2>
+    Questions</h2>
 @{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}
+
+@{Html.RenderPartial("~/Views/Group/_Index.cshtml", Model.Groups);}
 <div id="addNewQuestion" class="modal hide fade">
 </div>
 <div class="">
     @Ajax.ActionLink("Add Question", "Create", "Question", new { Model.Id }, new AjaxOptions
+                                                                                   {
+                                                                                       UpdateTargetId = "addNewQuestion",
+                                                                                       OnSuccess = "OpenModal"
+                                                                                   }, new { @class = "btn" })
+    @Ajax.ActionLink("Add Screen", "Create", "Group", new { Model.Id }, new AjaxOptions
                                                                                    {
                                                                                        UpdateTargetId = "addNewQuestion",
                                                                                        OnSuccess = "OpenModal"

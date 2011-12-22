@@ -95,9 +95,9 @@ namespace RavenQuestionnaire.Web.Controllers
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
 
-            var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                new QuestionnaireViewInputModel(id));
-            return View(new CompleteQuestionnaireView(model));
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireView>(
+                new CompleteQuestionnaireViewInputModel(){ TemplateQuestionanireId = id});
+            return View(model);
         }
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public ActionResult Participate(string id)
@@ -105,11 +105,11 @@ namespace RavenQuestionnaire.Web.Controllers
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
 
-            var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                new QuestionnaireViewInputModel(id));
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
+                new CompleteQuestionnaireViewInputModel() {TemplateQuestionanireId = id});
 
             ViewBag.ShowPrevious = false;
-            return View(new CompleteQuestionnaireViewEnumerable(model));
+            return View(model);
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]

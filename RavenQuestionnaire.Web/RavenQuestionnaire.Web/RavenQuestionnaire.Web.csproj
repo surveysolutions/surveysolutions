@@ -97,6 +97,7 @@
     <Compile Include="Controllers\CompleteQuestionnaireController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\AnswerController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
@@ -282,6 +283,9 @@
     <None Include="Content\main.less" />
     <Content Include="Views\CompleteQuestionnaire\Participate.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Question.cshtml" />
+    <Content Include="Views\Group\_Create.cshtml" />
+    <Content Include="Views\Group\_Index.cshtml" />
+    <Content Include="Views\Group\_GroupRow.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

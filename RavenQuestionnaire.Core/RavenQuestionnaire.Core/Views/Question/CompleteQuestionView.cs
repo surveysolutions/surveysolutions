@@ -24,20 +24,8 @@ namespace RavenQuestionnaire.Core.Views.Question
             get { return Question.QuestionType; }
         }
 
-        public CompleteAnswerView[] Answers
-        {
-            get
-            {
-                if (_answers == null)
-                {
-                    _answers = Question.Answers.Select(a => new CompleteAnswerView(a, false)).ToArray();
-                }
-                return _answers;
-            }
-            
-        }
+        public CompleteAnswerView[] Answers { get; private set; }
 
-        private CompleteAnswerView[] _answers;
         protected QuestionView Question { get; set; }
 
         public string QuestionnaireId
@@ -48,9 +36,10 @@ namespace RavenQuestionnaire.Core.Views.Question
         {
         }
 
-        public CompleteQuestionView(QuestionView templateQuestion)
+        public CompleteQuestionView(RavenQuestionnaire.Core.Entities.SubEntities.Question templateQuestion, string questionnaireId)
         {
-            this.Question = templateQuestion;
+            this.Question = new QuestionView(questionnaireId,templateQuestion);
+            this.Answers = templateQuestion.Answers.Select(a => new CompleteAnswerView(a, templateQuestion.PublicKey, false)).ToArray();
         }
 
     }

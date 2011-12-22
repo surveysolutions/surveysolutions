@@ -47,7 +47,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor)]
         public ActionResult Create()
         {
-            return View(QuestionnaireView.New());
+            return View(new QuestionnaireView());
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]

@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Questionnaire.Core.Web.Membership;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Questionnaire;
@@ -53,8 +54,12 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void When_GetQuestionnaireResultIsExecuted()
         {
-            var output = new CompleteQuestionnaireView("completequestionnairedocuments/cqId", new QuestionnaireView(),
-                                                       new CompleteAnswer[0], DateTime.Now, DateTime.Now, "0", "0");
+            CompleteQuestionnaireDocument innerDoc = new CompleteQuestionnaireDocument();
+            innerDoc.Id = "completequestionnairedocuments/cqId";
+            innerDoc.CreationDate = DateTime.Now;
+            innerDoc.LastEntryDate = DateTime.Now;
+            innerDoc.Questionnaire= new QuestionnaireDocument();
+            var output = new CompleteQuestionnaireView(innerDoc);
             var input = new CompleteQuestionnaireViewInputModel("cqId");
 
             ViewRepositoryMock.Setup(

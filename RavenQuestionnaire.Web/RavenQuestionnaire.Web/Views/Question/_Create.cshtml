@@ -36,6 +36,10 @@
             {
                 @Html.HiddenFor(model => model.PublicKey)
             }
+            else
+            {
+                   @Html.HiddenFor(model => model.GroupPublicKey)
+            }
             @Html.HiddenFor(model => model.QuestionnaireId)
             @{Html.RenderPartial("~/Views/Answer/_EditAnswers.cshtml", Model);}
         </div>

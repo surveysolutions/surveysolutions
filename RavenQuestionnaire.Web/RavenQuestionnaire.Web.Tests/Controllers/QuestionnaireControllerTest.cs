@@ -5,6 +5,7 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Repositories;
+using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Web.Controllers;
@@ -49,8 +50,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
 
-            Controller.Save(new QuestionnaireView(entity.QuestionnaireId, "edit q", innerDocument.CreationDate,
-                                                  DateTime.Now, new QuestionView[0]));
+            Controller.Save(new QuestionnaireView(innerDocument));
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateQuestionnaireCommand>()), Times.Once());
         }
         [Test]
@@ -68,7 +68,12 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void When_GetQuestionnaireDetailsIsExecuted()
         {
-            var output = new QuestionnaireView("questionnairedocuments/qId", "test", DateTime.Now, DateTime.Now, new QuestionView[0]);
+            QuestionnaireDocument innerDoc = new QuestionnaireDocument();
+            innerDoc.Id = "questionnairedocuments/qId";
+            innerDoc.Title = "test";
+            innerDoc.CreationDate = DateTime.Now;
+            innerDoc.LastEntryDate = DateTime.Now;
+            var output = new QuestionnaireView(innerDoc);
             var input = new QuestionnaireViewInputModel("qId");
 
             ViewRepositoryMock.Setup(

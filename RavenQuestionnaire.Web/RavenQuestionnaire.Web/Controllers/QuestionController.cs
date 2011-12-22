@@ -22,10 +22,10 @@ namespace RavenQuestionnaire.Web.Controllers
             this.viewRepository = viewRepository;
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Create(string id)
+        public ActionResult Create(string id, Guid? groupPublicKey)
         {
             return PartialView("_Create",
-                               QuestionView.New(id));
+                               new QuestionView(id, groupPublicKey));
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Edit(Guid publicKey, string questionnaireId)
@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     {
                         AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.QuestionText,
                                                                                         model.QuestionType,
-                                                                                        model.QuestionnaireId, null,
+                                                                                        model.QuestionnaireId, model.GroupPublicKey,
                                                                                         model.ConditionExpression,
                                                                                         model.Answers);
                         commandInvoker.Execute(createCommand);

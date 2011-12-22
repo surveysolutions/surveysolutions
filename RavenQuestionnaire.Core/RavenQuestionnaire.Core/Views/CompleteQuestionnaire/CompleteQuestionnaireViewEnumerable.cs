@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Question;
@@ -24,25 +26,25 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
         protected CompleteAnswer[] CompleteAnswers { get; set; }
 
-        public CompleteQuestionnaireViewEnumerable(string id,string title, CompleteAnswer[] answers, DateTime creationDate,
-                                               DateTime lastEntryDate, string status, string responsibleId, CompleteQuestionView currentQuestion)
+        public CompleteQuestionnaireViewEnumerable(CompleteQuestionnaireDocument doc, RavenQuestionnaire.Core.Entities.SubEntities.Question currentQuestion)
         {
-            this.Id = IdUtil.ParseId(id);
-            this.Title = title;
-            this.CompleteAnswers = answers;
-            this.CreationDate = creationDate;
-            this.LastEntryDate = lastEntryDate;
-            this.Status = status;
-            this.ResponsibleId = responsibleId;
-            this.CurrentQuestion = currentQuestion;
+            this.Id = IdUtil.ParseId(doc.Id);
+            this.Title = doc.Questionnaire.Title;
+            this.CompleteAnswers = doc.CompletedAnswers.ToArray();
+            this.CreationDate = doc.CreationDate;
+            this.LastEntryDate = doc.LastEntryDate;
+            this.Status = doc.Status;
+            this.ResponsibleId = doc.ResponsibleId;
+            if(currentQuestion!=null)
+                this.CurrentQuestion = new CompleteQuestionView(currentQuestion, doc.Questionnaire.Id);
             if (CurrentQuestion != null)
                 MerdgeAnswersWithResults();
 
         }
-        public CompleteQuestionnaireViewEnumerable(QuestionnaireView template)
+        public CompleteQuestionnaireViewEnumerable(QuestionnaireDocument template)
         {
             this.Title = template.Title;
-            this.CurrentQuestion = new CompleteQuestionView(template.Questions[0]);
+            this.CurrentQuestion = new CompleteQuestionView(template.Questions[0], template.Id);
             CompleteAnswers = new CompleteAnswer[0];
         }
         protected void MerdgeAnswersWithResults()
