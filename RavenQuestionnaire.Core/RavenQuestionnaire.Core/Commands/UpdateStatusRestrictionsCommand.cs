@@ -10,11 +10,13 @@ namespace RavenQuestionnaire.Core.Commands
 
         public Dictionary<string, List<SurveyStatus>> StatusRoles { get; private set; }
 
+        public UserLight Executor { get; set; }
         
-        public UpdateStatusRestrictionsCommand(string statusId, Dictionary<string, List<SurveyStatus>> statusRoles)
+        public UpdateStatusRestrictionsCommand(string statusId, Dictionary<string, List<SurveyStatus>> statusRoles, UserLight executor)
         {
             StatusId = IdUtil.CreateStatusId(statusId);
             StatusRoles = statusRoles;
+            Executor = executor;
         }
     }
 }

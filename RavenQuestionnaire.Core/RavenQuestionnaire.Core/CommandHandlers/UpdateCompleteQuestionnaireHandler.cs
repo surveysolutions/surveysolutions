@@ -9,13 +9,17 @@ namespace RavenQuestionnaire.Core.CommandHandlers
     public class UpdateCompleteQuestionnaireHandler : ICommandHandler<UpdateCompleteQuestionnaireCommand>
     {
         private ICompleteQuestionnaireRepository _questionnaireRepository;
-
         private IStatusRepository _statusRepository;
+        private IUserRepository _userRepository;
 
-        public UpdateCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository questionnaireRepository, IStatusRepository statusRepository)
+        public UpdateCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository questionnaireRepository, 
+            IStatusRepository statusRepository,
+            IUserRepository userRepository)
         {
             this._questionnaireRepository = questionnaireRepository;
             this._statusRepository = statusRepository;
+            this._userRepository = userRepository;
+
         }
 
         public void Handle(UpdateCompleteQuestionnaireCommand command)
@@ -24,8 +28,17 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             entity.UpdateAnswerList(command.CompleteAnswers);
 
             var status = _statusRepository.Load(IdUtil.CreateStatusId(command.StatusId));
-            entity.SetStatus(new SurveyStatus(command.StatusId, status.GetInnerDocument().Title));
+
+            if (status != null)
+                entity.SetStatus(new SurveyStatus(command.StatusId, status.GetInnerDocument().Title));
+
+
+            var user = _userRepository.Load(IdUtil.CreateUserId(command.ResponsibleId));
+
+            if (user != null)
+                entity.SetResponsible(new UserLight() { Id = command.ResponsibleId, Name = user.GetInnerDocument().UserName });
             
+
         }
     }
 }

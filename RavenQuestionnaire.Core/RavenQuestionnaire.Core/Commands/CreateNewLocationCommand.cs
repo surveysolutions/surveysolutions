@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Commands
 {
@@ -13,10 +14,13 @@ namespace RavenQuestionnaire.Core.Commands
             private set;
         }
 
+        public UserLight Executor { get; set; }
 
-        public CreateNewLocationCommand(string location)
+        public CreateNewLocationCommand(string location, UserLight executor)
         {
             this.Location = location;
+            Executor = executor;
+
         }
     }
 }

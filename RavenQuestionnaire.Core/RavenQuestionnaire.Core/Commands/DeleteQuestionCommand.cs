@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Commands
@@ -11,9 +12,12 @@ namespace RavenQuestionnaire.Core.Commands
         public Guid QuestionId { get; set; }
         public string QuestionnaireId { get; set; }
 
-        public DeleteQuestionCommand(Guid questionId, string questionnaireId)
+        public UserLight Executor { get; set; }
+
+        public DeleteQuestionCommand(Guid questionId, string questionnaireId, UserLight executor)
         {
             this.QuestionId = questionId;
+            Executor = executor;
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
         }
     }

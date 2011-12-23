@@ -103,7 +103,7 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Password = password;
         }
 
-        UserDocument IEntity<UserDocument>.GetInnerDocument()
+        public UserDocument GetInnerDocument()
         {
             return innerDocument;
         }
