@@ -16,7 +16,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate{ get; set; }
 
-        public QuestionView[] Questions
+        protected QuestionView[] Questions
         {
             get { return _questions; }
             set
@@ -47,6 +47,16 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         {
             Questions = new QuestionView[0];
             Groups = new GroupView[0];
+        }
+
+        public QuestionView[] GetQuestions(Guid? groupPublicKey)
+        {
+            if (!groupPublicKey.HasValue)
+                return Questions;
+            var group = Groups.FirstOrDefault(g => g.PublicKey.Equals(groupPublicKey.Value));
+            if (group == null)
+                throw new ArgumentException("group doesn't exists");
+            return group.Questions;
         }
     }
 }
