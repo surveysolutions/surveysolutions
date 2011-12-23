@@ -76,7 +76,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 }
                 var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
 
-                return PartialView("_Index", questionnaire.Questions);
+                return PartialView("_Index", questionnaire.GetQuestions(model.GroupPublicKey));
 
             }
             return PartialView("_Create" , model);

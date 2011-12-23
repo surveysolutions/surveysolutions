@@ -15,14 +15,14 @@
     }
     function HideCreateQuestionForm(content) {
         //      $('#addNewQuestion').modal('hide');
-        if (content.responseText.indexOf("divCreateForm") === -1) {
+        if ($(content.responseText).children('div#divCreateForm form').length == 0) {
             $('#divAllQuestions').html(content.responseText);
             $('#addNewQuestion').modal('hide');
         }
     }
     function HideCreateGroupForm(content) {
         //      $('#addNewQuestion').modal('hide');
-        if (content.responseText.indexOf("divCreateForm") === -1) {
+        if ($(content.responseText).children('div#divCreateForm form').length == 0) {
             $('#divAllGroups').html(content.responseText);
             $('#addNewQuestion').modal('hide');
         }
@@ -47,9 +47,10 @@
 </div>
 <h2>
     Questions</h2>
-@{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}
-
-@{Html.RenderPartial("~/Views/Group/_Index.cshtml", Model.Groups);}
+    <div id="divAllQuestions">
+@{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.GetQuestions(null));}</div>
+  <div id="divAllGroups">
+@{Html.RenderPartial("~/Views/Group/_Index.cshtml", Model.Groups);}</div>
 <div id="addNewQuestion" class="modal hide fade">
 </div>
 <div class="">

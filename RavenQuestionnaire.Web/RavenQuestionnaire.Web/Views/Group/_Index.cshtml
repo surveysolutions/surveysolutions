@@ -1,9 +1,8 @@
 ﻿
 @using RavenQuestionnaire.Core.Views.Group
 @model IEnumerable<GroupView>
-<div id="divAllGroups">
     @foreach (var item in Model)
     {
         Html.RenderPartial("~/Views/Group/_GroupRow.cshtml", item);
     }
-</div>
+
