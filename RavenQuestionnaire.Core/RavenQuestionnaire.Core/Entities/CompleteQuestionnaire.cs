@@ -74,6 +74,12 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Status = status;
         }
 
+
+        public void SetResponsible(UserLight user)
+        {
+            innerDocument.Responsible = user;
+        }
+
         public void UpdateAnswerList(IEnumerable<CompleteAnswer> answers)
         {
             ClearAnswers();

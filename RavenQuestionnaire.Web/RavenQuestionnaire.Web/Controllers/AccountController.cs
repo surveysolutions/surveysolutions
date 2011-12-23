@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Web.Security;
-using Questionnaire.Core.Web.Membership;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Web.Models;

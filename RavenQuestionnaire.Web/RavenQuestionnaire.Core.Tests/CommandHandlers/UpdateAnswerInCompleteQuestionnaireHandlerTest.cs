@@ -33,7 +33,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
                                                                                                                 new CompleteAnswer
                                                                                                                     (answer,
-                                                                                                                     question.PublicKey));
+                                                                                                                     question.PublicKey),
+                                                                                                                null);
             handler.Handle(command);
             repositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqId"), Times.Once());
             Assert.AreEqual(qDoqument.CompletedAnswers[0].QuestionPublicKey, question.PublicKey);

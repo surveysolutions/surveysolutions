@@ -11,14 +11,15 @@ namespace RavenQuestionnaire.Core.Commands
     {
         public string CompleteQuestionnaireId { get; private set; }
         public CompleteAnswer CompleteAnswer { get; private set; }
-
+        public UserLight Executor { get; set; }
 
 
         public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionanireId, 
-                                                  CompleteAnswer answer)
+                                                  CompleteAnswer answer, UserLight executer)
         {
             this.CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(completeQuestionanireId);
             this.CompleteAnswer = answer;
+            Executor = executer;
         }
     }
 }

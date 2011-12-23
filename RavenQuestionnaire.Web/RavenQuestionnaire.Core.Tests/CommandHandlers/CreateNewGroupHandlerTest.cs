@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Questionnaire questionnaire= new Questionnaire("some questionanire");
             questionaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qId")).Returns(questionnaire);
             CreateNewGroupHandler handler = new CreateNewGroupHandler(questionaireRepositoryMock.Object);
-            handler.Handle(new Commands.CreateNewGroupCommand("some text", "qId", null));
+            handler.Handle(new Commands.CreateNewGroupCommand("some text", "qId", null, null));
             var innerDocument = ((IEntity<QuestionnaireDocument>) questionnaire).GetInnerDocument();
             Assert.AreEqual(innerDocument.Groups.Count, 1);
             Assert.AreEqual(innerDocument.Groups[0].GroupText, "some text");
@@ -37,7 +37,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             innerDocument.Groups.Add(topGroup);
             questionaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qId")).Returns(questionnaire);
             CreateNewGroupHandler handler = new CreateNewGroupHandler(questionaireRepositoryMock.Object);
-            handler.Handle(new Commands.CreateNewGroupCommand("some text", "qId", topGroup.PublicKey));
+            handler.Handle(new Commands.CreateNewGroupCommand("some text", "qId", topGroup.PublicKey, null));
           
             Assert.AreEqual(innerDocument.Groups[0].Groups.Count, 1);
             Assert.AreEqual(innerDocument.Groups[0].Groups[0].GroupText, "some text");
@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CreateNewGroupHandler handler = new CreateNewGroupHandler(questionaireRepositoryMock.Object);
 
             Assert.Throws<ArgumentException>(
-                () => handler.Handle(new Commands.CreateNewGroupCommand("some text", "qId", Guid.NewGuid())));
+                () => handler.Handle(new Commands.CreateNewGroupCommand("some text", "qId", Guid.NewGuid(), null)));
         }
     }
 }

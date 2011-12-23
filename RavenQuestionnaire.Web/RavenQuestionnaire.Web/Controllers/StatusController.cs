@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Helpers;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -42,7 +43,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (string.IsNullOrEmpty(model.Id))
                 {
-                    commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial));
+                    commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial, Global.GetCurrentUser()));
                 }
                 return RedirectToAction("Index");
 
@@ -70,7 +71,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                 roles[roleItem.RoleName].Add(new SurveyStatus(item.Status.Id, item.Status.Title));
                             }
                     }
-                    commandInvoker.Execute(new UpdateStatusRestrictionsCommand(model.Id, roles));
+                    commandInvoker.Execute(new UpdateStatusRestrictionsCommand(model.Id, roles, Global.GetCurrentUser()));
                     return RedirectToAction("Index");
                 }
             }
@@ -103,7 +104,8 @@ namespace RavenQuestionnaire.Web.Controllers
 
             if (model != null)
             {
-                foreach (var status in viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(new StatusBrowseInputModel() { PageSize = 100 }).Items)
+                foreach (var status in viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(
+                    new StatusBrowseInputModel() { PageSize = 100 }).Items)
                 {
                     var statusByRole = new StatusByRole {Status = status};
 

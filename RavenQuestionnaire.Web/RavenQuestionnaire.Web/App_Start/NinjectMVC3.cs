@@ -1,9 +1,7 @@
 using System.Web.Mvc;
-using System.Web.Security;
 using Ninject.Extensions.Conventions;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
-using Questionnaire.Core.Web.Membership;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Conventions;
@@ -14,7 +12,6 @@ using FormsAuthentication = Questionnaire.Core.Web.Security.FormsAuthentication;
 
 namespace RavenQuestionnaire.Web.App_Start
 {
-    using System.Reflection;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
     using Ninject;
     using Ninject.Web.Mvc;

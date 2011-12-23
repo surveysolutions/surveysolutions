@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object);
             AnswerView[] answers = new AnswerView[]{ new AnswerView(){ AnswerText = "answer", AnswerType = AnswerType.Text} };
             handler.Handle(new Commands.AddNewQuestionCommand("test", QuestionType.SingleOption, entity.QuestionnaireId, null, string.Empty,
-                                                              answers));
+                                                              answers, null));
 
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
 
@@ -44,8 +44,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };
-            handler.Handle(new Commands.AddNewQuestionCommand("test", QuestionType.SingleOption, entity.QuestionnaireId, topGroup.PublicKey, string.Empty,
-                                                              answers));
+            handler.Handle(new Commands.AddNewQuestionCommand("test", QuestionType.SingleOption, entity.QuestionnaireId, 
+                topGroup.PublicKey, string.Empty,
+                answers, null));
 
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
             Assert.AreEqual(innerDocument.Groups[0].Questions.Count,1);
@@ -65,7 +66,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                 () =>
                 handler.Handle(new Commands.AddNewQuestionCommand("test", QuestionType.SingleOption,
                                                                   entity.QuestionnaireId, Guid.NewGuid(), string.Empty,
-                                                                  answers)));
+                                                                  answers, null)));
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
@@ -11,6 +12,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Views.Status;
+using RavenQuestionnaire.Core.Views.User;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -38,7 +40,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
         public ViewResult MyItems(CompleteQuestionnaireBrowseInputModel input)
         {
-            input.ResponsibleId = authentication.GetUserIdForCurrentUser();
+            input.ResponsibleId = Global.GetCurrentUser().Id;
             var model = viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(input);
             return View(model);
         }
@@ -52,6 +54,8 @@ namespace RavenQuestionnaire.Web.Controllers
 
             if (model != null)
                 AddAllowedStatusesToViewBag(model.Status.Id, model.Status.Name);
+
+            AddUsersToViewBag();
             return View(model);
         }
 
@@ -62,7 +66,10 @@ namespace RavenQuestionnaire.Web.Controllers
                 var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
 
                 commandInvoker.Execute(new CreateNewCompleteQuestionnaireCommand(id,
-                    answers, authentication.GetCurrentUser(), new SurveyStatus(statusView.Id, statusView.Title)));
+                    answers, 
+                    Global.GetCurrentUser(), 
+                    new SurveyStatus(statusView.Id, statusView.Title), 
+                    Global.GetCurrentUser()));
 
             }
             return RedirectToAction("Index");
@@ -74,8 +81,9 @@ namespace RavenQuestionnaire.Web.Controllers
                 var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
 
                 var command = new CreateNewCompleteQuestionnaireCommand(id, answers,
-                                                                        authentication.GetCurrentUser(), 
-                                                                        new SurveyStatus(statusView.Id, statusView.Title ));
+                                                                        Global.GetCurrentUser(),
+                                                                        new SurveyStatus(statusView.Id, statusView.Title), 
+                                                                        Global.GetCurrentUser());
                 commandInvoker.Execute(command);
 
 
@@ -88,11 +96,12 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             return RedirectToAction("Participate", new { id });
         }
-        public ActionResult UpdateResult(string id, CompleteAnswer[] answers, SurveyStatus status)
+        public ActionResult UpdateResult(string id, CompleteAnswer[] answers, SurveyStatus status, UserLight responsible)
         {
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, answers, status.Id));
+                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, answers, status.Id, responsible.Id, 
+                    Global.GetCurrentUser()));
 
             }
             return RedirectToAction("Index");
@@ -140,7 +149,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, answers[0]));
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, answers[0], Global.GetCurrentUser()));
             }
 
             return RedirectToAction("Question", new { id = id, question = answers[0].QuestionPublicKey, order = order == "Previous"});
@@ -148,10 +157,18 @@ namespace RavenQuestionnaire.Web.Controllers
 
         public ActionResult Delete(string id)
         {
-            commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id));
+            commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id, Global.GetCurrentUser()));
             return RedirectToAction("Index");
         }
 
+
+        protected void AddUsersToViewBag()
+        {
+            var users =
+                viewRepository.Load<UserBrowseInputModel, UserBrowseView>(new UserBrowseInputModel() { PageSize = 300 }).Items;
+            List<UserBrowseItem> list = users.ToList();
+            ViewBag.Users = list;
+        }
 
 
         protected void AddAllowedStatusesToViewBag(string statusId, string statusName)

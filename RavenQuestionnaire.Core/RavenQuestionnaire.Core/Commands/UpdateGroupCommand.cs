@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Commands
@@ -23,11 +24,15 @@ namespace RavenQuestionnaire.Core.Commands
             get;
             private set;
         }
-        public UpdateGroupCommand(string groupText, string questionnaireId, Guid parentGroup)
+
+        public UserLight Executor { get; set; }
+
+        public UpdateGroupCommand(string groupText, string questionnaireId, Guid parentGroup, UserLight executor)
         {
             this.GroupText = groupText;
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.GroupPublicKey = parentGroup;
+            Executor = executor;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Helpers;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -70,11 +71,11 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (string.IsNullOrEmpty(model.Id))
                 {
-                    commandInvoker.Execute(new CreateNewQuestionnaireCommand(model.Title));
+                    commandInvoker.Execute(new CreateNewQuestionnaireCommand(model.Title, Global.GetCurrentUser()));
                 }
                 else
                 {
-                    commandInvoker.Execute(new UpdateQuestionnaireCommand(model.Id, model.Title));
+                    commandInvoker.Execute(new UpdateQuestionnaireCommand(model.Id, model.Title, Global.GetCurrentUser()));
                 }
                 return RedirectToAction("Index");
 
@@ -88,7 +89,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Delete(string id)
         {
-            commandInvoker.Execute(new DeleteQuestionnaireCommand(id));
+            commandInvoker.Execute(new DeleteQuestionnaireCommand(id, Global.GetCurrentUser()));
             return RedirectToAction("Index");
         }
 

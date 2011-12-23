@@ -32,9 +32,10 @@
         <div class="clearfix">
             <div class="key">
                 Responsible</div>
+                
             <div class="value">
-                @Html.DisplayFor(model => model.Responsible.Name)
-                @Html.HiddenFor(model => model.Responsible.Id)
+                @Html.DropDownListFor(model => model.Responsible.Id,
+         new SelectList(ViewBag.Users, "Id", "UserName", Model.Responsible.Id))
             </div>
         </div>
     </div>

@@ -1,4 +1,6 @@
-﻿namespace RavenQuestionnaire.Core.Commands
+﻿using RavenQuestionnaire.Core.Entities.SubEntities;
+
+namespace RavenQuestionnaire.Core.Commands
 {
     public class CreateNewQuestionnaireCommand : ICommand
     {
@@ -8,10 +10,17 @@
             private set;
         }
 
-
-        public CreateNewQuestionnaireCommand(string title)
+        public CreateNewQuestionnaireCommand(string title, UserLight executor)
         {
             this.Title = title;
+            this.Executor = executor;
+        }
+
+
+        public UserLight Executor
+        {
+            get;
+            set;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
 
             DeleteGroupHandler handler = new DeleteGroupHandler(questionnaireRepositoryMock.Object);
-            handler.Handle(new Commands.DeleteGroupCommand(group.PublicKey, entity.QuestionnaireId));
+            handler.Handle(new Commands.DeleteGroupCommand(group.PublicKey, entity.QuestionnaireId, null));
 
             Assert.True(
                 innerDocument.Questions.Count == 0);

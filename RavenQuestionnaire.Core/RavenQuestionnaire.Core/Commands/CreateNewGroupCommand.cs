@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Commands
@@ -15,19 +16,21 @@ namespace RavenQuestionnaire.Core.Commands
         }
         public string QuestionnaireId
         {
-            get;
-            private set;
+            get;private set;
         }
         public Guid? ParentGroupPublicKey
         {
-            get;
-            private set;
+            get; private set;
         }
-        public CreateNewGroupCommand(string groupText, string questionnaireId, Guid? parentGroup)
+
+        public UserLight Executor { get; set; }
+
+        public CreateNewGroupCommand(string groupText, string questionnaireId, Guid? parentGroup, UserLight executor)
         {
             this.GroupText = groupText;
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.ParentGroupPublicKey = parentGroup;
+            Executor = executor;
         }
     }
 }

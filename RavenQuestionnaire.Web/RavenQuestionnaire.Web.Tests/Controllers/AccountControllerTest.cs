@@ -7,7 +7,6 @@ using Moq;
 using NUnit.Framework;
 using Ninject;
 using Questionnaire.Core.Web.Helpers;
-using Questionnaire.Core.Web.Membership;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;

@@ -19,8 +19,11 @@ namespace RavenQuestionnaire.Core.Commands
 
         public string LocationId { get; private set; }
 
-        public UpdateUserCommand(string userId, string email,/* string password,*/ bool isLocked, 
-            UserRoles[] rolesList, string supervisorId, string locationId)
+        public UserLight Executor { get; set; }
+
+        public UpdateUserCommand(string userId, string email, bool isLocked, 
+            UserRoles[] rolesList, string supervisorId, string locationId,
+            UserLight executor)
         {
             this.UserId = IdUtil.CreateUserId(userId);
          //   this.Password = password;
@@ -32,6 +35,8 @@ namespace RavenQuestionnaire.Core.Commands
                 this.SupervisorId = IdUtil.CreateUserId(supervisorId);
             }
             this.LocationId = IdUtil.CreateLocationId(locationId);
+
+            Executor = executor;
         }
     }
 }
