@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Core.Views.User
             DateTime creationDate,
             IEnumerable<UserRoles> roles,
             bool isLocked,
-            Supervisor supervisor,
+            UserLight supervisor,
             string locationId
             )
         {
@@ -32,7 +32,7 @@ namespace RavenQuestionnaire.Core.Views.User
             this.Roles = roles;
             this.IsLocked = isLocked;
             if (supervisor != null)
-                this.SupervisorId = IdUtil.ParseId(supervisor.SupervisorId);
+                this.SupervisorId = IdUtil.ParseId(supervisor.Id);
             this.LocationId = IdUtil.ParseId(locationId);
         }
 

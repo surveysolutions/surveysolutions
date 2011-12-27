@@ -12,15 +12,16 @@ namespace RavenQuestionnaire.Core.Commands
         public string CompleteQuestionnaireId { get; private set; }
         public CompleteAnswer[] CompleteAnswers { get; private set; }
         public Guid? Group { get; private set; }
-
+		public UserLight Executor { get; set; }
 
         public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionanireId, Guid? group,
-                                                  CompleteAnswer[] answers)
+                                                  CompleteAnswer[] answers, UserLight executer)
         {
             this.CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(completeQuestionanireId);
             if (group != Guid.Empty)
                 this.Group = group;
             this.CompleteAnswers = answers;
+            Executor = executer;
         }
     }
 }

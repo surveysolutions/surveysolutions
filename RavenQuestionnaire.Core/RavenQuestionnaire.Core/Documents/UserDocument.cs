@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Documents
@@ -31,7 +29,7 @@ namespace RavenQuestionnaire.Core.Documents
 
         public bool IsDeleted { get; set; }
 
-        public Supervisor Supervisor { get; set; }
+        public UserLight Supervisor { get; set; }
 
         public LocationDocument Location { get; set; }
     }

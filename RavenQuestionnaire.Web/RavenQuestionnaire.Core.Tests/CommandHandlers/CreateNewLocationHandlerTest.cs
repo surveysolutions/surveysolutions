@@ -10,7 +10,7 @@ using RavenQuestionnaire.Core.Repositories;
 
 namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 {
-     [TestFixture]
+    [TestFixture]
     public class CreateNewLocationHandlerTest
     {
          [Test]
@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
           //   locationRepositoryMock.Setup(x => x.Load("locationdocuments/some_id")).Returns(location);
 
              CreateNewLocationHandler handler = new CreateNewLocationHandler(locationRepositoryMock.Object);
-             handler.Handle(new Commands.CreateNewLocationCommand("some location"));
+             handler.Handle(new Commands.CreateNewLocationCommand("some location", null));
              locationRepositoryMock.Verify(x => x.Add(It.IsAny<Location>()), Times.Once());
          }
     }

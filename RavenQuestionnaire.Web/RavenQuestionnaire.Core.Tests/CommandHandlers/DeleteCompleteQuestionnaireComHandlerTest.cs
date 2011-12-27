@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             questionnaireRepositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqID")).Returns(entity);
 
             DeleteCompleteQuestionnaireHandler handler = new DeleteCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object);
-            handler.Handle(new Commands.DeleteCompleteQuestionnaireCommand(entity.CompleteQuestinnaireId));
+            handler.Handle(new Commands.DeleteCompleteQuestionnaireCommand(entity.CompleteQuestinnaireId, null));
             questionnaireRepositoryMock.Verify(x => x.Remove(entity));
         }
     }

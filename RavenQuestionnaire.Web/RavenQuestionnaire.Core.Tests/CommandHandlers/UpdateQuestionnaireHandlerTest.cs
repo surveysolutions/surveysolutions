@@ -24,7 +24,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
             UpdateQuestionnaireHandler handler = new UpdateQuestionnaireHandler(questionnaireRepositoryMock.Object);
-            handler.Handle(new Commands.UpdateQuestionnaireCommand(entity.QuestionnaireId, "title"));
+            handler.Handle(new Commands.UpdateQuestionnaireCommand(entity.QuestionnaireId, "title", null));
 
             Assert.True(
                 innerDocument.Title == "title");

@@ -2,21 +2,31 @@
 @using RavenQuestionnaire.Web.Models
 @model QuestionnaireBrowseView
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Surveys";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>Index</h2>
+<h2>
+    Surveys</h2>
 <p>
     @Html.ActionLink("Create New", "Create", null, new { @class = "btn small primary" })
 </p>
 <table class="bordered-table zebra-striped">
     <thead>
         <tr>
-            <th>Id </th>
-            <th>Title </th>
-            <th>Creation date</th>
-            <th>Last edit date</th>
-            <th></th>
+            <th>
+                Id
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Creation date
+            </th>
+            <th>
+                Last edit date
+            </th>
+            <th>
+            </th>
         </tr>
     </thead>
     <tbody>

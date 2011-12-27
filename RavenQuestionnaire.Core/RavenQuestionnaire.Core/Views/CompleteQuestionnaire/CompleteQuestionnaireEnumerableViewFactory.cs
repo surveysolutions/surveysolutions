@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Views.Questionnaire;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
@@ -27,7 +23,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
                 var completeQuestionnaireRoot = new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc);
                 RavenQuestionnaire.Core.Entities.SubEntities.Group group = null;
-               
+
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
                     var template = new RavenQuestionnaire.Core.Entities.Questionnaire(doc.Questionnaire);
@@ -40,8 +36,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                     Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Group, Guid?> iterator =
                         new QuestionnaireScreenIterator(completeQuestionnaireRoot);
                     group = input.IsReverse
-                                       ? iterator.GetPreviousBefoure(input.PreviousGroupPublicKey)
-                                       : iterator.GetNextAfter(input.PreviousGroupPublicKey);
+                                ? iterator.GetPreviousBefoure(input.PreviousGroupPublicKey)
+                                : iterator.GetNextAfter(input.PreviousGroupPublicKey);
                 }
                 return new CompleteQuestionnaireViewEnumerable(doc, group);
             }
@@ -51,7 +47,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 return new CompleteQuestionnaireViewEnumerable(doc);
             }
             return null;
-        }
 
+        }
     }
 }

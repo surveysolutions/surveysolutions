@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
 
@@ -25,16 +22,13 @@ namespace RavenQuestionnaire.Core.Views.User
                 doc = this.documentSession.Load<UserDocument>(input.UserId);
             else if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))
             {
-                doc =
-                    this.documentSession.Query<UserDocument>().Where(u => u.UserName.Equals(input.UserName)).
-                        FirstOrDefault();
+                doc = documentSession.Query<UserDocument>().FirstOrDefault(u => u.UserName.Equals(input.UserName));
 
             }
             if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
             {
-                doc =
-                    this.documentSession.Query<UserDocument>().Where(
-                        u => u.UserName.Equals(input.UserName) /*&& u.Password.Equals(input.Password)*/).FirstOrDefault();
+                doc = this.documentSession.Query<UserDocument>().FirstOrDefault(u => u.UserName.Equals(input.UserName));
+
                 if (doc!=null && doc.Password != input.Password)
                     return null;
 

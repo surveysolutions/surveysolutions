@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Helpers;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -42,7 +43,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     if (model.PublicKey == Guid.Empty)
                     {
                         CreateNewGroupCommand createCommand = new CreateNewGroupCommand(model.GroupText,
-                                                                                        model.QuestionnaireId, null);
+                                                                                        model.QuestionnaireId, null, Global.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
 
 
@@ -50,7 +51,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     else
                     {
                         commandInvoker.Execute(new UpdateGroupCommand(model.GroupText, model.QuestionnaireId,
-                                                                      model.PublicKey));
+                                                                      model.PublicKey, Global.GetCurrentUser()));
                     }
                 }
                 catch (Exception e)
@@ -79,7 +80,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public string Delete(Guid publicKey, string questionnaireId)
         {
-            commandInvoker.Execute(new DeleteGroupCommand(publicKey, questionnaireId));
+            commandInvoker.Execute(new DeleteGroupCommand(publicKey, questionnaireId, Global.GetCurrentUser()));
             return "";
         }
     }

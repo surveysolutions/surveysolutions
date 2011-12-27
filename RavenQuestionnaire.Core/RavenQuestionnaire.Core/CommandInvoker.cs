@@ -2,6 +2,7 @@
 using Raven.Client;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core
 {
@@ -16,7 +17,7 @@ namespace RavenQuestionnaire.Core
             this.documentSession = documentSession;
         }
 
-        public void Execute<T>(T command) where T:ICommand
+        public void Execute<T>(T command) where T : ICommand
         {
             var handler = container.Get<ICommandHandler<T>>();
             handler.Handle(command);

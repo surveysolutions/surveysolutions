@@ -18,9 +18,12 @@
             @Html.ValidationMessageFor(model => model.Title)
         </div>      
        
-
-    @*    @Html.HiddenFor(model => model.Id)*@
-
+       <div class="editor-label">
+            @Html.LabelFor(model => model.IsInitial)
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.IsInitial)
+        </div> 
         <p>
             <input type="submit" value="Save" />
         </p>

@@ -19,9 +19,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate{ get; set; }
 
-        public string Status { get; set; }
+        public SurveyStatus Status { get; set; }
 
-        public string ResponsibleId { set; get; }
+        public UserLight Responsible { set; get; }
 
         public CompleteQuestionView[] Questions
         {
@@ -35,6 +35,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         protected CompleteAnswer[] CompleteAnswers { get; set; }
 
         public CompleteQuestionnaireView( CompleteQuestionnaireDocument doc)
+            : this(doc.Questionnaire)
         {
             this.Id = IdUtil.ParseId(doc.Id);
             this.Questionnaire = new QuestionnaireView(doc.Questionnaire);
@@ -42,7 +43,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.CreationDate = doc.CreationDate;
             this.LastEntryDate = doc.LastEntryDate;
             this.Status = doc.Status;
-            this.ResponsibleId = doc.ResponsibleId;
+            this.Responsible = doc.Responsible;
             //TODO _question may be redundant
             _questions =
                 doc.Questionnaire.Questions.Select(q => new CompleteQuestionView(q, doc.Questionnaire)).ToArray();

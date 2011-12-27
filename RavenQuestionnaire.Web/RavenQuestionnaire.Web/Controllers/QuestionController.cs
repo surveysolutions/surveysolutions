@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
-using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Helpers;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -56,7 +57,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                         model.QuestionType,
                                                                                         model.QuestionnaireId, model.GroupPublicKey,
                                                                                         model.ConditionExpression,
-                                                                                        model.Answers);
+                                                                                        model.Answers, Global.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
 
 
@@ -65,7 +66,8 @@ namespace RavenQuestionnaire.Web.Controllers
                     {
                         commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId, model.PublicKey,
                                                                          model.QuestionText, model.QuestionType,
-                                                                         model.ConditionExpression, model.Answers));
+                                                                         model.ConditionExpression, model.Answers,
+                                                                         Global.GetCurrentUser()));
                     }
                 }
                 catch (Exception e)
@@ -84,7 +86,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public string Delete(Guid publicKey, string questionnaireId)
         {
-            commandInvoker.Execute(new DeleteQuestionCommand(publicKey, questionnaireId));
+            commandInvoker.Execute(new DeleteQuestionCommand(publicKey, questionnaireId, Global.GetCurrentUser()));
             return "";
         }
     }

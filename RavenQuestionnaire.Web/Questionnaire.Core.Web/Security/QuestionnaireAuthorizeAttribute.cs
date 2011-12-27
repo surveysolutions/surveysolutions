@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
-namespace Questionnaire.Core.Web.Membership
+namespace Questionnaire.Core.Web.Security
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class QuestionnaireAuthorizeAttribute : FilterAttribute, IAuthorizationFilter

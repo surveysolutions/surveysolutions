@@ -14,8 +14,8 @@ namespace RavenQuestionnaire.Core.CommandHandlers
 
         public void Handle(CreateNewQuestionnaireCommand command)
         {
-            Questionnaire newUser = new Questionnaire(command.Title);
-            _questionnaireRepository.Add(newUser);
+            Questionnaire newQuestionnaire = new Questionnaire(command.Title);
+            _questionnaireRepository.Add(newQuestionnaire);
         }
     }
 }

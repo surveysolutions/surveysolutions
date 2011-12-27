@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 
@@ -20,19 +21,19 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public DateTime CreationDate { get; private set; }
         public DateTime LastEntryDate { get; private set; }
 
-        public string ResponsibleId { get; private set; }
+        public UserLight Responsible { get; private set; }
 
-        public string StatusId { get; private set; }
+        public SurveyStatus Status { get; private set; }
 
         public CompleteQuestionnaireBrowseItem(string id, string questionnaireTitle, DateTime creationDate,
-                                               DateTime lastEntryDate, string statusId, string responsibleId)
+                                               DateTime lastEntryDate, SurveyStatus status, UserLight responsible)
         {
             this.Id = id;
             this.QuestionnaireTitle = questionnaireTitle;
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
-            this.StatusId = statusId;
-            this.ResponsibleId = responsibleId;
+            this.Status = status;
+            this.Responsible = responsible;
         }
     }
 }

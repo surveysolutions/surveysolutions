@@ -28,7 +28,8 @@
                     @Html.DisplayFor(modelItem => item.LastEntryDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.StatusId)
+                    @Html.DisplayFor(modelItem => item.Status.Name)
+                    @Html.HiddenFor(modelItem => item.Status.Id)
                 </td>
                 <td class="buttons">
                     @Html.ActionLink("Details", "Result", new { id = item.Id })

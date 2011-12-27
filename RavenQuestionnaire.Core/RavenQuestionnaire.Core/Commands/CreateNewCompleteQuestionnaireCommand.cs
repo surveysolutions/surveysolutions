@@ -8,19 +8,29 @@ namespace RavenQuestionnaire.Core.Commands
     public class CreateNewCompleteQuestionnaireCommand : ICommand
     {
         public string QuestionnaireId { get; private set; }
-        public string UserId { get; private set; }
+        public UserLight Creator { get; private set; }
         public IEnumerable<CompleteAnswer> CompleteAnswers { get; private set; }
         public string CompleteQuestionnaireId { get; set; }
+        public SurveyStatus Status { set; get; }
 
-        public CreateNewCompleteQuestionnaireCommand(string questionnaireId, IEnumerable<CompleteAnswer> answers, string creatorId)
+        public UserLight Executor { get; set; }
+
+        public CreateNewCompleteQuestionnaireCommand(string questionnaireId, 
+            IEnumerable<CompleteAnswer> answers, 
+            UserLight creator, 
+            SurveyStatus status,
+            UserLight executor)
         {
             if(string.IsNullOrEmpty(questionnaireId))
                 throw  new ArgumentNullException("QuestionnaireId can't be null");
-            if (string.IsNullOrEmpty(creatorId))
+            if (string.IsNullOrEmpty(creator.Id))
                 throw new ArgumentNullException("User id can't be null");
             this.QuestionnaireId =IdUtil.CreateQuestionnaireId(questionnaireId);
             this.CompleteAnswers = answers;
-            this.UserId = creatorId;
+            this.Creator = creator;
+            this .Status = status;
+
+            this.Executor = executor;
         }
     }
 }

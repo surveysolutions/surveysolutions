@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
@@ -23,11 +21,8 @@ namespace RavenQuestionnaire.Core.Conventions
             }
 
             Assembly containingAssembly = type.Assembly;
-            var matchedType = containingAssembly.GetTypes()
-                .Where(x =>
-                       x.Namespace == type.Namespace
-                       && x.GetInterface(type.FullName) != null)
-                .FirstOrDefault();
+            var matchedType = containingAssembly.GetTypes().FirstOrDefault(x => x.Namespace == type.Namespace
+                                                                                && x.GetInterface(type.FullName) != null);
             if (matchedType == null)
             {
                 return;

@@ -33,10 +33,12 @@
                     @Html.DisplayFor(modelItem => item.LastEntryDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.StatusId)
+                    @Html.DisplayFor(modelItem => item.Status.Name)
+                    @Html.HiddenFor(modelItem => item.Status.Id)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ResponsibleId)
+                    @Html.DisplayFor(modelItem => item.Responsible.Name)
+                    @Html.HiddenFor(modelItem => item.Responsible.Id)
                 </td>
                 <td class="buttons">
                     @Html.ActionLink("Details", "Question", new { id = item.Id }, new { @class = "btn small" })

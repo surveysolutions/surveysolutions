@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Helpers;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -14,7 +16,6 @@ namespace RavenQuestionnaire.Web.Controllers
     [QuestionnaireAuthorize(UserRoles.Administrator)]
     public class StatusController : Controller
     {
-
         private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
 
@@ -42,7 +43,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (string.IsNullOrEmpty(model.Id))
                 {
-                    commandInvoker.Execute(new CreateNewStatusCommand(model.Title));
+                    commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial, Global.GetCurrentUser()));
                 }
                 return RedirectToAction("Index");
 
@@ -58,7 +59,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (!string.IsNullOrEmpty(model.Id) && model.StatusRolesMatrix != null)
                 {
-                    Dictionary<string, List<string>> roles = new Dictionary<string, List<string>>();
+                    Dictionary<string, List<SurveyStatus>> roles = new Dictionary<string, List<SurveyStatus>>();
                     
                     foreach (var item in model.StatusRolesMatrix)
                     {
@@ -66,11 +67,11 @@ namespace RavenQuestionnaire.Web.Controllers
                             if (roleItem.Permit)
                             {
                                 if (!roles.ContainsKey(roleItem.RoleName))
-                                    roles.Add(roleItem.RoleName, new List<string>());
-                                roles[roleItem.RoleName].Add(item.Status.Id);
+                                    roles.Add(roleItem.RoleName, new List<SurveyStatus>());
+                                roles[roleItem.RoleName].Add(new SurveyStatus(item.Status.Id, item.Status.Title));
                             }
                     }
-                    commandInvoker.Execute(new UpdateStatusRestrictionsCommand(model.Id, roles));
+                    commandInvoker.Execute(new UpdateStatusRestrictionsCommand(model.Id, roles, Global.GetCurrentUser()));
                     return RedirectToAction("Index");
                 }
             }
@@ -103,16 +104,26 @@ namespace RavenQuestionnaire.Web.Controllers
 
             if (model != null)
             {
-                foreach (var status in viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(new StatusBrowseInputModel() { PageSize = 100 }).Items)
+                foreach (var status in viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(
+                    new StatusBrowseInputModel() { PageSize = 100 }).Items)
                 {
                     var statusByRole = new StatusByRole {Status = status};
 
                     foreach (var role in Roles.GetAllRoles())
                     {
                         bool flag = false;
-                        if (model.StatusRoles.ContainsKey(role) && model.StatusRoles[role].Contains(status.Id))
-                            flag = true;
-
+                        if (model.StatusRoles.ContainsKey(role))
+                        {
+                            foreach (var VARIABLE in model.StatusRoles[role])
+                            {
+                                if (String.Compare(VARIABLE.Id, status.Id, StringComparison.OrdinalIgnoreCase) == 0)
+                                {
+                                    flag = true;
+                                    break;
+                                }
+                            }
+                        }
+                        
                         statusByRole.StatusRestriction.Add(new RolePermission(role, flag));
                     }
 

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Moq;
 using NUnit.Framework;
-using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
@@ -59,6 +56,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             innerDoc.CreationDate = DateTime.Now;
             innerDoc.LastEntryDate = DateTime.Now;
             innerDoc.Questionnaire= new QuestionnaireDocument();
+            innerDoc.Status = new SurveyStatus("-1", "dummyStatus");
+            innerDoc.Responsible = new UserLight("-1", "dummyUser");
             var output = new CompleteQuestionnaireView(innerDoc);
             var input = new CompleteQuestionnaireViewInputModel("cqId");
 

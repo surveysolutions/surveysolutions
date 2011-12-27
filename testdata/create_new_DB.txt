@@ -1,0 +1,13 @@
+1. Start ravenDb server.
+2. Exec 
+Raven.Smuggler in http://localhost:8081/  init.dump
+
+where: 
+Raven.Smuggler  		export\import utility
+http://localhost:8080/ 		server path
+init.dump 			file of exported db
+
+
+if you want to update use out command
+
+Raven.Smuggler out http://localhost:8081/  init.dump

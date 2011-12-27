@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers;
 using RavenQuestionnaire.Core.Documents;
@@ -28,7 +24,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             locationRepositoryMock.Setup(x => x.Load("locationdocuments/some_id")).Returns(location);
             UpdateUserHandler handler = new UpdateUserHandler(userRepositoryMock.Object, locationRepositoryMock.Object);
             handler.Handle(new Commands.UpdateUserCommand("uID", "email@test.com",/* "test",*/ true,
-                                                          new [] {UserRoles.Administrator}, null,"some_id"));
+                                                          new[] { UserRoles.Administrator }, null, 
+                                                          "some_id", null));
 
             Assert.True(
                 innerDocument.Email == "email@test.com" /*&& innerDocument.Password == "test"*/ && innerDocument.IsLocked &&
@@ -62,9 +59,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                     locationRepositoryMock.Object);
             handler.Handle(new Commands.UpdateUserCommand("uID", "email@test.com", false,
                                                           new UserRoles[] {UserRoles.User},
-                                                          "supervisor_id", "some_id"));
-            Assert.AreEqual(innerDocument.Supervisor.SupervisorId, supervisorDoc.Id);
-            Assert.AreEqual(innerDocument.Supervisor.SupervisorName, supervisorDoc.UserName);
+                                                          "supervisor_id", "some_id", null));
+            Assert.AreEqual(innerDocument.Supervisor.Id, supervisorDoc.Id);
+            Assert.AreEqual(innerDocument.Supervisor.Name, supervisorDoc.UserName);
             userRepositoryMock.Verify(x => x.Load("userdocuments/supervisor_id"));
         }
     }
