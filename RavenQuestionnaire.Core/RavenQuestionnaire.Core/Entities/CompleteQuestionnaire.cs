@@ -14,14 +14,14 @@ namespace RavenQuestionnaire.Core.Entities
         {
             return innerDocument;
         }
-        public CompleteQuestionnaire(Questionnaire template, string userId)
+        public CompleteQuestionnaire(Questionnaire template, UserLight user, SurveyStatus status)
         {
             innerDocument = new CompleteQuestionnaireDocument()
                                 {
                                     Questionnaire = ((IEntity<QuestionnaireDocument>) template).GetInnerDocument(),
-                                    UserId = userId,
-                                    Status = "0",
-                                    ResponsibleId = userId,
+                                    Creator = user,
+                                    Status = status,
+                                    Responsible = user,
                                 };
         }
 
@@ -43,10 +43,14 @@ namespace RavenQuestionnaire.Core.Entities
         {
             if(answer.PublicKey== Guid.Empty)
                 return;
-            if (innerDocument.CompletedAnswers.Where(a => a.PublicKey.Equals(answer.PublicKey)).Count() > 0)
+            if (innerDocument.CompletedAnswers.Any(a => a.PublicKey.Equals(answer.PublicKey)))
                 throw new DuplicateNameException("Answer with current public key already exists.");
-            var templateAnswer = this.GetQuestionsFromGroup(groupPublicKey).Where(q => q.PublicKey.Equals(answer.QuestionPublicKey)).SelectMany(q => q.Answers).Where(
-                    a => a.PublicKey.Equals(answer.PublicKey)).FirstOrDefault();
+
+            var templateAnswer = this.GetQuestionsFromGroup(groupPublicKey).
+                Where(q=>q.PublicKey.Equals(answer.QuestionPublicKey)).
+                SelectMany(q => q.Answers).
+                FirstOrDefault(a => a.PublicKey.Equals(answer.PublicKey));
+
             if (templateAnswer == null)
                 throw new InvalidOperationException("Answer with current public key doesn't exist in question list.");
            /* if(!string.IsNullOrEmpty(answer.CustomAnswer) && templateAnswer.AnswerType!= AnswerType.Text)
@@ -56,15 +60,27 @@ namespace RavenQuestionnaire.Core.Entities
         }
         public void UpdateAnswer(CompleteAnswer answer, Guid? groupPublicKey)
         {
-            var question =
-                this.GetQuestionsFromGroup(groupPublicKey).Where(q => q.PublicKey.Equals(answer.QuestionPublicKey)).
-                    FirstOrDefault();
+            var question = this.GetQuestionsFromGroup(groupPublicKey).FirstOrDefault(q => q.PublicKey.Equals(answer.QuestionPublicKey));
+
             if (question == null)
                 throw new InvalidOperationException("Question does not exist in questionnaire");
 
             innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey == question.PublicKey);
             AddAnswer(answer, groupPublicKey);
         }
+
+        public void SetStatus(SurveyStatus status)
+        {
+            innerDocument.Status = status;
+        }
+
+
+        public void SetResponsible(UserLight user)
+        {
+            innerDocument.Responsible = user;
+        }
+
+
         protected List<Question> GetQuestionsFromGroup(Guid? groupPublicKey)
         {
             Questionnaire questionnaire = new Questionnaire(innerDocument.Questionnaire);
@@ -82,17 +98,6 @@ namespace RavenQuestionnaire.Core.Entities
             }
             return questions;
         }
-
-/*
-        public void UpdateAnswerList(IEnumerable<CompleteAnswer> answers)
-        {
-            ClearAnswers();
-            
-            foreach (var answer in answers)
-            {
-                AddAnswer(answer, this.innerDocument.Questionnaire.Questions);
-            }
-        }*/
 
         public Questionnaire GetQuestionnaireTemplate()
         {

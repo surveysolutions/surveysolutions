@@ -14,7 +14,7 @@
             get { return _pageSize; }
             set { _pageSize = value; }
         }
-        private int _pageSize = 5;
+        private int _pageSize = 10;
 
     }
 }

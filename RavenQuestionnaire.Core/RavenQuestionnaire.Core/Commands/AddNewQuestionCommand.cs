@@ -36,8 +36,11 @@ namespace RavenQuestionnaire.Core.Commands
             private set;
         }
         public Answer[] Answers { get; set; }
-       
-        public AddNewQuestionCommand(string text, QuestionType type, string questionnaireId, Guid? groupPublicKey, string condition, AnswerView[] answers)
+
+        public UserLight Executor { get; set; }
+
+        public AddNewQuestionCommand(string text, QuestionType type, string questionnaireId, Guid? groupPublicKey, 
+            string condition, AnswerView[] answers, UserLight executor)
         {
             this.QuestionText = text;
             this.QuestionType = type;
@@ -54,6 +57,8 @@ namespace RavenQuestionnaire.Core.Commands
                        Mandatory = a.Mandatory,
                        PublicKey = a.PublicKey
                    }).ToArray();
+
+            Executor = executor;
         }
     }
 }

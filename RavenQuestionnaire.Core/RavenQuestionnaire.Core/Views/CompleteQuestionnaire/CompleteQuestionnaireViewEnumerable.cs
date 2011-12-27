@@ -20,9 +20,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate{ get; set; }
 
-        public string Status { get; set; }
+        public SurveyStatus Status { get; set; }
 
-        public string ResponsibleId { set; get; }
+        public UserLight Responsible { set; get; }
         public CompleteGroupView CurrentGroup { get; set; }
 
 
@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.CreationDate = doc.CreationDate;
             this.LastEntryDate = doc.LastEntryDate;
             this.Status = doc.Status;
-            this.ResponsibleId = doc.ResponsibleId;
+            this.Responsible = doc.Responsible;
             if(currentGroup!=null)
             {
                 this.CurrentGroup = new CompleteGroupView(doc, currentGroup);

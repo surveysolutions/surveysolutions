@@ -14,10 +14,10 @@ namespace RavenQuestionnaire.Core.Services
         {
             this._questionRepository = questionRepository;
         }
-        public CompleteQuestionnaire AddCompleteAnswer(Entities.Questionnaire questionnaire,
-                                 IEnumerable<CompleteAnswer> answers, string userId)
+        public CompleteQuestionnaire AddCompleteAnswer(Questionnaire questionnaire,
+                                 IEnumerable<CompleteAnswer> answers, UserLight user, SurveyStatus status)
         {
-            CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire, userId);
+            CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire, user, status);
             foreach (CompleteAnswer completeAnswer in answers)
             {
 
@@ -26,13 +26,13 @@ namespace RavenQuestionnaire.Core.Services
             _questionRepository.Add(entity);
             return entity;
         }
-        public CompleteQuestionnaire UpdateCompleteAnswer(string id, Entities.Questionnaire questionnaire,
+        public CompleteQuestionnaire UpdateCompleteAnswer(string id, Questionnaire questionnaire,
                                  IEnumerable<CompleteAnswer> answers)
         {
             CompleteQuestionnaire entity = _questionRepository.Load(id);
             if (entity.GetQuestionnaireTemplate().QuestionnaireId != questionnaire.QuestionnaireId)
                 throw new InvalidOperationException(
-                    "You can't attach different questionnaire to completted questionnaire if updating it.");
+                    "You can't attach different questionnaire to completed questionnaire on updating.");
             foreach (CompleteAnswer completeAnswer in answers)
             {
 

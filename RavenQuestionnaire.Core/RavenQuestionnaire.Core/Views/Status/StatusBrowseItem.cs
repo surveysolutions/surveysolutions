@@ -16,8 +16,13 @@ namespace RavenQuestionnaire.Core.Views.Status
 
         public string Title { get; set; }
 
+        public bool IsInitial { get; set; }
+        public bool IsVisible { get; set; }
+
         public StatusBrowseItem()
-        {}
+        {
+            IsInitial = false;
+        }
 
         public StatusBrowseItem (string id, string title)
         {
