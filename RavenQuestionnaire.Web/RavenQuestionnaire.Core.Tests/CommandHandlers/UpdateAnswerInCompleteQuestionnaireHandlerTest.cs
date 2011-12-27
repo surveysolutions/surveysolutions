@@ -30,10 +30,16 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
             UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object);
-            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
+            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",null,
                                                                                                                 new CompleteAnswer
-                                                                                                                    (answer,
-                                                                                                                     question.PublicKey));
+                                                                                                                    []
+                                                                                                                    {
+                                                                                                                        new CompleteAnswer
+                                                                                                                            (answer,
+                                                                                                                             question
+                                                                                                                                 .
+                                                                                                                                 PublicKey)
+                                                                                                                    });
             handler.Handle(command);
             repositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqId"), Times.Once());
             Assert.AreEqual(qDoqument.CompletedAnswers[0].QuestionPublicKey, question.PublicKey);

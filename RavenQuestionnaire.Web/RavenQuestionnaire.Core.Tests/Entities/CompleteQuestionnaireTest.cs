@@ -21,7 +21,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             innerDocument.Questionnaire= new QuestionnaireDocument();
             CompleteQuestionnaire questionnaire = new CompleteQuestionnaire(innerDocument);
 
-            Assert.Throws<InvalidOperationException>(() => questionnaire.AddAnswer(new CompleteAnswer() { PublicKey = Guid.NewGuid(),CustomAnswer = "test" }));
+            Assert.Throws<InvalidOperationException>(
+                () =>
+                questionnaire.AddAnswer(new CompleteAnswer() {PublicKey = Guid.NewGuid(), CustomAnswer = "test"}, null));
         }
         [Test]
         public void WhenAddCompletedAnswerFromQuestionnaireList_AnswerIsAdded()
@@ -34,7 +36,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                                     PublicKey = innerDocument.Questionnaire.Questions[0].Answers[0].PublicKey,
                                     AnswerText = innerDocument.Questionnaire.Questions[0].Answers[0].AnswerText
                                 };
-            completeQuestionnaire.AddAnswer(new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0], innerDocument.Questionnaire.Questions[0].PublicKey));
+            completeQuestionnaire.AddAnswer(new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0], innerDocument.Questionnaire.Questions[0].PublicKey), null);
             Assert.AreEqual(innerDocument.CompletedAnswers[0].PublicKey, innerDocument.Questionnaire.Questions[0].Answers[0].PublicKey);
         }
 
@@ -46,16 +48,6 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
 
             completeQuestionnaire.ClearAnswers();
-            Assert.AreEqual(innerDocument.CompletedAnswers.Count, 0);
-        }
-        [Test]
-        public void UpdateAnswerList_UpdatesCompletedAnswersInDocument()
-        {
-            CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
-            CompleteQuestionnaireDocument innerDocument =
-               ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
-
-            completeQuestionnaire.UpdateAnswerList(new CompleteAnswer[0]);
             Assert.AreEqual(innerDocument.CompletedAnswers.Count, 0);
         }
         [Test]
@@ -97,7 +89,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteQuestionnaireDocument innerDocument =
                ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
             Assert.Throws<InvalidOperationException>(
-                () => completeQuestionnaire.UpdateAnswer(new CompleteAnswer(new Answer(), Guid.NewGuid())));
+                () => completeQuestionnaire.UpdateAnswer(new CompleteAnswer(new Answer(), Guid.NewGuid()), null));
 
         }
         [Test]
@@ -110,7 +102,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             innerDocument.CompletedAnswers.Add(new CompleteAnswer(firstQuestion.Answers[0], firstQuestion.PublicKey));
             
 
-            completeQuestionnaire.UpdateAnswer(new CompleteAnswer(firstQuestion.Answers[1], firstQuestion.PublicKey));
+            completeQuestionnaire.UpdateAnswer(new CompleteAnswer(firstQuestion.Answers[1], firstQuestion.PublicKey), null);
             Assert.AreEqual(innerDocument.CompletedAnswers.Count, 1);
             Assert.AreEqual(innerDocument.CompletedAnswers[0].PublicKey, firstQuestion.Answers[1].PublicKey);
 
@@ -123,7 +115,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteQuestionnaireDocument innerDocument =
                ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
 
-            completeQuestionnaire.AddAnswer(new CompleteAnswer() {PublicKey = Guid.Empty});
+            completeQuestionnaire.AddAnswer(new CompleteAnswer() { PublicKey = Guid.Empty }, null);
             Assert.AreEqual(innerDocument.CompletedAnswers.Count, 0);
 
         }
@@ -138,7 +130,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             
             Assert.Throws<DuplicateNameException>(
                 () =>
-                completeQuestionnaire.AddAnswer(new CompleteAnswer(firstQuestion.Answers[0], firstQuestion.PublicKey)));
+                completeQuestionnaire.AddAnswer(new CompleteAnswer(firstQuestion.Answers[0], firstQuestion.PublicKey), null));
 
         }
         [Test]
@@ -152,7 +144,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
             Assert.Throws<InvalidOperationException>(
                 () =>
-                completeQuestionnaire.AddAnswer(new CompleteAnswer(new Answer(), firstQuestion.PublicKey)));
+                completeQuestionnaire.AddAnswer(new CompleteAnswer(new Answer(), firstQuestion.PublicKey), null));
 
         }
         [Test]
@@ -164,7 +156,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                 ((IEntity<CompleteQuestionnaireDocument>) completeQuestionnaire).GetInnerDocument();
             var firstQuestion = innerDocument.Questionnaire.Questions[0];
 
-            completeQuestionnaire.AddAnswer(new CompleteAnswer(firstQuestion.Answers[0], firstQuestion.PublicKey));
+            completeQuestionnaire.AddAnswer(new CompleteAnswer(firstQuestion.Answers[0], firstQuestion.PublicKey), null);
             Assert.AreEqual(innerDocument.CompletedAnswers.Count, 1);
             Assert.AreEqual(innerDocument.CompletedAnswers[0].PublicKey, firstQuestion.Answers[0].PublicKey);
 

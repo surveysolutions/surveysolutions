@@ -37,7 +37,7 @@
                 </td>
                 <td class="buttons">
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn small " })
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn small " })
+                    @Html.ActionLink("Manage", "Details", new { id = item.Id }, new { @class = "btn small " })
                     @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn small danger" })
                     @Html.ActionLink("Participate", "Participate", "CompleteQuestionnaire", new { id = item.Id }, new { @class = "btn small primary" })
                 </td>

@@ -18,7 +18,11 @@ namespace RavenQuestionnaire.Core.Services
                                  IEnumerable<CompleteAnswer> answers, string userId)
         {
             CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire, userId);
-            entity.UpdateAnswerList(answers);
+            foreach (CompleteAnswer completeAnswer in answers)
+            {
+
+                entity.UpdateAnswer(completeAnswer, null);
+            }
             _questionRepository.Add(entity);
             return entity;
         }
@@ -29,7 +33,11 @@ namespace RavenQuestionnaire.Core.Services
             if (entity.GetQuestionnaireTemplate().QuestionnaireId != questionnaire.QuestionnaireId)
                 throw new InvalidOperationException(
                     "You can't attach different questionnaire to completted questionnaire if updating it.");
-            entity.UpdateAnswerList(answers);
+            foreach (CompleteAnswer completeAnswer in answers)
+            {
+
+                entity.UpdateAnswer(completeAnswer, null);
+            }
             _questionRepository.Add(entity);
             return entity;
         }

@@ -123,7 +123,7 @@ namespace RavenQuestionnaire.Web.Controllers
             return View( model);
         }
 
-        public ActionResult SaveSingleResult(string id, CompleteAnswer[] answers, string order)
+        public ActionResult SaveSingleResult(string id, Guid? PublicKey, CompleteAnswer[] answers, string order)
         {
             if (answers == null || answers.Length <= 0)
             {
@@ -131,10 +131,10 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, answers[0]));
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id,PublicKey, answers));
             }
 
-            return RedirectToAction("Question", new { id = id, question = answers[0].QuestionPublicKey, order = order == "Previous"});
+            return RedirectToAction("Question", new { id = id, question = PublicKey, order = order == "Previous" });
         }
 
         public ActionResult Delete(string id)

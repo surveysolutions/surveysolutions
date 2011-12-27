@@ -10,15 +10,17 @@ namespace RavenQuestionnaire.Core.Commands
     public class UpdateAnswerInCompleteQuestionnaireCommand: ICommand
     {
         public string CompleteQuestionnaireId { get; private set; }
-        public CompleteAnswer CompleteAnswer { get; private set; }
+        public CompleteAnswer[] CompleteAnswers { get; private set; }
+        public Guid? Group { get; private set; }
 
 
-
-        public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionanireId, 
-                                                  CompleteAnswer answer)
+        public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionanireId, Guid? group,
+                                                  CompleteAnswer[] answers)
         {
             this.CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(completeQuestionanireId);
-            this.CompleteAnswer = answer;
+            if (group != Guid.Empty)
+                this.Group = group;
+            this.CompleteAnswers = answers;
         }
     }
 }

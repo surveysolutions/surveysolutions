@@ -10,10 +10,10 @@
     <h2>
         Questions:</h2>
     
-   if (Model.CurrentQuestion != null)
+    if (Model.CurrentGroup != null)
    {
     <div>
-        @{ Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", Model.CurrentQuestion); }
+        @{ Html.RenderPartial("~/Views/Group/_Screen.cshtml", Model.CurrentGroup); }
     </div>
    }
    else
@@ -25,7 +25,7 @@
     @Html.HiddenFor(model => Model.Id)
     <p>
         <input type="submit" value="Previous" name="order" class="btn primary" />
-        @if (Model.CurrentQuestion != null)
+        @if (Model.CurrentGroup != null)
         {
         <input type="submit" value="Next" name="order" class="btn primary" />}
     </p>
