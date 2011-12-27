@@ -22,10 +22,19 @@ namespace RavenQuestionnaire.Core.Views.Group
             this.QuestionnaireId = doc.Id;
             this.PublicKey = group.PublicKey;
             this.GroupText = group.GroupText;
-            this._questions =
-               group.Questions.Select(q => new CompleteQuestionView(q, doc.Id)).ToArray();
+            this._questions = ProcessQuestionList(group.Questions, doc.CompletedAnswers, doc.Questionnaire);
             this.CompleteAnswers = doc.CompletedAnswers.ToArray();
             MerdgeAnswersWithResults();
+        }
+        protected CompleteQuestionView[] ProcessQuestionList(IList<RavenQuestionnaire.Core.Entities.SubEntities.Question> questions, IList<CompleteAnswer> answers, QuestionnaireDocument questionnaire)
+        {
+            CompleteQuestionView[] result = new CompleteQuestionView[questions.Count];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = new CompleteQuestionView(questions[i], questionnaire);
+                result[i].Enabled = questions[i].EvaluateCondition(answers);
+            }
+            return result;
         }
 
         public Guid PublicKey { get; set; }

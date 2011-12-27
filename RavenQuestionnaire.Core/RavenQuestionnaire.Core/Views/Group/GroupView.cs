@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Views.Group
             this.Questions =
                 group.Questions.Select(
                     q =>
-                    new QuestionView(doc.Id, q)).ToArray();
+                    new QuestionView(doc, q)).ToArray();
         }
 
         public Guid PublicKey { get; set; }

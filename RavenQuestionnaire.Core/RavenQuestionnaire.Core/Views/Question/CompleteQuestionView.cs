@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Answer;
 
@@ -32,13 +33,16 @@ namespace RavenQuestionnaire.Core.Views.Question
         {
             get { return Question.QuestionnaireId; }
         }
+
+        public bool Enabled { get; set; }
+
         public CompleteQuestionView()
         {
         }
 
-        public CompleteQuestionView(RavenQuestionnaire.Core.Entities.SubEntities.Question templateQuestion, string questionnaireId)
+        public CompleteQuestionView(RavenQuestionnaire.Core.Entities.SubEntities.Question templateQuestion, QuestionnaireDocument questionnaire)
         {
-            this.Question = new QuestionView(questionnaireId,templateQuestion);
+            this.Question = new QuestionView(questionnaire, templateQuestion);
             this.Answers = templateQuestion.Answers.Select(a => new CompleteAnswerView(a, templateQuestion.PublicKey, false)).ToArray();
         }
 
