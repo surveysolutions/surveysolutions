@@ -27,8 +27,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
                 var completeQuestionnaireRoot = new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc);
 
-                Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Question, Guid?> iterator =
-                    new QuestionnaireSimpleIterator(completeQuestionnaireRoot);
+                Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Group, Guid?> iterator =
+                    new QuestionnaireScreenIterator(completeQuestionnaireRoot);
                 var question = input.IsReverse
                                    ? iterator.GetPreviousBefoure(input.PreviousQuestionPublicKey)
                                    : iterator.GetNextAfter(input.PreviousQuestionPublicKey);

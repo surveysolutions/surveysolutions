@@ -148,6 +148,7 @@
     <Compile Include="Entities\Event.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Iterators\Iterator.cs" />
+    <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireSimpleIterator.cs" />
     <Compile Include="Entities\Location.cs" />
     <Compile Include="Entities\Questionnaire.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewEnumerable.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
+    <Compile Include="Views\Group\CompleteGroupView.cs" />
     <Compile Include="Views\Group\GroupView.cs" />
     <Compile Include="Views\Group\GroupViewFactory.cs" />
     <Compile Include="Views\Group\GroupViewInputModel.cs" />

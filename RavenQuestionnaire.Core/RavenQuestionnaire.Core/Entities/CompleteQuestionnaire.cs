@@ -39,14 +39,13 @@ namespace RavenQuestionnaire.Core.Entities
         {
             innerDocument.CompletedAnswers.Clear();
         }
-        public void AddAnswer(CompleteAnswer answer)
+        public void AddAnswer(CompleteAnswer answer, Guid? groupPublicKey)
         {
             if(answer.PublicKey== Guid.Empty)
                 return;
             if (innerDocument.CompletedAnswers.Where(a => a.PublicKey.Equals(answer.PublicKey)).Count() > 0)
                 throw new DuplicateNameException("Answer with current public key already exists.");
-            var templateAnswer =
-                innerDocument.Questionnaire.Questions.Where(q=>q.PublicKey.Equals(answer.QuestionPublicKey)).SelectMany(q => q.Answers).Where(
+            var templateAnswer = this.GetQuestionsFromGroup(groupPublicKey).Where(q => q.PublicKey.Equals(answer.QuestionPublicKey)).SelectMany(q => q.Answers).Where(
                     a => a.PublicKey.Equals(answer.PublicKey)).FirstOrDefault();
             if (templateAnswer == null)
                 throw new InvalidOperationException("Answer with current public key doesn't exist in question list.");
@@ -55,27 +54,45 @@ namespace RavenQuestionnaire.Core.Entities
             answer.CustomAnswer = templateAnswer.AnswerText;
             innerDocument.CompletedAnswers.Add(answer);
         }
-        public void UpdateAnswer(CompleteAnswer answer)
+        public void UpdateAnswer(CompleteAnswer answer, Guid? groupPublicKey)
         {
             var question =
-                innerDocument.Questionnaire.Questions.Where(q => q.PublicKey.Equals(answer.QuestionPublicKey)).
+                this.GetQuestionsFromGroup(groupPublicKey).Where(q => q.PublicKey.Equals(answer.QuestionPublicKey)).
                     FirstOrDefault();
             if (question == null)
                 throw new InvalidOperationException("Question does not exist in questionnaire");
 
             innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey == question.PublicKey);
-            AddAnswer(answer);
+            AddAnswer(answer, groupPublicKey);
+        }
+        protected List<Question> GetQuestionsFromGroup(Guid? groupPublicKey)
+        {
+            Questionnaire questionnaire = new Questionnaire(innerDocument.Questionnaire);
+            List<Question> questions;
+            if (groupPublicKey.HasValue)
+            {
+                Group group = questionnaire.Find<Group>(groupPublicKey.Value);
+                if (group == null)
+                    throw new ArgumentException("group does not exsit");
+                questions = group.Questions;
+            }
+            else
+            {
+                questions = innerDocument.Questionnaire.Questions;
+            }
+            return questions;
         }
 
+/*
         public void UpdateAnswerList(IEnumerable<CompleteAnswer> answers)
         {
             ClearAnswers();
             
             foreach (var answer in answers)
             {
-                AddAnswer(answer);
+                AddAnswer(answer, this.innerDocument.Questionnaire.Questions);
             }
-        }
+        }*/
 
         public Questionnaire GetQuestionnaireTemplate()
         {
@@ -89,6 +106,10 @@ namespace RavenQuestionnaire.Core.Entities
         public IList<Question> GetAllQuestions()
         {
             return innerDocument.Questionnaire.Questions;
+        }
+        public IList<Group> GetAllGroups()
+        {
+            return innerDocument.Questionnaire.Groups;
         }
 
 
