@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Answer;
@@ -50,16 +51,38 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.GroupPublicKey = groupPublicKey;
         }
 
-        public QuestionView(string questionnaireId, RavenQuestionnaire.Core.Entities.SubEntities.Question doc)
+        public QuestionView(QuestionnaireDocument questionnaire, RavenQuestionnaire.Core.Entities.SubEntities.Question doc)
         {
             this.PublicKey = doc.PublicKey;
             this.QuestionText = doc.QuestionText;
             this.QuestionType = doc.QuestionType;
-            this.QuestionnaireId = questionnaireId;
+            this.QuestionnaireId = questionnaire.Id;
             this.ConditionExpression = doc.ConditionExpression;
             this.Answers = doc.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
+            this.GroupPublicKey = GetQuestionGroup(questionnaire, doc.PublicKey);
+        }
+        protected Guid? GetQuestionGroup(QuestionnaireDocument questionnaire, Guid questionKey)
+        {
+            if (questionnaire.Questions.Where(q => q.PublicKey.Equals(questionKey)).Count() > 0)
+                return null;
+            Queue<RavenQuestionnaire.Core.Entities.SubEntities.Group> group= new Queue<Entities.SubEntities.Group>();
+            foreach (var child in questionnaire.Groups)
+            {
+                group.Enqueue(child);
+            }
+            while (group.Count!=0)
+            {
+                var queueItem = group.Dequeue();
+
+                if (queueItem.Questions.Where(q => q.PublicKey.Equals(questionKey)).Count() > 0)
+                    return queueItem.PublicKey;
+                foreach (var child in queueItem.Groups)
+                {
+                    group.Enqueue(child);
+                }
+            }
+            throw new ArgumentException("group does not exist");
         }
 
-        
     }
 }

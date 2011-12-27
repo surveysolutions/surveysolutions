@@ -26,13 +26,24 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             {
                 var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
                 var completeQuestionnaireRoot = new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc);
-
-                Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Group, Guid?> iterator =
-                    new QuestionnaireScreenIterator(completeQuestionnaireRoot);
-                var question = input.IsReverse
-                                   ? iterator.GetPreviousBefoure(input.PreviousQuestionPublicKey)
-                                   : iterator.GetNextAfter(input.PreviousQuestionPublicKey);
-                return new CompleteQuestionnaireViewEnumerable(doc, question);
+                RavenQuestionnaire.Core.Entities.SubEntities.Group group = null;
+               
+                if (input.CurrentGroupPublicKey.HasValue)
+                {
+                    var template = new RavenQuestionnaire.Core.Entities.Questionnaire(doc.Questionnaire);
+                    group =
+                        template.Find<RavenQuestionnaire.Core.Entities.SubEntities.Group>(
+                            input.CurrentGroupPublicKey.Value);
+                }
+                if (group == null)
+                {
+                    Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Group, Guid?> iterator =
+                        new QuestionnaireScreenIterator(completeQuestionnaireRoot);
+                    group = input.IsReverse
+                                       ? iterator.GetPreviousBefoure(input.PreviousGroupPublicKey)
+                                       : iterator.GetNextAfter(input.PreviousGroupPublicKey);
+                }
+                return new CompleteQuestionnaireViewEnumerable(doc, group);
             }
             if (!string.IsNullOrEmpty(input.TemplateQuestionanireId))
             {

@@ -73,8 +73,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 return RedirectToAction("Question",
                                         new
                                             {
-                                                id = command.CompleteQuestionnaireId,
-                                                question = answers[0].QuestionPublicKey
+                                                id = command.CompleteQuestionnaireId
                                             });
             }
             return RedirectToAction("Participate", new { id });
@@ -113,13 +112,13 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
-        public ActionResult Question(string id, Guid? question, bool? order)
+        public ActionResult Question(string id, Guid? group, bool? order)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
             var model =
                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
-                    new CompleteQuestionnaireViewInputModel(id, question, order?? false));
+                    new CompleteQuestionnaireViewInputModel(id, group, order?? false));
             return View( model);
         }
 
@@ -127,14 +126,20 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (answers == null || answers.Length <= 0)
             {
-                return RedirectToAction("Question", new { id = id, order = order == "Previous" });
+                return RedirectToAction("Question", new {id = id, order = order == "Previous"});
             }
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id,PublicKey, answers));
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, PublicKey, answers));
             }
-
-            return RedirectToAction("Question", new { id = id, question = PublicKey, order = order == "Previous" });
+            if (string.IsNullOrEmpty(order))
+            {
+                var model =
+                    viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
+                        new CompleteQuestionnaireViewInputModel(id) {CurrentGroupPublicKey = PublicKey});
+                return View("Question", model);
+            }
+            return RedirectToAction("Question", new {id = id, group = PublicKey, order = order == "Previous"});
         }
 
         public ActionResult Delete(string id)

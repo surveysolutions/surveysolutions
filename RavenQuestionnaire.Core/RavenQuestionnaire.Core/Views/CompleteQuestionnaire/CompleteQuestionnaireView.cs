@@ -45,7 +45,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.ResponsibleId = doc.ResponsibleId;
             //TODO _question may be redundant
             _questions =
-                doc.Questionnaire.Questions.Select(q => new CompleteQuestionView(q, doc.Questionnaire.Id)).ToArray();
+                doc.Questionnaire.Questions.Select(q => new CompleteQuestionView(q, doc.Questionnaire)).ToArray();
             MerdgeAnswersWithResults();
 
         }
@@ -53,7 +53,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
             this.Questionnaire = new QuestionnaireView(template);
             CompleteAnswers = new CompleteAnswer[0];
-            _questions = template.Questions.Select(q => new CompleteQuestionView(q, template.Id)).ToArray();
+            _questions = template.Questions.Select(q => new CompleteQuestionView(q, template)).ToArray();
         }
 
         protected void MerdgeAnswersWithResults()

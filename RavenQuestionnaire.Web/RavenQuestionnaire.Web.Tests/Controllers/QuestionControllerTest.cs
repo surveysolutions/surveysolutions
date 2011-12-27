@@ -39,7 +39,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
             var question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty, null);
-            var questionView = new QuestionView(innerDocument.Id,question);
+            var questionView = new QuestionView(innerDocument,question);
 
 
             ViewRepositoryMock.Setup(
@@ -60,7 +60,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
             var question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty, null);
 
-            var questionView = new QuestionView(innerDocument.Id ,question);
+            var questionView = new QuestionView(innerDocument ,question);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
             ViewRepositoryMock.Setup(
@@ -98,7 +98,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
             var question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty, null);
-            var questionView = new QuestionView(innerDocument.Id, question);
+            var questionView = new QuestionView(innerDocument, question);
 
             var input = new QuestionViewInputModel(question.PublicKey, entity.QuestionnaireId);
 
@@ -106,7 +106,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 x =>
                 x.Load<QuestionViewInputModel, QuestionView>(
                     It.Is<QuestionViewInputModel>(
-                        v => v.QuestionnaireId.Equals(input.QuestionnaireId) && v.PublickKey.Equals(input.PublickKey))))
+                        v => v.QuestionnaireId.Equals(input.QuestionnaireId) && v.PublicKey.Equals(input.PublicKey))))
                 .Returns(questionView);
 
             var result = Controller.Edit(question.PublicKey, innerDocument.Id);

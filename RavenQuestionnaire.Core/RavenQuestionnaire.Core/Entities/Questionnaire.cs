@@ -65,7 +65,8 @@ namespace RavenQuestionnaire.Core.Entities
         }
         public void UpdateQuestion(Guid publicKey, string text, QuestionType type,string condition, IEnumerable<Answer> answers)
         {
-            var question = innerDocument.Questions.Where(q => q.PublicKey.Equals(publicKey)).FirstOrDefault();
+            var question =
+                new RavenQuestionnaire.Core.Entities.Questionnaire(this.innerDocument).Find<Question>(publicKey);
             if (question == null)
                 return;
             question.QuestionText = text;
@@ -79,7 +80,7 @@ namespace RavenQuestionnaire.Core.Entities
             if (string.IsNullOrEmpty(expression))
                 return;
             var e = new Expression(expression);
-            foreach (var question in innerDocument.Questions)
+            foreach (var question in GetAllQuestions())
             {
                 e.Parameters[question.PublicKey.ToString()] = "1";
             }
@@ -183,6 +184,26 @@ namespace RavenQuestionnaire.Core.Entities
                     return subNodes;
             }
             return null;
+        }
+        protected IList<Question> GetAllQuestions()
+        {
+            List<Question> result = new List<Question>();
+            result.AddRange(innerDocument.Questions);
+            Queue<Group> groups = new Queue<Group>();
+            foreach (var child in innerDocument.Groups)
+            {
+                groups.Enqueue(child);
+            }
+            while (groups.Count != 0)
+            {
+                var queueItem = groups.Dequeue();
+                result.AddRange(queueItem.Questions);
+                foreach (var child in queueItem.Groups)
+                {
+                    groups.Enqueue(child);
+                }
+            }
+            return result;
         }
     }
 }

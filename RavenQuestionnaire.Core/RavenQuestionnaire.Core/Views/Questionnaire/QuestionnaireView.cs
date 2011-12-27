@@ -39,7 +39,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
             this.Title = doc.Title;
             this.CreationDate = doc.CreationDate;
             this.LastEntryDate = doc.LastEntryDate;
-            this.Questions = doc.Questions.Select(q => new QuestionView(doc.Id, q)).ToArray();
+            this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();
             this.Groups = doc.Groups.Select(g => new GroupView(doc, g)).ToArray();
 
         }
