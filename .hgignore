@@ -8,3 +8,4 @@ RavenQuestionnaire.Web/*.dotCover
 RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/bin/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Core.Tests/obj/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/obj/*
+RavenQuestionnaire.Web/RavenQuestionnaire.Core.Tests/RavenQuestionnaire.Core.Tests.csproj.user
