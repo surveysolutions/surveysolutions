@@ -1,0 +1,10 @@
+syntax: glob
+RavenQuestionnaire.Web/RavenQuestionnaire.Web/obj/*
+RavenQuestionnaire.Web/_ReSharper.RavenQuestionnaire.Web/*
+RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
+RavenQuestionnaire.Web/RavenQuestionnaire.Web/bin/*
+RavenQuestionnaire.Web/Questionnaire.Core.Web/obj/*
+RavenQuestionnaire.Web/*.dotCover
+RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/bin/*
+RavenQuestionnaire.Web/RavenQuestionnaire.Core.Tests/obj/*
+RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/obj/*
