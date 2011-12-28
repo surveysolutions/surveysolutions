@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
+using NCalc;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
@@ -136,7 +137,23 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Assert.AreEqual(innerDocument.Questions[0].QuestionType, QuestionType.MultyOption);
             Assert.AreEqual(innerDocument.Questions[0].Answers.Count, 1);
         }
-
-
+        [Test]
+        public void AddQuestion_ConditionIsInvalid_EvaluationExceptionIsThrowed()
+        {
+            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+            Questionnaire questionnaire = new Questionnaire(innerDocument);
+            Assert.Throws<EvaluationException>(
+                () => questionnaire.AddQuestion("question", QuestionType.SingleOption, "totaly invalid condition", null));
+        }
+        [Test]
+        public void GetAllQuestions_ListOfUngroupedQuestionsIsReturned()
+        {
+            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+            Questionnaire questionnaire = new Questionnaire(innerDocument);
+            innerDocument.Questions.Add(new Question("top", QuestionType.SingleOption));
+            innerDocument.Groups.Add(new Group("g1"));
+            innerDocument.Groups[0].Questions.Add(new Question("first level", QuestionType.MultyOption));
+            Assert.AreEqual(questionnaire.GetAllQuestions().Count, 2);
+        }
     }
 }

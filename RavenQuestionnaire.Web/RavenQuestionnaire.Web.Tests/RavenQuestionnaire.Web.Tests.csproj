@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountControllerTest.cs" />
     <Compile Include="Controllers\CompleteQuestionnaireControllerTest.cs" />
+    <Compile Include="Controllers\GroupControllerTest.cs" />
     <Compile Include="Controllers\QuestionControllerTest.cs" />
     <Compile Include="Controllers\QuestionnaireControllerTest.cs" />
     <Compile Include="Membership\QuestionnaireMembershipProviderTests.cs" />

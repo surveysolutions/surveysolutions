@@ -117,7 +117,7 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
-        public ActionResult Participate(string id)
+        public ViewResult Participate(string id)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
@@ -130,7 +130,7 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
-        public ActionResult Question(string id, Guid? group, bool? order)
+        public ViewResult Question(string id, Guid? group, bool? order)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");

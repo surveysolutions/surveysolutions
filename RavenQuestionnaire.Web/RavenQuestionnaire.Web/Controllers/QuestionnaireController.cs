@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Edit(string id)
+        public ViewResult Edit(string id)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters.");

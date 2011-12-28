@@ -75,7 +75,7 @@ namespace RavenQuestionnaire.Core.Entities
             ValidateExpression(condition);
             question.SetConditionExpression(condition);
         }
-        public void ValidateExpression(string expression)
+        protected void ValidateExpression(string expression)
         {
             if (string.IsNullOrEmpty(expression))
                 return;
@@ -185,7 +185,7 @@ namespace RavenQuestionnaire.Core.Entities
             }
             return null;
         }
-        protected IList<Question> GetAllQuestions()
+        public IList<Question> GetAllQuestions()
         {
             List<Question> result = new List<Question>();
             result.AddRange(innerDocument.Questions);

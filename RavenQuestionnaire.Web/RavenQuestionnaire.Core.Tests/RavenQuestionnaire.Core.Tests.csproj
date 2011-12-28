@@ -109,6 +109,7 @@
     <Compile Include="CommandHandlers\UpdateQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateUserHandlerTest.cs" />
     <Compile Include="Entities\CompleteQuestionnaireTest.cs" />
+    <Compile Include="Entities\Iterators\QuestionnaireScreenIteratorTest.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireSimpleIteratorTest.cs" />
     <Compile Include="Entities\LocationEntityTest.cs" />
     <Compile Include="Entities\QuestionnaireEntityTest.cs" />
@@ -123,6 +124,10 @@
     <Compile Include="Views\User\UserViewFactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
+      <Project>{5F014003-50D8-49E0-8AFE-91D38DCCC97C}</Project>
+      <Name>NCalc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
       <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
       <Name>RavenQuestionnaire.Core</Name>

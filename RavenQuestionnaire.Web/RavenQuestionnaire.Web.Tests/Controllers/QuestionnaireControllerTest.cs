@@ -1,4 +1,5 @@
 using System;
+using System.Web;
 using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core;
@@ -86,6 +87,11 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Assert.AreEqual(output, result.ViewData.Model);
         }
         [Test]
+        public void Details_IdIsEmpty_ExceptionThrowed()
+        {
+            Assert.Throws<HttpException>(() => Controller.Details(null));
+        }
+        [Test]
         public void When_DeleteQuestionnaireIsExecuted()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
@@ -97,6 +103,26 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
             Controller.Delete(entity.QuestionnaireId);
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<DeleteQuestionnaireCommand>()), Times.Once());
+        }
+        [Test]
+        public void Edit_EditFormIsReturned()
+        {
+            QuestionnaireDocument innerDoc = new QuestionnaireDocument();
+            innerDoc.Id = "questionnairedocuments/qId";
+            innerDoc.Title = "test";
+            innerDoc.CreationDate = DateTime.Now;
+            innerDoc.LastEntryDate = DateTime.Now;
+            var output = new QuestionnaireView(innerDoc);
+            var input = new QuestionnaireViewInputModel("qId");
+
+            ViewRepositoryMock.Setup(
+                x =>
+                x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
+                    It.Is<QuestionnaireViewInputModel>(v => v.QuestionnaireId.Equals(input.QuestionnaireId))))
+                .Returns(output);
+
+            var result = Controller.Edit(output.Id);
+            Assert.AreEqual(output, result.ViewData.Model);
         }
     }
 }
