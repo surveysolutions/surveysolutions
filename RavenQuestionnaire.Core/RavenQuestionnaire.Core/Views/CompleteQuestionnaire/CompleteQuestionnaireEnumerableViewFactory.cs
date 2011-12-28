@@ -24,6 +24,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 var completeQuestionnaireRoot = new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc);
                 RavenQuestionnaire.Core.Entities.SubEntities.Group group = null;
 
+                Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Group, Guid> iterator =
+                       new QuestionnaireScreenIterator(completeQuestionnaireRoot);
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
                     var template = new RavenQuestionnaire.Core.Entities.Questionnaire(doc.Questionnaire);
@@ -31,13 +33,16 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                         template.Find<RavenQuestionnaire.Core.Entities.SubEntities.Group>(
                             input.CurrentGroupPublicKey.Value);
                 }
-                if (group == null)
+                else if (input.PreviousGroupPublicKey.HasValue)
                 {
-                    Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Group, Guid?> iterator =
-                        new QuestionnaireScreenIterator(completeQuestionnaireRoot);
+                   
                     group = input.IsReverse
-                                ? iterator.GetPreviousBefoure(input.PreviousGroupPublicKey)
-                                : iterator.GetNextAfter(input.PreviousGroupPublicKey);
+                                ? iterator.GetPreviousBefoure(input.PreviousGroupPublicKey.Value)
+                                : iterator.GetNextAfter(input.PreviousGroupPublicKey.Value);
+                }
+                else
+                {
+                    group = input.IsReverse ? iterator.Last : iterator.First;
                 }
                 return new CompleteQuestionnaireViewEnumerable(doc, group);
             }

@@ -80,12 +80,17 @@ namespace RavenQuestionnaire.Core.Entities
             if (string.IsNullOrEmpty(expression))
                 return;
             var e = new Expression(expression);
-            foreach (var question in GetAllQuestions())
-            {
-                e.Parameters[question.PublicKey.ToString()] = "1";
-            }
+          
+            e.EvaluateParameter += new EvaluateParameterHandler(e_EvaluateParameter);
             e.Evaluate();
 
+        }
+
+        void e_EvaluateParameter(string name, ParameterArgs args)
+        {
+            if(GetAllQuestions().Where(q=>q.PublicKey.ToString().Equals(name)).Count()<=0)
+                throw new ArgumentOutOfRangeException(string.Format("Parameter {0} is invalid", name));
+            args.Result = "0";
         }
         public bool Add(IComposite c, Guid? parent)
         {
