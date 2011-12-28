@@ -3,6 +3,7 @@
 @model IEnumerable<CompleteAnswerView>
 @using (Html.BeginCollectionItem("answers"))
 {
+     { ((IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings).Add("onclick", "this.form.submit();"); }
     foreach (var item in Model)
      {
          Html.RenderPartial("~/Views/Answer/_TakeRow.cshtml", item);

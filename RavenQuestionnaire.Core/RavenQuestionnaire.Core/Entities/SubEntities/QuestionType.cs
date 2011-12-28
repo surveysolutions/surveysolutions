@@ -8,6 +8,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     public enum QuestionType
     {
         SingleOption,
+        DropDownList,
         MultyOption,
         DynamicInputList
     }

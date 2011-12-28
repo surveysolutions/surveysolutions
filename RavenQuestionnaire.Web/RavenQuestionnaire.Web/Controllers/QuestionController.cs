@@ -42,11 +42,13 @@ namespace RavenQuestionnaire.Web.Controllers
         //
         // POST: /Questionnaire/Create
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Save(QuestionView model)
+        public ActionResult Save(QuestionView model,bool isDropDown)
         {
             
             if (ModelState.IsValid)
             {
+                if(isDropDown)
+                    model.QuestionType= QuestionType.DropDownList;
                 try
                 {
 
