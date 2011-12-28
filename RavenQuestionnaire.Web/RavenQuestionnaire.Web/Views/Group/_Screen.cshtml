@@ -2,13 +2,14 @@
 @using RavenQuestionnaire.Core.Views.Group
 @using RavenQuestionnaire.Core.Views.Question
 @model CompleteGroupView
-<div class="question">
-    <h3>@*@Model.Index)*@ @Html.DisplayFor(modelItem => Model.GroupText)</h3>
-
-   @foreach (var question in Model.Questions)
-   {
-       Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question); 
-   }
-   @Html.HiddenFor(model => Model.PublicKey)
+<div>
+    @foreach (var question in Model.Questions)
+    {
+        using (Html.BeginForm("SaveSingleResult", "CompleteQuestionnaire"))
+        {
+            Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);   
+        @Html.HiddenFor(model => Model.PublicKey)
+        @Html.Hidden("id", Model.QuestionnaireId)
+        }
+    }
 </div>
-

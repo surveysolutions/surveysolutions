@@ -31,13 +31,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Controller = new CompleteQuestionnaireController(CommandInvokerMock.Object, ViewRepositoryMock.Object,
                                                              Authentication.Object);
         }
-        [Test]
-        public void WhenNewCompleteQuestionnaireIsSubmittedWithValidModel_CommandIsSent()
-        {
-            Authentication.Setup(x => x.GetUserIdForCurrentUser()).Returns("some_user_id");
-            Controller.SaveResult("some id", new CompleteAnswer[0]);
-            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewCompleteQuestionnaireCommand>()), Times.Once());
-        }
 
         [Test]
         public void When_GetCompleteQuestionnaireIsExecutedModelIsReturned()
@@ -88,18 +81,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void Participate_ValidId_FormIsReturned()
         {
-            QuestionnaireDocument innerDoc = new QuestionnaireDocument();
-            innerDoc.Id = "questionnairedocuments/cqId";
-            CompleteQuestionnaireViewEnumerable template = new CompleteQuestionnaireViewEnumerable(innerDoc);
-            var input = new CompleteQuestionnaireViewInputModel() {TemplateQuestionanireId = "cqId"};
-            ViewRepositoryMock.Setup(
-               x =>
-               x.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
-                   It.Is<CompleteQuestionnaireViewInputModel>(v => v.TemplateQuestionanireId.Equals(input.TemplateQuestionanireId))))
-               .Returns(template);
-            var result = Controller.Participate("cqId");
-            Assert.AreEqual(result.ViewData.Model.GetType(), typeof(CompleteQuestionnaireViewEnumerable));
-            Assert.AreEqual(result.ViewData.Model, template);
+        
         }
         [Test]
         public void Question_ValidId_FormIsReturned()
@@ -113,22 +95,11 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                x.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
                    It.Is<CompleteQuestionnaireViewInputModel>(v => v.CompleteQuestionnaireId.Equals(input.CompleteQuestionnaireId))))
                .Returns(template);
-            var result = Controller.Question("cqId", null, false);
+            var result = Controller.Question("cqId", null);
             Assert.AreEqual(result.ViewData.Model.GetType(), typeof(CompleteQuestionnaireViewEnumerable));
             Assert.AreEqual(result.ViewData.Model, template);
         }
 
-        [Test]
-        public void SaveFirstStep_Valid_FormIsReturned()
-        {
-            ViewRepositoryMock.Setup(
-                x =>
-                x.Load<StatusViewInputModel, StatusView>(
-                    It.IsAny<StatusViewInputModel>()))
-                .Returns(new StatusView());
-            Controller.SaveFirstStep("cId", new CompleteAnswer[] {});
-            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewCompleteQuestionnaireCommand>()), Times.Once());
-        }
 
         [Test]
         public void SaveSingleResult_Valid_FormIsReturned()
@@ -139,7 +110,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     It.IsAny<StatusViewInputModel>()))
                 .Returns(new StatusView());
             Controller.SaveSingleResult("cId", null,
-                                        new CompleteAnswer[] {new CompleteAnswer(new Answer(), Guid.NewGuid())}, null);
+                                        new CompleteAnswer[] {new CompleteAnswer(new Answer(), Guid.NewGuid())});
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateAnswerInCompleteQuestionnaireCommand>()), Times.Once());
         }
     }

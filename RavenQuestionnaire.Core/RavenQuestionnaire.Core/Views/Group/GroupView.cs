@@ -19,11 +19,6 @@ namespace RavenQuestionnaire.Core.Views.Group
         {
             this.QuestionnaireId = questionnaireId;
         }
-        public GroupView(string questionnaireId, Guid? parent)
-            : this(questionnaireId)
-        {
-            this.ParentGroup = parent;
-        }
         public GroupView(QuestionnaireDocument doc, RavenQuestionnaire.Core.Entities.SubEntities.Group group)
             : this()
         {

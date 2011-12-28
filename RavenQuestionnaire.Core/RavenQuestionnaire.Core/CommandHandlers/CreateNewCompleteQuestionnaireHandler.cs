@@ -21,7 +21,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         public void Handle(CreateNewCompleteQuestionnaireCommand command)
         {
             var questionnaire = this._questionnaireRepository.Load(command.QuestionnaireId);
-            var result =this._completeQuestionnaireUploader.AddCompleteAnswer(questionnaire, command.CompleteAnswers,
+            var result =this._completeQuestionnaireUploader.CreateCompleteQuestionnaire(questionnaire, 
                 command.Creator, command.Status);
             
             

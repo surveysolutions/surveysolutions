@@ -1,36 +1,21 @@
 ﻿@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
+@using RavenQuestionnaire.Core.Views.Group
 @model CompleteQuestionnaireViewEnumerable
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@using (Html.BeginForm("SaveSingleResult", "CompleteQuestionnaire"))
-{
-    <h1>@Model.Title</h1>
-       
-    <h2>
-        Questions:</h2>
-    
-    if (Model.CurrentGroup != null)
-   {
-    <div>
-        @{ Html.RenderPartial("~/Views/Group/_Screen.cshtml", Model.CurrentGroup); }
-    </div>
-   }
-   else
-   {
-    <div>
-        Complete</div>
-   }
-
-    @Html.HiddenFor(model => Model.Id)
-    <p>
-        <input type="submit" value="Previous" name="order" class="btn primary" />
-        @if (Model.CurrentGroup != null)
-        {
-        <input type="submit" value="Next" name="order" class="btn primary" />}
-    </p>
-
-    <div class="">
-        @Html.ActionLink("Back to List of Questionnaires", "Index", null, new { @class = "btn" })
-    </div>
-}
+<h1>@Model.Title</h1>
+<ul class="tabs">
+    @foreach (GroupView groupView in Model.Groups)
+    {
+        string cssClass = groupView.PublicKey == Model.CurrentGroup.PublicKey ? "active" : "";
+        <li  class="@cssClass">
+            @Html.ActionLink(groupView.GroupText, "Question", new { id = Model.Id, group = groupView.PublicKey })</li>
+    }</ul>
+<div>
+    @{ Html.RenderPartial("~/Views/Group/_Screen.cshtml", Model.CurrentGroup); }
+</div>
+@Html.HiddenFor(model => Model.Id)
+<div class="">
+    @Html.ActionLink("Back to List of Questionnaires", "Index", null, new { @class = "btn" })
+</div>

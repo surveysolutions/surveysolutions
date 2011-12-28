@@ -282,8 +282,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\main.less" />
- <Content Include="Views\Administration\Menu.cshtml" />
-   <Content Include="Views\CompleteQuestionnaire\Participate.cshtml" />   
+    <Content Include="Views\Administration\Menu.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Question.cshtml" />
     <Content Include="Views\Group\_Create.cshtml" />
     <Content Include="Views\Group\_Index.cshtml" />
