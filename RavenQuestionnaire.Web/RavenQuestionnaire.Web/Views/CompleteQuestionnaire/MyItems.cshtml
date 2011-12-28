@@ -4,35 +4,40 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<table class="bordered-table zebra-striped">
+<script src="../../Scripts/sorter.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function() {
+        $("#completedQuestionnaireTable").tablesorter({
+                order: "@Model.Order",
+                send: function(data) {
+                    $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("_TableData", "CompleteQuestionnaire")",
+                            data: JSON.stringify({ Orders: data, Page: @Model.Page , PageSize: @Model.PageSize }),
+                            contentType: 'application/json, charset=utf-8',
+                            statusCode: {
+                                200: function(response) {
+                                    $("#completedQuestionnaireTable tbody").html(response);
+                                }
+                            }
+                        });
+                }
+            });
+    });
+</script>
+<table id="completedQuestionnaireTable" class="bordered-table zebra-striped">
     <thead>
         <tr>
-            <th>Id </th>
-            <th>Title </th>
-            <th>Last edit date </th>
-            <th></th>
+            <th sorter='{"key":"Id"}'>Id </th>
+            <th sorter='{"key":"Questionnaire.Title"}'>Title </th>
+            <th sorter='{"key":"LastEntryDate"}'>Last edit date </th>
+            <th sorter='{"disable":"true"}'></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Items)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.QuestionnaireTitle)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastEntryDate)
-                </td>
-                <td class="buttons">
-                    @Html.ActionLink("Details", "Result", new { id = item.Id })
-                </td>
-            </tr>
-        }
+        @Html.Partial("_Table", Model)
     </tbody>
 </table>
 <div class="pagination">
-    @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount)
+    @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new {order = Model.Order})
 </div>

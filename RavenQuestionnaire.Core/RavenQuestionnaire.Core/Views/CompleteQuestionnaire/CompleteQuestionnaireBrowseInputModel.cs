@@ -1,7 +1,27 @@
-﻿namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Utility;
+
+namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     public class CompleteQuestionnaireBrowseInputModel
     {
+        public string Order
+        {
+            get { return StringUtil.GetOrderRequestString(_orders); }
+            set { _orders = StringUtil.ParseOrderRequestString(value); }
+        }
+
+        public List<OrderRequestItem> Orders
+        {
+            get { return _orders; }
+            set { _orders = value; }
+        }
+
+        public List<OrderRequestItem> _orders = new List<OrderRequestItem>();
+
         public int Page
         {
             get { return _page; }
@@ -24,5 +44,7 @@
         }
 
         private string _responsibleId = "";
+
+
     }
 }

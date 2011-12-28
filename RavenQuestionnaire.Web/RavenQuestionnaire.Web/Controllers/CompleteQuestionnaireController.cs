@@ -3,9 +3,11 @@ using System.Web.Mvc;
 using Questionnaire.Core.Web.Membership;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Questionnaire;
+using RavenQuestionnaire.Web.Models;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -29,6 +31,19 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult _TableData(CompleteQuestionnaireBrowseInputModel input)
+        {
+            var model = viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(input);
+            return PartialView("_Table", model);
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult _TableIndexData(CompleteQuestionnaireBrowseInputModel input)
+        {
+            var model = viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(input);
+            return PartialView("_TableIndex", model);
+        }
 
         public ViewResult MyItems(CompleteQuestionnaireBrowseInputModel input)
         {

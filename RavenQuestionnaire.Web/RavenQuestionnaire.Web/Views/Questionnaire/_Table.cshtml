@@ -1,0 +1,25 @@
+﻿@model RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireBrowseView
+@foreach (var item in Model.Items)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastEntryDate)
+        </td>
+        <td class="buttons">
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn small " })
+            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn small " })
+            @Html.ActionLink("Flow", "Flow", new { id = item.Id }, new { @class = "btn small " })
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn small danger" })
+            @Html.ActionLink("Participate", "Take", "CompleteQuestionnaire", new { id = item.Id }, new { @class = "btn small primary" })
+        </td>
+    </tr>
+}

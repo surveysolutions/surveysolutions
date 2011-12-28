@@ -1,0 +1,19 @@
+﻿@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
+@model CompleteQuestionnaireBrowseView
+@foreach (var item in Model.Items)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.QuestionnaireTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastEntryDate)
+        </td>
+        <td class="buttons">
+            @Html.ActionLink("Details", "Result", new { id = item.Id })
+        </td>
+    </tr>
+}
