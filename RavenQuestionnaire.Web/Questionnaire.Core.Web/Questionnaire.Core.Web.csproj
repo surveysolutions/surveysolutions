@@ -63,6 +63,7 @@
     <Compile Include="Helpers\IBagManager.cs" />
     <Compile Include="Helpers\IGlobalInfoProvider.cs" />
     <Compile Include="Helpers\KernelLocator.cs" />
+    <Compile Include="Helpers\SelectExtensions.cs" />
     <Compile Include="Helpers\ViewBagManager.cs" />
     <Compile Include="Security\FormsAuthentication.cs" />
     <Compile Include="Security\IFormsAuthentication.cs" />

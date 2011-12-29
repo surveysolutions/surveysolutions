@@ -1,0 +1,7 @@
+﻿@using RavenQuestionnaire.Core.Views.Answer
+@model CompleteAnswerView
+  @Model.AnswerText
+  @Html.TextBox("CustomAnswer", Model.CustomAnswer)
+  @if ((Model.Selected))
+  {
+  <input type="submit" value="done"/>}

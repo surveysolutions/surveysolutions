@@ -2,17 +2,16 @@
 @using RavenQuestionnaire.Core.Views.Question
 @model CompleteQuestionView
 @{
-    ViewBag.EnabledRadioBoxSettings = new { onclick = "this.form.submit();" };
+    ViewBag.EnabledRadioBoxSettings = new Dictionary<string,object>();
     if (!Model.Enabled)
     {
-        ViewBag.EnabledRadioBoxSettings = new {onclick = "this.form.submit();", Disabled = true};
+        ViewBag.EnabledRadioBoxSettings.Add("Disabled" , true );
     }
 }
-    
-    <div class="question">
-        <h3>@*@Model.Index)*@ @Html.DisplayFor(modelItem => Model.QuestionText)</h3>
-        <div class="answers">
-            @{ Html.RenderPartial("~/Views/Answer/_Take.cshtml", Model.Answers); }
-            <br />
-        </div>
+<div class="question">
+    <h3>@*@Model.Index)*@ @Html.DisplayFor(modelItem => Model.QuestionText)</h3>
+    <div class="answers">
+          @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", Model.QuestionType), Model.Answers);}
+        <br />
     </div>
+</div>

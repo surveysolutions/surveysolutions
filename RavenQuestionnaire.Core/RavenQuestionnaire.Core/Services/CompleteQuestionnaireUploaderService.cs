@@ -26,6 +26,14 @@ namespace RavenQuestionnaire.Core.Services
             _questionRepository.Add(entity);
             return entity;
         }
+        public CompleteQuestionnaire CreateCompleteQuestionnaire(Questionnaire questionnaire,UserLight user, SurveyStatus status)
+        {
+            CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire, user, status);
+           
+            _questionRepository.Add(entity);
+            return entity;
+        }
+
         public CompleteQuestionnaire UpdateCompleteAnswer(string id, Questionnaire questionnaire,
                                  IEnumerable<CompleteAnswer> answers)
         {

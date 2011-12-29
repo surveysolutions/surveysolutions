@@ -26,15 +26,24 @@ namespace RavenQuestionnaire.Core.Views.Group
             this.CompleteAnswers = doc.CompletedAnswers.ToArray();
             MerdgeAnswersWithResults();
         }
-        protected CompleteQuestionView[] ProcessQuestionList(IList<RavenQuestionnaire.Core.Entities.SubEntities.Question> questions, IList<CompleteAnswer> answers, QuestionnaireDocument questionnaire)
+        protected CompleteQuestionView[] ProcessQuestionList(
+            IList<RavenQuestionnaire.Core.Entities.SubEntities.Question> questions, 
+            List<CompleteAnswer> answers, 
+            QuestionnaireDocument questionnaire)
         {
             CompleteQuestionView[] result = new CompleteQuestionView[questions.Count];
             for (int i = 0; i < result.Length; i++)
             {
                 result[i] = new CompleteQuestionView(questions[i], questionnaire);
                 result[i].Enabled = questions[i].EvaluateCondition(answers);
+                RemoveDisabledAnswers(answers, result[i]);
             }
             return result;
+        }
+        protected void RemoveDisabledAnswers(List<CompleteAnswer> answers, CompleteQuestionView question)
+        {
+            if (!question.Enabled)
+                answers.RemoveAll(a => a.QuestionPublicKey.Equals(question.PublicKey));
         }
 
         public Guid PublicKey { get; set; }

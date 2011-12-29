@@ -1,0 +1,18 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Answer
+@model IEnumerable<CompleteAnswerView>
+@using (Html.BeginCollectionItem("answers"))
+{
+    { ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "this.form.submit();"); }
+    foreach (var item in Model)
+    {
+    @Html.Hidden("QuestionPublicKey", item.QuestionId)
+
+      
+    <div class="answer">
+        <span>
+            @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)</span>
+        @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}
+    </div>
+    }
+}

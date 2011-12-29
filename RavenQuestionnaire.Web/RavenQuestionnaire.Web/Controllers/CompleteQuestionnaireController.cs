@@ -58,105 +58,49 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
-        public ActionResult SaveResult(string id, CompleteAnswer[] answers)
+        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
+        public ActionResult Participate(string id)
         {
-            if (ModelState.IsValid)
-            {
-                var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
+            var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
 
-                commandInvoker.Execute(new CreateNewCompleteQuestionnaireCommand(id,
-                    answers, 
-                    GlobalInfo.GetCurrentUser(), 
-                    new SurveyStatus(statusView.Id, statusView.Title), 
-                    GlobalInfo.GetCurrentUser()));
-
-            }
-            return RedirectToAction("Index");
-        }
-        public ActionResult SaveFirstStep(string id, CompleteAnswer[] answers)
-        {
-            if (ModelState.IsValid)
-            {
-                var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
-
-                var command = new CreateNewCompleteQuestionnaireCommand(id, answers,
-                                                                        GlobalInfo.GetCurrentUser(),
-                                                                        new SurveyStatus(statusView.Id, statusView.Title), 
-                                                                        GlobalInfo.GetCurrentUser());
-                commandInvoker.Execute(command);
+            var command = new CreateNewCompleteQuestionnaireCommand(id, 
+                                                                    GlobalInfo.GetCurrentUser(),
+                                                                    new SurveyStatus(statusView.Id, statusView.Title),
+                                                                    GlobalInfo.GetCurrentUser());
+            commandInvoker.Execute(command);
 
 
-                return RedirectToAction("Question",
-                                        new
-                                            {
-                                                id = command.CompleteQuestionnaireId
-                                            });
-            }
-            return RedirectToAction("Participate", new { id });
-        }
-        public ActionResult UpdateResult(string id, CompleteAnswer[] answers, SurveyStatus status, UserLight responsible)
-        {
-            if (ModelState.IsValid)
-            {
-                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, answers, status.Id, responsible.Id, 
-                    GlobalInfo.GetCurrentUser()));
-
-            }
-            return RedirectToAction("Index");
+            return RedirectToAction("Question",
+                                    new
+                                    {
+                                        id = command.CompleteQuestionnaireId
+                                    });
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
-        public ActionResult Take(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-                throw new HttpException(404, "Invalid query string parameters");
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireView>(
-                new CompleteQuestionnaireViewInputModel(){ TemplateQuestionanireId = id});
-            return View(model);
-        }
-        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
-        public ViewResult Participate(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-                throw new HttpException(404, "Invalid query string parameters");
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
-                new CompleteQuestionnaireViewInputModel() {TemplateQuestionanireId = id});
-
-            ViewBag.ShowPrevious = false;
-            return View(model);
-        }
-
-        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
-        public ViewResult Question(string id, Guid? group, bool? order)
+        public ViewResult Question(string id, Guid? group)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
             var model =
                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
-                    new CompleteQuestionnaireViewInputModel(id, group, order?? false));
+                    new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
             return View( model);
         }
 
-        public ActionResult SaveSingleResult(string id, Guid? PublicKey, CompleteAnswer[] answers, string order)
+        public ActionResult SaveSingleResult(string id, Guid? PublicKey, CompleteAnswer[] answers)
         {
             if (answers == null || answers.Length <= 0)
             {
-                return RedirectToAction("Question", new {id = id, order = order == "Previous"});
+                return RedirectToAction("Question", new {id = id});
             }
+
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id,  PublicKey, answers, GlobalInfo.GetCurrentUser()));
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, PublicKey, answers,
+                                                                                      GlobalInfo.GetCurrentUser()));
             }
-            if (string.IsNullOrEmpty(order))
-            {
-                var model =
-                    viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
-                        new CompleteQuestionnaireViewInputModel(id) {CurrentGroupPublicKey = PublicKey});
-                return View("Question", model);
-            }
-            return RedirectToAction("Question", new {id = id, group = PublicKey, order = order == "Previous"});
+            return RedirectToAction("Question", new {id = id, group = PublicKey});
         }
 
         public ActionResult Delete(string id)

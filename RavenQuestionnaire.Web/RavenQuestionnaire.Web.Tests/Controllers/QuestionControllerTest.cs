@@ -48,7 +48,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     It.Is<QuestionnaireViewInputModel>(
                         v => v.QuestionnaireId.Equals("questionnairedocuments/qID"))))
                 .Returns(new QuestionnaireView(innerDocument));
-            Controller.Save(new QuestionView() { QuestionText = "test", QuestionnaireId = innerDocument.Id });
+            Controller.Save(new QuestionView() { QuestionText = "test", QuestionnaireId = innerDocument.Id }, false);
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<AddNewQuestionCommand>()), Times.Once());
         }
 
@@ -71,7 +71,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
               .Returns(new QuestionnaireView(innerDocument));
           
 
-            Controller.Save(questionView);
+            Controller.Save(questionView, false);
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateQuestionCommand>()), Times.Once());
         }
         [Test]

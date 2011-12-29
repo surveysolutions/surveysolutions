@@ -1,4 +1,5 @@
 ﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.Answer
 @model AnswerView
 @{ var currentRowId = "divEditAnswer" + Model.PublicKey.ToString(); }
@@ -10,6 +11,13 @@
             <div class="input">
                 <div class="inline-inputs">
                     @Html.EditorFor(model => Model.AnswerText)
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input">
+                <div class="inline-inputs">
+                    @Html.EnumDropDownListFor(model => Model.AnswerType)
                     <a href="javascript:void(0)" onclick="$('#@currentRowId').remove()" class="btn small danger">
                         Delete</a> <span class="help-inline">@Html.ValidationMessageFor(model => Model.AnswerText)</span>
                 </div>

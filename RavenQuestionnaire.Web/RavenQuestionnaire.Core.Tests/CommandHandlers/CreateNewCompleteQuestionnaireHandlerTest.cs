@@ -27,7 +27,6 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CreateNewCompleteQuestionnaireHandler handler = new CreateNewCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object, 
                 completeQuestionnaireService);
             Assert.Throws<NullReferenceException>(() => handler.Handle(new Commands.CreateNewCompleteQuestionnaireCommand("invalid id", 
-                new CompleteAnswer[0], 
                 new UserLight("-1", "dummyUser"), 
                 new SurveyStatus("-1","dummyStatus"),
                 null))); 
@@ -54,7 +53,6 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                 innerDocument.Questionnaire.Questions[0].PublicKey) };
 
             handler.Handle(new Commands.CreateNewCompleteQuestionnaireCommand("qID", 
-                answers, 
                 new UserLight("-2", "dummy-2"), 
                 new SurveyStatus("-100", "dummyStatus100"), 
                 null));

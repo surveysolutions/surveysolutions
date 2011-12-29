@@ -23,7 +23,18 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         }
         public string CompleteQuestionnaireId { get; private set; }
         public Guid? PreviousGroupPublicKey { get; private set; }
-        public Guid? CurrentGroupPublicKey { get; set; }
+        public Guid? CurrentGroupPublicKey
+        {
+            get { return this.currentGroupPublicKey; }
+            set
+            {
+                if (value == Guid.Empty)
+                    this.currentGroupPublicKey = null;
+                else
+                    this.currentGroupPublicKey = value;
+            }
+        }
+        private Guid? currentGroupPublicKey;
         public bool IsReverse { get; private set; }
         public string TemplateQuestionanireId
         {
