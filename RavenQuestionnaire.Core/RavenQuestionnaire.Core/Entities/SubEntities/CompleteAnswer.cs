@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
@@ -10,12 +11,15 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public CompleteAnswer()
         {
         }
-        public CompleteAnswer(Answer answer)
+        public CompleteAnswer(Answer answer, Guid questionPublicKey)
         {
             this.PublicKey = answer.PublicKey;
-         //   this.CustomAnswer = answer.AnswerText;
+            this.QuestionPublicKey = questionPublicKey;
+            // this.CustomAnswer = answer.AnswerText;
         }
         public Guid PublicKey { get; set; }
         public string CustomAnswer { get; set; }
+        public Guid QuestionPublicKey { get; set; }
+
     }
 }

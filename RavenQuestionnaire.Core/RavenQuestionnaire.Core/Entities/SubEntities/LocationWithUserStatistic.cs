@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RavenQuestionnaire.Core.Documents;
-
-namespace RavenQuestionnaire.Core.Entities.SubEntities
+﻿namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
     public class LocationWithUserStatistic
     {

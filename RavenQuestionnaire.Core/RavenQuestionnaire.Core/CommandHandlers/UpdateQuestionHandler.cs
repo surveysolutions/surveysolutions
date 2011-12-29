@@ -21,7 +21,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         {
             var questionnaire = _questionnaireRepository.Load(command.QuestionnaireId);
             questionnaire.UpdateQuestion(command.QuestionPublicKey, command.QuestionText, command.QuestionType,
+                                         command.ConditionExpression,
                                          command.Answers);
+
             /*   if(command.Answers!=null)
                 questionnaire.UpdateAnswerList(command.Answers);*/
         }

@@ -1,11 +1,17 @@
 syntax: glob
-RavenQuestionnaire.Web/RavenQuestionnaire.Web/obj/*
-RavenQuestionnaire.Web/_ReSharper.RavenQuestionnaire.Web/*
+RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
-RavenQuestionnaire.Web/RavenQuestionnaire.Web/bin/*
+RavenQuestionnaire.Web/_ReSharper.RavenQuestionnaire.Web/*
+RavenQuestionnaire.Web/Questionnaire.Core.Web/bin/*
 RavenQuestionnaire.Web/Questionnaire.Core.Web/obj/*
-RavenQuestionnaire.Web/*.dotCover
-RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/bin/*
+RavenQuestionnaire.Web/RavenQuestionnaire.Core.Tests/bin/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Core.Tests/obj/*
+RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/bin/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/obj/*
-RavenQuestionnaire.Web/RavenQuestionnaire.Core.Tests/RavenQuestionnaire.Core.Tests.csproj.user
+RavenQuestionnaire.Web/RavenQuestionnaire.Web/bin/*
+RavenQuestionnaire.Web/RavenQuestionnaire.Web/obj/*
+ExpressionEvaluator/Evaluant.Calculator.Tests/bin/*
+ExpressionEvaluator/Evaluant.Calculator.Tests/obj/*
+ExpressionEvaluator/Evaluant.Calculator/bin/*
+ExpressionEvaluator/Evaluant.Calculator/obj/*
+*.orig

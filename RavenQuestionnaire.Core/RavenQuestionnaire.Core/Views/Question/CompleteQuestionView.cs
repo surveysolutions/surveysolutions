@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Answer;
 
 namespace RavenQuestionnaire.Core.Views.Question
@@ -27,33 +25,25 @@ namespace RavenQuestionnaire.Core.Views.Question
             get { return Question.QuestionType; }
         }
 
-        public CompleteAnswerView[] Answers
-        {
-            get
-            {
-                if (_answers == null)
-                {
-                    _answers = Question.Answers.Select(a => new CompleteAnswerView(a, false)).ToArray();
-                }
-                return _answers;
-            }
-            
-        }
+        public CompleteAnswerView[] Answers { get; private set; }
 
-        private CompleteAnswerView[] _answers;
         protected QuestionView Question { get; set; }
 
         public string QuestionnaireId
         {
             get { return Question.QuestionnaireId; }
         }
+
+        public bool Enabled { get; set; }
+
         public CompleteQuestionView()
         {
         }
 
-        public CompleteQuestionView(QuestionView templateQuestion)
+        public CompleteQuestionView(RavenQuestionnaire.Core.Entities.SubEntities.Question templateQuestion, QuestionnaireDocument questionnaire)
         {
-            this.Question = templateQuestion;
+            this.Question = new QuestionView(questionnaire, templateQuestion);
+            this.Answers = templateQuestion.Answers.Select(a => new CompleteAnswerView(a, templateQuestion.PublicKey, false)).ToArray();
         }
 
     }

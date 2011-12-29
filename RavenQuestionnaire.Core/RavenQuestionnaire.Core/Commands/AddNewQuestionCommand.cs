@@ -25,13 +25,28 @@ namespace RavenQuestionnaire.Core.Commands
             get;
             private set;
         }
+        public Guid? GroupPublicKey
+        {
+            get;
+            private set;
+        }
+        public string ConditionExpression
+        {
+            get;
+            private set;
+        }
         public Answer[] Answers { get; set; }
-       
-        public AddNewQuestionCommand(string text, QuestionType type, string questionnaireId, AnswerView[] answers)
+
+        public UserLight Executor { get; set; }
+
+        public AddNewQuestionCommand(string text, QuestionType type, string questionnaireId, Guid? groupPublicKey, 
+            string condition, AnswerView[] answers, UserLight executor)
         {
             this.QuestionText = text;
             this.QuestionType = type;
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            this.GroupPublicKey = groupPublicKey;
+            this.ConditionExpression = condition;
             this.Answers =
                answers.Select(
                    a =>
@@ -42,6 +57,8 @@ namespace RavenQuestionnaire.Core.Commands
                        Mandatory = a.Mandatory,
                        PublicKey = a.PublicKey
                    }).ToArray();
+
+            Executor = executor;
         }
     }
 }

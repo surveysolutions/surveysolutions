@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Utility;
+using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.Questionnaire
@@ -13,7 +16,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate{ get; set; }
 
-        public QuestionView[] Questions
+        protected QuestionView[] Questions
         {
             get { return _questions; }
             set
@@ -27,24 +30,33 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
             }
         }
 
+        public GroupView[] Groups { get; set; }
         private QuestionView[] _questions;
-        public QuestionnaireView(string id, string title, DateTime creationDate, DateTime lastEntryDate, IEnumerable<QuestionView> questions)
+        public QuestionnaireView(QuestionnaireDocument doc)
+            : this()
         {
-            this.Id = IdUtil.ParseId(id);
-            this.Title = title;
-            this.CreationDate = creationDate;
-            this.LastEntryDate = lastEntryDate;
-            this.Questions = questions.ToArray();
-           
+            this.Id = IdUtil.ParseId(doc.Id);
+            this.Title = doc.Title;
+            this.CreationDate = doc.CreationDate;
+            this.LastEntryDate = doc.LastEntryDate;
+            this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();
+            this.Groups = doc.Groups.Select(g => new GroupView(doc, g)).ToArray();
+
         }
         public QuestionnaireView()
         {
             Questions = new QuestionView[0];
+            Groups = new GroupView[0];
         }
 
-        public static QuestionnaireView New()
+        public QuestionView[] GetQuestions(Guid? groupPublicKey)
         {
-            return new QuestionnaireView();
+            if (!groupPublicKey.HasValue)
+                return Questions;
+            var group = Groups.FirstOrDefault(g => g.PublicKey.Equals(groupPublicKey.Value));
+            if (group == null)
+                throw new ArgumentException("group doesn't exists");
+            return group.Questions;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Answer;
@@ -13,8 +14,8 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public Guid PublicKey { get; set; }
 
-        private string _id;
         public string QuestionText { get; set; }
+        public string ConditionExpression { get; set; }
         public QuestionType QuestionType { get; set; }
         public AnswerView[] Answers
         {
@@ -38,44 +39,50 @@ namespace RavenQuestionnaire.Core.Views.Question
             set { _questionnaireId = value; }
         }
 
+        public Guid? GroupPublicKey { get; set; }
         private string _questionnaireId;
         public QuestionView()
         {
             Answers = new AnswerView[0];
         }
-        public QuestionView(Guid publicKey, 
-            string text, 
-            QuestionType type, 
-            string questionnaireId)
+        public QuestionView(string questionnaireId, Guid? groupPublicKey):this()
         {
-            this.PublicKey = publicKey;
-            this.QuestionText = text;
-            this.QuestionType = type;
             this.QuestionnaireId = questionnaireId;
+            this.GroupPublicKey = groupPublicKey;
         }
 
-        public QuestionView(Guid publicKey, 
-            string text, 
-            QuestionType type, 
-            IEnumerable<RavenQuestionnaire.Core.Entities.SubEntities.Answer> answers,
-            string questionnaireId)
-            : this(publicKey, text, type, questionnaireId)
+        public QuestionView(QuestionnaireDocument questionnaire, RavenQuestionnaire.Core.Entities.SubEntities.Question doc)
         {
-            this.Answers = answers.Select(answer => new AnswerView(answer.PublicKey, answer.AnswerText, answer.Mandatory, answer.AnswerType, this.PublicKey)).ToArray();
-           
+            this.PublicKey = doc.PublicKey;
+            this.QuestionText = doc.QuestionText;
+            this.QuestionType = doc.QuestionType;
+            this.QuestionnaireId = questionnaire.Id;
+            this.ConditionExpression = doc.ConditionExpression;
+            this.Answers = doc.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
+            this.GroupPublicKey = GetQuestionGroup(questionnaire, doc.PublicKey);
         }
-        public QuestionView(Guid publicKey, 
-            string text, 
-            QuestionType type, 
-            IEnumerable<AnswerView> answers,
-            string questionnaireId)
-            : this(publicKey, text, type, questionnaireId)
+        protected Guid? GetQuestionGroup(QuestionnaireDocument questionnaire, Guid questionKey)
         {
-           this.Answers = answers.ToArray();
+            if (questionnaire.Questions.Where(q => q.PublicKey.Equals(questionKey)).Count() > 0)
+                return null;
+            Queue<RavenQuestionnaire.Core.Entities.SubEntities.Group> group= new Queue<Entities.SubEntities.Group>();
+            foreach (var child in questionnaire.Groups)
+            {
+                group.Enqueue(child);
+            }
+            while (group.Count!=0)
+            {
+                var queueItem = group.Dequeue();
+
+                if (queueItem.Questions.Where(q => q.PublicKey.Equals(questionKey)).Count() > 0)
+                    return queueItem.PublicKey;
+                foreach (var child in queueItem.Groups)
+                {
+                    group.Enqueue(child);
+                }
+            }
+            throw new ArgumentException("group does not exist");
         }
-        public static QuestionView New(string questionnaireId)
-        {
-            return new QuestionView() {QuestionnaireId = questionnaireId};
-        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using RavenQuestionnaire.Core.Utility;
+﻿using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Commands
 {
@@ -6,16 +7,22 @@ namespace RavenQuestionnaire.Core.Commands
     {
         public string QuestionnaireId { get; set; }
 
-        public string Title
+        public string Title{get; set;}
+        public UserLight Executor { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="questionnaireId"></param>
+        /// <param name="title"></param>
+        /// <param name="executor"></param>
+        public UpdateQuestionnaireCommand(string questionnaireId, string title, UserLight executor)
         {
-            get; set;
+            this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            this.Title = title;
+            this.Executor = executor;
         }
 
-
-        public UpdateQuestionnaireCommand(string questionnaireId, string title)
-        {
-           this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
-           this.Title = title;
-        }
+        
     }
 }
