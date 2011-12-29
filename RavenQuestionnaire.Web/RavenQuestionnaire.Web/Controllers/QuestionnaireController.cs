@@ -25,6 +25,13 @@ namespace RavenQuestionnaire.Web.Controllers
             var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
             return View(model);
         }
+
+        public ViewResult ItemList(QuestionnaireBrowseInputModel input)
+        {
+            var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
+            return View(model);
+        }
+
         /*public ActionResult Index()
         {
             var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(new QuestionnaireBrowseInputModel());

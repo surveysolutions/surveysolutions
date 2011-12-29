@@ -11,11 +11,11 @@
     <div class="topbar">
         <div class="topbar-inner">
             <div class="container-fluid">
-                <a href="@Url.Action("Index", "Questionnaire")" class="brand">Home</a>
-                 <ul class="nav">
-                    <li>@Html.ActionLink("Dashboard", "MyItems", "CompleteQuestionnaire")</li>
-                    <li>@Html.ActionLink("Data Entry", "Index", "Questionnaire")</li>
-                    <li>@Html.ActionLink("MIS", "Index", "CompleteQuestionnaire")</li>
+                <a href="@Url.Action("MyItems", "CompleteQuestionnaire")" class="brand">Home</a>
+                 <ul class="nav">@*
+                    <li>@Html.ActionLink("Dashboard", "MyItems", "CompleteQuestionnaire")</li>*@
+                    <li>@Html.ActionLink("Take New", "ItemList", "Questionnaire")</li>
+                    <li>@Html.ActionLink("All Completed", "Index", "CompleteQuestionnaire")</li>
                 </ul>
                 <p class="pull-right">@Html.Partial("_LogOnPartial")</p>
             </div>
