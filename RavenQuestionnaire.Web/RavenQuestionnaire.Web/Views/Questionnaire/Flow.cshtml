@@ -24,11 +24,11 @@
 </style>
 <h1>@Model.Title</h1>
 <div id="demo">
-    @foreach (var question in Model.Questions)
+    @*@foreach (var question in Model.Questions)
     {
         var id = "window" + question.PublicKey;
         <div class="window" id="id" style="top: @top em">@question.QuestionText</div>
-    }
+    }*@
 </div>
 @*<div class="">
     @Html.ActionLink("Back to List of Questionnaires", "Index", null, new { @class = "btn" })

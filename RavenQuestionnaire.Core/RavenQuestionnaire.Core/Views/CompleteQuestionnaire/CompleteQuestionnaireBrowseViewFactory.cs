@@ -9,7 +9,7 @@ using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
-    public class CompleteQuestionnaireBrowseViewFactory: IViewFactory<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>
+    public class CompleteQuestionnaireBrowseViewFactory : IViewFactory<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>
     {
         private IDocumentSession documentSession;
 
@@ -26,19 +26,21 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 return new CompleteQuestionnaireBrowseView(input.Page, input.PageSize, count,
                                                            new CompleteQuestionnaireBrowseItem[0],
                                                            input.Order);
-                                            
-          IOrderedQueryable<CompleteQuestionnaireDocument> query;
+
+            IOrderedQueryable<CompleteQuestionnaireDocument> query;
 
             if (!String.IsNullOrEmpty(input.ResponsibleId)) //filter result by responsible
             {
-                query = documentSession.Query<CompleteQuestionnaireDocument>()
-                    .Where(x => x.Responsible.Id == input.ResponsibleId);
+                query =
+                    (IOrderedQueryable<CompleteQuestionnaireDocument>)
+                    documentSession.Query<CompleteQuestionnaireDocument>()
+                        .Where(x => x.Responsible.Id == input.ResponsibleId);
             }
             else
             {
                 query = documentSession.Query<CompleteQuestionnaireDocument>();
-             }
-                
+            }
+
             if (input.Orders.Count > 0)
             {
                 query = input.Orders[0].Direction == OrderDirection.Asc
@@ -54,6 +56,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                                 : query.ThenByDescending(order.Field);
                 }
 
+            var page = query.Skip((input.Page - 1) * input.PageSize)
+                .Take(input.PageSize).ToArray();
 
             var items = page
                     .Select(
@@ -61,11 +65,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                         new CompleteQuestionnaireBrowseItem(x.Id, x.Questionnaire.Title, x.CreationDate, x.LastEntryDate,
                                                             x.Status, x.Responsible));
 
-                return new CompleteQuestionnaireBrowseView(
-                    input.Page,
-                    input.PageSize, count,
-                    items,
-                    input.Order);               
+            return new CompleteQuestionnaireBrowseView(
+                input.Page,
+                input.PageSize, count,
+                items,
+                input.Order);
         }
     }
 }
