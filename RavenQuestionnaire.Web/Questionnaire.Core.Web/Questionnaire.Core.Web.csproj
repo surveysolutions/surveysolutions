@@ -61,6 +61,7 @@
     <Compile Include="Helpers\Global.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\KernelLocator.cs" />
+    <Compile Include="Helpers\SelectExtensions.cs" />
     <Compile Include="Security\FormsAuthentication.cs" />
     <Compile Include="Security\IFormsAuthentication.cs" />
     <Compile Include="Security\QuestionnaireAuthorizeAttribute.cs" />

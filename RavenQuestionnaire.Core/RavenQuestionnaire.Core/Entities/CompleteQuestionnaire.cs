@@ -55,7 +55,8 @@ namespace RavenQuestionnaire.Core.Entities
                 throw new InvalidOperationException("Answer with current public key doesn't exist in question list.");
            /* if(!string.IsNullOrEmpty(answer.CustomAnswer) && templateAnswer.AnswerType!= AnswerType.Text)
                 throw new InvalidOperationException("Only answer with type 'Text' can have custom text.");*/
-            answer.CustomAnswer = templateAnswer.AnswerText;
+            if (templateAnswer.AnswerType == AnswerType.Select)
+                answer.CustomAnswer = templateAnswer.AnswerText;
             innerDocument.CompletedAnswers.Add(answer);
         }
         public void UpdateAnswer(CompleteAnswer answer, Guid? groupPublicKey)

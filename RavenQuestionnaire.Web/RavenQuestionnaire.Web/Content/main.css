@@ -2189,6 +2189,9 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 }
 .modal-body {
   padding: 15px;
+  height: expression( this.scrollHeight > 399 ? "400px" : "auto" ); /* sets max-height for IE */
+  max-height: 400px; /* sets max-height value for all standards-compliant browsers */
+  overflow-y:scroll;
 }
 .modal-body form {
   margin-bottom: 0;

@@ -12,7 +12,7 @@
     <div class="answer">
         <span>
             @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)</span>
-        @item.AnswerText
+        @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}
     </div>
     }
 }
