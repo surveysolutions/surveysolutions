@@ -249,7 +249,6 @@
     <Compile Include="Views\User\UserViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CommandHandlers\CreateNewCompleteQuestionnaireHandler.cs.orig" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
