@@ -3,9 +3,16 @@
 @model IEnumerable<CompleteAnswerView>
 @using (Html.BeginCollectionItem("answers"))
 {
-     { ((IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings).Add("onclick", "this.form.submit();"); }
+    { ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "this.form.submit();"); }
     foreach (var item in Model)
-     {
-         Html.RenderPartial("~/Views/Answer/_TakeRow.cshtml", item);
-     }
+    {
+    @Html.Hidden("QuestionPublicKey", item.QuestionId)
+
+      
+    <div class="answer">
+        <span>
+            @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)</span>
+        @item.AnswerText
+    </div>
+    }
 }

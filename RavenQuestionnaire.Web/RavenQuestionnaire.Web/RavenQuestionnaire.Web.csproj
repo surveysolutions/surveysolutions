@@ -242,9 +242,6 @@
     <Content Include="Views\Question\_TakeRow.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Answer\_TakeRow.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\User\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

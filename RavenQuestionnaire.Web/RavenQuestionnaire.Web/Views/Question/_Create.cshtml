@@ -25,8 +25,9 @@
                 </div>
             </div>
             <div class="clearfix">
-                Render as drop down
-                <div class="input"> @Model.QuestionType
+              <label>Render as drop down</label>
+                <div class="input">
+
                     @Html.CheckBox("isDropDown", Model.QuestionType== QuestionType.DropDownList)
                 </div>
             </div>
