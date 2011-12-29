@@ -45,6 +45,9 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="dotless.Core">
+      <HintPath>..\packages\dotless.1.2.1.0\lib\dotless.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -274,8 +277,7 @@
     <None Include="Content\main.less" />
     <Content Include="Views\Administration\Menu.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Question.cshtml" />
-
- <Content Include="Views\Group\_Create.cshtml" />
+    <Content Include="Views\Group\_Create.cshtml" />
     <Content Include="Views\Group\_Index.cshtml" />
     <Content Include="Views\Group\_GroupRow.cshtml" />
     <Content Include="Views\Group\_Screen.cshtml" />
@@ -283,7 +285,6 @@
     <Content Include="Views\Answer\AnswerListView\_DropDownList.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Select.cshtml" />
-
     <Content Include="Views\Answer\AnswerListView\_SingleOption.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_DropDownList.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Text.cshtml" />
