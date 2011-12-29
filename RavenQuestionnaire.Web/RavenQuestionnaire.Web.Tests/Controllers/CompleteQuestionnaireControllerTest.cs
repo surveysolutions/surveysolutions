@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Web;
 using Moq;
 using NUnit.Framework;
-using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Questionnaire;
+using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Web.Controllers;
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
@@ -53,8 +53,14 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void When_GetQuestionnaireResultIsExecuted()
         {
-            var output = new CompleteQuestionnaireView("completequestionnairedocuments/cqId", new QuestionnaireView(),
-                                                       new CompleteAnswer[0], DateTime.Now, DateTime.Now, 0);
+            CompleteQuestionnaireDocument innerDoc = new CompleteQuestionnaireDocument();
+            innerDoc.Id = "completequestionnairedocuments/cqId";
+            innerDoc.CreationDate = DateTime.Now;
+            innerDoc.LastEntryDate = DateTime.Now;
+            innerDoc.Questionnaire= new QuestionnaireDocument();
+            innerDoc.Status = new SurveyStatus("-1", "dummyStatus");
+            innerDoc.Responsible = new UserLight("-1", "dummyUser");
+            var output = new CompleteQuestionnaireView(innerDoc);
             var input = new CompleteQuestionnaireViewInputModel("cqId");
 
             ViewRepositoryMock.Setup(
@@ -71,6 +77,70 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
              Controller.Delete("some_id");
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<DeleteCompleteQuestionnaireCommand>()), Times.Once());
+        }
+
+
+        [Test]
+        public void Participate_EmptyId_404Exception()
+        {
+            Assert.Throws<HttpException>(() => Controller.Participate(null));
+        }
+        [Test]
+        public void Participate_ValidId_FormIsReturned()
+        {
+            QuestionnaireDocument innerDoc = new QuestionnaireDocument();
+            innerDoc.Id = "questionnairedocuments/cqId";
+            CompleteQuestionnaireViewEnumerable template = new CompleteQuestionnaireViewEnumerable(innerDoc);
+            var input = new CompleteQuestionnaireViewInputModel() {TemplateQuestionanireId = "cqId"};
+            ViewRepositoryMock.Setup(
+               x =>
+               x.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
+                   It.Is<CompleteQuestionnaireViewInputModel>(v => v.TemplateQuestionanireId.Equals(input.TemplateQuestionanireId))))
+               .Returns(template);
+            var result = Controller.Participate("cqId");
+            Assert.AreEqual(result.ViewData.Model.GetType(), typeof(CompleteQuestionnaireViewEnumerable));
+            Assert.AreEqual(result.ViewData.Model, template);
+        }
+        [Test]
+        public void Question_ValidId_FormIsReturned()
+        {
+            QuestionnaireDocument innerDoc = new QuestionnaireDocument();
+            innerDoc.Id = "questionnairedocuments/cqId";
+            CompleteQuestionnaireViewEnumerable template = new CompleteQuestionnaireViewEnumerable(innerDoc);
+            var input = new CompleteQuestionnaireViewInputModel("cqId", null, false);
+            ViewRepositoryMock.Setup(
+               x =>
+               x.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
+                   It.Is<CompleteQuestionnaireViewInputModel>(v => v.CompleteQuestionnaireId.Equals(input.CompleteQuestionnaireId))))
+               .Returns(template);
+            var result = Controller.Question("cqId", null, false);
+            Assert.AreEqual(result.ViewData.Model.GetType(), typeof(CompleteQuestionnaireViewEnumerable));
+            Assert.AreEqual(result.ViewData.Model, template);
+        }
+
+        [Test]
+        public void SaveFirstStep_Valid_FormIsReturned()
+        {
+            ViewRepositoryMock.Setup(
+                x =>
+                x.Load<StatusViewInputModel, StatusView>(
+                    It.IsAny<StatusViewInputModel>()))
+                .Returns(new StatusView());
+            Controller.SaveFirstStep("cId", new CompleteAnswer[] {});
+            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewCompleteQuestionnaireCommand>()), Times.Once());
+        }
+
+        [Test]
+        public void SaveSingleResult_Valid_FormIsReturned()
+        {
+            ViewRepositoryMock.Setup(
+                x =>
+                x.Load<StatusViewInputModel, StatusView>(
+                    It.IsAny<StatusViewInputModel>()))
+                .Returns(new StatusView());
+            Controller.SaveSingleResult("cId", null,
+                                        new CompleteAnswer[] {new CompleteAnswer(new Answer(), Guid.NewGuid())}, null);
+            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateAnswerInCompleteQuestionnaireCommand>()), Times.Once());
         }
     }
 }

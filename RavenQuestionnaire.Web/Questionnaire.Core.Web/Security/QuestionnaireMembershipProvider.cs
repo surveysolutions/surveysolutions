@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration.Provider;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Web;
 using System.Web.Security;
 using Ninject;
 using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.User;
 
-namespace Questionnaire.Core.Web.Membership
+namespace Questionnaire.Core.Web.Security
 {
     public class QuestionnaireMembershipProvider : MembershipProvider
     {
@@ -233,7 +225,7 @@ namespace Questionnaire.Core.Web.Membership
             get { return _applicationName; }
             set { _applicationName = value; }
         }
-        private string _applicationName = "Questionnairre";
+        private string _applicationName = "Questionnaire";
 
         public override int MaxInvalidPasswordAttempts
         {

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
@@ -121,9 +118,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
              UserDocument innerDocument = new UserDocument();
              innerDocument.Roles.Add(UserRoles.Supervisor);
              User user = new User(innerDocument);
-             Supervisor supervisor = user.CreateSupervisor();
+             UserLight supervisor = user.CreateSupervisor();
              Assert.AreEqual(
-                 supervisor.SupervisorId == user.UserId && supervisor.SupervisorName == innerDocument.UserName, true);
+                 supervisor.Id == user.UserId && supervisor.Name == innerDocument.UserName, true);
          }
          [Test]
          public void CreateSupervisorFromUserNotInRoleSupervisor_SupervisorReturnedAsNull()
@@ -131,7 +128,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
              UserDocument innerDocument = new UserDocument();
              innerDocument.Roles.Add(UserRoles.User);
              User user = new User(innerDocument);
-             Supervisor supervisor = user.CreateSupervisor();
+             UserLight supervisor = user.CreateSupervisor();
              Assert.AreEqual(supervisor, null);
          }
 
@@ -140,7 +137,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
          {
              UserDocument innerDocument = new UserDocument();
              User user = new User(innerDocument);
-             Supervisor supervisor = new Supervisor() {SupervisorId = "som_id"};
+             UserLight supervisor = new UserLight("som_id", "some_name" );
              user.SetSupervisor(supervisor);
 
              Assert.AreEqual(innerDocument.Supervisor, supervisor);
@@ -159,7 +156,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
          {
              UserDocument innerDocument = new UserDocument();
              User user = new User(innerDocument);
-             Supervisor supervisor = new Supervisor() { SupervisorId = "som_id" };
+             UserLight supervisor = new UserLight( "som_id" , "some_name");
              innerDocument.Supervisor = supervisor;
              user.ClearSupervisor();
 

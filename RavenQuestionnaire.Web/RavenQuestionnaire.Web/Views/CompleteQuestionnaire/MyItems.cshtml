@@ -32,10 +32,13 @@
             <th sorter='{"key":"Questionnaire.Title"}'>Title </th>
             <th sorter='{"key":"LastEntryDate"}'>Last edit date </th>
             <th sorter='{"disable":"true"}'></th>
+            <th sorter='{"disable":"true"}'>Status </th>
+
         </tr>
     </thead>
     <tbody>
         @Html.Partial("_Table", Model)
+
     </tbody>
 </table>
 <div class="pagination">

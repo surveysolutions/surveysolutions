@@ -16,22 +16,22 @@ namespace RavenQuestionnaire.Core.Views.Answer
         public AnswerType AnswerType { get; set; }
         public Guid QuestionId { get; set; }
 
-        private string _id;
         public  AnswerView()
         {
         }
 
-        public  AnswerView(Guid publicKey, string text, bool mandatory, AnswerType type, Guid question)
+        public AnswerView(Guid questionPublicKey, RavenQuestionnaire.Core.Entities.SubEntities.Answer doc)
         {
-            this.PublicKey = publicKey;
-            this.AnswerText = text;
-            this.Mandatory = mandatory;
-            this.AnswerType = type;
-            this.QuestionId = question;
+            this.PublicKey = doc.PublicKey;
+            this.AnswerText = doc.AnswerText;
+            this.Mandatory = doc.Mandatory;
+            this.AnswerType = doc.AnswerType;
+            this.QuestionId = questionPublicKey;
         }
-        public static AnswerView New(Guid questionId)
+
+        public  AnswerView (Guid questionPublicKey)
         {
-            return new AnswerView() { QuestionId = questionId };
+            this.QuestionId = questionPublicKey;
         }
     }
 }

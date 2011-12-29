@@ -83,6 +83,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
@@ -92,20 +93,27 @@
   <ItemGroup>
     <Compile Include="CommandHandlers\AddNewQuestionHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewCompleteQuestionnaireHandlerTest.cs" />
+    <Compile Include="CommandHandlers\CreateNewGroupHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewLocationHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewUserHandlerTest.cs" />
     <Compile Include="CommandHandlers\DeleteCompleteQuestionnaireComHandlerTest.cs" />
+    <Compile Include="CommandHandlers\DeleteGroupHandlerTest.cs" />
     <Compile Include="CommandHandlers\DeleteQuestionHandlerTest.cs" />
     <Compile Include="CommandHandlers\DeleteQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\DeleteUserHandlerTest.cs" />
+    <Compile Include="CommandHandlers\UpdateAnswerInCompleteQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateCompleteQuestionnaireHandlerTest.cs" />
+    <Compile Include="CommandHandlers\UpdateGroupHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateQuestionHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateUserHandlerTest.cs" />
     <Compile Include="Entities\CompleteQuestionnaireTest.cs" />
+    <Compile Include="Entities\Iterators\QuestionnaireScreenIteratorTest.cs" />
+    <Compile Include="Entities\Iterators\QuestionnaireSimpleIteratorTest.cs" />
     <Compile Include="Entities\LocationEntityTest.cs" />
     <Compile Include="Entities\QuestionnaireEntityTest.cs" />
+    <Compile Include="Entities\QuestionTest.cs" />
     <Compile Include="Entities\UserEntityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CommandInvokerTests.cs" />
@@ -116,6 +124,10 @@
     <Compile Include="Views\User\UserViewFactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
+      <Project>{5F014003-50D8-49E0-8AFE-91D38DCCC97C}</Project>
+      <Name>NCalc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
       <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
       <Name>RavenQuestionnaire.Core</Name>

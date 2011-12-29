@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Documents
 {
@@ -9,7 +10,9 @@ namespace RavenQuestionnaire.Core.Documents
 
         public bool IsVisible {get; set;}
 
-        public Dictionary<string, List<string>> StatusRoles { 
+        public bool IsInitial { get; set; }
+
+        public Dictionary<string, List<SurveyStatus>> StatusRoles { 
             set;// { _statusRoles = value; }
             get;// { return _statusRoles ?? (_statusRoles = new Dictionary<string, List<string>>()); }
         }
@@ -19,7 +22,7 @@ namespace RavenQuestionnaire.Core.Documents
         public StatusDocument()
         {
             IsVisible = true;
-            StatusRoles = new Dictionary<string, List<string>>();
+            StatusRoles = new Dictionary<string, List<SurveyStatus>>();
         
         }
     }

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
-using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Helpers;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -22,10 +23,10 @@ namespace RavenQuestionnaire.Web.Controllers
             this.viewRepository = viewRepository;
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Create(string id)
+        public ActionResult Create(string id, Guid? groupPublicKey)
         {
             return PartialView("_Create",
-                               QuestionView.New(id));
+                               new QuestionView(id, groupPublicKey));
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Edit(Guid publicKey, string questionnaireId)
@@ -43,32 +44,49 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Save(QuestionView model)
         {
+            
             if (ModelState.IsValid)
             {
-                if (model.PublicKey== Guid.Empty)
+                try
                 {
-                    AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.QuestionText,
-                                                                                    model.QuestionType,
-                                                                                    model.QuestionnaireId, model.Answers);
-                    commandInvoker.Execute(createCommand);
 
 
+                    if (model.PublicKey == Guid.Empty)
+                    {
+                        AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.QuestionText,
+                                                                                        model.QuestionType,
+                                                                                        model.QuestionnaireId, model.GroupPublicKey,
+                                                                                        model.ConditionExpression,
+                                                                                        model.Answers, Global.GetCurrentUser());
+                        commandInvoker.Execute(createCommand);
+
+
+                    }
+                    else
+                    {
+                        commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId, model.PublicKey,
+                                                                         model.QuestionText, model.QuestionType,
+                                                                         model.ConditionExpression, model.Answers,
+                                                                         Global.GetCurrentUser()));
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId, model.PublicKey, model.QuestionText, model.QuestionType, model.Answers));
+
+                    ModelState.AddModelError("ConditionExpression", e.Message);
+                    return PartialView("_Create", model);
                 }
                 var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
 
-                return PartialView("_Index", questionnaire.Questions);
+                return PartialView("_Index", questionnaire.GetQuestions(model.GroupPublicKey));
 
             }
-            return PartialView("_Create" /*, model*/);
+            return PartialView("_Create" , model);
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public string Delete(Guid publicKey, string questionnaireId)
         {
-            commandInvoker.Execute(new DeleteQuestionCommand(publicKey, questionnaireId));
+            commandInvoker.Execute(new DeleteQuestionCommand(publicKey, questionnaireId, Global.GetCurrentUser()));
             return "";
         }
     }

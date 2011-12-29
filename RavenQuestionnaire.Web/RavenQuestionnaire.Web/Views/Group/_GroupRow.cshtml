@@ -1,0 +1,35 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Group
+@model GroupView
+           
+       
+@{ var currentRowId = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Group, Model.PublicKey.ToString());
+   var allQuestions = "divAllQuestions" + Model.PublicKey;
+   var hideFunctionName = "HideCreateQuestionForm" + Model.PublicKey.ToString().Replace('-','_');
+   }
+
+       <script>
+               function @hideFunctionName (content) {
+                   //      $('#addNewQuestion').modal('hide');
+                   if ($(content.responseText).children('div#divCreateForm form').length == 0) {
+                       $('#@allQuestions').html(content.responseText);
+                       $('#addNewQuestion').modal('hide');
+                   }
+               }
+</script>
+<div id="@currentRowId" class="question">
+    <h3>@Html.DisplayFor(modelItem => Model.GroupText)
+        <span>
+            @Ajax.ActionLink("Add Question", "Create", "Question", new { id = Model.QuestionnaireId, groupPublicKey = Model.PublicKey }, new AjaxOptions
+                                                                                   {
+                                                                                       UpdateTargetId = "addNewQuestion",
+                                                                                       OnSuccess = "OpenModal"
+                                                                                   }, new { @class = "btn" })
+            @Ajax.ActionLink("Edit", "Edit", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn primary small" })
+            @Ajax.ActionLink("Delete", "Delete", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn danger small" })
+        </span>
+    </h3> 
+    <div id='@allQuestions'>
+        @{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}
+    </div>
+</div>

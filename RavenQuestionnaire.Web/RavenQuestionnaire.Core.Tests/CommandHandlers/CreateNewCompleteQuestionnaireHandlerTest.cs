@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers;
@@ -12,7 +8,6 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Core.Tests.Utils;
-using RavenQuestionnaire.Core.Views.Answer;
 
 namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 {
@@ -29,8 +24,13 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
              new CompleteQuestionnaireUploaderService(coompleteQuestionnaireRepositoryMock.Object);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
         
-            CreateNewCompleteQuestionnaireHandler handler = new CreateNewCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object, completeQuestionnaireService);
-            Assert.Throws<NullReferenceException>(() => handler.Handle(new Commands.CreateNewCompleteQuestionnaireCommand("invalid id", new CompleteAnswer[0], "invalid"))); 
+            CreateNewCompleteQuestionnaireHandler handler = new CreateNewCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object, 
+                completeQuestionnaireService);
+            Assert.Throws<NullReferenceException>(() => handler.Handle(new Commands.CreateNewCompleteQuestionnaireCommand("invalid id", 
+                new CompleteAnswer[0], 
+                new UserLight("-1", "dummyUser"), 
+                new SurveyStatus("-1","dummyStatus"),
+                null))); 
         }
 
         [Test]
@@ -48,9 +48,16 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                 entity.GetQuestionnaireTemplate());
 
 
-            CreateNewCompleteQuestionnaireHandler handler = new CreateNewCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object, completeQuestionnaireService);
-            CompleteAnswer[] answers = new CompleteAnswer[] { new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0]) };
-            handler.Handle(new Commands.CreateNewCompleteQuestionnaireCommand("qID", answers, "some id"));
+            CreateNewCompleteQuestionnaireHandler handler = 
+                new CreateNewCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object, completeQuestionnaireService);
+            CompleteAnswer[] answers = new CompleteAnswer[] { new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0], 
+                innerDocument.Questionnaire.Questions[0].PublicKey) };
+
+            handler.Handle(new Commands.CreateNewCompleteQuestionnaireCommand("qID", 
+                answers, 
+                new UserLight("-2", "dummy-2"), 
+                new SurveyStatus("-100", "dummyStatus100"), 
+                null));
 
             coompleteQuestionnaireRepositoryMock.Verify(x => x.Add(It.IsAny<CompleteQuestionnaire>()), Times.Once());
 

@@ -1,11 +1,11 @@
 ﻿@using RavenQuestionnaire.Core.Views.Question
 @model IEnumerable<QuestionView>
-<div id="divAllQuestions">
+
     @foreach (var item in Model)
     {
         Html.RenderPartial("~/Views/Question/_QuestionRow.cshtml", item);
     }
-</div>
+
 <script>
     function onDeleteSuccess(currentRowId) {
         $('#' + currentRowId).remove();

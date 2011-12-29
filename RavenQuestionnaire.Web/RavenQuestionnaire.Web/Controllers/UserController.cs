@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Helpers;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -56,7 +57,7 @@ namespace RavenQuestionnaire.Web.Controllers
         }
         public ActionResult Delete(string id)
         {
-            commandInvoker.Execute(new DeleteUserCommand(id));
+            commandInvoker.Execute(new DeleteUserCommand(id, Global.GetCurrentUser()));
             return RedirectToAction("Index");
         }
 
@@ -68,7 +69,8 @@ namespace RavenQuestionnaire.Web.Controllers
                 if (string.IsNullOrEmpty(model.UserId))
                 {
                     commandInvoker.Execute(new CreateNewUserCommand(model.UserName, model.Email,SimpleHash.ComputeHash(model.Password),
-                                                                    model.PrimaryRole, model.IsLocked, model.SupervisorId, model.LocationId));
+                                                                    model.PrimaryRole, model.IsLocked, model.SupervisorId, model.LocationId,
+                                                                    Global.GetCurrentUser()));
                 }
                 else
                 {
@@ -76,7 +78,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                  new UserRoles[]
                                                                      {
                                                                          model.PrimaryRole
-                                                                     }, model.SupervisorId, model.LocationId));
+                                                                     }, model.SupervisorId, model.LocationId,
+                                                                     Global.GetCurrentUser()));
                 }
                 return RedirectToAction("Index");
 

@@ -23,7 +23,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             innerDocument.Id = "qID";
 
             Questionnaire entity = new Questionnaire(innerDocument);
-            var question = new Question(entity, "question", QuestionType.MultyOption);
+            var question = new Question("question", QuestionType.MultyOption);
             innerDocument.Questions.Add(question);
             Assert.True(
                 innerDocument.Questions.Count == 1);
@@ -31,7 +31,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
 
             DeleteQuestionHandler handler = new DeleteQuestionHandler(questionnaireRepositoryMock.Object);
-            handler.Handle(new Commands.DeleteQuestionCommand(question.PublicKey, entity.QuestionnaireId));
+            handler.Handle(new Commands.DeleteQuestionCommand(question.PublicKey, entity.QuestionnaireId, null));
 
             Assert.True(
                 innerDocument.Questions.Count == 0);

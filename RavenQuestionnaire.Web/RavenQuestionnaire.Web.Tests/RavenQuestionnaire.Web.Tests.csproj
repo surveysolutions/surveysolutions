@@ -51,9 +51,9 @@
     <Reference Include="MvcPaging">
       <HintPath>..\packages\MvcPaging.1.0.1\lib\net40\MvcPaging.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL" />
-    <Reference Include="Ninject.Extensions.Conventions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL" />
-    <Reference Include="Ninject.Web.Mvc, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL" />
+    <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountControllerTest.cs" />
     <Compile Include="Controllers\CompleteQuestionnaireControllerTest.cs" />
+    <Compile Include="Controllers\GroupControllerTest.cs" />
     <Compile Include="Controllers\QuestionControllerTest.cs" />
     <Compile Include="Controllers\QuestionnaireControllerTest.cs" />
     <Compile Include="Membership\QuestionnaireMembershipProviderTests.cs" />

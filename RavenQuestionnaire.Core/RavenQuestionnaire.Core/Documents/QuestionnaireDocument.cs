@@ -14,6 +14,7 @@ namespace RavenQuestionnaire.Core.Documents
             CreationDate = DateTime.Now;
             LastEntryDate = DateTime.Now;
             Questions= new List<Question>();
+            Groups= new List<Group>();
         }
 
         public string Id { get; set; }
@@ -32,5 +33,6 @@ namespace RavenQuestionnaire.Core.Documents
         public DateTime? CloseDate
         { get; set; }
         public List<Question> Questions { get; set; }
+        public List<Group> Groups { get; set; }
     }
 }

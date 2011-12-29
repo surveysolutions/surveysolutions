@@ -15,14 +15,14 @@ namespace RavenQuestionnaire.Core.Views.Answer
         {
         }
 
-        public CompleteAnswerView(AnswerView answer, bool selected)
-            : base(answer.PublicKey, answer.AnswerText, answer.Mandatory, answer.AnswerType, answer.QuestionId)
+        public CompleteAnswerView(RavenQuestionnaire.Core.Entities.SubEntities.Answer answer,Guid questionPublicKey, bool selected)
+            : base(questionPublicKey,answer)
         {
             this.Selected = selected;
         }
 
-        public CompleteAnswerView(AnswerView answer, bool selected, string customText)
-            : this(answer, selected)
+        public CompleteAnswerView(RavenQuestionnaire.Core.Entities.SubEntities.Answer answer, Guid questionPublicKey, bool selected, string customText)
+            : this(answer,questionPublicKey, selected)
         {
             this.CustomAnswer = customText;
         }

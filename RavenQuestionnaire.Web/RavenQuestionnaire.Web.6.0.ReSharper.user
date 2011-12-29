@@ -1,51 +1,68 @@
 <Configuration>
   <RecentFiles>
     <RecentFiles>
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/f:Web.config" caret="868" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Scripts/f:sorter.js" caret="1000" fromTop="27" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:_Table.cshtml" caret="981" fromTop="23" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseInputModel.cs" caret="641" fromTop="23" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:OrderRequestItem.cs" caret="212" fromTop="8" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseView.cs" caret="572" fromTop="26" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseItem.cs" caret="655" fromTop="24" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Utility/f:LINQExtensions.cs" caret="1848" fromTop="42" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Models/f:PagingHelper.cs" caret="1130" fromTop="24" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/f:ViewRepository.cs" caret="335" fromTop="14" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseViewFactory.cs" caret="2028" fromTop="43" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:QuestionnaireController.cs" caret="1014" fromTop="17" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Index.cshtml" caret="1137" fromTop="25" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:User/f:UserView.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:User/f:UserBrowseItem.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:UserDocument.cs" caret="851" fromTop="21" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/f:SurveyStatus.cs" caret="88" fromTop="2" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/f:UserLight.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Conventions/f:RegisterGenericTypesOfInterface.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseViewFactory.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusBrowseViewFactory.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:User/f:UserBrowseViewFactory.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Conventions/f:RegisterFirstInstanceOfInterface.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireBrowseInputModel.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/f:IViewRepsoitory.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireBrowseViewFactory.cs" caret="2038" fromTop="14" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireBrowseItem.cs" caret="741" fromTop="13" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireBrowseView.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/f:UpdateCompleteQuestionnaireCommand.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/f:ViewRepository.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:CompleteQuestionnaire.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:CompleteQuestionnaireDocument.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireViewFactory.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireView.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/f:CoreRegistry.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:Status.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/f:Question.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/f:LocationWithUserStatistic.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/d:SubView/f:StatusByRole.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusView.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Status/f:StatusViewFactory.cs" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:CompleteQuestionnaireController.cs" caret="0" fromTop="0" />
+      <File id="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8/d:CommandHandlers/f:CreateNewCompleteQuestionnaireHandlerTest.cs" caret="13" fromTop="0" />
     </RecentFiles>
     <RecentEdits>
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Scripts/f:sorter.js" caret="7113" fromTop="38" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Scripts/f:sorter.js" caret="8094" fromTop="41" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Index.cshtml" caret="1015" fromTop="22" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Scripts/f:sorter.js" caret="1000" fromTop="27" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:QuestionnaireController.cs" caret="1382" fromTop="41" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:_Table.cshtml" caret="981" fromTop="23" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Index.cshtml" caret="1508" fromTop="20" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:QuestionnaireController.cs" caret="1790" fromTop="29" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseViewFactory.cs" caret="1823" fromTop="25" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseViewFactory.cs" caret="1876" fromTop="30" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseInputModel.cs" caret="557" fromTop="19" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseViewFactory.cs" caret="1823" fromTop="25" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseViewFactory.cs" caret="1823" fromTop="26" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseViewFactory.cs" caret="1823" fromTop="26" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseViewFactory.cs" caret="1504" fromTop="28" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:QuestionnaireController.cs" caret="3867" fromTop="34" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:OrderRequestItem.cs" caret="17" fromTop="0" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseInputModel.cs" caret="708" fromTop="26" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseInputModel.cs" caret="641" fromTop="23" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:QuestionnaireController.cs" caret="1382" fromTop="23" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:QuestionnaireController.cs" caret="1314" fromTop="27" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:OrderRequestItem.cs" caret="255" fromTop="11" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:OrderRequestItem.cs" caret="155" fromTop="5" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseViewFactory.cs" caret="1193" fromTop="26" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseViewFactory.cs" caret="1431" fromTop="32" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseViewFactory.cs" caret="1659" fromTop="36" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Utility/f:LINQExtensions.cs" caret="6255" fromTop="130" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Questionnaire/f:QuestionnaireBrowseViewFactory.cs" caret="162" fromTop="4" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:QuestionnaireController.cs" caret="975" fromTop="15" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Index.cshtml" caret="992" fromTop="17" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:User/f:UserView.cs" caret="564" fromTop="18" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/f:UserLight.cs" caret="160" fromTop="5" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:User.cs" caret="1499" fromTop="11" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:User.cs" caret="1756" fromTop="19" />
+      <File id="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8/d:Entities/f:UserEntityTest.cs" caret="4766" fromTop="17" />
+      <File id="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8/d:Entities/f:UserEntityTest.cs" caret="5262" fromTop="15" />
+      <File id="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8/d:Entities/f:UserEntityTest.cs" caret="5586" fromTop="20" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:User.cs" caret="918" fromTop="16" />
+      <File id="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8/d:Entities/f:UserEntityTest.cs" caret="6325" fromTop="18" />
+      <File id="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8/d:Entities/f:UserEntityTest.cs" caret="13" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/f:CreateNewCompleteQuestionnaireCommand.cs" caret="796" fromTop="17" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/f:CreateNewCompleteQuestionnaireCommand.cs" caret="1038" fromTop="21" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:CompleteQuestionnaireController.cs" caret="2056" fromTop="22" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:CompleteQuestionnaireController.cs" caret="2353" fromTop="19" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:CompleteQuestionnaireDocument.cs" caret="848" fromTop="21" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Services/f:ICompleteQuestionnaireUploaderService.cs" caret="423" fromTop="11" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/f:CreateNewCompleteQuestionnaireCommand.cs" caret="359" fromTop="10" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireViewFactory.cs" caret="1942" fromTop="28" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireView.cs" caret="1241" fromTop="18" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireView.cs" caret="680" fromTop="16" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireView.cs" caret="1546" fromTop="30" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Services/f:CompleteQuestionnaireUploaderService.cs" caret="880" fromTop="17" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:CompleteQuestionnaire.cs" caret="581" fromTop="16" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:CompleteQuestionnaire.cs" caret="862" fromTop="21" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:CompleteQuestionnaireDocument.cs" caret="565" fromTop="17" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireBrowseViewFactory.cs" caret="1340" fromTop="16" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireBrowseItem.cs" caret="1061" fromTop="18" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireBrowseItem.cs" caret="1320" fromTop="25" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/f:CompleteQuestionnaireBrowseItem.cs" caret="741" fromTop="13" />
+      <File id="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8/d:CommandHandlers/f:CreateNewCompleteQuestionnaireHandlerTest.cs" caret="13" fromTop="0" />
     </RecentEdits>
   </RecentFiles>
   <NAntValidationSettings>
@@ -70,14 +87,14 @@
   <CompletionStatisticsManager>
     <ItemStatistics item="CSharpCodeCompletionContext">
       <Item value="Guid`0" priority="159" />
-      <Item value="public" priority="1115" />
+      <Item value="public" priority="1020" />
       <Item value="DateTime`0" priority="159" />
       <Item value="AbstractComand`0" priority="95" />
-      <Item value="string" priority="825" />
+      <Item value="string" priority="831" />
       <Item value="EventDocument`0" priority="31" />
       <Item value="CreationDate" priority="31" />
       <Item value="PublicKey" priority="31" />
-      <Item value="new" priority="896" />
+      <Item value="new" priority="608" />
       <Item value="interface" priority="30" />
       <Item value="ISyncAdvancedSessionOperation`0" priority="63" />
       <Item value="as" priority="31" />
@@ -89,20 +106,20 @@
       <Item value="Mock`0" priority="31" />
       <Item value="ICommand`0" priority="158" />
       <Item value="Mock&lt;ICommand&gt;" priority="28" />
-      <Item value="private" priority="127" />
+      <Item value="private" priority="159" />
       <Item value="IEntity" priority="31" />
       <Item value="Event`0" priority="95" />
       <Item value="document" priority="91" />
-      <Item value="return" priority="287" />
+      <Item value="return" priority="255" />
       <Item value="innerDocument" priority="31" />
       <Item value="IEventRepository`0" priority="31" />
       <Item value="IEntityRepository" priority="31" />
       <Item value="Event" priority="29" />
-      <Item value="int" priority="127" />
+      <Item value="int" priority="159" />
       <Item value="Status" priority="64" />
       <Item value="ResponsibleId" priority="32" />
-      <Item value="this" priority="319" />
-      <Item value="Dictionary" priority="63" />
+      <Item value="this" priority="383" />
+      <Item value="Dictionary" priority="95" />
       <Item value="RoleStatusList" priority="31" />
       <Item value="CreateNewStatusDependencyHandler`0" priority="26" />
       <Item value="StatusDependency" priority="28" />
@@ -112,7 +129,7 @@
       <Item value="StatusBrowseItem`0" priority="31" />
       <Item value="Title" priority="63" />
       <Item value="IDisposable`0" priority="31" />
-      <Item value="null" priority="282" />
+      <Item value="null" priority="122" />
       <Item value="id" priority="31" />
       <Item value="title" priority="31" />
       <Item value="RoleManagerEventArgs`0" priority="31" />
@@ -122,27 +139,27 @@
       <Item value="questionnaireId" priority="31" />
       <Item value="Dictionary&lt;string,List&lt;string&gt;&gt;" priority="115" />
       <Item value="for" priority="93" />
-      <Item value="Html" priority="211" />
+      <Item value="Html" priority="181" />
       <Item value="Dictionary&lt;string,object&gt;" priority="28" />
-      <Item value="if" priority="159" />
-      <Item value="else" priority="31" />
-      <Item value="Where`1" priority="26" />
+      <Item value="if" priority="223" />
+      <Item value="else" priority="63" />
+      <Item value="Where`1" priority="53" />
       <Item value="bool" priority="255" />
       <Item value="doc" priority="31" />
       <Item value="StatusRoles" priority="64" />
       <Item value="statusRoles" priority="31" />
-      <Item value="model" priority="314" />
+      <Item value="model" priority="250" />
       <Item value="true" priority="95" />
       <Item value="AddRolesListToViewBag`0" priority="31" />
       <Item value="UserRoles`0" priority="31" />
-      <Item value="Model" priority="246" />
+      <Item value="Model" priority="214" />
       <Item value="false" priority="63" />
-      <Item value="IEnumerable" priority="63" />
-      <Item value="foreach" priority="154" />
+      <Item value="IEnumerable" priority="90" />
+      <Item value="foreach" priority="149" />
       <Item value="DictionaryValueProvider" priority="29" />
       <Item value="role" priority="122" />
       <Item value="HttpPost" priority="26" />
-      <Item value="using" priority="120" />
+      <Item value="using" priority="59" />
       <Item value="BeginHtmlFieldPrefixScope`0" priority="3" />
       <Item value="rowName" priority="31" />
       <Item value="View`0" priority="31" />
@@ -157,39 +174,22 @@
       <Item value="Permit" priority="31" />
       <Item value="value" priority="95" />
       <Item value="List&lt;StatusByRole&gt;" priority="28" />
-      <Item value="item" priority="95" />
+      <Item value="item" priority="31" />
       <Item value="roles" priority="31" />
       <Item value="AddNewQuestionCommand`0" priority="26" />
       <Item value="List&lt;string&gt;" priority="28" />
-      <Item value="override" priority="31" />
-      <Item value="sb" priority="63" />
-      <Item value="Url" priority="62" />
-      <Item value="object" priority="28" />
-      <Item value="OnSuccess" priority="32" />
-      <Item value="Web.Mvc" priority="20" />
-      <Item value="JQuery" priority="20" />
-      <Item value="JqGrid" priority="20" />
-      <Item value="QuestionnaireBrowseInputModel" priority="28" />
-      <Item value="Page" priority="26" />
-      <Item value="PageSize" priority="32" />
-      <Item value="request" priority="92" />
-      <Item value="QuestionnaireBrowseItem`0" priority="26" />
-      <Item value="response" priority="26" />
-      <Item value="IisTraceListener`0" priority="31" />
-      <Item value="orderRequest" priority="32" />
-      <Item value="PartialView`0" priority="31" />
-      <Item value="IOrderedQueryable`0" priority="31" />
-      <Item value="QuestionnaireDocument`0" priority="30" />
-      <Item value="List&lt;LambdaExpression&gt;" priority="28" />
-      <Item value="raw" priority="31" />
-      <Item value="input" priority="94" />
-      <Item value="query" priority="117" />
-      <Item value="sortExpression" priority="32" />
-      <Item value="k" priority="31" />
-      <Item value="data" priority="31" />
-      <Item value="Questionnaire" priority="31" />
-      <Item value="Orders" priority="32" />
-      <Item value="enum" priority="30" />
+      <Item value="App_Start" priority="31" />
+      <Item value="IisTraceListener`0" priority="127" />
+      <Item value="statuses" priority="27" />
+      <Item value="Dictionary&lt;string,string&gt;" priority="28" />
+      <Item value="List" priority="26" />
+      <Item value="statusId" priority="31" />
+      <Item value="x" priority="63" />
+      <Item value="global" priority="31" />
+      <Item value="IFormatProvider`0" priority="31" />
+      <Item value="IEquatable" priority="31" />
+      <Item value="Name" priority="60" />
+      <Item value="UserLight`0" priority="95" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:@System.Guid">
       <Item value="NewGuid`0" priority="53" />
@@ -205,13 +205,16 @@
       <Item value="ToLower`0" priority="110" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Documents.CompleteQuestionnaireDocument">
-      <Item value="Status" priority="22" />
+      <Item value="Status" priority="49" />
+      <Item value="ResponsibleId" priority="53" />
+      <Item value="Responsible" priority="22" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.CompleteQuestionnaire.CompleteQuestionnaireView">
-      <Item value="Status" priority="27" />
+      <Item value="Status" priority="54" />
+      <Item value="ResponsibleId" priority="22" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Int32">
-      <Item value="CompareTo`0" priority="53" />
+      <Item value="CompareTo`0" priority="26" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Entities.StatusDependency">
       <Item value="innerDocument" priority="26" />
@@ -226,11 +229,12 @@
     <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.Status.StatusView">
       <Item value="Id" priority="107" />
       <Item value="Title" priority="26" />
-      <Item value="StatusRoles" priority="107" />
+      <Item value="StatusRoles" priority="134" />
       <Item value="StatusRolesMatrix" priority="204" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:@System.Web.Security.Roles">
       <Item value="GetAllRoles`0" priority="26" />
+      <Item value="GetRolesForUser`0" priority="22" />
     </ItemStatistics>
     <ItemStatistics item="HtmlCodeCompletionContext">
       <Item value="style" priority="19" />
@@ -244,35 +248,6 @@
       <Item value="center" priority="8" />
       <Item value="br" priority="13" />
       <Item value="tr" priority="5" />
-      <Item value="class" priority="164" />
-      <Item value="content" priority="5" />
-      <Item value="pagination" priority="34" />
-      <Item value="thead" priority="29" />
-      <Item value="tbody" priority="23" />
-      <Item value="buttons" priority="6" />
-      <Item value="btn" priority="43" />
-      <Item value="clearfix" priority="52" />
-      <Item value="span" priority="5" />
-      <Item value="help-inline" priority="11" />
-      <Item value="actions" priority="23" />
-      <Item value="input" priority="12" />
-      <Item value="primary" priority="17" />
-      <Item value="type" priority="5" />
-      <Item value="text/javascript" priority="5" />
-      <Item value="small" priority="5" />
-      <Item value="danger" priority="5" />
-      <Item value="div" priority="35" />
-      <Item value="inline-inputs" priority="5" />
-      <Item value="help-block" priority="5" />
-      <Item value="h2" priority="5" />
-      <Item value="key" priority="27" />
-      <Item value="answers" priority="5" />
-      <Item value="question" priority="6" />
-      <Item value="value" priority="13" />
-      <Item value="Web.Mvc" priority="4" />
-      <Item value="JQuery" priority="4" />
-      <Item value="JqGrid" priority="4" />
-      <Item value="script" priority="6" />
     </ItemStatistics>
     <ItemStatistics item="CssCodeCompletionContext">
       <Item value="float" priority="0" />
@@ -281,14 +256,11 @@
       <Item value="gainsboro" priority="1" />
       <Item value="text-align" priority="0" />
       <Item value="center" priority="1" />
-      <Item value="dotted" priority="6" />
-      <Item value="position" priority="5" />
     </ItemStatistics>
     <ItemStatistics item="RazorTransitionCompletionContext">
       <Item value="for" priority="7" />
-      <Item value="Html" priority="49" />
-      <Item value="using" priority="25" />
-      <Item value="Url" priority="20" />
+      <Item value="Html" priority="41" />
+      <Item value="using" priority="15" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Web.Mvc.HtmlHelper`1">
       <Item value="CheckBoxFor`1" priority="54" />
@@ -298,15 +270,14 @@
       <Item value="DisplayTextFor`2" priority="50" />
       <Item value="EditorFor`2" priority="50" />
       <Item value="EditorForModel`0" priority="22" />
-      <Item value="Partial`0" priority="26" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:@System.String">
       <Item value="IsNullOrEmpty`0" priority="26" />
       <Item value="Format`0" priority="82" />
-      <Item value="Empty" priority="81" />
+      <Item value="Empty" priority="54" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Collections.Generic.IEnumerable`1">
-      <Item value="Where`1" priority="26" />
+      <Item value="Where`1" priority="53" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Documents.StatusDocument">
       <Item value="IsVisible" priority="26" />
@@ -318,18 +289,16 @@
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Collections.Generic.Dictionary`2">
       <Item value="Contains`1" priority="22" />
-      <Item value="ContainsKey`0" priority="76" />
-      <Item value="Add`0" priority="81" />
+      <Item value="ContainsKey`0" priority="103" />
+      <Item value="Add`0" priority="108" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Collections.Generic.IDictionary`2">
       <Item value="Add`0" priority="53" />
       <Item value="Keys" priority="26" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Collections.Generic.List`1">
-      <Item value="Contains`0" priority="26" />
-      <Item value="Add`0" priority="26" />
-      <Item value="Count" priority="53" />
-      <Item value="Skip`1" priority="27" />
+      <Item value="Contains`0" priority="80" />
+      <Item value="Add`0" priority="82" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.Status.SubView.StatusByRole">
       <Item value="Status" priority="104" />
@@ -346,120 +315,25 @@
     <ItemStatistics item="Qualified:@RavenQuestionnaire.Core.Utility.IdUtil">
       <Item value="CreateStatusId`0" priority="22" />
     </ItemStatistics>
-    <ItemStatistics item="Qualified:System.Text.StringBuilder">
-      <Item value="Append`0" priority="53" />
-      <Item value="AppendFormat`0" priority="22" />
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.CompleteQuestionnaire.CompleteQuestionnaireBrowseItem">
+      <Item value="StatusId" priority="95" />
+      <Item value="ResponsibleId" priority="77" />
     </ItemStatistics>
-    <ItemStatistics item="JavaScriptSpecificContext">
-      <Item value="false" priority="10" />
-      <Item value="var" priority="43" />
-      <Item value="null" priority="21" />
-      <Item value="if" priority="10" />
-      <Item value="$" priority="19" />
-      <Item value="cell" priority="10" />
-      <Item value="meta" priority="32" />
-      <Item value="return" priority="21" />
-      <Item value="true" priority="10" />
-      <Item value="this" priority="21" />
-      <Item value="setTimeout" priority="10" />
-      <Item value="config" priority="21" />
-      <Item value="data" priority="32" />
-      <Item value="o" priority="21" />
-      <Item value="s" priority="10" />
-      <Item value="function" priority="8" />
-      <Item value="alert" priority="10" />
-      <Item value="Url" priority="5" />
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.CompleteQuestionnaire.CompleteQuestionnaireBrowseInputModel">
+      <Item value="ResponsibleId" priority="26" />
     </ItemStatistics>
-    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireBrowseItem">
-      <Item value="Id" priority="27" />
-      <Item value="Title" priority="27" />
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Entities.SubEntities.SurveyStatus">
+      <Item value="Id" priority="26" />
     </ItemStatistics>
-    <ItemStatistics item="Qualified:Lib.Web.Mvc.JQuery.JqGrid.JqGridRequest">
-      <Item value="PageIndex" priority="27" />
-    </ItemStatistics>
-    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireBrowseView">
-      <Item value="TotalCount" priority="26" />
-      <Item value="Items" priority="53" />
-    </ItemStatistics>
-    <ItemStatistics item="Qualified:Lib.Web.Mvc.JQuery.JqGrid.JqGridResponse">
-      <Item value="Records" priority="26" />
-    </ItemStatistics>
-    <ItemStatistics item="JavaScriptSpecificContextQualified">
-      <Item value="get" priority="8" />
-      <Item value="attr" priority="9" />
-      <Item value="keys" priority="8" />
-      <Item value="ajax" priority="8" />
-      <Item value="send" priority="7" />
-      <Item value="html" priority="7" />
-    </ItemStatistics>
-    <ItemStatistics item="Qualified:Raven.Client.Linq.IRavenQueryable`1">
-      <Item value="OrderBy`2" priority="22" />
-    </ItemStatistics>
-    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireBrowseInputModel">
-      <Item value="SortExpression" priority="81" />
-      <Item value="Orders" priority="27" />
-    </ItemStatistics>
-    <ItemStatistics item="Qualified:System.Linq.IOrderedQueryable`1">
-      <Item value="OrderBy`2" priority="26" />
-      <Item value="ThenBy`2" priority="83" />
-      <Item value="OrderByDescending`2" priority="22" />
-      <Item value="ThenByDescending`2" priority="27" />
-    </ItemStatistics>
-    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Documents.QuestionnaireDocument">
-      <Item value="CreationDate" priority="26" />
-    </ItemStatistics>
-    <ItemStatistics item="Qualified:RavenQuestionnaire.Web.Controllers.OrderRequestItem">
-      <Item value="Key" priority="53" />
-    </ItemStatistics>
-    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Entities.OrderRequestItem">
-      <Item value="Order" priority="26" />
-      <Item value="Key" priority="27" />
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Entities.SubEntities.UserLight">
+      <Item value="Id" priority="26" />
     </ItemStatistics>
   </CompletionStatisticsManager>
   <UnitTestSessions>
     <Session>
       <Name>Session #1</Name>
       <Elements>
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.AddNewQuestionHandlerTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
         <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandInvokerTests" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewCompleteQuestionnaireHandlerTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewLocationHandlerTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewQuestionnaireHandlerTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewUserHandlerTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteCompleteQuestionnaireComHandlerTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteQuestionHandlerTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteQuestionnaireHandlerTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteUserHandlerTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateCompleteQuestionnaireHandlerTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateQuestionHandlerTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateQuestionnaireHandlerTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateUserHandlerTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.Views.User.UserViewFactoryTest" type="NUnitTestFixtureElement" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest.ClearAnswers_ClearsCompletedAnswersToDocument" ParentId="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest" MethodName="ClearAnswers_ClearsCompletedAnswersToDocument" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest.GetQuestionnaireTemplate_ReturntTemplateForCompleteQuestionnaireFromDocument" ParentId="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest" MethodName="GetQuestionnaireTemplate_ReturntTemplateForCompleteQuestionnaireFromDocument" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.Views.User.UserViewFactoryTest.LoadByExistingUserId_UserViewIsReturned" ParentId="RavenQuestionnaire.Core.Tests.Views.User.UserViewFactoryTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.Views.User.UserViewFactoryTest" MethodName="LoadByExistingUserId_UserViewIsReturned" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.Views.User.UserViewFactoryTest.LoadByExistingUserIdButUserMarketAsDEleted_NullIsReturned" ParentId="RavenQuestionnaire.Core.Tests.Views.User.UserViewFactoryTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.Views.User.UserViewFactoryTest" MethodName="LoadByExistingUserIdButUserMarketAsDEleted_NullIsReturned" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.Views.User.UserViewFactoryTest.LoadByExistingUserName_UserViewIsReturned" ParentId="RavenQuestionnaire.Core.Tests.Views.User.UserViewFactoryTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.Views.User.UserViewFactoryTest" MethodName="LoadByExistingUserName_UserViewIsReturned" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.Views.User.UserViewFactoryTest.LoadByNotExistingUserId_NullIsReturned" ParentId="RavenQuestionnaire.Core.Tests.Views.User.UserViewFactoryTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.Views.User.UserViewFactoryTest" MethodName="LoadByNotExistingUserId_NullIsReturned" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest.UpdateAnswerList_UpdatesCompletedAnswersInDocument" ParentId="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest" MethodName="UpdateAnswerList_UpdatesCompletedAnswersInDocument" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest.WhenAddCompletedAnswerFromQuestionnaireList_AnswerIsAdded" ParentId="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest" MethodName="WhenAddCompletedAnswerFromQuestionnaireList_AnswerIsAdded" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest.WhenAddCompletedAnswerFromQuestionnaireListWithCustonText_InvalidExceptionThrowed" ParentId="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest" MethodName="WhenAddCompletedAnswerFromQuestionnaireListWithCustonText_InvalidExceptionThrowed" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest.WhenAddCompletedAnswerNotInQuestionnaireList_InvalidExceptionThrowed" ParentId="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.Entities.CompleteQuestionnaireTest" MethodName="WhenAddCompletedAnswerNotInQuestionnaireList_InvalidExceptionThrowed" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateCompleteQuestionnaireHandlerTest.WhenCommandIsReceived_CompleteQuestionnaireIsUpdatedToRepository" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateCompleteQuestionnaireHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateCompleteQuestionnaireHandlerTest" MethodName="WhenCommandIsReceived_CompleteQuestionnaireIsUpdatedToRepository" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewCompleteQuestionnaireHandlerTest.WhenCommandIsReceived_NewCompleteQuestionnIsAddedToRepository" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewCompleteQuestionnaireHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewCompleteQuestionnaireHandlerTest" MethodName="WhenCommandIsReceived_NewCompleteQuestionnIsAddedToRepository" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewLocationHandlerTest.WhenCommandIsReceived_NewLocationIsAddedToRepository" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewLocationHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewLocationHandlerTest" MethodName="WhenCommandIsReceived_NewLocationIsAddedToRepository" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewQuestionnaireHandlerTest.WhenCommandIsReceived_NewQuestionnaireIsAddedToRepository" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewQuestionnaireHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewQuestionnaireHandlerTest" MethodName="WhenCommandIsReceived_NewQuestionnaireIsAddedToRepository" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.AddNewQuestionHandlerTest.WhenCommandIsReceived_NewQuestionnIsAddedToRepository" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.AddNewQuestionHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.AddNewQuestionHandlerTest" MethodName="WhenCommandIsReceived_NewQuestionnIsAddedToRepository" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewUserHandlerTest.WhenCommandIsReceived_NewUserIsAddedToRepository" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewUserHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewUserHandlerTest" MethodName="WhenCommandIsReceived_NewUserIsAddedToRepository" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateQuestionHandlerTest.WhenCommandIsReceived_QuestionIsUpdatedToRepository" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateQuestionHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateQuestionHandlerTest" MethodName="WhenCommandIsReceived_QuestionIsUpdatedToRepository" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateQuestionnaireHandlerTest.WhenCommandIsReceived_QuestionIsUpdatedToRepository" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateQuestionnaireHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateQuestionnaireHandlerTest" MethodName="WhenCommandIsReceived_QuestionIsUpdatedToRepository" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateUserHandlerTest.WhenCommandIsReceived_QuestionIsUpdatedToRepository" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateUserHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.UpdateUserHandlerTest" MethodName="WhenCommandIsReceived_QuestionIsUpdatedToRepository" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteCompleteQuestionnaireComHandlerTest.WhenCommandIsReceived_QuestionnaireIsDeletedFromRepository" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteCompleteQuestionnaireComHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteCompleteQuestionnaireComHandlerTest" MethodName="WhenCommandIsReceived_QuestionnaireIsDeletedFromRepository" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteQuestionnaireHandlerTest.WhenCommandIsReceived_QuestionnaireIsDeletedFromRepository" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteQuestionnaireHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteQuestionnaireHandlerTest" MethodName="WhenCommandIsReceived_QuestionnaireIsDeletedFromRepository" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteUserHandlerTest.WhenCommandIsReceived_QuestionnaireIsDeletedFromRepository" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteUserHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteUserHandlerTest" MethodName="WhenCommandIsReceived_QuestionnaireIsDeletedFromRepository" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteQuestionHandlerTest.WhenCommandIsReceived_QuestionnIsDeletedFromRepository" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteQuestionHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.DeleteQuestionHandlerTest" MethodName="WhenCommandIsReceived_QuestionnIsDeletedFromRepository" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
-        <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewCompleteQuestionnaireHandlerTest.WhenCommandIsReceivedWithInvalidQuestionnaireid_NullRefferenceException" ParentId="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewCompleteQuestionnaireHandlerTest" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandHandlers.CreateNewCompleteQuestionnaireHandlerTest" MethodName="WhenCommandIsReceivedWithInvalidQuestionnaireid_NullRefferenceException" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
         <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandInvokerTests.WhenCommandIsSentAndHandlerIsNotPresent_ExceptionThrown" ParentId="RavenQuestionnaire.Core.Tests.CommandInvokerTests" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandInvokerTests" MethodName="WhenCommandIsSentAndHandlerIsNotPresent_ExceptionThrown" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
         <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandInvokerTests.WhenCommandIsSentAndHandlerIsNotPresent_SessionIsNotFlushed" ParentId="RavenQuestionnaire.Core.Tests.CommandInvokerTests" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandInvokerTests" MethodName="WhenCommandIsSentAndHandlerIsNotPresent_SessionIsNotFlushed" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />
         <UnitTestElement Provider="nUnit" Id="RavenQuestionnaire.Core.Tests.CommandInvokerTests.WhenCommandIsSentAndHandlerIsPresent_HandlerIsInvoked" ParentId="RavenQuestionnaire.Core.Tests.CommandInvokerTests" type="NUnitTestElement" TypeName="RavenQuestionnaire.Core.Tests.CommandInvokerTests" MethodName="WhenCommandIsSentAndHandlerIsPresent_HandlerIsInvoked" Project="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8" />

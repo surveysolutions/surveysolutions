@@ -2,7 +2,7 @@
 @using RavenQuestionnaire.Web.Models
 @model QuestionnaireBrowseView
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Surveys";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script src="../../Scripts/sorter.js" type="text/javascript"></script>
@@ -26,7 +26,6 @@
             });
     });
 </script>
-<h2>Index</h2>
 <p>
     @Html.ActionLink("Create New", "Create", null, new { @class = "btn small primary" })
 </p>

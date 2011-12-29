@@ -42,7 +42,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="dotless.Core">
@@ -96,10 +96,12 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectMVC3.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\CompleteQuestionnaireController.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\GridDataRequest.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\AnswerController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
@@ -284,10 +286,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\main.less" />
-    <Content Include="Views\Questionnaire\_Table.cshtml" />
+        <Content Include="Views\Questionnaire\_Table.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\_Table.cshtml" />
     <Content Include="Views\Questionnaire\Flow.cshtml" />
-    <Content Include="Views\CompleteQuestionnaire\_TableIndex.cshtml" />
+    <Content Include="Views\CompleteQuestionnaire\_TableIndex.cshtml" />    
+   <Content Include="Views\Administration\Menu.cshtml" />
+   <Content Include="Views\CompleteQuestionnaire\Participate.cshtml" />   
+    <Content Include="Views\CompleteQuestionnaire\Question.cshtml" />
+    <Content Include="Views\Group\_Create.cshtml" />
+    <Content Include="Views\Group\_Index.cshtml" />
+    <Content Include="Views\Group\_GroupRow.cshtml" />
+    <Content Include="Views\Group\_Screen.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

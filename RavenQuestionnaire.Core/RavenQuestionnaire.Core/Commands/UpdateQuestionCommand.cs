@@ -15,18 +15,30 @@ namespace RavenQuestionnaire.Core.Commands
 
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
+        public string ConditionExpression
+        {
+            get;
+            private set;
+        }
+
+        public UserLight Executor { get; set; }
+
         public Answer[] Answers { get; set; }
-        public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text, QuestionType type)
+        public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text, 
+            QuestionType type, string condition, UserLight executor)
         {
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.QuestionPublicKey = questionPublicKey;
             this.QuestionText = text;
             this.QuestionType = type;
             this.Answers = new Answer[0];
+            this.ConditionExpression = condition;
+            this.Executor = executor;
         }
 
-        public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text, QuestionType type, AnswerView[] answers) :
-            this(questionnaireId, questionPublicKey, text, type)
+        public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text, 
+            QuestionType type, string condition, AnswerView[] answers, UserLight executor) :
+            this(questionnaireId, questionPublicKey, text, type, condition, executor)
         {
             this.Answers =
                 answers.Select(

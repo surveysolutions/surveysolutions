@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             userRepositoryMock.Setup(x => x.Load("userdocuments/uID")).Returns(entity);
 
             DeleteUserHandler handler = new DeleteUserHandler(userRepositoryMock.Object);
-            handler.Handle(new Commands.DeleteUserCommand(entity.UserId));
+            handler.Handle(new Commands.DeleteUserCommand(entity.UserId, null));
             userRepositoryMock.Verify(x => x.Remove(entity), Times.Never());
             Assert.IsTrue(innerDocument.IsDeleted);
         }

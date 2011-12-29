@@ -8,7 +8,7 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.User;
 
-namespace Questionnaire.Core.Web.Membership
+namespace Questionnaire.Core.Web.Security
 {
     public class QuestionnaireRoleProvider : RoleProvider
     {

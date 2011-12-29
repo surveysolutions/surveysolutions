@@ -22,17 +22,17 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Questionnaire entity = new Questionnaire(innerDocument);
-            Question question = entity.AddQuestion("question", QuestionType.SingleOption);
+            Question question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty, null);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
             UpdateQuestionHandler handler = new UpdateQuestionHandler(questionnaireRepositoryMock.Object);
             handler.Handle(new Commands.UpdateQuestionCommand(entity.QuestionnaireId, question.PublicKey,
-                                                              "question after update", QuestionType.MultyOption));
+                                                              "question after update", QuestionType.MultyOption, 
+                                                              string.Empty, null));
 
             Assert.True(
                 innerDocument.Questions[0].QuestionText == "question after update" &&
-                innerDocument.Questions[0].QuestionType == QuestionType.MultyOption &&
-                innerDocument.Questions[0].QuestionnaireId == "qID");
+                innerDocument.Questions[0].QuestionType == QuestionType.MultyOption);
 
         }
     }

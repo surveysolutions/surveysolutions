@@ -12,14 +12,17 @@ namespace RavenQuestionnaire.Core.Views.Question
         {
             this.documentSession = documentSession;
         }
-        public QuestionView Load(QuestionViewInputModel input)
-        {
-            var doc = documentSession.Load<QuestionnaireDocument>(input.QuestionnaireId);
-            var question =doc.Questions.Where(q => q.PublicKey.Equals(input.PublickKey)).FirstOrDefault();
-            if (question == null)
-                return null;
-            return new QuestionView(question.PublicKey, question.QuestionText, question.QuestionType, question.Answers, question.QuestionnaireId);
-        
-        }
+         public QuestionView Load(QuestionViewInputModel input)
+         {
+             var doc = documentSession.Load<QuestionnaireDocument>(input.QuestionnaireId);
+
+             var question =
+                 new RavenQuestionnaire.Core.Entities.Questionnaire(doc).Find
+                     <RavenQuestionnaire.Core.Entities.SubEntities.Question>(input.PublicKey);
+             if (question == null)
+                 return null;
+             return new QuestionView(doc, question);
+
+         }
     }
 }

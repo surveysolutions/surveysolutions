@@ -1,13 +1,19 @@
-﻿using System.Web;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
-using Questionnaire.Core.Web.Membership;
+using System.Web.Security;
+using Questionnaire.Core.Web.Helpers;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Questionnaire;
-using RavenQuestionnaire.Web.Models;
+using RavenQuestionnaire.Core.Views.Status;
+using RavenQuestionnaire.Core.Views.User;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -16,6 +22,7 @@ namespace RavenQuestionnaire.Web.Controllers
     {
         private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
+
         private IFormsAuthentication authentication;
 
         public CompleteQuestionnaireController(ICommandInvoker commandInvoker, IViewRepository viewRepository, IFormsAuthentication auth)
@@ -47,6 +54,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
         public ViewResult MyItems(CompleteQuestionnaireBrowseInputModel input)
         {
+            input.ResponsibleId = Global.GetCurrentUser().Id;
             var model = viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(input);
             return View(model);
         }
@@ -54,8 +62,14 @@ namespace RavenQuestionnaire.Web.Controllers
         public ViewResult Result(string id)
         {
             if (string.IsNullOrEmpty(id))
-                throw new HttpException(404, "Invalid quesry string parameters");
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
+                throw new HttpException(404, "Invalid query string parameters");
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, 
+                CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
+
+            if (model != null)
+                AddAllowedStatusesToViewBag(model.Status.Id, model.Status.Name);
+
+            AddUsersToViewBag();
             return View(model);
         }
 
@@ -63,17 +77,44 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new CreateNewCompleteQuestionnaireCommand(id, answers, authentication.GetUserIdForCurrentUser()));
+                var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
+
+                commandInvoker.Execute(new CreateNewCompleteQuestionnaireCommand(id,
+                    answers, 
+                    Global.GetCurrentUser(), 
+                    new SurveyStatus(statusView.Id, statusView.Title), 
+                    Global.GetCurrentUser()));
 
             }
             return RedirectToAction("Index");
         }
-
-        public ActionResult UpdateResult(string id, CompleteAnswer[] answers)
+        public ActionResult SaveFirstStep(string id, CompleteAnswer[] answers)
         {
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, answers));
+                var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
+
+                var command = new CreateNewCompleteQuestionnaireCommand(id, answers,
+                                                                        Global.GetCurrentUser(),
+                                                                        new SurveyStatus(statusView.Id, statusView.Title), 
+                                                                        Global.GetCurrentUser());
+                commandInvoker.Execute(command);
+
+
+                return RedirectToAction("Question",
+                                        new
+                                            {
+                                                id = command.CompleteQuestionnaireId
+                                            });
+            }
+            return RedirectToAction("Participate", new { id });
+        }
+        public ActionResult UpdateResult(string id, CompleteAnswer[] answers, SurveyStatus status, UserLight responsible)
+        {
+            if (ModelState.IsValid)
+            {
+                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, answers, status.Id, responsible.Id, 
+                    Global.GetCurrentUser()));
 
             }
             return RedirectToAction("Index");
@@ -83,17 +124,95 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult Take(string id)
         {
             if (string.IsNullOrEmpty(id))
-                throw new HttpException(404, "Invalid quesry string parameters");
+                throw new HttpException(404, "Invalid query string parameters");
 
-            var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                new QuestionnaireViewInputModel(id));
-            return View( new CompleteQuestionnaireView(model));
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireView>(
+                new CompleteQuestionnaireViewInputModel(){ TemplateQuestionanireId = id});
+            return View(model);
+        }
+        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
+        public ViewResult Participate(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
+                new CompleteQuestionnaireViewInputModel() {TemplateQuestionanireId = id});
+
+            ViewBag.ShowPrevious = false;
+            return View(model);
+        }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
+        public ViewResult Question(string id, Guid? group, bool? order)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+            var model =
+                viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
+                    new CompleteQuestionnaireViewInputModel(id, group, order?? false));
+            return View( model);
+        }
+
+        public ActionResult SaveSingleResult(string id, Guid? PublicKey, CompleteAnswer[] answers, string order)
+        {
+            if (answers == null || answers.Length <= 0)
+            {
+                return RedirectToAction("Question", new {id = id, order = order == "Previous"});
+            }
+            if (ModelState.IsValid)
+            {
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id,  PublicKey, answers, Global.GetCurrentUser()));
+            }
+            if (string.IsNullOrEmpty(order))
+            {
+                var model =
+                    viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
+                        new CompleteQuestionnaireViewInputModel(id) {CurrentGroupPublicKey = PublicKey});
+                return View("Question", model);
+            }
+            return RedirectToAction("Question", new {id = id, group = PublicKey, order = order == "Previous"});
         }
 
         public ActionResult Delete(string id)
         {
-            commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id));
+            commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id, Global.GetCurrentUser()));
             return RedirectToAction("Index");
+        }
+
+
+        protected void AddUsersToViewBag()
+        {
+            var users =
+                viewRepository.Load<UserBrowseInputModel, UserBrowseView>(new UserBrowseInputModel() { PageSize = 300 }).Items;
+            List<UserBrowseItem> list = users.ToList();
+            ViewBag.Users = list;
+        }
+
+
+        protected void AddAllowedStatusesToViewBag(string statusId, string statusName)
+        {
+            List<SurveyStatus> statuses = new List<SurveyStatus>();
+
+            StatusView model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(statusId));
+            if (model != null)
+            {
+                foreach (var role in Roles.GetRolesForUser())
+                {
+                    if (model.StatusRoles.ContainsKey(role))
+                        foreach (var item in model.StatusRoles[role])
+                        {
+                            if (!statuses.Contains(item))
+                                statuses.Add(item);
+                        }
+                }
+            }
+
+            SurveyStatus currentStatus = new SurveyStatus(statusId, statusName );
+            if (!statuses.Contains(currentStatus))
+                statuses.Add(currentStatus);
+
+            ViewBag.AvailableStatuses = statuses;
         }
     }
 }

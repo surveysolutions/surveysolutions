@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using Questionnaire.Core.Web.Membership;
+using Questionnaire.Core.Web.Helpers;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -48,7 +49,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (string.IsNullOrEmpty(model.Id))
                 {
-                    commandInvoker.Execute(new CreateNewLocationCommand(model.Location));
+                    commandInvoker.Execute(new CreateNewLocationCommand(model.Location, Global.GetCurrentUser()));
                 }
                 else
                 {
