@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using Raven.Client;
-using Raven.Client.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Tests.Utils;
 using RavenQuestionnaire.Core.Views.User;
@@ -31,7 +27,7 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
                         result.UserName == "test");
         }
         [Test]
-        public void LoadByExistingUserIdButUserMarketAsDEleted_NullIsReturned()
+        public void LoadByExistingUserIdButUserMarketAsDeleted_NullIsReturned()
         {
             Mock<IDocumentSession> documentSesionMock = new Mock<IDocumentSession>();
             UserViewInputModel input = new UserViewInputModel("user_id");

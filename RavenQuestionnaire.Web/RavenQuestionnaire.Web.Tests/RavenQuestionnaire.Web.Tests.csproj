@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -93,6 +94,7 @@
     <Compile Include="Controllers\GroupControllerTest.cs" />
     <Compile Include="Controllers\QuestionControllerTest.cs" />
     <Compile Include="Controllers\QuestionnaireControllerTest.cs" />
+    <Compile Include="Controllers\StatusControllerTest.cs" />
     <Compile Include="Membership\QuestionnaireMembershipProviderTests.cs" />
     <Compile Include="Membership\QuestionnaireRoleProviderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

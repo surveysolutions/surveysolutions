@@ -49,7 +49,6 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -58,9 +57,13 @@
     <Compile Include="Binding\GenericBinderResolver.cs" />
     <Compile Include="Helpers\ClientIdHelper.cs" />
     <Compile Include="Helpers\EntityNames.cs" />
-    <Compile Include="Helpers\Global.cs" />
+    <Compile Include="Helpers\GlobalInfo.cs" />
+    <Compile Include="Helpers\GlobalInfoProvider.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
+    <Compile Include="Helpers\IBagManager.cs" />
+    <Compile Include="Helpers\IGlobalInfoProvider.cs" />
     <Compile Include="Helpers\KernelLocator.cs" />
+    <Compile Include="Helpers\ViewBagManager.cs" />
     <Compile Include="Security\FormsAuthentication.cs" />
     <Compile Include="Security\IFormsAuthentication.cs" />
     <Compile Include="Security\QuestionnaireAuthorizeAttribute.cs" />

@@ -2,6 +2,7 @@
 using System.Web;
 using Moq;
 using NUnit.Framework;
+using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
@@ -20,6 +21,9 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public Mock<IFormsAuthentication> Authentication { get; set; }
+        public Mock<IBagManager> BagManager { get; set; }
+        public Mock<IGlobalInfoProvider> InfoProvider { get; set; }
+
         public CompleteQuestionnaireController Controller { get; set; }
 
         [SetUp]
@@ -28,8 +32,13 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             CommandInvokerMock = new Mock<ICommandInvoker>();  
             ViewRepositoryMock = new Mock<IViewRepository>();
             Authentication = new Mock<IFormsAuthentication>();
-            Controller = new CompleteQuestionnaireController(CommandInvokerMock.Object, ViewRepositoryMock.Object,
-                                                             Authentication.Object);
+            BagManager = new Mock<IBagManager>();
+
+            InfoProvider = new Mock<IGlobalInfoProvider>();
+
+
+            Controller = new CompleteQuestionnaireController(CommandInvokerMock.Object, ViewRepositoryMock.Object, 
+                BagManager.Object, InfoProvider.Object);
         }
         [Test]
         public void WhenNewCompleteQuestionnaireIsSubmittedWithValidModel_CommandIsSent()

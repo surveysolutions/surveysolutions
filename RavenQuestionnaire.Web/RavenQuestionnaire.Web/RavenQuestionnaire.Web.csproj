@@ -45,9 +45,6 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="dotless.Core">
-      <HintPath>..\packages\dotless.1.2.1.0\lib\dotless.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -77,7 +74,6 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -282,13 +278,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\main.less" />
- <Content Include="Views\Administration\Menu.cshtml" />
-   <Content Include="Views\CompleteQuestionnaire\Participate.cshtml" />   
+    <Content Include="Views\Administration\Menu.cshtml" />
+    <Content Include="Views\CompleteQuestionnaire\Participate.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Question.cshtml" />
-    <Content Include="Views\Group\_Create.cshtml" />
-    <Content Include="Views\Group\_Index.cshtml" />
-    <Content Include="Views\Group\_GroupRow.cshtml" />
-    <Content Include="Views\Group\_Screen.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

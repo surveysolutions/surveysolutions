@@ -36,7 +36,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
 
         [Test]
-        public void WhenNewQuestionnaireIsSubmittedWIthValidModel_CommandIsSent()
+        public void WhenNewQuestionnaireIsSubmittedWithValidModel_CommandIsSent()
         {
             Controller.Save(new QuestionnaireView() {Title = "test"});
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewQuestionnaireCommand>()), Times.Once());

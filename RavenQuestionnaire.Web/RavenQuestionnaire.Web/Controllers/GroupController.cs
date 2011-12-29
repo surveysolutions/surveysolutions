@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Questionnaire.Core.Web.Helpers;
@@ -9,7 +7,6 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 
 namespace RavenQuestionnaire.Web.Controllers
@@ -43,7 +40,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     if (model.PublicKey == Guid.Empty)
                     {
                         CreateNewGroupCommand createCommand = new CreateNewGroupCommand(model.GroupText,
-                                                                                        model.QuestionnaireId, null, Global.GetCurrentUser());
+                                                                                        model.QuestionnaireId, null, GlobalInfo.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
 
 
@@ -51,7 +48,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     else
                     {
                         commandInvoker.Execute(new UpdateGroupCommand(model.GroupText, model.QuestionnaireId,
-                                                                      model.PublicKey, Global.GetCurrentUser()));
+                                                                      model.PublicKey, GlobalInfo.GetCurrentUser()));
                     }
                 }
                 catch (Exception e)
@@ -60,7 +57,8 @@ namespace RavenQuestionnaire.Web.Controllers
                     ModelState.AddModelError("ConditionExpression", e.Message);
                     return PartialView("_Create", model);
                 }
-                var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
+                var questionnaire = 
+                    viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
 
                 return PartialView("_Index", questionnaire.Groups);
 
@@ -80,7 +78,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public string Delete(Guid publicKey, string questionnaireId)
         {
-            commandInvoker.Execute(new DeleteGroupCommand(publicKey, questionnaireId, Global.GetCurrentUser()));
+            commandInvoker.Execute(new DeleteGroupCommand(publicKey, questionnaireId, GlobalInfo.GetCurrentUser()));
             return "";
         }
     }

@@ -49,7 +49,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (string.IsNullOrEmpty(model.Id))
                 {
-                    commandInvoker.Execute(new CreateNewLocationCommand(model.Location, Global.GetCurrentUser()));
+                    commandInvoker.Execute(new CreateNewLocationCommand(model.Location, GlobalInfo.GetCurrentUser()));
                 }
                 else
                 {

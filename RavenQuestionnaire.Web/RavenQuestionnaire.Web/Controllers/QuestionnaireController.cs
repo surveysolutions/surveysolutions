@@ -71,11 +71,11 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (string.IsNullOrEmpty(model.Id))
                 {
-                    commandInvoker.Execute(new CreateNewQuestionnaireCommand(model.Title, Global.GetCurrentUser()));
+                    commandInvoker.Execute(new CreateNewQuestionnaireCommand(model.Title, GlobalInfo.GetCurrentUser()));
                 }
                 else
                 {
-                    commandInvoker.Execute(new UpdateQuestionnaireCommand(model.Id, model.Title, Global.GetCurrentUser()));
+                    commandInvoker.Execute(new UpdateQuestionnaireCommand(model.Id, model.Title, GlobalInfo.GetCurrentUser()));
                 }
                 return RedirectToAction("Index");
 
@@ -89,7 +89,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Delete(string id)
         {
-            commandInvoker.Execute(new DeleteQuestionnaireCommand(id, Global.GetCurrentUser()));
+            commandInvoker.Execute(new DeleteQuestionnaireCommand(id, GlobalInfo.GetCurrentUser()));
             return RedirectToAction("Index");
         }
 

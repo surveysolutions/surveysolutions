@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -10,9 +9,7 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Views.Status;
-using RavenQuestionnaire.Core.Views.User;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -21,14 +18,16 @@ namespace RavenQuestionnaire.Web.Controllers
     {
         private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
+        private IBagManager _bagManager;
+        private IGlobalInfoProvider _globalProvider;
 
-        private IFormsAuthentication authentication;
-
-        public CompleteQuestionnaireController(ICommandInvoker commandInvoker, IViewRepository viewRepository, IFormsAuthentication auth)
+        public CompleteQuestionnaireController(ICommandInvoker commandInvoker, IViewRepository viewRepository,
+            IBagManager bagManager, IGlobalInfoProvider globalProvider)
         {
             this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
-            this.authentication = auth;
+            this._bagManager = bagManager;
+            this._globalProvider = globalProvider;
         }
 
         public ViewResult Index(CompleteQuestionnaireBrowseInputModel input)
@@ -40,7 +39,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
         public ViewResult MyItems(CompleteQuestionnaireBrowseInputModel input)
         {
-            input.ResponsibleId = Global.GetCurrentUser().Id;
+            input.ResponsibleId = GlobalInfo.GetCurrentUser().Id;
             var model = viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(input);
             return View(model);
         }
@@ -55,7 +54,7 @@ namespace RavenQuestionnaire.Web.Controllers
             if (model != null)
                 AddAllowedStatusesToViewBag(model.Status.Id, model.Status.Name);
 
-            AddUsersToViewBag();
+            _bagManager.AddUsersToBag(ViewBag, viewRepository);
             return View(model);
         }
 
@@ -67,9 +66,9 @@ namespace RavenQuestionnaire.Web.Controllers
 
                 commandInvoker.Execute(new CreateNewCompleteQuestionnaireCommand(id,
                     answers, 
-                    Global.GetCurrentUser(), 
+                    GlobalInfo.GetCurrentUser(), 
                     new SurveyStatus(statusView.Id, statusView.Title), 
-                    Global.GetCurrentUser()));
+                    GlobalInfo.GetCurrentUser()));
 
             }
             return RedirectToAction("Index");
@@ -81,9 +80,9 @@ namespace RavenQuestionnaire.Web.Controllers
                 var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
 
                 var command = new CreateNewCompleteQuestionnaireCommand(id, answers,
-                                                                        Global.GetCurrentUser(),
+                                                                        GlobalInfo.GetCurrentUser(),
                                                                         new SurveyStatus(statusView.Id, statusView.Title), 
-                                                                        Global.GetCurrentUser());
+                                                                        GlobalInfo.GetCurrentUser());
                 commandInvoker.Execute(command);
 
 
@@ -100,7 +99,7 @@ namespace RavenQuestionnaire.Web.Controllers
             if (ModelState.IsValid)
             {
                 commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, answers, status.Id, responsible.Id, 
-                    Global.GetCurrentUser()));
+                    GlobalInfo.GetCurrentUser()));
 
             }
             return RedirectToAction("Index");
@@ -148,7 +147,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id,  PublicKey, answers, Global.GetCurrentUser()));
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id,  PublicKey, answers, GlobalInfo.GetCurrentUser()));
             }
             if (string.IsNullOrEmpty(order))
             {
@@ -162,19 +161,9 @@ namespace RavenQuestionnaire.Web.Controllers
 
         public ActionResult Delete(string id)
         {
-            commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id, Global.GetCurrentUser()));
+            commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id, GlobalInfo.GetCurrentUser()));
             return RedirectToAction("Index");
         }
-
-
-        protected void AddUsersToViewBag()
-        {
-            var users =
-                viewRepository.Load<UserBrowseInputModel, UserBrowseView>(new UserBrowseInputModel() { PageSize = 300 }).Items;
-            List<UserBrowseItem> list = users.ToList();
-            ViewBag.Users = list;
-        }
-
 
         protected void AddAllowedStatusesToViewBag(string statusId, string statusName)
         {
