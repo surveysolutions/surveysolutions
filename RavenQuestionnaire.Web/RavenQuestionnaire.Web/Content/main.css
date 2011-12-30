@@ -1306,7 +1306,8 @@ table .headerSortUp.purple, table .headerSortDown.purple {
   font-weight: 200;
   line-height: 1;
 }
-.topbar p {
+.topbar p{
+  color: white;
   margin: 0;
   line-height: 40px;
 }

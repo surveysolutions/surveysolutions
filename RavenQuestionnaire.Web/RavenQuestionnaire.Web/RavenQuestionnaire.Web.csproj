@@ -101,6 +101,7 @@
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\AnswerController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
@@ -290,6 +291,7 @@
     <Content Include="Views\Answer\AnswerView\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Select.cshtml" />
     <Content Include="Views\Questionnaire\ItemList.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

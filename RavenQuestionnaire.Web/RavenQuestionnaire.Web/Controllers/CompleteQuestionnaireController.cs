@@ -77,6 +77,23 @@ namespace RavenQuestionnaire.Web.Controllers
                                     });
         }
 
+        public ActionResult UpdateResult(string id, CompleteAnswer[] answers, SurveyStatus status, UserLight responsible)
+        {
+            if (ModelState.IsValid)
+            {
+                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, answers, status.Id, responsible.Id, 
+                    GlobalInfo.GetCurrentUser()));
+
+            }
+           return RedirectToAction("Index");
+           /* return RedirectToAction("Question",
+                                    new
+                                    {
+                                        id = command.CompleteQuestionnaireId
+                                    });*/
+         }
+
+
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public ViewResult Question(string id, Guid? group)
         {

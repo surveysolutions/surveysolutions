@@ -1,16 +1,20 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
     [QuestionnaireAuthorize(UserRoles.Administrator)]
-    public class AdministrationController : Controller
+    public class ReportController : Controller
     {
         //
-        // GET: /Administration/
+        // GET: /Report/
 
-        public ActionResult Menu()
+        public ActionResult Index()
         {
             return View();
         }
