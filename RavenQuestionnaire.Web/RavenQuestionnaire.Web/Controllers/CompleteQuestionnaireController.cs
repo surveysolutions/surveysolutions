@@ -59,19 +59,7 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
-        public ActionResult UpdateResult(string id, CompleteAnswer[] answers, SurveyStatus status, UserLight responsible)
-        {
-            if (ModelState.IsValid)
-            {
-                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, answers, status.Id, responsible.Id,
-                    GlobalInfo.GetCurrentUser()));
-
-            }
-            return RedirectToAction("Index");
-        }
-
-
-        public ViewResult Result(string id)
+       public ViewResult Result(string id)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");

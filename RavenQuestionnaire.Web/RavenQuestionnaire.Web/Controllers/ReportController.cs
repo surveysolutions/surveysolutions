@@ -19,5 +19,10 @@ namespace RavenQuestionnaire.Web.Controllers
             return View();
         }
 
+        public ActionResult Report (string id)
+        {
+            return View();
+        }
+
     }
 }

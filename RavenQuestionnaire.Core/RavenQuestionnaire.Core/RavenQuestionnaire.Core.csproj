@@ -200,8 +200,12 @@
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireEnumerableViewFactory.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireView.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewEnumerable.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewEnumerable.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
     <Compile Include="Views\Group\CompleteGroupView.cs" />
