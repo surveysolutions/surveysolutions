@@ -40,6 +40,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult _TableData(CompleteQuestionnaireBrowseInputModel input)
         {
+            input.ResponsibleId = GlobalInfo.GetCurrentUser().Id;
             var model = viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(input);
             return PartialView("_Table", model);
         }
@@ -102,23 +103,6 @@ namespace RavenQuestionnaire.Web.Controllers
                                         id = command.CompleteQuestionnaireId
                                     });
         }
-
-        public ActionResult UpdateResult(string id, CompleteAnswer[] answers, SurveyStatus status, UserLight responsible)
-        {
-            if (ModelState.IsValid)
-            {
-                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, answers, status.Id, responsible.Id, 
-                    GlobalInfo.GetCurrentUser()));
-
-            }
-           return RedirectToAction("Index");
-           /* return RedirectToAction("Question",
-                                    new
-                                    {
-                                        id = command.CompleteQuestionnaireId
-                                    });*/
-         }
-
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public ViewResult Question(string id, Guid? group)
