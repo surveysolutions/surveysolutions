@@ -22,12 +22,12 @@ namespace RavenQuestionnaire.Core.Views.User
                 doc = this.documentSession.Load<UserDocument>(input.UserId);
             else if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))
             {
-                doc = documentSession.Query<UserDocument>().FirstOrDefault(u => u.UserName.Equals(input.UserName));
+                doc = documentSession.Query<UserDocument>().FirstOrDefault(u => u.UserName == input.UserName);
 
             }
             if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
             {
-                doc = this.documentSession.Query<UserDocument>().FirstOrDefault(u => u.UserName.Equals(input.UserName));
+                doc = this.documentSession.Query<UserDocument>().FirstOrDefault(u => u.UserName ==input.UserName);
 
                 if (doc!=null && doc.Password != input.Password)
                     return null;
