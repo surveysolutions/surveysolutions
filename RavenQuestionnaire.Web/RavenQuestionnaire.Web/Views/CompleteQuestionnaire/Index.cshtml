@@ -1,20 +1,36 @@
-﻿@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
+﻿@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 @using RavenQuestionnaire.Web.Models
 @model CompleteQuestionnaireBrowseView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1> All Completed </h1>
+<h1>
+    All Completed
+</h1>
 <table class="bordered-table zebra-striped">
     <thead>
         <tr>
-            <th>Id </th>
-            <th>Title </th>
-            <th>Creation date</th>
-            <th>Last edit date</th>
-            <th>Status</th>
-            <th>Responsible</th>
-            <th></th>
+            <th>
+                Id
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Creation date
+            </th>
+            <th>
+                Last edit date
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Responsible
+            </th>
+            <th>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -42,8 +58,11 @@
                     @Html.HiddenFor(modelItem => item.Responsible.Id)
                 </td>
                 <td class="buttons">
-                    @Html.ActionLink("Details", "Question", new { id = item.Id }, new { @class = "btn small" })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn small danger" })
+                    @if (Roles.IsUserInRole(UserRoles.Administrator.ToString()))
+                    {
+                        @Html.ActionLink("Details", "Question", new { id = item.Id }, new { @class = "btn small" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn small danger" })
+                    }
                 </td>
             </tr>
         }
