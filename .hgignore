@@ -15,3 +15,6 @@ ExpressionEvaluator/Evaluant.Calculator.Tests/obj/*
 ExpressionEvaluator/Evaluant.Calculator/bin/*
 ExpressionEvaluator/Evaluant.Calculator/obj/*
 *.orig
+RavenQuestionnaire.Web/RavenQuestionnaire.Web.sln.DotSettings.user
+RavenQuestionnaire.Web/RavenQuestionnaire.Web.6.1.ReSharper.user
+RavenQuestionnaire.Web/RavenQuestionnaire.Web.1.1.dotCover
