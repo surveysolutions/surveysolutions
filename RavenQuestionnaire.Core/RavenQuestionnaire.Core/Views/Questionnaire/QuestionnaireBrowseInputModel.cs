@@ -1,4 +1,9 @@
-﻿namespace RavenQuestionnaire.Core.Views.Questionnaire
+﻿using System.Collections.Generic;
+using System.Linq.Expressions;
+using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Utility;
+
+namespace RavenQuestionnaire.Core.Views.Questionnaire
 {
     public class QuestionnaireBrowseInputModel
     {
@@ -13,5 +18,19 @@
             set { _pageSize = value; }
         }
         private int _pageSize = 20;
+
+        public string Order
+        {
+            get { return StringUtil.GetOrderRequestString(_orders); }
+            set { _orders = StringUtil.ParseOrderRequestString(value); }
+        }
+
+        public List<OrderRequestItem> Orders 
+        {
+            get { return _orders; }
+            set { _orders = value; }
+        }
+
+        private List<OrderRequestItem> _orders = new List<OrderRequestItem>();
     }
 }
