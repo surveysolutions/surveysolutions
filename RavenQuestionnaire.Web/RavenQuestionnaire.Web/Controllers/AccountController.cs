@@ -42,7 +42,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     }
                     else
                     {*/
-                        return RedirectToAction("Index", "Questionnaire");
+                        return Redirect("~/");
                    // }
                 }
                 else
@@ -62,7 +62,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             authentication.SignOut();
 
-            return RedirectToAction("Index", "Questionnaire");
+            return Redirect("~/");
         }
 
         //
