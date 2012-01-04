@@ -36,7 +36,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
 
         [Test]
-        public void WhenNewQuestionnaireIsSubmittedWIthValidModel_CommandIsSent()
+        public void WhenNewQuestionnaireIsSubmittedWithValidModel_CommandIsSent()
         {
             Controller.Save(new QuestionnaireView() {Title = "test"});
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewQuestionnaireCommand>()), Times.Once());
@@ -62,7 +62,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             ViewRepositoryMock.Setup(x => x.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input))
                 .Returns(output);
 
-            var result = Controller.Index(input);
+            var result = Controller.ItemList(input);
             Assert.AreEqual(output, result.ViewData.Model);
         }
 

@@ -1,7 +1,8 @@
-﻿@using RavenQuestionnaire.Core.Views.Question
+﻿@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Web.Models
 @model QuestionView
-           @{var hideFunctionName = Model.GroupPublicKey.HasValue ? "HideCreateQuestionForm" + Model.GroupPublicKey.ToString().Replace('-', '_') : "HideCreateQuestionForm";}
+@{var hideFunctionName = Model.GroupPublicKey.HasValue ? "HideCreateQuestionForm" + Model.GroupPublicKey.ToString().Replace('-', '_') : "HideCreateQuestionForm";}
 <div id="divCreateForm">
     @using (Ajax.BeginForm("Save", "Question",
                                          new AjaxOptions
@@ -21,6 +22,13 @@
                 <div class="input">
                     @Html.EditorFor(model => model.QuestionText)
                     @Html.ValidationMessageFor(model => model.QuestionText)
+                </div>
+            </div>
+            <div class="clearfix">
+              <label>Render as drop down</label>
+                <div class="input">
+
+                    @Html.CheckBox("isDropDown", Model.QuestionType== QuestionType.DropDownList)
                 </div>
             </div>
             <div class="clearfix">

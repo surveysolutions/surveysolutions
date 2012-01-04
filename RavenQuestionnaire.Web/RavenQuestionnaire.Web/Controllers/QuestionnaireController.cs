@@ -38,11 +38,23 @@ namespace RavenQuestionnaire.Web.Controllers
             return PartialView("_Table", model);
         }
 
-        public ViewResult Index(QuestionnaireBrowseInputModel input)
+        public ViewResult ItemList(QuestionnaireBrowseInputModel input)
         {
             var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
             return View(model);
         }
+        public ActionResult Index()
+        {
+            var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(new QuestionnaireBrowseInputModel());
+            return View(model);
+        }
+       /* public ActionResult Index()
+        {
+            var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
+            return View(model);
+        }*/
+        //
+        // GET: /Questionnaire/Details/5
 
         public ViewResult Details(string id)
         {
@@ -90,11 +102,11 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (string.IsNullOrEmpty(model.Id))
                 {
-                    commandInvoker.Execute(new CreateNewQuestionnaireCommand(model.Title, Global.GetCurrentUser()));
+                    commandInvoker.Execute(new CreateNewQuestionnaireCommand(model.Title, GlobalInfo.GetCurrentUser()));
                 }
                 else
                 {
-                    commandInvoker.Execute(new UpdateQuestionnaireCommand(model.Id, model.Title, Global.GetCurrentUser()));
+                    commandInvoker.Execute(new UpdateQuestionnaireCommand(model.Id, model.Title, GlobalInfo.GetCurrentUser()));
                 }
                 return RedirectToAction("Index");
 
@@ -108,7 +120,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Delete(string id)
         {
-            commandInvoker.Execute(new DeleteQuestionnaireCommand(id, Global.GetCurrentUser()));
+            commandInvoker.Execute(new DeleteQuestionnaireCommand(id, GlobalInfo.GetCurrentUser()));
             return RedirectToAction("Index");
         }
 

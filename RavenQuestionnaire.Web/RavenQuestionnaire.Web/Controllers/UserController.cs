@@ -35,10 +35,10 @@ namespace RavenQuestionnaire.Web.Controllers
         }
         protected void AddLocationsListToViewBag()
         {
-            var locationas =
+            var locations =
               viewRepository.Load<LocationBrowseInputModel, LocationBrowseView>(new LocationBrowseInputModel() { PageSize = 100 }).Items;
 
-            ViewBag.AllLocations = locationas;
+            ViewBag.AllLocations = locations;
         }
 
         public ActionResult Index(UserBrowseInputModel input)
@@ -57,7 +57,7 @@ namespace RavenQuestionnaire.Web.Controllers
         }
         public ActionResult Delete(string id)
         {
-            commandInvoker.Execute(new DeleteUserCommand(id, Global.GetCurrentUser()));
+            commandInvoker.Execute(new DeleteUserCommand(id, GlobalInfo.GetCurrentUser()));
             return RedirectToAction("Index");
         }
 
@@ -70,7 +70,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     commandInvoker.Execute(new CreateNewUserCommand(model.UserName, model.Email,SimpleHash.ComputeHash(model.Password),
                                                                     model.PrimaryRole, model.IsLocked, model.SupervisorId, model.LocationId,
-                                                                    Global.GetCurrentUser()));
+                                                                    GlobalInfo.GetCurrentUser()));
                 }
                 else
                 {
@@ -79,7 +79,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                      {
                                                                          model.PrimaryRole
                                                                      }, model.SupervisorId, model.LocationId,
-                                                                     Global.GetCurrentUser()));
+                                                                     GlobalInfo.GetCurrentUser()));
                 }
                 return RedirectToAction("Index");
 

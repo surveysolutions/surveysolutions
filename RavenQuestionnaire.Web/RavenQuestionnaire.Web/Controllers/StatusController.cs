@@ -25,13 +25,13 @@ namespace RavenQuestionnaire.Web.Controllers
             this.viewRepository = viewRepository;
         }
 
-        public ActionResult Index(StatusBrowseInputModel input)
+        public ViewResult Index(StatusBrowseInputModel input)
         {
             var model = viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(input);
             return View(model);
         }
 
-        public ActionResult Create()
+        public ViewResult Create()
         {
             return View(StatusBrowseItem.New());
         }
@@ -43,7 +43,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (string.IsNullOrEmpty(model.Id))
                 {
-                    commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial, Global.GetCurrentUser()));
+                    commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial, GlobalInfo.GetCurrentUser()));
                 }
                 return RedirectToAction("Index");
 
@@ -71,7 +71,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                 roles[roleItem.RoleName].Add(new SurveyStatus(item.Status.Id, item.Status.Title));
                             }
                     }
-                    commandInvoker.Execute(new UpdateStatusRestrictionsCommand(model.Id, roles, Global.GetCurrentUser()));
+                    commandInvoker.Execute(new UpdateStatusRestrictionsCommand(model.Id, roles, GlobalInfo.GetCurrentUser()));
                     return RedirectToAction("Index");
                 }
             }
@@ -96,7 +96,7 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Edit(string id)
+        public ViewResult Edit(string id)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters.");
@@ -114,9 +114,9 @@ namespace RavenQuestionnaire.Web.Controllers
                         bool flag = false;
                         if (model.StatusRoles.ContainsKey(role))
                         {
-                            foreach (var VARIABLE in model.StatusRoles[role])
+                            foreach (var item in model.StatusRoles[role])
                             {
-                                if (String.Compare(VARIABLE.Id, status.Id, StringComparison.OrdinalIgnoreCase) == 0)
+                                if (String.Compare(item.Id, status.Id, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     flag = true;
                                     break;

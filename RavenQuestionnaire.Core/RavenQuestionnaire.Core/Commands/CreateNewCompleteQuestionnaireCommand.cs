@@ -9,14 +9,12 @@ namespace RavenQuestionnaire.Core.Commands
     {
         public string QuestionnaireId { get; private set; }
         public UserLight Creator { get; private set; }
-        public IEnumerable<CompleteAnswer> CompleteAnswers { get; private set; }
         public string CompleteQuestionnaireId { get; set; }
         public SurveyStatus Status { set; get; }
 
         public UserLight Executor { get; set; }
 
         public CreateNewCompleteQuestionnaireCommand(string questionnaireId, 
-            IEnumerable<CompleteAnswer> answers, 
             UserLight creator, 
             SurveyStatus status,
             UserLight executor)
@@ -26,10 +24,8 @@ namespace RavenQuestionnaire.Core.Commands
             if (string.IsNullOrEmpty(creator.Id))
                 throw new ArgumentNullException("User id can't be null");
             this.QuestionnaireId =IdUtil.CreateQuestionnaireId(questionnaireId);
-            this.CompleteAnswers = answers;
             this.Creator = creator;
             this .Status = status;
-
             this.Executor = executor;
         }
     }

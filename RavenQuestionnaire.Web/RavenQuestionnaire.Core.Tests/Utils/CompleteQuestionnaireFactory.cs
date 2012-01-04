@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RavenQuestionnaire.Core.Documents;
+﻿using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 

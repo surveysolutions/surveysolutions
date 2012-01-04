@@ -42,11 +42,13 @@ namespace RavenQuestionnaire.Web.Controllers
         //
         // POST: /Questionnaire/Create
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Save(QuestionView model)
+        public ActionResult Save(QuestionView model,bool isDropDown)
         {
             
             if (ModelState.IsValid)
             {
+                if(isDropDown)
+                    model.QuestionType= QuestionType.DropDownList;
                 try
                 {
 
@@ -57,7 +59,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                         model.QuestionType,
                                                                                         model.QuestionnaireId, model.GroupPublicKey,
                                                                                         model.ConditionExpression,
-                                                                                        model.Answers, Global.GetCurrentUser());
+                                                                                        model.Answers, GlobalInfo.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
 
 
@@ -67,7 +69,7 @@ namespace RavenQuestionnaire.Web.Controllers
                         commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId, model.PublicKey,
                                                                          model.QuestionText, model.QuestionType,
                                                                          model.ConditionExpression, model.Answers,
-                                                                         Global.GetCurrentUser()));
+                                                                         GlobalInfo.GetCurrentUser()));
                     }
                 }
                 catch (Exception e)
@@ -86,7 +88,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public string Delete(Guid publicKey, string questionnaireId)
         {
-            commandInvoker.Execute(new DeleteQuestionCommand(publicKey, questionnaireId, Global.GetCurrentUser()));
+            commandInvoker.Execute(new DeleteQuestionCommand(publicKey, questionnaireId, GlobalInfo.GetCurrentUser()));
             return "";
         }
     }

@@ -3,7 +3,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace Questionnaire.Core.Web.Helpers
 {
-    public class Global
+    public class GlobalInfo 
     {
         public static UserLight GetCurrentUser()
         {

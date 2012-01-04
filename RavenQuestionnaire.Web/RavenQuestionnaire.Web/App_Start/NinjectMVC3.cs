@@ -79,6 +79,8 @@ namespace RavenQuestionnaire.Web.App_Start
             });
 
             kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
+            kernel.Bind<IBagManager>().To<ViewBagManager>();
+            kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
         }        
     }
 
