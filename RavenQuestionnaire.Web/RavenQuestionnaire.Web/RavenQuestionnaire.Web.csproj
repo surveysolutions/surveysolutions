@@ -53,8 +53,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="MvcPaging">
-      <HintPath>..\packages\MvcPaging.1.0.1\lib\net40\MvcPaging.dll</HintPath>
+    <Reference Include="MvcPaging, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MvcPaging.1.0.2\lib\net40\MvcPaging.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
@@ -86,8 +87,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="WebActivator">
-      <HintPath>..\packages\WebActivator.1.4.4\lib\net40\WebActivator.dll</HintPath>
+    <Reference Include="WebActivator, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WebActivator.1.5\lib\net40\WebActivator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +99,7 @@
     <Compile Include="Controllers\CompleteQuestionnaireController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\GridDataRequest.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\AnswerController.cs" />
@@ -156,6 +159,7 @@
     <Content Include="Scripts\modal.js" />
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
+    <Content Include="Scripts\sorter.js" />
     <Content Include="Views\CompleteQuestionnaire\Index.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Result.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Take.cshtml" />
@@ -276,7 +280,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\main.less" />
-    <Content Include="Views\Administration\Menu.cshtml" />
+        <Content Include="Views\Questionnaire\_Table.cshtml" />
+    <Content Include="Views\CompleteQuestionnaire\_Table.cshtml" />
+    <Content Include="Views\Questionnaire\Flow.cshtml" />
+    <Content Include="Views\CompleteQuestionnaire\_TableIndex.cshtml" />    
+   <Content Include="Views\Administration\Menu.cshtml" />
+   <Content Include="Views\CompleteQuestionnaire\Participate.cshtml" />   
     <Content Include="Views\CompleteQuestionnaire\Question.cshtml" />
     <Content Include="Views\Group\_Create.cshtml" />
     <Content Include="Views\Group\_Index.cshtml" />
@@ -311,7 +320,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>7712</DevelopmentServerPort>
+          <DevelopmentServerPort>19185</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

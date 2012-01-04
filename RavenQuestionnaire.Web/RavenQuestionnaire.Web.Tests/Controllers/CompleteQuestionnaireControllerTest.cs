@@ -45,7 +45,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void When_GetCompleteQuestionnaireIsExecutedModelIsReturned()
         {
             var input = new CompleteQuestionnaireBrowseInputModel();
-            var output = new CompleteQuestionnaireBrowseView(0, 10, 0, new CompleteQuestionnaireBrowseItem[0]);
+            var output = new CompleteQuestionnaireBrowseView(0, 10, 0, new CompleteQuestionnaireBrowseItem[0], "");
             ViewRepositoryMock.Setup(x => x.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(input))
                 .Returns(output);
 

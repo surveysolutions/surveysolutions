@@ -5,56 +5,45 @@
     ViewBag.Title = "Surveys";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>
-    Surveys</h2>
+<script src="../../Scripts/sorter.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function() {
+        $("#questionnaireTable").tablesorter({
+                order: "@Model.Order",
+                send: function(data) {
+                    $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("_TableData", "Questionnaire")",
+                            data: JSON.stringify({ SortOrder: data, Pager: { Page: @Model.Page , PageSize: @Model.PageSize } }),
+                            contentType: 'application/json, charset=utf-8',
+                            statusCode: {
+                                200: function(response) {
+                                    $("#questionnaireTable tbody").html(response);
+                                }
+                            }
+                        });
+                }
+            });
+    });
+</script>
+<h2>Surveys</h2>
 <p>
     @Html.ActionLink("Create New", "Create", null, new { @class = "btn small primary" })
 </p>
-<table class="bordered-table zebra-striped">
+<table id="questionnaireTable" class="bordered-table zebra-striped">
     <thead>
         <tr>
-            <th>
-                Id
-            </th>
-            <th>
-                Title
-            </th>
-            <th>
-                Creation date
-            </th>
-            <th>
-                Last edit date
-            </th>
-            <th>
-            </th>
+            <th sorter='{"key":"Id"}'>Id</th>
+            <th sorter='{"key":"Title"}'>Title </th>
+            <th sorter='{"key":"CreationDate"}'>Creation date</th>
+            <th sorter='{"key":"LastEntryDate"}'>Last edit date</th>
+            <th sorter='{"disable":"true"}'></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Items)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreationDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastEntryDate)
-                </td>
-                <td class="buttons">
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn small " })
-                    @Html.ActionLink("Manage", "Details", new { id = item.Id }, new { @class = "btn small " })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn small danger" })
-                    @Html.ActionLink("Participate", "Participate", "CompleteQuestionnaire", new { id = item.Id }, new { @class = "btn small primary" })
-                </td>
-            </tr>
-        }
+        @Html.Partial("_Table", Model)
     </tbody>
 </table>
 <div class="pagination">
-    @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount)
+    @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new {order= Model.Order})
 </div>

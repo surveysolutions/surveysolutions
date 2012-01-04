@@ -7,6 +7,7 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Status;
@@ -36,6 +37,19 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult _TableData(CompleteQuestionnaireBrowseInputModel input)
+        {
+            var model = viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(input);
+            return PartialView("_Table", model);
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult _TableIndexData(CompleteQuestionnaireBrowseInputModel input)
+        {
+            var model = viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(input);
+            return PartialView("_TableIndex", model);
+        }
 
         public ViewResult MyItems(CompleteQuestionnaireBrowseInputModel input)
         {
@@ -44,7 +58,7 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
-        public ViewResult Result(string id)
+       public ViewResult Result(string id)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");

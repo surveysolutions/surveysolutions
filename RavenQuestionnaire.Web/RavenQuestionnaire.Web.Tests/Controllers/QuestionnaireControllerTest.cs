@@ -58,11 +58,11 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void When_GetQuestionnaireIsExecutedModelIsReturned()
         {
             var input = new QuestionnaireBrowseInputModel();
-            var output = new QuestionnaireBrowseView(0, 10, 0, new QuestionnaireBrowseItem[0]);
+            var output = new QuestionnaireBrowseView(0, 10, 0, new QuestionnaireBrowseItem[0],"");
             ViewRepositoryMock.Setup(x => x.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input))
                 .Returns(output);
 
-            var result = Controller.Index(input);
+            var result = Controller.ItemList(input);
             Assert.AreEqual(output, result.ViewData.Model);
         }
 

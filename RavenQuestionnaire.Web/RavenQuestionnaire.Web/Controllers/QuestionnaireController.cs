@@ -1,4 +1,8 @@
-﻿using System.Web;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
@@ -6,6 +10,7 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Questionnaire;
+using RavenQuestionnaire.Web.Models;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -20,10 +25,17 @@ namespace RavenQuestionnaire.Web.Controllers
             this.viewRepository = viewRepository;
         }
 
-        public ViewResult Index(QuestionnaireBrowseInputModel input)
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult _TableData(GridDataRequest data)
         {
+            var input = new QuestionnaireBrowseInputModel
+                                                     {
+                                                         Page = data.Pager.Page,
+                                                         PageSize = data.Pager.PageSize,
+                                                         Orders = data.SortOrder
+                                                     };
             var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
-            return View(model);
+            return PartialView("_Table", model);
         }
 
         public ViewResult ItemList(QuestionnaireBrowseInputModel input)
@@ -31,10 +43,14 @@ namespace RavenQuestionnaire.Web.Controllers
             var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
             return View(model);
         }
-
-        /*public ActionResult Index()
+        public ActionResult Index()
         {
             var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(new QuestionnaireBrowseInputModel());
+            return View(model);
+        }
+       /* public ActionResult Index()
+        {
+            var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
             return View(model);
         }*/
         //
@@ -48,6 +64,14 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
+
+        public ViewResult Flow(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid quesry string parameters");
+            var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
+            return View(model);
+        }
 
 
         //
