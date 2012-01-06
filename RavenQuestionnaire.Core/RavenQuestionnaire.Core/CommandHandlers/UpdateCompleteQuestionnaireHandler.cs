@@ -25,15 +25,17 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         public void Handle(UpdateCompleteQuestionnaireCommand command)
         {
             CompleteQuestionnaire entity = _questionnaireRepository.Load(command.CompleteQuestionnaireId);
+/*
             foreach (CompleteAnswer completeAnswer in command.CompleteAnswers )
             {
                 entity.UpdateAnswer(completeAnswer, null);
             }
+*/
+
             var status = _statusRepository.Load(IdUtil.CreateStatusId(command.StatusId));
 
             if (status != null)
                 entity.SetStatus(new SurveyStatus(command.StatusId, status.GetInnerDocument().Title));
-
 
             var user = _userRepository.Load(IdUtil.CreateUserId(command.ResponsibleId));
 

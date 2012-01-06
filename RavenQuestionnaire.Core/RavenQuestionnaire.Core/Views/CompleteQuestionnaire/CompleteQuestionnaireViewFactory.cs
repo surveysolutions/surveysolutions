@@ -1,9 +1,5 @@
-﻿using System.Linq;
-using Raven.Client;
+﻿using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Views.Questionnaire;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {

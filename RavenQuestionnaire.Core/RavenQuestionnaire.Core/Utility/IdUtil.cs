@@ -30,5 +30,9 @@
         {
             return string.Format("statusdocuments/{0}", id);
         }
+        public static string CreateReportId(string id)
+        {
+            return string.Format("reportdocuments/{0}", id);
+        }
     }
 }
