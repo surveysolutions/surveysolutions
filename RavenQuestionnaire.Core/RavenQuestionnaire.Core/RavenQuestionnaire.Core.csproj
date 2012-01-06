@@ -42,6 +42,9 @@
     <Reference Include="AsyncCtpLibrary">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB-Embedded.1.0.499\lib\net40\AsyncCtpLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="CsvHelper">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\CsvHelper.1.1.0\lib\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="Esent.Interop">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB-Embedded.1.0.499\lib\net40\Esent.Interop.dll</HintPath>
     </Reference>
@@ -141,6 +144,7 @@
     <Compile Include="Documents\EventDocument.cs" />
     <Compile Include="Documents\LocationDocument.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
+    <Compile Include="Documents\ReportDocument.cs" />
     <Compile Include="Documents\StatusDocument.cs" />
     <Compile Include="Documents\UserDocument.cs" />
     <Compile Include="Entities\CompleteQuestionnaire.cs" />
@@ -152,6 +156,7 @@
     <Compile Include="Entities\Iterators\QuestionnaireSimpleIterator.cs" />
     <Compile Include="Entities\Location.cs" />
     <Compile Include="Entities\Questionnaire.cs" />
+    <Compile Include="Entities\Report.cs" />
     <Compile Include="Entities\Status.cs" />
     <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\AnswerType.cs" />
@@ -164,6 +169,9 @@
     <Compile Include="Entities\SubEntities\SurveyStatus.cs" />
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Export\csv\CSVExporter.cs" />
+    <Compile Include="Export\ExportManager.cs" />
+    <Compile Include="Export\IExportProvider.cs" />
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
@@ -235,6 +243,13 @@
     </Compile>
     <Compile Include="Views\Question\QuestionViewFactory.cs" />
     <Compile Include="Views\Question\QuestionViewInputModel.cs" />
+    <Compile Include="Views\Report\ReportBrowseInputModel.cs" />
+    <Compile Include="Views\Report\ReportBrowseItem.cs" />
+    <Compile Include="Views\Report\ReportBrowseView.cs" />
+    <Compile Include="Views\Report\ReportBrowseViewFactory.cs" />
+    <Compile Include="Views\Report\ReportView.cs" />
+    <Compile Include="Views\Report\ReportViewFactory.cs" />
+    <Compile Include="Views\Report\ReportViewInputModel.cs" />
     <Compile Include="Views\Status\StatusBrowseInputModel.cs" />
     <Compile Include="Views\Status\StatusBrowseItem.cs" />
     <Compile Include="Views\Status\StatusBrowseView.cs" />

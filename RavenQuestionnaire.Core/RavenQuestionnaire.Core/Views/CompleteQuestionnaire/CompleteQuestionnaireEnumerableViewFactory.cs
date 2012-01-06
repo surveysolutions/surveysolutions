@@ -2,7 +2,6 @@
 using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Iterators;
-using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
@@ -21,14 +20,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
             {
                 var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
-                var completeQuestionnaireRoot = new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc);
+                var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
                 RavenQuestionnaire.Core.Entities.SubEntities.Group group = null;
 
                 Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Group, Guid> iterator =
                        new QuestionnaireScreenIterator(completeQuestionnaireRoot);
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
-                    var template = new RavenQuestionnaire.Core.Entities.Questionnaire(doc.Questionnaire);
+                    var template = new Entities.Questionnaire(doc.Questionnaire);
                     group =
                         template.Find<RavenQuestionnaire.Core.Entities.SubEntities.Group>(
                             input.CurrentGroupPublicKey.Value);

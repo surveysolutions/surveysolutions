@@ -3,15 +3,27 @@
 }
 <h2>
     Administration</h2>
-<div>
-    <text> @Html.ActionLink("Users", "Index", "User") </text>
-</div>
-<div>
-    <text> @Html.ActionLink("Locations", "Index", "Location") </text>
-</div>
-<div>
-    <text> @Html.ActionLink("Statuses", "Index", "Status") </text>
-</div>
-<div>
-    <text> @Html.ActionLink("Survey templates", "Index", "Questionnaire") </text>
-</div>
+<table id="AdminTable" class="bordered-table zebra-striped">
+    <tbody>
+        <tr>
+            <td>
+                <text> @Html.ActionLink("Users", "Index", "User") </text>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <text> @Html.ActionLink("Locations", "Index", "Location") </text>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <text> @Html.ActionLink("Statuses", "Index", "Status") </text>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <text> @Html.ActionLink("Survey templates", "Index", "Questionnaire") </text>
+            </td>
+        </tr>
+    </tbody>
+</table>

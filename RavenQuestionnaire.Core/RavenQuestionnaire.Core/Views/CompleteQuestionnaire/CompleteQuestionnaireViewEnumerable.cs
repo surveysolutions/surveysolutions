@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Views.Questionnaire;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
