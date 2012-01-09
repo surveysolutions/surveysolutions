@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Globalization;
-using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using Questionnaire.Core.Web.Helpers;
@@ -12,7 +9,7 @@ using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Export;
 using RavenQuestionnaire.Core.Export.csv;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Web.Models;
 
@@ -150,18 +147,32 @@ namespace RavenQuestionnaire.Web.Controllers
             
             if (model != null)
             {
-                var path = string.Format(@"C:\temp\ex{0}.cvs", DateTime.Now.ToString(CultureInfo.InvariantCulture));
-                if (type == "cvs")
+                var fileName = string.Format("exported{0}.csv", DateTime.Now.ToLongTimeString());
+
+                if (type == "csv" || type == "tab")
                 {
-                    IExportProvider provider = new CSVExporter();
+                    IExportProvider provider = new CSVExporter(type == "csv" ? ',' : '\t');
                     ExportManager manager = new ExportManager(provider);
 
-                    CompleteQuestionnaireBrowseView records =
-                        viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(
-                            new CompleteQuestionnaireBrowseInputModel() {PageSize = 100});
-                    manager.Export(new Dictionary<Guid, string>(), records, path);
-                    return new FileStreamResult(new FileStream(path, FileMode.Open), "application/zip");
+                    CompleteQuestionnaireExportView records =
+                        viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(
+                            new CompleteQuestionnaireExportInputModel() {PageSize = 100});
+
+                    Dictionary<Guid, string> header = new Dictionary<Guid, string>();
+
+                    foreach (var q in model.Questions)
+                    {
+                        header.Add(q.PublicKey, q.QuestionText);
+                    }
+
+                    var stream = manager.ExportToStream(header, records);
+
+                    FileStreamResult fsr = new FileStreamResult(stream, "text/csv") {FileDownloadName = fileName};
+
+                    return fsr;
                 }
+
+
             }
             return null;
 

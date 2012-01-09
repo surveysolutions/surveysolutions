@@ -16,7 +16,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate{ get; set; }
 
-        protected QuestionView[] Questions
+        public QuestionView[] Questions
         {
             get { return _questions; }
             set

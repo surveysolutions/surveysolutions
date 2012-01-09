@@ -142,6 +142,7 @@
     <Compile Include="CoreRegistry.cs" />
     <Compile Include="Documents\CompleteQuestionnaireDocument.cs" />
     <Compile Include="Documents\EventDocument.cs" />
+    <Compile Include="Documents\ExportSchemaDocument.cs" />
     <Compile Include="Documents\LocationDocument.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
     <Compile Include="Documents\ReportDocument.cs" />
@@ -216,6 +217,10 @@
     </Compile>
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportInputModel.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportItem.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportView.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportViewFactory.cs" />
     <Compile Include="Views\Group\CompleteGroupView.cs" />
     <Compile Include="Views\Group\GroupView.cs" />
     <Compile Include="Views\Group\GroupViewFactory.cs" />
