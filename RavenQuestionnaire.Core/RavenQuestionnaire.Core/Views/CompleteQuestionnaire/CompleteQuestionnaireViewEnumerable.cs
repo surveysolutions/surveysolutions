@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Group;
+using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
@@ -21,7 +23,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public GroupView[] Groups { get; set; }
 
         public CompleteQuestionnaireViewEnumerable(CompleteQuestionnaireDocument doc,
-                                                   RavenQuestionnaire.Core.Entities.SubEntities.Group currentGroup, IExpressionExecutor<CompleteQuestionnaireDocument> executor)
+                                                   CompleteGroupView currentGroup)
         {
             this.Id = IdUtil.ParseId(doc.Id);
             this.Title = doc.Questionnaire.Title;
@@ -30,19 +32,16 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
             InitGroups(doc.Questionnaire);
-
-            if (currentGroup != null)
-            {
-                this.CurrentGroup = new CompleteGroupView(doc, currentGroup, executor);
-            }
-
+            this.CurrentGroup = currentGroup;
         }
-        public CompleteQuestionnaireViewEnumerable(QuestionnaireDocument template, IExpressionExecutor<CompleteQuestionnaireDocument> executor)
+        public CompleteQuestionnaireViewEnumerable(QuestionnaireDocument template)
         {
             this.Title = template.Title;
+            Entities.SubEntities.Group group = new Entities.SubEntities.Group() {Questions = template.Questions};
             this.CurrentGroup = new CompleteGroupView(new CompleteQuestionnaireDocument() {Questionnaire = template},
-                                                      new Entities.SubEntities.Group() {Questions = template.Questions},
-                                                      executor);
+                                                      group,
+                                                      group.Questions.Select(q => new CompleteQuestionView(q, template))
+                                                          .ToArray());
             InitGroups(template);
             /*  this.CurrentQuestion = new CompleteQuestionView(template.Questions[0], template.Id);*/
         }

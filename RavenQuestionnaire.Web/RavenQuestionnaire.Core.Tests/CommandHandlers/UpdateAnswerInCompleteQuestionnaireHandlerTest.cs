@@ -9,6 +9,7 @@ using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
 
 namespace RavenQuestionnaire.Core.Tests.CommandHandlers
@@ -29,7 +30,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             qDoqument.Questionnaire.Questions.Add(question);
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
-            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object);
+            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
                                                                                                                 null,
                                                                                                                 new CompleteAnswer
