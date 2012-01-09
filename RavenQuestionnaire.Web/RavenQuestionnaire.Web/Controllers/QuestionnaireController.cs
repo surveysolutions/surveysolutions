@@ -156,13 +156,22 @@ namespace RavenQuestionnaire.Web.Controllers
 
                     CompleteQuestionnaireExportView records =
                         viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(
-                            new CompleteQuestionnaireExportInputModel() {PageSize = 100});
+                            new CompleteQuestionnaireExportInputModel() { PageSize = 100, QuestionnaryId = model.Id});
 
+                    
                     Dictionary<Guid, string> header = new Dictionary<Guid, string>();
 
                     foreach (var q in model.Questions)
                     {
                         header.Add(q.PublicKey, string.IsNullOrEmpty(q.StataExportCaption) ? q.QuestionText : q.StataExportCaption);
+                    }
+
+                    foreach (var group in model.Groups)
+                    {
+                        foreach (var q in group.Questions)
+                        {
+                            header.Add(q.PublicKey, string.IsNullOrEmpty(q.StataExportCaption) ? q.QuestionText : q.StataExportCaption);
+                        }
                     }
 
                     var stream = manager.ExportToStream(header, records);

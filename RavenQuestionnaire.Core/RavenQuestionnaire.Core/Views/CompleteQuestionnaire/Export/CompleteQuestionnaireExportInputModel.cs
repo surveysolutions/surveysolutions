@@ -35,7 +35,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         private int _pageSize = 20;
 
 
-        public string ResponsibleId
+        public string QuestionnaryId
         {
             get { return _responsibleId; }
             set { _responsibleId = value; }
