@@ -5,12 +5,24 @@ using NCalc;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities
 {
     public class Questionnaire : IEntity<QuestionnaireDocument>, IComposite
     {
         private QuestionnaireDocument innerDocument;
+        private QuestionnaireExpressionValidator expresstionValidator;
+
+        protected QuestionnaireExpressionValidator ExpresstionValidator
+        {
+            get
+            {
+                if (expresstionValidator == null)
+                    expresstionValidator = new QuestionnaireExpressionValidator(this);
+                return expresstionValidator;
+            }
+        }
 
         public string QuestionnaireId { get { return innerDocument.Id; } }
 
@@ -34,7 +46,7 @@ namespace RavenQuestionnaire.Core.Entities
 
         public Question AddQuestion(string text, QuestionType type, string condition, Guid? groupPublicKey)
         {
-            ValidateExpression(condition);
+            ExpresstionValidator.Execute(condition);
             Question result = new Question() {QuestionText = text, QuestionType = type};
             result.SetConditionExpression(condition);
             if(!Add(result, groupPublicKey))
@@ -72,26 +84,10 @@ namespace RavenQuestionnaire.Core.Entities
             question.QuestionText = text;
             question.QuestionType = type;
             question.UpdateAnswerList(answers);
-            ValidateExpression(condition);
+            ExpresstionValidator.Execute(condition);
             question.SetConditionExpression(condition);
         }
-        protected void ValidateExpression(string expression)
-        {
-            if (string.IsNullOrEmpty(expression))
-                return;
-            var e = new Expression(expression);
-          
-            e.EvaluateParameter += new EvaluateParameterHandler(e_EvaluateParameter);
-            e.Evaluate();
-
-        }
-
-        void e_EvaluateParameter(string name, ParameterArgs args)
-        {
-            if(GetAllQuestions().Where(q=>q.PublicKey.ToString().Equals(name)).Count()<=0)
-                throw new ArgumentOutOfRangeException(string.Format("Parameter {0} is invalid", name));
-            args.Result = "0";
-        }
+       
         public bool Add(IComposite c, Guid? parent)
         {
             if (!parent.HasValue)

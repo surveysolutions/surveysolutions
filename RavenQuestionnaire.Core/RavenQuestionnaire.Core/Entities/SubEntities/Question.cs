@@ -40,27 +40,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 Add(answer, PublicKey);
             }
         }
-        public bool EvaluateCondition(IList<CompleteAnswer> answers)
-        {
-            if (string.IsNullOrEmpty(ConditionExpression))
-                return true;
-            var e = new Expression(ConditionExpression);
-            foreach (var answer in answers)
-            {
-                e.Parameters[answer.QuestionPublicKey.ToString()] = answer.CustomAnswer;
-            }
-
-            bool result = false;
-            try
-            {
-                result = (bool)e.Evaluate();
-            }
-            catch (Exception)
-            {
-            }
-            return result;
-        }
-
         public void SetConditionExpression(string expression)
         {
             ConditionExpression = expression;
@@ -68,7 +47,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         protected void AddAnswer(Answer answer)
         {
-            if (Answers.Where(a => a.PublicKey.Equals(answer.PublicKey)).Count() > 0)
+            if (Answers.Any(a => a.PublicKey.Equals(answer.PublicKey)))
                 throw new DuplicateNameException("answer with current publick key already exist");
             Answers.Add(answer);
         }
