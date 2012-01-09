@@ -27,6 +27,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public List<Answer> Answers { get; set; }
         public string ConditionExpression { get; private set; }
 
+        //remove when exportSchema will be done 
+        public string StataExportCaption { get; set; }
+
         public void ClearAnswers()
         {
             Answers.Clear();

@@ -13,12 +13,10 @@ namespace RavenQuestionnaire.Core.Documents
         public bool IsInitial { get; set; }
 
         public Dictionary<string, List<SurveyStatus>> StatusRoles { 
-            set;// { _statusRoles = value; }
-            get;// { return _statusRoles ?? (_statusRoles = new Dictionary<string, List<string>>()); }
+            set;
+            get;
         }
 
-        //private Dictionary<string, List<string>> _statusRoles;
-        
         public StatusDocument()
         {
             IsVisible = true;
