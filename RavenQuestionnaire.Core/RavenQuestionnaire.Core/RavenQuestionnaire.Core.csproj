@@ -164,6 +164,9 @@
     <Compile Include="Entities\SubEntities\SurveyStatus.cs" />
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
+    <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
+    <Compile Include="ExpressionExecutors\QuestionnaireExpressionValidator.cs" />
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
