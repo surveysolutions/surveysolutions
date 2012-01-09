@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities
 {
@@ -68,6 +69,10 @@ namespace RavenQuestionnaire.Core.Entities
 
             innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey == question.PublicKey);
             AddAnswer(answer, groupPublicKey);
+        }
+        public void RemoveAnswerOnQuestion(Guid questionPublicKey)
+        {
+            innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey.Equals(questionPublicKey));
         }
 
         public void SetStatus(SurveyStatus status)

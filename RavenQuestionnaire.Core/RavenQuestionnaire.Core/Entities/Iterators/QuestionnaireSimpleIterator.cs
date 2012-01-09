@@ -10,7 +10,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
 {
     public class QuestionnaireSimpleIterator : Iterator<Question, Guid?>
     {
-        public QuestionnaireSimpleIterator(CompleteQuestionnaire questionnaire, IExpressionExecutor<CompleteQuestionnaireDocument> validator)
+        public QuestionnaireSimpleIterator(CompleteQuestionnaire questionnaire, IExpressionExecutor<CompleteQuestionnaire> validator)
         {
             this.questionnaire = questionnaire;
             this.expresstionValidator = validator;
@@ -18,7 +18,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 throw new ArgumentException("Questionnaires question list is empty");
         }
 
-        private IExpressionExecutor<CompleteQuestionnaireDocument> expresstionValidator;
+        private IExpressionExecutor<CompleteQuestionnaire> expresstionValidator;
         protected CompleteQuestionnaire questionnaire;
 
         public Question First
@@ -34,7 +34,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             {
                 int lastIndex = this.questionnaire.GetAllQuestions().Count - 1;
                 Question possibleQuestion = this.questionnaire.GetAllQuestions()[lastIndex];
-                while (!expresstionValidator.Execute(this.questionnaire.GetInnerDocument(), possibleQuestion.ConditionExpression))
+                while (!expresstionValidator.Execute(this.questionnaire, possibleQuestion.ConditionExpression))
                 {
                     if (lastIndex == 0)
                         return null;
@@ -51,7 +51,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 if (IsDone)
                     return null;
                 Question possibleQuestion = this.questionnaire.GetAllQuestions()[++this.current];
-                if (expresstionValidator.Execute(this.questionnaire.GetInnerDocument(), possibleQuestion.ConditionExpression))
+                if (expresstionValidator.Execute(this.questionnaire, possibleQuestion.ConditionExpression))
                 {
                     return possibleQuestion;
                 }
@@ -66,7 +66,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 if (CurrentItem == First)
                     return null;
                 Question possibleQuestion = this.questionnaire.GetAllQuestions()[--this.current];
-                if (expresstionValidator.Execute(this.questionnaire.GetInnerDocument(), possibleQuestion.ConditionExpression))
+                if (expresstionValidator.Execute(this.questionnaire, possibleQuestion.ConditionExpression))
                 {
                     return possibleQuestion;
                 }
