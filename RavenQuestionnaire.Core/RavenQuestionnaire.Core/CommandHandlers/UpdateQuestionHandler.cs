@@ -25,8 +25,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             var questionnaire = _questionnaireRepository.Load(command.QuestionnaireId);
             if (!this._expressionValidator.Execute(questionnaire, command.ConditionExpression))
                 return;
-            
-            questionnaire.UpdateQuestion(command.QuestionPublicKey, command.QuestionText, command.QuestionType,
+
+            questionnaire.UpdateQuestion(command.QuestionPublicKey, command.QuestionText, command.StataExportCaption,
+                                        command.QuestionType,
                                          command.ConditionExpression,
                                          command.Answers);
 

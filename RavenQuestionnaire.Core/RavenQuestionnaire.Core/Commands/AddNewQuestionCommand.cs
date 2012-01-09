@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Answer;
@@ -15,6 +13,12 @@ namespace RavenQuestionnaire.Core.Commands
             get;
             private set;
         }
+        public string StataExportCaption
+        {
+            get;
+            private set;
+        }
+
         public QuestionType QuestionType
         {
             get;
@@ -39,10 +43,11 @@ namespace RavenQuestionnaire.Core.Commands
 
         public UserLight Executor { get; set; }
 
-        public AddNewQuestionCommand(string text, QuestionType type, string questionnaireId, Guid? groupPublicKey, 
+        public AddNewQuestionCommand(string text, string stataExportCaption, QuestionType type, string questionnaireId, Guid? groupPublicKey, 
             string condition, AnswerView[] answers, UserLight executor)
         {
             this.QuestionText = text;
+            this.StataExportCaption = stataExportCaption;
             this.QuestionType = type;
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.GroupPublicKey = groupPublicKey;
