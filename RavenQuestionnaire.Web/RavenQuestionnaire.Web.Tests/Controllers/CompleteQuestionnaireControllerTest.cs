@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Views.Status;
@@ -97,7 +98,9 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             QuestionnaireDocument innerDoc = new QuestionnaireDocument();
             innerDoc.Id = "questionnairedocuments/cqId";
-            CompleteQuestionnaireViewEnumerable template = new CompleteQuestionnaireViewEnumerable(innerDoc);
+            CompleteQuestionnaireViewEnumerable template = new CompleteQuestionnaireViewEnumerable(innerDoc,
+                                                                                                   new CompleteQuestionnaireConditionExecutor
+                                                                                                       ());
             var input = new CompleteQuestionnaireViewInputModel("cqId", null, false);
             ViewRepositoryMock.Setup(
                x =>

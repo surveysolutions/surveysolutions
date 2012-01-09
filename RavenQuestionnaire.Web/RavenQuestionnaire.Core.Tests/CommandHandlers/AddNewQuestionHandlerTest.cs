@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core.CommandHandlers;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Views.Answer;
 
@@ -24,7 +25,10 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Questionnaire entity = new Questionnaire(innerDocument);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
-            AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object);
+
+            Mock<IExpressionExecutor<Questionnaire>> validator = new Mock<IExpressionExecutor<Questionnaire>>();
+            validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
+            AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[]{ new AnswerView(){ AnswerText = "answer", AnswerType = AnswerType.Text} };
             handler.Handle(new Commands.AddNewQuestionCommand("test", QuestionType.SingleOption, entity.QuestionnaireId, null, string.Empty,
                                                               answers, null));
@@ -42,7 +46,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Questionnaire entity = new Questionnaire(innerDocument);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
-            AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object);
+            Mock<IExpressionExecutor<Questionnaire>> validator = new Mock<IExpressionExecutor<Questionnaire>>();
+            validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
+            AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };
             handler.Handle(new Commands.AddNewQuestionCommand("test", QuestionType.SingleOption, entity.QuestionnaireId, 
                 topGroup.PublicKey, string.Empty,
@@ -60,7 +66,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Questionnaire entity = new Questionnaire(innerDocument);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
-            AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object);
+            Mock<IExpressionExecutor<Questionnaire>> validator = new Mock<IExpressionExecutor<Questionnaire>>();
+            validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
+            AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };
             Assert.Throws<ArgumentException>(
                 () =>
@@ -68,5 +76,33 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                   entity.QuestionnaireId, Guid.NewGuid(), string.Empty,
                                                                   answers, null)));
         }
+
+        [Test]
+        public void WhenCommandIsReceived_NotValidExpression_QuestionIsNotAdded()
+        {
+            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+            innerDocument.Id = "qID";
+            Questionnaire entity = new Questionnaire(innerDocument);
+            Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
+            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            Mock<IExpressionExecutor<Questionnaire>> validator = new Mock<IExpressionExecutor<Questionnaire>>();
+            validator.Setup(x => x.Execute(entity, string.Empty)).Returns(false);
+            AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
+            AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };
+            handler.Handle(new Commands.AddNewQuestionCommand("test", QuestionType.SingleOption, entity.QuestionnaireId,
+               null, string.Empty,
+                answers, null));
+
+            Assert.AreEqual(innerDocument.Questions.Count,0);
+        }
+        /*
+        [Test]
+        public void AddQuestion_ConditionIsInvalid_EvaluationExceptionIsThrowed()
+        {
+            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+            Questionnaire questionnaire = new Questionnaire(innerDocument);
+            Assert.Throws<EvaluationException>(
+                () => questionnaire.AddQuestion("question", QuestionType.SingleOption, "totaly invalid condition", null));
+        }*/
     }
 }

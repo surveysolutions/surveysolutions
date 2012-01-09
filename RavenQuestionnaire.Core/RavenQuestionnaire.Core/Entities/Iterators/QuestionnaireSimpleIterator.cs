@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities.Iterators
 {
     public class QuestionnaireSimpleIterator : Iterator<Question, Guid?>
     {
-        public QuestionnaireSimpleIterator(CompleteQuestionnaire questionnaire)
+        public QuestionnaireSimpleIterator(CompleteQuestionnaire questionnaire, IExpressionExecutor<CompleteQuestionnaireDocument> validator)
         {
             this.questionnaire = questionnaire;
+            this.expresstionValidator = validator;
             if (this.questionnaire.GetAllQuestions().Count == 0)
                 throw new ArgumentException("Questionnaires question list is empty");
         }
 
+        private IExpressionExecutor<CompleteQuestionnaireDocument> expresstionValidator;
         protected CompleteQuestionnaire questionnaire;
 
         public Question First
@@ -30,7 +34,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             {
                 int lastIndex = this.questionnaire.GetAllQuestions().Count - 1;
                 Question possibleQuestion = this.questionnaire.GetAllQuestions()[lastIndex];
-                while (!possibleQuestion.EvaluateCondition(this.questionnaire.GetAllAnswers()))
+                while (!expresstionValidator.Execute(this.questionnaire.GetInnerDocument(), possibleQuestion.ConditionExpression))
                 {
                     if (lastIndex == 0)
                         return null;
@@ -47,7 +51,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 if (IsDone)
                     return null;
                 Question possibleQuestion = this.questionnaire.GetAllQuestions()[++this.current];
-                if (possibleQuestion.EvaluateCondition(this.questionnaire.GetAllAnswers()))
+                if (expresstionValidator.Execute(this.questionnaire.GetInnerDocument(), possibleQuestion.ConditionExpression))
                 {
                     return possibleQuestion;
                 }
@@ -62,7 +66,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 if (CurrentItem == First)
                     return null;
                 Question possibleQuestion = this.questionnaire.GetAllQuestions()[--this.current];
-                if (possibleQuestion.EvaluateCondition(this.questionnaire.GetAllAnswers()))
+                if (expresstionValidator.Execute(this.questionnaire.GetInnerDocument(), possibleQuestion.ConditionExpression))
                 {
                     return possibleQuestion;
                 }
@@ -86,7 +90,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 return First;
 
             var question =
-                this.questionnaire.GetAllQuestions().Where(q => q.PublicKey.Equals(questionkey.Value)).FirstOrDefault();
+                this.questionnaire.GetAllQuestions().FirstOrDefault(q => q.PublicKey.Equals(questionkey.Value));
             current = this.questionnaire.GetAllQuestions().IndexOf(question);
             if (question != null)
             {
@@ -99,7 +103,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             if (!questionkey.HasValue)
                 return Last;
             var question =
-                this.questionnaire.GetAllQuestions().Where(q => q.PublicKey.Equals(questionkey)).FirstOrDefault();
+                this.questionnaire.GetAllQuestions().FirstOrDefault(q => q.PublicKey.Equals(questionkey));
             current = this.questionnaire.GetAllQuestions().IndexOf(question);
             if (question != null)
             {
