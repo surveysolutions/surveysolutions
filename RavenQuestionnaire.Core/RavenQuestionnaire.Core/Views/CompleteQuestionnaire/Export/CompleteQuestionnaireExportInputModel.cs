@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         public string QuestionnaryId
         {
             get { return _responsibleId; }
-            set { _responsibleId = value; }
+            set { _responsibleId = IdUtil.CreateQuestionnaireId(value); ; }
         }
 
         private string _responsibleId = "";
