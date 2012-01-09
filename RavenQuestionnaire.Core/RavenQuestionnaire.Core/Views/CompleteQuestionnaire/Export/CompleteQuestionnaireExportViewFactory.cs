@@ -27,16 +27,18 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 
             IOrderedQueryable<CompleteQuestionnaireDocument> query;
 
-            if (!String.IsNullOrEmpty(input.ResponsibleId)) //filter result by responsible
+            if (!String.IsNullOrEmpty(input.QuestionnaryId)) //filter result by responsible
             {
                 query =
                     (IOrderedQueryable<CompleteQuestionnaireDocument>)
                     documentSession.Query<CompleteQuestionnaireDocument>()
-                        .Where(x => x.Responsible.Id == input.ResponsibleId);
+                        .Where(x => x.Questionnaire.Id == input.QuestionnaryId);
             }
             else
             {
-                query = documentSession.Query<CompleteQuestionnaireDocument>();
+                return new CompleteQuestionnaireExportView(input.Page, input.PageSize, count,
+                                                          new CompleteQuestionnaireExportItem[0],
+                                                          input.Order);
             }
 
             if (input.Orders.Count > 0)
