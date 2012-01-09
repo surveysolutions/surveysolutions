@@ -8,14 +8,14 @@ using RavenQuestionnaire.Core.Entities;
 
 namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
-    public class CompleteQuestionnaireConditionExecutor : IExpressionExecutor<CompleteQuestionnaireDocument>
+    public class CompleteQuestionnaireConditionExecutor : IExpressionExecutor<CompleteQuestionnaire>
     {
-        public bool Execute(CompleteQuestionnaireDocument entity, string condition)
+        public bool Execute(CompleteQuestionnaire entity, string condition)
         {
             if (string.IsNullOrEmpty(condition))
                 return true;
             var e = new Expression(condition);
-            foreach (var answer in entity.CompletedAnswers)
+            foreach (var answer in entity.GetAllAnswers())
             {
                 e.Parameters[answer.QuestionPublicKey.ToString()] = answer.CustomAnswer;
             }
