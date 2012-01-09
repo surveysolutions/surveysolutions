@@ -62,7 +62,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, answers, status.Id, responsible.Id,
+                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, /*answers,*/ status.Id, responsible.Id,
                     _globalProvider.GetCurrentUser()));
 
             }

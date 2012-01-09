@@ -25,6 +25,14 @@
                 </div>
             </div>
             <div class="clearfix">
+                @Html.LabelFor(model => model.StataExportCaption)
+                <div class="input">
+                    @Html.EditorFor(model => model.StataExportCaption)
+                    @Html.ValidationMessageFor(model => model.StataExportCaption)
+                </div>
+            </div>
+
+            <div class="clearfix">
               <label>Render as drop down</label>
                 <div class="input">
 

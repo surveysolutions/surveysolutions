@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             UpdateCompleteQuestionnaireHandler handler = new UpdateCompleteQuestionnaireHandler(coompleteQuestionnaireRepositoryMock.Object,
                 statusRepositoryMock.Object, userRepositoryMock.Object);
 
-            handler.Handle(new Commands.UpdateCompleteQuestionnaireCommand("cqID", new CompleteAnswer[] { new CompleteAnswer(answer, question.PublicKey) }, "-11", "-111", null));
+            handler.Handle(new Commands.UpdateCompleteQuestionnaireCommand("cqID", /*new CompleteAnswer[] { new CompleteAnswer(answer, question.PublicKey) },*/ "-11", "-111", null));
 
             coompleteQuestionnaireRepositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqID"));
             Assert.AreEqual(innerDocument.CompletedAnswers.Count, 1);

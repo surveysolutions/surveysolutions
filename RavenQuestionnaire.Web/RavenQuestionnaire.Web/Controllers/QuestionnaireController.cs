@@ -162,7 +162,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
                     foreach (var q in model.Questions)
                     {
-                        header.Add(q.PublicKey, q.QuestionText);
+                        header.Add(q.PublicKey, string.IsNullOrEmpty(q.StataExportCaption) ? q.QuestionText : q.StataExportCaption);
                     }
 
                     var stream = manager.ExportToStream(header, records);
