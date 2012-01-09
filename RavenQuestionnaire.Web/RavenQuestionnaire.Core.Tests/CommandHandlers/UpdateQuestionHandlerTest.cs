@@ -32,7 +32,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             UpdateQuestionHandler handler = new UpdateQuestionHandler(questionnaireRepositoryMock.Object,
                                                                       validator.Object);
             handler.Handle(new Commands.UpdateQuestionCommand(entity.QuestionnaireId, question.PublicKey,
-                                                              "question after update", QuestionType.MultyOption, 
+                                                              "question after update", "export title",  QuestionType.MultyOption, 
                                                               string.Empty, null));
 
             Assert.True(

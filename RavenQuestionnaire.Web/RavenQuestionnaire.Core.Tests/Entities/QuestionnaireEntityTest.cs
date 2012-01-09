@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            questionnaire.AddQuestion("question", QuestionType.SingleOption, string.Empty, null);
+            questionnaire.AddQuestion("question","Exportquestion",  QuestionType.SingleOption, string.Empty, null);
 
             Assert.AreEqual(innerDocument.Questions[0].QuestionText, "question");
             Assert.AreEqual(innerDocument.Questions[0].QuestionType, QuestionType.SingleOption);

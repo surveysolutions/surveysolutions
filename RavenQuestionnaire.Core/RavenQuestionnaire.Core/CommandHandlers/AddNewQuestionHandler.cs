@@ -26,8 +26,10 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             var questionnaire = this._questionnaireRepository.Load(command.QuestionnaireId);
             if (!this._expressionValidator.Execute(questionnaire, command.ConditionExpression))
                 return;
-            var question = questionnaire.AddQuestion(command.QuestionText, command.QuestionType,
-                                                     command.ConditionExpression, command.GroupPublicKey);
+            var question = questionnaire.AddQuestion(command.QuestionText, command.StataExportCaption,
+                                                     command.QuestionType,
+                                                     command.ConditionExpression, 
+                                                     command.GroupPublicKey);
             question.UpdateAnswerList(command.Answers);
         }
     }

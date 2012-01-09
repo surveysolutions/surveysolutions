@@ -33,10 +33,10 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Questions.Clear();
         }
 
-        public Question AddQuestion(string text, QuestionType type, string condition, Guid? groupPublicKey)
+        public Question AddQuestion(string text, string stataExportCaption, QuestionType type, string condition, Guid? groupPublicKey)
         {
             
-            Question result = new Question() {QuestionText = text, QuestionType = type};
+            Question result = new Question() {QuestionText = text, QuestionType = type, StataExportCaption = stataExportCaption};
             result.SetConditionExpression(condition);
             if(!Add(result, groupPublicKey))
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey.Value));
@@ -64,13 +64,13 @@ namespace RavenQuestionnaire.Core.Entities
         {
             return this.innerDocument;
         }
-        public void UpdateQuestion(Guid publicKey, string text, QuestionType type,string condition, IEnumerable<Answer> answers)
+        public void UpdateQuestion(Guid publicKey, string text, string stataExportCaption, QuestionType type, string condition, IEnumerable<Answer> answers)
         {
-            var question =
-                new RavenQuestionnaire.Core.Entities.Questionnaire(this.innerDocument).Find<Question>(publicKey);
+            var question = new Questionnaire(this.innerDocument).Find<Question>(publicKey);
             if (question == null)
                 return;
             question.QuestionText = text;
+            question.StataExportCaption = stataExportCaption;
             question.QuestionType = type;
             question.UpdateAnswerList(answers);
             question.SetConditionExpression(condition);

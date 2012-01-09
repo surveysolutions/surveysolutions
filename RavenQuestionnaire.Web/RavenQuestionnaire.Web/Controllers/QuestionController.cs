@@ -56,6 +56,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     if (model.PublicKey == Guid.Empty)
                     {
                         AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.QuestionText,
+                                                                                        model.StataExportCaption,
                                                                                         model.QuestionType,
                                                                                         model.QuestionnaireId, model.GroupPublicKey,
                                                                                         model.ConditionExpression,
@@ -67,7 +68,9 @@ namespace RavenQuestionnaire.Web.Controllers
                     else
                     {
                         commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId, model.PublicKey,
-                                                                         model.QuestionText, model.QuestionType,
+                                                                         model.QuestionText,
+                                                                         model.StataExportCaption,
+                                                                         model.QuestionType,
                                                                          model.ConditionExpression, model.Answers,
                                                                          GlobalInfo.GetCurrentUser()));
                     }
