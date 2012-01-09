@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 
@@ -9,23 +10,15 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
 {
     public class QuestionnaireSimpleIterator : Iterator<Question, Guid?>
     {
-        public QuestionnaireSimpleIterator(CompleteQuestionnaire questionnaire)
+        public QuestionnaireSimpleIterator(CompleteQuestionnaire questionnaire, IExpressionExecutor<CompleteQuestionnaireDocument> validator)
         {
             this.questionnaire = questionnaire;
+            this.expresstionValidator = validator;
             if (this.questionnaire.GetAllQuestions().Count == 0)
                 throw new ArgumentException("Questionnaires question list is empty");
         }
-        private CompleteQuestionnaireConditionExecutor expresstionValidator;
 
-        protected CompleteQuestionnaireConditionExecutor ExpresstionValidator
-        {
-            get
-            {
-                if (expresstionValidator == null)
-                    expresstionValidator = new CompleteQuestionnaireConditionExecutor(this.questionnaire.GetInnerDocument());
-                return expresstionValidator;
-            }
-        }
+        private IExpressionExecutor<CompleteQuestionnaireDocument> expresstionValidator;
         protected CompleteQuestionnaire questionnaire;
 
         public Question First
@@ -41,7 +34,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             {
                 int lastIndex = this.questionnaire.GetAllQuestions().Count - 1;
                 Question possibleQuestion = this.questionnaire.GetAllQuestions()[lastIndex];
-                while (!ExpresstionValidator.Execute(possibleQuestion.ConditionExpression))
+                while (!expresstionValidator.Execute(this.questionnaire.GetInnerDocument(), possibleQuestion.ConditionExpression))
                 {
                     if (lastIndex == 0)
                         return null;
@@ -58,7 +51,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 if (IsDone)
                     return null;
                 Question possibleQuestion = this.questionnaire.GetAllQuestions()[++this.current];
-                if (ExpresstionValidator.Execute(possibleQuestion.ConditionExpression))
+                if (expresstionValidator.Execute(this.questionnaire.GetInnerDocument(), possibleQuestion.ConditionExpression))
                 {
                     return possibleQuestion;
                 }
@@ -73,7 +66,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 if (CurrentItem == First)
                     return null;
                 Question possibleQuestion = this.questionnaire.GetAllQuestions()[--this.current];
-                if (ExpresstionValidator.Execute(possibleQuestion.ConditionExpression))
+                if (expresstionValidator.Execute(this.questionnaire.GetInnerDocument(), possibleQuestion.ConditionExpression))
                 {
                     return possibleQuestion;
                 }

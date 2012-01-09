@@ -5,6 +5,7 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Conventions;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using FormsAuthentication = Questionnaire.Core.Web.Security.FormsAuthentication;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(RavenQuestionnaire.Web.App_Start.NinjectMVC3), "Start")]
@@ -71,6 +72,11 @@ namespace RavenQuestionnaire.Web.App_Start
             {
                 s.FromAssembliesMatching("RavenQuestionnaire.*");
                 s.BindWith(new GenericBindingGenerator(typeof(IViewFactory<,>)));
+            });
+            kernel.Scan(s =>
+            {
+                s.FromAssembliesMatching("RavenQuestionnaire.*");
+                s.BindWith(new GenericBindingGenerator(typeof(IExpressionExecutor<>)));
             });
             kernel.Scan(s =>
             {

@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core.CommandHandlers;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Views.Answer;
 
@@ -25,7 +26,11 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Question question = entity.AddQuestion("question", QuestionType.SingleOption, string.Empty, null);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
-            UpdateQuestionHandler handler = new UpdateQuestionHandler(questionnaireRepositoryMock.Object);
+
+            Mock<IExpressionExecutor<Questionnaire>> validator = new Mock<IExpressionExecutor<Questionnaire>>();
+            validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
+            UpdateQuestionHandler handler = new UpdateQuestionHandler(questionnaireRepositoryMock.Object,
+                                                                      validator.Object);
             handler.Handle(new Commands.UpdateQuestionCommand(entity.QuestionnaireId, question.PublicKey,
                                                               "question after update", QuestionType.MultyOption, 
                                                               string.Empty, null));

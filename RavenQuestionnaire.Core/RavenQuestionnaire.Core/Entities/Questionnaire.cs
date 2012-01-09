@@ -12,17 +12,6 @@ namespace RavenQuestionnaire.Core.Entities
     public class Questionnaire : IEntity<QuestionnaireDocument>, IComposite
     {
         private QuestionnaireDocument innerDocument;
-        private QuestionnaireExpressionValidator expresstionValidator;
-
-        protected QuestionnaireExpressionValidator ExpresstionValidator
-        {
-            get
-            {
-                if (expresstionValidator == null)
-                    expresstionValidator = new QuestionnaireExpressionValidator(this);
-                return expresstionValidator;
-            }
-        }
 
         public string QuestionnaireId { get { return innerDocument.Id; } }
 
@@ -46,7 +35,7 @@ namespace RavenQuestionnaire.Core.Entities
 
         public Question AddQuestion(string text, QuestionType type, string condition, Guid? groupPublicKey)
         {
-            ExpresstionValidator.Execute(condition);
+            
             Question result = new Question() {QuestionText = text, QuestionType = type};
             result.SetConditionExpression(condition);
             if(!Add(result, groupPublicKey))
@@ -84,7 +73,6 @@ namespace RavenQuestionnaire.Core.Entities
             question.QuestionText = text;
             question.QuestionType = type;
             question.UpdateAnswerList(answers);
-            ExpresstionValidator.Execute(condition);
             question.SetConditionExpression(condition);
         }
        

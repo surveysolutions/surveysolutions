@@ -15,23 +15,23 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         [Test]
         public void EvaluateCondition_ConditionIsEmpty_ReturnsTrue()
         {
-            CompleteQuestionnaireConditionExecutor executor= new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
-            bool result = executor.Execute("");
+            CompleteQuestionnaireConditionExecutor executor= new CompleteQuestionnaireConditionExecutor();
+            bool result = executor.Execute(new CompleteQuestionnaireDocument(),"");
             Assert.AreEqual(result, true);
         }
         [Test]
         public void EvaluateCondition_ConditionIsInvalid_ReturnsFalse()
         {
-            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
-            bool result = executor.Execute("invalid condition");
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor();
+            bool result = executor.Execute(new CompleteQuestionnaireDocument(), "invalid condition");
             Assert.AreEqual(result, false);
         }
         [Test]
         public void EvaluateCondition_ConditionIsValidParamsAreEmpty_ReturnsTrue()
         {
-            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor();
 
-            bool result = executor.Execute("5>3");
+            bool result = executor.Execute(new CompleteQuestionnaireDocument(), "5>3");
             Assert.AreEqual(result, true);
         }
         [Test]
@@ -43,9 +43,9 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var previousResults = new List<CompleteAnswer>();
             previousResults.Add(completeAnswer);
 
-            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument() { CompletedAnswers = previousResults });
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor();
 
-            bool result = executor.Execute("[" + completeAnswer.QuestionPublicKey + "]==3");
+            bool result = executor.Execute(new CompleteQuestionnaireDocument() { CompletedAnswers = previousResults }, "[" + completeAnswer.QuestionPublicKey + "]==3");
             Assert.AreEqual(result, true);
         }
         [Test]
@@ -57,9 +57,10 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var previousResults = new List<CompleteAnswer>();
             previousResults.Add(answer);
 
-            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument() { CompletedAnswers = previousResults });
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor();
 
-            bool result = executor.Execute("[" + answer.QuestionPublicKey + "]==3");
+            bool result = executor.Execute(new CompleteQuestionnaireDocument() {CompletedAnswers = previousResults},
+                                           "[" + answer.QuestionPublicKey + "]==3");
             Assert.AreEqual(result, false);
         }
     }

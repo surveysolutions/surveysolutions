@@ -7,7 +7,6 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
     public interface IExpressionExecutor<TInput>
     {
-        TInput Entity { get; }
-        bool Execute(string condition);
+        bool Execute(TInput entity, string condition);
     }
 }

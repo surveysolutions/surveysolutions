@@ -1,6 +1,7 @@
 ﻿using System;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Group;
 
@@ -20,7 +21,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public GroupView[] Groups { get; set; }
 
         public CompleteQuestionnaireViewEnumerable(CompleteQuestionnaireDocument doc,
-                                                   RavenQuestionnaire.Core.Entities.SubEntities.Group currentGroup)
+                                                   RavenQuestionnaire.Core.Entities.SubEntities.Group currentGroup, IExpressionExecutor<CompleteQuestionnaireDocument> executor)
         {
             this.Id = IdUtil.ParseId(doc.Id);
             this.Title = doc.Questionnaire.Title;
@@ -32,16 +33,16 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
             if (currentGroup != null)
             {
-                this.CurrentGroup = new CompleteGroupView(doc, currentGroup);
+                this.CurrentGroup = new CompleteGroupView(doc, currentGroup, executor);
             }
 
         }
-
-        public CompleteQuestionnaireViewEnumerable(QuestionnaireDocument template)
+        public CompleteQuestionnaireViewEnumerable(QuestionnaireDocument template, IExpressionExecutor<CompleteQuestionnaireDocument> executor)
         {
             this.Title = template.Title;
             this.CurrentGroup = new CompleteGroupView(new CompleteQuestionnaireDocument() {Questionnaire = template},
-                                                      new Entities.SubEntities.Group() {Questions = template.Questions});
+                                                      new Entities.SubEntities.Group() {Questions = template.Questions},
+                                                      executor);
             InitGroups(template);
             /*  this.CurrentQuestion = new CompleteQuestionView(template.Questions[0], template.Id);*/
         }

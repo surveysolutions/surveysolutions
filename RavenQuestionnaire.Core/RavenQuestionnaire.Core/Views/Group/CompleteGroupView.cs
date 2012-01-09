@@ -16,41 +16,30 @@ namespace RavenQuestionnaire.Core.Views.Group
         {
             Groups = new CompleteGroupView[0];
             _questions = new CompleteQuestionView[0];
-             expresstionValidator = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
             
         }
-        public CompleteGroupView(CompleteQuestionnaireDocument doc, RavenQuestionnaire.Core.Entities.SubEntities.Group group)
+        public CompleteGroupView(CompleteQuestionnaireDocument doc, RavenQuestionnaire.Core.Entities.SubEntities.Group group, IExpressionExecutor<CompleteQuestionnaireDocument> executor)
             : this()
         {
-            this.QuestionnaireId = doc.Id;
+            this.completeQuestionnaireDocument = doc;
+            this.conditionExecutor = executor;
             this.PublicKey = group.PublicKey;
             this.GroupText = group.GroupText;
-            this.CompleteAnswers = doc.CompletedAnswers.ToArray();
-            expresstionValidator = new CompleteQuestionnaireConditionExecutor(doc);
-            this._questions = ProcessQuestionList(group.Questions, doc.CompletedAnswers, doc.Questionnaire);
+            this._questions = ProcessQuestionList(group.Questions);
             MerdgeAnswersWithResults();
         }
-        private readonly CompleteQuestionnaireConditionExecutor expresstionValidator;
 
-        protected CompleteQuestionnaireConditionExecutor ExpresstionValidator
-        {
-            get
-            {
-                return expresstionValidator;
-            }
-        }
+        private IExpressionExecutor<CompleteQuestionnaireDocument> conditionExecutor;
 
         protected CompleteQuestionView[] ProcessQuestionList(
-            IList<RavenQuestionnaire.Core.Entities.SubEntities.Question> questions, 
-            List<CompleteAnswer> answers, 
-            QuestionnaireDocument questionnaire)
+            IList<RavenQuestionnaire.Core.Entities.SubEntities.Question> questions)
         {
             CompleteQuestionView[] result = new CompleteQuestionView[questions.Count];
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = new CompleteQuestionView(questions[i], questionnaire);
-                result[i].Enabled = ExpresstionValidator.Execute(questions[i].ConditionExpression);
-                RemoveDisabledAnswers(answers, result[i]);
+                result[i] = new CompleteQuestionView(questions[i], this.completeQuestionnaireDocument.Questionnaire);
+                result[i].Enabled = this.conditionExecutor.Execute(completeQuestionnaireDocument, questions[i].ConditionExpression);
+                RemoveDisabledAnswers(this.completeQuestionnaireDocument.CompletedAnswers, result[i]);
             }
             return result;
         }
@@ -66,8 +55,7 @@ namespace RavenQuestionnaire.Core.Views.Group
 
         public string QuestionnaireId
         {
-            get { return IdUtil.ParseId(_questionnaireId); }
-            set { _questionnaireId = value; }
+            get { return IdUtil.ParseId(this.completeQuestionnaireDocument.Id); }
         }
         private string _questionnaireId;
 
@@ -76,13 +64,14 @@ namespace RavenQuestionnaire.Core.Views.Group
         {
             get { return _questions; }
         }
-        protected CompleteAnswer[] CompleteAnswers { get; set; }
+
+        protected CompleteQuestionnaireDocument completeQuestionnaireDocument;
         private CompleteQuestionView[] _questions;
         protected void MerdgeAnswersWithResults()
         {
             foreach (var answer in Questions.SelectMany(q => q.Answers))
             {
-                var completeAnswer = CompleteAnswers.FirstOrDefault(a => a.PublicKey.Equals(answer.PublicKey));
+                var completeAnswer = completeQuestionnaireDocument.CompletedAnswers.FirstOrDefault(a => a.PublicKey.Equals(answer.PublicKey));
                 if (completeAnswer != null)
                 {
                     answer.Selected = true;
