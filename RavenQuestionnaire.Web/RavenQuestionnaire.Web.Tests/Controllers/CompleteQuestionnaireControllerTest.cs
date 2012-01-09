@@ -98,9 +98,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             QuestionnaireDocument innerDoc = new QuestionnaireDocument();
             innerDoc.Id = "questionnairedocuments/cqId";
-            CompleteQuestionnaireViewEnumerable template = new CompleteQuestionnaireViewEnumerable(innerDoc,
-                                                                                                   new CompleteQuestionnaireConditionExecutor
-                                                                                                       ());
+            CompleteQuestionnaireViewEnumerable template = new CompleteQuestionnaireViewEnumerable(innerDoc);
             var input = new CompleteQuestionnaireViewInputModel("cqId", null, false);
             ViewRepositoryMock.Setup(
                x =>
