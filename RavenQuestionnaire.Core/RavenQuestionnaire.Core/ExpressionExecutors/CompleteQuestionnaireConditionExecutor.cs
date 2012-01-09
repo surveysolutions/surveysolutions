@@ -10,23 +10,12 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
     public class CompleteQuestionnaireConditionExecutor : IExpressionExecutor<CompleteQuestionnaireDocument>
     {
-        public CompleteQuestionnaireConditionExecutor(CompleteQuestionnaireDocument questionnaire)
-        {
-            this.questionnaire = questionnaire;
-        }
-
-        private readonly CompleteQuestionnaireDocument questionnaire;
-        public CompleteQuestionnaireDocument Entity
-        {
-            get { return this.questionnaire; }
-        }
-
-        public bool Execute(string condition)
+        public bool Execute(CompleteQuestionnaireDocument entity, string condition)
         {
             if (string.IsNullOrEmpty(condition))
                 return true;
             var e = new Expression(condition);
-            foreach (var answer in this.questionnaire.CompletedAnswers)
+            foreach (var answer in entity.CompletedAnswers)
             {
                 e.Parameters[answer.QuestionPublicKey.ToString()] = answer.CustomAnswer;
             }
@@ -34,7 +23,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             bool result = false;
             try
             {
-                result = (bool)e.Evaluate();
+                result = (bool) e.Evaluate();
             }
             catch (Exception)
             {
