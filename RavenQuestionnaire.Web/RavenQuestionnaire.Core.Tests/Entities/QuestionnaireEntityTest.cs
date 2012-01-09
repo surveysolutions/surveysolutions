@@ -137,14 +137,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Assert.AreEqual(innerDocument.Questions[0].QuestionType, QuestionType.MultyOption);
             Assert.AreEqual(innerDocument.Questions[0].Answers.Count, 1);
         }
-        [Test]
-        public void AddQuestion_ConditionIsInvalid_EvaluationExceptionIsThrowed()
-        {
-            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            Questionnaire questionnaire = new Questionnaire(innerDocument);
-            Assert.Throws<EvaluationException>(
-                () => questionnaire.AddQuestion("question", QuestionType.SingleOption, "totaly invalid condition", null));
-        }
+       
         [Test]
         public void GetAllQuestions_ListOfUngroupedQuestionsIsReturned()
         {

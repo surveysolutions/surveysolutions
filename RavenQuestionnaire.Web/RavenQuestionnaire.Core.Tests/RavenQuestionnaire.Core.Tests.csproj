@@ -115,6 +115,8 @@
     <Compile Include="Entities\QuestionnaireEntityTest.cs" />
     <Compile Include="Entities\QuestionTest.cs" />
     <Compile Include="Entities\UserEntityTest.cs" />
+    <Compile Include="ExpressionEvaluatorTests.cs" />
+    <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CommandInvokerTests.cs" />
     <Compile Include="Repositories\EntityRepositoryTests.cs" />

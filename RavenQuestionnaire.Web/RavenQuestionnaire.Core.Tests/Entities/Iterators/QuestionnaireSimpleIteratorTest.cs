@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
 {
@@ -25,7 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
             var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
             questionnaire.GetInnerDocument().Questionnaire= new QuestionnaireDocument();    
             Assert.Throws<ArgumentException>(
-                () => new QuestionnaireSimpleIterator(questionnaire));
+                () => new QuestionnaireSimpleIterator(questionnaire, new CompleteQuestionnaireConditionExecutor()));
         }
         [Test]
         public void First_FirstItemIsReturned()
@@ -36,7 +37,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
                 new Question("first", QuestionType.DynamicInputList));
             questionnaire.GetInnerDocument().Questionnaire.Questions.Add(
                 new Question("second", QuestionType.DynamicInputList));
-            var iterator = new QuestionnaireSimpleIterator(questionnaire);
+            var iterator = new QuestionnaireSimpleIterator(questionnaire, new CompleteQuestionnaireConditionExecutor());
             Assert.AreEqual(iterator.First.QuestionText, "first");
 
             var takeNext = iterator.Next;
@@ -52,7 +53,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
                 new Question("first", QuestionType.DynamicInputList));
             questionnaire.GetInnerDocument().Questionnaire.Questions.Add(
                 new Question("second", QuestionType.DynamicInputList));
-            var iterator = new QuestionnaireSimpleIterator(questionnaire);
+            var iterator = new QuestionnaireSimpleIterator(questionnaire, new CompleteQuestionnaireConditionExecutor());
 
            /* Assert.AreEqual(iterator.Next.QuestionText, "first");*/
             Assert.AreEqual(iterator.IsDone, false);
@@ -79,8 +80,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
             questionnaire.GetInnerDocument().Questionnaire.Questions.Add(trueConditionQuestion1);
             questionnaire.GetInnerDocument().Questionnaire.Questions.Add(trueConditionQuestion2);
             questionnaire.GetInnerDocument().Questionnaire.Questions.Add(falseConditionQuestion);
-           
-            var iterator = new QuestionnaireSimpleIterator(questionnaire);
+
+            var iterator = new QuestionnaireSimpleIterator(questionnaire, new CompleteQuestionnaireConditionExecutor());
 
             Assert.AreEqual(iterator.Next, trueConditionQuestion2);
             Assert.AreEqual(iterator.IsDone, false);
