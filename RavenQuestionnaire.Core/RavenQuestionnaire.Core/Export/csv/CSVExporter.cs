@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using CsvHelper;
-using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.Questionnaire;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
 
 namespace RavenQuestionnaire.Core.Export.csv
 {
@@ -13,41 +12,62 @@ namespace RavenQuestionnaire.Core.Export.csv
     /// </summary>
     public class CSVExporter : IExportProvider
     {
-        public bool DoExport(Dictionary<Guid, string> template, CompleteQuestionnaireBrowseView records, string fileName)
+        public CSVExporter(char delimeter)
         {
+            Delimeter = delimeter;
+        }
+
+        public char Delimeter { private set; get; }
+
+        public bool DoExport(Dictionary<Guid, string> template, CompleteQuestionnaireExportView records, string fileName)
+        {
+            using (var memoryStream =  DoExportToStream(template, records))
+            {
+                using (var fileStream = File.Create(fileName))
+                {
+                    memoryStream.CopyTo(fileStream);
+                }
+            }
+            return true;
+        }
+
+        public Stream DoExportToStream(Dictionary<Guid, string> template, CompleteQuestionnaireExportView records)
+        {
+            Stream result = new MemoryStream();
+
             using (var memoryStream = new MemoryStream())
             using (var streamWriter = new StreamWriter(memoryStream))
-            using (var streamReader = new StreamReader(memoryStream))
             using (var writer = new CsvWriter(streamWriter))
             {
-                writer.WriteField("ID");//templated column for ID
 
+                writer.Configuration.Delimiter = Delimeter;
+                writer.WriteField("ID");//templated column for ID
+                
+                //build up header
                 foreach (var question in template.Values)
                 {
                     writer.WriteField(question);
                 }
-
                 writer.NextRecord();
 
+                //iterate over records
                 foreach (var item in records.Items)
                 {
                     writer.WriteField(item.Id);
-
                     foreach (var guid in template.Keys)
                     {
-                        writer.WriteField(null);
+                        var completeAnswer = item.CompleteAnswers.FirstOrDefault(a => a.QuestionPublicKey.Equals(guid));
+                        writer.WriteField(completeAnswer != null ? completeAnswer.CustomAnswer : null);
                     }
                     writer.NextRecord();
                 }
-                
 
                 memoryStream.Position = 0;
+                memoryStream.CopyTo(result);
 
-                //Console.WriteLine(streamReader.ReadToEnd());
+                result.Position = 0;
+                return result;
             }
-
-            return true;
         }
-
     }
 }
