@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
@@ -51,7 +52,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                     group = input.IsReverse ? iterator.Last : iterator.First;
                 }
                 return new CompleteQuestionnaireViewEnumerable(doc,
-                                                               new CompleteGroupView(doc, group,
+                                                               new CompleteGroupView(doc.Id, group,
                                                                                      ProcessQuestionList(completeQuestionnaireRoot,
                                                                                                          group.Questions)));
             }
@@ -74,7 +75,21 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 result[i].Enabled = this.conditionExecutor.Execute(entity, questions[i].ConditionExpression);
            //     RemoveDisabledAnswers(this.completeQuestionnaireDocument.CompletedAnswers, result[i]);
             }
+            MergeAnswersWithResults(result, entity.GetAllAnswers());
             return result;
+        }
+
+        protected void MergeAnswersWithResults(CompleteQuestionView[] questions, IList<CompleteAnswer> answers )
+        {
+            foreach (var answer in questions.SelectMany(q => q.Answers))
+            {
+                var completeAnswer = answers.FirstOrDefault(a => a.PublicKey.Equals(answer.PublicKey));
+                if (completeAnswer != null)
+                {
+                    answer.Selected = true;
+                    answer.CustomAnswer = completeAnswer.CustomAnswer;
+                }
+            }
         }
     }
 }

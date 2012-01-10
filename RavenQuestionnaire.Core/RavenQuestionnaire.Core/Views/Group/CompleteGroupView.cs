@@ -18,45 +18,29 @@ namespace RavenQuestionnaire.Core.Views.Group
             _questions = new CompleteQuestionView[0];
             
         }
-        public CompleteGroupView(CompleteQuestionnaireDocument doc, RavenQuestionnaire.Core.Entities.SubEntities.Group group, CompleteQuestionView[] questions)
+        public CompleteGroupView(string completeQuestionnaireId, RavenQuestionnaire.Core.Entities.SubEntities.Group group, CompleteQuestionView[] questions)
             : this()
         {
-            this.completeQuestionnaireDocument = doc;
+            this.completeQuestionnaireId = IdUtil.ParseId(completeQuestionnaireId);
+            this._questions = questions;
             this.PublicKey = group.PublicKey;
             this.GroupText = group.GroupText;
-            this._questions = questions;
-            MerdgeAnswersWithResults();
         }
-
-        protected CompleteQuestionnaireDocument completeQuestionnaireDocument;
+        protected string completeQuestionnaireId;
         private CompleteQuestionView[] _questions;
-        
-       
 
         public Guid PublicKey { get; set; }
         public string GroupText { get; set; }
         public Guid? ParentGroup { get; set; }
-        public string QuestionnaireId
-        {
-            get { return IdUtil.ParseId(this.completeQuestionnaireDocument.Id); }
-        }
         public CompleteGroupView[] Groups { get; set; }
+
         public CompleteQuestionView[] Questions
         {
             get { return _questions; }
         }
-
-        protected void MerdgeAnswersWithResults()
+        public string QuestionnaireId
         {
-            foreach (var answer in Questions.SelectMany(q => q.Answers))
-            {
-                var completeAnswer = completeQuestionnaireDocument.CompletedAnswers.FirstOrDefault(a => a.PublicKey.Equals(answer.PublicKey));
-                if (completeAnswer != null)
-                {
-                    answer.Selected = true;
-                    answer.CustomAnswer = completeAnswer.CustomAnswer;
-                }
-            }
+            get { return this.completeQuestionnaireId; }
         }
         
     }
