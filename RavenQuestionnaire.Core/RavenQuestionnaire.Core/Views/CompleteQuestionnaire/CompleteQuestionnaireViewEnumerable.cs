@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
             this.Title = template.Title;
             Entities.SubEntities.Group group = new Entities.SubEntities.Group() {Questions = template.Questions};
-            this.CurrentGroup = new CompleteGroupView(new CompleteQuestionnaireDocument() {Questionnaire = template},
+            this.CurrentGroup = new CompleteGroupView(null,
                                                       group,
                                                       group.Questions.Select(q => new CompleteQuestionView(q, template))
                                                           .ToArray());
