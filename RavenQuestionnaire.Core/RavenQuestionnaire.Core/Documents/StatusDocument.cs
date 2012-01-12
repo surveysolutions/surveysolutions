@@ -12,6 +12,8 @@ namespace RavenQuestionnaire.Core.Documents
 
         public bool IsInitial { get; set; }
 
+        public string QuestionnaireId { get; set; }
+
         public Dictionary<string, List<SurveyStatus>> StatusRoles { 
             set;
             get;
