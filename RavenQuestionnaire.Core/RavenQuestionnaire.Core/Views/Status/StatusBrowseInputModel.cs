@@ -16,5 +16,7 @@
         }
         private int _pageSize = 10;
 
+
+        public string QuestionnaireId { get; set; }
     }
 }

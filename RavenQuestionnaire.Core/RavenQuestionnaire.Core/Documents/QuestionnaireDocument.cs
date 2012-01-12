@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Documents
@@ -33,8 +34,7 @@ namespace RavenQuestionnaire.Core.Documents
 
         public string Id { get; set; }
 
-        public string Title
-        { get; set; }
+        public string Title { get; set; }
 
         public DateTime CreationDate
         { get; set; }
@@ -44,9 +44,10 @@ namespace RavenQuestionnaire.Core.Documents
         public DateTime? OpenDate
         { get; set; }
 
-        public DateTime? CloseDate
-        { get; set; }
+        public DateTime? CloseDate { get; set; }
+
         public List<Question> Questions { get; set; }
         public List<Group> Groups { get; set; }
+        
     }
 }

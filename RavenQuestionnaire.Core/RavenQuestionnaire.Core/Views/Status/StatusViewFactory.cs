@@ -25,7 +25,7 @@ namespace RavenQuestionnaire.Core.Views.Status
 
             return doc == null 
                 ? null 
-                : new StatusView(doc.Id,doc.Title,doc.IsVisible, doc.StatusRoles);
+                : new StatusView(doc.Id,doc.Title,doc.IsVisible, doc.StatusRoles, doc.QuestionnaireId);
         }
     }
 }

@@ -1,6 +1,13 @@
 ﻿@using RavenQuestionnaire.Core.Views.Status
 @model StatusView
-Status <strong> @Html.DisplayTextFor(model => model.Title) </strong>
+<div>           
+    Q: <strong> @Html.DisplayTextFor(model => model.QuestionnaireId) </strong>
+</div>
+<br/>
+<div>           
+    Status: <strong> @Html.DisplayTextFor(model => model.Title) </strong>
+</div>
+
 <table>
     <tr>
         <td style="background-color: gainsboro">
@@ -13,7 +20,8 @@ Status <strong> @Html.DisplayTextFor(model => model.Title) </strong>
         }
     </tr>
     @Html.HiddenFor(model => model.Id)
-    
+    @Html.HiddenFor(model => model.QuestionnaireId)
+
     @Html.EditorFor(model => model.StatusRolesMatrix)
 </table>
 

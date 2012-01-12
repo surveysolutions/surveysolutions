@@ -18,6 +18,7 @@ namespace RavenQuestionnaire.Core.Views.Status
 
         public int TotalCount { get; private set; }
 
+        public string QuestionnaireId { set; get; }
 
         public IEnumerable<StatusBrowseItem> Items
         {
@@ -25,12 +26,13 @@ namespace RavenQuestionnaire.Core.Views.Status
             private set;
         }
 
-        public StatusBrowseView(int page, int pageSize, int totalCount, IEnumerable<StatusBrowseItem> items)
+        public StatusBrowseView(int page, int pageSize, int totalCount, IEnumerable<StatusBrowseItem> items, string questionnaireId)
         {
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
             this.Items = items;
+            this.QuestionnaireId = questionnaireId;
         }
 
     }
