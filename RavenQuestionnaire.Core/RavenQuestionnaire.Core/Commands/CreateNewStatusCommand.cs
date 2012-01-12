@@ -6,6 +6,7 @@ namespace RavenQuestionnaire.Core.Commands
     public class CreateNewStatusCommand : ICommand
     {
         public int Status { get; private set; }
+
         public Dictionary<string, IEnumerable<int>> RoleStatusList { get; private set; }
 
         public string Title { get; private set; }
@@ -14,25 +15,33 @@ namespace RavenQuestionnaire.Core.Commands
 
         public UserLight Executor { get; set; }
 
+        public string QuestionnaireId { get; set; }
+
         /// <summary>
         /// Creates new instance.
         /// </summary>
         /// <param name="title"></param>
         /// <param name="isInitial"> </param>
-        public CreateNewStatusCommand(string title, bool isInitial, UserLight executor)
+        /// <param name="questionnaireId"> </param>
+        /// <param name="executor"> </param>
+        public CreateNewStatusCommand(string title, bool isInitial, string questionnaireId,  UserLight executor)
         {
             Title = title;
             IsInitial = isInitial;
             Executor = executor;
-
+            QuestionnaireId = questionnaireId;
         }
 
-
-        public CreateNewStatusCommand(Dictionary<string, IEnumerable<int>> roleStatusList, int status, UserLight executer)
+/*
+        public CreateNewStatusCommand(Dictionary<string, IEnumerable<int>> roleStatusList,
+            int status,
+            string questionnaireId,
+            UserLight executer)
         {
             Status = status;
             RoleStatusList = roleStatusList;
             Executor = executer;
-        }
+            QuestionnaireId = questionnaireId;
+        }*/
     }
 }

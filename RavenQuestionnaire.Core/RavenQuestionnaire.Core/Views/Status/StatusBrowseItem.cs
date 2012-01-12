@@ -19,21 +19,23 @@ namespace RavenQuestionnaire.Core.Views.Status
         public bool IsInitial { get; set; }
         public bool IsVisible { get; set; }
 
+        public string QuestionnaireId { set; get; }
+
         public StatusBrowseItem()
         {
             IsInitial = false;
         }
 
-        public StatusBrowseItem (string id, string title)
+        public StatusBrowseItem (string id, string title, string qId)
         {
             this.Title = title;
             this.Id = id;
-
+            this.QuestionnaireId = qId;
         }
 
-        public static StatusBrowseItem New()
+        public static StatusBrowseItem New(string qId)
         {
-            return new StatusBrowseItem(null, null);
+            return new StatusBrowseItem(null, null, qId);
         }
 
     }
