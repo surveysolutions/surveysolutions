@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities.Iterators
 {
-    public class QuestionnaireScreenIterator : Iterator<Group, Guid>
+    public class QuestionnaireScreenIterator : Iterator<CompleteGroup, Guid>
     {
         public QuestionnaireScreenIterator(CompleteQuestionnaire questionnaire)
         {
             this.questionnaire = questionnaire;
            
-            if (this.questionnaire.GetAllQuestions().Count == 0)
+            if (this.questionnaire.GetRootQuestions().Count == 0)
             {
                 if (this.questionnaire.GetAllGroups().Count == 0)
                     throw new ArgumentException("Questionnaires question list is empty");
@@ -21,28 +22,27 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             }
             else
             {
-                this.groups = new List<Group>(this.questionnaire.GetAllGroups().Count + 1);
-                this.groups.Add(new Group()
-                               {Questions = this.questionnaire.GetAllQuestions().ToList(), PublicKey = Guid.Empty});
-                foreach (Group item in this.questionnaire.GetAllGroups())
+                this.groups = new List<CompleteGroup>(this.questionnaire.GetAllGroups().Count + 1);
+                this.groups.Add(new CompleteGroup() { Questions = this.questionnaire.GetRootQuestions().ToList(), PublicKey = Guid.Empty });
+                foreach (CompleteGroup item in this.questionnaire.GetAllGroups())
                 {
                     this.groups.Add(item);
                 }
             }
         }
         protected CompleteQuestionnaire questionnaire;
-        protected IList<Group> groups; 
-        public Group First
+        protected IList<CompleteGroup> groups;
+        public CompleteGroup First
         {
             get { return groups.First(); }
         }
 
-        public Group Last
+        public CompleteGroup Last
         {
             get { return this.groups[this.groups.Count - 1]; }
         }
 
-        public Group Next
+        public CompleteGroup Next
         {
             get
             {
@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             }
         }
 
-        public Group Previous
+        public CompleteGroup Previous
         {
             get
             {
@@ -67,15 +67,15 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             get { return this.current >= this.groups.Count - 1; }
         }
 
-        public Group CurrentItem
+        public CompleteGroup CurrentItem
         {
             get { return this.groups[current]; }
         }
 
-        public Group GetNextAfter(Guid key)
+        public CompleteGroup GetNextAfter(Guid key)
         {
             var group =
-                this.groups.Where(q => q.PublicKey.Equals(key)).FirstOrDefault();
+                this.groups.FirstOrDefault(q => q.PublicKey.Equals(key));
 
             if (group != null)
             {
@@ -85,10 +85,10 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             return null;
         }
 
-        public Group GetPreviousBefoure(Guid key)
+        public CompleteGroup GetPreviousBefoure(Guid key)
         {
             var group =
-                this.groups.Where(q => q.PublicKey.Equals(key)).FirstOrDefault();
+                this.groups.FirstOrDefault(q => q.PublicKey.Equals(key));
            
             if (group != null)
             {

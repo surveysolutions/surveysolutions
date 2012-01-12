@@ -6,7 +6,15 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public class Answer : IComposite
+    public interface IAnswer: IComposite
+    {
+        Guid PublicKey { get; set; }
+        string AnswerText { get; set; }
+        bool Mandatory { get; set; }
+        AnswerType AnswerType { get; set; }
+    }
+
+    public class Answer :IAnswer
     {
         public Answer(/*Question owner*/)
         {

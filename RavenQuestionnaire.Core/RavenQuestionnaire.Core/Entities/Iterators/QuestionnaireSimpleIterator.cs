@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities.Iterators
 {
-    public class QuestionnaireSimpleIterator : Iterator<Question, Guid?>
+    public class QuestionnaireSimpleIterator : Iterator<CompleteQuestion, Guid?>
     {
         public QuestionnaireSimpleIterator(CompleteQuestionnaire questionnaire, IExpressionExecutor<CompleteQuestionnaire> validator)
         {
@@ -21,19 +21,19 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
         private IExpressionExecutor<CompleteQuestionnaire> expresstionValidator;
         protected CompleteQuestionnaire questionnaire;
 
-        public Question First
+        public CompleteQuestion First
         {
             get
             {
                 return this.questionnaire.GetAllQuestions()[0];
             }
         }
-        public Question Last
+        public CompleteQuestion Last
         {
             get
             {
                 int lastIndex = this.questionnaire.GetAllQuestions().Count - 1;
-                Question possibleQuestion = this.questionnaire.GetAllQuestions()[lastIndex];
+                CompleteQuestion possibleQuestion = this.questionnaire.GetAllQuestions()[lastIndex];
                 while (!expresstionValidator.Execute(this.questionnaire, possibleQuestion.ConditionExpression))
                 {
                     if (lastIndex == 0)
@@ -44,13 +44,13 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 return possibleQuestion;
             }
         }
-        public Question Next
+        public CompleteQuestion Next
         {
             get
             {
                 if (IsDone)
                     return null;
-                Question possibleQuestion = this.questionnaire.GetAllQuestions()[++this.current];
+                CompleteQuestion possibleQuestion = this.questionnaire.GetAllQuestions()[++this.current];
                 if (expresstionValidator.Execute(this.questionnaire, possibleQuestion.ConditionExpression))
                 {
                     return possibleQuestion;
@@ -59,13 +59,13 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             }
         }
 
-        public Question Previous
+        public CompleteQuestion Previous
         {
             get
             {
                 if (CurrentItem == First)
                     return null;
-                Question possibleQuestion = this.questionnaire.GetAllQuestions()[--this.current];
+                CompleteQuestion possibleQuestion = this.questionnaire.GetAllQuestions()[--this.current];
                 if (expresstionValidator.Execute(this.questionnaire, possibleQuestion.ConditionExpression))
                 {
                     return possibleQuestion;
@@ -79,12 +79,12 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             get { return this.current >= this.questionnaire.GetAllQuestions().Count - 1; }
         }
 
-        public Question CurrentItem
+        public CompleteQuestion CurrentItem
         {
             get { return this.questionnaire.GetAllQuestions()[current]; }
         }
 
-        public Question GetNextAfter(Guid? questionkey)
+        public CompleteQuestion GetNextAfter(Guid? questionkey)
         {
             if (!questionkey.HasValue)
                 return First;
@@ -98,7 +98,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             }
             return null;
         }
-        public Question GetPreviousBefoure(Guid? questionkey)
+        public CompleteQuestion GetPreviousBefoure(Guid? questionkey)
         {
             if (!questionkey.HasValue)
                 return Last;

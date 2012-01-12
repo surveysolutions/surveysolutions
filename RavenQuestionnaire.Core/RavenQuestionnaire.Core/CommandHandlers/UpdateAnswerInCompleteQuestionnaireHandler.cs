@@ -5,17 +5,20 @@ using System.Text;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
 
 namespace RavenQuestionnaire.Core.CommandHandlers
 {
-    public class UpdateAnswerInCompleteQuestionnaireHandler : ICommandHandler<UpdateAnswerInCompleteQuestionnaireCommand>
+    public class UpdateAnswerInCompleteQuestionnaireHandler :
+        ICommandHandler<UpdateAnswerInCompleteQuestionnaireCommand>
     {
-       private ICompleteQuestionnaireRepository _questionnaireRepository;
+        private ICompleteQuestionnaireRepository _questionnaireRepository;
         private IExpressionExecutor<CompleteQuestionnaire> _conditionExecutor;
 
-        public UpdateAnswerInCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository questionnaireRepository, IExpressionExecutor<CompleteQuestionnaire> conditionExecutor)
+        public UpdateAnswerInCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository questionnaireRepository,
+                                                          IExpressionExecutor<CompleteQuestionnaire> conditionExecutor)
         {
             this._questionnaireRepository = questionnaireRepository;
             this._conditionExecutor = conditionExecutor;
@@ -26,19 +29,29 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             CompleteQuestionnaire entity = _questionnaireRepository.Load(command.CompleteQuestionnaireId);
             foreach (CompleteAnswer completeAnswer in command.CompleteAnswers)
             {
-                entity.UpdateAnswer(completeAnswer, command.Group);
+                entity.Remove<Question>(completeAnswer.QuestionPublicKey);
+                entity.Add(completeAnswer, completeAnswer.QuestionPublicKey);
             }
             RemoveDisabledAnswers(entity);
         }
+
         protected void RemoveDisabledAnswers(CompleteQuestionnaire entity)
         {
             //innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey.Equals(question.PublicKey));
-            Questionnaire template = entity.GetQuestionnaireTemplate();
-            var questionsToCheck = entity.GetAllAnswers().Select(a => template.Find<Question>(a.QuestionPublicKey)).ToList();
+          //  Questionnaire template = entity.GetQuestionnaireTemplate();
+            var questionsToCheck =
+                entity.GetAllQuestions();
             foreach (var question in questionsToCheck)
             {
                 if (!this._conditionExecutor.Execute(entity, question.ConditionExpression))
-                    entity.RemoveAnswerOnQuestion(question.PublicKey);
+                {
+                    entity.Remove<Question>(question.PublicKey);
+                    question.Enabled = false;
+                }
+                else
+                {
+                    question.Enabled = true;
+                }
             }
         }
     }

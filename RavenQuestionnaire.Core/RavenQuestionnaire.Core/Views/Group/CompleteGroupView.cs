@@ -18,16 +18,17 @@ namespace RavenQuestionnaire.Core.Views.Group
             _questions = new CompleteQuestionView[0];
             
         }
-        public CompleteGroupView(string completeQuestionnaireId, RavenQuestionnaire.Core.Entities.SubEntities.Group group, CompleteQuestionView[] questions)
+        public CompleteGroupView(string completeQuestionnaireId, Entities.SubEntities.Complete.CompleteGroup group)
             : this()
         {
             this.completeQuestionnaireId = IdUtil.ParseId(completeQuestionnaireId);
-            this._questions = questions;
+            this._questions =
+                group.Questions.Select(q => new CompleteQuestionView(q, completeQuestionnaireId)).ToArray();
             this.PublicKey = group.PublicKey;
             this.GroupText = group.GroupText;
         }
         protected string completeQuestionnaireId;
-        private CompleteQuestionView[] _questions;
+        private readonly CompleteQuestionView[] _questions;
 
         public Guid PublicKey { get; set; }
         public string GroupText { get; set; }

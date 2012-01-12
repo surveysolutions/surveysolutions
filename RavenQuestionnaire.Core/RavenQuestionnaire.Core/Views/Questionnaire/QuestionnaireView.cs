@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
@@ -32,16 +31,20 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
 
         public GroupView[] Groups { get; set; }
         private QuestionView[] _questions;
-        public QuestionnaireView(QuestionnaireDocument doc)
-            : this()
+        public QuestionnaireView(IQuestionnaireDocument doc):this()
         {
             this.Id = IdUtil.ParseId(doc.Id);
             this.Title = doc.Title;
             this.CreationDate = doc.CreationDate;
             this.LastEntryDate = doc.LastEntryDate;
+            this.Questions = new QuestionView[0];
+            this.Groups=new GroupView[0];
+        }
+        public QuestionnaireView(IQuestionnaireDocument<RavenQuestionnaire.Core.Entities.SubEntities.Group, RavenQuestionnaire.Core.Entities.SubEntities.Question> doc)
+            : this((IQuestionnaireDocument)doc)
+        {
             this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();
             this.Groups = doc.Groups.Select(g => new GroupView(doc, g)).ToArray();
-
         }
         public QuestionnaireView()
         {
