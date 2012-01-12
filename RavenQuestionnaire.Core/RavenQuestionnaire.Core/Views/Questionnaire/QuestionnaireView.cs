@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.Questionnaire
 {
-    public class QuestionnaireView
+    public abstract class AbstractQuestionnaireView
     {
         public string Id { get; set; }
         public string Title { get; set; }
         public DateTime CreationDate { get; set; }
-        public DateTime LastEntryDate{ get; set; }
+        public DateTime LastEntryDate { get; set; }
 
-        public QuestionView[] Questions
+        public AbstractQuestionView[] Questions
         {
             get { return _questions; }
             set
@@ -29,30 +30,34 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
             }
         }
 
-        public GroupView[] Groups { get; set; }
-        private QuestionView[] _questions;
-        public QuestionnaireView(IQuestionnaireDocument doc):this()
+        public AbstractGroupView[] Groups { get; set; }
+        private AbstractQuestionView[] _questions;
+
+        public AbstractQuestionnaireView(IQuestionnaireDocument doc)
+            : this()
         {
             this.Id = IdUtil.ParseId(doc.Id);
             this.Title = doc.Title;
             this.CreationDate = doc.CreationDate;
             this.LastEntryDate = doc.LastEntryDate;
-            this.Questions = new QuestionView[0];
-            this.Groups=new GroupView[0];
-        }
-        public QuestionnaireView(IQuestionnaireDocument<RavenQuestionnaire.Core.Entities.SubEntities.Group, RavenQuestionnaire.Core.Entities.SubEntities.Question> doc)
-            : this((IQuestionnaireDocument)doc)
-        {
-            this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();
-            this.Groups = doc.Groups.Select(g => new GroupView(doc, g)).ToArray();
-        }
-        public QuestionnaireView()
-        {
-            Questions = new QuestionView[0];
-            Groups = new GroupView[0];
+            this.Questions = new AbstractQuestionView[0];
+            this.Groups = new AbstractGroupView[0];
         }
 
-        public QuestionView[] GetQuestions(Guid? groupPublicKey)
+        /*  public AbstractQuestionnaireView(IQuestionnaireDocument<RavenQuestionnaire.Core.Entities.SubEntities.Group, RavenQuestionnaire.Core.Entities.SubEntities.Question> doc)
+              : this((IQuestionnaireDocument)doc)
+          {
+              this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();
+              this.Groups = doc.Groups.Select(g => new GroupView(doc, g)).ToArray();
+          }*/
+
+        public AbstractQuestionnaireView()
+        {
+            Questions = new AbstractQuestionView[0];
+            Groups = new AbstractGroupView[0];
+        }
+
+        public AbstractQuestionView[] GetQuestions(Guid? groupPublicKey)
         {
             if (!groupPublicKey.HasValue)
                 return Questions;
@@ -60,6 +65,54 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
             if (group == null)
                 throw new ArgumentException("group doesn't exists");
             return group.Questions;
+        }
+    }
+
+    public class QuestionnaireView<TGroup, TQuestion, TAnswer> : AbstractQuestionnaireView
+        where TAnswer : IAnswer
+        where TQuestion : IQuestion<TAnswer>
+        where TGroup : IGroup<TGroup, TQuestion>
+    {
+        public QuestionnaireView(IQuestionnaireDocument doc)
+            : base()
+        {
+        }
+
+        public QuestionnaireView(IQuestionnaireDocument<TGroup, TQuestion> doc)
+            : base(doc)
+        {
+         /*   this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();
+            this.Groups = doc.Groups.Select(g => new GroupView(doc, g)).ToArray();*/
+        }
+
+        public QuestionnaireView()
+            : base()
+        {
+        }
+    }
+
+    public class QuestionnaireView :
+        QuestionnaireView
+            <RavenQuestionnaire.Core.Entities.SubEntities.Group, RavenQuestionnaire.Core.Entities.SubEntities.Question,
+            RavenQuestionnaire.Core.Entities.SubEntities.Answer>
+    {
+        public QuestionnaireView()
+            : base()
+        {
+        }
+        public QuestionnaireView(IQuestionnaireDocument doc)
+            : base(doc)
+        {
+        }
+
+        public QuestionnaireView(
+            IQuestionnaireDocument
+                <RavenQuestionnaire.Core.Entities.SubEntities.Group,
+                RavenQuestionnaire.Core.Entities.SubEntities.Question> doc)
+            : base(doc)
+        {
+            this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();
+            this.Groups = doc.Groups.Select(g => new GroupView(doc, g)).ToArray();
         }
     }
 }
