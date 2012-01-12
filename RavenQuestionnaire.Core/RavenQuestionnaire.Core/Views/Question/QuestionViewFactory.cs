@@ -21,7 +21,8 @@ namespace RavenQuestionnaire.Core.Views.Question
                      <RavenQuestionnaire.Core.Entities.SubEntities.Question>(input.PublicKey);
              if (question == null)
                  return null;
-             return new QuestionView(doc, question);
+             return
+                 new QuestionView(doc, question);
 
          }
     }

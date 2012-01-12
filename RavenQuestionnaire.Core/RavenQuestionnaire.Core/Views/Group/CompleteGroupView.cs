@@ -4,45 +4,29 @@ using System.Linq;
 using System.Text;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.Group
 {
-    public class CompleteGroupView
+    public class CompleteGroupView : GroupView<CompleteGroup, CompleteQuestion, CompleteAnswer>
     {
         public CompleteGroupView()
         {
-            Groups = new CompleteGroupView[0];
-            _questions = new CompleteQuestionView[0];
-            
         }
-        public CompleteGroupView(string completeQuestionnaireId, Entities.SubEntities.Complete.CompleteGroup group)
-            : this()
+        public CompleteGroupView(string questionnaireId)
+            : base(questionnaireId)
         {
-            this.completeQuestionnaireId = IdUtil.ParseId(completeQuestionnaireId);
-            this._questions =
-                group.Questions.Select(q => new CompleteQuestionView(q, completeQuestionnaireId)).ToArray();
-            this.PublicKey = group.PublicKey;
-            this.GroupText = group.GroupText;
         }
-        protected string completeQuestionnaireId;
-        private readonly CompleteQuestionView[] _questions;
-
-        public Guid PublicKey { get; set; }
-        public string GroupText { get; set; }
-        public Guid? ParentGroup { get; set; }
-        public CompleteGroupView[] Groups { get; set; }
-
-        public CompleteQuestionView[] Questions
+        public CompleteGroupView(CompleteQuestionnaireDocument doc, CompleteGroup group)
+            : base(doc, group)
         {
-            get { return _questions; }
+            this.Questions =
+                group.Questions.Select(
+                    q =>
+                    new CompleteQuestionView(doc, q)).ToArray();
         }
-        public string QuestionnaireId
-        {
-            get { return this.completeQuestionnaireId; }
-        }
-        
     }
 }
