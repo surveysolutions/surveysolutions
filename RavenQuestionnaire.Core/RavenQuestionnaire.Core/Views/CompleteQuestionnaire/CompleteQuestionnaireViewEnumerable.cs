@@ -47,11 +47,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                                                                                                      q.QuestionType)).
                                                                             ToList()
                                                                     };
-            this.CurrentGroup = new CompleteGroupView(null,
+            this.CurrentGroup = new CompleteGroupView(doc,
                                                       group);
             InitGroups(doc);
         }
-
+        
         protected void InitGroups(CompleteQuestionnaireDocument doc)
         {
             if (doc.Questions.Count > 0)
