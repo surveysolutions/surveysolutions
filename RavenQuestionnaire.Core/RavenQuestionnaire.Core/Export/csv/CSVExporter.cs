@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CsvHelper;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
 
 namespace RavenQuestionnaire.Core.Export.csv
@@ -57,7 +58,11 @@ namespace RavenQuestionnaire.Core.Export.csv
                     foreach (var guid in template.Keys)
                     {
                         var completeAnswer = item.CompleteAnswers.FirstOrDefault(a => a.QuestionPublicKey.Equals(guid));
-                        writer.WriteField(completeAnswer != null ? completeAnswer.CustomAnswer : null);
+                        writer.WriteField(completeAnswer != null
+                                              ? completeAnswer.AnswerType == AnswerType.Text
+                                                    ? completeAnswer.CustomAnswer
+                                                    : completeAnswer.AnswerText
+                                              : null);
                     }
                     writer.NextRecord();
                 }
