@@ -36,12 +36,14 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void When_GetStatusIsExecutedModelIsReturned()
         {
+            string questionnaryId = "-1";
             var input = new StatusBrowseInputModel();
-            var output = new StatusBrowseView(0, 10, 0, new StatusBrowseItem[0]);
+            input.QuestionnaireId = questionnaryId;
+            var output = new StatusBrowseView(0, 10, 0, new StatusBrowseItem[0], questionnaryId);
             ViewRepositoryMock.Setup(x => x.Load<StatusBrowseInputModel, StatusBrowseView>(input))
                 .Returns(output);
 
-            var result = Controller.Index(input);
+            var result = Controller.Index(questionnaryId);
             Assert.AreEqual(output, result.ViewData.Model);
         }
 
@@ -49,7 +51,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void When_GetQuestionnaireDetailsIsExecuted()
         {
-            var output = new StatusView("statusdocuments/sId", "test", true, null);
+            var output = new StatusView("statusdocuments/sId", "test", true, null, "-1");
             var input = new StatusViewInputModel("sId");
 
             ViewRepositoryMock.Setup(

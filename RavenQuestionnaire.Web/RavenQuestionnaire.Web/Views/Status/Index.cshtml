@@ -2,7 +2,7 @@
 @using RavenQuestionnaire.Web.Models
 @model StatusBrowseView
 <p>
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn small primary" })
+    @Html.ActionLink("Create New", "Create", new { qId = Model.QuestionnaireId }, new { @class = "btn small primary" })
 </p>
 <table class="bordered-table zebra-striped">
     <thead>
@@ -19,7 +19,7 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td class="buttons">
-                    @Html.ActionLink("Connections", "Edit", new { id = item.Id }, new { @class = "btn small " })
+                    @Html.ActionLink("Role restrictions", "Edit", new { id = item.Id }, new { @class = "btn small " })
                 </td>
             </tr>
         }

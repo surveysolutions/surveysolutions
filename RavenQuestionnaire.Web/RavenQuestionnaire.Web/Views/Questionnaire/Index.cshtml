@@ -26,19 +26,30 @@
             });
     });
 </script>
-<h2>Surveys</h2>
+<h2>
+    Surveys</h2>
 <p>
     @Html.ActionLink("Create New", "Create", null, new { @class = "btn small primary" })
 </p>
 <table id="questionnaireTable" class="bordered-table zebra-striped">
     <thead>
         <tr>
-            <th sorter='{"key":"Id"}'>Id</th>
-            <th sorter='{"key":"Title"}'>Title </th>
-            <th sorter='{"key":"CreationDate"}'>Creation date</th>
-            <th sorter='{"key":"LastEntryDate"}'>Last edit date</th>
-            <th sorter='{"disable":"true"}'></th>
-            <th sorter='{"disable":"true"}'></th>
+            <th sorter='{"key":"Id"}'>
+                Id
+            </th>
+            <th sorter='{"key":"Title"}'>
+                Title
+            </th>
+            <th sorter='{"key":"CreationDate"}'>
+                Creation date
+            </th>
+            @*<th sorter='{"key":"LastEntryDate"}'>Last edit date</th>*@
+            <th sorter='{"disable":"true"}'>
+            </th>
+            <th sorter='{"disable":"true"}'>
+            </th>
+            <th sorter='{"disable":"true"}'>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -46,5 +57,5 @@
     </tbody>
 </table>
 <div class="pagination">
-    @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new {order= Model.Order})
+    @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new { order = Model.Order })
 </div>

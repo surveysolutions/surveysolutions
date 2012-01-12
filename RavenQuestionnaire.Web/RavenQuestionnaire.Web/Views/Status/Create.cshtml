@@ -9,7 +9,7 @@
     @Html.ValidationSummary(true)
     <fieldset>
         <legend>Status</legend>
-
+        @Html.HiddenFor(model=>model.QuestionnaireId)
         <div class="editor-label">
             @Html.LabelFor(model => model.Title)
         </div>

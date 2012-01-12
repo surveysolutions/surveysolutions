@@ -11,15 +11,18 @@
         <td>
             @Html.DisplayFor(modelItem => item.CreationDate)
         </td>
-        <td>
+       @* <td>
             @Html.DisplayFor(modelItem => item.LastEntryDate)
-        </td>
+        </td>*@
         <td class="buttons">
-            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn small " })
+            @Html.ActionLink("Rename", "Edit", new { id = item.Id }, new { @class = "btn small " })
             @Html.ActionLink("Manage", "Details", new { id = item.Id }, new { @class = "btn small " })
             @Html.ActionLink("Flow", "Flow", new { id = item.Id }, new { @class = "btn small " })
             @*@Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn small danger" })*@
             @Html.ActionLink("Participate", "Participate", "CompleteQuestionnaire", new { id = item.Id }, new { @class = "btn small primary" })
+        </td>
+        <td class="buttons">    
+            @Html.ActionLink("Statuses", "Index", "Status", new { id = item.Id }, new { @class = "btn small " })
         </td>
         <td class="buttons">    
             @Html.ActionLink("Export Completed", "Export", new { id = item.Id }, new { @class = "btn small primary" })
