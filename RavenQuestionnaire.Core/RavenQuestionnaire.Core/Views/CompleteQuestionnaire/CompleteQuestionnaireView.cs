@@ -3,6 +3,7 @@ using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
@@ -32,42 +33,26 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
         private QuestionnaireView Questionnaire { get; set; }
 
-        protected CompleteAnswer[] CompleteAnswers { get; set; }
-
-        public CompleteQuestionnaireView( CompleteQuestionnaireDocument doc)
-            : this(doc.Questionnaire)
+        public CompleteQuestionnaireView(CompleteQuestionnaireDocument doc)
         {
             this.Id = IdUtil.ParseId(doc.Id);
-            this.Questionnaire = new QuestionnaireView(doc.Questionnaire);
-            this.CompleteAnswers = doc.CompletedAnswers.ToArray();
+            this.Questionnaire = new QuestionnaireView(doc);
             this.CreationDate = doc.CreationDate;
             this.LastEntryDate = doc.LastEntryDate;
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
             //TODO _question may be redundant
             _questions =
-                doc.Questionnaire.Questions.Select(q => new CompleteQuestionView(q, doc.Questionnaire)).ToArray();
-            MerdgeAnswersWithResults();
+                doc.Questions.Select(q => new CompleteQuestionView(q, doc.Id)).ToArray();
 
         }
-        public CompleteQuestionnaireView(QuestionnaireDocument template)
+        public CompleteQuestionnaireView(QuestionnaireDocument template, bool exposeFields)
         {
             this.Questionnaire = new QuestionnaireView(template);
-            CompleteAnswers = new CompleteAnswer[0];
-            _questions = template.Questions.Select(q => new CompleteQuestionView(q, template)).ToArray();
-        }
-
-        protected void MerdgeAnswersWithResults()
-        {
-            foreach (var answer in Questions.SelectMany(q=>q.Answers))
-            {
-                var completeAnswer = CompleteAnswers.Where(a => a.PublicKey.Equals(answer.PublicKey)).FirstOrDefault();
-                if(completeAnswer!=null)
-                {
-                    answer.Selected = true;
-                    answer.CustomAnswer = completeAnswer.CustomAnswer;
-                }
-            }
+            _questions =
+                template.Questions.Select(
+                    q => new CompleteQuestionView(new CompleteQuestion(q.QuestionText, q.QuestionType), template.Id)).
+                    ToArray();
         }
     }
 }

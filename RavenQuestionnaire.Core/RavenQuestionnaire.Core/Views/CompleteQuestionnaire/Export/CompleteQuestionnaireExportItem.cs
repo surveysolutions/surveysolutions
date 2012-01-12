@@ -1,8 +1,9 @@
 ﻿using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Questionnaire;
-
+using System.Linq;
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 {
     public class CompleteQuestionnaireExportItem
@@ -20,7 +21,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         public CompleteQuestionnaireExportItem(CompleteQuestionnaireDocument doc)
         {
             this.Id = IdUtil.ParseId(doc.Id);
-            this.CompleteAnswers = doc.CompletedAnswers.ToArray();
+            this.CompleteAnswers =
+                new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc).GetAllAnswers().ToArray();
         }
     }
 }

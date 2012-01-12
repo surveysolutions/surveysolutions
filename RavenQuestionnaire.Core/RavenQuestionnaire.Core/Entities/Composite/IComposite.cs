@@ -11,5 +11,6 @@ namespace RavenQuestionnaire.Core.Entities.Composite
         bool Remove(IComposite c);
         bool Remove<T>(Guid publicKey) where T : class, IComposite;
         T Find<T>(Guid publicKey) where T : class, IComposite;
+
     }
 }

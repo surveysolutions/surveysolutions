@@ -4,10 +4,26 @@ using System.Data;
 using System.Linq;
 using NCalc;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public class Question : /*IEntity<QuestionDocument>*/ IComposite
+    public interface IQuestion : IComposite
+    {
+        Guid PublicKey { get; set; }
+        string QuestionText { get; set; }
+        QuestionType QuestionType { get; set; }
+        string ConditionExpression { get; }
+        string StataExportCaption { get; set; }
+        void SetConditionExpression(string expression);
+    }
+
+    public interface IQuestion<T> : IQuestion where T : IAnswer
+    {
+        List<T> Answers { get; set; }
+    }
+
+    public class Question : /*IEntity<QuestionDocument>*/IQuestion<Answer>
     {
 
         public Question()
@@ -48,25 +64,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             ConditionExpression = expression;
         }
 
-        protected void AddAnswer(Answer answer)
+        public void AddAnswer(Answer answer)
         {
             if (Answers.Any(a => a.PublicKey.Equals(answer.PublicKey)))
                 throw new DuplicateNameException("answer with current publick key already exist");
             Answers.Add(answer);
         }
-
-      /*  public bool Remove(IComposite c, Guid? parent)
-        {
-            Answer answer = c as Answer;
-            if (answer == null)
-                throw new ArgumentException("Only answer can be removed from question");
-            Answers.Remove(answer);
-            return true;
-        }
-        public T Find<T>(Guid publicKey) where T : class, IComposite
-        {
-            return Answers.FirstOrDefault(a => a.PublicKey.Equals(publicKey)) as T;
-        }*/
 
         public bool Add(IComposite c, Guid? parent)
         {

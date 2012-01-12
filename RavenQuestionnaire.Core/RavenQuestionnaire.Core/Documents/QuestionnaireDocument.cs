@@ -4,7 +4,24 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Documents
 {
-    public class QuestionnaireDocument
+    public interface IQuestionnaireDocument
+    {
+        string Id { get; set; }
+        string Title { get; set; }
+        DateTime CreationDate { get; set; }
+        DateTime LastEntryDate { get; set; }
+        DateTime? OpenDate { get; set; }
+        DateTime? CloseDate { get; set; }
+       
+    }
+    public interface IQuestionnaireDocument<TGroup, TQuestion> : IQuestionnaireDocument
+        where TQuestion : IQuestion
+        where TGroup : IGroup
+    {
+        List<TQuestion> Questions { get; set; }
+        List<TGroup> Groups { get; set; }
+    }
+    public class QuestionnaireDocument : IQuestionnaireDocument<Group, Question>
     {
         public QuestionnaireDocument()
         {

@@ -5,6 +5,7 @@ using System.Text;
 using NCalc;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
@@ -17,7 +18,9 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             var e = new Expression(condition);
             foreach (var answer in entity.GetAllAnswers())
             {
-                e.Parameters[answer.QuestionPublicKey.ToString()] = answer.CustomAnswer;
+                e.Parameters[answer.QuestionPublicKey.ToString()] = answer.AnswerType == AnswerType.Text
+                                                                        ? answer.CustomAnswer
+                                                                        : answer.AnswerText;
             }
 
             bool result = false;

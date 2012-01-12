@@ -5,6 +5,7 @@ using RavenQuestionnaire.Core.CommandHandlers;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Core.Tests.Utils;
@@ -36,22 +37,18 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_NewCompleteQuestionnIsAddedToRepository()
         {
             CompleteQuestionnaire entity = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
-            CompleteQuestionnaireDocument innerDocument =
-               ((IEntity<CompleteQuestionnaireDocument>)entity).GetInnerDocument();
+            Questionnaire questionnaireDocument =new Questionnaire("some");
 
             Mock<ICompleteQuestionnaireRepository> coompleteQuestionnaireRepositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             ICompleteQuestionnaireUploaderService completeQuestionnaireService =
                 new CompleteQuestionnaireUploaderService(coompleteQuestionnaireRepositoryMock.Object);
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(
-                entity.GetQuestionnaireTemplate());
+            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(questionnaireDocument);
 
 
             CreateNewCompleteQuestionnaireHandler handler = 
                 new CreateNewCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object, completeQuestionnaireService);
-            CompleteAnswer[] answers = new CompleteAnswer[] { new CompleteAnswer(innerDocument.Questionnaire.Questions[0].Answers[0], 
-                innerDocument.Questionnaire.Questions[0].PublicKey) };
-
+        
             handler.Handle(new Commands.CreateNewCompleteQuestionnaireCommand("qID", 
                 new UserLight("-2", "dummy-2"), 
                 new SurveyStatus("-100", "dummyStatus100"), 

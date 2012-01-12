@@ -1,56 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using RavenQuestionnaire.Core.Entities.Composite;
 
-namespace RavenQuestionnaire.Core.Entities.SubEntities
+namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public interface IGroup: IComposite
+    public class CompleteGroup: IGroup<CompleteGroup, CompleteQuestion>
     {
-        Guid PublicKey { get; set; }
-        string GroupText { get; set; }
-    }
-
-    public interface IGroup<TGroup, TQuestion> : IGroup
-        where TQuestion : IQuestion
-        where TGroup : IGroup
-    {
-        List<TQuestion> Questions { get; set; }
-        List<TGroup> Groups { get; set; }
-    }
-    public class Group : IGroup<Group, Question>
-    {
-        public Group()
+        public CompleteGroup()
         {
-            this.PublicKey = Guid.NewGuid();
-            this.Questions= new List<Question>();
-            this.Groups = new List<Group>();
+            Questions= new List<CompleteQuestion>();
+            Groups = new List<CompleteGroup>();
         }
-        public Group(string text):this()
+        public CompleteGroup(string name):this()
         {
-            this.GroupText = text;
+            this.GroupText = name;
         }
-
-        public Guid PublicKey { get; set; }
-        public string GroupText { get; set; }
-        public List<Question> Questions  { get; set; }
-        public List<Group> Groups { get; set; }
-        public void Update(string groupText)
+        public static explicit operator CompleteGroup(Group doc)
         {
-            this.GroupText = groupText;
-        }
-        public bool Add(IComposite c, Guid? parent)
-        {
-            if (!parent.HasValue || parent.Value == PublicKey)
+            CompleteGroup result = new CompleteGroup
             {
-                Group group = c as Group;
+                PublicKey = doc.PublicKey,
+                GroupText = doc.GroupText
+            };
+            result.Questions = doc.Questions.Select(q => (CompleteQuestion) q).ToList();
+            result.Groups = doc.Groups.Select(q => (CompleteGroup)q).ToList();
+            return result;
+        }
+        public Guid PublicKey { get; set; }
+
+        public string GroupText { get; set; }
+
+        public List<CompleteQuestion> Questions { get; set; }
+        public List<CompleteGroup> Groups { get; set; }
+
+
+        public new bool Add(IComposite c, Guid? parent)
+        {
+           /* if (!parent.HasValue || parent.Value == PublicKey)
+            {
+                CompleteGroup group = c as CompleteGroup;
                 if (group != null)
                 {
                     Groups.Add(group);
                     return true;
                 }
-                Question question = c as Question;
+                CompleteQuestion question = c as CompleteQuestion;
                 if (question != null)
                 {
                     Questions.Add(question);
@@ -58,13 +55,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 }
                 if (!parent.HasValue)
                     return false;
-            }
-            foreach (Group child in Groups)
+            }*/
+            foreach (CompleteGroup child in Groups)
             {
                 if (child.Add(c, parent))
                     return true;
             }
-            foreach (Question child in Questions)
+            foreach (CompleteQuestion child in Questions)
             {
                 if (child.Add(c, parent))
                     return true;
@@ -72,23 +69,23 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             return false;
         }
 
-        public bool Remove(IComposite c)
+        public new bool Remove(IComposite c)
         {
-            foreach (Group child in Groups)
+            foreach (CompleteGroup child in Groups)
             {
-                if (child == c)
+              /*  if (child == c)
                 {
                     Groups.Remove(child);
                     return true;
-                }
+                }*/
                 if (child.Remove(c))
                     return true;
             }
-            foreach (Question child in Questions)
+            foreach (CompleteQuestion child in Questions)
             {
                 if (child == c)
                 {
-                    Questions.Remove(child);
+                    child.Answers.ForEach(a => a.Reset());
                     return true;
                 }
                 if (child.Remove(c))
@@ -96,23 +93,23 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             }
             return false;
         }
-        public bool Remove<T>(Guid publicKey) where T : class, IComposite
+        public new bool Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            foreach (Group child in Groups)
+            foreach (CompleteGroup child in Groups)
             {
-                if (child.PublicKey == publicKey)
+               /* if (child.PublicKey == publicKey)
                 {
                     Groups.Remove(child);
                     return true;
-                }
+                }*/
                 if (child.Remove<T>(publicKey))
                     return true;
             }
-            foreach (Question child in Questions)
+            foreach (CompleteQuestion child in Questions)
             {
                 if (child.PublicKey == publicKey)
                 {
-                    Questions.Remove(child);
+                    child.Answers.ForEach(a => a.Reset());
                     return true;
                 }
                 if (child.Remove<T>(publicKey))
@@ -121,9 +118,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             return false;
         }
 
-        public T Find<T>(Guid publicKey) where T : class, IComposite
+        public new T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            foreach (Group child in Groups)
+            foreach (CompleteGroup child in Groups)
             {
                 if (child is T && child.PublicKey == publicKey)
                     return child as T;
@@ -131,7 +128,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 if (subNodes != null)
                     return subNodes;
             }
-            foreach (Question child in Questions)
+            foreach (CompleteQuestion child in Questions)
             {
                 if (child is T && child.PublicKey == publicKey)
                     return child as T;

@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Core.Views.Answer
         {
         }
 
-        public AnswerView(Guid questionPublicKey, RavenQuestionnaire.Core.Entities.SubEntities.Answer doc)
+        public AnswerView(Guid questionPublicKey, RavenQuestionnaire.Core.Entities.SubEntities.IAnswer doc)
         {
             this.PublicKey = doc.PublicKey;
             this.AnswerText = doc.AnswerText;

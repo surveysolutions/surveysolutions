@@ -7,6 +7,7 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
 {
@@ -17,7 +18,6 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
         public void WhenEmptyQuestionnaireIsPassed_ExceptionIsThrowed()
         {
             var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
-            questionnaire.GetInnerDocument().Questionnaire = new QuestionnaireDocument();
             Assert.Throws<ArgumentException>(
                 () => new QuestionnaireScreenIterator(questionnaire));
         }
@@ -25,12 +25,11 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
         public void First_FirstItemIsReturned()
         {
             var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
-            questionnaire.GetInnerDocument().Questionnaire = new QuestionnaireDocument();
-            questionnaire.GetInnerDocument().Questionnaire.Groups.Add(
+            questionnaire.GetInnerDocument().Groups.Add(
                 new 
-                    Group("first"));
-            questionnaire.GetInnerDocument().Questionnaire.Groups.Add(
-                new Group("second"));
+                    CompleteGroup("first"));
+            questionnaire.GetInnerDocument().Groups.Add(
+                new CompleteGroup("second"));
             var iterator = new QuestionnaireScreenIterator(questionnaire);
             Assert.AreEqual(iterator.First.GroupText, "first");
 
@@ -42,11 +41,10 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
         public void Iteration_WithoutConditions_GeneralTestForIteration()
         {
             var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
-            questionnaire.GetInnerDocument().Questionnaire = new QuestionnaireDocument();
-            questionnaire.GetInnerDocument().Questionnaire.Groups.Add(
-                new Group("first"));
-            questionnaire.GetInnerDocument().Questionnaire.Groups.Add(
-                new Group("second"));
+            questionnaire.GetInnerDocument().Groups.Add(
+                new CompleteGroup("first"));
+            questionnaire.GetInnerDocument().Groups.Add(
+                new CompleteGroup("second"));
             var iterator = new QuestionnaireScreenIterator(questionnaire);
 
             /* Assert.AreEqual(iterator.Next.QuestionText, "first");*/

@@ -6,6 +6,7 @@ using NUnit.Framework;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
@@ -41,28 +42,28 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         [Test]
         public void EvaluateCondition_ConditionIsValidParamsAreNotEmpty_ReturnsTrue()
         {
-            var completeAnswer = new CompleteAnswer();
-            completeAnswer.QuestionPublicKey = Guid.NewGuid();
-            completeAnswer.CustomAnswer = "3";
-            var previousResults = new List<CompleteAnswer>();
-            previousResults.Add(completeAnswer);
-
             CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor();
-            CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument() {CompletedAnswers = previousResults};
+            CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
+            doc.Questions.Add(new CompleteQuestion("", QuestionType.SingleOption));
+
+            var completeAnswer = new CompleteAnswer(new Answer(), doc.Questions[0].PublicKey);
+            completeAnswer.AnswerType = AnswerType.Text;
+            completeAnswer.CustomAnswer = "3";
+            completeAnswer.Selected = true;
+            doc.Questions[0].Answers.Add(completeAnswer);
             bool result = executor.Execute(new CompleteQuestionnaire(doc), "[" + completeAnswer.QuestionPublicKey + "]==3");
             Assert.AreEqual(result, true);
         }
         [Test]
         public void EvaluateCondition_ConditionIsInValidParamsAreNotEmpty_ReturnsTrue()
         {
-            var answer = new CompleteAnswer();
-            answer.QuestionPublicKey = Guid.NewGuid();
+            var answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
             answer.CustomAnswer = "invalid value";
-            var previousResults = new List<CompleteAnswer>();
-            previousResults.Add(answer);
 
             CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor();
-            CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument() { CompletedAnswers = previousResults };
+            CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
+            doc.Questions.Add(new CompleteQuestion("", QuestionType.SingleOption));
+            doc.Questions[0].Answers.Add(answer);
             bool result = executor.Execute(new CompleteQuestionnaire(doc),
                                            "[" + answer.QuestionPublicKey + "]==3");
             Assert.AreEqual(result, false);

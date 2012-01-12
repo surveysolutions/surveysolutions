@@ -6,7 +6,7 @@
 }
 <h1>@Model.Title</h1>
 <ul class="tabs">
-    @foreach (GroupView groupView in Model.Groups)
+    @foreach (CompleteGroupView groupView in Model.Groups)
     {
         string cssClass = groupView.PublicKey == Model.CurrentGroup.PublicKey ? "active" : "";
         <li  class="@cssClass">

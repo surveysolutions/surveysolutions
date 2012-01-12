@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities
 {
-    public class CompleteQuestionnaire : IEntity<CompleteQuestionnaireDocument>
+    public class CompleteQuestionnaire : IEntity<CompleteQuestionnaireDocument>, IComposite
     {
         private CompleteQuestionnaireDocument innerDocument;
         public CompleteQuestionnaireDocument GetInnerDocument()
@@ -17,13 +19,10 @@ namespace RavenQuestionnaire.Core.Entities
         }
         public CompleteQuestionnaire(Questionnaire template, UserLight user, SurveyStatus status)
         {
-            innerDocument = new CompleteQuestionnaireDocument()
-                                {
-                                    Questionnaire = ((IEntity<QuestionnaireDocument>) template).GetInnerDocument(),
-                                    Creator = user,
-                                    Status = status,
-                                    Responsible = user,
-                                };
+            innerDocument = (CompleteQuestionnaireDocument)((IEntity<QuestionnaireDocument>) template).GetInnerDocument();
+            innerDocument.Creator = user;
+            innerDocument.Status = status;
+            innerDocument.Responsible = user;
         }
 
         public CompleteQuestionnaire(CompleteQuestionnaireDocument document)
@@ -36,44 +35,36 @@ namespace RavenQuestionnaire.Core.Entities
             get { return innerDocument.Id; }
         }
 
-        public void ClearAnswers()
+       /* public void ClearAnswers()
         {
-            innerDocument.CompletedAnswers.Clear();
+            this.GetAllQuestions().ForEach(q => q.Reset());
         }
-        public void AddAnswer(CompleteAnswer answer, Guid? groupPublicKey)
+        public void AddAnswer(Guid publicKey, string customText)
         {
-            if(answer.PublicKey== Guid.Empty)
+            if (publicKey == Guid.Empty)
                 return;
-            if (innerDocument.CompletedAnswers.Any(a => a.PublicKey.Equals(answer.PublicKey)))
-                throw new DuplicateNameException("Answer with current public key already exists.");
 
-            var templateAnswer = this.GetQuestionsFromGroup(groupPublicKey).
-                Where(q=>q.PublicKey.Equals(answer.QuestionPublicKey)).
-                SelectMany(q => q.Answers).
-                FirstOrDefault(a => a.PublicKey.Equals(answer.PublicKey));
+            var templateAnswer = this.Find<CompleteAnswer>(publicKey);
 
             if (templateAnswer == null)
                 throw new InvalidOperationException("Answer with current public key doesn't exist in question list.");
-           /* if(!string.IsNullOrEmpty(answer.CustomAnswer) && templateAnswer.AnswerType!= AnswerType.Text)
-                throw new InvalidOperationException("Only answer with type 'Text' can have custom text.");*/
-            if (templateAnswer.AnswerType == AnswerType.Select)
-                answer.CustomAnswer = templateAnswer.AnswerText;
-            innerDocument.CompletedAnswers.Add(answer);
+            templateAnswer.GiveAnAnswer(customText);
         }
-        public void UpdateAnswer(CompleteAnswer answer, Guid? groupPublicKey)
+        public void ChangeAnswer(CompleteAnswer answer)
         {
-            var question = this.GetQuestionsFromGroup(groupPublicKey).FirstOrDefault(q => q.PublicKey.Equals(answer.QuestionPublicKey));
+            var question = this.Find<CompleteQuestion>(answer.QuestionPublicKey);
 
             if (question == null)
                 throw new InvalidOperationException("Question does not exist in questionnaire");
-
-            innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey == question.PublicKey);
-            AddAnswer(answer, groupPublicKey);
+            question.Reset();
+            question.SetAnswer(answer.PublicKey, answer.CustomAnswer);
         }
+
         public void RemoveAnswerOnQuestion(Guid questionPublicKey)
         {
-            innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey.Equals(questionPublicKey));
-        }
+            var question = this.Find<CompleteQuestion>(questionPublicKey);
+            question.ClearAnswers();
+        }*/
 
         public void SetStatus(SurveyStatus status)
         {
@@ -85,44 +76,154 @@ namespace RavenQuestionnaire.Core.Entities
         {
             innerDocument.Responsible = user;
         }
-
-
-        protected List<Question> GetQuestionsFromGroup(Guid? groupPublicKey)
+        public IEnumerable<CompleteAnswer> GetAllAnswers()
         {
-            Questionnaire questionnaire = new Questionnaire(innerDocument.Questionnaire);
-            List<Question> questions;
-            if (groupPublicKey.HasValue)
+            List<CompleteAnswer> result= new List<CompleteAnswer>();
+            foreach (CompleteQuestion completeQuestion in GetAllQuestions())
             {
-                Group group = questionnaire.Find<Group>(groupPublicKey.Value);
-                if (group == null)
-                    throw new ArgumentException("group does not exsit");
-                questions = group.Questions;
+                foreach (CompleteAnswer completeAnswer in completeQuestion.Answers)
+                {
+                    completeAnswer.QuestionPublicKey = completeQuestion.PublicKey;
+                    if (completeAnswer.Selected)
+                        result.Add(completeAnswer);
+                }
             }
-            else
+            return result;
+            //  return GetAllQuestions().SelectMany(q => q.Answers).Where(a => a.Selected);
+        }
+        public IList<CompleteGroup> GetAllGroups()
+        {
+            return innerDocument.Groups;
+        }
+        
+        #region Implementation of IComposite
+
+        public bool Add(IComposite c, Guid? parent)
+        {
+           /* if (!parent.HasValue)
             {
-                questions = innerDocument.Questionnaire.Questions;
+                CompleteGroup group = c as CompleteGroup;
+                if (group != null)
+                {
+                    innerDocument.Groups.Add(group);
+                    return true;
+                }
+                CompleteQuestion question = c as CompleteQuestion;
+                if (question != null)
+                {
+                    innerDocument.Questions.Add(question);
+                    return true;
+                }
+            }*/
+            foreach (CompleteGroup child in innerDocument.Groups)
+            {
+                if (child.Add(c, parent))
+                    return true;
             }
-            return questions;
+            foreach (CompleteQuestion child in innerDocument.Questions)
+            {
+                if (child.Add(c, parent))
+                    return true;
+            }
+            return false;
         }
 
-        public Questionnaire GetQuestionnaireTemplate()
+        public bool Remove(IComposite c)
         {
-            return new Questionnaire(innerDocument.Questionnaire);
+            foreach (CompleteGroup child in innerDocument.Groups)
+            {
+               /* if (child == c)
+                {
+                    innerDocument.Groups.Remove(child);
+                    return true;
+                }*/
+                if (child.Remove(c))
+                    return true;
+            }
+            foreach (CompleteQuestion child in innerDocument.Questions)
+            {
+                if (child == c)
+                {
+                    child.Answers.ForEach(a => a.Reset());
+                    return true;
+                }
+                if (child.Remove(c))
+                    return true;
+            }
+            return false;
         }
 
-        public IList<CompleteAnswer> GetAllAnswers()
+        public bool Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            return innerDocument.CompletedAnswers;
-        }
-        public IList<Question> GetAllQuestions()
-        {
-            return innerDocument.Questionnaire.Questions;
-        }
-        public IList<Group> GetAllGroups()
-        {
-            return innerDocument.Questionnaire.Groups;
+            foreach (CompleteGroup child in innerDocument.Groups)
+            {
+               /* if (child.PublicKey == publicKey)
+                {
+                    innerDocument.Groups.Remove(child);
+                    return true;
+                }*/
+                if (child.Remove<T>(publicKey))
+                    return true;
+            }
+            foreach (CompleteQuestion child in innerDocument.Questions)
+            {
+                if (child.PublicKey == publicKey)
+                {
+                    child.Answers.ForEach(a => a.Reset());
+                    return true;
+                }
+                if (child.Remove<T>(publicKey))
+                    return true;
+            }
+            return false;
         }
 
+        public T Find<T>(Guid publicKey) where T : class, IComposite
+        {
+            foreach (CompleteGroup child in innerDocument.Groups)
+            {
+                if (child is T && child.PublicKey == publicKey)
+                    return child as T;
+                T subNodes = child.Find<T>(publicKey);
+                if (subNodes != null)
+                    return subNodes;
+            }
+            foreach (CompleteQuestion child in innerDocument.Questions)
+            {
+                if (child is T && child.PublicKey == publicKey)
+                    return child as T;
+                T subNodes = child.Find<T>(publicKey);
+                if (subNodes != null)
+                    return subNodes;
+            }
+            return null;
+        }
 
+        #endregion
+        public List<CompleteQuestion> GetRootQuestions()
+        {
+            return innerDocument.Questions;
+        }
+
+        public List<CompleteQuestion> GetAllQuestions()
+        {
+            List<CompleteQuestion> result = new List<CompleteQuestion>();
+            result.AddRange(innerDocument.Questions);
+            Queue<CompleteGroup> groups = new Queue<CompleteGroup>();
+            foreach (var child in innerDocument.Groups)
+            {
+                groups.Enqueue(child);
+            }
+            while (groups.Count != 0)
+            {
+                var queueItem = groups.Dequeue();
+                result.AddRange(queueItem.Questions);
+                foreach (var child in queueItem.Groups)
+                {
+                    groups.Enqueue(child);
+                }
+            }
+            return result;
+        }
     }
 }

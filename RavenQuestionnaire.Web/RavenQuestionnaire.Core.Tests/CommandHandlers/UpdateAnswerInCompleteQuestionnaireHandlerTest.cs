@@ -9,6 +9,7 @@ using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
 
@@ -22,17 +23,15 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         {
             Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             CompleteQuestionnaireDocument qDoqument= new CompleteQuestionnaireDocument();
-            qDoqument.Questionnaire= new QuestionnaireDocument();
-            Question question = new Question( "q",
+            CompleteQuestion question = new CompleteQuestion("q",
                                              QuestionType.SingleOption);
-            Answer answer= new Answer();
+            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
             question.Answers.Add(answer);
-            qDoqument.Questionnaire.Questions.Add(question);
+            qDoqument.Questions.Add(question);
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
             UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
-                                                                                                                null,
                                                                                                                 new CompleteAnswer
                                                                                                                     []
                                                                                                                     {
@@ -45,8 +44,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                 null);
             handler.Handle(command);
             repositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqId"), Times.Once());
-            Assert.AreEqual(qDoqument.CompletedAnswers[0].QuestionPublicKey, question.PublicKey);
-            Assert.AreEqual(qDoqument.CompletedAnswers[0].PublicKey, answer.PublicKey);
+            Assert.AreEqual(qDoqument.Questions[0].PublicKey, question.PublicKey);
+            Assert.AreEqual(qDoqument.Questions[0].Answers[0].Selected, true);
         }
     }
 }
