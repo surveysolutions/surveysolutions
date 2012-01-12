@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
             InitGroups(doc);
-            this.CurrentGroup = new CompleteGroupView(doc.Id, currentGroup);
+            this.CurrentGroup = new CompleteGroupView(doc, currentGroup);
         }
         public CompleteQuestionnaireViewEnumerable(CompleteQuestionnaireDocument doc)
         {
@@ -57,11 +57,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             if (doc.Questions.Count > 0)
             {
                 this.Groups = new CompleteGroupView[doc.Groups.Count + 1];
-                this.Groups[0] = new CompleteGroupView(doc.Id,
+                this.Groups[0] = new CompleteGroupView(doc,
                                                new Entities.SubEntities.Complete.CompleteGroup("Main") {PublicKey = Guid.Empty});
                 for (int i = 1; i <= doc.Groups.Count; i++)
                 {
-                    this.Groups[i] = new CompleteGroupView(doc.Id, doc.Groups[i - 1]);
+                    this.Groups[i] = new CompleteGroupView(doc, doc.Groups[i - 1]);
                 }
             }
             else
@@ -69,7 +69,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 this.Groups = new CompleteGroupView[doc.Groups.Count];
                 for (int i = 0; i < doc.Groups.Count; i++)
                 {
-                    this.Groups[i] = new CompleteGroupView(doc.Id, doc.Groups[i - 1]);
+                    this.Groups[i] = new CompleteGroupView(doc, doc.Groups[i - 1]);
                 }
             }
         }
