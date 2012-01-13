@@ -21,7 +21,7 @@ namespace RavenQuestionnaire.Core.Services
             CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire, user, status);
             foreach (CompleteAnswer completeAnswer in answers)
             {
-                entity.Remove<Question>(completeAnswer.QuestionPublicKey);
+             //   entity.Remove<Question>(completeAnswer.QuestionPublicKey);
                 entity.Add(completeAnswer, completeAnswer.QuestionPublicKey);
                // entity.ChangeAnswer(completeAnswer);
             }

@@ -37,7 +37,7 @@ namespace RavenQuestionnaire.Core.Entities
         {
             
             Question result = new Question() {QuestionText = text, QuestionType = type, StataExportCaption = stataExportCaption};
-            result.SetConditionExpression(condition);
+            result.ConditionExpression = condition;
             if(!Add(result, groupPublicKey))
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey.Value));
             return result;
@@ -73,7 +73,7 @@ namespace RavenQuestionnaire.Core.Entities
             question.StataExportCaption = stataExportCaption;
             question.QuestionType = type;
             question.UpdateAnswerList(answers);
-            question.SetConditionExpression(condition);
+            question.ConditionExpression = condition;
         }
        
         public bool Add(IComposite c, Guid? parent)

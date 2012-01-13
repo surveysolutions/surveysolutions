@@ -13,9 +13,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         Guid PublicKey { get; set; }
         string QuestionText { get; set; }
         QuestionType QuestionType { get; set; }
-        string ConditionExpression { get; }
+        string ConditionExpression { get; set; }
         string StataExportCaption { get; set; }
-        void SetConditionExpression(string expression);
     }
 
     public interface IQuestion<T> : IQuestion where T : IAnswer
@@ -41,7 +40,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
         public List<Answer> Answers { get; set; }
-        public string ConditionExpression { get; private set; }
+        public string ConditionExpression { get; set; }
 
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
@@ -59,11 +58,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 Add(answer, PublicKey);
             }
         }
-        public void SetConditionExpression(string expression)
-        {
-            ConditionExpression = expression;
-        }
-
         public void AddAnswer(Answer answer)
         {
             if (Answers.Any(a => a.PublicKey.Equals(answer.PublicKey)))

@@ -8,7 +8,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class CompleteQuestion : IQuestion<CompleteAnswer>
+    public class CompleteQuestion : ICompleteQuestion<CompleteAnswer>
     {
         public CompleteQuestion()
         {
@@ -44,7 +44,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public  List<CompleteAnswer> Answers { get; set; }
 
-        public string ConditionExpression { get; private set; }
+        public string ConditionExpression { get; set; }
 
         public string StataExportCaption { get; set; }
 
@@ -68,10 +68,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             }
         }*/
 
-        public void SetConditionExpression(string expression)
-        {
-            ConditionExpression = expression;
-        }
       /*  public void AddAnswer(CompleteAnswer answer)
         {
             CompleteAnswer completeAnswer =
@@ -81,11 +77,19 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                                                           answer.PublicKey));
             completeAnswer.Set(answer.CustomAnswer);
         }*/
-        public  bool Add(IComposite c, Guid? parent)
+        public bool Add(IComposite c, Guid? parent)
         {
-            if (c as CompleteAnswer == null)
+            CompleteAnswer currentAnswer = c as CompleteAnswer;
+            if (currentAnswer == null)
                 return false;
-            return Answers.Any(answer => answer.Add(c, parent));
+            bool result = Answers.Any(answer => answer.Add(c, parent));
+            if (result)
+                foreach (CompleteAnswer answer in Answers)
+                {
+                    if (answer.PublicKey != currentAnswer.PublicKey)
+                        answer.Selected = false;
+                }
+            return result;
         }
 
         public bool Remove(IComposite c)

@@ -29,8 +29,8 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             CompleteQuestionnaire entity = _questionnaireRepository.Load(command.CompleteQuestionnaireId);
             foreach (CompleteAnswer completeAnswer in command.CompleteAnswers)
             {
-                entity.Remove<CompleteQuestion>(completeAnswer.QuestionPublicKey);
-                entity.Add(completeAnswer, completeAnswer.QuestionPublicKey);
+            //    entity.Remove<CompleteQuestion>(completeAnswer.QuestionPublicKey);
+                entity.Add(completeAnswer, null);
             }
             RemoveDisabledAnswers(entity);
         }
@@ -45,7 +45,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             {
                 if (!this._conditionExecutor.Execute(entity, question.ConditionExpression))
                 {
-                    entity.Remove<CompleteQuestion>(question.PublicKey);
+                    entity.Remove(question);
                     question.Enabled = false;
                 }
                 else
