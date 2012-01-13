@@ -47,5 +47,84 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Assert.AreEqual(qDoqument.Questions[0].PublicKey, question.PublicKey);
             Assert.AreEqual(qDoqument.Questions[0].Answers[0].Selected, true);
         }
+        [Test]
+        public void AddNewAnswerInPropagatedGroup_ValidAnswer_AnswerIsAdded()
+        {
+            CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
+            CompleteGroup group = new CompleteGroup("test") {Propagated = true};
+            CompleteQuestion question = new CompleteQuestion("q",
+                                           QuestionType.SingleOption);
+            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            question.Answers.Add(answer);
+            group.Questions.Add(question);
+            qDoqument.Groups.Add(group);
+            questionanire.Add(group, null);
+            Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
+            repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
+
+            CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
+
+
+            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
+            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
+                                                                                                                new CompleteAnswer
+                                                                                                                    []
+                                                                                                                    {
+                                                                                                                        new PropagatableCompleteAnswer
+                                                                                                                            (completeAnswer,
+                                                                                                                             ((
+                                                                                                                              PropagatableCompleteGroup
+                                                                                                                              )
+                                                                                                                              qDoqument
+                                                                                                                                  .
+                                                                                                                                  Groups
+                                                                                                                                  [
+                                                                                                                                      1
+                                                                                                                                  ])
+                                                                                                                                 .
+                                                                                                                                 PropogationPublicKey)
+                                                                                                                    },
+                                                                                                                null);
+            handler.Handle(command);
+
+            Assert.AreEqual(qDoqument.Groups[0].Questions[0].Answers[0].Selected, false);
+            Assert.AreEqual(qDoqument.Groups[1].Questions[0].Answers[0].Selected, true);
+            //  group.Add(group, null);
+        }
+
+        [Test]
+        public void AddNewAnswerInPropagatedGroup_InvalidPropogationGuid_NoAnswersIsSelected()
+        {
+            CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
+            CompleteGroup group = new CompleteGroup("test") { Propagated = true };
+            CompleteQuestion question = new CompleteQuestion("q",
+                                           QuestionType.SingleOption);
+            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            question.Answers.Add(answer);
+            group.Questions.Add(question);
+            qDoqument.Groups.Add(group);
+            questionanire.Add(group, null);
+            Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
+            repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
+
+            CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
+
+
+            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
+            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
+                                                                                                                new CompleteAnswer
+                                                                                                                    []
+                                                                                                                    {
+                                                                                                                        new PropagatableCompleteAnswer
+                                                                                                                            (completeAnswer,Guid.NewGuid())
+                                                                                                                    },
+                                                                                                                null);
+            handler.Handle(command);
+
+            Assert.AreEqual(questionanire.GetAllAnswers().Select(a => a.Selected).Count(), 0);
+            //  group.Add(group, null);
+        }
     }
 }

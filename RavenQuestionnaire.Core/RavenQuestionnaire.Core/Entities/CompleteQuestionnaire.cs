@@ -69,6 +69,15 @@ namespace RavenQuestionnaire.Core.Entities
 
         public virtual bool Add(IComposite c, Guid? parent)
         {
+            if (!parent.HasValue)
+            {
+                CompleteGroup propogate = c as CompleteGroup;
+                if (propogate != null && propogate.Propagated)
+                {
+                    innerDocument.Groups.Add(new PropagatableCompleteGroup(propogate, Guid.NewGuid()));
+                    return true;
+                }
+            }
             if (innerDocument.Groups.Any(child => child.Add(c, parent)))
             {
                 return true;

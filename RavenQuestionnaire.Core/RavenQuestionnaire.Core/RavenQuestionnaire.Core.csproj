@@ -164,8 +164,12 @@
     <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteGroup.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\ICompleteGroup.cs" />
+    <Compile Include="Entities\SubEntities\Complete\ICompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\IPropogate.cs" />
+    <Compile Include="Entities\SubEntities\Complete\PropagatableCompleteAnswer.cs" />
     <Compile Include="Entities\SubEntities\Complete\PropagatableCompleteGroup.cs" />
+    <Compile Include="Entities\SubEntities\Complete\PropagatableCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Group.cs" />
     <Compile Include="Entities\SubEntities\LocationWithUserStatistic.cs" />
     <Compile Include="Entities\SubEntities\Question.cs" />

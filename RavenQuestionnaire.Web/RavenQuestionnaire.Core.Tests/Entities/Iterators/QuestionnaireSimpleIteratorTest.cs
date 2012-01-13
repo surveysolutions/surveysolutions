@@ -68,11 +68,11 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
 
 
             CompleteQuestion falseConditionQuestion = new CompleteQuestion("false", QuestionType.DynamicInputList);
-            falseConditionQuestion.SetConditionExpression("5<1");
+            falseConditionQuestion.ConditionExpression="5<1";
             CompleteQuestion trueConditionQuestion1 = new CompleteQuestion("true1", QuestionType.DynamicInputList);
-            trueConditionQuestion1.SetConditionExpression("5>1");
+            trueConditionQuestion1.ConditionExpression="5>1";
             CompleteQuestion trueConditionQuestion2 = new CompleteQuestion("true2", QuestionType.DynamicInputList);
-            trueConditionQuestion2.SetConditionExpression("5>1");
+            trueConditionQuestion2.ConditionExpression="5>1";
          
             questionnaire.GetInnerDocument().Questions.Add(trueConditionQuestion1);
             questionnaire.GetInnerDocument().Questions.Add(trueConditionQuestion2);

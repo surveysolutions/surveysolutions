@@ -7,28 +7,31 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class CompleteGroup : IGroup<CompleteGroup, CompleteQuestion>
+    public class CompleteGroup : ICompleteGroup<CompleteGroup, CompleteQuestion>
     {
         public CompleteGroup()
         {
-            Questions= new List<CompleteQuestion>();
+            Questions = new List<CompleteQuestion>();
             Groups = new List<CompleteGroup>();
         }
-        public CompleteGroup(string name):this()
+
+        public CompleteGroup(string name)
+            : this()
         {
             this.GroupText = name;
         }
+
         public static explicit operator CompleteGroup(Group doc)
         {
-            CompleteGroup result;
+            /*CompleteGroup result;
             if (doc.Propagated)
                 result = new PropagatableCompleteGroup()
                              {
                                  PublicKey = doc.PublicKey,
                                  GroupText = doc.GroupText,
                                  Propagated = true
-                             };
-            result = new CompleteGroup
+                             };*/
+            CompleteGroup result = new CompleteGroup
                          {
                              PublicKey = doc.PublicKey,
                              GroupText = doc.GroupText,
@@ -51,6 +54,18 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public virtual bool Add(IComposite c, Guid? parent)
         {
+            IPropogate propogated = c as IPropogate;
+            if (propogated != null && !(this is IPropogate))
+                return false;
+            if (!parent.HasValue || parent.Value == PublicKey)
+            {
+                CompleteGroup propogate = c as CompleteGroup;
+                if (propogate != null && propogate.Propagated)
+                {
+                    Groups.Add(new PropagatableCompleteGroup(propogate, Guid.NewGuid()));
+                    return true;
+                }
+            }
             if (Groups.Any(child => child.Add(c, parent)))
             {
                 return true;
@@ -58,8 +73,16 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return Questions.Any(child => child.Add(c, parent));
         }
 
-        public bool Remove(IComposite c)
+        public virtual bool Remove(IComposite c)
         {
+            PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
+            if (propogate != null)
+            {
+                Groups.RemoveAll(
+                    g =>
+                    g.PublicKey.Equals(propogate.PublicKey) &&
+                    ((IPropogate) g).PropogationPublicKey.Equals(propogate.PropogationPublicKey));
+            }
             if (Groups.Any(child => child.Remove(c)))
             {
                 return true;
@@ -67,8 +90,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return Questions.Any(child => child.Remove(c));
         }
 
-        public bool Remove<T>(Guid publicKey) where T : class, IComposite
+        public virtual bool Remove<T>(Guid publicKey) where T : class, IComposite
         {
+            if(typeof(T)== typeof(PropagatableCompleteGroup))
+            {
+                Groups.RemoveAll(
+                   g =>
+                   g.PublicKey.Equals(publicKey));
+            }
             if (Groups.Any(child => child.Remove<T>(publicKey)))
             {
                 return true;
@@ -76,39 +105,23 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return Questions.Any(child => child.Remove<T>(publicKey));
         }
 
-        public T Find<T>(Guid publicKey) where T : class, IComposite
+        public virtual T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            if (typeof(T) == GetType())
+            if (typeof (T) == GetType())
             {
                 if (this.PublicKey.Equals(publicKey))
                     return this as T;
             }
-            var resultInsideGroups = Groups.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+            var resultInsideGroups =
+                Groups.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
             if (resultInsideGroups != null)
                 return resultInsideGroups;
-            var resultInsideQuestions = Questions.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+            var resultInsideQuestions =
+                Questions.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
             if (resultInsideQuestions != null)
                 return resultInsideQuestions;
-          /*  foreach (CompleteGroup child in Groups)
-            {
-               
-                if (child is T && child.PublicKey == publicKey)
-                    return child as T;
-                T subNodes = child.Find<T>(publicKey);
-                if (subNodes != null)
-                    return subNodes;
-            }
-            foreach (CompleteQuestion child in Questions)
-            {
-                if (child is T && child.PublicKey == publicKey)
-                    return child as T;
-                T subNodes = child.Find<T>(publicKey);
-                if (subNodes != null)
-                    return subNodes;
-            }*/
             return null;
         }
 
-      
     }
 }

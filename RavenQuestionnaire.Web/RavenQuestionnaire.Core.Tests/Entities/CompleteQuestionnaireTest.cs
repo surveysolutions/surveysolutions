@@ -75,7 +75,42 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             innerDocument.Questions = questions;
             Assert.AreEqual(completeQuestionnaire.GetAllQuestions(), questions);
         }
+        [Test]
+        public void PropogateGroup_ValidData_GroupIsAdded()
+        {
 
+            CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
+            CompleteGroup group = new CompleteGroup("test") { Propagated = true };
+            CompleteQuestion question = new CompleteQuestion("q",
+                                           QuestionType.SingleOption);
+            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            question.Answers.Add(answer);
+            group.Questions.Add(question);
+            qDoqument.Groups.Add(group);
+
+            questionanire.Add(group, null);
+
+            Assert.AreEqual(qDoqument.Groups.Count, 2);
+            Assert.AreEqual(qDoqument.Groups[0].PublicKey, qDoqument.Groups[1].PublicKey);
+            Assert.True(qDoqument.Groups[1] is IPropogate);
+        }
+        [Test]
+        public void PropogateGroup_InValidDataNotPropogatebleGroup_GroupIsNotAdded()
+        {
+
+            CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
+            CompleteGroup group = new CompleteGroup("test");
+            CompleteQuestion question = new CompleteQuestion("q",
+                                           QuestionType.SingleOption);
+            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            question.Answers.Add(answer);
+            group.Questions.Add(question);
+            qDoqument.Groups.Add(group);
+            questionanire.Add(group, null);
+            Assert.AreEqual(qDoqument.Groups.Count, 1);
+        }
      /*   [Test]
         public void UpdateAnswer_UpdateUnpresentedQuestion_ExceptionIsThrownen()
         {
