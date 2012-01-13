@@ -72,7 +72,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             ConditionExpression = expression;
         }
-        public void AddAnswer(CompleteAnswer answer)
+      /*  public void AddAnswer(CompleteAnswer answer)
         {
             CompleteAnswer completeAnswer =
                 this.Answers.FirstOrDefault(a => a.PublicKey.Equals(answer.PublicKey));
@@ -80,48 +80,56 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 throw new ArgumentException(string.Format("answer with guid {0} doesn't exists in current question",
                                                           answer.PublicKey));
             completeAnswer.Set(answer.CustomAnswer);
-        }
+        }*/
         public  bool Add(IComposite c, Guid? parent)
         {
-            if (!parent.HasValue || parent.Value == PublicKey)
+            if (c as CompleteAnswer == null)
+                return false;
+            return Answers.Any(answer => answer.Add(c, parent));
+        }
+
+        public bool Remove(IComposite c)
+        {
+            CompleteQuestion question = c as CompleteQuestion;
+            if (question != null && this.PublicKey.Equals(question.PublicKey))
             {
-                CompleteAnswer answer = c as CompleteAnswer;
-                if (answer != null)
+                foreach (CompleteAnswer answer in Answers)
                 {
-                    this.AddAnswer(answer);
-                    return true;
+                    answer.Remove(answer);
                 }
+                return true;
             }
+            if (c as CompleteAnswer == null)
+                return Answers.Any(answer => answer.Remove(c));
             return false;
         }
 
-        public  bool Remove(IComposite c)
+        public bool Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            CompleteAnswer answer = c as CompleteAnswer;
-            if (answer != null)
+            if (typeof(T) == GetType() && this.PublicKey.Equals(publicKey))
             {
-                answer.Reset();
-                return true;
-            }
-            return false;
-        }
-        public  bool Remove<T>(Guid publicKey) where T : class, IComposite
-        {
-            if (typeof(T) == typeof(CompleteAnswer))
-            {
-                foreach (CompleteAnswer completeAnswer in Answers)
+                foreach (CompleteAnswer answer in Answers)
                 {
-                    completeAnswer.Reset();
+                    answer.Remove(answer);
                 }
                 return true;
             }
+            if (typeof (T) != typeof (CompleteAnswer))
+                return Answers.Any(answer => answer.Remove<T>(publicKey));
             return false;
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
+            if (typeof(T) == GetType())
+            {
+                if (this.PublicKey.Equals(publicKey))
+                    return this as T;
+            }
             if (typeof(T) == typeof(CompleteAnswer))
-                return Answers.FirstOrDefault(a => a.PublicKey.Equals(publicKey)) as T;
+            {
+                return Answers.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+            }
             return null;
         }
     }

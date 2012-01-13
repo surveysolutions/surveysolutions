@@ -10,6 +10,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     {
         Guid PublicKey { get; set; }
         string GroupText { get; set; }
+        bool Propagated { get; set; }
     }
 
     public interface IGroup<TGroup, TQuestion> : IGroup
@@ -34,6 +35,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public Guid PublicKey { get; set; }
         public string GroupText { get; set; }
+        public bool Propagated { get; set; }
         public List<Question> Questions  { get; set; }
         public List<Group> Groups { get; set; }
         public void Update(string groupText)

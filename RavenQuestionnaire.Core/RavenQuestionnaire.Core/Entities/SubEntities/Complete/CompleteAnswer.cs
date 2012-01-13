@@ -35,12 +35,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         [XmlIgnore]
         public Guid QuestionPublicKey { get; set; }
         public bool Selected { get; set; }
-        public void Set(string text)
+        protected void Set(string text)
         {
             this.Selected = true;
             this.CustomAnswer = text;
         }
-        public void Reset()
+        protected void Reset()
         {
             this.Selected = false;
             this.CustomAnswer = null;
@@ -50,20 +50,49 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public bool Add(IComposite c, Guid? parent)
         {
+            CompleteAnswer answer = c as CompleteAnswer;
+            if (answer == null)
+                return false;
+            if (answer.PublicKey == PublicKey)
+            {
+                Set(answer.CustomAnswer);
+                return true;
+            }
             return false;
         }
 
         public bool Remove(IComposite c)
         {
+            CompleteAnswer answer = c as CompleteAnswer;
+            if (answer == null)
+                return false;
+            if (answer.PublicKey == PublicKey)
+            {
+                Reset();
+                return true;
+            }
             return false;
         }
         public bool Remove<T>(Guid publicKey) where T : class, IComposite
         {
+            if (typeof(T) != GetType())
+                return false;
+            if (publicKey == PublicKey)
+            {
+                Reset();
+                return true;
+            }
             return false;
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
+            if (typeof(T) != GetType())
+                return null;
+            if (publicKey == PublicKey)
+            {
+                return this as T;
+            }
             return null;
         }
 

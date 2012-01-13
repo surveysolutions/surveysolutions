@@ -7,7 +7,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class CompleteGroup: IGroup<CompleteGroup, CompleteQuestion>
+    public class CompleteGroup : IGroup<CompleteGroup, CompleteQuestion>
     {
         public CompleteGroup()
         {
@@ -20,123 +20,95 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
         public static explicit operator CompleteGroup(Group doc)
         {
-            CompleteGroup result = new CompleteGroup
-            {
-                PublicKey = doc.PublicKey,
-                GroupText = doc.GroupText
-            };
+            CompleteGroup result;
+            if (doc.Propagated)
+                result = new PropagatableCompleteGroup()
+                             {
+                                 PublicKey = doc.PublicKey,
+                                 GroupText = doc.GroupText,
+                                 Propagated = true
+                             };
+            result = new CompleteGroup
+                         {
+                             PublicKey = doc.PublicKey,
+                             GroupText = doc.GroupText,
+                             Propagated = false
+                         };
             result.Questions = doc.Questions.Select(q => (CompleteQuestion) q).ToList();
-            result.Groups = doc.Groups.Select(q => (CompleteGroup)q).ToList();
+            result.Groups = doc.Groups.Select(q => (CompleteGroup) q).ToList();
             return result;
         }
+
         public Guid PublicKey { get; set; }
 
         public string GroupText { get; set; }
 
+        public bool Propagated { get; set; }
+
         public List<CompleteQuestion> Questions { get; set; }
+
         public List<CompleteGroup> Groups { get; set; }
 
-
-        public new bool Add(IComposite c, Guid? parent)
+        public virtual bool Add(IComposite c, Guid? parent)
         {
-           /* if (!parent.HasValue || parent.Value == PublicKey)
+            if (Groups.Any(child => child.Add(c, parent)))
             {
-                CompleteGroup group = c as CompleteGroup;
-                if (group != null)
-                {
-                    Groups.Add(group);
-                    return true;
-                }
-                CompleteQuestion question = c as CompleteQuestion;
-                if (question != null)
-                {
-                    Questions.Add(question);
-                    return true;
-                }
-                if (!parent.HasValue)
-                    return false;
+                return true;
+            }
+            return Questions.Any(child => child.Add(c, parent));
+        }
+
+        public bool Remove(IComposite c)
+        {
+            if (Groups.Any(child => child.Remove(c)))
+            {
+                return true;
+            }
+            return Questions.Any(child => child.Remove(c));
+        }
+
+        public bool Remove<T>(Guid publicKey) where T : class, IComposite
+        {
+            if (Groups.Any(child => child.Remove<T>(publicKey)))
+            {
+                return true;
+            }
+            return Questions.Any(child => child.Remove<T>(publicKey));
+        }
+
+        public T Find<T>(Guid publicKey) where T : class, IComposite
+        {
+            if (typeof(T) == GetType())
+            {
+                if (this.PublicKey.Equals(publicKey))
+                    return this as T;
+            }
+            var resultInsideGroups = Groups.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+            if (resultInsideGroups != null)
+                return resultInsideGroups;
+            var resultInsideQuestions = Questions.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+            if (resultInsideQuestions != null)
+                return resultInsideQuestions;
+          /*  foreach (CompleteGroup child in Groups)
+            {
+               
+                if (child is T && child.PublicKey == publicKey)
+                    return child as T;
+                T subNodes = child.Find<T>(publicKey);
+                if (subNodes != null)
+                    return subNodes;
+            }
+            foreach (CompleteQuestion child in Questions)
+            {
+                if (child is T && child.PublicKey == publicKey)
+                    return child as T;
+                T subNodes = child.Find<T>(publicKey);
+                if (subNodes != null)
+                    return subNodes;
             }*/
-            foreach (CompleteGroup child in Groups)
-            {
-                if (child.Add(c, parent))
-                    return true;
-            }
-            foreach (CompleteQuestion child in Questions)
-            {
-                if (child.Add(c, parent))
-                    return true;
-            }
-            return false;
-        }
-
-        public new bool Remove(IComposite c)
-        {
-            foreach (CompleteGroup child in Groups)
-            {
-              /*  if (child == c)
-                {
-                    Groups.Remove(child);
-                    return true;
-                }*/
-                if (child.Remove(c))
-                    return true;
-            }
-            foreach (CompleteQuestion child in Questions)
-            {
-                if (child == c)
-                {
-                    child.Answers.ForEach(a => a.Reset());
-                    return true;
-                }
-                if (child.Remove(c))
-                    return true;
-            }
-            return false;
-        }
-        public new bool Remove<T>(Guid publicKey) where T : class, IComposite
-        {
-            foreach (CompleteGroup child in Groups)
-            {
-               /* if (child.PublicKey == publicKey)
-                {
-                    Groups.Remove(child);
-                    return true;
-                }*/
-                if (child.Remove<T>(publicKey))
-                    return true;
-            }
-            foreach (CompleteQuestion child in Questions)
-            {
-                if (child.PublicKey == publicKey)
-                {
-                    child.Answers.ForEach(a => a.Reset());
-                    return true;
-                }
-                if (child.Remove<T>(publicKey))
-                    return true;
-            }
-            return false;
-        }
-
-        public new T Find<T>(Guid publicKey) where T : class, IComposite
-        {
-            foreach (CompleteGroup child in Groups)
-            {
-                if (child is T && child.PublicKey == publicKey)
-                    return child as T;
-                T subNodes = child.Find<T>(publicKey);
-                if (subNodes != null)
-                    return subNodes;
-            }
-            foreach (CompleteQuestion child in Questions)
-            {
-                if (child is T && child.PublicKey == publicKey)
-                    return child as T;
-                T subNodes = child.Find<T>(publicKey);
-                if (subNodes != null)
-                    return subNodes;
-            }
             return null;
         }
+
+      
     }
 }

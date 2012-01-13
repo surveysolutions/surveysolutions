@@ -10,7 +10,7 @@ using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities
 {
-    public class CompleteQuestionnaire : IEntity<CompleteQuestionnaireDocument>, IComposite
+    public class CompleteQuestionnaire : IEntity<CompleteQuestionnaireDocument>, IComposite//, IPropogate
     {
         private CompleteQuestionnaireDocument innerDocument;
         public CompleteQuestionnaireDocument GetInnerDocument()
@@ -34,37 +34,6 @@ namespace RavenQuestionnaire.Core.Entities
         {
             get { return innerDocument.Id; }
         }
-
-       /* public void ClearAnswers()
-        {
-            this.GetAllQuestions().ForEach(q => q.Reset());
-        }
-        public void AddAnswer(Guid publicKey, string customText)
-        {
-            if (publicKey == Guid.Empty)
-                return;
-
-            var templateAnswer = this.Find<CompleteAnswer>(publicKey);
-
-            if (templateAnswer == null)
-                throw new InvalidOperationException("Answer with current public key doesn't exist in question list.");
-            templateAnswer.GiveAnAnswer(customText);
-        }
-        public void ChangeAnswer(CompleteAnswer answer)
-        {
-            var question = this.Find<CompleteQuestion>(answer.QuestionPublicKey);
-
-            if (question == null)
-                throw new InvalidOperationException("Question does not exist in questionnaire");
-            question.Reset();
-            question.SetAnswer(answer.PublicKey, answer.CustomAnswer);
-        }
-
-        public void RemoveAnswerOnQuestion(Guid questionPublicKey)
-        {
-            var question = this.Find<CompleteQuestion>(questionPublicKey);
-            question.ClearAnswers();
-        }*/
 
         public void SetStatus(SurveyStatus status)
         {
@@ -98,104 +67,41 @@ namespace RavenQuestionnaire.Core.Entities
         
         #region Implementation of IComposite
 
-        public bool Add(IComposite c, Guid? parent)
+        public virtual bool Add(IComposite c, Guid? parent)
         {
-           /* if (!parent.HasValue)
+            if (innerDocument.Groups.Any(child => child.Add(c, parent)))
             {
-                CompleteGroup group = c as CompleteGroup;
-                if (group != null)
-                {
-                    innerDocument.Groups.Add(group);
-                    return true;
-                }
-                CompleteQuestion question = c as CompleteQuestion;
-                if (question != null)
-                {
-                    innerDocument.Questions.Add(question);
-                    return true;
-                }
-            }*/
-            foreach (CompleteGroup child in innerDocument.Groups)
-            {
-                if (child.Add(c, parent))
-                    return true;
+                return true;
             }
-            foreach (CompleteQuestion child in innerDocument.Questions)
-            {
-                if (child.Add(c, parent))
-                    return true;
-            }
-            return false;
+            return innerDocument.Questions.Any(child => child.Add(c, parent));
         }
 
         public bool Remove(IComposite c)
         {
-            foreach (CompleteGroup child in innerDocument.Groups)
+            if (innerDocument.Groups.Any(child => child.Remove(c)))
             {
-               /* if (child == c)
-                {
-                    innerDocument.Groups.Remove(child);
-                    return true;
-                }*/
-                if (child.Remove(c))
-                    return true;
+                return true;
             }
-            foreach (CompleteQuestion child in innerDocument.Questions)
-            {
-                if (child == c)
-                {
-                    child.Answers.ForEach(a => a.Reset());
-                    return true;
-                }
-                if (child.Remove(c))
-                    return true;
-            }
-            return false;
+            return innerDocument.Questions.Any(child => child.Remove(c));
         }
 
         public bool Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            foreach (CompleteGroup child in innerDocument.Groups)
+            if (innerDocument.Groups.Any(child => child.Remove<T>(publicKey)))
             {
-               /* if (child.PublicKey == publicKey)
-                {
-                    innerDocument.Groups.Remove(child);
-                    return true;
-                }*/
-                if (child.Remove<T>(publicKey))
-                    return true;
+                return true;
             }
-            foreach (CompleteQuestion child in innerDocument.Questions)
-            {
-                if (child.PublicKey == publicKey)
-                {
-                    child.Answers.ForEach(a => a.Reset());
-                    return true;
-                }
-                if (child.Remove<T>(publicKey))
-                    return true;
-            }
-            return false;
+            return innerDocument.Questions.Any(child => child.Remove<T>(publicKey));
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            foreach (CompleteGroup child in innerDocument.Groups)
-            {
-                if (child is T && child.PublicKey == publicKey)
-                    return child as T;
-                T subNodes = child.Find<T>(publicKey);
-                if (subNodes != null)
-                    return subNodes;
-            }
-            foreach (CompleteQuestion child in innerDocument.Questions)
-            {
-                if (child is T && child.PublicKey == publicKey)
-                    return child as T;
-                T subNodes = child.Find<T>(publicKey);
-                if (subNodes != null)
-                    return subNodes;
-            }
+            var resultInsideGroups = innerDocument.Groups.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+            if (resultInsideGroups != null)
+                return resultInsideGroups;
+            var resultInsideQuestions = innerDocument.Questions.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+            if (resultInsideQuestions != null)
+                return resultInsideQuestions;
             return null;
         }
 
@@ -225,5 +131,25 @@ namespace RavenQuestionnaire.Core.Entities
             }
             return result;
         }
+
+      /*  #region Implementation of IPropogate
+
+        public void Propogate(Guid childGroupPublicKey)
+        {
+            var group = this.innerDocument.Groups.FirstOrDefault(g => g.PublicKey.Equals(childGroupPublicKey));
+            if (group == null)
+                throw new ArgumentException("Propogated group can't be founded");
+            this.innerDocument.Groups.Add(group);
+        }
+
+        public void RemovePropogated(Guid childGroupPublicKey)
+        {
+            var group = this.innerDocument.Groups.FirstOrDefault(g => g.PublicKey.Equals(childGroupPublicKey));
+            if (group == null)
+                throw new ArgumentException("Removed group can't be founded");
+            this.innerDocument.Groups.Remove(group);
+        }
+
+        #endregion*/
     }
 }
