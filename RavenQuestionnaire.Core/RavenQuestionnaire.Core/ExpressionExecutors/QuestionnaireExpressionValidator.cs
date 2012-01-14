@@ -1,11 +1,12 @@
 using System;
 using System.Linq;
 using NCalc;
+using NCalc.Domain;
 using RavenQuestionnaire.Core.Entities;
 
 namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
-    public class QuestionnaireExpressionValidator : IExpressionExecutor<Questionnaire>
+    public class QuestionnaireExpressionValidator : IExpressionExecutor<Questionnaire, bool>
     {
         public bool Execute(Questionnaire entity, string expression)
         {
@@ -20,7 +21,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
                                                    string.Format("Parameter {0} is invalid", name));
                                            args.Result = "0";
                                        };
-            e.Evaluate();
+            e.Evaluate(new EvaluationTesterVisitor(e.Options));
             return true;
         }
     }

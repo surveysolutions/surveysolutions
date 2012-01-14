@@ -10,7 +10,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
 {
     public class QuestionnaireSimpleIterator : Iterator<CompleteQuestion, Guid?>
     {
-        public QuestionnaireSimpleIterator(CompleteQuestionnaire questionnaire, IExpressionExecutor<CompleteQuestionnaire> validator)
+        public QuestionnaireSimpleIterator(CompleteQuestionnaire questionnaire, IExpressionExecutor<CompleteQuestionnaire, bool> validator)
         {
             this.questionnaire = questionnaire;
             this.expresstionValidator = validator;
@@ -18,7 +18,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 throw new ArgumentException("Questionnaires question list is empty");
         }
 
-        private IExpressionExecutor<CompleteQuestionnaire> expresstionValidator;
+        private IExpressionExecutor<CompleteQuestionnaire, bool> expresstionValidator;
         protected CompleteQuestionnaire questionnaire;
 
         public CompleteQuestion First

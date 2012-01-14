@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NCalc;
+using NCalc.Domain;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
-    public class CompleteQuestionnaireConditionExecutor : IExpressionExecutor<CompleteQuestionnaire>
+    public class CompleteQuestionnaireConditionExecutor : IExpressionExecutor<CompleteQuestionnaire, bool>
     {
         public bool Execute(CompleteQuestionnaire entity, string condition)
         {

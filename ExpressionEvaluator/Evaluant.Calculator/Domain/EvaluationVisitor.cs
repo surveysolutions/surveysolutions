@@ -8,7 +8,7 @@ namespace NCalc.Domain
 
     public class EvaluationVisitor : LogicalExpressionVisitor
     {
-        private delegate T Func<T>();
+        protected delegate T Func<T>();
 
         private readonly EvaluateOptions _options = EvaluateOptions.None;
 
@@ -19,7 +19,7 @@ namespace NCalc.Domain
             _options = options;
         }
 
-        public object Result { get; private set; }
+        public object Result { get; protected set; }
 
         private object Evaluate(LogicalExpression expression)
         {
@@ -75,7 +75,7 @@ namespace NCalc.Domain
             }
         }
 
-        private static bool IsReal(object value)
+        protected static bool IsReal(object value)
         {
             var typeCode = Type.GetTypeCode(value.GetType());
 
