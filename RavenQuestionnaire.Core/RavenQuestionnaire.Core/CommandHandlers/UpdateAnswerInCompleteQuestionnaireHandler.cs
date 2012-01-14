@@ -15,10 +15,10 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         ICommandHandler<UpdateAnswerInCompleteQuestionnaireCommand>
     {
         private ICompleteQuestionnaireRepository _questionnaireRepository;
-        private IExpressionExecutor<CompleteQuestionnaire> _conditionExecutor;
+        private IExpressionExecutor<CompleteQuestionnaire, bool> _conditionExecutor;
 
         public UpdateAnswerInCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository questionnaireRepository,
-                                                          IExpressionExecutor<CompleteQuestionnaire> conditionExecutor)
+                                                          IExpressionExecutor<CompleteQuestionnaire, bool> conditionExecutor)
         {
             this._questionnaireRepository = questionnaireRepository;
             this._conditionExecutor = conditionExecutor;

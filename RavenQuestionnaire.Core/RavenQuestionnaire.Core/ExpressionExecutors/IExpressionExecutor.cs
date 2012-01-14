@@ -5,8 +5,8 @@ using System.Text;
 
 namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
-    public interface IExpressionExecutor<TInput>
+    public interface IExpressionExecutor<in TInput, out TOutput>
     {
-        bool Execute(TInput entity, string condition);
+        TOutput Execute(TInput entity, string condition);
     }
 }

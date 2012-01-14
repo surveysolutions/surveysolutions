@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
 
-            Mock<IExpressionExecutor<Questionnaire>> validator = new Mock<IExpressionExecutor<Questionnaire>>();
+            Mock<IExpressionExecutor<Questionnaire, bool>> validator = new Mock<IExpressionExecutor<Questionnaire, bool>>();
             validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[]{ new AnswerView(){ AnswerText = "answer", AnswerType = AnswerType.Text} };
@@ -46,7 +46,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Questionnaire entity = new Questionnaire(innerDocument);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
-            Mock<IExpressionExecutor<Questionnaire>> validator = new Mock<IExpressionExecutor<Questionnaire>>();
+            Mock<IExpressionExecutor<Questionnaire, bool>> validator = new Mock<IExpressionExecutor<Questionnaire, bool>>();
             validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };
@@ -66,7 +66,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Questionnaire entity = new Questionnaire(innerDocument);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
-            Mock<IExpressionExecutor<Questionnaire>> validator = new Mock<IExpressionExecutor<Questionnaire>>();
+            Mock<IExpressionExecutor<Questionnaire, bool>> validator = new Mock<IExpressionExecutor<Questionnaire, bool>>();
             validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };
@@ -85,7 +85,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Questionnaire entity = new Questionnaire(innerDocument);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
-            Mock<IExpressionExecutor<Questionnaire>> validator = new Mock<IExpressionExecutor<Questionnaire>>();
+            Mock<IExpressionExecutor<Questionnaire, bool>> validator = new Mock<IExpressionExecutor<Questionnaire, bool>>();
             validator.Setup(x => x.Execute(entity, string.Empty)).Returns(false);
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };

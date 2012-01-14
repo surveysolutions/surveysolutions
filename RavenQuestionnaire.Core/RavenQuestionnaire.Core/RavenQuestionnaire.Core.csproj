@@ -184,6 +184,7 @@
     <Compile Include="Export\csv\CSVExporter.cs" />
     <Compile Include="Export\ExportManager.cs" />
     <Compile Include="Export\IExportProvider.cs" />
+    <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />

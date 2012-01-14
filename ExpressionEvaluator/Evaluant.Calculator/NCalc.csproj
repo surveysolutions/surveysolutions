@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\EvaluationTesterVisitor.cs" />
     <Compile Include="Domain\SerializationVisitor.cs" />
     <Compile Include="Domain\TernaryExpression.cs" />
     <Compile Include="EvaluationException.cs" />
