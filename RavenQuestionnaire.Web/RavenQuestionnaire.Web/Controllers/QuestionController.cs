@@ -63,7 +63,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             return Json(new
             {
-                expression = "== " + answerText,
+                expression = "== '" + answerText+"'",
                 condition = question.ConditionExpression,
                 sourceId = sourceQuestionPublicKey,
                 targetId = questionPublicKey

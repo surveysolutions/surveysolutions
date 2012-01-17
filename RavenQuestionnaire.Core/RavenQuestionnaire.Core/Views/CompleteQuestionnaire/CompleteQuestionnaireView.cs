@@ -31,8 +31,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
-            this.Questions =
-                doc.Questions.Select(q => new CompleteQuestionView(doc, q)).ToArray();
+            this.Questions = doc.Questions.Select(q => new CompleteQuestionView(doc, q)).ToArray();
         }
     }
 }

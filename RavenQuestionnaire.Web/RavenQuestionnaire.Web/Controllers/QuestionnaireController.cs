@@ -66,29 +66,28 @@ namespace RavenQuestionnaire.Web.Controllers
                 throw new HttpException(404, "Invalid quesry string parameters");
 
             var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
-            //var graph = viewRepository.Load<FlowGraphViewInputModel, FlowGraphView>(new FlowGraphViewInputModel(id));
-
+            
             return View(model);
         }
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult _SaveFlow(string questionnnaireId, List<FlowBlock> blocks, List<FlowConnection> connections)
+        public ActionResult _SaveFlow(string questionnaireId, List<FlowBlock> blocks, List<FlowConnection> connections)
         {
+            try
+            {
+                commandInvoker.Execute(new UpdateQuestionnaireFlowCommand(questionnaireId, blocks, connections,
+                                                                          GlobalInfo.GetCurrentUser()));
+            }
+            catch (Exception e)
+            {
+                return Json(new { status = "not saved" });
+            }
             /*
-            commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId, model.PublicKey,
-                                                                         model.QuestionText,
-                                                                         model.StataExportCaption,
-                                                                         model.QuestionType,
-                                                                         model.ConditionExpression, model.Answers,
-                                                                         GlobalInfo.GetCurrentUser()));
-            commandInvoker.Execute(new UpdateFlowGraphCommand(questionnnaireId, blocks, connections, GlobalInfo.GetCurrentUser()));
-            */
-/*
-            var roots = (from block in graph.Blocks
-                         where !graph.Connections.Any(c => c.Target == block.Id)
-                         select block).ToList();
-            if (roots.Count==0)
-                return Json(new { status = "error: cicklic flow" });
-            */
+                        var roots = (from block in graph.Blocks
+                                     where !graph.Connections.Any(c => c.Target == block.Id)
+                                     select block).ToList();
+                        if (roots.Count==0)
+                            return Json(new { status = "error: cyclic flow" });
+                        */
 
 
             return Json(new {status = "flow saved"});

@@ -75,7 +75,17 @@ namespace RavenQuestionnaire.Core.Entities
             question.UpdateAnswerList(answers);
             question.ConditionExpression = condition;
         }
-       
+        public void UpdateFlow(List<FlowBlock> blocks, List<FlowConnection> connections)
+        {
+            //TODO: check flow saving!
+            if (this.innerDocument.FlowGraph==null)
+            {
+                this.innerDocument.FlowGraph = new FlowGraph();
+            }
+            var graph = this.innerDocument.FlowGraph;
+            graph.Blocks = blocks;
+            graph.Connections = connections;
+        }
         public bool Add(IComposite c, Guid? parent)
         {
             if (!parent.HasValue)
@@ -195,5 +205,7 @@ namespace RavenQuestionnaire.Core.Entities
             }
             return result;
         }
+
+
     }
 }

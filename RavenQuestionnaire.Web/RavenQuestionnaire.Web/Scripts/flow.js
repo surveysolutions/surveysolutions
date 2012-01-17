@@ -3,7 +3,7 @@
 
 
     window.jsPlumbDemo = {
-
+        labelTexts: [],
         init: function () {
 
             // notice the 'curviness' argument to this Bezier curve.  the curves on this page are far smoother
@@ -13,7 +13,7 @@
             jsPlumb.Defaults.EndpointStyle = { radius: 3, fillStyle: "#0069D6" };
             jsPlumb.Defaults.PaintStyle = { lineWidth: 3, strokeStyle: "#456" };
             jsPlumb.Defaults.Anchor = "Continuous";
-            jsPlumb.Defaults.Connector = ["StateMachine", { curviness: 40}];
+            jsPlumb.Defaults.Connector = ["StateMachine", { curviness: 20}];
 
             jsPlumb.Defaults.Overlays = [
 							["Arrow", {
@@ -87,6 +87,7 @@
                 var id = value.id;
                 r.Source = value.sourceId;
                 r.Target = value.targetId;
+                r.LabelText = jsPlumbDemo.labelTexts[id];
                 if (jQuery.inArray(id, ids) == -1) {
                     result.push(r);
                     ids.push(id);
@@ -98,10 +99,9 @@
             var result = [];
             $.each($('.w'), function (index, block) {
                 var r = {};
-                r.Id = $(block).attr('id');
-                var o = $(block).offset();
-                r.Left = o.left;
-                r.Top = o.top;
+                r.QuestionId = $(block).attr('id');
+                r.Left = $(block).css('left').replace("px", "");
+                r.Top = $(block).css('top').replace("px", "");
                 r.LabelText = "";
                 result.push(r);
             });
@@ -109,6 +109,9 @@
         },
         updateConnectionLabel: function (searchOption, expression) {
             var connection = jsPlumb.getConnections(searchOption)[0];
+
+            jsPlumbDemo.labelTexts[connection.id] = expression;
+
             if (connection != null) {
                 var p = { Target: searchOption.target, Condition: expression };
                 connection.labelText = $("#action" + searchOption.source).tmpl(p).html();

@@ -3,15 +3,49 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public class FlowBlock 
+    public interface IFlowBlock : IComposite
     {
-        public FlowBlock(Guid id)
+        int Left { get; set; }
+        int Top { get; set; }
+        Guid QuestionId { get; set; }
+    }
+
+    public class FlowBlock : IFlowBlock
+    {
+        public FlowBlock()
         {
-            Id = id;
         }
-        
+
+        public FlowBlock(Guid questionId)
+        {
+            QuestionId = questionId;
+        }
+         public FlowBlock(IQuestion question)
+         {
+             QuestionId = question.PublicKey;
+         }
         public int Left { get; set; }
         public int Top { get; set; }
-        public Guid Id { get; set; }
+        public Guid QuestionId { get; set; }
+
+        public bool Add(IComposite c, Guid? parent)
+        {
+            return false;
+        }
+
+        public bool Remove(IComposite c)
+        {
+            return false;
+        }
+
+        public bool Remove<T>(Guid publicKey) where T : class, IComposite
+        {
+            return false;
+        }
+
+        public T Find<T>(Guid publicKey) where T : class, IComposite
+        {
+            return null;
+        }
     }
 }
