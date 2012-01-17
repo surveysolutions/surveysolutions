@@ -87,6 +87,14 @@ namespace RavenQuestionnaire.Core.Entities
 
         public bool Remove(IComposite c)
         {
+            PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
+            if (propogate != null)
+            {
+                innerDocument.Groups.RemoveAll(
+                    g =>
+                    g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
+                    ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey));
+            }
             if (innerDocument.Groups.Any(child => child.Remove(c)))
             {
                 return true;

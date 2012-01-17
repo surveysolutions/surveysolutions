@@ -80,7 +80,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             {
                 Groups.RemoveAll(
                     g =>
-                    g.PublicKey.Equals(propogate.PublicKey) &&
+                    g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
                     ((IPropogate) g).PropogationPublicKey.Equals(propogate.PropogationPublicKey));
             }
             if (Groups.Any(child => child.Remove(c)))
