@@ -32,7 +32,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
                 query =
                     (IOrderedQueryable<CompleteQuestionnaireDocument>)
                     documentSession.Query<CompleteQuestionnaireDocument>()
-                        .Where(x => x.Questionnaire.Id == input.QuestionnaryId);
+                        .Where(x => x.TemplateId == input.QuestionnaryId);
             }
             else
             {

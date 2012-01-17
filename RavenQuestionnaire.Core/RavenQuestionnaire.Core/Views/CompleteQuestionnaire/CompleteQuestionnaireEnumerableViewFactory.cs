@@ -1,8 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Iterators;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
+using RavenQuestionnaire.Core.Views.Group;
+using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
@@ -11,32 +18,31 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
     {
         private IDocumentSession documentSession;
 
-        public CompleteQuestionnaireEnumerableViewFactory(IDocumentSession documentSession, IExpressionExecutor<CompleteQuestionnaireDocument> executor)
+        public CompleteQuestionnaireEnumerableViewFactory(IDocumentSession documentSession)
         {
             this.documentSession = documentSession;
-            this.conditionExecutor = executor;
         }
-        private IExpressionExecutor<CompleteQuestionnaireDocument> conditionExecutor;
+
         public CompleteQuestionnaireViewEnumerable Load(CompleteQuestionnaireViewInputModel input)
         {
             if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
             {
                 var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
                 var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
-                RavenQuestionnaire.Core.Entities.SubEntities.Group group = null;
+                RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup group = null;
 
-                Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Group, Guid> iterator =
-                       new QuestionnaireScreenIterator(completeQuestionnaireRoot);
+                Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup, Guid> iterator =
+                    new QuestionnaireScreenIterator(completeQuestionnaireRoot);
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
-                    var template = new Entities.Questionnaire(doc.Questionnaire);
                     group =
-                        template.Find<RavenQuestionnaire.Core.Entities.SubEntities.Group>(
-                            input.CurrentGroupPublicKey.Value);
+                        completeQuestionnaireRoot.Find
+                            <RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup>(
+                                input.CurrentGroupPublicKey.Value);
                 }
                 else if (input.PreviousGroupPublicKey.HasValue)
                 {
-                   
+
                     group = input.IsReverse
                                 ? iterator.GetPreviousBefoure(input.PreviousGroupPublicKey.Value)
                                 : iterator.GetNextAfter(input.PreviousGroupPublicKey.Value);
@@ -45,12 +51,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 {
                     group = input.IsReverse ? iterator.Last : iterator.First;
                 }
-                return new CompleteQuestionnaireViewEnumerable(doc, group, this.conditionExecutor);
+                return new CompleteQuestionnaireViewEnumerable(doc, group);
             }
             if (!string.IsNullOrEmpty(input.TemplateQuestionanireId))
             {
                 var doc = documentSession.Load<QuestionnaireDocument>(input.TemplateQuestionanireId);
-                return new CompleteQuestionnaireViewEnumerable(doc, this.conditionExecutor);
+                return new CompleteQuestionnaireViewEnumerable((CompleteQuestionnaireDocument)doc);
             }
             return null;
 

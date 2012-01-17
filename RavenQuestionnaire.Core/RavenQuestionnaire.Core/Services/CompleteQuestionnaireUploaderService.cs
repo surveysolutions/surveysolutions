@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Repositories;
 
 namespace RavenQuestionnaire.Core.Services
@@ -20,8 +21,9 @@ namespace RavenQuestionnaire.Core.Services
             CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire, user, status);
             foreach (CompleteAnswer completeAnswer in answers)
             {
-
-                entity.UpdateAnswer(completeAnswer, null);
+             //   entity.Remove<Question>(completeAnswer.QuestionPublicKey);
+                entity.Add(completeAnswer, completeAnswer.QuestionPublicKey);
+               // entity.ChangeAnswer(completeAnswer);
             }
             _questionRepository.Add(entity);
             return entity;
@@ -30,22 +32,6 @@ namespace RavenQuestionnaire.Core.Services
         {
             CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire, user, status);
            
-            _questionRepository.Add(entity);
-            return entity;
-        }
-
-        public CompleteQuestionnaire UpdateCompleteAnswer(string id, Questionnaire questionnaire,
-                                 IEnumerable<CompleteAnswer> answers)
-        {
-            CompleteQuestionnaire entity = _questionRepository.Load(id);
-            if (entity.GetQuestionnaireTemplate().QuestionnaireId != questionnaire.QuestionnaireId)
-                throw new InvalidOperationException(
-                    "You can't attach different questionnaire to completed questionnaire on updating.");
-            foreach (CompleteAnswer completeAnswer in answers)
-            {
-
-                entity.UpdateAnswer(completeAnswer, null);
-            }
             _questionRepository.Add(entity);
             return entity;
         }

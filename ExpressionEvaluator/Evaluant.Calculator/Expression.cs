@@ -194,6 +194,12 @@ namespace NCalc
 
         public object Evaluate()
         {
+            var visitor = new EvaluationVisitor(Options);
+            return Evaluate(visitor);
+        }
+
+        public object Evaluate(EvaluationVisitor visitor)
+        {
             if (HasErrors())
             {
                 throw new EvaluationException(Error);
@@ -205,7 +211,7 @@ namespace NCalc
             }
 
 
-            var visitor = new EvaluationVisitor(Options);
+          /*  */
             visitor.EvaluateFunction += EvaluateFunction;
             visitor.EvaluateParameter += EvaluateParameter;
             visitor.Parameters = Parameters;
