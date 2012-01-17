@@ -29,16 +29,18 @@ namespace RavenQuestionnaire.Core.Views.Group
 
         protected AbstractGroupView(IQuestionnaireDocument doc, IGroup group)
         {
-            QuestionnaireId = doc.Id;
-            PublicKey = group.PublicKey;
-            GroupText = group.GroupText;
+            this.QuestionnaireId = doc.Id;
+            this.PublicKey = group.PublicKey;
+            this.GroupText = group.GroupText;
+            this.Propagated = group.Propagated;
         }
-
         public Guid PublicKey { get; set; }
 
         public string GroupText { get; set; }
 
         public Guid? ParentGroup { get; set; }
+
+        public bool Propagated { get; set; }
 
         public string QuestionnaireId
         {
@@ -105,6 +107,7 @@ namespace RavenQuestionnaire.Core.Views.Group
                 group.Questions.Select(
                     q =>
                     new QuestionView(doc, q)).ToArray();
+            this.Groups = group.Groups.Select(g => new GroupView(doc, g)).ToArray();
         }
     }
 }

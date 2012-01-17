@@ -11,6 +11,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Web.Controllers;
@@ -98,7 +99,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             QuestionnaireDocument innerDoc = new QuestionnaireDocument();
             innerDoc.Id = "questionnairedocuments/cqId";
-            CompleteQuestionnaireViewEnumerable template = new CompleteQuestionnaireViewEnumerable((CompleteQuestionnaireDocument)innerDoc);
+            CompleteQuestionnaireViewEnumerable template = new CompleteQuestionnaireViewEnumerable((CompleteQuestionnaireDocument)innerDoc, new CompleteGroupFactory());
             var input = new CompleteQuestionnaireViewInputModel("cqId", null, false);
             ViewRepositoryMock.Setup(
                x =>
@@ -120,7 +121,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     It.IsAny<StatusViewInputModel>()))
                 .Returns(new StatusView());
             Controller.SaveSingleResult("cId", null,
-                                        new CompleteAnswer[] {new CompleteAnswer(new Answer(), Guid.NewGuid())});
+                                        new CompleteAnswer[] {new CompleteAnswer(new Answer(), Guid.NewGuid())}, null);
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateAnswerInCompleteQuestionnaireCommand>()), Times.Once());
         }
     }

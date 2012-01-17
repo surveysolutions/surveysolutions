@@ -108,6 +108,7 @@
     <Compile Include="CommandHandlers\DeleteQuestionHandler.cs" />
     <Compile Include="CommandHandlers\DeleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\DeleteUserHandler.cs" />
+    <Compile Include="CommandHandlers\PropagateGroupHandler.cs" />
     <Compile Include="CommandHandlers\UpdateAnswerInCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\UpdateCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\UpdateGroupHandler.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Commands\DeleteQuestionCommand.cs" />
     <Compile Include="Commands\DeleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\DeleteUserCommand.cs" />
+    <Compile Include="Commands\PropagateGroupCommand.cs" />
     <Compile Include="Commands\UpdateAnswerInCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\UpdateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\UpdateGroupCommand.cs" />
@@ -241,10 +243,13 @@
     <Compile Include="Views\FlowGraph\FlowGraphView.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphViewFactory.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphViewInputModel.cs" />
+    <Compile Include="Views\Group\CompleteGroupFactory.cs" />
     <Compile Include="Views\Group\CompleteGroupView.cs" />
     <Compile Include="Views\Group\GroupView.cs" />
     <Compile Include="Views\Group\GroupViewFactory.cs" />
     <Compile Include="Views\Group\GroupViewInputModel.cs" />
+    <Compile Include="Views\Group\ICompleteGroupFactory.cs" />
+    <Compile Include="Views\Group\PropagatedCompleteGroupView.cs" />
     <Compile Include="Views\Location\LocationBrowseInputModel.cs" />
     <Compile Include="Views\Location\LocationBrowseItem.cs" />
     <Compile Include="Views\Location\LocationBrowseView.cs" />

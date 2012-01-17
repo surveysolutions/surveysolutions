@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
@@ -80,6 +81,11 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             commandInvoker.Execute(new DeleteGroupCommand(publicKey, questionnaireId, GlobalInfo.GetCurrentUser()));
             return "";
+        }
+        public ActionResult PropagateGroup(Guid publicKey, string questionnaireId)
+        {
+            commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser()));
+            return RedirectToAction("Question", "CompleteQuestionnaire", new {id = questionnaireId});
         }
     }
 }
