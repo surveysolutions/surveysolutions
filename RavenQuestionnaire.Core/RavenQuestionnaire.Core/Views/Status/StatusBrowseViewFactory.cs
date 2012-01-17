@@ -20,11 +20,11 @@ namespace RavenQuestionnaire.Core.Views.Status
             // Adjust the model appropriately
             var count = documentSession.Query<StatusDocument>().Count();
             if (count == 0)
-                return new StatusBrowseView(input.Page, input.PageSize, count, new StatusBrowseItem[0], input.QuestionnaireId);
+                return new StatusBrowseView(input.Page, input.PageSize, count, new StatusBrowseItem[0], input.QId);
 
             // Perform the paged query
             var query = documentSession.Query<StatusDocument>()
-                .Where(x => x.QuestionnaireId == input.QuestionnaireId)
+                .Where(x => x.QuestionnaireId == input.QId)
                     .Skip((input.Page - 1) * input.PageSize)
                     .Take(input.PageSize);
 
@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.Views.Status
                 input.Page,
                 input.PageSize, count,
                 items.ToArray(),
-                input.QuestionnaireId);
+                input.QId);
         }
     }
 }
