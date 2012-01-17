@@ -115,7 +115,7 @@ namespace RavenQuestionnaire.Web.Controllers
             if (model != null)
             {
                 foreach (var status in viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(
-                    new StatusBrowseInputModel() { PageSize = 100, QuestionnaireId = model.QuestionnaireId}).Items)
+                    new StatusBrowseInputModel() { PageSize = 100, QId = model.QuestionnaireId}).Items)
                 {
                     var statusByRole = new StatusByRole {Status = status};
 
