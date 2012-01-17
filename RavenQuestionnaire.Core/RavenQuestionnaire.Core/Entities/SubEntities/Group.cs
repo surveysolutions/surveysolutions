@@ -6,7 +6,21 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public class Group : IComposite
+    public interface IGroup: IComposite
+    {
+        Guid PublicKey { get; set; }
+        string GroupText { get; set; }
+        bool Propagated { get; set; }
+    }
+
+    public interface IGroup<TGroup, TQuestion> : IGroup
+        where TQuestion : IQuestion
+        where TGroup : IGroup
+    {
+        List<TQuestion> Questions { get; set; }
+        List<TGroup> Groups { get; set; }
+    }
+    public class Group : IGroup<Group, Question>
     {
         public Group()
         {
@@ -21,44 +35,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public Guid PublicKey { get; set; }
         public string GroupText { get; set; }
+        public bool Propagated { get; set; }
         public List<Question> Questions  { get; set; }
         public List<Group> Groups { get; set; }
         public void Update(string groupText)
         {
             this.GroupText = groupText;
-        }
-        protected bool AddComposite(IComposite c)
-        {
-            Question question = c as Question;
-            if (question != null)
-            {
-                Questions.Add(question);
-                return true;
-            }
-            Group group = c as Group;
-            if (group != null)
-            {
-                Groups.Add(group);
-                return true;
-            }
-            return false;
-        }
-        protected bool RemoveComposite(IComposite c)
-        {
-            Question question = c as Question;
-            if (question != null)
-            {
-                Questions.Remove(question);
-                return true;
-            }
-            Group group = c as Group;
-            if (group != null)
-            {
-
-                Groups.Remove(group);
-                return true;
-            }
-            return false;
         }
         public bool Add(IComposite c, Guid? parent)
         {

@@ -161,9 +161,17 @@
     <Compile Include="Entities\Status.cs" />
     <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\AnswerType.cs" />
-    <Compile Include="Entities\SubEntities\CompleteAnswer.cs" />
+    <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs" />
     <Compile Include="Entities\SubEntities\FlowConnection.cs" />
     <Compile Include="Entities\SubEntities\FlowBlock.cs" />
+    <Compile Include="Entities\SubEntities\Complete\CompleteGroup.cs" />
+    <Compile Include="Entities\SubEntities\Complete\CompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\ICompleteGroup.cs" />
+    <Compile Include="Entities\SubEntities\Complete\ICompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\IPropogate.cs" />
+    <Compile Include="Entities\SubEntities\Complete\PropagatableCompleteAnswer.cs" />
+    <Compile Include="Entities\SubEntities\Complete\PropagatableCompleteGroup.cs" />
+    <Compile Include="Entities\SubEntities\Complete\PropagatableCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Group.cs" />
     <Compile Include="Entities\SubEntities\LocationWithUserStatistic.cs" />
     <Compile Include="Entities\SubEntities\Question.cs" />
@@ -178,6 +186,7 @@
     <Compile Include="Export\csv\CSVExporter.cs" />
     <Compile Include="Export\ExportManager.cs" />
     <Compile Include="Export\IExportProvider.cs" />
+    <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />

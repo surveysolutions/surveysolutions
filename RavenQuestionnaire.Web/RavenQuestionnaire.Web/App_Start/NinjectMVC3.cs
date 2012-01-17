@@ -76,7 +76,7 @@ namespace RavenQuestionnaire.Web.App_Start
             kernel.Scan(s =>
             {
                 s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(IExpressionExecutor<>)));
+                s.BindWith(new GenericBindingGenerator(typeof(IExpressionExecutor<,>)));
             });
             kernel.Scan(s =>
             {

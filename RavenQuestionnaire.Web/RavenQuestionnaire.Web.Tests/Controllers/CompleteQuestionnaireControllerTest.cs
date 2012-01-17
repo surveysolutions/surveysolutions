@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Questionnaire;
@@ -60,7 +61,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             innerDoc.Id = "completequestionnairedocuments/cqId";
             innerDoc.CreationDate = DateTime.Now;
             innerDoc.LastEntryDate = DateTime.Now;
-            innerDoc.Questionnaire= new QuestionnaireDocument();
             innerDoc.Status = new SurveyStatus("-1", "dummyStatus");
             innerDoc.Responsible = new UserLight("-1", "dummyUser");
             var output = new CompleteQuestionnaireView(innerDoc);
@@ -98,9 +98,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             QuestionnaireDocument innerDoc = new QuestionnaireDocument();
             innerDoc.Id = "questionnairedocuments/cqId";
-            CompleteQuestionnaireViewEnumerable template = new CompleteQuestionnaireViewEnumerable(innerDoc,
-                                                                                                   new CompleteQuestionnaireConditionExecutor
-                                                                                                       ());
+            CompleteQuestionnaireViewEnumerable template = new CompleteQuestionnaireViewEnumerable((CompleteQuestionnaireDocument)innerDoc);
             var input = new CompleteQuestionnaireViewInputModel("cqId", null, false);
             ViewRepositoryMock.Setup(
                x =>

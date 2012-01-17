@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Group;
+using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
@@ -18,53 +21,55 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
         public UserLight Responsible { set; get; }
         public CompleteGroupView CurrentGroup { get; set; }
-        public GroupView[] Groups { get; set; }
+        public CompleteGroupView[] Groups { get; set; }
 
         public CompleteQuestionnaireViewEnumerable(CompleteQuestionnaireDocument doc,
-                                                   RavenQuestionnaire.Core.Entities.SubEntities.Group currentGroup, IExpressionExecutor<CompleteQuestionnaireDocument> executor)
+                                                   CompleteGroup currentGroup)
         {
             this.Id = IdUtil.ParseId(doc.Id);
-            this.Title = doc.Questionnaire.Title;
+            this.Title = doc.Title;
             this.CreationDate = doc.CreationDate;
             this.LastEntryDate = doc.LastEntryDate;
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
-            InitGroups(doc.Questionnaire);
-
-            if (currentGroup != null)
-            {
-                this.CurrentGroup = new CompleteGroupView(doc, currentGroup, executor);
-            }
-
+            InitGroups(doc);
+            this.CurrentGroup = new CompleteGroupView(doc, currentGroup);
         }
-        public CompleteQuestionnaireViewEnumerable(QuestionnaireDocument template, IExpressionExecutor<CompleteQuestionnaireDocument> executor)
+        public CompleteQuestionnaireViewEnumerable(CompleteQuestionnaireDocument doc)
         {
-            this.Title = template.Title;
-            this.CurrentGroup = new CompleteGroupView(new CompleteQuestionnaireDocument() {Questionnaire = template},
-                                                      new Entities.SubEntities.Group() {Questions = template.Questions},
-                                                      executor);
-            InitGroups(template);
-            /*  this.CurrentQuestion = new CompleteQuestionView(template.Questions[0], template.Id);*/
+            this.Title = doc.Title;
+            Entities.SubEntities.Complete.CompleteGroup group = new Entities.SubEntities.Complete.CompleteGroup()
+                                                                    {
+                                                                        Questions =
+                                                                            doc.Questions.Select(
+                                                                                q =>
+                                                                                new CompleteQuestion(q.QuestionText,
+                                                                                                     q.QuestionType)).
+                                                                            ToList()
+                                                                    };
+            this.CurrentGroup = new CompleteGroupView(doc,
+                                                      group);
+            InitGroups(doc);
         }
-
-        protected void InitGroups(QuestionnaireDocument doc)
+        
+        protected void InitGroups(CompleteQuestionnaireDocument doc)
         {
             if (doc.Questions.Count > 0)
             {
-                this.Groups = new GroupView[doc.Groups.Count + 1];
-                this.Groups[0] = new GroupView(doc,
-                                               new Entities.SubEntities.Group("Main") {PublicKey = Guid.Empty});
+                this.Groups = new CompleteGroupView[doc.Groups.Count + 1];
+                this.Groups[0] = new CompleteGroupView(doc,
+                                               new Entities.SubEntities.Complete.CompleteGroup("Main") {PublicKey = Guid.Empty});
                 for (int i = 1; i <= doc.Groups.Count; i++)
                 {
-                    this.Groups[i] = new GroupView(doc, doc.Groups[i - 1]);
+                    this.Groups[i] = new CompleteGroupView(doc, doc.Groups[i - 1]);
                 }
             }
             else
             {
-                this.Groups = new GroupView[doc.Groups.Count];
+                this.Groups = new CompleteGroupView[doc.Groups.Count];
                 for (int i = 0; i < doc.Groups.Count; i++)
                 {
-                    this.Groups[i] = new GroupView(doc, doc.Groups[i - 1]);
+                    this.Groups[i] = new CompleteGroupView(doc, doc.Groups[i - 1]);
                 }
             }
         }

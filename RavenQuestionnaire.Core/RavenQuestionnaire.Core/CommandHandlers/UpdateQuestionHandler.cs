@@ -13,8 +13,8 @@ namespace RavenQuestionnaire.Core.CommandHandlers
     public class UpdateQuestionHandler:ICommandHandler<UpdateQuestionCommand>
     {
          private IQuestionnaireRepository _questionnaireRepository;
-         private IExpressionExecutor<Questionnaire> _expressionValidator;
-         public UpdateQuestionHandler(IQuestionnaireRepository questionnaireRepository, IExpressionExecutor<Questionnaire> validator)
+         private IExpressionExecutor<Questionnaire, bool> _expressionValidator;
+         public UpdateQuestionHandler(IQuestionnaireRepository questionnaireRepository, IExpressionExecutor<Questionnaire, bool> validator)
          {
              this._questionnaireRepository = questionnaireRepository;
              this._expressionValidator = validator;

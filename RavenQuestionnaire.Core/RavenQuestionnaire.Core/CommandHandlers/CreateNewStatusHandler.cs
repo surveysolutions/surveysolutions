@@ -17,7 +17,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
 
         public void Handle(CreateNewStatusCommand command)
         {
-            Status newStatus = new Status(command.Title, command.IsInitial);
+            Status newStatus = new Status(command.Title, command.IsInitial, command.QuestionnaireId);
             _repository.Add(newStatus);
         }
     }

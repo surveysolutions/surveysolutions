@@ -25,12 +25,16 @@ namespace RavenQuestionnaire.Core.Entities
             this.innerDocument = document;
         }
 
-        public Status(string title, bool isInitial)
+        public Status(string title, bool isInitial, string questionnaireId)
         {
-            innerDocument = new StatusDocument() { Title = title, IsInitial = isInitial };
+            innerDocument = new StatusDocument() { Title = title, 
+                IsInitial = isInitial, 
+                QuestionnaireId = questionnaireId };
         }
 
-        public Status(string title, bool isInitial, Dictionary<string, List<SurveyStatus>> statusRoles):this(title, isInitial)
+        public Status(string title, bool isInitial, Dictionary<string, List<SurveyStatus>> statusRoles, 
+            string questionnaireId)
+            :this(title, isInitial, questionnaireId)
         {
             innerDocument.StatusRoles = statusRoles;
         }

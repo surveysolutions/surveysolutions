@@ -8,6 +8,7 @@ using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Views.Status;
@@ -123,7 +124,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, PublicKey, answers,
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, answers,
                                                                                       _globalProvider.GetCurrentUser()));
             }
             return RedirectToAction("Question", new {id = id, group = PublicKey});

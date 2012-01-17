@@ -15,7 +15,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         public void WhenSetConditionExpression_ExpressionIsAdded()
         {
             Question question = new Question();
-            question.SetConditionExpression("some expression");
+            question.ConditionExpression="some expression";
             Assert.AreEqual(question.ConditionExpression, "some expression");
         }
        

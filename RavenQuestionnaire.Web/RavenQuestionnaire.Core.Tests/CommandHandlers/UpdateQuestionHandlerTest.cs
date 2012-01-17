@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
 
-            Mock<IExpressionExecutor<Questionnaire>> validator = new Mock<IExpressionExecutor<Questionnaire>>();
+            Mock<IExpressionExecutor<Questionnaire, bool>> validator = new Mock<IExpressionExecutor<Questionnaire, bool>>();
             validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
             UpdateQuestionHandler handler = new UpdateQuestionHandler(questionnaireRepositoryMock.Object,
                                                                       validator.Object);

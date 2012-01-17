@@ -1,10 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Documents
 {
-    public class QuestionnaireDocument
+    public interface IQuestionnaireDocument
+    {
+        string Id { get; set; }
+        string Title { get; set; }
+        DateTime CreationDate { get; set; }
+        DateTime LastEntryDate { get; set; }
+        DateTime? OpenDate { get; set; }
+        DateTime? CloseDate { get; set; }
+       
+    }
+    public interface IQuestionnaireDocument<TGroup, TQuestion> : IQuestionnaireDocument
+        where TQuestion : IQuestion
+        where TGroup : IGroup
+    {
+        List<TQuestion> Questions { get; set; }
+        List<TGroup> Groups { get; set; }
+    }
+    public class QuestionnaireDocument : IQuestionnaireDocument<Group, Question>
     {
         public QuestionnaireDocument()
         {
@@ -16,8 +34,7 @@ namespace RavenQuestionnaire.Core.Documents
 
         public string Id { get; set; }
 
-        public string Title
-        { get; set; }
+        public string Title { get; set; }
 
         public DateTime CreationDate
         { get; set; }
@@ -27,9 +44,10 @@ namespace RavenQuestionnaire.Core.Documents
         public DateTime? OpenDate
         { get; set; }
 
-        public DateTime? CloseDate
-        { get; set; }
+        public DateTime? CloseDate { get; set; }
+
         public List<Question> Questions { get; set; }
         public List<Group> Groups { get; set; }
+        
     }
 }

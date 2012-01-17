@@ -3,71 +3,36 @@ using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Utility;
+using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
-    public class CompleteQuestionnaireView
+    public class CompleteQuestionnaireView:QuestionnaireView
+            <CompleteGroup, CompleteQuestion,
+            CompleteAnswer>
     {
-        public string Id { get; set; }
-        public string Title
-        {
-            get { return Questionnaire.Title; }
-        }
-        public DateTime CreationDate { get; set; }
-        public DateTime LastEntryDate{ get; set; }
-
         public SurveyStatus Status { get; set; }
 
         public UserLight Responsible { set; get; }
-
-        public CompleteQuestionView[] Questions
+         public CompleteQuestionnaireView()
         {
-            get { return _questions; }
+        }
+        public CompleteQuestionnaireView(IQuestionnaireDocument doc)
+            : base(doc)
+        {
         }
 
-        private CompleteQuestionView[] _questions;
-
-        private QuestionnaireView Questionnaire { get; set; }
-
-        protected CompleteAnswer[] CompleteAnswers { get; set; }
-
-        public CompleteQuestionnaireView( CompleteQuestionnaireDocument doc)
-            : this(doc.Questionnaire)
+        public CompleteQuestionnaireView(CompleteQuestionnaireDocument doc)
+            : base(doc)
         {
-            this.Id = IdUtil.ParseId(doc.Id);
-            this.Questionnaire = new QuestionnaireView(doc.Questionnaire);
-            this.CompleteAnswers = doc.CompletedAnswers.ToArray();
-            this.CreationDate = doc.CreationDate;
-            this.LastEntryDate = doc.LastEntryDate;
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
-            //TODO _question may be redundant
-            _questions =
-                doc.Questionnaire.Questions.Select(q => new CompleteQuestionView(q, doc.Questionnaire)).ToArray();
-            MerdgeAnswersWithResults();
-
-        }
-        public CompleteQuestionnaireView(QuestionnaireDocument template)
-        {
-            this.Questionnaire = new QuestionnaireView(template);
-            CompleteAnswers = new CompleteAnswer[0];
-            _questions = template.Questions.Select(q => new CompleteQuestionView(q, template)).ToArray();
-        }
-
-        protected void MerdgeAnswersWithResults()
-        {
-            foreach (var answer in Questions.SelectMany(q=>q.Answers))
-            {
-                var completeAnswer = CompleteAnswers.Where(a => a.PublicKey.Equals(answer.PublicKey)).FirstOrDefault();
-                if(completeAnswer!=null)
-                {
-                    answer.Selected = true;
-                    answer.CustomAnswer = completeAnswer.CustomAnswer;
-                }
-            }
+            this.Questions =
+                doc.Questions.Select(q => new CompleteQuestionView(doc, q)).ToArray();
         }
     }
 }
