@@ -16,6 +16,8 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate { get; set; }
 
+        public AbstractFlowGraphView FlowGraph { get; set; }
+
         public AbstractQuestionView[] Questions
         {
             get { return _questions; }
@@ -55,6 +57,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         {
             Questions = new AbstractQuestionView[0];
             Groups = new AbstractGroupView[0];
+            FlowGraph = null;
         }
 
         public AbstractQuestionView[] GetQuestions(Guid? groupPublicKey)
@@ -81,8 +84,8 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         public QuestionnaireView(IQuestionnaireDocument<TGroup, TQuestion> doc)
             : base(doc)
         {
-         /*   this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();
-            this.Groups = doc.Groups.Select(g => new GroupView(doc, g)).ToArray();*/
+            /*   this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();
+               this.Groups = doc.Groups.Select(g => new GroupView(doc, g)).ToArray();*/
         }
 
         public QuestionnaireView()
@@ -93,7 +96,8 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
 
     public class QuestionnaireView :
         QuestionnaireView
-            <RavenQuestionnaire.Core.Entities.SubEntities.Group, RavenQuestionnaire.Core.Entities.SubEntities.Question,
+            <RavenQuestionnaire.Core.Entities.SubEntities.Group,
+            RavenQuestionnaire.Core.Entities.SubEntities.Question,
             RavenQuestionnaire.Core.Entities.SubEntities.Answer>
     {
         public QuestionnaireView()
@@ -113,6 +117,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         {
             this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();
             this.Groups = doc.Groups.Select(g => new GroupView(doc, g)).ToArray();
+            this.FlowGraph = new FlowGraphView(doc as QuestionnaireDocument);
         }
     }
 }

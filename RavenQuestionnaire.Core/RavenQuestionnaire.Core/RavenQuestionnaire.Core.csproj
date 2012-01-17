@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandlers\AddNewQuestionHandler.cs" />
+    <Compile Include="CommandHandlers\UpdateQuestionnaireFlowHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewGroupHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewLocationHandler.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Commands\UpdateGroupCommand.cs" />
     <Compile Include="Commands\UpdateQuestionCommand.cs" />
     <Compile Include="Commands\UpdateQuestionnaireCommand.cs" />
+    <Compile Include="Commands\UpdateQuestionnaireFlowCommand.cs" />
     <Compile Include="Commands\UpdateStatusRestrictionsCommand.cs" />
     <Compile Include="Commands\UpdateUserCommand.cs" />
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\AnswerType.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs" />
+    <Compile Include="Entities\SubEntities\FlowGraph.cs" />
     <Compile Include="Entities\SubEntities\FlowConnection.cs" />
     <Compile Include="Entities\SubEntities\FlowBlock.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteGroup.cs" />
@@ -235,6 +238,9 @@
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportViewFactory.cs" />
+    <Compile Include="Views\FlowGraph\FlowGraphView.cs" />
+    <Compile Include="Views\FlowGraph\FlowGraphViewFactory.cs" />
+    <Compile Include="Views\FlowGraph\FlowGraphViewInputModel.cs" />
     <Compile Include="Views\Group\CompleteGroupView.cs" />
     <Compile Include="Views\Group\GroupView.cs" />
     <Compile Include="Views\Group\GroupViewFactory.cs" />

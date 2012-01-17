@@ -6,24 +6,46 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public class FlowConnection 
+    public interface IFlowConnection : IComposite
     {
-        private Guid sourceId;
-        private Guid targetId;
+        Guid Source { get; set; }
+        Guid Target { get; set; }
+        string LabelText { get; set; }
+    }
 
+    public class FlowConnection : IFlowConnection
+    {
         public FlowConnection()
         {
         }
 
         public FlowConnection(Guid sourceId, Guid targetId)
         {
-            // TODO: Complete member initialization
-            this.sourceId = sourceId;
-            this.targetId = targetId;
+            Source = sourceId;
+            Target = targetId;
+        }
+        public Guid Source { get; set; }
+        public Guid Target { get; set; }
+        public string LabelText { get; set; }
+
+        public bool Add(IComposite c, Guid? parent)
+        {
+            return false;
         }
 
-        public string Source { get; set; }
-        public string Target { get; set; }
-        public string LabelText { get; set; }
+        public bool Remove(IComposite c)
+        {
+            return false;
+        }
+
+        public bool Remove<T>(Guid publicKey) where T : class, IComposite
+        {
+            return false;
+        }
+
+        public T Find<T>(Guid publicKey) where T : class, IComposite
+        {
+            return null;
+        }
     }
 }
