@@ -1,0 +1,40 @@
+﻿@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Web.Models
+@model QuestionConditionModel
+@{
+    ViewBag.Title = "_GetAnswers";
+    var sourceQuestionPublicKey = Model.Source.PublicKey;
+    var questionPublicKey = Model.Target.PublicKey;
+    var questionnaireId = Model.Target.QuestionnaireId;
+}
+<div id="divCreateForm">
+    @using (Ajax.BeginForm("EditCondition", "Question",
+                                         new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "editConnection",
+                                                 OnComplete = "HideEditConditionForm"
+                                             }))
+    {
+        <div class="modal-header">
+            <h3>Edit condition</h3>
+        </div>
+        <div class="modal-body">
+            <p>Ask "@Model.Target.QuestionText" if "@Model.Source.QuestionText" answer equals:</p>
+            @foreach (var answer in Model.Source.Answers)
+            {
+                <p>
+                    @Html.RadioButton("AnswerPublicKey", answer.PublicKey, false)
+                    @answer.AnswerText
+                </p>
+            }
+            @Html.HiddenFor(model => sourceQuestionPublicKey)
+            @Html.HiddenFor(model => questionPublicKey)
+            @Html.HiddenFor(model => questionnaireId)
+        </div>
+        <div class="modal-footer">
+            <a href="javascript:void(0)" onclick=" $('#editConnection').modal('hide')" class="btn">
+                Cancel</a>
+            <input type="submit" value="Save" class="btn primary" />
+        </div>
+    }
+</div>

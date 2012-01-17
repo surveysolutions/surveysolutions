@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Questionnaire.Core.Web.Helpers;
@@ -20,6 +21,7 @@ namespace RavenQuestionnaire.Web.Controllers
     {
         private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
+
         public QuestionnaireController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
         {
             this.commandInvoker = commandInvoker;
@@ -49,13 +51,6 @@ namespace RavenQuestionnaire.Web.Controllers
             var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(new QuestionnaireBrowseInputModel());
             return View(model);
         }
-       /* public ActionResult Index()
-        {
-            var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
-            return View(model);
-        }*/
-        //
-        // GET: /Questionnaire/Details/5
 
         public ViewResult Details(string id)
         {
@@ -65,16 +60,39 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
-
         public ViewResult Flow(string id)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid quesry string parameters");
+
             var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
+            //var graph = viewRepository.Load<FlowGraphViewInputModel, FlowGraphView>(new FlowGraphViewInputModel(id));
+
             return View(model);
         }
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult _SaveFlow(string questionnnaireId, List<FlowBlock> blocks, List<FlowConnection> connections)
+        {
+            /*
+            commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId, model.PublicKey,
+                                                                         model.QuestionText,
+                                                                         model.StataExportCaption,
+                                                                         model.QuestionType,
+                                                                         model.ConditionExpression, model.Answers,
+                                                                         GlobalInfo.GetCurrentUser()));
+            commandInvoker.Execute(new UpdateFlowGraphCommand(questionnnaireId, blocks, connections, GlobalInfo.GetCurrentUser()));
+            */
+/*
+            var roots = (from block in graph.Blocks
+                         where !graph.Connections.Any(c => c.Target == block.Id)
+                         select block).ToList();
+            if (roots.Count==0)
+                return Json(new { status = "error: cicklic flow" });
+            */
 
 
+            return Json(new {status = "flow saved"});
+        }
         //
         // GET: /Questionnaire/Create
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor)]
@@ -180,13 +198,9 @@ namespace RavenQuestionnaire.Web.Controllers
 
                     return fsr;
                 }
-
-
             }
             return null;
-
         }
-
         #endregion
     }
 }

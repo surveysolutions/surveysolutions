@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Questionnaire.Core.Web.Helpers;
@@ -6,8 +8,10 @@ using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
+using RavenQuestionnaire.Web.Models;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -22,6 +26,50 @@ namespace RavenQuestionnaire.Web.Controllers
             this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
         }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        [HttpPost]
+        public ActionResult _GetAnswers(Guid publicKey, Guid targetPublicKey, string questionnaireId)
+        {
+            var source = viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(publicKey, questionnaireId));
+            var target = viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(targetPublicKey, questionnaireId));
+            return PartialView("_GetAnswers", new QuestionConditionModel
+                                                  {
+                                                      Source = source,
+                                                      Target = target
+                                                  });
+        }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        [HttpPost]
+        public ActionResult EditCondition(Guid questionPublicKey, Guid sourceQuestionPublicKey, Guid answerPublicKey, string questionnaireId)
+        {
+            var question = viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(questionPublicKey, questionnaireId));
+            var questionS = viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(sourceQuestionPublicKey, questionnaireId));
+            var answer = questionS.Answers.SingleOrDefault(a => a.PublicKey == answerPublicKey);
+            var answerText = answerPublicKey.ToString();
+            if (answer != null)
+            {
+                answerText = answer.AnswerText;
+                question.ConditionExpression = "[" + sourceQuestionPublicKey + "]=='" + answer.AnswerText + "'";
+
+                commandInvoker.Execute(new UpdateQuestionCommand(questionnaireId, questionPublicKey,
+                                                                 question.QuestionText,
+                                                                 question.StataExportCaption,
+                                                                 question.QuestionType,
+                                                                 question.ConditionExpression,
+                                                                 question.Answers,
+                                                                 GlobalInfo.GetCurrentUser()));
+            }
+            return Json(new
+            {
+                expression = "== " + answerText,
+                condition = question.ConditionExpression,
+                sourceId = sourceQuestionPublicKey,
+                targetId = questionPublicKey
+            });
+        }
+
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Create(string id, Guid? groupPublicKey)
         {
@@ -31,7 +79,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Edit(Guid publicKey, string questionnaireId)
         {
-            if (publicKey== Guid.Empty)
+            if (publicKey == Guid.Empty)
                 throw new HttpException(404, "Invalid query string parameters");
             var model =
                 viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(publicKey, questionnaireId));
@@ -42,13 +90,13 @@ namespace RavenQuestionnaire.Web.Controllers
         //
         // POST: /Questionnaire/Create
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Save(QuestionView model,bool isDropDown)
+        public ActionResult Save(QuestionView model, bool isDropDown)
         {
-            
+
             if (ModelState.IsValid)
             {
-                if(isDropDown)
-                    model.QuestionType= QuestionType.DropDownList;
+                if (isDropDown)
+                    model.QuestionType = QuestionType.DropDownList;
                 try
                 {
 
@@ -86,7 +134,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 return PartialView("_Index", questionnaire.GetQuestions(model.GroupPublicKey));
 
             }
-            return PartialView("_Create" , model);
+            return PartialView("_Create", model);
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public string Delete(Guid publicKey, string questionnaireId)
