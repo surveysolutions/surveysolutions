@@ -37,13 +37,13 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void When_GetStatusIsExecutedModelIsReturned()
         {
             string questionnaryId = "-1";
-            var input = new StatusBrowseInputModel();
-            input.QuestionnaireId = questionnaryId;
+            StatusBrowseInputModel  input = new StatusBrowseInputModel {QId = questionnaryId};
+            
             var output = new StatusBrowseView(0, 10, 0, new StatusBrowseItem[0], questionnaryId);
             ViewRepositoryMock.Setup(x => x.Load<StatusBrowseInputModel, StatusBrowseView>(input))
                 .Returns(output);
 
-            var result = Controller.Index(questionnaryId);
+            var result = Controller.Index(input);
             Assert.AreEqual(output, result.ViewData.Model);
         }
 
