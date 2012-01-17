@@ -126,7 +126,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             group.Questions.Add(question);
             qDoqument.Groups.Add(group);
             questionanire.Add(group, null);
-
+            questionanire.Add(group, null);
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
 
             questionanire.Add(
@@ -135,7 +135,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                 null);
             Assert.AreEqual(qDoqument.Groups[0].Questions[0].Answers[0].Selected, false);
             Assert.AreEqual(qDoqument.Groups[1].Questions[0].Answers[0].Selected, true);
-            
+            Assert.AreEqual(qDoqument.Groups[2].Questions[0].Answers[0].Selected, false);
+
         }
 
         [Test]

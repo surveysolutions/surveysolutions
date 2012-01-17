@@ -114,7 +114,7 @@ namespace RavenQuestionnaire.Web.Controllers
             return View( model);
         }
 
-        public ActionResult SaveSingleResult(string id, Guid? PublicKey, CompleteAnswer[] answers)
+        public ActionResult SaveSingleResult(string id, Guid? PublicKey, CompleteAnswer[] answers, Guid? PropogationPublicKey)
         {
             if (answers == null || answers.Length <= 0)
             {
@@ -123,6 +123,13 @@ namespace RavenQuestionnaire.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                if(PropogationPublicKey.HasValue)
+                {
+                    for (int i = 0; i < answers.Length; i++)
+                    {
+                        answers[i] = new PropagatableCompleteAnswer(answers[i], PropogationPublicKey.Value);
+                    }
+                }
                 commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, answers,
                                                                                       _globalProvider.GetCurrentUser()));
             }
