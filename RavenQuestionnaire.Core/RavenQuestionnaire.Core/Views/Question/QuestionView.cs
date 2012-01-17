@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NCalc;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
@@ -67,6 +68,13 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.GroupPublicKey = GetQuestionGroup(questionnaire, doc.PublicKey);
             this.StataExportCaption = doc.StataExportCaption;
         
+        }
+        public void GetConditions()
+        {
+            if (!string.IsNullOrWhiteSpace(this.ConditionExpression))
+            {
+                var e = new Expression(this.ConditionExpression);
+            }
         }
         protected Guid? GetQuestionGroup(QuestionnaireDocument questionnaire, Guid questionKey)
         {

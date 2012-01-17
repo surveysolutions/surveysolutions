@@ -162,6 +162,8 @@
     <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\AnswerType.cs" />
     <Compile Include="Entities\SubEntities\CompleteAnswer.cs" />
+    <Compile Include="Entities\SubEntities\FlowConnection.cs" />
+    <Compile Include="Entities\SubEntities\FlowBlock.cs" />
     <Compile Include="Entities\SubEntities\Group.cs" />
     <Compile Include="Entities\SubEntities\LocationWithUserStatistic.cs" />
     <Compile Include="Entities\SubEntities\Question.cs" />
