@@ -26,12 +26,10 @@ namespace RavenQuestionnaire.Web.Controllers
             this.viewRepository = viewRepository;
         }
 
-        public ViewResult Index(string id)
+        public ViewResult Index(StatusBrowseInputModel input)
         {
-            if (string.IsNullOrEmpty(id))
+            if ((input == null) || string.IsNullOrEmpty(input.QId))
                 throw new HttpException(404, "Invalid query string parameters.");
-
-            StatusBrowseInputModel input = new StatusBrowseInputModel {QuestionnaireId = id};
             var model = viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(input);
             return View(model);
         }
