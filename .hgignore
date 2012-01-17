@@ -18,3 +18,4 @@ ExpressionEvaluator/Evaluant.Calculator/obj/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web.sln.DotSettings.user
 RavenQuestionnaire.Web/RavenQuestionnaire.Web.6.1.ReSharper.user
 RavenQuestionnaire.Web/RavenQuestionnaire.Web.1.1.dotCover
+RavenQuestionnaire.Web/RavenQuestionnaire.Core.Tests/RavenQuestionnaire.Core.Tests.csproj.user
