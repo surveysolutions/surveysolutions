@@ -20,13 +20,15 @@ namespace RavenQuestionnaire.Core.Views.Group
             : base(questionnaireId)
         {
         }
-        public CompleteGroupView(CompleteQuestionnaireDocument doc, CompleteGroup group)
+        public CompleteGroupView(CompleteQuestionnaireDocument doc, CompleteGroup group, ICompleteGroupFactory groupFactory)
             : base(doc, group)
         {
+            
             this.Questions =
                 group.Questions.Select(
                     q =>
                     new CompleteQuestionView(doc, q)).ToArray();
+            this.Groups = group.Groups.Select(g => groupFactory.CreateGroup(doc, g)).ToArray();
         }
     }
 }
