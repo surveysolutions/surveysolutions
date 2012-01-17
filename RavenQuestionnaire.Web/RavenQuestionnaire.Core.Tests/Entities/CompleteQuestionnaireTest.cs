@@ -111,6 +111,57 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             questionanire.Add(group, null);
             Assert.AreEqual(qDoqument.Groups.Count, 1);
         }
+
+        [Test]
+        public void Add_AnswerInPropogatedGroup_AnswerIsAdded()
+        {
+
+            CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
+            CompleteGroup group = new CompleteGroup("test") { Propagated = true };
+            CompleteQuestion question = new CompleteQuestion("q",
+                                           QuestionType.SingleOption);
+            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            question.Answers.Add(answer);
+            group.Questions.Add(question);
+            qDoqument.Groups.Add(group);
+            questionanire.Add(group, null);
+
+            CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
+
+            questionanire.Add(
+                new PropagatableCompleteAnswer(completeAnswer,
+                                               ((PropagatableCompleteGroup) qDoqument.Groups[1]).PropogationPublicKey),
+                null);
+            Assert.AreEqual(qDoqument.Groups[0].Questions[0].Answers[0].Selected, false);
+            Assert.AreEqual(qDoqument.Groups[1].Questions[0].Answers[0].Selected, true);
+            
+        }
+
+        [Test]
+        public void RemovePropogatedGroup_GroupIsValid_GroupIsRemoved()
+        {
+
+            CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
+            CompleteGroup group = new CompleteGroup("test") { Propagated = true };
+            CompleteQuestion question = new CompleteQuestion("q",
+                                           QuestionType.SingleOption);
+            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            question.Answers.Add(answer);
+            group.Questions.Add(question);
+            qDoqument.Groups.Add(group);
+            questionanire.Add(group, null);
+
+            Assert.AreEqual(qDoqument.Groups.Count, 2);
+            Assert.AreEqual(qDoqument.Groups[1].GetType(), typeof (PropagatableCompleteGroup));
+            questionanire.Remove(new PropagatableCompleteGroup(group,
+                                                               ((PropagatableCompleteGroup) qDoqument.Groups[1]).
+                                                                   PropogationPublicKey));
+            Assert.AreEqual(qDoqument.Groups.Count, 1);
+            Assert.AreEqual(qDoqument.Groups[0].GetType(), typeof(CompleteGroup));
+
+        }
      /*   [Test]
         public void UpdateAnswer_UpdateUnpresentedQuestion_ExceptionIsThrownen()
         {
