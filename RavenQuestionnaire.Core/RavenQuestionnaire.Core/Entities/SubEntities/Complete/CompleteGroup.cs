@@ -54,9 +54,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public virtual bool Add(IComposite c, Guid? parent)
         {
-            IPropogate propogated = c as IPropogate;
-            if (propogated != null && !(this is IPropogate))
-                return false;
             if (!parent.HasValue || parent.Value == PublicKey)
             {
                 CompleteGroup propogate = c as CompleteGroup;
@@ -70,6 +67,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             {
                 return true;
             }
+            IPropogate propogated = c as IPropogate;
+            if (propogated != null && !(this is IPropogate))
+                return false;
             return Questions.Any(child => child.Add(c, parent));
         }
 

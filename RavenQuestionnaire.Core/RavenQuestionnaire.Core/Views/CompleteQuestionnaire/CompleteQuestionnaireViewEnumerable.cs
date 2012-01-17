@@ -24,8 +24,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public CompleteGroupView[] Groups { get; set; }
 
         public CompleteQuestionnaireViewEnumerable(CompleteQuestionnaireDocument doc,
-                                                   CompleteGroup currentGroup)
+                                                   CompleteGroup currentGroup, ICompleteGroupFactory groupFactory)
         {
+            this.GroupFactory = groupFactory;
             this.Id = IdUtil.ParseId(doc.Id);
             this.Title = doc.Title;
             this.CreationDate = doc.CreationDate;
@@ -33,10 +34,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
             InitGroups(doc);
-            this.CurrentGroup = new CompleteGroupView(doc, currentGroup);
+            this.CurrentGroup = GroupFactory.CreateGroup(doc, currentGroup);
         }
-        public CompleteQuestionnaireViewEnumerable(CompleteQuestionnaireDocument doc)
+        public CompleteQuestionnaireViewEnumerable(CompleteQuestionnaireDocument doc, ICompleteGroupFactory groupFactory)
         {
+            this.GroupFactory = groupFactory;
             this.Title = doc.Title;
             Entities.SubEntities.Complete.CompleteGroup group = new Entities.SubEntities.Complete.CompleteGroup()
                                                                     {
@@ -47,21 +49,23 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                                                                                                      q.QuestionType)).
                                                                             ToList()
                                                                     };
-            this.CurrentGroup = new CompleteGroupView(doc,
+            this.CurrentGroup = GroupFactory.CreateGroup(doc,
                                                       group);
             InitGroups(doc);
         }
-        
+
+        protected readonly ICompleteGroupFactory GroupFactory;
+
         protected void InitGroups(CompleteQuestionnaireDocument doc)
         {
             if (doc.Questions.Count > 0)
             {
                 this.Groups = new CompleteGroupView[doc.Groups.Count + 1];
-                this.Groups[0] = new CompleteGroupView(doc,
+                this.Groups[0] = GroupFactory.CreateGroup(doc,
                                                new Entities.SubEntities.Complete.CompleteGroup("Main") {PublicKey = Guid.Empty});
                 for (int i = 1; i <= doc.Groups.Count; i++)
                 {
-                    this.Groups[i] = new CompleteGroupView(doc, doc.Groups[i - 1]);
+                    this.Groups[i] = GroupFactory.CreateGroup(doc, doc.Groups[i - 1]);
                 }
             }
             else
@@ -69,7 +73,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 this.Groups = new CompleteGroupView[doc.Groups.Count];
                 for (int i = 0; i < doc.Groups.Count; i++)
                 {
-                    this.Groups[i] = new CompleteGroupView(doc, doc.Groups[i - 1]);
+                    this.Groups[i] = GroupFactory.CreateGroup(doc, doc.Groups[i - 1]);
                 }
             }
         }
