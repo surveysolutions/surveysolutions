@@ -11,12 +11,14 @@
             using (Html.BeginForm("SaveSingleResult", "CompleteQuestionnaire"))
             {
                 Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
-                @Html.HiddenFor(model => Model.PublicKey)
-                @Html.Hidden("id", Model.QuestionnaireId)
-                @Html.Hidden("PropogationPublicKey", newModel.PropogationPublicKey)
+            @Html.HiddenFor(model => Model.PublicKey)
+            @Html.Hidden("id", Model.QuestionnaireId)
+            @Html.Hidden("PropogationPublicKey", newModel.PropogationPublicKey)
             }
         }
     </div>
+    
+    @Html.ActionLink("Remove", "DeletePropagatedGroup", "Group", new { propagationKey = newModel.PropogationPublicKey, publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireId }, new { @class = "btn" })
     
 }
 else if (!Model.Propagated)
@@ -27,16 +29,16 @@ else if (!Model.Propagated)
             using (Html.BeginForm("SaveSingleResult", "CompleteQuestionnaire"))
             {
                 Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
-                @Html.HiddenFor(model => Model.PublicKey)
-                @Html.Hidden("id", Model.QuestionnaireId)
+            @Html.HiddenFor(model => Model.PublicKey)
+            @Html.Hidden("id", Model.QuestionnaireId)
             }
         }
     </div>
         foreach (var group in Model.Groups)
         {
-         <div>
-             @{ Html.RenderPartial("~/Views/Group/_Screen.cshtml", group); }
-         </div>
+    <div>
+        @{ Html.RenderPartial("~/Views/Group/_Screen.cshtml", group); }
+    </div>
         }
 }
 else

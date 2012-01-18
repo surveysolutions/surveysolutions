@@ -87,5 +87,11 @@ namespace RavenQuestionnaire.Web.Controllers
             commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser()));
             return RedirectToAction("Question", "CompleteQuestionnaire", new {id = questionnaireId});
         }
+        public ActionResult DeletePropagatedGroup(Guid propagationKey, Guid publicKey, string questionnaireId)
+        {
+            commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
+                                                                    GlobalInfo.GetCurrentUser()));
+            return RedirectToAction("Question", "CompleteQuestionnaire", new {id = questionnaireId});
+        }
     }
 }
