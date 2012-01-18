@@ -11,7 +11,8 @@ namespace RavenQuestionnaire.Core.Views.Group
         public CompleteGroupViewInputModel(Guid? propagationkey, Guid? publicKey, string questionnaireId)
         {
             PropagationKey = propagationkey;
-            PublicKey = publicKey;
+            if (publicKey.HasValue && publicKey.Value != Guid.Empty)
+                PublicKey = publicKey;
             QuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(questionnaireId);
         }
 
