@@ -50,7 +50,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 }
                 return RedirectToAction("Index", new
                 {
-                    id = model.QuestionnaireId
+                    Qid = model.QuestionnaireId
                 });
 
             }
@@ -80,7 +80,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     commandInvoker.Execute(new UpdateStatusRestrictionsCommand(model.Id, roles, GlobalInfo.GetCurrentUser()));
                     return RedirectToAction("Index", new
                     {
-                        id = model.QuestionnaireId
+                        Qid = model.QuestionnaireId
 
                     });
                 }
