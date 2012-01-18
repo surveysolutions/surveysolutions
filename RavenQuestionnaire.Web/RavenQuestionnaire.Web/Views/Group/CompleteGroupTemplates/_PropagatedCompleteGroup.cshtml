@@ -1,0 +1,14 @@
+﻿@model RavenQuestionnaire.Core.Views.Group.PropagatableCompleteGroupView
+
+    @foreach (var question in Model.Questions)
+    {
+        using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.GetClientId("div") }))
+        {
+            Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
+        @Html.HiddenFor(model => Model.PublicKey)
+        @Html.Hidden("id", Model.QuestionnaireId)
+        @Html.Hidden("PropogationPublicKey", Model.PropogationPublicKey)
+        }
+    }
+
+@Html.ActionLink("Remove", "DeletePropagatedGroup", "Group", new { propagationKey = Model.PropogationPublicKey, publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireId }, new { @class = "btn" })

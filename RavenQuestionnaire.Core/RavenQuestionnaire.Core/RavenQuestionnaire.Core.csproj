@@ -95,6 +95,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractFactories\CompleteGroupFactory.cs" />
+    <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="CommandHandlers\AddNewQuestionHandler.cs" />
     <Compile Include="CommandHandlers\DeletePropagatedGroupHandler.cs" />
     <Compile Include="CommandHandlers\UpdateQuestionnaireFlowHandler.cs" />
@@ -245,12 +247,12 @@
     <Compile Include="Views\FlowGraph\FlowGraphView.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphViewFactory.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphViewInputModel.cs" />
-    <Compile Include="Views\Group\CompleteGroupFactory.cs" />
     <Compile Include="Views\Group\CompleteGroupView.cs" />
+    <Compile Include="Views\Group\CompleteGroupViewFactory.cs" />
+    <Compile Include="Views\Group\CompleteGroupViewInputModel.cs" />
     <Compile Include="Views\Group\GroupView.cs" />
     <Compile Include="Views\Group\GroupViewFactory.cs" />
     <Compile Include="Views\Group\GroupViewInputModel.cs" />
-    <Compile Include="Views\Group\ICompleteGroupFactory.cs" />
     <Compile Include="Views\Group\PropagatedCompleteGroupView.cs" />
     <Compile Include="Views\Location\LocationBrowseInputModel.cs" />
     <Compile Include="Views\Location\LocationBrowseItem.cs" />

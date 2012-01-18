@@ -10,6 +10,7 @@ using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Views.Status;
 
@@ -115,7 +116,7 @@ namespace RavenQuestionnaire.Web.Controllers
             return View( model);
         }
 
-        public ActionResult SaveSingleResult(string id, Guid? PublicKey, CompleteAnswer[] answers, Guid? PropogationPublicKey)
+        public ActionResult SaveSingleResult(string id, Guid? PublicKey, Guid? PropogationPublicKey, CompleteAnswer[] answers)
         {
             if (answers == null || answers.Length <= 0)
             {
@@ -124,7 +125,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                if(PropogationPublicKey.HasValue)
+                if (PropogationPublicKey.HasValue)
                 {
                     for (int i = 0; i < answers.Length; i++)
                     {
@@ -134,7 +135,10 @@ namespace RavenQuestionnaire.Web.Controllers
                 commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, answers,
                                                                                       _globalProvider.GetCurrentUser()));
             }
-            return RedirectToAction("Question", new {id = id, group = PublicKey});
+            var model =
+                viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
+                    new CompleteGroupViewInputModel(PropogationPublicKey, PublicKey, id));
+            return PartialView("~/Views/Group/_Screen.cshtml", model);
         }
 
         public ActionResult Delete(string id)

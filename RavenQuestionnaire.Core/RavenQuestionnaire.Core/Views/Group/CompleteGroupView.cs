@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -29,6 +30,10 @@ namespace RavenQuestionnaire.Core.Views.Group
                     q =>
                     new CompleteQuestionView(doc, q)).ToArray();
             this.Groups = group.Groups.Select(g => groupFactory.CreateGroup(doc, g)).ToArray();
+        }
+        public virtual string GetClientId(string prefix)
+        {
+            return string.Format("{0}_{1}", prefix, this.PublicKey);
         }
     }
 }

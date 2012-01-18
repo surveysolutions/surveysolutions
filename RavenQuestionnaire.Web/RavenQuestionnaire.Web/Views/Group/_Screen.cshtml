@@ -5,43 +5,18 @@
 @{ PropagatableCompleteGroupView newModel = Model as PropagatableCompleteGroupView; }
 @if (newModel != null)
 {
-    <div>
-        @foreach (var question in Model.Questions)
-        {
-            using (Html.BeginForm("SaveSingleResult", "CompleteQuestionnaire"))
-            {
-                Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
-            @Html.HiddenFor(model => Model.PublicKey)
-            @Html.Hidden("id", Model.QuestionnaireId)
-            @Html.Hidden("PropogationPublicKey", newModel.PropogationPublicKey)
-            }
-        }
-    </div>
-    
-    @Html.ActionLink("Remove", "DeletePropagatedGroup", "Group", new { propagationKey = newModel.PropogationPublicKey, publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireId }, new { @class = "btn" })
-    
+    Html.RenderPartial("~/Views/Group/CompleteGroupTemplates/_PropagatedCompleteGroup.cshtml", newModel);
+
+
 }
-else if (!Model.Propagated)
+else if (Model.Propagated)
 {
-    <div>
-        @foreach (var question in Model.Questions)
-        {
-            using (Html.BeginForm("SaveSingleResult", "CompleteQuestionnaire"))
-            {
-                Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
-            @Html.HiddenFor(model => Model.PublicKey)
-            @Html.Hidden("id", Model.QuestionnaireId)
-            }
-        }
-    </div>
-        foreach (var group in Model.Groups)
-        {
-    <div>
-        @{ Html.RenderPartial("~/Views/Group/_Screen.cshtml", group); }
-    </div>
-        }
+
+    Html.RenderPartial("~/Views/Group/CompleteGroupTemplates/_PropagatebleCompleteGroup.cshtml", Model);
+
 }
 else
 {
-    @Html.ActionLink("Propagate Group", "PropagateGroup", "Group", new { publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireId }, new { @class = "btn" })
+    Html.RenderPartial("~/Views/Group/CompleteGroupTemplates/_CompleteGroup.cshtml", Model);
+
 }

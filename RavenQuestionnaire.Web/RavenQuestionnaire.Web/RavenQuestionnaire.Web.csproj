@@ -313,6 +313,9 @@
     <Content Include="Views\Report\Report.cshtml" />
     <Content Include="Views\Questionnaire\Export.cshtml" />
     <Content Include="Views\Question\_GetAnswers.cshtml" />
+    <Content Include="Views\Group\CompleteGroupTemplates\_CompleteGroup.cshtml" />
+    <Content Include="Views\Group\CompleteGroupTemplates\_PropagatedCompleteGroup.cshtml" />
+    <Content Include="Views\Group\CompleteGroupTemplates\_PropagatebleCompleteGroup.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

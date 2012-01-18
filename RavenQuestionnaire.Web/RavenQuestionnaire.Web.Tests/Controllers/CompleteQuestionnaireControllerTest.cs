@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -120,8 +121,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 x.Load<StatusViewInputModel, StatusView>(
                     It.IsAny<StatusViewInputModel>()))
                 .Returns(new StatusView());
-            Controller.SaveSingleResult("cId", null,
-                                        new CompleteAnswer[] {new CompleteAnswer(new Answer(), Guid.NewGuid())}, null);
+            Controller.SaveSingleResult("cId", null, null,
+                                        new CompleteAnswer[] {new CompleteAnswer(new Answer(), Guid.NewGuid())});
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateAnswerInCompleteQuestionnaireCommand>()), Times.Once());
         }
     }
