@@ -32,15 +32,11 @@ namespace RavenQuestionnaire.Core.Views.Group
             else
             {
                 group = new Entities.SubEntities.Complete.CompleteGroup()
-                {
-                    Questions =
-                        doc.Questions.Select(
-                            q =>
-                            new CompleteQuestion(q.QuestionText,
-                                                 q.QuestionType)).
-                        ToList()
-                };
-                
+                            {
+                                Questions =
+                                    doc.Questions.ToList()
+                            };
+
             }
             return this.groupFactory.CreateGroup(doc, group);
         }

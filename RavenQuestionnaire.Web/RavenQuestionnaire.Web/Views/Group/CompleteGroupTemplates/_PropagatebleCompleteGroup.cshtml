@@ -1,2 +1,5 @@
 ﻿@model RavenQuestionnaire.Core.Views.Group.CompleteGroupView
-@Html.ActionLink("Propagate Group", "PropagateGroup", "Group", new { publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireId }, new { @class = "btn" })
+@using (Ajax.BeginForm("PropagateGroup", "Group", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.GetClientId("div") }))
+{
+    @Html.ActionLink("Propagate Group", "PropagateGroup", "Group", new { publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireId }, new { @class = "btn" })
+}
