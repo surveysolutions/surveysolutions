@@ -1,4 +1,5 @@
-﻿@model RavenQuestionnaire.Core.Views.Group.PropagatableCompleteGroupView
+﻿@using RavenQuestionnaire.Core.Views.Group
+@model RavenQuestionnaire.Core.Views.Group.PropagatableCompleteGroupView
 
     @foreach (var question in Model.Questions)
     {
@@ -11,4 +12,6 @@
         }
     }
 
-@Html.ActionLink("Remove", "DeletePropagatedGroup", "Group", new { propagationKey = Model.PropogationPublicKey, publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireId }, new { @class = "btn" })
+@Ajax.ActionLink("Remove", "DeletePropagatedGroup", "Group", new { propagationKey = Model.PropogationPublicKey, publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireId, parentGroupPublicKey = ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey },
+new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div") },
+new { @class = "btn" })

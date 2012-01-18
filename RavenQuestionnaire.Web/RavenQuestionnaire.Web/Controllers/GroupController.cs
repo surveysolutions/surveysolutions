@@ -58,7 +58,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     ModelState.AddModelError("ConditionExpression", e.Message);
                     return PartialView("_Create", model);
                 }
-                var questionnaire = 
+                var questionnaire =
                     viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
 
                 return PartialView("_Index", questionnaire.Groups);
@@ -82,16 +82,27 @@ namespace RavenQuestionnaire.Web.Controllers
             commandInvoker.Execute(new DeleteGroupCommand(publicKey, questionnaireId, GlobalInfo.GetCurrentUser()));
             return "";
         }
-        public ActionResult PropagateGroup(Guid publicKey, string questionnaireId)
+        public ActionResult PropagateGroup(Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
         {
             commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser()));
-            return RedirectToAction("Question", "CompleteQuestionnaire", new {id = questionnaireId});
+            var model =
+               viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
+                   new CompleteGroupViewInputModel(null, parentGroupPublicKey, questionnaireId));
+            ViewBag.CurrentGroup = model;
+            return PartialView("~/Views/Group/_Screen.cshtml", model);
+            //   return RedirectToAction("Question", "CompleteQuestionnaire", new {id = questionnaireId});
         }
-        public ActionResult DeletePropagatedGroup(Guid propagationKey, Guid publicKey, string questionnaireId)
+        public ActionResult DeletePropagatedGroup(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
         {
             commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
                                                                     GlobalInfo.GetCurrentUser()));
-            return RedirectToAction("Question", "CompleteQuestionnaire", new {id = questionnaireId});
+
+            var model =
+             viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
+                 new CompleteGroupViewInputModel(null, parentGroupPublicKey, questionnaireId));
+            ViewBag.CurrentGroup = model;
+            return PartialView("~/Views/Group/_Screen.cshtml", model);
+           // return RedirectToAction("Question", "CompleteQuestionnaire", new { id = questionnaireId });
         }
     }
 }
