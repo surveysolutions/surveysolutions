@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandlers\AddNewQuestionHandler.cs" />
+    <Compile Include="CommandHandlers\DeletePropagatedGroupHandler.cs" />
     <Compile Include="CommandHandlers\UpdateQuestionnaireFlowHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewGroupHandler.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Commands\CreateNewLocationCommand.cs" />
     <Compile Include="Commands\CreateNewStatusCommand.cs" />
     <Compile Include="Commands\DeleteGroupCommand.cs" />
+    <Compile Include="Commands\DeletePropagatedGroupCommand.cs" />
     <Compile Include="Commands\IComand.cs" />
     <Compile Include="Commands\AddNewQuestionCommand.cs" />
     <Compile Include="Commands\CreateNewCompleteQuestionnaireCommand.cs" />
