@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Security;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
@@ -142,6 +141,12 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             AddRolesListToViewBag();
             return View("Edit", model);
+        }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ViewResult Route(string id)
+        {
+            return View();
         }
 
     }
