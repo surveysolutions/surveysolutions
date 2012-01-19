@@ -44,11 +44,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             Entities.SubEntities.Complete.CompleteGroup group = new Entities.SubEntities.Complete.CompleteGroup()
                                                                     {
                                                                         Questions =
-                                                                            doc.Questions.Select(
-                                                                                q =>
-                                                                                new CompleteQuestion(q.QuestionText,
-                                                                                                     q.QuestionType)).
-                                                                            ToList()
+                                                                            doc.Questions
                                                                     };
             this.CurrentGroup = GroupFactory.CreateGroup(doc,
                                                       group);

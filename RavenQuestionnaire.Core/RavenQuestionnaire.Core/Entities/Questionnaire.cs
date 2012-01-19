@@ -42,19 +42,21 @@ namespace RavenQuestionnaire.Core.Entities
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey.Value));
             return result;
         }
-        public void AddGroup(string groupText, Guid? parent)
+        public void AddGroup(string groupText,bool propageted, Guid? parent)
         {
             Group group = new Group();
             group.GroupText = groupText;
+            group.Propagated = propageted;
             if (!Add(group, parent))
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
         }
 
-        public void UpdateGroup(string groupText, Guid publicKey)
+        public void UpdateGroup(string groupText, bool propageted, Guid publicKey)
         {
             Group group = Find<Group>(publicKey);
             if (group != null)
             {
+                group.Propagated = propageted;
                 group.Update(groupText);
                 return;
             }
