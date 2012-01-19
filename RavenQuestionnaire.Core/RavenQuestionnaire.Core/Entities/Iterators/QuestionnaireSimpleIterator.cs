@@ -84,7 +84,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             get { return this.questionnaire.GetAllQuestions()[current]; }
         }
 
-        public CompleteQuestion GetNextAfter(Guid? questionkey)
+       /* public CompleteQuestion GetNextAfter(Guid? questionkey)
         {
             if (!questionkey.HasValue)
                 return First;
@@ -110,7 +110,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 return Previous;
             }
             return null;
-        }
+        }*/
 
         private int current = 0;
     }

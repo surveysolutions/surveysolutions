@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
@@ -45,26 +46,19 @@ namespace RavenQuestionnaire.Core.Entities
         {
             innerDocument.Responsible = user;
         }
-        public IEnumerable<CompleteAnswer> GetAllAnswers()
+
+        public Iterator<CompleteAnswer> AnswerIterator
         {
-            List<CompleteAnswer> result= new List<CompleteAnswer>();
-            foreach (CompleteQuestion completeQuestion in GetAllQuestions())
-            {
-                foreach (CompleteAnswer completeAnswer in completeQuestion.Answers)
-                {
-                    completeAnswer.QuestionPublicKey = completeQuestion.PublicKey;
-                    if (completeAnswer.Selected)
-                        result.Add(completeAnswer);
-                }
-            }
-            return result;
-            //  return GetAllQuestions().SelectMany(q => q.Answers).Where(a => a.Selected);
+            get { return new QuestionnaireAnswerIterator(this.innerDocument); }
         }
-        public IList<CompleteGroup> GetAllGroups()
+        public Iterator<CompleteQuestion> QuestionIterator
         {
-            return innerDocument.Groups;
+            get { return new QuestionnaireQuestionIterator(this.innerDocument); }
         }
-        
+        public Iterator<CompleteGroup> GroupIterator
+        {
+            get { return new QuestionnaireScreenIterator(this.innerDocument); }
+        }
         #region Implementation of IComposite
 
         public virtual bool Add(IComposite c, Guid? parent)
@@ -123,50 +117,7 @@ namespace RavenQuestionnaire.Core.Entities
         }
 
         #endregion
-        public List<CompleteQuestion> GetRootQuestions()
-        {
-            return innerDocument.Questions;
-        }
 
-        public List<CompleteQuestion> GetAllQuestions()
-        {
-            List<CompleteQuestion> result = new List<CompleteQuestion>();
-            result.AddRange(innerDocument.Questions);
-            Queue<CompleteGroup> groups = new Queue<CompleteGroup>();
-            foreach (var child in innerDocument.Groups)
-            {
-                groups.Enqueue(child);
-            }
-            while (groups.Count != 0)
-            {
-                var queueItem = groups.Dequeue();
-                result.AddRange(queueItem.Questions);
-                foreach (var child in queueItem.Groups)
-                {
-                    groups.Enqueue(child);
-                }
-            }
-            return result;
-        }
-
-      /*  #region Implementation of IPropogate
-
-        public void Propogate(Guid childGroupPublicKey)
-        {
-            var group = this.innerDocument.Groups.FirstOrDefault(g => g.PublicKey.Equals(childGroupPublicKey));
-            if (group == null)
-                throw new ArgumentException("Propogated group can't be founded");
-            this.innerDocument.Groups.Add(group);
-        }
-
-        public void RemovePropogated(Guid childGroupPublicKey)
-        {
-            var group = this.innerDocument.Groups.FirstOrDefault(g => g.PublicKey.Equals(childGroupPublicKey));
-            if (group == null)
-                throw new ArgumentException("Removed group can't be founded");
-            this.innerDocument.Groups.Remove(group);
-        }
-
-        #endregion*/
+        
     }
 }
