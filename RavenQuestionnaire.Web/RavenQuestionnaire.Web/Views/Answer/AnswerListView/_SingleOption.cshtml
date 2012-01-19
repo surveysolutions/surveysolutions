@@ -9,10 +9,12 @@
     @Html.Hidden("QuestionPublicKey", item.QuestionId)
 
       
-    <div class="answer">
-        <span>
-            @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)</span>
-        @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}
-    </div>
+        <div class="answer">
+            @item.Selected
+            <span>
+                @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)</span>
+                @Html.CheckBox("sadsad"+item.PublicKey.ToString(), item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
+            @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}
+        </div>
     }
 }

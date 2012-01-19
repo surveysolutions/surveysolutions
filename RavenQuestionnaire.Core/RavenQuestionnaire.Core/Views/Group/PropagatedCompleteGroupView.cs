@@ -13,10 +13,6 @@ namespace RavenQuestionnaire.Core.Views.Group
          public PropagatableCompleteGroupView()
         {
         }
-        public PropagatableCompleteGroupView(string questionnaireId)
-            : base(questionnaireId)
-        {
-        }
         public PropagatableCompleteGroupView(CompleteQuestionnaireDocument doc, PropagatableCompleteGroup group, ICompleteGroupFactory groupFactory)
             : base(doc, group, groupFactory)
         {

@@ -35,7 +35,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                          {
                              PublicKey = doc.PublicKey,
                              GroupText = doc.GroupText,
-                             Propagated = false
+                             Propagated = doc.Propagated
                          };
             result.Questions = doc.Questions.Select(q => (CompleteQuestion) q).ToList();
             result.Groups = doc.Groups.Select(q => (CompleteGroup) q).ToList();

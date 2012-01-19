@@ -23,10 +23,10 @@ namespace RavenQuestionnaire.Web.Controllers
             this.viewRepository = viewRepository;
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Create(string id)
+        public ActionResult Create(string id, Guid? parentGroup)
         {
             return PartialView("_Create",
-                               new GroupView(id));
+                               new GroupView(id, parentGroup));
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Save(GroupView model)
@@ -40,15 +40,15 @@ namespace RavenQuestionnaire.Web.Controllers
 
                     if (model.PublicKey == Guid.Empty)
                     {
-                        CreateNewGroupCommand createCommand = new CreateNewGroupCommand(model.GroupText,
-                                                                                        model.QuestionnaireId, null, GlobalInfo.GetCurrentUser());
+                        CreateNewGroupCommand createCommand = new CreateNewGroupCommand(model.GroupText,model.Propagated,
+                                                                                        model.QuestionnaireId, model.ParentGroup, GlobalInfo.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
 
 
                     }
                     else
                     {
-                        commandInvoker.Execute(new UpdateGroupCommand(model.GroupText, model.QuestionnaireId,
+                        commandInvoker.Execute(new UpdateGroupCommand(model.GroupText, model.Propagated, model.QuestionnaireId,
                                                                       model.PublicKey, GlobalInfo.GetCurrentUser()));
                     }
                 }
