@@ -7,6 +7,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
     public class PropagatableCompleteAnswer : CompleteAnswer, IPropogate
     {
+        public PropagatableCompleteAnswer()
+        {
+        }
 
         public PropagatableCompleteAnswer(IAnswer answer, Guid questionPublicKey):base(answer,questionPublicKey)
         {

@@ -19,7 +19,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         {
             var questionnaire = this._questionnaireRepository.Load(command.QuestionnaireId);
 
-            questionnaire.UpdateGroup(command.GroupText, command.GroupPublicKey);
+            questionnaire.UpdateGroup(command.GroupText, command.Paropagateble, command.GroupPublicKey);
         }
     }
 }

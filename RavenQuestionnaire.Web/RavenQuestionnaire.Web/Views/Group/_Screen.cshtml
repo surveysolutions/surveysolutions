@@ -2,14 +2,21 @@
 @using RavenQuestionnaire.Core.Views.Group
 @using RavenQuestionnaire.Core.Views.Question
 @model CompleteGroupView
-<div>
-    @foreach (var question in Model.Questions)
-    {
-        using (Html.BeginForm("SaveSingleResult", "CompleteQuestionnaire"))
-        {
-            Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);   
-        @Html.HiddenFor(model => Model.PublicKey)
-        @Html.Hidden("id", Model.QuestionnaireId)
-        }
-    }
-</div>
+@{ PropagatableCompleteGroupView newModel = Model as PropagatableCompleteGroupView; }
+@if (newModel != null)
+{
+    Html.RenderPartial("~/Views/Group/CompleteGroupTemplates/_PropagatedCompleteGroup.cshtml", newModel);
+
+
+}
+else if (Model.Propagated)
+{
+
+    Html.RenderPartial("~/Views/Group/CompleteGroupTemplates/_PropagatebleCompleteGroup.cshtml", Model);
+
+}
+else
+{
+    Html.RenderPartial("~/Views/Group/CompleteGroupTemplates/_CompleteGroup.cshtml", Model);
+
+}

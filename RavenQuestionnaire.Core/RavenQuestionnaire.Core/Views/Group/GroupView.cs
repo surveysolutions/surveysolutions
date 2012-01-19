@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -22,23 +23,26 @@ namespace RavenQuestionnaire.Core.Views.Group
             Groups = new AbstractGroupView[] { };
         }
 
-        public AbstractGroupView(string questionnaireId)
+        public AbstractGroupView(string questionnaireId, Guid? parentGroup)
         {
             QuestionnaireId = questionnaireId;
+            ParentGroup = parentGroup;
         }
 
         protected AbstractGroupView(IQuestionnaireDocument doc, IGroup group)
         {
-            QuestionnaireId = doc.Id;
-            PublicKey = group.PublicKey;
-            GroupText = group.GroupText;
+            this.QuestionnaireId = doc.Id;
+            this.PublicKey = group.PublicKey;
+            this.GroupText = group.GroupText;
+            this.Propagated = group.Propagated;
         }
-
         public Guid PublicKey { get; set; }
 
         public string GroupText { get; set; }
 
         public Guid? ParentGroup { get; set; }
+
+        public bool Propagated { get; set; }
 
         public string QuestionnaireId
         {
@@ -60,6 +64,9 @@ namespace RavenQuestionnaire.Core.Views.Group
         }
 
         public AbstractGroupView[] Groups { get; set; }
+
+
+       
     }
 
     public abstract class GroupView<TGroup, TQuestion, TAnswer> : AbstractGroupView
@@ -71,18 +78,41 @@ namespace RavenQuestionnaire.Core.Views.Group
         {
         }
 
-        public GroupView(string questionnaireId)
-            : base(questionnaireId)
+        public GroupView(string questionnaireId, Guid? parentGroup)
+            : base(questionnaireId, parentGroup)
         {
         }
 
         public GroupView(IQuestionnaireDocument<TGroup, TQuestion> doc, TGroup group)
             : base(doc, group)
         {
+            this.ParentGroup = GetGroupParent(doc, group);
             /*   this.Questions =
                 group.Questions.Select(
                     q =>
                     new QuestionView(doc, q)).ToArray();*/
+        }
+        protected Guid? GetGroupParent(IQuestionnaireDocument<TGroup, TQuestion> questionnaire, TGroup group)
+        {
+            if (questionnaire.Groups.Any(q => q.PublicKey.Equals(group.PublicKey)))
+                return null;
+            var groups = new Queue<TGroup>();
+            foreach (var child in questionnaire.Groups)
+            {
+                groups.Enqueue(child);
+            }
+            while (groups.Count != 0)
+            {
+                var queueItem = groups.Dequeue();
+
+                if (queueItem.Groups.Any(q => q.PublicKey.Equals(group.PublicKey)))
+                    return queueItem.PublicKey;
+                foreach (var child in queueItem.Groups)
+                {
+                    groups.Enqueue(child);
+                }
+            }
+            return null;
         }
     }
 
@@ -92,8 +122,8 @@ namespace RavenQuestionnaire.Core.Views.Group
         {
         }
 
-        public GroupView(string questionnaireId)
-            : base(questionnaireId)
+        public GroupView(string questionnaireId, Guid? parentGroup)
+            : base(questionnaireId, parentGroup)
         {
         }
 
@@ -105,6 +135,7 @@ namespace RavenQuestionnaire.Core.Views.Group
                 group.Questions.Select(
                     q =>
                     new QuestionView(doc, q)).ToArray();
+            this.Groups = group.Groups.Select(g => new GroupView(doc, g)).ToArray();
         }
     }
 }

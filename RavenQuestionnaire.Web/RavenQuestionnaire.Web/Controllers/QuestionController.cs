@@ -9,6 +9,7 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Answer;
+using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Web.Models;
@@ -98,9 +99,20 @@ namespace RavenQuestionnaire.Web.Controllers
                     ModelState.AddModelError("ConditionExpression", e.Message);
                     return PartialView("_Create", model);
                 }
-                var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
+           //     var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
+                if (model.GroupPublicKey.HasValue)
+                {
+                    var updatedGroup =
+                        viewRepository.Load<GroupViewInputModel, GroupView>(
+                            new GroupViewInputModel(model.GroupPublicKey.Value, model.QuestionnaireId));
 
-                return PartialView("_Index", questionnaire.GetQuestions(model.GroupPublicKey));
+                    return PartialView("_Index", updatedGroup.Questions);
+                }
+                else
+                {
+                    var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
+                    return PartialView("_Index", questionnaire.Questions);
+                }
 
             }
             return PartialView("_Create", model);

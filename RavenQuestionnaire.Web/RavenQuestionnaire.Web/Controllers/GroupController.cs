@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
@@ -22,10 +23,10 @@ namespace RavenQuestionnaire.Web.Controllers
             this.viewRepository = viewRepository;
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Create(string id)
+        public ActionResult Create(string id, Guid? parentGroup)
         {
             return PartialView("_Create",
-                               new GroupView(id));
+                               new GroupView(id, parentGroup));
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Save(GroupView model)
@@ -39,15 +40,15 @@ namespace RavenQuestionnaire.Web.Controllers
 
                     if (model.PublicKey == Guid.Empty)
                     {
-                        CreateNewGroupCommand createCommand = new CreateNewGroupCommand(model.GroupText,
-                                                                                        model.QuestionnaireId, null, GlobalInfo.GetCurrentUser());
+                        CreateNewGroupCommand createCommand = new CreateNewGroupCommand(model.GroupText,model.Propagated,
+                                                                                        model.QuestionnaireId, model.ParentGroup, GlobalInfo.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
 
 
                     }
                     else
                     {
-                        commandInvoker.Execute(new UpdateGroupCommand(model.GroupText, model.QuestionnaireId,
+                        commandInvoker.Execute(new UpdateGroupCommand(model.GroupText, model.Propagated, model.QuestionnaireId,
                                                                       model.PublicKey, GlobalInfo.GetCurrentUser()));
                     }
                 }
@@ -57,7 +58,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     ModelState.AddModelError("ConditionExpression", e.Message);
                     return PartialView("_Create", model);
                 }
-                var questionnaire = 
+                var questionnaire =
                     viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
 
                 return PartialView("_Index", questionnaire.Groups);
@@ -80,6 +81,28 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             commandInvoker.Execute(new DeleteGroupCommand(publicKey, questionnaireId, GlobalInfo.GetCurrentUser()));
             return "";
+        }
+        public ActionResult PropagateGroup(Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
+        {
+            commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser()));
+            var model =
+               viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
+                   new CompleteGroupViewInputModel(null, parentGroupPublicKey, questionnaireId));
+            ViewBag.CurrentGroup = model;
+            return PartialView("~/Views/Group/_Screen.cshtml", model);
+            //   return RedirectToAction("Question", "CompleteQuestionnaire", new {id = questionnaireId});
+        }
+        public ActionResult DeletePropagatedGroup(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
+        {
+            commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
+                                                                    GlobalInfo.GetCurrentUser()));
+
+            var model =
+             viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
+                 new CompleteGroupViewInputModel(null, parentGroupPublicKey, questionnaireId));
+            ViewBag.CurrentGroup = model;
+            return PartialView("~/Views/Group/_Screen.cshtml", model);
+           // return RedirectToAction("Question", "CompleteQuestionnaire", new { id = questionnaireId });
         }
     }
 }

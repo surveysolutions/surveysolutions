@@ -23,12 +23,22 @@
                     @Html.ValidationMessageFor(model => model.GroupText)
                 </div>
             </div>
+            @if (Model.ParentGroup.HasValue)
+            {
+                <div class="clearfix">
+                    <label>Is Group propagateble?</label>
+                    <div class="input">
 
+                        @Html.CheckBoxFor(model => model.Propagated)
+                    </div>
+                </div>
+            }
             @if (Model.PublicKey != Guid.Empty)
             {
                 @Html.HiddenFor(model => model.PublicKey)
             }
             @Html.HiddenFor(model => model.QuestionnaireId)
+            @Html.HiddenFor(model => model.ParentGroup)
         </div>
         <div class="modal-footer">
            

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -16,17 +17,19 @@ namespace RavenQuestionnaire.Core.Views.Group
         public CompleteGroupView()
         {
         }
-        public CompleteGroupView(string questionnaireId)
-            : base(questionnaireId)
-        {
-        }
-        public CompleteGroupView(CompleteQuestionnaireDocument doc, CompleteGroup group)
+        public CompleteGroupView(CompleteQuestionnaireDocument doc, CompleteGroup group, ICompleteGroupFactory groupFactory)
             : base(doc, group)
         {
+            
             this.Questions =
                 group.Questions.Select(
                     q =>
                     new CompleteQuestionView(doc, q)).ToArray();
+            this.Groups = group.Groups.Select(g => groupFactory.CreateGroup(doc, g)).ToArray();
+        }
+        public virtual string GetClientId(string prefix)
+        {
+            return string.Format("{0}_{1}", prefix, this.PublicKey);
         }
     }
 }

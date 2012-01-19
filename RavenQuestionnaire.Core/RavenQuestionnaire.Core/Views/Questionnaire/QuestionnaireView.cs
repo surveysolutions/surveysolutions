@@ -59,16 +59,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
             Groups = new AbstractGroupView[0];
             FlowGraph = null;
         }
-
-        public AbstractQuestionView[] GetQuestions(Guid? groupPublicKey)
-        {
-            if (!groupPublicKey.HasValue)
-                return Questions;
-            var group = Groups.FirstOrDefault(g => g.PublicKey.Equals(groupPublicKey.Value));
-            if (group == null)
-                throw new ArgumentException("group doesn't exists");
-            return group.Questions;
-        }
     }
 
     public class QuestionnaireView<TGroup, TQuestion, TAnswer> : AbstractQuestionnaireView

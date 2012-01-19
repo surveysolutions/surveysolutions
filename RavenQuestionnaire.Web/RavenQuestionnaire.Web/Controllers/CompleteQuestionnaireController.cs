@@ -10,6 +10,7 @@ using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Views.Status;
 
@@ -112,10 +113,11 @@ namespace RavenQuestionnaire.Web.Controllers
             var model =
                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
+            ViewBag.CurrentGroup = model.CurrentGroup;
             return View( model);
         }
 
-        public ActionResult SaveSingleResult(string id, Guid? PublicKey, CompleteAnswer[] answers)
+        public ActionResult SaveSingleResult(string id, Guid? PublicKey, Guid? PropogationPublicKey, CompleteAnswer[] answers)
         {
             if (answers == null || answers.Length <= 0)
             {
@@ -124,10 +126,21 @@ namespace RavenQuestionnaire.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                if (PropogationPublicKey.HasValue)
+                {
+                    for (int i = 0; i < answers.Length; i++)
+                    {
+                        answers[i] = new PropagatableCompleteAnswer(answers[i], PropogationPublicKey.Value);
+                    }
+                }
                 commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, answers,
                                                                                       _globalProvider.GetCurrentUser()));
             }
-            return RedirectToAction("Question", new {id = id, group = PublicKey});
+            var model =
+                viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
+                    new CompleteGroupViewInputModel(PropogationPublicKey, PublicKey, id));
+            ViewBag.CurrentGroup = model;
+            return PartialView("~/Views/Group/_Screen.cshtml", model);
         }
 
         public ActionResult Delete(string id)
