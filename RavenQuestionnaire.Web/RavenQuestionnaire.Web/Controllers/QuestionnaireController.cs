@@ -107,8 +107,11 @@ namespace RavenQuestionnaire.Web.Controllers
                         var andList = new List<string>();
                         var c = inputs[0].LabelText;
                         if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
-                        c = conditions[inputs[0].Source];
-                        if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
+                        if (conditions.ContainsKey(inputs[0].Source))
+                        {
+                            c = conditions[inputs[0].Source];
+                            if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
+                        }
                         if (andList.Count == 1)
                             condition = andList[0];
                         else if (andList.Count > 1)
@@ -122,8 +125,11 @@ namespace RavenQuestionnaire.Web.Controllers
                             var andList = new List<string>();
                             var c = input.LabelText;
                             if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
-                            c = conditions[input.Source];
-                            if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
+                            if (conditions.ContainsKey(input.Source))
+                            {
+                                c = conditions[input.Source];
+                                if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
+                            }
                             if (andList.Count > 1)
                                 orList.Add("(" + string.Join(") and (", andList) + ")");
                             else if (andList.Count == 1)
@@ -141,7 +147,8 @@ namespace RavenQuestionnaire.Web.Controllers
             foreach (var condition in conditions.Where(kvp => !parents.Contains(kvp.Key)))
             {
                 var question = viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(condition.Key, questionnaireId));
-
+                if(question==null)
+                    continue;
                 commandInvoker.Execute(new UpdateQuestionCommand(questionnaireId, question.PublicKey,
                                                                question.QuestionText,
                                                                question.StataExportCaption,

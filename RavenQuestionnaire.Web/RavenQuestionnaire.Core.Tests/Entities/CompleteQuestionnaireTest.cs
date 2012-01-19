@@ -73,7 +73,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
             var questions = new List<CompleteQuestion>();
             innerDocument.Questions = questions;
-            Assert.AreEqual(completeQuestionnaire.GetAllQuestions(), questions);
+            Assert.AreEqual(completeQuestionnaire.QuestionIterator, questions);
         }
         [Test]
         public void PropogateGroup_ValidData_GroupIsAdded()

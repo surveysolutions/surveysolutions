@@ -17,7 +17,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             if (string.IsNullOrEmpty(condition))
                 return true;
             var e = new Expression(condition);
-            foreach (var answer in entity.GetAllAnswers())
+            foreach (var answer in entity.AnswerIterator)
             {
                 e.Parameters[answer.QuestionPublicKey.ToString()] = answer.AnswerType == AnswerType.Text
                                                                         ? answer.CustomAnswer

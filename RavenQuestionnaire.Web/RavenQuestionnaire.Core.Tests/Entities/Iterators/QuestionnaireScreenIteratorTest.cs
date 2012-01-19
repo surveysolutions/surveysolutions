@@ -17,9 +17,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
         [Test]
         public void WhenEmptyQuestionnaireIsPassed_ExceptionIsThrowed()
         {
-            var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
             Assert.Throws<ArgumentException>(
-                () => new QuestionnaireScreenIterator(questionnaire));
+                () => new QuestionnaireScreenIterator(new CompleteQuestionnaireDocument()));
         }
         [Test]
         public void First_FirstItemIsReturned()
@@ -30,11 +29,11 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
                     CompleteGroup("first"));
             questionnaire.GetInnerDocument().Groups.Add(
                 new CompleteGroup("second"));
-            var iterator = new QuestionnaireScreenIterator(questionnaire);
-            Assert.AreEqual(iterator.First.GroupText, "first");
+            var iterator = new QuestionnaireScreenIterator(questionnaire.GetInnerDocument());
+            Assert.AreEqual(iterator.First().GroupText, "first");
 
             var takeNext = iterator.Next;
-            Assert.AreEqual(iterator.First.GroupText, "first");
+            Assert.AreEqual(iterator.First().GroupText, "first");
         }
 
         [Test]
@@ -45,14 +44,16 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
                 new CompleteGroup("first"));
             questionnaire.GetInnerDocument().Groups.Add(
                 new CompleteGroup("second"));
-            var iterator = new QuestionnaireScreenIterator(questionnaire);
+            var iterator = new QuestionnaireScreenIterator(questionnaire.GetInnerDocument());
 
             /* Assert.AreEqual(iterator.Next.QuestionText, "first");*/
-            Assert.AreEqual(iterator.IsDone, false);
-            Assert.AreEqual(iterator.Next.GroupText, "second");
-            Assert.AreEqual(iterator.IsDone, true);
+            Assert.AreEqual(iterator.MoveNext(), true);
+            Assert.AreEqual(iterator.Current.GroupText, "second");
+            Assert.AreEqual(iterator.MoveNext(), false);
             Assert.AreEqual(iterator.Previous.GroupText, "first");
-            Assert.AreEqual(iterator.IsDone, false);
+            Assert.AreEqual(iterator.MoveNext(), true);
+            var takePrevious =  iterator.Previous;
+            Assert.AreEqual(iterator.Next.GroupText, "second");
         }
     }
 }

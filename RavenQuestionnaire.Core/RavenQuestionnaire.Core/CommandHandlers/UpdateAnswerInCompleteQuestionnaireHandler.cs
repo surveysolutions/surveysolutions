@@ -39,9 +39,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         {
             //innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey.Equals(question.PublicKey));
           //  Questionnaire template = entity.GetQuestionnaireTemplate();
-            var questionsToCheck =
-                entity.GetAllQuestions();
-            foreach (var question in questionsToCheck)
+            foreach (var question in entity.QuestionIterator)
             {
                 if (!this._conditionExecutor.Execute(entity, question.ConditionExpression))
                 {

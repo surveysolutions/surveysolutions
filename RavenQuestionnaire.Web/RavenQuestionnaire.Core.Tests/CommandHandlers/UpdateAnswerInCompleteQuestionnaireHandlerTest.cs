@@ -123,7 +123,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                 null);
             handler.Handle(command);
 
-            Assert.AreEqual(questionanire.GetAllAnswers().Select(a => a.Selected).Count(), 0);
+            Assert.AreEqual(questionanire.AnswerIterator.Select(a => a.Selected).Count(), 0);
             //  group.Add(group, null);
         }
     }

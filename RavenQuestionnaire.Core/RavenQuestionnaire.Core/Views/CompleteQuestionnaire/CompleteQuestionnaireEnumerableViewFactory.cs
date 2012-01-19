@@ -33,8 +33,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
                 RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup group = null;
 
-                Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup, Guid> iterator =
-                    new QuestionnaireScreenIterator(completeQuestionnaireRoot);
+                Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup> iterator =
+                    completeQuestionnaireRoot.GroupIterator;
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
                     group =
@@ -45,13 +45,16 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 else if (input.PreviousGroupPublicKey.HasValue)
                 {
 
+                    iterator.SetCurrent(completeQuestionnaireRoot.Find
+                                            <RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup>(
+                                                input.PreviousGroupPublicKey.Value));
                     group = input.IsReverse
-                                ? iterator.GetPreviousBefoure(input.PreviousGroupPublicKey.Value)
-                                : iterator.GetNextAfter(input.PreviousGroupPublicKey.Value);
+                                ? iterator.Previous
+                                : iterator.Next;
                 }
                 else
                 {
-                    group = input.IsReverse ? iterator.Last : iterator.First;
+                    group = input.IsReverse ? iterator.Last() : iterator.First();
                 }
                 return new CompleteQuestionnaireViewEnumerable(doc, group, this.groupFactory);
             }
