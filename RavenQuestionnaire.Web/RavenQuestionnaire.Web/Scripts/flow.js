@@ -1,5 +1,128 @@
-﻿(function () {
+﻿function FlowGraph(parentKey){ 
+	this.Blocks=[];
+	this.Connections=[];
+	this.ParentPublicKey = parentKey;
+} 
+function FlowConnection(){ 
+	this.Source="";
+	this.Target="";
+    this.LabelText = "";
+} 
+function FlowBlock(){
+    this.Height = 0;
+    this.Width = 0;
+    this.Left = 0;
+    this.Top = 0;
+    this.QuestionId = "";
+} 
 
+
+(function () {
+    
+    function Edge(v1, v2) {
+        this.v1 = v1;
+        this.v2 = v2;
+    }
+
+    function Graph() {
+        this.V = {};
+        this.E = [];
+    }
+
+    Graph.prototype.getFirstVertex = function () {
+        for (var v in this.V) {
+            return v;
+        }
+    };
+
+    Graph.prototype.addEdge = function (v1, v2, weight) {
+        if (!this.V[v1])
+            this.V[v1] = {};
+        if (!this.V[v2])
+            this.V[v2] = {};
+        this.V[v1][v2] = weight;
+        this.E.push(new Edge(v1, v2));
+    };
+
+    Graph.prototype.explore = function (v, proc, prefunc, postfunc) {
+        var visited = {};
+        var graph = this;
+        function helper(v) {
+            prefunc(v);
+            visited[v] = true;
+            proc(v);
+            $.each(graph.V[v], function (k, v) {
+                if (!visited[k])
+                    helper(k);
+            });
+            postfunc(v);
+        }
+        helper(v);
+    };
+
+    Graph.prototype.hasCicle = function () {
+        var pre = {};
+        var post = {};
+        var ccn = 1;
+        function previsit(v) {
+            pre[v] = ccn;
+            ccn++;
+        }
+        function postvisit(v) {
+            post[v] = ccn;
+            ccn++;
+        }
+        function action(v) {
+        }
+        //We explore using dfs and mark Pre and Post number for each vertex
+        this.explore(this.getFirstVertex(), action, previsit, postvisit);
+
+        var hasCicle = false;
+        //We check back edge to see if this graph is acyclic
+        $.each(this.E, function (i, e) {
+            var v1 = e.v1;
+            var v2 = e.v2;
+            if (pre[v1] > pre[v2] && post[v2] > post[v1]) {
+                hasCicle = true;
+            }
+        });
+        return hasCicle;
+    };
+
+    Graph.prototype.topologicalSort = function () {
+        var pre = {};
+        var post = {};
+        var ccn = 1;
+
+        function previsit(v) {
+            pre[v] = ccn;
+            ccn++;
+        }
+        function postvisit(v) {
+            post[v] = ccn;
+            ccn++;
+        }
+        function action(v) {
+
+        }
+
+        this.explore(this.getFirstVertex(), action, previsit, postvisit);
+
+        var linearizedSequence = [];
+        $.each(post, function (k, v) {
+            linearizedSequence.push(k);
+        });
+
+        linearizedSequence.sort(function (a, b) {
+            return post[a] < post[b];
+        });
+
+        var result = [];
+        $.each(linearizedSequence, function (i, v) {
+            result.push(v);
+        });
+        return result;
+    };
 
 
     window.jsPlumbDemo = {
@@ -42,17 +165,25 @@
 
             jsPlumbDemo.initConnections();
 
+            $(".w").each(function () {
+                var e = $(this);
 
-            var dragoptions = {
-                containment: "#" + "canvas",
-                scroll: false,
-                scope: "foo".concat(new String("canvas")),
-                start: function (event, ui) {
-                    $(this).data("startPosition", $(this).position());
-                }
-            };
+                var scope = e.attr("scope");
 
-            jsPlumb.draggable(jsPlumb.getSelector(".w"), dragoptions);
+                e.resizable({ containment: "#" + scope });
+
+                var dragoptions = {
+                    containment: "#" + scope,
+                    scroll: false,
+                    scope: scope,
+                    start: function (event, ui) {
+                        $(this).data("startPosition", $(this).position());
+                    }
+                };
+                jsPlumb.draggable(e, dragoptions);
+            });
+
+            $("#canvas").resizable();
 
 
             jsPlumb.bind("dblclick", function (conn) {
@@ -63,57 +194,155 @@
         initEndpoints: function () {
             $(".ep").each(function (i, e) {
                 var p = $(e).parent();
+                var s = $(p).attr('scope');
                 jsPlumb.makeSource($(e), {
                     parent: p,
                     endpoint: {
-                        maxConnections: -1
-                    }
+                        maxConnections: -1,
+                        scope: s
+                    },
+                    scope: s
                 });
             });
-
-            jsPlumb.makeTarget($(".w"), {
-                dropOptions: { hoverClass: "dragHover" },
-                endpoint: {
-                    anchor: "Continuous"
-                }
+            $(".w").each(function (i, e) {
+                var s = $(e).attr('scope');
+                jsPlumb.makeTarget($(e), {
+                    dropOptions: { hoverClass: "dragHover" },
+                    endpoint: {
+                        anchor: "Continuous",
+                        scope: s
+                    },
+                    scope: s
+                });
             });
         },
-        getAllConnections: function () {
+        getAllFlowGraphs: function () {
             var result = [];
-            var ids = [];
-            var connections = jsPlumb.getConnections();
-            for (var i = 0, len = connections.length; value = connections[i], i < len; i++) {
-                var r = {};
-                var id = value.id;
-                r.Source = value.sourceId;
-                r.Target = value.targetId;
-                r.LabelText = jsPlumbDemo.labelTexts[id];
-                if (jQuery.inArray(id, ids) == -1) {
-                    result.push(r);
-                    ids.push(id);
+            var scopes = [];
+            $(".w").each(function (i, e) {
+                var s = $(e).attr('scope');
+                if (jQuery.inArray(s, scopes) == -1) {
+                    scopes.push(s);
                 }
+            });
+            var connections = this.getDistinctConnections();
+            $.each(scopes, function (i, scope) {
+                var graph = new FlowGraph(scope == "canvas" ? null : scope);
+                var conn = connections[scope];
+                var ids = [];
+                if ((conn != null) && (conn.length > 0))
+                {
+                    var g = new Graph();
+                    var value = null;
+                    for (var i = 0, len = conn.length; value = conn[i], i < len; i++) {
+                        graph.Connections.push(value);
+                        g.addEdge(value.Source, value.Target, 1);
+                    }
+                    var orderedIds = g.topologicalSort();
+                    $.each(orderedIds, function(j, id) {
+                        graph.Blocks.push(getBlock(id));
+                        ids.push(id);
+                    });
+                }
+                $.each($('.w[scope=' + scope + ']'), function(j, block) {
+                    var id = $(block).attr('id');
+                    if (jQuery.inArray(id, ids) == -1) {
+                        graph.Blocks.push(getBlock(id));
+                        ids.push(id);
+                    }
+                });
+                function getBlock(id) {
+                    var block = $("#" + id);
+                    var r = new FlowBlock();
+                    r.QuestionId = block.attr('id');
+                    r.Left = block.css('left').replace("px", "") * 1;
+                    r.Top = block.css('top').replace("px", "") * 1;
+                    r.Width = block.outerWidth();
+                    r.Height = block.outerHeight();
+                    r.LabelText = "";
+                    return r;
+                };
+                result.push(graph);
+            });
+            return result;
+        },
+        getAllGraphs: function () {
+            var connections = this.getDistinctConnections();
+            var result = [];
+            for (var key in connections) {
+                var conn = connections[key];
+                var g = new Graph();
+                var block = null;
+                for (var i = 0, len = conn.length; block = conn[i], i < len; i++) {
+                    g.addEdge(block.Source, block.Target, 1);
+                }
+                result.push(g);
             }
             return result;
         },
-        getAllBlocks: function () {
-            var result = [];
-            $.each($('.w'), function (index, block) {
-                var r = {};
-                r.QuestionId = $(block).attr('id');
-                r.Left = $(block).css('left').replace("px", "");
-                r.Top = $(block).css('top').replace("px", "");
-                r.LabelText = "";
-                result.push(r);
-            });
+        checkFlow: function () {
+            var isOk = true;
+            $('.w').removeClass('highlight-error');
+            var graphs = this.getAllGraphs();
+            var g = null;
+            for (var i = 0, len = graphs.length; g = graphs[i], i < len; i++) {
+                if (g.hasCicle() === true) {
+                    $.jGrowl("Highlihted flow has cycle", { theme: 'alert-message error', sticky: true });
+                    var scope = $("#" + g.getFirstVertex()).attr('scope');
+                    $('.w[scope="' + scope + '"]').addClass('highlight-error');
+                    isOk = false;
+                }
+            }
+            return isOk;
+        },
+        getDistinctConnections: function () {
+            var connections = jsPlumb.getAllConnections();
+            var result = {};
+            if (connections.length > 0) {
+                var ids = [];
+                key = $("#" + connections[0].sourceId).attr('scope');
+                result[key] = [];
+                for (var i = 0, len = connections.length; value = connections[i], i < len; i++) {
+                    var r = getConnection(value);
+                    if (jQuery.inArray(value.id, ids) == -1) {
+                        result[key].push(r);
+                        ids.push(value.id);
+                    }
+                }
+            }
+            else {
+                for (var key in connections) {
+                    var ids = [];
+                    var conn = connections[key];
+                    if (conn.length == 0)
+                        continue;
+                    result[key] = [];
+                    for (var i = 0, len = conn.length; value = conn[i], i < len; i++) {
+                        var r = getConnection(value);
+                        if (jQuery.inArray(value.id, ids) == -1) {
+                            result[key].push(r);
+                            ids.push(value.id);
+                        }
+                    }
+                }
+            }
+            function getConnection(jsConnection) {
+                var c = new FlowConnection();
+                var id = jsConnection.id;
+                c.Source = jsConnection.sourceId;
+                c.Target = jsConnection.targetId;
+                c.LabelText = jsPlumbDemo.labelTexts[id];
+                return c;
+            }
             return result;
         },
-        updateConnectionLabel: function (searchOption, expression) {
+        updateConnectionLabel: function (searchOption, text) {
             var connection = jsPlumb.getConnections(searchOption)[0];
 
-            jsPlumbDemo.labelTexts[connection.id] = expression;
+            jsPlumbDemo.labelTexts[connection.id] = "["+searchOption.source+"]=="+"'"+text+"'";
 
             if (connection != null) {
-                var p = { Target: searchOption.target, Condition: expression };
+                var p = { Target: searchOption.target, Condition: "=="+"'"+text+"'" };
                 connection.labelText = $("#action" + searchOption.source).tmpl(p).html();
                 jsPlumb.repaintEverything();
             }
@@ -146,4 +375,3 @@ jsPlumb.bind("ready", function () {
 
     resetRenderMode(jsPlumb.CANVAS);
 });
-

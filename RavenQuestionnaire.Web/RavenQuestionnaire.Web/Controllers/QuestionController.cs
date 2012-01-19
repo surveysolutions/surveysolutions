@@ -32,42 +32,11 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult _GetAnswers(Guid publicKey, Guid targetPublicKey, string questionnaireId)
         {
             var source = viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(publicKey, questionnaireId));
-            var target = viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(targetPublicKey, questionnaireId));
             return PartialView("_GetAnswers", new QuestionConditionModel
                                                   {
                                                       Source = source,
-                                                      Target = target
+                                                      TargetPublicKey = targetPublicKey
                                                   });
-        }
-
-        [QuestionnaireAuthorize(UserRoles.Administrator)]
-        [HttpPost]
-        public ActionResult EditCondition(Guid questionPublicKey, Guid sourceQuestionPublicKey, Guid answerPublicKey, string questionnaireId)
-        {
-            var question = viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(questionPublicKey, questionnaireId));
-            var questionS = viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(sourceQuestionPublicKey, questionnaireId));
-            var answer = questionS.Answers.SingleOrDefault(a => a.PublicKey == answerPublicKey);
-            var answerText = answerPublicKey.ToString();
-            if (answer != null)
-            {
-                answerText = answer.AnswerText;
-                question.ConditionExpression = "[" + sourceQuestionPublicKey + "]=='" + answer.AnswerText + "'";
-
-                commandInvoker.Execute(new UpdateQuestionCommand(questionnaireId, questionPublicKey,
-                                                                 question.QuestionText,
-                                                                 question.StataExportCaption,
-                                                                 question.QuestionType,
-                                                                 question.ConditionExpression,
-                                                                 question.Answers,
-                                                                 GlobalInfo.GetCurrentUser()));
-            }
-            return Json(new
-            {
-                expression = "== '" + answerText+"'",
-                condition = question.ConditionExpression,
-                sourceId = sourceQuestionPublicKey,
-                targetId = questionPublicKey
-            });
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]

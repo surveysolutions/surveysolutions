@@ -7,6 +7,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     {
         int Left { get; set; }
         int Top { get; set; }
+        int Height { get; set; }
+        int Width { get; set; }
         Guid QuestionId { get; set; }
     }
 
@@ -20,10 +22,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             QuestionId = questionId;
         }
-         public FlowBlock(IQuestion question)
-         {
-             QuestionId = question.PublicKey;
-         }
+        public int Height { get; set; }
+        public int Width { get; set; }
         public int Left { get; set; }
         public int Top { get; set; }
         public Guid QuestionId { get; set; }

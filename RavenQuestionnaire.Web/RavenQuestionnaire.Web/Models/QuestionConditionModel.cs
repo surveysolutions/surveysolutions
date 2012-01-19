@@ -9,6 +9,6 @@ namespace RavenQuestionnaire.Web.Models
     public class QuestionConditionModel
     {
         public QuestionView Source { get; set; }
-        public QuestionView Target { get; set; }
+        public Guid TargetPublicKey { get; set; }
     }
 }

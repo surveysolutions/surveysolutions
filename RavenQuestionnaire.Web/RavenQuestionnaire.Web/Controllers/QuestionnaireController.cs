@@ -11,8 +11,11 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Export;
 using RavenQuestionnaire.Core.Export.csv;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
+using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Web.Models;
+using FlowBlock = RavenQuestionnaire.Core.Entities.SubEntities.FlowBlock;
+using FlowGraph = RavenQuestionnaire.Web.Models.FlowGraph;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -66,31 +69,91 @@ namespace RavenQuestionnaire.Web.Controllers
                 throw new HttpException(404, "Invalid quesry string parameters");
 
             var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
-            
+
             return View(model);
         }
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult _SaveFlow(string questionnaireId, List<FlowBlock> blocks, List<FlowConnection> connections)
+        public ActionResult _SaveFlow(string questionnaireId, List<FlowGraph> graphs)
         {
+            var blocks = graphs.SelectMany(graph => graph.Blocks).ToList();
+            var connections = graphs.SelectMany(graph => graph.Connections).ToList();
             try
             {
-                commandInvoker.Execute(new UpdateQuestionnaireFlowCommand(questionnaireId, blocks, connections,
-                                                                          GlobalInfo.GetCurrentUser()));
+                commandInvoker.Execute(new UpdateQuestionnaireFlowCommand(questionnaireId, blocks, connections, GlobalInfo.GetCurrentUser()));
             }
             catch (Exception e)
             {
                 return Json(new { status = "not saved" });
             }
-            /*
-                        var roots = (from block in graph.Blocks
-                                     where !graph.Connections.Any(c => c.Target == block.Id)
-                                     select block).ToList();
-                        if (roots.Count==0)
-                            return Json(new { status = "error: cyclic flow" });
-                        */
+
+            var conditions = new Dictionary<Guid, string>();
+            var parents = new List<Guid>();
+            foreach (var graph in graphs)
+            {
+                foreach (var block in graph.Blocks)
+                {
+                    var inputs = graph.Connections.Where(c => c.Target == block.QuestionId).ToList();
+                    var condition = string.Empty;
+                    if (graph.ParentPublicKey.HasValue && !parents.Contains(graph.ParentPublicKey.Value))
+                    {
+                        parents.Add(graph.ParentPublicKey.Value);
+                    }
+                    if (inputs.Count == 0 && graph.ParentPublicKey.HasValue)
+                    {
+                        condition = conditions[graph.ParentPublicKey.Value];
+                    }
+                    if (inputs.Count == 1)
+                    {
+                        var andList = new List<string>();
+                        var c = inputs[0].LabelText;
+                        if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
+                        c = conditions[inputs[0].Source];
+                        if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
+                        if (andList.Count == 1)
+                            condition = andList[0];
+                        else if (andList.Count > 1)
+                            condition = "(" + string.Join(") and (", andList) + ")";
+                    }
+                    else if (inputs.Count > 1)
+                    {
+                        var orList = new List<string>();
+                        foreach (var input in inputs)
+                        {
+                            var andList = new List<string>();
+                            var c = input.LabelText;
+                            if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
+                            c = conditions[input.Source];
+                            if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
+                            if (andList.Count > 1)
+                                orList.Add("(" + string.Join(") and (", andList) + ")");
+                            else if (andList.Count == 1)
+                                orList.Add(andList[0]);
+                        }
+                        if (orList.Count > 1)
+                            condition = "(" + string.Join(") or (", orList) + ")";
+                        else if (orList.Count == 1)
+                            condition = orList[0];
+                    }
+
+                    conditions.Add(block.QuestionId, condition);
+                }
+            }
+            foreach (var condition in conditions.Where(kvp => !parents.Contains(kvp.Key)))
+            {
+                var question = viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(condition.Key, questionnaireId));
+
+                commandInvoker.Execute(new UpdateQuestionCommand(questionnaireId, question.PublicKey,
+                                                               question.QuestionText,
+                                                               question.StataExportCaption,
+                                                               question.QuestionType,
+                                                               condition.Value,
+                                                               question.Answers,
+                                                               GlobalInfo.GetCurrentUser()));
+            }
+            
 
 
-            return Json(new {status = "flow saved"});
+            return Json(new { status = "flow saved" });
         }
         //
         // GET: /Questionnaire/Create
@@ -143,7 +206,7 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         #region export
-        
+
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Export(string id)
@@ -153,15 +216,15 @@ namespace RavenQuestionnaire.Web.Controllers
             var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
             return View(model);
         }
-        
+
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult GetExportedData(string id, string type)
         {
             if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(type))
                 throw new HttpException(404, "Invalid quesry string parameters");
-            var model = 
+            var model =
                 viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
-            
+
             if (model != null)
             {
                 var fileName = string.Format("exported{0}.csv", DateTime.Now.ToLongTimeString());
@@ -173,9 +236,9 @@ namespace RavenQuestionnaire.Web.Controllers
 
                     CompleteQuestionnaireExportView records =
                         viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(
-                            new CompleteQuestionnaireExportInputModel() { PageSize = 100, QuestionnaryId = model.Id});
+                            new CompleteQuestionnaireExportInputModel() { PageSize = 100, QuestionnaryId = model.Id });
 
-                    
+
                     Dictionary<Guid, string> header = new Dictionary<Guid, string>();
 
                     foreach (var q in model.Questions)
@@ -193,7 +256,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
                     var stream = manager.ExportToStream(header, records);
 
-                    FileStreamResult fsr = new FileStreamResult(stream, "text/csv") {FileDownloadName = fileName};
+                    FileStreamResult fsr = new FileStreamResult(stream, "text/csv") { FileDownloadName = fileName };
 
                     return fsr;
                 }
