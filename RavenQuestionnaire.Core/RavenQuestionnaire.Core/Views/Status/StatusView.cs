@@ -10,7 +10,6 @@ namespace RavenQuestionnaire.Core.Views.Status
         public string Id { get; set; }
         public string Title { get; set; }
         public bool IsVisible { get; set; }
-
         public string QuestionnaireId { get; set; }
 
         public Dictionary<string, List<SurveyStatus>> StatusRoles { private set; get; }
@@ -28,8 +27,10 @@ namespace RavenQuestionnaire.Core.Views.Status
             StatusRolesMatrix = new List<StatusByRole>();
         }
 
-        public StatusView(string id, string title, bool isVisible, 
-            Dictionary<string, List<SurveyStatus>> statusRoles, string questionnaireId):this()
+        public StatusView(string id, 
+            string title, bool isVisible, 
+            Dictionary<string, List<SurveyStatus>> statusRoles, 
+            string questionnaireId):this()
         {
             this.Id = IdUtil.ParseId(id); 
             this.Title = title;

@@ -153,6 +153,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             List<SurveyStatus> statuses = new List<SurveyStatus>();
 
+            bool isCurrentPresent = false;
             StatusView model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(statusId));
             if (model != null)
             {
@@ -161,15 +162,17 @@ namespace RavenQuestionnaire.Web.Controllers
                     if (model.StatusRoles.ContainsKey(role))
                         foreach (var item in model.StatusRoles[role])
                         {
-                            if (!statuses.Contains(item))
-                                statuses.Add(item);
+                            if (statuses.Contains(item)) continue;
+                            statuses.Add(item);
+                            if (isCurrentPresent) continue;
+
+                            if (item.Id == statusId && item.Name == statusName)
+                                isCurrentPresent = true;
                         }
                 }
             }
-
-            SurveyStatus currentStatus = new SurveyStatus(statusId, statusName );
-            if (!statuses.Contains(currentStatus))
-                statuses.Add(currentStatus);
+            if (!isCurrentPresent)
+                statuses.Add(new SurveyStatus(statusId, statusName));
 
             ViewBag.AvailableStatuses = statuses;
         }
