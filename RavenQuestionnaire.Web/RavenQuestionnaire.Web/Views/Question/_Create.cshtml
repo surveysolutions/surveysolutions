@@ -39,17 +39,11 @@
                     @Html.CheckBox("isDropDown", Model.QuestionType== QuestionType.DropDownList)
                 </div>
             </div>
-            <div class="clearfix">
-                @Html.LabelFor(model => model.ConditionExpression)
-                <div class="input">
-                    @Html.TextAreaFor(model => model.ConditionExpression)
-                    @Html.ValidationMessageFor(model => model.ConditionExpression)
-                </div>
-            </div>
             @if (Model.PublicKey != Guid.Empty)
             {
                 @Html.HiddenFor(model => model.PublicKey)
             }
+            @Html.HiddenFor(model => model.ConditionExpression)
             @Html.HiddenFor(model => model.GroupPublicKey)
             @Html.HiddenFor(model => model.QuestionnaireId)
             @{Html.RenderPartial("~/Views/Answer/_EditAnswers.cshtml", Model);}

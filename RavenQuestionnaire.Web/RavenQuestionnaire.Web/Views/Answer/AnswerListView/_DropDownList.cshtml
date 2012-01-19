@@ -12,4 +12,4 @@
     ((IDictionary<string,object>)ViewBag.EnabledRadioBoxSettings).Add("onchange", "$(this.form).submit();");
 }
   @Html.Hidden("answers[0].QuestionPublicKey", Model.FirstOrDefault().QuestionId)
-@Html.DropDownList("answers[0].PublicKey", new SelectList(Model, "PublicKey", "AnswerText", selected), (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
+@Html.DropDownList("answers[0].PublicKey", new SelectList(Model, "PublicKey", "AnswerText", selected),"Select answer", (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)

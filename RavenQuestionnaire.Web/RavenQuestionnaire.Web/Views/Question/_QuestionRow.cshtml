@@ -4,7 +4,7 @@
 @model QuestionView
 @{ var currentRowId = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, Model.PublicKey.ToString()); }
 <div id="@currentRowId" class="question">
-    <h3>@Model.Index) @Html.DisplayFor(modelItem => Model.QuestionText) - @Model.PublicKey
+    <h3>@Model.Index) @Html.DisplayFor(modelItem => Model.QuestionText)
         <span>
             @Ajax.ActionLink("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn primary small" })
             @Ajax.ActionLink("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn danger small" })
