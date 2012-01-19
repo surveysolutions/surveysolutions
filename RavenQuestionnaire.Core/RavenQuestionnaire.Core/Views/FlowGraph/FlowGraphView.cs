@@ -72,13 +72,26 @@ namespace RavenQuestionnaire.Core.Views.Group
         {
             if (doc.FlowGraph == null)
             {
-
                 var blocks = new List<FlowBlock>();
                 var top = 0;
                 foreach (var question in doc.Questions)
                 {
-                    blocks.Add(new FlowBlock(question) {Top = top});
+                    blocks.Add(new FlowBlock(question.PublicKey) { Top = top, Width = 180, Height = 100 });
                     top += 120;
+                }
+                foreach (var group in doc.Groups )
+                {
+                    var gBlock = new FlowBlock(group.PublicKey) {Top = top};
+                    var ltop = 0;
+                    foreach (var question in group.Questions)
+                    {
+                        blocks.Add(new FlowBlock(question.PublicKey) {Top = ltop, Width = 180, Height = 100});
+                        ltop += 120;
+                    }
+                    top += ltop;
+                    gBlock.Height = ltop;
+                    gBlock.Width = 300;
+                    blocks.Add(gBlock);
                 }
                 this.Blocks = blocks.ToArray();
                 this.Connections = new FlowConnection[0];
