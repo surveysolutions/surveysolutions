@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Raven.Client;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Iterators;
@@ -17,10 +18,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         IViewFactory<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>
     {
         private IDocumentSession documentSession;
-
-        public CompleteQuestionnaireEnumerableViewFactory(IDocumentSession documentSession)
+        private ICompleteGroupFactory groupFactory;
+        public CompleteQuestionnaireEnumerableViewFactory(IDocumentSession documentSession, ICompleteGroupFactory groupFactory)
         {
             this.documentSession = documentSession;
+            this.groupFactory = groupFactory;
         }
 
         public CompleteQuestionnaireViewEnumerable Load(CompleteQuestionnaireViewInputModel input)
@@ -51,12 +53,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 {
                     group = input.IsReverse ? iterator.Last : iterator.First;
                 }
-                return new CompleteQuestionnaireViewEnumerable(doc, group);
+                return new CompleteQuestionnaireViewEnumerable(doc, group, this.groupFactory);
             }
             if (!string.IsNullOrEmpty(input.TemplateQuestionanireId))
             {
                 var doc = documentSession.Load<QuestionnaireDocument>(input.TemplateQuestionanireId);
-                return new CompleteQuestionnaireViewEnumerable((CompleteQuestionnaireDocument)doc);
+                return new CompleteQuestionnaireViewEnumerable((CompleteQuestionnaireDocument)doc, this.groupFactory);
             }
             return null;
 

@@ -95,7 +95,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractFactories\CompleteGroupFactory.cs" />
+    <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="CommandHandlers\AddNewQuestionHandler.cs" />
+    <Compile Include="CommandHandlers\DeletePropagatedGroupHandler.cs" />
     <Compile Include="CommandHandlers\UpdateQuestionnaireFlowHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewGroupHandler.cs" />
@@ -108,6 +111,7 @@
     <Compile Include="CommandHandlers\DeleteQuestionHandler.cs" />
     <Compile Include="CommandHandlers\DeleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\DeleteUserHandler.cs" />
+    <Compile Include="CommandHandlers\PropagateGroupHandler.cs" />
     <Compile Include="CommandHandlers\UpdateAnswerInCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\UpdateCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\UpdateGroupHandler.cs" />
@@ -122,6 +126,7 @@
     <Compile Include="Commands\CreateNewLocationCommand.cs" />
     <Compile Include="Commands\CreateNewStatusCommand.cs" />
     <Compile Include="Commands\DeleteGroupCommand.cs" />
+    <Compile Include="Commands\DeletePropagatedGroupCommand.cs" />
     <Compile Include="Commands\IComand.cs" />
     <Compile Include="Commands\AddNewQuestionCommand.cs" />
     <Compile Include="Commands\CreateNewCompleteQuestionnaireCommand.cs" />
@@ -131,6 +136,7 @@
     <Compile Include="Commands\DeleteQuestionCommand.cs" />
     <Compile Include="Commands\DeleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\DeleteUserCommand.cs" />
+    <Compile Include="Commands\PropagateGroupCommand.cs" />
     <Compile Include="Commands\UpdateAnswerInCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\UpdateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\UpdateGroupCommand.cs" />
@@ -242,9 +248,12 @@
     <Compile Include="Views\FlowGraph\FlowGraphViewFactory.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphViewInputModel.cs" />
     <Compile Include="Views\Group\CompleteGroupView.cs" />
+    <Compile Include="Views\Group\CompleteGroupViewFactory.cs" />
+    <Compile Include="Views\Group\CompleteGroupViewInputModel.cs" />
     <Compile Include="Views\Group\GroupView.cs" />
     <Compile Include="Views\Group\GroupViewFactory.cs" />
     <Compile Include="Views\Group\GroupViewInputModel.cs" />
+    <Compile Include="Views\Group\PropagatedCompleteGroupView.cs" />
     <Compile Include="Views\Location\LocationBrowseInputModel.cs" />
     <Compile Include="Views\Location\LocationBrowseItem.cs" />
     <Compile Include="Views\Location\LocationBrowseView.cs" />

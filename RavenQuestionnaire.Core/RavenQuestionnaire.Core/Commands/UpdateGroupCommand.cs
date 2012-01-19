@@ -14,6 +14,11 @@ namespace RavenQuestionnaire.Core.Commands
             get;
             private set;
         }
+        public bool Paropagateble
+        {
+            get;
+            private set;
+        }
         public string QuestionnaireId
         {
             get;
@@ -27,9 +32,10 @@ namespace RavenQuestionnaire.Core.Commands
 
         public UserLight Executor { get; set; }
 
-        public UpdateGroupCommand(string groupText, string questionnaireId, Guid parentGroup, UserLight executor)
+        public UpdateGroupCommand(string groupText, bool propagateble, string questionnaireId, Guid parentGroup, UserLight executor)
         {
             this.GroupText = groupText;
+            this.Paropagateble = propagateble;
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.GroupPublicKey = parentGroup;
             Executor = executor;

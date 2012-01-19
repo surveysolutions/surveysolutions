@@ -8,6 +8,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
     public class PropagatableCompleteQuestion : CompleteQuestion, IPropogate
     {
+        public PropagatableCompleteQuestion()
+        {
+        }
+
         public PropagatableCompleteQuestion(CompleteQuestion question, Guid propogationPublicKey)
         {
             this.ConditionExpression = question.ConditionExpression;

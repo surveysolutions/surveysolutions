@@ -72,7 +72,7 @@ namespace RavenQuestionnaire.Core.Entities
             if (!parent.HasValue)
             {
                 CompleteGroup propogate = c as CompleteGroup;
-                if (propogate != null && propogate.Propagated)
+                if (propogate != null && propogate.Propagated && innerDocument.Groups.FirstOrDefault(g => g.PublicKey.Equals(propogate.PublicKey)) != null)
                 {
                     innerDocument.Groups.Add(new PropagatableCompleteGroup(propogate, Guid.NewGuid()));
                     return true;
