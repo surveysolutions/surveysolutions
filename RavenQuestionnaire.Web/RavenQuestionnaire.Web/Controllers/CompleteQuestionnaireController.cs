@@ -139,6 +139,7 @@ namespace RavenQuestionnaire.Web.Controllers
             var model =
                 viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
                     new CompleteGroupViewInputModel(PropogationPublicKey, PublicKey, id));
+            ViewBag.CurrentGroup = model;
             return PartialView("~/Views/Group/_Screen.cshtml", model);
         }
 

@@ -3,10 +3,10 @@
 @foreach (var question in Model.Questions)
 {
 
-    using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.GetClientId("div") }))
+    using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div") }))
     {
         Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
-    @Html.HiddenFor(model => Model.PublicKey)
+    @Html.Hidden("PublicKey",((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
     @Html.Hidden("id", Model.QuestionnaireId)
     }
 }
