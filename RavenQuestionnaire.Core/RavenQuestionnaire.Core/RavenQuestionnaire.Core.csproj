@@ -197,6 +197,7 @@
     <Compile Include="Export\ExportManager.cs" />
     <Compile Include="Export\IExportProvider.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />
+    <Compile Include="ExpressionExecutors\StatusProcessorExecutor.cs" />
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
