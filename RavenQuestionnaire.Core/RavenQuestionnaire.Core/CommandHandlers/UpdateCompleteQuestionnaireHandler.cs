@@ -25,23 +25,18 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         public void Handle(UpdateCompleteQuestionnaireCommand command)
         {
             CompleteQuestionnaire entity = _questionnaireRepository.Load(command.CompleteQuestionnaireId);
-/*
-            foreach (CompleteAnswer completeAnswer in command.CompleteAnswers )
-            {
-                entity.UpdateAnswer(completeAnswer, null);
-            }
-*/
 
-            var status = _statusRepository.Load(IdUtil.CreateStatusId(command.StatusId));
+            
+            var status = _statusRepository.Load(IdUtil.CreateStatusId(command.Status.Id));
 
             if (status != null)
-                entity.SetStatus(new SurveyStatus(command.StatusId, status.GetInnerDocument().Title));
-
-            var user = _userRepository.Load(IdUtil.CreateUserId(command.ResponsibleId));
+                entity.SetStatus(command.Status);
+            //what to do if status is not present
+            var user = _userRepository.Load(IdUtil.CreateUserId(command.Responsible.Id));
 
             if (user != null)
-                entity.SetResponsible(new UserLight() { Id = command.ResponsibleId, Name = user.GetInnerDocument().UserName });
-            
+                entity.SetResponsible(command.Responsible);
+            //what to do if user is not present
 
         }
     }
