@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.Processors
             //order of items is important
             foreach (var item in status.FlowRules)
             {
-                if (executor.Execute(completedQ, item.ConditionExpression))
+                if (executor.Execute(completedQ.AnswerIterator, item.ConditionExpression))
                 {
                     CallStatusChange(completedQ.CompleteQuestinnaireId, item.StatusToGo, item.ChangeComment);
                     return;

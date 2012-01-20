@@ -1,18 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using NCalc;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
-    public class CompleteQuestionnaireConditionExecutor : IExpressionExecutor<CompleteQuestionnaire, bool>
+    public class CompleteQuestionnaireConditionExecutor : IExpressionExecutor<IEnumerable<CompleteAnswer>, bool>
     {
-        public bool Execute(CompleteQuestionnaire entity, string condition)
+        public bool Execute(IEnumerable<CompleteAnswer> answers, string condition)
         {
             if (string.IsNullOrEmpty(condition))
                 return true;
             var e = new Expression(condition);
-            foreach (var answer in entity.AnswerIterator)
+            foreach (var answer in answers)
             {
                 e.Parameters[answer.QuestionPublicKey.ToString()] = answer.AnswerType == AnswerType.Text
                                                                         ? answer.CustomAnswer

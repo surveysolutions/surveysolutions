@@ -15,9 +15,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         ICommandHandler<UpdateAnswerInCompleteQuestionnaireCommand>
     {
         private ICompleteQuestionnaireRepository _questionnaireRepository;
-        private IExpressionExecutor<CompleteQuestionnaire, bool> _conditionExecutor;
+        private IExpressionExecutor<IEnumerable<CompleteAnswer>, bool> _conditionExecutor;
         public UpdateAnswerInCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository questionnaireRepository,
-                                                          IExpressionExecutor<CompleteQuestionnaire, bool> conditionExecutor)
+                                                          IExpressionExecutor<IEnumerable<CompleteAnswer>, bool> conditionExecutor)
         {
             this._questionnaireRepository = questionnaireRepository;
             this._conditionExecutor = conditionExecutor;
@@ -38,9 +38,10 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         {
             //innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey.Equals(question.PublicKey));
           //  Questionnaire template = entity.GetQuestionnaireTemplate();
-            foreach (var question in entity.QuestionIterator)
+            var questions = entity.QuestionIterator;
+            foreach (var question in questions)
             {
-                if (!this._conditionExecutor.Execute(entity, question.ConditionExpression))
+                if (!this._conditionExecutor.Execute(entity.AnswerIterator, question.ConditionExpression))
                 {
                     entity.Remove(question);
                     question.Enabled = false;
