@@ -10,10 +10,10 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
 {
     public class QuestionnaireAnswerIterator : Iterator<CompleteAnswer>
     {
-        public QuestionnaireAnswerIterator(IQuestionnaireDocument<CompleteGroup, CompleteQuestion> questionnaire)
+        public QuestionnaireAnswerIterator(IQuestionnaireDocument<CompleteGroup, CompleteQuestion> document)
         {
             answers= new List<CompleteAnswer>();
-            var questionIterator = new QuestionnaireQuestionIterator(questionnaire);
+            var questionIterator = new QuestionnaireQuestionIterator(document);
             foreach (CompleteQuestion completeQuestion in questionIterator)
             {
                 foreach (CompleteAnswer completeAnswer in completeQuestion.Answers)

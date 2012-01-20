@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
@@ -14,6 +15,12 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
     [TestFixture]
     public class QuestionnaireScreenIteratorTest
     {
+        public Mock<IIteratorContainer> iteratorContainerMock;
+        [SetUp]
+        public void CreateObjects()
+        {
+            iteratorContainerMock = new Mock<IIteratorContainer>();
+        }
         [Test]
         public void WhenEmptyQuestionnaireIsPassed_ExceptionIsThrowed()
         {
@@ -23,7 +30,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
         [Test]
         public void First_FirstItemIsReturned()
         {
-            var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
+            var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument(), iteratorContainerMock.Object);
             questionnaire.GetInnerDocument().Groups.Add(
                 new 
                     CompleteGroup("first"));
@@ -39,7 +46,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
         [Test]
         public void Iteration_WithoutConditions_GeneralTestForIteration()
         {
-            var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
+            var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument(), iteratorContainerMock.Object);
             questionnaire.GetInnerDocument().Groups.Add(
                 new CompleteGroup("first"));
             questionnaire.GetInnerDocument().Groups.Add(
