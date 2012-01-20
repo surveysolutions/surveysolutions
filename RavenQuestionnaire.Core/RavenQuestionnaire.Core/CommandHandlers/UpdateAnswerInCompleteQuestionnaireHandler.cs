@@ -16,7 +16,6 @@ namespace RavenQuestionnaire.Core.CommandHandlers
     {
         private ICompleteQuestionnaireRepository _questionnaireRepository;
         private IExpressionExecutor<CompleteQuestionnaire, bool> _conditionExecutor;
-
         public UpdateAnswerInCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository questionnaireRepository,
                                                           IExpressionExecutor<CompleteQuestionnaire, bool> conditionExecutor)
         {
