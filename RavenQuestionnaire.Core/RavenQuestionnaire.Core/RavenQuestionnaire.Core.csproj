@@ -182,6 +182,7 @@
     <Compile Include="Entities\SubEntities\Complete\PropagatableCompleteAnswer.cs" />
     <Compile Include="Entities\SubEntities\Complete\PropagatableCompleteGroup.cs" />
     <Compile Include="Entities\SubEntities\Complete\PropagatableCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\FlowRule.cs" />
     <Compile Include="Entities\SubEntities\Group.cs" />
     <Compile Include="Entities\SubEntities\LocationWithUserStatistic.cs" />
     <Compile Include="Entities\SubEntities\Question.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="Export\ExportManager.cs" />
     <Compile Include="Export\IExportProvider.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />
+    <Compile Include="ExpressionExecutors\StatusProcessorExecutor.cs" />
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
@@ -204,6 +206,7 @@
     <Compile Include="IViewFactory.cs" />
     <Compile Include="IViewRepsoitory.cs" />
     <Compile Include="Entities\OrderRequestItem.cs" />
+    <Compile Include="Processors\CommonStatusProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CompleteQuestionnaireRepository.cs" />
     <Compile Include="Repositories\EntityRepository.cs" />
@@ -285,10 +288,13 @@
     <Compile Include="Views\Report\ReportView.cs" />
     <Compile Include="Views\Report\ReportViewFactory.cs" />
     <Compile Include="Views\Report\ReportViewInputModel.cs" />
-    <Compile Include="Views\Status\StatusBrowseInputModel.cs" />
-    <Compile Include="Views\Status\StatusBrowseItem.cs" />
-    <Compile Include="Views\Status\StatusBrowseView.cs" />
-    <Compile Include="Views\Status\StatusBrowseViewFactory.cs" />
+    <Compile Include="Views\Status\Browse\StatusBrowseInputModel.cs" />
+    <Compile Include="Views\Status\Browse\StatusBrowseItem.cs" />
+    <Compile Include="Views\Status\Browse\StatusBrowseView.cs" />
+    <Compile Include="Views\Status\Browse\StatusBrowseViewFactory.cs" />
+    <Compile Include="Views\Status\Processing\StatusProcessView.cs" />
+    <Compile Include="Views\Status\Processing\StatusProcessViewFactory.cs" />
+    <Compile Include="Views\Status\Processing\StatusProcessViewInputModel.cs" />
     <Compile Include="Views\Status\StatusView.cs" />
     <Compile Include="Views\Status\StatusViewFactory.cs" />
     <Compile Include="Views\Status\StatusViewInputModel.cs" />

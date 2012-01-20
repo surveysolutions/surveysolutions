@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NCalc;
 using NCalc.Domain;
 using RavenQuestionnaire.Core.Entities;
@@ -16,9 +15,9 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             IList<Question> result = new List<Question>();
             if (string.IsNullOrEmpty(expression))
                 return result;
-            var e = new Expression(expression);
+            var expressionEntity = new Expression(expression);
 
-            e.EvaluateParameter += (name, args) =>
+            expressionEntity.EvaluateParameter += (name, args) =>
                                        {
                                            var question =
                                                entity.GetAllQuestions().FirstOrDefault(
@@ -29,7 +28,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
                                            result.Add(question);
                                            args.Result = "0";
                                        };
-            e.Evaluate(new EvaluationTesterVisitor(e.Options));
+            expressionEntity.Evaluate(new EvaluationTesterVisitor(expressionEntity.Options));
             return result;
         }
     }
