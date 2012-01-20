@@ -10,10 +10,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
     public class CompleteQuestionnaireExportViewFactory : IViewFactory<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
     {
         private IDocumentSession documentSession;
-
-        public CompleteQuestionnaireExportViewFactory(IDocumentSession documentSession)
+        private IIteratorContainer iteratorContainer;
+        public CompleteQuestionnaireExportViewFactory(IDocumentSession documentSession, IIteratorContainer iteratorContainer)
         {
             this.documentSession = documentSession;
+            this.iteratorContainer = iteratorContainer;
+
         }
 
         public CompleteQuestionnaireExportView Load(CompleteQuestionnaireExportInputModel input)
@@ -62,7 +64,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
             var items = page
                     .Select(
                         x =>
-                        new CompleteQuestionnaireExportItem(x));
+                        new CompleteQuestionnaireExportItem(x, iteratorContainer));
 
             return new CompleteQuestionnaireExportView(
                 input.Page,
