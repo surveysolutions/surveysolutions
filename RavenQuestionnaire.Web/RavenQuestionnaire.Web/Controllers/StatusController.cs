@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Security;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
@@ -26,12 +25,10 @@ namespace RavenQuestionnaire.Web.Controllers
             this.viewRepository = viewRepository;
         }
 
-        public ViewResult Index(string id)
+        public ViewResult Index(StatusBrowseInputModel input)
         {
-            if (string.IsNullOrEmpty(id))
+            if ((input == null) || string.IsNullOrEmpty(input.QId))
                 throw new HttpException(404, "Invalid query string parameters.");
-
-            StatusBrowseInputModel input = new StatusBrowseInputModel {QuestionnaireId = id};
             var model = viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(input);
             return View(model);
         }
@@ -52,7 +49,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 }
                 return RedirectToAction("Index", new
                 {
-                    id = model.QuestionnaireId
+                    Qid = model.QuestionnaireId
                 });
 
             }
@@ -82,7 +79,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     commandInvoker.Execute(new UpdateStatusRestrictionsCommand(model.Id, roles, GlobalInfo.GetCurrentUser()));
                     return RedirectToAction("Index", new
                     {
-                        id = model.QuestionnaireId
+                        Qid = model.QuestionnaireId
 
                     });
                 }
@@ -117,7 +114,7 @@ namespace RavenQuestionnaire.Web.Controllers
             if (model != null)
             {
                 foreach (var status in viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(
-                    new StatusBrowseInputModel() { PageSize = 100, QuestionnaireId = model.QuestionnaireId}).Items)
+                    new StatusBrowseInputModel() { PageSize = 100, QId = model.QuestionnaireId}).Items)
                 {
                     var statusByRole = new StatusByRole {Status = status};
 
@@ -144,6 +141,12 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             AddRolesListToViewBag();
             return View("Edit", model);
+        }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ViewResult Route(string id)
+        {
+            return View();
         }
 
     }
