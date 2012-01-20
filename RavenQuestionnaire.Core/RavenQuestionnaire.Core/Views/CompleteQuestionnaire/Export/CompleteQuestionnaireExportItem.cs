@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         {
             this.Id = IdUtil.ParseId(doc.Id);
             this.CompleteAnswers =
-                new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc,iteratorContainer).AnswerIterator.ToArray();
+                iteratorContainer.Create<CompleteQuestionnaireDocument, CompleteAnswer>(doc).ToArray();
         }
     }
 }

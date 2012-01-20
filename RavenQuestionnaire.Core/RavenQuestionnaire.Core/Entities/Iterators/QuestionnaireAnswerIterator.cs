@@ -12,15 +12,36 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
     {
         public QuestionnaireAnswerIterator(IQuestionnaireDocument<CompleteGroup, CompleteQuestion> document)
         {
-            answers= new List<CompleteAnswer>();
-            var questionIterator = new QuestionnaireQuestionIterator(document);
-            foreach (CompleteQuestion completeQuestion in questionIterator)
+            answers = new List<CompleteAnswer>();
+            foreach (CompleteQuestion completeQuestion in document.Questions)
             {
                 foreach (CompleteAnswer completeAnswer in completeQuestion.Answers)
                 {
                     completeAnswer.QuestionPublicKey = completeQuestion.PublicKey;
                     if (completeAnswer.Selected)
                         answers.Add(completeAnswer);
+                }
+            }
+            Queue<CompleteGroup> groups = new Queue<CompleteGroup>();
+            foreach (var child in document.Groups)
+            {
+                groups.Enqueue(child);
+            }
+            while (groups.Count != 0)
+            {
+                var queueItem = groups.Dequeue();
+                foreach (CompleteQuestion completeQuestion in queueItem.Questions)
+                {
+                    foreach (CompleteAnswer completeAnswer in completeQuestion.Answers)
+                    {
+                        completeAnswer.QuestionPublicKey = completeQuestion.PublicKey;
+                        if (completeAnswer.Selected)
+                            answers.Add(completeAnswer);
+                    }
+                }
+                foreach (var child in queueItem.Groups)
+                {
+                    groups.Enqueue(child);
                 }
             }
         }
