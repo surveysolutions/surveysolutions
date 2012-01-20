@@ -60,11 +60,14 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
-        public ActionResult UpdateResult(string id, CompleteAnswer[] answers, SurveyStatus status, UserLight responsible)
+        public ActionResult UpdateResult(string id, SurveyStatus status, UserLight responsible, string changeComment)
         {
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, status, responsible,
+                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, 
+                    status, 
+                    changeComment,
+                    responsible,
                     _globalProvider.GetCurrentUser()));
 
             }

@@ -11,10 +11,11 @@ namespace RavenQuestionnaire.Core.Commands
         public UserLight Responsible { get; private set; }
 
         public UserLight Executor { get; set; }
-
+        public string ChangeComment { get; set; }
 
         public UpdateCompleteQuestionnaireCommand(string completeQuestionanireId, 
-            SurveyStatus statusId, 
+            SurveyStatus statusId,
+            string changeComment,
             UserLight responsible,
             UserLight executor)
         {
@@ -22,6 +23,7 @@ namespace RavenQuestionnaire.Core.Commands
             this.Status = statusId;
             this.Responsible = responsible;
             this.Executor = executor;
+            ChangeComment = changeComment;
         }
     }
 }

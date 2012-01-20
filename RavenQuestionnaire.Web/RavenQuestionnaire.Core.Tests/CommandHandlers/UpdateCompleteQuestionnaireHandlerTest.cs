@@ -34,11 +34,14 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             UpdateCompleteQuestionnaireHandler handler = new UpdateCompleteQuestionnaireHandler(coompleteQuestionnaireRepositoryMock.Object,
                 statusRepositoryMock.Object, userRepositoryMock.Object);
 
-            handler.Handle(new Commands.UpdateCompleteQuestionnaireCommand("cqID", new SurveyStatus( "-11", "unknownStatus"), new UserLight("-111", "unknownUser"), null));
+            handler.Handle(new Commands.UpdateCompleteQuestionnaireCommand("cqID", 
+                new SurveyStatus( "-11", "unknownStatus"),
+                "test status change",
+                new UserLight("-111", "unknownUser"), 
+                null));
 
             coompleteQuestionnaireRepositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqID"));
        
-
         }
     }
 }
