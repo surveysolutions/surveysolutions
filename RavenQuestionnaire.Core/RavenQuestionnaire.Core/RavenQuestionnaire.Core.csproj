@@ -202,7 +202,9 @@
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
+    <Compile Include="IIteratorContainer.cs" />
     <Compile Include="Indexes\UsersInLocationIndex.cs" />
+    <Compile Include="IteratorContainer.cs" />
     <Compile Include="IViewFactory.cs" />
     <Compile Include="IViewRepsoitory.cs" />
     <Compile Include="Entities\OrderRequestItem.cs" />

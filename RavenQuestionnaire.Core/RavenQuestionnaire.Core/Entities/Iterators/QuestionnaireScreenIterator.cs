@@ -12,19 +12,19 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
 {
     public class QuestionnaireScreenIterator : Iterator<CompleteGroup>
     {
-        public QuestionnaireScreenIterator(IQuestionnaireDocument<CompleteGroup, CompleteQuestion> questionnaire)
+        public QuestionnaireScreenIterator(IQuestionnaireDocument<CompleteGroup, CompleteQuestion> document)
         {
-            if (questionnaire.Questions.Count == 0)
+            if (document.Questions.Count == 0)
             {
-                if (questionnaire.Groups.Count == 0)
+                if (document.Groups.Count == 0)
                     throw new ArgumentException("Questionnaires question list is empty");
-                this.groups = questionnaire.Groups;
+                this.groups = document.Groups;
             }
             else
             {
-                this.groups = new List<CompleteGroup>(questionnaire.Groups.Count + 1);
-                this.groups.Add(new CompleteGroup() { Questions = questionnaire.Questions, PublicKey = Guid.Empty });
-                foreach (CompleteGroup item in questionnaire.Groups)
+                this.groups = new List<CompleteGroup>(document.Groups.Count + 1);
+                this.groups.Add(new CompleteGroup() { Questions = document.Questions, PublicKey = Guid.Empty });
+                foreach (CompleteGroup item in document.Groups)
                 {
                     this.groups.Add(item);
                 }

@@ -11,13 +11,13 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
 {
     public class QuestionnaireQuestionIterator : Iterator<CompleteQuestion>
     {
-        public QuestionnaireQuestionIterator(IQuestionnaireDocument<CompleteGroup, CompleteQuestion> questionnaire)
+        public QuestionnaireQuestionIterator(IQuestionnaireDocument<CompleteGroup, CompleteQuestion> document)
         {
           //  this.questionnaire = questionnaire;
             questions = new List<CompleteQuestion>();
-            questions.AddRange(questionnaire.Questions);
+            questions.AddRange(document.Questions);
             Queue<CompleteGroup> groups = new Queue<CompleteGroup>();
-            foreach (var child in questionnaire.Groups)
+            foreach (var child in document.Groups)
             {
                 groups.Enqueue(child);
             }

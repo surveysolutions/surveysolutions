@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core.CommandHandlers;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
@@ -18,6 +19,12 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
     [TestFixture]
     public class UpdateAnswerInCompleteQuestionnaireHandlerTest
     {
+        public Mock<IIteratorContainer> iteratorContainerMock;
+        [SetUp]
+        public void CreateObjects()
+        {
+            iteratorContainerMock = new Mock<IIteratorContainer>();
+        }
         [Test]
         public void WhenCommandIsReceived_NewAnswerIsAddedTCompleteQuestionnaire()
         {
@@ -28,7 +35,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
             question.Answers.Add(answer);
             qDoqument.Questions.Add(question);
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
             UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
@@ -42,6 +49,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                                  PublicKey)
                                                                                                                     },
                                                                                                                 null);
+            iteratorContainerMock.Setup(
+             x => x.Create<CompleteQuestionnaireDocument, CompleteQuestion>(qDoqument)).Returns(
+                 new QuestionnaireQuestionIterator(qDoqument));
             handler.Handle(command);
             repositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqId"), Times.Once());
             Assert.AreEqual(qDoqument.Questions[0].PublicKey, question.PublicKey);
@@ -51,7 +61,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void AddNewAnswerInPropagatedGroup_ValidAnswer_AnswerIsAdded()
         {
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
             CompleteGroup group = new CompleteGroup("test") {Propagated = true};
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
@@ -65,7 +75,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
 
-
+            iteratorContainerMock.Setup(
+               x => x.Create<CompleteQuestionnaireDocument, CompleteQuestion>(qDoqument)).Returns(
+                   new QuestionnaireQuestionIterator(qDoqument));
             UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
                                                                                                                 new CompleteAnswer
@@ -97,7 +109,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void AddNewAnswerInPropagatedGroup_InvalidPropogationGuid_NoAnswersIsSelected()
         {
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
             CompleteGroup group = new CompleteGroup("test") { Propagated = true };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
@@ -111,7 +123,12 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
 
-
+            iteratorContainerMock.Setup(
+              x => x.Create<CompleteQuestionnaireDocument, CompleteQuestion>(qDoqument)).Returns(
+                  new QuestionnaireQuestionIterator(qDoqument));
+            iteratorContainerMock.Setup(
+             x => x.Create<CompleteQuestionnaireDocument, CompleteAnswer>(qDoqument)).Returns(
+                 new QuestionnaireAnswerIterator(qDoqument));
             UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
                                                                                                                 new CompleteAnswer
