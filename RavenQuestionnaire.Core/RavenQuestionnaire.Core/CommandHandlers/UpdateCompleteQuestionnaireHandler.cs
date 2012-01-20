@@ -32,12 +32,16 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             if (status != null)
                 entity.SetStatus(command.Status);
             //what to do if status is not present
-            var user = _userRepository.Load(IdUtil.CreateUserId(command.Responsible.Id));
 
-            if (user != null)
-                entity.SetResponsible(command.Responsible);
-            //what to do if user is not present
+            //do not change responsible if incoming value is null
+            if (command.Responsible != null)
+            {
+                var user = _userRepository.Load(IdUtil.CreateUserId(command.Responsible.Id));
 
+                if (user != null)
+                    entity.SetResponsible(command.Responsible);
+                //what to do if user is not present
+            }
         }
     }
 }
