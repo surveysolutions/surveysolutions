@@ -13,7 +13,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
                 return true;
             var expressionItem = new Expression(condition);
 
-            foreach (var answer in entity.GetAllAnswers())
+            foreach (var answer in entity.AnswerIterator)
             {
                 expressionItem.Parameters[answer.QuestionPublicKey.ToString()] = 
                     answer.AnswerType == AnswerType.Text

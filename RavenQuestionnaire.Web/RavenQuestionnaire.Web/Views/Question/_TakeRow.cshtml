@@ -9,9 +9,10 @@
     }
 }
 <div class="question">
-    <h3>@*@Model.Index)*@ @Html.DisplayFor(modelItem => Model.QuestionText)</h3>
-    <div class="answers">
+    <b>@*@Model.Index)*@ @Html.DisplayFor(modelItem => Model.QuestionText)</b>
+        <br />   <br />
+  @*  <div class="answers">*@
           @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", Model.QuestionType), Model.Answers);}
         <br />
-    </div>
+   @* </div>*@
 </div>

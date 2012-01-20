@@ -1,6 +1,8 @@
 ﻿@using RavenQuestionnaire.Core.Views.Group
 @model RavenQuestionnaire.Core.Views.Group.CompleteGroupView
-@Ajax.ActionLink(Model.GroupText,
+<h3>@Model.GroupText</h3>
+<br/>
+@Ajax.ActionLink("Add",
                 "PropagateGroup", "Group", new { publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireId, parentGroupPublicKey = ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey },
         new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div") }, 
     new { @class = "btn" })
