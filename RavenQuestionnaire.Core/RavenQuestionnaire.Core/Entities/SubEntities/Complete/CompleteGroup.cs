@@ -59,8 +59,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 CompleteGroup propogate = c as CompleteGroup;
                 if (propogate != null && propogate.Propagated)
                 {
-                    Groups.Add(new PropagatableCompleteGroup(propogate, Guid.NewGuid()));
-                    return true;
+                    var group = Groups.FirstOrDefault(g => g.PublicKey.Equals(propogate.PublicKey));
+                    if (group != null)
+                    {
+                        Groups.Add(new PropagatableCompleteGroup(propogate, Guid.NewGuid()));
+                        return true;
+                    }
                 }
             }
             if (Groups.Any(child => child.Add(c, parent)))

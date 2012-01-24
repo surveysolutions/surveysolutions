@@ -24,7 +24,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             }
             for (int i = 0; i < group.Groups.Count; i++)
             {
-                this.Groups[i] = new PropagatableCompleteGroup(group.Groups[i], propogationPublicKey);
+                this.Groups.Add(new PropagatableCompleteGroup(group.Groups[i], propogationPublicKey));
+            //    this.Groups[i] = new PropagatableCompleteGroup(group.Groups[i], propogationPublicKey);
             }
 
             this.PropogationPublicKey = propogationPublicKey;
