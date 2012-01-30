@@ -82,6 +82,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             CompleteAnswer currentAnswer = c as CompleteAnswer;
             if (currentAnswer == null)
                 throw new CompositeException("answer wasn't found");
+            if (QuestionType == QuestionType.Numeric)
+            {
+                Answers.Clear();
+                Answers.Add(currentAnswer);
+                return;
+            }
 
             foreach (CompleteAnswer completeAnswer in Answers)
             {
