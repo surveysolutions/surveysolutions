@@ -121,23 +121,22 @@ namespace RavenQuestionnaire.Web.Controllers
 
         public ActionResult SaveSingleResult(string id, Guid? ParentGroupPublicKey, Guid? PropogationPublicKey, CompleteAnswer[] answers)
         {
-            if (answers == null || answers.Length <= 0)
+            if (answers == null || answers.Length <= 0 || !ModelState.IsValid)
             {
                 return RedirectToAction("Question", new {id = id});
             }
 
-            if (ModelState.IsValid)
+
+            if (PropogationPublicKey.HasValue)
             {
-                if (PropogationPublicKey.HasValue)
+                for (int i = 0; i < answers.Length; i++)
                 {
-                    for (int i = 0; i < answers.Length; i++)
-                    {
-                        answers[i] = new PropagatableCompleteAnswer(answers[i], PropogationPublicKey.Value);
-                    }
+                    answers[i] = new PropagatableCompleteAnswer(answers[i], PropogationPublicKey.Value);
                 }
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, answers,
-                                                                                      _globalProvider.GetCurrentUser()));
             }
+            commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, answers,
+                                                                                  _globalProvider.GetCurrentUser()));
+
             var model =
                 viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
                     new CompleteGroupViewInputModel(PropogationPublicKey, ParentGroupPublicKey, id));

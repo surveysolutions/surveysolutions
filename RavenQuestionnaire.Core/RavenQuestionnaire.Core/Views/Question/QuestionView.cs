@@ -30,6 +30,12 @@ namespace RavenQuestionnaire.Core.Views.Question
             set
             {
                 _answers = value;
+                if (this._answers == null)
+                {
+                    this._answers = new AnswerView[0];
+                    return;
+                }
+
                 for (int i = 0; i < this._answers.Length; i++)
                 {
                     this._answers[i].Index = i + 1;
