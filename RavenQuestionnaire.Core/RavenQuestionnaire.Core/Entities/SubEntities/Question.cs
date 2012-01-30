@@ -65,7 +65,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             Answers.Add(answer);
         }
 
-        public bool Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent)
         {
             if (!parent.HasValue || parent.Value == PublicKey)
             {
@@ -73,29 +73,30 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 if (answer != null)
                 {
                     AddAnswer(answer);
-                    return true;
+                    return;
                 }
             }
-            return false;
+            throw new CompositeException();
         }
 
-        public bool Remove(IComposite c)
+        public void Remove(IComposite c)
         {
             Answer answer = c as Answer;
             if (answer != null)
             {
                 Answers.Remove(answer);
-                return true;
+                return;
             }
-            return false;
+            throw new CompositeException();
         }
-        public bool Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
             if (typeof(T) == typeof(Answer))
             {
-                return Answers.RemoveAll(a => a.PublicKey.Equals(publicKey)) > 0;
+                if(Answers.RemoveAll(a => a.PublicKey.Equals(publicKey)) > 0)
+                    return;
             }
-            return false;
+            throw new CompositeException();
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite

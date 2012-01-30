@@ -7,9 +7,9 @@ namespace RavenQuestionnaire.Core.Entities.Composite
 {
     public interface IComposite
     {
-        bool Add(IComposite c, Guid? parent);
-        bool Remove(IComposite c);
-        bool Remove<T>(Guid publicKey) where T : class, IComposite;
+        void Add(IComposite c, Guid? parent);
+        void Remove(IComposite c);
+        void Remove<T>(Guid publicKey) where T : class, IComposite;
         T Find<T>(Guid publicKey) where T : class, IComposite;
     }
 }

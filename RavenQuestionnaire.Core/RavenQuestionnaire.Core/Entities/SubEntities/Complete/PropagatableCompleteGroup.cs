@@ -76,26 +76,26 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
 
         #endregion
-        public override bool Add(IComposite c, Guid? parent)
+        public override void Add(IComposite c, Guid? parent)
         {
             IPropogate propagate = c as IPropogate;
             if (propagate == null)
-                return false;
+                throw new CompositeException();
             if (propagate.PropogationPublicKey != this.PropogationPublicKey)
-                return false;
-            return base.Add(c, parent);
+                throw new CompositeException();
+            base.Add(c, parent);
         }
-        public override bool Remove(IComposite c)
+        public override void Remove(IComposite c)
         {
             IPropogate propagate = c as IPropogate;
             if (propagate == null)
-                return false;
+                throw new CompositeException();
             if (propagate.PropogationPublicKey != this.PropogationPublicKey)
-                return false;
-            return base.Remove(c);
+                throw new CompositeException();
+            base.Remove(c);
         }
 
-        public override bool Remove<T>(Guid publicKey){
+        public override void Remove<T>(Guid publicKey){
             //  IPropogate propagate = c as IPropogate;
           /*  if (!typeof (T).IsAssignableFrom(typeof (IPropogate)))
                 return false;

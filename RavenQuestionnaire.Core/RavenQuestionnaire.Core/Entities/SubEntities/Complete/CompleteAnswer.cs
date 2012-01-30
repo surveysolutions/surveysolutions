@@ -48,41 +48,41 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         #region Implementation of IComposite
 
-        public bool Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent)
         {
             CompleteAnswer answer = c as CompleteAnswer;
             if (answer == null)
-                return false;
+                throw new CompositeException("answer wasn't found");
             if (answer.PublicKey == PublicKey)
             {
                 Set(answer.CustomAnswer);
-                return true;
+                return;
             }
-            return false;
+            throw new CompositeException("answer wasn't found");
         }
 
-        public bool Remove(IComposite c)
+        public void Remove(IComposite c)
         {
             CompleteAnswer answer = c as CompleteAnswer;
             if (answer == null)
-                return false;
+                throw new CompositeException("answer wasn't found");
             if (answer.PublicKey == PublicKey)
             {
                 Reset();
-                return true;
+                return;
             }
-            return false;
+            throw new CompositeException("answer wasn't found");
         }
-        public bool Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
             if (typeof(T) != GetType())
-                return false;
+                throw new CompositeException("answer wasn't found");
             if (publicKey == PublicKey)
             {
                 Reset();
-                return true;
+                return;
             }
-            return false;
+            throw new CompositeException("answer wasn't found");
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite

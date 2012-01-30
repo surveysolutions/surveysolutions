@@ -28,19 +28,19 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Guid Target { get; set; }
         public string LabelText { get; set; }
 
-        public bool Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent)
         {
-            return false;
+            throw new CompositeException("flow connection is not hierarchical");
         }
 
-        public bool Remove(IComposite c)
+        public void Remove(IComposite c)
         {
-            return false;
+            throw new CompositeException("flow connection is not hierarchical");
         }
 
-        public bool Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            return false;
+            throw new CompositeException("flow connection is not hierarchical");
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
