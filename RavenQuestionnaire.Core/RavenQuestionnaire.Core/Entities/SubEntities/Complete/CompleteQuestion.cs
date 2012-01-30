@@ -82,7 +82,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             CompleteAnswer currentAnswer = c as CompleteAnswer;
             if (currentAnswer == null)
                 throw new CompositeException("answer wasn't found");
-            if (QuestionType == QuestionType.Numeric)
+            if ((QuestionType == QuestionType.Numeric
+                || QuestionType == QuestionType.DateTime
+                || QuestionType == QuestionType.Text)
+                && currentAnswer.QuestionPublicKey == this.PublicKey)
             {
                 Answers.Clear();
                 Answers.Add(currentAnswer);
