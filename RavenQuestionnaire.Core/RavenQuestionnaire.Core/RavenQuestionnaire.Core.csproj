@@ -157,6 +157,7 @@
     <Compile Include="Documents\StatusDocument.cs" />
     <Compile Include="Documents\UserDocument.cs" />
     <Compile Include="Entities\CompleteQuestionnaire.cs" />
+    <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\Event.cs" />
     <Compile Include="Entities\IEntity.cs" />

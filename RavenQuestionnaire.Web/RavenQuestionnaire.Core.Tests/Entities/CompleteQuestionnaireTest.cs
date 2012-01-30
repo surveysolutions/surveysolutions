@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Tests.Utils;
@@ -105,8 +106,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             question.Answers.Add(answer);
             group.Questions.Add(question);
             qDoqument.Groups.Add(group);
-            questionanire.Add(group, null);
-            Assert.AreEqual(qDoqument.Groups.Count, 1);
+            Assert.Throws<CompositeException>(() => questionanire.Add(group, null));
         }
 
         [Test]

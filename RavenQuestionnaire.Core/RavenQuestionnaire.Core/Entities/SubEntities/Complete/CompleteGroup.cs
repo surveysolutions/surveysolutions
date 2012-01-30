@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public List<CompleteGroup> Groups { get; set; }
 
-        public virtual bool Add(IComposite c, Guid? parent)
+        public virtual void Add(IComposite c, Guid? parent)
         {
             if (!parent.HasValue || parent.Value == PublicKey)
             {
@@ -63,50 +63,107 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                     if (group != null)
                     {
                         Groups.Add(new PropagatableCompleteGroup(propogate, Guid.NewGuid()));
-                        return true;
+                        return;
                     }
                 }
             }
-            if (Groups.Any(child => child.Add(c, parent)))
+
+            foreach (CompleteGroup completeGroup in Groups)
             {
-                return true;
+                try
+                {
+                    completeGroup.Add(c, parent);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
             }
             IPropogate propogated = c as IPropogate;
             if (propogated != null && !(this is IPropogate))
-                return false;
-            return Questions.Any(child => child.Add(c, parent));
+                throw new CompositeException();
+            foreach (CompleteQuestion completeQuestion in Questions)
+            {
+                try
+                {
+                    completeQuestion.Add(c, parent);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
+            }
+            throw new CompositeException();
         }
 
-        public virtual bool Remove(IComposite c)
+        public virtual void Remove(IComposite c)
         {
             PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
             if (propogate != null)
             {
-                Groups.RemoveAll(
+                if (Groups.RemoveAll(
                     g =>
                     g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
-                    ((IPropogate) g).PropogationPublicKey.Equals(propogate.PropogationPublicKey));
+                    ((IPropogate) g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
+                    return;
             }
-            if (Groups.Any(child => child.Remove(c)))
+            foreach (CompleteGroup completeGroup in Groups)
             {
-                return true;
+                try
+                {
+                    completeGroup.Remove(c);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
             }
-            return Questions.Any(child => child.Remove(c));
+            foreach (CompleteQuestion completeQuestion in Questions)
+            {
+                try
+                {
+                    completeQuestion.Remove(c);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
+            }
+            throw new CompositeException();
         }
 
-        public virtual bool Remove<T>(Guid publicKey) where T : class, IComposite
+        public virtual void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            if(typeof(T)== typeof(PropagatableCompleteGroup))
+            if (typeof(T) == typeof(PropagatableCompleteGroup))
             {
-                Groups.RemoveAll(
-                   g =>
-                   g.PublicKey.Equals(publicKey));
+                if (Groups.RemoveAll(
+                    g =>
+                    g.PublicKey.Equals(publicKey)) > 0)
+                    return;
             }
-            if (Groups.Any(child => child.Remove<T>(publicKey)))
+            foreach (CompleteGroup completeGroup in Groups)
             {
-                return true;
+                try
+                {
+                    completeGroup.Remove<T>(publicKey);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
             }
-            return Questions.Any(child => child.Remove<T>(publicKey));
+            foreach (CompleteQuestion completeQuestion in Questions)
+            {
+                try
+                {
+                    completeQuestion.Remove<T>(publicKey);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
+            }
+            throw new CompositeException();
         }
 
         public virtual T Find<T>(Guid publicKey) where T : class, IComposite

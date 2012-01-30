@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core.CommandHandlers;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -58,7 +59,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Assert.AreEqual(qDoqument.Questions[0].Answers[0].Selected, true);
         }
         [Test]
-        public void AddNewAnswerInPropagatedGroup_ValidAnswer_AnswerIsAdded()
+        public void 
+            AddNewAnswerInPropagatedGroup_ValidAnswer_AnswerIsAdded()
         {
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
@@ -138,9 +140,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                             (completeAnswer,Guid.NewGuid())
                                                                                                                     },
                                                                                                                 null);
-            handler.Handle(command);
 
-            Assert.AreEqual(questionanire.AnswerIterator.Select(a => a.Selected).Count(), 0);
+
+            Assert.Throws<CompositeException>(() => handler.Handle(command));
             //  group.Add(group, null);
         }
     }

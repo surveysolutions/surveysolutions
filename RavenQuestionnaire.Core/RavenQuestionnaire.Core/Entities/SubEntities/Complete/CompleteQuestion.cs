@@ -77,22 +77,31 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                                                           answer.PublicKey));
             completeAnswer.Set(answer.CustomAnswer);
         }*/
-        public bool Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent)
         {
             CompleteAnswer currentAnswer = c as CompleteAnswer;
             if (currentAnswer == null)
-                return false;
-            bool result = Answers.Any(answer => answer.Add(c, parent));
-            if (result)
-                foreach (CompleteAnswer answer in Answers)
+                throw new CompositeException("answer wasn't found");
+
+            foreach (CompleteAnswer completeAnswer in Answers)
+            {
+                try
                 {
-                    if (answer.PublicKey != currentAnswer.PublicKey)
+                    completeAnswer.Add(c, parent);
+                    foreach (var answer in Answers.Where(answer => answer.PublicKey != currentAnswer.PublicKey))
+                    {
                         answer.Selected = false;
+                    }
+                    return;
                 }
-            return result;
+                catch (CompositeException)
+                {
+                }
+            }
+            throw new CompositeException("answer wasn't found");
         }
 
-        public bool Remove(IComposite c)
+        public void Remove(IComposite c)
         {
             CompleteQuestion question = c as CompleteQuestion;
             if (question != null && this.PublicKey.Equals(question.PublicKey))
@@ -101,26 +110,46 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 {
                     answer.Remove(answer);
                 }
-                return true;
+                return;
             }
             if (c as CompleteAnswer == null)
-                return Answers.Any(answer => answer.Remove(c));
-            return false;
+                foreach (CompleteAnswer completeAnswer in Answers)
+                {
+                    try
+                    {
+                        completeAnswer.Remove(c);
+                        return;
+                    }
+                    catch (CompositeException)
+                    {
+                    }
+                }
+            throw new CompositeException("answer wasn't found");
         }
 
-        public bool Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            if (typeof(T) == GetType() && this.PublicKey.Equals(publicKey))
+            if (typeof (T) == GetType() && this.PublicKey.Equals(publicKey))
             {
                 foreach (CompleteAnswer answer in Answers)
                 {
                     answer.Remove(answer);
                 }
-                return true;
+                return;
             }
             if (typeof (T) != typeof (CompleteAnswer))
-                return Answers.Any(answer => answer.Remove<T>(publicKey));
-            return false;
+                foreach (CompleteAnswer completeAnswer in Answers)
+                {
+                    try
+                    {
+                        completeAnswer.Remove<T>(publicKey);
+                        return;
+                    }
+                    catch (CompositeException)
+                    {
+                    }
+                }
+            throw new CompositeException("answer wasn't found");
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
