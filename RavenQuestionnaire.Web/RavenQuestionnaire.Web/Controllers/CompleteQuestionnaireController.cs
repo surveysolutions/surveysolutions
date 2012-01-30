@@ -119,7 +119,7 @@ namespace RavenQuestionnaire.Web.Controllers
             return View( model);
         }
 
-        public ActionResult SaveSingleResult(string id, Guid? PublicKey, Guid? PropogationPublicKey, CompleteAnswer[] answers)
+        public ActionResult SaveSingleResult(string id, Guid? ParentGroupPublicKey, Guid? PropogationPublicKey, CompleteAnswer[] answers)
         {
             if (answers == null || answers.Length <= 0)
             {
@@ -140,7 +140,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             var model =
                 viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
-                    new CompleteGroupViewInputModel(PropogationPublicKey, PublicKey, id));
+                    new CompleteGroupViewInputModel(PropogationPublicKey, ParentGroupPublicKey, id));
             ViewBag.CurrentGroup = model;
             return PartialView("~/Views/Group/_Screen.cshtml", model);
         }

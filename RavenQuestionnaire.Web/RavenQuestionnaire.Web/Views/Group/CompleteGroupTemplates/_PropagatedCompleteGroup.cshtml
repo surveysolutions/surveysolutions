@@ -12,7 +12,7 @@
                                                                                     }))
                 {
                     Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
-                    @Html.Hidden("PublicKey", ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
+                    @Html.Hidden("ParentGroupPublicKey", ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
                     @Html.Hidden("id", Model.QuestionnaireId)
                     @Html.Hidden("PropogationPublicKey", Model.PropogationPublicKey)
                 }
