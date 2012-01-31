@@ -25,7 +25,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             handler.Handle(new Commands.CreateNewGroupCommand("some text", false, "qId", null, null));
             var innerDocument = ((IEntity<QuestionnaireDocument>) questionnaire).GetInnerDocument();
             Assert.AreEqual(innerDocument.Groups.Count, 1);
-            Assert.AreEqual(innerDocument.Groups[0].GroupText, "some text");
+            Assert.AreEqual(innerDocument.Groups[0].Title, "some text");
         }
         [Test]
         public void WhenCommandIsReceived_SubGroup_NewGroupIsIsAddedToQuestionnaire()
@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             handler.Handle(new Commands.CreateNewGroupCommand("some text", false, "qId", topGroup.PublicKey, null));
           
             Assert.AreEqual(innerDocument.Groups[0].Groups.Count, 1);
-            Assert.AreEqual(innerDocument.Groups[0].Groups[0].GroupText, "some text");
+            Assert.AreEqual(innerDocument.Groups[0].Groups[0].Title, "some text");
         }
 
         [Test]

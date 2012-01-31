@@ -38,7 +38,28 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         {
             //innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey.Equals(question.PublicKey));
           //  Questionnaire template = entity.GetQuestionnaireTemplate();
-            var questions = entity.QuestionIterator;
+            var groups = entity.GroupIterator;
+          //  var allQuestions = entity.QuestionIterator;
+            foreach (CompleteGroup completeGroup in groups)
+            {
+               // IEnumerable<CompleteQuestion> questions = completeGroup is IPropogate ? completeGroup.Questions : allQuestions;
+                foreach (CompleteQuestion completeQuestion in completeGroup.Questions)
+                {
+                    if (
+                        !this._conditionExecutor.Execute(
+                            completeGroup is IPropogate ? completeGroup.AnswerIterator : entity.AnswerIterator,
+                            completeQuestion.ConditionExpression))
+                    {
+                        entity.Remove(completeQuestion);
+                        completeQuestion.Enabled = false;
+                    }
+                    else
+                    {
+                        completeQuestion.Enabled = true;
+                    }
+                }
+            }
+            /* var questions = entity.QuestionIterator;
             foreach (var question in questions)
             {
                 if (!this._conditionExecutor.Execute(entity.AnswerIterator, question.ConditionExpression))
@@ -50,7 +71,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
                 {
                     question.Enabled = true;
                 }
-            }
+            }*/
         }
     }
 }

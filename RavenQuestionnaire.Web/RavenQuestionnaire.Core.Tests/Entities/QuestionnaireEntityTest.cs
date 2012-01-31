@@ -32,7 +32,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             questionnaire.AddGroup("group", false, null);
 
-            Assert.AreEqual(innerDocument.Groups[0].GroupText, "group");
+            Assert.AreEqual(innerDocument.Groups[0].Title, "group");
         }
         [Test]
         public void AddGroup_FirstLevel_GroupIsAddedToDocument()
@@ -43,7 +43,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             innerDocument.Groups.Add(parent);
             questionnaire.AddGroup("group", false, parent.PublicKey);
 
-            Assert.AreEqual(innerDocument.Groups[0].Groups[0].GroupText, "group");
+            Assert.AreEqual(innerDocument.Groups[0].Groups[0].Title, "group");
             Assert.AreEqual(innerDocument.Groups[0], parent);
         }
         [Test]
@@ -57,7 +57,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             topParent.Groups.Add(subParent);
             questionnaire.AddGroup("group", false, subParent.PublicKey);
 
-            Assert.AreEqual(innerDocument.Groups[0].Groups[0].Groups[0].GroupText, "group");
+            Assert.AreEqual(innerDocument.Groups[0].Groups[0].Groups[0].Title, "group");
             Assert.AreEqual(innerDocument.Groups[0].Groups[0], subParent);
         }
         [Test]
@@ -75,7 +75,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Group group = new Group();
             innerDocument.Groups.Add(group);
             questionnaire.UpdateGroup("group",false, group.PublicKey);
-            Assert.AreEqual(group.GroupText, "group");
+            Assert.AreEqual(group.Title, "group");
         }
         [Test]
         public void UpdateGroup_InvalidgroupPublicKey_ArgumentException()

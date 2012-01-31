@@ -37,10 +37,10 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
             questionnaire.GetInnerDocument().Groups.Add(
                 new CompleteGroup("second"));
             var iterator = new QuestionnaireScreenIterator(questionnaire.GetInnerDocument());
-            Assert.AreEqual(iterator.First().GroupText, "first");
+            Assert.AreEqual(iterator.First().Title, "first");
 
             var takeNext = iterator.Next;
-            Assert.AreEqual(iterator.First().GroupText, "first");
+            Assert.AreEqual(iterator.First().Title, "first");
         }
 
         [Test]
@@ -55,12 +55,12 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
 
             /* Assert.AreEqual(iterator.Next.QuestionText, "first");*/
             Assert.AreEqual(iterator.MoveNext(), true);
-            Assert.AreEqual(iterator.Current.GroupText, "second");
+            Assert.AreEqual(iterator.Current.Title, "second");
             Assert.AreEqual(iterator.MoveNext(), false);
-            Assert.AreEqual(iterator.Previous.GroupText, "first");
+            Assert.AreEqual(iterator.Previous.Title, "first");
             Assert.AreEqual(iterator.MoveNext(), true);
             var takePrevious =  iterator.Previous;
-            Assert.AreEqual(iterator.Next.GroupText, "second");
+            Assert.AreEqual(iterator.Next.Title, "second");
         }
     }
 }

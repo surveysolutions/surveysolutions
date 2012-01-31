@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Core.Entities
         public void AddGroup(string groupText,bool propageted, Guid? parent)
         {
             Group group = new Group();
-            group.GroupText = groupText;
+            group.Title = groupText;
             group.Propagated = propageted;
             try
             {

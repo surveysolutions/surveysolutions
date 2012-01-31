@@ -53,10 +53,14 @@ namespace RavenQuestionnaire.Core.Entities
         {
             get { return iteratorContainer.Create<CompleteQuestionnaireDocument, CompleteAnswer>(this.innerDocument); }
         }
-        public Iterator<CompleteQuestion> QuestionIterator
+        public Iterator<CompleteGroup> GroupIterator
+        {
+            get { return new HierarchicalGroupIterator(this.innerDocument); }
+        }
+     /*   public Iterator<CompleteQuestion> QuestionIterator
         {
             get { return iteratorContainer.Create<CompleteQuestionnaireDocument, CompleteQuestion>(this.innerDocument); }
-        }
+        }*/
         #region Implementation of IComposite
 
         public virtual void Add(IComposite c, Guid? parent)

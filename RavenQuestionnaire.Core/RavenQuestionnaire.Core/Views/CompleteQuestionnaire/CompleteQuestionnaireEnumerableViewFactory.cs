@@ -36,7 +36,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup group = null;
 
                 Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup> iterator =
-                    this.iteratorContainer.Create<CompleteQuestionnaireDocument, RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup>(doc);
+                    new QuestionnaireScreenIterator(doc);
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
                     group =
