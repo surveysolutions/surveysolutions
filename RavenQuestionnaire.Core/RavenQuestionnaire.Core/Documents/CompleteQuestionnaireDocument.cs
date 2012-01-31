@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
@@ -53,6 +54,15 @@ namespace RavenQuestionnaire.Core.Documents
         public DateTime? OpenDate { get; set; }
 
         public DateTime? CloseDate { get; set; }
+
+        [XmlIgnore]
+        public Guid PublicKey { get; set; }
+        [XmlIgnore]
+        public bool Propagated
+        {
+            get { return false; }
+            set { }
+        }
 
         #endregion
     }

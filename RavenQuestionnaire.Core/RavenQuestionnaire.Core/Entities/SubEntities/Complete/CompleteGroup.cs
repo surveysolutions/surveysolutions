@@ -3,38 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Iterators;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class CompleteGroup : ICompleteGroup<CompleteGroup, CompleteQuestion>
+    public class CompleteGroup : ICompleteGroup<CompleteGroup, CompleteQuestion>,IComposite
     {
         public CompleteGroup()
         {
             Questions = new List<CompleteQuestion>();
             Groups = new List<CompleteGroup>();
+         //   this.iteratorContainer = new IteratorContainer();
         }
 
         public CompleteGroup(string name)
             : this()
         {
-            this.GroupText = name;
+            this.Title = name;
         }
 
         public static explicit operator CompleteGroup(Group doc)
         {
-            /*CompleteGroup result;
-            if (doc.Propagated)
-                result = new PropagatableCompleteGroup()
-                             {
-                                 PublicKey = doc.PublicKey,
-                                 GroupText = doc.GroupText,
-                                 Propagated = true
-                             };*/
-            CompleteGroup result = new CompleteGroup
+            CompleteGroup result = new CompleteGroup(null)
                          {
                              PublicKey = doc.PublicKey,
-                             GroupText = doc.GroupText,
+                             Title = doc.Title,
                              Propagated = doc.Propagated
                          };
             result.Questions = doc.Questions.Select(q => (CompleteQuestion) q).ToList();
@@ -44,13 +39,19 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public Guid PublicKey { get; set; }
 
-        public string GroupText { get; set; }
+        public string Title { get; set; }
 
         public bool Propagated { get; set; }
 
         public List<CompleteQuestion> Questions { get; set; }
 
         public List<CompleteGroup> Groups { get; set; }
+
+        public Iterator<CompleteAnswer> AnswerIterator
+        {
+            get { return new QuestionnaireAnswerIterator(this); }
+        }
+       // private IIteratorContainer iteratorContainer;
 
         public virtual void Add(IComposite c, Guid? parent)
         {

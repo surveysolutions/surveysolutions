@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Views.Group
         {
             this.QuestionnaireId = doc.Id;
             this.PublicKey = group.PublicKey;
-            this.GroupText = group.GroupText;
+            this.GroupText = group.Title;
             this.Propagated = group.Propagated;
         }
         public Guid PublicKey { get; set; }

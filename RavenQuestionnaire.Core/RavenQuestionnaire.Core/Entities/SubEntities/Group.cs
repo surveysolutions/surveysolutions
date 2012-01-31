@@ -6,10 +6,10 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public interface IGroup: IComposite
+    public interface IGroup
     {
         Guid PublicKey { get; set; }
-        string GroupText { get; set; }
+        string Title { get; set; }
         bool Propagated { get; set; }
     }
 
@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         List<TQuestion> Questions { get; set; }
         List<TGroup> Groups { get; set; }
     }
-    public class Group : IGroup<Group, Question>
+    public class Group : IGroup<Group, Question>,IComposite
     {
         public Group()
         {
@@ -30,17 +30,17 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         }
         public Group(string text):this()
         {
-            this.GroupText = text;
+            this.Title = text;
         }
 
         public Guid PublicKey { get; set; }
-        public string GroupText { get; set; }
+        public string Title { get; set; }
         public bool Propagated { get; set; }
         public List<Question> Questions  { get; set; }
         public List<Group> Groups { get; set; }
         public void Update(string groupText)
         {
-            this.GroupText = groupText;
+            this.Title = groupText;
         }
         public void Add(IComposite c, Guid? parent)
         {
