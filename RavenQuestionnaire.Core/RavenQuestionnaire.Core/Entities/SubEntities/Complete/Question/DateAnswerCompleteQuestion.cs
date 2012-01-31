@@ -24,7 +24,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             DateTime value;
             if (!DateTime.TryParse(currentAnswer.CustomAnswer, out value))
                 throw new InvalidCastException("answer is no data value");
-
+            currentAnswer.Selected = true;
+            currentAnswer.AnswerType = AnswerType.Text;
             this.document.Answers.Clear();
             this.document.Answers.Add(currentAnswer);
         }

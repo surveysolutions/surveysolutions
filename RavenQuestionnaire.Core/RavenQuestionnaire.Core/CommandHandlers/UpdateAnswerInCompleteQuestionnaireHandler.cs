@@ -38,6 +38,19 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         {
             //innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey.Equals(question.PublicKey));
           //  Questionnaire template = entity.GetQuestionnaireTemplate();
+            foreach (CompleteQuestion completeQuestion in entity.GetInnerDocument().Questions)
+            {
+                if (
+                    !this._conditionExecutor.Execute(entity.AnswerIterator, completeQuestion.ConditionExpression))
+                {
+                    entity.Remove(completeQuestion);
+                    completeQuestion.Enabled = false;
+                }
+                else
+                {
+                    completeQuestion.Enabled = true;
+                }
+            }
             var groups = entity.GroupIterator;
           //  var allQuestions = entity.QuestionIterator;
             foreach (CompleteGroup completeGroup in groups)
