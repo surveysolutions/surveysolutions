@@ -1,11 +1,10 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Answer
 @model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
-     @using (Html.BeginCollectionItem("answers", true, Model.PublicKey))
-     {
+     @{
          
          ((IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings).Add("onclick", "$(this.form).submit();");
-         string tbClientId = "#" + Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId( "CustomAnswer");
+         string tbClientId = "#" + Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId( "CustomAnswer");}
 
 
          @Html.Hidden("QuestionPublicKey", Model.PublicKey)
@@ -26,5 +25,5 @@
                  $('@tbClientId').numeric();
              });
          </script>
-     }
+     
 

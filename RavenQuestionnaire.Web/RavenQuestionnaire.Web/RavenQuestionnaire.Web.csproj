@@ -302,11 +302,6 @@
     <Content Include="Views\Group\_Index.cshtml" />
     <Content Include="Views\Group\_GroupRow.cshtml" />
     <Content Include="Views\Group\_Screen.cshtml" />
-    <Content Include="Views\Answer\AnswerListView\_SingleOption.cshtml" />
-    <Content Include="Views\Answer\AnswerListView\_DropDownList.cshtml" />
-    <Content Include="Views\Answer\AnswerView\_Text.cshtml" />
-    <Content Include="Views\Answer\AnswerView\_Select.cshtml" />
-    <Content Include="Views\Answer\AnswerListView\_SingleOption.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_DropDownList.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Select.cshtml" />
@@ -322,6 +317,7 @@
     <Content Include="Views\Answer\AnswerListView\_Numeric.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_DateTime.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_Text.cshtml" />
+    <Content Include="Views\Answer\AnswerListView\_SingleOption.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

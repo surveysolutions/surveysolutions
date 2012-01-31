@@ -1,33 +1,24 @@
-﻿
-@using Questionnaire.Core.Web.Helpers
+﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Answer
 @model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
-           @using (Html.BeginCollectionItem("answers", true, Model.PublicKey))
-           {
-
-
-               ((IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings).Add("onclick", "$(this.form).submit();");
-            //   string answerKey = string.Format("answers[{0}].", Model.PublicKey);
-               string tbClientId = "#" + Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("CustomAnswer");
-
-               @Html.Hidden("QuestionPublicKey", Model.PublicKey)
-
-
-
-               <div class="answer">
-                   @Html.Hidden("PublicKey", Guid.NewGuid())
-                   @*@Model.Answers[0].AnswerText*@
-                   @Html.TextBox("CustomAnswer", Model.Answers.Length > 0 ? ((CompleteAnswerView) Model.Answers[0]).CustomAnswer : string.Empty)
-                   <input type="submit" value="done"/>
-                   @Html.ValidationMessage("CustomAnswer")
-                   @* <span>
+@{
+    ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "$(this.form).submit();");
+    //   string answerKey = string.Format("answers[{0}].", Model.PublicKey);
+    string tbClientId = "#" + Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("CustomAnswer");
+}
+@Html.Hidden("QuestionPublicKey", Model.PublicKey)
+<div class="answer">
+    @Html.Hidden("PublicKey", Guid.NewGuid())
+    @*@Model.Answers[0].AnswerText*@
+    @Html.TextBox("CustomAnswer", Model.Answers.Length > 0 ? ((CompleteAnswerView)Model.Answers[0]).CustomAnswer : string.Empty)
+    <input type="submit" value="done" />
+    @Html.ValidationMessage("CustomAnswer")
+    @* <span>
             @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)</span>
         @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}*@
-               </div>
-               <script>
-                   $(document).ready(function() {
-                       $('@tbClientId').datepicker({ prevText: '', nextText: '' });
-                   });
-               </script>
-
-           }
+</div>
+<script>
+    $(document).ready(function () {
+        $('@tbClientId').datepicker({ prevText: '', nextText: '' });
+    });
+</script>

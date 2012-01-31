@@ -3,7 +3,8 @@
 @using RavenQuestionnaire.Core.Views.Question
 @model CompleteGroupView
 @{ PropagatableCompleteGroupView newModel = Model as PropagatableCompleteGroupView; }
- @using (Html.BeginCollectionItem("answers", true, Guid.NewGuid()))
+ @using (Html.BeginCollectionItem("answers", true, Guid.NewGuid()
+ ))
  {
  }
 @if (newModel != null)
