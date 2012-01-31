@@ -8,11 +8,10 @@
       @Html.Hidden("QuestionPublicKey", Model.PublicKey)
 
 
-
       <div class="answer">
           @Html.Hidden("PublicKey", Guid.NewGuid())
           @*@Model.Answers[0].AnswerText*@
-          @Html.TextBox("CustomAnswer", Model.Answers.Length > 0 ? ((CompleteAnswerView) Model.Answers[0]).CustomAnswer : string.Empty)
+          @Html.TextBox("CustomAnswer", Model.Answers.Length > 0 ? ((CompleteAnswerView)Model.Answers[0]).CustomAnswer : string.Empty)
           <input type="submit" value="done" />
           @Html.ValidationMessage("CustomAnswer")
           @* <span>

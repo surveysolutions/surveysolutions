@@ -6,7 +6,7 @@
     using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div") }))
     {
         Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
-    @Html.Hidden("PublicKey",((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
+    @Html.Hidden("ParentGroupPublicKey", ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
     @Html.Hidden("id", Model.QuestionnaireId)
     }
 }
