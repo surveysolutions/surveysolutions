@@ -172,6 +172,13 @@
     <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\AnswerType.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\CompleteQuestionFactory.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\DateAnswerCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\IAnswerStrategy.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\MultyAnswerCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\NumericAnswerCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\SingleAnswerCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\TextAnswerCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\FlowGraph.cs" />
     <Compile Include="Entities\SubEntities\FlowConnection.cs" />
     <Compile Include="Entities\SubEntities\FlowBlock.cs" />

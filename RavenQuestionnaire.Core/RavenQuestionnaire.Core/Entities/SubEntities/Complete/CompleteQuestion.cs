@@ -4,7 +4,9 @@ using System.Data;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
@@ -17,22 +19,23 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             Answers = new List<CompleteAnswer>();
         }
 
-        public CompleteQuestion(string text, QuestionType type):this()
+        public CompleteQuestion(string text, QuestionType type)
+            : this()
         {
 
             this.QuestionText = text;
             this.QuestionType = type;
         }
-        public static explicit operator CompleteQuestion (Question doc)
+        public static explicit operator CompleteQuestion(RavenQuestionnaire.Core.Entities.SubEntities.Question doc)
         {
-            CompleteQuestion result= new CompleteQuestion
-                       {
-                           PublicKey = doc.PublicKey,
-                           ConditionExpression = doc.ConditionExpression,
-                           QuestionText = doc.QuestionText,
-                           QuestionType = doc.QuestionType,
-                           StataExportCaption = doc.StataExportCaption
-                       };
+            CompleteQuestion result = new CompleteQuestion
+            {
+                PublicKey = doc.PublicKey,
+                ConditionExpression = doc.ConditionExpression,
+                QuestionText = doc.QuestionText,
+                QuestionType = doc.QuestionType,
+                StataExportCaption = doc.StataExportCaption
+            };
             result.Answers = doc.Answers.Select(a => (CompleteAnswer)a).ToList();
             return result;
         }
@@ -42,72 +45,16 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public QuestionType QuestionType { get; set; }
 
-        public  List<CompleteAnswer> Answers { get; set; }
+        public List<CompleteAnswer> Answers { get; set; }
 
         public string ConditionExpression { get; set; }
 
         public string StataExportCaption { get; set; }
 
         public bool Enabled { get; set; }
-
-    /*    public void ClearAnswers()
-        {
-            foreach (CompleteAnswer answer in this.Answers)
-            {
-                answer.Selected = false;
-                answer.CustomAnswer = null;
-            }
-        }
-
-        public void UpdateAnswerList(IEnumerable<CompleteAnswer> answers)
-        {
-            ClearAnswers();
-            foreach (CompleteAnswer answer in answers)
-            {
-                Add(answer, PublicKey);
-            }
-        }*/
-
-      /*  public void AddAnswer(CompleteAnswer answer)
-        {
-            CompleteAnswer completeAnswer =
-                this.Answers.FirstOrDefault(a => a.PublicKey.Equals(answer.PublicKey));
-            if (completeAnswer == null)
-                throw new ArgumentException(string.Format("answer with guid {0} doesn't exists in current question",
-                                                          answer.PublicKey));
-            completeAnswer.Set(answer.CustomAnswer);
-        }*/
         public void Add(IComposite c, Guid? parent)
         {
-            CompleteAnswer currentAnswer = c as CompleteAnswer;
-            if (currentAnswer == null)
-                throw new CompositeException("answer wasn't found");
-            if ((QuestionType == QuestionType.Numeric
-                || QuestionType == QuestionType.DateTime
-                || QuestionType == QuestionType.Text)
-                && currentAnswer.QuestionPublicKey == this.PublicKey)
-            {
-                Answers.Clear();
-                Answers.Add(currentAnswer);
-                return;
-            }
-
-            foreach (CompleteAnswer completeAnswer in Answers)
-            {
-                try
-                {
-                    completeAnswer.Add(c, parent);
-                    foreach (var answer in Answers.Where(answer => answer.PublicKey != currentAnswer.PublicKey))
-                    {
-                        answer.Selected = false;
-                    }
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-            throw new CompositeException("answer wasn't found");
+            new CompleteQuestionFactory().Create(this).Add(c, parent);
         }
 
         public void Remove(IComposite c)
@@ -115,14 +62,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             CompleteQuestion question = c as CompleteQuestion;
             if (question != null && this.PublicKey.Equals(question.PublicKey))
             {
-                foreach (CompleteAnswer answer in Answers)
+                foreach (CompleteAnswer answer in this.Answers)
                 {
                     answer.Remove(answer);
                 }
                 return;
             }
             if (c as CompleteAnswer == null)
-                foreach (CompleteAnswer completeAnswer in Answers)
+                foreach (CompleteAnswer completeAnswer in this.Answers)
                 {
                     try
                     {
@@ -138,16 +85,16 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            if (typeof (T) == GetType() && this.PublicKey.Equals(publicKey))
+            if (typeof(T) == GetType() && this.PublicKey.Equals(publicKey))
             {
-                foreach (CompleteAnswer answer in Answers)
+                foreach (CompleteAnswer answer in this.Answers)
                 {
                     answer.Remove(answer);
                 }
                 return;
             }
             if (typeof (T) != typeof (CompleteAnswer))
-                foreach (CompleteAnswer completeAnswer in Answers)
+                foreach (CompleteAnswer completeAnswer in this.Answers)
                 {
                     try
                     {
@@ -170,7 +117,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             }
             if (typeof(T) == typeof(CompleteAnswer))
             {
-                return Answers.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+                return this.Answers.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
             }
             return null;
         }
