@@ -12,12 +12,17 @@ namespace Questionnaire.Core.Web.Helpers
         public static IDisposable BeginCollectionItem(this HtmlHelper html, string collectionName)
         {
 
-            return BeginCollectionItem(html, collectionName, false);
+            return BeginCollectionItem(html, collectionName, false, Guid.NewGuid().ToString());
         }
-        public static IDisposable BeginCollectionItem(this HtmlHelper html, string collectionName, bool includePreviusPrefix)
+        public static IDisposable BeginCollectionItem(this HtmlHelper html, string collectionName, object uniqueIdentifire)
+        {
+
+            return BeginCollectionItem(html, collectionName, false, uniqueIdentifire);
+        }
+        public static IDisposable BeginCollectionItem(this HtmlHelper html, string collectionName, bool includePreviusPrefix, object uniqueIdentifire)
         {
             var idsToReuse = GetIdsToReuse(html.ViewContext.HttpContext, collectionName);
-            string itemIndex = idsToReuse.Count > 0 ? idsToReuse.Dequeue() : Guid.NewGuid().ToString();
+            string itemIndex = idsToReuse.Count > 0 ? idsToReuse.Dequeue() : uniqueIdentifire.ToString();
 
             // autocomplete="off" is needed to work around a very annoying Chrome behaviour whereby it reuses old values after the user clicks "Back", which causes the xyz.index and xyz[...] values to get out of sync.
             html.ViewContext.Writer.WriteLine(string.Format("<input type=\"hidden\" name=\"{0}.index\" autocomplete=\"off\" value=\"{1}\" />", html.GetHtmlPrefix(collectionName, includePreviusPrefix), html.Encode(itemIndex)));
@@ -35,8 +40,11 @@ namespace Questionnaire.Core.Web.Helpers
         }
         private static string GetHtmlPrefix(this HtmlHelper html, string htmlFieldPrefix, bool includePreviusPrefix)
         {
+            string previousPrefix = string.IsNullOrEmpty(html.ViewData.TemplateInfo.HtmlFieldPrefix)
+                                        ? string.Empty
+                                        : html.ViewData.TemplateInfo.HtmlFieldPrefix + ".";
             return includePreviusPrefix
-                       ? html.ViewData.TemplateInfo.HtmlFieldPrefix + "." + htmlFieldPrefix
+                       ? previousPrefix + htmlFieldPrefix
                        : htmlFieldPrefix;
         }
 
