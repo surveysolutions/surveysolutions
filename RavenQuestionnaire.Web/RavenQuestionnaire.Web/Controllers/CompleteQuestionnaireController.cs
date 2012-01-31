@@ -134,9 +134,18 @@ namespace RavenQuestionnaire.Web.Controllers
                     answers[i] = new PropagatableCompleteAnswer(answers[i], PropogationPublicKey.Value);
                 }
             }
-            commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, answers,
-                                                                                  _globalProvider.GetCurrentUser()));
+            try
+            {
 
+
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, answers,
+                                                                                      _globalProvider.GetCurrentUser()));
+            }
+            catch (Exception e)
+            {
+
+                ModelState.AddModelError("answers["+answers[0].QuestionPublicKey+"].CustomAnswer", e.Message);
+            }
             var model =
                 viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
                     new CompleteGroupViewInputModel(PropogationPublicKey, ParentGroupPublicKey, id));
