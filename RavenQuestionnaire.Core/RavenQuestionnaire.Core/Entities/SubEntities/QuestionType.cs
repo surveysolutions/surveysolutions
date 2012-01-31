@@ -10,7 +10,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         SingleOption,
         DropDownList,
         MultyOption,
-        DynamicInputList,
         Numeric,
         DateTime,
         Text
