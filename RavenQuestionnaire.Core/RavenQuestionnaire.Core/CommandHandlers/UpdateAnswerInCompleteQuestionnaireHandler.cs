@@ -26,11 +26,10 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         public void Handle(UpdateAnswerInCompleteQuestionnaireCommand command)
         {
             CompleteQuestionnaire entity = _questionnaireRepository.Load(command.CompleteQuestionnaireId);
-            foreach (CompleteAnswer completeAnswer in command.CompleteAnswers)
-            {
+
             //    entity.Remove<CompleteQuestion>(completeAnswer.QuestionPublicKey);
-                entity.Add(completeAnswer, null);
-            }
+            entity.Add(command.CompleteAnswer, null);
+
             RemoveDisabledAnswers(entity);
         }
 
@@ -82,8 +81,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers
 
         private IEnumerable<CompleteAnswer> GetAnswersListForPropagatedGroup(PropagatableCompleteGroup group, IEnumerable<CompleteAnswer> allAnswers)
         {
-            List<CompleteAnswer> result =
-                allAnswers.Where(
+            List<CompleteAnswer> result = new List<CompleteAnswer>();
+            if (allAnswers != null)
+                result = allAnswers.Where(
                     completeAnswer =>
                     @group.Questions.Count(q => q.PublicKey.Equals(completeAnswer.QuestionPublicKey)) == 0).ToList();
             result.AddRange(group.AnswerIterator);

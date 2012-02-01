@@ -18,7 +18,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         public  void Add(IComposite c, Guid? parent)
         {
             CompleteAnswer currentAnswer = c as CompleteAnswer;
-            if (currentAnswer == null)
+            if (currentAnswer == null || currentAnswer.QuestionPublicKey != this.document.PublicKey)
                 throw new CompositeException("answer wasn't found");
 
             foreach (CompleteAnswer completeAnswer in this.document.Answers)

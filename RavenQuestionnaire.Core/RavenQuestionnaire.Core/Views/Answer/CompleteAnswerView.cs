@@ -9,7 +9,7 @@ namespace RavenQuestionnaire.Core.Views.Answer
     public class CompleteAnswerView : AnswerView
     {
         public bool Selected { get; set; }
-        public object CustomAnswer { get; set; }
+        public string CustomAnswer { get; set; }
 
         public CompleteAnswerView()
         {
@@ -23,7 +23,7 @@ namespace RavenQuestionnaire.Core.Views.Answer
             : this(answer.QuestionPublicKey, answer)
         {
             this.Selected = answer.Selected;
-            this.CustomAnswer = answer.CustomAnswer;
+            this.CustomAnswer = (answer.CustomAnswer ?? string.Empty).ToString();
         }
     }
 }
