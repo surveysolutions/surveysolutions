@@ -1,11 +1,27 @@
 ﻿@using RavenQuestionnaire.Core.Views.Group
 @model RavenQuestionnaire.Core.Views.Group.CompleteGroupView
 <h3>@Model.GroupText</h3>
-<br/>
+<br />
 @Ajax.ActionLink("Add",
-                "PropagateGroup", "Group", new { publicKey = Model.PublicKey,
-                    questionnaireId = Model.QuestionnaireId, 
-                    parentGroupPublicKey = ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey },
-        new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div") }, 
+                "PropagateGroup", "Group", new
+                {
+                    publicKey = Model.PublicKey,
+                    questionnaireId = Model.QuestionnaireId,
+                    parentGroupPublicKey = ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey
+                },
+        new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div") },
     new { @class = "btn" })
-    @Html.ValidationMessage("PropagationError")
+@Html.ValidationMessage("PropagationError")
+<br/>
+<br/>
+<table>
+    <tr style="background-color:#ddd">
+        @foreach (var question in Model.Questions)
+        {
+
+            <td style="border:1px solid #404040;">
+                <b style="width: 220px; display:block; color: #404040">@*@Model.Index)*@ @Html.DisplayFor(modelItem => question.QuestionText)</b>
+            </td>
+        }
+    </tr>
+</table>
