@@ -9,7 +9,7 @@ namespace RavenQuestionnaire.Core.Views.Answer
     public class CompleteAnswerView : AnswerView
     {
         public bool Selected { get; set; }
-        public string CustomAnswer { get; set; }
+        public object CustomAnswer { get; set; }
 
         public CompleteAnswerView()
         {

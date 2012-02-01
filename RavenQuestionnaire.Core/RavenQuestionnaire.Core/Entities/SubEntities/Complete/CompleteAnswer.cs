@@ -31,11 +31,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public string AnswerText { get; set; }
         public bool Mandatory { get; set; }
         public AnswerType AnswerType { get; set; }
-        public string CustomAnswer { get; set; }
+        public object CustomAnswer { get; set; }
         [XmlIgnore]
         public Guid QuestionPublicKey { get; set; }
         public bool Selected { get; set; }
-        protected void Set(string text)
+        protected void Set(object text)
         {
             this.Selected = true;
             this.CustomAnswer = text;
