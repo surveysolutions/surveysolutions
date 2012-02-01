@@ -73,7 +73,9 @@ namespace RavenQuestionnaire.Core.Entities
                     var group = this.innerDocument.Groups.FirstOrDefault(g => g.PublicKey.Equals(propogate.PublicKey));
                     if (group != null)
                     {
-                        this.innerDocument.Groups.Add(new PropagatableCompleteGroup(propogate, Guid.NewGuid()));
+                        var newGroup = new PropagatableCompleteGroup(propogate, Guid.NewGuid());
+                        this.innerDocument.Groups.Add(newGroup);
+                        
                         return;
                     }
                 }

@@ -8,3 +8,4 @@
                     parentGroupPublicKey = ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey },
         new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div") }, 
     new { @class = "btn" })
+    @Html.ValidationMessage("PropagationError")
