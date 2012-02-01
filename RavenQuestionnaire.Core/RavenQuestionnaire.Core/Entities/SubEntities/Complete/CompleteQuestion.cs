@@ -60,15 +60,17 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public void Remove(IComposite c)
         {
             CompleteQuestion question = c as CompleteQuestion;
-            if (question != null && this.PublicKey.Equals(question.PublicKey))
+            if (question != null)
             {
+                if (!this.PublicKey.Equals(question.PublicKey))
+                    throw new CompositeException();
                 foreach (CompleteAnswer answer in this.Answers)
                 {
                     answer.Remove(answer);
                 }
                 return;
             }
-            if (c as CompleteAnswer == null)
+            if (c as CompleteAnswer != null)
                 foreach (CompleteAnswer completeAnswer in this.Answers)
                 {
                     try

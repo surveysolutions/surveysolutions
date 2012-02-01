@@ -55,6 +55,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers
           //  var allQuestions = entity.QuestionIterator;
             foreach (CompleteGroup completeGroup in groups)
             {
+                if (completeGroup.Propagated && !(completeGroup is IPropogate))
+                    continue;
+                
                // IEnumerable<CompleteQuestion> questions = completeGroup is IPropogate ? completeGroup.Questions : allQuestions;
                 foreach (CompleteQuestion completeQuestion in completeGroup.Questions)
                 {

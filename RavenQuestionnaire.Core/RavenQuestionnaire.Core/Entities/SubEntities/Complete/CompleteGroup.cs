@@ -99,6 +99,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public virtual void Remove(IComposite c)
         {
+
             PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
             if (propogate != null)
             {
@@ -119,6 +120,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 {
                 }
             }
+            if (c is IPropogate && !(this is IPropogate))
+                throw new CompositeException();
             foreach (CompleteQuestion completeQuestion in Questions)
             {
                 try
