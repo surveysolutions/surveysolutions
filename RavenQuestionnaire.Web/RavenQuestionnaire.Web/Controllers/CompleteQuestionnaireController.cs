@@ -12,6 +12,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Status;
+using RavenQuestionnaire.Web.Models;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -119,26 +120,26 @@ namespace RavenQuestionnaire.Web.Controllers
             return View( model);
         }
 
-        public ActionResult SaveSingleResult(string id, Guid? ParentGroupPublicKey, Guid? PropogationPublicKey, CompleteAnswer[] answers)
+        public ActionResult SaveSingleResult(CompleteQuestionSettings[] settings, CompleteAnswer[] answers)
         {
             if (answers == null || answers.Length <= 0 || !ModelState.IsValid)
             {
-                return RedirectToAction("Question", new {id = id});
+                return RedirectToAction("Question", new { id = settings[0].QuestionnaireId});
             }
 
 
-            if (PropogationPublicKey.HasValue)
+            if (settings[0].PropogationPublicKey.HasValue)
             {
                 for (int i = 0; i < answers.Length; i++)
                 {
-                    answers[i] = new PropagatableCompleteAnswer(answers[i], PropogationPublicKey.Value);
+                    answers[i] = new PropagatableCompleteAnswer(answers[i], settings[0].PropogationPublicKey.Value);
                 }
             }
             try
             {
 
 
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(id, answers,
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId, answers,
                                                                                       _globalProvider.GetCurrentUser()));
             }
             catch (Exception e)
@@ -148,7 +149,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             var model =
                 viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
-                    new CompleteGroupViewInputModel(PropogationPublicKey, ParentGroupPublicKey, id));
+                    new CompleteGroupViewInputModel(settings[0].PropogationPublicKey, settings[0].ParentGroupPublicKey, settings[0].QuestionnaireId));
             ViewBag.CurrentGroup = model;
             return PartialView("~/Views/Group/_Screen.cshtml", model);
         }

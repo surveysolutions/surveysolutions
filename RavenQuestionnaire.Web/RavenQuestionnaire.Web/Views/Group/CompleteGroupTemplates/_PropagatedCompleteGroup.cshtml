@@ -1,27 +1,34 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Group
 @model RavenQuestionnaire.Core.Views.Group.PropagatableCompleteGroupView
+@using (Html.BeginCollectionItem("settings", true, Guid.NewGuid()))
+{
+    @Html.Hidden("PropogationPublicKey", "dummy")
+}
 <table>
     <tr>
         @foreach (var question in Model.Questions)
         {
 
             <td>
-                @using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", new AjaxOptions()
-                                                                                          {
-                                                                                              InsertionMode = InsertionMode.Replace,
-                                                                                              UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div")
-                                                                                          }))
+                @using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", null, new AjaxOptions()
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div")
+                }, new { autocomplete = "off" }))
                 {
                     using (Html.BeginCollectionItem("answers", true, question.PublicKey + "_" + Model.PropogationPublicKey))
                     {
 
                         Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
                     }
+                    using (Html.BeginCollectionItem("settings", true, Model.PublicKey + "_" + Model.PropogationPublicKey))
+                    {
                     @Html.Hidden("ParentGroupPublicKey", ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
-                    @Html.Hidden("id", Model.QuestionnaireId)
+                    @Html.Hidden("QuestionnaireId", Model.QuestionnaireId)
                     @Html.Hidden("PropogationPublicKey", Model.PropogationPublicKey)
-                     
+                    }
+
                 }
             </td>
 

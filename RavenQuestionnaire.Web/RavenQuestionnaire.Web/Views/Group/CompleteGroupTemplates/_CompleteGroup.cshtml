@@ -1,7 +1,6 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Group
 @model RavenQuestionnaire.Core.Views.Group.CompleteGroupView
-
 @foreach (var question in Model.Questions)
 {
 
@@ -11,11 +10,14 @@
         {
             Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
         }
-        @Html.Hidden("ParentGroupPublicKey", ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
-    @Html.Hidden("id", Model.QuestionnaireId)
+        using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+        {
+            @Html.Hidden("ParentGroupPublicKey", ((CompleteGroupView) ViewBag.CurrentGroup).PublicKey)
+            @Html.Hidden("QuestionnaireId", Model.QuestionnaireId)
+        }
     }
 }
 @foreach (var group in Model.Groups)
 {
-     Html.RenderPartial("~/Views/Group/_Screen.cshtml", group); 
+    Html.RenderPartial("~/Views/Group/_Screen.cshtml", group);
 }

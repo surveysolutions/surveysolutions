@@ -16,6 +16,7 @@ using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Web.Controllers;
+using RavenQuestionnaire.Web.Models;
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
@@ -121,9 +122,11 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 x.Load<StatusViewInputModel, StatusView>(
                     It.IsAny<StatusViewInputModel>()))
                 .Returns(new StatusView());
-            Controller.SaveSingleResult("cId", null, null,
-                                        new CompleteAnswer[] {new CompleteAnswer(new Answer(), Guid.NewGuid())});
-            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateAnswerInCompleteQuestionnaireCommand>()), Times.Once());
+            Controller.SaveSingleResult(
+                new CompleteQuestionSettings[] {new CompleteQuestionSettings() {QuestionnaireId = "cId"}},
+                new CompleteAnswer[] {new CompleteAnswer(new Answer(), Guid.NewGuid())});
+            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateAnswerInCompleteQuestionnaireCommand>()),
+                                      Times.Once());
         }
     }
 }
