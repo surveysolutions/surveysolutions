@@ -59,7 +59,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             {
                 this.Groups = new CompleteGroupView[doc.Groups.Count + 1];
                 this.Groups[0] = GroupFactory.CreateGroup(doc,
-                                               new Entities.SubEntities.Complete.CompleteGroup("Main") {PublicKey = Guid.Empty});
+                                               new Entities.SubEntities.Complete.CompleteGroup("Main") { PublicKey = Guid.Empty });
                 for (int i = 1; i <= doc.Groups.Count; i++)
                 {
                     this.Groups[i] = GroupFactory.CreateGroup(doc, doc.Groups[i - 1]);
@@ -70,7 +70,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 this.Groups = new CompleteGroupView[doc.Groups.Count];
                 for (int i = 0; i < doc.Groups.Count; i++)
                 {
-                    this.Groups[i] = GroupFactory.CreateGroup(doc, doc.Groups[i - 1]);
+                    this.Groups[i] = GroupFactory.CreateGroup(doc, doc.Groups[i]);
                 }
             }
         }
