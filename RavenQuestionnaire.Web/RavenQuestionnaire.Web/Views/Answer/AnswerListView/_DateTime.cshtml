@@ -6,7 +6,7 @@
     //   string answerKey = string.Format("answers[{0}].", Model.PublicKey);
     string tbClientId = "#" + Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("CustomAnswer");
 }
-@Html.Hidden("QuestionPublicKey", Model.PublicKey)
+@Html.Hidden("QuestionId", Model.PublicKey)
 <div class="answer">
     @Html.Hidden("PublicKey", Guid.NewGuid())
     @*@Model.Answers[0].AnswerText*@

@@ -5,7 +5,7 @@
 
     ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "$(this.form).submit();");
 }
-@Html.Hidden("QuestionPublicKey", Model.PublicKey)
+@Html.Hidden("QuestionId", Model.PublicKey)
 <div class="answer">
     @Html.Hidden("PublicKey", Guid.NewGuid())
     @*@Model.Answers[0].AnswerText*@

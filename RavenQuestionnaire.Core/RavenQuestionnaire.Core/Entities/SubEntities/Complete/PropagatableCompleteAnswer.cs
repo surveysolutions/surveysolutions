@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.Mandatory = answer.Mandatory;
             this.PublicKey = answer.PublicKey;
             this.Selected = answer.Selected;
-
+            this.QuestionPublicKey = answer.QuestionPublicKey;
             this.PropogationPublicKey = propogationPublicKey;
         }
         #region Implementation of ICloneable

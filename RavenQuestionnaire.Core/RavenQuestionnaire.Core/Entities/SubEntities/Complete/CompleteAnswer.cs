@@ -38,8 +38,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         protected void Set(object text)
         {
             this.Selected = true;
+
             this.CustomAnswer = text;
         }
+
         protected void Reset()
         {
             this.Selected = false;

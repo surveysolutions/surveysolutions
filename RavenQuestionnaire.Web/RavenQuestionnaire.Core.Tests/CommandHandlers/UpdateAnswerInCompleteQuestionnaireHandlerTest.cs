@@ -14,6 +14,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
+using RavenQuestionnaire.Core.Views.Answer;
 
 namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 {
@@ -40,15 +41,14 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
             UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
-                                                                                                                new CompleteAnswer
-                                                                                                                    []
-                                                                                                                    {
-                                                                                                                        new CompleteAnswer
-                                                                                                                            (answer,
-                                                                                                                             question
-                                                                                                                                 .
-                                                                                                                                 PublicKey)
-                                                                                                                    },
+                                                                                                                new CompleteAnswerView
+                                                                                                                    (
+                                                                                                                    question
+                                                                                                                        .
+                                                                                                                        PublicKey,
+                                                                                                                    answer),
+                                                                                                                null
+                                                                                                                ,
                                                                                                                 null);
             iteratorContainerMock.Setup(
              x => x.Create<CompleteQuestionnaireDocument, CompleteQuestion>(qDoqument)).Returns(
@@ -82,23 +82,21 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                    new QuestionnaireQuestionIterator(qDoqument));
             UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
-                                                                                                                new CompleteAnswer
-                                                                                                                    []
-                                                                                                                    {
-                                                                                                                        new PropagatableCompleteAnswer
-                                                                                                                            (completeAnswer,
-                                                                                                                             ((
-                                                                                                                              PropagatableCompleteGroup
-                                                                                                                              )
-                                                                                                                              qDoqument
-                                                                                                                                  .
-                                                                                                                                  Groups
-                                                                                                                                  [
-                                                                                                                                      1
-                                                                                                                                  ])
-                                                                                                                                 .
-                                                                                                                                 PropogationPublicKey)
-                                                                                                                    },
+
+                                                                                                                new CompleteAnswerView
+                                                                                                                    (completeAnswer),
+                                                                                                                ((
+                                                                                                                 PropagatableCompleteGroup
+                                                                                                                 )
+                                                                                                                 qDoqument
+                                                                                                                     .
+                                                                                                                     Groups
+                                                                                                                     [
+                                                                                                                         1
+                                                                                                                     ])
+                                                                                                                    .
+                                                                                                                    PropogationPublicKey
+                                                                                                                ,
                                                                                                                 null);
             handler.Handle(command);
 
@@ -133,12 +131,12 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                  new QuestionnaireAnswerIterator(qDoqument));
             UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
-                                                                                                                new CompleteAnswer
-                                                                                                                    []
-                                                                                                                    {
-                                                                                                                        new PropagatableCompleteAnswer
-                                                                                                                            (completeAnswer,Guid.NewGuid())
-                                                                                                                    },
+                                                                                                                new CompleteAnswerView
+                                                                                                                    (completeAnswer),
+                                                                                                                Guid.
+                                                                                                                    NewGuid
+                                                                                                                    ()
+                                                                                                                ,
                                                                                                                 null);
 
 

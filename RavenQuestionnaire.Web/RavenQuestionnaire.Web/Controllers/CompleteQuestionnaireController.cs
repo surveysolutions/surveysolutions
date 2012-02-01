@@ -9,6 +9,7 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Status;
@@ -120,7 +121,7 @@ namespace RavenQuestionnaire.Web.Controllers
             return View( model);
         }
 
-        public ActionResult SaveSingleResult(CompleteQuestionSettings[] settings, CompleteAnswer[] answers)
+        public ActionResult SaveSingleResult(CompleteQuestionSettings[] settings, CompleteAnswerView[] answers)
         {
             if (answers == null || answers.Length <= 0 || !ModelState.IsValid)
             {
@@ -128,24 +129,26 @@ namespace RavenQuestionnaire.Web.Controllers
             }
 
 
-            if (settings[0].PropogationPublicKey.HasValue)
+          /*  if (settings[0].PropogationPublicKey.HasValue)
             {
                 for (int i = 0; i < answers.Length; i++)
                 {
                     answers[i] = new PropagatableCompleteAnswer(answers[i], settings[0].PropogationPublicKey.Value);
                 }
-            }
+            }*/
             try
             {
 
 
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId, answers,
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
+                                                                                      answers[0],
+                                                                                      settings[0].PropogationPublicKey,
                                                                                       _globalProvider.GetCurrentUser()));
             }
             catch (Exception e)
             {
 
-                ModelState.AddModelError("answers["+answers[0].QuestionPublicKey+"].CustomAnswer", e.Message);
+                ModelState.AddModelError("answers["+answers[0].QuestionId+"].CustomAnswer", e.Message);
             }
             var model =
                 viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(

@@ -2,7 +2,7 @@
 @using RavenQuestionnaire.Core.Views.Answer
 @model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
 @{ ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "$(this.form).submit();"); }
-@Html.Hidden("QuestionPublicKey", Model.PublicKey)
+@Html.Hidden("QuestionId", Model.PublicKey)
 @foreach (var item in Model.Answers) {
 
 <div class="answer">

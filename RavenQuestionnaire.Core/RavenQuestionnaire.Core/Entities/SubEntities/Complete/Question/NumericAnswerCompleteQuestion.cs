@@ -22,11 +22,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 throw new CompositeException("answer wasn't found");
             
             double value;
-            string stringValue = currentAnswer.CustomAnswer.ToString();
+          /*  string stringValue = currentAnswer.CustomAnswer.ToString();
             var array = currentAnswer.CustomAnswer as string[];
             if (array != null && array.Length > 0)
-                stringValue = array[0];
-            if (!double.TryParse(stringValue, out value))
+                stringValue = array[0];*/
+            if (!double.TryParse(currentAnswer.CustomAnswer.ToString(), out value))
                 throw new InvalidCastException("answer is no numeric value");
             currentAnswer.Selected = true;
             currentAnswer.AnswerType = AnswerType.Text;
