@@ -47,17 +47,18 @@ namespace RavenQuestionnaire.Core.Commands
            string stataExport, QuestionType type, string condition, AnswerView[] answers, UserLight executor) :
             this(questionnaireId, questionPublicKey, text, stataExport, type, condition, executor)
         {
-            this.Answers =
-                answers.Select(
-                    a =>
-                    new Answer()
-                        {
-                            AnswerValue = a.AnswerValue,
-                            AnswerText = a.AnswerText,
-                            AnswerType = a.AnswerType,
-                            Mandatory = a.Mandatory,
-                            PublicKey = a.PublicKey
-                        }).ToArray();
+            if (answers != null)
+                this.Answers =
+                    answers.Select(
+                        a =>
+                        new Answer()
+                            {
+                                AnswerValue = a.AnswerValue,
+                                AnswerText = a.AnswerText,
+                                AnswerType = a.AnswerType,
+                                Mandatory = a.Mandatory,
+                                PublicKey = a.PublicKey
+                            }).ToArray();
         }
     }
 }

@@ -18,7 +18,7 @@
         </div>
         
         <div class="modal-body">
-            @using (Html.BeginCollectionItem("question"))
+            @using (Html.BeginCollectionItem("question", Model.PublicKey))
             {
                 @Html.ValidationSummary(true)
                 <div class="clearfix">

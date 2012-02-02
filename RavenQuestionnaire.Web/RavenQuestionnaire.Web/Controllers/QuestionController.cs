@@ -93,7 +93,8 @@ namespace RavenQuestionnaire.Web.Controllers
                 catch (Exception e)
                 {
 
-                    ModelState.AddModelError("ConditionExpression", e.Message);
+                    ModelState.AddModelError(string.Format("question[{0}].ConditionExpression", model.PublicKey),
+                                             e.Message);
                     return PartialView("_Create", model);
                 }
            //     var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));

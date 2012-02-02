@@ -2,6 +2,7 @@
 @using RavenQuestionnaire.Core.Views.Answer
 @model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
 @{
+    ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onchange", "$(this.form).submit();");
     //   string answerKey = string.Format("answers[{0}].", Model.PublicKey);
     string tbClientId = "#" + Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
 }
@@ -9,7 +10,7 @@
 <div class="answer">
     @Html.Hidden("PublicKey", Guid.NewGuid())
     @*@Model.Answers[0].AnswerText*@
-    @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? ((CompleteAnswerView)Model.Answers[0]).AnswerValue : string.Empty, new { onchange = "$(this.form).submit();" })
+    @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? ((CompleteAnswerView)Model.Answers[0]).AnswerValue : string.Empty, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
     @Html.ValidationMessage("AnswerValue")
     @* <span>
             @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)</span>
