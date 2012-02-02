@@ -52,6 +52,7 @@ namespace RavenQuestionnaire.Core.Commands
                     a =>
                     new Answer()
                         {
+                            AnswerValue = a.AnswerValue,
                             AnswerText = a.AnswerText,
                             AnswerType = a.AnswerType,
                             Mandatory = a.Mandatory,

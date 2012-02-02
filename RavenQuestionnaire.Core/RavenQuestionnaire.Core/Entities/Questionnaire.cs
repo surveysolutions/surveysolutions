@@ -83,7 +83,7 @@ namespace RavenQuestionnaire.Core.Entities
         }
         public void UpdateQuestion(Guid publicKey, string text, string stataExportCaption, QuestionType type, string condition, IEnumerable<Answer> answers)
         {
-            var question = new Questionnaire(this.innerDocument).Find<Question>(publicKey);
+            var question = Find<Question>(publicKey);
             if (question == null)
                 return;
             question.QuestionText = text;

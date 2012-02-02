@@ -11,6 +11,7 @@ namespace RavenQuestionnaire.Core.Views.Answer
     {
         public int Index { get; set; }
         public Guid PublicKey { get; set; }
+        public string AnswerValue { get; set; }
         public string AnswerText { get; set; }
         public bool Mandatory { get; set; }
         public AnswerType AnswerType { get; set; }
@@ -24,6 +25,7 @@ namespace RavenQuestionnaire.Core.Views.Answer
         {
             this.PublicKey = doc.PublicKey;
             this.AnswerText = doc.AnswerText;
+            this.AnswerValue = (doc.AnswerValue ?? string.Empty).ToString();
             this.Mandatory = doc.Mandatory;
             this.AnswerType = doc.AnswerType;
             this.QuestionId = questionPublicKey;
