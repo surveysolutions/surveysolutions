@@ -148,7 +148,11 @@ namespace RavenQuestionnaire.Web.Controllers
             catch (Exception e)
             {
 
-                ModelState.AddModelError("answers["+answers[0].QuestionId+"].CustomAnswer", e.Message);
+                ModelState.AddModelError(
+                    "answers[" + answers[0].QuestionId +
+                    (settings[0].PropogationPublicKey.HasValue
+                         ? string.Format("_{0}", settings[0].PropogationPublicKey.Value)
+                         : "") + "].AnswerValue", e.Message);
             }
             var model =
                 viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(

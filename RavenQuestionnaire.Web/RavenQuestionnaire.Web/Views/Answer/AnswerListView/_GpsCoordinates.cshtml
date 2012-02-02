@@ -1,0 +1,13 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Answer
+@model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
+@{
+    string[] coordinates = (Model.Answers.Length > 0 ? Model.Answers[0].AnswerValue.Split(';') : null) ?? new string[2];
+}
+@Html.Hidden("QuestionId", Model.PublicKey)
+@Html.Hidden("PublicKey", Guid.NewGuid())
+<div class="answer">
+    Latitude & Longitude separated by semicolon
+    @Html.TextBox("AnswerValue", coordinates[0], new { onchange = "$(this.form).submit();" })
+    <br />
+    @Html.ValidationMessage("AnswerValue")</div>

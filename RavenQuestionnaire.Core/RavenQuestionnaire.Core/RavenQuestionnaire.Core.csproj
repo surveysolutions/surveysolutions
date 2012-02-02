@@ -175,6 +175,7 @@
     <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\CompleteQuestionFactory.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\DateAnswerCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\GpsAnswerCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\IAnswerStrategy.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\MultyAnswerCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\NumericAnswerCompleteQuestion.cs" />

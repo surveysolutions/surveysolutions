@@ -319,6 +319,7 @@
     <Content Include="Views\Answer\AnswerListView\_DateTime.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_SingleOption.cshtml" />
+    <Content Include="Views\Answer\AnswerListView\_GpsCoordinates.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
