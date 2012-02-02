@@ -28,7 +28,7 @@
                             {
                                 ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
                             }
-
+                            
                             Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
                         }
                         <br />

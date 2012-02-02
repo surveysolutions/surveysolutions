@@ -53,7 +53,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
 
             var completeAnswer = new CompleteAnswer(new Answer(), doc.Questions[0].PublicKey);
             completeAnswer.AnswerType = AnswerType.Text;
-            completeAnswer.CustomAnswer = "3";
+            completeAnswer.AnswerValue = "3";
             completeAnswer.Selected = true;
             doc.Questions[0].Answers.Add(completeAnswer);
             iteratorContainerMock.Setup(
@@ -69,7 +69,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         public void EvaluateCondition_ConditionIsInValidParamsAreNotEmpty_ReturnsTrue()
         {
             var answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
-            answer.CustomAnswer = "invalid value";
+            answer.AnswerValue = "invalid value";
 
             CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor();
             CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();

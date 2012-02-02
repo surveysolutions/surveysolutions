@@ -3,9 +3,17 @@
 @using RavenQuestionnaire.Core.Views.Answer
 @model AnswerView
 @{ var currentRowId = "divEditAnswer" + Model.PublicKey.ToString(); }
-@using (Html.BeginCollectionItem("Answers"))
+@using (Html.BeginCollectionItem("answers"))
 {
     <div id="@currentRowId">
+        <div class="clearfix">
+            @Html.LabelFor(model => Model.AnswerValue)
+            <div class="input">
+                <div class="inline-inputs">
+                    @Html.EditorFor(model => Model.AnswerValue)
+                </div>
+            </div>
+        </div>
         <div class="clearfix">
             @Html.LabelFor(model => Model.AnswerText)
             <div class="input">

@@ -11,7 +11,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.PublicKey = Guid.NewGuid();
         }
 
-        public CompleteAnswer(IAnswer answer , Guid questionPublicKey)
+        public CompleteAnswer(IAnswer answer, Guid questionPublicKey)
         {
             this.PublicKey = answer.PublicKey;
             this.QuestionPublicKey = questionPublicKey;
@@ -23,6 +23,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             {
                 PublicKey = doc.PublicKey,
                 AnswerText = doc.AnswerText,
+                AnswerValue = doc.AnswerValue,
                 Mandatory = doc.Mandatory,
                 AnswerType = doc.AnswerType
             };
@@ -31,21 +32,22 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public string AnswerText { get; set; }
         public bool Mandatory { get; set; }
         public AnswerType AnswerType { get; set; }
-        public object CustomAnswer { get; set; }
+        public object AnswerValue { get; set; }
         [XmlIgnore]
         public Guid QuestionPublicKey { get; set; }
         public bool Selected { get; set; }
         protected void Set(object text)
         {
             this.Selected = true;
-
-            this.CustomAnswer = text;
+            if (this.AnswerType == AnswerType.Text)
+                this.AnswerValue = text;
         }
 
         protected void Reset()
         {
             this.Selected = false;
-            this.CustomAnswer = null;
+            if (this.AnswerType == AnswerType.Text)
+                this.AnswerValue = null;
         }
 
         #region Implementation of IComposite
@@ -57,7 +59,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 throw new CompositeException("answer wasn't found");
             if (answer.PublicKey == PublicKey)
             {
-                Set(answer.CustomAnswer);
+                Set(answer.AnswerValue);
                 return;
             }
             throw new CompositeException("answer wasn't found");

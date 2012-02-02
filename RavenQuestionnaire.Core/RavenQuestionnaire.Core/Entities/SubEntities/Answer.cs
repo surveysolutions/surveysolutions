@@ -9,6 +9,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     public interface IAnswer: IComposite
     {
         Guid PublicKey { get; set; }
+        object AnswerValue { get; set; }
         string AnswerText { get; set; }
         bool Mandatory { get; set; }
         AnswerType AnswerType { get; set; }
@@ -25,6 +26,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Guid PublicKey { get; set; }
         public string AnswerText { get; set; }
         public bool Mandatory { get; set; }
+        public object AnswerValue { get; set; }
         public AnswerType AnswerType { get; set; }
        // public string QuestionId { get; set; }
 

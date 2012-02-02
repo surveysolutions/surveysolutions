@@ -18,7 +18,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             this.AnswerText = answer.AnswerText;
             this.AnswerType = answer.AnswerType;
-            this.CustomAnswer = answer.CustomAnswer;
+            this.AnswerValue = answer.AnswerValue;
             this.Mandatory = answer.Mandatory;
             this.PublicKey = answer.PublicKey;
             this.Selected = answer.Selected;

@@ -22,15 +22,15 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 throw new CompositeException("answer wasn't found");
             
             DateTime value;
-            string stringValue = currentAnswer.CustomAnswer.ToString();
-            var array = currentAnswer.CustomAnswer as string[];
+            string stringValue = currentAnswer.AnswerValue.ToString();
+            var array = currentAnswer.AnswerValue as string[];
             if (array != null && array.Length > 0)
                 stringValue = array[0];
             if (!DateTime.TryParse(stringValue, out value))
                 throw new InvalidCastException("answer is no data value");
             currentAnswer.Selected = true;
             currentAnswer.AnswerType = AnswerType.Text;
-            currentAnswer.CustomAnswer = value;
+            currentAnswer.AnswerValue = value;
             this.document.Answers.Clear();
             this.document.Answers.Add(currentAnswer);
         }

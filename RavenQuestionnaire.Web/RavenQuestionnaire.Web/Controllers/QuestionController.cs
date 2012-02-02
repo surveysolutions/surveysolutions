@@ -60,16 +60,13 @@ namespace RavenQuestionnaire.Web.Controllers
         //
         // POST: /Questionnaire/Create
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Save(QuestionView model, bool isDropDown)
+        public ActionResult Save(QuestionView[] question, AnswerView[] answers)
         {
-
+            QuestionView model = question[0];
             if (ModelState.IsValid)
             {
-                if (isDropDown)
-                    model.QuestionType = QuestionType.DropDownList;
                 try
                 {
-
 
                     if (model.PublicKey == Guid.Empty)
                     {
@@ -78,7 +75,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                         model.QuestionType,
                                                                                         model.QuestionnaireId, model.GroupPublicKey,
                                                                                         model.ConditionExpression,
-                                                                                        model.Answers, GlobalInfo.GetCurrentUser());
+                                                                                        answers, GlobalInfo.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
 
 
@@ -89,7 +86,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                          model.QuestionText,
                                                                          model.StataExportCaption,
                                                                          model.QuestionType,
-                                                                         model.ConditionExpression, model.Answers,
+                                                                         model.ConditionExpression, answers,
                                                                          GlobalInfo.GetCurrentUser()));
                     }
                 }

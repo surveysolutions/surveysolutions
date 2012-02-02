@@ -6,9 +6,9 @@
 <div class="answer">
     @Html.Hidden("PublicKey", Guid.NewGuid())
     @*@Model.Answers[0].AnswerText*@
-    @Html.TextBox("CustomAnswer", Model.Answers.Length > 0 ? ((CompleteAnswerView)Model.Answers[0]).CustomAnswer : string.Empty,  new { onchange = "$(this.form).submit();" })
+    @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? ((CompleteAnswerView)Model.Answers[0]).AnswerValue : string.Empty, new { onchange = "$(this.form).submit();" })
  
-    @Html.ValidationMessage("CustomAnswer")
+    @Html.ValidationMessage("AnswerValue")
     @* <span>
             @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)</span>
         @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}*@

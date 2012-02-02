@@ -6,6 +6,7 @@ using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Repositories;
+using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Web.Controllers;
@@ -42,7 +43,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     It.Is<QuestionnaireViewInputModel>(
                         v => v.QuestionnaireId.Equals("questionnairedocuments/qID"))))
                 .Returns(new QuestionnaireView(innerDocument));
-            Controller.Save(new QuestionView() { QuestionText = "test", QuestionnaireId = innerDocument.Id }, false);
+            Controller.Save(new QuestionView[]
+                                {new QuestionView() {QuestionText = "test", QuestionnaireId = innerDocument.Id}}, new AnswerView[0]);
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<AddNewQuestionCommand>()), Times.Once());
         }
 
@@ -63,9 +65,9 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                   It.Is<QuestionnaireViewInputModel>(
                       v => v.QuestionnaireId.Equals("questionnairedocuments/qID"))))
               .Returns(new QuestionnaireView(innerDocument));
-          
 
-            Controller.Save(questionView, false);
+
+            Controller.Save(new QuestionView[] {questionView}, questionView.Answers);
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateQuestionCommand>()), Times.Once());
         }
         [Test]

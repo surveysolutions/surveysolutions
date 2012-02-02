@@ -26,11 +26,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             var array = currentAnswer.CustomAnswer as string[];
             if (array != null && array.Length > 0)
                 stringValue = array[0];*/
-            if (!double.TryParse(currentAnswer.CustomAnswer.ToString(), out value))
+            if (!double.TryParse(currentAnswer.AnswerValue.ToString(), out value))
                 throw new InvalidCastException("answer is no numeric value");
             currentAnswer.Selected = true;
             currentAnswer.AnswerType = AnswerType.Text;
-            currentAnswer.CustomAnswer = value;
+            currentAnswer.AnswerValue = value;
             this.document.Answers.Clear();
             this.document.Answers.Add(currentAnswer);
 

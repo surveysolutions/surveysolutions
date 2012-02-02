@@ -15,8 +15,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public PropagatableCompleteQuestion(CompleteQuestion question, Guid propogationPublicKey)
         {
             this.ConditionExpression = question.ConditionExpression;
+           
             this.Enabled = question.Enabled;
             this.PublicKey = question.PublicKey;
+            
             this.QuestionText = question.QuestionText;
             this.QuestionType = question.QuestionType;
             this.StataExportCaption = question.StataExportCaption;

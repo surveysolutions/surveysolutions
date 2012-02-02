@@ -9,7 +9,6 @@ namespace RavenQuestionnaire.Core.Views.Answer
     public class CompleteAnswerView : AnswerView
     {
         public bool Selected { get; set; }
-        public string CustomAnswer { get; set; }
 
         public CompleteAnswerView()
         {
@@ -17,13 +16,11 @@ namespace RavenQuestionnaire.Core.Views.Answer
         public CompleteAnswerView(Guid questionPublicKey, RavenQuestionnaire.Core.Entities.SubEntities.IAnswer doc):base(questionPublicKey, doc)
         {
             this.Selected = false;
-            this.CustomAnswer = null;
         }
         public CompleteAnswerView(RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteAnswer answer)
             : this(answer.QuestionPublicKey, answer)
         {
             this.Selected = answer.Selected;
-            this.CustomAnswer = (answer.CustomAnswer ?? string.Empty).ToString();
         }
     }
 }

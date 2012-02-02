@@ -16,15 +16,13 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             var e = new Expression(condition);
             foreach (var answer in answers)
             {
-                e.Parameters[answer.QuestionPublicKey.ToString()] = answer.AnswerType == AnswerType.Text
-                                                                        ? answer.CustomAnswer
-                                                                        : answer.AnswerText;
+                e.Parameters[answer.QuestionPublicKey.ToString()] = answer.AnswerValue ?? answer.AnswerText;
             }
 
             bool result = false;
             try
             {
-                result = (bool) e.Evaluate();
+                result = (bool)e.Evaluate();
             }
             catch (Exception)
             {

@@ -17,10 +17,8 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
 
             foreach (var answer in entity)
             {
-                expressionItem.Parameters[answer.QuestionPublicKey.ToString()] = 
-                    answer.AnswerType == AnswerType.Text
-                    ? answer.CustomAnswer
-                    : answer.AnswerText;
+                expressionItem.Parameters[answer.QuestionPublicKey.ToString()] =
+                    answer.AnswerValue ?? answer.AnswerText;
             }
 
             bool result = false;
