@@ -6,21 +6,22 @@ using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
+using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
 
 #endregion
 
 namespace RavenQuestionnaire.Core.Views.Group
 {
-    public abstract class AbstractGroupView
+    public abstract class AbstractGroupView<T> where T : AnswerView
     {
         private string _questionnaireId;
-        private AbstractQuestionView[] _questions;
+        private AbstractQuestionView<T>[] _questions;
 
         public AbstractGroupView()
         {
-            Questions = new AbstractQuestionView[] { };
-            Groups = new AbstractGroupView[] { };
+            Questions = new AbstractQuestionView<T>[] { };
+            Groups = new AbstractGroupView<T>[] { };
         }
 
         public AbstractGroupView(string questionnaireId, Guid? parentGroup)
@@ -50,7 +51,7 @@ namespace RavenQuestionnaire.Core.Views.Group
             set { _questionnaireId = value; }
         }
 
-        public AbstractQuestionView[] Questions
+        public AbstractQuestionView<T>[] Questions
         {
             get { return _questions; }
             set
@@ -63,13 +64,14 @@ namespace RavenQuestionnaire.Core.Views.Group
             }
         }
 
-        public AbstractGroupView[] Groups { get; set; }
+        public AbstractGroupView<T>[] Groups { get; set; }
 
 
        
     }
 
-    public abstract class GroupView<TGroup, TQuestion, TAnswer> : AbstractGroupView
+    public abstract class GroupView<T, TGroup, TQuestion, TAnswer> : AbstractGroupView<T>
+        where T:AnswerView
         where TAnswer : IAnswer
         where TQuestion : IQuestion<TAnswer>
         where TGroup : IGroup<TGroup, TQuestion>
@@ -116,7 +118,7 @@ namespace RavenQuestionnaire.Core.Views.Group
         }
     }
 
-    public class GroupView : GroupView<Entities.SubEntities.Group, Entities.SubEntities.Question, Entities.SubEntities.Answer>
+    public class GroupView : GroupView<AnswerView,Entities.SubEntities.Group, Entities.SubEntities.Question, Entities.SubEntities.Answer>
     {
         public GroupView()
         {

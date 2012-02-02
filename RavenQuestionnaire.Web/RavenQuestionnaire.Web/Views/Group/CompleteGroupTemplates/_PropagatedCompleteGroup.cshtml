@@ -1,10 +1,15 @@
 ﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.Group
 @using RavenQuestionnaire.Core.Views.Question
 @model RavenQuestionnaire.Core.Views.Group.PropagatableCompleteGroupView
 @using (Html.BeginCollectionItem("settings", true, Guid.NewGuid()))
 {
     @Html.Hidden("PropogationPublicKey", "dummy")
+}
+@using (Html.BeginCollectionItem("questions", true, Guid.NewGuid()))
+{
+    @Html.Hidden("PublicKey", "dummy")
 }
 <table>
     <tr>
@@ -19,17 +24,20 @@
                                                                                                     UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div")
                                                                                                 }, new { autocomplete = "off" }))
                     {
-                        using (Html.BeginCollectionItem("answers", true, question.PublicKey + "_" + Model.PropogationPublicKey))
+                        using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + Model.PropogationPublicKey))
                         {
 
+                        
+                        @Html.Hidden("PublicKey", question.PublicKey)
+                   ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+                   if (!question.Enabled)
+                   {
+                       ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+                   }
 
-                            ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
-                            if (!question.Enabled)
-                            {
-                                ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
-                            }
-                            
-                            Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
+                   Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
+                      
+                        @Html.ValidationMessage("AnswerValue")
                         }
                         <br />
 

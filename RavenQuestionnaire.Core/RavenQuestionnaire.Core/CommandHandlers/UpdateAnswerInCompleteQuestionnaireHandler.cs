@@ -28,8 +28,13 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             CompleteQuestionnaire entity = _questionnaireRepository.Load(command.CompleteQuestionnaireId);
 
             //    entity.Remove<CompleteQuestion>(completeAnswer.QuestionPublicKey);
-            entity.Add(command.CompleteAnswer, null);
-
+            foreach (var completeAnswer in command.CompleteAnswers)
+            {
+                if (completeAnswer.Selected)
+                    entity.Add(completeAnswer, null);
+                else
+                    entity.Remove(completeAnswer);
+            }
             RemoveDisabledAnswers(entity);
         }
 

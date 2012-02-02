@@ -7,7 +7,7 @@ using RavenQuestionnaire.Core.Views.Answer;
 
 namespace RavenQuestionnaire.Core.Views.Question
 {
-    public class CompleteQuestionView : QuestionView<CompleteGroup, CompleteQuestion, CompleteAnswer>
+    public class CompleteQuestionView : QuestionView<CompleteAnswerView,CompleteGroup, CompleteQuestion, CompleteAnswer>
     {
         public bool Enabled { get; set; }
 

@@ -34,19 +34,20 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteQuestionnaireDocument qDoqument= new CompleteQuestionnaireDocument();
             CompleteQuestion question = new CompleteQuestion("q",
                                              QuestionType.SingleOption);
+            
             CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
             question.Answers.Add(answer);
             qDoqument.Questions.Add(question);
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
             UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
-            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
+            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
                                                                                                                     (
                                                                                                                     question
                                                                                                                         .
                                                                                                                         PublicKey,
-                                                                                                                    answer),
+                                                                                                                    answer){ Selected = true}},
                                                                                                                 null
                                                                                                                 ,
                                                                                                                 null);
@@ -76,15 +77,15 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
 
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
-
+            completeAnswer.Selected = true;
             iteratorContainerMock.Setup(
                x => x.Create<CompleteQuestionnaireDocument, CompleteQuestion>(qDoqument)).Returns(
                    new QuestionnaireQuestionIterator(qDoqument));
             UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
-
+                new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
-                                                                                                                    (completeAnswer),
+                                                                                                                    (completeAnswer)},
                                                                                                                 ((
                                                                                                                  PropagatableCompleteGroup
                                                                                                                  )
@@ -130,9 +131,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
              x => x.Create<CompleteQuestionnaireDocument, CompleteAnswer>(qDoqument)).Returns(
                  new QuestionnaireAnswerIterator(qDoqument));
             UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
-            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
+            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
-                                                                                                                    (completeAnswer),
+                                                                                                                    (completeAnswer)},
                                                                                                                 Guid.
                                                                                                                     NewGuid
                                                                                                                     ()

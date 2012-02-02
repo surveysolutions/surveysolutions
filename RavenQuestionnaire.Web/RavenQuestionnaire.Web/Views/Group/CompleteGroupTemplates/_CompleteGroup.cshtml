@@ -6,13 +6,14 @@
 
     using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div") }))
     {
-        using (Html.BeginCollectionItem("answers", true, question.PublicKey))
+        using (Html.BeginCollectionItem("questions", true, question.PublicKey))
         {
             Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
+              
         }
         using (Html.BeginCollectionItem("settings", true, question.PublicKey))
         {
-            @Html.Hidden("ParentGroupPublicKey", ((CompleteGroupView) ViewBag.CurrentGroup).PublicKey)
+            @Html.Hidden("ParentGroupPublicKey", ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
             @Html.Hidden("QuestionnaireId", Model.QuestionnaireId)
         }
     }

@@ -12,6 +12,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Group;
+using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Web.Models;
 
@@ -121,27 +122,20 @@ namespace RavenQuestionnaire.Web.Controllers
             return View( model);
         }
 
-        public ActionResult SaveSingleResult(CompleteQuestionSettings[] settings, CompleteAnswerView[] answers)
+        public ActionResult SaveSingleResult(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
         {
-            if (answers == null || answers.Length <= 0 || !ModelState.IsValid)
+            if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
             {
                 return RedirectToAction("Question", new { id = settings[0].QuestionnaireId});
             }
 
-
-          /*  if (settings[0].PropogationPublicKey.HasValue)
-            {
-                for (int i = 0; i < answers.Length; i++)
-                {
-                    answers[i] = new PropagatableCompleteAnswer(answers[i], settings[0].PropogationPublicKey.Value);
-                }
-            }*/
+            CompleteQuestionView question = questions[0];
             try
             {
 
 
                 commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
-                                                                                      answers[0],
+                                                                                      question.Answers as CompleteAnswerView[],
                                                                                       settings[0].PropogationPublicKey,
                                                                                       _globalProvider.GetCurrentUser()));
             }
@@ -149,7 +143,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
 
                 ModelState.AddModelError(
-                    "answers[" + answers[0].QuestionId +
+                    "questions[" + question.PublicKey +
                     (settings[0].PropogationPublicKey.HasValue
                          ? string.Format("_{0}", settings[0].PropogationPublicKey.Value)
                          : "") + "].AnswerValue", e.Message);
