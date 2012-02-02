@@ -9,7 +9,7 @@ using RavenQuestionnaire.Core.Views.Answer;
 
 namespace RavenQuestionnaire.Core.Views.Question
 {
-    public abstract class AbstractQuestionView
+    public abstract class AbstractQuestionView<T> where T : AnswerView
     {
         public int Index { get; set; }
 
@@ -24,7 +24,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
 
-        public AnswerView[] Answers
+        public T[] Answers
         {
             get { return _answers; }
             set
@@ -32,7 +32,7 @@ namespace RavenQuestionnaire.Core.Views.Question
                 _answers = value;
                 if (this._answers == null)
                 {
-                    this._answers = new AnswerView[0];
+                    this._answers = new T[0];
                     return;
                 }
 
@@ -44,7 +44,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             }
         }
 
-        private AnswerView[] _answers;
+        private T[] _answers;
 
         public string QuestionnaireId
         {
@@ -58,7 +58,7 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public AbstractQuestionView()
         {
-            Answers = new AnswerView[0];
+            Answers = new T[0];
         }
 
         public AbstractQuestionView(string questionnaireId, Guid? groupPublicKey)
@@ -80,7 +80,8 @@ namespace RavenQuestionnaire.Core.Views.Question
         }
     }
 
-    public abstract class QuestionView<TGroup, TQuestion, TAnswer> : AbstractQuestionView
+    public abstract class QuestionView<T, TGroup, TQuestion, TAnswer> : AbstractQuestionView<T>
+        where T: AnswerView
         where TAnswer : IAnswer
         where TQuestion : IQuestion<TAnswer>
         where TGroup : IGroup<TGroup, TQuestion>
@@ -103,7 +104,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             :
                 base(questionnaire, doc)
         {
-            this.Answers = doc.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
+            
             this.GroupPublicKey = GetQuestionGroup(questionnaire, doc.PublicKey);
         }
 
@@ -133,7 +134,7 @@ namespace RavenQuestionnaire.Core.Views.Question
 
     public class QuestionView :
         QuestionView
-            <RavenQuestionnaire.Core.Entities.SubEntities.Group, RavenQuestionnaire.Core.Entities.SubEntities.Question,
+            <AnswerView, RavenQuestionnaire.Core.Entities.SubEntities.Group, RavenQuestionnaire.Core.Entities.SubEntities.Question,
             RavenQuestionnaire.Core.Entities.SubEntities.Answer>
     {
         public QuestionView()
@@ -148,6 +149,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         protected QuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
             : base(questionnaire, doc)
         {
+            
         }
 
         public QuestionView(

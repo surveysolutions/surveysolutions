@@ -8,11 +8,12 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Utility;
+using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.Group
 {
-    public class CompleteGroupView : GroupView<CompleteGroup, CompleteQuestion, CompleteAnswer>
+    public class CompleteGroupView : GroupView<CompleteAnswerView, CompleteGroup, CompleteQuestion, CompleteAnswer>
     {
         public CompleteGroupView()
         {
