@@ -24,6 +24,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                     return new DateAnswerStrategy(baseQuestion);
                 case QuestionType.Numeric:
                     return new NumericAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.GpsCoordinates:
+                    return new GpsAnswerCompleteQuestion(baseQuestion);
             }
             return new TextAnswerCompleteQuestion(baseQuestion);
         }

@@ -12,6 +12,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         MultyOption,
         Numeric,
         DateTime,
+        GpsCoordinates,
         Text
     }
 }
