@@ -7,7 +7,7 @@
 @foreach (var item in Model.Answers) {
     using (Html.BeginCollectionItem("Answers", true, item.PublicKey))
     {
-         @Html.Hidden("QuestionId", item.QuestionId)
+         @Html.Hidden("QuestionId", Model.PublicKey)
         <div class="answer">
             <span>
                 @Html.Hidden("PublicKey", item.PublicKey)
