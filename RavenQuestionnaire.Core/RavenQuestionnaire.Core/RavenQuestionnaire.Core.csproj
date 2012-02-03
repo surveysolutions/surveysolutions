@@ -172,7 +172,10 @@
     <Compile Include="Entities\Status.cs" />
     <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\AnswerType.cs" />
+    <Compile Include="Entities\SubEntities\BindedQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\BindedCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs" />
+    <Compile Include="Entities\SubEntities\Complete\IBinded.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\CompleteQuestionFactory.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\DateAnswerCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\GpsAnswerCompleteQuestion.cs" />
