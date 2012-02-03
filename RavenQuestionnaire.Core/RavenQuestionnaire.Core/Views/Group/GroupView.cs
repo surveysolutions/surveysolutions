@@ -13,15 +13,12 @@ using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.Group
 {
-    public abstract class AbstractGroupView<T> where T : AnswerView
+    public abstract class AbstractGroupView
     {
         private string _questionnaireId;
-        private AbstractQuestionView<T>[] _questions;
 
         public AbstractGroupView()
         {
-            Questions = new AbstractQuestionView<T>[] { };
-            Groups = new AbstractGroupView<T>[] { };
         }
 
         public AbstractGroupView(string questionnaireId, Guid? parentGroup)
@@ -51,7 +48,35 @@ namespace RavenQuestionnaire.Core.Views.Group
             set { _questionnaireId = value; }
         }
 
-        public AbstractQuestionView<T>[] Questions
+    }
+    public abstract class AbstractGroupView<TGroup, TQuestion> : AbstractGroupView 
+        where TGroup:AbstractGroupView
+        where TQuestion : AbstractQuestionView
+    {
+        
+        private TQuestion[] _questions;
+
+        public AbstractGroupView()
+        {
+            Questions = new TQuestion[] { };
+            Groups = new TGroup[] { };
+        }
+
+        public AbstractGroupView(string questionnaireId, Guid? parentGroup)
+        {
+            QuestionnaireId = questionnaireId;
+            ParentGroup = parentGroup;
+        }
+
+        protected AbstractGroupView(IQuestionnaireDocument doc, IGroup group)
+        {
+            this.QuestionnaireId = doc.Id;
+            this.PublicKey = group.PublicKey;
+            this.GroupText = group.Title;
+            this.Propagated = group.Propagated;
+        }
+
+        public TQuestion[] Questions
         {
             get { return _questions; }
             set
@@ -64,14 +89,15 @@ namespace RavenQuestionnaire.Core.Views.Group
             }
         }
 
-        public AbstractGroupView<T>[] Groups { get; set; }
+        public TGroup[] Groups { get; set; }
 
 
        
     }
 
-    public abstract class GroupView<T, TGroup, TQuestion, TAnswer> : AbstractGroupView<T>
-        where T:AnswerView
+    public abstract class GroupView<TGroupView, TQuestionView,TGroup, TQuestion, TAnswer> : AbstractGroupView<TGroupView, TQuestionView>
+        where TGroupView : AbstractGroupView
+        where TQuestionView : AbstractQuestionView
         where TAnswer : IAnswer
         where TQuestion : IQuestion<TAnswer>
         where TGroup : IGroup<TGroup, TQuestion>
@@ -89,10 +115,6 @@ namespace RavenQuestionnaire.Core.Views.Group
             : base(doc, group)
         {
             this.ParentGroup = GetGroupParent(doc, group);
-            /*   this.Questions =
-                group.Questions.Select(
-                    q =>
-                    new QuestionView(doc, q)).ToArray();*/
         }
         protected Guid? GetGroupParent(IQuestionnaireDocument<TGroup, TQuestion> questionnaire, TGroup group)
         {
@@ -118,7 +140,7 @@ namespace RavenQuestionnaire.Core.Views.Group
         }
     }
 
-    public class GroupView : GroupView<AnswerView,Entities.SubEntities.Group, Entities.SubEntities.Question, Entities.SubEntities.Answer>
+    public class GroupView : GroupView<GroupView, QuestionView, Entities.SubEntities.Group, Entities.SubEntities.Question, Entities.SubEntities.Answer>
     {
         public GroupView()
         {
@@ -139,5 +161,6 @@ namespace RavenQuestionnaire.Core.Views.Group
                     new QuestionView(doc, q)).ToArray();
             this.Groups = group.Groups.Select(g => new GroupView(doc, g)).ToArray();
         }
+
     }
 }

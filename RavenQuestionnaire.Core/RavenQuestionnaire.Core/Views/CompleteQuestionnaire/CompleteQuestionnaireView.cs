@@ -3,14 +3,14 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.Answer;
+using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
-    public class CompleteQuestionnaireView: QuestionnaireView
-            <CompleteAnswerView,CompleteGroup, CompleteQuestion,
-            CompleteAnswer>
+    public class CompleteQuestionnaireView : AbstractQuestionnaireView
+            <CompleteGroupView, CompleteQuestionView>
     {
         public SurveyStatus Status { get; set; }
 

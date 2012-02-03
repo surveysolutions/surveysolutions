@@ -13,7 +13,7 @@ using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.Group
 {
-    public class CompleteGroupView : GroupView<CompleteAnswerView, CompleteGroup, CompleteQuestion, CompleteAnswer>
+    public class CompleteGroupView : GroupView<CompleteGroupView, CompleteQuestionView, CompleteGroup, CompleteQuestion, CompleteAnswer>
     {
         public CompleteGroupView()
         {
