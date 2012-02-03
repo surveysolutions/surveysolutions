@@ -9,7 +9,7 @@ using RavenQuestionnaire.Core.Views.Answer;
 
 namespace RavenQuestionnaire.Core.Views.Question
 {
-    public abstract class AbstractQuestionView<T> where T : AnswerView
+    public abstract class AbstractQuestionView
     {
         public int Index { get; set; }
 
@@ -24,6 +24,41 @@ namespace RavenQuestionnaire.Core.Views.Question
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
 
+        public string QuestionnaireId
+        {
+            get { return IdUtil.ParseId(_questionnaireId); }
+            set { _questionnaireId = value; }
+        }
+
+        private string _questionnaireId;
+
+        public Guid? GroupPublicKey { get; set; }
+
+        public AbstractQuestionView()
+        {
+          
+        }
+
+        public AbstractQuestionView(string questionnaireId, Guid? groupPublicKey)
+            : this()
+        {
+            this.QuestionnaireId = questionnaireId;
+            this.GroupPublicKey = groupPublicKey;
+        }
+
+        public AbstractQuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
+            : this()
+        {
+            this.PublicKey = doc.PublicKey;
+            this.QuestionText = doc.QuestionText;
+            this.QuestionType = doc.QuestionType;
+            this.QuestionnaireId = questionnaire.Id;
+            this.ConditionExpression = doc.ConditionExpression;
+            this.StataExportCaption = doc.StataExportCaption;
+        }
+    }
+    public abstract class AbstractQuestionView<T> : AbstractQuestionView where T : AnswerView
+    {
         public T[] Answers
         {
             get { return _answers; }
@@ -46,17 +81,7 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         private T[] _answers;
 
-        public string QuestionnaireId
-        {
-            get { return IdUtil.ParseId(_questionnaireId); }
-            set { _questionnaireId = value; }
-        }
-
-        private string _questionnaireId;
-
-        public Guid? GroupPublicKey { get; set; }
-
-        public AbstractQuestionView()
+        public AbstractQuestionView():base()
         {
             Answers = new T[0];
         }
@@ -161,7 +186,6 @@ namespace RavenQuestionnaire.Core.Views.Question
                 base(questionnaire, doc)
         {
             this.Answers = doc.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
-            this.GroupPublicKey = GetQuestionGroup(questionnaire, doc.PublicKey);
         }
     }
 }
