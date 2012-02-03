@@ -37,7 +37,11 @@ namespace RavenQuestionnaire.Core.CommandHandlers
                                                     completeQuestion.ConditionExpression))
                 {
                     isCondition = true;
-                    break;
+                    completeQuestion.Enabled = true;
+                }
+                else
+                {
+                    completeQuestion.Enabled = false;
                 }
             }
             if (isCondition)
