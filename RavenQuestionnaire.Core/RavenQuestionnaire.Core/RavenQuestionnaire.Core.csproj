@@ -95,8 +95,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractFactories\CompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\CompleteGroupFactory.cs" />
+    <Compile Include="AbstractFactories\CompleteQuestionFactory.cs" />
+    <Compile Include="AbstractFactories\ICompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
+    <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
     <Compile Include="CommandHandlers\AddNewQuestionHandler.cs" />
     <Compile Include="CommandHandlers\DeletePropagatedGroupHandler.cs" />
     <Compile Include="CommandHandlers\UpdateQuestionnaireFlowHandler.cs" />

@@ -2,19 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Documents
 {
-    public class CompleteQuestionnaireDocument : IQuestionnaireDocument<CompleteGroup, CompleteQuestion>
+    public interface ICompleteQuestionnaireDocument<TGroup, TQuestion> : IQuestionnaireDocument<TGroup, TQuestion>, ICompleteGroup<TGroup, TQuestion>
+        where TQuestion : ICompleteQuestion
+        where TGroup : ICompleteGroup
+    {
+         UserLight Creator { get; set; }
+
+         string TemplateId { get; set; }
+
+         SurveyStatus Status { set; get; }
+
+         UserLight Responsible { get; set; }
+
+         string StatusChangeComment { get; set; }
+    }
+
+
+    public class CompleteQuestionnaireDocument : ICompleteQuestionnaireDocument<ICompleteGroup, ICompleteQuestion>
     {
         public CompleteQuestionnaireDocument()
         {
             CreationDate = DateTime.Now;
             LastEntryDate = DateTime.Now;
-            Questions = new List<CompleteQuestion>();
-            Groups = new List<CompleteGroup>();
+            Questions = new List<ICompleteQuestion>();
+            Groups = new List<ICompleteGroup>();
         }
         public static explicit operator CompleteQuestionnaireDocument(QuestionnaireDocument doc)
         {
@@ -23,8 +40,10 @@ namespace RavenQuestionnaire.Core.Documents
                 TemplateId = doc.Id,
                 Title = doc.Title
             };
-            result.Questions = doc.Questions.Select(q => (CompleteQuestion)q).ToList();
-            result.Groups = doc.Groups.Select(q => (CompleteGroup)q).ToList();
+            result.Questions =
+                doc.Questions.Select(q => new CompleteQuestionFactory().ConvertToCompleteQuestion(q)).ToList();
+            result.Groups =
+                doc.Groups.Select(q => new CompleteGroupFactory().ConvertToCompleteGroup(q)).ToList();
             return result;
         }
         public UserLight Creator { get; set; }
@@ -39,9 +58,9 @@ namespace RavenQuestionnaire.Core.Documents
 
         #region Implementation of IQuestionnaireDocument
 
-        public List<CompleteQuestion> Questions { get; set; }
+        public List<ICompleteQuestion> Questions { get; set; }
 
-        public List<CompleteGroup> Groups { get; set; }
+        public List<ICompleteGroup> Groups { get; set; }
 
         public string Id { get; set; }
 

@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Xml.Serialization;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Iterators;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class CompleteGroup : ICompleteGroup<CompleteGroup, CompleteQuestion>,IComposite
+    public class CompleteGroup : ICompleteGroup<ICompleteGroup, ICompleteQuestion>,IComposite
     {
         public CompleteGroup()
         {
-            Questions = new List<CompleteQuestion>();
-            Groups = new List<CompleteGroup>();
+            Questions = new List<ICompleteQuestion>();
+            Groups = new List<ICompleteGroup>();
          //   this.iteratorContainer = new IteratorContainer();
         }
 
@@ -32,8 +34,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                              Title = doc.Title,
                              Propagated = doc.Propagated
                          };
-            result.Questions = doc.Questions.Select(q => (CompleteQuestion) q).ToList();
-            result.Groups = doc.Groups.Select(q => (CompleteGroup) q).ToList();
+            result.Questions =
+               doc.Questions.Select(q => new CompleteQuestionFactory().ConvertToCompleteQuestion(q)).ToList();
+            result.Groups =
+                doc.Groups.Select(q => new CompleteGroupFactory().ConvertToCompleteGroup(q)).ToList();
             return result;
         }
 
@@ -43,11 +47,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public bool Propagated { get; set; }
 
-        public List<CompleteQuestion> Questions { get; set; }
+        public List<ICompleteQuestion> Questions { get; set; }
 
-        public List<CompleteGroup> Groups { get; set; }
-
-        public Iterator<CompleteAnswer> AnswerIterator
+        public List<ICompleteGroup> Groups { get; set; }
+        [XmlIgnore]
+        public Iterator<ICompleteAnswer> AnswerIterator
         {
             get { return new QuestionnaireAnswerIterator(this); }
         }
@@ -178,7 +182,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                     return this as T;
             }
             var resultInsideGroups =
-                Groups.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+                Groups.Where(a=> a is IComposite).Select(answer => (answer as IComposite).Find<T>(publicKey)).FirstOrDefault(result => result != null);
             if (resultInsideGroups != null)
                 return resultInsideGroups;
             var resultInsideQuestions =

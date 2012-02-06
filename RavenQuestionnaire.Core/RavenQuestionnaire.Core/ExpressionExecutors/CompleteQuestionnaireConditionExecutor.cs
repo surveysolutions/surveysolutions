@@ -7,9 +7,9 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
-    public class CompleteQuestionnaireConditionExecutor : IExpressionExecutor<IEnumerable<CompleteAnswer>, bool>
+    public class CompleteQuestionnaireConditionExecutor : IExpressionExecutor<IEnumerable<ICompleteAnswer>, bool>
     {
-        public bool Execute(IEnumerable<CompleteAnswer> answers, string condition)
+        public bool Execute(IEnumerable<ICompleteAnswer> answers, string condition)
         {
             if (string.IsNullOrEmpty(condition))
                 return true;

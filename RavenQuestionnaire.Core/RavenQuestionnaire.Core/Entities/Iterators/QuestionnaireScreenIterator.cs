@@ -10,9 +10,9 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities.Iterators
 {
-    public class QuestionnaireScreenIterator : Iterator<CompleteGroup>
+    public class QuestionnaireScreenIterator : Iterator<ICompleteGroup>
     {
-        public QuestionnaireScreenIterator(IQuestionnaireDocument<CompleteGroup, CompleteQuestion> document)
+        public QuestionnaireScreenIterator(IQuestionnaireDocument<ICompleteGroup, ICompleteQuestion> document)
         {
             if (document.Questions.Count == 0)
             {
@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             }
             else
             {
-                this.groups = new List<CompleteGroup>(document.Groups.Count + 1);
+                this.groups = new List<ICompleteGroup>(document.Groups.Count + 1);
                 this.groups.Add(new CompleteGroup() { Questions = document.Questions, PublicKey = Guid.Empty });
                 foreach (CompleteGroup item in document.Groups)
                 {
@@ -30,8 +30,8 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 }
             }
         }
-        protected IList<CompleteGroup> groups;
-        public CompleteGroup Next
+        protected IList<ICompleteGroup> groups;
+        public ICompleteGroup Next
         {
             get
             {
@@ -41,7 +41,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             }
         }
 
-        public CompleteGroup Previous
+        public ICompleteGroup Previous
         {
             get
             {
@@ -50,7 +50,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 return this.groups[--this.current];
             }
         }
-        public void SetCurrent(CompleteGroup item)
+        public void SetCurrent(ICompleteGroup item)
         {
             var index = this.groups.IndexOf(item);
             if (index >= 0)
@@ -64,7 +64,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
 
         #region Implementation of IEnumerable
 
-        public IEnumerator<CompleteGroup> GetEnumerator()
+        public IEnumerator<ICompleteGroup> GetEnumerator()
         {
             return this.groups.GetEnumerator();
         }
@@ -101,7 +101,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             this.current = 0;
         }
 
-        public CompleteGroup Current
+        public ICompleteGroup Current
         {
             get { return this.groups[current];}
         }

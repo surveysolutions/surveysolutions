@@ -12,22 +12,26 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
         }
 
-        public PropagatableCompleteGroup(CompleteGroup group, Guid propogationPublicKey)
+        public PropagatableCompleteGroup(ICompleteGroup group, Guid propogationPublicKey)
         {
             this.Title = group.Title;
             this.Propagated = group.Propagated;
             this.PublicKey = group.PublicKey;
-
-            for (int i = 0; i < group.Questions.Count; i++)
+            var groupWithQuestion = group as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
+            if (groupWithQuestion != null)
             {
-                this.Questions.Add(new PropagatableCompleteQuestion(group.Questions[i], propogationPublicKey));
-            }
-            for (int i = 0; i < group.Groups.Count; i++)
-            {
-                this.Groups.Add(new PropagatableCompleteGroup(group.Groups[i], propogationPublicKey));
-            //    this.Groups[i] = new PropagatableCompleteGroup(group.Groups[i], propogationPublicKey);
-            }
+                for (int i = 0; i < groupWithQuestion.Questions.Count; i++)
+                {
+                    this.Questions.Add(new PropagatableCompleteQuestion(groupWithQuestion.Questions[i],
+                                                                        propogationPublicKey));
+                }
 
+                for (int i = 0; i < groupWithQuestion.Groups.Count; i++)
+                {
+                    this.Groups.Add(new PropagatableCompleteGroup(groupWithQuestion.Groups[i], propogationPublicKey));
+                    //    this.Groups[i] = new PropagatableCompleteGroup(group.Groups[i], propogationPublicKey);
+                }
+            }
             this.PropogationPublicKey = propogationPublicKey;
         }
 
@@ -117,7 +121,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                     return this as T;
             }
             var resultInsideGroups =
-                Groups.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+                Groups.Where(a => a is IComposite).Select(group => (group as IComposite).Find<T>(publicKey)).
+                    FirstOrDefault(result => result != null);
             if (resultInsideGroups != null)
                 return resultInsideGroups;
             var resultInsideQuestions =

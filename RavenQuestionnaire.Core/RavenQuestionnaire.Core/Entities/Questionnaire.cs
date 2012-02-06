@@ -5,6 +5,7 @@ using NCalc;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities
@@ -250,18 +251,20 @@ namespace RavenQuestionnaire.Core.Entities
             return null;
         }
 
-        public IList<Question> GetAllQuestions()
+        public IList<IQuestion> GetAllQuestions()
         {
-            List<Question> result = new List<Question>();
+            List<IQuestion> result = new List<IQuestion>();
             result.AddRange(innerDocument.Questions);
-            Queue<Group> groups = new Queue<Group>();
+            Queue<IGroup> groups = new Queue<IGroup>();
             foreach (var child in innerDocument.Groups)
             {
                 groups.Enqueue(child);
             }
             while (groups.Count != 0)
             {
-                var queueItem = groups.Dequeue();
+                var queueItem = groups.Dequeue() as IGroup<IGroup, IQuestion>;
+                if (queueItem == null)
+                    continue;
                 result.AddRange(queueItem.Questions);
                 foreach (var child in queueItem.Groups)
                 {

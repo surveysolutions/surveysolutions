@@ -20,15 +20,16 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         List<TQuestion> Questions { get; set; }
         List<TGroup> Groups { get; set; }
     }
-    public class Group : IGroup<Group, Question>,IComposite
+    public class Group : IGroup<IGroup, IQuestion>, IComposite
     {
         public Group()
         {
             this.PublicKey = Guid.NewGuid();
-            this.Questions= new List<Question>();
-            this.Groups = new List<Group>();
+            this.Questions = new List<IQuestion>();
+            this.Groups = new List<IGroup>();
         }
-        public Group(string text):this()
+        public Group(string text)
+            : this()
         {
             this.Title = text;
         }
@@ -36,8 +37,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Guid PublicKey { get; set; }
         public string Title { get; set; }
         public bool Propagated { get; set; }
-        public List<Question> Questions  { get; set; }
-        public List<Group> Groups { get; set; }
+        public List<IQuestion> Questions { get; set; }
+        public List<IGroup> Groups { get; set; }
         public void Update(string groupText)
         {
             this.Title = groupText;

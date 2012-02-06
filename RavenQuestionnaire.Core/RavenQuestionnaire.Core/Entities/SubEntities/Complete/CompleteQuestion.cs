@@ -4,19 +4,20 @@ using System.Data;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
+using CompleteQuestionFactory = RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question.CompleteQuestionFactory;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class CompleteQuestion : ICompleteQuestion<CompleteAnswer>
+    public class CompleteQuestion : ICompleteQuestion<ICompleteAnswer>
     {
         public CompleteQuestion()
         {
             this.PublicKey = Guid.NewGuid();
             this.Enabled = true;
-            Answers = new List<CompleteAnswer>();
+            Answers = new List<ICompleteAnswer>();
         }
 
         public CompleteQuestion(string text, QuestionType type)
@@ -36,7 +37,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 QuestionType = doc.QuestionType,
                 StataExportCaption = doc.StataExportCaption
             };
-            result.Answers = doc.Answers.Select(a => (CompleteAnswer)a).ToList();
+            result.Answers = doc.Answers.Select(a => new CompleteAnswerFactory().ConvertToCompleteAnswer(a)).ToList();
             return result;
         }
         public Guid PublicKey { get; set; }
@@ -45,7 +46,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public QuestionType QuestionType { get; set; }
 
-        public List<CompleteAnswer> Answers { get; set; }
+        public List<ICompleteAnswer> Answers { get; set; }
 
         public string ConditionExpression { get; set; }
 

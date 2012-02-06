@@ -105,11 +105,10 @@ namespace RavenQuestionnaire.Core.Views.Question
         }
     }
 
-    public abstract class QuestionView<T, TGroup, TQuestion, TAnswer> : AbstractQuestionView<T>
+    public abstract class QuestionView<T, TGroup, TQuestion> : AbstractQuestionView<T>
         where T: AnswerView
-        where TAnswer : IAnswer
-        where TQuestion : IQuestion<TAnswer>
-        where TGroup : IGroup<TGroup, TQuestion>
+        where TQuestion : IQuestion
+        where TGroup : IGroup
     {
         public QuestionView()
         {
@@ -137,19 +136,23 @@ namespace RavenQuestionnaire.Core.Views.Question
         {
             if (questionnaire.Questions.Any(q => q.PublicKey.Equals(questionKey)))
                 return null;
-            var group = new Queue<TGroup>();
+            var group = new Queue<IGroup>();
             foreach (var child in questionnaire.Groups)
             {
                 group.Enqueue(child);
             }
             while (group.Count != 0)
             {
-                var queueItem = group.Dequeue();
-
+                var queueItem = group.Dequeue() as IGroup<TGroup, TQuestion>;
+                if(queueItem==null)
+                    continue;
+                
                 if (queueItem.Questions.Any(q => q.PublicKey.Equals(questionKey)))
                     return queueItem.PublicKey;
                 foreach (var child in queueItem.Groups)
                 {
+                   /* var childWithQuestion = child as IGroup<IGroup, TQuestion>;
+                    if(childWithQuestion!=null)*/
                     group.Enqueue(child);
                 }
             }
@@ -159,8 +162,7 @@ namespace RavenQuestionnaire.Core.Views.Question
 
     public class QuestionView :
         QuestionView
-            <AnswerView, RavenQuestionnaire.Core.Entities.SubEntities.Group, RavenQuestionnaire.Core.Entities.SubEntities.Question,
-            RavenQuestionnaire.Core.Entities.SubEntities.Answer>
+            <AnswerView, RavenQuestionnaire.Core.Entities.SubEntities.Group, IQuestion>
     {
         public QuestionView()
         {
@@ -179,13 +181,15 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public QuestionView(
             IQuestionnaireDocument
-                <RavenQuestionnaire.Core.Entities.SubEntities.Group,
-                RavenQuestionnaire.Core.Entities.SubEntities.Question> questionnaire,
-            RavenQuestionnaire.Core.Entities.SubEntities.Question doc)
+                <IGroup,
+                IQuestion> questionnaire,
+            IQuestion doc)
             :
                 base(questionnaire, doc)
         {
-            this.Answers = doc.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
+            var question = doc as IQuestion<IAnswer>;
+            if (question != null)
+                this.Answers = question.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
         }
     }
 }

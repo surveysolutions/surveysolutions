@@ -13,10 +13,10 @@ namespace RavenQuestionnaire.Core.CommandHandlers
     public class PropagateGroupHandler : ICommandHandler<PropagateGroupCommand>
     {
         private ICompleteQuestionnaireRepository _questionnaireRepository;
-        private IExpressionExecutor<IEnumerable<CompleteAnswer>, bool> _conditionExecutor;
+        private IExpressionExecutor<IEnumerable<ICompleteAnswer>, bool> _conditionExecutor;
 
         public PropagateGroupHandler(ICompleteQuestionnaireRepository questionnaireRepository,
-                                                          IExpressionExecutor<IEnumerable<CompleteAnswer>, bool> conditionExecutor)
+                                                          IExpressionExecutor<IEnumerable<ICompleteAnswer>, bool> conditionExecutor)
         {
             this._questionnaireRepository = questionnaireRepository;
             this._conditionExecutor = conditionExecutor;

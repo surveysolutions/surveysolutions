@@ -4,7 +4,13 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class CompleteAnswer : IAnswer
+    public interface ICompleteAnswer : IAnswer
+    {
+       bool Selected { get; set; }
+       Guid QuestionPublicKey { get; set; }
+    }
+
+    public class CompleteAnswer : ICompleteAnswer
     {
         public CompleteAnswer()
         {
@@ -13,8 +19,16 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public CompleteAnswer(IAnswer answer, Guid questionPublicKey)
         {
+            this.AnswerText = answer.AnswerText;
+            this.AnswerType = answer.AnswerType;
+            this.AnswerValue = answer.AnswerValue;
+            this.Mandatory = answer.Mandatory;
             this.PublicKey = answer.PublicKey;
+            this.Selected = false;
             this.QuestionPublicKey = questionPublicKey;
+       
+          /*  this.PublicKey = answer.PublicKey;
+            this.QuestionPublicKey = questionPublicKey;*/
             // this.CustomAnswer = answer.AnswerText;
         }
         public static explicit operator CompleteAnswer(Answer doc)

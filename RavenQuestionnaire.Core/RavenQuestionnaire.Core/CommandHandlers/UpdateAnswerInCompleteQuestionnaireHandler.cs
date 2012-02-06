@@ -15,9 +15,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         ICommandHandler<UpdateAnswerInCompleteQuestionnaireCommand>
     {
         private ICompleteQuestionnaireRepository _questionnaireRepository;
-        private IExpressionExecutor<IEnumerable<CompleteAnswer>, bool> _conditionExecutor;
+        private IExpressionExecutor<IEnumerable<ICompleteAnswer>, bool> _conditionExecutor;
         public UpdateAnswerInCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository questionnaireRepository,
-                                                          IExpressionExecutor<IEnumerable<CompleteAnswer>, bool> conditionExecutor)
+                                                          IExpressionExecutor<IEnumerable<ICompleteAnswer>, bool> conditionExecutor)
         {
             this._questionnaireRepository = questionnaireRepository;
             this._conditionExecutor = conditionExecutor;
@@ -84,9 +84,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             }
         }
 
-        private IEnumerable<CompleteAnswer> GetAnswersListForPropagatedGroup(PropagatableCompleteGroup group, IEnumerable<CompleteAnswer> allAnswers)
+        private IEnumerable<ICompleteAnswer> GetAnswersListForPropagatedGroup(PropagatableCompleteGroup group, IEnumerable<ICompleteAnswer> allAnswers)
         {
-            List<CompleteAnswer> result = new List<CompleteAnswer>();
+            List<ICompleteAnswer> result = new List<ICompleteAnswer>();
             if (allAnswers != null)
                 result = allAnswers.Where(
                     completeAnswer =>

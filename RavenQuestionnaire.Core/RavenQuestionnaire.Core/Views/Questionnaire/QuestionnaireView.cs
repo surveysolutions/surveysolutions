@@ -86,8 +86,8 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
 
         public QuestionnaireView(
             IQuestionnaireDocument
-                <RavenQuestionnaire.Core.Entities.SubEntities.Group,
-                RavenQuestionnaire.Core.Entities.SubEntities.Question> doc)
+                <IGroup,
+                IQuestion> doc)
             : base(doc)
         {
             this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();

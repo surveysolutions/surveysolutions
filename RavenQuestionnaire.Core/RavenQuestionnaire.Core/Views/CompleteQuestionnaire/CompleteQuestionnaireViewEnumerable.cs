@@ -25,7 +25,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public CompleteGroupView[] Groups { get; set; }
 
         public CompleteQuestionnaireViewEnumerable(CompleteQuestionnaireDocument doc,
-                                                   CompleteGroup currentGroup, ICompleteGroupFactory groupFactory)
+                                                   ICompleteGroup currentGroup, ICompleteGroupFactory groupFactory)
         {
             this.GroupFactory = groupFactory;
             this.Id = IdUtil.ParseId(doc.Id);

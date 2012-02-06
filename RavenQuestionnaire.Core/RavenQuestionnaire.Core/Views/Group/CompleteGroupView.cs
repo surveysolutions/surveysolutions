@@ -13,20 +13,24 @@ using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.Group
 {
-    public class CompleteGroupView : GroupView<CompleteGroupView, CompleteQuestionView, CompleteGroup, CompleteQuestion, CompleteAnswer>
+    public class CompleteGroupView : GroupView<CompleteGroupView, CompleteQuestionView, ICompleteGroup, ICompleteQuestion>
     {
         public CompleteGroupView()
         {
         }
-        public CompleteGroupView(CompleteQuestionnaireDocument doc, CompleteGroup group, ICompleteGroupFactory groupFactory)
+        public CompleteGroupView(CompleteQuestionnaireDocument doc, ICompleteGroup group, ICompleteGroupFactory groupFactory)
             : base(doc, group)
         {
-            
-            this.Questions =
-                group.Questions.Select(
-                    q =>
-                    new CompleteQuestionView(doc, q)).ToArray();
-            this.Groups = group.Groups.Select(g => groupFactory.CreateGroup(doc, g)).ToArray();
+            var groupWithQuestions = group as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
+            if (groupWithQuestions != null)
+            {
+
+                this.Questions =
+                    groupWithQuestions.Questions.Select(
+                        q =>
+                        new CompleteQuestionView(doc, q)).ToArray();
+                this.Groups = groupWithQuestions.Groups.Select(g => groupFactory.CreateGroup(doc, g)).ToArray();
+            }
         }
         public virtual string GetClientId(string prefix)
         {
