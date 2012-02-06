@@ -9,8 +9,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
     class NumericAnswerCompleteQuestion: IAnswerStrategy
     {
-        private CompleteQuestion document;
-        public NumericAnswerCompleteQuestion(CompleteQuestion document)
+        private ICompleteQuestion<ICompleteAnswer> document;
+        public NumericAnswerCompleteQuestion(ICompleteQuestion<ICompleteAnswer> document)
         {
             this.document = document;
         }

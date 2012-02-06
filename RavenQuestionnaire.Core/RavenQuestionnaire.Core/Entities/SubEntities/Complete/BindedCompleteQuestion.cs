@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
@@ -18,6 +19,15 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public BindedCompleteQuestion(ICompleteQuestion<ICompleteAnswer> template)
         {
             this.template=template;
+        }
+        public static explicit operator BindedCompleteQuestion(BindedQuestion doc)
+        {
+            BindedCompleteQuestion result = new BindedCompleteQuestion
+            {
+                PublicKey = doc.PublicKey,
+                ParentPublicKey = doc.ParentPublicKey
+            };
+            return result;
         }
         private readonly ICompleteQuestion<ICompleteAnswer> template;
         #region Implementation of IComposite
@@ -47,46 +57,46 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         #region Implementation of IQuestion
 
         public Guid PublicKey { get; set; }
-        [XmlIgnore]
+        [JsonIgnore]
         public string QuestionText
         {
             get { return template.QuestionText; }
             set { throw new InvalidOperationException("question text can't be changed at binded question"); }
         }
-        [XmlIgnore]
+        [JsonIgnore]
         public QuestionType QuestionType
         {
             get { return template.QuestionType; }
             set { throw new InvalidOperationException("QuestionType can't be changed at binded question"); }
         }
-        [XmlIgnore]
+        [JsonIgnore]
         public string ConditionExpression
         {
-            get { return template.QuestionText; }
+            get { return template.ConditionExpression; }
             set { throw new InvalidOperationException("ConditionExpression can't be changed at binded question"); }
         }
-        [XmlIgnore]
+        [JsonIgnore]
         public string StataExportCaption
         {
-            get { return template.QuestionText; }
+            get { return template.StataExportCaption; }
             set { throw new InvalidOperationException("StataExportCaption can't be changed at binded question"); }
         }
 
         #endregion
 
         #region Implementation of ICompleteQuestion
-        [XmlIgnore]
+        [JsonIgnore]
         public bool Enabled
         {
             get { return false; }
-            set { throw new InvalidOperationException("StataExportCaption can't be changed at binded question"); }
+            set { }
         }
 
         #endregion
 
         #region Implementation of IQuestion<CompleteAnswer>
 
-        [XmlIgnore]
+        [JsonIgnore]
         public List<ICompleteAnswer> Answers
         {
             get { return template.Answers; }

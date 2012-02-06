@@ -8,8 +8,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
     public class GpsAnswerCompleteQuestion: IAnswerStrategy
     {
-        private CompleteQuestion document;
-        public GpsAnswerCompleteQuestion(CompleteQuestion document)
+        private ICompleteQuestion<ICompleteAnswer> document;
+        public GpsAnswerCompleteQuestion(ICompleteQuestion<ICompleteAnswer> document)
         {
             this.document = document;
         }

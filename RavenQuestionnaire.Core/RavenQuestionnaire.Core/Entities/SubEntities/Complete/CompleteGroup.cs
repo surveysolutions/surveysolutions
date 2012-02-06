@@ -87,7 +87,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             IPropogate propogated = c as IPropogate;
             if (propogated != null && !(this is IPropogate))
                 throw new CompositeException();
-            foreach (CompleteQuestion completeQuestion in Questions)
+            foreach (ICompleteQuestion completeQuestion in Questions)
             {
                 try
                 {
@@ -126,7 +126,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             }
             if (c is IPropogate && !(this is IPropogate))
                 throw new CompositeException();
-            foreach (CompleteQuestion completeQuestion in Questions)
+            foreach (ICompleteQuestion completeQuestion in Questions)
             {
                 try
                 {
@@ -160,7 +160,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 {
                 }
             }
-            foreach (CompleteQuestion completeQuestion in Questions)
+            foreach (ICompleteQuestion completeQuestion in Questions)
             {
                 try
                 {

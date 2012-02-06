@@ -14,9 +14,13 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
         public QuestionnaireAnswerIterator(ICompleteGroup<ICompleteGroup,ICompleteQuestion> document)
         {
             answers = new List<ICompleteAnswer>();
-            foreach (CompleteQuestion completeQuestion in document.Questions)
+            foreach (ICompleteQuestion completeQuestion in document.Questions)
             {
-                foreach (CompleteAnswer completeAnswer in completeQuestion.Answers)
+                var questionWithAnswers = completeQuestion as ICompleteQuestion<IAnswer>;
+                if (questionWithAnswers == null)
+                    continue;
+
+                foreach (CompleteAnswer completeAnswer in questionWithAnswers.Answers)
                 {
                     completeAnswer.QuestionPublicKey = completeQuestion.PublicKey;
                     if (completeAnswer.Selected)
@@ -38,9 +42,12 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                
                 if (queueItem == null)
                     continue;
-                foreach (CompleteQuestion completeQuestion in queueItem.Questions)
+                foreach (ICompleteQuestion completeQuestion in queueItem.Questions)
                 {
-                    foreach (CompleteAnswer completeAnswer in completeQuestion.Answers)
+                    var questionWithAnswers = completeQuestion as ICompleteQuestion<IAnswer>;
+                    if (questionWithAnswers == null)
+                        continue;
+                    foreach (CompleteAnswer completeAnswer in questionWithAnswers.Answers)
                     {
                         completeAnswer.QuestionPublicKey = completeQuestion.PublicKey;
                         if (completeAnswer.Selected)

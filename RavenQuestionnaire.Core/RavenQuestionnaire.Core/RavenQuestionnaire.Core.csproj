@@ -180,7 +180,6 @@
     <Compile Include="Entities\SubEntities\Complete\BindedCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs" />
     <Compile Include="Entities\SubEntities\Complete\IBinded.cs" />
-    <Compile Include="Entities\SubEntities\Complete\Question\CompleteQuestionFactory.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\DateAnswerCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\GpsAnswerCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\IAnswerStrategy.cs" />
@@ -294,6 +293,7 @@
     <Compile Include="Views\Questionnaire\QuestionnaireView.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireViewInputModel.cs" />
+    <Compile Include="Views\Question\BindedCompleteQuestionView.cs" />
     <Compile Include="Views\Question\CompleteQuestionView.cs" />
     <Compile Include="Views\Question\QuestionView.cs">
       <SubType>Code</SubType>
