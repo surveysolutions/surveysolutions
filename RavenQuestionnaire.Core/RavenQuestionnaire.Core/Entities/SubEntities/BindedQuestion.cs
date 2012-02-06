@@ -9,19 +9,19 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public class BindedQuestion : Question, IBinded
+    public class BindedQuestion : IQuestion<IAnswer>, IBinded
     {
         public BindedQuestion()
         {
             this.template=new Question();
             PublicKey = Guid.NewGuid();
         }
-        public BindedQuestion(IQuestion<Answer> template)
+        public BindedQuestion(IQuestion<IAnswer> template)
         {
             this.template=template;
         }
 
-        private readonly IQuestion<Answer> template;
+        private readonly IQuestion<IAnswer> template;
 
         public Guid PublicKey { get; set; }
 
@@ -44,7 +44,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             set { throw new InvalidOperationException("QuestionType can't be changed at binded question"); }
         }
         [XmlIgnore]
-        public List<Answer> Answers
+        public List<IAnswer> Answers
         {
             get { return template.Answers; }
             set { throw new InvalidOperationException("Answers can't be changed at binded question"); }

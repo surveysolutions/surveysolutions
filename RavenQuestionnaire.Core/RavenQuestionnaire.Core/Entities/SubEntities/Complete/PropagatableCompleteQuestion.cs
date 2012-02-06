@@ -12,7 +12,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
         }
 
-        public PropagatableCompleteQuestion(CompleteQuestion question, Guid propogationPublicKey)
+        public PropagatableCompleteQuestion(ICompleteQuestion question, Guid propogationPublicKey)
         {
             this.ConditionExpression = question.ConditionExpression;
            
@@ -22,12 +22,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.QuestionText = question.QuestionText;
             this.QuestionType = question.QuestionType;
             this.StataExportCaption = question.StataExportCaption;
-
-            for (int i = 0; i < question.Answers.Count; i++)
+            var questionWithAnswer = question as ICompleteQuestion<ICompleteAnswer>;
+            if (questionWithAnswer != null)
             {
-                this.Answers.Add(new PropagatableCompleteAnswer(question.Answers[i], propogationPublicKey));
+                for (int i = 0; i < questionWithAnswer.Answers.Count; i++)
+                {
+                    this.Answers.Add(new PropagatableCompleteAnswer(questionWithAnswer.Answers[i], propogationPublicKey));
+                }
             }
-
             this.PropogationPublicKey = propogationPublicKey;
         }
 

@@ -22,14 +22,14 @@ namespace RavenQuestionnaire.Core.Documents
     {
     }
 
-    public class QuestionnaireDocument : IQuestionnaireDocument<Group, Question>
+    public class QuestionnaireDocument : IQuestionnaireDocument<IGroup, IQuestion>
     {
         public QuestionnaireDocument()
         {
             CreationDate = DateTime.Now;
             LastEntryDate = DateTime.Now;
-            Questions = new List<Question>();
-            Groups = new List<Group>();
+            Questions = new List<IQuestion>();
+            Groups = new List<IGroup>();
             FlowGraph = null;
         }
 
@@ -55,8 +55,8 @@ namespace RavenQuestionnaire.Core.Documents
 
         public DateTime? CloseDate { get; set; }
 
-        public List<Question> Questions { get; set; }
-        public List<Group> Groups { get; set; }
+        public List<IQuestion> Questions { get; set; }
+        public List<IGroup> Groups { get; set; }
         public FlowGraph FlowGraph { get; set; }
 
         

@@ -49,11 +49,11 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Responsible = user;
         }
 
-        public Iterator<CompleteAnswer> AnswerIterator
+        public Iterator<ICompleteAnswer> AnswerIterator
         {
-            get { return iteratorContainer.Create<CompleteQuestionnaireDocument, CompleteAnswer>(this.innerDocument); }
+            get { return iteratorContainer.Create<ICompleteGroup<ICompleteGroup, ICompleteQuestion>, ICompleteAnswer>(this.innerDocument); }
         }
-        public Iterator<CompleteGroup> GroupIterator
+        public Iterator<ICompleteGroup> GroupIterator
         {
             get { return new HierarchicalGroupIterator(this.innerDocument); }
         }
@@ -178,7 +178,7 @@ namespace RavenQuestionnaire.Core.Entities
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            var resultInsideGroups = innerDocument.Groups.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+            var resultInsideGroups = innerDocument.Groups.Where(a=> a is IComposite).Select(answer =>(answer as IComposite).Find<T>(publicKey)).FirstOrDefault(result => result != null);
             if (resultInsideGroups != null)
                 return resultInsideGroups;
             var resultInsideQuestions = innerDocument.Questions.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);

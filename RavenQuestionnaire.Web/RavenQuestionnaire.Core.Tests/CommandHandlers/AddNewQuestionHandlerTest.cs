@@ -55,8 +55,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                 answers, null));
 
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
-            Assert.AreEqual(innerDocument.Groups[0].Questions.Count,1);
-            Assert.AreEqual(innerDocument.Groups[0].Questions[0].QuestionText, "test");
+            Assert.AreEqual((innerDocument.Groups[0] as Group).Questions.Count,1);
+            Assert.AreEqual((innerDocument.Groups[0] as Group).Questions[0].QuestionText, "test");
         }
         [Test]
         public void WhenCommandIsReceived_ToNotExistingGroup_NewQuestionnIsAddedToRepository()

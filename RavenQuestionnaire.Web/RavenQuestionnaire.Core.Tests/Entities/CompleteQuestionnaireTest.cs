@@ -130,9 +130,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                 new PropagatableCompleteAnswer(completeAnswer,
                                                ((PropagatableCompleteGroup) qDoqument.Groups[1]).PropogationPublicKey),
                 null);
-            Assert.AreEqual(qDoqument.Groups[0].Questions[0].Answers[0].Selected, false);
-            Assert.AreEqual(qDoqument.Groups[1].Questions[0].Answers[0].Selected, true);
-            Assert.AreEqual(qDoqument.Groups[2].Questions[0].Answers[0].Selected, false);
+            Assert.AreEqual((((qDoqument.Groups[0] as CompleteGroup).Questions[0] as CompleteQuestion).Answers[0] as CompleteAnswer).Selected, false);
+            Assert.AreEqual((((qDoqument.Groups[1] as CompleteGroup).Questions[0] as CompleteQuestion).Answers[0] as CompleteAnswer).Selected, true);
+            Assert.AreEqual((((qDoqument.Groups[2] as CompleteGroup).Questions[0] as CompleteQuestion).Answers[0] as CompleteAnswer).Selected, false);
 
         }
 

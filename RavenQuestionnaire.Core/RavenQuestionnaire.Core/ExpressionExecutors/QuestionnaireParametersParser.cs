@@ -8,11 +8,11 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
-    public class QuestionnaireParametersParser : IExpressionExecutor<Questionnaire, IList<Question>>
+    public class QuestionnaireParametersParser : IExpressionExecutor<Questionnaire, IList<IQuestion>>
     {
-        public IList<Question> Execute(Questionnaire entity, string expression)
+        public IList<IQuestion> Execute(Questionnaire entity, string expression)
         {
-            IList<Question> result = new List<Question>();
+            IList<IQuestion> result = new List<IQuestion>();
             if (string.IsNullOrEmpty(expression))
                 return result;
             var expressionEntity = new Expression(expression);

@@ -95,12 +95,11 @@ namespace RavenQuestionnaire.Core.Views.Group
        
     }
 
-    public abstract class GroupView<TGroupView, TQuestionView,TGroup, TQuestion, TAnswer> : AbstractGroupView<TGroupView, TQuestionView>
+    public abstract class GroupView<TGroupView, TQuestionView,TGroup, TQuestion> : AbstractGroupView<TGroupView, TQuestionView>
         where TGroupView : AbstractGroupView
         where TQuestionView : AbstractQuestionView
-        where TAnswer : IAnswer
-        where TQuestion : IQuestion<TAnswer>
-        where TGroup : IGroup<TGroup, TQuestion>
+        where TQuestion : IQuestion
+        where TGroup : IGroup
     {
         public GroupView()
         {
@@ -127,8 +126,10 @@ namespace RavenQuestionnaire.Core.Views.Group
             }
             while (groups.Count != 0)
             {
-                var queueItem = groups.Dequeue();
-
+                var queueItem = groups.Dequeue() as IGroup<TGroup, TQuestion>;
+                if(queueItem==null)
+                    continue;
+                
                 if (queueItem.Groups.Any(q => q.PublicKey.Equals(group.PublicKey)))
                     return queueItem.PublicKey;
                 foreach (var child in queueItem.Groups)
@@ -140,7 +141,7 @@ namespace RavenQuestionnaire.Core.Views.Group
         }
     }
 
-    public class GroupView : GroupView<GroupView, QuestionView, Entities.SubEntities.Group, Entities.SubEntities.Question, Entities.SubEntities.Answer>
+    public class GroupView : GroupView<GroupView, QuestionView, IGroup,IQuestion>
     {
         public GroupView()
         {
@@ -152,14 +153,17 @@ namespace RavenQuestionnaire.Core.Views.Group
         }
 
         public GroupView(
-            IQuestionnaireDocument<Entities.SubEntities.Group, Entities.SubEntities.Question> doc, Entities.SubEntities.Group group)
+            IQuestionnaireDocument<IGroup, IQuestion> doc, IGroup group)
             : base(doc, group)
         {
+            var groupTyped = group as IGroup<IGroup, IQuestion>;
+            if (groupTyped == null)
+                return;
             Questions =
-                group.Questions.Select(
+                groupTyped.Questions.Select(
                     q =>
                     new QuestionView(doc, q)).ToArray();
-            this.Groups = group.Groups.Select(g => new GroupView(doc, g)).ToArray();
+            this.Groups = groupTyped.Groups.Select(g => new GroupView(doc, g)).ToArray();
         }
 
     }

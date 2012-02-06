@@ -43,7 +43,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             innerDocument.Groups.Add(parent);
             questionnaire.AddGroup("group", false, parent.PublicKey);
 
-            Assert.AreEqual(innerDocument.Groups[0].Groups[0].Title, "group");
+            Assert.AreEqual((innerDocument.Groups[0] as Group).Groups[0].Title, "group");
             Assert.AreEqual(innerDocument.Groups[0], parent);
         }
         [Test]
@@ -57,8 +57,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             topParent.Groups.Add(subParent);
             questionnaire.AddGroup("group", false, subParent.PublicKey);
 
-            Assert.AreEqual(innerDocument.Groups[0].Groups[0].Groups[0].Title, "group");
-            Assert.AreEqual(innerDocument.Groups[0].Groups[0], subParent);
+            Assert.AreEqual(((innerDocument.Groups[0] as Group).Groups[0] as Group).Groups[0].Title, "group");
+            Assert.AreEqual((innerDocument.Groups[0] as Group).Groups[0], subParent);
         }
         [Test]
         public void AddGroup_InvalidParentPublicKey_ArgumentException()
@@ -135,7 +135,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
             Assert.AreEqual(innerDocument.Questions[0].QuestionText, "new question title");
             Assert.AreEqual(innerDocument.Questions[0].QuestionType, QuestionType.MultyOption);
-            Assert.AreEqual(innerDocument.Questions[0].Answers.Count, 1);
+            Assert.AreEqual((innerDocument.Questions[0] as Question).Answers.Count, 1);
         }
        
         [Test]
@@ -145,7 +145,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             innerDocument.Questions.Add(new Question("top", QuestionType.SingleOption));
             innerDocument.Groups.Add(new Group("g1"));
-            innerDocument.Groups[0].Questions.Add(new Question("first level", QuestionType.MultyOption));
+            (innerDocument.Groups[0] as Group).Questions.Add(new Question("first level", QuestionType.MultyOption));
             Assert.AreEqual(questionnaire.GetAllQuestions().Count, 2);
         }
     }

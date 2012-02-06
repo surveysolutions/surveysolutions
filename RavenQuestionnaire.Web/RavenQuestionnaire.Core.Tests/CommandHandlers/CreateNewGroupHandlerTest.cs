@@ -39,8 +39,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CreateNewGroupHandler handler = new CreateNewGroupHandler(questionaireRepositoryMock.Object);
             handler.Handle(new Commands.CreateNewGroupCommand("some text", false, "qId", topGroup.PublicKey, null));
           
-            Assert.AreEqual(innerDocument.Groups[0].Groups.Count, 1);
-            Assert.AreEqual(innerDocument.Groups[0].Groups[0].Title, "some text");
+            Assert.AreEqual((innerDocument.Groups[0] as Group).Groups.Count, 1);
+            Assert.AreEqual((innerDocument.Groups[0] as Group).Groups[0].Title, "some text");
         }
 
         [Test]

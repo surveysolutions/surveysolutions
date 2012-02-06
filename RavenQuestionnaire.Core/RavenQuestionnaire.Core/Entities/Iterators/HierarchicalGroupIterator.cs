@@ -8,21 +8,24 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities.Iterators
 {
-    public class HierarchicalGroupIterator: Iterator<CompleteGroup>
+    public class HierarchicalGroupIterator: Iterator<ICompleteGroup>
     {
-        public HierarchicalGroupIterator(IQuestionnaireDocument<CompleteGroup, CompleteQuestion> document)
+        public HierarchicalGroupIterator(IQuestionnaireDocument<ICompleteGroup, ICompleteQuestion> document)
         {
           //  this.questionnaire = questionnaire;
-            groups = new List<CompleteGroup>();
+            groups = new List<ICompleteGroup>();
             groups.AddRange(document.Groups);
-            Queue<CompleteGroup> groupsQuque = new Queue<CompleteGroup>();
+            Queue<ICompleteGroup> groupsQuque = new Queue<ICompleteGroup>();
             foreach (var child in document.Groups)
             {
                 groupsQuque.Enqueue(child);
             }
             while (groupsQuque.Count != 0)
             {
-                var queueItem = groupsQuque.Dequeue();
+                var queueItem = groupsQuque.Dequeue() as ICompleteGroup<ICompleteGroup,ICompleteQuestion>;
+                if(queueItem==null)
+                    continue;
+                
                 groups.AddRange(queueItem.Groups);
                 foreach (var child in queueItem.Groups)
                 {
@@ -31,11 +34,11 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             }
         }
     //    protected IQuestionnaireDocument<CompleteGroup, CompleteQuestion> questionnaire;
-        protected List<CompleteGroup> groups;
+        protected List<ICompleteGroup> groups;
         private int current = 0;
         #region Implementation of Iterator<Question,Guid>
 
-        public CompleteGroup Next
+        public ICompleteGroup Next
         {
             get
             {
@@ -45,7 +48,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             }
         }
 
-        public CompleteGroup Previous
+        public ICompleteGroup Previous
         {
             get
             {
@@ -54,7 +57,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 return this.groups[--this.current];
             }
         }
-        public void SetCurrent(CompleteGroup item)
+        public void SetCurrent(ICompleteGroup item)
         {
             var index = this.groups.IndexOf(item);
             if (index >= 0)
@@ -69,7 +72,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
 
         #region Implementation of IEnumerable
 
-        public IEnumerator<CompleteGroup> GetEnumerator()
+        public IEnumerator<ICompleteGroup> GetEnumerator()
         {
             return this.groups.GetEnumerator();
         }
@@ -106,7 +109,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             this.current = 0;
         }
 
-        public CompleteGroup Current
+        public ICompleteGroup Current
         {
             get { return this.groups[current]; }
         }

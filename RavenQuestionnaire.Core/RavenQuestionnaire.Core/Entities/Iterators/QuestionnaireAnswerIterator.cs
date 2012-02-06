@@ -9,11 +9,11 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities.Iterators
 {
-    public class QuestionnaireAnswerIterator : Iterator<CompleteAnswer>
+    public class QuestionnaireAnswerIterator : Iterator<ICompleteAnswer>
     {
-        public QuestionnaireAnswerIterator(IGroup<CompleteGroup, CompleteQuestion> document)
+        public QuestionnaireAnswerIterator(ICompleteGroup<ICompleteGroup,ICompleteQuestion> document)
         {
-            answers = new List<CompleteAnswer>();
+            answers = new List<ICompleteAnswer>();
             foreach (CompleteQuestion completeQuestion in document.Questions)
             {
                 foreach (CompleteAnswer completeAnswer in completeQuestion.Answers)
@@ -23,14 +23,21 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                         answers.Add(completeAnswer);
                 }
             }
-            Queue<CompleteGroup> groups = new Queue<CompleteGroup>();
+            Queue<ICompleteGroup> groups = new Queue<ICompleteGroup>();
             foreach (var child in document.Groups)
             {
+                var childWithGroups = child as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
+                if(childWithGroups==null)
+                    continue;
+                
                 groups.Enqueue(child);
             }
             while (groups.Count != 0)
             {
-                var queueItem = groups.Dequeue();
+                var queueItem = groups.Dequeue() as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
+               
+                if (queueItem == null)
+                    continue;
                 foreach (CompleteQuestion completeQuestion in queueItem.Questions)
                 {
                     foreach (CompleteAnswer completeAnswer in completeQuestion.Answers)
@@ -47,13 +54,13 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             }
         }
 
-        protected List<CompleteAnswer> answers;
+        protected List<ICompleteAnswer> answers;
         private int current = 0;
 
 
         #region Implementation of Iterator<CompleteAnswer>
 
-        public CompleteAnswer Next
+        public ICompleteAnswer Next
         {
             get
             {
@@ -63,7 +70,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             }
         }
 
-        public CompleteAnswer Previous
+        public ICompleteAnswer Previous
         {
             get
             {
@@ -72,7 +79,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                 return this.answers[--this.current];
             }
         }
-        public void SetCurrent(CompleteAnswer item)
+        public void SetCurrent(ICompleteAnswer item)
         {
             var index = this.answers.IndexOf(item);
             if (index >= 0)
@@ -87,7 +94,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
 
         #region Implementation of IEnumerable
 
-        public IEnumerator<CompleteAnswer> GetEnumerator()
+        public IEnumerator<ICompleteAnswer> GetEnumerator()
         {
             return this.answers.GetEnumerator();
         }
@@ -124,7 +131,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             this.current = 0;
         }
 
-        public CompleteAnswer Current
+        public ICompleteAnswer Current
         {
             get { return this.answers[current]; }
         }

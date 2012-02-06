@@ -81,7 +81,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 commandInvoker.Execute(new UpdateQuestionnaireFlowCommand(questionnaireId, blocks, connections, GlobalInfo.GetCurrentUser()));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return Json(new { status = "not saved" });
             }

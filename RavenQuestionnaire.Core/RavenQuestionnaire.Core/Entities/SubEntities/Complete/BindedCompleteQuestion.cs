@@ -7,7 +7,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class BindedCompleteQuestion : ICompleteQuestion<CompleteAnswer>, IBinded
+    public class BindedCompleteQuestion : ICompleteQuestion<ICompleteAnswer>, IBinded
     {
         public BindedCompleteQuestion()
         {
@@ -15,25 +15,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             PublicKey = Guid.NewGuid();
         }
 
-        public BindedCompleteQuestion(ICompleteQuestion<CompleteAnswer> template)
+        public BindedCompleteQuestion(ICompleteQuestion<ICompleteAnswer> template)
         {
             this.template=template;
         }
-        public static explicit operator BindedCompleteQuestion(RavenQuestionnaire.Core.Entities.SubEntities.BindedQuestion doc)
-        {
-            BindedCompleteQuestion result = new BindedCompleteQuestion
-            {
-                ParentPublicKey = doc.ParentPublicKey,
-                PublicKey = doc.PublicKey,
-                ConditionExpression = doc.ConditionExpression,
-                QuestionText = doc.QuestionText,
-                QuestionType = doc.QuestionType,
-                StataExportCaption = doc.StataExportCaption
-            };
-            result.Answers = doc.Answers.Select(a => (CompleteAnswer)a).ToList();
-            return result;
-        }
-        private readonly ICompleteQuestion<CompleteAnswer> template;
+        private readonly ICompleteQuestion<ICompleteAnswer> template;
         #region Implementation of IComposite
 
         public void Add(IComposite c, Guid? parent)
@@ -101,7 +87,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         #region Implementation of IQuestion<CompleteAnswer>
 
         [XmlIgnore]
-        public List<CompleteAnswer> Answers
+        public List<ICompleteAnswer> Answers
         {
             get { return template.Answers; }
             set { throw new InvalidOperationException("Answers can't be changed at binded question"); }

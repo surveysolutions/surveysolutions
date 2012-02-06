@@ -17,7 +17,7 @@ namespace RavenQuestionnaire.Core.Views.Answer
         {
             this.Selected = false;
         }
-        public CompleteAnswerView(RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteAnswer answer)
+        public CompleteAnswerView(RavenQuestionnaire.Core.Entities.SubEntities.Complete.ICompleteAnswer answer)
             : this(answer.QuestionPublicKey, answer)
         {
             this.Selected = answer.Selected;

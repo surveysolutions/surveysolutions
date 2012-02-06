@@ -22,13 +22,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         List<T> Answers { get; set; }
     }
 
-    public class Question : /*IEntity<QuestionDocument>*/IQuestion<Answer>
+    public class Question : /*IEntity<QuestionDocument>*/IQuestion<IAnswer>
     {
 
         public Question()
         {
             PublicKey = Guid.NewGuid();
-            Answers = new List<Answer>();
+            Answers = new List<IAnswer>();
         }
         public Question(string text, QuestionType type)
             : this()
@@ -39,7 +39,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
-        public List<Answer> Answers { get; set; }
+        public List<IAnswer> Answers { get; set; }
         public string ConditionExpression { get; set; }
 
         //remove when exportSchema will be done 

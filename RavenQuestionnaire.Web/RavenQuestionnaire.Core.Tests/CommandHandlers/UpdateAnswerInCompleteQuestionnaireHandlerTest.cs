@@ -52,12 +52,12 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                 ,
                                                                                                                 null);
             iteratorContainerMock.Setup(
-             x => x.Create<CompleteQuestionnaireDocument, CompleteQuestion>(qDoqument)).Returns(
+             x => x.Create<ICompleteGroup, ICompleteQuestion>(qDoqument)).Returns(
                  new QuestionnaireQuestionIterator(qDoqument));
             handler.Handle(command);
             repositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqId"), Times.Once());
             Assert.AreEqual(qDoqument.Questions[0].PublicKey, question.PublicKey);
-            Assert.AreEqual(qDoqument.Questions[0].Answers[0].Selected, true);
+            Assert.AreEqual((qDoqument.Questions[0] as CompleteQuestion).Answers[0].Selected, true);
         }
         [Test]
         public void 
@@ -79,7 +79,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
             completeAnswer.Selected = true;
             iteratorContainerMock.Setup(
-               x => x.Create<CompleteQuestionnaireDocument, CompleteQuestion>(qDoqument)).Returns(
+               x => x.Create<CompleteQuestionnaireDocument, ICompleteQuestion>(qDoqument)).Returns(
                    new QuestionnaireQuestionIterator(qDoqument));
             UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
@@ -101,8 +101,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                 null);
             handler.Handle(command);
 
-            Assert.AreEqual(qDoqument.Groups[0].Questions[0].Answers[0].Selected, false);
-            Assert.AreEqual(qDoqument.Groups[1].Questions[0].Answers[0].Selected, true);
+            Assert.AreEqual(((qDoqument.Groups[0] as CompleteGroup).Questions[0] as CompleteQuestion).Answers[0].Selected, false);
+            Assert.AreEqual(((qDoqument.Groups[1] as CompleteGroup).Questions[0] as CompleteQuestion).Answers[0].Selected, true);
             //  group.Add(group, null);
         }
 
@@ -125,10 +125,10 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
 
             iteratorContainerMock.Setup(
-              x => x.Create<CompleteQuestionnaireDocument, CompleteQuestion>(qDoqument)).Returns(
+              x => x.Create<ICompleteGroup, ICompleteQuestion>(qDoqument)).Returns(
                   new QuestionnaireQuestionIterator(qDoqument));
             iteratorContainerMock.Setup(
-             x => x.Create<CompleteQuestionnaireDocument, CompleteAnswer>(qDoqument)).Returns(
+             x => x.Create<ICompleteGroup, ICompleteAnswer>(qDoqument)).Returns(
                  new QuestionnaireAnswerIterator(qDoqument));
             UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
