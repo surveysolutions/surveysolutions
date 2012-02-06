@@ -10,7 +10,7 @@ namespace RavenQuestionnaire.Core.Views.Group
 {
     public class PropagatableCompleteGroupView : CompleteGroupView
     {
-         public PropagatableCompleteGroupView()
+        public PropagatableCompleteGroupView()
         {
         }
         public PropagatableCompleteGroupView(CompleteQuestionnaireDocument doc, PropagatableCompleteGroup group, ICompleteGroupFactory groupFactory)

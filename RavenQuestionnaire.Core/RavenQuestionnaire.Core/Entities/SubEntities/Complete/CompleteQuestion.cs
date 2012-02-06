@@ -7,7 +7,6 @@ using System.Text;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
-using CompleteQuestionFactory = RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question.CompleteQuestionFactory;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {

@@ -11,18 +11,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
         }
 
-        public PropagatableCompleteAnswer(IAnswer answer, Guid questionPublicKey):base(answer,questionPublicKey)
+      /*  public PropagatableCompleteAnswer(IAnswer answer, Guid questionPublicKey):base(answer,questionPublicKey)
         {
-        }
-        public PropagatableCompleteAnswer(CompleteAnswer answer, Guid propogationPublicKey)
+        }*/
+        public PropagatableCompleteAnswer(ICompleteAnswer answer, Guid propogationPublicKey):base(answer,answer.QuestionPublicKey)
         {
-            this.AnswerText = answer.AnswerText;
-            this.AnswerType = answer.AnswerType;
-            this.AnswerValue = answer.AnswerValue;
-            this.Mandatory = answer.Mandatory;
-            this.PublicKey = answer.PublicKey;
             this.Selected = answer.Selected;
-            this.QuestionPublicKey = answer.QuestionPublicKey;
             this.PropogationPublicKey = propogationPublicKey;
         }
         #region Implementation of ICloneable

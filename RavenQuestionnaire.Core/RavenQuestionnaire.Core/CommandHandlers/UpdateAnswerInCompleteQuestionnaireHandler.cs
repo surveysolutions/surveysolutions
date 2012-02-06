@@ -42,7 +42,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         {
             //innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey.Equals(question.PublicKey));
             //  Questionnaire template = entity.GetQuestionnaireTemplate();
-            foreach (CompleteQuestion completeQuestion in entity.GetInnerDocument().Questions)
+            foreach (ICompleteQuestion completeQuestion in entity.GetInnerDocument().Questions)
             {
                 if (
                     !this._conditionExecutor.Execute(entity.AnswerIterator, completeQuestion.ConditionExpression))
@@ -63,7 +63,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
                     continue;
 
                 // IEnumerable<CompleteQuestion> questions = completeGroup is IPropogate ? completeGroup.Questions : allQuestions;
-                foreach (CompleteQuestion completeQuestion in completeGroup.Questions)
+                foreach (ICompleteQuestion completeQuestion in completeGroup.Questions)
                 {
                     if (
                         !this._conditionExecutor.Execute(

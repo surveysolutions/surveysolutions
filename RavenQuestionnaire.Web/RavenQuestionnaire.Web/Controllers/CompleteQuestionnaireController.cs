@@ -146,7 +146,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     "questions[" + question.PublicKey +
                     (settings[0].PropogationPublicKey.HasValue
                          ? string.Format("_{0}", settings[0].PropogationPublicKey.Value)
-                         : "") + "].AnswerValue", e.Message);
+                         : "") + "].AnswerValue", e.StackTrace);
             }
             var model =
                 viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
