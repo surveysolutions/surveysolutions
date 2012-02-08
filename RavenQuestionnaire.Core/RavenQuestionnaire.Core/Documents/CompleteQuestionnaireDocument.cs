@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using RavenQuestionnaire.Core.AbstractFactories;
+using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
@@ -32,6 +33,7 @@ namespace RavenQuestionnaire.Core.Documents
             LastEntryDate = DateTime.Now;
             Questions = new List<ICompleteQuestion>();
             Groups = new List<ICompleteGroup>();
+            Observers = new List<IObserver<CompositeInfo>>();
         }
         public static explicit operator CompleteQuestionnaireDocument(QuestionnaireDocument doc)
         {
@@ -44,6 +46,7 @@ namespace RavenQuestionnaire.Core.Documents
                 doc.Questions.Select(q => new CompleteQuestionFactory().ConvertToCompleteQuestion(q)).ToList();
             result.Groups =
                 doc.Groups.Select(q => new CompleteGroupFactory().ConvertToCompleteGroup(q)).ToList();
+            result.Observers = doc.Observers;
             return result;
         }
         public UserLight Creator { get; set; }
@@ -83,6 +86,12 @@ namespace RavenQuestionnaire.Core.Documents
             set { }
         }
 
+        public Guid? ForcingPropagationPublicKey
+        {
+            get { return null; }
+            set {  }
+        }
+        public List<IObserver<CompositeInfo>> Observers { get; set; }
         #endregion
     }
 }

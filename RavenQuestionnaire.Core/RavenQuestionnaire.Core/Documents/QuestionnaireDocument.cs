@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Documents
@@ -13,7 +14,7 @@ namespace RavenQuestionnaire.Core.Documents
         DateTime LastEntryDate { get; set; }
         DateTime? OpenDate { get; set; }
         DateTime? CloseDate { get; set; }
-
+        List<IObserver<CompositeInfo>> Observers { get; set; }
     }
 
     public interface IQuestionnaireDocument<TGroup, TQuestion> : IQuestionnaireDocument, IGroup<TGroup, TQuestion>
@@ -30,6 +31,7 @@ namespace RavenQuestionnaire.Core.Documents
             LastEntryDate = DateTime.Now;
             Questions = new List<IQuestion>();
             Groups = new List<IGroup>();
+            Observers = new List<IObserver<CompositeInfo>>();
             FlowGraph = null;
         }
 
@@ -42,6 +44,12 @@ namespace RavenQuestionnaire.Core.Documents
         public bool Propagated
         {
             get { return false; }
+            set {  }
+        }
+
+        public Guid? ForcingPropagationPublicKey
+        {
+            get { return null; }
             set {  }
         }
 
@@ -58,7 +66,6 @@ namespace RavenQuestionnaire.Core.Documents
         public List<IQuestion> Questions { get; set; }
         public List<IGroup> Groups { get; set; }
         public FlowGraph FlowGraph { get; set; }
-
-        
+        public List<IObserver<CompositeInfo>> Observers { get; set; }
     }
 }
