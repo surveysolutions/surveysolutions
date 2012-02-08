@@ -171,6 +171,9 @@
     <Compile Include="Entities\Iterators\QuestionnaireQuestionIterator.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
     <Compile Include="Entities\Location.cs" />
+    <Compile Include="Entities\Observers\CompositeHandler.cs" />
+    <Compile Include="Entities\Observers\CompositeInfo.cs" />
+    <Compile Include="Entities\Observers\GroupObservable.cs" />
     <Compile Include="Entities\Questionnaire.cs" />
     <Compile Include="Entities\Report.cs" />
     <Compile Include="Entities\Status.cs" />

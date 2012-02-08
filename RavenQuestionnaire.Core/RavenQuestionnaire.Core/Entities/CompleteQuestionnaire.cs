@@ -5,6 +5,7 @@ using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Iterators;
+using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
@@ -15,29 +16,52 @@ namespace RavenQuestionnaire.Core.Entities
     {
         private CompleteQuestionnaireDocument innerDocument;
         private IIteratorContainer iteratorContainer;
+        private CompositeHandler handler;
         public CompleteQuestionnaireDocument GetInnerDocument()
         {
             return innerDocument;
         }
         public CompleteQuestionnaire(Questionnaire template, UserLight user, SurveyStatus status)
         {
-            innerDocument = (CompleteQuestionnaireDocument)((IEntity<QuestionnaireDocument>) template).GetInnerDocument();
+            innerDocument =
+                (CompleteQuestionnaireDocument)((IEntity<QuestionnaireDocument>)template).GetInnerDocument();
             innerDocument.Creator = user;
             innerDocument.Status = status;
             innerDocument.Responsible = user;
+            handler = new CompositeHandler(innerDocument.Observers, this);
+            /* foreach (ICompleteGroup completeGroup in GroupIterator)
+             {
+                 var group = completeGroup as CompleteGroup;
+                 if (group != null)
+                     group.Subscribe(this.handler);
+             }*/
         }
 
         public CompleteQuestionnaire(CompleteQuestionnaireDocument document, IIteratorContainer iteratorContainer)
         {
             this.innerDocument = document;
             this.iteratorContainer = iteratorContainer;
+            handler = new CompositeHandler(innerDocument.Observers, this);
+            /*    foreach (ICompleteGroup completeGroup in GroupIterator)
+                {
+                    var group = completeGroup as CompleteGroup;
+                    if (group != null)
+                        group.Subscribe(this.handler);
+                }*/
         }
 
         public string CompleteQuestinnaireId
         {
             get { return innerDocument.Id; }
         }
-
+        /*  public void Subscribe(IComposite target, CompleteGroup group, Actions action)
+          {
+              group.Subscribe(this.handler);
+          }
+          public void Unsubscribe(CompleteGroup group)
+          {
+              group.Unsubscribe();
+          }*/
         public void SetStatus(SurveyStatus status)
         {
             innerDocument.Status = status;
@@ -57,25 +81,27 @@ namespace RavenQuestionnaire.Core.Entities
         {
             get { return new HierarchicalGroupIterator(this.innerDocument); }
         }
-     /*   public Iterator<CompleteQuestion> QuestionIterator
-        {
-            get { return iteratorContainer.Create<CompleteQuestionnaireDocument, CompleteQuestion>(this.innerDocument); }
-        }*/
+        /*   public Iterator<CompleteQuestion> QuestionIterator
+           {
+               get { return iteratorContainer.Create<CompleteQuestionnaireDocument, CompleteQuestion>(this.innerDocument); }
+           }*/
         #region Implementation of IComposite
 
         public virtual void Add(IComposite c, Guid? parent)
         {
-            if (!parent.HasValue)
+            CompleteGroup group = c as CompleteGroup;
+            if (group != null && group.Propagated)
             {
-                CompleteGroup propogate = c as CompleteGroup;
-                if (propogate != null && propogate.Propagated)
+                if (!(group is PropagatableCompleteGroup))
+                c = new PropagatableCompleteGroup(group, Guid.NewGuid());
+
+                if (!parent.HasValue)
                 {
-                    var group = this.innerDocument.Groups.FirstOrDefault(g => g.PublicKey.Equals(propogate.PublicKey));
-                    if (group != null)
+
+                    if (this.innerDocument.Groups.Count(g => g.PublicKey.Equals(group.PublicKey)) > 0)
                     {
-                        var newGroup = new PropagatableCompleteGroup(propogate, Guid.NewGuid());
-                        this.innerDocument.Groups.Add(newGroup);
-                        
+                        this.innerDocument.Groups.Add(c as ICompleteGroup);
+                        this.handler.Add(c);
                         return;
                     }
                 }
@@ -85,6 +111,7 @@ namespace RavenQuestionnaire.Core.Entities
                 try
                 {
                     completeGroup.Add(c, parent);
+                    this.handler.Add(c);
                     return;
                 }
                 catch (CompositeException)
@@ -96,6 +123,7 @@ namespace RavenQuestionnaire.Core.Entities
                 try
                 {
                     completeQuestion.Add(c, parent);
+                    this.handler.Add(c);
                     return;
                 }
                 catch (CompositeException)
@@ -114,14 +142,18 @@ namespace RavenQuestionnaire.Core.Entities
                     this.innerDocument.Groups.RemoveAll(
                         g =>
                         g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
-                        ((IPropogate) g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
+                        ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
+                {
+                    this.handler.Remove(c);
                     return;
+                }
             }
             foreach (CompleteGroup completeGroup in this.innerDocument.Groups)
             {
                 try
                 {
                     completeGroup.Remove(c);
+                    this.handler.Remove(c);
                     return;
                 }
                 catch (CompositeException)
@@ -133,6 +165,7 @@ namespace RavenQuestionnaire.Core.Entities
                 try
                 {
                     completeQuestion.Remove(c);
+                    this.handler.Remove(c);
                     return;
                 }
                 catch (CompositeException)
@@ -149,13 +182,17 @@ namespace RavenQuestionnaire.Core.Entities
                 if (this.innerDocument.Groups.RemoveAll(
                     g =>
                     g.PublicKey.Equals(publicKey)) > 0)
+                {
+                    this.handler.Remove<T>(publicKey);
                     return;
+                }
             }
             foreach (CompleteGroup completeGroup in this.innerDocument.Groups)
             {
                 try
                 {
                     completeGroup.Remove<T>(publicKey);
+                    this.handler.Remove<T>(publicKey);
                     return;
                 }
                 catch (CompositeException)
@@ -167,6 +204,7 @@ namespace RavenQuestionnaire.Core.Entities
                 try
                 {
                     completeQuestion.Remove<T>(publicKey);
+                    this.handler.Remove<T>(publicKey);
                     return;
                 }
                 catch (CompositeException)
@@ -178,7 +216,7 @@ namespace RavenQuestionnaire.Core.Entities
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            var resultInsideGroups = innerDocument.Groups.Where(a=> a is IComposite).Select(answer =>(answer as IComposite).Find<T>(publicKey)).FirstOrDefault(result => result != null);
+            var resultInsideGroups = innerDocument.Groups.Where(a => a is IComposite).Select(answer => (answer as IComposite).Find<T>(publicKey)).FirstOrDefault(result => result != null);
             if (resultInsideGroups != null)
                 return resultInsideGroups;
             var resultInsideQuestions = innerDocument.Questions.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
@@ -189,6 +227,6 @@ namespace RavenQuestionnaire.Core.Entities
 
         #endregion
 
-        
+
     }
 }

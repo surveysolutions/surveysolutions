@@ -8,16 +8,18 @@ using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Iterators;
+using RavenQuestionnaire.Core.Entities.Observers;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class CompleteGroup : ICompleteGroup<ICompleteGroup, ICompleteQuestion>,IComposite
+    public class CompleteGroup : ICompleteGroup<ICompleteGroup, ICompleteQuestion>, IComposite
     {
         public CompleteGroup()
         {
             Questions = new List<ICompleteQuestion>();
             Groups = new List<ICompleteGroup>();
-         //   this.iteratorContainer = new IteratorContainer();
+            this.PublicKey = Guid.NewGuid();
+            //   this.iteratorContainer = new IteratorContainer();
         }
 
         public CompleteGroup(string name)
@@ -46,7 +48,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public string Title { get; set; }
 
         public bool Propagated { get; set; }
-
+        
         public List<ICompleteQuestion> Questions { get; set; }
 
         public List<ICompleteGroup> Groups { get; set; }
@@ -55,19 +57,19 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             get { return new QuestionnaireAnswerIterator(this); }
         }
-       // private IIteratorContainer iteratorContainer;
+        // private IIteratorContainer iteratorContainer;
 
         public virtual void Add(IComposite c, Guid? parent)
         {
             if (!parent.HasValue || parent.Value == PublicKey)
             {
-                CompleteGroup propogate = c as CompleteGroup;
-                if (propogate != null && propogate.Propagated)
+                PropagatableCompleteGroup propogateGroup = c as PropagatableCompleteGroup;
+                if (propogateGroup != null)
                 {
-                    var group = Groups.FirstOrDefault(g => g.PublicKey.Equals(propogate.PublicKey));
+                    var group = Groups.FirstOrDefault(g => g.PublicKey.Equals(propogateGroup.PublicKey));
                     if (group != null)
                     {
-                        Groups.Add(new PropagatableCompleteGroup(propogate, Guid.NewGuid()));
+                        Groups.Add(propogateGroup);
                         return;
                     }
                 }
@@ -110,7 +112,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 if (Groups.RemoveAll(
                     g =>
                     g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
-                    ((IPropogate) g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
+                    ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
                     return;
             }
             foreach (CompleteGroup completeGroup in Groups)
@@ -176,13 +178,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public virtual T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            if (typeof (T) == GetType())
+            if (typeof(T) == GetType())
             {
                 if (this.PublicKey.Equals(publicKey))
                     return this as T;
             }
             var resultInsideGroups =
-                Groups.Where(a=> a is IComposite).Select(answer => (answer as IComposite).Find<T>(publicKey)).FirstOrDefault(result => result != null);
+                Groups.Where(a => a is IComposite).Select(answer => (answer as IComposite).Find<T>(publicKey)).FirstOrDefault(result => result != null);
             if (resultInsideGroups != null)
                 return resultInsideGroups;
             var resultInsideQuestions =
@@ -192,5 +194,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return null;
         }
 
+       
+        
     }
 }

@@ -16,7 +16,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
             answers = new List<ICompleteAnswer>();
             foreach (ICompleteQuestion completeQuestion in document.Questions)
             {
-                var questionWithAnswers = completeQuestion as ICompleteQuestion<IAnswer>;
+                var questionWithAnswers = completeQuestion as ICompleteQuestion<ICompleteAnswer>;
                 if (questionWithAnswers == null)
                     continue;
 
@@ -44,7 +44,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
                     continue;
                 foreach (ICompleteQuestion completeQuestion in queueItem.Questions)
                 {
-                    var questionWithAnswers = completeQuestion as ICompleteQuestion<IAnswer>;
+                    var questionWithAnswers = completeQuestion as ICompleteQuestion<ICompleteAnswer>;
                     if (questionWithAnswers == null)
                         continue;
                     foreach (CompleteAnswer completeAnswer in questionWithAnswers.Answers)
