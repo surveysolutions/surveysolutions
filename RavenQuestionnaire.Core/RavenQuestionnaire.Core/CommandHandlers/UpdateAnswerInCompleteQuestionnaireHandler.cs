@@ -69,7 +69,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
                         !this._conditionExecutor.Execute(
                             completeGroup is PropagatableCompleteGroup
                                 ? GetAnswersListForPropagatedGroup(completeGroup as PropagatableCompleteGroup,
-                                                                   entity.AnswerIterator)
+                                                                   entity)
                                 : entity.AnswerIterator,
                             completeQuestion.ConditionExpression))
                     {
@@ -83,6 +83,20 @@ namespace RavenQuestionnaire.Core.CommandHandlers
                 }
             }
         }
+        private IEnumerable<ICompleteAnswer> GetAnswersListForPropagatedGroup(PropagatableCompleteGroup group, CompleteQuestionnaire questionnaire)
+        {
+            List<ICompleteAnswer> result = new List<ICompleteAnswer>();
+            var propagatedGroupWithSameId =
+                questionnaire.Find<PropagatableCompleteGroup>(
+                    g => g.PropogationPublicKey.Equals(group.PropogationPublicKey));
+
+            if (questionnaire.AnswerIterator != null)
+                result =
+                    questionnaire.AnswerIterator.Where(
+                        a => propagatedGroupWithSameId.SelectMany(g=>g.Questions).Count(ag => ag.PublicKey.Equals(a.QuestionPublicKey)) == 0).ToList();
+            result.AddRange(propagatedGroupWithSameId.SelectMany(g => g.AnswerIterator));
+            return result;
+        }
 
         private IEnumerable<ICompleteAnswer> GetAnswersListForPropagatedGroup(PropagatableCompleteGroup group, IEnumerable<ICompleteAnswer> allAnswers)
         {
@@ -90,7 +104,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             if (allAnswers != null)
                 result = allAnswers.Where(
                     completeAnswer =>
-                    @group.Questions.Count(q => q.PublicKey.Equals(completeAnswer.QuestionPublicKey)) == 0).ToList();
+                    group.Questions.Count(q => q.PublicKey.Equals(completeAnswer.QuestionPublicKey)) == 0).ToList();
             result.AddRange(group.AnswerIterator);
             return result;
         }
