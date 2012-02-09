@@ -250,7 +250,32 @@ namespace RavenQuestionnaire.Core.Entities
             }
             return null;
         }
-
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            return
+             innerDocument.Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
+                 innerDocument.Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
+                     innerDocument.Questions.SelectMany(q => q.Find<T>(condition))).Union(
+                         innerDocument.Groups.Where(g => g is IComposite).SelectMany(g => (g as IComposite).Find<T>(condition)));
+        
+         /*   foreach (Group child in innerDocument.Groups)
+            {
+                if (child is T && condition(child))
+                    return child as T;
+                T subNodes = child.Find<T>(condition);
+                if (subNodes != null)
+                    return subNodes;
+            }
+            foreach (Question child in innerDocument.Questions)
+            {
+                if (child is T && condition(child))
+                    return child as T;
+                T subNodes = child.Find<T>(condition);
+                if (subNodes != null)
+                    return subNodes;
+            }
+            return null;*/
+        }
         public IList<IQuestion> GetAllQuestions()
         {
             List<IQuestion> result = new List<IQuestion>();

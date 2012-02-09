@@ -44,11 +44,11 @@ namespace RavenQuestionnaire.Core.AbstractFactories
             return new TextAnswerCompleteQuestion(baseQuestion);
         }
 
-        public CompleteQuestionView CreateGroup(CompleteQuestionnaireDocument doc,ICompleteQuestion question)
+        public CompleteQuestionView CreateQuestion(CompleteQuestionnaireDocument doc,ICompleteGroup group, ICompleteQuestion question)
         {
             BindedCompleteQuestion bindedQuestion = question as BindedCompleteQuestion;
             if (bindedQuestion != null)
-                return new BindedCompleteQuestionView(doc, bindedQuestion);
+                return new BindedCompleteQuestionView(doc,group, bindedQuestion);
             return new CompleteQuestionView(doc, question);
         }
 

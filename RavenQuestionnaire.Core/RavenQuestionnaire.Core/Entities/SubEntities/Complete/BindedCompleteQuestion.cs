@@ -52,8 +52,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return null;
         }
 
-        #endregion
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            return new T[0];
+        }
 
+        #endregion
+        
         #region Implementation of IQuestion
 
         public Guid PublicKey { get; set; }

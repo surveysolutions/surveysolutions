@@ -186,5 +186,31 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             }
             return null;
         }
+
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            return
+                Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
+                    Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
+                        Questions.SelectMany(q => q.Find<T>(condition))).Union(
+                            Groups.Where(g => g is IComposite).SelectMany(g => (g as IComposite).Find<T>(condition)));
+            /*  foreach (Group child in Groups)
+            {
+                if (child is T && condition(this))
+                    return child as T;
+                T subNodes = child.Find<T>(condition);
+                if (subNodes != null)
+                    return subNodes;
+            }
+            foreach (Question child in Questions)
+            {
+                if (child is T && condition(this))
+                    return child as T;
+                T subNodes = child.Find<T>(condition);
+                if (subNodes != null)
+                    return subNodes;
+            }
+            return null;*/
+        }
     }
 }

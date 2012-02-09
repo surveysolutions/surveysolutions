@@ -194,7 +194,28 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return null;
         }
 
-       
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            return
+             Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
+                 Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
+                     Questions.SelectMany(q => q.Find<T>(condition))).Union(
+                         Groups.Where(g => g is IComposite).SelectMany(g => (g as IComposite).Find<T>(condition)));
         
+         /*   if (typeof(T) == GetType())
+            {
+                if (condition(this))
+                    return this as T;
+            }
+            var resultInsideGroups =
+                Groups.Where(a => a is IComposite).Select(answer => (answer as IComposite).Find<T>(condition)).FirstOrDefault(result => result != null);
+            if (resultInsideGroups != null)
+                return resultInsideGroups;
+            var resultInsideQuestions =
+                Questions.Select(answer => answer.Find<T>(condition)).FirstOrDefault(result => result != null);
+            if (resultInsideQuestions != null)
+                return resultInsideQuestions;
+            return null;*/
+        }
     }
 }

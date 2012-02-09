@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
@@ -46,6 +47,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
             return null;
+        }
+
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            return new T[0];
         }
     }
 }

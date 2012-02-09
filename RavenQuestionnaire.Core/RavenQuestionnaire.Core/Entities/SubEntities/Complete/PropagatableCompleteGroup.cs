@@ -23,8 +23,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             {
                 for (int i = 0; i < groupWithQuestion.Questions.Count; i++)
                 {
-                    this.Questions.Add(new PropagatableCompleteQuestion(groupWithQuestion.Questions[i],
-                                                                        propogationPublicKey));
+                    if (!(groupWithQuestion.Questions[i] is IBinded))
+                        this.Questions.Add(new PropagatableCompleteQuestion(groupWithQuestion.Questions[i],
+                                                                            propogationPublicKey));
+                    else
+                        this.Questions.Add((BindedCompleteQuestion) groupWithQuestion.Questions[i]);
+
                 }
 
                 for (int i = 0; i < groupWithQuestion.Groups.Count; i++)

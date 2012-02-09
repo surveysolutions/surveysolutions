@@ -123,5 +123,20 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             }
             return null;
         }
+
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            return Answers.Where(a => a is T && condition(a as T)).Select(a => a as T);
+            /* if (typeof(T) == GetType())
+             {
+                 if (condition(this))
+                     return this as T;
+             }
+             if (typeof(T) == typeof(CompleteAnswer))
+             {
+                 return this.Answers.Select(answer => answer.Find<T>(condition)).FirstOrDefault(result => result != null);
+             }
+             return null;*/
+        }
     }
 }

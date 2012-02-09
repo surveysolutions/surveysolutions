@@ -48,5 +48,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             throw new CompositeException("answer is not hierarchical");
         }
+
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            throw new CompositeException("answer is not hierarchical");
+        }
     }
 }
