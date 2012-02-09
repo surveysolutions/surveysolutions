@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.Views.Group
 
                 this.Questions =
                     groupWithQuestions.Questions.Select(
-                        q => new CompleteQuestionFactory().CreateGroup(doc, q)).ToArray();
+                        q => new CompleteQuestionFactory().CreateQuestion(doc,group, q)).ToArray();
                 this.Groups = groupWithQuestions.Groups.Select(g => groupFactory.CreateGroup(doc, g)).ToArray();
             }
         }

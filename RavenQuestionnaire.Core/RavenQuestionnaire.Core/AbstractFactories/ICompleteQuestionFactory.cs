@@ -12,7 +12,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
 {
     public interface ICompleteQuestionFactory
     {
-        CompleteQuestionView CreateGroup(CompleteQuestionnaireDocument doc, ICompleteQuestion question);
+        CompleteQuestionView CreateQuestion(CompleteQuestionnaireDocument doc, ICompleteGroup group, ICompleteQuestion question);
         ICompleteQuestion ConvertToCompleteQuestion(IQuestion question);
         IAnswerStrategy Create(ICompleteQuestion<ICompleteAnswer> baseQuestion);
     }

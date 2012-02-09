@@ -105,5 +105,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 return Answers.FirstOrDefault(a => a.PublicKey.Equals(publicKey)) as T;
             return null;
         }
+
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+
+            return Answers.Where(a => a is T && condition(a as T)).Select(a => a as T);
+            /* if (typeof(T) == typeof(Answer))
+                 return Answers.Where(a => condition(a)).Select(a => a as T);
+             return null;*/
+        }
     }
 }

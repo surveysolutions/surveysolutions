@@ -224,6 +224,15 @@ namespace RavenQuestionnaire.Core.Entities
                 return resultInsideQuestions;
             return null;
         }
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            return
+              innerDocument.Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
+                  innerDocument.Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
+                      innerDocument.Questions.SelectMany(q => q.Find<T>(condition))).Union(
+                          innerDocument.Groups.Where(g => g is IComposite).SelectMany(g => (g as IComposite).Find<T>(condition)));
+      
+        }
 
         #endregion
 

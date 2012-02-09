@@ -80,5 +80,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             return null;
         }
+
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            return new T[0];
+        }
     }
 }

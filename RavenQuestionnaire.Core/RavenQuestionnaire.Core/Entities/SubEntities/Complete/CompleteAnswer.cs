@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 using RavenQuestionnaire.Core.Entities.Composite;
 
@@ -112,6 +113,18 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 return this as T;
             }
             return null;
+        }
+
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            
+            if (typeof (T) != GetType())
+                return new T[0];
+            if (condition(this as T))
+            {
+                return new T[] {this as T};
+            }
+            return new T[0];
         }
 
         #endregion
