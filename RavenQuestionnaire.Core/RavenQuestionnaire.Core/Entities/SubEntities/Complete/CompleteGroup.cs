@@ -184,7 +184,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                     return this as T;
             }
             var resultInsideGroups =
-                Groups.Where(a => a is IComposite).Select(answer => (answer as IComposite).Find<T>(publicKey)).FirstOrDefault(result => result != null);
+                Groups.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
             if (resultInsideGroups != null)
                 return resultInsideGroups;
             var resultInsideQuestions =
@@ -200,22 +200,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
              Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
                  Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
                      Questions.SelectMany(q => q.Find<T>(condition))).Union(
-                         Groups.Where(g => g is IComposite).SelectMany(g => (g as IComposite).Find<T>(condition)));
-        
-         /*   if (typeof(T) == GetType())
-            {
-                if (condition(this))
-                    return this as T;
-            }
-            var resultInsideGroups =
-                Groups.Where(a => a is IComposite).Select(answer => (answer as IComposite).Find<T>(condition)).FirstOrDefault(result => result != null);
-            if (resultInsideGroups != null)
-                return resultInsideGroups;
-            var resultInsideQuestions =
-                Questions.Select(answer => answer.Find<T>(condition)).FirstOrDefault(result => result != null);
-            if (resultInsideQuestions != null)
-                return resultInsideQuestions;
-            return null;*/
+                         Groups.SelectMany(g => g.Find<T>(condition)));
         }
     }
 }

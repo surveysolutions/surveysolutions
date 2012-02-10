@@ -36,7 +36,7 @@ namespace RavenQuestionnaire.Core.Views.Question
                     FirstOrDefault();
                 if (template == null)
                 {
-                    throw new ArgumentException();
+                    return;
                 }
             }
             this.Answers = template.Answers.Select(a => new CompleteAnswerView(a)).ToArray();
