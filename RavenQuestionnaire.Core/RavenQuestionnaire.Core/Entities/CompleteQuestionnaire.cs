@@ -87,6 +87,11 @@ namespace RavenQuestionnaire.Core.Entities
            }*/
         #region Implementation of IComposite
 
+        public Guid PublicKey
+        {
+            get { return innerDocument.PublicKey; }
+        }
+
         public virtual void Add(IComposite c, Guid? parent)
         {
             CompleteGroup group = c as CompleteGroup;

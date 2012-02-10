@@ -28,6 +28,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Guid Target { get; set; }
         public string LabelText { get; set; }
 
+        public Guid PublicKey
+        {
+            get { return Guid.Empty; }
+        }
+
         public void Add(IComposite c, Guid? parent)
         {
             throw new CompositeException("flow connection is not hierarchical");

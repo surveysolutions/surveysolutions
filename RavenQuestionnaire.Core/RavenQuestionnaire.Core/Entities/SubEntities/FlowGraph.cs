@@ -19,6 +19,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public List<FlowBlock> Blocks { get; set; }
         public List<FlowConnection> Connections { get; set; }
 
+        public Guid PublicKey
+        {
+            get { return Guid.Empty; }
+        }
+
         public void Add(IComposite c, Guid? parent)
         {
             var block = c as FlowBlock;
@@ -79,7 +84,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             foreach (FlowBlock child in Blocks)
             {
-                if (child.QuestionId == publicKey)
+                if (child.PublicKey == publicKey)
                 {
                     Blocks.Remove(child);
                     return;
