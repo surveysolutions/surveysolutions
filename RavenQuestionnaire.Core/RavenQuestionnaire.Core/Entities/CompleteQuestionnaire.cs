@@ -93,145 +93,35 @@ namespace RavenQuestionnaire.Core.Entities
             if (group != null && group.Propagated)
             {
                 if (!(group is PropagatableCompleteGroup))
-                c = new PropagatableCompleteGroup(group, Guid.NewGuid());
+                    c = new PropagatableCompleteGroup(group, Guid.NewGuid());
 
-                if (!parent.HasValue)
-                {
+            }
+            innerDocument.Add(c, parent);
+            this.handler.Add(c);
 
-                    if (this.innerDocument.Groups.Count(g => g.PublicKey.Equals(group.PublicKey)) > 0)
-                    {
-                        this.innerDocument.Groups.Add(c as ICompleteGroup);
-                        this.handler.Add(c);
-                        return;
-                    }
-                }
-            }
-            foreach (CompleteGroup completeGroup in this.innerDocument.Groups)
-            {
-                try
-                {
-                    completeGroup.Add(c, parent);
-                    this.handler.Add(c);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-            foreach (CompleteQuestion completeQuestion in this.innerDocument.Questions)
-            {
-                try
-                {
-                    completeQuestion.Add(c, parent);
-                    this.handler.Add(c);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-            throw new CompositeException();
         }
 
         public void Remove(IComposite c)
         {
-            PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
-            if (propogate != null)
-            {
-                if (
-                    this.innerDocument.Groups.RemoveAll(
-                        g =>
-                        g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
-                        ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
-                {
-                    this.handler.Remove(c);
-                    return;
-                }
-            }
-            foreach (CompleteGroup completeGroup in this.innerDocument.Groups)
-            {
-                try
-                {
-                    completeGroup.Remove(c);
-                    this.handler.Remove(c);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-            foreach (CompleteQuestion completeQuestion in this.innerDocument.Questions)
-            {
-                try
-                {
-                    completeQuestion.Remove(c);
-                    this.handler.Remove(c);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-            throw new CompositeException();
+            innerDocument.Remove(c);
+            this.handler.Remove(c);
         }
 
         public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            if (typeof(T) == typeof(PropagatableCompleteGroup))
-            {
-                if (this.innerDocument.Groups.RemoveAll(
-                    g =>
-                    g.PublicKey.Equals(publicKey)) > 0)
-                {
-                    this.handler.Remove<T>(publicKey);
-                    return;
-                }
-            }
-            foreach (CompleteGroup completeGroup in this.innerDocument.Groups)
-            {
-                try
-                {
-                    completeGroup.Remove<T>(publicKey);
-                    this.handler.Remove<T>(publicKey);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-            foreach (CompleteQuestion completeQuestion in this.innerDocument.Questions)
-            {
-                try
-                {
-                    completeQuestion.Remove<T>(publicKey);
-                    this.handler.Remove<T>(publicKey);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-            throw new CompositeException();
+            innerDocument.Remove<T>(publicKey);
+            this.handler.Remove<T>(publicKey);
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            var resultInsideGroups = innerDocument.Groups.Where(a => a is IComposite).Select(answer => (answer as IComposite).Find<T>(publicKey)).FirstOrDefault(result => result != null);
-            if (resultInsideGroups != null)
-                return resultInsideGroups;
-            var resultInsideQuestions = innerDocument.Questions.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
-            if (resultInsideQuestions != null)
-                return resultInsideQuestions;
-            return null;
+            return innerDocument.Find<T>(publicKey);
         }
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
         {
             return
-              innerDocument.Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
-                  innerDocument.Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
-                      innerDocument.Questions.SelectMany(q => q.Find<T>(condition))).Union(
-                          innerDocument.Groups.Where(g => g is IComposite).SelectMany(g => (g as IComposite).Find<T>(condition)));
-      
+                innerDocument.Find<T>(condition);
+
         }
 
         #endregion

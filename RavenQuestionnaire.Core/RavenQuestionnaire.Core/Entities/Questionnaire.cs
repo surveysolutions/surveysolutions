@@ -106,176 +106,27 @@ namespace RavenQuestionnaire.Core.Entities
         }
         public void Add(IComposite c, Guid? parent)
         {
-            if (!parent.HasValue)
-            {
-                Group group = c as Group;
-                if (group != null)
-                {
-                    innerDocument.Groups.Add(group);
-                    return;
-                }
-                Question question = c as Question;
-                if (question != null)
-                {
-                    innerDocument.Questions.Add(question);
-                    return;
-                }
-            }
-            foreach (Group child in innerDocument.Groups)
-            {
-                try
-                {
-                    child.Add(c, parent);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-                /* if (child.Add(c, parent))
-                     return true;*/
-            }
-            foreach (Question child in innerDocument.Questions)
-            {
-                try
-                {
-                    child.Add(c, parent);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-                /*  if (child.Add(c, parent))
-                      return true;*/
-            }
-            throw new CompositeException();
+            innerDocument.Add(c, parent);
         }
 
         public void Remove(IComposite c)
         {
-            var group = this.innerDocument.Groups.FirstOrDefault(g =>c is Group &&  g.PublicKey.Equals(((Group)c).PublicKey));
-            if (group != null)
-            {
-                this.innerDocument.Groups.Remove(group);
-                return;
-            }
-            var question = this.innerDocument.Questions.FirstOrDefault(g => c is Question && g.PublicKey.Equals(((Question)c).PublicKey));
-            if (question != null)
-            {
-                this.innerDocument.Questions.Remove(question);
-                return;
-            }
-            foreach (Group child in this.innerDocument.Groups)
-            {
-                try
-                {
-                    child.Remove(c);
-                    return;
-                }
-                catch (CompositeException)
-                {
-
-                }
-            }
-            foreach (Question child in this.innerDocument.Questions)
-            {
-                try
-                {
-                    child.Remove(c);
-                    return;
-                }
-                catch (CompositeException)
-                {
-
-                }
-            }
-            throw new CompositeException();
+           innerDocument.Remove(c);
         }
         public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            var group = this.innerDocument.Groups.FirstOrDefault(g => typeof(T) == typeof(Group) && g.PublicKey.Equals(publicKey));
-            if (group != null)
-            {
-                this.innerDocument.Groups.Remove(group);
-                return;
-            }
-            var question = this.innerDocument.Questions.FirstOrDefault(g => typeof(T) == typeof(Question) && g.PublicKey.Equals(publicKey));
-            if (question != null)
-            {
-                this.innerDocument.Questions.Remove(question);
-                return;
-            }
-            foreach (Group child in this.innerDocument.Groups)
-            {
-                try
-                {
-                    child.Remove<T>(publicKey);
-                    return;
-                }
-                catch (CompositeException)
-                {
-
-                }
-            }
-            foreach (Question child in this.innerDocument.Questions)
-            {
-                try
-                {
-                    child.Remove<T>(publicKey);
-                    return;
-                }
-                catch (CompositeException)
-                {
-
-                }
-            }
-            throw new CompositeException();
+            innerDocument.Remove<T>(publicKey);
         }
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            foreach (Group child in innerDocument.Groups)
-            {
-                if (child is T && child.PublicKey == publicKey)
-                    return child as T;
-                T subNodes = child.Find<T>(publicKey);
-                if (subNodes != null)
-                    return subNodes;
-            }
-            foreach (Question child in innerDocument.Questions)
-            {
-                if (child is T && child.PublicKey == publicKey)
-                    return child as T;
-                T subNodes = child.Find<T>(publicKey);
-                if (subNodes != null)
-                    return subNodes;
-            }
-            return null;
+            return innerDocument.Find<T>(publicKey);
         }
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
         {
             return
-             innerDocument.Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
-                 innerDocument.Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
-                     innerDocument.Questions.SelectMany(q => q.Find<T>(condition))).Union(
-                         innerDocument.Groups.Where(g => g is IComposite).SelectMany(g => (g as IComposite).Find<T>(condition)));
-        
-         /*   foreach (Group child in innerDocument.Groups)
-            {
-                if (child is T && condition(child))
-                    return child as T;
-                T subNodes = child.Find<T>(condition);
-                if (subNodes != null)
-                    return subNodes;
-            }
-            foreach (Question child in innerDocument.Questions)
-            {
-                if (child is T && condition(child))
-                    return child as T;
-                T subNodes = child.Find<T>(condition);
-                if (subNodes != null)
-                    return subNodes;
-            }
-            return null;*/
+                innerDocument.Find<T>(condition);
         }
+
         public IList<IQuestion> GetAllQuestions()
         {
             List<IQuestion> result = new List<IQuestion>();

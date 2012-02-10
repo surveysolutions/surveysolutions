@@ -58,7 +58,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 Add(answer, PublicKey);
             }
         }
-        public void AddAnswer(Answer answer)
+        public void AddAnswer(IAnswer answer)
         {
             if (Answers.Any(a => a.PublicKey.Equals(answer.PublicKey)))
                 throw new DuplicateNameException("answer with current publick key already exist");
@@ -69,7 +69,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             if (!parent.HasValue || parent.Value == PublicKey)
             {
-                Answer answer = c as Answer;
+                IAnswer answer = c as IAnswer;
                 if (answer != null)
                 {
                     AddAnswer(answer);
@@ -81,7 +81,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public void Remove(IComposite c)
         {
-            Answer answer = c as Answer;
+            IAnswer answer = c as IAnswer;
             if (answer != null)
             {
                 Answers.Remove(answer);
@@ -91,7 +91,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         }
         public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            if (typeof(T) == typeof(Answer))
+            if (typeof(T).IsAssignableFrom(typeof(IAnswer)))
             {
                 if(Answers.RemoveAll(a => a.PublicKey.Equals(publicKey)) > 0)
                     return;
@@ -101,7 +101,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            if (typeof (T) == typeof (Answer))
+            if (typeof(T).IsAssignableFrom(typeof(IAnswer)))
                 return Answers.FirstOrDefault(a => a.PublicKey.Equals(publicKey)) as T;
             return null;
         }

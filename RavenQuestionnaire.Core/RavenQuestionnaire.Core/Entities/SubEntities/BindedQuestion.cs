@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
@@ -31,31 +32,31 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             set { template.PublicKey = value; }
         }
 
-        [XmlIgnore]
+        [JsonIgnore]
         public string QuestionText
         {
             get { return template.QuestionText; }
             set { throw new InvalidOperationException("question text can't be changed at binded question");}
         }
-        [XmlIgnore]
+        [JsonIgnore]
         public QuestionType QuestionType
         {
             get { return template.QuestionType; }
             set { throw new InvalidOperationException("QuestionType can't be changed at binded question"); }
         }
-        [XmlIgnore]
+        [JsonIgnore]
         public List<IAnswer> Answers
         {
             get { return template.Answers; }
             set { throw new InvalidOperationException("Answers can't be changed at binded question"); }
         }
-        [XmlIgnore]
+        [JsonIgnore]
         public string ConditionExpression
         {
             get { return template.ConditionExpression; }
             set { throw new InvalidOperationException("ConditionExpression can't be changed at binded question"); }
         }
-        [XmlIgnore]
+        [JsonIgnore]
         public string StataExportCaption
         {
             get { return template.StataExportCaption; }
