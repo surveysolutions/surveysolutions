@@ -47,7 +47,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public string Title { get; set; }
 
-        public bool Propagated { get; set; }
+        public Propagate Propagated { get; set; }
         
         public List<ICompleteQuestion> Questions { get; set; }
 

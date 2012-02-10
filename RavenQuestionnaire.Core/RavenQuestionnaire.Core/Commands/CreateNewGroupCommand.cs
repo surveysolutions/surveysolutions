@@ -14,7 +14,7 @@ namespace RavenQuestionnaire.Core.Commands
             get;
             private set;
         }
-        public bool Paropagateble
+        public Propagate Paropagateble
         {
             get;
             private set;
@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Core.Commands
 
         public UserLight Executor { get; set; }
 
-        public CreateNewGroupCommand(string groupText,bool propagateble, string questionnaireId, Guid? parentGroup, UserLight executor)
+        public CreateNewGroupCommand(string groupText, Propagate propagateble, string questionnaireId, Guid? parentGroup, UserLight executor)
         {
             this.GroupText = groupText;
             this.Paropagateble = propagateble;

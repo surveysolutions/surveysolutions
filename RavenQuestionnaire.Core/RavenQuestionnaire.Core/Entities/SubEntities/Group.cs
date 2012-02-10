@@ -6,11 +6,18 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
+    public enum Propagate
+    {
+        None,
+        Propagated,
+        AutoPropagated
+    }
+
     public interface IGroup : IComposite
     {
         Guid PublicKey { get; set; }
         string Title { get; set; }
-        bool Propagated { get; set; }
+        Propagate Propagated { get; set; }
     }
 
     public interface IGroup<TGroup, TQuestion> : IGroup
@@ -36,7 +43,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public Guid PublicKey { get; set; }
         public string Title { get; set; }
-        public bool Propagated { get; set; }
+        public Propagate Propagated { get; set; }
         public List<IQuestion> Questions { get; set; }
         public List<IGroup> Groups { get; set; }
         public void Update(string groupText)

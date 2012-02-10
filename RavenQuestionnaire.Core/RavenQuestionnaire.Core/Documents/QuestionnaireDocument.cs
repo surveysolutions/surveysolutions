@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Observers;
@@ -40,12 +41,12 @@ namespace RavenQuestionnaire.Core.Documents
         public string Id { get; set; }
        
         public string Title { get; set; }
-        [XmlIgnore]
+        [JsonIgnore]
         public Guid PublicKey { get; set; }
-        [XmlIgnore]
-        public bool Propagated
+        [JsonIgnore]
+        public Propagate Propagated
         {
-            get { return false; }
+            get { return Propagate.None; }
             set {  }
         }
 

@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Core.Entities
             }
         }
 
-        public void AddGroup(string groupText,bool propageted, Guid? parent)
+        public void AddGroup(string groupText,Propagate propageted, Guid? parent)
         {
             Group group = new Group();
             group.Title = groupText;
@@ -67,7 +67,7 @@ namespace RavenQuestionnaire.Core.Entities
             }
         }
 
-        public void UpdateGroup(string groupText, bool propageted, Guid publicKey)
+        public void UpdateGroup(string groupText, Propagate propageted, Guid publicKey)
         {
             Group group = Find<Group>(publicKey);
             if (group != null)

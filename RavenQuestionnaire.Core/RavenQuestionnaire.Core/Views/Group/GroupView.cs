@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Core.Views.Group
 
         public Guid? ParentGroup { get; set; }
 
-        public bool Propagated { get; set; }
+        public Propagate Propagated { get; set; }
 
         public string QuestionnaireId
         {
