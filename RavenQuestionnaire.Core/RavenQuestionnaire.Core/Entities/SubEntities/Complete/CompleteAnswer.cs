@@ -106,7 +106,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            if (!GetType().IsAssignableFrom(typeof(T)))
+            if (!typeof(T).IsAssignableFrom(GetType()))
                 return null;
             if (publicKey == PublicKey)
             {
@@ -117,8 +117,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
         {
-            
-            if (!GetType().IsAssignableFrom(typeof(T)))
+
+            if (!typeof(T).IsAssignableFrom(GetType()))
                 return new T[0];
             if (condition(this as T))
             {

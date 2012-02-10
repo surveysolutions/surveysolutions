@@ -118,13 +118,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public override T Find<T>(Guid publicKey)
         {
-            if (!typeof (T).IsAssignableFrom(typeof (IPropogate)))
+            if (!typeof (IPropogate).IsAssignableFrom(typeof (T)))
                 return null;
-            if (typeof (T) == GetType())
-            {
-                if (this.PublicKey.Equals(publicKey))
-                    return this as T;
-            }
+
+            if (this.PublicKey.Equals(publicKey))
+                return this as T;
+
             var resultInsideGroups =
                 Groups.Where(a => a is IComposite).Select(group => (group as IComposite).Find<T>(publicKey)).
                     FirstOrDefault(result => result != null);

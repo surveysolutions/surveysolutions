@@ -6,7 +6,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public interface IGroup
+    public interface IGroup : IComposite
     {
         Guid PublicKey { get; set; }
         string Title { get; set; }
@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         List<TQuestion> Questions { get; set; }
         List<TGroup> Groups { get; set; }
     }
-    public class Group : IGroup<IGroup, IQuestion>, IComposite
+    public class Group : IGroup<IGroup, IQuestion>
     {
         public Group()
         {
@@ -47,20 +47,20 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             if (parent.HasValue && parent.Value == PublicKey)
             {
-                Group group = c as Group;
+                IGroup group = c as IGroup;
                 if (group != null)
                 {
                     Groups.Add(group);
                     return;
                 }
-                Question question = c as Question;
+                IQuestion question = c as IQuestion;
                 if (question != null)
                 {
                     Questions.Add(question);
                     return;
                 }
             }
-            foreach (Group child in Groups)
+            foreach (IGroup child in Groups)
             {
                 try
                 {
@@ -71,7 +71,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 {
                 }
             }
-            foreach (Question child in Questions)
+            foreach (IQuestion child in Questions)
             {
                 try
                 {
@@ -87,19 +87,19 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public void Remove(IComposite c)
         {
-            var group = this.Groups.FirstOrDefault(g => c is Group && g.PublicKey.Equals(((Group)c).PublicKey));
+            var group = this.Groups.FirstOrDefault(g => c is IGroup && g.PublicKey.Equals(((IGroup)c).PublicKey));
             if (group != null)
             {
                 this.Groups.Remove(group);
                 return;
             }
-            var question = this.Questions.FirstOrDefault(g => c is Question && g.PublicKey.Equals(((Question)c).PublicKey));
+            var question = this.Questions.FirstOrDefault(g => c is IQuestion && g.PublicKey.Equals(((IQuestion)c).PublicKey));
             if (question != null)
             {
                 this.Questions.Remove(question);
                 return;
             }
-            foreach (Group child in this.Groups)
+            foreach (IGroup child in this.Groups)
             {
                 try
                 {
@@ -111,7 +111,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
                 }
             }
-            foreach (Question child in this.Questions)
+            foreach (IQuestion child in this.Questions)
             {
                 try
                 {
@@ -127,19 +127,19 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         }
         public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            var group = this.Groups.FirstOrDefault(g => typeof(T) == typeof(Group) && g.PublicKey.Equals(publicKey));
+            var group = this.Groups.FirstOrDefault(g => typeof(IGroup).IsAssignableFrom(typeof(T)) && g.PublicKey.Equals(publicKey));
             if (group != null)
             {
                 this.Groups.Remove(group);
                 return;
             }
-            var question = this.Questions.FirstOrDefault(g => typeof(T) == typeof(Question) && g.PublicKey.Equals(publicKey));
+            var question = this.Questions.FirstOrDefault(g => typeof(IQuestion).IsAssignableFrom(typeof(T)) && g.PublicKey.Equals(publicKey));
             if (question != null)
             {
                 this.Questions.Remove(question);
                 return;
             }
-            foreach (Group child in this.Groups)
+            foreach (IGroup child in this.Groups)
             {
                 try
                 {
@@ -151,7 +151,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
                 }
             }
-            foreach (Question child in this.Questions)
+            foreach (IQuestion child in this.Questions)
             {
                 try
                 {
@@ -168,7 +168,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            foreach (Group child in Groups)
+            foreach (IGroup child in Groups)
             {
                 if (child is T && child.PublicKey == publicKey)
                     return child as T;
@@ -176,7 +176,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 if (subNodes != null)
                     return subNodes;
             }
-            foreach (Question child in Questions)
+            foreach (IQuestion child in Questions)
             {
                 if (child is T && child.PublicKey == publicKey)
                     return child as T;
@@ -193,7 +193,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
                     Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
                         Questions.SelectMany(q => q.Find<T>(condition))).Union(
-                            Groups.Where(g => g is IComposite).SelectMany(g => (g as IComposite).Find<T>(condition)));
+                            Groups.SelectMany(g => g.Find<T>(condition)));
             /*  foreach (Group child in Groups)
             {
                 if (child is T && condition(this))
