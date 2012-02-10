@@ -17,6 +17,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             this.Title = group.Title;
             this.Propagated = group.Propagated;
+            this.AutoPropagate = group.Propagated == Propagate.AutoPropagated;
             this.PublicKey = group.PublicKey;
             var groupWithQuestion = group as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
             if (groupWithQuestion != null)
@@ -44,7 +45,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public Guid PropogationPublicKey { get; set; }
 
-    /*    public void Propogate(Guid childGroupPublicKey)
+        public bool AutoPropagate { get; set; }
+
+        /*    public void Propogate(Guid childGroupPublicKey)
         {
             var group = Groups.FirstOrDefault(g => g.PublicKey.Equals(childGroupPublicKey));
             if (group == null)
@@ -69,7 +72,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             var result = new PropagatableCompleteGroup()
                        {
                            Title = this.Title,
-                           Propagated = true,
+                           Propagated = this.Propagated,
+                           AutoPropagate = this.Propagated == Propagate.AutoPropagated,
                            PropogationPublicKey = Guid.NewGuid(),
                            PublicKey = this.PublicKey
                        };

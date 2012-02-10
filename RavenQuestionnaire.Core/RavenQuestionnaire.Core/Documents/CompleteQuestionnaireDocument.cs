@@ -81,9 +81,9 @@ namespace RavenQuestionnaire.Core.Documents
         [XmlIgnore]
         public Guid PublicKey { get; set; }
         [XmlIgnore]
-        public bool Propagated
+        public Propagate Propagated
         {
-            get { return false; }
+            get { return Propagate.None; }
             set { }
         }
 

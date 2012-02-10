@@ -65,7 +65,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         {
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
-            CompleteGroup group = new CompleteGroup("test") {Propagated = true};
+            CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated};
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
             CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
@@ -111,7 +111,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         {
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
-            CompleteGroup group = new CompleteGroup("test") { Propagated = true };
+            CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
             CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());

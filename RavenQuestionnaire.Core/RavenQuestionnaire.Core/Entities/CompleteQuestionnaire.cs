@@ -90,7 +90,7 @@ namespace RavenQuestionnaire.Core.Entities
         public virtual void Add(IComposite c, Guid? parent)
         {
             CompleteGroup group = c as CompleteGroup;
-            if (group != null && group.Propagated)
+            if (group != null && group.Propagated != Propagate.None)
             {
                 if (!(group is PropagatableCompleteGroup))
                     c = new PropagatableCompleteGroup(group, Guid.NewGuid());

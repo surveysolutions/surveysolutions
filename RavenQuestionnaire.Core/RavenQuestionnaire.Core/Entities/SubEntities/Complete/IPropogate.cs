@@ -8,7 +8,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
     public interface IPropogate : ICloneable
     {
         Guid PropogationPublicKey { get; set; }
-    /*    void Propogate(Guid childGroupPublicKey);
+        bool AutoPropagate { get; set; }
+        /*    void Propogate(Guid childGroupPublicKey);
         void RemovePropogated(Guid childGroupPublicKey);*/
     }
 }

@@ -1,4 +1,6 @@
-﻿@using Questionnaire.Core.Web.Helpers
+﻿
+@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.Group
 @using RavenQuestionnaire.Core.Views.Question
 @model CompleteGroupView
@@ -13,7 +15,7 @@
 
 
 }
-else if (Model.Propagated)
+else if (Model.Propagated!=Propagate.None)
 {
 
     Html.RenderPartial("~/Views/Group/CompleteGroupTemplates/_PropagatebleCompleteGroup.cshtml", Model);

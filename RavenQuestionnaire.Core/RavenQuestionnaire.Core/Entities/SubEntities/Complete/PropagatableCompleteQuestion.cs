@@ -46,6 +46,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public Guid PropogationPublicKey { get; set; }
 
+        public bool AutoPropagate { get; set; }
+
         #endregion
     }
 }
