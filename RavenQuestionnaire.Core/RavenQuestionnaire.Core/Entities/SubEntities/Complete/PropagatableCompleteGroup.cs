@@ -129,7 +129,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 return this as T;
 
             var resultInsideGroups =
-                Groups.Where(a => a is IComposite).Select(group => (group as IComposite).Find<T>(publicKey)).
+                Groups.Select(group => group.Find<T>(publicKey)).
                     FirstOrDefault(result => result != null);
             if (resultInsideGroups != null)
                 return resultInsideGroups;
