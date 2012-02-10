@@ -7,6 +7,7 @@ namespace RavenQuestionnaire.Core.Entities.Composite
 {
     public interface IComposite
     {
+        Guid PublicKey { get; }
         void Add(IComposite c, Guid? parent);
         void Remove(IComposite c);
         void Remove<T>(Guid publicKey) where T : class, IComposite;

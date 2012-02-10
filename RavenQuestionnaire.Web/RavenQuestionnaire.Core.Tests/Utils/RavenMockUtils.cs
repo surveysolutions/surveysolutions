@@ -23,7 +23,7 @@ namespace RavenQuestionnaire.Core.Tests.Utils
         public static void SetupQueryResult<T>(this Mock<IDocumentSession> documentSession, IEnumerable<T> result)
         {
             var ravenQueryableMock = new Mock<IRavenQueryable<T>>();
-            ravenQueryableMock.Setup(x => x.GetEnumerator()).Returns(() => result.GetEnumerator());
+            ravenQueryableMock.Setup(x => x.GetEnumerator()).Returns(result.GetEnumerator);
             ravenQueryableMock.Setup(x => x.Customize(It.IsAny<Action<Object>>()).GetEnumerator()).Returns(
                 () => result.GetEnumerator());
             documentSession.Setup(s => s.Query<T>()).Returns(ravenQueryableMock.Object).Verifiable();

@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using Raven.Client;
+using Raven.Client.Embedded;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Tests.Utils;
 using RavenQuestionnaire.Core.Views.User;
@@ -64,7 +65,6 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
         [Test]
         public void LoadByExistingUserName_UserViewIsReturned()
         {
-            Mock<IDocumentSession> documentSesionMock = new Mock<IDocumentSession>();
             UserViewInputModel input = new UserViewInputModel("user_name", null);
             UserDocument expected = new UserDocument()
                                         {
@@ -73,7 +73,7 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
                                             Password = "1234",
                                             UserName = "user_name"
                                         };
-
+            
             IEnumerable<UserDocument> expectedCollection = new[] {expected};
           /*  var ravenQueryableMock = new Mock<IRavenQueryable<UserDocument>>();
             ravenQueryableMock.Setup(x => x.GetEnumerator()).Returns(() => expectedCollection.GetEnumerator());
@@ -83,15 +83,18 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
             
             
             documentSesionMock.Setup(x => x.Query<UserDocument>()).Returns(ravenQueryableMock.Object);*/
-            documentSesionMock.SetupQueryResult(expectedCollection);
-
-            UserViewFactory factory = new UserViewFactory(documentSesionMock.Object);
+            IDocumentStore store = new EmbeddableDocumentStore() {RunInMemory = true};
+            store.Initialize();
+            IDocumentSession session = store.OpenSession();
+            session.Store(expected);
+            session.SaveChanges();
+            UserViewFactory factory = new UserViewFactory(session);
 
             UserView result = factory.Load(input);
 
-            documentSesionMock.Verify(x => x.Query<UserDocument>());
+        //    documentSesionMock.Verify(x => x.Query<UserDocument>());
             Assert.True(result.UserId == "user_id" && result.Email == "email@test.com" && result.Password == "1234" &&
-                        result.UserName == "test");
+                        result.UserName == "user_name");
         }
 
         /*    [Test]

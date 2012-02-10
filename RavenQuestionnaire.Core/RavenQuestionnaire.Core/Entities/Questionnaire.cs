@@ -104,6 +104,12 @@ namespace RavenQuestionnaire.Core.Entities
             graph.Blocks = blocks;
             graph.Connections = connections;
         }
+
+        public Guid PublicKey
+        {
+            get { return innerDocument.PublicKey; }
+        }
+
         public void Add(IComposite c, Guid? parent)
         {
             innerDocument.Add(c, parent);
