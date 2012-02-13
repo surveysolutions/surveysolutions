@@ -218,6 +218,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             var result = completeQuestionnaire.Find<IComposite>(c => true);
             Assert.AreEqual(result.Count(), 11);
             Assert.AreEqual(completeQuestionnaire.Find<ICompleteAnswer>(c => true).Count(), 6);
+            Assert.IsTrue(
+                completeQuestionnaire.Find<ICompleteAnswer>(c => true).All(a => a.QuestionPublicKey != Guid.Empty));
             Assert.AreEqual(completeQuestionnaire.Find<ICompleteQuestion>(c => true).Count(), 3);
             Assert.AreEqual(completeQuestionnaire.Find<ICompleteGroup>(c => true).Count(), 2);
 
