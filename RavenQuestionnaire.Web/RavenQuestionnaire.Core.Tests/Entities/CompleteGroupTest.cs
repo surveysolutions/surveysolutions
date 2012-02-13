@@ -29,7 +29,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
             CompleteGroup targetGroup = new CompleteGroup("some group") { Propagated = Propagate.Propagated };
             document.Setup(x => x.Find<CompleteGroup>(targetGroup.PublicKey)).Returns(targetGroup);
-            GroupObservable observeble = new GroupObservable(targetGroup.PublicKey, target.PublicKey);
+            GroupObserver observeble = new GroupObserver(targetGroup.PublicKey, target.PublicKey);
             observeble.Subscribe(handler);
 
             handler.Add(target);
@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
             CompleteGroup targetGroup = new CompleteGroup("some group") { Propagated = Propagate.Propagated };
             document.Setup(x => x.Find<CompleteGroup>(targetGroup.PublicKey)).Returns(targetGroup);
-            GroupObservable observeble = new GroupObservable(targetGroup.PublicKey, target.PublicKey);
+            GroupObserver observeble = new GroupObserver(targetGroup.PublicKey, target.PublicKey);
             observeble.Subscribe(handler);
             handler.Remove(target);
 
@@ -71,7 +71,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
             CompleteGroup targetGroup = new CompleteGroup("some group") { Propagated = Propagate .Propagated};
             document.Setup(x => x.Find<CompleteGroup>(targetGroup.PublicKey)).Returns(targetGroup);
-            GroupObservable observeble = new GroupObservable(targetGroup.PublicKey, Guid.NewGuid());
+            GroupObserver observeble = new GroupObserver(targetGroup.PublicKey, Guid.NewGuid());
             observeble.Subscribe(handler);
             handler.Remove(target);
 
@@ -90,7 +90,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
             CompleteGroup targetGroup = new CompleteGroup("some group") { Propagated = Propagate.Propagated };
             document.Setup(x => x.Find<CompleteGroup>(targetGroup.PublicKey)).Returns(targetGroup);
-            GroupObservable observeble = new GroupObservable(targetGroup.PublicKey, target.PublicKey);
+            GroupObserver observeble = new GroupObserver(targetGroup.PublicKey, target.PublicKey);
 
             observeble.Subscribe(handler);
             observeble.Unsubscribe();

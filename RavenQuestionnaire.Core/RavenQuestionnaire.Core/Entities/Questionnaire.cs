@@ -127,7 +127,7 @@ namespace RavenQuestionnaire.Core.Entities
         {
             return innerDocument.Find<T>(publicKey);
         }
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
                 innerDocument.Find<T>(condition);

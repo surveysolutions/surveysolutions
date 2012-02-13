@@ -124,8 +124,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             group.Questions.Add(question);
             qDoqument.Groups.Add(group);
             qDoqument.Groups.Add(otherGroup);
-            qDoqument.Observers = new List<IObserver<CompositeInfo>>
-                                      {new GroupObservable(otherGroup.PublicKey, group.PublicKey)};
+            qDoqument.Observers = new List<IObserver<CompositeInfo>> { new GroupObserver(otherGroup.PublicKey, group.PublicKey) };
 
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
         
@@ -189,16 +188,47 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
         }
         [Test]
-        public void AddCOmposite_Success_AllObserversAreNotified()
+        public void FindAllIComposite_Success_AllGroupsQuestionsAndAnswersIsReturned()
         {
-          /*  CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
-            CompleteQuestionnaireDocument innerDocument =
-               ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
-            Assert.Throws<InvalidOperationException>(
-                () => completeQuestionnaire.ChangeAnswer(new CompleteAnswer(new Answer(), Guid.NewGuid())));*/
+            QuestionnaireDocument questionnaireInnerDocument = new QuestionnaireDocument();
+            //queston without group
+            questionnaireInnerDocument.Id = "completequestionnairedocuments/cqID";
+            questionnaireInnerDocument.Questions.Add(new Question("test question", QuestionType.SingleOption));
+            Answer answer = new Answer() {AnswerText = "answer", AnswerType = AnswerType.Select};
+            questionnaireInnerDocument.Questions[0].Add(answer, null);
+            Answer answer2 = new Answer() {AnswerText = "answer2", AnswerType = AnswerType.Select};
+            questionnaireInnerDocument.Questions[0].Add(answer2, null);
+            //group
+            Group group = new Group("group");
+            group.Questions.Add(new Question("test question", QuestionType.SingleOption));
+            group.Questions[0].Add(new Answer() {AnswerText = "answer", AnswerType = AnswerType.Select}, null);
+            group.Questions[0].Add(new Answer() {AnswerText = "answer2", AnswerType = AnswerType.Select}, null);
+            questionnaireInnerDocument.Groups.Add(group);
 
+            //group for propagation
+            Group groupPropogated = new Group("group") {Propagated = Propagate.Propagated};
+            groupPropogated.Questions.Add(new Question("test question", QuestionType.SingleOption));
+            groupPropogated.Questions[0].Add(new Answer() {AnswerText = "answer", AnswerType = AnswerType.Select}, null);
+            groupPropogated.Questions[0].Add(new Answer() {AnswerText = "answer2", AnswerType = AnswerType.Select}, null);
+            questionnaireInnerDocument.Groups[0].Add(groupPropogated, null);
+
+            CompleteQuestionnaire completeQuestionnaire =
+                new CompleteQuestionnaire(new Questionnaire(questionnaireInnerDocument), new UserLight(),
+                                          new SurveyStatus());
+            CompleteQuestionnaireDocument innerDocument =
+                ((IEntity<CompleteQuestionnaireDocument>) completeQuestionnaire).GetInnerDocument();
+            var result = completeQuestionnaire.Find<IComposite>(c => true);
+            Assert.AreEqual(result.Count(), 11);
+            Assert.AreEqual(completeQuestionnaire.Find<ICompleteAnswer>(c => true).Count(), 6);
+            Assert.AreEqual(completeQuestionnaire.Find<ICompleteQuestion>(c => true).Count(), 3);
+            Assert.AreEqual(completeQuestionnaire.Find<ICompleteGroup>(c => true).Count(), 2);
+
+            completeQuestionnaire.Add(((CompleteGroup)innerDocument.Groups[0]).Groups[0], null);
+            Assert.AreEqual(completeQuestionnaire.Find<IComposite>(c => true).Count(), 15);
+            Assert.AreEqual(completeQuestionnaire.Find<IPropogate>(c => true).Count(), 4);
         }
-     /*   [Test]
+
+        /*   [Test]
         public void UpdateAnswer_UpdateQuestion_QuestionIsUpdated()
         {
             CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();

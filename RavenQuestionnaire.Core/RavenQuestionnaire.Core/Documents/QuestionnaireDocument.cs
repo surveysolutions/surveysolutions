@@ -218,7 +218,7 @@ namespace RavenQuestionnaire.Core.Documents
             }
             return null;
         }
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
              Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
