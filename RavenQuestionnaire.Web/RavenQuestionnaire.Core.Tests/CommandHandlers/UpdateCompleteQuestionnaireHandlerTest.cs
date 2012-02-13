@@ -12,11 +12,10 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
     [TestFixture]
     public class UpdateCompleteQuestionnaireHandlerTest
     {
-        public Mock<IIteratorContainer> iteratorContainerMock;
         [SetUp]
         public void CreateObjects()
         {
-            iteratorContainerMock = new Mock<IIteratorContainer>();
+           // iteratorContainerMock = new Mock<IIteratorContainer>();
         }
         [Test]
         public void WhenCommandIsReceived_CompleteQuestionnaireIsUpdatedToRepository()
@@ -29,7 +28,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteAnswer answer = new CompleteAnswer(new Answer(), question.PublicKey);
             question.Answers.Add(answer);
 
-            CompleteQuestionnaire entity = new CompleteQuestionnaire(innerDocument, iteratorContainerMock.Object);
+            CompleteQuestionnaire entity = new CompleteQuestionnaire(innerDocument);
             Mock<ICompleteQuestionnaireRepository> coompleteQuestionnaireRepositoryMock = new Mock<ICompleteQuestionnaireRepository>();
 
             Mock<IStatusRepository> statusRepositoryMock = new Mock<IStatusRepository>();

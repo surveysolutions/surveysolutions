@@ -22,14 +22,17 @@ namespace RavenQuestionnaire.Core.Views.Question
             {
                 throw new ArgumentException();
             }
-            var template = ((IComposite)group).Find<CompleteQuestion>(
-                    bindedQuestion.ParentPublicKey);
-            if (template == null)
+            var templates =
+                new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc).Find<CompleteQuestion>(
+                    q => q.PublicKey ==
+                         bindedQuestion.ParentPublicKey);
+            var template = templates.FirstOrDefault();
+            if (templates.Count() > 1)
             {
                 IPropogate propagatebleGroup = group as IPropogate;
                 if (propagatebleGroup == null)
                     return;
-                var questionnaire = new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc, null);
+                var questionnaire = new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc);
                 template = questionnaire.Find<PropagatableCompleteGroup>(
                     g => g.PropogationPublicKey.Equals(propagatebleGroup.PropogationPublicKey)).SelectMany(
                         g => g.Find<CompleteQuestion>(q => q.PublicKey.Equals(bindedQuestion.ParentPublicKey))).

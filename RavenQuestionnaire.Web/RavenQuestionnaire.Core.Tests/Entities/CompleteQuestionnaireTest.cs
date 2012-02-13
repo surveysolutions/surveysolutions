@@ -18,11 +18,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
     [TestFixture]
     public class CompleteQuestionnaireTest
     {
-        public Mock<IIteratorContainer> iteratorContainerMock;
         [SetUp]
         public void CreateObjects()
         {
-            iteratorContainerMock = new Mock<IIteratorContainer>();
         }
   /*      [Test]
         public void WhenAddCompletedAnswerNotInQuestionnaireList_InvalidExceptionThrowed()
@@ -79,7 +77,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
 
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
@@ -99,7 +97,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
 
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             CompleteGroup group = new CompleteGroup("test");
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
@@ -126,7 +124,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             qDoqument.Groups.Add(otherGroup);
             qDoqument.Observers = new List<IObserver<CompositeInfo>> { new GroupObserver(otherGroup.PublicKey, group.PublicKey) };
 
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
         
             questionanire.Add(group, null);
 
@@ -141,7 +139,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
 
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
@@ -168,7 +166,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
 
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);

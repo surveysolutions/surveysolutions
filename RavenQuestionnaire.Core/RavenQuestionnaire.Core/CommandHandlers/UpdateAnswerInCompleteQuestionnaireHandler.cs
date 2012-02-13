@@ -45,7 +45,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             foreach (ICompleteQuestion completeQuestion in entity.GetInnerDocument().Questions)
             {
                 if (
-                    !this._conditionExecutor.Execute(entity.AnswerIterator, completeQuestion.ConditionExpression))
+                    !this._conditionExecutor.Execute(entity.Find<ICompleteAnswer>(a=>a.Selected), completeQuestion.ConditionExpression))
                 {
                     entity.Remove(completeQuestion);
                     completeQuestion.Enabled = false;
@@ -55,7 +55,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
                     completeQuestion.Enabled = true;
                 }
             }
-            var groups = entity.GroupIterator;
+            var groups = entity.Find<ICompleteGroup>(q => true);
             //  var allQuestions = entity.QuestionIterator;
             foreach (CompleteGroup completeGroup in groups)
             {
@@ -70,7 +70,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
                             completeGroup is PropagatableCompleteGroup
                                 ? GetAnswersListForPropagatedGroup(completeGroup as PropagatableCompleteGroup,
                                                                    entity)
-                                : entity.AnswerIterator,
+                                : entity.Find<ICompleteAnswer>(a => a.Selected),
                             completeQuestion.ConditionExpression))
                     {
                         entity.Remove(completeQuestion);
@@ -89,23 +89,12 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             var propagatedGroupWithSameId =
                 questionnaire.Find<PropagatableCompleteGroup>(
                     g => g.PropogationPublicKey.Equals(group.PropogationPublicKey));
-
-            if (questionnaire.AnswerIterator != null)
-                result =
-                    questionnaire.AnswerIterator.Where(
-                        a => propagatedGroupWithSameId.SelectMany(g=>g.Questions).Count(ag => ag.PublicKey.Equals(a.QuestionPublicKey)) == 0).ToList();
-            result.AddRange(propagatedGroupWithSameId.SelectMany(g => g.AnswerIterator));
-            return result;
-        }
-
-        private IEnumerable<ICompleteAnswer> GetAnswersListForPropagatedGroup(PropagatableCompleteGroup group, IEnumerable<ICompleteAnswer> allAnswers)
-        {
-            List<ICompleteAnswer> result = new List<ICompleteAnswer>();
-            if (allAnswers != null)
-                result = allAnswers.Where(
-                    completeAnswer =>
-                    group.Questions.Count(q => q.PublicKey.Equals(completeAnswer.QuestionPublicKey)) == 0).ToList();
-            result.AddRange(group.AnswerIterator);
+            result =
+                questionnaire.Find<ICompleteAnswer>(a => a.Selected).Where(
+                    a =>
+                    propagatedGroupWithSameId.SelectMany(g => g.Questions).Count(
+                        ag => ag.PublicKey.Equals(a.QuestionPublicKey)) == 0).ToList();
+            result.AddRange(propagatedGroupWithSameId.SelectMany(g => g.Find<ICompleteAnswer>(a => a.Selected)));
             return result;
         }
     }

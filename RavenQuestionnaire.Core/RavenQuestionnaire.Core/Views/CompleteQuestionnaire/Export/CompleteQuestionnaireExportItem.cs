@@ -16,13 +16,15 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 
         private string _id;
 
-        public CompleteAnswer[] CompleteAnswers { get; set; }
+        public ICompleteAnswer[] CompleteAnswers { get; set; }
 
-        public CompleteQuestionnaireExportItem(CompleteQuestionnaireDocument doc,  IIteratorContainer iteratorContainer)
+        public CompleteQuestionnaireExportItem(CompleteQuestionnaireDocument doc)
         {
             this.Id = IdUtil.ParseId(doc.Id);
             this.CompleteAnswers =
-                iteratorContainer.Create<CompleteQuestionnaireDocument, CompleteAnswer>(doc).ToArray();
+                new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc).Find<ICompleteAnswer>(a => a.Selected).
+                    ToArray();
+                
         }
     }
 }

@@ -16,11 +16,11 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
     [TestFixture]
     public class CompleteQuestionnaireConditionExecutorTests
     {
-        public Mock<IIteratorContainer> iteratorContainerMock;
+      //  public Mock<IIteratorContainer> iteratorContainerMock;
         [SetUp]
         public void CreateObjects()
         {
-            iteratorContainerMock = new Mock<IIteratorContainer>();
+           // iteratorContainerMock = new Mock<IIteratorContainer>();
         }
         [Test]
         public void EvaluateCondition_ConditionIsEmpty_ReturnsTrue()
@@ -49,6 +49,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         {
             CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor();
             CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
+            CompleteQuestionnaire entity = new CompleteQuestionnaire(doc);
             doc.Questions.Add(new CompleteQuestion("", QuestionType.SingleOption));
 
             var completeAnswer = new CompleteAnswer(new Answer(), doc.Questions[0].PublicKey);
@@ -56,12 +57,6 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             completeAnswer.AnswerValue = "3";
             completeAnswer.Selected = true;
             (doc.Questions[0] as CompleteQuestion).Answers.Add(completeAnswer);
-            iteratorContainerMock.Setup(
-            x => x.Create<ICompleteGroup, ICompleteQuestion>(doc)).Returns(
-                new QuestionnaireQuestionIterator(doc));
-            iteratorContainerMock.Setup(
-             x => x.Create<CompleteQuestionnaireDocument, ICompleteAnswer>(doc)).Returns(
-                 new QuestionnaireAnswerIterator(doc));
             bool result = executor.Execute((doc.Questions[0] as CompleteQuestion).Answers, "[" + completeAnswer.QuestionPublicKey + "]==3");
             Assert.AreEqual(result, true);
         }
@@ -75,12 +70,6 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
             doc.Questions.Add(new CompleteQuestion("", QuestionType.SingleOption));
             (doc.Questions[0] as CompleteQuestion).Answers.Add(answer);
-            iteratorContainerMock.Setup(
-            x => x.Create<ICompleteGroup, ICompleteQuestion>(doc)).Returns(
-                new QuestionnaireQuestionIterator(doc));
-            iteratorContainerMock.Setup(
-             x => x.Create<CompleteQuestionnaireDocument, ICompleteAnswer>(doc)).Returns(
-                 new QuestionnaireAnswerIterator(doc));
             bool result = executor.Execute((doc.Questions[0] as CompleteQuestion).Answers,
                                            "[" + answer.QuestionPublicKey + "]==3");
             Assert.AreEqual(result, false);

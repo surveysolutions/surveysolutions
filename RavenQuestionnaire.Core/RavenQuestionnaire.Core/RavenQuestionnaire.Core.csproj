@@ -165,10 +165,7 @@
     <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\Event.cs" />
     <Compile Include="Entities\IEntity.cs" />
-    <Compile Include="Entities\Iterators\HierarchicalGroupIterator.cs" />
     <Compile Include="Entities\Iterators\Iterator.cs" />
-    <Compile Include="Entities\Iterators\QuestionnaireAnswerIterator.cs" />
-    <Compile Include="Entities\Iterators\QuestionnaireQuestionIterator.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
     <Compile Include="Entities\Location.cs" />
     <Compile Include="Entities\Observers\CompositeHandler.cs" />
@@ -221,9 +218,7 @@
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
-    <Compile Include="IIteratorContainer.cs" />
     <Compile Include="Indexes\UsersInLocationIndex.cs" />
-    <Compile Include="IteratorContainer.cs" />
     <Compile Include="IViewFactory.cs" />
     <Compile Include="IViewRepsoitory.cs" />
     <Compile Include="Entities\OrderRequestItem.cs" />

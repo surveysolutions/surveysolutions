@@ -52,11 +52,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public List<ICompleteQuestion> Questions { get; set; }
 
         public List<ICompleteGroup> Groups { get; set; }
-        [XmlIgnore]
-        public Iterator<ICompleteAnswer> AnswerIterator
-        {
-            get { return new QuestionnaireAnswerIterator(this); }
-        }
         // private IIteratorContainer iteratorContainer;
 
         public virtual void Add(IComposite c, Guid? parent)

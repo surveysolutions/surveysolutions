@@ -15,7 +15,6 @@ namespace RavenQuestionnaire.Core.Entities
     public class CompleteQuestionnaire : IEntity<CompleteQuestionnaireDocument>, IComposite//, IPropogate
     {
         private CompleteQuestionnaireDocument innerDocument;
-        private IIteratorContainer iteratorContainer;
         private CompositeHandler handler;
         public CompleteQuestionnaireDocument GetInnerDocument()
         {
@@ -37,10 +36,9 @@ namespace RavenQuestionnaire.Core.Entities
              }*/
         }
 
-        public CompleteQuestionnaire(CompleteQuestionnaireDocument document, IIteratorContainer iteratorContainer)
+        public CompleteQuestionnaire(CompleteQuestionnaireDocument document)
         {
             this.innerDocument = document;
-            this.iteratorContainer = iteratorContainer;
             handler = new CompositeHandler(innerDocument.Observers, this);
             /*    foreach (ICompleteGroup completeGroup in GroupIterator)
                 {
@@ -72,19 +70,6 @@ namespace RavenQuestionnaire.Core.Entities
         {
             innerDocument.Responsible = user;
         }
-
-        public Iterator<ICompleteAnswer> AnswerIterator
-        {
-            get { return iteratorContainer.Create<ICompleteGroup<ICompleteGroup, ICompleteQuestion>, ICompleteAnswer>(this.innerDocument); }
-        }
-        public Iterator<ICompleteGroup> GroupIterator
-        {
-            get { return new HierarchicalGroupIterator(this.innerDocument); }
-        }
-        /*   public Iterator<CompleteQuestion> QuestionIterator
-           {
-               get { return iteratorContainer.Create<CompleteQuestionnaireDocument, CompleteQuestion>(this.innerDocument); }
-           }*/
         #region Implementation of IComposite
 
         public Guid PublicKey

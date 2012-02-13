@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             foreach (CompleteQuestion completeQuestion in template.Questions)
             {
                 if (
-                    this._conditionExecutor.Execute(entity.AnswerIterator,
+                    this._conditionExecutor.Execute(entity.Find<ICompleteAnswer>(a=>a.Selected),
                                                     completeQuestion.ConditionExpression))
                 {
                     isCondition = true;
