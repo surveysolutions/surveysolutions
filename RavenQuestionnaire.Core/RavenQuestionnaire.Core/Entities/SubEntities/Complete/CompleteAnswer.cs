@@ -115,7 +115,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return null;
         }
 
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
 
             if (!typeof(T).IsAssignableFrom(GetType()))

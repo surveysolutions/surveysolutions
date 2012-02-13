@@ -123,7 +123,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             return null;
         }
 
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return new T[0];
         }

@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         }
         public void Add(IComposite c, Guid? parent)
         {
-            if (parent.HasValue && parent.Value == PublicKey)
+            if ((parent.HasValue && parent.Value == PublicKey) || !parent.HasValue)
             {
                 IGroup group = c as IGroup;
                 if (group != null)
@@ -194,7 +194,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             return null;
         }
 
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
                 Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(

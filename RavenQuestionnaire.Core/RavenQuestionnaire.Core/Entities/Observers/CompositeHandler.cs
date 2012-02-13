@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Core.Entities.Observers
         public CompositeHandler(List<IObserver<CompositeInfo>> observers, IComposite document):this(document)
         {
             this.Observers = observers;
-            foreach (GroupObservable observer in Observers)
+            foreach (GroupObserver observer in Observers)
             {
                 observer.Subscribe(this);
             }
