@@ -19,12 +19,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
     {
         private IDocumentSession documentSession;
         private ICompleteGroupFactory groupFactory;
-        private IIteratorContainer iteratorContainer;
-        public CompleteQuestionnaireEnumerableViewFactory(IDocumentSession documentSession, ICompleteGroupFactory groupFactory, IIteratorContainer iteratorContainer)
+        public CompleteQuestionnaireEnumerableViewFactory(IDocumentSession documentSession, ICompleteGroupFactory groupFactory)
         {
             this.documentSession = documentSession;
             this.groupFactory = groupFactory;
-            this.iteratorContainer = iteratorContainer;
         }
 
         public CompleteQuestionnaireViewEnumerable Load(CompleteQuestionnaireViewInputModel input)
@@ -32,7 +30,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
             {
                 var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
-                var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc, iteratorContainer);
+                var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
                 ICompleteGroup group = null;
 
                 Iterator<ICompleteGroup> iterator =

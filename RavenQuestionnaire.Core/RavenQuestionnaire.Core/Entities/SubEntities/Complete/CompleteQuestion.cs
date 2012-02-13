@@ -45,7 +45,18 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public QuestionType QuestionType { get; set; }
 
-        public List<ICompleteAnswer> Answers { get; set; }
+        public List<ICompleteAnswer> Answers
+        {
+            get { return answers; }
+            set
+            {
+                answers = value;
+                answers.ForEach(a => a.QuestionPublicKey = this.PublicKey);
+            }
+        }
+
+        private List<ICompleteAnswer> answers;
+
 
         public string ConditionExpression { get; set; }
 
@@ -126,17 +137,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
-            return Answers.Where(a => a is T && condition(a as T)).Select(a => a as T);
-            /* if (typeof(T) == GetType())
-             {
-                 if (condition(this))
-                     return this as T;
-             }
-             if (typeof(T) == typeof(CompleteAnswer))
-             {
-                 return this.Answers.Select(answer => answer.Find<T>(condition)).FirstOrDefault(result => result != null);
-             }
-             return null;*/
+            return
+                Answers.Where(a => a is T && condition(a as T)).Select
+                    (a => a as T);
         }
     }
 }
