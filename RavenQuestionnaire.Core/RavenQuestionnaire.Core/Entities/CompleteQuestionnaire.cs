@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reactive.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Iterators;
@@ -28,6 +29,7 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Status = status;
             innerDocument.Responsible = user;
             handler = new CompositeHandler(innerDocument.Observers, this);
+            
             /* foreach (ICompleteGroup completeGroup in GroupIterator)
              {
                  var group = completeGroup as CompleteGroup;
@@ -116,6 +118,13 @@ namespace RavenQuestionnaire.Core.Entities
 
         #endregion
 
+        #region Implementation of IObservable<out CompositeEventArgs>
 
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            return innerDocument.Subscribe(observer);
+        }
+
+        #endregion
     }
 }

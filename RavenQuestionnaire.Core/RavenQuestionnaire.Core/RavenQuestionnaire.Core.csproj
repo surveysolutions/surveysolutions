@@ -87,6 +87,9 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Reactive">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -171,6 +174,8 @@
     <Compile Include="Entities\Observers\CompositeHandler.cs" />
     <Compile Include="Entities\Observers\CompositeInfo.cs" />
     <Compile Include="Entities\Observers\GroupObservable.cs" />
+    <Compile Include="Entities\Observers\ObservableCollectionExtensions.cs" />
+    <Compile Include="Entities\Observers\ObservableCollectionS.cs" />
     <Compile Include="Entities\Questionnaire.cs" />
     <Compile Include="Entities\Report.cs" />
     <Compile Include="Entities\Status.cs" />

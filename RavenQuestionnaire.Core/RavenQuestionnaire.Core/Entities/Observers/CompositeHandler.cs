@@ -70,7 +70,7 @@ namespace RavenQuestionnaire.Core.Entities.Observers
             }
         }
     }
-    internal class Unsubscriber<T> : IDisposable
+  /*  internal class Unsubscriber<T> : IDisposable
     {
         private List<IObserver<T>> _observers;
         private IObserver<T> _observer;
@@ -86,6 +86,6 @@ namespace RavenQuestionnaire.Core.Entities.Observers
             if (_observers.Contains(_observer))
                 _observers.Remove(_observer);
         }
-    }
+    }*/
 
 }

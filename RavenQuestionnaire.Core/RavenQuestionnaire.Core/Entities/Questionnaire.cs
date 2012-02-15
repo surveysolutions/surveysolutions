@@ -133,6 +133,7 @@ namespace RavenQuestionnaire.Core.Entities
                 innerDocument.Find<T>(condition);
         }
 
+
         public IList<IQuestion> GetAllQuestions()
         {
             List<IQuestion> result = new List<IQuestion>();
@@ -156,6 +157,13 @@ namespace RavenQuestionnaire.Core.Entities
             return result;
         }
 
+        #region Implementation of IObservable<out CompositeEventArgs>
 
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            return innerDocument.Subscribe(observer);
+        }
+
+        #endregion
     }
 }

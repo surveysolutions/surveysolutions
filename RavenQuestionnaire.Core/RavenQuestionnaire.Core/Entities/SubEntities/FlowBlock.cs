@@ -16,6 +16,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     {
         public FlowBlock()
         {
+            this.observers=new List<IObserver<CompositeEventArgs>>();
         }
 
         public FlowBlock(Guid questionId)
@@ -51,5 +52,18 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class{
             return new T[0];
         }
+
+
+        #region Implementation of IObservable<out CompositeEventArgs>
+
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return new Unsubscriber<CompositeEventArgs>(observers, observer);
+        }
+        private List<IObserver<CompositeEventArgs>> observers;
+
+        #endregion
     }
 }
