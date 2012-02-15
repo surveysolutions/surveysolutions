@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Text;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
@@ -26,8 +29,6 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         public void Handle(UpdateAnswerInCompleteQuestionnaireCommand command)
         {
             CompleteQuestionnaire entity = _questionnaireRepository.Load(command.CompleteQuestionnaireId);
-
-            //    entity.Remove<CompleteQuestion>(completeAnswer.QuestionPublicKey);
             foreach (var completeAnswer in command.CompleteAnswers)
             {
                 if (completeAnswer.Selected)
@@ -45,7 +46,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             foreach (ICompleteQuestion completeQuestion in entity.GetInnerDocument().Questions)
             {
                 if (
-                    !this._conditionExecutor.Execute(entity.Find<ICompleteAnswer>(a=>a.Selected), completeQuestion.ConditionExpression))
+                    !this._conditionExecutor.Execute(entity.Find<ICompleteAnswer>(a => a.Selected), completeQuestion.ConditionExpression))
                 {
                     entity.Remove(completeQuestion);
                     completeQuestion.Enabled = false;

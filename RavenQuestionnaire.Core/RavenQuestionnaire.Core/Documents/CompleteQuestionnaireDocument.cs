@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Xml.Serialization;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Entities.Composite;
@@ -30,11 +32,19 @@ namespace RavenQuestionnaire.Core.Documents
     {
         public CompleteQuestionnaireDocument()
         {
-            CreationDate = DateTime.Now;
-            LastEntryDate = DateTime.Now;
-            Questions = new List<ICompleteQuestion>();
-            Groups = new List<ICompleteGroup>();
-            Observers = new List<IObserver<CompositeInfo>>();
+            this.CreationDate = DateTime.Now;
+            this.LastEntryDate = DateTime.Now;
+
+            this.compositeobservers = new List<IObserver<CompositeEventArgs>>();
+            this.Questions = new ObservableCollectionS<ICompleteQuestion>();
+         
+
+            this.Groups=new ObservableCollectionS<ICompleteGroup>();
+           
+            
+            this.Observers = new List<IObserver<CompositeInfo>>();
+            
+            SubscribeBindedQuestions();
         }
         public static explicit operator CompleteQuestionnaireDocument(QuestionnaireDocument doc)
         {
@@ -43,13 +53,88 @@ namespace RavenQuestionnaire.Core.Documents
                 TemplateId = doc.Id,
                 Title = doc.Title
             };
-            result.Questions =
-                doc.Questions.Select(q => new CompleteQuestionFactory().ConvertToCompleteQuestion(q)).ToList();
-            result.Groups =
-                doc.Groups.Select(q => new CompleteGroupFactory().ConvertToCompleteGroup(q)).ToList();
+            foreach (IQuestion question in doc.Questions)
+            {
+                result.Questions.Add(new CompleteQuestionFactory().ConvertToCompleteQuestion(question));
+            }
+            foreach (IGroup group in doc.Groups)
+            {
+                result.Groups.Add(new CompleteGroupFactory().ConvertToCompleteGroup(group));
+            }
             result.Observers = doc.Observers;
             return result;
         }
+
+        protected void SubscribeBindedQuestions()
+        {
+            var allAddedAnswersEvents = from q in this
+                                        where q.ParentEvent != null &&
+                                              q is CompositeAddedEventArgs &&
+                                              ((CompositeAddedEventArgs) q).AddedComposite is ICompleteAnswer
+                                        select q as CompositeAddedEventArgs;
+            var addAnswers = from q in allAddedAnswersEvents
+                             let question =
+                                 ((CompositeAddedEventArgs) q.ParentEvent).AddedComposite as
+                                 ICompleteQuestion
+                             let binded =
+                                 this.Find<BindedCompleteQuestion>(bq => bq.ParentPublicKey.Equals(question.PublicKey))
+                             where !(question is IPropogate) && binded.Any()
+                             select q;
+            addAnswers
+                .Subscribe(Observer.Create<CompositeAddedEventArgs>(
+                    BindQuestion));
+
+            var addPropagatedAnswers = from q in allAddedAnswersEvents
+                                       let question =
+                                           ((CompositeAddedEventArgs) q.ParentEvent).AddedComposite as
+                                           CompleteQuestion
+                                       where question is IPropogate
+                                       let propagationKey = ((IPropogate)question).PropogationPublicKey
+                                       let groupsWithSameKey=
+                                           this.Find<PropagatableCompleteGroup>(
+                                               g => g.PropogationPublicKey.Equals(propagationKey))
+                                       let binded = groupsWithSameKey.SelectMany(
+                                                   pg =>
+                                                   pg.Find<BindedCompleteQuestion>(
+                                                       bq => bq.ParentPublicKey.Equals(question.PublicKey)))
+                                       select q;
+            addPropagatedAnswers.Subscribe(Observer.Create<CompositeAddedEventArgs>(
+                    BindPropagatedQuestion));
+        }
+        protected void BindPropagatedQuestion(CompositeAddedEventArgs e)
+        {
+            var template = ((CompositeAddedEventArgs)e.ParentEvent).AddedComposite as PropagatableCompleteQuestion;
+            if (template == null)
+                return;
+
+            var bindedQuestions =this.Find<PropagatableCompleteGroup>(g=>g.PropogationPublicKey.Equals(template.PropogationPublicKey)).SelectMany(pg=>pg.Find<BindedCompleteQuestion>(
+                    q => q.ParentPublicKey.Equals(template.PublicKey)));
+         /*   if (question == null)
+            {
+                return;
+            }*/
+            foreach (BindedCompleteQuestion bindedCompleteQuestion in bindedQuestions)
+            {
+                bindedCompleteQuestion.Copy(template);
+            }
+          //  question.Copy(template);
+        }
+        protected void BindQuestion(CompositeAddedEventArgs e)
+        {
+            var template = ((CompositeAddedEventArgs) e.ParentEvent).AddedComposite as ICompleteQuestion;
+            if (template == null)
+                return;
+
+            var question =
+                this.Find<BindedCompleteQuestion>(
+                    q => q.ParentPublicKey.Equals(template.PublicKey)).FirstOrDefault();
+            if (question == null)
+            {
+                return;
+            }
+            question.Copy(template);
+        }
+
         public UserLight Creator { get; set; }
 
         public string TemplateId { get; set; }
@@ -62,9 +147,41 @@ namespace RavenQuestionnaire.Core.Documents
 
         #region Implementation of IQuestionnaireDocument
 
-        public List<ICompleteQuestion> Questions { get; set; }
+        public ObservableCollectionS<ICompleteQuestion> Questions
+        {
+            get { return questions; }
+            set
+            {
+                questions = value;
+                questions.GetObservableAddedValues().Subscribe(q => this.OnAdded(new CompositeAddedEventArgs(q)));
+                questions.GetObservableRemovedValues().Subscribe(
+                    q => OnRemoved(new CompositeRemovedEventArgs(null)));
+                foreach (ICompleteQuestion completeQuestion in questions)
+                {
+                    this.OnAdded(new CompositeAddedEventArgs(completeQuestion));
+                }
+            }
+        }
 
-        public List<ICompleteGroup> Groups { get; set; }
+        private ObservableCollectionS<ICompleteQuestion> questions;
+
+        public ObservableCollectionS<ICompleteGroup> Groups
+        {
+            get { return groups; }
+            set
+            {
+                groups = value;
+                this.Groups.GetObservableAddedValues().Subscribe(g => this.OnAdded(new CompositeAddedEventArgs(g)));
+                this.Groups.GetObservableRemovedValues().Subscribe(
+                    q => OnRemoved(new CompositeRemovedEventArgs(null)));
+                foreach (ICompleteGroup completeGroup in groups)
+                {
+                    this.OnAdded(new CompositeAddedEventArgs(completeGroup));
+                }
+            }
+        }
+
+        private ObservableCollectionS<ICompleteGroup> groups;
 
         public string Id { get; set; }
 
@@ -110,6 +227,7 @@ namespace RavenQuestionnaire.Core.Documents
                 if (this.Groups.Count(g => g.PublicKey.Equals(group.PublicKey)) > 0)
                 {
                     this.Groups.Add(group);
+                    OnAdded(new CompositeAddedEventArgs(group));
                     return;
                 }
             }
@@ -145,13 +263,26 @@ namespace RavenQuestionnaire.Core.Documents
             if (propogate != null)
             {
                 if (
-                    this.Groups.RemoveAll(
-                        g =>
-                        g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
-                        ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
+               this.Groups.RemoveAll(g => g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
+                     ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
                 {
+                    OnRemoved(new CompositeRemovedEventArgs(null));
                     return;
                 }
+
+                /*bool deleted = false;
+                var toRemove = this.Groups.Where(g =>
+                                                 g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
+                                                 ((IPropogate) g).PropogationPublicKey.Equals(
+                                                     propogate.PropogationPublicKey));
+                foreach (ICompleteGroup completeGroup in toRemove)
+                {
+                    Groups.Remove(completeGroup);
+                    OnRemoved(new CompositeRemovedEventArgs(completeGroup));
+                    deleted = true;
+                }
+                if(deleted)
+                    return;*/
             }
             foreach (CompleteGroup completeGroup in this.Groups)
             {
@@ -182,10 +313,11 @@ namespace RavenQuestionnaire.Core.Documents
         {
             if (typeof(T) == typeof(PropagatableCompleteGroup))
             {
-                if (this.Groups.RemoveAll(
-                    g =>
-                    g.PublicKey.Equals(publicKey)) > 0)
+                var forRemove = this.Groups.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
+                if (forRemove!=null)
                 {
+                    this.Groups.Remove(forRemove);
+                    OnRemoved(new CompositeRemovedEventArgs(forRemove));
                     return;
                 }
             }
@@ -234,6 +366,40 @@ namespace RavenQuestionnaire.Core.Documents
 
         }
 
+        protected void OnAdded(CompositeAddedEventArgs e)
+        {
+            foreach (IObserver<CompositeEventArgs> observer in compositeobservers)
+            {
+                e.AddedComposite.Subscribe(observer);
+                observer.OnNext(e);
+            }
+        }
+        protected void OnRemoved(CompositeRemovedEventArgs e)
+        {
+            foreach (IObserver<CompositeEventArgs> observer in compositeobservers)
+            {
+                observer.OnNext(e);
+            }
+        }
+
+        #region Implementation of IObservable<out CompositeEventArgs>
+
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            if (!compositeobservers.Contains(observer))
+                compositeobservers.Add(observer);
+            foreach (ICompleteQuestion completeQuestion in Questions)
+            {
+                completeQuestion.Subscribe(observer);
+            }
+            foreach (ICompleteGroup completeGroup in Groups)
+            {
+                completeGroup.Subscribe(observer);
+            }
+            return new Unsubscriber<CompositeEventArgs>(compositeobservers, observer);
+        }
+        private List<IObserver<CompositeEventArgs>> compositeobservers;
+        #endregion
         #endregion
     }
 }

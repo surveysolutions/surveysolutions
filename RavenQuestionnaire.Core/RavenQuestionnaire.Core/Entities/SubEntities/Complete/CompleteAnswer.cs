@@ -16,9 +16,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public CompleteAnswer()
         {
             this.PublicKey = Guid.NewGuid();
+            this.observers=new List<IObserver<CompositeEventArgs>>();
         }
 
-        public CompleteAnswer(IAnswer answer, Guid questionPublicKey)
+        public CompleteAnswer(IAnswer answer, Guid questionPublicKey):this()
         {
             this.AnswerText = answer.AnswerText;
             this.AnswerType = answer.AnswerType;
@@ -127,6 +128,32 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return new T[0];
         }
 
+
+        #endregion
+        protected void OnAdded(CompositeAddedEventArgs e)
+        {
+            foreach (IObserver<CompositeEventArgs> observer in observers)
+            {
+                observer.OnNext(e);
+            }
+        }
+        protected void OnRemoved(CompositeRemovedEventArgs e)
+        {
+            foreach (IObserver<CompositeEventArgs> observer in observers)
+            {
+                observer.OnNext(e);
+            }
+        }
+
+        #region Implementation of IObservable<out CompositeEventArgs>
+
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return new Unsubscriber<CompositeEventArgs>(observers, observer);
+        }
+        private List<IObserver<CompositeEventArgs>> observers;
         #endregion
     }
 }

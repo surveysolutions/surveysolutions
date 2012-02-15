@@ -16,6 +16,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     }
     public class FlowGraph : IFlowGraph<FlowBlock, FlowConnection>
     {
+        public FlowGraph()
+        {
+        this.observers=new List<IObserver<CompositeEventArgs>>();
+        }
+
         public List<FlowBlock> Blocks { get; set; }
         public List<FlowConnection> Connections { get; set; }
 
@@ -127,5 +132,17 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             return new T[0];
         }
+
+        #region Implementation of IObservable<out CompositeEventArgs>
+
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return new Unsubscriber<CompositeEventArgs>(observers, observer);
+        }
+        private List<IObserver<CompositeEventArgs>> observers;
+
+        #endregion
     }
 }

@@ -16,9 +16,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
     {
         public CompleteGroup()
         {
-            Questions = new List<ICompleteQuestion>();
-            Groups = new List<ICompleteGroup>();
+            this.Questions = new ObservableCollectionS<ICompleteQuestion>();
+            this.Groups = new ObservableCollectionS<ICompleteGroup>();
             this.PublicKey = Guid.NewGuid();
+            this.observers=new List<IObserver<CompositeEventArgs>>();
             //   this.iteratorContainer = new IteratorContainer();
         }
 
@@ -36,10 +37,15 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                              Title = doc.Title,
                              Propagated = doc.Propagated
                          };
-            result.Questions =
-               doc.Questions.Select(q => new CompleteQuestionFactory().ConvertToCompleteQuestion(q)).ToList();
-            result.Groups =
-                doc.Groups.Select(q => new CompleteGroupFactory().ConvertToCompleteGroup(q)).ToList();
+
+            foreach (IQuestion question in doc.Questions)
+            {
+                result.Questions.Add(new CompleteQuestionFactory().ConvertToCompleteQuestion(question));
+            }
+            foreach (IGroup group in doc.Groups)
+            {
+                result.Groups.Add(new CompleteGroupFactory().ConvertToCompleteGroup(group));
+            }
             return result;
         }
 
@@ -48,10 +54,42 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public string Title { get; set; }
 
         public Propagate Propagated { get; set; }
-        
-        public List<ICompleteQuestion> Questions { get; set; }
 
-        public List<ICompleteGroup> Groups { get; set; }
+        public ObservableCollectionS<ICompleteQuestion> Questions
+        {
+            get { return questions; }
+            set
+            {
+                questions = value;
+                questions.GetObservableAddedValues().Subscribe(q => this.OnAdded(new CompositeAddedEventArgs(q)));
+                questions.GetObservableRemovedValues().Subscribe(
+                    q => OnRemoved(new CompositeRemovedEventArgs(null)));
+                foreach (ICompleteQuestion completeQuestion in questions)
+                {
+                    this.OnAdded(new CompositeAddedEventArgs(completeQuestion));
+                }
+            }
+        }
+
+        private ObservableCollectionS<ICompleteQuestion> questions;
+
+        public ObservableCollectionS<ICompleteGroup> Groups
+        {
+            get { return groups; }
+            set
+            {
+                groups = value;
+                this.Groups.GetObservableAddedValues().Subscribe(g => this.OnAdded(new CompositeAddedEventArgs(g)));
+                this.Groups.GetObservableRemovedValues().Subscribe(
+                    q => OnRemoved(new CompositeRemovedEventArgs(null)));
+                foreach (ICompleteGroup completeGroup in groups)
+                {
+                    this.OnAdded(new CompositeAddedEventArgs(completeGroup));
+                }
+            }
+        }
+
+        private ObservableCollectionS<ICompleteGroup> groups;
         // private IIteratorContainer iteratorContainer;
 
         public virtual void Add(IComposite c, Guid? parent)
@@ -65,6 +103,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                     if (group != null)
                     {
                         Groups.Add(propogateGroup);
+                        OnAdded(new CompositeAddedEventArgs(propogateGroup));
                         return;
                     }
                 }
@@ -108,7 +147,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                     g =>
                     g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
                     ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
+                {
+                    OnRemoved(new CompositeRemovedEventArgs(null));
                     return;
+
+                }
             }
             foreach (CompleteGroup completeGroup in Groups)
             {
@@ -141,10 +184,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             if (typeof(T) == typeof(PropagatableCompleteGroup))
             {
-                if (Groups.RemoveAll(
-                    g =>
-                    g.PublicKey.Equals(publicKey)) > 0)
+                var forRemove = Groups.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
+                if (forRemove!=null)
+                {
+                    Groups.Remove(forRemove);
+                    OnRemoved(new CompositeRemovedEventArgs(forRemove));
                     return;
+                }
             }
             foreach (CompleteGroup completeGroup in Groups)
             {
@@ -197,5 +243,41 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                      Questions.SelectMany(q => q.Find<T>(condition))).Union(
                          Groups.SelectMany(g => g.Find<T>(condition)));
         }
+
+        protected void OnAdded(CompositeAddedEventArgs e)
+        {
+            foreach (IObserver<CompositeEventArgs> observer in observers)
+            {
+                e.AddedComposite.Subscribe(observer);
+                observer.OnNext(e);
+            }
+        }
+        protected void OnRemoved(CompositeRemovedEventArgs e)
+        {
+            foreach (IObserver<CompositeEventArgs> observer in observers)
+            {
+                observer.OnNext(e);
+            }
+        }
+
+        #region Implementation of IObservable<out CompositeEventArgs>
+
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            foreach (ICompleteQuestion completeQuestion in Questions)
+            {
+                completeQuestion.Subscribe(observer);
+            }
+            foreach (ICompleteGroup completeGroup in Groups)
+            {
+                completeGroup.Subscribe(observer);
+            }
+            return new Unsubscriber<CompositeEventArgs>(observers, observer);
+        }
+        private List<IObserver<CompositeEventArgs>> observers;
+
+        #endregion
     }
 }

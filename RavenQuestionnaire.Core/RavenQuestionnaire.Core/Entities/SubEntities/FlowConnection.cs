@@ -17,6 +17,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     {
         public FlowConnection()
         {
+            this.observers=new List<IObserver<CompositeEventArgs>>();
         }
 
         public FlowConnection(Guid sourceId, Guid targetId)
@@ -57,5 +58,18 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             return new T[0];
         }
+
+
+        #region Implementation of IObservable<out CompositeEventArgs>
+
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return new Unsubscriber<CompositeEventArgs>(observers, observer);
+        }
+        private List<IObserver<CompositeEventArgs>> observers;
+
+        #endregion
     }
 }
