@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Xml.Serialization;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -109,13 +110,9 @@ namespace RavenQuestionnaire.Core.Documents
                 return;
 
             var bindedQuestions =
-                this.Find<PropagatableCompleteGroup>(g => g.PropogationPublicKey.Equals(template.PropogationPublicKey)).
-                    SelectMany(pg => pg.Find<BindedCompleteQuestion>(
-                        q => q.ParentPublicKey.Equals(template.PublicKey)));
-            /*   if (question == null)
-               {
-                   return;
-               }*/
+                this.GetPropagatedGroupsByKey(template.PropogationPublicKey).SelectMany(
+                    pg => pg.GetAllBindedQuestions(template.PublicKey));
+
             foreach (BindedCompleteQuestion bindedCompleteQuestion in bindedQuestions)
             {
                 bindedCompleteQuestion.Copy(template);
@@ -129,14 +126,12 @@ namespace RavenQuestionnaire.Core.Documents
             if (template == null)
                 return;
 
-            var question =
-                this.Find<BindedCompleteQuestion>(
-                    q => q.ParentPublicKey.Equals(template.PublicKey)).FirstOrDefault();
-            if (question == null)
+            var bindedQuestions =
+                this.GetAllBindedQuestions(template.PublicKey);
+            foreach (BindedCompleteQuestion bindedCompleteQuestion in bindedQuestions)
             {
-                return;
+                bindedCompleteQuestion.Copy(template);
             }
-            question.Copy(template);
         }
 
         public UserLight Creator { get; set; }

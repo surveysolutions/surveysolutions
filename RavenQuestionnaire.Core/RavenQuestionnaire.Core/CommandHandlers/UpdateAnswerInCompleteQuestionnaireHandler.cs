@@ -37,7 +37,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
                 else
                     entity.Remove(completeAnswer);
             }
-            var questions = entity.GetAllQuestions();
+            var questions = entity.GetInnerDocument().GetAllQuestions();
             var executor = new CompleteQuestionnaireConditionExecutor(entity);
             foreach (ICompleteQuestion completeQuestion in questions)
             {
