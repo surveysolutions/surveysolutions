@@ -18,12 +18,12 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         ICommandHandler<UpdateAnswerInCompleteQuestionnaireCommand>
     {
         private ICompleteQuestionnaireRepository _questionnaireRepository;
-        private IExpressionExecutor<IEnumerable<ICompleteAnswer>, bool> _conditionExecutor;
-        public UpdateAnswerInCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository questionnaireRepository,
-                                                          IExpressionExecutor<IEnumerable<ICompleteAnswer>, bool> conditionExecutor)
+    //    private IExpressionExecutor<IEnumerable<ICompleteAnswer>, bool> _conditionExecutor;
+        public UpdateAnswerInCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository questionnaireRepository/*,
+                                                          IExpressionExecutor<IEnumerable<ICompleteAnswer>, bool> conditionExecutor*/)
         {
             this._questionnaireRepository = questionnaireRepository;
-            this._conditionExecutor = conditionExecutor;
+       //     this._conditionExecutor = conditionExecutor;
         }
 
         public void Handle(UpdateAnswerInCompleteQuestionnaireCommand command)
@@ -36,10 +36,27 @@ namespace RavenQuestionnaire.Core.CommandHandlers
                 else
                     entity.Remove(completeAnswer);
             }
-            RemoveDisabledAnswers(entity);
+          //  RemoveDisabledAnswers(entity);
+            var groups =
+                entity.Find<ICompleteGroup>(
+                    g =>
+                    (g.Propagated == Propagate.None || g is IPropogate) &&
+                    (g is ICompleteGroup<ICompleteGroup, ICompleteQuestion> &&
+                     ((ICompleteGroup<ICompleteGroup, ICompleteQuestion>) g).Questions.Count > 0)).Select(
+                         g => g as ICompleteGroup<ICompleteGroup, ICompleteQuestion>);
+            var questions =
+                groups.SelectMany(
+                    g => g.Questions).Where(q => !(q is IBinded));
+            var executor = new CompleteQuestionnaireConditionExecutor(entity);
+            foreach (ICompleteQuestion completeQuestion in questions)
+            {
+                completeQuestion.Enabled = executor.Execute(completeQuestion);
+                if (!completeQuestion.Enabled)
+                    entity.Remove(completeQuestion);
+            }
         }
 
-        protected void RemoveDisabledAnswers(CompleteQuestionnaire entity)
+       /* protected void RemoveDisabledAnswers(CompleteQuestionnaire entity)
         {
             //innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey.Equals(question.PublicKey));
             //  Questionnaire template = entity.GetQuestionnaireTemplate();
@@ -97,6 +114,6 @@ namespace RavenQuestionnaire.Core.CommandHandlers
                         ag => ag.PublicKey.Equals(a.QuestionPublicKey)) == 0).ToList();
             result.AddRange(propagatedGroupWithSameId.SelectMany(g => g.Find<ICompleteAnswer>(a => a.Selected)));
             return result;
-        }
+        }*/
     }
 }

@@ -13,13 +13,11 @@ namespace RavenQuestionnaire.Core.CommandHandlers
     public class PropagateGroupHandler : ICommandHandler<PropagateGroupCommand>
     {
         private ICompleteQuestionnaireRepository _questionnaireRepository;
-        private IExpressionExecutor<IEnumerable<ICompleteAnswer>, bool> _conditionExecutor;
+      
 
-        public PropagateGroupHandler(ICompleteQuestionnaireRepository questionnaireRepository,
-                                                          IExpressionExecutor<IEnumerable<ICompleteAnswer>, bool> conditionExecutor)
+        public PropagateGroupHandler(ICompleteQuestionnaireRepository questionnaireRepository)
         {
             this._questionnaireRepository = questionnaireRepository;
-            this._conditionExecutor = conditionExecutor;
         }
 
         #region Implementation of ICommandHandler<PropagateGroupCommand>
@@ -29,12 +27,12 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             CompleteQuestionnaire entity = _questionnaireRepository.Load(command.CompleteQuestionnaireId);
             var template = entity.Find<CompleteGroup>(command.GroupPublicKey);
             bool isCondition = false;
-
+            var executor = new CompleteQuestionnaireConditionExecutor(entity);
             foreach (CompleteQuestion completeQuestion in template.Questions)
             {
                 if (
-                    this._conditionExecutor.Execute(entity.Find<ICompleteAnswer>(a=>a.Selected),
-                                                    completeQuestion.ConditionExpression))
+                    executor.Execute(
+                                                                         completeQuestion))
                 {
                     isCondition = true;
                     completeQuestion.Enabled = true;

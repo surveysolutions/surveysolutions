@@ -156,12 +156,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            if (typeof(T) == GetType())
+            if (typeof(T).IsAssignableFrom(GetType()))
             {
                 if (this.PublicKey.Equals(publicKey))
                     return this as T;
             }
-            if (typeof(T) == typeof(CompleteAnswer))
+            if (typeof(T).IsAssignableFrom(typeof(CompleteAnswer)))
             {
                 return this.Answers.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
             }
