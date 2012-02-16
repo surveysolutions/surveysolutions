@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             qDoqument.Questions.Add(question);
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
-            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
+            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
                                                                                                                     (
@@ -76,7 +76,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
             completeAnswer.Selected = true;
-            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
+            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
                 new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
@@ -119,7 +119,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
 
-            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
+            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
                                                                                                                     (completeAnswer)},

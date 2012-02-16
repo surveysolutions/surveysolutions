@@ -64,6 +64,7 @@ namespace RavenQuestionnaire.Core.Documents
             result.Observers = doc.Observers;
             return result;
         }
+      
 
         protected void SubscribeBindedQuestions()
         {
@@ -103,22 +104,25 @@ namespace RavenQuestionnaire.Core.Documents
         }
         protected void BindPropagatedQuestion(CompositeAddedEventArgs e)
         {
-            var template = ((CompositeAddedEventArgs)e.ParentEvent).AddedComposite as PropagatableCompleteQuestion;
+            var template = ((CompositeAddedEventArgs) e.ParentEvent).AddedComposite as PropagatableCompleteQuestion;
             if (template == null)
                 return;
 
-            var bindedQuestions =this.Find<PropagatableCompleteGroup>(g=>g.PropogationPublicKey.Equals(template.PropogationPublicKey)).SelectMany(pg=>pg.Find<BindedCompleteQuestion>(
-                    q => q.ParentPublicKey.Equals(template.PublicKey)));
-         /*   if (question == null)
-            {
-                return;
-            }*/
+            var bindedQuestions =
+                this.Find<PropagatableCompleteGroup>(g => g.PropogationPublicKey.Equals(template.PropogationPublicKey)).
+                    SelectMany(pg => pg.Find<BindedCompleteQuestion>(
+                        q => q.ParentPublicKey.Equals(template.PublicKey)));
+            /*   if (question == null)
+               {
+                   return;
+               }*/
             foreach (BindedCompleteQuestion bindedCompleteQuestion in bindedQuestions)
             {
                 bindedCompleteQuestion.Copy(template);
             }
-          //  question.Copy(template);
+            //  question.Copy(template);
         }
+
         protected void BindQuestion(CompositeAddedEventArgs e)
         {
             var template = ((CompositeAddedEventArgs) e.ParentEvent).AddedComposite as ICompleteQuestion;

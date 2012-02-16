@@ -122,8 +122,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public override T Find<T>(Guid publicKey)
         {
-            if (!typeof (IPropogate).IsAssignableFrom(typeof (T)))
-                return null;
+          /*  if (!typeof (IPropogate).IsAssignableFrom(typeof (T)))
+                return null;*/
 
             if (this.PublicKey.Equals(publicKey))
                 return this as T;
