@@ -7,6 +7,7 @@ using System.Text;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
@@ -36,17 +37,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
                 else
                     entity.Remove(completeAnswer);
             }
-          //  RemoveDisabledAnswers(entity);
-            var groups =
-                entity.Find<ICompleteGroup>(
-                    g =>
-                    (g.Propagated == Propagate.None || g is IPropogate) &&
-                    (g is ICompleteGroup<ICompleteGroup, ICompleteQuestion> &&
-                     ((ICompleteGroup<ICompleteGroup, ICompleteQuestion>) g).Questions.Count > 0)).Select(
-                         g => g as ICompleteGroup<ICompleteGroup, ICompleteQuestion>);
-            var questions =
-                groups.SelectMany(
-                    g => g.Questions).Where(q => !(q is IBinded));
+            var questions = entity.GetAllQuestions();
             var executor = new CompleteQuestionnaireConditionExecutor(entity);
             foreach (ICompleteQuestion completeQuestion in questions)
             {
