@@ -25,8 +25,8 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             e.EvaluateParameter += (name, args) =>
                                        {
                                            Guid nameGuid = Guid.Parse(name);
-
-                                           var dependency = questionnaire.GetAllQuestions().Where(
+                                           var entity = questionnaire.GetInnerDocument();
+                                           var dependency = entity.GetAllQuestions().Where(
                                                q => !(q is IPropogate)).FirstOrDefault(
                                                    q => q.PublicKey.Equals(nameGuid));
 
@@ -50,7 +50,10 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
                                                return;
                                            }
                                            //searchig for particulat question by key inside of all groups
-                                           var dependencyPropagated = questionnaire.GetAllQuestionsFromPropagatedGroup(propagation.PropogationPublicKey).FirstOrDefault(q => q.PublicKey.Equals(nameGuid));
+                                           var dependencyPropagated =
+                                               entity.GetPropagatedGroupsByKey(propagation.PropogationPublicKey).
+                                                   SelectMany(pg => pg.GetAllQuestions()).FirstOrDefault(
+                                                       q => q.PublicKey.Equals(nameGuid));
                                            if (dependencyPropagated == null)
                                                return;
 
