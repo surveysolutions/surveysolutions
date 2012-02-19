@@ -101,5 +101,17 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             document.Verify(x => x.Remove(targetGroup), Times.Never());
             document.Verify(x => x.Add(targetGroup,null), Times.Never());
         }
+        [Test]
+        public void RemoveGroup_Propagated_GroupIsRemoved()
+        {
+            CompleteGroup target = new CompleteGroup("target");
+            var propogatedGroup = new CompleteGroup("propagated") {Propagated = Propagate.Propagated};
+            target.Groups.Add(propogatedGroup);
+            var groupForRemove = new PropagatableCompleteGroup(propogatedGroup, Guid.NewGuid());
+            target.Add(groupForRemove, null);
+            Assert.AreEqual(target.Groups.Count, 2);
+            target.Remove(groupForRemove);
+            Assert.AreEqual(target.Groups.Count, 1);
+        }
     }
 }

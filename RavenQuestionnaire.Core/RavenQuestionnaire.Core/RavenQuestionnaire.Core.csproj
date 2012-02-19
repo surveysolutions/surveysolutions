@@ -175,7 +175,7 @@
     <Compile Include="Entities\Location.cs" />
     <Compile Include="Entities\Observers\CompositeHandler.cs" />
     <Compile Include="Entities\Observers\CompositeInfo.cs" />
-    <Compile Include="Entities\Observers\GroupObservable.cs" />
+    <Compile Include="Entities\Observers\GroupObserver.cs" />
     <Compile Include="Entities\Observers\ObservableCollectionExtensions.cs" />
     <Compile Include="Entities\Observers\ObservableCollectionS.cs" />
     <Compile Include="Entities\Questionnaire.cs" />

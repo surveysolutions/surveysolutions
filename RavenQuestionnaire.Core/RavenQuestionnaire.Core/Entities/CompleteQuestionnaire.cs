@@ -42,26 +42,12 @@ namespace RavenQuestionnaire.Core.Entities
         {
             this.innerDocument = document;
             handler = new CompositeHandler(innerDocument.Observers, this);
-            /*    foreach (ICompleteGroup completeGroup in GroupIterator)
-                {
-                    var group = completeGroup as CompleteGroup;
-                    if (group != null)
-                        group.Subscribe(this.handler);
-                }*/
         }
 
         public string CompleteQuestinnaireId
         {
             get { return innerDocument.Id; }
         }
-        /*  public void Subscribe(IComposite target, CompleteGroup group, Actions action)
-          {
-              group.Subscribe(this.handler);
-          }
-          public void Unsubscribe(CompleteGroup group)
-          {
-              group.Unsubscribe();
-          }*/
         public void SetStatus(SurveyStatus status)
         {
             innerDocument.Status = status;

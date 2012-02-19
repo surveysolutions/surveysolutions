@@ -18,5 +18,19 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
                          ((CompositeAddedEventArgs) q).AddedComposite is ICompleteAnswer
                    select q as CompositeAddedEventArgs;
         }
+        public static IObservable<CompositeAddedEventArgs> GetGroupPropagatedEvents(this IObservable<CompositeEventArgs> observeble)
+        {
+            return from q in observeble
+                   where q is CompositeAddedEventArgs &&
+                         ((CompositeAddedEventArgs)q).AddedComposite is PropagatableCompleteGroup
+                   select q as CompositeAddedEventArgs;
+        }
+        public static IObservable<CompositeRemovedEventArgs> GetGroupPropagatedRemovedEvents(this IObservable<CompositeEventArgs> observeble)
+        {
+            return from q in observeble
+                   where q is CompositeRemovedEventArgs &&
+                         ((CompositeRemovedEventArgs)q).RemovedComposite is PropagatableCompleteGroup
+                   select q as CompositeRemovedEventArgs;
+        }
     }
 }

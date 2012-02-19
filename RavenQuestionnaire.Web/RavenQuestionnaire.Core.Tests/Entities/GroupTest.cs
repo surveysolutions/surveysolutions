@@ -60,5 +60,6 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             target.Add(new Question("se", QuestionType.Text), target.Groups[0].PublicKey);
             Assert.IsTrue(test);
         }
+       
     }
 }

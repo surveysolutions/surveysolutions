@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.Observers;
 
@@ -143,15 +144,25 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
             if (propogate != null)
             {
-                if (Groups.RemoveAll(
-                    g =>
-                    g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
-                    ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
+                var propagatedGroups = this.Groups.Where(
+                     g =>
+                     g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
+                     ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)).ToList();
+                foreach (PropagatableCompleteGroup propagatableCompleteGroup in propagatedGroups)
                 {
-                    OnRemoved(new CompositeRemovedEventArgs(null));
-                    return;
-
+                    Groups.Remove(propagatableCompleteGroup);
+                    OnRemoved(new CompositeRemovedEventArgs(propagatableCompleteGroup));
                 }
+                return;
+                /* if (Groups.RemoveAll(
+                     g =>
+                     g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
+                     ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
+                 {
+                     OnRemoved(new CompositeRemovedEventArgs(null));
+                     return;
+
+                 }*/
             }
             foreach (CompleteGroup completeGroup in Groups)
             {
