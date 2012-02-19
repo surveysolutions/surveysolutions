@@ -81,6 +81,9 @@ namespace RavenQuestionnaire.Core.Documents
                 .Subscribe(Observer.Create<CompositeAddedEventArgs>(
                     BindQuestion));
         }
+        protected void SubscribeOnGroupPropagation()
+        {
+        }
 
         protected void BindQuestion(CompositeAddedEventArgs e)
         {
@@ -189,11 +192,6 @@ namespace RavenQuestionnaire.Core.Documents
         public virtual void Add(IComposite c, Guid? parent)
         {
             ICompleteGroup group = c as ICompleteGroup;
-            /*  if (group != null && group.Propagated)
-              {
-                  if (!(group is PropagatableCompleteGroup))
-                      c = new PropagatableCompleteGroup(group, Guid.NewGuid());
-  */
             if (group != null && group is IPropogate && !parent.HasValue)
             {
                 if (this.Groups.Count(g => g.PublicKey.Equals(group.PublicKey)) > 0)
@@ -234,27 +232,17 @@ namespace RavenQuestionnaire.Core.Documents
             PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
             if (propogate != null)
             {
-                if (
-               this.Groups.RemoveAll(g => g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
-                     ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
+                var propagatedGroups = this.Groups.Where(
+                    g =>
+                    g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
+                    ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)).ToList();
+                foreach (PropagatableCompleteGroup propagatableCompleteGroup in propagatedGroups)
                 {
-                    OnRemoved(new CompositeRemovedEventArgs(null));
-                    return;
+                    Groups.Remove(propagatableCompleteGroup);
+                    OnRemoved(new CompositeRemovedEventArgs(propagatableCompleteGroup));
                 }
+                return;
 
-                /*bool deleted = false;
-                var toRemove = this.Groups.Where(g =>
-                                                 g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
-                                                 ((IPropogate) g).PropogationPublicKey.Equals(
-                                                     propogate.PropogationPublicKey));
-                foreach (ICompleteGroup completeGroup in toRemove)
-                {
-                    Groups.Remove(completeGroup);
-                    OnRemoved(new CompositeRemovedEventArgs(completeGroup));
-                    deleted = true;
-                }
-                if(deleted)
-                    return;*/
             }
             foreach (CompleteGroup completeGroup in this.Groups)
             {

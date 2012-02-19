@@ -17,6 +17,7 @@ namespace RavenQuestionnaire.Core.Entities.Composite
 
 
     }
+
     public class Unsubscriber<T> : IDisposable
     {
         private List<IObserver<T>> _observers;

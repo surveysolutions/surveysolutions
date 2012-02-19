@@ -65,5 +65,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         }
         private List<IObserver<CompositeEventArgs>> observers;
         #endregion
+
     }
 }
