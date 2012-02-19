@@ -65,73 +65,46 @@ namespace RavenQuestionnaire.Core.Documents
             result.Observers = doc.Observers;
             return result;
         }
-      
+
 
         protected void SubscribeBindedQuestions()
         {
-            var allAddedAnswersEvents = from q in this
-                                        where q.ParentEvent != null &&
-                                              q is CompositeAddedEventArgs &&
-                                              ((CompositeAddedEventArgs) q).AddedComposite is ICompleteAnswer
-                                        select q as CompositeAddedEventArgs;
-            var addAnswers = from q in allAddedAnswersEvents
+            var addAnswers = from q in this.GetAllAnswerAddedEvents()
                              let question =
                                  ((CompositeAddedEventArgs) q.ParentEvent).AddedComposite as
                                  ICompleteQuestion
                              let binded =
-                                 this.Find<BindedCompleteQuestion>(bq => bq.ParentPublicKey.Equals(question.PublicKey))
-                             where !(question is IPropogate) && binded.Any()
+                                 this.GetAllBindedQuestions(question.PublicKey)
+                             where binded.Any()
                              select q;
             addAnswers
                 .Subscribe(Observer.Create<CompositeAddedEventArgs>(
                     BindQuestion));
-
-            var addPropagatedAnswers = from q in allAddedAnswersEvents
-                                       let question =
-                                           ((CompositeAddedEventArgs) q.ParentEvent).AddedComposite as
-                                           CompleteQuestion
-                                       where question is IPropogate
-                                       let propagationKey = ((IPropogate)question).PropogationPublicKey
-                                       let groupsWithSameKey=
-                                           this.Find<PropagatableCompleteGroup>(
-                                               g => g.PropogationPublicKey.Equals(propagationKey))
-                                       let binded = groupsWithSameKey.SelectMany(
-                                                   pg =>
-                                                   pg.Find<BindedCompleteQuestion>(
-                                                       bq => bq.ParentPublicKey.Equals(question.PublicKey)))
-                                       select q;
-            addPropagatedAnswers.Subscribe(Observer.Create<CompositeAddedEventArgs>(
-                    BindPropagatedQuestion));
-        }
-        protected void BindPropagatedQuestion(CompositeAddedEventArgs e)
-        {
-            var template = ((CompositeAddedEventArgs) e.ParentEvent).AddedComposite as PropagatableCompleteQuestion;
-            if (template == null)
-                return;
-
-            var bindedQuestions =
-                this.GetPropagatedGroupsByKey(template.PropogationPublicKey).SelectMany(
-                    pg => pg.GetAllBindedQuestions(template.PublicKey));
-
-            foreach (BindedCompleteQuestion bindedCompleteQuestion in bindedQuestions)
-            {
-                bindedCompleteQuestion.Copy(template);
-            }
-            //  question.Copy(template);
         }
 
         protected void BindQuestion(CompositeAddedEventArgs e)
         {
             var template = ((CompositeAddedEventArgs) e.ParentEvent).AddedComposite as ICompleteQuestion;
+
             if (template == null)
                 return;
-
-            var bindedQuestions =
-                this.GetAllBindedQuestions(template.PublicKey);
-            foreach (BindedCompleteQuestion bindedCompleteQuestion in bindedQuestions)
+            var propagatedTemplate = template as IPropogate;
+            IEnumerable<BindedCompleteQuestion> binded;
+            if (propagatedTemplate == null)
+            {
+                binded =
+                    this.GetAllBindedQuestions(template.PublicKey);
+            }
+            else
+            {
+                binded = this.GetPropagatedGroupsByKey(propagatedTemplate.PropogationPublicKey).SelectMany(
+                    pg => pg.GetAllBindedQuestions(template.PublicKey));
+            }
+            foreach (BindedCompleteQuestion bindedCompleteQuestion in binded)
             {
                 bindedCompleteQuestion.Copy(template);
             }
+
         }
 
         public UserLight Creator { get; set; }

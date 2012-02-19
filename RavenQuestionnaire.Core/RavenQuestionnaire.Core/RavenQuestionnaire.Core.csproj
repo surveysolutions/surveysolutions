@@ -167,6 +167,7 @@
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\Event.cs" />
+    <Compile Include="Entities\Extensions\CompositeObservebleExtensions.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Iterators\Iterator.cs" />
