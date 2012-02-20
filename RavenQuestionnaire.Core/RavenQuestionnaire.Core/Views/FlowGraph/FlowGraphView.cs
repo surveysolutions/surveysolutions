@@ -94,7 +94,7 @@ namespace RavenQuestionnaire.Core.Views.FlowGraph
             parent.Width = width;
         }
 
-        private static List<FlowBlockViewItem> AddGroup(FlowBlockViewItem parent, IEnumerable<AbstractQuestionView> questions, IEnumerable<AbstractGroupView> groups)
+        private static List<FlowBlockViewItem> AddGroup(FlowBlockViewItem parent, IEnumerable<AbstractQuestionView> questions, IEnumerable<GroupView> groups)
         {
             var list = new List<FlowBlockViewItem>();
             foreach (var b in questions.Select(question => new FlowBlockViewItem()
