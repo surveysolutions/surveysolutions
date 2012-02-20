@@ -32,10 +32,18 @@ namespace RavenQuestionnaire.Core.Documents
         {
             CreationDate = DateTime.Now;
             LastEntryDate = DateTime.Now;
-            Questions = new List<IQuestion>();
-            Groups = new List<IGroup>();
+            Questions = new ObservableCollectionS<IQuestion>();
+            Groups = new ObservableCollectionS<IGroup>();
+            this.Questions.GetObservableAddedValues().Subscribe(q => this.OnAdded(new CompositeAddedEventArgs(q)));
+            this.Questions.GetObservableRemovedValues().Subscribe(
+                q => OnRemoved(new CompositeRemovedEventArgs(null)));
+
+            this.Groups.GetObservableAddedValues().Subscribe(g => this.OnAdded(new CompositeAddedEventArgs(g)));
+            this.Groups.GetObservableRemovedValues().Subscribe(
+                q => OnRemoved(new CompositeRemovedEventArgs(null)));
             Observers = new List<IObserver<CompositeInfo>>();
             FlowGraph = null;
+            this.observers=new List<IObserver<CompositeEventArgs>>();
         }
 
         public string Id { get; set; }
@@ -66,8 +74,8 @@ namespace RavenQuestionnaire.Core.Documents
 
         public DateTime? CloseDate { get; set; }
 
-        public List<IQuestion> Questions { get; set; }
-        public List<IGroup> Groups { get; set; }
+        public ObservableCollectionS<IQuestion> Questions { get; set; }
+        public ObservableCollectionS<IGroup> Groups { get; set; }
         public FlowGraph FlowGraph { get; set; }
         public List<IObserver<CompositeInfo>> Observers { get; set; }
 
@@ -80,12 +88,14 @@ namespace RavenQuestionnaire.Core.Documents
                 if (group != null)
                 {
                     this.Groups.Add(group);
+                    OnAdded(new CompositeAddedEventArgs(c));
                     return;
                 }
                 IQuestion question = c as IQuestion;
                 if (question != null)
                 {
                     this.Questions.Add(question);
+                    OnAdded(new CompositeAddedEventArgs(c));
                     return;
                 }
             }
@@ -124,12 +134,14 @@ namespace RavenQuestionnaire.Core.Documents
             if (group != null)
             {
                 this.Groups.Remove(group);
+                OnRemoved( new CompositeRemovedEventArgs(group));
                 return;
             }
             var question = this.Questions.FirstOrDefault(g => c is IQuestion && g.PublicKey.Equals(((IQuestion)c).PublicKey));
             if (question != null)
             {
                 this.Questions.Remove(question);
+                OnRemoved(new CompositeRemovedEventArgs(question));
                 return;
             }
             foreach (IGroup child in this.Groups)
@@ -164,12 +176,14 @@ namespace RavenQuestionnaire.Core.Documents
             if (group != null)
             {
                 this.Groups.Remove(group);
+                OnRemoved(new CompositeRemovedEventArgs(group));
                 return;
             }
             var question = this.Questions.FirstOrDefault(g => typeof(IQuestion).IsAssignableFrom(typeof(T)) && g.PublicKey.Equals(publicKey));
             if (question != null)
             {
                 this.Questions.Remove(question);
+                OnRemoved(new CompositeRemovedEventArgs(question));
                 return;
             }
             foreach (IGroup child in this.Groups)
@@ -218,7 +232,7 @@ namespace RavenQuestionnaire.Core.Documents
             }
             return null;
         }
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
              Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
@@ -245,6 +259,32 @@ namespace RavenQuestionnaire.Core.Documents
                return null;*/
         }
 
+        protected void OnAdded(CompositeAddedEventArgs e)
+        {
+            foreach (IObserver<CompositeEventArgs> observer in observers)
+            {
+                e.AddedComposite.Subscribe(observer);
+                observer.OnNext(e);
+            }
+        }
+        protected void OnRemoved(CompositeRemovedEventArgs e)
+        {
+            foreach (IObserver<CompositeEventArgs> observer in observers)
+            {
+                observer.OnNext(e);
+            }
+        }
+
+        #region Implementation of IObservable<out CompositeEventArgs>
+
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return new Unsubscriber<CompositeEventArgs>(observers, observer);
+        }
+        private List<IObserver<CompositeEventArgs>> observers;
+        #endregion
         #endregion
     }
 }

@@ -46,9 +46,9 @@ namespace RavenQuestionnaire.Core.AbstractFactories
 
         public CompleteQuestionView CreateQuestion(CompleteQuestionnaireDocument doc,ICompleteGroup group, ICompleteQuestion question)
         {
-            BindedCompleteQuestion bindedQuestion = question as BindedCompleteQuestion;
+        /*    BindedCompleteQuestion bindedQuestion = question as BindedCompleteQuestion;
             if (bindedQuestion != null)
-                return new BindedCompleteQuestionView(doc,group, bindedQuestion);
+                return new BindedCompleteQuestionView(doc,group, bindedQuestion);*/
             return new CompleteQuestionView(doc, question);
         }
 

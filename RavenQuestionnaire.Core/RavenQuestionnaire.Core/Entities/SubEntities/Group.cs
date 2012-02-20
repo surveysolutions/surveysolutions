@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Observers;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
@@ -15,7 +18,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
     public interface IGroup : IComposite
     {
-        Guid PublicKey { get; set; }
         string Title { get; set; }
         Propagate Propagated { get; set; }
     }
@@ -24,17 +26,26 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         where TQuestion : IQuestion
         where TGroup : IGroup
     {
-        List<TQuestion> Questions { get; set; }
-        List<TGroup> Groups { get; set; }
+        ObservableCollectionS<TQuestion> Questions { get; set; }
+        ObservableCollectionS<TGroup> Groups { get; set; }
     }
     public class Group : IGroup<IGroup, IQuestion>
     {
         public Group()
         {
             this.PublicKey = Guid.NewGuid();
-            this.Questions = new List<IQuestion>();
-            this.Groups = new List<IGroup>();
+            this.Observers = new List<IObserver<CompositeEventArgs>>();
+            this.Questions = new ObservableCollectionS<IQuestion>();
+            this.Groups = new ObservableCollectionS<IGroup>();
+            this.Questions.GetObservableAddedValues().Subscribe(q => this.OnAdded(new CompositeAddedEventArgs(q)));
+            this.Questions.GetObservableRemovedValues().Subscribe(
+                q => OnRemoved(new CompositeRemovedEventArgs(null)));
+
+            this.Groups.GetObservableAddedValues().Subscribe(g => this.OnAdded(new CompositeAddedEventArgs(g)));
+            this.Groups.GetObservableRemovedValues().Subscribe(
+                q => OnRemoved(new CompositeRemovedEventArgs(null)));
         }
+
         public Group(string text)
             : this()
         {
@@ -44,26 +55,28 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Guid PublicKey { get; set; }
         public string Title { get; set; }
         public Propagate Propagated { get; set; }
-        public List<IQuestion> Questions { get; set; }
-        public List<IGroup> Groups { get; set; }
+        public ObservableCollectionS<IQuestion> Questions { get; set; }
+        public ObservableCollectionS<IGroup> Groups { get; set; }
         public void Update(string groupText)
         {
             this.Title = groupText;
         }
         public void Add(IComposite c, Guid? parent)
         {
-            if (parent.HasValue && parent.Value == PublicKey)
+            if ((parent.HasValue && parent.Value == PublicKey) || !parent.HasValue)
             {
                 IGroup group = c as IGroup;
                 if (group != null)
                 {
                     Groups.Add(group);
+                //    group.Subscribe(this);
                     return;
                 }
                 IQuestion question = c as IQuestion;
                 if (question != null)
                 {
                     Questions.Add(question);
+                  //  question.Subscribe(this);
                     return;
                 }
             }
@@ -138,12 +151,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             if (group != null)
             {
                 this.Groups.Remove(group);
+                OnRemoved(new CompositeRemovedEventArgs(group));
                 return;
             }
             var question = this.Questions.FirstOrDefault(g => typeof(IQuestion).IsAssignableFrom(typeof(T)) && g.PublicKey.Equals(publicKey));
             if (question != null)
             {
                 this.Questions.Remove(question);
+                OnRemoved(new CompositeRemovedEventArgs(question));
                 return;
             }
             foreach (IGroup child in this.Groups)
@@ -194,7 +209,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             return null;
         }
 
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
                 Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
@@ -219,5 +234,36 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             }
             return null;*/
         }
+
+        protected void OnAdded(CompositeAddedEventArgs e)
+        {
+            
+            foreach (IObserver<CompositeEventArgs> observer in Observers)
+            {
+                e.AddedComposite.Subscribe(observer);
+                observer.OnNext(e);
+            }
+        }
+        protected void OnRemoved(CompositeRemovedEventArgs e)
+        {
+            foreach (IObserver<CompositeEventArgs> observer in Observers)
+            {
+                observer.OnNext(e);
+            }
+        }
+
+        #region Implementation of IObservable<out CompositeEventArgs>
+
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            if (!Observers.Contains(observer))
+                Observers.Add(observer);
+            return new Unsubscriber<CompositeEventArgs>(Observers, observer);
+        }
+
+        public List<IObserver<CompositeEventArgs>> Observers { get; set; }
+
+        #endregion
+
     }
 }
