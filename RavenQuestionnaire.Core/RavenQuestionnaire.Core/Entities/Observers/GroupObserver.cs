@@ -6,23 +6,23 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities.Observers
 {
-    public class GroupObservable : IObserver<CompositeInfo>
+    public class GroupObserver: IObserver<CompositeInfo>
     {
         public Guid PublicKey { get; set; }
         public Guid TargetPublicKey { get; set; }
         private IDisposable cancellation;
 
-        public virtual void Subscribe(CompositeHandler provider)
+        public void Subscribe(CompositeHandler provider)
         {
             cancellation = provider.Subscribe(this);
         }
 
-        public virtual void Unsubscribe()
+        public void Unsubscribe()
         {
             cancellation.Dispose();
             //   flightInfos.Clear();
         }
-        public GroupObservable(Guid group,Guid targetKey)
+        public GroupObserver(Guid group, Guid targetKey)
         {
             this.TargetPublicKey = targetKey;
             this.PublicKey = group;

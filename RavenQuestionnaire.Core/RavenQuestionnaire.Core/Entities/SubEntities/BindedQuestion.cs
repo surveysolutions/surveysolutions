@@ -6,6 +6,7 @@ using System.Text;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
@@ -14,54 +15,33 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     {
         public BindedQuestion()
         {
-            this.template=new Question();
             PublicKey = Guid.NewGuid();
+            Answers=new ObservableCollectionS<IAnswer>();
         }
         public BindedQuestion(IQuestion<IAnswer> template)
         {
-            this.template=template;
+            this.ParentPublicKey=template.PublicKey;
         }
 
-        private readonly IQuestion<IAnswer> template;
 
         public Guid PublicKey { get; set; }
 
-        public Guid ParentPublicKey
-        {
-            get { return template.PublicKey; }
-            set { template.PublicKey = value; }
-        }
+        public Guid ParentPublicKey { get; set; }
 
         [JsonIgnore]
-        public string QuestionText
-        {
-            get { return template.QuestionText; }
-            set { throw new InvalidOperationException("question text can't be changed at binded question");}
-        }
+        public string QuestionText { get; set; }
+
         [JsonIgnore]
-        public QuestionType QuestionType
-        {
-            get { return template.QuestionType; }
-            set { throw new InvalidOperationException("QuestionType can't be changed at binded question"); }
-        }
+        public QuestionType QuestionType { get; set; }
+
         [JsonIgnore]
-        public List<IAnswer> Answers
-        {
-            get { return template.Answers; }
-            set { throw new InvalidOperationException("Answers can't be changed at binded question"); }
-        }
+        public ObservableCollectionS<IAnswer> Answers { get; set; }
+
         [JsonIgnore]
-        public string ConditionExpression
-        {
-            get { return template.ConditionExpression; }
-            set { throw new InvalidOperationException("ConditionExpression can't be changed at binded question"); }
-        }
+        public string ConditionExpression { get; set; }
+
         [JsonIgnore]
-        public string StataExportCaption
-        {
-            get { return template.StataExportCaption; }
-            set { throw new InvalidOperationException("StataExportCaption can't be changed at binded question"); }
-        }
+        public string StataExportCaption { get; set; }
 
         public void Add(IComposite c, Guid? parent)
         {
@@ -82,9 +62,19 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             return null;
         }
 
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return new T[0];
         }
+
+
+        #region Implementation of IObservable<out CompositeEventArgs>
+
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            return null;
+        }
+
+        #endregion
     }
 }

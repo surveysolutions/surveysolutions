@@ -14,11 +14,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
     [TestFixture]
     public class DeleteCompleteQuestionnaireComHandlerTest
     {
-        public Mock<IIteratorContainer> iteratorContainerMock;
         [SetUp]
         public void CreateObjects()
         {
-            iteratorContainerMock = new Mock<IIteratorContainer>();
         }
         [Test]
         public void WhenCommandIsReceived_QuestionnaireIsDeletedFromRepository()
@@ -26,7 +24,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteQuestionnaireDocument innerDocument = new CompleteQuestionnaireDocument();
             innerDocument.Id = "cqID";
 
-            CompleteQuestionnaire entity = new CompleteQuestionnaire(innerDocument, iteratorContainerMock.Object);
+            CompleteQuestionnaire entity = new CompleteQuestionnaire(innerDocument);
 
             Mock<ICompleteQuestionnaireRepository> questionnaireRepositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqID")).Returns(entity);

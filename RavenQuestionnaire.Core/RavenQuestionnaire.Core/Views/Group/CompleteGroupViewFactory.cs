@@ -13,12 +13,10 @@ namespace RavenQuestionnaire.Core.Views.Group
     {
         private IDocumentSession documentSession;
         private ICompleteGroupFactory groupFactory;
-        private IIteratorContainer iteratorContainer;
-        public CompleteGroupViewFactory(IDocumentSession documentSession, ICompleteGroupFactory groupFactory, IIteratorContainer iteratorContainer)
+        public CompleteGroupViewFactory(IDocumentSession documentSession, ICompleteGroupFactory groupFactory)
         {
             this.documentSession = documentSession;
             this.groupFactory = groupFactory;
-            this.iteratorContainer = iteratorContainer;
         }
 
         public CompleteGroupView Load(CompleteGroupViewInputModel input)
@@ -28,7 +26,7 @@ namespace RavenQuestionnaire.Core.Views.Group
             if (input.PublicKey.HasValue)
             {
                 group =
-                    new Entities.CompleteQuestionnaire(doc, iteratorContainer).Find<Entities.SubEntities.Complete.CompleteGroup>(
+                    new Entities.CompleteQuestionnaire(doc).Find<Entities.SubEntities.Complete.CompleteGroup>(
                         input.PublicKey.Value);
             }
             else
@@ -36,8 +34,8 @@ namespace RavenQuestionnaire.Core.Views.Group
                 group = new Entities.SubEntities.Complete.CompleteGroup()
                             {
                                 Questions =
-                                    doc.Questions.ToList()
-                            };
+                                    doc.Questions};
+                group.PublicKey = Guid.Empty;
 
             }
             return this.groupFactory.CreateGroup(doc, group);

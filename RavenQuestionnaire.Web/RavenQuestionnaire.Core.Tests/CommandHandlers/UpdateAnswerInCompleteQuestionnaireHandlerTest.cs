@@ -21,11 +21,11 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
     [TestFixture]
     public class UpdateAnswerInCompleteQuestionnaireHandlerTest
     {
-        public Mock<IIteratorContainer> iteratorContainerMock;
+       // public Mock<IIteratorContainer> iteratorContainerMock;
         [SetUp]
         public void CreateObjects()
         {
-            iteratorContainerMock = new Mock<IIteratorContainer>();
+          //  iteratorContainerMock = new Mock<IIteratorContainer>();
         }
         [Test]
         public void WhenCommandIsReceived_NewAnswerIsAddedTCompleteQuestionnaire()
@@ -38,9 +38,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
             question.Answers.Add(answer);
             qDoqument.Questions.Add(question);
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
-            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
+            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
                                                                                                                     (
@@ -51,9 +51,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                 null
                                                                                                                 ,
                                                                                                                 null);
-            iteratorContainerMock.Setup(
-             x => x.Create<ICompleteGroup, ICompleteQuestion>(qDoqument)).Returns(
-                 new QuestionnaireQuestionIterator(qDoqument));
+            
             handler.Handle(command);
             repositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqId"), Times.Once());
             Assert.AreEqual(qDoqument.Questions[0].PublicKey, question.PublicKey);
@@ -64,7 +62,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AddNewAnswerInPropagatedGroup_ValidAnswer_AnswerIsAdded()
         {
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated};
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
@@ -78,10 +76,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
             completeAnswer.Selected = true;
-            iteratorContainerMock.Setup(
-               x => x.Create<CompleteQuestionnaireDocument, ICompleteQuestion>(qDoqument)).Returns(
-                   new QuestionnaireQuestionIterator(qDoqument));
-            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
+            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
                 new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
@@ -110,7 +105,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void AddNewAnswerInPropagatedGroup_InvalidPropogationGuid_NoAnswersIsSelected()
         {
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
@@ -124,13 +119,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
 
-            iteratorContainerMock.Setup(
-              x => x.Create<ICompleteGroup, ICompleteQuestion>(qDoqument)).Returns(
-                  new QuestionnaireQuestionIterator(qDoqument));
-            iteratorContainerMock.Setup(
-             x => x.Create<ICompleteGroup, ICompleteAnswer>(qDoqument)).Returns(
-                 new QuestionnaireAnswerIterator(qDoqument));
-            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object, new CompleteQuestionnaireConditionExecutor());
+            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
                                                                                                                     (completeAnswer)},

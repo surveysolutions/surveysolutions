@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reactive.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Iterators;
@@ -15,7 +16,6 @@ namespace RavenQuestionnaire.Core.Entities
     public class CompleteQuestionnaire : IEntity<CompleteQuestionnaireDocument>, IComposite//, IPropogate
     {
         private CompleteQuestionnaireDocument innerDocument;
-        private IIteratorContainer iteratorContainer;
         private CompositeHandler handler;
         public CompleteQuestionnaireDocument GetInnerDocument()
         {
@@ -29,6 +29,7 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Status = status;
             innerDocument.Responsible = user;
             handler = new CompositeHandler(innerDocument.Observers, this);
+            
             /* foreach (ICompleteGroup completeGroup in GroupIterator)
              {
                  var group = completeGroup as CompleteGroup;
@@ -37,31 +38,16 @@ namespace RavenQuestionnaire.Core.Entities
              }*/
         }
 
-        public CompleteQuestionnaire(CompleteQuestionnaireDocument document, IIteratorContainer iteratorContainer)
+        public CompleteQuestionnaire(CompleteQuestionnaireDocument document)
         {
             this.innerDocument = document;
-            this.iteratorContainer = iteratorContainer;
             handler = new CompositeHandler(innerDocument.Observers, this);
-            /*    foreach (ICompleteGroup completeGroup in GroupIterator)
-                {
-                    var group = completeGroup as CompleteGroup;
-                    if (group != null)
-                        group.Subscribe(this.handler);
-                }*/
         }
 
         public string CompleteQuestinnaireId
         {
             get { return innerDocument.Id; }
         }
-        /*  public void Subscribe(IComposite target, CompleteGroup group, Actions action)
-          {
-              group.Subscribe(this.handler);
-          }
-          public void Unsubscribe(CompleteGroup group)
-          {
-              group.Unsubscribe();
-          }*/
         public void SetStatus(SurveyStatus status)
         {
             innerDocument.Status = status;
@@ -72,20 +58,12 @@ namespace RavenQuestionnaire.Core.Entities
         {
             innerDocument.Responsible = user;
         }
-
-        public Iterator<ICompleteAnswer> AnswerIterator
-        {
-            get { return iteratorContainer.Create<ICompleteGroup<ICompleteGroup, ICompleteQuestion>, ICompleteAnswer>(this.innerDocument); }
-        }
-        public Iterator<ICompleteGroup> GroupIterator
-        {
-            get { return new HierarchicalGroupIterator(this.innerDocument); }
-        }
-        /*   public Iterator<CompleteQuestion> QuestionIterator
-           {
-               get { return iteratorContainer.Create<CompleteQuestionnaireDocument, CompleteQuestion>(this.innerDocument); }
-           }*/
         #region Implementation of IComposite
+
+        public Guid PublicKey
+        {
+            get { return innerDocument.PublicKey; }
+        }
 
         public virtual void Add(IComposite c, Guid? parent)
         {
@@ -117,7 +95,7 @@ namespace RavenQuestionnaire.Core.Entities
         {
             return innerDocument.Find<T>(publicKey);
         }
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
                 innerDocument.Find<T>(condition);
@@ -126,6 +104,13 @@ namespace RavenQuestionnaire.Core.Entities
 
         #endregion
 
+        #region Implementation of IObservable<out CompositeEventArgs>
 
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            return innerDocument.Subscribe(observer);
+        }
+
+        #endregion
     }
 }

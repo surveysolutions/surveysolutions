@@ -8,7 +8,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
     public interface IAnswer: IComposite
     {
-        Guid PublicKey { get; set; }
         object AnswerValue { get; set; }
         string AnswerText { get; set; }
         bool Mandatory { get; set; }
@@ -20,6 +19,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Answer(/*Question owner*/)
         {
             PublicKey = Guid.NewGuid();
+            this.observers=new List<IObserver<CompositeEventArgs>>();
        //     QuestionId = owner.QuestionId;
         }
 
@@ -49,9 +49,22 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             throw new CompositeException("answer is not hierarchical");
         }
 
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             throw new CompositeException("answer is not hierarchical");
         }
+
+
+        #region Implementation of IObservable<out CompositeEventArgs>
+
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return new Unsubscriber<CompositeEventArgs>(observers, observer);
+        }
+        private List<IObserver<CompositeEventArgs>> observers;
+        #endregion
+
     }
 }

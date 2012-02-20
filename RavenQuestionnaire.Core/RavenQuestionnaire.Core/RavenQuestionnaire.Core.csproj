@@ -87,6 +87,9 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Reactive">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -169,17 +172,18 @@
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\Event.cs" />
-    <Compile Include="Entities\FlowGraph.cs" />
+     <Compile Include="Entities\FlowGraph.cs" />
+    <Compile Include="Entities\Extensions\CompositeObservebleExtensions.cs" />
+    <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\IEntity.cs" />
-    <Compile Include="Entities\Iterators\HierarchicalGroupIterator.cs" />
     <Compile Include="Entities\Iterators\Iterator.cs" />
-    <Compile Include="Entities\Iterators\QuestionnaireAnswerIterator.cs" />
-    <Compile Include="Entities\Iterators\QuestionnaireQuestionIterator.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
     <Compile Include="Entities\Location.cs" />
     <Compile Include="Entities\Observers\CompositeHandler.cs" />
     <Compile Include="Entities\Observers\CompositeInfo.cs" />
-    <Compile Include="Entities\Observers\GroupObservable.cs" />
+    <Compile Include="Entities\Observers\GroupObserver.cs" />
+    <Compile Include="Entities\Observers\ObservableCollectionExtensions.cs" />
+    <Compile Include="Entities\Observers\ObservableCollectionS.cs" />
     <Compile Include="Entities\Questionnaire.cs" />
     <Compile Include="Entities\Report.cs" />
     <Compile Include="Entities\Status.cs" />
@@ -226,9 +230,7 @@
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
-    <Compile Include="IIteratorContainer.cs" />
     <Compile Include="Indexes\UsersInLocationIndex.cs" />
-    <Compile Include="IteratorContainer.cs" />
     <Compile Include="IViewFactory.cs" />
     <Compile Include="IViewRepsoitory.cs" />
     <Compile Include="Entities\OrderRequestItem.cs" />

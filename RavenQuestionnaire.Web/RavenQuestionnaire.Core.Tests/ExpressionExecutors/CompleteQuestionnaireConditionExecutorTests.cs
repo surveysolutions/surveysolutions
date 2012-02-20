@@ -16,53 +16,54 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
     [TestFixture]
     public class CompleteQuestionnaireConditionExecutorTests
     {
-        public Mock<IIteratorContainer> iteratorContainerMock;
+      //  public Mock<IIteratorContainer> iteratorContainerMock;
         [SetUp]
         public void CreateObjects()
         {
-            iteratorContainerMock = new Mock<IIteratorContainer>();
+           // iteratorContainerMock = new Mock<IIteratorContainer>();
         }
         [Test]
         public void EvaluateCondition_ConditionIsEmpty_ReturnsTrue()
         {
-            CompleteQuestionnaireConditionExecutor executor= new CompleteQuestionnaireConditionExecutor();
-            bool result = executor.Execute(new List<CompleteAnswer>(), "");
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaire(new CompleteQuestionnaireDocument()));
+            bool result = executor.Execute(
+                                           new CompleteQuestion());
             Assert.AreEqual(result, true);
         }
         [Test]
         public void EvaluateCondition_ConditionIsInvalid_ReturnsFalse()
         {
-            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor();
-            bool result = executor.Execute(new List<CompleteAnswer>(), "invalid condition");
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaire(new CompleteQuestionnaireDocument()));
+            bool result = executor.Execute(
+                                           new CompleteQuestion() {ConditionExpression = "invalid condition"});
             Assert.AreEqual(result, false);
         }
         [Test]
         public void EvaluateCondition_ConditionIsValidParamsAreEmpty_ReturnsTrue()
         {
-            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor();
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaire(new CompleteQuestionnaireDocument()));
 
-            bool result = executor.Execute(new List<CompleteAnswer>(), "5>3");
+            bool result = executor.Execute(
+                                           new CompleteQuestion() {ConditionExpression = "5>3"});
             Assert.AreEqual(result, true);
         }
         [Test]
         public void EvaluateCondition_ConditionIsValidParamsAreNotEmpty_ReturnsTrue()
         {
-            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor();
+            
             CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
-            doc.Questions.Add(new CompleteQuestion("", QuestionType.SingleOption));
+            CompleteQuestionnaire entity = new CompleteQuestionnaire(doc);
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(entity);
+            var question = new CompleteQuestion("", QuestionType.SingleOption);
+            question.ConditionExpression = "[" + question.PublicKey + "]==3";
+            doc.Questions.Add(question);
 
             var completeAnswer = new CompleteAnswer(new Answer(), doc.Questions[0].PublicKey);
             completeAnswer.AnswerType = AnswerType.Text;
             completeAnswer.AnswerValue = "3";
             completeAnswer.Selected = true;
-            (doc.Questions[0] as CompleteQuestion).Answers.Add(completeAnswer);
-            iteratorContainerMock.Setup(
-            x => x.Create<ICompleteGroup, ICompleteQuestion>(doc)).Returns(
-                new QuestionnaireQuestionIterator(doc));
-            iteratorContainerMock.Setup(
-             x => x.Create<CompleteQuestionnaireDocument, ICompleteAnswer>(doc)).Returns(
-                 new QuestionnaireAnswerIterator(doc));
-            bool result = executor.Execute((doc.Questions[0] as CompleteQuestion).Answers, "[" + completeAnswer.QuestionPublicKey + "]==3");
+            question.Answers.Add(completeAnswer);
+            bool result = executor.Execute(question);
             Assert.AreEqual(result, true);
         }
         [Test]
@@ -71,18 +72,15 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
             answer.AnswerValue = "invalid value";
 
-            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor();
+            
             CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
-            doc.Questions.Add(new CompleteQuestion("", QuestionType.SingleOption));
-            (doc.Questions[0] as CompleteQuestion).Answers.Add(answer);
-            iteratorContainerMock.Setup(
-            x => x.Create<ICompleteGroup, ICompleteQuestion>(doc)).Returns(
-                new QuestionnaireQuestionIterator(doc));
-            iteratorContainerMock.Setup(
-             x => x.Create<CompleteQuestionnaireDocument, ICompleteAnswer>(doc)).Returns(
-                 new QuestionnaireAnswerIterator(doc));
-            bool result = executor.Execute((doc.Questions[0] as CompleteQuestion).Answers,
-                                           "[" + answer.QuestionPublicKey + "]==3");
+            CompleteQuestionnaire entity = new CompleteQuestionnaire(doc);
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(entity);
+            var question = new CompleteQuestion("", QuestionType.SingleOption);
+            question.ConditionExpression = "[" + question.PublicKey + "]==3";
+            doc.Questions.Add(question);
+            question.Answers.Add(answer);
+            bool result = executor.Execute(question);
             Assert.AreEqual(result, false);
         }
     }

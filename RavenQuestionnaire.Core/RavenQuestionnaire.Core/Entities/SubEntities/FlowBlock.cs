@@ -10,24 +10,24 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         int Top { get; set; }
         int Height { get; set; }
         int Width { get; set; }
-        Guid QuestionId { get; set; }
     }
 
     public class FlowBlock : IFlowBlock
     {
         public FlowBlock()
         {
+            this.observers=new List<IObserver<CompositeEventArgs>>();
         }
 
         public FlowBlock(Guid questionId)
         {
-            QuestionId = questionId;
+            PublicKey = questionId;
         }
         public int Height { get; set; }
         public int Width { get; set; }
         public int Left { get; set; }
         public int Top { get; set; }
-        public Guid QuestionId { get; set; }
+        public Guid PublicKey { get; set; }
 
         public void Add(IComposite c, Guid? parent)
         {
@@ -49,9 +49,21 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             return null;
         }
 
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
-        {
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class{
             return new T[0];
         }
+
+
+        #region Implementation of IObservable<out CompositeEventArgs>
+
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return new Unsubscriber<CompositeEventArgs>(observers, observer);
+        }
+        private List<IObserver<CompositeEventArgs>> observers;
+
+        #endregion
     }
 }

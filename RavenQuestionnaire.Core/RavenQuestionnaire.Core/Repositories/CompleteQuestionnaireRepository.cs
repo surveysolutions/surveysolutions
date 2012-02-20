@@ -6,15 +6,13 @@ namespace RavenQuestionnaire.Core.Repositories
 {
     public class CompleteQuestionnaireRepository : EntityRepository<CompleteQuestionnaire, CompleteQuestionnaireDocument>, ICompleteQuestionnaireRepository
     {
-        private IIteratorContainer iteratorContainer;
-        public CompleteQuestionnaireRepository(IDocumentSession documentSession, IIteratorContainer iteratorContainer) : base(documentSession)
+        public CompleteQuestionnaireRepository(IDocumentSession documentSession) : base(documentSession)
         {
-            this.iteratorContainer = iteratorContainer;
         }
 
         protected override CompleteQuestionnaire Create(CompleteQuestionnaireDocument doc)
         {
-            return new CompleteQuestionnaire(doc, iteratorContainer);
+            return new CompleteQuestionnaire(doc);
         }
     }
 }

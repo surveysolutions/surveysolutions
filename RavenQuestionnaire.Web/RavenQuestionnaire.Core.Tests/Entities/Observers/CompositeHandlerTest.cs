@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Observers
 
             CompleteGroup targetGroup = new CompleteGroup("some group") { Propagated = Propagate.Propagated };
             document.Setup(x => x.Find<CompleteGroup>(targetGroup.PublicKey)).Returns(targetGroup);
-            GroupObservable observeble = new GroupObservable(targetGroup.PublicKey, target.PublicKey);
+            GroupObserver observeble = new GroupObserver(targetGroup.PublicKey, target.PublicKey);
             var observers = new List<IObserver<CompositeInfo>> {observeble};
 
             CompositeHandler handler = new CompositeHandler(observers,document.Object);

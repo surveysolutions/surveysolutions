@@ -1,6 +1,7 @@
 ﻿using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Views.Status.Processing;
 
@@ -27,7 +28,7 @@ namespace RavenQuestionnaire.Core.Processors
             //order of items is important
             foreach (var item in status.FlowRules)
             {
-                if (executor.Execute(completedQ.AnswerIterator, item.ConditionExpression))
+                if (executor.Execute(completedQ.Find<ICompleteAnswer>(a=>a.Selected), item.ConditionExpression))
                 {
                     CallStatusChange(completedQ.CompleteQuestinnaireId, item.StatusToGo, item.ChangeComment);
                     return;

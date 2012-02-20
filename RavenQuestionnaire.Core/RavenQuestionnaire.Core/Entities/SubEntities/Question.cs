@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
+using System.Reactive.Linq;
 using NCalc;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
@@ -19,7 +22,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
     public interface IQuestion<T> : IQuestion where T : IAnswer
     {
-        List<T> Answers { get; set; }
+        ObservableCollectionS<T> Answers { get; set; }
     }
 
     public class Question : /*IEntity<QuestionDocument>*/IQuestion<IAnswer>
@@ -28,7 +31,17 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Question()
         {
             PublicKey = Guid.NewGuid();
-            Answers = new List<IAnswer>();
+            Answers = new ObservableCollectionS<IAnswer>();
+            this.Answers.GetObservableAddedValues().Subscribe(q => this.OnAdded(new CompositeAddedEventArgs(q)));
+            this.Answers.GetObservableRemovedValues().Subscribe(
+                q => OnRemoved(new CompositeRemovedEventArgs(null)));
+            this.observers=new List<IObserver<CompositeEventArgs>>();
+        /*    var customerChanges = Observable.FromEvent(
+           (EventHandler<NotifyCollectionChangedEventArgs> ev)
+              => new NotifyCollectionChangedEventHandler(ev),
+           ev => customers.CollectionChanged += ev,
+           ev => customers.CollectionChanged -= ev);*/
+
         }
         public Question(string text, QuestionType type)
             : this()
@@ -36,10 +49,24 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             QuestionText = text;
             QuestionType = type;
         }
+        protected void OnAdded(CompositeAddedEventArgs e)
+        {
+            foreach (IObserver<CompositeEventArgs> observer in observers)
+            {
+                observer.OnNext(e);
+            }
+        }
+        protected void OnRemoved(CompositeRemovedEventArgs e)
+        {
+            foreach (IObserver<CompositeEventArgs> observer in observers)
+            {
+                observer.OnNext(e);
+            }
+        } 
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
-        public List<IAnswer> Answers { get; set; }
+        public ObservableCollectionS<IAnswer> Answers { get; set; }
         public string ConditionExpression { get; set; }
 
         //remove when exportSchema will be done 
@@ -93,8 +120,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             if (typeof(T).IsAssignableFrom(typeof(IAnswer)))
             {
-                if(Answers.RemoveAll(a => a.PublicKey.Equals(publicKey)) > 0)
+                if (Answers.RemoveAll(a => a.PublicKey.Equals(publicKey)) > 0)
+                {
                     return;
+                }
             }
             throw new CompositeException();
         }
@@ -106,7 +135,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             return null;
         }
 
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
 
             return Answers.Where(a => a is T && condition(a as T)).Select(a => a as T);
@@ -114,5 +143,18 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                  return Answers.Where(a => condition(a)).Select(a => a as T);
              return null;*/
         }
+
+
+        #region Implementation of IObservable<out CompositeEventArgs>
+
+        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
+        {
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return new Unsubscriber<CompositeEventArgs>(observers, observer);
+        }
+        private List<IObserver<CompositeEventArgs>> observers;
+
+        #endregion
     }
 }
