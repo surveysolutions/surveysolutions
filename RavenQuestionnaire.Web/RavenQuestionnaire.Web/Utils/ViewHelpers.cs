@@ -3,12 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
+using System.Web.Mvc.Ajax;
+using System.Web.Mvc.Html;
 using System.Web.Routing;
 
 namespace RavenQuestionnaire.Web.Utils
 {
     public static class ViewHelpers
     {
+        public static MvcHtmlString ActionLinkWithIcon(this AjaxHelper helper, string linkText,string actionName, string controllerName, object routeValues, AjaxOptions ajaxOptions, object htmlAttributes, string icon )
+        {
+            var builder = new TagBuilder("i");
+            builder.MergeAttribute("class", icon);
+            var link = helper.ActionLink("[replaceme]" + linkText, actionName, controllerName, routeValues, ajaxOptions, htmlAttributes);
+            return MvcHtmlString.Create(link.ToHtmlString().Replace("[replaceme]", builder.ToString(TagRenderMode.Normal)));
+        }
+
+
         public static MvcHtmlString LabelFor<TModel, TValue>(this HtmlHelper<TModel> html,
                                                              Expression<Func<TModel, TValue>> expression,
                                                              object htmlAttributes)

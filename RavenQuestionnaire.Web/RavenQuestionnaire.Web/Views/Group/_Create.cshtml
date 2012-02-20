@@ -12,9 +12,9 @@
     <div id="divCreateForm" class="modal open">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">&times;</a>
-                Edit screen form</h3>
+            <h3>Edit screen form</h3>
         </div>
-        <div class="modal-body">
+        <div class="modal-body form-horizontal">
             @Html.BootstrapValidationSummary("")
             <div class="control-group">
                 @Html.LabelFor(model => model.GroupText, new { @class = "control-label" })
@@ -26,10 +26,10 @@
             @if (Model.ParentGroup.HasValue)
             {
                 <div class="control-group">
-                    <label class="checkbox">
-                        Is Group propagateble?</label>
+                    <label class="control-label">Is Group propagateble?</label>
+                    <div class="controls">
                         @Html.EnumDropDownListFor(model => Model.Propagated)
-                        Is Group propagateble?</label>
+                    </div>
                 </div>
             }
             @if (Model.PublicKey != Guid.Empty)
@@ -40,10 +40,7 @@
             @Html.HiddenFor(model => model.ParentGroup)
         </div>
         <div class="modal-footer">
-        <a href="javascript:void(0)" onclick=" $('#addNewQuestion').modal('hide')" class="btn">Cancel</a>
-
-
-           <input type="submit" value="Save" class="btn btn-primary" />
+            <input type="submit" value="Save" class="btn btn-primary" />
         </div>
     </div>
 }

@@ -1,5 +1,6 @@
-﻿ @using Questionnaire.Core.Web.Helpers
+﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Group
+@using RavenQuestionnaire.Web.Utils
 @model GroupView
 @{ var currentRowId = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Group, Model.PublicKey.ToString());
    var allQuestions = "divAllQuestions" + Model.PublicKey;
@@ -15,26 +16,28 @@
                    }
                }
 </script>
-<div id="@currentRowId" class="question">
-    <h3>@Html.DisplayFor(modelItem => Model.GroupText)
-        <span>
-            @Ajax.ActionLink("Add Question", "Create", "Question", new { id = Model.QuestionnaireId, groupPublicKey = Model.PublicKey }, new AjaxOptions
+<div id="@currentRowId" class="display-group">
+    <div class="group-header">
+        <h3>@Html.DisplayFor(modelItem => Model.GroupText)</h3>
+        <div class="btn-group">
+            @Ajax.ActionLinkWithIcon("Add Question", "Create", "Question", new { id = Model.QuestionnaireId, groupPublicKey = Model.PublicKey }, new AjaxOptions
                                                                                    {
                                                                                        UpdateTargetId = "addNewQuestion",
                                                                                        OnSuccess = "OpenModal"
-                                                                                   }, new { @class = "btn btn-info" })
-            @Ajax.ActionLink("Add Group", "Create", "Group", new { id = Model.QuestionnaireId, parentGroup = Model.PublicKey }, new AjaxOptions
+                                                                                   }, new { @class = "btn btn-info" }, "icon-plus icon-white")
+            @Ajax.ActionLinkWithIcon("Add Group", "Create", "Group", new { id = Model.QuestionnaireId, parentGroup = Model.PublicKey }, new AjaxOptions
                                                                                    {
                                                                                        UpdateTargetId = "addNewQuestion",
                                                                                        OnSuccess = "OpenModal"
-                                                                                   }, new { @class = "btn btn-info" })
-            @Ajax.ActionLink("Edit", "Edit", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-primary" })
-            @Ajax.ActionLink("Delete", "Delete", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn btn-danger" })
-        </span>
-    </h3>
-    <div id='@allQuestions'>
-        @{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}
+                                                                                   }, new { @class = "btn btn-info" }, "icon-plus icon-white")
+            @Ajax.ActionLinkWithIcon("Edit", "Edit", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-primary" }, "icon-pencil icon-white")
+            @Ajax.ActionLinkWithIcon("Delete", "Delete", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn btn-danger" }, "icon-remove  icon-white")
+        </div>
     </div>
-     <div id="@allGroups">
-@{Html.RenderPartial("~/Views/Group/_Index.cshtml", Model.Groups);}</div>
+<div id='@allQuestions'>
+    @{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}
 </div>
+<div id="@allGroups">
+    @{Html.RenderPartial("~/Views/Group/_Index.cshtml", Model.Groups);}
+</div>
+</div> 

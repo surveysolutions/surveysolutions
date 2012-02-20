@@ -17,8 +17,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate { get; set; }
 
-        public AbstractFlowGraphView FlowGraph { get; set; }
-
         public AbstractQuestionnaireView(IQuestionnaireDocument doc)
             : this()
         {
@@ -30,7 +28,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
 
         public AbstractQuestionnaireView()
         {
-            FlowGraph = null;
         }
     }
 
@@ -92,7 +89,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         {
             this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();
             this.Groups = doc.Groups.Select(g => new GroupView(doc, g)).ToArray();
-            this.FlowGraph = new FlowGraphView(doc as QuestionnaireDocument);
         }
     }
 }

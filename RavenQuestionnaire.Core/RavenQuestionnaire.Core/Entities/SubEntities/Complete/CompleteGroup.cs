@@ -1,14 +1,14 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Xml.Serialization;
 using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Iterators;
-using RavenQuestionnaire.Core.Entities.Observers;
+
+#endregion
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
@@ -18,52 +18,41 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             Questions = new List<ICompleteQuestion>();
             Groups = new List<ICompleteGroup>();
-            this.PublicKey = Guid.NewGuid();
+            PublicKey = Guid.NewGuid();
             //   this.iteratorContainer = new IteratorContainer();
         }
 
         public CompleteGroup(string name)
             : this()
         {
-            this.Title = name;
+            Title = name;
         }
 
-        public static explicit operator CompleteGroup(Group doc)
+        [XmlIgnore]
+        public Iterator<ICompleteAnswer> AnswerIterator
         {
-            CompleteGroup result = new CompleteGroup(null)
-                         {
-                             PublicKey = doc.PublicKey,
-                             Title = doc.Title,
-                             Propagated = doc.Propagated
-                         };
-            result.Questions =
-               doc.Questions.Select(q => new CompleteQuestionFactory().ConvertToCompleteQuestion(q)).ToList();
-            result.Groups =
-                doc.Groups.Select(q => new CompleteGroupFactory().ConvertToCompleteGroup(q)).ToList();
-            return result;
+            get { return new QuestionnaireAnswerIterator(this); }
         }
+
+        #region ICompleteGroup<ICompleteGroup,ICompleteQuestion> Members
 
         public Guid PublicKey { get; set; }
 
         public string Title { get; set; }
 
         public Propagate Propagated { get; set; }
-        
+
         public List<ICompleteQuestion> Questions { get; set; }
 
         public List<ICompleteGroup> Groups { get; set; }
-        [XmlIgnore]
-        public Iterator<ICompleteAnswer> AnswerIterator
-        {
-            get { return new QuestionnaireAnswerIterator(this); }
-        }
+
         // private IIteratorContainer iteratorContainer;
 
         public virtual void Add(IComposite c, Guid? parent)
         {
             if (!parent.HasValue || parent.Value == PublicKey)
             {
-                PropagatableCompleteGroup propogateGroup = c as PropagatableCompleteGroup;
+                var propogateGroup = c as PropagatableCompleteGroup;
                 if (propogateGroup != null)
                 {
                     var group = Groups.FirstOrDefault(g => g.PublicKey.Equals(propogateGroup.PublicKey));
@@ -86,10 +75,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 {
                 }
             }
-            IPropogate propogated = c as IPropogate;
+            var propogated = c as IPropogate;
             if (propogated != null && !(this is IPropogate))
                 throw new CompositeException();
-            foreach (ICompleteQuestion completeQuestion in Questions)
+            foreach (var completeQuestion in Questions)
             {
                 try
                 {
@@ -105,14 +94,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public virtual void Remove(IComposite c)
         {
-
-            PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
+            var propogate = c as PropagatableCompleteGroup;
             if (propogate != null)
             {
                 if (Groups.RemoveAll(
                     g =>
                     g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
-                    ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
+                    ((IPropogate) g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
                     return;
             }
             foreach (CompleteGroup completeGroup in Groups)
@@ -128,7 +116,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             }
             if (c is IPropogate && !(this is IPropogate))
                 throw new CompositeException();
-            foreach (ICompleteQuestion completeQuestion in Questions)
+            foreach (var completeQuestion in Questions)
             {
                 try
                 {
@@ -144,7 +132,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public virtual void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            if (typeof(T) == typeof(PropagatableCompleteGroup))
+            if (typeof (T) == typeof (PropagatableCompleteGroup))
             {
                 if (Groups.RemoveAll(
                     g =>
@@ -162,7 +150,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 {
                 }
             }
-            foreach (ICompleteQuestion completeQuestion in Questions)
+            foreach (var completeQuestion in Questions)
             {
                 try
                 {
@@ -178,13 +166,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public virtual T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            if (typeof(T) == GetType())
+            if (typeof (T) == GetType())
             {
-                if (this.PublicKey.Equals(publicKey))
+                if (PublicKey.Equals(publicKey))
                     return this as T;
             }
             var resultInsideGroups =
-                Groups.Where(a => a is IComposite).Select(answer => (answer as IComposite).Find<T>(publicKey)).FirstOrDefault(result => result != null);
+                Groups.Where(a => a is IComposite).Select(answer => (answer).Find<T>(publicKey)).FirstOrDefault(
+                    result => result != null);
             if (resultInsideGroups != null)
                 return resultInsideGroups;
             var resultInsideQuestions =
@@ -197,12 +186,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
         {
             return
-             Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
-                 Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
-                     Questions.SelectMany(q => q.Find<T>(condition))).Union(
-                         Groups.Where(g => g is IComposite).SelectMany(g => (g as IComposite).Find<T>(condition)));
-        
-         /*   if (typeof(T) == GetType())
+                Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
+                    Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
+                        Questions.SelectMany(q => q.Find(condition))).Union(
+                            Groups.Where(g => g is IComposite).SelectMany(g => (g).Find(condition)));
+
+            /*   if (typeof(T) == GetType())
             {
                 if (condition(this))
                     return this as T;
@@ -216,6 +205,23 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             if (resultInsideQuestions != null)
                 return resultInsideQuestions;
             return null;*/
+        }
+
+        #endregion
+
+        public static explicit operator CompleteGroup(Group doc)
+        {
+            var result = new CompleteGroup(null)
+                             {
+                                 PublicKey = doc.PublicKey,
+                                 Title = doc.Title,
+                                 Propagated = doc.Propagated
+                             };
+            result.Questions =
+                doc.Questions.Select(q => new CompleteQuestionFactory().ConvertToCompleteQuestion(q)).ToList();
+            result.Groups =
+                doc.Groups.Select(q => new CompleteGroupFactory().ConvertToCompleteGroup(q)).ToList();
+            return result;
         }
     }
 }

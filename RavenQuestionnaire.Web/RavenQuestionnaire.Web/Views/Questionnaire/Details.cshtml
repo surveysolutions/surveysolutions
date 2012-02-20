@@ -1,10 +1,47 @@
-﻿@using RavenQuestionnaire.Core.Views.Group
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Web.Utils
+@using RavenQuestionnaire.Core.Views.Group
 @using RavenQuestionnaire.Core.Views.Questionnaire
 @model QuestionnaireView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script src="../../Scripts/modal.js" type="text/javascript"></script>
+<style type="text/css">
+    #main
+    {
+        position: absolute;
+        top: 43px;
+        bottom: 0;
+        left: 20px;
+        right: 20px;
+    }
+    #sidebar
+    {
+    	right: 0;
+        width: 300px;
+        position: absolute;
+        top: 0;
+        bottom: 40px;
+          background-color: white;
+
+    }
+    #content
+    {
+        position: absolute;
+        top: 0;
+        bottom: 40px;
+        right: 300px;
+        left: 0;
+          background-color: white;
+    }
+    .scroll-y
+    {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+</style>
+<script src="../../Scripts/bootstrap/bootstrap-collapse.js" type="text/javascript"></script>
+<script src="../../Scripts/bootstrap/bootstrap-modal.js" type="text/javascript"></script>
 <script>
     $('#addNewQuestion').modal({
         backdrop: 'static'
@@ -28,42 +65,79 @@
         }
     }
 </script>
-<h1>@Model.Title</h1>
-<div class="pairs">
-    <div class="clearfix">
-        <div class="key">
-            Creation Date:</div>
-        <div class="value">
-            @Html.DisplayFor(model => model.CreationDate)
-        </div>
-    </div>
-    <div class="clearfix">
-        <div class="key">
-            Last edit Date:</div>
-        <div class="value">
-            @Html.DisplayFor(model => model.LastEntryDate)
-        </div>
-    </div>
+<div id="sidebar" class="scroll-y">
+    <ul class="nav nav-list">
+        @{ var index = 1;}
+        @foreach (var question in Model.Questions)
+        {
+            var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, question.PublicKey.ToString());
+            <li><a  class="text-ellipsis" href="#@id">@index) @question.QuestionText</a></li>
+            index++;
+        }
+        @foreach (var @group in Model.Groups)
+        {
+            var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Group, @group.PublicKey.ToString());
+            <li class="nav-header"><a class="text-ellipsis" href="#@id">@group.GroupText</a></li>
+            <text>@RenderTOC(@group)</text>
+        }
+    </ul>
 </div>
-<h2>
-    Questions</h2>
+<div id="content" class="scroll-y">
+    <h1>@Model.Title</h1>
+    <div class="control-group">
+        <label class="control-label">Creation Date:</label>
+        <div class="controls">
+            <p class="text-block">@Html.DisplayFor(model => model.CreationDate)</p>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Last edit Date:</label>
+        <div class="controls">
+            <p class="text-block">@Html.DisplayFor(model => model.LastEntryDate)</p>
+        </div>
+    </div>
     <div id="divAllQuestions">
-@{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}</div>
-  <div id="divAllGroups">
-@{Html.RenderPartial("~/Views/Group/_Index.cshtml", Model.Groups);}</div>
-<div id="addNewQuestion">
+        @{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}
+    </div>
+    <div id="divAllGroups">
+        @{Html.RenderPartial("~/Views/Group/_Index.cshtml", Model.Groups);}
+    </div>
+    <div id="addNewQuestion">
+    </div>
+    <div class="navbar  navbar-fixed-bottom">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <p>
+                    @Ajax.ActionLinkWithIcon("Add Question", "Create", "Question", new { Model.Id }, new AjaxOptions
+                       {
+                           UpdateTargetId = "addNewQuestion",
+                           OnSuccess = "OpenModal"
+                       }, new { @class = "btn btn-success" }, "icon-plus icon-white")
+                    @Ajax.ActionLinkWithIcon("Add Screen", "Create", "Group", new { Model.Id }, new AjaxOptions
+                       {
+                           UpdateTargetId = "addNewQuestion",
+                           OnSuccess = "OpenModal"
+                       }, new { @class = "btn btn-success" }, "icon-plus icon-white")
+                    <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-primary"><i class="icon-pencil icon-white"></i>Edit</a>
+                    <a href="@Url.Action("Index")" class="btn"><i class="icon-arrow-left"></i>Back to Questionnaires</a>
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="">
-    @Ajax.ActionLink("Add Question", "Create", "Question", new { Model.Id }, new AjaxOptions
-                                                                                   {
-                                                                                       UpdateTargetId = "addNewQuestion",
-                                                                                       OnSuccess = "OpenModal"
-                                                                                   }, new { @class = "btn btn-info" })
-    @Ajax.ActionLink("Add Screen", "Create", "Group", new { Model.Id }, new AjaxOptions
-                                                                                   {
-                                                                                       UpdateTargetId = "addNewQuestion",
-                                                                                       OnSuccess = "OpenModal"
-                                                                                   }, new { @class = "btn btn-info" })
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
-    @Html.ActionLink("Back to List of Questionnaires", "Index", null, new { @class = "btn" })
-</div>
+@helper RenderTOC(GroupView block)
+    {
+        var index = 1;
+        foreach (var question in block.Questions)
+        {
+            var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, question.PublicKey.ToString());
+            <li><a class="text-ellipsis" href="#@id">@index) @question.QuestionText</a></li>
+            index++;
+        }
+        foreach (var @group in block.Groups)
+        {
+            var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Group, @group.PublicKey.ToString());
+    <li class="nav-header"><a class="text-ellipsis" href="#@id">@group.GroupText</a></li>
+    <text>@RenderTOC(@group)</text>
+        }
+}

@@ -172,6 +172,21 @@
   .border-radius(0);
 }
 
+.navbar-fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: @zindexFixedNavbar;
+  margin-bottom: 0;
+}
+.navbar-fixed-bottom .navbar-inner {
+  padding-left:  0;
+  padding-right: 0;
+  #gradient > .vertical(@navbarLightBackgroundHighlight, @navbarLightBackground);
+  .border-radius(0);
+}
+
 
 // NAVIGATION
 // ----------
