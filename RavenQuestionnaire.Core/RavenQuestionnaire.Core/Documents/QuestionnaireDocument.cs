@@ -31,7 +31,6 @@ namespace RavenQuestionnaire.Core.Documents
             LastEntryDate = DateTime.Now;
             Questions = new List<Question>();
             Groups = new List<Group>();
-            FlowGraph = null;
         }
 
         public string Id { get; set; }
@@ -50,6 +49,5 @@ namespace RavenQuestionnaire.Core.Documents
 
         public List<Question> Questions { get; set; }
         public List<Group> Groups { get; set; }
-        public FlowGraph FlowGraph { get; set; }
     }
 }

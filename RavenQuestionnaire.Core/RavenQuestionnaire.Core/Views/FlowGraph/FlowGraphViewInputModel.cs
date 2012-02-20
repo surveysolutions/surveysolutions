@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using RavenQuestionnaire.Core.Utility;
 
-namespace RavenQuestionnaire.Core.Views.Group
+namespace RavenQuestionnaire.Core.Views.FlowGraph
 {
     public class FlowGraphViewInputModel
     {
-        public FlowGraphViewInputModel(Guid publicKey, string questionnaireId)
+        public FlowGraphViewInputModel(string questionnaireId)
         {
-            PublicKey = publicKey;
             QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            FlowGraphId = IdUtil.CreateFlowGraphId(IdUtil.ParseId(QuestionnaireId));
         }
 
         public string QuestionnaireId { get; set; }
-        public Guid PublicKey { get; private set; }
+        public string FlowGraphId { get; set; }
     }
 }

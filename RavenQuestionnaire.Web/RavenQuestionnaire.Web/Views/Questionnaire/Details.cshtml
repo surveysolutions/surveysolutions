@@ -51,19 +51,19 @@
 @{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}</div>
   <div id="divAllGroups">
 @{Html.RenderPartial("~/Views/Group/_Index.cshtml", Model.Groups);}</div>
-<div id="addNewQuestion" class="modal hide fade">
+<div id="addNewQuestion">
 </div>
 <div class="">
     @Ajax.ActionLink("Add Question", "Create", "Question", new { Model.Id }, new AjaxOptions
                                                                                    {
                                                                                        UpdateTargetId = "addNewQuestion",
                                                                                        OnSuccess = "OpenModal"
-                                                                                   }, new { @class = "btn" })
+                                                                                   }, new { @class = "btn btn-info" })
     @Ajax.ActionLink("Add Screen", "Create", "Group", new { Model.Id }, new AjaxOptions
                                                                                    {
                                                                                        UpdateTargetId = "addNewQuestion",
                                                                                        OnSuccess = "OpenModal"
-                                                                                   }, new { @class = "btn" })
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn primary" })
+                                                                                   }, new { @class = "btn btn-info" })
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
     @Html.ActionLink("Back to List of Questionnaires", "Index", null, new { @class = "btn" })
 </div>

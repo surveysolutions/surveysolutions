@@ -1,36 +1,33 @@
-﻿
-@using RavenQuestionnaire.Core.Views.Group
+﻿@using RavenQuestionnaire.Core.Views.Group
+@using RavenQuestionnaire.Web.Utils
 @model GroupView
-      
-<div id="divCreateForm">
-
-    @using (Ajax.BeginForm("Save", "Group",
+@using (Ajax.BeginForm("Save", "Group",
                                          new AjaxOptions
                                              {
                                                  UpdateTargetId = "addNewQuestion",
                                                  OnComplete = "HideCreateGroupForm"
                                              }))
-    {
+{
+    <div id="divCreateForm" class="modal open">
         <div class="modal-header">
+            <a class="close" data-dismiss="modal">&times;</a>
             <h3>Edit screen form</h3>
         </div>
         <div class="modal-body">
-            @Html.ValidationSummary(true)
-            <div class="clearfix">
-                @Html.LabelFor(model => model.GroupText)
-                <div class="input">
+            @Html.BootstrapValidationSummary("")
+            <div class="control-group">
+                @Html.LabelFor(model => model.GroupText, new { @class = "control-label" })
+                <div class="controls">
                     @Html.EditorFor(model => model.GroupText)
                     @Html.ValidationMessageFor(model => model.GroupText)
                 </div>
             </div>
             @if (Model.ParentGroup.HasValue)
             {
-                <div class="clearfix">
-                    <label>Is Group propagateble?</label>
-                    <div class="input">
-
+                <div class="control-group">
+                    <label class="checkbox">
                         @Html.CheckBoxFor(model => model.Propagated)
-                    </div>
+                        Is Group propagateble?</label>
                 </div>
             }
             @if (Model.PublicKey != Guid.Empty)
@@ -41,9 +38,8 @@
             @Html.HiddenFor(model => model.ParentGroup)
         </div>
         <div class="modal-footer">
-           
             <a href="javascript:void(0)" onclick=" $('#addNewQuestion').modal('hide')" class="btn">Cancel</a>
-            <input type="submit" value="Save" class="btn primary" />
+            <input type="submit" value="Save" class="btn btn-primary" />
         </div>
-    }
-</div>
+    </div>
+}

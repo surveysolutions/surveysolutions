@@ -7,6 +7,7 @@ function FlowConnection(){
 	this.Source="";
 	this.Target="";
     this.LabelText = "";
+    this.Condition = "";
 } 
 function FlowBlock(){
     this.Height = 0;
@@ -127,6 +128,7 @@ function FlowBlock(){
 
     window.jsPlumbDemo = {
         labelTexts: [],
+        labelConditions: [],
         init: function () {
 
             // notice the 'curviness' argument to this Bezier curve.  the curves on this page are far smoother
@@ -145,22 +147,22 @@ function FlowBlock(){
 							}],
 							["Label", {
 							    location: 0.5,
-							    label: function (label) {
-							        return label.connection.labelText || "";
-							    },
+							    id:"label",
 							    cssClass: "aLabel"
 							}]
 						];
+            init = function(connection) {
+                var label = connection.getOverlay("label");
+                if (! $('#'+connection.sourceId).hasClass("group")) {
+                    label.setLabel("No condition");
+                    label.canvas.classList.add("initialized");
+                }
+            };			
 
-
-            init = function (connection) {
-                var p = { Target: connection.targetId, Condition: "No condition" };
-                connection.labelText = $("#action" + connection.sourceId).tmpl(p).html();
-            };
-            jsPlumb.bind("jsPlumbConnection", function (connInfo) {
-                init(connInfo.connection);
-            });
-
+			jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) { 
+				init(connInfo.connection);
+			});
+            
             jsPlumbDemo.initEndpoints();
 
             jsPlumbDemo.initConnections();
@@ -183,13 +185,20 @@ function FlowBlock(){
                 jsPlumb.draggable(e, dragoptions);
             });
 
-            $("#canvas").resizable();
+            $("#canvas").resizable({
+                handles: 's',
+                stop: function(event, ui) {
+                    $(this).css("width", '');
+                }
+            });
 
 
             jsPlumb.bind("dblclick", function (conn) {
                 if (confirm("Delete connection from?"))
                     jsPlumb.detach(conn);
             });
+            
+            
         },
         initEndpoints: function () {
             $(".ep").each(function (i, e) {
@@ -260,6 +269,7 @@ function FlowBlock(){
                     r.Width = block.outerWidth();
                     r.Height = block.outerHeight();
                     r.LabelText = "";
+                    r.Condition = "";
                     return r;
                 };
                 result.push(graph);
@@ -332,6 +342,7 @@ function FlowBlock(){
                 c.Source = jsConnection.sourceId;
                 c.Target = jsConnection.targetId;
                 c.LabelText = jsPlumbDemo.labelTexts[id];
+                c.Condition = jsPlumbDemo.labelConditions[id];
                 return c;
             }
             return result;
@@ -339,11 +350,14 @@ function FlowBlock(){
         updateConnectionLabel: function (searchOption, text) {
             var connection = jsPlumb.getConnections(searchOption)[0];
 
-            jsPlumbDemo.labelTexts[connection.id] = "["+searchOption.source+"]=="+"'"+text+"'";
+            jsPlumbDemo.labelTexts[connection.id] = "=="+"'"+text+"'";
+            jsPlumbDemo.labelConditions[connection.id] = "["+searchOption.source+"]=="+"'"+text+"'";
 
             if (connection != null) {
-                var p = { Target: searchOption.target, Condition: "=="+"'"+text+"'" };
-                connection.labelText = $("#action" + searchOption.source).tmpl(p).html();
+                var label = connection.getOverlay("label");
+                label.setLabel(jsPlumbDemo.labelTexts[connection.id]);
+                label.canvas.classList.add("initialized");
+                
                 jsPlumb.repaintEverything();
             }
         }

@@ -1,16 +1,25 @@
 ﻿@using RavenQuestionnaire.Core.Entities.SubEntities
-@if (Request.IsAuthenticated)
-{
-    <text> <strong>@User.Identity.Name</strong> 
-
-        @if (Roles.IsUserInRole(UserRoles.Administrator.ToString()))
-    {     
-        <text> @Html.ActionLink("Administration", "Menu", "Administration") </text>
-        <text> @Html.ActionLink("Reports", "Index", "Report") </text>
+<ul class="nav pull-right">
+    @if (Request.IsAuthenticated)
+    {
+        if (Roles.IsUserInRole(UserRoles.Administrator.ToString()))
+        {     
+        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration
+            <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Users", "Index", "User") </li>
+                <li>@Html.ActionLink("Locations", "Index", "Location") </li>
+                <li>@Html.ActionLink("Survey templates", "Index", "Questionnaire") </li>
+            </ul>
+        </li>
+        <li>@Html.ActionLink("Reports", "Index", "Report")</li>
+        }
+        <li class="divider-vertical"></li>
+        <li class="navbar-text">@User.Identity.Name</li>
+        <li>@Html.ActionLink("Log Off", "LogOff", "Account")</li>
     }
-    @Html.ActionLink("Log Off", "LogOff", "Account")</text>
-}
-else
-{
-    @Html.ActionLink("Log On", "LogOn", "Account")
-}
+    else
+    {
+        <li>@Html.ActionLink("Log On", "LogOn", "Account")</li>
+    }
+</ul>

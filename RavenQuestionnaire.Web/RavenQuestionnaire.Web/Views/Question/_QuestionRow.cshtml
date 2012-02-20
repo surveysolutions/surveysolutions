@@ -6,16 +6,10 @@
 <div id="@currentRowId" class="question">
     <h3>@Model.Index) @Html.DisplayFor(modelItem => Model.QuestionText) - @Model.PublicKey
         <span>
-            @Ajax.ActionLink("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn primary small" })
-            @Ajax.ActionLink("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn danger small" })
+            @Ajax.ActionLink("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-primary" })
+            @Ajax.ActionLink("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn btn-danger" })
         </span></h3>
     <div class="answers">
         @{Html.RenderPartial("~/Views/Answer/_Index.cshtml", Model.Answers);}
     </div>
-    @* <div id="divNewAnswer">
-    </div>
-    <div id="addNewAnswer">
-    </div>
-    @Ajax.ActionLink("Edit answer list", "Edit", "Answer", new { Model.Id }, new AjaxOptions() { UpdateTargetId = "addNewAnswer" })
-    @Ajax.ActionLink("Add Answer", "Create", "Answer", new { Model.Id }, new AjaxOptions { UpdateTargetId = "addNewAnswer" })*@
 </div>

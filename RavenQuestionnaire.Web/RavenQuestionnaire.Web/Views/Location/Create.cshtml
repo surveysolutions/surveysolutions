@@ -1,32 +1,27 @@
 ﻿@using RavenQuestionnaire.Core.Views.Location
+@using RavenQuestionnaire.Web.Utils
 @model LocationBrowseItem
-
-
 @using (Html.BeginForm("Save", "Location"))
 {
-    @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>Location</legend>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Location)
+    <div class="modal inline-modal">
+        <div class="modal-header">
+            <h3>Location</h3>
         </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Location)
-            @Html.ValidationMessageFor(model => model.Location)
-        </div>      
-       
-
-    @*    @Html.HiddenFor(model => model.Id)*@
-
-        <p>
-            <input type="submit" value="Save" />
-        </p>
-    </fieldset>
+        <div class="modal-body">
+            <fieldset class="form-horizontal">
+                @Html.BootstrapValidationSummary("")
+                <div class="control-group">
+                    @Html.LabelFor(model => model.Location, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.Location)
+                        <span class="help-inline">@Html.ValidationMessageFor(model => model.Location)</span>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="modal-footer">
+            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-

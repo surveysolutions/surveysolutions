@@ -1,78 +1,82 @@
-﻿@using RavenQuestionnaire.Core.Views.User
+﻿@using System.ServiceModel.Channels
+@using RavenQuestionnaire.Core.Views.User
+@using RavenQuestionnaire.Web.Utils
 @model UserView
-@using (Html.BeginForm("Save", "User"))
+@using (Html.BeginForm("Save", "User", null, FormMethod.Post, new {@class="form-horizontal"}))
 {
-    @Html.ValidationSummary(true)
-
-    <fieldset><legend>Person</legend>
-        @if (!string.IsNullOrEmpty(Model.UserId))
-        { 
-            <div class="clearfix">
-                @Html.LabelFor(model => model.UserName)
-                <div class="input">
-                    @Html.DisplayFor(model => model.UserName)
-                </div>
-            </div>         
-        }
-        else
-        {
-            <div class="clearfix">
-                @Html.LabelFor(model => model.UserName)
-                <div class="input">
-                    @Html.EditorFor(model => model.UserName)
-                    @Html.ValidationMessageFor(model => model.UserName)
-                </div>
-            </div>        
+    <div class="modal inline-modal">
+        <div class="modal-header">
+            <h3>Edit user details</h3>
+        </div>
+        <div class="modal-body">
+            @Html.BootstrapValidationSummary("")
+            <fieldset>
+                @if (!string.IsNullOrEmpty(Model.UserId))
+                { 
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.UserName, new { @class = "control-label" })
+                        <div class="controls">
+                            @Html.DisplayFor(model => model.UserName)
+                        </div>
+                    </div>         
+                }
+                else
+                {
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.UserName, new { @class = "control-label" })
+                        <div class="controls">
+                            @Html.EditorFor(model => model.UserName)
+                            @Html.ValidationMessageFor(model => model.UserName)
+                        </div>
+                    </div>        
             
-            <div class="clearfix">
-                @Html.LabelFor(model => model.Password)
-                <div class="input">
-                    @Html.PasswordFor(model => model.Password)
-                    @Html.ValidationMessageFor(model => model.Password)
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.Password, new { @class = "control-label" })
+                        <div class="controls">
+                            @Html.PasswordFor(model => model.Password)
+                            @Html.ValidationMessageFor(model => model.Password)
+                        </div>
+                    </div>       
+                }
+                <div class="control-group">
+                    @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.Email)
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
                 </div>
-            </div>       
-        }
-        <div class="clearfix">
-            @Html.LabelFor(model => model.Email)
-            <div class="input">
-                @Html.EditorFor(model => model.Email)
-                @Html.ValidationMessageFor(model => model.Email)
-            </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.IsLocked, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.IsLocked)
+                        @Html.ValidationMessageFor(model => model.IsLocked)
+                    </div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.PrimaryRole, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.DropDownListFor(model => model.PrimaryRole, new SelectList(Roles.GetAllRoles()))
+                    </div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.LocationId, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.DropDownListFor(model => model.LocationId, new SelectList(ViewBag.AllLocations, "Id", "Location", Model.LocationId))
+                    </div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.SupervisorId, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.DropDownListFor(model => model.SupervisorId, new SelectList(ViewBag.Supervisors, "Id", "UserName"))
+                    </div>
+                </div>
+                @Html.HiddenFor(model => model.UserId)
+            </fieldset>
         </div>
-        <div class="clearfix">
-            @Html.LabelFor(model => model.IsLocked)
-            <div class="input">
-                @Html.EditorFor(model => model.IsLocked)
-                @Html.ValidationMessageFor(model => model.IsLocked)
-            </div>
+        <div class="modal-footer">
+            @Html.ActionLink("Back to List", "Index", new { @class = "btn" })
+            <input type="submit" value="Save" class="btn btn-primary" />
         </div>
-        <div class="clearfix">
-            @Html.LabelFor(model => model.PrimaryRole)
-            <div class="input">
-                @Html.DropDownListFor(model => model.PrimaryRole,
-            new SelectList(Roles.GetAllRoles()))
-            </div>
-        </div>
-        <div class="clearfix">
-            @Html.LabelFor(model => model.LocationId)
-            <div class="input">
-                @Html.DropDownListFor(model => model.LocationId,
-new SelectList(ViewBag.AllLocations, "Id", "Location", Model.LocationId))
-            </div>
-        </div>
-        <div class="clearfix">
-            @Html.LabelFor(model => model.SupervisorId)
-            <div class="input">
-                @Html.DropDownListFor(model => model.SupervisorId,
- new SelectList(ViewBag.Supervisors, "Id", "UserName"))
-            </div>
-        </div>
-        @Html.HiddenFor(model => model.UserId)
-        <div class="actions">
-            <input type="submit" value="Save" class="btn" />
-        </div>
-    </fieldset>
+    </div>
+   
 }
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

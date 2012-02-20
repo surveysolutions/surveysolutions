@@ -1,4 +1,4 @@
-﻿@using Questionnaire.Core.Web.Helpers
+﻿ @using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Group
 @model GroupView
 @{ var currentRowId = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Group, Model.PublicKey.ToString());
@@ -22,14 +22,14 @@
                                                                                    {
                                                                                        UpdateTargetId = "addNewQuestion",
                                                                                        OnSuccess = "OpenModal"
-                                                                                   }, new { @class = "btn" })
+                                                                                   }, new { @class = "btn btn-info" })
             @Ajax.ActionLink("Add Group", "Create", "Group", new { id = Model.QuestionnaireId, parentGroup = Model.PublicKey }, new AjaxOptions
                                                                                    {
                                                                                        UpdateTargetId = "addNewQuestion",
                                                                                        OnSuccess = "OpenModal"
-                                                                                   }, new { @class = "btn" })
-            @Ajax.ActionLink("Edit", "Edit", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn primary small" })
-            @Ajax.ActionLink("Delete", "Delete", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn danger small" })
+                                                                                   }, new { @class = "btn btn-info" })
+            @Ajax.ActionLink("Edit", "Edit", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-primary" })
+            @Ajax.ActionLink("Delete", "Delete", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn btn-danger" })
         </span>
     </h3>
     <div id='@allQuestions'>

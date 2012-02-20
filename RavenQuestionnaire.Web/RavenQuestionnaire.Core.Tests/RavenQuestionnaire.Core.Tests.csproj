@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandlers\AddNewQuestionHandlerTest.cs" />
+    <Compile Include="CommandHandlers\UpdateConditionsHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewCompleteQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewGroupHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewLocationHandlerTest.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="CommandHandlers\UpdateQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateUserHandlerTest.cs" />
     <Compile Include="Entities\CompleteQuestionnaireTest.cs" />
+    <Compile Include="Entities\FlowGraphEntityTest.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIteratorTest.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireSimpleIteratorTest.cs" />
     <Compile Include="Entities\LocationEntityTest.cs" />
@@ -139,7 +141,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\FlowGraph\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

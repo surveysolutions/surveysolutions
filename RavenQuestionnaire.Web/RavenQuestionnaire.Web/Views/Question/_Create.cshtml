@@ -1,47 +1,46 @@
 ﻿@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.Question
-@using RavenQuestionnaire.Web.Models
+@using RavenQuestionnaire.Web.Utils
 @model QuestionView
 @{var hideFunctionName = Model.GroupPublicKey.HasValue ? "HideCreateQuestionForm" + Model.GroupPublicKey.ToString().Replace('-', '_') : "HideCreateQuestionForm";}
-<div id="divCreateForm">
-    @using (Ajax.BeginForm("Save", "Question",
+@using (Ajax.BeginForm("Save", "Question",
                                          new AjaxOptions
                                              {
                                                  UpdateTargetId = "addNewQuestion",
                                                  OnComplete = @hideFunctionName
                                              }))
-    {
+{
+    <div id="divCreateForm" class="modal open form-horizontal">
         <div class="modal-header">
-            <h3>
-                Edit question form</h3>
+            <a class="close" data-dismiss="modal">&times;</a>
+            <h3>Edit question form</h3>
         </div>
         <div class="modal-body">
-            @Html.ValidationSummary(true)
-            <div class="clearfix">
-                @Html.LabelFor(model => model.QuestionText)
-                <div class="input">
+            @Html.BootstrapValidationSummary("")
+            <div class="control-group">
+                @Html.LabelFor(model => model.QuestionText, new { @class = "control-label" })
+                <div class="controls">
                     @Html.EditorFor(model => model.QuestionText)
                     @Html.ValidationMessageFor(model => model.QuestionText)
                 </div>
             </div>
-            <div class="clearfix">
-                @Html.LabelFor(model => model.StataExportCaption)
-                <div class="input">
+            <div class="control-group">
+                @Html.LabelFor(model => model.StataExportCaption, new { @class = "control-label" })
+                <div class="controls">
                     @Html.EditorFor(model => model.StataExportCaption)
                     @Html.ValidationMessageFor(model => model.StataExportCaption)
                 </div>
             </div>
-
-            <div class="clearfix">
-              <label>Render as drop down</label>
-                <div class="input">
-
-                    @Html.CheckBox("isDropDown", Model.QuestionType== QuestionType.DropDownList)
+            <div class="control-group">
+                <div class="controls">
+                    <label class="checkbox">
+                        @Html.CheckBox("isDropDown", Model.QuestionType == QuestionType.DropDownList)
+                        Render as drop down</label>
                 </div>
             </div>
-            <div class="clearfix">
-                @Html.LabelFor(model => model.ConditionExpression)
-                <div class="input">
+            <div class="control-group">
+                @Html.LabelFor(model => model.ConditionExpression, new { @class = "control-label" })
+                <div class="controls">
                     @Html.TextAreaFor(model => model.ConditionExpression)
                     @Html.ValidationMessageFor(model => model.ConditionExpression)
                 </div>
@@ -57,7 +56,7 @@
         <div class="modal-footer">
             <a href="javascript:void(0)" onclick=" $('#addNewQuestion').modal('hide')" class="btn">
                 Cancel</a>
-            <input type="submit" value="Save" class="btn primary" />
+            <input type="submit" value="Save" class="btn btn-primary" />
         </div>
-    }
-</div>
+    </div>
+}

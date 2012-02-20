@@ -2,6 +2,10 @@
 {
     public static class IdUtil
     {
+        public static string CreateFlowGraphId(string id)
+        {
+            return string.Format("flowgraphs/{0}", id);
+        }
         public static string CreateQuestionnaireId(string id)
         {
             return string.Format("questionnairedocuments/{0}", id);
