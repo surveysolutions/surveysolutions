@@ -1,17 +1,64 @@
-﻿@using RavenQuestionnaire.Core.Views.Group
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Views.Group
+@using RavenQuestionnaire.Core.Views.Question
 @model RavenQuestionnaire.Core.Views.Group.PropagatableCompleteGroupView
-
-    @foreach (var question in Model.Questions)
-    {
-        using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div") }))
+@using (Html.BeginCollectionItem("settings", true, Guid.NewGuid()))
+{
+    @Html.Hidden("PropogationPublicKey", "dummy")
+}
+@using (Html.BeginCollectionItem("questions", true, Guid.NewGuid()))
+{
+    @Html.Hidden("PublicKey", "dummy")
+}
+<table>
+    <tr>
+        @foreach (CompleteQuestionView question in Model.Questions)
         {
-            Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
-        @Html.Hidden("PublicKey", ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
-        @Html.Hidden("id", Model.QuestionnaireId)
-        @Html.Hidden("PropogationPublicKey", Model.PropogationPublicKey)
-        }
-    }
 
-@Ajax.ActionLink("Remove", "DeletePropagatedGroup", "Group", new { propagationKey = Model.PropogationPublicKey, publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireId, parentGroupPublicKey = ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey },
-new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div") },
-new { @class = "btn" })
+            <td style="border: 1px solid #ddd;">
+                <div style="width: 220px">
+                    @using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", null, new AjaxOptions()
+                                                                                                {
+                                                                                                    InsertionMode = InsertionMode.Replace,
+                                                                                                    UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div")
+                                                                                                }, new { autocomplete = "off" }))
+                    {
+                        using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + Model.PropogationPublicKey))
+                        {
+
+                        
+                            @Html.Hidden("PublicKey", question.PublicKey)
+                            ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+                            if (!question.Enabled)
+                            {
+                                ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+                            }
+
+                            Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
+                      
+                            @Html.ValidationMessage("AnswerValue")
+                        }
+                        <br />
+
+
+                        using (Html.BeginCollectionItem("settings", true, Model.PublicKey + "_" + Model.PropogationPublicKey))
+                        {
+                            @Html.Hidden("ParentGroupPublicKey", ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
+                            @Html.Hidden("QuestionnaireId", Model.QuestionnaireId)
+                            @Html.Hidden("PropogationPublicKey", Model.PropogationPublicKey)
+                        }
+                    }</div>
+            </td>
+
+        }
+    </tr>
+</table>
+@if (!Model.AutoPropagate)
+{
+    @Ajax.ActionLink("Remove", "DeletePropagatedGroup", "Group", new {propagationKey = Model.PropogationPublicKey, publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireId, parentGroupPublicKey = ((CompleteGroupView) ViewBag.CurrentGroup).PublicKey},
+                           new AjaxOptions() {InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView) ViewBag.CurrentGroup).GetClientId("div")},
+                           new {@class = "btn"})
+    <br />
+    <br />
+}

@@ -4,11 +4,11 @@
 @model QuestionView
 @{ var currentRowId = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, Model.PublicKey.ToString()); }
 <div id="@currentRowId" class="question">
-    <h3>@Model.Index) @Html.DisplayFor(modelItem => Model.QuestionText) - @Model.PublicKey
+    <h3>@Model.Index) @Html.DisplayFor(modelItem => Model.QuestionText)</h3> @Model.QuestionType - @Model.PublicKey
         <span>
             @Ajax.ActionLink("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-primary" })
             @Ajax.ActionLink("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn btn-danger" })
-        </span></h3>
+        </span>
     <div class="answers">
         @{Html.RenderPartial("~/Views/Answer/_Index.cshtml", Model.Answers);}
     </div>

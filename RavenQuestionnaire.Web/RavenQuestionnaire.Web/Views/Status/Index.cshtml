@@ -8,7 +8,8 @@
     <thead>
         <tr>
             <th>Title </th>
-            <th></th>
+            <th>Restrictions</th>
+            <th>Route rules</th>
         </tr>
     </thead>
     <tbody>
@@ -20,6 +21,9 @@
                 </td>
                 <td class="buttons">
                     @Html.ActionLink("Role restrictions", "Edit", new { id = item.Id }, new { @class = "btn small " })
+                </td>
+                <td class="buttons">
+                    @Html.ActionLink("Route", "Route", new { id = item.Id }, new { @class = "btn small " })
                 </td>
             </tr>
         }

@@ -7,7 +7,7 @@ using RavenQuestionnaire.Core.Views.Answer;
 
 namespace RavenQuestionnaire.Core.Views.Question
 {
-    public class CompleteQuestionView : QuestionView<CompleteGroup, CompleteQuestion, CompleteAnswer>
+    public class CompleteQuestionView : QuestionView<CompleteAnswerView,ICompleteGroup, ICompleteQuestion>
     {
         public bool Enabled { get; set; }
 
@@ -23,12 +23,14 @@ namespace RavenQuestionnaire.Core.Views.Question
         {
         }
         public CompleteQuestionView(
-            CompleteQuestionnaireDocument questionnaire, CompleteQuestion doc)
+            CompleteQuestionnaireDocument questionnaire, ICompleteQuestion doc)
             : base(questionnaire, doc)
         {
             this.QuestionnaireId = questionnaire.Id;
             this.Enabled = doc.Enabled;
-            this.Answers = doc.Answers.Select(a => new CompleteAnswerView(a)).ToArray();
+            var questionWithAnswer = doc as ICompleteQuestion<ICompleteAnswer>;
+            if (questionWithAnswer != null)
+                this.Answers = questionWithAnswer.Answers.Select(a => new CompleteAnswerView(a)).ToArray();
         }
     }
 }

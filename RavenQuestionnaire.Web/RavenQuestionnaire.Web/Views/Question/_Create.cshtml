@@ -1,4 +1,5 @@
-﻿@using RavenQuestionnaire.Core.Entities.SubEntities
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Web.Utils
 @model QuestionView
@@ -15,43 +16,52 @@
             <a class="close" data-dismiss="modal">&times;</a>
             <h3>Edit question form</h3>
         </div>
+        
         <div class="modal-body">
+         @using (Html.BeginCollectionItem("question", Model.PublicKey))
+         {
             @Html.BootstrapValidationSummary("")
             <div class="control-group">
                 @Html.LabelFor(model => model.QuestionText, new { @class = "control-label" })
                 <div class="controls">
-                    @Html.EditorFor(model => model.QuestionText)
-                    @Html.ValidationMessageFor(model => model.QuestionText)
+                        @Html.EditorFor(model => model.QuestionText)
+                        @Html.ValidationMessageFor(model => model.QuestionText)
+                    </div>
                 </div>
-            </div>
             <div class="control-group">
                 @Html.LabelFor(model => model.StataExportCaption, new { @class = "control-label" })
                 <div class="controls">
-                    @Html.EditorFor(model => model.StataExportCaption)
-                    @Html.ValidationMessageFor(model => model.StataExportCaption)
+                        @Html.EditorFor(model => model.StataExportCaption)
+                        @Html.ValidationMessageFor(model => model.StataExportCaption)
+                    </div>
                 </div>
-            </div>
             <div class="control-group">
+                <label class="control-label">Type</label>
                 <div class="controls">
-                    <label class="checkbox">
-                        @Html.CheckBox("isDropDown", Model.QuestionType == QuestionType.DropDownList)
-                        Render as drop down</label>
+                   @Html.EnumDropDownListFor(model => Model.QuestionType)
+
+
+                        @*Html.CheckBox("isDropDown", Model.QuestionType == QuestionType.DropDownList) *@
+                        
+                    </div>
                 </div>
-            </div>
             <div class="control-group">
                 @Html.LabelFor(model => model.ConditionExpression, new { @class = "control-label" })
                 <div class="controls">
-                    @Html.TextAreaFor(model => model.ConditionExpression)
-                    @Html.ValidationMessageFor(model => model.ConditionExpression)
+                        @Html.EnumDropDownListFor(model => Model.QuestionType)
+                        @*  @Html.CheckBox("isDropDown", Model.QuestionType== QuestionType.DropDownList)*@
+                    </div>
                 </div>
-            </div>
-            @if (Model.PublicKey != Guid.Empty)
-            {
+                   if (Model.PublicKey != Guid.Empty)
+                   {
                 @Html.HiddenFor(model => model.PublicKey)
+                   }
+                @Html.HiddenFor(model => model.GroupPublicKey)
+                @Html.HiddenFor(model => model.QuestionnaireId)
+
+           Html.RenderPartial("~/Views/Answer/_EditAnswers.cshtml", Model);
+
             }
-            @Html.HiddenFor(model => model.GroupPublicKey)
-            @Html.HiddenFor(model => model.QuestionnaireId)
-            @{Html.RenderPartial("~/Views/Answer/_EditAnswers.cshtml", Model);}
         </div>
         <div class="modal-footer">
             <a href="javascript:void(0)" onclick=" $('#addNewQuestion').modal('hide')" class="btn">

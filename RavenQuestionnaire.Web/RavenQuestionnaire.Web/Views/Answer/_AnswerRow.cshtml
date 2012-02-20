@@ -3,6 +3,13 @@
 @model AnswerView
 <div class="answer">
     <p>
-        @Model.Index) @Html.DisplayFor(modelItem => Model.AnswerText)
+        @Model.Index)
+        @if (!string.IsNullOrEmpty(Model.AnswerValue))
+        {
+            @Model.AnswerValue;
+                              <b> = </b>
+        }
+        
+        @Html.DisplayFor(modelItem => Model.AnswerText)
     </p>
 </div>

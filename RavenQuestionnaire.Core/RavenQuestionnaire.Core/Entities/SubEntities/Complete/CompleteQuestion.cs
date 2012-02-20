@@ -4,36 +4,39 @@ using System.Data;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using RavenQuestionnaire.Core.AbstractFactories;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class CompleteQuestion : ICompleteQuestion<CompleteAnswer>
+    public class CompleteQuestion : ICompleteQuestion<ICompleteAnswer>
     {
         public CompleteQuestion()
         {
             this.PublicKey = Guid.NewGuid();
             this.Enabled = true;
-            Answers = new List<CompleteAnswer>();
+            Answers = new List<ICompleteAnswer>();
         }
 
-        public CompleteQuestion(string text, QuestionType type):this()
+        public CompleteQuestion(string text, QuestionType type)
+            : this()
         {
 
             this.QuestionText = text;
             this.QuestionType = type;
         }
-        public static explicit operator CompleteQuestion (Question doc)
+        public static explicit operator CompleteQuestion(RavenQuestionnaire.Core.Entities.SubEntities.Question doc)
         {
-            CompleteQuestion result= new CompleteQuestion
-                       {
-                           PublicKey = doc.PublicKey,
-                           ConditionExpression = doc.ConditionExpression,
-                           QuestionText = doc.QuestionText,
-                           QuestionType = doc.QuestionType,
-                           StataExportCaption = doc.StataExportCaption
-                       };
-            result.Answers = doc.Answers.Select(a => (CompleteAnswer)a).ToList();
+            CompleteQuestion result = new CompleteQuestion
+            {
+                PublicKey = doc.PublicKey,
+                ConditionExpression = doc.ConditionExpression,
+                QuestionText = doc.QuestionText,
+                QuestionType = doc.QuestionType,
+                StataExportCaption = doc.StataExportCaption
+            };
+            result.Answers = doc.Answers.Select(a => new CompleteAnswerFactory().ConvertToCompleteAnswer(a)).ToList();
             return result;
         }
         public Guid PublicKey { get; set; }
@@ -42,85 +45,69 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public QuestionType QuestionType { get; set; }
 
-        public  List<CompleteAnswer> Answers { get; set; }
+        public List<ICompleteAnswer> Answers { get; set; }
 
         public string ConditionExpression { get; set; }
 
         public string StataExportCaption { get; set; }
 
         public bool Enabled { get; set; }
-
-    /*    public void ClearAnswers()
+        public void Add(IComposite c, Guid? parent)
         {
-            foreach (CompleteAnswer answer in this.Answers)
-            {
-                answer.Selected = false;
-                answer.CustomAnswer = null;
-            }
+            new CompleteQuestionFactory().Create(this).Add(c, parent);
         }
 
-        public void UpdateAnswerList(IEnumerable<CompleteAnswer> answers)
-        {
-            ClearAnswers();
-            foreach (CompleteAnswer answer in answers)
-            {
-                Add(answer, PublicKey);
-            }
-        }*/
-
-      /*  public void AddAnswer(CompleteAnswer answer)
-        {
-            CompleteAnswer completeAnswer =
-                this.Answers.FirstOrDefault(a => a.PublicKey.Equals(answer.PublicKey));
-            if (completeAnswer == null)
-                throw new ArgumentException(string.Format("answer with guid {0} doesn't exists in current question",
-                                                          answer.PublicKey));
-            completeAnswer.Set(answer.CustomAnswer);
-        }*/
-        public bool Add(IComposite c, Guid? parent)
-        {
-            CompleteAnswer currentAnswer = c as CompleteAnswer;
-            if (currentAnswer == null)
-                return false;
-            bool result = Answers.Any(answer => answer.Add(c, parent));
-            if (result)
-                foreach (CompleteAnswer answer in Answers)
-                {
-                    if (answer.PublicKey != currentAnswer.PublicKey)
-                        answer.Selected = false;
-                }
-            return result;
-        }
-
-        public bool Remove(IComposite c)
+        public void Remove(IComposite c)
         {
             CompleteQuestion question = c as CompleteQuestion;
-            if (question != null && this.PublicKey.Equals(question.PublicKey))
+            if (question != null)
             {
-                foreach (CompleteAnswer answer in Answers)
+                if (!this.PublicKey.Equals(question.PublicKey))
+                    throw new CompositeException();
+                foreach (CompleteAnswer answer in this.Answers)
                 {
                     answer.Remove(answer);
                 }
-                return true;
+                return;
             }
-            if (c as CompleteAnswer == null)
-                return Answers.Any(answer => answer.Remove(c));
-            return false;
+            if (c as CompleteAnswer != null)
+                foreach (CompleteAnswer completeAnswer in this.Answers)
+                {
+                    try
+                    {
+                        completeAnswer.Remove(c);
+                        return;
+                    }
+                    catch (CompositeException)
+                    {
+                    }
+                }
+            throw new CompositeException("answer wasn't found");
         }
 
-        public bool Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
             if (typeof(T) == GetType() && this.PublicKey.Equals(publicKey))
             {
-                foreach (CompleteAnswer answer in Answers)
+                foreach (CompleteAnswer answer in this.Answers)
                 {
                     answer.Remove(answer);
                 }
-                return true;
+                return;
             }
             if (typeof (T) != typeof (CompleteAnswer))
-                return Answers.Any(answer => answer.Remove<T>(publicKey));
-            return false;
+                foreach (CompleteAnswer completeAnswer in this.Answers)
+                {
+                    try
+                    {
+                        completeAnswer.Remove<T>(publicKey);
+                        return;
+                    }
+                    catch (CompositeException)
+                    {
+                    }
+                }
+            throw new CompositeException("answer wasn't found");
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
@@ -132,9 +119,24 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             }
             if (typeof(T) == typeof(CompleteAnswer))
             {
-                return Answers.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+                return this.Answers.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
             }
             return null;
+        }
+
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            return Answers.Where(a => a is T && condition(a as T)).Select(a => a as T);
+            /* if (typeof(T) == GetType())
+             {
+                 if (condition(this))
+                     return this as T;
+             }
+             if (typeof(T) == typeof(CompleteAnswer))
+             {
+                 return this.Answers.Select(answer => answer.Find<T>(condition)).FirstOrDefault(result => result != null);
+             }
+             return null;*/
         }
     }
 }

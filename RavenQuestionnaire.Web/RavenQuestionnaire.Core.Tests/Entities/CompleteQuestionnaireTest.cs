@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Tests.Utils;
@@ -15,6 +18,12 @@ namespace RavenQuestionnaire.Core.Tests.Entities
     [TestFixture]
     public class CompleteQuestionnaireTest
     {
+        public Mock<IIteratorContainer> iteratorContainerMock;
+        [SetUp]
+        public void CreateObjects()
+        {
+            iteratorContainerMock = new Mock<IIteratorContainer>();
+        }
   /*      [Test]
         public void WhenAddCompletedAnswerNotInQuestionnaireList_InvalidExceptionThrowed()
         {
@@ -66,22 +75,12 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Assert.AreEqual(completeQuestionnaire.GetAllAnswers().First().CustomAnswer, "custom text");
         }*/
         [Test]
-        public void GetAllQuestions_ReturnsAllQuestions()
-        {
-            CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
-            CompleteQuestionnaireDocument innerDocument =
-               ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
-            var questions = new List<CompleteQuestion>();
-            innerDocument.Questions = questions;
-            Assert.AreEqual(completeQuestionnaire.GetAllQuestions(), questions);
-        }
-        [Test]
         public void PropogateGroup_ValidData_GroupIsAdded()
         {
 
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
-            CompleteGroup group = new CompleteGroup("test") { Propagated = true };
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
+            CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
             CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
@@ -100,7 +99,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
 
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
             CompleteGroup group = new CompleteGroup("test");
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
@@ -108,17 +107,43 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             question.Answers.Add(answer);
             group.Questions.Add(question);
             qDoqument.Groups.Add(group);
-            questionanire.Add(group, null);
-            Assert.AreEqual(qDoqument.Groups.Count, 1);
+            Assert.Throws<CompositeException>(() => questionanire.Add(group, null));
         }
+        [Test]
+        public void PropogateGroup_ValidDataOtherGroupIsSubscribed_GroupIsAddedOtherGroupIsnotified()
+        {
 
+            CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
+
+            CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
+            CompleteGroup otherGroup = new CompleteGroup("other") { Propagated = Propagate.Propagated };
+            CompleteQuestion question = new CompleteQuestion("q",
+                                           QuestionType.SingleOption);
+            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            question.Answers.Add(answer);
+            group.Questions.Add(question);
+            qDoqument.Groups.Add(group);
+            qDoqument.Groups.Add(otherGroup);
+            qDoqument.Observers = new List<IObserver<CompositeInfo>>
+                                      {new GroupObservable(otherGroup.PublicKey, group.PublicKey)};
+
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
+        
+            questionanire.Add(group, null);
+
+            Assert.AreEqual(qDoqument.Groups.Count, 4);
+            Assert.AreEqual(qDoqument.Groups[0].PublicKey, qDoqument.Groups[2].PublicKey);
+            Assert.AreEqual(qDoqument.Groups[1].PublicKey, qDoqument.Groups[3].PublicKey);
+            Assert.True(qDoqument.Groups[2] is IPropogate);
+            Assert.True(qDoqument.Groups[3] is IPropogate);
+        }
         [Test]
         public void Add_AnswerInPropogatedGroup_AnswerIsAdded()
         {
 
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
-            CompleteGroup group = new CompleteGroup("test") { Propagated = true };
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
+            CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
             CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
@@ -133,9 +158,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                 new PropagatableCompleteAnswer(completeAnswer,
                                                ((PropagatableCompleteGroup) qDoqument.Groups[1]).PropogationPublicKey),
                 null);
-            Assert.AreEqual(qDoqument.Groups[0].Questions[0].Answers[0].Selected, false);
-            Assert.AreEqual(qDoqument.Groups[1].Questions[0].Answers[0].Selected, true);
-            Assert.AreEqual(qDoqument.Groups[2].Questions[0].Answers[0].Selected, false);
+            Assert.AreEqual((((qDoqument.Groups[0] as CompleteGroup).Questions[0] as CompleteQuestion).Answers[0] as CompleteAnswer).Selected, false);
+            Assert.AreEqual((((qDoqument.Groups[1] as CompleteGroup).Questions[0] as CompleteQuestion).Answers[0] as CompleteAnswer).Selected, true);
+            Assert.AreEqual((((qDoqument.Groups[2] as CompleteGroup).Questions[0] as CompleteQuestion).Answers[0] as CompleteAnswer).Selected, false);
 
         }
 
@@ -144,8 +169,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
 
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
-            CompleteGroup group = new CompleteGroup("test") { Propagated = true };
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, iteratorContainerMock.Object);
+            CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
             CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
@@ -163,17 +188,17 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Assert.AreEqual(qDoqument.Groups[0].GetType(), typeof(CompleteGroup));
 
         }
-     /*   [Test]
-        public void UpdateAnswer_UpdateUnpresentedQuestion_ExceptionIsThrownen()
+        [Test]
+        public void AddCOmposite_Success_AllObserversAreNotified()
         {
-            CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
+          /*  CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
             CompleteQuestionnaireDocument innerDocument =
                ((IEntity<CompleteQuestionnaireDocument>)completeQuestionnaire).GetInnerDocument();
             Assert.Throws<InvalidOperationException>(
-                () => completeQuestionnaire.ChangeAnswer(new CompleteAnswer(new Answer(), Guid.NewGuid())));
+                () => completeQuestionnaire.ChangeAnswer(new CompleteAnswer(new Answer(), Guid.NewGuid())));*/
 
         }
-        [Test]
+     /*   [Test]
         public void UpdateAnswer_UpdateQuestion_QuestionIsUpdated()
         {
             CompleteQuestionnaire completeQuestionnaire = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();

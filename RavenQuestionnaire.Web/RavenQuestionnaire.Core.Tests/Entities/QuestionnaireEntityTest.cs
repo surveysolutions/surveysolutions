@@ -30,9 +30,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            questionnaire.AddGroup("group", false, null);
+            questionnaire.AddGroup("group", Propagate.None, null);
 
-            Assert.AreEqual(innerDocument.Groups[0].GroupText, "group");
+            Assert.AreEqual(innerDocument.Groups[0].Title, "group");
         }
         [Test]
         public void AddGroup_FirstLevel_GroupIsAddedToDocument()
@@ -41,9 +41,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             Group parent= new Group();
             innerDocument.Groups.Add(parent);
-            questionnaire.AddGroup("group", false, parent.PublicKey);
+            questionnaire.AddGroup("group", Propagate.None, parent.PublicKey);
 
-            Assert.AreEqual(innerDocument.Groups[0].Groups[0].GroupText, "group");
+            Assert.AreEqual((innerDocument.Groups[0] as Group).Groups[0].Title, "group");
             Assert.AreEqual(innerDocument.Groups[0], parent);
         }
         [Test]
@@ -55,17 +55,17 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             innerDocument.Groups.Add(topParent);
             Group subParent = new Group();
             topParent.Groups.Add(subParent);
-            questionnaire.AddGroup("group", false, subParent.PublicKey);
+            questionnaire.AddGroup("group", Propagate.None, subParent.PublicKey);
 
-            Assert.AreEqual(innerDocument.Groups[0].Groups[0].Groups[0].GroupText, "group");
-            Assert.AreEqual(innerDocument.Groups[0].Groups[0], subParent);
+            Assert.AreEqual(((innerDocument.Groups[0] as Group).Groups[0] as Group).Groups[0].Title, "group");
+            Assert.AreEqual((innerDocument.Groups[0] as Group).Groups[0], subParent);
         }
         [Test]
         public void AddGroup_InvalidParentPublicKey_ArgumentException()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            Assert.Throws<ArgumentException>(() => questionnaire.AddGroup("group", false, Guid.NewGuid()));
+            Assert.Throws<ArgumentException>(() => questionnaire.AddGroup("group", Propagate.None, Guid.NewGuid()));
         }
         [Test]
         public void UpdateGroup_GroupIsUpdated()
@@ -74,15 +74,15 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             Group group = new Group();
             innerDocument.Groups.Add(group);
-            questionnaire.UpdateGroup("group",false, group.PublicKey);
-            Assert.AreEqual(group.GroupText, "group");
+            questionnaire.UpdateGroup("group", Propagate.None, group.PublicKey);
+            Assert.AreEqual(group.Title, "group");
         }
         [Test]
         public void UpdateGroup_InvalidgroupPublicKey_ArgumentException()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            Assert.Throws<ArgumentException>(() => questionnaire.UpdateGroup("group", false, Guid.NewGuid()));
+            Assert.Throws<ArgumentException>(() => questionnaire.UpdateGroup("group", Propagate.None, Guid.NewGuid()));
         }
         [Test]
         public void UpdateText_UpdatesTextToDocument()
@@ -135,7 +135,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
             Assert.AreEqual(innerDocument.Questions[0].QuestionText, "new question title");
             Assert.AreEqual(innerDocument.Questions[0].QuestionType, QuestionType.MultyOption);
-            Assert.AreEqual(innerDocument.Questions[0].Answers.Count, 1);
+            Assert.AreEqual((innerDocument.Questions[0] as Question).Answers.Count, 1);
         }
        
         [Test]
@@ -145,7 +145,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             innerDocument.Questions.Add(new Question("top", QuestionType.SingleOption));
             innerDocument.Groups.Add(new Group("g1"));
-            innerDocument.Groups[0].Questions.Add(new Question("first level", QuestionType.MultyOption));
+            (innerDocument.Groups[0] as Group).Questions.Add(new Question("first level", QuestionType.MultyOption));
             Assert.AreEqual(questionnaire.GetAllQuestions().Count, 2);
         }
     }

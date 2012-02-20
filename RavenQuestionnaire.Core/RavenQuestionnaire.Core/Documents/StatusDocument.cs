@@ -3,27 +3,43 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Documents
 {
+    /// <summary>
+    /// Describes the status in the system
+    /// </summary>
     public class StatusDocument
     {
         public string Id { get; set; }
         public string Title { get; set; }
 
         public bool IsVisible {get; set;}
+        /// <summary>
+        /// Is used for defining of the status for initially created CQ
+        /// </summary>
+        public bool IsInitial { get; set;}
 
-        public bool IsInitial { get; set; }
-
+        /// <summary>
+        ///Containes ref to the correspondent Q 
+        /// </summary>
         public string QuestionnaireId { get; set; }
 
-        public Dictionary<string, List<SurveyStatus>> StatusRoles { 
-            set;
-            get;
-        }
+        /// <summary>
+        /// Holds restriction by role.
+        /// </summary>
+        public Dictionary<string, List<SurveyStatus>> StatusRoles { set;get;}
 
         public StatusDocument()
         {
             IsVisible = true;
             StatusRoles = new Dictionary<string, List<SurveyStatus>>();
-        
         }
+
+        /// <summary>
+        /// Flag displays status is used for stuck item in commonon flow.
+        /// </summary>
+        public bool IsDefaultStuck { get; set; }
+
+        public List<FlowRule> FlowRules { get; set;}
+
+        public SurveyStatus DefaultIfNoConditions { set; get; }
     }
 }

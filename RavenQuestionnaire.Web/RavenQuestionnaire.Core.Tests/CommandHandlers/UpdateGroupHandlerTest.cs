@@ -28,8 +28,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
             UpdateGroupHandler handler = new UpdateGroupHandler(questionnaireRepositoryMock.Object);
       /*      AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };*/
-            handler.Handle(new Commands.UpdateGroupCommand("test", false, entity.QuestionnaireId, groupForUpdate.PublicKey, null));
-            Assert.AreEqual(innerDocument.Groups[0].GroupText, "test");
+            handler.Handle(new Commands.UpdateGroupCommand("test", Propagate.None, entity.QuestionnaireId, groupForUpdate.PublicKey, null));
+            Assert.AreEqual(innerDocument.Groups[0].Title, "test");
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
 
         }

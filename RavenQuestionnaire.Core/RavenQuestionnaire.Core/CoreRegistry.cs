@@ -4,6 +4,7 @@ using Ninject.Modules;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
+using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Indexes;
 
 namespace RavenQuestionnaire.Core

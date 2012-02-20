@@ -35,6 +35,13 @@
             <div class="controls">
                 @Html.DropDownListFor(model => model.Responsible.Id, new SelectList(ViewBag.Users, "Id", "UserName", Model.Responsible.Id))
             </div>
+        <div class="clearfix">
+            <div class="key">
+                Comment</div>
+                
+            <div class="value">
+                @Html.TextArea("changeComment")
+            </div>
         </div>
         <h3>Questions:</h3>
         @Html.Partial("~/Views/Question/_Take.cshtml", Model.Questions)

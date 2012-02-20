@@ -1,16 +1,24 @@
-﻿@using RavenQuestionnaire.Core.Views.Group
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Group
 @model RavenQuestionnaire.Core.Views.Group.CompleteGroupView
 @foreach (var question in Model.Questions)
 {
 
     using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div") }))
     {
-        Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
-    @Html.Hidden("PublicKey",((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
-    @Html.Hidden("id", Model.QuestionnaireId)
+        using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+        {
+            Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
+              
+        }
+        using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+        {
+            @Html.Hidden("ParentGroupPublicKey", ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
+            @Html.Hidden("QuestionnaireId", Model.QuestionnaireId)
+        }
     }
 }
 @foreach (var group in Model.Groups)
 {
-     Html.RenderPartial("~/Views/Group/_Screen.cshtml", group); 
+    Html.RenderPartial("~/Views/Group/_Screen.cshtml", group);
 }

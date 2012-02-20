@@ -31,21 +31,21 @@ namespace Questionnaire.Core.Web.Helpers
 
         public static SelectList ToSelectList(Type enumType, string selectedItem)
         {
-            List<SelectListItem> items = new List<SelectListItem>();
+            Dictionary<string, string> items = new Dictionary<string, string>();
             foreach (var item in Enum.GetValues(enumType))
             {
                 FieldInfo fi = enumType.GetField(item.ToString());
-                var attribute = fi.GetCustomAttributes(typeof(DescriptionAttribute), true).FirstOrDefault();
-                var title = attribute == null ? item.ToString() : ((DescriptionAttribute)attribute).Description;
-                var listItem = new SelectListItem
-                {
-                    Value = ((int)item).ToString(),
-                    Text = title
-                };
-                items.Add(listItem);
+                var attribute = fi.GetCustomAttributes(typeof (DescriptionAttribute), true).FirstOrDefault();
+                var title = attribute == null ? item.ToString() : ((DescriptionAttribute) attribute).Description;
+                /*  var listItem = new SelectListItem
+                  {
+                      Value = ((int)item).ToString(),
+                      Text = title
+                  };*/
+                items.Add(((int) item).ToString(), title);
             }
 
-            return new SelectList(items, "Value", "Text", selectedItem);
+            return new SelectList(items, "Key", "Value", selectedItem);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿@using RavenQuestionnaire.Core.Views.Group
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Group
 @using RavenQuestionnaire.Web.Utils
 @model GroupView
 @using (Ajax.BeginForm("Save", "Group",
@@ -11,7 +12,7 @@
     <div id="divCreateForm" class="modal open">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">&times;</a>
-            <h3>Edit screen form</h3>
+                Edit screen form</h3>
         </div>
         <div class="modal-body">
             @Html.BootstrapValidationSummary("")
@@ -26,7 +27,8 @@
             {
                 <div class="control-group">
                     <label class="checkbox">
-                        @Html.CheckBoxFor(model => model.Propagated)
+                        Is Group propagateble?</label>
+                        @Html.EnumDropDownListFor(model => Model.Propagated)
                         Is Group propagateble?</label>
                 </div>
             }
@@ -38,8 +40,10 @@
             @Html.HiddenFor(model => model.ParentGroup)
         </div>
         <div class="modal-footer">
-            <a href="javascript:void(0)" onclick=" $('#addNewQuestion').modal('hide')" class="btn">Cancel</a>
-            <input type="submit" value="Save" class="btn btn-primary" />
+        <a href="javascript:void(0)" onclick=" $('#addNewQuestion').modal('hide')" class="btn">Cancel</a>
+
+
+           <input type="submit" value="Save" class="btn btn-primary" />
         </div>
     </div>
 }

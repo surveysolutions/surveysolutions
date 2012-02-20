@@ -11,11 +11,14 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
+using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Group;
+using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Web.Controllers;
+using RavenQuestionnaire.Web.Models;
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
@@ -121,9 +124,18 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 x.Load<StatusViewInputModel, StatusView>(
                     It.IsAny<StatusViewInputModel>()))
                 .Returns(new StatusView());
-            Controller.SaveSingleResult("cId", null, null,
-                                        new CompleteAnswer[] {new CompleteAnswer(new Answer(), Guid.NewGuid())});
-            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateAnswerInCompleteQuestionnaireCommand>()), Times.Once());
+            CompleteQuestionView question = new CompleteQuestionView("cId",Guid.NewGuid());
+            question.Answers = new CompleteAnswerView[] {new CompleteAnswerView(new CompleteAnswer())};
+            Controller.SaveSingleResult(
+                new CompleteQuestionSettings[]
+                    {new CompleteQuestionSettings() {QuestionnaireId = "cId", PropogationPublicKey = Guid.NewGuid()}},
+                new CompleteQuestionView[]
+                    {
+                        question
+                    }
+                );
+            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateAnswerInCompleteQuestionnaireCommand>()),
+                                      Times.Once());
         }
     }
 }

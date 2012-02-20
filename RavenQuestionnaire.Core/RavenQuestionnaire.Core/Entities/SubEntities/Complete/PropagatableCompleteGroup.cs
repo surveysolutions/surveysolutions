@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Observers;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
@@ -12,21 +13,31 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
         }
 
-        public PropagatableCompleteGroup(CompleteGroup group, Guid propogationPublicKey)
+        public PropagatableCompleteGroup(ICompleteGroup group, Guid propogationPublicKey)
         {
-            this.GroupText = group.GroupText;
+            this.Title = group.Title;
             this.Propagated = group.Propagated;
+            this.AutoPropagate = group.Propagated == Propagate.AutoPropagated;
             this.PublicKey = group.PublicKey;
-
-            for (int i = 0; i < group.Questions.Count; i++)
+            var groupWithQuestion = group as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
+            if (groupWithQuestion != null)
             {
-                this.Questions.Add(new PropagatableCompleteQuestion(group.Questions[i], propogationPublicKey));
-            }
-            for (int i = 0; i < group.Groups.Count; i++)
-            {
-                this.Groups[i] = new PropagatableCompleteGroup(group.Groups[i], propogationPublicKey);
-            }
+                for (int i = 0; i < groupWithQuestion.Questions.Count; i++)
+                {
+                    if (!(groupWithQuestion.Questions[i] is IBinded))
+                        this.Questions.Add(new PropagatableCompleteQuestion(groupWithQuestion.Questions[i],
+                                                                            propogationPublicKey));
+                    else
+                        this.Questions.Add((BindedCompleteQuestion) groupWithQuestion.Questions[i]);
 
+                }
+
+                for (int i = 0; i < groupWithQuestion.Groups.Count; i++)
+                {
+                    this.Groups.Add(new PropagatableCompleteGroup(groupWithQuestion.Groups[i], propogationPublicKey));
+                    //    this.Groups[i] = new PropagatableCompleteGroup(group.Groups[i], propogationPublicKey);
+                }
+            }
             this.PropogationPublicKey = propogationPublicKey;
         }
 
@@ -34,7 +45,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public Guid PropogationPublicKey { get; set; }
 
-    /*    public void Propogate(Guid childGroupPublicKey)
+        public bool AutoPropagate { get; set; }
+
+        /*    public void Propogate(Guid childGroupPublicKey)
         {
             var group = Groups.FirstOrDefault(g => g.PublicKey.Equals(childGroupPublicKey));
             if (group == null)
@@ -58,8 +71,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             var result = new PropagatableCompleteGroup()
                        {
-                           GroupText = this.GroupText,
-                           Propagated = true,
+                           Title = this.Title,
+                           Propagated = this.Propagated,
+                           AutoPropagate = this.Propagated == Propagate.AutoPropagated,
                            PropogationPublicKey = Guid.NewGuid(),
                            PublicKey = this.PublicKey
                        };
@@ -75,26 +89,26 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
 
         #endregion
-        public override bool Add(IComposite c, Guid? parent)
+        public override void Add(IComposite c, Guid? parent)
         {
             IPropogate propagate = c as IPropogate;
             if (propagate == null)
-                return false;
+                throw new CompositeException();
             if (propagate.PropogationPublicKey != this.PropogationPublicKey)
-                return false;
-            return base.Add(c, parent);
+                throw new CompositeException();
+            base.Add(c, parent);
         }
-        public override bool Remove(IComposite c)
+        public override void Remove(IComposite c)
         {
             IPropogate propagate = c as IPropogate;
             if (propagate == null)
-                return false;
+                throw new CompositeException();
             if (propagate.PropogationPublicKey != this.PropogationPublicKey)
-                return false;
-            return base.Remove(c);
+                throw new CompositeException();
+            base.Remove(c);
         }
 
-        public override bool Remove<T>(Guid publicKey){
+        public override void Remove<T>(Guid publicKey){
             //  IPropogate propagate = c as IPropogate;
           /*  if (!typeof (T).IsAssignableFrom(typeof (IPropogate)))
                 return false;
@@ -108,15 +122,15 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public override T Find<T>(Guid publicKey)
         {
-            if (!typeof (T).IsAssignableFrom(typeof (IPropogate)))
+            if (!typeof (IPropogate).IsAssignableFrom(typeof (T)))
                 return null;
-            if (typeof (T) == GetType())
-            {
-                if (this.PublicKey.Equals(publicKey))
-                    return this as T;
-            }
+
+            if (this.PublicKey.Equals(publicKey))
+                return this as T;
+
             var resultInsideGroups =
-                Groups.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+                Groups.Where(a => a is IComposite).Select(group => (group as IComposite).Find<T>(publicKey)).
+                    FirstOrDefault(result => result != null);
             if (resultInsideGroups != null)
                 return resultInsideGroups;
             var resultInsideQuestions =

@@ -5,6 +5,7 @@ using NCalc;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities
@@ -35,23 +36,38 @@ namespace RavenQuestionnaire.Core.Entities
 
         public Question AddQuestion(string text, string stataExportCaption, QuestionType type, string condition, Guid? groupPublicKey)
         {
-            
-            Question result = new Question() {QuestionText = text, QuestionType = type, StataExportCaption = stataExportCaption};
+
+            Question result = new Question()
+                                  {QuestionText = text, QuestionType = type, StataExportCaption = stataExportCaption};
             result.ConditionExpression = condition;
-            if(!Add(result, groupPublicKey))
-                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey.Value));
-            return result;
-        }
-        public void AddGroup(string groupText,bool propageted, Guid? parent)
-        {
-            Group group = new Group();
-            group.GroupText = groupText;
-            group.Propagated = propageted;
-            if (!Add(group, parent))
-                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
+            try
+            {
+                Add(result, groupPublicKey);
+                return result;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found",
+                                                          groupPublicKey.Value));
+            }
         }
 
-        public void UpdateGroup(string groupText, bool propageted, Guid publicKey)
+        public void AddGroup(string groupText,Propagate propageted, Guid? parent)
+        {
+            Group group = new Group();
+            group.Title = groupText;
+            group.Propagated = propageted;
+            try
+            {
+                Add(group, parent);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
+            }
+        }
+
+        public void UpdateGroup(string groupText, Propagate propageted, Guid publicKey)
         {
             Group group = Find<Group>(publicKey);
             if (group != null)
@@ -68,7 +84,7 @@ namespace RavenQuestionnaire.Core.Entities
         }
         public void UpdateQuestion(Guid publicKey, string text, string stataExportCaption, QuestionType type, string condition, IEnumerable<Answer> answers)
         {
-            var question = new Questionnaire(this.innerDocument).Find<Question>(publicKey);
+            var question = Find<Question>(publicKey);
             if (question == null)
                 return;
             question.QuestionText = text;
@@ -77,126 +93,54 @@ namespace RavenQuestionnaire.Core.Entities
             question.UpdateAnswerList(answers);
             question.ConditionExpression = condition;
         }
-
-        public void UpdateConditionExpression(Guid publicKey, string condition)
+        public void UpdateFlow(List<FlowBlock> blocks, List<FlowConnection> connections)
         {
-            var question = new Questionnaire(this.innerDocument).Find<Question>(publicKey);
-            if (question == null)
-                return;
-            question.ConditionExpression = condition;
+            //TODO: check flow saving!
+            if (this.innerDocument.FlowGraph==null)
+            {
+                this.innerDocument.FlowGraph = new FlowGraph();
+            }
+            var graph = this.innerDocument.FlowGraph;
+            graph.Blocks = blocks;
+            graph.Connections = connections;
+        }
+        public void Add(IComposite c, Guid? parent)
+        {
+            innerDocument.Add(c, parent);
         }
 
-        public bool Add(IComposite c, Guid? parent)
+        public void Remove(IComposite c)
         {
-            if (!parent.HasValue)
-            {
-                Group group = c as Group;
-                if (group != null)
-                {
-                    innerDocument.Groups.Add(group);
-                    return true;
-                }
-                Question question = c as Question;
-                if (question != null)
-                {
-                    innerDocument.Questions.Add(question);
-                    return true;
-                }
-            }
-            foreach (Group child in innerDocument.Groups)
-            {
-                if (child.Add(c, parent))
-                    return true;
-            }
-            foreach (Question child in innerDocument.Questions)
-            {
-                if (child.Add(c, parent))
-                    return true;
-            }
-            return false;
+           innerDocument.Remove(c);
         }
-
-        public bool Remove(IComposite c)
+        public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            foreach (Group child in innerDocument.Groups)
-            {
-                if (child == c)
-                {
-                    innerDocument.Groups.Remove(child);
-                    return true;
-                }
-                if (child.Remove(c))
-                    return true;
-            }
-            foreach (Question child in innerDocument.Questions)
-            {
-                if (child == c)
-                {
-                    innerDocument.Questions.Remove(child);
-                    return true;
-                }
-                if (child.Remove(c))
-                    return true;
-            }
-            return false;
-        }
-        public bool Remove<T>(Guid publicKey) where T : class, IComposite
-        {
-            foreach (Group child in innerDocument.Groups)
-            {
-                if (child.PublicKey == publicKey)
-                {
-                    innerDocument.Groups.Remove(child);
-                    return true;
-                }
-                if (child.Remove<T>(publicKey))
-                    return true;
-            }
-            foreach (Question child in innerDocument.Questions)
-            {
-                if (child.PublicKey == publicKey)
-                {
-                    innerDocument.Questions.Remove(child);
-                    return true;
-                }
-                if (child.Remove<T>(publicKey))
-                    return true;
-            }
-            return false;
+            innerDocument.Remove<T>(publicKey);
         }
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            foreach (Group child in innerDocument.Groups)
-            {
-                if (child is T && child.PublicKey == publicKey)
-                    return child as T;
-                T subNodes = child.Find<T>(publicKey);
-                if (subNodes != null)
-                    return subNodes;
-            }
-            foreach (Question child in innerDocument.Questions)
-            {
-                if (child is T && child.PublicKey == publicKey)
-                    return child as T;
-                T subNodes = child.Find<T>(publicKey);
-                if (subNodes != null)
-                    return subNodes;
-            }
-            return null;
+            return innerDocument.Find<T>(publicKey);
+        }
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            return
+                innerDocument.Find<T>(condition);
         }
 
-        public IList<Question> GetAllQuestions()
+        public IList<IQuestion> GetAllQuestions()
         {
-            List<Question> result = new List<Question>();
+            List<IQuestion> result = new List<IQuestion>();
             result.AddRange(innerDocument.Questions);
-            Queue<Group> groups = new Queue<Group>();
+            Queue<IGroup> groups = new Queue<IGroup>();
             foreach (var child in innerDocument.Groups)
             {
                 groups.Enqueue(child);
             }
             while (groups.Count != 0)
             {
-                var queueItem = groups.Dequeue();
+                var queueItem = groups.Dequeue() as IGroup<IGroup, IQuestion>;
+                if (queueItem == null)
+                    continue;
                 result.AddRange(queueItem.Questions);
                 foreach (var child in queueItem.Groups)
                 {

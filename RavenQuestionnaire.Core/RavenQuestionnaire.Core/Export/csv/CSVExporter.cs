@@ -59,9 +59,7 @@ namespace RavenQuestionnaire.Core.Export.csv
                     {
                         var completeAnswer = item.CompleteAnswers.FirstOrDefault(a => a.QuestionPublicKey.Equals(guid));
                         writer.WriteField(completeAnswer != null
-                                              ? completeAnswer.AnswerType == AnswerType.Text
-                                                    ? completeAnswer.CustomAnswer
-                                                    : completeAnswer.AnswerText
+                                              ? completeAnswer.AnswerValue?? completeAnswer.AnswerText
                                               : null);
                     }
                     writer.NextRecord();

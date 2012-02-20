@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;

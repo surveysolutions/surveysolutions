@@ -9,6 +9,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     public interface IAnswer: IComposite
     {
         Guid PublicKey { get; set; }
+        object AnswerValue { get; set; }
         string AnswerText { get; set; }
         bool Mandatory { get; set; }
         AnswerType AnswerType { get; set; }
@@ -25,26 +26,32 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Guid PublicKey { get; set; }
         public string AnswerText { get; set; }
         public bool Mandatory { get; set; }
+        public object AnswerValue { get; set; }
         public AnswerType AnswerType { get; set; }
        // public string QuestionId { get; set; }
 
-        public bool Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent)
         {
-            return false;
+            throw new CompositeException("answer is not hierarchical");
         }
 
-        public bool Remove(IComposite c)
+        public void Remove(IComposite c)
         {
-            return false;
+            throw new CompositeException("answer is not hierarchical");
         }
-        public bool Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            return false;
+            throw new CompositeException("answer is not hierarchical");
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            return null;
+            throw new CompositeException("answer is not hierarchical");
+        }
+
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            throw new CompositeException("answer is not hierarchical");
         }
     }
 }

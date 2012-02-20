@@ -104,6 +104,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controllers\FlowGraphController.cs" />
+    <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\FlowGraph.cs" />
     <Compile Include="Models\GridDataRequest.cs" />
     <Compile Include="Controllers\GroupController.cs" />
@@ -355,6 +356,7 @@
     <Content Include="Scripts\jquery.jgrowl.min.js" />
     <Content Include="Scripts\jquery.jsPlumb-1.3.4-all-min.js" />
     <Content Include="Scripts\jquery.jsPlumb-1.3.4-all.js" />
+    <Content Include="Scripts\jquery.numeric.js" />
     <Content Include="Scripts\jquery.tmpl.min.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -633,11 +635,6 @@
     <Content Include="Views\Group\_Index.cshtml" />
     <Content Include="Views\Group\_GroupRow.cshtml" />
     <Content Include="Views\Group\_Screen.cshtml" />
-    <Content Include="Views\Answer\AnswerListView\_SingleOption.cshtml" />
-    <Content Include="Views\Answer\AnswerListView\_DropDownList.cshtml" />
-    <Content Include="Views\Answer\AnswerView\_Text.cshtml" />
-    <Content Include="Views\Answer\AnswerView\_Select.cshtml" />
-    <Content Include="Views\Answer\AnswerListView\_SingleOption.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_DropDownList.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Select.cshtml" />
@@ -651,6 +648,13 @@
     <Content Include="Views\Group\CompleteGroupTemplates\_PropagatebleCompleteGroup.cshtml" />
     <Content Include="Views\FlowGraph\Index.cshtml" />
     <Content Include="Views\FlowGraph\_FlowJs.cshtml" />
+    <Content Include="Views\Status\Route.cshtml" />
+    <Content Include="Views\Answer\AnswerListView\_Numeric.cshtml" />
+    <Content Include="Views\Answer\AnswerListView\_DateTime.cshtml" />
+    <Content Include="Views\Answer\AnswerListView\_Text.cshtml" />
+    <Content Include="Views\Answer\AnswerListView\_SingleOption.cshtml" />
+    <Content Include="Views\Answer\AnswerListView\_GpsCoordinates.cshtml" />
+    <Content Include="Views\Answer\AnswerListView\_MultyOption.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
