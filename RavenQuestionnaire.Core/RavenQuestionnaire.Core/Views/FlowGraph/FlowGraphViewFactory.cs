@@ -1,22 +1,36 @@
 ﻿using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Views.Questionnaire;
 
-namespace RavenQuestionnaire.Core.Views.Group
+namespace RavenQuestionnaire.Core.Views.FlowGraph
 {
     public class FlowGraphViewFactory : IViewFactory<FlowGraphViewInputModel, FlowGraphView>
     {
-        private IDocumentSession documentSession;
+        private readonly IDocumentSession documentSession;
 
         public FlowGraphViewFactory(IDocumentSession documentSession)
         {
             this.documentSession = documentSession;
         }
+
+        #region IViewFactory<FlowGraphViewInputModel,FlowGraphView> Members
+
         public FlowGraphView Load(FlowGraphViewInputModel input)
         {
-            var doc = documentSession.Load<QuestionnaireDocument>(input.QuestionnaireId);
-            if (doc.FlowGraph == null)
-                return null;
-            return new FlowGraphView(doc);
+            var flowGraph = documentSession.Include<FlowGraphDocument>(x => x.QuestionnaireDocumentId).Load(input.FlowGraphId);
+
+            QuestionnaireDocument questionnaire;
+            if (flowGraph == null)
+            {
+                documentSession.Store(new FlowGraphDocument() { Id = input.FlowGraphId });
+                questionnaire = documentSession.Load<QuestionnaireDocument>(input.QuestionnaireId);
+            }
+            else
+            {
+                questionnaire = documentSession.Load<QuestionnaireDocument>(flowGraph.QuestionnaireDocumentId);
+            }
+            return new FlowGraphView(flowGraph, new QuestionnaireView(questionnaire));
         }
+        #endregion
     }
 }

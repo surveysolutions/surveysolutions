@@ -4,6 +4,7 @@ using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
+using RavenQuestionnaire.Core.Views.FlowGraph;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 
@@ -15,8 +16,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         public string Title { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate { get; set; }
-
-        public AbstractFlowGraphView FlowGraph { get; set; }
 
         public AbstractQuestionView[] Questions
         {
@@ -57,7 +56,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         {
             Questions = new AbstractQuestionView[0];
             Groups = new AbstractGroupView[0];
-            FlowGraph = null;
         }
     }
 
@@ -107,7 +105,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         {
             this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();
             this.Groups = doc.Groups.Select(g => new GroupView(doc, g)).ToArray();
-            this.FlowGraph = new FlowGraphView(doc as QuestionnaireDocument);
         }
     }
 }

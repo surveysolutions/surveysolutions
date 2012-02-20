@@ -98,6 +98,8 @@
     <Compile Include="AbstractFactories\CompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="CommandHandlers\AddNewQuestionHandler.cs" />
+    <Compile Include="CommandHandlers\UpdateConditionsHandler.cs" />
+    <Compile Include="CommandHandlers\CreateNewFlowGraphHandler.cs" />
     <Compile Include="CommandHandlers\DeletePropagatedGroupHandler.cs" />
     <Compile Include="CommandHandlers\UpdateQuestionnaireFlowHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewCompleteQuestionnaireHandler.cs" />
@@ -122,6 +124,8 @@
     <Compile Include="CommandHandlers\UpdateStatusRestrictionHandler.cs" />
     <Compile Include="CommandHandlers\UpdateUserHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
+    <Compile Include="Commands\UpdateConditionsCommand.cs" />
+    <Compile Include="Commands\CreateNewFlowGraphCommand.cs" />
     <Compile Include="Commands\CreateNewGroupCommand.cs" />
     <Compile Include="Commands\CreateNewLocationCommand.cs" />
     <Compile Include="Commands\CreateNewStatusCommand.cs" />
@@ -151,6 +155,7 @@
     <Compile Include="Documents\CompleteQuestionnaireDocument.cs" />
     <Compile Include="Documents\EventDocument.cs" />
     <Compile Include="Documents\ExportSchemaDocument.cs" />
+    <Compile Include="Documents\FlowGraphDocument.cs" />
     <Compile Include="Documents\LocationDocument.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
     <Compile Include="Documents\ReportDocument.cs" />
@@ -159,6 +164,7 @@
     <Compile Include="Entities\CompleteQuestionnaire.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\Event.cs" />
+    <Compile Include="Entities\FlowGraph.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Iterators\Iterator.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
@@ -170,7 +176,6 @@
     <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\AnswerType.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs" />
-    <Compile Include="Entities\SubEntities\FlowGraph.cs" />
     <Compile Include="Entities\SubEntities\FlowConnection.cs" />
     <Compile Include="Entities\SubEntities\FlowBlock.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteGroup.cs" />
@@ -205,6 +210,8 @@
     <Compile Include="Entities\OrderRequestItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CompleteQuestionnaireRepository.cs" />
+    <Compile Include="Repositories\IFlowGraphRepository.cs" />
+    <Compile Include="Repositories\FlowGraphRepository.cs" />
     <Compile Include="Repositories\EntityRepository.cs" />
     <Compile Include="Repositories\EventRepository.cs" />
     <Compile Include="Repositories\ICompleteQuestionnaireRepository.cs" />
@@ -244,9 +251,14 @@
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportViewFactory.cs" />
+    <Compile Include="Views\FlowGraph\FlowBlockViewItem.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphView.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphViewFactory.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphViewInputModel.cs" />
+    <Compile Include="Views\FlowGraph\FlowGraphBrowseInputModel.cs" />
+    <Compile Include="Views\FlowGraph\FlowGraphBrowseView.cs" />
+    <Compile Include="Views\FlowGraph\FlowGraphBrowseItem.cs" />
+    <Compile Include="Views\FlowGraph\FlowGraphBrowseViewFactory.cs" />
     <Compile Include="Views\Group\CompleteGroupView.cs" />
     <Compile Include="Views\Group\CompleteGroupViewFactory.cs" />
     <Compile Include="Views\Group\CompleteGroupViewInputModel.cs" />

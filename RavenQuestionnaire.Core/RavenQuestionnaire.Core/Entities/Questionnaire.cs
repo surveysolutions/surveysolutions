@@ -77,17 +77,15 @@ namespace RavenQuestionnaire.Core.Entities
             question.UpdateAnswerList(answers);
             question.ConditionExpression = condition;
         }
-        public void UpdateFlow(List<FlowBlock> blocks, List<FlowConnection> connections)
+
+        public void UpdateConditionExpression(Guid publicKey, string condition)
         {
-            //TODO: check flow saving!
-            if (this.innerDocument.FlowGraph==null)
-            {
-                this.innerDocument.FlowGraph = new FlowGraph();
-            }
-            var graph = this.innerDocument.FlowGraph;
-            graph.Blocks = blocks;
-            graph.Connections = connections;
+            var question = new Questionnaire(this.innerDocument).Find<Question>(publicKey);
+            if (question == null)
+                return;
+            question.ConditionExpression = condition;
         }
+
         public bool Add(IComposite c, Guid? parent)
         {
             if (!parent.HasValue)
