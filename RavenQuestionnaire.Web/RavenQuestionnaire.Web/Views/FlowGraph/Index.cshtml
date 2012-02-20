@@ -1,0 +1,43 @@
+﻿@using RavenQuestionnaire.Core.Views.FlowGraph
+@using RavenQuestionnaire.Web.Models
+@model FlowGraphBrowseView
+@{
+    ViewBag.Title = "Questionnaire flows";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>
+    Take a New
+</h1>
+<table class="table table-striped table-bordered table-condensed">
+    <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Creation date
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDate)
+                </td>
+                <td class="buttons">
+                    @Html.ActionLink("Edit", "Edit", "FlowGraph", new { id = item.Id }, new { @class = "btn small btn-primary" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="pagination">
+    @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount)
+</div>
