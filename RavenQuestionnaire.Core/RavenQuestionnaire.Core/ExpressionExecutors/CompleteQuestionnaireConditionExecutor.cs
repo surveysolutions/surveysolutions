@@ -1,33 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NCalc;
-using NCalc.Domain;
-using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
-    public class CompleteQuestionnaireConditionExecutor : IExpressionExecutor<CompleteQuestionnaire, bool>
+    public class CompleteQuestionnaireConditionExecutor : IExpressionExecutor<IEnumerable<ICompleteAnswer>, bool>
     {
-        public bool Execute(CompleteQuestionnaire entity, string condition)
+        public bool Execute(IEnumerable<ICompleteAnswer> answers, string condition)
         {
             if (string.IsNullOrEmpty(condition))
                 return true;
             var e = new Expression(condition);
-            foreach (var answer in entity.GetAllAnswers())
+            foreach (var answer in answers)
             {
-                e.Parameters[answer.QuestionPublicKey.ToString()] = answer.AnswerType == AnswerType.Text
-                                                                        ? answer.CustomAnswer
-                                                                        : answer.AnswerText;
+                e.Parameters[answer.QuestionPublicKey.ToString()] = answer.AnswerValue ?? answer.AnswerText;
             }
 
             bool result = false;
             try
             {
-                result = (bool) e.Evaluate();
+                result = (bool)e.Evaluate();
             }
             catch (Exception)
             {

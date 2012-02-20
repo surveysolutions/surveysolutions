@@ -3,117 +3,188 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Xml.Serialization;
+using RavenQuestionnaire.Core.AbstractFactories;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Iterators;
+using RavenQuestionnaire.Core.Entities.Observers;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class CompleteGroup : ICompleteGroup<CompleteGroup, CompleteQuestion>
+    public class CompleteGroup : ICompleteGroup<ICompleteGroup, ICompleteQuestion>, IComposite
     {
         public CompleteGroup()
         {
-            Questions = new List<CompleteQuestion>();
-            Groups = new List<CompleteGroup>();
+            Questions = new List<ICompleteQuestion>();
+            Groups = new List<ICompleteGroup>();
+            this.PublicKey = Guid.NewGuid();
+            //   this.iteratorContainer = new IteratorContainer();
         }
 
         public CompleteGroup(string name)
             : this()
         {
-            this.GroupText = name;
+            this.Title = name;
         }
 
         public static explicit operator CompleteGroup(Group doc)
         {
-            /*CompleteGroup result;
-            if (doc.Propagated)
-                result = new PropagatableCompleteGroup()
-                             {
-                                 PublicKey = doc.PublicKey,
-                                 GroupText = doc.GroupText,
-                                 Propagated = true
-                             };*/
-            CompleteGroup result = new CompleteGroup
+            CompleteGroup result = new CompleteGroup(null)
                          {
                              PublicKey = doc.PublicKey,
-                             GroupText = doc.GroupText,
+                             Title = doc.Title,
                              Propagated = doc.Propagated
                          };
-            result.Questions = doc.Questions.Select(q => (CompleteQuestion) q).ToList();
-            result.Groups = doc.Groups.Select(q => (CompleteGroup) q).ToList();
+            result.Questions =
+               doc.Questions.Select(q => new CompleteQuestionFactory().ConvertToCompleteQuestion(q)).ToList();
+            result.Groups =
+                doc.Groups.Select(q => new CompleteGroupFactory().ConvertToCompleteGroup(q)).ToList();
             return result;
         }
 
         public Guid PublicKey { get; set; }
 
-        public string GroupText { get; set; }
+        public string Title { get; set; }
 
-        public bool Propagated { get; set; }
+        public Propagate Propagated { get; set; }
+        
+        public List<ICompleteQuestion> Questions { get; set; }
 
-        public List<CompleteQuestion> Questions { get; set; }
+        public List<ICompleteGroup> Groups { get; set; }
+        [XmlIgnore]
+        public Iterator<ICompleteAnswer> AnswerIterator
+        {
+            get { return new QuestionnaireAnswerIterator(this); }
+        }
+        // private IIteratorContainer iteratorContainer;
 
-        public List<CompleteGroup> Groups { get; set; }
-
-        public virtual bool Add(IComposite c, Guid? parent)
+        public virtual void Add(IComposite c, Guid? parent)
         {
             if (!parent.HasValue || parent.Value == PublicKey)
             {
-                CompleteGroup propogate = c as CompleteGroup;
-                if (propogate != null && propogate.Propagated)
+                PropagatableCompleteGroup propogateGroup = c as PropagatableCompleteGroup;
+                if (propogateGroup != null)
                 {
-                    Groups.Add(new PropagatableCompleteGroup(propogate, Guid.NewGuid()));
-                    return true;
+                    var group = Groups.FirstOrDefault(g => g.PublicKey.Equals(propogateGroup.PublicKey));
+                    if (group != null)
+                    {
+                        Groups.Add(propogateGroup);
+                        return;
+                    }
                 }
             }
-            if (Groups.Any(child => child.Add(c, parent)))
+
+            foreach (CompleteGroup completeGroup in Groups)
             {
-                return true;
+                try
+                {
+                    completeGroup.Add(c, parent);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
             }
             IPropogate propogated = c as IPropogate;
             if (propogated != null && !(this is IPropogate))
-                return false;
-            return Questions.Any(child => child.Add(c, parent));
+                throw new CompositeException();
+            foreach (ICompleteQuestion completeQuestion in Questions)
+            {
+                try
+                {
+                    completeQuestion.Add(c, parent);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
+            }
+            throw new CompositeException();
         }
 
-        public virtual bool Remove(IComposite c)
+        public virtual void Remove(IComposite c)
         {
+
             PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
             if (propogate != null)
             {
-                Groups.RemoveAll(
+                if (Groups.RemoveAll(
                     g =>
                     g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
-                    ((IPropogate) g).PropogationPublicKey.Equals(propogate.PropogationPublicKey));
+                    ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)) > 0)
+                    return;
             }
-            if (Groups.Any(child => child.Remove(c)))
+            foreach (CompleteGroup completeGroup in Groups)
             {
-                return true;
+                try
+                {
+                    completeGroup.Remove(c);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
             }
-            return Questions.Any(child => child.Remove(c));
+            if (c is IPropogate && !(this is IPropogate))
+                throw new CompositeException();
+            foreach (ICompleteQuestion completeQuestion in Questions)
+            {
+                try
+                {
+                    completeQuestion.Remove(c);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
+            }
+            throw new CompositeException();
         }
 
-        public virtual bool Remove<T>(Guid publicKey) where T : class, IComposite
+        public virtual void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            if(typeof(T)== typeof(PropagatableCompleteGroup))
+            if (typeof(T) == typeof(PropagatableCompleteGroup))
             {
-                Groups.RemoveAll(
-                   g =>
-                   g.PublicKey.Equals(publicKey));
+                if (Groups.RemoveAll(
+                    g =>
+                    g.PublicKey.Equals(publicKey)) > 0)
+                    return;
             }
-            if (Groups.Any(child => child.Remove<T>(publicKey)))
+            foreach (CompleteGroup completeGroup in Groups)
             {
-                return true;
+                try
+                {
+                    completeGroup.Remove<T>(publicKey);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
             }
-            return Questions.Any(child => child.Remove<T>(publicKey));
+            foreach (ICompleteQuestion completeQuestion in Questions)
+            {
+                try
+                {
+                    completeQuestion.Remove<T>(publicKey);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
+            }
+            throw new CompositeException();
         }
 
         public virtual T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            if (typeof (T) == GetType())
+            if (typeof(T) == GetType())
             {
                 if (this.PublicKey.Equals(publicKey))
                     return this as T;
             }
             var resultInsideGroups =
-                Groups.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+                Groups.Where(a => a is IComposite).Select(answer => (answer as IComposite).Find<T>(publicKey)).FirstOrDefault(result => result != null);
             if (resultInsideGroups != null)
                 return resultInsideGroups;
             var resultInsideQuestions =
@@ -123,5 +194,28 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return null;
         }
 
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            return
+             Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
+                 Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
+                     Questions.SelectMany(q => q.Find<T>(condition))).Union(
+                         Groups.Where(g => g is IComposite).SelectMany(g => (g as IComposite).Find<T>(condition)));
+        
+         /*   if (typeof(T) == GetType())
+            {
+                if (condition(this))
+                    return this as T;
+            }
+            var resultInsideGroups =
+                Groups.Where(a => a is IComposite).Select(answer => (answer as IComposite).Find<T>(condition)).FirstOrDefault(result => result != null);
+            if (resultInsideGroups != null)
+                return resultInsideGroups;
+            var resultInsideQuestions =
+                Questions.Select(answer => answer.Find<T>(condition)).FirstOrDefault(result => result != null);
+            if (resultInsideQuestions != null)
+                return resultInsideQuestions;
+            return null;*/
+        }
     }
 }

@@ -19,10 +19,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
     {
         private IDocumentSession documentSession;
         private ICompleteGroupFactory groupFactory;
-        public CompleteQuestionnaireEnumerableViewFactory(IDocumentSession documentSession, ICompleteGroupFactory groupFactory)
+        private IIteratorContainer iteratorContainer;
+        public CompleteQuestionnaireEnumerableViewFactory(IDocumentSession documentSession, ICompleteGroupFactory groupFactory, IIteratorContainer iteratorContainer)
         {
             this.documentSession = documentSession;
             this.groupFactory = groupFactory;
+            this.iteratorContainer = iteratorContainer;
         }
 
         public CompleteQuestionnaireViewEnumerable Load(CompleteQuestionnaireViewInputModel input)
@@ -30,11 +32,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
             {
                 var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
-                var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
-                RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup group = null;
+                var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc, iteratorContainer);
+                ICompleteGroup group = null;
 
-                Iterator<RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup, Guid> iterator =
-                    new QuestionnaireScreenIterator(completeQuestionnaireRoot);
+                Iterator<ICompleteGroup> iterator =
+                    new QuestionnaireScreenIterator(doc);
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
                     group =
@@ -45,13 +47,16 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 else if (input.PreviousGroupPublicKey.HasValue)
                 {
 
+                    iterator.SetCurrent(completeQuestionnaireRoot.Find
+                                            <RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup>(
+                                                input.PreviousGroupPublicKey.Value));
                     group = input.IsReverse
-                                ? iterator.GetPreviousBefoure(input.PreviousGroupPublicKey.Value)
-                                : iterator.GetNextAfter(input.PreviousGroupPublicKey.Value);
+                                ? iterator.Previous
+                                : iterator.Next;
                 }
                 else
                 {
-                    group = input.IsReverse ? iterator.Last : iterator.First;
+                    group = input.IsReverse ? iterator.Last() : iterator.First();
                 }
                 return new CompleteQuestionnaireViewEnumerable(doc, group, this.groupFactory);
             }

@@ -6,11 +6,18 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public interface IGroup: IComposite
+    public enum Propagate
+    {
+        None,
+        Propagated,
+        AutoPropagated
+    }
+
+    public interface IGroup : IComposite
     {
         Guid PublicKey { get; set; }
-        string GroupText { get; set; }
-        bool Propagated { get; set; }
+        string Title { get; set; }
+        Propagate Propagated { get; set; }
     }
 
     public interface IGroup<TGroup, TQuestion> : IGroup
@@ -20,112 +27,155 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         List<TQuestion> Questions { get; set; }
         List<TGroup> Groups { get; set; }
     }
-    public class Group : IGroup<Group, Question>
+    public class Group : IGroup<IGroup, IQuestion>
     {
         public Group()
         {
             this.PublicKey = Guid.NewGuid();
-            this.Questions= new List<Question>();
-            this.Groups = new List<Group>();
+            this.Questions = new List<IQuestion>();
+            this.Groups = new List<IGroup>();
         }
-        public Group(string text):this()
+        public Group(string text)
+            : this()
         {
-            this.GroupText = text;
+            this.Title = text;
         }
 
         public Guid PublicKey { get; set; }
-        public string GroupText { get; set; }
-        public bool Propagated { get; set; }
-        public List<Question> Questions  { get; set; }
-        public List<Group> Groups { get; set; }
+        public string Title { get; set; }
+        public Propagate Propagated { get; set; }
+        public List<IQuestion> Questions { get; set; }
+        public List<IGroup> Groups { get; set; }
         public void Update(string groupText)
         {
-            this.GroupText = groupText;
+            this.Title = groupText;
         }
-        public bool Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent)
         {
-            if (!parent.HasValue || parent.Value == PublicKey)
+            if (parent.HasValue && parent.Value == PublicKey)
             {
-                Group group = c as Group;
+                IGroup group = c as IGroup;
                 if (group != null)
                 {
                     Groups.Add(group);
-                    return true;
+                    return;
                 }
-                Question question = c as Question;
+                IQuestion question = c as IQuestion;
                 if (question != null)
                 {
                     Questions.Add(question);
-                    return true;
+                    return;
                 }
-                if (!parent.HasValue)
-                    return false;
             }
-            foreach (Group child in Groups)
+            foreach (IGroup child in Groups)
             {
-                if (child.Add(c, parent))
-                    return true;
+                try
+                {
+                    child.Add(c, parent);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
             }
-            foreach (Question child in Questions)
+            foreach (IQuestion child in Questions)
             {
-                if (child.Add(c, parent))
-                    return true;
+                try
+                {
+                    child.Add(c, parent);
+                    return;
+                }
+                catch (CompositeException)
+                {
+                }
             }
-            return false;
+            throw new CompositeException();
         }
 
-        public bool Remove(IComposite c)
+        public void Remove(IComposite c)
         {
-            foreach (Group child in Groups)
+            var group = this.Groups.FirstOrDefault(g => c is IGroup && g.PublicKey.Equals(((IGroup)c).PublicKey));
+            if (group != null)
             {
-                if (child == c)
-                {
-                    Groups.Remove(child);
-                    return true;
-                }
-                if (child.Remove(c))
-                    return true;
+                this.Groups.Remove(group);
+                return;
             }
-            foreach (Question child in Questions)
+            var question = this.Questions.FirstOrDefault(g => c is IQuestion && g.PublicKey.Equals(((IQuestion)c).PublicKey));
+            if (question != null)
             {
-                if (child == c)
-                {
-                    Questions.Remove(child);
-                    return true;
-                }
-                if (child.Remove(c))
-                    return true;
+                this.Questions.Remove(question);
+                return;
             }
-            return false;
+            foreach (IGroup child in this.Groups)
+            {
+                try
+                {
+                    child.Remove(c);
+                    return;
+                }
+                catch (CompositeException)
+                {
+
+                }
+            }
+            foreach (IQuestion child in this.Questions)
+            {
+                try
+                {
+                    child.Remove(c);
+                    return;
+                }
+                catch (CompositeException)
+                {
+
+                }
+            }
+            throw new CompositeException();
         }
-        public bool Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            foreach (Group child in Groups)
+            var group = this.Groups.FirstOrDefault(g => typeof(IGroup).IsAssignableFrom(typeof(T)) && g.PublicKey.Equals(publicKey));
+            if (group != null)
             {
-                if (child.PublicKey == publicKey)
-                {
-                    Groups.Remove(child);
-                    return true;
-                }
-                if (child.Remove<T>(publicKey))
-                    return true;
+                this.Groups.Remove(group);
+                return;
             }
-            foreach (Question child in Questions)
+            var question = this.Questions.FirstOrDefault(g => typeof(IQuestion).IsAssignableFrom(typeof(T)) && g.PublicKey.Equals(publicKey));
+            if (question != null)
             {
-                if (child.PublicKey == publicKey)
-                {
-                    Questions.Remove(child);
-                    return true;
-                }
-                if (child.Remove<T>(publicKey))
-                    return true;
+                this.Questions.Remove(question);
+                return;
             }
-            return false;
+            foreach (IGroup child in this.Groups)
+            {
+                try
+                {
+                    child.Remove<T>(publicKey);
+                    return;
+                }
+                catch (CompositeException)
+                {
+
+                }
+            }
+            foreach (IQuestion child in this.Questions)
+            {
+                try
+                {
+                    child.Remove<T>(publicKey);
+                    return;
+                }
+                catch (CompositeException)
+                {
+
+                }
+            }
+            throw new CompositeException();
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            foreach (Group child in Groups)
+            foreach (IGroup child in Groups)
             {
                 if (child is T && child.PublicKey == publicKey)
                     return child as T;
@@ -133,7 +183,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 if (subNodes != null)
                     return subNodes;
             }
-            foreach (Question child in Questions)
+            foreach (IQuestion child in Questions)
             {
                 if (child is T && child.PublicKey == publicKey)
                     return child as T;
@@ -142,6 +192,32 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                     return subNodes;
             }
             return null;
+        }
+
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            return
+                Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
+                    Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
+                        Questions.SelectMany(q => q.Find<T>(condition))).Union(
+                            Groups.SelectMany(g => g.Find<T>(condition)));
+            /*  foreach (Group child in Groups)
+            {
+                if (child is T && condition(this))
+                    return child as T;
+                T subNodes = child.Find<T>(condition);
+                if (subNodes != null)
+                    return subNodes;
+            }
+            foreach (Question child in Questions)
+            {
+                if (child is T && condition(this))
+                    return child as T;
+                T subNodes = child.Find<T>(condition);
+                if (subNodes != null)
+                    return subNodes;
+            }
+            return null;*/
         }
     }
 }

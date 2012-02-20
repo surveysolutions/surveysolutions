@@ -4,6 +4,8 @@ using System.Data;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Iterators;
+using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
@@ -13,28 +15,53 @@ namespace RavenQuestionnaire.Core.Entities
     public class CompleteQuestionnaire : IEntity<CompleteQuestionnaireDocument>, IComposite//, IPropogate
     {
         private CompleteQuestionnaireDocument innerDocument;
+        private IIteratorContainer iteratorContainer;
+        private CompositeHandler handler;
         public CompleteQuestionnaireDocument GetInnerDocument()
         {
             return innerDocument;
         }
         public CompleteQuestionnaire(Questionnaire template, UserLight user, SurveyStatus status)
         {
-            innerDocument = (CompleteQuestionnaireDocument)((IEntity<QuestionnaireDocument>) template).GetInnerDocument();
+            innerDocument =
+                (CompleteQuestionnaireDocument)((IEntity<QuestionnaireDocument>)template).GetInnerDocument();
             innerDocument.Creator = user;
             innerDocument.Status = status;
             innerDocument.Responsible = user;
+            handler = new CompositeHandler(innerDocument.Observers, this);
+            /* foreach (ICompleteGroup completeGroup in GroupIterator)
+             {
+                 var group = completeGroup as CompleteGroup;
+                 if (group != null)
+                     group.Subscribe(this.handler);
+             }*/
         }
 
-        public CompleteQuestionnaire(CompleteQuestionnaireDocument document)
+        public CompleteQuestionnaire(CompleteQuestionnaireDocument document, IIteratorContainer iteratorContainer)
         {
             this.innerDocument = document;
+            this.iteratorContainer = iteratorContainer;
+            handler = new CompositeHandler(innerDocument.Observers, this);
+            /*    foreach (ICompleteGroup completeGroup in GroupIterator)
+                {
+                    var group = completeGroup as CompleteGroup;
+                    if (group != null)
+                        group.Subscribe(this.handler);
+                }*/
         }
 
         public string CompleteQuestinnaireId
         {
             get { return innerDocument.Id; }
         }
-
+        /*  public void Subscribe(IComposite target, CompleteGroup group, Actions action)
+          {
+              group.Subscribe(this.handler);
+          }
+          public void Unsubscribe(CompleteGroup group)
+          {
+              group.Unsubscribe();
+          }*/
         public void SetStatus(SurveyStatus status)
         {
             innerDocument.Status = status;
@@ -45,128 +72,60 @@ namespace RavenQuestionnaire.Core.Entities
         {
             innerDocument.Responsible = user;
         }
-        public IEnumerable<CompleteAnswer> GetAllAnswers()
+
+        public Iterator<ICompleteAnswer> AnswerIterator
         {
-            List<CompleteAnswer> result= new List<CompleteAnswer>();
-            foreach (CompleteQuestion completeQuestion in GetAllQuestions())
-            {
-                foreach (CompleteAnswer completeAnswer in completeQuestion.Answers)
-                {
-                    completeAnswer.QuestionPublicKey = completeQuestion.PublicKey;
-                    if (completeAnswer.Selected)
-                        result.Add(completeAnswer);
-                }
-            }
-            return result;
-            //  return GetAllQuestions().SelectMany(q => q.Answers).Where(a => a.Selected);
+            get { return iteratorContainer.Create<ICompleteGroup<ICompleteGroup, ICompleteQuestion>, ICompleteAnswer>(this.innerDocument); }
         }
-        public IList<CompleteGroup> GetAllGroups()
+        public Iterator<ICompleteGroup> GroupIterator
         {
-            return innerDocument.Groups;
+            get { return new HierarchicalGroupIterator(this.innerDocument); }
         }
-        
+        /*   public Iterator<CompleteQuestion> QuestionIterator
+           {
+               get { return iteratorContainer.Create<CompleteQuestionnaireDocument, CompleteQuestion>(this.innerDocument); }
+           }*/
         #region Implementation of IComposite
 
-        public virtual bool Add(IComposite c, Guid? parent)
+        public virtual void Add(IComposite c, Guid? parent)
         {
-            if (!parent.HasValue)
+            CompleteGroup group = c as CompleteGroup;
+            if (group != null && group.Propagated != Propagate.None)
             {
-                CompleteGroup propogate = c as CompleteGroup;
-                if (propogate != null && propogate.Propagated && innerDocument.Groups.FirstOrDefault(g => g.PublicKey.Equals(propogate.PublicKey)) != null)
-                {
-                    innerDocument.Groups.Add(new PropagatableCompleteGroup(propogate, Guid.NewGuid()));
-                    return true;
-                }
+                if (!(group is PropagatableCompleteGroup))
+                    c = new PropagatableCompleteGroup(group, Guid.NewGuid());
+
             }
-            if (innerDocument.Groups.Any(child => child.Add(c, parent)))
-            {
-                return true;
-            }
-            return innerDocument.Questions.Any(child => child.Add(c, parent));
+            innerDocument.Add(c, parent);
+            this.handler.Add(c);
+
         }
 
-        public bool Remove(IComposite c)
+        public void Remove(IComposite c)
         {
-            PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
-            if (propogate != null)
-            {
-                innerDocument.Groups.RemoveAll(
-                    g =>
-                    g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
-                    ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey));
-            }
-            if (innerDocument.Groups.Any(child => child.Remove(c)))
-            {
-                return true;
-            }
-            return innerDocument.Questions.Any(child => child.Remove(c));
+            innerDocument.Remove(c);
+            this.handler.Remove(c);
         }
 
-        public bool Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            if (innerDocument.Groups.Any(child => child.Remove<T>(publicKey)))
-            {
-                return true;
-            }
-            return innerDocument.Questions.Any(child => child.Remove<T>(publicKey));
+            innerDocument.Remove<T>(publicKey);
+            this.handler.Remove<T>(publicKey);
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            var resultInsideGroups = innerDocument.Groups.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
-            if (resultInsideGroups != null)
-                return resultInsideGroups;
-            var resultInsideQuestions = innerDocument.Questions.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
-            if (resultInsideQuestions != null)
-                return resultInsideQuestions;
-            return null;
+            return innerDocument.Find<T>(publicKey);
+        }
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class, IComposite
+        {
+            return
+                innerDocument.Find<T>(condition);
+
         }
 
         #endregion
-        public List<CompleteQuestion> GetRootQuestions()
-        {
-            return innerDocument.Questions;
-        }
 
-        public List<CompleteQuestion> GetAllQuestions()
-        {
-            List<CompleteQuestion> result = new List<CompleteQuestion>();
-            result.AddRange(innerDocument.Questions);
-            Queue<CompleteGroup> groups = new Queue<CompleteGroup>();
-            foreach (var child in innerDocument.Groups)
-            {
-                groups.Enqueue(child);
-            }
-            while (groups.Count != 0)
-            {
-                var queueItem = groups.Dequeue();
-                result.AddRange(queueItem.Questions);
-                foreach (var child in queueItem.Groups)
-                {
-                    groups.Enqueue(child);
-                }
-            }
-            return result;
-        }
 
-      /*  #region Implementation of IPropogate
-
-        public void Propogate(Guid childGroupPublicKey)
-        {
-            var group = this.innerDocument.Groups.FirstOrDefault(g => g.PublicKey.Equals(childGroupPublicKey));
-            if (group == null)
-                throw new ArgumentException("Propogated group can't be founded");
-            this.innerDocument.Groups.Add(group);
-        }
-
-        public void RemovePropogated(Guid childGroupPublicKey)
-        {
-            var group = this.innerDocument.Groups.FirstOrDefault(g => g.PublicKey.Equals(childGroupPublicKey));
-            if (group == null)
-                throw new ArgumentException("Removed group can't be founded");
-            this.innerDocument.Groups.Remove(group);
-        }
-
-        #endregion*/
     }
 }

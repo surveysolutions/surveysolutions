@@ -24,22 +24,6 @@ namespace RavenQuestionnaire.Core.Views.Question
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
 
-        public AnswerView[] Answers
-        {
-            get { return _answers; }
-            set
-            {
-                _answers = value;
-                for (int i = 0; i < this._answers.Length; i++)
-                {
-                    this._answers[i].Index = i + 1;
-                }
-
-            }
-        }
-
-        private AnswerView[] _answers;
-
         public string QuestionnaireId
         {
             get { return IdUtil.ParseId(_questionnaireId); }
@@ -52,7 +36,54 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public AbstractQuestionView()
         {
-            Answers = new AnswerView[0];
+          
+        }
+
+        public AbstractQuestionView(string questionnaireId, Guid? groupPublicKey)
+            : this()
+        {
+            this.QuestionnaireId = questionnaireId;
+            this.GroupPublicKey = groupPublicKey;
+        }
+
+        public AbstractQuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
+            : this()
+        {
+            this.PublicKey = doc.PublicKey;
+            this.QuestionText = doc.QuestionText;
+            this.QuestionType = doc.QuestionType;
+            this.QuestionnaireId = questionnaire.Id;
+            this.ConditionExpression = doc.ConditionExpression;
+            this.StataExportCaption = doc.StataExportCaption;
+        }
+    }
+    public abstract class AbstractQuestionView<T> : AbstractQuestionView where T : AnswerView
+    {
+        public T[] Answers
+        {
+            get { return _answers; }
+            set
+            {
+                _answers = value;
+                if (this._answers == null)
+                {
+                    this._answers = new T[0];
+                    return;
+                }
+
+                for (int i = 0; i < this._answers.Length; i++)
+                {
+                    this._answers[i].Index = i + 1;
+                }
+
+            }
+        }
+
+        private T[] _answers;
+
+        public AbstractQuestionView():base()
+        {
+            Answers = new T[0];
         }
 
         public AbstractQuestionView(string questionnaireId, Guid? groupPublicKey)
@@ -74,10 +105,10 @@ namespace RavenQuestionnaire.Core.Views.Question
         }
     }
 
-    public abstract class QuestionView<TGroup, TQuestion, TAnswer> : AbstractQuestionView
-        where TAnswer : IAnswer
-        where TQuestion : IQuestion<TAnswer>
-        where TGroup : IGroup<TGroup, TQuestion>
+    public abstract class QuestionView<T, TGroup, TQuestion> : AbstractQuestionView<T>
+        where T: AnswerView
+        where TQuestion : IQuestion
+        where TGroup : IGroup
     {
         public QuestionView()
         {
@@ -97,7 +128,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             :
                 base(questionnaire, doc)
         {
-            this.Answers = doc.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
+            
             this.GroupPublicKey = GetQuestionGroup(questionnaire, doc.PublicKey);
         }
 
@@ -105,19 +136,23 @@ namespace RavenQuestionnaire.Core.Views.Question
         {
             if (questionnaire.Questions.Any(q => q.PublicKey.Equals(questionKey)))
                 return null;
-            var group = new Queue<TGroup>();
+            var group = new Queue<IGroup>();
             foreach (var child in questionnaire.Groups)
             {
                 group.Enqueue(child);
             }
             while (group.Count != 0)
             {
-                var queueItem = group.Dequeue();
-
+                var queueItem = group.Dequeue() as IGroup<TGroup, TQuestion>;
+                if(queueItem==null)
+                    continue;
+                
                 if (queueItem.Questions.Any(q => q.PublicKey.Equals(questionKey)))
                     return queueItem.PublicKey;
                 foreach (var child in queueItem.Groups)
                 {
+                   /* var childWithQuestion = child as IGroup<IGroup, TQuestion>;
+                    if(childWithQuestion!=null)*/
                     group.Enqueue(child);
                 }
             }
@@ -127,8 +162,7 @@ namespace RavenQuestionnaire.Core.Views.Question
 
     public class QuestionView :
         QuestionView
-            <RavenQuestionnaire.Core.Entities.SubEntities.Group, RavenQuestionnaire.Core.Entities.SubEntities.Question,
-            RavenQuestionnaire.Core.Entities.SubEntities.Answer>
+            <AnswerView, RavenQuestionnaire.Core.Entities.SubEntities.Group, IQuestion>
     {
         public QuestionView()
         {
@@ -142,18 +176,20 @@ namespace RavenQuestionnaire.Core.Views.Question
         protected QuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
             : base(questionnaire, doc)
         {
+            
         }
 
         public QuestionView(
             IQuestionnaireDocument
-                <RavenQuestionnaire.Core.Entities.SubEntities.Group,
-                RavenQuestionnaire.Core.Entities.SubEntities.Question> questionnaire,
-            RavenQuestionnaire.Core.Entities.SubEntities.Question doc)
+                <IGroup,
+                IQuestion> questionnaire,
+            IQuestion doc)
             :
                 base(questionnaire, doc)
         {
-            this.Answers = doc.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
-            this.GroupPublicKey = GetQuestionGroup(questionnaire, doc.PublicKey);
+            var question = doc as IQuestion<IAnswer>;
+            if (question != null)
+                this.Answers = question.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
         }
     }
 }
