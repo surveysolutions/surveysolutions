@@ -4,7 +4,7 @@
     {
         public static string CreateFlowGraphId(string id)
         {
-            return string.Format("flowgraphs/{0}", id);
+            return string.Format("flowgraphdocuments/{0}", id);
         }
         public static string CreateQuestionnaireId(string id)
         {

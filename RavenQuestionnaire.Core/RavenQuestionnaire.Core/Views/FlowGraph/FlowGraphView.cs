@@ -39,7 +39,7 @@ namespace RavenQuestionnaire.Core.Views.FlowGraph
             {
                 foreach (var block in blocks)
                 {
-                    var fBlock = flow.Blocks.FirstOrDefault(b => b.QuestionId.ToString() == block.Id);
+                    var fBlock = flow.Blocks.FirstOrDefault(b => b.PublicKey.ToString() == block.Id);
                     if (fBlock == null)
                     {
                         block.Left = 0;
