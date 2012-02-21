@@ -17,8 +17,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
     {
         public CompleteGroup()
         {
-            this.Questions = new ObservableCollectionS<ICompleteQuestion>();
-            this.Groups = new ObservableCollectionS<ICompleteGroup>();
+            this.Questions = new List<ICompleteQuestion>();
+            this.Groups = new List<ICompleteGroup>();
             this.PublicKey = Guid.NewGuid();
             this.observers=new List<IObserver<CompositeEventArgs>>();
             //   this.iteratorContainer = new IteratorContainer();
@@ -56,15 +56,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public Propagate Propagated { get; set; }
 
-        public ObservableCollectionS<ICompleteQuestion> Questions
+        public List<ICompleteQuestion> Questions
         {
             get { return questions; }
             set
             {
                 questions = value;
-                questions.GetObservableAddedValues().Subscribe(q => this.OnAdded(new CompositeAddedEventArgs(q)));
-                questions.GetObservableRemovedValues().Subscribe(
-                    q => OnRemoved(new CompositeRemovedEventArgs(null)));
                 foreach (ICompleteQuestion completeQuestion in questions)
                 {
                     this.OnAdded(new CompositeAddedEventArgs(completeQuestion));
@@ -72,17 +69,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             }
         }
 
-        private ObservableCollectionS<ICompleteQuestion> questions;
+        private List<ICompleteQuestion> questions;
 
-        public ObservableCollectionS<ICompleteGroup> Groups
+        public List<ICompleteGroup> Groups
         {
             get { return groups; }
             set
             {
                 groups = value;
-                this.Groups.GetObservableAddedValues().Subscribe(g => this.OnAdded(new CompositeAddedEventArgs(g)));
-                this.Groups.GetObservableRemovedValues().Subscribe(
-                    q => OnRemoved(new CompositeRemovedEventArgs(null)));
                 foreach (ICompleteGroup completeGroup in groups)
                 {
                     this.OnAdded(new CompositeAddedEventArgs(completeGroup));
@@ -90,7 +84,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             }
         }
 
-        private ObservableCollectionS<ICompleteGroup> groups;
+        private List<ICompleteGroup> groups;
         // private IIteratorContainer iteratorContainer;
 
         public virtual void Add(IComposite c, Guid? parent)
@@ -144,6 +138,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
             if (propogate != null)
             {
+                bool isremoved = false;
                 var propagatedGroups = this.Groups.Where(
                      g =>
                      g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
@@ -152,7 +147,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 {
                     Groups.Remove(propagatableCompleteGroup);
                     OnRemoved(new CompositeRemovedEventArgs(propagatableCompleteGroup));
+                    isremoved = true;
                 }
+                if(isremoved)
                 return;
                 /* if (Groups.RemoveAll(
                      g =>

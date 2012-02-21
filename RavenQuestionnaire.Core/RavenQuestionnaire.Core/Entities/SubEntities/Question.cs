@@ -13,7 +13,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
     public interface IQuestion : IComposite
     {
-        Guid PublicKey { get; set; }
         string QuestionText { get; set; }
         QuestionType QuestionType { get; set; }
         string ConditionExpression { get; set; }
@@ -22,7 +21,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
     public interface IQuestion<T> : IQuestion where T : IAnswer
     {
-        ObservableCollectionS<T> Answers { get; set; }
+        List<T> Answers { get; set; }
     }
 
     public class Question : /*IEntity<QuestionDocument>*/IQuestion<IAnswer>
@@ -31,18 +30,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Question()
         {
             PublicKey = Guid.NewGuid();
-            Answers = new ObservableCollectionS<IAnswer>();
-            this.Answers.GetObservableAddedValues().Subscribe(q => this.OnAdded(new CompositeAddedEventArgs(q)));
-            this.Answers.GetObservableRemovedValues().Subscribe(
-                q => OnRemoved(new CompositeRemovedEventArgs(null)));
-            this.observers=new List<IObserver<CompositeEventArgs>>();
-        /*    var customerChanges = Observable.FromEvent(
-           (EventHandler<NotifyCollectionChangedEventArgs> ev)
-              => new NotifyCollectionChangedEventHandler(ev),
-           ev => customers.CollectionChanged += ev,
-           ev => customers.CollectionChanged -= ev);*/
+            Answers = new List<IAnswer>();
+            this.observers = new List<IObserver<CompositeEventArgs>>();
 
         }
+
         public Question(string text, QuestionType type)
             : this()
         {
@@ -66,7 +58,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
-        public ObservableCollectionS<IAnswer> Answers { get; set; }
+        public List<IAnswer> Answers { get; set; }
         public string ConditionExpression { get; set; }
 
         //remove when exportSchema will be done 
@@ -90,6 +82,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             if (Answers.Any(a => a.PublicKey.Equals(answer.PublicKey)))
                 throw new DuplicateNameException("answer with current publick key already exist");
             Answers.Add(answer);
+            OnAdded(new CompositeAddedEventArgs(answer));
         }
 
         public void Add(IComposite c, Guid? parent)
@@ -112,6 +105,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             if (answer != null)
             {
                 Answers.Remove(answer);
+                OnRemoved(new CompositeRemovedEventArgs(answer));
                 return;
             }
             throw new CompositeException();
