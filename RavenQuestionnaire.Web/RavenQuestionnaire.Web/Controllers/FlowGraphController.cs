@@ -75,7 +75,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 foreach (var block in graph.Blocks)
                 {
-                    var inputs = graph.Connections.Where(c => c.Target == block.QuestionId).ToList();
+                    var inputs = graph.Connections.Where(c => c.Target == block.PublicKey).ToList();
                     var condition = string.Empty;
                     if (graph.ParentPublicKey.HasValue && !parents.Contains(graph.ParentPublicKey.Value))
                     {
@@ -118,7 +118,7 @@ namespace RavenQuestionnaire.Web.Controllers
                             condition = orList[0];
                     }
 
-                    conditions.Add(block.QuestionId, condition);
+                    conditions.Add(block.PublicKey, condition);
                 }
             }
             return conditions.Where(condition => !parents.Contains(condition.Key)).ToDictionary(condition => condition.Key, condition => condition.Value);

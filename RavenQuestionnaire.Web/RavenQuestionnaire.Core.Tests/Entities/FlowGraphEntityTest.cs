@@ -38,9 +38,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             graph.UpdateFlow(blocks, connections);
 
             Assert.AreEqual(blocks.Count, innerDocument.Blocks.Count);
-            Assert.AreEqual(blocks[0].QuestionId, innerDocument.Blocks[0].QuestionId);
-            Assert.AreEqual(blocks[1].QuestionId, innerDocument.Blocks[1].QuestionId);
-            Assert.AreEqual(blocks[2].QuestionId, innerDocument.Blocks[2].QuestionId);
+            Assert.AreEqual(blocks[0].PublicKey, innerDocument.Blocks[0].PublicKey);
+            Assert.AreEqual(blocks[1].PublicKey, innerDocument.Blocks[1].PublicKey);
+            Assert.AreEqual(blocks[2].PublicKey, innerDocument.Blocks[2].PublicKey);
 
             Assert.AreEqual(connections.Count, innerDocument.Connections.Count);
 
