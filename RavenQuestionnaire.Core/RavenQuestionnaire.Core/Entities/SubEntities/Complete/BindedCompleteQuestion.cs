@@ -14,7 +14,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public BindedCompleteQuestion()
         {
             PublicKey = Guid.NewGuid();
-            Answers = new ObservableCollectionS<ICompleteAnswer>();
+            Answers = new List<ICompleteAnswer>();
         }
 
         public BindedCompleteQuestion(ICompleteQuestion<ICompleteAnswer> template)
@@ -95,7 +95,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         #region Implementation of IQuestion<CompleteAnswer>
 
-        public ObservableCollectionS<ICompleteAnswer> Answers { get; set; }
+        public List<ICompleteAnswer> Answers { get; set; }
 
         #endregion
 

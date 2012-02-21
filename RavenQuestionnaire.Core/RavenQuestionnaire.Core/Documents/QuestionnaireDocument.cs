@@ -32,15 +32,8 @@ namespace RavenQuestionnaire.Core.Documents
         {
             CreationDate = DateTime.Now;
             LastEntryDate = DateTime.Now;
-            Questions = new ObservableCollectionS<IQuestion>();
-            Groups = new ObservableCollectionS<IGroup>();
-            this.Questions.GetObservableAddedValues().Subscribe(q => this.OnAdded(new CompositeAddedEventArgs(q)));
-            this.Questions.GetObservableRemovedValues().Subscribe(
-                q => OnRemoved(new CompositeRemovedEventArgs(null)));
-
-            this.Groups.GetObservableAddedValues().Subscribe(g => this.OnAdded(new CompositeAddedEventArgs(g)));
-            this.Groups.GetObservableRemovedValues().Subscribe(
-                q => OnRemoved(new CompositeRemovedEventArgs(null)));
+            Questions = new List<IQuestion>();
+            Groups = new List<IGroup>();
             Observers = new List<IObserver<CompositeInfo>>();
             FlowGraph = null;
             this.observers=new List<IObserver<CompositeEventArgs>>();
@@ -74,8 +67,32 @@ namespace RavenQuestionnaire.Core.Documents
 
         public DateTime? CloseDate { get; set; }
 
-        public ObservableCollectionS<IQuestion> Questions { get; set; }
-        public ObservableCollectionS<IGroup> Groups { get; set; }
+        public List<IQuestion> Questions
+        {
+            get { return questions; }
+            set
+            {
+                questions = value;
+                foreach (IQuestion completeQuestion in questions)
+                {
+                    this.OnAdded(new CompositeAddedEventArgs(completeQuestion));
+                }
+            }
+        }
+        private List<IQuestion> questions;
+        public List<IGroup> Groups
+        {
+            get { return groups; }
+            set
+            {
+                groups = value;
+                foreach (IGroup completeGroup in groups)
+                {
+                    this.OnAdded(new CompositeAddedEventArgs(completeGroup));
+                }
+            }
+        }
+        private List<IGroup> groups;
         public FlowGraph FlowGraph { get; set; }
         public List<IObserver<CompositeInfo>> Observers { get; set; }
 
