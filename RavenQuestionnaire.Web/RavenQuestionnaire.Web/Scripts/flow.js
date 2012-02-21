@@ -14,7 +14,8 @@ function FlowBlock(){
     this.Width = 0;
     this.Left = 0;
     this.Top = 0;
-    this.QuestionId = "";
+    this.PublicKey = "";
+    this.IsQuestion = false;
 } 
 
 
@@ -263,13 +264,14 @@ function FlowBlock(){
                 function getBlock(id) {
                     var block = $("#" + id);
                     var r = new FlowBlock();
-                    r.QuestionId = block.attr('id');
+                    r.PublicKey = block.attr('id');
                     r.Left = block.css('left').replace("px", "") * 1;
                     r.Top = block.css('top').replace("px", "") * 1;
                     r.Width = block.outerWidth();
                     r.Height = block.outerHeight();
                     r.LabelText = "";
                     r.Condition = "";
+                    r.IsQuestion = block.hasClass("question");
                     return r;
                 };
                 result.push(graph);

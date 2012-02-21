@@ -20,34 +20,63 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
     public class UpdateConditionsHandlerTest
     {
         [Test]
-        public void WhenCommandIsReceived_ConditionsAreUpdatedToRepository()
+        public void WhenCommandIsReceived_AllConditionsShouldBeUpdated()
         {
-            var innerDocument = new QuestionnaireDocument {Id = "qID"};
+            var innerDocument = new QuestionnaireDocument { Id = "qID" };
             var entity = new Questionnaire(innerDocument);
             var question1 = entity.AddQuestion("The First Question", "", QuestionType.SingleOption, string.Empty, null);
             var question2 = entity.AddQuestion("The Second Question", "", QuestionType.SingleOption, string.Empty, null);
             var question3 = entity.AddQuestion("The Third Question", "stataCap", QuestionType.SingleOption, string.Empty, null);
-            string validCondition = string.Format("[{0}]=='No'", question1.PublicKey);
             var conditions = new Dictionary<Guid, string>
                                  {
                                      {question1.PublicKey, ""},
-                                     {question2.PublicKey, "[some invalid]!~e xpression"},
-                                     {question3.PublicKey, validCondition}
+                                     {question2.PublicKey, "[some_valid]=='expression'"},
+                                     {question3.PublicKey, string.Format("[{0}]=='No'", question1.PublicKey)}
                                  };
 
             var questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
 
             var validator = new Mock<IExpressionExecutor<Questionnaire, bool>>();
-            //validator.Setup(x => x.Execute(entity, y)).Returns(true);
+            validator.Setup(x => x.Execute(entity, It.IsAny<string>())).Returns(true);
 
             var handler = new UpdateConditionsHandler(questionnaireRepositoryMock.Object, validator.Object);
 
             handler.Handle(new UpdateConditionsCommand(entity.QuestionnaireId, conditions, null));
 
-            Assert.AreEqual(string.Empty,innerDocument.Questions[0].ConditionExpression);
-            Assert.AreEqual(string.Empty,innerDocument.Questions[1].ConditionExpression);
-            Assert.AreEqual(validCondition, innerDocument.Questions[2].ConditionExpression);
+            Assert.AreEqual(conditions[question1.PublicKey], innerDocument.Questions[0].ConditionExpression);
+            Assert.AreEqual(conditions[question2.PublicKey], innerDocument.Questions[1].ConditionExpression);
+            Assert.AreEqual(conditions[question3.PublicKey], innerDocument.Questions[2].ConditionExpression);
+        }
+    
+        [Test]
+        public void WhenCommandIsReceived_ConditionsAreInvalid_NoUpdates()
+        {
+            var innerDocument = new QuestionnaireDocument { Id = "qID" };
+            var entity = new Questionnaire(innerDocument);
+            var question1 = entity.AddQuestion("The First Question", "", QuestionType.SingleOption, string.Empty, null);
+            var question2 = entity.AddQuestion("The Second Question", "", QuestionType.SingleOption, string.Empty, null);
+            var question3 = entity.AddQuestion("The Third Question", "stataCap", QuestionType.SingleOption, string.Empty, null);
+
+            var conditions = new Dictionary<Guid, string>
+                                 {
+                                     {question1.PublicKey, "@!%R#%"},
+                                     {question2.PublicKey, "[some invalid]!~e xpression"}
+                                 };
+
+            var questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
+            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+
+            var validator = new Mock<IExpressionExecutor<Questionnaire, bool>>();
+            validator.Setup(x => x.Execute(entity, It.IsAny<string>())).Returns(false);
+
+            var handler = new UpdateConditionsHandler(questionnaireRepositoryMock.Object, validator.Object);
+
+            handler.Handle(new UpdateConditionsCommand(entity.QuestionnaireId, conditions, null));
+
+            Assert.AreEqual(string.Empty, innerDocument.Questions[0].ConditionExpression);
+            Assert.AreEqual(string.Empty, innerDocument.Questions[1].ConditionExpression);
+            Assert.AreEqual(string.Empty, innerDocument.Questions[2].ConditionExpression);
         }
     }
 }

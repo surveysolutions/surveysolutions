@@ -8,25 +8,18 @@
 {
     <div id="@currentRowId">
         <div class="control-group">
-            @Html.LabelFor(model => Model.AnswerText, new {@class="control-label"})
+            @Html.LabelFor(model => Model.AnswerText, new { @class = "control-label" })
             <div class="controls">
-                <div class="inline-inputs">
-                    @Html.EditorFor(model => Model.AnswerValue)
-                </div>
-            </div>
-        </div>
-                <div class="inline-inputs">
-                    @Html.EditorFor(model => Model.AnswerText)
-                </div>
+                @Html.TextBoxFor(model => Model.AnswerValue, new { @class = "span1" })
+                @Html.EnumDropDownListFor(model => Model.AnswerType)
+                
             </div>
         </div>
         <div class="control-group">
             <div class="controls">
-                <div class="inline-inputs">
-                    @Html.EnumDropDownListFor(model => Model.AnswerType)
-                    <a href="javascript:void(0)" onclick="$('#@currentRowId').remove()" class="btn btn-mini btn-danger">
-                        <i class="icon-remove icon-white"></i>Delete</a> <span class="help-inline">@Html.ValidationMessageFor(model => Model.AnswerText)</span>
-                </div>
+                @Html.TextBoxFor(model => Model.AnswerText)
+                <a href="javascript:void(0)" onclick="$('#@currentRowId').remove()" class="btn btn-mini btn-danger">
+                    <i class="icon-remove icon-white"></i>Delete</a> <span class="help-inline">@Html.ValidationMessageFor(model => Model.AnswerText)</span>
             </div>
         </div>
         @Html.HiddenFor(model => Model.PublicKey)

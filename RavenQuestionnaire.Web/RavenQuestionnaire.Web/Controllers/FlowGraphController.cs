@@ -43,10 +43,10 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult _SaveFlow(string questionnaireId, List<FlowGraph> graphs)
+        public ActionResult _SaveFlow(string questionnaireId, List<FlowGraphClient> graphs)
         {
-            var blocks = graphs.SelectMany(graph => graph.Blocks).ToList();
-            var connections = graphs.SelectMany(graph => graph.Connections).ToList();
+            var blocks = graphs.SelectMany(graph => graph.Blocks).Select(b => b.Convert()).ToList();
+            var connections = graphs.SelectMany(graph => graph.Connections).Select(c => c.Convert()).ToList();
             try
             {
                 commandInvoker.Execute(new UpdateQuestionnaireFlowCommand(questionnaireId, blocks, connections, GlobalInfo.GetCurrentUser()));
@@ -55,7 +55,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 return Json(new { status = "not saved" });
             }
-            
+
             var conditions = GetConditions(graphs);
 
             if (conditions.Count > 0)
@@ -66,62 +66,25 @@ namespace RavenQuestionnaire.Web.Controllers
             return Json(new { status = "flow saved" });
         }
 
-        public static Dictionary<Guid, string> GetConditions(List<FlowGraph> graphs)
+        public static Dictionary<Guid, string> GetConditions(List<FlowGraphClient> graphs)
         {
-            var conditions = new Dictionary<Guid, string>();
-            var parents = new List<Guid>();
+            var blocks = graphs.SelectMany(graph => graph.Blocks).ToList();
 
             foreach (var graph in graphs)
             {
-                foreach (var block in graph.Blocks)
+                if (graph.ParentPublicKey.HasValue)
                 {
-                    var inputs = graph.Connections.Where(c => c.Target == block.QuestionId).ToList();
-                    var condition = string.Empty;
-                    if (graph.ParentPublicKey.HasValue && !parents.Contains(graph.ParentPublicKey.Value))
-                    {
-                        parents.Add(graph.ParentPublicKey.Value);
-                    }
-                    if (inputs.Count == 0 && graph.ParentPublicKey.HasValue)
-                    {
-                        condition = conditions[graph.ParentPublicKey.Value];
-                    }
-                    if (inputs.Count == 1)
-                    {
-                        var andList = new List<string>();
-                        var c = inputs[0].Condition;
-                        if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
-                        c = conditions[inputs[0].Source];
-                        if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
-                        if (andList.Count == 1)
-                            condition = andList[0];
-                        else if (andList.Count > 1)
-                            condition = "(" + string.Join(") and (", andList) + ")";
-                    }
-                    else if (inputs.Count > 1)
-                    {
-                        var orList = new List<string>();
-                        foreach (var input in inputs)
-                        {
-                            var andList = new List<string>();
-                            var c = input.Condition;
-                            if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
-                            c = conditions[input.Source];
-                            if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
-                            if (andList.Count > 1)
-                                orList.Add("(" + string.Join(") and (", andList) + ")");
-                            else if (andList.Count == 1)
-                                orList.Add(andList[0]);
-                        }
-                        if (orList.Count > 1)
-                            condition = "(" + string.Join(") or (", orList) + ")";
-                        else if (orList.Count == 1)
-                            condition = orList[0];
-                    }
-
-                    conditions.Add(block.QuestionId, condition);
+                    var block = blocks.SingleOrDefault(b => b.PublicKey == graph.ParentPublicKey.Value);
+                    if (block != null)
+                        block.Graphs.Add(graph);
                 }
             }
-            return conditions.Where(condition => !parents.Contains(condition.Key)).ToDictionary(condition => condition.Key, condition => condition.Value);
+            foreach (var graph in graphs.Where(g => !g.ParentPublicKey.HasValue))
+            {
+                graph.Calc(string.Empty);
+            }
+
+            return blocks.Where(b => b.IsQuestion).ToDictionary(b => b.PublicKey, b => b.Condition);
         }
     }
 }

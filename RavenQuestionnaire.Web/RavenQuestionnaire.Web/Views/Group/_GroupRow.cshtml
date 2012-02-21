@@ -24,14 +24,14 @@
                                                                                    {
                                                                                        UpdateTargetId = "addNewQuestion",
                                                                                        OnSuccess = "OpenModal"
-                                                                                   }, new { @class = "btn btn-info" }, "icon-plus icon-white")
+                                                                                   }, new { @class = "btn btn-info btn-mini" }, "icon-plus icon-white")
             @Ajax.ActionLinkWithIcon("Add Group", "Create", "Group", new { id = Model.QuestionnaireId, parentGroup = Model.PublicKey }, new AjaxOptions
                                                                                    {
                                                                                        UpdateTargetId = "addNewQuestion",
                                                                                        OnSuccess = "OpenModal"
-                                                                                   }, new { @class = "btn btn-info" }, "icon-plus icon-white")
-            @Ajax.ActionLinkWithIcon("Edit", "Edit", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-primary" }, "icon-pencil icon-white")
-            @Ajax.ActionLinkWithIcon("Delete", "Delete", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn btn-danger" }, "icon-remove  icon-white")
+                                                                                   }, new { @class = "btn btn-info btn-mini" }, "icon-plus icon-white")
+            @Ajax.ActionLinkWithIcon("Edit", "Edit", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-primary btn-mini" }, "icon-pencil icon-white")
+            @Ajax.ActionLinkWithIcon("Delete", "Delete", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn btn-danger btn-mini" }, "icon-remove  icon-white")
         </div>
     </div>
 <div id='@allQuestions'>

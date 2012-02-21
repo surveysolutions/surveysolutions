@@ -8,8 +8,8 @@
 <div class="question-header">
     <h3>@Model.Index) @Html.DisplayFor(modelItem => Model.QuestionText)</h3> 
         <div class="btn-group">
-            @Ajax.ActionLinkWithIcon("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-primary" }, "icon-pencil icon-white")
-            @Ajax.ActionLinkWithIcon("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn btn-danger" }, "icon-remove icon-white")
+            @Ajax.ActionLinkWithIcon("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-primary btn-mini" }, "icon-pencil icon-white")
+            @Ajax.ActionLinkWithIcon("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn btn-danger btn-mini" }, "icon-remove icon-white")
         </div>
     </div>
     <div class="question-body">

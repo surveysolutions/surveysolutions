@@ -11,11 +11,8 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Export;
 using RavenQuestionnaire.Core.Export.csv;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
-using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Web.Models;
-using FlowBlock = RavenQuestionnaire.Core.Entities.SubEntities.FlowBlock;
-using FlowGraph = RavenQuestionnaire.Web.Models.FlowGraph;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -62,106 +59,7 @@ namespace RavenQuestionnaire.Web.Controllers
             var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
             return View(model);
         }
-
-        public ViewResult Flow(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-                throw new HttpException(404, "Invalid quesry string parameters");
-
-            var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
-
-            return View(model);
-        }
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult _SaveFlow(string questionnaireId, List<FlowGraph> graphs)
-        {
-            var blocks = graphs.SelectMany(graph => graph.Blocks).ToList();
-            var connections = graphs.SelectMany(graph => graph.Connections).ToList();
-            try
-            {
-                commandInvoker.Execute(new UpdateQuestionnaireFlowCommand(questionnaireId, blocks, connections, GlobalInfo.GetCurrentUser()));
-            }
-            catch (Exception)
-            {
-                return Json(new { status = "not saved" });
-            }
-
-            var conditions = new Dictionary<Guid, string>();
-            var parents = new List<Guid>();
-            foreach (var graph in graphs)
-            {
-                foreach (var block in graph.Blocks)
-                {
-                    var inputs = graph.Connections.Where(c => c.Target == block.PublicKey).ToList();
-                    var condition = string.Empty;
-                    if (graph.ParentPublicKey.HasValue && !parents.Contains(graph.ParentPublicKey.Value))
-                    {
-                        parents.Add(graph.ParentPublicKey.Value);
-                    }
-                    if (inputs.Count == 0 && graph.ParentPublicKey.HasValue)
-                    {
-                        condition = conditions[graph.ParentPublicKey.Value];
-                    }
-                    if (inputs.Count == 1)
-                    {
-                        var andList = new List<string>();
-                        var c = inputs[0].LabelText;
-                        if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
-                        if (conditions.ContainsKey(inputs[0].Source))
-                        {
-                            c = conditions[inputs[0].Source];
-                            if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
-                        }
-                        if (andList.Count == 1)
-                            condition = andList[0];
-                        else if (andList.Count > 1)
-                            condition = "(" + string.Join(") and (", andList) + ")";
-                    }
-                    else if (inputs.Count > 1)
-                    {
-                        var orList = new List<string>();
-                        foreach (var input in inputs)
-                        {
-                            var andList = new List<string>();
-                            var c = input.LabelText;
-                            if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
-                            if (conditions.ContainsKey(input.Source))
-                            {
-                                c = conditions[input.Source];
-                                if (!string.IsNullOrWhiteSpace(c)) andList.Add(c);
-                            }
-                            if (andList.Count > 1)
-                                orList.Add("(" + string.Join(") and (", andList) + ")");
-                            else if (andList.Count == 1)
-                                orList.Add(andList[0]);
-                        }
-                        if (orList.Count > 1)
-                            condition = "(" + string.Join(") or (", orList) + ")";
-                        else if (orList.Count == 1)
-                            condition = orList[0];
-                    }
-
-                    conditions.Add(block.PublicKey, condition);
-                }
-            }
-            foreach (var condition in conditions.Where(kvp => !parents.Contains(kvp.Key)))
-            {
-                var question = viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(condition.Key, questionnaireId));
-                if(question==null)
-                    continue;
-                commandInvoker.Execute(new UpdateQuestionCommand(questionnaireId, question.PublicKey,
-                                                               question.QuestionText,
-                                                               question.StataExportCaption,
-                                                               question.QuestionType,
-                                                               condition.Value,
-                                                               question.Answers,
-                                                               GlobalInfo.GetCurrentUser()));
-            }
-            
-
-
-            return Json(new { status = "flow saved" });
-        }
+       
         //
         // GET: /Questionnaire/Create
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor)]
