@@ -16,7 +16,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public BindedQuestion()
         {
             PublicKey = Guid.NewGuid();
-            Answers=new ObservableCollectionS<IAnswer>();
+            Answers=new List<IAnswer>();
         }
         public BindedQuestion(IQuestion<IAnswer> template)
         {
@@ -35,7 +35,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public QuestionType QuestionType { get; set; }
 
         [JsonIgnore]
-        public ObservableCollectionS<IAnswer> Answers { get; set; }
+        public List<IAnswer> Answers { get; set; }
 
         [JsonIgnore]
         public string ConditionExpression { get; set; }

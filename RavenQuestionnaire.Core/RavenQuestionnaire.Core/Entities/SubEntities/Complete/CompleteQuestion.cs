@@ -9,6 +9,7 @@ using System.Text;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.Observers;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
@@ -19,11 +20,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             this.PublicKey = Guid.NewGuid();
             this.Enabled = true;
-            this.Answers = new ObservableCollectionS<ICompleteAnswer>();
-
-            this.Answers.GetObservableAddedValues().Subscribe(q => this.OnAdded(new CompositeAddedEventArgs(null,q)));
-            this.Answers.GetObservableRemovedValues().Subscribe(
-                q => OnRemoved(new CompositeRemovedEventArgs(null,null)));
+            this.Answers = new List<ICompleteAnswer>();
 
             //this.Answers.GetObservablePropertyChanges().Subscribe(e=>e.EventArgs)
             this.observers=new List<IObserver<CompositeEventArgs>>();
@@ -50,39 +47,43 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
           
             foreach (IAnswer answer in doc.Answers)
             {
-                result.Answers.Add(new CompleteAnswerFactory().ConvertToCompleteAnswer(answer));
+                var newanswer = new CompleteAnswerFactory().ConvertToCompleteAnswer(answer);
+                result.Answers.Add(newanswer);
+                result.OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(result), newanswer));
             }
             return result;
         }
 
         protected void SubscribeAddedAnswers()
         {
-            this.Where(
-                q => q is CompositeAddedEventArgs && ((CompositeAddedEventArgs) q).AddedComposite is ICompleteAnswer).
-                Select(q => q as CompositeAddedEventArgs).Subscribe(
+            this.GetAllAnswerAddedEvents().Subscribe(
                     Observer.Create<CompositeAddedEventArgs>(HandleAddedAnswer));
         }
         protected void HandleAddedAnswer(CompositeAddedEventArgs e)
         {
             ((ICompleteAnswer) e.AddedComposite).QuestionPublicKey = this.PublicKey;
         }
-
+        
         public Guid PublicKey { get; set; }
 
         public string QuestionText { get; set; }
 
         public QuestionType QuestionType { get; set; }
 
-        public ObservableCollectionS<ICompleteAnswer> Answers
+        public List<ICompleteAnswer> Answers
         {
-            get; set; /* get { return answers; }
-             set
-             {
-                 answers = value;
-                 answers.ForEach(a => a.QuestionPublicKey = this.PublicKey);
-             }*/ }
+            get { return answers; }
+            set
+            {
+                answers = value;
+                foreach (ICompleteAnswer completeAnswer in answers)
+                {
+                    OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), completeAnswer));
+                }
+            }
+        }
 
-       // private ObservableCollectionS<ICompleteAnswer> answers;
+        private List<ICompleteAnswer> answers;
 
 
         public string ConditionExpression { get; set; }
