@@ -37,10 +37,10 @@ namespace RavenQuestionnaire.Core.Documents
             this.LastEntryDate = DateTime.Now;
 
             this.compositeobservers = new List<IObserver<CompositeEventArgs>>();
-            this.Questions = new ObservableCollectionS<ICompleteQuestion>();
-         
+            this.Questions = new List<ICompleteQuestion>();
 
-            this.Groups=new ObservableCollectionS<ICompleteGroup>();
+
+            this.Groups = new List<ICompleteGroup>();
            
             
             this.Observers = new List<IObserver<CompositeInfo>>();
@@ -122,41 +122,32 @@ namespace RavenQuestionnaire.Core.Documents
 
         #region Implementation of IQuestionnaireDocument
 
-        public ObservableCollectionS<ICompleteQuestion> Questions
+        public List<ICompleteQuestion> Questions
         {
             get { return questions; }
             set
             {
                 questions = value;
-                questions.GetObservableAddedValues().Subscribe(q => this.OnAdded(new CompositeAddedEventArgs(q)));
-                questions.GetObservableRemovedValues().Subscribe(
-                    q => OnRemoved(new CompositeRemovedEventArgs(null)));
                 foreach (ICompleteQuestion completeQuestion in questions)
                 {
                     this.OnAdded(new CompositeAddedEventArgs(completeQuestion));
                 }
             }
         }
-
-        private ObservableCollectionS<ICompleteQuestion> questions;
-
-        public ObservableCollectionS<ICompleteGroup> Groups
+        private List<ICompleteQuestion> questions;
+        public List<ICompleteGroup> Groups
         {
             get { return groups; }
             set
             {
                 groups = value;
-                this.Groups.GetObservableAddedValues().Subscribe(g => this.OnAdded(new CompositeAddedEventArgs(g)));
-                this.Groups.GetObservableRemovedValues().Subscribe(
-                    q => OnRemoved(new CompositeRemovedEventArgs(null)));
                 foreach (ICompleteGroup completeGroup in groups)
                 {
                     this.OnAdded(new CompositeAddedEventArgs(completeGroup));
                 }
             }
         }
-
-        private ObservableCollectionS<ICompleteGroup> groups;
+        private List<ICompleteGroup> groups;
 
         public string Id { get; set; }
 
@@ -232,6 +223,7 @@ namespace RavenQuestionnaire.Core.Documents
             PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
             if (propogate != null)
             {
+                bool isremoved = false;
                 var propagatedGroups = this.Groups.Where(
                     g =>
                     g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
@@ -240,8 +232,10 @@ namespace RavenQuestionnaire.Core.Documents
                 {
                     Groups.Remove(propagatableCompleteGroup);
                     OnRemoved(new CompositeRemovedEventArgs(propagatableCompleteGroup));
+                    isremoved = true;
                 }
-                return;
+                if (isremoved)
+                    return;
 
             }
             foreach (CompleteGroup completeGroup in this.Groups)

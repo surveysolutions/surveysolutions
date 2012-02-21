@@ -26,8 +26,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         where TQuestion : IQuestion
         where TGroup : IGroup
     {
-        ObservableCollectionS<TQuestion> Questions { get; set; }
-        ObservableCollectionS<TGroup> Groups { get; set; }
+        List<TQuestion> Questions { get; set; }
+        List<TGroup> Groups { get; set; }
     }
     public class Group : IGroup<IGroup, IQuestion>
     {
@@ -35,15 +35,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             this.PublicKey = Guid.NewGuid();
             this.Observers = new List<IObserver<CompositeEventArgs>>();
-            this.Questions = new ObservableCollectionS<IQuestion>();
-            this.Groups = new ObservableCollectionS<IGroup>();
-            this.Questions.GetObservableAddedValues().Subscribe(q => this.OnAdded(new CompositeAddedEventArgs(q)));
-            this.Questions.GetObservableRemovedValues().Subscribe(
-                q => OnRemoved(new CompositeRemovedEventArgs(null)));
-
-            this.Groups.GetObservableAddedValues().Subscribe(g => this.OnAdded(new CompositeAddedEventArgs(g)));
-            this.Groups.GetObservableRemovedValues().Subscribe(
-                q => OnRemoved(new CompositeRemovedEventArgs(null)));
+            this.Questions = new List<IQuestion>();
+            this.Groups = new List<IGroup>();
+          
         }
 
         public Group(string text)
@@ -55,8 +49,32 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Guid PublicKey { get; set; }
         public string Title { get; set; }
         public Propagate Propagated { get; set; }
-        public ObservableCollectionS<IQuestion> Questions { get; set; }
-        public ObservableCollectionS<IGroup> Groups { get; set; }
+        public List<IQuestion> Questions
+        {
+            get { return questions; }
+            set
+            {
+                questions = value;
+                foreach (IQuestion completeQuestion in questions)
+                {
+                    this.OnAdded(new CompositeAddedEventArgs(completeQuestion));
+                }
+            }
+        }
+        private List<IQuestion> questions;
+        public List<IGroup> Groups
+        {
+            get { return groups; }
+            set
+            {
+                groups = value;
+                foreach (IGroup completeGroup in groups)
+                {
+                    this.OnAdded(new CompositeAddedEventArgs(completeGroup));
+                }
+            }
+        }
+        private List<IGroup> groups;
         public void Update(string groupText)
         {
             this.Title = groupText;
@@ -69,6 +87,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 if (group != null)
                 {
                     Groups.Add(group);
+                    OnAdded(new CompositeAddedEventArgs(group));
                 //    group.Subscribe(this);
                     return;
                 }
@@ -76,6 +95,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 if (question != null)
                 {
                     Questions.Add(question);
+                    OnAdded(new CompositeAddedEventArgs(question));
                   //  question.Subscribe(this);
                     return;
                 }
@@ -111,12 +131,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             if (group != null)
             {
                 this.Groups.Remove(group);
+                OnRemoved(new CompositeRemovedEventArgs(group));
                 return;
             }
             var question = this.Questions.FirstOrDefault(g => c is IQuestion && g.PublicKey.Equals(((IQuestion)c).PublicKey));
             if (question != null)
             {
                 this.Questions.Remove(question);
+                OnRemoved(new CompositeRemovedEventArgs(question));
                 return;
             }
             foreach (IGroup child in this.Groups)
