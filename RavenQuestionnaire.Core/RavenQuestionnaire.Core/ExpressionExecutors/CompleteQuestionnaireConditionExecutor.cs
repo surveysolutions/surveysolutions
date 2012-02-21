@@ -36,7 +36,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
                                                    dependency.Find<ICompleteAnswer>(a => a.Selected).FirstOrDefault();
                                                if (answer == null)
                                                {
-                                                   args.Result = null;
+                                                   args.Result = string.Empty;
                                                    return;
                                                }
                                                //question wasn't propagated so we looking for only main question
@@ -62,7 +62,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
                                                    FirstOrDefault();
                                            if (answerPropagated == null)
                                            {
-                                               args.Result = null;
+                                               args.Result = string.Empty;
                                                return;
                                            }
                                            args.Result = answerPropagated.AnswerValue ?? answerPropagated.AnswerText;
