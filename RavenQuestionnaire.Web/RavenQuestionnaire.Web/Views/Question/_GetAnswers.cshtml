@@ -17,7 +17,7 @@
         @foreach (var answer in Model.Source.Answers)
         {
             <p>
-                @Html.RadioButton("AnswerPublicKey", answer.PublicKey, false, new{ text=answer.AnswerText})
+                @Html.RadioButton("AnswerPublicKey", answer.PublicKey, false, new{ text=answer.AnswerText, num = answer.AnswerValue})
                 @answer.AnswerText
             </p>
         }
@@ -31,6 +31,7 @@
         <input type="submit" value="Save" class="btn btn-primary" onclick="HideEditConditionForm(
     '@Model.Source.PublicKey',
             '@Model.TargetPublicKey',    
-            $('input:radio[name=AnswerPublicKey]:checked').val())" />
+            $('input:radio[name=AnswerPublicKey]:checked').val(),
+            $('input:radio[name=AnswerPublicKey]:checked').attr('num'))" />
     </div>
 </div>

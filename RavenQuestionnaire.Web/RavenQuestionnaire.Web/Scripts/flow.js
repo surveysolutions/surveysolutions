@@ -349,11 +349,11 @@ function FlowBlock(){
             }
             return result;
         },
-        updateConnectionLabel: function (searchOption, text) {
+        updateConnectionLabel: function (searchOption, text, num) {
             var connection = jsPlumb.getConnections(searchOption)[0];
 
             jsPlumbDemo.labelTexts[connection.id] = "=="+"'"+text+"'";
-            jsPlumbDemo.labelConditions[connection.id] = "["+searchOption.source+"]=="+"'"+text+"'";
+            jsPlumbDemo.labelConditions[connection.id] = "["+searchOption.source+"]=="+num;
 
             if (connection != null) {
                 var label = connection.getOverlay("label");

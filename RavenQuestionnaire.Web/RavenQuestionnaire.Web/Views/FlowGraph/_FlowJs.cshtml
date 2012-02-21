@@ -62,13 +62,13 @@
     function OpenModal() {
         $('#editConnection').modal('show');
     }
-    function HideEditConditionForm(sourceId, targetId, answerId) {
+    function HideEditConditionForm(sourceId, targetId, answerId, answerNum) {
         var options = {};
         var text = $('input:radio[value='+answerId+']').attr('text');
         options.scope = $("#" + sourceId).attr('scope');
         options.source = sourceId;
         options.target = targetId;
-        jsPlumbDemo.updateConnectionLabel(options, text);
+        jsPlumbDemo.updateConnectionLabel(options, text, answerNum);
         
         $('#editConnection').modal('hide');
         SaveFlow();
