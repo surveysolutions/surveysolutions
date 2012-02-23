@@ -20,6 +20,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     {
         string Title { get; set; }
         Propagate Propagated { get; set; }
+        List<Guid> Triggers { get; set; }
     }
 
     public interface IGroup<TGroup, TQuestion> : IGroup
@@ -36,6 +37,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             this.PublicKey = Guid.NewGuid();
             this.Observers = new List<IObserver<CompositeEventArgs>>();
             this.Questions = new List<IQuestion>();
+            this.Triggers = new List<Guid>();
             this.Groups = new List<IGroup>();
           
         }
@@ -49,6 +51,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Guid PublicKey { get; set; }
         public string Title { get; set; }
         public Propagate Propagated { get; set; }
+
+        public List<Guid> Triggers { get; set; }
+
         public List<IQuestion> Questions
         {
             get { return questions; }

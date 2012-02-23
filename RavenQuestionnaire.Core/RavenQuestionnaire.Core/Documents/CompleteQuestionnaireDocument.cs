@@ -42,9 +42,6 @@ namespace RavenQuestionnaire.Core.Documents
 
             this.Groups = new List<ICompleteGroup>();
            
-            
-            this.Observers = new List<IObserver<CompositeInfo>>();
-            
             SubscribeBindedQuestions();
         }
         public static explicit operator CompleteQuestionnaireDocument(QuestionnaireDocument doc)
@@ -52,7 +49,8 @@ namespace RavenQuestionnaire.Core.Documents
             CompleteQuestionnaireDocument result = new CompleteQuestionnaireDocument
             {
                 TemplateId = doc.Id,
-                Title = doc.Title
+                Title = doc.Title,
+                Triggers = doc.Triggers
             };
             foreach (IQuestion question in doc.Questions)
             {
@@ -62,7 +60,6 @@ namespace RavenQuestionnaire.Core.Documents
             {
                 result.Groups.Add(new CompleteGroupFactory().ConvertToCompleteGroup(group));
             }
-            result.Observers = doc.Observers;
             return result;
         }
 
@@ -170,12 +167,19 @@ namespace RavenQuestionnaire.Core.Documents
             set { }
         }
 
+        public List<Guid> Triggers
+        {
+            get { return triggers; }
+            set { }
+        }
+
+        private List<Guid> triggers = new List<Guid>();
         public Guid? ForcingPropagationPublicKey
         {
             get { return null; }
             set {  }
         }
-        public List<IObserver<CompositeInfo>> Observers { get; set; }
+      //  public List<IObserver<CompositeInfo>> Observers { get; set; }
         #endregion
 
         #region Implementation of IComposite
