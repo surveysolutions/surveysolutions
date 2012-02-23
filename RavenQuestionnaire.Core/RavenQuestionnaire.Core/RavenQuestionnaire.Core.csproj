@@ -172,16 +172,13 @@
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\Event.cs" />
-     <Compile Include="Entities\FlowGraph.cs" />
+    <Compile Include="Entities\FlowGraph.cs" />
     <Compile Include="Entities\Extensions\CompositeObservebleExtensions.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Iterators\Iterator.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
     <Compile Include="Entities\Location.cs" />
-    <Compile Include="Entities\Observers\CompositeHandler.cs" />
-    <Compile Include="Entities\Observers\CompositeInfo.cs" />
-    <Compile Include="Entities\Observers\GroupObserver.cs" />
     <Compile Include="Entities\Observers\ObservableCollectionExtensions.cs" />
     <Compile Include="Entities\Observers\ObservableCollectionS.cs" />
     <Compile Include="Entities\Questionnaire.cs" />

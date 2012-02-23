@@ -149,7 +149,6 @@
     <Compile Include="Entities\GroupTest.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIteratorTest.cs" />
     <Compile Include="Entities\LocationEntityTest.cs" />
-    <Compile Include="Entities\Observers\CompositeHandlerTest.cs" />
     <Compile Include="Entities\QuestionnaireEntityTest.cs" />
     <Compile Include="Entities\QuestionTest.cs" />
     <Compile Include="Entities\UserEntityTest.cs" />

@@ -17,7 +17,6 @@ namespace RavenQuestionnaire.Core.Documents
         DateTime LastEntryDate { get; set; }
         DateTime? OpenDate { get; set; }
         DateTime? CloseDate { get; set; }
-        List<IObserver<CompositeInfo>> Observers { get; set; }
     }
 
     public interface IQuestionnaireDocument<TGroup, TQuestion> : IQuestionnaireDocument, IGroup<TGroup, TQuestion>
@@ -34,7 +33,6 @@ namespace RavenQuestionnaire.Core.Documents
             LastEntryDate = DateTime.Now;
             Questions = new List<IQuestion>();
             Groups = new List<IGroup>();
-            Observers = new List<IObserver<CompositeInfo>>();
             FlowGraph = null;
             this.observers=new List<IObserver<CompositeEventArgs>>();
         }
@@ -50,6 +48,14 @@ namespace RavenQuestionnaire.Core.Documents
             get { return Propagate.None; }
             set {  }
         }
+
+        public List<Guid> Triggers
+        {
+            get { return triggers; }
+            set { }
+        }
+
+        private List<Guid> triggers = new List<Guid>();
 
         public Guid? ForcingPropagationPublicKey
         {
@@ -70,7 +76,6 @@ namespace RavenQuestionnaire.Core.Documents
         public List<IQuestion> Questions { get; set; }
         public List<IGroup> Groups { get; set; }
         public FlowGraph FlowGraph { get; set; }
-        public List<IObserver<CompositeInfo>> Observers { get; set; }
 
         #region Implementation of IComposite
         public void Add(IComposite c, Guid? parent)

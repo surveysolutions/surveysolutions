@@ -122,7 +122,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             group.Questions.Add(question);
             qDoqument.Groups.Add(group);
             qDoqument.Groups.Add(otherGroup);
-            qDoqument.Observers = new List<IObserver<CompositeInfo>> { new GroupObserver(otherGroup.PublicKey, group.PublicKey) };
+            otherGroup.Triggers.Add(group.PublicKey);
+          //  qDoqument.Observers = new List<IObserver<CompositeInfo>> { new GroupObserver(otherGroup.PublicKey, group.PublicKey) };
 
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
         

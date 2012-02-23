@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -16,7 +18,7 @@ namespace RavenQuestionnaire.Core.Entities
     public class CompleteQuestionnaire : IEntity<CompleteQuestionnaireDocument>, IComposite//, IPropogate
     {
         private CompleteQuestionnaireDocument innerDocument;
-        private CompositeHandler handler;
+       // private CompositeHandler handler;
         public CompleteQuestionnaireDocument GetInnerDocument()
         {
             return innerDocument;
@@ -28,7 +30,6 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Creator = user;
             innerDocument.Status = status;
             innerDocument.Responsible = user;
-            handler = new CompositeHandler(innerDocument.Observers, this);
             
             /* foreach (ICompleteGroup completeGroup in GroupIterator)
              {
@@ -36,14 +37,48 @@ namespace RavenQuestionnaire.Core.Entities
                  if (group != null)
                      group.Subscribe(this.handler);
              }*/
+            SubscibeAutoPropogation();
         }
 
         public CompleteQuestionnaire(CompleteQuestionnaireDocument document)
         {
             this.innerDocument = document;
-            handler = new CompositeHandler(innerDocument.Observers, this);
+            SubscibeAutoPropogation();
         }
-
+        protected void SubscibeAutoPropogation()
+        {
+            innerDocument.GetGroupPropagatedEvents().Subscribe(Observer.Create<CompositeAddedEventArgs>(AutoPropagate));
+            innerDocument.GetGroupPropagatedRemovedEvents().Subscribe(Observer.Create<CompositeRemovedEventArgs>(RemoveAutoPropagate));
+        }
+        protected void AutoPropagate(CompositeAddedEventArgs e)
+        {
+           // ICompleteGroup template = ((CompositeAddedEventArgs) e.ParentEvent).AddedComposite as ICompleteGroup; 
+            PropagatableCompleteGroup group = e.AddedComposite as PropagatableCompleteGroup;
+            if(group==null)
+                return;
+            var triggeres =
+                this.Find<ICompleteGroup>(
+                    g => g.Triggers.Count(gp => gp.Equals(group.PublicKey)) > 0).ToList();
+            foreach (ICompleteGroup triggere in triggeres)
+            {
+                var propagatebleGroup = new PropagatableCompleteGroup(triggere, group.PropogationPublicKey);
+                innerDocument.Add(propagatebleGroup, null);
+            }
+        }
+        protected void RemoveAutoPropagate(CompositeRemovedEventArgs e)
+        {
+            PropagatableCompleteGroup group = e.RemovedComposite as PropagatableCompleteGroup;
+            if (group == null)
+                return;
+              var triggeres =
+                this.Find<ICompleteGroup>(
+                    g => g.Triggers.Count(gp => gp.Equals(group.PublicKey)) > 0).ToList();
+              foreach (ICompleteGroup triggere in triggeres)
+              {
+                  var propagatebleGroup = new PropagatableCompleteGroup(triggere, group.PropogationPublicKey);
+                  innerDocument.Remove(propagatebleGroup);
+              }
+        }
         public string CompleteQuestinnaireId
         {
             get { return innerDocument.Id; }
@@ -75,20 +110,17 @@ namespace RavenQuestionnaire.Core.Entities
 
             }
             innerDocument.Add(c, parent);
-            this.handler.Add(c);
 
         }
 
         public void Remove(IComposite c)
         {
             innerDocument.Remove(c);
-            this.handler.Remove(c);
         }
 
         public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
             innerDocument.Remove<T>(publicKey);
-            this.handler.Remove<T>(publicKey);
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
