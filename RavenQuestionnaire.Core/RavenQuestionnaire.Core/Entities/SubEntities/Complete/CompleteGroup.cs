@@ -20,6 +20,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.Questions = new List<ICompleteQuestion>();
             this.Groups = new List<ICompleteGroup>();
             this.PublicKey = Guid.NewGuid();
+            this.Triggers = new List<Guid>();
             this.observers=new List<IObserver<CompositeEventArgs>>();
             //   this.iteratorContainer = new IteratorContainer();
         }
@@ -33,11 +34,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public static explicit operator CompleteGroup(Group doc)
         {
             CompleteGroup result = new CompleteGroup(null)
-                         {
-                             PublicKey = doc.PublicKey,
-                             Title = doc.Title,
-                             Propagated = doc.Propagated
-                         };
+                                       {
+                                           PublicKey = doc.PublicKey,
+                                           Title = doc.Title,
+                                           Propagated = doc.Propagated,
+                                           Triggers = doc.Triggers
+                                       };
 
             foreach (IQuestion question in doc.Questions)
             {
@@ -55,6 +57,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public string Title { get; set; }
 
         public Propagate Propagated { get; set; }
+
+        public List<Guid> Triggers { get; set; }
 
         public List<ICompleteQuestion> Questions
         {

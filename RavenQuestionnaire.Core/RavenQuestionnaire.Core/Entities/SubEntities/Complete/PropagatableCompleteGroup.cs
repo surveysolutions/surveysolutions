@@ -13,7 +13,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
         }
 
-        public PropagatableCompleteGroup(ICompleteGroup group, Guid propogationPublicKey)
+        public PropagatableCompleteGroup(ICompleteGroup group, Guid propogationPublicKey):this()
         {
             this.Title = group.Title;
             this.Propagated = group.Propagated;
@@ -46,6 +46,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public Guid PropogationPublicKey { get; set; }
 
         public bool AutoPropagate { get; set; }
+
 
         /*    public void Propogate(Guid childGroupPublicKey)
         {
