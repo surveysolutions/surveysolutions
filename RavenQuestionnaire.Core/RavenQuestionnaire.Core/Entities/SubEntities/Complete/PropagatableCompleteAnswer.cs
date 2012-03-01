@@ -34,6 +34,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public bool AutoPropagate { get; set; }
 
+      
         #endregion
     }
 }
