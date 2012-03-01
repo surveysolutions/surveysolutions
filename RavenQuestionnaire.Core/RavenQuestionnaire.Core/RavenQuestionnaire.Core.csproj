@@ -172,7 +172,7 @@
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\Event.cs" />
-     <Compile Include="Entities\FlowGraph.cs" />
+    <Compile Include="Entities\FlowGraph.cs" />
     <Compile Include="Entities\Extensions\CompositeObservebleExtensions.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\IEntity.cs" />
@@ -274,10 +274,13 @@
     </Compile>
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Vertical\CompleteQuestionnaireEnumerableViewVFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportViewFactory.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Vertical\CompleteQuestionnaireViewEnumerable.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Vertical\CompleteQuestionnaireViewV.cs" />
     <Compile Include="Views\FlowGraph\FlowBlockViewItem.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphView.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphViewFactory.cs" />
@@ -289,6 +292,7 @@
     <Compile Include="Views\Group\CompleteGroupView.cs" />
     <Compile Include="Views\Group\CompleteGroupViewFactory.cs" />
     <Compile Include="Views\Group\CompleteGroupViewInputModel.cs" />
+    <Compile Include="Views\Group\PropagatedCompleteGroupViewV.cs" />
     <Compile Include="Views\Group\GroupView.cs" />
     <Compile Include="Views\Group\GroupViewFactory.cs" />
     <Compile Include="Views\Group\GroupViewInputModel.cs" />

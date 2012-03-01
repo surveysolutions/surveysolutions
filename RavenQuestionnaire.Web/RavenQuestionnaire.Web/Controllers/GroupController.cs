@@ -103,6 +103,26 @@ namespace RavenQuestionnaire.Web.Controllers
             //   return RedirectToAction("Question", "CompleteQuestionnaire", new {id = questionnaireId});
         }
 
+        public ActionResult PropagateGroupV(Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
+        {
+            try
+            {
+
+
+                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser()));
+            }
+            catch (Exception e)
+            {
+
+                ModelState.AddModelError("PropagationError", e.Message);
+            }
+            var model =
+                viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
+                    new CompleteGroupViewInputModel(null, parentGroupPublicKey, questionnaireId));
+            ViewBag.CurrentGroup = model;
+            return PartialView("~/Views/Group/_ScreenV.cshtml", model);
+        }
+
         public ActionResult DeletePropagatedGroup(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
         {
             commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,

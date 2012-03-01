@@ -11,6 +11,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Status;
@@ -120,6 +121,19 @@ namespace RavenQuestionnaire.Web.Controllers
                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
             ViewBag.CurrentGroup = model.CurrentGroup;
             return View( model);
+        }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
+        public ViewResult QuestionV(string id, Guid? group)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+            var model =
+                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
+            ViewBag.CurrentGroup = model.CurrentGroup;
+
+            return View(model);
         }
 
         public ActionResult SaveSingleResult(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
