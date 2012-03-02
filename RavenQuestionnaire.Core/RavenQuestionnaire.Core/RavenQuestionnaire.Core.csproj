@@ -289,7 +289,6 @@
     <Compile Include="Views\Group\CompleteGroupView.cs" />
     <Compile Include="Views\Group\CompleteGroupViewFactory.cs" />
     <Compile Include="Views\Group\CompleteGroupViewInputModel.cs" />
-    <Compile Include="Views\Group\PropagatedCompleteGroupViewV.cs" />
     <Compile Include="Views\Group\GroupView.cs" />
     <Compile Include="Views\Group\GroupViewFactory.cs" />
     <Compile Include="Views\Group\GroupViewInputModel.cs" />

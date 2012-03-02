@@ -1,0 +1,118 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+@model CompleteQuestionnaireViewV
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="../../Scripts/jquery.fixedheadertable.min.js" type="text/javascript"></script>
+@RenderGroup(Model.CurrentGroup)
+@helper  RenderGroup(CompleteGroupViewV currentGroup)
+    {
+        if (currentGroup.Propagated == Propagate.Propagated)
+        {
+            if (currentGroup.Propagated != Propagate.AutoPropagated)
+            { 
+    @Ajax.ActionLink("Add", "PropagateGroupV", "Group", new
+                            {
+                                publicKey = currentGroup.PublicKey,
+                                questionnaireId = Model.Id,
+                                parentGroupPublicKey = Model.CurrentGroup.PublicKey
+                            },
+                    new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div") },
+                new { @class = "btn" })
+    @Html.ValidationMessage("PropagationError")
+
+            }
+    <div class="">
+    <script type="text/javascript">
+        $('#@currentGroup.GetClientId("table")').fixedHeaderTable({ footer: false, cloneHeadToFoot: false, fixedColumn: true });
+    </script>
+   
+    <table id="@currentGroup.GetClientId("table")" class="table table-striped">
+        @foreach (var pquestion in currentGroup.PropagatedQuestions)
+        {
+            <tr>
+                <td>@pquestion.QuestionText
+                </td>
+                @for (int index = 0; index < pquestion.Questions.Count; index++)
+                {
+                    var question = pquestion.Questions[index];
+                    <td>
+                        @using (Ajax.BeginForm("SaveSingleResultV", "CompleteQuestionnaire", null, new AjaxOptions()
+                            {
+                                InsertionMode = InsertionMode.Replace,
+                                UpdateTargetId = Model.CurrentGroup.GetClientId("div")
+                            }, new { autocomplete = "off" }))
+                        {
+                            using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + currentGroup.PropogationPublicKeys[index]))
+                            {
+                            @Html.Hidden("PublicKey", question.PublicKey)
+                                ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+                                if (!question.Enabled)
+                                {
+                                    ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+                                }
+
+                                Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
+
+                            @Html.ValidationMessage("AnswerValue")
+                            }
+                            <br />
+
+
+                            using (Html.BeginCollectionItem("settings", true, currentGroup.PublicKey + "_" + currentGroup.PropogationPublicKeys[index]))
+                            {
+                            @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
+                            @Html.Hidden("QuestionnaireId", Model.Id)
+                            @Html.Hidden("PropogationPublicKey", currentGroup.PropogationPublicKeys[index])
+                            }
+                        }
+                    </td>
+                }
+            </tr>
+            
+        }
+        @if (!currentGroup.AutoPropagate)
+        {
+            <tr>
+                <td>
+                </td>
+                @foreach (var pKey in currentGroup.PropogationPublicKeys)
+                {
+                    <td>
+                        @Ajax.ActionLink("Remove", "DeletePropagatedGroupV", "Group", new { propagationKey = pKey, publicKey = currentGroup.PublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey },
+                                                                new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div") },
+                                                                new { @class = "btn btn-danger" })
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+    </div>
+        }
+        else
+        {
+            foreach (var question in currentGroup.Questions)
+            {
+
+                using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div") }))
+                {
+                    using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+                    {
+                        Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
+
+                    }
+                    using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+                    {
+    @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
+    @Html.Hidden("QuestionnaireId", Model.Id)
+                    }
+                }
+            }
+        }
+        foreach (var @group in currentGroup.Groups)
+        {
+    <text>@RenderGroup(@group)</text>
+        }
+}

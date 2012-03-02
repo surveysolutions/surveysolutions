@@ -657,8 +657,7 @@
     <Content Include="Views\Answer\AnswerListView\_GpsCoordinates.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_MultyOption.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\QuestionV.cshtml" />
-    <Content Include="Views\Group\CompleteGroupTemplates\_PropagatedCompleteGroupV.cshtml" />
-    <Content Include="Views\Group\CompleteGroupTemplates\_PropagatebleCompleteGroupV.cshtml" />
+    <Content Include="Views\Group\_ScreenV.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

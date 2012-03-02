@@ -87,3 +87,8 @@
 {
 	color: #3A87AD;
 }
+table td form ,
+table td form input
+{
+	margin-bottom: 0;
+}
