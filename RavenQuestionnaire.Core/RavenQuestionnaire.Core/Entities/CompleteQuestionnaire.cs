@@ -38,18 +38,59 @@ namespace RavenQuestionnaire.Core.Entities
                      group.Subscribe(this.handler);
              }*/
             SubscibeAutoPropogation();
+            SubscribeBindedQuestions();
         }
 
         public CompleteQuestionnaire(CompleteQuestionnaireDocument document)
         {
             this.innerDocument = document;
             SubscibeAutoPropogation();
+            SubscribeBindedQuestions();
         }
         protected void SubscibeAutoPropogation()
         {
             innerDocument.GetGroupPropagatedEvents().Subscribe(Observer.Create<CompositeAddedEventArgs>(AutoPropagate));
             innerDocument.GetGroupPropagatedRemovedEvents().Subscribe(Observer.Create<CompositeRemovedEventArgs>(RemoveAutoPropagate));
         }
+        protected void SubscribeBindedQuestions()
+        {
+            var addAnswers = from q in this.GetAllAnswerAddedEvents()
+                             let question =
+                                 ((CompositeAddedEventArgs)q.ParentEvent).AddedComposite as
+                                 ICompleteQuestion
+                             let binded =
+                                 this.innerDocument.GetAllBindedQuestions(question.PublicKey)
+                             where binded.Any()
+                             select q;
+            addAnswers
+                .Subscribe(Observer.Create<CompositeAddedEventArgs>(
+                    BindQuestion));
+        }
+        protected void BindQuestion(CompositeAddedEventArgs e)
+        {
+            var template = ((CompositeAddedEventArgs)e.ParentEvent).AddedComposite as ICompleteQuestion;
+
+            if (template == null)
+                return;
+            var propagatedTemplate = template as IPropogate;
+            IEnumerable<BindedCompleteQuestion> binded;
+            if (propagatedTemplate == null)
+            {
+                binded =
+                    this.innerDocument.GetAllBindedQuestions(template.PublicKey);
+            }
+            else
+            {
+                binded = this.innerDocument.GetPropagatedGroupsByKey(propagatedTemplate.PropogationPublicKey).SelectMany(
+                    pg => pg.GetAllBindedQuestions(template.PublicKey));
+            }
+            foreach (BindedCompleteQuestion bindedCompleteQuestion in binded)
+            {
+                bindedCompleteQuestion.Copy(template);
+            }
+
+        }
+
         protected void AutoPropagate(CompositeAddedEventArgs e)
         {
            // ICompleteGroup template = ((CompositeAddedEventArgs) e.ParentEvent).AddedComposite as ICompleteGroup; 
