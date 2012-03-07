@@ -41,8 +41,6 @@ namespace RavenQuestionnaire.Core.Documents
 
 
             this.Groups = new List<ICompleteGroup>();
-           
-            SubscribeBindedQuestions();
         }
         public static explicit operator CompleteQuestionnaireDocument(QuestionnaireDocument doc)
         {
@@ -62,51 +60,7 @@ namespace RavenQuestionnaire.Core.Documents
             }
             return result;
         }
-
-
-        protected void SubscribeBindedQuestions()
-        {
-            var addAnswers = from q in this.GetAllAnswerAddedEvents()
-                             let question =
-                                 ((CompositeAddedEventArgs) q.ParentEvent).AddedComposite as
-                                 ICompleteQuestion
-                             let binded =
-                                 this.GetAllBindedQuestions(question.PublicKey)
-                             where binded.Any()
-                             select q;
-            addAnswers
-                .Subscribe(Observer.Create<CompositeAddedEventArgs>(
-                    BindQuestion));
-        }
-        protected void SubscribeOnGroupPropagation()
-        {
-        }
-
-        protected void BindQuestion(CompositeAddedEventArgs e)
-        {
-            var template = ((CompositeAddedEventArgs) e.ParentEvent).AddedComposite as ICompleteQuestion;
-
-            if (template == null)
-                return;
-            var propagatedTemplate = template as IPropogate;
-            IEnumerable<BindedCompleteQuestion> binded;
-            if (propagatedTemplate == null)
-            {
-                binded =
-                    this.GetAllBindedQuestions(template.PublicKey);
-            }
-            else
-            {
-                binded = this.GetPropagatedGroupsByKey(propagatedTemplate.PropogationPublicKey).SelectMany(
-                    pg => pg.GetAllBindedQuestions(template.PublicKey));
-            }
-            foreach (BindedCompleteQuestion bindedCompleteQuestion in binded)
-            {
-                bindedCompleteQuestion.Copy(template);
-            }
-
-        }
-
+       
         public UserLight Creator { get; set; }
 
         public string TemplateId { get; set; }
