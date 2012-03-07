@@ -20,6 +20,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
         public string GroupText { get; set; }
 
         public bool IsCurrent { get; set; }
+
+        public virtual string GetClientId(string prefix)
+        {
+            return string.Format("{0}_{1}", prefix, PublicKey);
+        }
     }
 
     public class CompleteGroupViewV
@@ -30,6 +35,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             Groups = new List<CompleteGroupViewV>();
             Propagated = Propagate.None;
             PropagatedQuestions = new List<PropagatedQuestion>();
+            PropogationPublicKeys = new List<Guid>();
             AutoPropagate = false;
         }
         public CompleteGroupViewV(CompleteQuestionnaireDocument doc, CompleteGroup currentGroup)
@@ -37,8 +43,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
         {
             PublicKey = currentGroup.PublicKey;
             GroupText = currentGroup.Title;
-
-            if (currentGroup.Questions.Count > 0)
+            Propagated = currentGroup.Propagated;
+            if (currentGroup.Questions.Count > 0 && currentGroup.Propagated == Propagate.None)
             {
                 var questionQgroup = new CompleteGroupViewV();
                 questionQgroup.Questions = currentGroup.Questions.Select(q => new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q)).ToList();
@@ -75,7 +81,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             var qf = new CompleteQuestionFactory();
             PublicKey = propagatable.PublicKey;
             GroupText = propagatable.Title;
-            Propagated = Propagate.Propagated;
+            Propagated = propagatable.Propagated;
 
             var propagated = propGroups.Where(g => g != propagatable).Select(g => g as PropagatableCompleteGroup).ToList();
             if (propagated.Count > 0)

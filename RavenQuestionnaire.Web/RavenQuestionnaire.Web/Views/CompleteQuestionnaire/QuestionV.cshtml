@@ -63,7 +63,8 @@
                 <a href="@Url.Action("QuestionV", new { id = Model.Id, group = gh.PublicKey })" class="accordion-toggle">@gh.GroupText</a>
             </div>
             <div class="accordion-body collapse @inClass" id="collapseOne">
-                <div class="accordion-inner" id="@Model.CurrentGroup.GetClientId("div")">
+                
+                <div class="accordion-inner" id="@gh.GetClientId("div")">
                     @if (gh.IsCurrent)
                     {
                         Html.RenderPartial("~/Views/Group/_ScreenV.cshtml", Model);

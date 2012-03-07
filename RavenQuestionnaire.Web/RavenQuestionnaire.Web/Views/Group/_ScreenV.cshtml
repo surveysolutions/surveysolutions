@@ -1,5 +1,6 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Entities.SubEntities.Complete
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
 @using RavenQuestionnaire.Web.Utils
 @model CompleteQuestionnaireViewV
@@ -36,6 +37,7 @@
    <h2>@Model.CurrentGroup.GroupText</h2>
 </div>
 @RenderGroup(Model.CurrentGroup)
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('#headerTableWrap').css("width", $('#contentTableWrap').css('width'));
@@ -43,44 +45,50 @@
 </script>
 @helper  RenderGroup(CompleteGroupViewV currentGroup)
     {
-        if (currentGroup.Propagated == Propagate.Propagated)
+        if (currentGroup.Propagated != Propagate.None)
         {
             if (currentGroup.Propagated != Propagate.AutoPropagated)
             { 
     <div class="clearfix">
         <p class="pull-right">
-            @RenderAddButton(Model, currentGroup.PublicKey)
             @Html.ValidationMessage("PropagationError")
+            @RenderAddButton(Model, currentGroup.PublicKey)
+         
         </p>
     </div>
             }
-    <div class="col-wrap1">
-        <div class="col-wrap2">
-            <div class="col1">
-                <div style="overflow: hidden">
-                    <div id="headerTableWrap">
-                        @RenderPropagatebleGroup(currentGroup)
-                    </div>
-                </div>
-            </div>
-            <div class="col2">
-                <div style="overflow: hidden; overflow-x: scroll; margin-right: 200px;">
-                    <div id="contentTableWrap" style="margin-left: -204px;">
-                        @RenderPropagatebleGroup(currentGroup)
-                    </div>
-                </div>
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-    </div>
+            if (currentGroup.PropagatedGroupsCount>0)
+           {
+               <div class="col-wrap1">
+
+                   <div class="col-wrap2">
+                       <div class="col1">
+                           <div style="overflow: hidden">
+                               <div id="headerTableWrap">
+                                   @RenderPropagatebleGroup(currentGroup)
+                               </div>
+                           </div>
+                       </div>
+                       <div class="col2">
+                           <div style="overflow: hidden; overflow-x: scroll; margin-right: 200px;">
+                               <div id="contentTableWrap" style="margin-left: -204px;">
+                                   @RenderPropagatebleGroup(currentGroup)
+                               </div>
+                           </div>
+                       </div>
+                       <div class="clear">
+                       </div>
+                   </div>
+               </div>
+           }
+
         }
         else
-        {
+        { 
             foreach (var question in currentGroup.Questions)
             {
 
-                using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div") }))
+                using (Ajax.BeginForm("SaveSingleResultV", "CompleteQuestionnaire", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div") }))
                 {
                     using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                     {
@@ -95,14 +103,16 @@
                 }
             }
         }
+
         foreach (var @group in currentGroup.Groups)
         {
+          
     <text>@RenderGroup(@group)</text>
         }
 }
 @helper  RenderPropagatebleGroup(CompleteGroupViewV currentGroup)
     {
-        
+    
     <table class="table  table-striped table-bordered" style="width: auto;">
         <thead>
         </thead>
@@ -119,19 +129,22 @@
                         @using (Ajax.BeginForm("SaveSingleResultV", "CompleteQuestionnaire", null, new AjaxOptions()
                         {
                             InsertionMode = InsertionMode.Replace,
-                            UpdateTargetId = Model.CurrentGroup.GetClientId("div")
+                            UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
+                            OnBegin = "ShowOverlay",
+                            OnComplete = "HideOverlay",
+                            OnFailure = "HideOverlay"
                         }, new { autocomplete = "off" }))
                         {
                             using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + currentGroup.PropogationPublicKeys[index]))
                             {
                             @Html.Hidden("PublicKey", question.PublicKey)
-                                ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
-                                if (!question.Enabled)
-                                {
-                                    ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
-                                }
+                       ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+                       if (!question.Enabled)
+                       {
+                           ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+                       }
 
-                                Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
+                       Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
 
                             @Html.ValidationMessage("AnswerValue")
                             }
