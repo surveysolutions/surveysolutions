@@ -5,6 +5,9 @@ using RavenQuestionnaire.Core.Views.Status.SubView;
 
 namespace RavenQuestionnaire.Core.Views.Status
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class StatusView
     {
         public string Id { get; set; }

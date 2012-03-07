@@ -8,17 +8,22 @@ namespace RavenQuestionnaire.Core.Documents
     /// </summary>
     public class StatusDocument
     {
+        /// <summary>
+        /// Document ID.
+        /// </summary>
         public string Id { get; set; }
+
         public string Title { get; set; }
 
         public bool IsVisible {get; set;}
+
         /// <summary>
-        /// Is used for defining of the status for initially created CQ
+        /// Is used for defining of the status for initially created CQ.
         /// </summary>
         public bool IsInitial { get; set;}
 
         /// <summary>
-        ///Containes ref to the correspondent Q 
+        ///Containes ref to the correspondent Q.
         /// </summary>
         public string QuestionnaireId { get; set; }
 
@@ -33,13 +38,18 @@ namespace RavenQuestionnaire.Core.Documents
             StatusRoles = new Dictionary<string, List<SurveyStatus>>();
         }
 
+
         /// <summary>
-        /// Flag displays status is used for stuck item in commonon flow.
+        /// Flag displays status is used for stuck item in the commonon flow.
         /// </summary>
         public bool IsDefaultStuck { get; set; }
 
+        /// <summary>
+        /// List of flow rules is used for status changing.
+        /// </summary>
         public List<FlowRule> FlowRules { get; set;}
 
         public SurveyStatus DefaultIfNoConditions { set; get; }
+
     }
 }
