@@ -145,5 +145,33 @@ namespace RavenQuestionnaire.Web.Controllers
             
             return PartialView("~/Views/Group/_ScreenV.cshtml", model);
         }
+
+        public ActionResult PropagateGroupC(Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
+        {
+            try
+            {
+                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser()));
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("PropagationError", e.Message);
+            }
+
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
+
+            return PartialView("~/Views/Group/_ScreenC.cshtml", model);
+        }
+
+        public ActionResult DeletePropagatedGroupC(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey,
+                                                  string questionnaireId)
+        {
+            commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
+                                                                    GlobalInfo.GetCurrentUser()));
+
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
+
+            return PartialView("~/Views/Group/_ScreenC.cshtml", model);
+        }
+    
     }
 }

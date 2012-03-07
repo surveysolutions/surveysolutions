@@ -1,80 +1,71 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
-@using RavenQuestionnaire.Core.Views.Question
+@using RavenQuestionnaire.Web.Utils
 @model CompleteQuestionnaireViewV
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-<style type="text/css">
-    .col1 td
-    {
-        visibility: hidden;
-    }
-    .col2 th
-    {
-        visibility: hidden;
-    }
-    .col-wrap1
-    {
-        width: 100%;
-    }
-    
-    .col-wrap2
-    {
-        width: 100%;
-        margin-right: -100%; 
-        position: relative;
-        left: 200px;
-    }
-    
-    .col1
-    {
-        float: left;
-        width: 200px;
-        margin-right: -100%;
-        position: relative;
-        left: -200px;
-    }
-    
-    .clear
-    {
-        clear: both;
-        font-size: 0;
-        overflow: hidden; 
-    }
-</style>
 
+<script type="text/javascript">
+    !function ($) {
+
+        $(function() {
+
+            // fix sub nav on scroll
+            var $win = $(window)
+      , $nav = $('.subnav')
+      , navTop = $('.subnav').length && $('.subnav').offset().top - 40
+      , isFixed = 0;
+
+            processScroll();
+
+            $win.on('scroll', processScroll);
+
+            function processScroll() {
+                var i, scrollTop = $win.scrollTop();
+                if (scrollTop >= navTop && !isFixed) {
+                    isFixed = 1
+                    $nav.addClass('subnav-fixed');
+                } else if (scrollTop <= navTop && isFixed) {
+                    isFixed = 0
+                    $nav.removeClass('subnav-fixed');
+                }
+            }
+        });
+    } (window.jQuery);
+</script>
+<div class="subnav">
+   <h2>@Model.CurrentGroup.GroupText</h2>
+</div>
 @RenderGroup(Model.CurrentGroup)
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#headerTableWrap').css("width", $('#contentTableWrap').css('width'));
+    })
+</script>
 @helper  RenderGroup(CompleteGroupViewV currentGroup)
     {
         if (currentGroup.Propagated == Propagate.Propagated)
         {
             if (currentGroup.Propagated != Propagate.AutoPropagated)
             { 
-                <div class="clearfix">
-                <p class="pull-right">
-    @Ajax.ActionLink("Add", "PropagateGroupV", "Group", new
-{
-    publicKey = currentGroup.PublicKey,
-    questionnaireId = Model.Id,
-    parentGroupPublicKey = Model.CurrentGroup.PublicKey
-},
-                    new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div") },
-                new { @class = "btn btn-success" })
-    @Html.ValidationMessage("PropagationError")
-    </p></div>
+    <div class="clearfix">
+        <p class="pull-right">
+            @RenderAddButton(Model, currentGroup.PublicKey)
+            @Html.ValidationMessage("PropagationError")
+        </p>
+    </div>
             }
     <div class="col-wrap1">
         <div class="col-wrap2">
             <div class="col1">
                 <div style="overflow: hidden">
-                    @RenderPropagatebleGroup(currentGroup)
+                    <div id="headerTableWrap">
+                        @RenderPropagatebleGroup(currentGroup)
+                    </div>
                 </div>
             </div>
             <div class="col2">
                 <div style="overflow: hidden; overflow-x: scroll; margin-right: 200px;">
-                    <div style="margin-left: -204px;">
+                    <div id="contentTableWrap" style="margin-left: -204px;">
                         @RenderPropagatebleGroup(currentGroup)
                     </div>
                 </div>
@@ -83,8 +74,6 @@
             </div>
         </div>
     </div>
-        
-
         }
         else
         {
@@ -113,6 +102,7 @@
 }
 @helper  RenderPropagatebleGroup(CompleteGroupViewV currentGroup)
     {
+        
     <table class="table  table-striped table-bordered" style="width: auto;">
         <thead>
         </thead>
@@ -165,12 +155,22 @@
                 @foreach (var pKey in currentGroup.PropogationPublicKeys)
                 {
                     <td>
-                        @Ajax.ActionLink("Remove", "DeletePropagatedGroupV", "Group", new { propagationKey = pKey, publicKey = currentGroup.PublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey },
-                                                                new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div") },
-                                                                new { @class = "btn btn-danger" })
+                        @RenderDeleteButton(Model, currentGroup.PublicKey, pKey)
                     </td>
                 }
             </tr>
         }
     </table>
+}
+@helper RenderAddButton(CompleteQuestionnaireViewV model, Guid currentGroupPublicKey)
+    {
+        var addAjaxOptions = new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div"), OnBegin = "ShowOverlay", OnComplete = "HideOverlay", OnFailure = "HideOverlay" };
+        var rparams = new { publicKey = currentGroupPublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey };
+    @Ajax.ActionLinkWithIcon("Add", "PropagateGroupV", "Group", rparams, addAjaxOptions, new { @class = "btn btn-success" }, "icon-plus icon-white")
+}
+@helper RenderDeleteButton(CompleteQuestionnaireViewV model, Guid currentGroupPublicKey, Guid pKey)
+    {
+        var removeAjaxOptions = new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div"), OnBegin = "ShowOverlay", OnComplete = "HideOverlay", OnFailure = "HideOverlay" };
+        var rparams = new { propagationKey = pKey, publicKey = currentGroupPublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey };
+    @Ajax.ActionLinkWithIcon("Remove", "DeletePropagatedGroupV", "Group", rparams, removeAjaxOptions, new { @class = "btn btn-danger" }, "icon-trash icon-white")
 }

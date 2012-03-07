@@ -119,6 +119,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
 
         public List<PropagatedQuestion> PropagatedQuestions { get; set; }
 
+        public int PropagatedGroupsCount { get { return PropagatedQuestions.Count > 0?  PropagatedQuestions[0].Questions.Count : 0; } }
+
         public virtual string GetClientId(string prefix)
         {
             return string.Format("{0}_{1}", prefix, PublicKey);

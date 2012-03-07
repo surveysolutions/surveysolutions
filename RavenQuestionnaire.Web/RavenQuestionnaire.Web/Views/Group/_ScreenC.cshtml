@@ -1,0 +1,196 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+@using RavenQuestionnaire.Web.Utils
+@model CompleteQuestionnaireViewV
+<script type="text/javascript">
+    !function ($) {
+
+        $(function () {
+
+            // fix sub nav on scroll
+            var $win = $(window)
+      , $nav = $('.subnav')
+      , navTop = $('.subnav').length && $('.subnav').offset().top - 40
+      , isFixed = 0;
+
+            processScroll();
+
+            $win.on('scroll', processScroll);
+
+            function processScroll() {
+                var i, scrollTop = $win.scrollTop();
+                if (scrollTop >= navTop && !isFixed) {
+                    isFixed = 1
+                    $nav.addClass('subnav-fixed');
+                } else if (scrollTop <= navTop && isFixed) {
+                    isFixed = 0
+                    $nav.removeClass('subnav-fixed');
+                }
+            }
+        })
+    } (window.jQuery);
+</script>
+<div class="subnav">
+    <h2>@Model.CurrentGroup.GroupText</h2>
+</div>
+@RenderGroup(Model.CurrentGroup)
+@helper  RenderGroup(CompleteGroupViewV currentGroup)
+    {
+        if (currentGroup.Propagated == Propagate.Propagated)
+        {
+            if (currentGroup.Propagated != Propagate.AutoPropagated)
+            { 
+    <div class="clearfix">
+        <p class="pull-right">
+            @RenderAddButton(Model, currentGroup.PublicKey)
+            @Html.ValidationMessage("PropagationError")
+        </p>
+    </div>
+            }
+    @RenderPropagatebleGroup(currentGroup)
+        }
+        else
+        {
+            foreach (var question in currentGroup.Questions)
+            {
+
+                using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div") }))
+                {
+                    using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+                    {
+                        Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
+
+                    }
+                    using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+                    {
+    @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
+    @Html.Hidden("QuestionnaireId", Model.Id)
+                    }
+                }
+            }
+        }
+        foreach (var @group in currentGroup.Groups)
+        {
+    <text>@RenderGroup(@group)</text>
+        }
+}
+@helper  RenderPropagatebleGroup(CompleteGroupViewV currentGroup)
+    {
+        
+    <div>
+        @for (int index = 0; index < currentGroup.PropagatedGroupsCount; index++)
+        {
+
+            foreach (var pquestion in currentGroup.PropagatedQuestions.Take(1))
+            {
+            <div>@pquestion.QuestionText</div>
+                {
+                    var question = pquestion.Questions[index];
+
+                            
+@*RenderQuestion(question)*@
+                    using (Ajax.BeginForm("SaveSingleResultC", "CompleteQuestionnaire", null, new AjaxOptions()
+                    {
+                        InsertionMode = InsertionMode.Replace,
+                        UpdateTargetId = Model.CurrentGroup.GetClientId("div")
+                    }, new { autocomplete = "off" }))
+                    {
+                        using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + currentGroup.PropogationPublicKeys[index]))
+                        {
+            @Html.Hidden("PublicKey", question.PublicKey)
+                            ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+                            if (!question.Enabled)
+                            {
+                                ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+                            }
+
+                            Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
+
+            @Html.ValidationMessage("AnswerValue")
+                        }
+                        using (Html.BeginCollectionItem("settings", true, currentGroup.PublicKey + "_" + currentGroup.PropogationPublicKeys[index]))
+                        {
+            @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
+            @Html.Hidden("QuestionnaireId", Model.Id)
+            @Html.Hidden("PropogationPublicKey", currentGroup.PropogationPublicKeys[index])
+                        }
+                    }
+
+                }
+            }
+            if (!currentGroup.AutoPropagate)
+            {
+            @RenderDeleteButton(Model, currentGroup.PublicKey, currentGroup.PropogationPublicKeys[index])
+            }
+            
+            <div class="modal" id="myModal">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>Modal header</h3>
+                </div>
+                <div class="modal-body">
+                    @foreach (var pquestion in currentGroup.PropagatedQuestions.Skip(1))
+                    {
+                        <div>@pquestion.QuestionText</div>
+                        {
+                            var question = pquestion.Questions[index];
+
+                            
+@*RenderQuestion(question)*@
+                            using (Ajax.BeginForm("SaveSingleResultC", "CompleteQuestionnaire", null, new AjaxOptions()
+                            {
+                                InsertionMode = InsertionMode.Replace,
+                                UpdateTargetId = Model.CurrentGroup.GetClientId("div")
+                            }, new { autocomplete = "off" }))
+                            {
+                                using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + currentGroup.PropogationPublicKeys[index]))
+                                {
+                        @Html.Hidden("PublicKey", question.PublicKey)
+                                    ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+                                    if (!question.Enabled)
+                                    {
+                                        ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+                                    }
+
+                                    Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
+
+                        @Html.ValidationMessage("AnswerValue")
+                                }
+                                using (Html.BeginCollectionItem("settings", true, currentGroup.PublicKey + "_" + currentGroup.PropogationPublicKeys[index]))
+                                {
+                        @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
+                        @Html.Hidden("QuestionnaireId", Model.Id)
+                        @Html.Hidden("PropogationPublicKey", currentGroup.PropogationPublicKeys[index])
+                                }
+                            }
+
+                        }
+                    }
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-primary">Save changes</a> <a href="#" class="btn">Close</a>
+                </div>
+            </div>
+            
+            
+            
+        }
+    </div>
+}
+@helper RenderQuestion()
+    {
+    
+}
+@helper RenderAddButton(CompleteQuestionnaireViewV model, Guid currentGroupPublicKey)
+    {
+        var addAjaxOptions = new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div"), OnBegin = "ShowOverlay", OnComplete = "HideOverlay", OnFailure = "HideOverlay" };
+        var rparams = new { publicKey = currentGroupPublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey };
+    @Ajax.ActionLinkWithIcon("Add", "PropagateGroupC", "Group", rparams, addAjaxOptions, new { @class = "btn btn-success" }, "icon-plus icon-white")
+}
+@helper RenderDeleteButton(CompleteQuestionnaireViewV model, Guid currentGroupPublicKey, Guid pKey)
+    {
+        var removeAjaxOptions = new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div"), OnBegin = "ShowOverlay", OnComplete = "HideOverlay", OnFailure = "HideOverlay" };
+        var rparams = new { propagationKey = pKey, publicKey = currentGroupPublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey };
+    @Ajax.ActionLinkWithIcon("Remove", "DeletePropagatedGroupC", "Group", rparams, removeAjaxOptions, new { @class = "btn btn-danger" }, "icon-trash icon-white")
+}
