@@ -131,3 +131,7 @@ table td form, table td form input
 {
 	margin: 0 20px;
 }
+.well .form-actions {
+	padding-bottom: 0;
+	margin-bottom: 0;
+}
