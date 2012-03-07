@@ -1,0 +1,78 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+@using RavenQuestionnaire.Core.Views.Group
+@model CompleteQuestionnaireViewV
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function ShowOverlay() {
+        $('#loadingModal').modal('show');
+    }
+    function HideOverlay() {
+        $('#loadingModal').modal('hide');
+    }
+</script>
+<style type="text/css">
+    .col1 td
+    {
+        visibility: hidden;
+    }
+    .col2 th
+    {
+        visibility: hidden;
+    }
+    .col-wrap1
+    {
+        width: 100%;
+    }
+    
+    .col-wrap2
+    {
+        width: 100%;
+        margin-right: -100%;
+        position: relative;
+        left: 200px;
+    }
+    
+    .col1
+    {
+        float: left;
+        width: 200px;
+        margin-right: -100%;
+        position: relative;
+        left: -200px;
+    }
+    
+    .clear
+    {
+        clear: both;
+        font-size: 0;
+        overflow: hidden;
+    }
+</style>
+<h1>@Model.Title</h1>
+<div id="accordion2" class="accordion">
+    @foreach (var gh in Model.Groups)
+    {
+        var inClass = gh.IsCurrent ? " in " : "";
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a href="@Url.Action("QuestionC", new { id = Model.Id, group = gh.PublicKey })" class="accordion-toggle">@gh.GroupText</a>
+            </div>
+            <div class="accordion-body collapse @inClass" id="collapseOne">
+                <div class="accordion-inner" id="@Model.CurrentGroup.GetClientId("div")">
+                    @if (gh.IsCurrent)
+                    {
+                        Html.RenderPartial("~/Views/Group/_ScreenC.cshtml", Model);
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div id="loadingModal" class="modal hide" >
+
+</div>

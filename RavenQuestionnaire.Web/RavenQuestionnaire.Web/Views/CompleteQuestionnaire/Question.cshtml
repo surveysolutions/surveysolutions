@@ -3,6 +3,7 @@
 @model CompleteQuestionnaireViewEnumerable
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = Model.CurrentGroup.GroupText;
 }
 <h1>@Model.Title</h1>
 <div class="tabbable">

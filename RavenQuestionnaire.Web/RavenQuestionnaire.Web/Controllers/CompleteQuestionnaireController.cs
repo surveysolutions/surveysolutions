@@ -11,6 +11,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Status;
@@ -67,8 +68,8 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id, 
-                    status, 
+                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
+                    status,
                     changeComment,
                     responsible,
                     _globalProvider.GetCurrentUser()));
@@ -81,7 +82,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, 
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel,
                 CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
 
             if (model != null)
@@ -119,14 +120,42 @@ namespace RavenQuestionnaire.Web.Controllers
                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
             ViewBag.CurrentGroup = model.CurrentGroup;
-            return View( model);
+            return View(model);
         }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
+        public ViewResult QuestionV(string id, Guid? group)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+            var model =
+                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
+            ViewBag.CurrentGroup = model.CurrentGroup;
+
+            return View(model);
+        }
+
+
+        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
+        public ViewResult QuestionC(string id, Guid? group)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+            var model =
+                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
+            ViewBag.CurrentGroup = model.CurrentGroup;
+
+            return View(model);
+        }
+
 
         public ActionResult SaveSingleResult(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
         {
             if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
             {
-                return RedirectToAction("Question", new { id = settings[0].QuestionnaireId});
+                return RedirectToAction("Question", new { id = settings[0].QuestionnaireId });
             }
 
             CompleteQuestionView question = questions[0];
@@ -154,6 +183,64 @@ namespace RavenQuestionnaire.Web.Controllers
             ViewBag.CurrentGroup = model;
             return PartialView("~/Views/Group/_Screen.cshtml", model);
         }
+
+        public ActionResult SaveSingleResultV(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
+        {
+            if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
+            {
+                return RedirectToAction("QuestionV", new { id = settings[0].QuestionnaireId });
+            }
+
+            CompleteQuestionView question = questions[0];
+            try
+            {
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
+                                                                                      question.Answers as CompleteAnswerView[],
+                                                                                      settings[0].PropogationPublicKey,
+                                                                                      _globalProvider.GetCurrentUser()));
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("questions[" + question.PublicKey + (settings[0].PropogationPublicKey.HasValue
+                         ? string.Format("_{0}", settings[0].PropogationPublicKey.Value)
+                         : "") + "].AnswerValue", e.Message);
+            }
+
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
+
+            return PartialView("~/Views/Group/_ScreenV.cshtml", model);
+        }
+
+
+        public ActionResult SaveSingleResultC(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
+        {
+            if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
+            {
+                return RedirectToAction("QuestionC", new { id = settings[0].QuestionnaireId });
+            }
+
+            CompleteQuestionView question = questions[0];
+            try
+            {
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
+                                                                                      question.Answers as CompleteAnswerView[],
+                                                                                      settings[0].PropogationPublicKey,
+                                                                                      _globalProvider.GetCurrentUser()));
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("questions[" + question.PublicKey + (settings[0].PropogationPublicKey.HasValue
+                         ? string.Format("_{0}", settings[0].PropogationPublicKey.Value)
+                         : "") + "].AnswerValue", e.Message);
+            }
+
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
+
+            return PartialView("~/Views/Group/_ScreenC.cshtml", model);
+        }
+
 
         public ActionResult Delete(string id)
         {

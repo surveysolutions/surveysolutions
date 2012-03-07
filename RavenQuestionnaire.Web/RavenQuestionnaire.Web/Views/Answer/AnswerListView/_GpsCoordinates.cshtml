@@ -12,7 +12,7 @@
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
     <div class="answer">
-        Latitude & Longitude separated by semicolon
         @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? Model.Answers[0].AnswerValue : "", (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
+        <p class="help-block"> Latitude & Longitude separated by semicolon</p>
     </div>
 }
