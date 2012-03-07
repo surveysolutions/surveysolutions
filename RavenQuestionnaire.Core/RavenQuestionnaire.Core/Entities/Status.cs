@@ -9,10 +9,7 @@ namespace RavenQuestionnaire.Core.Entities
         private StatusDocument innerDocument;
         public string StatusId
         {
-            get
-            {
-                return innerDocument.Id;
-            }
+            get { return innerDocument.Id; }
         }
 
         public StatusDocument GetInnerDocument()
@@ -27,14 +24,15 @@ namespace RavenQuestionnaire.Core.Entities
 
         public Status(string title, bool isInitial, string questionnaireId)
         {
-            innerDocument = new StatusDocument() { Title = title, 
+            innerDocument = new StatusDocument() { 
+                Title = title, 
                 IsInitial = isInitial, 
-                QuestionnaireId = questionnaireId };
+                QuestionnaireId = questionnaireId 
+            };
         }
 
         public Status(string title, bool isInitial, Dictionary<string, List<SurveyStatus>> statusRoles, 
-            string questionnaireId)
-            :this(title, isInitial, questionnaireId)
+            string questionnaireId) : this(title, isInitial, questionnaireId)
         {
             innerDocument.StatusRoles = statusRoles;
         }
@@ -43,6 +41,7 @@ namespace RavenQuestionnaire.Core.Entities
         {
             innerDocument.StatusRoles = restrictions;
         }
+
 
 
     }
