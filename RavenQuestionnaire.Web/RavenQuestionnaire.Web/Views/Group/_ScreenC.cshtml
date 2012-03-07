@@ -123,8 +123,9 @@
             {
             @RenderDeleteButton(Model, currentGroup.PublicKey, currentGroup.PropogationPublicKeys[index])
             }
+            <a class="btn" data-toggle="modal" href="#@currentGroup.PropogationPublicKeys[index]" >Edit</a>
             
-            <div class="modal" id="myModal">
+            <div class="modal hide" id="@currentGroup.PropogationPublicKeys[index]">
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal">×</a>
                     <h3>Modal header</h3>
