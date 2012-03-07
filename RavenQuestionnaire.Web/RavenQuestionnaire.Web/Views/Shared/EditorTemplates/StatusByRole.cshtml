@@ -1,5 +1,6 @@
 ﻿@using RavenQuestionnaire.Core.Views.Status.SubView
 @model  StatusByRole
+            
 <tr>
     <td>
         @Html.DisplayTextFor(model => model.Status.Title)
@@ -9,6 +10,7 @@
     @Html.HiddenFor(model => model.Status.Title)
 
     @Html.EditorFor(model => model.StatusRestriction) 
+
     @*@foreach (var statusRestriction in Model.StatusRestriction)
     {
         @#1#Html.Hidden(string.Format("StatusRolesMatrix[{0}].Index", Model.Status.Id), statusRestriction.Key)#1#

@@ -2,5 +2,16 @@
 @model StatusView
 @if (Model != null)
 {
-   
+    using (Html.BeginForm("Update", "Status"))
+    {
+    
+    @Html.ValidationSummary(true)
+    
+    @Html.EditorForModel()
+    <p>
+        <input type="submit" value="Save" />
+    </p>
+    }
 }
+
+
