@@ -9,10 +9,11 @@
 }
 <script type="text/javascript">
     function ShowOverlay() {
-        $('#loadingModal').modal('show');
+        $('#loadingModal').addClass('overlay');
+        $('.modal-backdrop').remove();
     }
     function HideOverlay() {
-        $('#loadingModal').modal('hide');
+        $('#loadingModal').removeClass('overlay');
     }
 </script>
 <style type="text/css">
@@ -73,6 +74,4 @@
         </div>
     }
 </div>
-<div id="loadingModal" class="modal hide" >
-
-</div>
+<div id="loadingModal" class=""></div>

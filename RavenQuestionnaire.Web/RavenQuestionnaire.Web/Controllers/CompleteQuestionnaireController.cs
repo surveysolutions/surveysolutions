@@ -132,7 +132,7 @@ namespace RavenQuestionnaire.Web.Controllers
                  viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
                      new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
             ViewBag.CurrentGroup = model.CurrentGroup;
-
+            
             return View(model);
         }
 
@@ -146,7 +146,8 @@ namespace RavenQuestionnaire.Web.Controllers
                  viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
                      new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
             ViewBag.CurrentGroup = model.CurrentGroup;
-
+            ViewBag.AnsweredQuestionKey = Guid.Empty;
+            ViewBag.PropogationGroupKey = Guid.Empty;
             return View(model);
         }
 
@@ -221,6 +222,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
 
             CompleteQuestionView question = questions[0];
+            
             try
             {
                 commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
@@ -234,9 +236,12 @@ namespace RavenQuestionnaire.Web.Controllers
                          ? string.Format("_{0}", settings[0].PropogationPublicKey.Value)
                          : "") + "].AnswerValue", e.Message);
             }
-
+            
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
                 new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
+
+            ViewBag.AnsweredQuestionKey = question.PublicKey;
+            ViewBag.PropogationGroupKey = settings[0].PropogationPublicKey;
 
             return PartialView("~/Views/Group/_ScreenC.cshtml", model);
         }

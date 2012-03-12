@@ -2,6 +2,7 @@
 @using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
 @using RavenQuestionnaire.Core.Views.Question
+@using RavenQuestionnaire.Web.Models
 @using RavenQuestionnaire.Web.Utils
 @model CompleteQuestionnaireViewV
 <script type="text/javascript">
@@ -56,7 +57,14 @@
             foreach (var question in currentGroup.Questions)
             {
 
-                using (Ajax.BeginForm("SaveSingleResult", "CompleteQuestionnaire", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div") }))
+                using (Ajax.BeginForm("SaveSingleResultC", "CompleteQuestionnaire", new AjaxOptions()
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
+                    OnBegin = "ShowOverlay",
+                    OnComplete = "HideOverlay",
+                    OnFailure = "HideOverlay"
+                }))
                 {
                     using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                     {
@@ -80,9 +88,40 @@
     {
         for (int index = 0; index < currentGroup.PropagatedGroupsCount; index++)
         {
-            var first = currentGroup.PropagatedQuestions.First(); 
-    <div class="well">
-        @RenderQuestion(first.Questions[index], currentGroup.PublicKey, currentGroup.PropogationPublicKeys[index])
+            var first = currentGroup.PropagatedQuestions.First();
+            var answers = first.Questions[index].Answers.Where(a => a.Selected).ToList();
+            var modalHeader = string.Empty;
+            if (answers.Count == 0) { }
+            else if (answers.Count == 1)
+            {
+                var answer = answers[0];
+                if (!string.IsNullOrEmpty(answer.AnswerValue))
+                {
+                    modalHeader = answer.AnswerValue;
+                }
+                else if (!string.IsNullOrEmpty(answer.AnswerText))
+                {
+                    modalHeader = answer.AnswerText;
+                }
+                else
+                {
+                    modalHeader = "Fill parcel name field";
+                }
+            }
+            else
+            {
+                modalHeader = "Fill parcel name field";
+            }
+            if (currentGroup.PropogationPublicKeys[index] == ViewBag.PropogationGroupKey)
+            {
+    <text>
+    <script type="text/javascript">
+        $('#@currentGroup.PropogationPublicKeys[index]').modal('show');
+    </script>
+    </text>
+            }
+    <div class="well span4">
+        @RenderQuestion(first.Questions[index], currentGroup.PublicKey, currentGroup.PropogationPublicKeys[index], new QuestionRenderOptions { isHorizontal = false })
         <div class="form-actions">
             <a class="btn btn-primary" data-toggle="modal" href="#@currentGroup.PropogationPublicKeys[index]">
                 <i class="icon-pencil icon-white"></i>Edit</a>
@@ -94,26 +133,29 @@
         <div class="modal hide" id="@currentGroup.PropogationPublicKeys[index]">
             <div class="modal-header">
                 <a class="close" data-dismiss="modal">&times;</a>
-                <h3>Modal header</h3>
+                <h3>@modalHeader</h3>
             </div>
             <div class="modal-body" style="height: 420px; overflow-y: scroll">
                 @foreach (var pquestion in currentGroup.PropagatedQuestions.Skip(1))
                 {
-                    @RenderQuestion(pquestion.Questions[index], currentGroup.PublicKey, currentGroup.PropogationPublicKeys[index])
+                    @RenderQuestion(pquestion.Questions[index], currentGroup.PublicKey, currentGroup.PropogationPublicKeys[index], new QuestionRenderOptions { isHorizontal = true })
                 }
             </div>
         </div>
     </div>
         }
 }
-@helper RenderQuestion(CompleteQuestionView question, Guid groupPublicKey, Guid propogationPublicKey)
+@helper RenderQuestion(CompleteQuestionView question, Guid groupPublicKey, Guid propogationPublicKey, QuestionRenderOptions qOptions)
     {
         var options = new AjaxOptions()
         {
             InsertionMode = InsertionMode.Replace,
-            UpdateTargetId = Model.CurrentGroup.GetClientId("div")
+            UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
+            OnBegin = "ShowOverlay",
+            OnComplete = "HideOverlay",
+            OnFailure = "HideOverlay",
         };
-        using (Ajax.BeginForm("SaveSingleResultC", "CompleteQuestionnaire", null, options, new { autocomplete = "off", @class = "form-horizontal" }))
+        using (Ajax.BeginForm("SaveSingleResultC", "CompleteQuestionnaire", null, options, new { autocomplete = "off", @class = qOptions.isHorizontal ? "form-horizontal" : "" }))
         {
     <div class="control-group">
         <label class="control-label">@question.QuestionText</label>
@@ -138,7 +180,6 @@
         </div>
     </div>
         }
-
 }
 @helper RenderAddButton(CompleteQuestionnaireViewV model, Guid currentGroupPublicKey)
     {

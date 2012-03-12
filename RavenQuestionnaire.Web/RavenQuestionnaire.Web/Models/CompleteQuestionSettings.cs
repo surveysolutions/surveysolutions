@@ -8,4 +8,9 @@ namespace RavenQuestionnaire.Web.Models
         public Guid? ParentGroupPublicKey { get; set; }
         public Guid? PropogationPublicKey { get; set; }
     }
+
+    public class QuestionRenderOptions
+    {
+        public bool isHorizontal { get; set;}
+    }
 }
