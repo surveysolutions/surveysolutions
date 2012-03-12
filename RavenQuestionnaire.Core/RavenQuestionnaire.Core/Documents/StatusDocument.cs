@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Documents
@@ -12,9 +13,7 @@ namespace RavenQuestionnaire.Core.Documents
         /// Document ID.
         /// </summary>
         public string Id { get; set; }
-
         public string Title { get; set; }
-
         public bool IsVisible {get; set;}
 
         /// <summary>
@@ -36,9 +35,9 @@ namespace RavenQuestionnaire.Core.Documents
         {
             IsVisible = true;
             StatusRoles = new Dictionary<string, List<SurveyStatus>>();
+            FlowRules = new Dictionary<Guid, FlowRule>();
         }
-
-
+        
         /// <summary>
         /// Flag displays status is used for stuck item in the commonon flow.
         /// </summary>
@@ -47,9 +46,7 @@ namespace RavenQuestionnaire.Core.Documents
         /// <summary>
         /// List of flow rules is used for status changing.
         /// </summary>
-        public List<FlowRule> FlowRules { get; set;}
-
-        public SurveyStatus DefaultIfNoConditions { set; get; }
-
+        public Dictionary<Guid,FlowRule> FlowRules { get; set;}
+        
     }
 }

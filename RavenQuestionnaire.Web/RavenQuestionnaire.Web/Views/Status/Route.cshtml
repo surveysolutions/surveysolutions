@@ -2,16 +2,54 @@
 @model StatusView
 @if (Model != null)
 {
-    using (Html.BeginForm("Update", "Status"))
-    {
-    
-    @Html.ValidationSummary(true)
-    
-    @Html.EditorForModel()
     <p>
-        <input type="submit" value="Save" />
+        @Html.ActionLink("Add Route", "AddRoute", new { sId = Model.Id }, new { @class = "btn small btn-primary" })
     </p>
-    }
+    
+    <table class="table table-striped table-bordered table-condensed">
+        <thead>
+            <tr>
+                <th>
+                    Condition
+                </th>
+                <th>
+                    Comment on changing
+                </th>
+                <th>
+                    Target Status
+                </th>
+                <th>
+                    Order
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.FlowRules != null)
+            {
+                foreach (var item in Model.FlowRules)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => item.Value.ConditionExpression)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Value.ChangeComment)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Value.TargetStatus)
+                        @*@Html.ActionLink("Route", "Route", new { id = item.Id }, new { @class = "btn small " })*@
+                    </td>
+                    <td class="buttons">
+                    </td>
+                    <td class="buttons">
+                        @*@Html.ActionLink("Route", "Route", new { id = item.Id }, new { @class = "btn small " })*@
+                    </td>
+                </tr>
+                }
+            }
+        </tbody>
+    </table>
 }
-
-

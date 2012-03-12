@@ -56,6 +56,28 @@ namespace RavenQuestionnaire.Web.Controllers
             return View("Create", model);
         }
 
+
+        [HttpPost]
+        public ActionResult SaveRoute(FlowRule model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(model.StatusId))
+                {
+                    //commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial, model.QuestionnaireId, GlobalInfo.GetCurrentUser()));
+                }
+
+                return RedirectToAction("Index", new
+                {
+                    Qid = model.StatusId
+                });
+
+            }
+            return View("AddRoute", model);
+        }
+
+
+
         [HttpPost]
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Update(StatusView model)
@@ -146,7 +168,17 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ViewResult Route(string id)
         {
-            return View();
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters.");
+            StatusView model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(id));
+
+            return View(model);
+        }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ViewResult AddRoute(string id)
+        {
+            return View(new FlowRule(){StatusId = id});
         }
 
     }
