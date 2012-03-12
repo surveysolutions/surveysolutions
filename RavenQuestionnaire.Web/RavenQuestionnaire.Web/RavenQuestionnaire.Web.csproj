@@ -147,11 +147,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>breadcrumbs.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\button-groups.css">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>button-groups.less</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap\buttons.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -286,11 +281,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>type.less</DependentUpon>
-    </Content>
-    <Content Include="Content\bootstrap\utilities.css">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>utilities.less</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap\variables.css">
       <AutoGen>True</AutoGen>
