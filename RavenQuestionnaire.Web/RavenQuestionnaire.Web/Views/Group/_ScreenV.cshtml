@@ -40,8 +40,15 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        adjust();
+    });
+    $(window).resize(function () {
+        adjust();
+    });
+    function adjust()
+    {
         $('#headerTableWrap').css("width", $('#contentTableWrap').css('width'));
-    })
+    }
 </script>
 @helper  RenderGroup(CompleteGroupViewV currentGroup)
     {

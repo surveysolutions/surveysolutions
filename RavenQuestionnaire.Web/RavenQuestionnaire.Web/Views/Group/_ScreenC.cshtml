@@ -111,10 +111,7 @@
         var options = new AjaxOptions()
         {
             InsertionMode = InsertionMode.Replace,
-            UpdateTargetId = Model.CurrentGroup.GetClientId("div")/*,
-            OnBegin = "ShowOverlay",
-            OnComplete = "HideOverlay",
-            OnFailure = "HideOverlay"*/
+            UpdateTargetId = Model.CurrentGroup.GetClientId("div")
         };
         using (Ajax.BeginForm("SaveSingleResultC", "CompleteQuestionnaire", null, options, new { autocomplete = "off", @class = "form-horizontal" }))
         {
