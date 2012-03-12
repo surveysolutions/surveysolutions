@@ -39,47 +39,47 @@
 @RenderGroup(Model.CurrentGroup)
 @helper  RenderGroup(CompleteGroupViewV currentGroup)
     {
-        if (currentGroup.Propagated == Propagate.Propagated )
-        {
-            //if (currentGroup.Propagated != Propagate.AutoPropagated)
-            { 
-    <div class="clearfix">
-        <p class="pull-right">
-            @RenderAddButton(Model, currentGroup.PublicKey)
-            @Html.ValidationMessage("PropagationError")
-        </p>
-    </div>
-            }
-    @RenderPropagatebleGroup(currentGroup)
+    if (currentGroup.Propagated == Propagate.Propagated || currentGroup.Propagated == Propagate.AutoPropagated	 )
+    {
+        //if (currentGroup.Propagated != Propagate.AutoPropagated)
+        { 
+            <div class="clearfix">
+                <p class="pull-right">
+                    @RenderAddButton(Model, currentGroup.PublicKey)
+                    @Html.ValidationMessage("PropagationError")
+                </p>
+            </div>
         }
-        else
+        @RenderPropagatebleGroup(currentGroup)
+    }
+    else
+    {
+        foreach (var question in currentGroup.Questions)
         {
-            foreach (var question in currentGroup.Questions)
+
+            using (Ajax.BeginForm("SaveSingleResultC", "CompleteQuestionnaire", new AjaxOptions()
+                                                                                    {
+                                                                                        InsertionMode = InsertionMode.Replace,
+                                                                                        UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
+                                                                                        OnBegin = "ShowOverlay",
+                                                                                        OnComplete = "HideOverlay",
+                                                                                        OnFailure = "HideOverlay"
+                                                                                    }))
             {
-
-                using (Ajax.BeginForm("SaveSingleResultC", "CompleteQuestionnaire", new AjaxOptions()
+                using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                 {
-                    InsertionMode = InsertionMode.Replace,
-                    UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
-                    OnBegin = "ShowOverlay",
-                    OnComplete = "HideOverlay",
-                    OnFailure = "HideOverlay"
-                }))
-                {
-                    using (Html.BeginCollectionItem("questions", true, question.PublicKey))
-                    {
-                        Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
+                    Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
 
-                    }
-                    using (Html.BeginCollectionItem("settings", true, question.PublicKey))
-                    {
-    @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
-    @Html.Hidden("QuestionnaireId", Model.Id)
-                    }
+                }
+                using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+                {
+                    @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
+                    @Html.Hidden("QuestionnaireId", Model.Id)
                 }
             }
         }
-        foreach (var @group in currentGroup.Groups)
+    }
+    foreach (var @group in currentGroup.Groups)
         {
     <text>@RenderGroup(@group)</text>
         }
