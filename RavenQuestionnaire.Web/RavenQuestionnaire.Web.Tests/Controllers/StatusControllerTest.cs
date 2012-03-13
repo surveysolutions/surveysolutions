@@ -51,7 +51,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void When_GetQuestionnaireDetailsIsExecuted()
         {
-            var output = new StatusView("statusdocuments/sId", "test", true, null, "-1");
+            var output = new StatusView("statusdocuments/sId", "test", true, null,"-1",null );
             var input = new StatusViewInputModel("sId");
 
             ViewRepositoryMock.Setup(

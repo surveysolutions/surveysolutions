@@ -8,7 +8,7 @@
     <thead>
         <tr>
             <th>Title </th>
-            <th>Restrictions</th>
+            <th title="Defines limitations for roles">Role  restrictions</th>
             <th>Route rules</th>
         </tr>
     </thead>
@@ -20,7 +20,7 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td class="buttons">
-                    @Html.ActionLink("Role restrictions", "Edit", new { id = item.Id }, new { @class = "btn small " })
+                    @Html.ActionLink("Manage", "Edit", new { id = item.Id }, new { @class = "btn small " })
                 </td>
                 <td class="buttons">
                     @Html.ActionLink("Route", "Route", new { id = item.Id }, new { @class = "btn small " })

@@ -64,7 +64,6 @@
                 <a href="@Url.Action("QuestionV", new { id = Model.Id, group = gh.PublicKey })" class="accordion-toggle">@gh.GroupText</a>
             </div>
             <div class="accordion-body collapse @inClass" id="collapseOne">
-                
                 <div class="accordion-inner" id="@gh.GetClientId("div")">
                     @if (gh.IsCurrent)
                     {
@@ -75,6 +74,5 @@
         </div>
     }
 </div>
-<div id="loadingModal" class="modal hide" >
-
+<div id="loadingModal" class="modal hide">
 </div>
