@@ -32,7 +32,19 @@
                     @Html.DisplayFor(modelItem => item.CreationDate)
                 </td>
                 <td class="buttons">
-                    @Html.ActionLink("Participate", "Participate", "CompleteQuestionnaire", new { id = item.Id }, new { @class = "btn small btn-primary" })
+                    
+                    <div class="btn-group">
+    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">Participate<span
+        class="caret"></span></a>
+    <ul class="dropdown-menu">
+        <li><a href="@Url.Action("Participate", "CompleteQuestionnaire", new { id = item.Id, mode="" })">
+            Horizontal</a></li>
+        <li><a href="@Url.Action("Participate", "CompleteQuestionnaire", new { id = item.Id, mode = "V" })">
+            Vertical</a></li>
+        <li><a href="@Url.Action("Participate", "CompleteQuestionnaire", new { id = item.Id, mode = "C" })">
+            Modal</a></li>
+    </ul>
+</div>
                 </td>
             </tr>
         }

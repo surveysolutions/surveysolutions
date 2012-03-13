@@ -35,8 +35,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             Groups = new List<CompleteGroupViewV>();
             Propagated = Propagate.None;
             PropagatedQuestions = new List<PropagatedQuestion>();
+            PropagatedGroups = new List<PropagatedGroup>();
             PropogationPublicKeys = new List<Guid>();
-            AutoPropagate = false;
+            AutoPropagate = new List<bool>();
         }
         public CompleteGroupViewV(CompleteQuestionnaireDocument doc, CompleteGroup currentGroup)
             : this()
@@ -84,10 +85,22 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             Propagated = propagatable.Propagated;
 
             var propagated = propGroups.Where(g => g != propagatable).Select(g => g as PropagatableCompleteGroup).ToList();
+
             if (propagated.Count > 0)
             {
-                AutoPropagate = propagated[0].AutoPropagate;
                 PropogationPublicKeys = propagated.Select(g => g.PropogationPublicKey).ToList();
+                foreach (var @group in propagated)
+                {
+                    
+                    var pgroup = new PropagatedGroup
+                                     {
+                                         AutoPropagate = @group.AutoPropagate,
+                                         PropogationKey = @group.PropogationPublicKey,
+                                         Questions = new List<CompleteQuestionView>()
+                                     };
+                    PropagatedGroups.Add(pgroup);
+                    AutoPropagate.Add(@group.AutoPropagate);
+                }
             }
             for (int i = 0; i < propagatable.Questions.Count; i++)
             {
@@ -97,21 +110,22 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                                  PublicKey = question.PublicKey,
                                  QuestionText = question.QuestionText,
                                  Questions = new List<CompleteQuestionView>()
-                                 
                              };
 
-                foreach (var p in propagated)
+                for (int index = 0; index < propagated.Count; index++)
                 {
-                    pq.Questions.Add(qf.CreateQuestion(doc, p, p.Questions[i]));
+                    var p = propagated[index];
+                    var cq = qf.CreateQuestion(doc, p, p.Questions[i]);
+                    pq.Questions.Add(cq);
+                    PropagatedGroups[index].Questions.Add(cq);
                 }
                 PropagatedQuestions.Add(pq);
             }
-           
         }
 
         public Guid PublicKey { get; set; }
 
-        public bool AutoPropagate { get; set; }
+       
 
         public string GroupText { get; set; }
 
@@ -125,18 +139,73 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
 
         public List<PropagatedQuestion> PropagatedQuestions { get; set; }
 
-        public int PropagatedGroupsCount { get { return PropagatedQuestions.Count > 0?  PropagatedQuestions[0].Questions.Count : 0; } }
+        public List<bool> AutoPropagate { get; set; }
+
+        public List<PropagatedGroup> PropagatedGroups { get; set; }
+
+        public int PropagatedGroupsCount { get { return PropagatedQuestions.Count > 0 ? PropagatedQuestions[0].Questions.Count : 0; } }
 
         public virtual string GetClientId(string prefix)
         {
             return string.Format("{0}_{1}", prefix, PublicKey);
         }
     }
+    public class PropagatedGroup
+    {
+        public bool AutoPropagate { get; set; }
+        public Guid PropogationKey { get; set; }
+        public List<CompleteQuestionView> Questions { get; set; }
+        public string FirstAnswer
+        {
+            get
+            {
+                var answers = Questions.First().Answers.Where(a => a.Selected).ToList();
+                string firstAnswer;
+
+                switch (answers.Count)
+                {
+                    case 0:
+                        firstAnswer = "Answe the first question";
+                        break;
+                    case 1:
+                        {
+                            var answer = answers[0]; 
+                            if (!string.IsNullOrEmpty(answer.AnswerValue))
+                            {
+                                firstAnswer = answer.AnswerValue;
+                            }
+                            else if (!string.IsNullOrEmpty(answer.AnswerText))
+                            {
+                                firstAnswer = answer.AnswerText;
+                            }
+                            else
+                            {
+                                firstAnswer = "Fill parcel name field";
+                            }
+                        }
+                        break;
+                    default:
+                        firstAnswer = "Multiple answers";
+                        break;
+                }
+                if (string.IsNullOrWhiteSpace(firstAnswer))
+                {
+                    firstAnswer = "Answe the first question";
+                }
+                return firstAnswer;
+            }
+        }
+    }
     public class PropagatedQuestion
     {
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
-        
+
         public List<CompleteQuestionView> Questions { get; set; }
+        
+        public PropagatedQuestion()
+        {
+            
+        }
     }
 }

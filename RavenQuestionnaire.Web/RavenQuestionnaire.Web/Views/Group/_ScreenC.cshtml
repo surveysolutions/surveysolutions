@@ -39,109 +39,100 @@
 @RenderGroup(Model.CurrentGroup)
 @helper  RenderGroup(CompleteGroupViewV currentGroup)
     {
-    if (currentGroup.Propagated == Propagate.Propagated || currentGroup.Propagated == Propagate.AutoPropagated	 )
-    {
-        //if (currentGroup.Propagated != Propagate.AutoPropagated)
-        { 
-            <div class="clearfix">
-                <p class="pull-right">
-                    @RenderAddButton(Model, currentGroup.PublicKey)
-                    @Html.ValidationMessage("PropagationError")
-                </p>
-            </div>
-        }
-        @RenderPropagatebleGroup(currentGroup)
-    }
-    else
-    {
-        foreach (var question in currentGroup.Questions)
+        if (currentGroup.Propagated == Propagate.Propagated || currentGroup.Propagated == Propagate.AutoPropagated)
         {
-
-            using (Ajax.BeginForm("SaveSingleResultC", "CompleteQuestionnaire", new AjaxOptions()
-                                                                                    {
-                                                                                        InsertionMode = InsertionMode.Replace,
-                                                                                        UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
-                                                                                        OnBegin = "ShowOverlay",
-                                                                                        OnComplete = "HideOverlay",
-                                                                                        OnFailure = "HideOverlay"
-                                                                                    }))
+            //if (currentGroup.Propagated != Propagate.AutoPropagated)
+            { 
+    <div class="clearfix">
+        <p class="pull-right">
+            @RenderAddButton(Model, currentGroup.PublicKey)
+            @Html.ValidationMessage("PropagationError")
+        </p>
+    </div>
+            }
+    @RenderPropagatebleGroup(currentGroup)
+        }
+        else
+        {
+            foreach (var question in currentGroup.Questions)
             {
-                using (Html.BeginCollectionItem("questions", true, question.PublicKey))
-                {
-                    Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
 
-                }
-                using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+                using (Ajax.BeginForm("SaveSingleResultC", "CompleteQuestionnaire", new AjaxOptions()
                 {
-                    @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
-                    @Html.Hidden("QuestionnaireId", Model.Id)
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
+                    OnBegin = "ShowOverlay",
+                    OnComplete = "HideOverlay",
+                    OnFailure = "HideOverlay"
+                }))
+                {
+                    using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+                    {
+                        Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
+
+                    }
+                    using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+                    {
+    @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
+    @Html.Hidden("QuestionnaireId", Model.Id)
+                    }
                 }
             }
         }
-    }
-    foreach (var @group in currentGroup.Groups)
+        foreach (var @group in currentGroup.Groups)
         {
     <text>@RenderGroup(@group)</text>
         }
 }
 @helper  RenderPropagatebleGroup(CompleteGroupViewV currentGroup)
     {
-        for (int index = 0; index < currentGroup.PropagatedGroupsCount; index++)
+        var blocksPerRow = 2;
+        var index = 0;
+        for (int i = 0; i < Math.Ceiling(currentGroup.PropagatedGroupsCount / (double)blocksPerRow); i++)
         {
-            var first = currentGroup.PropagatedQuestions.First();
-            var answers = first.Questions[index].Answers.Where(a => a.Selected).ToList();
-            var modalHeader = string.Empty;
-            if (answers.Count == 0) { }
-            else if (answers.Count == 1)
+            var spanClass   = "span" + (12 / blocksPerRow).ToString();
+    <div class="row-fluid">
+        @for (int j = 0; (j < blocksPerRow) && (index<currentGroup.PropagatedGroupsCount); j++)
+        {
+            var pgroup = currentGroup.PropagatedGroups[index];
+             var first = currentGroup.PropagatedQuestions.First();
+                        if (currentGroup.PropogationPublicKeys[index] == ViewBag.PropogationGroupKey)
             {
-                var answer = answers[0];
-                if (!string.IsNullOrEmpty(answer.AnswerValue))
-                {
-                    modalHeader = answer.AnswerValue;
-                }
-                else if (!string.IsNullOrEmpty(answer.AnswerText))
-                {
-                    modalHeader = answer.AnswerText;
-                }
-                else
-                {
-                    modalHeader = "Fill parcel name field";
-                }
+            <text>
+            <script type="text/javascript">
+                $('#@currentGroup.PropogationPublicKeys[index]').modal('show');
+            </script>
+            </text>
             }
-            else
-            {
-                modalHeader = "Fill parcel name field";
-            }
-            if (currentGroup.PropogationPublicKeys[index] == ViewBag.PropogationGroupKey)
-            {
-    <text>
-    <script type="text/javascript">
-        $('#@currentGroup.PropogationPublicKeys[index]').modal('show');
-    </script>
-    </text>
-            }
-    <div class="well span4">
-        @RenderQuestion(first.Questions[index], currentGroup.PublicKey, currentGroup.PropogationPublicKeys[index], new QuestionRenderOptions { isHorizontal = false })
-        <div class="form-actions">
-            <a class="btn btn-primary" data-toggle="modal" href="#@currentGroup.PropogationPublicKeys[index]">
-                <i class="icon-pencil icon-white"></i>Edit</a>
-            @if (!currentGroup.AutoPropagate)
-            {
-                @RenderDeleteButton(Model, currentGroup.PublicKey, currentGroup.PropogationPublicKeys[index])
-            }
-        </div>
-        <div class="modal hide" id="@currentGroup.PropogationPublicKeys[index]">
-            <div class="modal-header">
-                <a class="close" data-dismiss="modal">&times;</a>
-                <h3>@modalHeader</h3>
+            <div class="@spanClass">
+                <div class="well">
+                    @RenderQuestion(first.Questions[index], currentGroup.PublicKey, pgroup.PropogationKey, new QuestionRenderOptions { isHorizontal = false })
+                    <div class="form-actions">
+                        <a class="btn btn-primary" data-toggle="modal" href="#@currentGroup.PropogationPublicKeys[index]">
+                            <i class="icon-pencil icon-white"></i>Edit</a>
+                        @if (!pgroup.AutoPropagate)
+                        {
+                            @RenderDeleteButton(Model, currentGroup.PublicKey, currentGroup.PropogationPublicKeys[index])
+                        }
+                    </div>
+                    <div class="modal hide" id="@currentGroup.PropogationPublicKeys[index]">
+                        <div class="modal-header">
+                            <a class="close" data-dismiss="modal">&times;</a>
+                            <h3>@pgroup.FirstAnswer</h3>
+                        </div>
+                        <div class="modal-body" style="height: 420px; overflow-y: scroll">
+                            @foreach (var pquestion in currentGroup.PropagatedQuestions.Skip(1))
+                            {
+                                @RenderQuestion(pquestion.Questions[index], currentGroup.PublicKey, currentGroup.PropogationPublicKeys[index], new QuestionRenderOptions { isHorizontal = true })
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body" style="height: 420px; overflow-y: scroll">
-                @foreach (var pquestion in currentGroup.PropagatedQuestions.Skip(1))
-                {
-                    @RenderQuestion(pquestion.Questions[index], currentGroup.PublicKey, currentGroup.PropogationPublicKeys[index], new QuestionRenderOptions { isHorizontal = true })
-                }
-            </div>
-        </div>
+            {
+                index++;
+            }
+        }
     </div>
         }
 }

@@ -9,10 +9,11 @@
 }
 <script type="text/javascript">
     function ShowOverlay() {
-        $('#loadingModal').modal('show');
+        $('#loadingModal').addClass('overlay');
+        $('.modal-backdrop').remove();
     }
     function HideOverlay() {
-        $('#loadingModal').modal('hide');
+        $('#loadingModal').removeClass('overlay');
     }
 </script>
 <style type="text/css">
@@ -55,6 +56,18 @@
     }
 </style>
 <h1>@Model.Title</h1>
+<div class="btn-group">
+    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Switch view <span
+        class="caret"></span></a>
+    <ul class="dropdown-menu">
+        <li><a href="@Url.Action("Question", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey })">
+            Horizontal</a></li>
+        <li><a href="@Url.Action("QuestionV", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey })">
+            Vertical</a></li>
+        <li><a href="@Url.Action("QuestionC", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey })">
+            Modal</a></li>
+    </ul>
+</div>
 <div id="accordion2" class="accordion">
     @foreach (var gh in Model.Groups)
     {
@@ -64,7 +77,6 @@
                 <a href="@Url.Action("QuestionV", new { id = Model.Id, group = gh.PublicKey })" class="accordion-toggle">@gh.GroupText</a>
             </div>
             <div class="accordion-body collapse @inClass" id="collapseOne">
-                
                 <div class="accordion-inner" id="@gh.GetClientId("div")">
                     @if (gh.IsCurrent)
                     {
@@ -75,6 +87,5 @@
         </div>
     }
 </div>
-<div id="loadingModal" class="modal hide" >
-
+<div id="loadingModal" class="">
 </div>

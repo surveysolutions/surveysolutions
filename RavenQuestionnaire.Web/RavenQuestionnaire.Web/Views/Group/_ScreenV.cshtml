@@ -4,11 +4,10 @@
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
 @using RavenQuestionnaire.Web.Utils
 @model CompleteQuestionnaireViewV
-
 <script type="text/javascript">
     !function ($) {
 
-        $(function() {
+        $(function () {
 
             // fix sub nav on scroll
             var $win = $(window)
@@ -34,10 +33,10 @@
     } (window.jQuery);
 </script>
 <div class="subnav">
-   <h2>@Model.CurrentGroup.GroupText</h2>
+    <h2>@Model.CurrentGroup.GroupText</h2>
+    
 </div>
 @RenderGroup(Model.CurrentGroup)
-
 <script type="text/javascript">
     $(document).ready(function () {
         adjust();
@@ -45,8 +44,7 @@
     $(window).resize(function () {
         adjust();
     });
-    function adjust()
-    {
+    function adjust() {
         $('#headerTableWrap').css("width", $('#contentTableWrap').css('width'));
     }
 </script>
@@ -60,38 +58,36 @@
         <p class="pull-right">
             @Html.ValidationMessage("PropagationError")
             @RenderAddButton(Model, currentGroup.PublicKey)
-         
         </p>
     </div>
             }
-            if (currentGroup.PropagatedGroupsCount>0)
-           {
-               <div class="col-wrap1">
-
-                   <div class="col-wrap2">
-                       <div class="col1">
-                           <div style="overflow: hidden">
-                               <div id="headerTableWrap">
-                                   @RenderPropagatebleGroup(currentGroup)
-                               </div>
-                           </div>
-                       </div>
-                       <div class="col2">
-                           <div style="overflow: hidden; overflow-x: scroll; margin-right: 200px;">
-                               <div id="contentTableWrap" style="margin-left: -204px;">
-                                   @RenderPropagatebleGroup(currentGroup)
-                               </div>
-                           </div>
-                       </div>
-                       <div class="clear">
-                       </div>
-                   </div>
-               </div>
-           }
+            if (currentGroup.PropagatedGroupsCount > 0)
+            {
+    <div class="col-wrap1">
+        <div class="col-wrap2">
+            <div class="col1">
+                <div style="overflow: hidden">
+                    <div id="headerTableWrap">
+                        @RenderPropagatebleGroup(currentGroup)
+                    </div>
+                </div>
+            </div>
+            <div class="col2">
+                <div style="overflow: hidden; overflow-x: scroll; margin-right: 200px;">
+                    <div id="contentTableWrap" style="margin-left: -204px;">
+                        @RenderPropagatebleGroup(currentGroup)
+                    </div>
+                </div>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+    </div>
+            }
 
         }
         else
-        { 
+        {
             foreach (var question in currentGroup.Questions)
             {
 
@@ -123,8 +119,9 @@
     <table class="table  table-striped table-bordered" style="width: auto;">
         <thead>
         </thead>
-        @foreach (var pquestion in currentGroup.PropagatedQuestions)
+        @for (int i = 0; i < currentGroup.PropagatedQuestions.Count; i++)
         {
+            var pquestion = currentGroup.PropagatedQuestions[i];
             <tr>
                 <th>
                     <div style="width: 184px;">@pquestion.QuestionText</div>
@@ -134,24 +131,24 @@
                     var question = pquestion.Questions[index];
                     <td>
                         @using (Ajax.BeginForm("SaveSingleResultV", "CompleteQuestionnaire", null, new AjaxOptions()
-                        {
-                            InsertionMode = InsertionMode.Replace,
-                            UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
-                            OnBegin = "ShowOverlay",
-                            OnComplete = "HideOverlay",
-                            OnFailure = "HideOverlay"
-                        }, new { autocomplete = "off" }))
+                                {
+                                    InsertionMode = InsertionMode.Replace,
+                                    UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
+                                    OnBegin = "ShowOverlay",
+                                    OnComplete = "HideOverlay",
+                                    OnFailure = "HideOverlay"
+                                }, new { autocomplete = "off" }))
                         {
                             using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + currentGroup.PropogationPublicKeys[index]))
                             {
                             @Html.Hidden("PublicKey", question.PublicKey)
-                       ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
-                       if (!question.Enabled)
-                       {
-                           ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
-                       }
+                                ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+                                if (!question.Enabled)
+                                {
+                                    ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+                                }
 
-                       Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
+                                Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
 
                             @Html.ValidationMessage("AnswerValue")
                             }
@@ -165,17 +162,19 @@
                     </td>
                 }
             </tr>
-            
         }
-        @if (!currentGroup.AutoPropagate)
+        @if (currentGroup.AutoPropagate.Any(a => a))
         {
             <tr>
                 <td>
                 </td>
-                @foreach (var pKey in currentGroup.PropogationPublicKeys)
+                @for (int i = 0; i < currentGroup.PropogationPublicKeys.Count; i++)
                 {
                     <td>
-                        @RenderDeleteButton(Model, currentGroup.PublicKey, pKey)
+                        @if (currentGroup.AutoPropagate[i])
+                        {
+                            <text>@RenderDeleteButton(Model, currentGroup.PublicKey, currentGroup.PropogationPublicKeys[i])</text>
+                        }
                     </td>
                 }
             </tr>

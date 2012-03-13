@@ -6,6 +6,18 @@
     ViewBag.Title = Model.CurrentGroup.GroupText;
 }
 <h1>@Model.Title</h1>
+<div class="btn-group">
+    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Switch view <span
+        class="caret"></span></a>
+    <ul class="dropdown-menu">
+        <li><a href="@Url.Action("Question", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey })">
+            Horizontal</a></li>
+        <li><a href="@Url.Action("QuestionV", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey })">
+            Vertical</a></li>
+        <li><a href="@Url.Action("QuestionC", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey })">
+            Modal</a></li>
+    </ul>
+</div>
 <div class="tabbable">
 <ul class="nav nav-tabs">
     @foreach (CompleteGroupView groupView in Model.Groups)

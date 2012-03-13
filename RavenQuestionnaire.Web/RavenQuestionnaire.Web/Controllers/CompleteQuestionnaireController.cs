@@ -93,7 +93,7 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
-        public ActionResult Participate(string id)
+        public ActionResult Participate(string id, string mode)
         {
             var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
 
@@ -104,7 +104,7 @@ namespace RavenQuestionnaire.Web.Controllers
             commandInvoker.Execute(command);
 
 
-            return RedirectToAction("Question",
+            return RedirectToAction("Question" + mode,
                                     new
                                     {
                                         id = command.CompleteQuestionnaireId
@@ -132,7 +132,7 @@ namespace RavenQuestionnaire.Web.Controllers
                  viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
                      new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
             ViewBag.CurrentGroup = model.CurrentGroup;
-            
+
             return View(model);
         }
 
@@ -222,7 +222,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
 
             CompleteQuestionView question = questions[0];
-            
+
             try
             {
                 commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
@@ -236,7 +236,7 @@ namespace RavenQuestionnaire.Web.Controllers
                          ? string.Format("_{0}", settings[0].PropogationPublicKey.Value)
                          : "") + "].AnswerValue", e.Message);
             }
-            
+
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
                 new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
 

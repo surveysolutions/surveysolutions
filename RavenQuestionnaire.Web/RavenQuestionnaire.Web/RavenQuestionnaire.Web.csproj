@@ -147,6 +147,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>breadcrumbs.less</DependentUpon>
     </Content>
+    <Content Include="Content\bootstrap\button-groups.css">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>button-groups.less</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap\buttons.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -281,6 +286,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>type.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mis_utilities.css">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>mis_utilities.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\utilities.css">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>utilities.less</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap\variables.css">
       <AutoGen>True</AutoGen>
@@ -517,6 +532,10 @@
       <Generator>LessGenerator</Generator>
       <LastGenOutput>component-animations.css</LastGenOutput>
     </None>
+    <None Include="Content\bootstrap\mis_utilities.less">
+      <Generator>LessGenerator</Generator>
+      <LastGenOutput>mis_utilities.css</LastGenOutput>
+    </None>
     <None Include="Content\bootstrap\dropdowns.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>dropdowns.css</LastGenOutput>
@@ -668,12 +687,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>24525</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost/MIS</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
