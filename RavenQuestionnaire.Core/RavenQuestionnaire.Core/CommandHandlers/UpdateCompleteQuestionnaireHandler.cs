@@ -1,6 +1,5 @@
 ﻿using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Utility;
 
