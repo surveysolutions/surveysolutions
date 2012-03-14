@@ -1,0 +1,36 @@
+﻿@using RavenQuestionnaire.Core.Entities.SubEntities
+@model FlowRule
+@{
+    ViewBag.Title = "Add Route";
+}
+<h2>AddRoute</h2>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("SaveRoute", "Status"))
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Status</legend>
+        @Html.HiddenFor(model => model.StatusId)
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ChangeComment)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ConditionExpression)
+            @Html.ValidationMessageFor(model => model.ConditionExpression)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TargetStatus)
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.Enabled)
+        </div>
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index", new { Qid = @Model.StatusId })
+</div>
