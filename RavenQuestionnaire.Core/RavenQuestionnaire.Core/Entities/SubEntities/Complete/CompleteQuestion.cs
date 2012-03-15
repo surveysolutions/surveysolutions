@@ -206,5 +206,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         private List<IObserver<CompositeEventArgs>> observers;
 
         #endregion
+
+        #region Implementation of ITriggerable
+
+        public List<Guid> Triggers { get; set; }
+
+        #endregion
     }
 }

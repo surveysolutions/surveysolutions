@@ -16,11 +16,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         AutoPropagated
     }
 
-    public interface IGroup : IComposite
+    public interface IGroup : IComposite, ITriggerable
     {
         string Title { get; set; }
         Propagate Propagated { get; set; }
-        List<Guid> Triggers { get; set; }
     }
 
     public interface IGroup<TGroup, TQuestion> : IGroup
