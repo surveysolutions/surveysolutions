@@ -91,7 +91,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void Participate_EmptyId_404Exception()
         {
-            Assert.Throws<HttpException>(() => Controller.Participate(null));
+            Assert.Throws<HttpException>(() => Controller.Participate(null,string.Empty));
         }
         [Test]
         public void Participate_ValidId_FormIsReturned()
