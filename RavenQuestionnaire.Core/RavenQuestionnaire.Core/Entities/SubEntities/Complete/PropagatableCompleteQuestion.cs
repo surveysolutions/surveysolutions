@@ -21,6 +21,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             
             this.QuestionText = question.QuestionText;
             this.QuestionType = question.QuestionType;
+            this.Triggers = question.Triggers;
             this.StataExportCaption = question.StataExportCaption;
             var questionWithAnswer = question as ICompleteQuestion<ICompleteAnswer>;
             if (questionWithAnswer != null)
