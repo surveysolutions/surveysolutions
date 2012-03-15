@@ -105,6 +105,7 @@
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
     <Compile Include="CommandHandlers\AddNewQuestionHandler.cs" />
+    <Compile Include="CommandHandlers\CreateStatusFlowHandler.cs" />
     <Compile Include="CommandHandlers\UpdateConditionsHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewFlowGraphHandler.cs" />
     <Compile Include="CommandHandlers\DeletePropagatedGroupHandler.cs" />
