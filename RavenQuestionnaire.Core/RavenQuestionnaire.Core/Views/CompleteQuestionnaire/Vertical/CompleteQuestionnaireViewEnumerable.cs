@@ -13,6 +13,7 @@ using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
 {
+
     public class CompleteGroupHeaders
     {
         public Guid PublicKey { get; set; }
@@ -74,6 +75,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                                ? new CompleteGroupViewV(doc, k.Value[0] as CompleteGroup)
                                : new CompleteGroupViewV(doc, k.Value));
             }
+
+           
         }
         public CompleteGroupViewV(CompleteQuestionnaireDocument doc, List<CompleteGroup> propGroups)
             : this()
@@ -91,7 +94,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                 PropogationPublicKeys = propagated.Select(g => g.PropogationPublicKey).ToList();
                 foreach (var @group in propagated)
                 {
-                    
+
                     var pgroup = new PropagatedGroup
                                      {
                                          AutoPropagate = @group.AutoPropagate,
@@ -123,9 +126,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             }
         }
 
-        public Guid PublicKey { get; set; }
+     
 
-       
+        public Guid PublicKey { get; set; }
 
         public string GroupText { get; set; }
 
@@ -144,6 +147,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
         public List<PropagatedGroup> PropagatedGroups { get; set; }
 
         public int PropagatedGroupsCount { get { return PropagatedQuestions.Count > 0 ? PropagatedQuestions[0].Questions.Count : 0; } }
+
+        
 
         public virtual string GetClientId(string prefix)
         {
@@ -169,7 +174,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                         break;
                     case 1:
                         {
-                            var answer = answers[0]; 
+                            var answer = answers[0];
                             if (!string.IsNullOrEmpty(answer.AnswerValue))
                             {
                                 firstAnswer = answer.AnswerValue;
@@ -202,10 +207,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
         public string QuestionText { get; set; }
 
         public List<CompleteQuestionView> Questions { get; set; }
-        
+
         public PropagatedQuestion()
         {
-            
+
         }
     }
 }

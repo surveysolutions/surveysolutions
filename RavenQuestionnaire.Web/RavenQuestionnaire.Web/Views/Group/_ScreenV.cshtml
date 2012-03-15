@@ -29,12 +29,33 @@
                     $nav.removeClass('subnav-fixed');
                 }
             }
+
+            if (typeof document.body.style.webkitOverflowScrolling === "undefined") {
+                var xScrollers = document.getElementsByClassName("scroll-x");
+                for (var i = 0; i < xScrollers.length; i++)
+                    new iScroll(xScrollers[i], { vScroll: false });
+
+                var yScrollers = document.getElementsByClassName("scroll-y");
+                for (var i = 0; i < yScrollers.length; i++)
+                    new iScroll(yScrollers[i], { hScroll: false });
+            }
         });
     } (window.jQuery);
 </script>
 <div class="subnav">
-    <h2>@Model.CurrentGroup.GroupText</h2>
-    
+    <div class="row-fluid">
+        <div class="span9">
+            <h2>@Model.CurrentGroup.GroupText</h2>
+        </div>
+        <div class="span3">
+            <div style="margin: 9px 20px 0 0">
+                <div style="margin-bottom: 9px;" class="progress progress-warning">
+                    <div style="width: @string.Format("{0}%", Model.Totals.Progress)" class="bar">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @RenderGroup(Model.CurrentGroup)
 <script type="text/javascript">
@@ -73,8 +94,8 @@
                 </div>
             </div>
             <div class="col2">
-                <div style="overflow: hidden; overflow-x: scroll; margin-right: 200px;">
-                    <div id="contentTableWrap" style="margin-left: -204px;">
+                <div style="overflow: hidden; margin-right: 200px;">
+                    <div id="contentTableWrap" style="margin-left: -204px;" class="scroll-x">
                         @RenderPropagatebleGroup(currentGroup)
                     </div>
                 </div>
@@ -163,7 +184,7 @@
                 }
             </tr>
         }
-        @if (currentGroup.AutoPropagate.Any(a => a))
+        @if (!currentGroup.AutoPropagate.Any(a => a))
         {
             <tr>
                 <td>
@@ -171,7 +192,7 @@
                 @for (int i = 0; i < currentGroup.PropogationPublicKeys.Count; i++)
                 {
                     <td>
-                        @if (currentGroup.AutoPropagate[i])
+                        @if (!currentGroup.AutoPropagate[i])
                         {
                             <text>@RenderDeleteButton(Model, currentGroup.PublicKey, currentGroup.PropogationPublicKeys[i])</text>
                         }

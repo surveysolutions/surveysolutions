@@ -34,7 +34,19 @@
     } (window.jQuery);
 </script>
 <div class="subnav">
-    <h2>@Model.CurrentGroup.GroupText</h2>
+    <div class="row-fluid">
+        <div class="span9">
+            <h2>@Model.CurrentGroup.GroupText</h2>
+        </div>
+        <div class="span3">
+            <div style="margin: 9px 20px 0 0">
+                <div style="margin-bottom: 9px;" class="progress progress-warning">
+                    <div style="width: @string.Format("{0}%", Model.Totals.Progress)" class="bar">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @RenderGroup(Model.CurrentGroup)
 @helper  RenderGroup(CompleteGroupViewV currentGroup)
