@@ -32,6 +32,8 @@ namespace RavenQuestionnaire.Core.AbstractFactories
                     return new SingleAnswerCompleteQuestion(baseQuestion);
                 case QuestionType.SingleOption:
                     return new SingleAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.YesNo:
+                    return new YesNoAnswerCompleteQuestion(baseQuestion);
                 case QuestionType.Text:
                     return new TextAnswerCompleteQuestion(baseQuestion);
                 case QuestionType.DateTime:
