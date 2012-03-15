@@ -112,5 +112,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return null;
         }
         #endregion
+
+        #region Implementation of ITriggerable
+
+        public List<Guid> Triggers
+        {
+            get { return new List<Guid>(0); }
+            set { throw new InvalidOperationException(); }
+        }
+        #endregion
     }
 }
