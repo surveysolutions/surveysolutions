@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NCalc;
 using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -11,8 +12,8 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
     public class CompleteQuestionnaireConditionExecutor// : IExpressionExecutor<CompleteQuestionnaire, bool>
     {
-        private readonly CompleteQuestionnaire questionnaire;
-        public CompleteQuestionnaireConditionExecutor(CompleteQuestionnaire questionnaire)
+        private readonly ICompleteGroup questionnaire;
+        public CompleteQuestionnaireConditionExecutor(ICompleteGroup questionnaire)
         {
             this.questionnaire = questionnaire;
         }
@@ -25,48 +26,16 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             e.EvaluateParameter += (name, args) =>
                                        {
                                            Guid nameGuid = Guid.Parse(name);
-                                           var entity = questionnaire.GetInnerDocument();
-                                           var dependency = entity.GetAllQuestions().Where(
-                                               q => !(q is IPropogate)).FirstOrDefault(
-                                                   q => q.PublicKey.Equals(nameGuid));
-
-                                           if (dependency != null)
-                                           {
-                                               var answer =
-                                                   dependency.Find<ICompleteAnswer>(a => a.Selected).FirstOrDefault();
-                                               if (answer == null)
-                                               {
-                                                   args.Result = string.Empty;
-                                                   return;
-                                               }
-                                               //question wasn't propagated so we looking for only main question
-                                               args.Result = answer.AnswerValue ?? answer.AnswerText;
-                                               return;
-                                           }
-                                           /* question was propagated*/
-                                           var propagation = question as IPropogate;
+                                           var propagation = question as PropagatableCompleteQuestion;
                                            if (propagation == null)
                                            {
+                                               args.Result =
+                                                   GetValue(GetRegularQuestion(nameGuid, question, questionnaire));
                                                return;
                                            }
-                                           //searchig for particulat question by key inside of all groups
-                                           var dependencyPropagated =
-                                               entity.GetPropagatedGroupsByKey(propagation.PropogationPublicKey).
-                                                   SelectMany(pg => pg.GetAllQuestions()).FirstOrDefault(
-                                                       q => q.PublicKey.Equals(nameGuid));
-                                           if (dependencyPropagated == null)
-                                               return;
-
-                                           var answerPropagated =
-                                               dependencyPropagated.Find<ICompleteAnswer>(a => a.Selected).
-                                                   FirstOrDefault();
-                                           if (answerPropagated == null)
-                                           {
-                                               args.Result = string.Empty;
-                                               return;
-                                           }
-                                           args.Result = answerPropagated.AnswerValue ?? answerPropagated.AnswerText;
-
+                                           args.Result =
+                                               GetValue(GetPropagatedQuestion(nameGuid, propagation, questionnaire) ??
+                                                        GetRegularQuestion(nameGuid, question, questionnaire));
                                        }
                 ;
             bool result = false;
@@ -78,6 +47,34 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             {
             }
             return result;
+        }
+        protected ICompleteQuestion GetRegularQuestion(Guid target, ICompleteQuestion question, ICompleteGroup entity)
+        {
+            var dependency = entity.FirstOrDefault<ICompleteQuestion>(
+                q => q.PublicKey.Equals(target) && !(q is IPropogate));
+            return dependency;
+        }
+        protected ICompleteQuestion GetPropagatedQuestion(Guid target, PropagatableCompleteQuestion question, ICompleteGroup entity)
+        {
+            //searchig for particulat question by key inside of all groups
+            var dependencyPropagated =
+                entity.GetPropagatedQuestion(target,
+                                                    question.PropogationPublicKey);
+            return dependencyPropagated;
+        }
+        protected object GetValue(ICompleteQuestion question)
+        {
+            if (question == null)
+                return null;
+
+            var answerPropagated =
+                question.FirstOrDefault<ICompleteAnswer>(a => a.Selected);
+            if (answerPropagated == null)
+            {
+                return string.Empty;
+            }
+            return answerPropagated.AnswerValue ?? answerPropagated.AnswerText;
+
         }
 
     }

@@ -54,6 +54,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             throw new CompositeException("answer is not hierarchical");
         }
 
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            throw new CompositeException("answer is not hierarchical");
+        }
 
         #region Implementation of IObservable<out CompositeEventArgs>
 

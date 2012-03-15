@@ -128,6 +128,16 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return new T[0];
         }
 
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            if (!typeof(T).IsAssignableFrom(GetType()))
+                return null;
+            if (condition(this as T))
+            {
+                return  this as T ;
+            }
+            return null;
+        }
 
         #endregion
         protected void OnAdded(CompositeAddedEventArgs e)

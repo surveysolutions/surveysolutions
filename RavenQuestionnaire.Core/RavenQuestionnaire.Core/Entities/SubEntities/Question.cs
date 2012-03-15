@@ -8,10 +8,11 @@ using NCalc;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public interface IQuestion : IComposite
+    public interface IQuestion : IComposite, ITriggerable
     {
         string QuestionText { get; set; }
         QuestionType QuestionType { get; set; }
@@ -31,6 +32,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             PublicKey = Guid.NewGuid();
             Answers = new List<IAnswer>();
+            this.Triggers=new List<Guid>();
             this.observers = new List<IObserver<CompositeEventArgs>>();
 
         }
@@ -59,8 +61,19 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
         public List<IAnswer> Answers { get; set; }
-        public string ConditionExpression { get; set; }
 
+        public string ConditionExpression
+        {
+            get { return this.conditionExpression; }
+            set
+            {
+                this.conditionExpression = value;
+                QuestionnaireParametersParser parser = new QuestionnaireParametersParser();
+                this.Triggers = parser.Execute(value);
+            }
+        }
+
+        private string conditionExpression;
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
 
@@ -138,6 +151,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
              return null;*/
         }
 
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            return Answers.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault();
+        }
 
         #region Implementation of IObservable<out CompositeEventArgs>
 
@@ -148,6 +165,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             return new Unsubscriber<CompositeEventArgs>(observers, observer);
         }
         private List<IObserver<CompositeEventArgs>> observers;
+
+        #endregion
+
+        #region Implementation of ITriggerable
+
+        public List<Guid> Triggers { get; set; }
 
         #endregion
     }
