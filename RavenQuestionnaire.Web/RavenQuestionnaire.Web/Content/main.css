@@ -163,3 +163,8 @@ table td form, table td form input
 	margin-left: 0;
 	width: 76.9231%
 }
+.questions-left {
+	    display: inline-block;
+    float: right;
+    text-align: center;
+}
