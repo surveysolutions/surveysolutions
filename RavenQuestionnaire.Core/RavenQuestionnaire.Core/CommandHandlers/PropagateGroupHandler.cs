@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             CompleteQuestionnaire entity = _questionnaireRepository.Load(command.CompleteQuestionnaireId);
             var template = entity.Find<CompleteGroup>(command.GroupPublicKey);
             bool isCondition = false;
-            var executor = new CompleteQuestionnaireConditionExecutor(entity);
+            var executor = new CompleteQuestionnaireConditionExecutor(entity.GetInnerDocument());
             foreach (CompleteQuestion completeQuestion in template.Questions)
             {
                 if (
