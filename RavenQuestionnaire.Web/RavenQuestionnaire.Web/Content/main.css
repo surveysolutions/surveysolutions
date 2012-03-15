@@ -158,3 +158,8 @@ table td form, table td form input
 .btn-group-vertical .btn:hover,.btn-group-vertical .btn:focus,.btn-group-vertical .btn:active,.btn-group-vertical .btn.active{z-index:2}
 
 .overlay{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2080;background-color:#000;opacity:0.7;filter:alpha(opacity=70)}
+
+.tabbable.tabs-left .span9.tab_content {
+	margin-left: 0;
+	width: 76.9231%
+}

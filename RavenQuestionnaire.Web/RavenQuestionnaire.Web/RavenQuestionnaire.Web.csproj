@@ -123,6 +123,7 @@
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuestionConditionModel.cs" />
+    <Compile Include="Models\SwitcherModel.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -672,6 +673,9 @@
     <Content Include="Views\Group\_ScreenV.cshtml" />
     <Content Include="Views\Group\_ScreenC.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\QuestionC.cshtml" />
+    <Content Include="Views\CompleteQuestionnaire\QuestionI.cshtml" />
+    <Content Include="Views\Group\_ScreenI.cshtml" />
+    <Content Include="Views\Shared\ViewSwitcher.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

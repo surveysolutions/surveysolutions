@@ -8,7 +8,7 @@
     <ul class="btn-group-vertical">
         @foreach (var item in Model.Answers)
         {
-            var selectedClass = ((CompleteAnswerView)item).Selected ? "btn-primary" : "";
+            var selectedClass = item.Selected ? "btn-primary" : "";
             <li class="btn @selectedClass ">
                 <label class="radio">
                     @Html.RadioButton("PublicKey", item.PublicKey, ((CompleteAnswerView)item).Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)

@@ -58,26 +58,35 @@
 </style>
 <h1>@Model.Title</h1>
 @Html.Partial("ViewSwitcher", new SwitcherModel{Id = Model.Id, PublicKey = Model.CurrentGroup.PublicKey})
-<div id="accordion2" class="accordion">
-    @foreach (var gh in Model.Groups)
-    {
-        var inClass = gh.IsCurrent ? " in " : "";
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a href="@Url.Action("QuestionV", new { id = Model.Id, group = gh.PublicKey })" class="accordion-toggle">@gh.GroupText</a>
-            </div>
-            <div class="accordion-body collapse @inClass" id="collapseOne">
-                <div class="accordion-inner" id="@gh.GetClientId("div")">
-                    @if (gh.IsCurrent)
+<div class="">
+    <div class="tabbable tabs-left row-fluid">
+        <div class="span3">
+            <ul class="nav nav-tabs">
+                @foreach (var gh in Model.Groups)
+                {
+                    if (gh.IsCurrent)
                     {
-                        Html.RenderPartial("~/Views/Group/_ScreenV.cshtml", Model);
+                    <li class="active"><a data-toggle="tab" href="#@gh.GetClientId("div")">
+                        @gh.GroupText
+                    </a></li>
                     }
+                    else
+                    {
+                    <li><a href="@Url.Action("QuestionI", new { id = Model.Id, group = gh.PublicKey })">
+                        @gh.GroupText
+                    </a></li>
+                    }
+                }
+            </ul>
+        </div>
+        <div class="span9 tab_content">
+            <div class="tab-content">
+                <div id="@Model.CurrentGroup.GetClientId("div")" class="tab-pane active">
+                    @Html.Partial("~/Views/Group/_ScreenI.cshtml", Model)
                 </div>
             </div>
         </div>
-    }
+    </div>
 </div>
 <div id="loadingModal" class="">
-</div>
-<div id="">
 </div>
