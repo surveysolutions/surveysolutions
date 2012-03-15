@@ -80,8 +80,8 @@
             </ul>
         </div>
         <div class="span9 tab_content">
-            <div class="tab-content">
-                <div id="@Model.CurrentGroup.GetClientId("div")" class="tab-pane active">
+            <div>
+                <div id="@Model.CurrentGroup.GetClientId("div")">
                     @Html.Partial("~/Views/Group/_ScreenI.cshtml", Model)
                 </div>
             </div>
