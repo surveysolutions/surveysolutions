@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 
@@ -12,9 +13,9 @@ namespace RavenQuestionnaire.Core.Views.Status.Processing
         public bool IsVisible { get; set; }
         public string QuestionnaireId { get; set; }
 
-        public List<FlowRule> FlowRules { get; set; }
+        public Dictionary<Guid, FlowRule> FlowRules { get; set; }
 
-        public SurveyStatus DefaultIfNoConditions { set; get; }
+        public bool IsDefaultStuck { get; set; }
 
 
         public StatusProcessView()
@@ -22,9 +23,9 @@ namespace RavenQuestionnaire.Core.Views.Status.Processing
         }
 
         public StatusProcessView(string id, 
-            string title, bool isVisible, 
-            List<FlowRule> flowRules,
-            SurveyStatus defaultIfNoConditions,
+            string title, bool isVisible,
+            Dictionary<Guid, FlowRule> flowRules,
+            bool IsDefaultStuck,
             string questionnaireId):this()
         {
             this.Id = IdUtil.ParseId(id); 
@@ -32,7 +33,7 @@ namespace RavenQuestionnaire.Core.Views.Status.Processing
             this.IsVisible = isVisible;
             QuestionnaireId = questionnaireId;
             FlowRules = flowRules;
-            DefaultIfNoConditions = defaultIfNoConditions;
+            this.IsDefaultStuck = IsDefaultStuck;
         }
         public static StatusProcessView New()
         {
