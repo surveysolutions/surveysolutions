@@ -106,6 +106,28 @@ namespace RavenQuestionnaire.Core.Entities
                 innerDocument.Add(propagatebleGroup, null);
             }
         }
+        protected void ExecuteConditions(CompositeAddedEventArgs e)
+        {
+            // ICompleteGroup template = ((CompositeAddedEventArgs) e.ParentEvent).AddedComposite as ICompleteGroup; 
+            ICompleteQuestion question = e.AddedComposite as ICompleteQuestion;
+            if (question == null)
+                return;
+            var triggeres =
+                this.Find<ICompleteQuestion>(
+                    g => g.Triggers.Count(gp => gp.Equals(question.PublicKey)) > 0).ToList();
+          /*  foreach (ICompleteGroup triggere in triggeres)
+            {
+                var propagatebleGroup = new PropagatableCompleteGroup(triggere, group.PropogationPublicKey);
+                innerDocument.Add(propagatebleGroup, null);
+            }*/
+            var executor = new CompleteQuestionnaireConditionExecutor(this);
+            foreach (ICompleteQuestion completeQuestion in triggeres)
+            {
+                completeQuestion.Enabled = executor.Execute(completeQuestion);
+                if (!completeQuestion.Enabled)
+                    this.Remove(completeQuestion);
+            }
+        }
         protected void RemoveAutoPropagate(CompositeRemovedEventArgs e)
         {
             PropagatableCompleteGroup group = e.RemovedComposite as PropagatableCompleteGroup;
