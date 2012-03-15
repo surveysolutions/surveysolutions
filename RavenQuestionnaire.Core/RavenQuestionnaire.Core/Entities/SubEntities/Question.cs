@@ -32,6 +32,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             PublicKey = Guid.NewGuid();
             Answers = new List<IAnswer>();
+            this.Triggers=new List<Guid>();
             this.observers = new List<IObserver<CompositeEventArgs>>();
 
         }
@@ -60,14 +61,18 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
         public List<IAnswer> Answers { get; set; }
+
         public string ConditionExpression
         {
-            /*get { return this.conditionExpression; }
-            set { this.conditionExpression = value;
-            QuestionnaireParametersParser parser= new QuestionnaireParametersParser();
-                parser.
-            }*/
-            get; set; }
+            get { return this.conditionExpression; }
+            set
+            {
+                this.conditionExpression = value;
+                QuestionnaireParametersParser parser = new QuestionnaireParametersParser();
+                this.Triggers = parser.Execute(value);
+            }
+        }
+
         private string conditionExpression;
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
@@ -146,6 +151,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
              return null;*/
         }
 
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            return Answers.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault();
+        }
 
         #region Implementation of IObservable<out CompositeEventArgs>
 
