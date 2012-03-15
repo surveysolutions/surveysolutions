@@ -167,7 +167,7 @@
                     ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
                 }
                 Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
-                @Html.ValidationMessage("AnswerValue")
+                @Html.BootstrapValidationMessage(string.Format("questions[{0}_{1}].AnswerValue", question.PublicKey, propogationPublicKey))
             }
             @using (Html.BeginCollectionItem("settings", true, groupPublicKey + "_" + propogationPublicKey))
             {

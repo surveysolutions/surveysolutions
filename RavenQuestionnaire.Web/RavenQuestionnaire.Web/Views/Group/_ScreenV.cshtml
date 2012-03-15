@@ -39,6 +39,8 @@
                 for (var i = 0; i < yScrollers.length; i++)
                     new iScroll(yScrollers[i], { hScroll: false });
             }
+
+            $('input[type="text"]').click(function(e) { $(this).focus(); });
         });
     } (window.jQuery);
 </script>
@@ -107,12 +109,18 @@
             foreach (var question in currentGroup.Questions)
             {
 
-                using (Ajax.BeginForm("SaveSingleResultV", "CompleteQuestionnaire", new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div") }))
+                using (Ajax.BeginForm("SaveSingleResultV", "CompleteQuestionnaire", new AjaxOptions()
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
+                    OnBegin = "ShowOverlay",
+                    OnComplete = "HideOverlay",
+                    OnFailure = "HideOverlay"
+                }))
                 {
                     using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                     {
                         Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
-
                     }
                     using (Html.BeginCollectionItem("settings", true, question.PublicKey))
                     {
@@ -166,7 +174,7 @@
 
                                 Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
 
-                            @Html.ValidationMessage("AnswerValue")
+                            @Html.BootstrapValidationMessage(string.Format("questions[{0}_{1}].AnswerValue", question.PublicKey, currentGroup.PropogationPublicKeys[index]))
                             }
                             using (Html.BeginCollectionItem("settings", true, currentGroup.PublicKey + "_" + currentGroup.PropogationPublicKeys[index]))
                             {

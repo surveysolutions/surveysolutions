@@ -8,14 +8,10 @@
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {
     @Html.Hidden("QuestionId", Model.PublicKey)
+    @Html.Hidden("PublicKey", answerGuid)
+    @Html.Hidden("Selected", true)
     <div class="answer">
-        @Html.Hidden("PublicKey", answerGuid)
-         @Html.Hidden("Selected", true)
-        @*@Model.Answers[0].AnswerText*@
-        @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? ((CompleteAnswerView) Model.Answers[0]).AnswerValue : string.Empty, (IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings)
- 
-        @* <span>
-            @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)</span>
-        @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}*@
+        @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
     </div>
+
 }

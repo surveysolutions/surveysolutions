@@ -1,22 +1,16 @@
-﻿
-@using Questionnaire.Core.Web.Helpers
+﻿@using RavenQuestionnaire.Web.Utils
 @using RavenQuestionnaire.Core.Views.Question
 @model CompleteQuestionView
 @{
-    ViewBag.EnabledRadioBoxSettings = new Dictionary<string,object>();
+    ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
     if (!Model.Enabled)
     {
-        ViewBag.EnabledRadioBoxSettings.Add("Disabled" , true );
+        ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
     }
 }
 <div class="question">
-    <b>@*@Model.Index)*@ @Html.DisplayFor(modelItem => Model.QuestionText)</b>
-    <br />   <br />
-    
-  @*  <div class="answers">*@
-          @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", Model.QuestionType), Model);}
-        <br />
-   @* </div>*@
+    <b>@Html.DisplayFor(modelItem => Model.QuestionText)</b>
+    @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", Model.QuestionType), Model);}
 </div>
-@Html.ValidationMessage("AnswerValue")
-   @Html.Hidden("PublicKey", Model.PublicKey)
+@Html.BootstrapValidationMessage("AnswerValue")
+@Html.Hidden("PublicKey", Model.PublicKey)

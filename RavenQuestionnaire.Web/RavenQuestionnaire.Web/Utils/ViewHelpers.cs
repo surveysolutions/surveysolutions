@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using System.Web.Mvc.Html;
@@ -11,7 +13,7 @@ namespace RavenQuestionnaire.Web.Utils
 {
     public static class ViewHelpers
     {
-        public static MvcHtmlString ActionLinkWithIcon(this AjaxHelper helper, string linkText,string actionName, string controllerName, object routeValues, AjaxOptions ajaxOptions, object htmlAttributes, string icon )
+        public static MvcHtmlString ActionLinkWithIcon(this AjaxHelper helper, string linkText, string actionName, string controllerName, object routeValues, AjaxOptions ajaxOptions, object htmlAttributes, string icon)
         {
             var builder = new TagBuilder("i");
             builder.MergeAttribute("class", icon);
@@ -63,5 +65,55 @@ namespace RavenQuestionnaire.Web.Utils
             return MvcHtmlString.Create(retVal);
         }
 
+        public static MvcHtmlString BootstrapValidationMessage(this HtmlHelper htmlHelper, string modelName)
+        {
+            if (modelName == null)
+            {
+                throw new ArgumentNullException("modelName");
+            }
+
+            if (!htmlHelper.ViewData.ModelState.ContainsKey(modelName))
+            {
+                return null;
+            }
+
+            ModelState modelState = htmlHelper.ViewData.ModelState[modelName];
+            ModelErrorCollection modelErrors = (modelState == null) ? null : modelState.Errors;
+            ModelError modelError = ((modelErrors == null) || (modelErrors.Count == 0)) ? null : modelErrors[0];
+
+            if (modelError == null)
+            {
+                return null;
+            }
+
+
+            string retVal = "";
+            if (htmlHelper.ViewData.ModelState.IsValid)
+                return null;
+
+            var message = GetUserErrorMessageOrDefault(htmlHelper.ViewContext.HttpContext, modelError, modelState);
+
+            retVal += "<div class='alert alert-error'><a data-dismiss='alert' class='close'>&times;</a><span>";
+            if (!String.IsNullOrEmpty(message))
+                retVal += message;
+            retVal += "</span>";
+            retVal += "</div>";
+            return MvcHtmlString.Create(retVal);
+        }
+
+        private static string GetUserErrorMessageOrDefault(HttpContextBase httpContext, ModelError error, ModelState modelState)
+        {
+            if (!String.IsNullOrEmpty(error.ErrorMessage))
+            {
+                return error.ErrorMessage;
+            }
+            if (modelState == null)
+            {
+                return null;
+            }
+
+            string attemptedValue = (modelState.Value != null) ? modelState.Value.AttemptedValue : null;
+            return String.Format(CultureInfo.CurrentCulture, "Invalid property", attemptedValue);
+        }
     }
 }

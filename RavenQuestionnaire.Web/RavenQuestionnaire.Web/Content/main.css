@@ -168,3 +168,13 @@ table td form, table td form input
     float: right;
     text-align: center;
 }
+.scroll-x {
+	overflow-x: scroll;
+}
+
+.btn-group .btn label {
+	margin-bottom: 0;
+}
+.btn-group .btn.btn-primary label {
+	color: #fff;
+}

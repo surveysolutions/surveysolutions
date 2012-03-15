@@ -190,6 +190,7 @@
     <Compile Include="Entities\SubEntities\Complete\BindedCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs" />
     <Compile Include="Entities\SubEntities\Complete\IBinded.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\YesNoAnswerCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\DateAnswerCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\GpsAnswerCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\IAnswerStrategy.cs" />

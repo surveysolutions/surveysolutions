@@ -9,16 +9,11 @@
     ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onchange", "$(this.form).submit();");
     string tbClientId = "#" + Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
 
-
+    @Html.Hidden("PublicKey", answerGuid)
+    @Html.Hidden("Selected", true)
     @Html.Hidden("QuestionId", Model.PublicKey)
     <div class="answer">
-        @Html.Hidden("PublicKey", answerGuid)
-        @Html.Hidden("Selected", true)
-        @*@Model.Answers[0].AnswerText*@
         @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? Model.Answers[0].AnswerValue : null, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
-        @* <span>
-            @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)</span>
-        @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}*@
     </div>
 
     <script>
