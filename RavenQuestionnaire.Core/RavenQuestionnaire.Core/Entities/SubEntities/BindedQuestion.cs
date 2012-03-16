@@ -67,12 +67,26 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             return new T[0];
         }
 
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            return null;
+        }
 
         #region Implementation of IObservable<out CompositeEventArgs>
 
         public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
         {
             return null;
+        }
+
+        #endregion
+
+        #region Implementation of ITriggerable
+        [JsonIgnore]
+        public List<Guid> Triggers
+        {
+            get { return new List<Guid>(0); }
+            set { throw new InvalidOperationException(); }
         }
 
         #endregion
