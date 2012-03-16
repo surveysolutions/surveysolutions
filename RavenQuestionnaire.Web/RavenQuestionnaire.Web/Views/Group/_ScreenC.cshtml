@@ -182,12 +182,12 @@
 @helper RenderAddButton(CompleteQuestionnaireViewV model, Guid currentGroupPublicKey)
     {
         var addAjaxOptions = new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div"), OnBegin = "ShowOverlay", OnComplete = "HideOverlay", OnFailure = "HideOverlay" };
-        var rparams = new { publicKey = currentGroupPublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey };
+        var rparams = new { publicKey = currentGroupPublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey, salt = (new Random()).NextDouble() };
     @Ajax.ActionLinkWithIcon("Add", "PropagateGroupC", "Group", rparams, addAjaxOptions, new { @class = "btn btn-success" }, "icon-plus icon-white")
 }
 @helper RenderDeleteButton(CompleteQuestionnaireViewV model, Guid currentGroupPublicKey, Guid pKey)
     {
         var removeAjaxOptions = new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div"), OnBegin = "ShowOverlay", OnComplete = "HideOverlay", OnFailure = "HideOverlay" };
-        var rparams = new { propagationKey = pKey, publicKey = currentGroupPublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey };
+        var rparams = new { propagationKey = pKey, publicKey = currentGroupPublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey, salt = (new Random()).NextDouble() };
     @Ajax.ActionLinkWithIcon("Remove", "DeletePropagatedGroupC", "Group", rparams, removeAjaxOptions, new { @class = "btn btn-danger" }, "icon-trash icon-white")
 }

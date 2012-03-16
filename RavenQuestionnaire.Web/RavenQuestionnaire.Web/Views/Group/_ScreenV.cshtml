@@ -30,15 +30,7 @@
                 }
             }
 
-            if (typeof document.body.style.webkitOverflowScrolling === "undefined") {
-                var xScrollers = document.getElementsByClassName("scroll-x");
-                for (var i = 0; i < xScrollers.length; i++)
-                    new iScroll(xScrollers[i], { vScroll: false });
 
-                var yScrollers = document.getElementsByClassName("scroll-y");
-                for (var i = 0; i < yScrollers.length; i++)
-                    new iScroll(yScrollers[i], { hScroll: false });
-            }
 
             $('input[type="text"]').click(function(e) { $(this).focus(); });
         });
@@ -208,12 +200,12 @@
 @helper RenderAddButton(CompleteQuestionnaireViewV model, Guid currentGroupPublicKey)
     {
         var addAjaxOptions = new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div"), OnBegin = "ShowOverlay", OnComplete = "HideOverlay", OnFailure = "HideOverlay" };
-        var rparams = new { publicKey = currentGroupPublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey };
+        var rparams = new { publicKey = currentGroupPublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey, salt = (new Random()).NextDouble() };
     @Ajax.ActionLinkWithIcon("Add", "PropagateGroupV", "Group", rparams, addAjaxOptions, new { @class = "btn btn-success" }, "icon-plus icon-white")
 }
 @helper RenderDeleteButton(CompleteQuestionnaireViewV model, Guid currentGroupPublicKey, Guid pKey)
     {
         var removeAjaxOptions = new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div"), OnBegin = "ShowOverlay", OnComplete = "HideOverlay", OnFailure = "HideOverlay" };
-        var rparams = new { propagationKey = pKey, publicKey = currentGroupPublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey };
+        var rparams = new { propagationKey = pKey, publicKey = currentGroupPublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey, salt = (new Random()).NextDouble() };
     @Ajax.ActionLinkWithIcon("Remove", "DeletePropagatedGroupV", "Group", rparams, removeAjaxOptions, new { @class = "btn btn-danger" }, "icon-trash icon-white")
 }
