@@ -363,6 +363,7 @@
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.11.js" />
     <Content Include="Scripts\jquery-ui-1.8.11.min.js" />
+    <Content Include="Scripts\jquery.inputmask.js" />
     <Content Include="Scripts\jquery.jgrowl.min.js" />
     <Content Include="Scripts\jquery.jsPlumb-1.3.4-all-min.js" />
     <Content Include="Scripts\jquery.jsPlumb-1.3.4-all.js" />
@@ -375,6 +376,7 @@
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
     <Content Include="Scripts\sorter.js" />
+    <Content Include="Scripts\take.js" />
     <Content Include="Views\CompleteQuestionnaire\Index.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Result.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Take.cshtml" />
@@ -485,13 +487,13 @@
     <Content Include="Views\CompleteQuestionnaire\MyItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\EditorTemplates\StatusByRole.cshtml" />
+    <Content Include="Views\Location\EditorTemplates\StatusByRole.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\EditorTemplates\RolePermission.cshtml" />
+    <Content Include="Views\Location\EditorTemplates\RolePermission.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\EditorTemplates\StatusView.cshtml" />
+    <Content Include="Views\Location\EditorTemplates\StatusView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\bootstrap\accordion.less">

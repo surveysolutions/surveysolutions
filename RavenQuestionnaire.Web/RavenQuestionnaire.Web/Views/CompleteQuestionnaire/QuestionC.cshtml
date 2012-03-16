@@ -8,15 +8,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script type="text/javascript">
-    function ShowOverlay() {
-        $('#loadingModal').addClass('overlay');
-        $('.modal-backdrop').remove();
-    }
-    function HideOverlay() {
-        $('#loadingModal').removeClass('overlay');
-    }
-</script>
+<script src="@Url.Content("~/Scripts/take.js")" type="text/javascript"></script>
 <h1>@Model.Title</h1>
 @Html.Partial("ViewSwitcher", new SwitcherModel{Id = Model.Id, PublicKey = Model.CurrentGroup.PublicKey})
 <div id="accordion2" class="accordion">

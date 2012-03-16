@@ -161,7 +161,21 @@ table td form, table td form input
 
 .tabbable.tabs-left .span9.tab_content {
 	margin-left: 0;
-	width: 76.9231%
+	width: 76.5957%
+}
+@media (min-width: 1200px) 
+{
+	.tabbable.tabs-left .span9.tab_content {
+		width: 76.9231%
+	}
+}
+@media (max-width: 767px) 
+{
+	.tabbable.tabs-left .span9.tab_content {
+		width: auto;
+		display: block;
+		float: none;
+	}
 }
 .questions-left {
 	    display: inline-block;
@@ -178,3 +192,41 @@ table td form, table td form input
 .btn-group .btn.btn-primary label {
 	color: #fff;
 }
+
+    .col1 td
+    {
+        visibility: hidden;
+    }
+    .col2 th
+    {
+        visibility: hidden;
+    }
+    .col-wrap1
+    {
+        width: 100%;
+    }
+    
+    .col-wrap2
+    {
+        width: 100%;
+        margin-right: -100%;
+        position: relative;
+        left: 200px;
+    }
+    
+    .col1
+    {
+        float: left;
+        width: 200px;
+        margin-right: -100%;
+        position: relative;
+        left: -200px;
+        border-right: 1px solid #DDDDDD;
+    }
+    
+    .clear
+    {
+        clear: both;
+        font-size: 0;
+        overflow: hidden;
+    }

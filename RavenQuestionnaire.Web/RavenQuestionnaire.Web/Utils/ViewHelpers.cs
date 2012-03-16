@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
@@ -92,8 +94,14 @@ namespace RavenQuestionnaire.Web.Utils
                 return null;
 
             var message = GetUserErrorMessageOrDefault(htmlHelper.ViewContext.HttpContext, modelError, modelState);
+            Guid id;
+            using (MD5 md5 = MD5.Create())
+            {
+                byte[] hash = md5.ComputeHash(Encoding.Default.GetBytes(message));
+                id = new Guid(hash);
+            }
 
-            retVal += "<div class='alert alert-error'><a data-dismiss='alert' class='close'>&times;</a><span>";
+            retVal += "<div  close-marker=\"" + id.ToString() + "\" class='alert alert-error'><a  class='close'>&times;</a><span>";
             if (!String.IsNullOrEmpty(message))
                 retVal += message;
             retVal += "</span>";

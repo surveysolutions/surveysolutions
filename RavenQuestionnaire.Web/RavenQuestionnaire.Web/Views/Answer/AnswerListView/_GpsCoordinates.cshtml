@@ -4,7 +4,10 @@
          
 @{
     var answerGuid = Model.Answers.Length > 0 ? Model.Answers[0].PublicKey : Guid.NewGuid();
-    ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onchange", "$(this.form).submit();");
+    var settings = ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings);
+    settings.Add("onchange", "$(this.form).submit();");
+    settings.Add("class", "geomask");
+    var value = Model.Answers.Length > 0 ? Model.Answers[0].AnswerValue : "";
 }
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {
@@ -12,7 +15,13 @@
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
     <div class="answer">
-        @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? Model.Answers[0].AnswerValue : "", (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
+        @Html.TextBox("AnswerValue", value, settings)
         <p class="help-block"> Latitude & Longitude separated by semicolon</p>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.geomask').inputmask('99.99;99.99', { });
+            });
+        </script>
+
     </div>
 }
