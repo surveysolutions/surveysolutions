@@ -31,5 +31,38 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             expressionEntity.Evaluate(new EvaluationTesterVisitor(expressionEntity.Options));
             return result;
         }
+        public List<Guid> Execute(string expression)
+        {
+            List<Guid> result = new List<Guid>();
+            if (string.IsNullOrEmpty(expression))
+                return result;
+            var expressionEntity = new Expression(expression);
+
+            expressionEntity.EvaluateParameter += (name, args) =>
+                                                      {
+                                                          try
+                                                          {
+
+                                                              result.Add(Guid.Parse(name));
+
+                                                          }
+                                                          catch (FormatException)
+                                                          {
+
+                                                              //ignore invalid parameters
+                                                          }
+                                                          args.Result = "0";
+                                                      };
+            try
+            {
+                expressionEntity.Evaluate(new EvaluationTesterVisitor(expressionEntity.Options));
+            }
+            catch (EvaluationException)
+            {
+
+                //ignore invalid expression
+            }
+            return result;
+        }
     }
 }

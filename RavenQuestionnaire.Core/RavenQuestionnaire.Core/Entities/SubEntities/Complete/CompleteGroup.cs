@@ -256,6 +256,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                          Groups.SelectMany(g => g.Find<T>(condition)));
         }
 
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            return ((Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault() ??
+                 Groups.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault()) ??
+                Questions.SelectMany(q => q.Find<T>(condition)).FirstOrDefault()) ??
+               Groups.SelectMany(g => g.Find<T>(condition)).FirstOrDefault();
+        }
+
         protected void OnAdded(CompositeAddedEventArgs e)
         {
             foreach (IObserver<CompositeEventArgs> observer in observers)
