@@ -46,6 +46,45 @@ namespace RavenQuestionnaire.Core.AbstractFactories
             return new TextAnswerCompleteQuestion(baseQuestion);
         }
 
+        public object GetAnswerValue(ICompleteQuestion baseQuestion)
+        {
+            var answer =
+                baseQuestion.FirstOrDefault<ICompleteAnswer>(a => a.Selected);
+            object retval;
+            if (answer == null)
+            {
+                retval = string.Empty;
+            }
+            else
+            {
+
+                retval = answer.AnswerValue ?? answer.AnswerText;
+            }
+            switch (baseQuestion.QuestionType)
+            {
+               /* case QuestionType.MultyOption:
+                    return new MultyAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.DropDownList:
+                    return new SingleAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.SingleOption:
+                    return new SingleAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.YesNo:
+                    return new YesNoAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.Text:
+                    return new TextAnswerCompleteQuestion(baseQuestion);*/
+          /*      case QuestionType.DateTime:
+                    
+                    break;*/
+                case QuestionType.Numeric:
+                    if (retval == null || string.IsNullOrEmpty(retval.ToString()))
+                        retval = 0;
+                    break;
+               /* case QuestionType.GpsCoordinates:
+                    return new GpsAnswerCompleteQuestion(baseQuestion);*/
+            }
+            return retval;
+        }
+
         public CompleteQuestionView CreateQuestion(CompleteQuestionnaireDocument doc,ICompleteGroup group, ICompleteQuestion question)
         {
         /*    BindedCompleteQuestion bindedQuestion = question as BindedCompleteQuestion;

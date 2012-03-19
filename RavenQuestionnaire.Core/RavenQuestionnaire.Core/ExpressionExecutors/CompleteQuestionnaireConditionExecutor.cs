@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NCalc;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
@@ -66,14 +67,8 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         {
             if (question == null)
                 return null;
-
-            var answerPropagated =
-                question.FirstOrDefault<ICompleteAnswer>(a => a.Selected);
-            if (answerPropagated == null)
-            {
-                return string.Empty;
-            }
-            return answerPropagated.AnswerValue ?? answerPropagated.AnswerText;
+            var factory = new CompleteQuestionFactory();
+            return factory.GetAnswerValue(question);
 
         }
 
