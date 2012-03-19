@@ -56,28 +56,6 @@ namespace RavenQuestionnaire.Web.Controllers
             return View("Create", model);
         }
 
-
-        [HttpPost]
-        public ActionResult SaveRoute(FlowRule model)
-        {
-            if (ModelState.IsValid)
-            {
-                if (string.IsNullOrEmpty(model.StatusId))
-                {
-                    //commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial, model.QuestionnaireId, GlobalInfo.GetCurrentUser()));
-                }
-
-                return RedirectToAction("Index", new
-                {
-                    Qid = model.StatusId
-                });
-
-            }
-            return View("AddRoute", model);
-        }
-
-
-
         [HttpPost]
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Update(StatusView model)
@@ -112,10 +90,14 @@ namespace RavenQuestionnaire.Web.Controllers
             
         }
 
-        protected void AddStatusListToViewBag()
+        protected void AddStatusListToViewBag(string Qid)
         {
-            var statuses =
-              viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(new StatusBrowseInputModel() { PageSize = 100 }).Items;
+            var statuses = viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>
+                (new StatusBrowseInputModel()
+                     {
+                         PageSize = 300, 
+                         QId = Qid
+                     }).Items;
 
             ViewBag.AllStatuses = statuses;
         }
@@ -175,10 +157,28 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
+        [HttpPost]
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ViewResult AddRoute(string id)
+        public ActionResult SaveRoute(FlowRule model)
         {
-            return View(new FlowRule(){StatusId = id});
+            if (ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(model.StatusId))
+                {
+                    //commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial, model.QuestionnaireId, GlobalInfo.GetCurrentUser()));
+                }
+
+                StatusView m = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(model.StatusId));
+                return PartialView("Route", m);
+            }
+            return View("AddRoute", model);
+        }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ActionResult AddRoute(string id, string qid)
+        {
+            AddStatusListToViewBag(qid);
+            return PartialView("AddRoute", new FlowRule() { StatusId = id });            
         }
 
     }

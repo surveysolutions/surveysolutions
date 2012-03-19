@@ -1,36 +1,56 @@
-﻿@using RavenQuestionnaire.Core.Entities.SubEntities
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Web.Utils
 @model FlowRule
-@{
-    ViewBag.Title = "Add Route";
-}
-<h2>AddRoute</h2>
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@using (Html.BeginForm("SaveRoute", "Status"))
+
+@{var hideFunctionName = "HideAddRouteForm";}
+@using (Ajax.BeginForm("SaveRoute", "Status",
+                                         new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "addNewRoute",
+                                                 OnComplete = @hideFunctionName
+                                             }))
 {
-    @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>Status</legend>
-        @Html.HiddenFor(model => model.StatusId)
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ChangeComment)
+    
+    <div id="addNewRoute" class="modal open form-horizontal">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">&times;</a>
+            <h3>
+                Status Route Rule</h3>
         </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.ConditionExpression)
-            @Html.ValidationMessageFor(model => model.ConditionExpression)
+        <div class="modal-body">
+            @using (Html.BeginCollectionItem("route", Model.StatusId))
+            {
+                @Html.BootstrapValidationSummary("")
+                @Html.HiddenFor(model => model.StatusId)
+                
+                <div class="control-group">
+                    @Html.LabelFor(model => model.ConditionExpression, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => Model.ConditionExpression)
+                        @Html.ValidationMessageFor(model => model.ConditionExpression)
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    @Html.LabelFor(model => model.ChangeComment, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => Model.ChangeComment)
+                        @Html.ValidationMessageFor(model => model.ChangeComment)
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    @Html.LabelFor(model => model.StatusId, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.DropDownListFor(model => model.TargetStatus, new SelectList(ViewBag.AllStatuses, "Id", "Title", Model.StatusId))
+                    </div>
+                </div>
+                
+            }
         </div>
-        <div class="editor-label">
-            @Html.LabelFor(model => model.TargetStatus)
+        <div class="modal-footer">
+            <input type="submit" value="Save" class="btn btn-primary" />
         </div>
-        <div class="editor-field">
-            @Html.CheckBoxFor(model => model.Enabled)
-        </div>
-        <p>
-            <input type="submit" value="Save" />
-        </p>
-    </fieldset>
+    </div>
 }
-<div>
-    @Html.ActionLink("Back to List", "Index", new { Qid = @Model.StatusId })
-</div>

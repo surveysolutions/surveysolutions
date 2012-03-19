@@ -673,6 +673,7 @@
     <Content Include="Views\Group\_ScreenC.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\QuestionC.cshtml" />
     <Content Include="Views\Status\AddRoute.cshtml" />
+    <Content Include="Views\Status\_Route.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
