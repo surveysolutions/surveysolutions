@@ -132,6 +132,7 @@
     <Compile Include="CommandHandlers\UpdateStatusRestrictionHandler.cs" />
     <Compile Include="CommandHandlers\UpdateUserHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
+    <Compile Include="Commands\AddNewStatusFlowItem.cs" />
     <Compile Include="Commands\UpdateConditionsCommand.cs" />
     <Compile Include="Commands\CreateNewFlowGraphCommand.cs" />
     <Compile Include="Commands\CreateNewGroupCommand.cs" />
