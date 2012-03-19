@@ -15,5 +15,6 @@ namespace RavenQuestionnaire.Core.AbstractFactories
         CompleteQuestionView CreateQuestion(CompleteQuestionnaireDocument doc, ICompleteGroup group, ICompleteQuestion question);
         ICompleteQuestion ConvertToCompleteQuestion(IQuestion question);
         IAnswerStrategy Create(ICompleteQuestion<ICompleteAnswer> baseQuestion);
+        object GetAnswerValue(ICompleteQuestion baseQuestion);
     }
 }
