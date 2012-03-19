@@ -8,7 +8,6 @@ using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
@@ -175,8 +174,6 @@ namespace RavenQuestionnaire.Web.Controllers
             CompleteQuestionView question = questions[0];
             try
             {
-
-
                 commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
                                                                                       question.Answers as CompleteAnswerView[],
                                                                                       settings[0].PropogationPublicKey,
