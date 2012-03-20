@@ -677,6 +677,8 @@
     <Content Include="Views\CompleteQuestionnaire\QuestionC.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\QuestionI.cshtml" />
     <Content Include="Views\Group\_ScreenI.cshtml" />
+    <Content Include="Views\Status\AddRoute.cshtml" />
+    <Content Include="Views\Status\_Route.cshtml" />
     <Content Include="Views\Shared\ViewSwitcher.cshtml" />
     <Content Include="Views\Shared\ProgressBar.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_YesNo.cshtml" />
