@@ -22,7 +22,19 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
                     q => q.ParentPublicKey.Equals(questionKey));
 
         }
+        public static ICompleteQuestion GetPropagatedQuestion(this ICompleteGroup group, Guid questionKey, Guid propagationKey)
+        {
+            var groups = group.GetPropagatedGroupsByKey(propagationKey);
+            foreach (PropagatableCompleteGroup propagatableCompleteGroup in groups)
+            {
+                var question =
+                    propagatableCompleteGroup.FirstOrDefault<ICompleteQuestion>(q => q.PublicKey == questionKey);
+                if (question != null)
+                    return question;
+            }
+            return null;
 
+        }
         public static IEnumerable<ICompleteQuestion> GetAllQuestions(this ICompleteGroup entity)
         {
             var groups =

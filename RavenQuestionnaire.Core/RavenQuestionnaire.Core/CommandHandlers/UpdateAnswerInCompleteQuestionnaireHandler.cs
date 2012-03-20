@@ -37,17 +37,62 @@ namespace RavenQuestionnaire.Core.CommandHandlers
                 else
                     entity.Remove(completeAnswer);
             }
-            var questions = entity.GetInnerDocument().GetAllQuestions();
+            PropagatableCompleteAnswer propagated = command.CompleteAnswers[0] as PropagatableCompleteAnswer;
+            ICompleteGroup general = entity.GetInnerDocument();
+            if (propagated == null)
+                ExecuteConditions(FindQuestion(command.CompleteAnswers[0].QuestionPublicKey, null, general), general);
+            else
+
+                ExecuteConditions(FindQuestion(propagated.QuestionPublicKey, propagated.PropogationPublicKey, general),
+                                  general);
+            /*   var questions = entity.GetInnerDocument().GetAllQuestions();
             var executor = new CompleteQuestionnaireConditionExecutor(entity);
             foreach (ICompleteQuestion completeQuestion in questions)
             {
                 completeQuestion.Enabled = executor.Execute(completeQuestion);
                 if (!completeQuestion.Enabled)
                     entity.Remove(completeQuestion);
-            }
+            }*/
         }
 
-       /* protected void RemoveDisabledAnswers(CompleteQuestionnaire entity)
+        protected void ExecuteConditions(ICompleteQuestion question, ICompleteGroup entity)
+        {
+            PropagatableCompleteQuestion propagated = question as PropagatableCompleteQuestion;
+            IEnumerable<ICompleteQuestion> triggeres;
+            if(propagated==null)
+            {
+                triggeres =
+               entity.Find<ICompleteQuestion>(
+                   g => g.Triggers.Count(gp => gp.Equals(question.PublicKey)) > 0).ToList();
+            }
+            else
+            {
+                triggeres =
+                    entity.GetPropagatedGroupsByKey(propagated.PropogationPublicKey).SelectMany(g => g.Find<ICompleteQuestion>(
+                        q => q.Triggers.Count(gp => gp.Equals(question.PublicKey)) > 0)).ToList();
+            }
+            var executor = new CompleteQuestionnaireConditionExecutor(entity);
+            foreach (ICompleteQuestion completeQuestion in triggeres)
+            {
+                bool previousState = completeQuestion.Enabled;
+                completeQuestion.Enabled = executor.Execute(completeQuestion);
+                if (!completeQuestion.Enabled)
+                    entity.Remove(completeQuestion);
+                if(previousState!=completeQuestion.Enabled)
+                {
+                    ExecuteConditions(completeQuestion, entity);
+                }
+            }
+        }
+        protected ICompleteQuestion FindQuestion(Guid questionKey, Guid? propagationKey, ICompleteGroup entity)
+        {
+            //PropagatableCompleteAnswer propagated = answer as PropagatableCompleteAnswer;
+            if (!propagationKey.HasValue)
+                return entity.FirstOrDefault<ICompleteQuestion>(q => q.PublicKey == questionKey);
+            return entity.GetPropagatedQuestion(questionKey, propagationKey.Value);
+        }
+
+        /* protected void RemoveDisabledAnswers(CompleteQuestionnaire entity)
         {
             //innerDocument.CompletedAnswers.RemoveAll(a => a.QuestionPublicKey.Equals(question.PublicKey));
             //  Questionnaire template = entity.GetQuestionnaireTemplate();

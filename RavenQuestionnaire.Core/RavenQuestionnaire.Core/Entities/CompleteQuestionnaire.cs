@@ -106,6 +106,7 @@ namespace RavenQuestionnaire.Core.Entities
                 innerDocument.Add(propagatebleGroup, null);
             }
         }
+       
         protected void RemoveAutoPropagate(CompositeRemovedEventArgs e)
         {
             PropagatableCompleteGroup group = e.RemovedComposite as PropagatableCompleteGroup;
@@ -173,6 +174,11 @@ namespace RavenQuestionnaire.Core.Entities
             return
                 innerDocument.Find<T>(condition);
 
+        }
+
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            return innerDocument.FirstOrDefault<T>(condition);
         }
 
         #endregion
