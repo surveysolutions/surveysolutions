@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    $(".alert .close").live("click",function () {
+    $(".alert .close").live("click", function () {
         var id = $(this).parent().attr('close-marker');
         $("[close-marker=" + id + "]").alert('close');
     });
@@ -17,8 +17,9 @@ $.validator.addMethod(
     "sum",
     function (value, element, params) {
         var sumOfVals = 0;
-        var parent = $(element).parent(".question");
-        $(parent).find("input").each(function () {
+        var parent = $(element).parents(".question");
+        var selector = $(element).attr('group');
+        $(parent).find("input[group=" + selector + "]").each(function () {
             sumOfVals = sumOfVals + parseInt($(this).val(), 10);
         });
         if (sumOfVals == params) return true;
