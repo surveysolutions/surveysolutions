@@ -85,7 +85,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
 
             if (model != null)
-                AddAllowedStatusesToViewBag(model.Status.Id, model.Status.Name);
+                AddAllowedStatusesToViewBag(model.Status.Id, model.Status.Name, model.Id);
 
             _bagManager.AddUsersToBag(ViewBag, viewRepository);
             return View(model);
@@ -291,11 +291,20 @@ namespace RavenQuestionnaire.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        protected void AddAllowedStatusesToViewBag(string statusId, string statusName)
+        protected void AddAllowedStatusesToViewBag(string statusId, string statusName, string Qid)
         {
             List<SurveyStatus> statuses = new List<SurveyStatus>();
 
             bool isCurrentPresent = false;
+
+
+            var model1 = viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>
+            (new StatusBrowseInputModel()
+            {
+                PageSize = 300,
+                QId = Qid
+            }).Items;
+
             StatusView model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(statusId));
             if (model != null)
             {
