@@ -26,22 +26,24 @@ namespace RavenQuestionnaire.Core.Processors
             
             //iterates over all rules and get first true condition
             //order of items is important
-            foreach (var item in status.FlowRules)
+            foreach (var item in status.FlowRules.Values)
             {
                 if (executor.Execute(completedQ.Find<ICompleteAnswer>(a=>a.Selected), item.ConditionExpression))
                 {
-                    CallStatusChange(completedQ.CompleteQuestinnaireId, item.StatusToGo, item.ChangeComment);
+                    CallStatusChange(completedQ.CompleteQuestinnaireId, item.TargetStatus, item.ChangeComment);
                     return;
                 }
             }
 
-            //any condition was not rised
+            //TODO: add handling if status was not changed 
+
+            /*//any condition was not rised
             if (status.DefaultIfNoConditions != null)
             {
                 CallStatusChange(completedQ.CompleteQuestinnaireId, 
                     status.DefaultIfNoConditions, 
                     DefaultStatusChangeComment);
-            }
+            }*/
         }
 
 
