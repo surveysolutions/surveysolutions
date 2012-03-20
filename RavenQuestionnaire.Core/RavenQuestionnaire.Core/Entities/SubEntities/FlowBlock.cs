@@ -53,6 +53,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             return new T[0];
         }
 
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            return null;
+        }
 
         #region Implementation of IObservable<out CompositeEventArgs>
 

@@ -16,11 +16,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         AutoPropagated
     }
 
-    public interface IGroup : IComposite
+    public interface IGroup : IComposite, ITriggerable
     {
         string Title { get; set; }
         Propagate Propagated { get; set; }
-        List<Guid> Triggers { get; set; }
     }
 
     public interface IGroup<TGroup, TQuestion> : IGroup
@@ -260,6 +259,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                     return subNodes;
             }
             return null;*/
+        }
+
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            return ((Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault() ??
+                   Groups.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault()) ??
+                  Questions.SelectMany(q => q.Find<T>(condition)).FirstOrDefault()) ??
+                 Groups.SelectMany(g => g.Find<T>(condition)).FirstOrDefault();
         }
 
         protected void OnAdded(CompositeAddedEventArgs e)

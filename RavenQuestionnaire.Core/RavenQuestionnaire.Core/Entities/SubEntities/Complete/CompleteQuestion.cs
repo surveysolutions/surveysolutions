@@ -21,7 +21,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.PublicKey = Guid.NewGuid();
             this.Enabled = true;
             this.Answers = new List<ICompleteAnswer>();
-
+            this.Triggers=new List<Guid>();
             //this.Answers.GetObservablePropertyChanges().Subscribe(e=>e.EventArgs)
             this.observers=new List<IObserver<CompositeEventArgs>>();
             SubscribeAddedAnswers();
@@ -42,7 +42,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                                               ConditionExpression = doc.ConditionExpression,
                                               QuestionText = doc.QuestionText,
                                               QuestionType = doc.QuestionType,
-                                              StataExportCaption = doc.StataExportCaption
+                                              StataExportCaption = doc.StataExportCaption,
+                                              Triggers = doc.Triggers
                                           };
           
             foreach (IAnswer answer in doc.Answers)
@@ -175,6 +176,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 Answers.Where(a => a is T && condition(a as T)).Select
                     (a => a as T);
         }
+
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            return Find<T>(condition).FirstOrDefault();
+        }
+
         protected void OnAdded(CompositeAddedEventArgs e)
         {
             foreach (IObserver<CompositeEventArgs> observer in observers)
@@ -204,6 +211,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return new Unsubscriber<CompositeEventArgs>(observers, observer);
         }
         private List<IObserver<CompositeEventArgs>> observers;
+
+        #endregion
+
+        #region Implementation of ITriggerable
+
+        public List<Guid> Triggers { get; set; }
 
         #endregion
     }

@@ -25,7 +25,7 @@ namespace RavenQuestionnaire.Core.Views.Answer
         {
             this.PublicKey = doc.PublicKey;
             this.AnswerText = doc.AnswerText;
-            this.AnswerValue = (doc.AnswerValue ?? string.Empty).ToString();
+            this.AnswerValue = GetAnswerValue(doc.AnswerValue);
             this.Mandatory = doc.Mandatory;
             this.AnswerType = doc.AnswerType;
             this.QuestionId = questionPublicKey;
@@ -34,6 +34,24 @@ namespace RavenQuestionnaire.Core.Views.Answer
         public  AnswerView (Guid questionPublicKey)
         {
             this.QuestionId = questionPublicKey;
+        }
+
+        protected string GetAnswerValue(object value)
+        {
+            if (value == null || string.IsNullOrEmpty(value.ToString()))
+                return string.Empty;
+            
+            try
+            {
+                
+                return DateTime.Parse(value.ToString()).ToShortDateString();
+            }
+            catch (FormatException)
+            {
+
+                return value.ToString();
+            }
+
         }
     }
 }

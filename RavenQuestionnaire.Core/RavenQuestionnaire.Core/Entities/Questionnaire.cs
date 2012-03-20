@@ -129,6 +129,12 @@ namespace RavenQuestionnaire.Core.Entities
                 innerDocument.Find<T>(condition);
         }
 
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            return
+              innerDocument.FirstOrDefault<T>(condition);
+        }
+
 
         public IList<IQuestion> GetAllQuestions()
         {
