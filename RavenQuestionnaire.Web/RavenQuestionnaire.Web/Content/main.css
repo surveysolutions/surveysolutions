@@ -117,6 +117,7 @@ table td form, table td form input
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
+    margin-bottom: 10px;
 
 }
 .subnav-fixed
