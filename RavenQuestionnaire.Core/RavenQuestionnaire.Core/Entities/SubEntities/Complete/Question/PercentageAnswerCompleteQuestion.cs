@@ -7,10 +7,10 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
-    public class MultyAnswerCompleteQuestion: IAnswerStrategy
+    public class PercentageAnswerCompleteQuestion : IAnswerStrategy
     {
         private ICompleteQuestion<ICompleteAnswer> document;
-        public MultyAnswerCompleteQuestion(ICompleteQuestion<ICompleteAnswer> document)
+        public PercentageAnswerCompleteQuestion(ICompleteQuestion<ICompleteAnswer> document)
         {
             this.document = document;
         }
@@ -35,4 +35,5 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             throw new CompositeException("answer wasn't found");
         }
     }
+   
 }

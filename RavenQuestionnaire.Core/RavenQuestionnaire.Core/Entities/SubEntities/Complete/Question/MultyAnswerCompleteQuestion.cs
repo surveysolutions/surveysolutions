@@ -7,10 +7,10 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
-    public class PercentageAnswerCompleteQuestion : IAnswerStrategy
+    public class MultyAnswerCompleteQuestion : IAnswerStrategy
     {
         private ICompleteQuestion<ICompleteAnswer> document;
-        public PercentageAnswerCompleteQuestion(ICompleteQuestion<ICompleteAnswer> document)
+        public MultyAnswerCompleteQuestion(ICompleteQuestion<ICompleteAnswer> document)
         {
             this.document = document;
         }
@@ -20,17 +20,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             CompleteAnswer currentAnswer = c as CompleteAnswer;
             if (currentAnswer == null || currentAnswer.QuestionPublicKey != this.document.PublicKey)
                 throw new CompositeException("answer wasn't found");
-
-            var persent = 0.0;
-            foreach (CompleteAnswer completeAnswer in this.document.Answers)
-            {
-                double value;
-                if (!double.TryParse(currentAnswer.AnswerValue.ToString(), out value))
-                    throw new InvalidCastException("answer is no numeric value");
-                persent += value;
-            }
-            if (Math.Abs(100-persent)>0.001)
-                throw new CompositeException("summ should be equals 100%");
 
             foreach (CompleteAnswer completeAnswer in this.document.Answers)
             {

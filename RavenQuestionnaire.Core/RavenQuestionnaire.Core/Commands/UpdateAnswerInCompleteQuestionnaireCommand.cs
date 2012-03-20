@@ -39,7 +39,6 @@ namespace RavenQuestionnaire.Core.Commands
                     this.CompleteAnswers[i] = new PropagatableCompleteAnswer(this.CompleteAnswers[i],
                                                                              propogationPublicKey.Value);
                 }
-
             }
             Executor = executer;
         }
