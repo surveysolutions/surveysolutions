@@ -23,11 +23,18 @@
 	padding-top: 10px;
 	position: relative;
 }
+.group {
+	border: 1px solid #bfbfbf;
+	border-radius: 6px;
+	padding: 10px;
+		margin-bottom: 10px;
+}
 .question
 {
 	padding-left: 5px;
 	border-left: 3px solid #bfbfbf;
 	margin-bottom: 15px;
+
 }
 .answers
 {
