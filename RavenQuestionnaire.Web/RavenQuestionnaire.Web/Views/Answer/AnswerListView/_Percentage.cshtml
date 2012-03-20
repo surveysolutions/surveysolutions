@@ -1,0 +1,30 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities.Complete
+@model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
+@{ ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "");
+   string qtbClientId = string.Format("val_{0}_{1}_{2}", Model.QuestionnaireId, Model.GroupPublicKey, Model.PublicKey);
+}
+@foreach (var item in Model.Answers)
+{
+    using (Html.BeginCollectionItem("Answers", true, item.PublicKey))
+    {
+    @Html.Hidden("QuestionId", Model.PublicKey)
+    <div class="answer">
+        @Html.Hidden("PublicKey", item.PublicKey)
+        @item.AnswerText
+        @Html.TextBox("AnswerValue", item.AnswerValue, new { @class = qtbClientId })
+    </div>
+        string tbClientId = "#" + Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('@tbClientId').numeric();
+            $("@tbClientId").inputmask({ "mask": "9", "repeat": 3, "greedy": false });
+        });
+    </script>
+    }
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".@qtbClientId").rules('add', { sum: 100 });
+    });
+</script>

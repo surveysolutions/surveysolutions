@@ -680,6 +680,7 @@
     <Content Include="Views\Shared\ViewSwitcher.cshtml" />
     <Content Include="Views\Shared\ProgressBar.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_YesNo.cshtml" />
+    <Content Include="Views\Answer\AnswerListView\_Percentage.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

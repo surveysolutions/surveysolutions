@@ -14,6 +14,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         Numeric,
         DateTime,
         GpsCoordinates,
-        Text
+        Text,
+        Percentage
     }
 }
