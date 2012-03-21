@@ -1,4 +1,5 @@
 ﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.Answer
 @model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
 @{ ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "$(this.form).submit();"); }
@@ -9,12 +10,22 @@
         @foreach (var item in Model.Answers)
         {
             var selectedClass = item.Selected ? "btn-primary" : "";
+            @Html.Hidden("Selected", true)
             <li class="btn @selectedClass ">
-                <label class="radio">
-                    @Html.RadioButton("PublicKey", item.PublicKey, ((CompleteAnswerView)item).Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
-                    @Html.Hidden("Selected", true)
-                    @{ Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item); }
-                </label>
+                @if (item.AnswerType == AnswerType.Text)
+                {
+                    <div class="radio">
+                        @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
+                        @{ Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item); }
+                    </div>
+                }
+                else
+                {
+                    <label class="radio">
+                        @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
+                        @{ Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item); }
+                    </label>
+                }
             </li>
         }
     </ul>
