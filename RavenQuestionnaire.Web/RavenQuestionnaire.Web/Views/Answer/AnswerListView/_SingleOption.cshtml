@@ -29,4 +29,15 @@
             </li>
         }
     </ul>
+    
+    <script>
+        $("input[name='@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("PublicKey")']").change(function (e) {
+            var target = $(this);
+            target.parent().parent().parent().children('li').removeClass('btn-primary');
+
+            target.parent().parent().addClass('btn-primary');
+
+
+        });
+    </script>
 }
