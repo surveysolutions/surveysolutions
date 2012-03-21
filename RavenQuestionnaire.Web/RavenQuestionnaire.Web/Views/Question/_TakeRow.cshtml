@@ -8,7 +8,7 @@
         ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
     }
 }
-@if (!String.IsNullOrEmpty(Model.Instructions))
+@*@if (!String.IsNullOrEmpty(Model.Instructions))
 {
     <div class="alert alert-block alert-info fade in">
         <a href="#" data-dismiss="alert" class="close">&times;</a>
@@ -16,11 +16,11 @@
             Some header?</h4>
         <p>@Model.Instructions</p>
     </div>
-}
+}*@
 <div class="question">
     <div class="group">
         <div class="row-fluid ">
-            <div class="span10 ">
+            <div class="span12 ">
                 <b @if (!String.IsNullOrEmpty(Model.Instructions))
                    {
                        <text>
@@ -31,7 +31,7 @@
                    } >
                     @Html.DisplayFor(modelItem => Model.QuestionText)</b>
             </div>
-            <div class="span">
+            @*<div class="span">
                 @if (!String.IsNullOrEmpty(Model.Instructions))
                 {
                     <div class="btn-group">
@@ -53,7 +53,7 @@
                            rel = "popover" data-placement="left" href="#">i</a>
                     </div>
                 }
-            </div>
+            </div>*@
         </div>
     </div>
     @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", Model.QuestionType), Model);}
