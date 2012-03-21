@@ -112,6 +112,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                              {
                                  PublicKey = question.PublicKey,
                                  QuestionText = question.QuestionText,
+                                 Instructions = question.Instructions,
                                  Questions = new List<CompleteQuestionView>()
                              };
 
@@ -205,6 +206,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
     {
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
+        public string Instructions { get; set; }
 
         public List<CompleteQuestionView> Questions { get; set; }
 

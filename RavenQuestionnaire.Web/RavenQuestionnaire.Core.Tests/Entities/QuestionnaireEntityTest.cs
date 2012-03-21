@@ -121,8 +121,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             var question = questionnaire.AddQuestion("old question title", "stataCap", QuestionType.SingleOption, string.Empty, null);
 
-            questionnaire.UpdateQuestion(question.PublicKey, "new question title", "stataCap", QuestionType.MultyOption, string.Empty,
-                                         new Answer[]
+            questionnaire.UpdateQuestion(question.PublicKey, "new question title", "stataCap", QuestionType.MultyOption, string.Empty, 
+                string.Empty, new Answer[]
                                              {
 
                                                  new Answer()

@@ -19,6 +19,12 @@ namespace RavenQuestionnaire.Core.Commands
             private set;
         }
 
+        public string Instructions
+        {
+            get;
+            private set;
+        }
+
         public QuestionType QuestionType
         {
             get;
@@ -43,8 +49,8 @@ namespace RavenQuestionnaire.Core.Commands
 
         public UserLight Executor { get; set; }
 
-        public AddNewQuestionCommand(string text, string stataExportCaption, QuestionType type, string questionnaireId, Guid? groupPublicKey,
-            string condition, AnswerView[] answers, UserLight executor)
+        public AddNewQuestionCommand(string text, string stataExportCaption, QuestionType type, string questionnaireId,
+            Guid? groupPublicKey, string condition, string instructions, AnswerView[] answers, UserLight executor)
         {
             this.QuestionText = text;
             this.StataExportCaption = stataExportCaption;
@@ -52,6 +58,7 @@ namespace RavenQuestionnaire.Core.Commands
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.GroupPublicKey = groupPublicKey;
             this.ConditionExpression = condition;
+            this.Instructions = instructions;
             this.Answers = new Answer[0];
             if (answers != null)
                 this.Answers =

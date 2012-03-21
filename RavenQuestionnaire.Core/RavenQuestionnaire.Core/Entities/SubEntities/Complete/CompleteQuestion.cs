@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
-using RavenQuestionnaire.Core.Entities.Observers;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
@@ -43,6 +37,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                                               QuestionText = doc.QuestionText,
                                               QuestionType = doc.QuestionType,
                                               StataExportCaption = doc.StataExportCaption,
+                                              Instructions = doc.Instructions,
                                               Triggers = doc.Triggers
                                           };
           
@@ -90,6 +85,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public string ConditionExpression { get; set; }
 
         public string StataExportCaption { get; set; }
+
+        public string Instructions{ get; set; }
 
         public bool Enabled { get; set; }
         public void Add(IComposite c, Guid? parent)

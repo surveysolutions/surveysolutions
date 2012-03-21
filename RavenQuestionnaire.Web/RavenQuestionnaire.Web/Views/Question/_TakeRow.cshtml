@@ -9,7 +9,27 @@
     }
 }
 <div class="question">
-    <b>@Html.DisplayFor(modelItem => Model.QuestionText)</b>
+    <div class="group">
+        <div class="row-fluid ">
+            <div class="span11 ">
+                <b>@Html.DisplayFor(modelItem => Model.QuestionText)</b>
+            </div>
+            <div class="span">
+                @if (!String.IsNullOrEmpty(Model.Instructions))
+                {
+                    <div class="btn-group">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">i<span
+                                class="caret"></span></a>
+                            <div class="dropdown-menu">
+                                <div>
+                                    @Model.Instructions
+                                </div>
+                            </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
     @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", Model.QuestionType), Model);}
 </div>
 @Html.BootstrapValidationMessage("AnswerValue")
