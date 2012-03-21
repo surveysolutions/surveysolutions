@@ -1,6 +1,5 @@
 ﻿@model RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical.Counter
-<div style="margin: 9px 20px 0 0">
-    <div style="margin-bottom: 9px;" class="progress progress-warning">
+    <div class="progress progress-warning" style="vertical-align: middle">
         <div style="width: @string.Format("{0}%", 100 - Model.Progress)" class="questions-left">
             @(Model.Enablad - Model.Answered)
         </div>
@@ -8,4 +7,3 @@
             @Model.Answered
         </div>
     </div>
-</div>

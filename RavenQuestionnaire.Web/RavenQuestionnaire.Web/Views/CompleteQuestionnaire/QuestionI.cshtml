@@ -1,16 +1,12 @@
-﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Entities.SubEntities
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
-@using RavenQuestionnaire.Core.Views.Group
+﻿@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
 @using RavenQuestionnaire.Web.Models
 @model CompleteQuestionnaireViewV
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script src="@Url.Content("~/Scripts/take.js")" type="text/javascript"></script>
-<h1>@Model.Title</h1>
-@Html.Partial("ViewSwitcher", new SwitcherModel{Id = Model.Id, PublicKey = Model.CurrentGroup.PublicKey})
+<h2>@Model.Title</h2>
+@Html.Partial("ViewSwitcher", new SwitcherModel { Id = Model.Id, PublicKey = Model.CurrentGroup.PublicKey })
 <div class="">
     <div class="row-fluid">
         <div class="span3">

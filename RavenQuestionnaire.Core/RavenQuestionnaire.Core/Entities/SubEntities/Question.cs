@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
-using System.Reactive.Linq;
-using NCalc;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Observers;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
@@ -18,6 +14,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         QuestionType QuestionType { get; set; }
         string ConditionExpression { get; set; }
         string StataExportCaption { get; set; }
+        string Instructions { get; set; }
     }
 
     public interface IQuestion<T> : IQuestion where T : IAnswer
@@ -76,6 +73,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         private string conditionExpression;
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
+
+        public string Instructions{ get; set; }
 
         public void ClearAnswers()
         {

@@ -31,7 +31,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[]{ new AnswerView(){ AnswerText = "answer", AnswerType = AnswerType.Text} };
             handler.Handle(new Commands.AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId, null, string.Empty,
-                                                              answers, null));
+                                                              null,answers, null));
 
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
 
@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };
             handler.Handle(new Commands.AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId, 
                 topGroup.PublicKey, string.Empty,
-                answers, null));
+                null,answers, null));
 
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
             Assert.AreEqual((innerDocument.Groups[0] as Group).Questions.Count,1);
@@ -74,6 +74,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                 () =>
                 handler.Handle(new Commands.AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption,
                                                                   entity.QuestionnaireId, Guid.NewGuid(), string.Empty,
+                                                                  string.Empty,
                                                                   answers, null)));
         }
 
@@ -90,7 +91,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };
             handler.Handle(new Commands.AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId,
-               null, string.Empty,
+               null, string.Empty, string.Empty,
                 answers, null));
 
             Assert.AreEqual(innerDocument.Questions.Count,0);

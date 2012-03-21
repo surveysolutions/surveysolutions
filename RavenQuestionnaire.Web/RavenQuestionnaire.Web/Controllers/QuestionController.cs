@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Questionnaire.Core.Web.Helpers;
@@ -75,6 +73,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                         model.QuestionType,
                                                                                         model.QuestionnaireId, model.GroupPublicKey,
                                                                                         model.ConditionExpression,
+                                                                                        model.Instructions,
                                                                                         answers, GlobalInfo.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
 
@@ -86,7 +85,9 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                          model.QuestionText,
                                                                          model.StataExportCaption,
                                                                          model.QuestionType,
-                                                                         model.ConditionExpression, answers,
+                                                                         model.ConditionExpression,
+                                                                         model.Instructions,
+                                                                         answers,
                                                                          GlobalInfo.GetCurrentUser()));
                     }
                 }

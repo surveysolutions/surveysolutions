@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Answer;
 
@@ -23,6 +22,8 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
+
+        public string Instructions { get; set; }
 
         public string QuestionnaireId
         {
@@ -55,6 +56,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.QuestionnaireId = questionnaire.Id;
             this.ConditionExpression = doc.ConditionExpression;
             this.StataExportCaption = doc.StataExportCaption;
+            this.Instructions = doc.Instructions;
         }
     }
     public abstract class AbstractQuestionView<T> : AbstractQuestionView where T : AnswerView
@@ -102,6 +104,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.QuestionnaireId = questionnaire.Id;
             this.ConditionExpression = doc.ConditionExpression;
             this.StataExportCaption = doc.StataExportCaption;
+            this.Instructions = doc.Instructions;
         }
     }
 
@@ -160,9 +163,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         }
     }
 
-    public class QuestionView :
-        QuestionView
-            <AnswerView, RavenQuestionnaire.Core.Entities.SubEntities.Group, IQuestion>
+    public class QuestionView :QuestionView<AnswerView, RavenQuestionnaire.Core.Entities.SubEntities.Group, IQuestion>
     {
         public QuestionView()
         {

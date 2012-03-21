@@ -105,6 +105,7 @@
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
     <Compile Include="CommandHandlers\AddNewQuestionHandler.cs" />
+    <Compile Include="CommandHandlers\CreateStatusFlowHandler.cs" />
     <Compile Include="CommandHandlers\UpdateConditionsHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewFlowGraphHandler.cs" />
     <Compile Include="CommandHandlers\DeletePropagatedGroupHandler.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="CommandHandlers\UpdateStatusRestrictionHandler.cs" />
     <Compile Include="CommandHandlers\UpdateUserHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
+    <Compile Include="Commands\AddNewStatusFlowItem.cs" />
     <Compile Include="Commands\UpdateConditionsCommand.cs" />
     <Compile Include="Commands\CreateNewFlowGraphCommand.cs" />
     <Compile Include="Commands\CreateNewGroupCommand.cs" />
