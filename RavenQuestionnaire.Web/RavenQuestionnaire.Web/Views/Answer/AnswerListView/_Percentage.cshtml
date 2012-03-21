@@ -29,6 +29,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('@tbClientId').numeric();
+            $('@tbClientId').blur(function () { $(this.form).submit(); });
         });
     </script>
     }
