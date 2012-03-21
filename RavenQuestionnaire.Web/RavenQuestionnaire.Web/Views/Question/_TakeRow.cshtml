@@ -12,34 +12,45 @@
 {
     <div class="alert alert-block alert-info fade in">
         <a href="#" data-dismiss="alert" class="close">&times;</a>
-        <h4 class="alert-heading">Some header?</h4>
+        <h4 class="alert-heading">
+            Some header?</h4>
         <p>@Model.Instructions</p>
     </div>
 }
 <div class="question">
     <div class="group">
         <div class="row-fluid ">
-            <div class="span11 ">
+            <div class="span10 ">
                 <b @if (!String.IsNullOrEmpty(Model.Instructions))
                    {
                        <text>
-                       data-original-title = "Some header?"
+                       data-original-title = "Instructions"
                        data-content = "@Model.Instructions"
                        rel = "popover"
                        </text>
                    } >
-                @Html.DisplayFor(modelItem => Model.QuestionText)</b>
+                    @Html.DisplayFor(modelItem => Model.QuestionText)</b>
             </div>
             <div class="span">
                 @if (!String.IsNullOrEmpty(Model.Instructions))
                 {
                     <div class="btn-group">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">i<span class="caret"></span></a>
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">i</a>
                         <div class="dropdown-menu">
                             <div>
                                 @Model.Instructions
                             </div>
                         </div>
+                    </div>
+                }
+            </div>
+            <div class="span">
+                @if (!String.IsNullOrEmpty(Model.Instructions))
+                {
+                    <div class="btn-group">
+                        <a class="btn" data-original-title = "Instructions"
+                           data-content = "@Model.Instructions" id="btn_instr"
+                           rel = "popover" data-placement="left" href="#">i</a>
                     </div>
                 }
             </div>
