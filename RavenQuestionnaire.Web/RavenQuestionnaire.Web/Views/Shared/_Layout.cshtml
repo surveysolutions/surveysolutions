@@ -50,7 +50,11 @@
    
     <script type="text/javascript">
         $('.dropdown-toggle').dropdown();
-    
+        $("[rel=popover]")
+            .popover()
+            .click(function (e) {
+                e.preventDefault();
+            });
     </script>
 </body>
 </html>

@@ -136,7 +136,7 @@ table td form, table td form input
 	box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
 	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false); /* IE6-9 */
 }
-.subnav h2, h3
+.subnav h2, .subnav h3
 {
 	margin: 0 20px;
 }
@@ -237,3 +237,8 @@ table td form, table td form input
         font-size: 0;
         overflow: hidden;
     }
+    
+.center
+{
+	text-align: center;
+}
