@@ -4,79 +4,38 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<style type="text/css">
-    #main
-    {
-        position: absolute;
-        top: 43px;
-        bottom: 0;
-        left: 20px;
-        right: 20px;
-    }
-    #sidebar
-    {
-    	left: 0;
-        width: 300px;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-          background-color: white;
-
-    }
-    #content
-    {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 300px;
-        right: 0;
-        background-color: white;
-    }
-    .scroll-y
-    {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-  
-</style>
 <script src="@Url.Content("~/Scripts/take.js")" type="text/javascript"></script>
-@*<div class="">
+<h2>@Model.Title</h2>
+@Html.Partial("ViewSwitcher", new SwitcherModel { Id = Model.Id, PublicKey = Model.CurrentGroup.PublicKey })
+<div class="">
     <div class="row-fluid">
         <div class="span3">
+            <ul class="nav nav-list well">
+                @foreach (var gh in Model.Groups)
+                {
+                    if (gh.IsCurrent)
+                    {
+                    <li class="active"><a href="#@gh.GetClientId("div")">
+                        @gh.GroupText
+                    </a></li>
+                    }
+                    else
+                    {
+                    <li><a href="@Url.Action("QuestionI", new { id = Model.Id, group = gh.PublicKey })">
+                        @gh.GroupText
+                    </a></li>
+                    }
+                    <li class="divider"></li>
+                }
+            </ul>
         </div>
         <div class="span9 tab_content">
             <div>
+                <div id="@Model.CurrentGroup.GetClientId("div")">
+                    @Html.Partial("~/Views/Group/_ScreenI.cshtml", Model)
+                </div>
             </div>
         </div>
-    </div>
-</div>*@
-
-<div id="sidebar" class="scroll-y">
-    <ul class="nav nav-list well">
-        @foreach (var gh in Model.Groups)
-        {
-            if (gh.IsCurrent)
-            {
-            <li class="active"><a href="#@gh.GetClientId("div")">
-                @gh.GroupText
-            </a></li>
-            }
-            else
-            {
-            <li><a href="@Url.Action("QuestionI", new { id = Model.Id, group = gh.PublicKey })">
-                @gh.GroupText
-            </a></li>
-            }
-            <li class="divider"></li>
-        }
-    </ul>
-</div>
-<div id="content" class="scroll-y">
-    <h2>@Model.Title</h2>
-    @Html.Partial("ViewSwitcher", new SwitcherModel { Id = Model.Id, PublicKey = Model.CurrentGroup.PublicKey })
-    <div id="@Model.CurrentGroup.GetClientId("div")">
-        @Html.Partial("~/Views/Group/_ScreenI.cshtml", Model)
     </div>
 </div>
 <div id="loadingModal" class="">
