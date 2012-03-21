@@ -24,6 +24,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
             questionnaire.UpdateQuestion(command.QuestionPublicKey, command.QuestionText, command.StataExportCaption,
                                         command.QuestionType,
                                          command.ConditionExpression,
+                                         command.Instructions,
                                          command.Answers);
 
             /*   if(command.Answers!=null)

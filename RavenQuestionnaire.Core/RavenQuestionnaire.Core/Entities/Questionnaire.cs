@@ -82,7 +82,8 @@ namespace RavenQuestionnaire.Core.Entities
         {
             return this.innerDocument;
         }
-        public void UpdateQuestion(Guid publicKey, string text, string stataExportCaption, QuestionType type, string condition, IEnumerable<Answer> answers)
+        public void UpdateQuestion(Guid publicKey, string text, string stataExportCaption, QuestionType type, 
+            string condition, string instructions ,IEnumerable<Answer> answers)
         {
             var question = Find<Question>(publicKey);
             if (question == null)
@@ -92,6 +93,7 @@ namespace RavenQuestionnaire.Core.Entities
             question.QuestionType = type;
             question.UpdateAnswerList(answers);
             question.ConditionExpression = condition;
+            question.Instructions = instructions;
         }
         public void UpdateConditionExpression(Guid publicKey, string condition)
         {

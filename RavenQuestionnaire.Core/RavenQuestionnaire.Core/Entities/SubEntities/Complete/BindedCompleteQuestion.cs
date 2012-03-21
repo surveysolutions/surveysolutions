@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.Observers;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
@@ -84,6 +80,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public string ConditionExpression { get; set; }
 
         public string StataExportCaption { get; set; }
+
+        public string Instructions
+        {
+            get; set; }
 
         #endregion
 

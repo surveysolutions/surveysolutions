@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
@@ -42,6 +37,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         [JsonIgnore]
         public string StataExportCaption { get; set; }
+
+        [JsonIgnore]
+        public string Instructions
+        {
+            get; set; }
 
         public void Add(IComposite c, Guid? parent)
         {
