@@ -1,4 +1,5 @@
-﻿@using Questionnaire.Core.Web.Helpers
+﻿@using System.Web.Mvc.Html5
+@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Entities.SubEntities.Complete
 @model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
 @{ ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "");
@@ -15,16 +16,27 @@
     @Html.Hidden("QuestionId", Model.PublicKey)
     <div class="answer control-group">
         @Html.Hidden("PublicKey", item.PublicKey)
-       
         <label for="@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue")" class="control-label">@item.AnswerText</label>
         <div class="input-append">
-            @Html.TextBox("AnswerValue", item.AnswerValue, new {@class="input-mini", group = qtbClientId, onchange = "$(this.form).submit();", style="margin-bottom:0;" })<span class="add-on">%</span>
+        @*    @Html.TextBox("AnswerValue", item.AnswerValue, new { @class = "input-mini", group = qtbClientId, onchange = "$(this.form).submit();", style = "margin-bottom:0;" })
+        *@    @Html.Html5Number(0, 100, 1,
+           !string.IsNullOrEmpty(item.AnswerValue) ? Convert.ToInt32(item.AnswerValue) : 0,
+       new
+       {
+           @class = "input-mini",
+           group = qtbClientId,
+           onchange = "$(this.form).submit();",
+           style = "margin-bottom:0;",
+           name = Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue"),
+           id = Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue")
+       })
+            <span class="add-on">%</span>
         </div>
         <span class="help-inline" style="display: none;"></span>
-        @Html.CheckBox("Selected", true, new { @checked ="checked", style="display:none"})
+        @Html.CheckBox("Selected", true, new { @checked = "checked", style = "display:none" })
     </div>
-        string tbClientId = "#" + Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
-        ids.Add(tbClientId);
+   string tbClientId = "#" + Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
+   ids.Add(tbClientId);
             
     <script type="text/javascript">
         $(document).ready(function () {

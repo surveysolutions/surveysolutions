@@ -9,6 +9,14 @@ function ShowOverlay() {
     $('#loadingModal').addClass('overlay');
     $('.modal-backdrop').remove();
 }
+function MultySelectChangeStyles(input) {
+    if (input.checked)
+        $(input).addClass('btn-primary');
+    else
+        $(input).removeClass('btn-primary');
+
+}
+
 function HideOverlay() {
     $('#loadingModal').removeClass('overlay');
 }

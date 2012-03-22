@@ -249,7 +249,7 @@
                 break;
             }
         }
-    <div class="row-fluid show-grid">
+@*    <div class="row-fluid show-grid">
         @if (prev != null)
         {
             <div class="span@(prevSpan)">
@@ -272,9 +272,9 @@
                 </p>
             </div>
         }
-    </div>
+    </div>*@
         
-    <div class="table table-striped table-bordered table-condensed" id="navTable" style="margin-top: 10px;">
+    <table class="table table-striped table-bordered table-condensed" id="navTable" style="margin-top: 10px;">
         <tbody>
             <tr style="text-align: center">
                 @if (prev != null)
@@ -296,9 +296,9 @@
                 }
             </tr>
         </tbody>
-    </div>
+    </table>
         
-    <div class="group" style="text-align: center">
+    @*<div class="group" style="text-align: center">
         <div class="row-fluid">
             <div class="span2">
                 @if (prev != null)
@@ -321,6 +321,6 @@
                 &nbsp;
             </div>
         </div>
-    </div>
+    </div>*@
     
 }
