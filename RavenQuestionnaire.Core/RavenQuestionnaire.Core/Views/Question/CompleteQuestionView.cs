@@ -4,6 +4,7 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.Answer;
+using RavenQuestionnaire.Core.Views.Card;
 
 namespace RavenQuestionnaire.Core.Views.Question
 {
@@ -31,6 +32,8 @@ namespace RavenQuestionnaire.Core.Views.Question
             var questionWithAnswer = doc as ICompleteQuestion<ICompleteAnswer>;
             if (questionWithAnswer != null)
                 this.Answers = questionWithAnswer.Answers.Select(a => new CompleteAnswerView(a)).ToArray();
+            if (doc.Cards != null)
+                this.Cards = doc.Cards.Select(card => new CardView(doc.PublicKey, card)).ToArray();
         }
     }
 }

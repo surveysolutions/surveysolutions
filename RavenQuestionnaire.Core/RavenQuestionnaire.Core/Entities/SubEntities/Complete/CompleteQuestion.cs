@@ -15,6 +15,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.PublicKey = Guid.NewGuid();
             this.Enabled = true;
             this.Answers = new List<ICompleteAnswer>();
+            this.Cards = new List<Image>();
             this.Triggers = new List<Guid>();
             //this.Answers.GetObservablePropertyChanges().Subscribe(e=>e.EventArgs)
             this.observers = new List<IObserver<CompositeEventArgs>>();
@@ -47,6 +48,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 result.Answers.Add(newanswer);
                 result.OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(result), newanswer));
             }
+            if (doc.Cards != null)
+                foreach (var card in doc.Cards)
+                {
+                    result.Cards.Add(card);
+                }
             return result;
         }
 
