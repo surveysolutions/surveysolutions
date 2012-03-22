@@ -14,6 +14,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         public QuestionnaireView Load(QuestionnaireViewInputModel input)
         {
             var doc = documentSession.Load<QuestionnaireDocument>(input.QuestionnaireId);
+
             /*  var questions =
                   documentSession.Query<QuestionDocument, QuestionnaireContainingQuestions>().Where(
                       question => question.QuestionnaireId.Equals(doc.Id));*/

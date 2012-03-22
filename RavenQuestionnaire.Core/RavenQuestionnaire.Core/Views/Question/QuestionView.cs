@@ -5,6 +5,7 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Answer;
+using RavenQuestionnaire.Core.Views.Card;
 
 namespace RavenQuestionnaire.Core.Views.Question
 {
@@ -61,6 +62,8 @@ namespace RavenQuestionnaire.Core.Views.Question
     }
     public abstract class AbstractQuestionView<T> : AbstractQuestionView where T : AnswerView
     {
+        public CardView[] Cards { get; set; }
+
         public T[] Answers
         {
             get { return _answers; }
@@ -86,6 +89,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         public AbstractQuestionView():base()
         {
             Answers = new T[0];
+            Cards = new CardView[0];
         }
 
         public AbstractQuestionView(string questionnaireId, Guid? groupPublicKey)
@@ -165,6 +169,7 @@ namespace RavenQuestionnaire.Core.Views.Question
 
     public class QuestionView :QuestionView<AnswerView, RavenQuestionnaire.Core.Entities.SubEntities.Group, IQuestion>
     {
+
         public QuestionView()
         {
         }
@@ -190,7 +195,11 @@ namespace RavenQuestionnaire.Core.Views.Question
         {
             var question = doc as IQuestion<IAnswer>;
             if (question != null)
+            {
                 this.Answers = question.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
+                if (question.Cards!=null)
+                    this.Cards = question.Cards.Select(c => new CardView(doc.PublicKey, c)).ToArray();
+            }
         }
     }
 }

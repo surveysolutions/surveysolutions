@@ -7,6 +7,7 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Conventions;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.ExpressionExecutors;
+using RavenQuestionnaire.Core.Services;
 using FormsAuthentication = Questionnaire.Core.Web.Security.FormsAuthentication;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(RavenQuestionnaire.Web.App_Start.NinjectMVC3), "Start")]
@@ -82,6 +83,11 @@ namespace RavenQuestionnaire.Web.App_Start
             kernel.Scan(s =>
             {
                 s.FromAssembliesMatching("RavenQuestionnaire.*");
+                s.BindWith(new GenericBindingGenerator(typeof(IExpressionExecutor<,>)));
+            });
+            kernel.Scan(s =>
+            {
+                s.FromAssembliesMatching("RavenQuestionnaire.*");
                 s.BindWith(new RegisterFirstInstanceOfInterface());
             });
             kernel.Scan(s =>
@@ -89,6 +95,7 @@ namespace RavenQuestionnaire.Web.App_Start
                 s.FromAssembliesMatching("RavenQuestionnaire.*");
                 s.BindWith(new GenericBindingGenerator(typeof(Iterator<>)));
             });
+
             kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
             kernel.Bind<IBagManager>().To<ViewBagManager>();
             kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();

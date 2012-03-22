@@ -5,15 +5,26 @@
 @model QuestionView
 @{ var currentRowId = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, Model.PublicKey.ToString()); }
 <div id="@currentRowId" class="display-question">
-<div class="question-header">
-    <h3>@Model.Index) @Html.DisplayFor(modelItem => Model.QuestionText)</h3> 
+    <div class="question-header">
+        <h3>@Model.Index) @Html.DisplayFor(modelItem => Model.QuestionText)</h3>
         <div class="btn-group">
             @Ajax.ActionLinkWithIcon("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-primary btn-mini" }, "icon-pencil icon-white")
             @Ajax.ActionLinkWithIcon("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, new { @class = "btn btn-danger btn-mini" }, "icon-remove icon-white")
+            @Ajax.ActionLinkWithIcon("Add cards", "AddCards", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-info btn-mini" }, "icon-picture icon-white")
         </div>
     </div>
     <div class="question-body">
         <p>@Model.QuestionType - @Model.PublicKey</p>
         @{Html.RenderPartial("~/Views/Answer/_Index.cshtml", Model.Answers);}
+        <ul class="thumbnails">
+            @foreach (var i in Model.Cards)
+            {
+                <li class="span2">
+                    <div class="thumbnail">
+                        <img src="data:image/png;base64,@(i.Thumb)" alt="@i.Title" />
+                    </div>
+                </li>
+            }
+        </ul>
     </div>
 </div>

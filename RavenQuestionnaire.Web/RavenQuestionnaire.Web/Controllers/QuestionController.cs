@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using Kaliko.ImageLibrary;
+using Kaliko.ImageLibrary.Filters;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
@@ -25,6 +28,52 @@ namespace RavenQuestionnaire.Web.Controllers
             this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
         }
+
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult UploadCard(string currentUserId, HttpPostedFileBase file, ImageNewViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (file != null)
+                {
+                    var origData = new byte[file.ContentLength];
+                    file.InputStream.Read(origData, 0, origData.Length);
+
+                    var image = new KalikoImage(file.InputStream);
+
+                    var thumb = image.GetThumbnailImage(160, 120, ThumbnailMethod.Fit);
+
+                    thumb.ApplyFilter(new UnsharpMaskFilter(1.4, 0.32));
+
+                    var ms = new MemoryStream();
+                    thumb.SavePng(ms, 80);
+                    ms.Position = 0;
+
+                    var thumbData = new byte[ms.Length];
+                    ms.Read(thumbData, 0, thumbData.Length);
+
+                    commandInvoker.Execute(new UploadImageCommand(model.PublicKey, model.QuestionnaireId,
+                                                                  model.Title, model.Desc,
+                                                                  thumbData, thumb.Width, thumb.Height,
+                                                                  origData, image.Width, image.Height,
+                                                                  GlobalInfo.GetCurrentUser()));
+
+                    return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
+                }
+
+                ModelState.AddModelError("file", "Please select a file for upload");
+            }
+            return PartialView("_AddCards");
+        }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ActionResult AddCards(Guid publicKey, string questionnaireId)
+        {
+            return PartialView("_AddCards", new ImageNewViewModel { PublicKey = publicKey, QuestionnaireId = questionnaireId });
+        }
+
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         [HttpPost]
@@ -98,7 +147,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                              e.Message);
                     return PartialView("_Create", model);
                 }
-           //     var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
+                //     var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
                 if (model.GroupPublicKey.HasValue)
                 {
                     var updatedGroup =

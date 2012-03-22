@@ -15,7 +15,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public BindedCompleteQuestion(ICompleteQuestion<ICompleteAnswer> template)
         {
-            this.ParentPublicKey=template.PublicKey;
+            this.ParentPublicKey = template.PublicKey;
         }
         public static explicit operator BindedCompleteQuestion(BindedQuestion doc)
         {
@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 this.Answers = witAnswers.Answers;
             this.QuestionText = template.QuestionText;
             this.QuestionType = template.QuestionType;
-            
+
         }
 
         #region Implementation of IComposite
@@ -69,7 +69,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
 
         #endregion
-        
+
         #region Implementation of IQuestion
 
         public Guid PublicKey { get; set; }
@@ -81,14 +81,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public string StataExportCaption { get; set; }
 
-        public string Instructions
-        {
-            get; set; }
+        public string Instructions { get; set; }
+
+        public List<Image> Cards { get; set; }
 
         #endregion
 
         #region Implementation of ICompleteQuestion
-        
+
         public bool Enabled
         {
             get { return false; }

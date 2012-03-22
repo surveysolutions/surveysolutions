@@ -15,6 +15,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         string ConditionExpression { get; set; }
         string StataExportCaption { get; set; }
         string Instructions { get; set; }
+        List<Image> Cards { get; set; }
     }
 
     public interface IQuestion<T> : IQuestion where T : IAnswer
@@ -29,6 +30,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             PublicKey = Guid.NewGuid();
             Answers = new List<IAnswer>();
+            Cards = new List<Image>();
             this.Triggers=new List<Guid>();
             this.observers = new List<IObserver<CompositeEventArgs>>();
 
@@ -58,6 +60,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
         public List<IAnswer> Answers { get; set; }
+        public List<Image> Cards { get; set; }
 
         public string ConditionExpression
         {
@@ -88,6 +91,15 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             {
                 Add(answer, PublicKey);
             }
+        }
+
+        public void AddCard(Image card)
+        {
+            if (Cards == null)
+                Cards = new List<Image>();
+            Cards.Clear();
+            Cards.Add(card);
+            //OnAdded(new CompositeAddedEventArgs(card));
         }
         public void AddAnswer(IAnswer answer)
         {
@@ -172,5 +184,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public List<Guid> Triggers { get; set; }
 
         #endregion
+
+
     }
 }

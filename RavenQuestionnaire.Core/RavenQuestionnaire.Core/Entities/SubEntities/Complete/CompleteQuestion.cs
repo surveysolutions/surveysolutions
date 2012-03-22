@@ -15,9 +15,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.PublicKey = Guid.NewGuid();
             this.Enabled = true;
             this.Answers = new List<ICompleteAnswer>();
-            this.Triggers=new List<Guid>();
+            this.Triggers = new List<Guid>();
             //this.Answers.GetObservablePropertyChanges().Subscribe(e=>e.EventArgs)
-            this.observers=new List<IObserver<CompositeEventArgs>>();
+            this.observers = new List<IObserver<CompositeEventArgs>>();
             SubscribeAddedAnswers();
         }
 
@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                                               Instructions = doc.Instructions,
                                               Triggers = doc.Triggers
                                           };
-          
+
             foreach (IAnswer answer in doc.Answers)
             {
                 var newanswer = new CompleteAnswerFactory().ConvertToCompleteAnswer(answer);
@@ -57,9 +57,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
         protected void HandleAddedAnswer(CompositeAddedEventArgs e)
         {
-            ((ICompleteAnswer) e.AddedComposite).QuestionPublicKey = this.PublicKey;
+            ((ICompleteAnswer)e.AddedComposite).QuestionPublicKey = this.PublicKey;
         }
-        
+
         public Guid PublicKey { get; set; }
 
         public string QuestionText { get; set; }
@@ -86,7 +86,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public string StataExportCaption { get; set; }
 
-        public string Instructions{ get; set; }
+        public string Instructions { get; set; }
+
+        public List<Image> Cards { get; set; }
 
         public bool Enabled { get; set; }
         public void Add(IComposite c, Guid? parent)
@@ -105,7 +107,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 foreach (CompleteAnswer answer in this.Answers)
                 {
                     answer.Remove(answer);
-                    
+
                 }
                 OnRemoved(new CompositeRemovedEventArgs(this));
                 return;
@@ -137,7 +139,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 OnRemoved(new CompositeRemovedEventArgs(this));
                 return;
             }
-            if (typeof (T) != typeof (CompleteAnswer))
+            if (typeof(T) != typeof(CompleteAnswer))
                 foreach (CompleteAnswer completeAnswer in this.Answers)
                 {
                     try
