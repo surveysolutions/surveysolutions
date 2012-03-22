@@ -63,6 +63,9 @@
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB-Embedded.1.0.499\lib\net40\Raven.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Raven.Client.Debug">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.1.0.499\lib\net40\Raven.Client.Debug.dll</HintPath>
     </Reference>
@@ -131,6 +134,7 @@
     <Compile Include="CommandHandlers\UpdateQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\UpdateStatusRestrictionHandler.cs" />
     <Compile Include="CommandHandlers\UpdateUserHandler.cs" />
+    <Compile Include="CommandHandlers\UploadImageCommandHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
     <Compile Include="Commands\AddNewStatusFlowItem.cs" />
     <Compile Include="Commands\UpdateConditionsCommand.cs" />
@@ -158,6 +162,7 @@
     <Compile Include="Commands\UpdateQuestionnaireFlowCommand.cs" />
     <Compile Include="Commands\UpdateStatusRestrictionsCommand.cs" />
     <Compile Include="Commands\UpdateUserCommand.cs" />
+    <Compile Include="Commands\UploadImageCommand.cs" />
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="Conventions\RegisterGenericTypesOfInterface.cs" />
     <Compile Include="CoreRegistry.cs" />
@@ -178,6 +183,7 @@
     <Compile Include="Entities\Extensions\CompositeObservebleExtensions.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\IEntity.cs" />
+    <Compile Include="Entities\SubEntities\Image.cs" />
     <Compile Include="Entities\Iterators\Iterator.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
     <Compile Include="Entities\Location.cs" />
@@ -233,6 +239,8 @@
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
     <Compile Include="Indexes\UsersInLocationIndex.cs" />
+    <Compile Include="Services\IFileStorageService.cs" />
+    <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="IViewFactory.cs" />
     <Compile Include="IViewRepsoitory.cs" />
     <Compile Include="Entities\OrderRequestItem.cs" />
@@ -263,6 +271,7 @@
     <Compile Include="ViewRepository.cs" />
     <Compile Include="Views\Answer\AnswerView.cs" />
     <Compile Include="Views\Answer\CompleteAnswerView.cs" />
+    <Compile Include="Views\Card\CardView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseView.cs" />
