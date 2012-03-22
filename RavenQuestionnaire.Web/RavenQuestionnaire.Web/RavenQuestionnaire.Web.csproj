@@ -350,6 +350,10 @@
     <Content Include="Content\themes\base\jquery.ui.slider.css" />
     <Content Include="Content\themes\base\jquery.ui.tabs.css" />
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\classic\classic-loader.gif" />
+    <Content Include="Content\themes\classic\classic-map.png" />
+    <Content Include="Content\themes\classic\galleria.classic.css" />
+    <Content Include="Content\themes\classic\galleria.classic.min.js" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap\bootstrap-alert.js" />
     <Content Include="Scripts\bootstrap\bootstrap-button.js" />
@@ -365,6 +369,7 @@
     <Content Include="Scripts\bootstrap\bootstrap-typeahead.js" />
     <Content Include="Scripts\bootstrap\bootstrap.min.js" />
     <Content Include="Scripts\flow.js" />
+    <Content Include="Scripts\galleria-1.2.6.min.js" />
     <Content Include="Scripts\iscroll.js" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />

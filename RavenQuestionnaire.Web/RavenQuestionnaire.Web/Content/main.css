@@ -242,3 +242,7 @@ table td form, table td form input
 {
 	text-align: center;
 }
+.galleria-errors
+{
+	display: none !important;
+}

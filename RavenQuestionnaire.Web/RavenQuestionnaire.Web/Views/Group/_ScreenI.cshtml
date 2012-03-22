@@ -1,6 +1,7 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+@using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Web.Utils
 @model CompleteQuestionnaireViewV
 <script type="text/javascript">
@@ -20,7 +21,7 @@
                 if (scrollTop >= navTop && !isFixed) {
                     isFixed = 1
                     $nav.addClass('subnav-fixed');
-                    $('#sidebar').css('top','40px');
+                    $('#sidebar').css('top', '40px');
                 } else if (scrollTop <= navTop && isFixed) {
                     isFixed = 0
                     $nav.removeClass('subnav-fixed');
@@ -112,27 +113,7 @@
         }*/
         foreach (var question in simpleGroup.Questions)
         {
-
-            using (Ajax.BeginForm("SaveSingleResultI", "CompleteQuestionnaire", new AjaxOptions()
-            {
-                InsertionMode = InsertionMode.Replace,
-                UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
-                OnBegin = "ShowOverlay",
-                OnComplete = "HideOverlay",
-                OnFailure = "HideOverlay"
-            }))
-            {
-                using (Html.BeginCollectionItem("questions", true, question.PublicKey))
-                {
-                    Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
-
-                }
-                using (Html.BeginCollectionItem("settings", true, question.PublicKey))
-                {
-    @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
-    @Html.Hidden("QuestionnaireId", Model.Id)
-                }
-            }
+    <text>@RenderSimpleQuestion(question)</text>
         }
         foreach (var @group in simpleGroup.Groups)
         {
@@ -147,9 +128,8 @@
     <table class="table  table-striped table-bordered" style="width: auto;">
         <thead>
         </thead>
-        @for (int i = 0; i < currentGroup.PropagatedQuestions.Count; i++)
+        @foreach (var pquestion in currentGroup.PropagatedQuestions)
         {
-            var pquestion = currentGroup.PropagatedQuestions[i];
             <tr>
                 <th>
                     <div style="width: 184px;">@pquestion.QuestionText</div>
@@ -158,34 +138,7 @@
                 {
                     var question = pquestion.Questions[index];
                     <td>
-                        @using (Ajax.BeginForm("SaveSingleResultI", "CompleteQuestionnaire", null, new AjaxOptions()
-                        {
-                            InsertionMode = InsertionMode.Replace,
-                            UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
-                            OnBegin = "ShowOverlay",
-                            OnComplete = "HideOverlay",
-                            OnFailure = "HideOverlay"
-                        }, new { autocomplete = "off" }))
-                        {
-                            using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + currentGroup.PropogationPublicKeys[index]))
-                            {
-                            @Html.Hidden("PublicKey", question.PublicKey)
-                                ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
-                                if (!question.Enabled)
-                                {
-                                    ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
-                                }
-
-                                Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
-                            @Html.BootstrapValidationMessage(string.Format("questions[{0}_{1}].AnswerValue", question.PublicKey, currentGroup.PropogationPublicKeys[index]))
-                            }
-                            using (Html.BeginCollectionItem("settings", true, currentGroup.PublicKey + "_" + currentGroup.PropogationPublicKeys[index]))
-                            {
-                            @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
-                            @Html.Hidden("QuestionnaireId", Model.Id)
-                            @Html.Hidden("PropogationPublicKey", currentGroup.PropogationPublicKeys[index])
-                            }
-                        }
+                        @RenderQuestion(question, currentGroup.PublicKey, currentGroup.PropogationPublicKeys[index])
                     </td>
                 }
             </tr>
@@ -207,6 +160,61 @@
             </tr>
         }
     </table>
+}
+@helper RenderSimpleQuestion(CompleteQuestionView question)
+    {
+    var ajaxOptions = new AjaxOptions
+                          {
+                              InsertionMode = InsertionMode.Replace,
+                              UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
+                              OnBegin = "ShowOverlay",
+                              OnComplete = "HideOverlay",
+                              OnFailure = "HideOverlay"
+                          };
+    using (Ajax.BeginForm("SaveSingleResultI", "CompleteQuestionnaire", ajaxOptions))
+    {
+        using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+        {
+            Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
+        }
+        using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+        {
+            @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
+            @Html.Hidden("QuestionnaireId", Model.Id)
+        }
+    }
+}
+@helper RenderQuestion(CompleteQuestionView question, Guid groupKey, Guid propagationKey)
+    {
+        var ajaxOptions = new AjaxOptions
+                              {
+                                  InsertionMode = InsertionMode.Replace,
+                                  UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
+                                  OnBegin = "ShowOverlay",
+                                  OnComplete = "HideOverlay",
+                                  OnFailure = "HideOverlay"
+                              };
+        using (Ajax.BeginForm("SaveSingleResultI", "CompleteQuestionnaire", null, ajaxOptions, new { autocomplete = "off" }))
+        {
+            using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + propagationKey))
+            {
+                @Html.Hidden("PublicKey", question.PublicKey)
+                ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+                if (!question.Enabled)
+                {
+                    ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+                }
+
+                Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
+    @Html.BootstrapValidationMessage(string.Format("questions[{0}_{1}].AnswerValue", question.PublicKey, propagationKey))
+            }
+            using (Html.BeginCollectionItem("settings", true, groupKey + "_" + propagationKey))
+            {
+    @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
+    @Html.Hidden("QuestionnaireId", Model.Id)
+    @Html.Hidden("PropogationPublicKey", propagationKey)
+            }
+        }
 }
 @helper RenderAddButton(CompleteQuestionnaireViewV model, Guid currentGroupPublicKey)
     {
@@ -298,7 +306,7 @@
         </tbody>
     </table>
         
-    @*<div class="group" style="text-align: center">
+@*<div class="group" style="text-align: center">
         <div class="row-fluid">
             <div class="span2">
                 @if (prev != null)

@@ -97,7 +97,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             if (Cards == null)
                 Cards = new List<Image>();
-            Cards.Clear();
             Cards.Add(card);
             //OnAdded(new CompositeAddedEventArgs(card));
         }
