@@ -1,0 +1,6 @@
+﻿@using RavenQuestionnaire.Core.Views.Status.SubView
+@model RolePermission
+<td style="text-align: center">
+    @Html.HiddenFor(model => model.RoleName)
+    @Html.CheckBoxFor(model => model.Permit)
+</td>

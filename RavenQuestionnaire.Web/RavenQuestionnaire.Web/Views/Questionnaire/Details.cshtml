@@ -109,15 +109,15 @@
             <div class="container-fluid">
                 <p>
                     @Ajax.ActionLinkWithIcon("Add Question", "Create", "Question", new { Model.Id }, new AjaxOptions
-                       {
-                           UpdateTargetId = "addNewQuestion",
-                           OnSuccess = "OpenModal"
-                       }, new { @class = "btn btn-success" }, "icon-plus icon-white")
+                                                                                           {
+                                                                                               UpdateTargetId = "addNewQuestion",
+                                                                                               OnSuccess = "OpenModal"
+                                                                                           }, new { @class = "btn btn-success" }, "icon-plus icon-white")
                     @Ajax.ActionLinkWithIcon("Add Screen", "Create", "Group", new { Model.Id }, new AjaxOptions
-                       {
-                           UpdateTargetId = "addNewQuestion",
-                           OnSuccess = "OpenModal"
-                       }, new { @class = "btn btn-success" }, "icon-plus icon-white")
+                                                                                      {
+                                                                                          UpdateTargetId = "addNewQuestion",
+                                                                                          OnSuccess = "OpenModal"
+                                                                                      }, new { @class = "btn btn-success" }, "icon-plus icon-white")
                     <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-primary"><i class="icon-pencil icon-white"></i>Edit</a>
                     <a href="@Url.Action("Index")" class="btn"><i class="icon-arrow-left"></i>Back to Questionnaires</a>
                 </p>
@@ -125,6 +125,7 @@
         </div>
     </div>
 </div>
+
 @helper RenderTOC(GroupView block)
     {
         var index = 1;
@@ -138,6 +139,8 @@
         {
             var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Group, @group.PublicKey.ToString());
     <li class="nav-header"><a class="text-ellipsis" href="#@id">@group.GroupText</a></li>
-    <text>@RenderTOC(@group)</text>
+<text>
+    @RenderTOC(@group)
+</text>
         }
 }

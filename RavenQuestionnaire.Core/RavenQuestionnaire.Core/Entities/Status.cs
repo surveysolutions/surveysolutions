@@ -59,5 +59,11 @@ namespace RavenQuestionnaire.Core.Entities
             }
         }
 
+        public void AddFlowRule(FlowRule flowRule)
+        {
+            innerDocument.FlowRules.Add(Guid.NewGuid(), flowRule);
+        }
+
+
     }
 }

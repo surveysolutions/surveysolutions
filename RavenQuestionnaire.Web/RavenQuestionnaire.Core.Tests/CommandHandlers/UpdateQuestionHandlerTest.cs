@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
-using RavenQuestionnaire.Core.CommandHandlers;
+using RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
-using RavenQuestionnaire.Core.Views.Answer;
 
 namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 {
@@ -31,7 +27,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
             UpdateQuestionHandler handler = new UpdateQuestionHandler(questionnaireRepositoryMock.Object,
                                                                       validator.Object);
-            handler.Handle(new Commands.UpdateQuestionCommand(entity.QuestionnaireId, question.PublicKey,
+            handler.Handle(new UpdateQuestionCommand(entity.QuestionnaireId, question.PublicKey,
                                                               "question after update", "export title",  QuestionType.MultyOption,
                                                               string.Empty, string.Empty, null));
 

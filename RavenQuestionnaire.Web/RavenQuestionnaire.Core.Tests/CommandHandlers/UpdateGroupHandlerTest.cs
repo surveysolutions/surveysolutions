@@ -5,6 +5,8 @@ using System.Text;
 using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers;
+using RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Group;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -28,7 +30,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
             UpdateGroupHandler handler = new UpdateGroupHandler(questionnaireRepositoryMock.Object);
       /*      AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };*/
-            handler.Handle(new Commands.UpdateGroupCommand("test", Propagate.None, entity.QuestionnaireId, groupForUpdate.PublicKey, null));
+            handler.Handle(new UpdateGroupCommand("test", Propagate.None, entity.QuestionnaireId, groupForUpdate.PublicKey, null));
             Assert.AreEqual(innerDocument.Groups[0].Title, "test");
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
 
