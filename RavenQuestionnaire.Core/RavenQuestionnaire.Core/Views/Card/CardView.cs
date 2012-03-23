@@ -1,5 +1,6 @@
 ﻿using System;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Views.Card
 {
@@ -11,19 +12,21 @@ namespace RavenQuestionnaire.Core.Views.Card
 
         public CardView(Guid questionPublicKey, Image doc)
         {
+            PublicKey = doc.PublicKey;
             Title = doc.Title;
             Description = doc.Description;
-            Original = doc.OriginalBase64;
+            Original = IdUtil.ParseId(doc.OriginalBase64);
             Width = doc.Width;
             Height = doc.Height;
 
-            Thumb = doc.ThumbnailBase64;
+            Thumb = IdUtil.ParseId(doc.ThumbnailBase);
             ThumbHeight = doc.ThumbnailHeight;
             ThumbWidth = doc.ThumbnailWidth;
 
             QuestionId = questionPublicKey;
         }
 
+        public Guid PublicKey { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Original { get; set; }

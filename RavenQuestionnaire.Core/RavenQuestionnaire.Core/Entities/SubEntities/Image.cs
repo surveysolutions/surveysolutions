@@ -8,7 +8,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
     public class Image
     {
-        public string Id { get; set; }
+        public Guid PublicKey { get; set; }
 
         public DateTime CreationDate { get; set; }
 
@@ -21,7 +21,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public string ThumbnailBase64 { get; set; }
+        public string ThumbnailBase { get; set; }
         public int ThumbnailWidth { get; set; }
         public int ThumbnailHeight { get; set; }
     }

@@ -8,6 +8,7 @@
         ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
     }
     var modalId = new Random().Next(int.MaxValue / 2, int.MaxValue);
+    int headerSpan = Model.Cards.Length == 0 ? 12 : 10;
 }
 @*@if (!String.IsNullOrEmpty(Model.Instructions))
 {
@@ -21,7 +22,7 @@
 <div class="question">
     <div class="group">
         <div class="row-fluid ">
-            <div class="span10">
+            <div class="span@(headerSpan)">
                 <b @if (!String.IsNullOrEmpty(Model.Instructions))
                    {
                        <text>
@@ -32,11 +33,14 @@
                    } >
                     @Html.DisplayFor(modelItem => Model.QuestionText)</b>
             </div>
-            <div class="span2">
-                <a class="btn btn-success btn-mini  pull-right" data-toggle="modal" href="#images@(modalId)">
-                    <i class="icon-picture icon-white"></i>Show Cards</a>
-            </div>
-            @*<div class="span">
+            @if (Model.Cards.Length > 0)
+            {
+                <div class="span2">
+                    <a class="btn btn-success btn-mini  pull-right" data-toggle="modal" href="#images@(modalId)">
+                        <i class="icon-picture icon-white"></i>Show Cards</a>
+                </div>
+            }
+@*<div class="span">
                 @if (!String.IsNullOrEmpty(Model.Instructions))
                 {
                     <div class="btn-group">
@@ -63,6 +67,7 @@
     </div>
     @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", Model.QuestionType), Model);}
 </div>
+if (Model.Cards.Length > 0) {
 <div class="modal" id="images@(modalId)" style="display: none;">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">&times;</a>
@@ -72,7 +77,9 @@
         <div id="gallery@(modalId)">
             @foreach (var card in Model.Cards)
             {
-                <img src="data:image/png;base64,@(card.Original)" alt="@card.Title" />
+                <a href="@Url.Action("Images", "Resource", new { id = card.Original })">
+                    <img src="@Url.Action("Images", "Resource", new { id = card.Thumb })" alt="@card.Description" title="@card.Title" />
+                </a>
             }
         </div>
     </div>
@@ -82,7 +89,8 @@
             height: 500,
             imageCrop: true
         });
-</script>
+    </script>
 </div>
+}
 @Html.BootstrapValidationMessage("AnswerValue")
 @Html.Hidden("PublicKey", Model.PublicKey)

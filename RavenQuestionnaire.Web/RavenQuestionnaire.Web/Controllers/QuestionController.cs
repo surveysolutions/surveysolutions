@@ -10,6 +10,7 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Answer;
+using RavenQuestionnaire.Core.Views.Card;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
@@ -29,10 +30,43 @@ namespace RavenQuestionnaire.Web.Controllers
             this.viewRepository = viewRepository;
         }
 
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        [AcceptVerbs(HttpVerbs.Post)]
+        public string DeleteCard(Guid publicKey, string questionnaireId, Guid imageKey)
+        {
+            commandInvoker.Execute(new DeleteImageCommand(questionnaireId, publicKey,imageKey, GlobalInfo.GetCurrentUser()));
+            return string.Empty;
+        }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ActionResult EditCard(Guid publicKey, string questionnaireId, Guid imageKey)
+        {
+            var source = viewRepository.Load<CardViewInputModel, CardView>(new CardViewInputModel(publicKey, questionnaireId, imageKey));
+
+            return PartialView("_EditCard",  new ImageNewViewModel()
+                                                 {
+                                                     Desc = source.Description,
+                                                     Title = source.Title,
+                                                     QuestionnaireId = questionnaireId,
+                                                     PublicKey = publicKey,
+                                                     ImageKey = imageKey
+                                                 });
+        }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult UploadCard(string currentUserId, HttpPostedFileBase file, ImageNewViewModel model)
+        public ActionResult EditCard(ImageNewViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                commandInvoker.Execute(new UpdateImageCommand(model.QuestionnaireId, model.PublicKey, model.ImageKey, model.Title, model.Desc, GlobalInfo.GetCurrentUser()));
+            }
+            return PartialView("_EditCard", model);
+        }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult UploadCard(HttpPostedFileBase file, ImageNewViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -171,5 +205,6 @@ namespace RavenQuestionnaire.Web.Controllers
             commandInvoker.Execute(new DeleteQuestionCommand(publicKey, questionnaireId, GlobalInfo.GetCurrentUser()));
             return "";
         }
+
     }
 }

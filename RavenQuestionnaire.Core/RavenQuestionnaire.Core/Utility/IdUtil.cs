@@ -4,7 +4,7 @@
     {
         public static string CreateImageId(string id)
         {
-            return string.Format("imagedocuments/{0}", id);
+            return string.Format("images/{0}", id);
         }
 
         public static string CreateFlowGraphId(string id)

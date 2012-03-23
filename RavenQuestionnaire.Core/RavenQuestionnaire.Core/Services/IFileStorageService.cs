@@ -7,6 +7,8 @@ namespace RavenQuestionnaire.Core.Services
     {
         void StoreFile(string filename, Byte[] bytes);
 
-        Attachment RetrieveFile(string filename);
+        byte[] RetrieveFile(string filename);
+
+        void DeleteFile(string filename);
     }
 }

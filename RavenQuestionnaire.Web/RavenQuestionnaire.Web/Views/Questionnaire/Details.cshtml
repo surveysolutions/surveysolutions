@@ -50,6 +50,10 @@
 
         $('#addNewQuestion').modal('show');
     }
+    function CloseModal() {
+
+        $('#addNewQuestion').modal('hide');
+    }
     function HideCreateQuestionForm(content) {
         //      $('#addNewQuestion').modal('hide');
         if ($(content.responseText).children('div#divCreateForm form').length == 0) {

@@ -1,18 +1,6 @@
 <Configuration>
   <RecentFiles>
     <RecentFiles>
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Models/f:CompleteQuestionSettings.cs" caret="78" fromTop="4" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:FlowGraph.cs" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/f:main.css" caret="2664" fromTop="76" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/d:bootstrap/f:responsive.less" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/d:bootstrap/f:bootstrap.less" caret="1413" fromTop="55" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_Layout.cshtml" caret="2285" fromTop="46" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/d:bootstrap/f:responsive.css" caret="402" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:QuestionC.cshtml" caret="495" fromTop="0" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/d:Vertical/f:CompleteQuestionnaireViewEnumerable.cs" caret="4607" fromTop="29" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/d:Vertical/f:CompleteQuestionnaireEnumerableViewVFactory.cs" caret="685" fromTop="5" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/d:Vertical/f:CompleteQuestionnaireViewV.cs" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/d:bootstrap/f:modals.less" caret="598" fromTop="26" />
       <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:CompleteQuestionnaireController.cs" caret="5694" fromTop="23" />
       <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/d:bootstrap/f:variables.less" caret="1369" fromTop="44" />
       <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/d:bootstrap/f:utilities.less" caret="411" fromTop="33" />
@@ -31,23 +19,20 @@
       <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:Result.cshtml" caret="0" fromTop="0" />
       <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:Questionnaire.cs" caret="0" fromTop="0" />
       <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Group/f:_ScreenC.cshtml" caret="1403" fromTop="25" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:QuestionController.cs" caret="2900" fromTop="32" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Services/f:IFileStorageService.cs" caret="214" fromTop="9" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:ResourceController.cs" caret="887" fromTop="25" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/f:UploadImageCommandHandler.cs" caret="970" fromTop="12" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Utility/f:IdUtil.cs" caret="350" fromTop="11" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Card/f:CardView.cs" caret="1136" fromTop="37" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/d:Complete/f:CompleteQuestion.cs" caret="2254" fromTop="19" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/f:Question.cs" caret="3059" fromTop="28" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Question/f:_TakeRow.cshtml" caret="2556" fromTop="22" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Question/f:_QuestionRow.cshtml" caret="1753" fromTop="23" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Details.cshtml" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Services/f:RavenFileStorageService.cs" caret="601" fromTop="19" />
     </RecentFiles>
     <RecentEdits>
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:CompleteQuestionnaireController.cs" caret="10352" fromTop="24" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:CompleteQuestionnaireController.cs" caret="11525" fromTop="39" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:CompleteQuestionnaireController.cs" caret="10650" fromTop="22" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:CompleteQuestionnaireController.cs" caret="6106" fromTop="14" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Group/f:_ScreenC.cshtml" caret="6680" fromTop="48" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:CompleteQuestionnaireController.cs" caret="6848" fromTop="20" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Group/f:_ScreenC.cshtml" caret="1110" fromTop="33" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:CompleteQuestionnaireController.cs" caret="11938" fromTop="18" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/d:bootstrap/f:utilities.less" caret="411" fromTop="33" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Group/f:_ScreenC.cshtml" caret="6031" fromTop="39" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:QuestionC.cshtml" caret="495" fromTop="12" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Group/f:_ScreenC.cshtml" caret="4262" fromTop="12" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/f:main.css" caret="2600" fromTop="24" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/f:main.css" caret="1643" fromTop="9" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_Layout.cshtml" caret="2275" fromTop="24" />
       <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_Layout.cshtml" caret="2275" fromTop="16" />
       <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_Layout.cshtml" caret="248" fromTop="6" />
       <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_Layout.cshtml" caret="2479" fromTop="45" />
@@ -63,6 +48,21 @@
       <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Group/f:_ScreenC.cshtml" caret="3813" fromTop="28" />
       <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Group/f:_ScreenC.cshtml" caret="3592" fromTop="21" />
       <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Group/f:_ScreenC.cshtml" caret="1403" fromTop="7" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/f:UploadImageCommandHandler.cs" caret="1161" fromTop="12" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:ResourceController.cs" caret="770" fromTop="16" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:ResourceController.cs" caret="700" fromTop="17" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Services/f:IFileStorageService.cs" caret="212" fromTop="9" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:ResourceController.cs" caret="970" fromTop="28" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Services/f:RavenFileStorageService.cs" caret="908" fromTop="23" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Services/f:RavenFileStorageService.cs" caret="546" fromTop="16" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Question/f:_QuestionRow.cshtml" caret="1753" fromTop="23" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Question/f:_TakeRow.cshtml" caret="3200" fromTop="31" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:ResourceController.cs" caret="897" fromTop="25" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/f:Question.cs" caret="3059" fromTop="28" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Card/f:CardView.cs" caret="448" fromTop="16" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Card/f:CardView.cs" caret="569" fromTop="20" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Utility/f:IdUtil.cs" caret="191" fromTop="6" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Services/f:RavenFileStorageService.cs" caret="761" fromTop="22" />
     </RecentEdits>
   </RecentFiles>
   <NAntValidationSettings>
@@ -87,10 +87,10 @@
   <CompletionStatisticsManager>
     <ItemStatistics item="CSharpCodeCompletionContext">
       <Item value="Guid`0" priority="607" />
-      <Item value="public" priority="1722" />
+      <Item value="public" priority="1754" />
       <Item value="DateTime`0" priority="159" />
       <Item value="AbstractComand`0" priority="95" />
-      <Item value="string" priority="1618" />
+      <Item value="string" priority="1650" />
       <Item value="EventDocument`0" priority="31" />
       <Item value="CreationDate" priority="31" />
       <Item value="PublicKey" priority="95" />
@@ -180,8 +180,8 @@
       <Item value="List&lt;string&gt;" priority="28" />
       <Item value="override" priority="31" />
       <Item value="sb" priority="63" />
-      <Item value="Url" priority="92" />
-      <Item value="object" priority="28" />
+      <Item value="Url" priority="122" />
+      <Item value="object" priority="57" />
       <Item value="OnSuccess" priority="32" />
       <Item value="Web.Mvc" priority="20" />
       <Item value="JQuery" priority="20" />
@@ -233,7 +233,7 @@
       <Item value="a" priority="95" />
       <Item value="IFilterProvider`0" priority="31" />
       <Item value="ExpressionExecutors" priority="27" />
-      <Item value="void" priority="31" />
+      <Item value="void" priority="63" />
       <Item value="List" priority="369" />
       <Item value="Blocks" priority="96" />
       <Item value="graph" priority="418" />
@@ -358,6 +358,10 @@
       <Item value="answers" priority="95" />
       <Item value="responsive.css" priority="22" />
       <Item value="modalHeader" priority="95" />
+      <Item value="byte" priority="63" />
+      <Item value="Cards" priority="31" />
+      <Item value="Resource" priority="27" />
+      <Item value="card" priority="31" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:@System.Guid">
       <Item value="NewGuid`0" priority="53" />
@@ -537,7 +541,7 @@
       <Item value="for" priority="15" />
       <Item value="Html" priority="49" />
       <Item value="using" priority="25" />
-      <Item value="Url" priority="30" />
+      <Item value="Url" priority="40" />
       <Item value="Model" priority="45" />
       <Item value="answer" priority="21" />
       <Item value="question" priority="15" />
@@ -612,6 +616,7 @@
       <Item value="Single`1" priority="27" />
       <Item value="Take`1" priority="27" />
       <Item value="First`1" priority="27" />
+      <Item value="Clear`0" priority="26" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.Status.SubView.StatusByRole">
       <Item value="Status" priority="104" />
@@ -629,6 +634,8 @@
       <Item value="CreateStatusId`0" priority="22" />
       <Item value="CreateFlowGraphId`0" priority="27" />
       <Item value="CreateQuestionnaireId`0" priority="22" />
+      <Item value="ParseId`0" priority="22" />
+      <Item value="CreateImageId`0" priority="22" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Text.StringBuilder">
       <Item value="Append`0" priority="53" />
@@ -984,6 +991,18 @@
       <Item value="AnswerText" priority="80" />
       <Item value="Selected" priority="26" />
       <Item value="AnswerValue" priority="27" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Commands.UploadImageCommand">
+      <Item value="ThumbnailImage" priority="22" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Web.Mvc.UrlHelper">
+      <Item value="Action`0" priority="27" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.Card.CardView">
+      <Item value="Thumb" priority="22" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Raven.Abstractions.Data.Attachment">
+      <Item value="Data" priority="26" />
     </ItemStatistics>
   </CompletionStatisticsManager>
   <UnitTestSessions>

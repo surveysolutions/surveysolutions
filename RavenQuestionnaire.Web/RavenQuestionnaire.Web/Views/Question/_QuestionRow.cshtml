@@ -19,9 +19,20 @@
         <ul class="thumbnails">
             @foreach (var i in Model.Cards)
             {
-                <li class="span2">
+                <li class="span2" id="image@(i.PublicKey)">
                     <div class="thumbnail">
-                        <img src="data:image/png;base64,@(i.Thumb)" alt="@i.Title" />
+                        <img src="@Url.Action("Images", "Resource", new { id = i.Thumb })" alt="@i.Title" />
+                        <div class="caption">
+                            @using (Ajax.BeginForm("DeleteCard", "Question", new AjaxOptions() { HttpMethod = "Post", OnComplete = string.Format("$('#image{0}').remove()",i.PublicKey), Confirm = "Are you sure?" }))
+                            {
+                                var imageKey = i.PublicKey;
+                                @Html.HiddenFor(x => x.QuestionnaireId)
+                                @Html.HiddenFor(x => x.PublicKey)
+                                @Html.HiddenFor(x => imageKey)
+                                <input class="btn btn-danger btn-mini" type="submit" value="Remove" />
+                            }
+                            @Ajax.ActionLinkWithIcon("Edit", "EditCard", "Question", new { Model.PublicKey, Model.QuestionnaireId, ImageKey = i.PublicKey }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-info btn-mini" }, "icon-edit icon-white")
+                        </div>
                     </div>
                 </li>
             }

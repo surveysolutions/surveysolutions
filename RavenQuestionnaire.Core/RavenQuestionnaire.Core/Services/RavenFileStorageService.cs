@@ -1,6 +1,8 @@
-﻿using Raven.Abstractions.Data;
+﻿using System.IO;
+using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Json.Linq;
+using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Services
 {
@@ -17,9 +19,20 @@ namespace RavenQuestionnaire.Core.Services
             documentStore.DatabaseCommands.PutAttachment(filename, null, bytes, new RavenJObject{});
         }
 
-        public Attachment RetrieveFile(string filename)
+        public byte[] RetrieveFile(string filename)
         {
-            return documentStore.DatabaseCommands.GetAttachment(filename);
+            Attachment a = documentStore.DatabaseCommands.GetAttachment(IdUtil.CreateImageId(filename));
+            /*var memoryStream = new MemoryStream();
+            (a.Data() as Stream).CopyTo(memoryStream);
+            return memoryStream.ToArray();
+             */
+            return a.Data;
+
+        }
+
+        public void DeleteFile(string filename)
+        {
+            documentStore.DatabaseCommands.DeleteAttachment(filename, null);
         }
     }
 }

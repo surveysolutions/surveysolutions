@@ -246,3 +246,7 @@ table td form, table td form input
 {
 	display: none !important;
 }
+.thumbnail form {
+	display: inline;
+	margin-bottom: 0;
+}

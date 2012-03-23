@@ -108,6 +108,8 @@
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
     <Compile Include="CommandHandlers\AddNewQuestionHandler.cs" />
+    <Compile Include="CommandHandlers\UpdateImageCommandHandler.cs" />
+    <Compile Include="CommandHandlers\DeleteImageCommandHandler.cs" />
     <Compile Include="CommandHandlers\CreateStatusFlowHandler.cs" />
     <Compile Include="CommandHandlers\UpdateConditionsHandler.cs" />
     <Compile Include="CommandHandlers\CreateNewFlowGraphHandler.cs" />
@@ -137,6 +139,8 @@
     <Compile Include="CommandHandlers\UploadImageCommandHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
     <Compile Include="Commands\AddNewStatusFlowItem.cs" />
+    <Compile Include="Commands\UpdateImageCommand.cs" />
+    <Compile Include="Commands\DeleteImageCommand.cs" />
     <Compile Include="Commands\UpdateConditionsCommand.cs" />
     <Compile Include="Commands\CreateNewFlowGraphCommand.cs" />
     <Compile Include="Commands\CreateNewGroupCommand.cs" />
@@ -272,6 +276,8 @@
     <Compile Include="Views\Answer\AnswerView.cs" />
     <Compile Include="Views\Answer\CompleteAnswerView.cs" />
     <Compile Include="Views\Card\CardView.cs" />
+    <Compile Include="Views\Card\CardViewFactory.cs" />
+    <Compile Include="Views\Card\CardViewInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseView.cs" />

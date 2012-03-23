@@ -31,7 +31,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             PublicKey = Guid.NewGuid();
             Answers = new List<IAnswer>();
             Cards = new List<Image>();
-            this.Triggers=new List<Guid>();
+            this.Triggers = new List<Guid>();
             this.observers = new List<IObserver<CompositeEventArgs>>();
 
         }
@@ -55,7 +55,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             {
                 observer.OnNext(e);
             }
-        } 
+        }
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
@@ -77,7 +77,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
 
-        public string Instructions{ get; set; }
+        public string Instructions { get; set; }
 
         public void ClearAnswers()
         {
@@ -98,7 +98,23 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             if (Cards == null)
                 Cards = new List<Image>();
             Cards.Add(card);
-            //OnAdded(new CompositeAddedEventArgs(card));
+        }
+        public Image RemoveCard(Guid imageKey)
+        {
+            if (Cards == null)
+                Cards = new List<Image>();
+            var card = Cards.Single(c => c.PublicKey == imageKey);
+            Cards.Remove(card);
+            return card;
+        }
+        public void UpdateCard(Guid imageKey, string title, string desc)
+        {
+            if (Cards == null)
+                Cards = new List<Image>();
+            var card = Cards.Single(c => c.PublicKey == imageKey);
+
+            card.Title = title;
+            card.Description = desc;
         }
         public void AddAnswer(IAnswer answer)
         {

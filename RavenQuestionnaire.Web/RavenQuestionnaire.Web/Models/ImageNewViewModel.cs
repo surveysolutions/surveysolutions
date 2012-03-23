@@ -18,5 +18,7 @@ namespace RavenQuestionnaire.Web.Models
 
         [DisplayName("File")]
         public HttpPostedFileBase FileDummy { get; set; }
+
+        public Guid ImageKey { get; set; }
     }
 }
