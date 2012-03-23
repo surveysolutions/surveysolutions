@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Views.Group;

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Moq;
 using NUnit.Framework;
-using RavenQuestionnaire.Core.CommandHandlers;
+using RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -30,7 +28,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[]{ new AnswerView(){ AnswerText = "answer", AnswerType = AnswerType.Text} };
-            handler.Handle(new Commands.AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId, null, string.Empty,
+            handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId, null, string.Empty,
                                                               null,answers, null));
 
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
@@ -50,7 +48,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };
-            handler.Handle(new Commands.AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId, 
+            handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId, 
                 topGroup.PublicKey, string.Empty,
                 null,answers, null));
 
@@ -72,7 +70,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };
             Assert.Throws<ArgumentException>(
                 () =>
-                handler.Handle(new Commands.AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption,
+                handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption,
                                                                   entity.QuestionnaireId, Guid.NewGuid(), string.Empty,
                                                                   string.Empty,
                                                                   answers, null)));
@@ -90,7 +88,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             validator.Setup(x => x.Execute(entity, string.Empty)).Returns(false);
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };
-            handler.Handle(new Commands.AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId,
+            handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId,
                null, string.Empty, string.Empty,
                 answers, null));
 

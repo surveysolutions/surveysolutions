@@ -7,6 +7,7 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Commands.Status;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Core.Views.Status.SubView;
@@ -51,7 +52,6 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     Qid = model.QuestionnaireId
                 });
-
             }
             return View("Create", model);
         }
@@ -65,7 +65,6 @@ namespace RavenQuestionnaire.Web.Controllers
                 if (!string.IsNullOrEmpty(model.Id) && model.StatusRolesMatrix != null)
                 {
                     Dictionary<string, List<SurveyStatus>> roles = new Dictionary<string, List<SurveyStatus>>();
-                    
                     foreach (var item in model.StatusRolesMatrix)
                     {
                         foreach (var roleItem in item.StatusRestriction)
@@ -80,7 +79,6 @@ namespace RavenQuestionnaire.Web.Controllers
                     return RedirectToAction("Index", new
                     {
                         Qid = model.QuestionnaireId
-
                     });
                 }
             }
@@ -165,11 +163,11 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (string.IsNullOrEmpty(model.StatusId))
                 {
-                    //commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial, model.QuestionnaireId, GlobalInfo.GetCurrentUser()));
+                    commandInvoker.Execute(new AddNewStatusFlowItem(model.StatusId, model.ConditionExpression, model.ChangeComment, model.TargetStatus, GlobalInfo.GetCurrentUser()));
                 }
 
                 StatusView m = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(model.StatusId));
-                return PartialView("Route", m);
+                return PartialView("_Route", m);
             }
             return View("AddRoute", model);
         }
@@ -180,6 +178,5 @@ namespace RavenQuestionnaire.Web.Controllers
             AddStatusListToViewBag(qid);
             return PartialView("AddRoute", new FlowRule() { StatusId = id });            
         }
-
     }
 }

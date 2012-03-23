@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers;
+using RavenQuestionnaire.Core.CommandHandlers.Questionnaire;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;

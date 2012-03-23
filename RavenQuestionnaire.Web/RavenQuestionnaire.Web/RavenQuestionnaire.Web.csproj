@@ -53,8 +53,7 @@
       <HintPath>..\packages\dotless.1.2.2.0\lib\dotless.Core.dll</HintPath>
     </Reference>
     <Reference Include="Kaliko.ImageLibrary">
-      <HintPath>C:\Users\Slava\Downloads\Kaliko.ImageLibrary.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -699,6 +698,9 @@
     <Content Include="Views\Answer\AnswerListView\_Percentage.cshtml" />
     <Content Include="Views\Question\_AddCards.cshtml" />
     <Content Include="Views\Question\_EditCard.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\StatusByRole.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\StatusView.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\RolePermission.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
@@ -715,7 +717,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>24525</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

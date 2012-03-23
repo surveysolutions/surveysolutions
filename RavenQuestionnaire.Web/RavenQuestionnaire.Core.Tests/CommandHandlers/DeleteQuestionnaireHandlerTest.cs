@@ -5,6 +5,7 @@ using System.Text;
 using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers;
+using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -27,7 +28,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
 
             DeleteQuestionnaireHandler handler = new DeleteQuestionnaireHandler(questionnaireRepositoryMock.Object);
-            handler.Handle(new Commands.DeleteQuestionnaireCommand(entity.QuestionnaireId, null));
+            handler.Handle(new DeleteQuestionnaireCommand(entity.QuestionnaireId, null));
             questionnaireRepositoryMock.Verify(x => x.Remove(entity));
         }
     }
