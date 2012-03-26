@@ -108,10 +108,9 @@
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Question\AddNewQuestionHandler.cs" />
-    
-    <Compile Include="CommandHandlers\UpdateImageCommandHandler.cs" />
-    <Compile Include="CommandHandlers\DeleteImageCommandHandler.cs" />
-    
+    <Compile Include="CommandHandlers\Questionnaire\UpdateConditionsHandler.cs" />
+    <Compile Include="CommandHandlers\Questionnaire\UpdateImageCommandHandler.cs" />
+    <Compile Include="CommandHandlers\Questionnaire\DeleteImageCommandHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Flow\CreateNewFlowGraphHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Group\DeletePropagatedGroupHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Flow\UpdateQuestionnaireFlowHandler.cs" />
@@ -138,11 +137,11 @@
     <Compile Include="CommandHandlers\User\UpdateUserHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UploadImageCommandHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
+    <Compile Include="Commands\Questionnaire\Flow\CreateNewFlowGraphCommand.cs" />
+    <Compile Include="Commands\Questionnaire\UpdateConditionsCommand.cs" />
     <Compile Include="Commands\Status\AddNewStatusFlowItem.cs" />
-    
-    <Compile Include="Commands\UpdateImageCommand.cs" />
-    <Compile Include="Commands\DeleteImageCommand.cs" />
-
+    <Compile Include="Commands\Questionnaire\UpdateImageCommand.cs" />
+    <Compile Include="Commands\Questionnaire\DeleteImageCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\CreateNewGroupCommand.cs" />
     <Compile Include="Commands\Location\CreateNewLocationCommand.cs" />
     <Compile Include="Commands\Status\CreateNewStatusCommand.cs" />

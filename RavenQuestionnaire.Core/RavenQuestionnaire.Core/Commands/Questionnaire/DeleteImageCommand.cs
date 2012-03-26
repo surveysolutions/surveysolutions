@@ -1,7 +1,7 @@
 ﻿using System;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
-namespace RavenQuestionnaire.Core.Commands
+namespace RavenQuestionnaire.Core.Commands.Questionnaire
 {
     public class DeleteImageCommand : ICommand
     {
