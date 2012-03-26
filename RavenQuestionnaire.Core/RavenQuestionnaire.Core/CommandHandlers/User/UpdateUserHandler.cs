@@ -1,0 +1,40 @@
+﻿using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Repositories;
+
+namespace RavenQuestionnaire.Core.CommandHandlers.User
+{
+    public class UpdateUserHandler : ICommandHandler<UpdateUserCommand>
+    {
+        private IUserRepository _repository;
+        private ILocationRepository _locationalRepository;
+        public UpdateUserHandler(IUserRepository repository, ILocationRepository locationRepository)
+        {
+            _repository = repository;
+            _locationalRepository = locationRepository;
+        }
+
+        #region Implementation of ICommandHandler<UpdateUserCommand>
+
+        public void Handle(UpdateUserCommand command)
+        {
+            Entities.User user = _repository.Load(command.UserId);
+            user.ChangeEmail(command.Email);
+            user.ChangeLockStatus(command.IsLocked);
+      //      user.ChangePassword(command.Password);
+            user.ChangeRoleList(command.Roles);
+            if (!string.IsNullOrEmpty(command.SupervisorId))
+            {
+                Entities.User supervisor = _repository.Load(command.SupervisorId);
+                user.SetSupervisor(supervisor.CreateSupervisor());
+            }
+            else
+            {
+                user.ClearSupervisor();
+            }
+            var location = _locationalRepository.Load(command.LocationId);
+            user.SetLocaton(location);
+        }
+
+        #endregion
+    }
+}
