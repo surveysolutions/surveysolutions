@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using RavenQuestionnaire.Core.Documents;
@@ -26,7 +27,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             var array = currentAnswer.AnswerValue as string[];
             if (array != null && array.Length > 0)
                 stringValue = array[0];
-            if (!DateTime.TryParse(stringValue, out value))
+            //if (!DateTime.TryParse(stringValue, out value))
+            if (!DateTime.TryParseExact(stringValue, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out value))
                 throw new InvalidCastException("answer is no data value");
             currentAnswer.Selected = true;
             currentAnswer.AnswerType = AnswerType.Text;
