@@ -201,22 +201,30 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
             {
-                return RedirectToAction("QuestionI", new { id = settings[0].QuestionnaireId });
+                //return RedirectToAction("QuestionI", new { id = settings[0].QuestionnaireId });
+                //fix wrong render on unselecting in dropdown
             }
-
-            CompleteQuestionView question = questions[0];
-            try
+            else
             {
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
-                                                                                      question.Answers as CompleteAnswerView[],
-                                                                                      settings[0].PropogationPublicKey,
-                                                                                      _globalProvider.GetCurrentUser()));
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("questions[" + question.PublicKey + (settings[0].PropogationPublicKey.HasValue
-                         ? string.Format("_{0}", settings[0].PropogationPublicKey.Value)
-                         : "") + "].AnswerValue", e.Message);
+                CompleteQuestionView question = questions[0];
+                try
+                {
+                    commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
+                                                                                          question.Answers as
+                                                                                          CompleteAnswerView[],
+                                                                                          settings[0].
+                                                                                              PropogationPublicKey,
+                                                                                          _globalProvider.GetCurrentUser
+                                                                                              ()));
+                }
+                catch (Exception e)
+                {
+                    ModelState.AddModelError(
+                        "questions[" + question.PublicKey + (settings[0].PropogationPublicKey.HasValue
+                                                                 ? string.Format("_{0}",
+                                                                                 settings[0].PropogationPublicKey.Value)
+                                                                 : "") + "].AnswerValue", e.Message);
+                }
             }
 
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(

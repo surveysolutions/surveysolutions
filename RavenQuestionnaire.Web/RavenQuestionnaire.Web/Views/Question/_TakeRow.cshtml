@@ -10,25 +10,26 @@
     var modalId = new Random().Next(int.MaxValue / 2, int.MaxValue);
     int headerSpan = Model.Cards.Length == 0 ? 12 : 10;
 }
-@*@if (!String.IsNullOrEmpty(Model.Instructions))
-{
-    <div class="alert alert-block alert-info fade in">
-        <a href="#" data-dismiss="alert" class="close">&times;</a>
-        <h4 class="alert-heading">
-            Some header?</h4>
-        <p>@Model.Instructions</p>
-    </div>
-}*@
 <div class="question">
     <div class="group">
         <div class="row-fluid ">
             <div class="span@(headerSpan)">
+                
+                @*temporary fix of script missing*@
+                @if (!String.IsNullOrEmpty(Model.Instructions))
+                {
+                    <script type="text/javascript">
+                        $('.dropdown-toggle').dropdown();
+                        $("[rel=popover]").popover().click(function (e) {e.preventDefault();});
+                    </script>
+                }
+                
                 <b @if (!String.IsNullOrEmpty(Model.Instructions))
                    {
                        <text>
-                       data-original-title = "Instructions"
-                       data-content = "@Model.Instructions"
-                       rel = "popover"
+                           data-original-title = "Instructions"
+                           data-content = "@Model.Instructions"
+                           rel = "popover"
                        </text>
                    } >
                     @Html.DisplayFor(modelItem => Model.QuestionText)</b>
@@ -40,57 +41,36 @@
                         <i class="icon-picture icon-white"></i>Show Cards</a>
                 </div>
             }
-@*<div class="span">
-                @if (!String.IsNullOrEmpty(Model.Instructions))
-                {
-                    <div class="btn-group">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">i</a>
-                        <div class="dropdown-menu">
-                            <div>
-                                @Model.Instructions
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-            <div class="span">
-                @if (!String.IsNullOrEmpty(Model.Instructions))
-                {
-                    <div class="btn-group">
-                        <a class="btn" data-original-title = "Instructions"
-                           data-content = "@Model.Instructions" id="btn_instr"
-                           rel = "popover" data-placement="left" href="#">i</a>
-                    </div>
-                }
-            </div>*@
         </div>
     </div>
     @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", Model.QuestionType), Model);}
 </div>
-if (Model.Cards.Length > 0) {
-<div class="modal" id="images@(modalId)" style="display: none;">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">&times;</a>
-        <h3>Cards</h3>
-    </div>
-    <div class="modal-body" style="min-height: 500px;">
-        <div id="gallery@(modalId)">
-            @foreach (var card in Model.Cards)
-            {
-                <a href="@Url.Action("Images", "Resource", new { id = card.Original })">
-                    <img src="@Url.Action("Images", "Resource", new { id = card.Thumb })" alt="@card.Description" title="@card.Title" />
-                </a>
-            }
+@if (Model.Cards.Length > 0)
+{
+    <div class="modal" id="images@(modalId)" style="display: none;">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">&times;</a>
+            <h3>
+                Cards</h3>
         </div>
+        <div class="modal-body" style="min-height: 500px;">
+            <div id="gallery@(modalId)">
+                @foreach (var card in Model.Cards)
+                {
+                    <a href="@Url.Action("Images", "Resource", new { id = card.Original })">
+                        <img src="@Url.Action("Images", "Resource", new { id = card.Thumb })" alt="@card.Description" title="@card.Title" />
+                    </a>
+                }
+            </div>
+        </div>
+        <script type="text/javascript">
+            $('#gallery@(modalId)').galleria({
+                width: 530,
+                height: 500,
+                imageCrop: true
+            });
+        </script>
     </div>
-    <script type="text/javascript">
-        $('#gallery@(modalId)').galleria({
-            width: 530,
-            height: 500,
-            imageCrop: true
-        });
-    </script>
-</div>
 }
 @Html.BootstrapValidationMessage("AnswerValue")
 @Html.Hidden("PublicKey", Model.PublicKey)

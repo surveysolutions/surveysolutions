@@ -1,6 +1,5 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Entities.SubEntities
-@using RavenQuestionnaire.Core.Views.Answer
 @model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
 @{ ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "$(this.form).submit();"); }
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
@@ -14,10 +13,10 @@
             <li class="btn @selectedClass ">
                 @if (item.AnswerType == AnswerType.Text)
                 {
-                    <div class="radio">
+                    <label class="radio">
                         @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
                         @{ Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item); }
-                    </div>
+                    </label>
                 }
                 else
                 {
@@ -30,7 +29,7 @@
         }
     </ul>
     
-    <script>
+    <script type="text/javascript">
         $("input[name='@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("PublicKey")']").change(function (e) {
             var target = $(this);
             target.parent().parent().parent().children('li').removeClass('btn-primary');

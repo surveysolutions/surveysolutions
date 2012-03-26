@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RavenQuestionnaire.Core.Commands;
-using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Repositories;
-using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Core.Utility;
 
-namespace RavenQuestionnaire.Core.CommandHandlers
+namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire
 {
     public class UpdatemageCommandHandler : ICommandHandler<UpdateImageCommand>
     {
@@ -23,7 +16,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         {
             var questionnaire = _questionnaireRepository.Load(IdUtil.CreateQuestionnaireId(command.QuestionnaireId));
 
-            var question = questionnaire.Find<Question>(command.QuestionKey);
+            var question = questionnaire.Find<Entities.SubEntities.Question>(command.QuestionKey);
 
             question.UpdateCard(command.ImageKey, command.Title, command.Description);
        }

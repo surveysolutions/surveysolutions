@@ -1,45 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire;
-using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Core.Utility;
 
-namespace RavenQuestionnaire.Core.CommandHandlers
+namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire
 {
     public class UploadImageCommandHandler : ICommandHandler<UploadImageCommand>
     {
         private readonly IQuestionnaireRepository _questionnaireRepository;
-        public UploadImageCommandHandler(IQuestionnaireRepository questionnaireRepository)
+        private IFileStorageService _fileStorageService;
+        public UploadImageCommandHandler(IFileStorageService fileStorageService, IQuestionnaireRepository questionnaireRepository)
         {
             _questionnaireRepository = questionnaireRepository;
+            _fileStorageService = fileStorageService;
         }
         public void Handle(UploadImageCommand command)
         {
-            string fileBase64 = Convert.ToBase64String(command.OriginalImage);
-            string thumbBase64 = Convert.ToBase64String(command.ThumbnailImage);
+            var id = Guid.NewGuid();
+            string filename = String.Format("images/{0}.png", id);
+            string thumbname = String.Format("images/{0}_thumb.png", id);
+
+            _fileStorageService.StoreFile(filename, command.OriginalImage);
+            _fileStorageService.StoreFile(thumbname, command.ThumbnailImage);
 
             var newImage = new Image
-                               {
-                                   Title = command.Title, 
-                                   Description = command.Description,
-                                   OriginalBase64 = fileBase64,
-                                   Width = command.OriginalWidth,
-                                   Height = command.OriginalHeight,
-                                   ThumbnailBase64 = thumbBase64,
-                                   ThumbnailHeight = command.ThumbHeight,
-                                   ThumbnailWidth = command.ThumbWidth,
-                                   CreationDate = DateTime.Now
-                               };
+            {
+                PublicKey = Guid.NewGuid(),
+                Title = command.Title,
+                Description = command.Description,
+                OriginalBase64 = filename/*fileBase64*/,
+                Width = command.OriginalWidth,
+                Height = command.OriginalHeight,
+                ThumbnailBase = thumbname/*thumbBase64*/,
+                ThumbnailHeight = command.ThumbHeight,
+                ThumbnailWidth = command.ThumbWidth,
+                CreationDate = DateTime.Now
+            };
 
-            var questionnaire =  _questionnaireRepository.Load(IdUtil.CreateQuestionnaireId(command.QuestionnaireId));
+            var questionnaire = _questionnaireRepository.Load(IdUtil.CreateQuestionnaireId(command.QuestionnaireId));
 
-            var question = questionnaire.Find<Question>(command.PublicKey);
+            var question = questionnaire.Find<Entities.SubEntities.Question>(command.PublicKey);
 
             question.AddCard(newImage);
         }

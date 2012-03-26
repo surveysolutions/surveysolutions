@@ -28,7 +28,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
 
         public CompleteQuestionnaireViewV(CompleteQuestionnaireDocument doc)
         {
-            Title = doc.Title;
+            Id = IdUtil.ParseId(doc.Id);
             Title = doc.Title;
             CreationDate = doc.CreationDate;
             LastEntryDate = doc.LastEntryDate;
