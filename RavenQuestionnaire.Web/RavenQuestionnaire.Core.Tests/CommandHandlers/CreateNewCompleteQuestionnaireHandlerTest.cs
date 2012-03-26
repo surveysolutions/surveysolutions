@@ -2,6 +2,8 @@
 using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers;
+using RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -27,7 +29,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         
             CreateNewCompleteQuestionnaireHandler handler = new CreateNewCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object, 
                 completeQuestionnaireService);
-            Assert.Throws<NullReferenceException>(() => handler.Handle(new Commands.CreateNewCompleteQuestionnaireCommand("invalid id", 
+            Assert.Throws<NullReferenceException>(() => handler.Handle(new CreateNewCompleteQuestionnaireCommand("invalid id", 
                 new UserLight("-1", "dummyUser"), 
                 new SurveyStatus("-1","dummyStatus"),
                 null))); 
@@ -49,7 +51,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CreateNewCompleteQuestionnaireHandler handler = 
                 new CreateNewCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object, completeQuestionnaireService);
         
-            handler.Handle(new Commands.CreateNewCompleteQuestionnaireCommand("qID", 
+            handler.Handle(new CreateNewCompleteQuestionnaireCommand("qID", 
                 new UserLight("-2", "dummy-2"), 
                 new SurveyStatus("-100", "dummyStatus100"), 
                 null));

@@ -1,6 +1,8 @@
 ﻿using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers;
+using RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -39,7 +41,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             UpdateCompleteQuestionnaireHandler handler = new UpdateCompleteQuestionnaireHandler(coompleteQuestionnaireRepositoryMock.Object,
                 statusRepositoryMock.Object, userRepositoryMock.Object);
 
-            handler.Handle(new Commands.UpdateCompleteQuestionnaireCommand("cqID", 
+            handler.Handle(new UpdateCompleteQuestionnaireCommand("cqID", 
                 new SurveyStatus( "-11", "unknownStatus"),
                 "test status change",
                 new UserLight("-111", "unknownUser"), 

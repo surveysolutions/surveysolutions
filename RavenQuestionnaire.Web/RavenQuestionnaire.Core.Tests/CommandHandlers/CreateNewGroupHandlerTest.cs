@@ -5,6 +5,8 @@ using System.Text;
 using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers;
+using RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Group;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -22,7 +24,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Questionnaire questionnaire= new Questionnaire("some questionanire");
             questionaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qId")).Returns(questionnaire);
             CreateNewGroupHandler handler = new CreateNewGroupHandler(questionaireRepositoryMock.Object);
-            handler.Handle(new Commands.CreateNewGroupCommand("some text", Propagate.None, "qId", null, null));
+            handler.Handle(new CreateNewGroupCommand("some text", Propagate.None, "qId", null, null));
             var innerDocument = ((IEntity<QuestionnaireDocument>) questionnaire).GetInnerDocument();
             Assert.AreEqual(innerDocument.Groups.Count, 1);
             Assert.AreEqual(innerDocument.Groups[0].Title, "some text");
@@ -37,7 +39,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             innerDocument.Groups.Add(topGroup);
             questionaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qId")).Returns(questionnaire);
             CreateNewGroupHandler handler = new CreateNewGroupHandler(questionaireRepositoryMock.Object);
-            handler.Handle(new Commands.CreateNewGroupCommand("some text", Propagate.None, "qId", topGroup.PublicKey, null));
+            handler.Handle(new CreateNewGroupCommand("some text", Propagate.None, "qId", topGroup.PublicKey, null));
           
             Assert.AreEqual((innerDocument.Groups[0] as Group).Groups.Count, 1);
             Assert.AreEqual((innerDocument.Groups[0] as Group).Groups[0].Title, "some text");
@@ -52,7 +54,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CreateNewGroupHandler handler = new CreateNewGroupHandler(questionaireRepositoryMock.Object);
 
             Assert.Throws<ArgumentException>(
-                () => handler.Handle(new Commands.CreateNewGroupCommand("some text", Propagate.None, "qId", Guid.NewGuid(), null)));
+                () => handler.Handle(new CreateNewGroupCommand("some text", Propagate.None, "qId", Guid.NewGuid(), null)));
         }
     }
 }

@@ -5,6 +5,8 @@ using System.Text;
 using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers;
+using RavenQuestionnaire.Core.CommandHandlers.Location;
+using RavenQuestionnaire.Core.Commands.Location;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Repositories;
 
@@ -22,7 +24,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
           //   locationRepositoryMock.Setup(x => x.Load("locationdocuments/some_id")).Returns(location);
 
              CreateNewLocationHandler handler = new CreateNewLocationHandler(locationRepositoryMock.Object);
-             handler.Handle(new Commands.CreateNewLocationCommand("some location", null));
+             handler.Handle(new CreateNewLocationCommand("some location", null));
              locationRepositoryMock.Verify(x => x.Add(It.IsAny<Location>()), Times.Once());
          }
     }

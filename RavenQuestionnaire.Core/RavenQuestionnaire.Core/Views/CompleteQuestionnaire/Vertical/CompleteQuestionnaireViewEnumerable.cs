@@ -171,7 +171,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                 switch (answers.Count)
                 {
                     case 0:
-                        firstAnswer = "Answe the first question";
+                        firstAnswer = "Answer the first question";
                         break;
                     case 1:
                         {
@@ -196,7 +196,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                 }
                 if (string.IsNullOrWhiteSpace(firstAnswer))
                 {
-                    firstAnswer = "Answe the first question";
+                    firstAnswer = "Answer the first question";
                 }
                 return firstAnswer;
             }

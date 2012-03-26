@@ -4,15 +4,13 @@
 {
     using (Html.BeginForm("Update", "Status"))
     {
-    
-    @Html.ValidationSummary(true)
-    
-    @Html.EditorForModel()
+        @Html.ValidationSummary(true)
+        @Html.EditorForModel()
     <p>
         <input type="submit" value="Save" />
     </p>
     }
 }
 <div>
-    @Html.ActionLink("Back to List", "Index", new {qid= Model.QuestionnaireId})
+    @Html.ActionLink("Back to List", "Index", new { qid = Model.QuestionnaireId })
 </div>
