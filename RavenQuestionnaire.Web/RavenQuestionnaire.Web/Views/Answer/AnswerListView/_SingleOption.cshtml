@@ -10,7 +10,7 @@
         @foreach (var item in Model.Answers)
         {
             var selectedClass = item.Selected ? "btn-primary" : "";
-            @Html.Hidden("Selected", true)
+            
             <li class="btn @selectedClass ">
                 @if (item.AnswerType == AnswerType.Text)
                 {
@@ -26,7 +26,9 @@
                         @{ Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item); }
                     </label>
                 }
+                 @Html.Hidden("Selected", true)
             </li>
+           
         }
     </ul>
     

@@ -317,6 +317,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>wells.less</DependentUpon>
     </Content>
+    <Content Include="Content\favicon.png" />
     <Content Include="Content\flow.css" />
     <Content Include="Content\icons.png" />
     <Content Include="Content\img\ajax-loader.gif" />

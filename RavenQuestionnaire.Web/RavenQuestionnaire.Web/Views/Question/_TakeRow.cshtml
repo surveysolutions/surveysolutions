@@ -20,7 +20,7 @@
     </div>
 }*@
 <div class="question">
-    <div class="group">
+    <div class="question-header">
         <div class="row-fluid ">
             <div class="span@(headerSpan)">
                 <b @if (!String.IsNullOrEmpty(Model.Instructions))
@@ -67,7 +67,7 @@
     </div>
     @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", Model.QuestionType), Model);}
 </div>
-if (Model.Cards.Length > 0) {
+@if (Model.Cards.Length > 0) {
 <div class="modal" id="images@(modalId)" style="display: none;">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">&times;</a>
@@ -83,12 +83,13 @@ if (Model.Cards.Length > 0) {
             }
         </div>
     </div>
+
     <script type="text/javascript">
         $('#gallery@(modalId)').galleria({
-            width: 530,
-            height: 500,
-            imageCrop: true
-        });
+                width: 530,
+                height: 500,
+                imageCrop: true
+            });
     </script>
 </div>
 }

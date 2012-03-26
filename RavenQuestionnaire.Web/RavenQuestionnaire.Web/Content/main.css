@@ -2,6 +2,7 @@
 {
 	padding: 0;
 }
+
 .text-block
 {
 	color: #333333;
@@ -17,24 +18,43 @@
 	margin: 0 auto;
 	max-height: 999999px;
 	z-index: 1;
-}
+}scroll-y
 #main
 {
 	padding-top: 10px;
 	position: relative;
 }
 .group {
-	border: 1px solid #bfbfbf;
+	/*border: 1px solid #bfbfbf;
 	border-radius: 6px;
 	padding: 10px;
-		margin-bottom: 10px;
+		margin-bottom: 10px;*/
+	  
+  padding: 10px;
+  margin-bottom: 10px;
+ /* background-color: #f5f5f5;*/
+  border: 1px solid #eee;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.05);
 }
 .question
 {
-	padding-left: 5px;
-	border-left: 3px solid #bfbfbf;
-	margin-bottom: 15px;
-
+	/*background-color: #F5F5F5;*/
+	/*border-left: 3px solid #bfbfbf;*/
+	padding: 15px 5px 15px 5px;
+}
+.question-header {
+	padding: 10px;
+	padding-left: 0;
+}
+.question [rel="popover"]
+{
+	border-bottom: 1px dotted #333333;
 }
 .answers
 {
@@ -140,10 +160,25 @@ table td form, table td form input
 {
 	margin: 0 20px;
 }
+.subnav .progress.progress-warning
+{
+	margin-bottom: 7px;
+}
+.progress-wrap {
+	margin: 0 10px;
+	vertical-align: middle;
+}
 .well .form-actions {
 	padding-bottom: 0;
 	margin-bottom: 0;
 	padding-left: 0;
+}
+.question .btn-group
+{
+	margin-left: 0;
+}
+.answer .input-prepend input {
+	margin-bottom: 0;
 }
 @media (max-width: 979px) 
 {
@@ -156,9 +191,36 @@ table td form, table td form input
 .btn-group-vertical:before,.btn-group-vertical:after{display:table;content:""}
 .btn-group-vertical:after{clear:both}.btn-group-vertical:first-child{*margin-left:0}
 .btn-group-vertical+.btn-group-vertical{margin-bottom:5px}
-.btn-group-vertical .btn{margin-top:-1px;position:relative;float:none;display:block;text-align:left;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
-.btn-group-vertical .btn.btn-primary label{color:#fff;margin-bottom:0;}
-.btn-group-vertical .btn:first-child{margin-left:0;-webkit-border-top-left-radius:4px;-moz-border-radius-topleft:4px;border-top-left-radius:4px;-webkit-border-top-right-radius:4px;-moz-border-radius-topright:4px;border-top-right-radius:4px}
+.btn-group-vertical .btn {
+	margin-top:-1px;
+	position:relative;
+	float:none;
+	display:block;
+	text-align:left;
+	-webkit-border-radius:0;
+	-moz-border-radius:0;
+	border-radius: 0;
+	padding: 0;
+}
+.btn-group-vertical .btn .radio, 
+.btn-group-vertical .btn .checkbox{padding: 6px 10px 8px 28px;margin-bottom:0;}
+.btn-group-vertical .btn div.radio input[type="radio"],
+.btn-group-vertical .btn div.radio input[type="checkbox"] {
+	margin-top: 6px;	
+}
+.btn-group-vertical .btn div.radio input[type="text"] {
+	margin-bottom: 0;	
+}
+.btn-group-vertical .btn.btn-primary label{color:#fff;}
+.btn-group-vertical .btn:first-child{
+	margin-left:0;
+	-webkit-border-top-left-radius:4px;
+	-webkit-border-top-right-radius:4px;
+	-moz-border-radius-topleft:4px;
+	-moz-border-radius-topright:4px;
+	border-top-left-radius:4px;
+	border-top-right-radius: 4px;
+}
 .btn-group-vertical .btn:last-child{-webkit-border-bottom-left-radius:4px;-moz-border-radius-bottomleft:4px;border-bottom-left-radius:4px;-webkit-border-bottom-right-radius:4px;-moz-border-radius-bottomright:4px;border-bottom-right-radius:4px}
 .btn-group-vertical .btn.large:first-child{margin-left:0;-webkit-border-top-left-radius:6px;-moz-border-radius-topleft:6px;border-top-left-radius:6px;-webkit-border-bottom-left-radius:6px;-moz-border-radius-bottomleft:6px;border-bottom-left-radius:6px}
 .btn-group-vertical .btn.large:last-child,.btn-group-vertical .large.dropdown-toggle{-webkit-border-top-right-radius:6px;-moz-border-radius-topright:6px;border-top-right-radius:6px;-webkit-border-bottom-right-radius:6px;-moz-border-radius-bottomright:6px;border-bottom-right-radius:6px}
@@ -192,7 +254,9 @@ table td form, table td form input
 .scroll-x {
 	overflow-x: scroll;
 }
-
+scroll-y {
+	overflow-y: scroll;
+}
 .btn-group .btn label {
 	margin-bottom: 0;
 }
@@ -248,5 +312,8 @@ table td form, table td form input
 }
 .thumbnail form {
 	display: inline;
+	margin-bottom: 0;
+}
+form {
 	margin-bottom: 0;
 }

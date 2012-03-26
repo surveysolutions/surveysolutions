@@ -29,8 +29,7 @@
            style = "margin-bottom:0;",
            name = Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue"),
            id = Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue")
-       })
-            <span class="add-on">%</span>
+       })<span class="add-on">%</span> @* !DON'T INSERT WHITESPACE BEFORE add-on ELEMENT *@
         </div>
         <span class="help-inline" style="display: none;"></span>
         @Html.CheckBox("Selected", true, new { @checked = "checked", style = "display:none" })

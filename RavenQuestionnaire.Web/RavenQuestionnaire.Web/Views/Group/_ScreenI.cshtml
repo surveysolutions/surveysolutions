@@ -10,7 +10,7 @@
         $(function () {
 
             // fix sub nav on scroll
-            var $win = $("#content"), $nav = $('.subnav'), navTop = $('.subnav').length && $('.subnav').offset().top - 40, isFixed = 0;
+            var $win = $(/*"#content"*/document), $nav = $('.subnav'), navTop = $('.subnav').length && $('.subnav').offset().top - 40, isFixed = 0;
 
             processScroll();
 
@@ -21,11 +21,11 @@
                 if (scrollTop >= navTop && !isFixed) {
                     isFixed = 1
                     $nav.addClass('subnav-fixed');
-                    $('#sidebar').css('top', '40px');
+                    /*$('#sidebar').css('top', '40px');*/
                 } else if (scrollTop <= navTop && isFixed) {
                     isFixed = 0
                     $nav.removeClass('subnav-fixed');
-                    $('#sidebar').css('top', '0px');
+                    /*$('#sidebar').css('top', '0px');*/
                 }
             }
 
@@ -35,7 +35,13 @@
                     new iScroll(xScrollers[i], { vScroll: false });
             }
 
-            $('input[type="text"]').click(function (e) { $(this).focus(); });
+            $('input[type="text"]').click(function (e) {
+                $(this).focus(); e.stopPropagation();
+            });
+            $('input[type="number"]').click(function (e) {
+                $(this).focus(); e.stopPropagation();
+            });
+            
         });
     } (window.jQuery);
 </script>
@@ -44,7 +50,7 @@
         <div class="span9">
             <h3>@Model.CurrentGroup.GroupText</h3>
         </div>
-        <div class="span3" style="height: 100%; padding-top: 5px;">
+        <div class="span3" style="padding-top: 4px;">
             @Html.Partial("ProgressBar", Model.Totals)
         </div>
     </div>

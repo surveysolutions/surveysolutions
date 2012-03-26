@@ -610,7 +610,7 @@ textarea {
 }
 label {
   display: block;
-    line-height: 30px;
+  margin-bottom: 5px;
   color: #333333;
 }
 input,
@@ -645,7 +645,7 @@ input[type="radio"] {
   width: auto;
   height: auto;
   padding: 0;
-    margin: 7px 3px;
+  margin: 3px 0;
   *margin-top: 0;
   /* IE7 */
 
@@ -717,6 +717,7 @@ input[type="hidden"] {
 .radio input[type="radio"],
 .checkbox input[type="checkbox"] {
   float: left;
+  margin-left: -18px;
 }
 .controls > .radio:first-child,
 .controls > .checkbox:first-child {
@@ -1958,13 +1959,13 @@ table .span24 {
   filter: alpha(opacity=40);
   cursor: pointer;
 }
-/*.btn label, .btn div{ font-size: 20px;}*/
 .btn {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
 
   *zoom: 1;
+  padding: 4px 10px 4px;
   margin-bottom: 0;
   font-size: 13px;
   line-height: 18px;
