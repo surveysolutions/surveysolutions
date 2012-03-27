@@ -142,7 +142,17 @@
         {
             <tr>
                 <th>
-                    <div style="width: 184px;">@pquestion.QuestionText</div>
+                    <div style="width: 184px;">
+                        <b @if (!String.IsNullOrEmpty(pquestion.Instructions))
+                   {
+                       <text>
+                           data-original-title = "Instructions"
+                           data-content = "@pquestion.Instructions"
+                           rel = "popover"
+                       </text>
+                   } >
+                        @pquestion.QuestionText
+                    </div>
                 </th>
                 @for (int index = 0; index < pquestion.Questions.Count; index++)
                 {
