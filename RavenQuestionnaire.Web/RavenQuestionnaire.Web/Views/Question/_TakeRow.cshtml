@@ -16,13 +16,13 @@
             <div class="span@(headerSpan)">
                 
                 @*temporary fix of script missing*@
-                @if (!String.IsNullOrEmpty(Model.Instructions))
+                @*@if (!String.IsNullOrEmpty(Model.Instructions))
                 {
                     <script type="text/javascript">
                         $('.dropdown-toggle').dropdown();
                         $("[rel=popover]").popover().click(function (e) {e.preventDefault();});
                     </script>
-                }
+                }*@
                 
                 <b @if (!String.IsNullOrEmpty(Model.Instructions))
                    {
@@ -37,7 +37,7 @@
             @if (Model.Cards.Length > 0)
             {
                 <div class="span2">
-                    <a class="btn btn-success btn-mini  pull-right" data-toggle="modal" href="#images@(modalId)">
+                    <a class="btn btn-success btn-mini  pull-right" data-toggle="modal" href="#images@(Model.PublicKey)">
                         <i class="icon-picture icon-white"></i>Show Cards</a>
                 </div>
             }
@@ -47,14 +47,14 @@
 </div>
 @if (Model.Cards.Length > 0)
 {
-    <div class="modal" id="images@(modalId)" style="display: none;">
+    <div class="modal" id="images@(Model.PublicKey)" style="display: none;">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">&times;</a>
             <h3>
                 Cards</h3>
         </div>
         <div class="modal-body" style="min-height: 500px;">
-            <div id="gallery@(modalId)">
+            <div id="gallery@(Model.PublicKey)" >
                 @foreach (var card in Model.Cards)
                 {
                     <a href="@Url.Action("Images", "Resource", new { id = card.Original })">
@@ -65,12 +65,13 @@
         </div>
 
         <script type="text/javascript">
-            $('#gallery@(modalId)').galleria({
+            $('#gallery@(Model.PublicKey)').galleria({
                 width: 530,
-                height: 500,
-                imageCrop: true
+                height: 450,
+                show_imagenav: true
             });
         </script>
+
     </div>
 }
 @Html.BootstrapValidationMessage("AnswerValue")

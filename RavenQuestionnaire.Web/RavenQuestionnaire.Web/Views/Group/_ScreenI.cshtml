@@ -4,7 +4,10 @@
 @using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Web.Utils
 @model CompleteQuestionnaireViewV
-<script type="text/javascript">
+          
+@*temporary disabled*@ 
+@*bad behaviour on touch device and if height is the same as window*@
+@*<script type="text/javascript">
     !function ($) {
 
         $(function () {
@@ -44,7 +47,7 @@
             
         });
     } (window.jQuery);
-</script>
+</script>*@
 <div class="subnav">
     <div class="row-fluid">
         <div class="span9">
@@ -56,7 +59,11 @@
     </div>
 </div>
 @RenderGroup(Model.CurrentGroup)
-@RenderNextPrevGroupButton(Model)
+
+@Html.Partial("GroupNavigation", Model)
+
+
+
 <script type="text/javascript">
     $(document).ready(function () {
         adjust();
@@ -113,10 +120,7 @@
 }
 @helper  RenderSimpleGroup(CompleteGroupViewV simpleGroup)
     {
-        /*if (!string.IsNullOrWhiteSpace(simpleGroup.GroupText))
-        {
-            <h3>@simpleGroup.GroupText</h3>
-        }*/
+       
         foreach (var question in simpleGroup.Questions)
         {
     <text>@RenderSimpleQuestion(question)</text>
@@ -169,26 +173,26 @@
 }
 @helper RenderSimpleQuestion(CompleteQuestionView question)
     {
-    var ajaxOptions = new AjaxOptions
-                          {
-                              InsertionMode = InsertionMode.Replace,
-                              UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
-                              OnBegin = "ShowOverlay",
-                              OnComplete = "HideOverlay",
-                              OnFailure = "HideOverlay"
-                          };
-    using (Ajax.BeginForm("SaveSingleResultI", "CompleteQuestionnaire", ajaxOptions))
-    {
-        using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+        var ajaxOptions = new AjaxOptions
+                              {
+                                  InsertionMode = InsertionMode.Replace,
+                                  UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
+                                  OnBegin = "ShowOverlay",
+                                  OnComplete = "HideOverlay",
+                                  OnFailure = "HideOverlay"
+                              };
+        using (Ajax.BeginForm("SaveSingleResultI", "CompleteQuestionnaire", ajaxOptions))
         {
-            Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
+            using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+            {
+                Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
+            }
+            using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+            {
+    @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
+    @Html.Hidden("QuestionnaireId", Model.Id)
+            }
         }
-        using (Html.BeginCollectionItem("settings", true, question.PublicKey))
-        {
-            @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
-            @Html.Hidden("QuestionnaireId", Model.Id)
-        }
-    }
 }
 @helper RenderQuestion(CompleteQuestionView question, Guid groupKey, Guid propagationKey)
     {
@@ -204,7 +208,7 @@
         {
             using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + propagationKey))
             {
-                @Html.Hidden("PublicKey", question.PublicKey)
+    @Html.Hidden("PublicKey", question.PublicKey)
                 ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
                 if (!question.Enabled)
                 {
@@ -233,108 +237,4 @@
         var removeAjaxOptions = new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = Model.CurrentGroup.GetClientId("div"), OnBegin = "ShowOverlay", OnComplete = "HideOverlay", OnFailure = "HideOverlay" };
         var rparams = new { propagationKey = pKey, publicKey = currentGroupPublicKey, questionnaireId = Model.Id, parentGroupPublicKey = Model.CurrentGroup.PublicKey, salt = (new Random()).NextDouble() };
     @Ajax.ActionLinkWithIcon("Remove", "DeletePropagatedGroupI", "Group", rparams, removeAjaxOptions, new { @class = "btn btn-danger" }, "icon-trash icon-white")
-}
-@helper RenderNextPrevGroupButton(CompleteQuestionnaireViewV model)
-    {
-        int prevSpan = 0;
-        int curSpan = 12;
-        int nexSpan = 0;
-        CompleteGroupHeaders prev = null;
-        CompleteGroupHeaders curr = null;
-        CompleteGroupHeaders next = null;
-
-        foreach (var gh in Model.Groups)
-        {
-            if (!gh.IsCurrent && curr == null)
-            {
-                prevSpan = 4;
-                prev = gh;
-            }
-            else if (gh.IsCurrent)
-            {
-                curSpan -= prevSpan;
-                curr = gh;
-            }
-            else
-            {
-                next = gh;
-                nexSpan = 4;
-                curSpan -= nexSpan;
-                break;
-            }
-        }
-@*    <div class="row-fluid show-grid">
-        @if (prev != null)
-        {
-            <div class="span@(prevSpan)">
-                <p class="center">
-                    @Html.ActionLink("Prev Group", "QuestionI", "CompleteQuestionnaire", new { id = Model.Id, group = prev.PublicKey }, new { @class = "btn small " })
-                </p>
-            </div>
-        }
-        @if (curr != null)
-        {
-            <div class="span@(curSpan)">
-                <p class="center">@curr.GroupText</p>
-            </div>
-        }
-        @if (next != null)
-        {
-            <div class="span@(nexSpan)">
-                <p class="center">
-                    @Html.ActionLink("Next Group", "QuestionI", "CompleteQuestionnaire", new { id = Model.Id, group = next.PublicKey }, new { @class = "btn small btn-primary" })
-                </p>
-            </div>
-        }
-    </div>*@
-        
-    <table class="table table-striped table-bordered table-condensed" id="navTable" style="margin-top: 10px;">
-        <tbody>
-            <tr style="text-align: center">
-                @if (prev != null)
-                {
-                    <td style="text-align: center">
-                        @Html.ActionLink("Prev Group", "QuestionI", "CompleteQuestionnaire", new { id = Model.Id, group = prev.PublicKey }, new { @class = "btn small " })
-                    </td>
-                }
-                @if (curr != null)
-                {
-                    <td style="text-align: center">@curr.GroupText
-                    </td>
-                }
-                @if (next != null)
-                {
-                    <td style="text-align: center">
-                        @Html.ActionLink("Next Group", "QuestionI", "CompleteQuestionnaire", new { id = Model.Id, group = next.PublicKey }, new { @class = "btn small btn-primary" })
-                    </td>
-                }
-            </tr>
-        </tbody>
-    </table>
-        
-@*<div class="group" style="text-align: center">
-        <div class="row-fluid">
-            <div class="span2">
-                @if (prev != null)
-                {
-                    @Html.ActionLink("Prev Group", "QuestionI", "CompleteQuestionnaire", new { id = Model.Id, group = prev.PublicKey }, new { @class = "btn small " })
-                }
-                &nbsp;
-            </div>
-            <div class="span7">
-                @if (curr != null)
-                {
-                    @curr.GroupText
-                }
-            </div>
-            <div class="span2">
-                @if (next != null)
-                {
-                    @Html.ActionLink("Next Group", "QuestionI", "CompleteQuestionnaire", new { id = Model.Id, group = next.PublicKey }, new { @class = "btn small btn-primary" })
-                }
-                &nbsp;
-            </div>
-        </div>
-    </div>*@
-    
 }
