@@ -22,6 +22,7 @@ namespace RavenQuestionnaire.Core.Services
         public byte[] RetrieveFile(string filename)
         {
             Attachment a = documentStore.DatabaseCommands.GetAttachment(IdUtil.CreateImageId(filename));
+            
             /*var memoryStream = new MemoryStream();
             (a.Data() as Stream).CopyTo(memoryStream);
             return memoryStream.ToArray();

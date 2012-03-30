@@ -36,7 +36,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public string DeleteCard(Guid publicKey, string questionnaireId, Guid imageKey)
         {
-            commandInvoker.Execute(new DeleteImageCommand(questionnaireId, publicKey,imageKey, GlobalInfo.GetCurrentUser()));
+            commandInvoker.Execute(new DeleteImageCommand(questionnaireId, publicKey, imageKey, GlobalInfo.GetCurrentUser()));
             return string.Empty;
         }
 
@@ -45,7 +45,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             var source = viewRepository.Load<CardViewInputModel, CardView>(new CardViewInputModel(publicKey, questionnaireId, imageKey));
 
-            return PartialView("_EditCard",  new ImageNewViewModel()
+            return PartialView("_EditCard", new ImageNewViewModel()
                                                  {
                                                      Desc = source.Description,
                                                      Title = source.Title,
@@ -74,26 +74,15 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (file != null)
                 {
-                    var origData = new byte[file.ContentLength];
-                    file.InputStream.Read(origData, 0, origData.Length);
-
                     var image = new KalikoImage(file.InputStream);
-
-                    var thumb = image.GetThumbnailImage(160, 120, ThumbnailMethod.Fit);
-
-                    thumb.ApplyFilter(new UnsharpMaskFilter(1.4, 0.32));
-
-                    var ms = new MemoryStream();
-                    thumb.SavePng(ms, 80);
-                    ms.Position = 0;
-
-                    var thumbData = new byte[ms.Length];
-                    ms.Read(thumbData, 0, thumbData.Length);
+                    int thumbWidth, thumbHeight, origWidth, origHeight;
+                    var thumbData = ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
+                    var origData = ResizeImage(image, 1024, 768, out origWidth, out origHeight);
 
                     commandInvoker.Execute(new UploadImageCommand(model.PublicKey, model.QuestionnaireId,
                                                                   model.Title, model.Desc,
-                                                                  thumbData, thumb.Width, thumb.Height,
-                                                                  origData, image.Width, image.Height,
+                                                                  thumbData, thumbWidth, thumbHeight,
+                                                                  origData, origWidth, origHeight,
                                                                   GlobalInfo.GetCurrentUser()));
 
                     return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
@@ -102,6 +91,23 @@ namespace RavenQuestionnaire.Web.Controllers
                 ModelState.AddModelError("file", "Please select a file for upload");
             }
             return PartialView("_AddCards");
+        }
+        private byte[] ResizeImage(KalikoImage image, int width, int height, out int newWidth, out int newHeight)
+        {
+            var thumb = image.GetThumbnailImage(width, height, ThumbnailMethod.Fit);
+            thumb.ApplyFilter(new UnsharpMaskFilter(1.4, 0.32));
+
+            var ms = new MemoryStream();
+            thumb.SavePng(ms, 80);
+            ms.Position = 0;
+
+            var thumbData = new byte[ms.Length];
+            ms.Read(thumbData, 0, thumbData.Length);
+
+            newHeight = thumb.Height;
+            newWidth = thumb.Width;
+
+            return thumbData;
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]

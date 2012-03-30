@@ -1,0 +1,71 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+@using RavenQuestionnaire.Core.Views.Question
+@using RavenQuestionnaire.Web.Utils
+@model CompleteGroupViewV
+<table class="table  table-striped table-bordered propagated-table">
+    <thead>
+    </thead>
+    @foreach (var pquestion in Model.PropagatedQuestions)
+    {
+        <tr>
+            <th>
+                <div class="table-row-header">@pquestion.QuestionText</div>
+            </th>
+            @for (int index = 0; index < pquestion.Questions.Count; index++)
+            {
+                var question = pquestion.Questions[index];
+                <td>
+                    @RenderQuestion(question, Model.PublicKey, Model.PropogationPublicKeys[index])
+                </td>
+            }
+        </tr>
+    }
+    @if (!Model.AutoPropagate.Any(a => a))
+    {
+        <tr>
+            <td></td>
+            @for (int i = 0; i < Model.PropogationPublicKeys.Count; i++)
+            {
+                <td>
+                    @if (!Model.AutoPropagate[i])
+                    {
+                        var rparams = new
+                        {
+                            propagationKey = Model.PropogationPublicKeys[i],
+                            publicKey = Model.PublicKey,
+                            questionnaireId = ViewBag.QuestionnaireId,
+                            parentGroupPublicKey = ViewBag.CurrentGroupPublicKey,
+                            salt = (new Random()).NextDouble()
+                        };
+                        @Ajax.ActionLinkWithIcon("Remove", "DeletePropagatedGroupI", "Group", rparams, ViewBag.AjaxOptions as AjaxOptions, new { @class = "btn btn-danger" }, "icon-trash icon-white")
+                    }
+                </td>
+            }
+        </tr>
+    }
+</table>
+@helper RenderQuestion(CompleteQuestionView question, Guid groupKey, Guid propagationKey)
+{
+    using (Ajax.BeginForm("SaveSingleResultI", "CompleteQuestionnaire", null, ViewBag.AjaxOptions as AjaxOptions, new { autocomplete = "off" }))
+    {
+        using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + propagationKey))
+        {
+            ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+            if (!question.Enabled)
+            {
+                ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+            }
+                
+            @Html.Hidden("PublicKey", question.PublicKey)
+            Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
+            @Html.BootstrapValidationMessage(string.Format("questions[{0}_{1}].AnswerValue", question.PublicKey, propagationKey))
+        }
+        using (Html.BeginCollectionItem("settings", true, groupKey + "_" + propagationKey))
+        {
+            @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+            @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
+            @Html.Hidden("PropogationPublicKey", propagationKey)
+        }
+    }
+}

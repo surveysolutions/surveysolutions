@@ -18,7 +18,11 @@
 	margin: 0 auto;
 	max-height: 999999px;
 	z-index: 1;
-}scroll-y
+}
+.scroll-y
+ {
+ 	
+ }
 #main
 {
 	padding-top: 10px;
@@ -47,6 +51,12 @@
 	/*background-color: #F5F5F5;*/
 	/*border-left: 3px solid #bfbfbf;*/
 	padding: 15px 5px 15px 5px;
+	
+}
+.question-disabled
+{
+	  opacity: 0.5;
+  filter: alpha(opacity=50);
 }
 .question-header {
 	padding: 10px;
@@ -164,6 +174,10 @@ table td form, table td form input
 {
 	margin-bottom: 7px;
 }
+.progress-container
+{
+	padding-top: 4px;
+}
 .progress-wrap {
 	margin: 0 10px;
 	vertical-align: middle;
@@ -226,7 +240,14 @@ table td form, table td form input
 .btn-group-vertical .btn.large:last-child,.btn-group-vertical .large.dropdown-toggle{-webkit-border-top-right-radius:6px;-moz-border-radius-topright:6px;border-top-right-radius:6px;-webkit-border-bottom-right-radius:6px;-moz-border-radius-bottomright:6px;border-bottom-right-radius:6px}
 .btn-group-vertical .btn:hover,.btn-group-vertical .btn:focus,.btn-group-vertical .btn:active,.btn-group-vertical .btn.active{z-index:2}
 
-.overlay{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2080;/*background-color:#000;*/opacity:0.7;filter:alpha(opacity=70)}
+.overlay{position:fixed;
+         top:0;
+         right:0;
+         bottom:0;
+         left:0;
+         z-index:2080;
+         /*background-color:#000;*/
+         opacity:0.7;filter:alpha(opacity=70)}
 
 .tabbable.tabs-left .span9.tab_content {
 	margin-left: 0;
@@ -264,43 +285,60 @@ scroll-y {
 	color: #fff;
 }
 
-    .col1 td
-    {
-        visibility: hidden;
-    }
-    .col2 th
-    {
-        visibility: hidden;
-    }
-    .col-wrap1
-    {
-        width: 100%;
-    }
+.col1 td
+{
+    visibility: hidden;
+}
+.col2 th
+{
+    visibility: hidden;
+}
+.col-wrap1
+{
+    width: 100%;
+}
     
-    .col-wrap2
-    {
-        width: 100%;
-        margin-right: -100%;
-        position: relative;
-        left: 200px;
-    }
+.col-wrap2
+{
+    width: 100%;
+    margin-right: -100%;
+    position: relative;
+    left: 200px;
+}
     
-    .col1
-    {
-        float: left;
-        width: 200px;
-        margin-right: -100%;
-        position: relative;
-        left: -200px;
-        border-right: 1px solid #DDDDDD;
-    }
-    
-    .clear
-    {
-        clear: both;
-        font-size: 0;
-        overflow: hidden;
-    }
+.col1
+{
+    float: left;
+    width: 200px;
+    margin-right: -100%;
+    position: relative;
+    left: -200px;
+    border-right: 1px solid #DDDDDD;
+}
+.col1-content
+{
+    overflow: hidden;
+}
+.col2-content{
+	overflow: hidden;
+	margin-right: 200px;
+}
+#contentTableWrap {
+	margin-left: -204px;
+}
+.propagated-table {
+	width: auto!important;
+}
+.table-row-header {
+	width: 184px!important;
+}
+
+.clear
+{
+    clear: both;
+    font-size: 0;
+    overflow: hidden;
+}
     
 .center
 {
@@ -317,5 +355,18 @@ scroll-y {
 form {
 	margin-bottom: 0;
 }
-.btn
+/*.btn
 { padding: 7px;}
+*/
+.modal.gallery
+{
+    margin-left: -275px;
+    width: 550px;
+}
+.modal.gallery .modal-body {
+	max-height: 500px;
+	padding-top: 5px;
+}
+a.btn {
+	outline: none;
+}

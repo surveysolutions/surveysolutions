@@ -3,35 +3,26 @@
 @model CompleteQuestionView
 @{
     ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+    var questionClass = "";
     if (!Model.Enabled)
     {
         ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+        questionClass = "question-disabled";
     }
     var modalId = new Random().Next(int.MaxValue / 2, int.MaxValue);
     int headerSpan = Model.Cards.Length == 0 ? 12 : 10;
 }
-<div class="question">
+<div class="question @questionClass">
     <div class="question-header">
         <div class="row-fluid ">
             <div class="span@(headerSpan)">
-                
-                @*temporary fix of script missing*@
-                @*@if (!String.IsNullOrEmpty(Model.Instructions))
+                @*temporary fix of script missing*@ @*@if (!String.IsNullOrEmpty(Model.Instructions))
                 {
                     <script type="text/javascript">
                         $('.dropdown-toggle').dropdown();
-                        $("[rel=popover]").popover().click(function (e) {e.preventDefault();});
                     </script>
-                }*@
-                
-                <b @if (!String.IsNullOrEmpty(Model.Instructions))
-                   {
-                       <text>
-                           data-original-title = "Instructions"
-                           data-content = "@Model.Instructions"
-                           rel = "popover"
-                       </text>
-                   } >
+                }*@ <b @if (!String.IsNullOrEmpty(Model.Instructions))
+                       { <text>data-original-title = "Instructions" data-content = "@Model.Instructions" rel = "popover"</text> } >
                     @Html.DisplayFor(modelItem => Model.QuestionText)</b>
             </div>
             @if (Model.Cards.Length > 0)
@@ -47,31 +38,39 @@
 </div>
 @if (Model.Cards.Length > 0)
 {
-    <div class="modal" id="images@(Model.PublicKey)" style="display: none;">
+    var gId = Model.PublicKey;
+    <div class="modal gallery" id="images@(gId)" style="display: none;">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">&times;</a>
-            <h3>
-                Cards</h3>
+            <h3 id="caption@(gId)"></h3>
         </div>
-        <div class="modal-body" style="min-height: 500px;">
-            <div id="gallery@(Model.PublicKey)" >
-                @foreach (var card in Model.Cards)
-                {
-                    <a href="@Url.Action("Images", "Resource", new { id = card.Original })">
-                        <img src="@Url.Action("Images", "Resource", new { id = card.Thumb })" alt="@card.Description" title="@card.Title" />
-                    </a>
-                }
+        <div class="modal-body">
+            <div id="gallery@(gId)" style="height: 440px;" class="gallery-container">
+                <div id="loading@(gId)" class="loader">
+                </div>
+                <div id="slideshow@(gId)" class="slideshow">
+                </div>
+                <div id="thumbs@(gId)">
+                    <ul class="thumbs noscript">
+                        @foreach (var card in Model.Cards)
+                        {
+                            <li>
+                                <a class="thumb" _width="@((int)((362f * card.Width) / card.Height))" _height="362" href="@Url.Action("Images", "Resource", new { id = card.Original })" title="@card.Title">
+                                    <img height="40" width="@(((int)((40f * card.ThumbWidth) / card.ThumbHeight)))" src="@Url.Action("Images", "Resource", new { id = card.Thumb })" alt="@card.Title" />
+                                </a>
+                                <div class="caption">
+                                    @card.Title
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
         </div>
-
-        <script type="text/javascript">
-            $('#gallery@(Model.PublicKey)').galleria({
-                width: 530,
-                height: 450,
-                show_imagenav: true
-            });
-        </script>
-
+        <div class="modal-footer">
+            <div id="controls@(gId)">
+            </div>
+        </div>
     </div>
 }
 @Html.BootstrapValidationMessage("AnswerValue")

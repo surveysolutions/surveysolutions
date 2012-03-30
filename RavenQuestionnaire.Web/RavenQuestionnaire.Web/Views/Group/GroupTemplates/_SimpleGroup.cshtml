@@ -1,0 +1,24 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+@model CompleteGroupViewV
+@foreach (var question in Model.Questions)
+{
+    using (Ajax.BeginForm("SaveSingleResultI", "CompleteQuestionnaire", ViewBag.AjaxOptions as AjaxOptions))
+    {
+        using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+        {
+            Html.RenderPartial("~/Views/Question/_TakeRow.cshtml", question);
+        }
+        using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+        {
+            @Html.Hidden("ParentGroupPublicKey",(Guid)ViewBag.CurrentGroupPublicKey)
+            @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
+        }
+    }
+}
+@foreach (var group in Model.Groups)
+{
+    <div class="group">
+        @Html.Partial("~/Views/Group/GroupTemplates/_CompleteGroup.cshtml", @group)
+    </div>
+}
