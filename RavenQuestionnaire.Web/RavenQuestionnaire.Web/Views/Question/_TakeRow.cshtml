@@ -16,14 +16,14 @@
             <div class="span@(headerSpan)">
                 
                 @*temporary fix of script missing*@
-                @*@if (!String.IsNullOrEmpty(Model.Instructions))
+ @*               @if (!String.IsNullOrEmpty(Model.Instructions))
                 {
                     <script type="text/javascript">
                         $('.dropdown-toggle').dropdown();
                         $("[rel=popover]").popover().click(function (e) {e.preventDefault();});
                     </script>
-                }*@
-                
+                }
+ *@               
                 <b @if (!String.IsNullOrEmpty(Model.Instructions))
                    {
                        <text>

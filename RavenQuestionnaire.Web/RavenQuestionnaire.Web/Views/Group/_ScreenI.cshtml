@@ -63,6 +63,15 @@
 @Html.Partial("GroupNavigation", Model)
 
 
+ <script type="text/javascript">
+     
+     $("[rel=popover]")
+            .popover()
+            .click(function (e) {
+                e.preventDefault();
+            });
+    </script>
+
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -152,6 +161,7 @@
                        </text>
                    } >
                         @pquestion.QuestionText
+                        </b>
                     </div>
                 </th>
                 @for (int index = 0; index < pquestion.Questions.Count; index++)

@@ -18,6 +18,8 @@
         </td>
         <td class="buttons">
             @Html.ActionLink("Details", "Result", new { id = item.Id }, new {@class = "btn"})
+
+            @Html.ActionLink("Edit", "QuestionI", "CompleteQuestionnaire", new { id = item.Id }, new {@class = "btn"})
         </td>
     </tr>
 }

@@ -169,8 +169,9 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
             {
-                return RedirectToAction("Question", new { id = settings[0].QuestionnaireId });
-            }
+                //?? if it is used as prtial render on postback
+                //this behaviour is wrong
+                return RedirectToAction("Question", new { id = settings[0].QuestionnaireId });            }
 
             CompleteQuestionView question = questions[0];
             try
