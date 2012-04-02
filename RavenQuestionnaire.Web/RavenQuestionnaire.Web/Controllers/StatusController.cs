@@ -157,19 +157,32 @@ namespace RavenQuestionnaire.Web.Controllers
 
         [HttpPost]
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult SaveRoute(FlowRule model)
+        public ActionResult SaveRoute(string StatusId, SurveyStatus TargetStatus, string changeComment, string ConditionExpression)
         {
             if (ModelState.IsValid)
             {
-                if (string.IsNullOrEmpty(model.StatusId))
+                if (!string.IsNullOrEmpty(StatusId))
                 {
-                    commandInvoker.Execute(new AddNewStatusFlowItem(model.StatusId, model.ConditionExpression, model.ChangeComment, model.TargetStatus, GlobalInfo.GetCurrentUser()));
+                    commandInvoker.Execute(new AddNewStatusFlowItem(StatusId, ConditionExpression, 
+                        changeComment, TargetStatus, GlobalInfo.GetCurrentUser()));
                 }
 
-                StatusView m = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(model.StatusId));
+                StatusView m = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(StatusId));
                 return PartialView("_Route", m);
             }
-            return View("AddRoute", model);
+            return View("AddRoute");
+        }
+
+       
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ActionResult EditRoute(Guid publicId, string qId, string statusId)
+        {
+            AddStatusListToViewBag(qId);
+            StatusView dO = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(statusId));
+            if (dO.FlowRules.ContainsKey(publicId))
+                return PartialView("AddRoute", dO.FlowRules[publicId]);
+            else
+                throw new HttpException(404, "Invalid query string parameters.");
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
