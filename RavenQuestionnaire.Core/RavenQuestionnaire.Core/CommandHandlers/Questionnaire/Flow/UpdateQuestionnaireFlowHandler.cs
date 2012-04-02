@@ -1,8 +1,7 @@
-﻿using RavenQuestionnaire.Core.Commands;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Flow;
+﻿using RavenQuestionnaire.Core.Commands.Questionnaire.Flow;
 using RavenQuestionnaire.Core.Repositories;
 
-namespace RavenQuestionnaire.Core.CommandHandlers
+namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Flow
 {
     public class UpdateQuestionnaireFlowHandler : ICommandHandler<UpdateQuestionnaireFlowCommand>
     {
