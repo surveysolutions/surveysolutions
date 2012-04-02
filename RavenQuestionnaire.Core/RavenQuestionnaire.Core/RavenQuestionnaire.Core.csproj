@@ -119,6 +119,7 @@
     <Compile Include="CommandHandlers\Location\CreateNewLocationHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\CreateNewQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateNewStatusHandler.cs" />
+    <Compile Include="CommandHandlers\Status\CreateStatusFlowHandler.cs" />
     <Compile Include="CommandHandlers\User\CreateNewUserHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\DeleteCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Group\DeleteGroupHandler.cs" />
