@@ -1,0 +1,27 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Answer
+@model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
+@using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
+{
+
+    Guid selected = Guid.Empty;
+    var answer = Model.Answers.FirstOrDefault(a => ((CompleteAnswerView)a).Selected);
+    if (answer != null)
+    {
+        selected = answer.PublicKey;
+    }
+    ((IDictionary<string,object>)ViewBag.EnabledRadioBoxSettings).Add("onchange", "$(this.form).submit();");
+     @Html.Hidden("Selected", true)
+    @Html.Hidden("QuestionId", Model.Answers.FirstOrDefault().QuestionId)
+    @Html.Label("PublicKey",Model.QuestionText)
+     @Html.DropDownList("PublicKey", new SelectList(Model.Answers, "PublicKey", "AnswerText", selected), "Select answer", (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
+   
+   @* <label for="select-choice-0" class="select">
+        Shipping method:</label>
+    <select name="select-choice-0" id="select-choice-1">
+        <option value="standard">Standard: 7 day</option>
+        <option value="rush">Rush: 3 days</option>
+        <option value="express">Express: next day</option>
+        <option value="overnight">Overnight</option>
+    </select>*@
+}
