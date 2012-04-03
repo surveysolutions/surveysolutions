@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NCalc;
-using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.ExpressionExecutors

@@ -7,8 +7,6 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Conventions;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.ExpressionExecutors;
-using RavenQuestionnaire.Core.Services;
-using FormsAuthentication = Questionnaire.Core.Web.Security.FormsAuthentication;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(RavenQuestionnaire.Web.App_Start.NinjectMVC3), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(RavenQuestionnaire.Web.App_Start.NinjectMVC3), "Stop")]
