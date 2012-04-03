@@ -212,6 +212,8 @@ namespace RavenQuestionnaire.Web.Controllers
 
         public ActionResult SaveSingleResultI(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions, string type)
         {
+            if (string.IsNullOrEmpty(type))
+                type = "I";
             if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
             {
                 //return RedirectToAction("QuestionI", new { id = settings[0].QuestionnaireId });
