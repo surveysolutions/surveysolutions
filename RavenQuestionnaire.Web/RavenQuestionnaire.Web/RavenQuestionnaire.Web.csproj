@@ -374,6 +374,9 @@
     <Content Include="Scripts\galleria-1.2.6.min.js" />
     <Content Include="Scripts\gallery\jquery.galleriffic.js" />
     <Content Include="Scripts\gallery\jquery.opacityrollover.js" />
+    <Content Include="Scripts\Html5\LocalStorage.js" />
+    <Content Include="Scripts\Html5\take.js" />
+
     <Content Include="Scripts\iscroll.js" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
@@ -709,6 +712,22 @@
     <Content Include="Views\Group\GroupTemplates\_PropagatebleGroup.cshtml" />
     <Content Include="Views\Group\GroupTemplates\_SimpleGroup.cshtml" />
     <Content Include="Views\Group\GroupTemplates\_CompleteGroup.cshtml" />
+    <Content Include="Views\CompleteQuestionnaire\QuestionHtml5.cshtml" />
+    <Content Include="Views\Group\_ScreenHtml5.cshtml" />
+    <Content Include="Views\Shared\_LayputHtml5.cshtml" />
+    <Content Include="Views\Question\_TakeRowHtml5.cshtml" />
+    <Content Include="Views\Answer\AnswerListViewHtml5\_DateTime.cshtml" />
+    <Content Include="Views\Answer\AnswerListViewHtml5\_DropDownList.cshtml" />
+    <Content Include="Views\Answer\AnswerListViewHtml5\_GpsCoordinates.cshtml" />
+    <Content Include="Views\Answer\AnswerListViewHtml5\_MultyOption.cshtml" />
+    <Content Include="Views\Answer\AnswerListViewHtml5\_Numeric.cshtml" />
+    <Content Include="Views\Answer\AnswerListViewHtml5\_Percentage.cshtml" />
+    <Content Include="Views\Answer\AnswerListViewHtml5\_SingleOption.cshtml" />
+    <Content Include="Views\Answer\AnswerListViewHtml5\_Text.cshtml" />
+    <Content Include="Views\Answer\AnswerListViewHtml5\_YesNo.cshtml" />
+    <Content Include="Views\Answer\answerViewHtml5\_Select.cshtml" />
+    <Content Include="Views\Answer\answerViewHtml5\_Text.cshtml" />
+
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

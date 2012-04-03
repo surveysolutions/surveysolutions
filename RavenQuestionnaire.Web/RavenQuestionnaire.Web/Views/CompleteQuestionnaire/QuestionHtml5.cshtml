@@ -1,0 +1,31 @@
+﻿@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+@using RavenQuestionnaire.Web.Models
+@model CompleteQuestionnaireViewV
+@{
+    Layout = "~/Views/Shared/_LayputHtml5.cshtml";
+}
+<div class="content-primary">
+    <div  id="@Model.CurrentGroup.GetClientId("div")">
+    @Html.Partial("~/Views/Group/_ScreenHtml5.cshtml", Model)
+    </div>
+</div>
+<div class="content-secondary">
+    <div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="d">
+        <h3>
+            More in this section</h3>
+        <ul data-role="listview" data-theme="c" data-dividertheme="d">
+            @foreach (var gh in Model.Groups)
+            {
+                if (!gh.IsCurrent)
+                {
+                <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })">@gh.GroupText</a></li>
+                }
+                else
+                {
+                <li data-theme="a"><a>@gh.GroupText</a></li>
+                }
+
+            }
+        </ul>
+    </div>
+</div>

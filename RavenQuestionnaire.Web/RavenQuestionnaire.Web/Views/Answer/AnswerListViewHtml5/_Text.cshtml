@@ -1,0 +1,20 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Answer
+@model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
+@{
+    var answerGuid = Model.Answers.Length > 0 ? Model.Answers[0].PublicKey : Guid.NewGuid();
+    ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onchange", "$(this.form).submit();");
+}
+@using (Html.BeginCollectionItem("Answers", true, answerGuid))
+{
+    @Html.Hidden("QuestionId", Model.PublicKey)
+    @Html.Hidden("PublicKey", answerGuid)
+    @Html.Hidden("Selected", true)
+    @Html.Label("AnswerValue", Model.QuestionText)
+    @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
+  	
+   
+   
+ 
+
+}

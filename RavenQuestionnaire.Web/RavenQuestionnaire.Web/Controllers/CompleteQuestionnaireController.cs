@@ -149,6 +149,18 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
+        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
+        public ViewResult QuestionHtml5(string id, Guid? group)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+            var model =
+                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
+            ViewBag.CurrentGroup = model.CurrentGroup;
+
+            return View(model);
+        }
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public ViewResult QuestionC(string id, Guid? group)
@@ -198,7 +210,7 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
 
-        public ActionResult SaveSingleResultI(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
+        public ActionResult SaveSingleResultI(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions, string type)
         {
             if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
             {
@@ -231,7 +243,7 @@ namespace RavenQuestionnaire.Web.Controllers
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
                 new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
 
-            return PartialView("~/Views/Group/_ScreenI.cshtml", model);
+            return PartialView("~/Views/Group/_Screen" + type + ".cshtml", model);
         }
 
         public ActionResult SaveSingleResultV(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
