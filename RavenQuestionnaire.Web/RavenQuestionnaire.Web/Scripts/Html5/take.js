@@ -14,7 +14,6 @@ function ReInitMobile(id) {
 $('div[data-role=page]').live('pageshow', function (event) {
     ReinitInputs();
 });
-
 function ReinitInputs() {
     $("input[input-label=True]").each(function () {
         var div = $(this).parent();

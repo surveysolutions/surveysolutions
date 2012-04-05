@@ -8,6 +8,7 @@ using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
@@ -134,6 +135,18 @@ namespace RavenQuestionnaire.Web.Controllers
             ViewBag.CurrentGroup = model.CurrentGroup;
 
             return View(model);
+        }
+        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
+        public ActionResult Validate(string id, Guid? group, Guid? propagationKey)
+        {
+           /* if (!ModelState.IsValid)
+                return false;*/
+            commandInvoker.Execute(new ValidateGroupCommand(id, group, propagationKey, _globalProvider.GetCurrentUser()));
+           // return true;
+
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
+            return PartialView("~/Views/Group/_ScreenHtml5.cshtml", model);
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]

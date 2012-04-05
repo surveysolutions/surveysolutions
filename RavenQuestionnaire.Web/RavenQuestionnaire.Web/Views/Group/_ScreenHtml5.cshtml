@@ -22,28 +22,31 @@
 *@
 
 
-            //using (Ajax.BeginForm("javascript:void(0)",new {}, new AjaxOptions()
-            //{
-            //    InsertionMode = InsertionMode.Replace,
-            //    UpdateTargetId = Model.CurrentGroup.GetClientId("div")/*,
-            //    OnBegin = "ShowOverlay",
-            //    OnComplete = "HideOverlay",
-            //    OnFailure = "HideOverlay"*/
-            //}, new Dictionary<string, object>(){{ "data-ajax-url" ,"/MIS/CompleteQuestionnaire/SaveSingleResultI?type=Html5"}}))
-    <form data-ajax-update='#@Model.CurrentGroup.GetClientId("div")' data-ajax-mode="replace" data-ajax-complete="ReInitMobile('#@Model.CurrentGroup.GetClientId("div")')"
+            using (Ajax.BeginFormHtml5("SaveSingleResultI", "CompleteQuestionnaire", new { type = "Html5" }, new AjaxOptions()
+                                                                                                          {
+                                                                                                              InsertionMode = InsertionMode.Replace,
+                                                                                                              UpdateTargetId = Model.CurrentGroup.GetClientId("div"), /*
+                OnBegin = "ShowOverlay",*/
+                                                                                                              OnComplete = "ReInitMobile('#" + Model.CurrentGroup.GetClientId("div") + "')" /*,
+                OnFailure = "HideOverlay"*/
+                                                                                                          }))
+            {
+@*<form data-ajax-update='#@Model.CurrentGroup.GetClientId("div")' data-ajax-mode="replace" data-ajax-complete="ReInitMobile('#@Model.CurrentGroup.GetClientId("div")')"
             action="javascript:void(0)" data-ajax-method="post" data-ajax-url="@Url.Action("SaveSingleResultI", "CompleteQuestionnaire")?type=Html5"
-    data-ajax="true">
-    @using (Html.BeginCollectionItem("questions", true, question.PublicKey))
-    {
-        Html.RenderPartial("~/Views/Question/_TakeRowHtml5.cshtml",
-            question);
-    }
-    @using (Html.BeginCollectionItem("settings", true, question.PublicKey))
-    {
-        @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
-        @Html.Hidden("QuestionnaireId", Model.Id)
-    }
-    </form>
+    data-ajax="true">*@
+                
+                using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+                {
+                    Html.RenderPartial("~/Views/Question/_TakeRowHtml5.cshtml",
+                                       question);
+                }
+                using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+                {
+    @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
+    @Html.Hidden("QuestionnaireId", Model.Id)
+                }
+@*</form>*@
+            }
         }
         foreach (var @group in simpleGroup.Groups)
         {
