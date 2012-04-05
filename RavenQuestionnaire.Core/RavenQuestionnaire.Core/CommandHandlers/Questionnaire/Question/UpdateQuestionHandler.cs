@@ -21,10 +21,11 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question
             var questionnaire = _questionnaireRepository.Load(command.QuestionnaireId);
             if (!this._expressionValidator.Execute(questionnaire, command.ConditionExpression))
                 return;
-
+            if (!this._expressionValidator.Execute(questionnaire, command.ValidationExpression))
+                return;
             questionnaire.UpdateQuestion(command.QuestionPublicKey, command.QuestionText, command.StataExportCaption,
                                         command.QuestionType,
-                                         command.ConditionExpression,
+                                         command.ConditionExpression,command.ValidationExpression,
                                          command.Instructions,
                                          command.Answers);
 

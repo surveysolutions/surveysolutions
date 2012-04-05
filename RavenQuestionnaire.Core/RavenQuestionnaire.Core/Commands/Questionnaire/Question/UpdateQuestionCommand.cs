@@ -18,7 +18,11 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             get;
             private set;
         }
-
+        public string ValidationExpression
+        {
+            get;
+            private set;
+        }
         public string StataExportCaption
         {
             get;
@@ -35,7 +39,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
 
         public Answer[] Answers { get; set; }
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text,
-            string stataExport, QuestionType type, string condition,string instructions, UserLight executor)
+            string stataExport, QuestionType type, string condition, string validation, string instructions, UserLight executor)
         {
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.QuestionPublicKey = questionPublicKey;
@@ -44,13 +48,14 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.QuestionType = type;
             this.Answers = new Answer[0];
             this.ConditionExpression = condition;
+            this.ValidationExpression = validation;
             this.Executor = executor;
             this.Instructions = instructions;
         }
 
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text,
-           string stataExport, QuestionType type, string condition, string instructions, AnswerView[] answers, UserLight executor) :
-            this(questionnaireId, questionPublicKey, text, stataExport, type, condition,instructions , executor)
+           string stataExport, QuestionType type, string condition, string validation, string instructions, AnswerView[] answers, UserLight executor) :
+            this(questionnaireId, questionPublicKey, text, stataExport, type, condition, validation,instructions, executor)
         {
             if (answers != null)
                 this.Answers =

@@ -98,7 +98,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             set { }
         }
 
-        public bool Valid { get; set; }
+        public bool Valid
+        {
+            get { return true; }
+            set { }
+        }
 
         #endregion
 
