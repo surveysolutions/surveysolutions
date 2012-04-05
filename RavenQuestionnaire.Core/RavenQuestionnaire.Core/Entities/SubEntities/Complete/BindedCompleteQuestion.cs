@@ -79,6 +79,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public string ConditionExpression { get; set; }
 
+        public string ValidationExpression
+        { get; set; }
+
         public string StataExportCaption { get; set; }
 
         public string Instructions { get; set; }
@@ -94,6 +97,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             get { return false; }
             set { }
         }
+
+        public bool Valid { get; set; }
 
         #endregion
 

@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities
 {
@@ -117,6 +118,8 @@ namespace RavenQuestionnaire.Core.Entities
                   innerDocument.Remove(propagatebleGroup);
               }
         }
+       
+
         public string CompleteQuestinnaireId
         {
             get { return innerDocument.Id; }
