@@ -190,6 +190,7 @@
     <Compile Include="Entities\Extensions\CompositeObservebleExtensions.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\IEntity.cs" />
+    <Compile Include="Entities\SubEntities\AnswerOrder.cs" />
     <Compile Include="Entities\SubEntities\Image.cs" />
     <Compile Include="Entities\Iterators\Iterator.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
@@ -274,6 +275,10 @@
     <Compile Include="Services\ICompleteQuestionnaireUploaderService.cs" />
     <Compile Include="Services\IQuestionnaireService.cs" />
     <Compile Include="Services\ValildationService.cs" />
+    <Compile Include="Utility\OrderStrategy\AsIsStrategy.cs" />
+    <Compile Include="Utility\OrderStrategy\IOrderStrategy.cs" />
+    <Compile Include="Utility\OrderStrategy\OrderStrategyFactory.cs" />
+    <Compile Include="Utility\OrderStrategy\RandomStrategy.cs" />
     <Compile Include="Utility\StringUtil.cs" />
     <Compile Include="Utility\IdUtil.cs" />
     <Compile Include="Utility\LINQExtensions.cs" />

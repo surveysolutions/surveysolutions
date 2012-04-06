@@ -23,6 +23,8 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public QuestionType QuestionType { get; set; }
 
+
+        public Order AnswerOrder { get; set; }
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
 
@@ -61,6 +63,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.ValidationExpression = doc.ValidationExpression;
             this.StataExportCaption = doc.StataExportCaption;
             this.Instructions = doc.Instructions;
+            this.AnswerOrder = doc.AnswerOrder;
         }
     }
     public abstract class AbstractQuestionView<T> : AbstractQuestionView where T : AnswerView
@@ -103,15 +106,10 @@ namespace RavenQuestionnaire.Core.Views.Question
         }
 
         public AbstractQuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
-            : this()
+            : base(questionnaire,doc)
         {
-            this.PublicKey = doc.PublicKey;
-            this.QuestionText = doc.QuestionText;
-            this.QuestionType = doc.QuestionType;
-            this.QuestionnaireId = questionnaire.Id;
-            this.ConditionExpression = doc.ConditionExpression;
-            this.StataExportCaption = doc.StataExportCaption;
-            this.Instructions = doc.Instructions;
+            Answers = new T[0];
+            Cards = new CardView[0];
         }
     }
 

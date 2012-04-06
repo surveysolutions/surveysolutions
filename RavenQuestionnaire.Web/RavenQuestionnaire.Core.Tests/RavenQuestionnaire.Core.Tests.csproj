@@ -179,6 +179,7 @@
     <Compile Include="Repositories\EntityRepositoryTests.cs" />
     <Compile Include="Utils\CompleteQuestionnaireFactory.cs" />
     <Compile Include="Utils\RavenMockUtils.cs" />
+    <Compile Include="Utils\ReflectionUtils.cs" />
     <Compile Include="ViewRepositoryTests.cs" />
     <Compile Include="Views\User\UserViewFactoryTest.cs" />
   </ItemGroup>

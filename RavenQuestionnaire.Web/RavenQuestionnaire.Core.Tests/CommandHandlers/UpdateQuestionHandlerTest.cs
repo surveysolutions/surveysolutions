@@ -19,7 +19,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Questionnaire entity = new Questionnaire(innerDocument);
-            Question question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, null);
+            Question question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, Order.AsIs, null);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
 
@@ -29,7 +29,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                       validator.Object);
             handler.Handle(new UpdateQuestionCommand(entity.QuestionnaireId, question.PublicKey,
                                                               "question after update", "export title",  QuestionType.MultyOption,
-                                                              string.Empty, string.Empty, string.Empty, null));
+                                                              string.Empty, string.Empty, string.Empty, Order.AsIs, null));
 
             Assert.True(
                 innerDocument.Questions[0].QuestionText == "question after update" &&
