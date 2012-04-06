@@ -88,6 +88,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public List<Image> Cards { get; set; }
 
+        public Order AnswerOrder { get; set; }
+
         #endregion
 
         #region Implementation of ICompleteQuestion

@@ -34,14 +34,19 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             get;
             private set;
         }
-
+        public Order AnswerOrder
+        {
+            get;
+            private set;
+        }
         public UserLight Executor { get; set; }
 
         public Answer[] Answers { get; set; }
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text,
-            string stataExport, QuestionType type, string condition, string validation, string instructions, UserLight executor)
+            string stataExport, QuestionType type, string condition, string validation, string instructions, Order answerOrder, UserLight executor)
         {
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            this.AnswerOrder = answerOrder;
             this.QuestionPublicKey = questionPublicKey;
             this.QuestionText = text;
             this.StataExportCaption = stataExport;
@@ -54,8 +59,8 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         }
 
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text,
-           string stataExport, QuestionType type, string condition, string validation, string instructions, AnswerView[] answers, UserLight executor) :
-            this(questionnaireId, questionPublicKey, text, stataExport, type, condition, validation,instructions, executor)
+           string stataExport, QuestionType type, string condition, string validation, string instructions, Order answerOrder, AnswerView[] answers, UserLight executor) :
+            this(questionnaireId, questionPublicKey, text, stataExport, type, condition, validation,instructions,answerOrder, executor)
         {
             if (answers != null)
                 this.Answers =

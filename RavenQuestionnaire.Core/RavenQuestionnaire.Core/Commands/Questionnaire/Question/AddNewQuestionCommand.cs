@@ -50,14 +50,20 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             get;
             private set;
         }
+        public Order AnswerOrder
+        {
+            get;
+            private set;
+        }
         public Answer[] Answers { get; set; }
 
         public UserLight Executor { get; set; }
 
         public AddNewQuestionCommand(string text, string stataExportCaption, QuestionType type, string questionnaireId,
-            Guid? groupPublicKey, string condition, string validation, string instructions, AnswerView[] answers, UserLight executor)
+            Guid? groupPublicKey, string condition, string validation, string instructions, Order answerOrder, AnswerView[] answers, UserLight executor)
         {
             this.QuestionText = text;
+            this.AnswerOrder = answerOrder;
             this.StataExportCaption = stataExportCaption;
             this.QuestionType = type;
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
