@@ -9,6 +9,7 @@
         public SurveyStatus TargetStatus { set; get; }
         public bool Enabled { set; get; }
         public string ChangeComment { set; get; }
+        
         public string StatusId { set; get; }
 
         public FlowRule()

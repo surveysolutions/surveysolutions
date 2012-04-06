@@ -39,7 +39,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                                               QuestionType = doc.QuestionType,
                                               StataExportCaption = doc.StataExportCaption,
                                               Instructions = doc.Instructions,
-                                              Triggers = doc.Triggers
+                                              Triggers = doc.Triggers,
+                                              ValidationExpression = doc.ValidationExpression,
+                                              Valid = true
                                           };
 
             foreach (IAnswer answer in doc.Answers)
@@ -90,6 +92,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public string ConditionExpression { get; set; }
 
+        public string ValidationExpression
+        { get; set; }
+
         public string StataExportCaption { get; set; }
 
         public string Instructions { get; set; }
@@ -97,6 +102,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public List<Image> Cards { get; set; }
 
         public bool Enabled { get; set; }
+
+        public bool Valid { get; set; }
+
         public void Add(IComposite c, Guid? parent)
         {
             new CompleteQuestionFactory().Create(this).Add(c, parent);

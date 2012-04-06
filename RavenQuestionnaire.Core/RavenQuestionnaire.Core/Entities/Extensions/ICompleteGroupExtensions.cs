@@ -35,6 +35,12 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
             return null;
 
         }
+        public static ICompleteQuestion GetRegularQuestion(this ICompleteGroup entity, Guid target)
+        {
+            var dependency = entity.FirstOrDefault<ICompleteQuestion>(
+                q => q.PublicKey.Equals(target) && !(q is IPropogate));
+            return dependency;
+        }
         public static IEnumerable<ICompleteQuestion> GetAllQuestions(this ICompleteGroup entity)
         {
             var groups =
@@ -54,6 +60,27 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
                 groups.SelectMany(
                     g => g.Questions).Where(q => !(q is IBinded));
         }
+        public static ICompleteQuestion GetQuestionByKey(this ICompleteGroup entity, Guid key, Guid? propagationKey)
+        {
+            if (!propagationKey.HasValue)
+            {
+                return
+                    entity.GetRegularQuestion(key);
+
+            }
+            return
+                entity.GetPropagatedQuestion(key,
+                                             propagationKey.Value) ??
+                entity.GetRegularQuestion(key);
+        }
+
+        public static ICompleteGroup FindGroupByKey(this ICompleteGroup entity, Guid key, Guid? propagationKey)
+        {
+            if (!propagationKey.HasValue)
+                return entity.Find<ICompleteGroup>(key);
+            return entity.GetPropagatedGroupsByKey(propagationKey.Value).FirstOrDefault(g => g.PublicKey.Equals(key));
+        }
+
 /*
         public static IEnumerable<ICompleteQuestion> GetAllQuestionsFromPropagatedGroup(this ICompleteGroup entity, Guid propagationKey)
         {

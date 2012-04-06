@@ -19,6 +19,8 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public string ConditionExpression { get; set; }
 
+        public string ValidationExpression { get; set; }
+
         public QuestionType QuestionType { get; set; }
 
         //remove when exportSchema will be done 
@@ -56,6 +58,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.QuestionType = doc.QuestionType;
             this.QuestionnaireId = questionnaire.Id;
             this.ConditionExpression = doc.ConditionExpression;
+            this.ValidationExpression = doc.ValidationExpression;
             this.StataExportCaption = doc.StataExportCaption;
             this.Instructions = doc.Instructions;
         }
