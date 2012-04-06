@@ -1,6 +1,9 @@
 ﻿@using RavenQuestionnaire.Core.Views.Status
 @using RavenQuestionnaire.Web.Models
 @model StatusBrowseView
+
+<h1>Statuses</h1>
+<p>Questionnaire: @Model.QuestionnaireId </p>
 <p>
     @Html.ActionLink("Create New", "Create", new { qId = Model.QuestionnaireId }, new { @class = "btn small btn-primary" })
 </p>

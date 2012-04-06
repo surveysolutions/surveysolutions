@@ -8,6 +8,7 @@ using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
@@ -135,6 +136,18 @@ namespace RavenQuestionnaire.Web.Controllers
 
             return View(model);
         }
+        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
+        public ActionResult Validate(string id, Guid? group, Guid? propagationKey)
+        {
+           /* if (!ModelState.IsValid)
+                return false;*/
+            commandInvoker.Execute(new ValidateGroupCommand(id, group, propagationKey, _globalProvider.GetCurrentUser()));
+           // return true;
+
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
+            return PartialView("~/Views/Group/_ScreenHtml5.cshtml", model);
+        }
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public ViewResult QuestionI(string id, Guid? group)
@@ -149,6 +162,18 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
+        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
+        public ViewResult QuestionHtml5(string id, Guid? group)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+            var model =
+                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
+            ViewBag.CurrentGroup = model.CurrentGroup;
+
+            return View(model);
+        }
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public ViewResult QuestionC(string id, Guid? group)
@@ -169,8 +194,9 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
             {
-                return RedirectToAction("Question", new { id = settings[0].QuestionnaireId });
-            }
+                //?? if it is used as prtial render on postback
+                //this behaviour is wrong
+                return RedirectToAction("Question", new { id = settings[0].QuestionnaireId });            }
 
             CompleteQuestionView question = questions[0];
             try
@@ -197,8 +223,10 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
 
-        public ActionResult SaveSingleResultI(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
+        public ActionResult SaveSingleResultI(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions, string type)
         {
+            if (string.IsNullOrEmpty(type))
+                type = "I";
             if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
             {
                 //return RedirectToAction("QuestionI", new { id = settings[0].QuestionnaireId });
@@ -230,7 +258,7 @@ namespace RavenQuestionnaire.Web.Controllers
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
                 new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
 
-            return PartialView("~/Views/Group/_ScreenI.cshtml", model);
+            return PartialView("~/Views/Group/_Screen" + type + ".cshtml", model);
         }
 
         public ActionResult SaveSingleResultV(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)

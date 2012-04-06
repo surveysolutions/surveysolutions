@@ -1,0 +1,30 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Answer
+@model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
+@{ ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "$(this.form).submit();"); }
+@using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
+{
+    <fieldset data-role="controlgroup" data-type="horizontal">
+        <legend @if (!String.IsNullOrEmpty(Model.Instructions))
+                {
+                       <text>
+                       data-original-title = "Instructions"
+                       data-content = "@Model.Instructions"
+                       rel = "popover"
+                       </text>
+                } >
+            @Html.DisplayFor(modelItem => Model.QuestionText)</legend>
+        @Html.Hidden("QuestionId", Model.PublicKey)
+        @foreach (var item in Model.Answers)
+        {
+            var radibutonname = string.Format("radiobutton-{0}", item.PublicKey);
+            ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)["id"] = radibutonname;
+            @Html.RadioButton("PublicKey", item.PublicKey, (item).Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
+         
+            Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);
+            
+               @Html.Hidden("Selected", true)
+
+        }
+    </fieldset>
+}

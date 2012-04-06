@@ -1,0 +1,16 @@
+﻿@using RavenQuestionnaire.Web.Utils
+@using RavenQuestionnaire.Core.Views.Question
+@model CompleteQuestionView
+@{
+    ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+    if (!Model.Enabled)
+    {
+        ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+    }
+    var bodyTheme = Model.Valid ? "" : "ui-body ui-body-e";
+}
+<div class="@bodyTheme">
+    @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListViewHtml5/_{0}.cshtml", Model.QuestionType), Model);}
+</div>
+@Html.ValidationMessage("AnswerValue")
+@Html.Hidden("PublicKey", Model.PublicKey)

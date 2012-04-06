@@ -11,6 +11,7 @@ namespace RavenQuestionnaire.Core.Views.Question
     public class CompleteQuestionView : QuestionView<CompleteAnswerView,ICompleteGroup, ICompleteQuestion>
     {
         public bool Enabled { get; set; }
+        public bool Valid { get; set; }
 
         public CompleteQuestionView()
         {
@@ -28,6 +29,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             : base(questionnaire, doc)
         {
             this.QuestionnaireId = questionnaire.Id;
+            this.Valid = doc.Valid;
             this.Enabled = doc.Enabled;
             var questionWithAnswer = doc as ICompleteQuestion<ICompleteAnswer>;
             if (questionWithAnswer != null)
