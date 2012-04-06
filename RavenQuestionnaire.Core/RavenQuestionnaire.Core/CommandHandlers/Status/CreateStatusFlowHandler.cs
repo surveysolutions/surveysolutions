@@ -7,9 +7,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Status
     class CreateStatusFlowHandler : ICommandHandler<AddNewStatusFlowItem>
     {
         private IStatusRepository _repository;
-
-
-
+        
         public CreateStatusFlowHandler (IStatusRepository repository)
         {
             this._repository = repository;
