@@ -1,0 +1,59 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.File
+@using RavenQuestionnaire.Web.Models
+@model FileBrowseView
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Index</h2>
+@Html.ActionLink("Upload new images", "Upload")
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th></th>
+            <th>Title </th>
+            <th>Description </th>
+            <th>CreationDate </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                @using (Ajax.BeginForm("UpdateDesc", "Resource", new AjaxOptions() { HttpMethod = "Post" }))
+                {
+                    <th class="span1">
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </th>
+                    <td class="span2">
+                        <div class="thumbnail">
+                            <img src="@Url.Action("Images", "Resource", new { id = item.Thumbnail })" alt="@item.Title" />
+                        </div>
+                    </td>
+                    <td class="span2">
+                        @Html.TextArea("Title", item.Title, new { @class = "hidden-input", rows = "5" })
+                    </td>
+                    <td class="span3">
+                        @Html.TextArea("Description", item.Description, new { @class = "hidden-input", rows = "5" })
+                    </td>
+                    <td class="span2">
+                        @Html.DisplayFor(modelItem => item.CreationDate)
+                    </td>
+                    <td class="span2">
+                        @Html.Hidden("Id", item.Id)
+                        @* @Html.ActionLink("Edit", "Manage", new { id = item.Id }, new { @class = "btn small " })*@
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-small btn-danger " })
+                        <button class="btn btn-primary" type="submit">Save changes</button>
+                    </td>
+                }
+            </tr>
+                
+           
+        }
+    </tbody>
+</table>
+<div class="pagination">
+    @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount)
+</div>

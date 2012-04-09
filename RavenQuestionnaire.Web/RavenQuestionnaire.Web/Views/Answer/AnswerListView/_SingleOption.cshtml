@@ -11,22 +11,25 @@
             var selectedClass = item.Selected ? "btn-primary" : "";
             
             <li class="btn @selectedClass ">
-                @if (item.AnswerType == AnswerType.Text)
+                @switch (item.AnswerType)
                 {
+                    case AnswerType.Text:
                     <label class="radio">
                         @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
-                        @{ Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item); }
-                    </label>
-                        
-                }
-                else
-                {
+                        @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}
+                    </label>break;
+                    case AnswerType.Image:
                     <label class="radio">
                         @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
-                        @{ Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item); }
-                    </label>
+                        @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}
+                    </label>break;
+                    default:
+                    <label class="radio">
+                        @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
+                        @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}
+                    </label>break;
                 }
-                 @Html.Hidden("Selected", true)
+                @Html.Hidden("Selected", true)
             </li>
            
         }

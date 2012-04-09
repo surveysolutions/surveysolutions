@@ -35,7 +35,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
 
         public Answer[] Answers { get; set; }
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text,
-            string stataExport, QuestionType type, string condition,string instructions, UserLight executor)
+            string stataExport, QuestionType type, string condition, string instructions, UserLight executor)
         {
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.QuestionPublicKey = questionPublicKey;
@@ -50,7 +50,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
 
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text,
            string stataExport, QuestionType type, string condition, string instructions, AnswerView[] answers, UserLight executor) :
-            this(questionnaireId, questionPublicKey, text, stataExport, type, condition,instructions , executor)
+            this(questionnaireId, questionPublicKey, text, stataExport, type, condition, instructions, executor)
         {
             if (answers != null)
                 this.Answers =
@@ -62,7 +62,8 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
                                 AnswerText = a.AnswerText,
                                 AnswerType = a.AnswerType,
                                 Mandatory = a.Mandatory,
-                                PublicKey = a.PublicKey
+                                PublicKey = a.PublicKey,
+                                AnswerImage = string.IsNullOrEmpty(a.AnswerImage)? "": IdUtil.CreateFileId(a.AnswerImage)
                             }).ToArray();
         }
     }

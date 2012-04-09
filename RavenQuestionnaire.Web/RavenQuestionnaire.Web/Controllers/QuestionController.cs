@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Kaliko.ImageLibrary;
@@ -13,6 +14,7 @@ using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Card;
+using RavenQuestionnaire.Core.Views.File;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
@@ -132,12 +134,25 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Create(string id, Guid? groupPublicKey)
         {
+            LoadImages();
             return PartialView("_Create",
                                new QuestionView(id, groupPublicKey));
+        }
+        private void LoadImages()
+        {
+            var images = viewRepository.Load<FileBrowseInputModel, FileBrowseView>(new FileBrowseInputModel { PageSize = int.MaxValue });
+            var imagesList = new SelectList(images.Items.Select(i => new SelectListItem
+            {
+                Selected = false,
+                Text = i.Id,
+                Value = i.Id
+            }).ToList(), "Value", "Text");
+            ViewBag.Images = imagesList;
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Edit(Guid publicKey, string questionnaireId)
         {
+            LoadImages();
             if (publicKey == Guid.Empty)
                 throw new HttpException(404, "Invalid query string parameters");
             var model =

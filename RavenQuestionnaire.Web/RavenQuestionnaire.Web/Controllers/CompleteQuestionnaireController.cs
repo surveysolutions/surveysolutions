@@ -210,12 +210,9 @@ namespace RavenQuestionnaire.Web.Controllers
                 try
                 {
                     commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
-                                                                                          question.Answers as
-                                                                                          CompleteAnswerView[],
-                                                                                          settings[0].
-                                                                                              PropogationPublicKey,
-                                                                                          _globalProvider.GetCurrentUser
-                                                                                              ()));
+                                                                                          question.Answers,
+                                                                                          settings[0].PropogationPublicKey,
+                                                                                          _globalProvider.GetCurrentUser()));
                 }
                 catch (Exception e)
                 {
@@ -229,6 +226,10 @@ namespace RavenQuestionnaire.Web.Controllers
 
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
                 new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
+
+
+
+
 
             return PartialView("~/Views/Group/_ScreenI.cshtml", model);
         }

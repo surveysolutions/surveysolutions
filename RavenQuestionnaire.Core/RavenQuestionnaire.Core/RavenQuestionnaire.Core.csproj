@@ -107,6 +107,8 @@
     <Compile Include="AbstractFactories\ICompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
+    <Compile Include="CommandHandlers\File\UpdateFileMetaCommandHandler.cs" />
+    <Compile Include="CommandHandlers\File\UploadFileCommandHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Question\AddNewQuestionHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UpdateConditionsHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UpdateImageCommandHandler.cs" />
@@ -137,6 +139,8 @@
     <Compile Include="CommandHandlers\User\UpdateUserHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UploadImageCommandHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
+    <Compile Include="Commands\File\UpdateFileMetaCommand.cs" />
+    <Compile Include="Commands\File\UploadFileCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\CreateNewFlowGraphCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateConditionsCommand.cs" />
     <Compile Include="Commands\Status\AddNewStatusFlowItem.cs" />
@@ -173,6 +177,7 @@
     <Compile Include="Documents\EventDocument.cs" />
     <Compile Include="Documents\ExportSchemaDocument.cs" />
     <Compile Include="Documents\FlowGraphDocument.cs" />
+    <Compile Include="Documents\FileDocument.cs" />
     <Compile Include="Documents\LocationDocument.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
     <Compile Include="Documents\ReportDocument.cs" />
@@ -181,6 +186,7 @@
     <Compile Include="Entities\CompleteQuestionnaire.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
+    <Compile Include="Entities\File.cs" />
     <Compile Include="Entities\Event.cs" />
     <Compile Include="Entities\FlowGraph.cs" />
     <Compile Include="Entities\Extensions\CompositeObservebleExtensions.cs" />
@@ -242,6 +248,8 @@
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
     <Compile Include="Indexes\UsersInLocationIndex.cs" />
+    <Compile Include="Repositories\IFileRepository.cs" />
+    <Compile Include="Repositories\FileRepository.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
     <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="IViewFactory.cs" />
@@ -297,6 +305,10 @@
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Vertical\CompleteQuestionnaireViewEnumerable.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Vertical\CompleteQuestionnaireViewV.cs" />
+    <Compile Include="Views\File\FileBrowseInputModel.cs" />
+    <Compile Include="Views\File\FileBrowseItem.cs" />
+    <Compile Include="Views\File\FileBrowseView.cs" />
+    <Compile Include="Views\File\FileBrowseViewFactory.cs" />
     <Compile Include="Views\FlowGraph\FlowBlockViewItem.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphView.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphViewFactory.cs" />

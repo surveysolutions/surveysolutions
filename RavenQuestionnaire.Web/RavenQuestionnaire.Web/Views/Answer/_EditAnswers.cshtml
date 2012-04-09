@@ -2,6 +2,13 @@
 @using RavenQuestionnaire.Core.Views.Answer
 @using RavenQuestionnaire.Core.Views.Question
 @model QuestionView
+@{
+    if (ViewBag.Images != null)
+    {
+        var images = ViewBag.Images as SelectList;
+        this.ViewBag.Images = images;
+    }
+}
 @foreach (var item in Model.Answers)
 {
     Html.RenderPartial("~/Views/Answer/_EditRow.cshtml", item);
