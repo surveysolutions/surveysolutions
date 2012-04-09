@@ -1,0 +1,54 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+@using RavenQuestionnaire.Core.Views.Question
+@using RavenQuestionnaire.Web.Utils
+@model CompleteGroupViewV
+@for (int index = 0; index < Model.PropagatedGroups.Count; index++)
+{
+    var pg = Model.PropagatedGroups[index];
+    <ul data-role="listview" data-inset="true">
+        @foreach (var pquestion in pg.Questions)
+        {
+            <li data-role="fieldcontain">
+                @RenderQuestion(pquestion, Model.PublicKey, pg.PropogationKey)
+            </li>
+        }
+        @if (!pg.AutoPropagate)
+        {
+
+            var rparams = new
+                              {
+                                  propagationKey = pg.PropogationKey,
+                                  publicKey = Model.PublicKey,
+                                  questionnaireId = ViewBag.QuestionnaireId,
+                                  parentGroupPublicKey = ViewBag.CurrentGroupPublicKey,
+                                  salt = (new Random()).NextDouble()
+                              };
+            <li data-role="fieldcontain">
+                @Ajax.ActionLinkHtml5("Remove", "DeletePropagatedGroupHtml5", "Group", rparams, ViewBag.AjaxOptions as AjaxOptions, new { data_role = "button", data_icon = "delete", data_theme = "a" })
+            </li>
+        }
+    </ul>
+}
+@helper RenderQuestion(CompleteQuestionView question, Guid groupKey, Guid propagationKey)
+    {
+    using (Ajax.BeginFormHtml5("SaveSingleResultI", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions, new { autocomplete = "off" }))
+    {
+        using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + propagationKey))
+        {
+            ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+            if (!question.Enabled)
+            {
+                ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+            }
+            //Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
+            Html.RenderPartial("~/Views/Question/_TakeRowHtml5.cshtml", question);
+        }
+        using (Html.BeginCollectionItem("settings", true, groupKey + "_" + propagationKey))
+        {
+    @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+    @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
+    @Html.Hidden("PropogationPublicKey", propagationKey)
+        }
+    }
+}

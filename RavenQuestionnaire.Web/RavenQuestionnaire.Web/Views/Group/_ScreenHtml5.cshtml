@@ -4,48 +4,38 @@
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
 @using System.Web.Mvc.Html5
 @model CompleteQuestionnaireViewV
-@RenderSimpleGroup(Model.CurrentGroup)
-@helper  RenderSimpleGroup(CompleteGroupViewV simpleGroup)
+@{
+    ViewBag.AjaxOptions = new AjaxOptions()
+                              {
+                                  InsertionMode = InsertionMode.Replace,
+                                  UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
+                                  OnComplete = "ReInitMobile('#" + Model.CurrentGroup.GetClientId("div") + "')"
+                              };
+    ViewBag.CurrentGroupPublicKey = Model.CurrentGroup.PublicKey;
+    ViewBag.QuestionnaireId = Model.Id;
+}
+
+@Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", Model.CurrentGroup)
+
+
+@*@RenderSimpleGroup(Model.CurrentGroup)*@
+
+@*@helper  RenderSimpleGroup(CompleteGroupViewV simpleGroup)
     {
     
         foreach (var question in simpleGroup.Questions)
         {
-@* <fieldset data-role="controlgroup">
-                <legend>@question.QuestionText</legend>
-                @foreach (CompleteAnswerView completeAnswerView in question.Answers)
-                {
-                    var radibutonname = string.Format("radiobutton-{0}", completeAnswerView.PublicKey);
-                    @Html.RadioButton("PublicKey", question.PublicKey, new {id = radibutonname})
-                    @Html.Label(radibutonname, completeAnswerView.AnswerText)
-                }
-            </fieldset>
-*@
-
-
-            using (Ajax.BeginFormHtml5("SaveSingleResultI", "CompleteQuestionnaire", new { type = "Html5" }, new AjaxOptions()
-                                                                                                          {
-                                                                                                              InsertionMode = InsertionMode.Replace,
-                                                                                                              UpdateTargetId = Model.CurrentGroup.GetClientId("div"), /*
-                OnBegin = "ShowOverlay",*/
-                                                                                                              OnComplete = "ReInitMobile('#" + Model.CurrentGroup.GetClientId("div") + "')" /*,
-                OnFailure = "HideOverlay"*/
-                                                                                                          }))
+            using (Ajax.BeginFormHtml5("SaveSingleResultI", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions))
             {
-@*<form data-ajax-update='#@Model.CurrentGroup.GetClientId("div")' data-ajax-mode="replace" data-ajax-complete="ReInitMobile('#@Model.CurrentGroup.GetClientId("div")')"
-            action="javascript:void(0)" data-ajax-method="post" data-ajax-url="@Url.Action("SaveSingleResultI", "CompleteQuestionnaire")?type=Html5"
-    data-ajax="true">*@
-                
                 using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                 {
-                    Html.RenderPartial("~/Views/Question/_TakeRowHtml5.cshtml",
-                                       question);
+                    Html.RenderPartial("~/Views/Question/_TakeRowHtml5.cshtml", question);
                 }
                 using (Html.BeginCollectionItem("settings", true, question.PublicKey))
                 {
     @Html.Hidden("ParentGroupPublicKey", Model.CurrentGroup.PublicKey)
     @Html.Hidden("QuestionnaireId", Model.Id)
                 }
-@*</form>*@
             }
         }
         foreach (var @group in simpleGroup.Groups)
@@ -53,3 +43,4 @@
     @RenderSimpleGroup(@group)
         }
 }
+*@

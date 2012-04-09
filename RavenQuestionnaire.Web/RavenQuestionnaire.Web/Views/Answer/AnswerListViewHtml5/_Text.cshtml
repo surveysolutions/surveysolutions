@@ -12,9 +12,4 @@
     @Html.Hidden("Selected", true)
     @Html.Label("AnswerValue", Model.QuestionText)
     @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
-  	
-   
-   
- 
-
 }
