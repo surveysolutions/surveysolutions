@@ -25,8 +25,6 @@
                     </div>
                     break;
                     case AnswerType.Image:
-                        @Html.TextBox("AnswerValue", item.AnswerValue, new { onchange =  "$(this.form).submit();", onfocus = "$(this).parent().parent().children('label').children('input').prop('checked', true).change();" })
-                    </div>
                     <label class="radio">
                         @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
                         @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}

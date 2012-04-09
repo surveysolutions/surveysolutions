@@ -381,7 +381,12 @@ a.btn {
 }
 .thumbnail
 {
-	display: inline-block;
+	background: #FFFFFF;
+    color: #333333;
+    display: inline-block;
+    -webkit-text-shadow: none;
+	-moz-text-shadow: none;
+    text-shadow: none;
 }
 .hidden-input
 {
