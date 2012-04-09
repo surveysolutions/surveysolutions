@@ -54,20 +54,27 @@
                     </div>
                 </div>
                 <div class="control-group">
+                    @Html.LabelFor(model => model.ValidationExpression, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => Model.ValidationExpression)
+                        @Html.ValidationMessageFor(model => model.ValidationExpression)
+                    </div>
+                </div>
+                <div class="control-group">
                     @Html.LabelFor(model => model.Instructions, new { @class = "control-label" })
                     <div class="controls">
                         @Html.TextAreaFor(model => model.Instructions)
                         @Html.ValidationMessageFor(model => model.Instructions)
                     </div>
                 </div>
-                if (Model.PublicKey != Guid.Empty)
-                {
+                   if (Model.PublicKey != Guid.Empty)
+                   {
                 @Html.HiddenFor(model => model.PublicKey)
-                }
+                   }
                 @Html.HiddenFor(model => model.GroupPublicKey)
                 @Html.HiddenFor(model => model.QuestionnaireId)
 
-                Html.RenderPartial("~/Views/Answer/_EditAnswers.cshtml", Model);
+           Html.RenderPartial("~/Views/Answer/_EditAnswers.cshtml", Model);
 
             }
         </div>

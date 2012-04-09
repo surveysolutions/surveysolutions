@@ -48,6 +48,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -59,6 +60,7 @@
     <Compile Include="Helpers\EntityNames.cs" />
     <Compile Include="Helpers\GlobalInfo.cs" />
     <Compile Include="Helpers\GlobalInfoProvider.cs" />
+    <Compile Include="Helpers\Html5Extensions.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IBagManager.cs" />
     <Compile Include="Helpers\IGlobalInfoProvider.cs" />

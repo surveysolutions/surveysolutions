@@ -2,6 +2,7 @@
 @using RavenQuestionnaire.Core.Entities.SubEntities
 @model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
 @{ ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "$(this.form).submit();"); }
+
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
 {
     @Html.Hidden("QuestionId", Model.PublicKey)
@@ -14,11 +15,18 @@
                 @switch (item.AnswerType)
                 {
                     case AnswerType.Text:
-                    <label class="radio">
-                        @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
-                        @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}
-                    </label>break;
+                   <label class="radio">
+                        @Html.RadioButton("PublicKey", item.PublicKey, item.Selected,
+                        (IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings)
+                        @item.AnswerText
+                    </label>
+                    <div style = "padding-left: 30px;" >
+                        @Html.TextBox("AnswerValue", item.AnswerValue, new { onchange =  "$(this.form).submit();", onfocus = "$(this).parent().parent().children('label').children('input').prop('checked', true).change();" })
+                    </div>
+                    break;
                     case AnswerType.Image:
+                        @Html.TextBox("AnswerValue", item.AnswerValue, new { onchange =  "$(this.form).submit();", onfocus = "$(this).parent().parent().children('label').children('input').prop('checked', true).change();" })
+                    </div>
                     <label class="radio">
                         @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
                         @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}

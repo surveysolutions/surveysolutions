@@ -30,12 +30,13 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Questions.Clear();
         }
 
-        public Question AddQuestion(string text, string stataExportCaption, QuestionType type, string condition, Guid? groupPublicKey)
+        public Question AddQuestion(string text, string stataExportCaption, QuestionType type, string condition,string validation, Guid? groupPublicKey)
         {
 
             Question result = new Question()
                                   {QuestionText = text, QuestionType = type, StataExportCaption = stataExportCaption};
             result.ConditionExpression = condition;
+            result.ValidationExpression = validation;
             try
             {
                 Add(result, groupPublicKey);
@@ -78,8 +79,8 @@ namespace RavenQuestionnaire.Core.Entities
         {
             return this.innerDocument;
         }
-        public void UpdateQuestion(Guid publicKey, string text, string stataExportCaption, QuestionType type, 
-            string condition, string instructions ,IEnumerable<Answer> answers)
+        public void UpdateQuestion(Guid publicKey, string text, string stataExportCaption, QuestionType type,
+            string condition, string validation, string instructions, IEnumerable<Answer> answers)
         {
             var question = Find<Question>(publicKey);
             if (question == null)
@@ -89,6 +90,7 @@ namespace RavenQuestionnaire.Core.Entities
             question.QuestionType = type;
             question.UpdateAnswerList(answers);
             question.ConditionExpression = condition;
+            question.ValidationExpression = validation;
             question.Instructions = instructions;
         }
         public void UpdateConditionExpression(Guid publicKey, string condition)

@@ -52,10 +52,10 @@
 }
 .question
 {
-	/*background-color: #F5F5F5;*/
-	/*border-left: 3px solid #bfbfbf;*/
-	padding: 15px 5px 15px 5px;
-	
+	padding: 5px;
+	border: 1px solid #E5E5E5;
+    border-radius: 4px 4px 4px 4px;
+    margin-bottom: 5px;
 }
 .question-disabled
 {

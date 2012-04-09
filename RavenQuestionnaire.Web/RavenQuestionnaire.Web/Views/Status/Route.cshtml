@@ -25,6 +25,8 @@
         }
     </script>
     
+    <h1> Status: @Model.Title</h1>
+    
     <p>
         @Ajax.ActionLinkWithIcon("Add route", "AddRoute", "Status",
             new { Model.Id, Qid = Model.QuestionnaireId },

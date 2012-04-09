@@ -107,6 +107,7 @@
     <Compile Include="AbstractFactories\ICompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
+    <Compile Include="CommandHandlers\Questionnaire\Completed\ValidateGroupCommandHander.cs" />
     <Compile Include="CommandHandlers\File\UpdateFileMetaCommandHandler.cs" />
     <Compile Include="CommandHandlers\File\UploadFileCommandHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Question\AddNewQuestionHandler.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="CommandHandlers\Location\CreateNewLocationHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\CreateNewQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateNewStatusHandler.cs" />
+    <Compile Include="CommandHandlers\Status\CreateStatusFlowHandler.cs" />
     <Compile Include="CommandHandlers\User\CreateNewUserHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\DeleteCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Group\DeleteGroupHandler.cs" />
@@ -142,6 +144,7 @@
     <Compile Include="Commands\File\UpdateFileMetaCommand.cs" />
     <Compile Include="Commands\File\UploadFileCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\CreateNewFlowGraphCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\ValidateGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateConditionsCommand.cs" />
     <Compile Include="Commands\Status\AddNewStatusFlowItem.cs" />
     <Compile Include="Commands\Questionnaire\UpdateImageCommand.cs" />
@@ -188,6 +191,7 @@
     <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\File.cs" />
     <Compile Include="Entities\Event.cs" />
+    <Compile Include="Entities\Extensions\ICompleteQuestionExtensions.cs" />
     <Compile Include="Entities\FlowGraph.cs" />
     <Compile Include="Entities\Extensions\CompositeObservebleExtensions.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
@@ -237,6 +241,7 @@
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
+    <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireExpressionValidator.cs" />
     <Compile Include="Export\csv\CSVExporter.cs" />
@@ -251,6 +256,7 @@
     <Compile Include="Repositories\IFileRepository.cs" />
     <Compile Include="Repositories\FileRepository.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
+    <Compile Include="Services\IValildationService.cs" />
     <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="IViewFactory.cs" />
     <Compile Include="IViewRepsoitory.cs" />
@@ -275,6 +281,7 @@
     <Compile Include="Services\CompleteQuestionnaireUploaderService.cs" />
     <Compile Include="Services\ICompleteQuestionnaireUploaderService.cs" />
     <Compile Include="Services\IQuestionnaireService.cs" />
+    <Compile Include="Services\ValildationService.cs" />
     <Compile Include="Utility\StringUtil.cs" />
     <Compile Include="Utility\IdUtil.cs" />
     <Compile Include="Utility\LINQExtensions.cs" />

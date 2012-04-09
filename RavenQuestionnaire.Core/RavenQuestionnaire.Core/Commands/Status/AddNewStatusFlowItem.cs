@@ -1,4 +1,5 @@
 ﻿using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Commands.Status
 {
@@ -16,7 +17,7 @@ namespace RavenQuestionnaire.Core.Commands.Status
             ChangeRule = changeRule;
             ChangeComment = changeComment;
             TargetStatus = targetStatus;
-            Status = status;
+            Status = IdUtil.CreateStatusId(status); 
             Executor = executor;
         }
 

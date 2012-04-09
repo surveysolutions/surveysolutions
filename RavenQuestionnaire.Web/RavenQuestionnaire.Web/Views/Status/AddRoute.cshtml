@@ -1,29 +1,28 @@
-﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Entities.SubEntities
+﻿@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Web.Utils
 @model FlowRule
-
-@{var hideFunctionName = "HideAddRouteForm";}
-@using (Ajax.BeginForm("SaveRoute", "Status",
-                                         new AjaxOptions
-                                             {
-                                                 UpdateTargetId = "addNewRoute",
-                                                 OnComplete = @hideFunctionName
-                                             }))
+@if (Model != null)
 {
-    
+    var hideFunctionName = "HideAddRouteForm";
+    using (Ajax.BeginForm("SaveRoute", "Status",
+                                         new AjaxOptions
+                                         {
+                                             UpdateTargetId = "addNewRoute",
+                                             OnComplete = @hideFunctionName
+                                         }))
+    {
+
     <div id="addNewRoute" class="modal open form-horizontal">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">&times;</a>
             <h3>
-                Status Route Rule</h3>
+                Status Route Rule
+            </h3>
         </div>
         <div class="modal-body">
-            @using (Html.BeginCollectionItem("route", Model.StatusId))
-            {
+            <fieldset class="form-horizontal">
                 @Html.BootstrapValidationSummary("")
                 @Html.HiddenFor(model => model.StatusId)
-                
                 <div class="control-group">
                     @Html.LabelFor(model => model.ConditionExpression, new { @class = "control-label" })
                     <div class="controls">
@@ -31,7 +30,6 @@
                         @Html.ValidationMessageFor(model => model.ConditionExpression)
                     </div>
                 </div>
-                
                 <div class="control-group">
                     @Html.LabelFor(model => model.ChangeComment, new { @class = "control-label" })
                     <div class="controls">
@@ -39,18 +37,17 @@
                         @Html.ValidationMessageFor(model => model.ChangeComment)
                     </div>
                 </div>
-                
                 <div class="control-group">
                     @Html.LabelFor(model => model.StatusId, new { @class = "control-label" })
                     <div class="controls">
-                        @Html.DropDownListFor(model => model.TargetStatus, new SelectList(ViewBag.AllStatuses, "Id", "Title", Model.StatusId))
+                        @Html.DropDownListFor(model => model.TargetStatus.Id, new SelectList(ViewBag.AllStatuses, "Id", "Title", Model.StatusId))
                     </div>
                 </div>
-                
-            }
+            </fieldset>
         </div>
         <div class="modal-footer">
             <input type="submit" value="Save" class="btn btn-primary" />
         </div>
     </div>
+    }
 }

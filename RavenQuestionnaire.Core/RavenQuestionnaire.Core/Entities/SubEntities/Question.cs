@@ -13,6 +13,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         string QuestionText { get; set; }
         QuestionType QuestionType { get; set; }
         string ConditionExpression { get; set; }
+        string ValidationExpression { get; set; }
         string StataExportCaption { get; set; }
         string Instructions { get; set; }
         List<Image> Cards { get; set; }
@@ -68,12 +69,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             set
             {
                 this.conditionExpression = value;
-                QuestionnaireParametersParser parser = new QuestionnaireParametersParser();
                 this.Triggers = parser.Execute(value);
             }
         }
 
+        public string ValidationExpression { get; set; }
+
         private string conditionExpression;
+        private QuestionnaireParametersParser parser = new QuestionnaireParametersParser();
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
 

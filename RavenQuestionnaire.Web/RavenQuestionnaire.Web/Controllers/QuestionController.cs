@@ -178,7 +178,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                         model.StataExportCaption,
                                                                                         model.QuestionType,
                                                                                         model.QuestionnaireId, model.GroupPublicKey,
-                                                                                        model.ConditionExpression,
+                                                                                        model.ConditionExpression,model.ValidationExpression,
                                                                                         model.Instructions,
                                                                                         answers, GlobalInfo.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
@@ -191,7 +191,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                          model.QuestionText,
                                                                          model.StataExportCaption,
                                                                          model.QuestionType,
-                                                                         model.ConditionExpression,
+                                                                         model.ConditionExpression, model.ValidationExpression,
                                                                          model.Instructions,
                                                                          answers,
                                                                          GlobalInfo.GetCurrentUser()));
