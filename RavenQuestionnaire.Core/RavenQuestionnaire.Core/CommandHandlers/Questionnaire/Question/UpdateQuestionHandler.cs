@@ -51,10 +51,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question
                     answer.Image = null;
                 }
             }
-
             questionnaire.UpdateQuestion(command.QuestionPublicKey, command.QuestionText, command.StataExportCaption,
                                         command.QuestionType,
-                                         command.ConditionExpression,
+                                         command.ConditionExpression,command.ValidationExpression,
                                          command.Instructions,
                                          command.Answers);
 

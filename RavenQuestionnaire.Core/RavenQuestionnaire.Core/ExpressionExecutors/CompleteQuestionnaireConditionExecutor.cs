@@ -27,16 +27,15 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             e.EvaluateParameter += (name, args) =>
                                        {
                                            Guid nameGuid = Guid.Parse(name);
+                                           Guid? propagationKey = null;
                                            var propagation = question as PropagatableCompleteQuestion;
-                                           if (propagation == null)
+                                           if (propagation != null)
                                            {
-                                               args.Result =
-                                                   GetValue(GetRegularQuestion(nameGuid, question, questionnaire));
-                                               return;
+                                               propagationKey = propagation.PropogationPublicKey;
+
                                            }
                                            args.Result =
-                                               GetValue(GetPropagatedQuestion(nameGuid, propagation, questionnaire) ??
-                                                        GetRegularQuestion(nameGuid, question, questionnaire));
+                                               questionnaire.GetQuestionByKey(nameGuid, propagationKey).GetValue();
                                        }
                 ;
             bool result = false;
@@ -49,28 +48,28 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             }
             return result;
         }
-        protected ICompleteQuestion GetRegularQuestion(Guid target, ICompleteQuestion question, ICompleteGroup entity)
+       /* protected ICompleteQuestion GetRegularQuestion(Guid target, ICompleteQuestion question, ICompleteGroup entity)
         {
             var dependency = entity.FirstOrDefault<ICompleteQuestion>(
                 q => q.PublicKey.Equals(target) && !(q is IPropogate));
             return dependency;
-        }
-        protected ICompleteQuestion GetPropagatedQuestion(Guid target, PropagatableCompleteQuestion question, ICompleteGroup entity)
+        }*/
+     /*   protected ICompleteQuestion GetPropagatedQuestion(Guid target, PropagatableCompleteQuestion question, ICompleteGroup entity)
         {
             //searchig for particulat question by key inside of all groups
             var dependencyPropagated =
                 entity.GetPropagatedQuestion(target,
                                                     question.PropogationPublicKey);
             return dependencyPropagated;
-        }
-        protected object GetValue(ICompleteQuestion question)
+        }*/
+     /*   protected object GetValue(ICompleteQuestion question)
         {
             if (question == null)
                 return null;
             var factory = new CompleteQuestionFactory();
             return factory.GetAnswerValue(question);
 
-        }
+        }*/
 
     }
 }

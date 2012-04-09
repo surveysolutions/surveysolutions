@@ -45,12 +45,17 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             get;
             private set;
         }
+        public string ValidationExpression
+        {
+            get;
+            private set;
+        }
         public Answer[] Answers { get; set; }
 
         public UserLight Executor { get; set; }
 
         public AddNewQuestionCommand(string text, string stataExportCaption, QuestionType type, string questionnaireId,
-            Guid? groupPublicKey, string condition, string instructions, AnswerView[] answers, UserLight executor)
+            Guid? groupPublicKey, string condition, string validation, string instructions, AnswerView[] answers, UserLight executor)
         {
             QuestionText = text;
             StataExportCaption = stataExportCaption;
@@ -60,6 +65,8 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             ConditionExpression = condition;
             Instructions = instructions;
             Answers = new Answer[0];
+            this.ValidationExpression = validation;
+
             if (answers != null)
                 Answers = answers.Select(a => ConvertAnswer(a)).ToArray();
 
