@@ -52,28 +52,30 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public AddNewQuestionCommand(string text, string stataExportCaption, QuestionType type, string questionnaireId,
             Guid? groupPublicKey, string condition, string instructions, AnswerView[] answers, UserLight executor)
         {
-            this.QuestionText = text;
-            this.StataExportCaption = stataExportCaption;
-            this.QuestionType = type;
-            this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
-            this.GroupPublicKey = groupPublicKey;
-            this.ConditionExpression = condition;
-            this.Instructions = instructions;
-            this.Answers = new Answer[0];
+            QuestionText = text;
+            StataExportCaption = stataExportCaption;
+            QuestionType = type;
+            QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            GroupPublicKey = groupPublicKey;
+            ConditionExpression = condition;
+            Instructions = instructions;
+            Answers = new Answer[0];
             if (answers != null)
-                this.Answers =
-                    answers.Select(
-                        a =>
-                        new Answer()
-                            {
-                                AnswerValue = a.AnswerValue,
-                                AnswerText = a.AnswerText,
-                                AnswerType = a.AnswerType,
-                                Mandatory = a.Mandatory,
-                                PublicKey = a.PublicKey
-                            }).ToArray();
+                Answers = answers.Select(a => ConvertAnswer(a)).ToArray();
 
             Executor = executor;
+        }
+
+        private static Answer ConvertAnswer(AnswerView a)
+        {
+            var answer =  new Answer();
+            answer.AnswerValue = a.AnswerValue;
+
+            answer.AnswerType = a.AnswerType;
+            answer.AnswerText = a.AnswerText;
+            answer.Mandatory = a.Mandatory;
+            answer.PublicKey = a.PublicKey;
+            return answer;
         }
     }
 }

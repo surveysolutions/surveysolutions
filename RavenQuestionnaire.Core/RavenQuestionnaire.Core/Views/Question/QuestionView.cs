@@ -198,7 +198,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             {
                 this.Answers = question.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
                 if (question.Cards!=null)
-                    this.Cards = question.Cards.Select(c => new CardView(doc.PublicKey, c)).ToArray();
+                    this.Cards = question.Cards.Select(c => new CardView(doc.PublicKey, c)).OrderBy(a => Guid.NewGuid()).ToArray();
             }
         }
     }
