@@ -60,7 +60,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public UserLight Executor { get; set; }
 
         public AddNewQuestionCommand(string text, string stataExportCaption, QuestionType type, string questionnaireId,
-            Guid? groupPublicKey, string condition, string validation, string instructions, AnswerView[] answers, UserLight executor)
+            Guid? groupPublicKey, string condition, string validation, string instructions, Order answerOrder, AnswerView[] answers, UserLight executor)
         {
             QuestionText = text;
 this.AnswerOrder = answerOrder;
