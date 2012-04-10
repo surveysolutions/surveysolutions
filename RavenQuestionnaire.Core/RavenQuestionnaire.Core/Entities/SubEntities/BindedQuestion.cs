@@ -36,6 +36,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public List<Image> Cards { get; set; }
 
         [JsonIgnore]
+        public Order AnswerOrder { get; set; }
+
+        [JsonIgnore]
         public string ConditionExpression { get; set; }
         [JsonIgnore]
         public string ValidationExpression
