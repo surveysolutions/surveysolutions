@@ -106,6 +106,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             set { }
         }
 
+        public DateTime? AnswerDate { get; set; }
+
         #endregion
 
         #region Implementation of IQuestion<CompleteAnswer>

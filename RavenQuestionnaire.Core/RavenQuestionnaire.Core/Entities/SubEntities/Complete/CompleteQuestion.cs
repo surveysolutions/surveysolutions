@@ -15,6 +15,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             this.PublicKey = Guid.NewGuid();
             this.Enabled = true;
+            this.Valid = true;
             this.Answers = new List<ICompleteAnswer>();
             this.Cards = new List<Image>();
             this.Triggers = new List<Guid>();
@@ -109,9 +110,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public bool Valid { get; set; }
 
+        public DateTime? AnswerDate { get; set; }
+
         public void Add(IComposite c, Guid? parent)
         {
             new CompleteQuestionFactory().Create(this).Add(c, parent);
+            this.AnswerDate = DateTime.Now;
             OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), c));
         }
 
