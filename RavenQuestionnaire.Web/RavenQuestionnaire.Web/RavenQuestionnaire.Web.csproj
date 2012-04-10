@@ -111,6 +111,7 @@
     </Compile>
     <Compile Include="Controllers\FlowGraphController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
+    <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\FlowGraph.cs" />
     <Compile Include="Models\GridDataRequest.cs" />
@@ -732,6 +733,7 @@
     <Content Include="Views\Answer\AnswerListViewHtml5\_YesNo.cshtml" />
     <Content Include="Views\Answer\answerViewHtml5\_Select.cshtml" />
     <Content Include="Views\Answer\answerViewHtml5\_Text.cshtml" />
+    <Content Include="Views\Statistic\Details.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

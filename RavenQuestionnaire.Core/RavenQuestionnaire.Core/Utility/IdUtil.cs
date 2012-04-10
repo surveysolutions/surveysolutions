@@ -11,6 +11,10 @@
         {
             return string.Format("flowgraphdocuments/{0}", id);
         }
+        public static string CreateStatisticId(string id)
+        {
+            return string.Format("completeqquestionnairestatisticdocument/{0}", id);
+        }
         public static string CreateQuestionnaireId(string id)
         {
             return string.Format("questionnairedocuments/{0}", id);
