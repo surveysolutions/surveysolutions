@@ -779,7 +779,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>24525</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/MIS2</IISUrl>
+          <IISUrl>http://localhost/MIS</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
