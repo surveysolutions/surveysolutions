@@ -5,6 +5,7 @@ using System.Reactive;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
+using RavenQuestionnaire.Core.Utility.OrderStrategy;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
@@ -14,6 +15,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             this.PublicKey = Guid.NewGuid();
             this.Enabled = true;
+            this.Valid = true;
             this.Answers = new List<ICompleteAnswer>();
             this.Cards = new List<Image>();
             this.Triggers = new List<Guid>();
@@ -41,10 +43,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                                               Instructions = doc.Instructions,
                                               Triggers = doc.Triggers,
                                               ValidationExpression = doc.ValidationExpression,
+                                              AnswerOrder = doc.AnswerOrder,
                                               Valid = true
                                           };
-
-            foreach (IAnswer answer in doc.Answers)
+            var ansersToCopy = new OrderStrategyFactory().Get(result.AnswerOrder).Reorder(doc.Answers);
+            foreach (IAnswer answer in ansersToCopy)
             {
                 var newanswer = new CompleteAnswerFactory().ConvertToCompleteAnswer(answer);
                 result.Answers.Add(newanswer);
@@ -101,13 +104,18 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public List<Image> Cards { get; set; }
 
+        public Order AnswerOrder { get; set; }
+
         public bool Enabled { get; set; }
 
         public bool Valid { get; set; }
 
+        public DateTime? AnswerDate { get; set; }
+
         public void Add(IComposite c, Guid? parent)
         {
             new CompleteQuestionFactory().Create(this).Add(c, parent);
+            this.AnswerDate = DateTime.Now;
             OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), c));
         }
 

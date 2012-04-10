@@ -50,6 +50,11 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             get;
             private set;
         }
+        public Order AnswerOrder
+        {
+            get;
+            private set;
+        }
         public Answer[] Answers { get; set; }
 
         public UserLight Executor { get; set; }
@@ -58,6 +63,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             Guid? groupPublicKey, string condition, string validation, string instructions, AnswerView[] answers, UserLight executor)
         {
             QuestionText = text;
+this.AnswerOrder = answerOrder;
             StataExportCaption = stataExportCaption;
             QuestionType = type;
             QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);

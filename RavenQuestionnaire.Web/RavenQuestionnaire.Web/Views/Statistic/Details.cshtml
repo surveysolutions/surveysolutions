@@ -1,0 +1,68 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+@using RavenQuestionnaire.Core.Views.Statistics
+@using RavenQuestionnaire.Web.Models
+@model RavenQuestionnaire.Core.Views.Statistics.CompleteQuestionnaireStatisticView
+@{
+    Layout = "~/Views/Shared/_LayputHtml5.cshtml";
+            //  IDictionary<string, object> validateButtonAttr = new Dictionary<string, object>() { { "data-role", "button" }/*, { "data-inline", "true" } */};
+    
+}
+<div class="content-primary">
+    <div data-role="collapsible" data-theme="a" data-content-theme="a">
+        <h3>@Model.Title</h3>
+        <p>
+            Started: @Model.StartDate.ToShortTimeString()
+            @if (Model.EndDate.HasValue)
+            {
+                <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
+            }
+        </p>
+        <div data-role="collapsible" data-theme="b" data-content-theme="b">
+            <h3>
+                Answered questions</h3>
+            @foreach (QuestionStatisticView question in Model.AnsweredQuestions)
+            {
+                
+                <p>@question.QuestionText - @question.AnswerValue
+                    @if (question.ApproximateTime.HasValue)
+                    {<b> , Timing : @question.ApproximateTime.Value.Minutes
+                        minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                    }
+                </p>
+            }
+        </div>
+        <div data-role="collapsible" data-theme="e" data-content-theme="e">
+            <h3>
+                Invalid questions</h3>
+            @foreach (QuestionStatisticView question in Model.InvalidQuestions)
+            {
+                
+                <p>@question.QuestionText - @question.AnswerValue
+                </p>
+                   
+            }
+        </div>
+    </div>
+</div>
+@*<div class="content-secondary">
+    <div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="d">
+        <h3>
+            More in this section</h3>
+        <ul data-role="listview" data-theme="c" data-dividertheme="d">
+            @foreach (var gh in Model.Groups)
+            {
+                if (!gh.IsCurrent)
+                {
+                <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })">@gh.GroupText</a></li>
+                }
+                else
+                {
+                <li data-theme="a"><a>@gh.GroupText</a></li>
+                }
+
+            }
+        </ul>
+    </div>
+</div>
+*@
