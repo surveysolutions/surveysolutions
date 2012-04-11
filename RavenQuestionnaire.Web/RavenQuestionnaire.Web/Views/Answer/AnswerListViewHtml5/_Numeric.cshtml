@@ -16,5 +16,5 @@
     @Html.Hidden("Selected", true)
     @Html.Hidden("QuestionId", Model.PublicKey)
     @Html.Label("AnswerValue", Model.QuestionText)
-    @Html.Html5Number(int.MinValue, int.MaxValue, 1, Model.Answers.Length > 0 && !string.IsNullOrEmpty(Model.Answers[0].AnswerValue) ? Convert.ToInt32(Model.Answers[0].AnswerValue) : 0, viewBag)
+    @Html.Html5Range(int.MinValue, int.MaxValue, 1, Model.Answers.Length > 0 && !string.IsNullOrEmpty(Model.Answers[0].AnswerValue) ? Convert.ToInt32(Model.Answers[0].AnswerValue) : 0, viewBag)
 }

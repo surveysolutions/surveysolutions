@@ -169,6 +169,7 @@
     <Compile Include="Entities\LocationEntityTest.cs" />
     <Compile Include="Entities\QuestionnaireEntityTest.cs" />
     <Compile Include="Entities\QuestionTest.cs" />
+    <Compile Include="Entities\Statistics\CompleteQuestionnaireStatisticsTest.cs" />
     <Compile Include="Entities\UserEntityTest.cs" />
     <Compile Include="ExpressionEvaluatorTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Repositories\EntityRepositoryTests.cs" />
     <Compile Include="Utils\CompleteQuestionnaireFactory.cs" />
     <Compile Include="Utils\RavenMockUtils.cs" />
+    <Compile Include="Utils\ReflectionUtils.cs" />
     <Compile Include="ViewRepositoryTests.cs" />
     <Compile Include="Views\User\UserViewFactoryTest.cs" />
   </ItemGroup>
