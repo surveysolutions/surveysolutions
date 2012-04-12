@@ -66,6 +66,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.AnswerOrder = doc.AnswerOrder;
         }
     }
+
     public abstract class AbstractQuestionView<T> : AbstractQuestionView where T : AnswerView
     {
         public CardView[] Cards { get; set; }

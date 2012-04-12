@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -48,8 +49,7 @@ namespace RavenQuestionnaire.Core.Views.Answer
 
             try
             {
-
-                return DateTime.Parse(value.ToString()).ToShortDateString();
+                return DateTime.Parse(value.ToString()).ToString(@"MM/dd/yyyy", DateTimeFormatInfo.InvariantInfo);
             }
             catch (FormatException)
             {

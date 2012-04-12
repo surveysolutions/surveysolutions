@@ -1,68 +1,56 @@
 <Configuration>
   <RecentFiles>
     <RecentFiles>
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:CompleteQuestionnaireDocument.cs" caret="1997" fromTop="29" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:CompleteQuestionnaire.cs" caret="945" fromTop="15" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Services/f:CompleteQuestionnaireUploaderService.cs" caret="1556" fromTop="26" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Services/f:ICompleteQuestionnaireUploaderService.cs" caret="552" fromTop="13" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/d:Questionnaire/d:Completed/f:CreateNewCompleteQuestionnaireHandler.cs" caret="1220" fromTop="24" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Answer/f:AnswerView.cs" caret="966" fromTop="29" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:CompleteQuestionnaire/d:Vertical/f:CompleteQuestionnaireViewEnumerable.cs" caret="2154" fromTop="26" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Answer/f:CompleteAnswerView.cs" caret="570" fromTop="19" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListView/f:_SingleOption.cshtml" caret="1075" fromTop="20" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerView/f:_Image.cshtml" caret="407" fromTop="14" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Resource/f:Index.cshtml" caret="1801" fromTop="33" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Card/f:CardView.cs" caret="353" fromTop="14" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/f:_AnswerRow.cshtml" caret="471" fromTop="13" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/f:_Index.cshtml" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Question/f:_QuestionRow.cshtml" caret="2891" fromTop="36" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Question/f:_Index.cshtml" caret="175" fromTop="5" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/d:Questionnaire/d:Question/f:UpdateQuestionHandler.cs" caret="0" fromTop="0" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/f:Answer.cs" caret="0" fromTop="0" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/d:Questionnaire/d:Question/f:UpdateQuestionCommand.cs" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:QuestionnaireController.cs" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:QuestionController.cs" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Questionnaire/f:Details.cshtml" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Question/f:_Create.cshtml" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/f:_EditRow.cshtml" caret="0" fromTop="0" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:File/f:FileBrowseView.cs" caret="0" fromTop="0" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/d:Questionnaire/d:Question/f:AddNewQuestionCommand.cs" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:ResourceController.cs" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:CompleteQuestionnaireController.cs" caret="0" fromTop="0" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Group/f:_ScreenC.cshtml" caret="0" fromTop="0" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/d:Complete/f:CompleteAnswer.cs" caret="1555" fromTop="28" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/f:Web.config" caret="1693" fromTop="14" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/f:Web.config" caret="1014" fromTop="17" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/f:CoreRegistry.cs" caret="1265" fromTop="24" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/f:Questionnaire.cs" caret="4642" fromTop="5" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Question/f:_Create.cshtml" caret="2176" fromTop="44" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Group/f:_ScreenHtml5.cshtml" caret="735" fromTop="14" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:CompleteQuestionnaire/f:QuestionHtml5.cshtml" caret="394" fromTop="7" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:CompleteQuestionnaireController.cs" caret="8079" fromTop="24" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Documents/f:QuestionnaireDocument.cs" caret="6487" fromTop="26" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Question/f:QuestionViewFactory.cs" caret="620" fromTop="18" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Question/f:QuestionView.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Question/f:CompleteQuestionView.cs" caret="0" fromTop="0" />
+      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Question/f:QuestionViewInputModel.cs" caret="173" fromTop="7" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Controllers/f:QuestionController.cs" caret="7210" fromTop="35" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/f:_EditRow.cshtml" caret="315" fromTop="8" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_GpsCoordinates.cshtml" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_Text.cshtml" caret="642" fromTop="13" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_DropDownList.cshtml" caret="906" fromTop="19" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_Numeric.cshtml" caret="943" fromTop="18" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:answerViewHtml5/f:_Text.cshtml" caret="453" fromTop="10" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Scripts/f:take.js" caret="574" fromTop="22" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Scripts/d:Html5/f:jquery.mobile.datebox.min.js" caret="70386" fromTop="7" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/d:themes/d:jquerymobile/f:jquery.mobile.datebox.min.css" caret="5240" fromTop="7" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_LayputHtml5.cshtml" caret="2226" fromTop="28" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_SingleOption.cshtml" caret="1123" fromTop="19" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_DateTime.cshtml" caret="1153" fromTop="22" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Scripts/d:Html5/f:take.js" caret="674" fromTop="24" />
     </RecentFiles>
     <RecentEdits>
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Commands/d:Questionnaire/d:Question/f:UpdateQuestionCommand.cs" caret="2602" fromTop="42" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/d:Questionnaire/d:Question/f:UpdateQuestionHandler.cs" caret="1034" fromTop="18" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/d:Questionnaire/d:Question/f:UpdateQuestionHandler.cs" caret="1629" fromTop="31" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:CommandHandlers/d:Questionnaire/d:Question/f:UpdateQuestionHandler.cs" caret="2604" fromTop="41" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/d:Complete/f:CompleteAnswer.cs" caret="377" fromTop="13" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/d:Complete/f:CompleteAnswer.cs" caret="1901" fromTop="22" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/d:Complete/f:CompleteAnswer.cs" caret="2044" fromTop="27" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/d:Complete/f:CompleteAnswer.cs" caret="2399" fromTop="30" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/f:_AnswerRow.cshtml" caret="760" fromTop="20" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/f:_AnswerRow.cshtml" caret="760" fromTop="17" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Answer/f:AnswerView.cs" caret="570" fromTop="10" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Answer/f:AnswerView.cs" caret="1673" fromTop="22" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Views/d:Answer/f:AnswerView.cs" caret="1260" fromTop="22" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/f:_AnswerRow.cshtml" caret="471" fromTop="13" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Resource/f:Index.cshtml" caret="342" fromTop="12" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Resource/f:Index.cshtml" caret="753" fromTop="14" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Resource/f:Index.cshtml" caret="1178" fromTop="22" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Resource/f:Index.cshtml" caret="840" fromTop="15" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerView/f:_Image.cshtml" caret="365" fromTop="10" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerView/f:_Image.cshtml" caret="123" fromTop="5" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListView/f:_SingleOption.cshtml" caret="1494" fromTop="20" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListView/f:_SingleOption.cshtml" caret="1857" fromTop="30" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListView/f:_SingleOption.cshtml" caret="1501" fromTop="26" />
-      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListView/f:_SingleOption.cshtml" caret="1075" fromTop="20" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/d:Complete/f:CompleteAnswer.cs" caret="912" fromTop="27" />
-      <File id="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8/d:CommandHandlers/f:UpdateQuestionHandlerTest.cs" caret="1527" fromTop="27" />
-      <File id="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8/d:CommandHandlers/f:UpdateQuestionHandlerTest.cs" caret="2008" fromTop="33" />
-      <File id="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8/d:CommandHandlers/f:UpdateQuestionHandlerTest.cs" caret="995" fromTop="21" />
-      <File id="AAB42C5C-6CAD-4ACF-A311-D9172C8BADA8/d:CommandHandlers/f:UpdateQuestionHandlerTest.cs" caret="827" fromTop="18" />
-      <File id="7E143353-A648-4435-819F-93A748A90704/d:Entities/d:SubEntities/d:Complete/f:CompleteAnswer.cs" caret="1730" fromTop="32" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/f:Web.config" caret="1014" fromTop="17" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_DropDownList.cshtml" caret="750" fromTop="5" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_DropDownList.cshtml" caret="608" fromTop="13" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_DropDownList.cshtml" caret="903" fromTop="18" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:answerViewHtml5/f:_Text.cshtml" caret="453" fromTop="15" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_DateTime.cshtml" caret="464" fromTop="10" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:answerViewHtml5/f:_Text.cshtml" caret="453" fromTop="16" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:answerViewHtml5/f:_Text.cshtml" caret="453" fromTop="10" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:answerViewHtml5/f:_Text.cshtml" caret="453" fromTop="10" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Scripts/d:Html5/f:take.js" caret="199" fromTop="10" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_SingleOption.cshtml" caret="486" fromTop="9" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_SingleOption.cshtml" caret="1123" fromTop="19" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Scripts/d:Html5/f:take.js" caret="782" fromTop="30" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Scripts/d:Html5/f:take.js" caret="702" fromTop="25" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Scripts/d:Html5/f:jquery.mobile.datebox.min.js" caret="70386" fromTop="7" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_LayputHtml5.cshtml" caret="1326" fromTop="15" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/d:themes/d:jquerymobile/f:jquery.mobile.datebox.min.css" caret="0" fromTop="0" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Content/d:themes/d:jquerymobile/f:jquery.mobile.datebox.min.css" caret="5240" fromTop="7" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Shared/f:_LayputHtml5.cshtml" caret="375" fromTop="7" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_DateTime.cshtml" caret="885" fromTop="18" />
+      <File id="045B96C8-3A7C-4662-9C48-62543D7C1E74/d:Views/d:Answer/d:AnswerListViewHtml5/f:_DateTime.cshtml" caret="1153" fromTop="22" />
     </RecentEdits>
   </RecentFiles>
   <NAntValidationSettings>
@@ -87,14 +75,14 @@
   <CompletionStatisticsManager>
     <ItemStatistics item="CSharpCodeCompletionContext">
       <Item value="Guid`0" priority="635" />
-      <Item value="public" priority="1881" />
+      <Item value="public" priority="1945" />
       <Item value="DateTime`0" priority="191" />
       <Item value="AbstractComand`0" priority="95" />
       <Item value="string" priority="2147" />
       <Item value="EventDocument`0" priority="31" />
       <Item value="CreationDate" priority="63" />
       <Item value="PublicKey" priority="160" />
-      <Item value="new" priority="2562" />
+      <Item value="new" priority="2626" />
       <Item value="interface" priority="30" />
       <Item value="ISyncAdvancedSessionOperation`0" priority="63" />
       <Item value="as" priority="639" />
@@ -104,7 +92,7 @@
       <Item value="T`0" priority="31" />
       <Item value="ICommandHandler" priority="90" />
       <Item value="Mock`0" priority="31" />
-      <Item value="ICommand`0" priority="158" />
+      <Item value="ICommand`0" priority="190" />
       <Item value="Mock&lt;ICommand&gt;" priority="28" />
       <Item value="private" priority="223" />
       <Item value="IEntity" priority="31" />
@@ -118,7 +106,7 @@
       <Item value="int" priority="605" />
       <Item value="Status" priority="64" />
       <Item value="ResponsibleId" priority="32" />
-      <Item value="this" priority="800" />
+      <Item value="this" priority="832" />
       <Item value="Dictionary" priority="125" />
       <Item value="RoleStatusList" priority="31" />
       <Item value="CreateNewStatusDependencyHandler`0" priority="26" />
@@ -133,7 +121,7 @@
       <Item value="id" priority="63" />
       <Item value="title" priority="63" />
       <Item value="RoleManagerEventArgs`0" priority="31" />
-      <Item value="var" priority="2117" />
+      <Item value="var" priority="2213" />
       <Item value="Roles`0" priority="31" />
       <Item value="in" priority="159" />
       <Item value="questionnaireId" priority="63" />
@@ -152,7 +140,7 @@
       <Item value="true" priority="160" />
       <Item value="AddRolesListToViewBag`0" priority="31" />
       <Item value="UserRoles`0" priority="31" />
-      <Item value="Model" priority="1012" />
+      <Item value="Model" priority="1101" />
       <Item value="false" priority="192" />
       <Item value="IEnumerable" priority="63" />
       <Item value="foreach" priority="888" />
@@ -289,7 +277,7 @@
       <Item value="inputs" priority="159" />
       <Item value="continue" priority="31" />
       <Item value="conditions" priority="218" />
-      <Item value="viewRepository" priority="31" />
+      <Item value="viewRepository" priority="63" />
       <Item value="kvp" priority="222" />
       <Item value="i" priority="221" />
       <Item value="cl" priority="31" />
@@ -341,7 +329,7 @@
       <Item value="PropogationPublicKey" priority="31" />
       <Item value="propagated" priority="26" />
       <Item value="List&lt;Guid&gt;" priority="29" />
-      <Item value="index" priority="95" />
+      <Item value="index" priority="127" />
       <Item value="Partial`0" priority="3" />
       <Item value="RenderPropagatebleGroup`0" priority="29" />
       <Item value="RenderDeleteButton`0" priority="29" />
@@ -420,6 +408,8 @@
       <Item value="ThumbnailHeight" priority="32" />
       <Item value="ThumbnailWidth" priority="32" />
       <Item value="CardView" priority="28" />
+      <Item value="pg" priority="31" />
+      <Item value="popupName" priority="61" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:@System.Guid">
       <Item value="NewGuid`0" priority="82" />
@@ -492,7 +482,7 @@
       <Item value="text/javascript" priority="29" />
       <Item value="small" priority="5" />
       <Item value="danger" priority="5" />
-      <Item value="div" priority="152" />
+      <Item value="div" priority="159" />
       <Item value="inline-inputs" priority="5" />
       <Item value="help-block" priority="5" />
       <Item value="h2" priority="17" />
@@ -503,7 +493,7 @@
       <Item value="Web.Mvc" priority="4" />
       <Item value="JQuery" priority="4" />
       <Item value="JqGrid" priority="4" />
-      <Item value="script" priority="18" />
+      <Item value="script" priority="25" />
       <Item value="id" priority="54" />
       <Item value="p" priority="36" />
       <Item value="ul" priority="11" />
@@ -548,6 +538,7 @@
       <Item value="h3" priority="11" />
       <Item value="thumbnails" priority="5" />
       <Item value="row-fluid" priority="5" />
+      <Item value="display" priority="6" />
     </ItemStatistics>
     <ItemStatistics item="CssCodeCompletionContext">
       <Item value="float" priority="11" />
@@ -571,7 +562,7 @@
       <Item value="padding" priority="11" />
       <Item value="z-index" priority="11" />
       <Item value="margin" priority="23" />
-      <Item value="display" priority="31" />
+      <Item value="display" priority="32" />
       <Item value="leftPx" priority="1" />
       <Item value="saveFlow" priority="4" />
       <Item value="wi" priority="4" />
@@ -626,7 +617,7 @@
       <Item value="Html" priority="83" />
       <Item value="using" priority="33" />
       <Item value="Url" priority="40" />
-      <Item value="Model" priority="45" />
+      <Item value="Model" priority="53" />
       <Item value="answer" priority="21" />
       <Item value="question" priority="15" />
       <Item value="foreach" priority="33" />
@@ -645,6 +636,7 @@
       <Item value="ViewBag" priority="12" />
       <Item value="model" priority="23" />
       <Item value="i" priority="15" />
+      <Item value="popupName" priority="9" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Web.Mvc.HtmlHelper`1">
       <Item value="CheckBoxFor`1" priority="54" />
@@ -698,7 +690,7 @@
     <ItemStatistics item="Qualified:System.Collections.Generic.List`1">
       <Item value="Contains`0" priority="77" />
       <Item value="Add`0" priority="427" />
-      <Item value="Count" priority="348" />
+      <Item value="Count" priority="375" />
       <Item value="Skip`1" priority="54" />
       <Item value="SingleOrDefault`1" priority="27" />
       <Item value="Any`1" priority="50" />
@@ -1030,7 +1022,7 @@
       <Item value="GroupText" priority="26" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical.CompleteGroupViewV">
-      <Item value="Groups" priority="80" />
+      <Item value="Groups" priority="130" />
       <Item value="PublicKey" priority="53" />
       <Item value="Propagated" priority="26" />
       <Item value="PropagatedQuestions" priority="26" />
@@ -1039,6 +1031,7 @@
       <Item value="GetClientId`0" priority="27" />
       <Item value="GroupText" priority="26" />
       <Item value="PropagatedGroupsCount" priority="26" />
+      <Item value="PropagatedGroups" priority="26" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup">
       <Item value="PublicKey" priority="26" />
@@ -1082,7 +1075,7 @@
       <Item value="Id" priority="26" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.Question.CompleteQuestionView">
-      <Item value="QuestionText" priority="26" />
+      <Item value="QuestionText" priority="80" />
       <Item value="Answers" priority="153" />
       <Item value="Index" priority="26" />
       <Item value="PublicKey" priority="22" />
@@ -1199,6 +1192,18 @@
     <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteAnswer">
       <Item value="AnswerImage" priority="26" />
       <Item value="Image" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Web.Utils.LoadImagesAttribute">
+      <Item value="viewRepository" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical.PropagatedGroup">
+      <Item value="Questions" priority="26" />
+      <Item value="AutoPropagate" priority="26" />
+      <Item value="PropogationKey" priority="53" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Web.Mvc.AjaxHelper`1">
+      <Item value="ActionLinkHtml5`0" priority="22" />
+      <Item value="BeginFormHtml5`0" priority="22" />
     </ItemStatistics>
   </CompletionStatisticsManager>
   <UnitTestSessions>

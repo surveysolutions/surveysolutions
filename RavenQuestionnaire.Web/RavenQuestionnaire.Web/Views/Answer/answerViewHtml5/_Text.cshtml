@@ -1,13 +1,16 @@
 ﻿@using RavenQuestionnaire.Core.Views.Answer
 @model CompleteAnswerView
-@{var radibutonname = string.Format("radiobutton-{0}", Model.PublicKey);
-    var textArrtrs = new Dictionary<string, object>(){{"onchange",Model.Selected ? "$(this.form).submit();" : ""},
-    {"input-label", true}};
-     }
-
-<label for="@radibutonname">@Model.AnswerText
-<div data-role="fieldcontain">
-    @Html.Label("AnswerValue", " ")
-@Html.TextBox("AnswerValue", Model.AnswerValue, textArrtrs)
-</div>
+@{
+    var radibutonname = string.Format("radiobutton-{0}", Model.PublicKey);
+    var textArrtrs = new Dictionary<string, object>() { { "onchange", Model.Selected ? "$(this.form).submit();" : "" }, { "input-label", true }, { "style", "float: right; height: auto; margin: 0; position: static;" } };
+}   
+<label for="@radibutonname">
+    <div class="ui-grid-a">
+        <div class="ui-block-a">@Model.AnswerText</div>
+        <div class="ui-block-b">
+            <div>
+                @Html.TextBox("AnswerValue", Model.AnswerValue, textArrtrs)
+            </div>
+        </div>
+    </div>
 </label>
