@@ -24,3 +24,6 @@ RavenQuestionnaire.Web/RavenQuestionnaire.Web.sln.docstates.suo
 RavenQuestionnaire.Web/*.trx
 RavenQuestionnaire.Web/TestResults/*
 *.DotSettings.user
+RavenQuestionnaire.Web/Questionnaire.Core.Web.Tests/bin/*
+RavenQuestionnaire.Web/Questionnaire.Core.Web.Tests/obj/*
+RavenQuestionnaire.Web/RavenQuestionnaire.Web.1.2.dotCover

@@ -107,7 +107,7 @@
     <Compile Include="AbstractFactories\ICompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\Completed\ValidateGroupCommandHandler.cs" />
+    <Compile Include="CommandHandlers\Collection\CreateNewCollectionHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Question\AddNewQuestionHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UpdateConditionsHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UpdateImageCommandHandler.cs" />
@@ -139,8 +139,8 @@
     <Compile Include="CommandHandlers\User\UpdateUserHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UploadImageCommandHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
+    <Compile Include="Commands\Collection\CreateNewCollectionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\CreateNewFlowGraphCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\ValidateGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateConditionsCommand.cs" />
     <Compile Include="Commands\Status\AddNewStatusFlowItem.cs" />
     <Compile Include="Commands\Questionnaire\UpdateImageCommand.cs" />
@@ -172,6 +172,7 @@
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="Conventions\RegisterGenericTypesOfInterface.cs" />
     <Compile Include="CoreRegistry.cs" />
+    <Compile Include="Documents\CollectionDocument.cs" />
     <Compile Include="Documents\CompleteQuestionnaireDocument.cs" />
     <Compile Include="Documents\EventDocument.cs" />
     <Compile Include="Documents\ExportSchemaDocument.cs" />
@@ -181,15 +182,16 @@
     <Compile Include="Documents\ReportDocument.cs" />
     <Compile Include="Documents\StatusDocument.cs" />
     <Compile Include="Documents\UserDocument.cs" />
+    <Compile Include="Entities\Collection.cs" />
     <Compile Include="Entities\CompleteQuestionnaire.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\Event.cs" />
-    <Compile Include="Entities\Extensions\ICompleteQuestionExtensions.cs" />
     <Compile Include="Entities\FlowGraph.cs" />
     <Compile Include="Entities\Extensions\CompositeObservebleExtensions.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\IEntity.cs" />
+    <Compile Include="Entities\SubEntities\CollectionItem.cs" />
     <Compile Include="Entities\SubEntities\Image.cs" />
     <Compile Include="Entities\Iterators\Iterator.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
@@ -235,7 +237,6 @@
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
-    <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireExpressionValidator.cs" />
     <Compile Include="Export\csv\CSVExporter.cs" />
@@ -247,8 +248,9 @@
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
     <Compile Include="Indexes\UsersInLocationIndex.cs" />
+    <Compile Include="Repositories\CollectionRepository.cs" />
+    <Compile Include="Repositories\ICollectionRepository.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
-    <Compile Include="Services\IValildationService.cs" />
     <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="IViewFactory.cs" />
     <Compile Include="IViewRepsoitory.cs" />
@@ -273,7 +275,6 @@
     <Compile Include="Services\CompleteQuestionnaireUploaderService.cs" />
     <Compile Include="Services\ICompleteQuestionnaireUploaderService.cs" />
     <Compile Include="Services\IQuestionnaireService.cs" />
-    <Compile Include="Services\ValildationService.cs" />
     <Compile Include="Utility\StringUtil.cs" />
     <Compile Include="Utility\IdUtil.cs" />
     <Compile Include="Utility\LINQExtensions.cs" />
@@ -284,6 +285,14 @@
     <Compile Include="Views\Card\CardView.cs" />
     <Compile Include="Views\Card\CardViewFactory.cs" />
     <Compile Include="Views\Card\CardViewInputModel.cs" />
+    <Compile Include="Views\CollectionItem\CollectionItemBrowseInputModel.cs" />
+    <Compile Include="Views\CollectionItem\CollectionItemBrowseItem.cs" />
+    <Compile Include="Views\CollectionItem\CollectionItemBrowseView.cs" />
+    <Compile Include="Views\CollectionItem\CollectionItemBrowseViewFactory.cs" />
+    <Compile Include="Views\Collection\CollectionBrowseInputModel.cs" />
+    <Compile Include="Views\Collection\CollectionBrowseItem.cs" />
+    <Compile Include="Views\Collection\CollectionBrowseView.cs" />
+    <Compile Include="Views\Collection\CollectionBrowseViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseView.cs" />

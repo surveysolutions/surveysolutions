@@ -43,5 +43,11 @@
         {
             return string.Format("reportdocuments/{0}", id);
         }
+
+        public static string CreateCollectionId(string id)
+        {
+            return string.Format("collectiondocument/{0}", id);
+        }
+
     }
 }

@@ -48,6 +48,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public string AnswerText { get; set; }
         public bool Mandatory { get; set; }
         public AnswerType AnswerType { get; set; }
+        public string NameCollection { get; set; }
+        
+
         public object AnswerValue { get; set; }
         [XmlIgnore]
         public Guid QuestionPublicKey { get; set; }
