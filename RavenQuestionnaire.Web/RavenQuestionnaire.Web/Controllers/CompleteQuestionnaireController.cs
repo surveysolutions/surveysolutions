@@ -148,7 +148,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             /* if (!ModelState.IsValid)
                 return false;*/
-          //  commandInvoker.Execute(new ValidateGroupCommand(id, group, propagationKey, _globalProvider.GetCurrentUser()));
+            commandInvoker.Execute(new ValidateGroupCommand(id, group, propagationKey, _globalProvider.GetCurrentUser()));
             // return true;
 
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
