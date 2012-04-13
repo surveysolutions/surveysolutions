@@ -35,7 +35,9 @@ namespace RavenQuestionnaire.Core.Views.Question
             if (questionWithAnswer != null)
                 this.Answers = questionWithAnswer.Answers.Select(a => new CompleteAnswerView(a)).ToArray();
             if (doc.Cards != null)
-                this.Cards = doc.Cards.Select(card => new CardView(doc.PublicKey, card)).ToArray();
+            {
+                this.Cards = doc.Cards.Select(card => new CardView(doc.PublicKey, card)).OrderBy(a => Guid.NewGuid()).ToArray();
+            }
         }
     }
 }

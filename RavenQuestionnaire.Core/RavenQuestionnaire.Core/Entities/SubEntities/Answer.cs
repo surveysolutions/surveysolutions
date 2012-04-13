@@ -10,9 +10,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     {
         object AnswerValue { get; set; }
         string AnswerText { get; set; }
+        string AnswerImage { get; set; }
         bool Mandatory { get; set; }
         AnswerType AnswerType { get; set; }
         string NameCollection { get; set; }
+        Image Image { get; set; }
+
     }
 
     public class Answer :IAnswer
@@ -26,6 +29,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public Guid PublicKey { get; set; }
         public string AnswerText { get; set; }
+        public string AnswerImage { get; set; }
+        public Image Image { get; set; }
         public bool Mandatory { get; set; }
         public object AnswerValue { get; set; }
         public AnswerType AnswerType { get; set; }

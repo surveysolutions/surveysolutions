@@ -31,7 +31,6 @@ namespace RavenQuestionnaire.Core.Documents
             LastEntryDate = DateTime.Now;
             Questions = new List<IQuestion>();
             Groups = new List<IGroup>();
-            FlowGraph = null;
             this.observers=new List<IObserver<CompositeEventArgs>>();
         }
 
@@ -55,11 +54,6 @@ namespace RavenQuestionnaire.Core.Documents
 
         private List<Guid> triggers = new List<Guid>();
 
-        public Guid? ForcingPropagationPublicKey
-        {
-            get { return null; }
-            set {  }
-        }
 
         public DateTime CreationDate
         { get; set; }
@@ -73,7 +67,6 @@ namespace RavenQuestionnaire.Core.Documents
 
         public List<IQuestion> Questions { get; set; }
         public List<IGroup> Groups { get; set; }
-        public FlowGraph FlowGraph { get; set; }
 
         #region Implementation of IComposite
         public void Add(IComposite c, Guid? parent)

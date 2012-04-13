@@ -5,10 +5,13 @@ using System.Text;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public enum AnswerType
+    public enum Order
     {
-        Select,
-        Text,
-        Image
+        AsIs,
+        Random,
+        AZ,
+        ZA,
+        MinMax,
+        MaxMin
     }
 }

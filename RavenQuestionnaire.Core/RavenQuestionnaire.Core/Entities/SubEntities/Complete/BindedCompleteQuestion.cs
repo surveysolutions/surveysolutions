@@ -88,6 +88,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public List<Image> Cards { get; set; }
 
+        public Order AnswerOrder { get; set; }
+
         #endregion
 
         #region Implementation of ICompleteQuestion
@@ -103,6 +105,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             get { return true; }
             set { }
         }
+
+        public DateTime? AnswerDate { get; set; }
 
         #endregion
 

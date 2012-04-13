@@ -23,6 +23,8 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public QuestionType QuestionType { get; set; }
 
+
+        public Order AnswerOrder { get; set; }
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
 
@@ -61,8 +63,10 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.ValidationExpression = doc.ValidationExpression;
             this.StataExportCaption = doc.StataExportCaption;
             this.Instructions = doc.Instructions;
+            this.AnswerOrder = doc.AnswerOrder;
         }
     }
+
     public abstract class AbstractQuestionView<T> : AbstractQuestionView where T : AnswerView
     {
         public CardView[] Cards { get; set; }
@@ -103,15 +107,10 @@ namespace RavenQuestionnaire.Core.Views.Question
         }
 
         public AbstractQuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
-            : this()
+            : base(questionnaire,doc)
         {
-            this.PublicKey = doc.PublicKey;
-            this.QuestionText = doc.QuestionText;
-            this.QuestionType = doc.QuestionType;
-            this.QuestionnaireId = questionnaire.Id;
-            this.ConditionExpression = doc.ConditionExpression;
-            this.StataExportCaption = doc.StataExportCaption;
-            this.Instructions = doc.Instructions;
+            Answers = new T[0];
+            Cards = new CardView[0];
         }
     }
 
@@ -201,7 +200,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             {
                 this.Answers = question.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
                 if (question.Cards!=null)
-                    this.Cards = question.Cards.Select(c => new CardView(doc.PublicKey, c)).ToArray();
+                    this.Cards = question.Cards.Select(c => new CardView(doc.PublicKey, c)).OrderBy(a => Guid.NewGuid()).ToArray();
             }
         }
     }
