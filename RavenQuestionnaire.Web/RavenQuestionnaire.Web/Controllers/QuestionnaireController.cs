@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,16 +14,19 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Export;
 using RavenQuestionnaire.Core.Export.csv;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
+using RavenQuestionnaire.Core.Views.File;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Web.Models;
+
+#endregion
 
 namespace RavenQuestionnaire.Web.Controllers
 {
     [Authorize]
     public class QuestionnaireController : Controller
     {
-        private ICommandInvoker commandInvoker;
-        private IViewRepository viewRepository;
+        private readonly ICommandInvoker commandInvoker;
+        private readonly IViewRepository viewRepository;
 
         public QuestionnaireController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
         {
@@ -33,11 +38,11 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult _TableData(GridDataRequest data)
         {
             var input = new QuestionnaireBrowseInputModel
-                                                     {
-                                                         Page = data.Pager.Page,
-                                                         PageSize = data.Pager.PageSize,
-                                                         Orders = data.SortOrder
-                                                     };
+                            {
+                                Page = data.Pager.Page,
+                                PageSize = data.Pager.PageSize,
+                                Orders = data.SortOrder
+                            };
             var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
             return PartialView("_Table", model);
         }
@@ -47,9 +52,12 @@ namespace RavenQuestionnaire.Web.Controllers
             var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
             return View(model);
         }
+
         public ActionResult Index()
         {
-            var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(new QuestionnaireBrowseInputModel());
+            var model =
+                viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(
+                    new QuestionnaireBrowseInputModel());
             return View(model);
         }
 
@@ -58,9 +66,10 @@ namespace RavenQuestionnaire.Web.Controllers
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid quesry string parameters");
             var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
+            
             return View(model);
         }
-       
+
         //
         // GET: /Questionnaire/Create
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor)]
@@ -74,7 +83,8 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters.");
-            var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
+            var model =
+                viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
             return View("Create", model);
         }
 
@@ -93,10 +103,10 @@ namespace RavenQuestionnaire.Web.Controllers
                 }
                 else
                 {
-                    commandInvoker.Execute(new UpdateQuestionnaireCommand(model.Id, model.Title, GlobalInfo.GetCurrentUser()));
+                    commandInvoker.Execute(new UpdateQuestionnaireCommand(model.Id, model.Title,
+                                                                          GlobalInfo.GetCurrentUser()));
                 }
                 return RedirectToAction("Index");
-
             }
             return View("Create", model);
         }
@@ -113,13 +123,13 @@ namespace RavenQuestionnaire.Web.Controllers
 
         #region export
 
-
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Export(string id)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid quesry string parameters");
-            var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
+            var model =
+                viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
             return View(model);
         }
 
@@ -138,37 +148,42 @@ namespace RavenQuestionnaire.Web.Controllers
                 if (type == "csv" || type == "tab")
                 {
                     IExportProvider provider = new CSVExporter(type == "csv" ? ',' : '\t');
-                    ExportManager manager = new ExportManager(provider);
+                    var manager = new ExportManager(provider);
 
-                    CompleteQuestionnaireExportView records =
+                    var records =
                         viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(
-                            new CompleteQuestionnaireExportInputModel() { PageSize = 100, QuestionnaryId = model.Id });
+                            new CompleteQuestionnaireExportInputModel {PageSize = 100, QuestionnaryId = model.Id});
 
 
-                    Dictionary<Guid, string> header = new Dictionary<Guid, string>();
+                    var header = new Dictionary<Guid, string>();
 
                     foreach (var q in model.Questions)
                     {
-                        header.Add(q.PublicKey, string.IsNullOrEmpty(q.StataExportCaption) ? q.QuestionText : q.StataExportCaption);
+                        header.Add(q.PublicKey,
+                                   string.IsNullOrEmpty(q.StataExportCaption) ? q.QuestionText : q.StataExportCaption);
                     }
 
                     foreach (var group in model.Groups)
                     {
                         foreach (var q in group.Questions)
                         {
-                            header.Add(q.PublicKey, string.IsNullOrEmpty(q.StataExportCaption) ? q.QuestionText : q.StataExportCaption);
+                            header.Add(q.PublicKey,
+                                       string.IsNullOrEmpty(q.StataExportCaption)
+                                           ? q.QuestionText
+                                           : q.StataExportCaption);
                         }
                     }
 
                     var stream = manager.ExportToStream(header, records);
 
-                    FileStreamResult fsr = new FileStreamResult(stream, "text/csv") { FileDownloadName = fileName };
+                    var fsr = new FileStreamResult(stream, "text/csv") {FileDownloadName = fileName};
 
                     return fsr;
                 }
             }
             return null;
         }
+
         #endregion
     }
 }

@@ -45,6 +45,12 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClientDependency.Core">
+      <HintPath>..\packages\ClientDependency.1.4.0.0\lib\ClientDependency.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ClientDependency.Core.Mvc">
+      <HintPath>..\packages\ClientDependency-Mvc.1.4.0.0\lib\ClientDependency.Core.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="CsvHelper">
       <HintPath>..\packages\CsvHelper.1.1.0\lib\CsvHelper.dll</HintPath>
     </Reference>
@@ -111,6 +117,7 @@
     </Compile>
     <Compile Include="Controllers\FlowGraphController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
+    <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\FlowGraph.cs" />
     <Compile Include="Models\GridDataRequest.cs" />
@@ -132,10 +139,12 @@
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuestionConditionModel.cs" />
     <Compile Include="Models\SwitcherModel.cs" />
+    <Compile Include="Utils\LoadImagesAttribute.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+  <Content Include="Content\Bootstrap\accordion.css">
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\AsyncCtpLibrary.dll" />
     <Content Include="bin\CsvHelper.dll" />
@@ -201,193 +210,210 @@
     <Content Include="bin\System.Reactive.xml" />
     <Content Include="bin\System.Web.Mvc.Html5.dll" />
     <Content Include="bin\WebActivator.dll" />
-    <Content Include="Content\bootstrap\accordion.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>accordion.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\alerts.css">
+    <Content Include="Content\Bootstrap\alerts.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>alerts.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\bootstrap.css">
+    <Content Include="Content\Bootstrap\bootstrap-image-gallery.min.css" />
+    <Content Include="Content\Bootstrap\bootstrap-image-gallery.min.js" />
+    <Content Include="Content\Bootstrap\bootstrap-responsive.min.css" />
+    <Content Include="Content\Bootstrap\bootstrap.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>bootstrap.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\breadcrumbs.css">
+    <Content Include="Content\Bootstrap\bootstrap.min.css" />
+    <Content Include="Content\Bootstrap\bootstrap.min.js" />
+    <Content Include="Content\Bootstrap\breadcrumbs.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>breadcrumbs.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\button-groups.css">
+    <Content Include="Content\Bootstrap\button-groups.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>button-groups.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\buttons.css">
+    <Content Include="Content\Bootstrap\buttons.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>buttons.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\carousel.css">
+    <Content Include="Content\Bootstrap\carousel.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>carousel.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\close.css">
+    <Content Include="Content\Bootstrap\close.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>close.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\code.css">
+    <Content Include="Content\Bootstrap\code.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>code.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\component-animations.css">
+    <Content Include="Content\Bootstrap\component-animations.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>component-animations.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\dropdowns.css">
+    <Content Include="Content\Bootstrap\dropdowns.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dropdowns.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\forms.css">
+    <Content Include="Content\Bootstrap\forms.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>forms.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\grid.css">
+    <Content Include="Content\Bootstrap\grid.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>grid.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\hero-unit.css">
+    <Content Include="Content\Bootstrap\hero-unit.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>hero-unit.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\labels.css">
+    <Content Include="Content\Bootstrap\labels.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>labels.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\layouts.css">
+    <Content Include="Content\Bootstrap\layouts.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>layouts.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\mixins.css">
+    <Content Include="Content\Bootstrap\mixins.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>mixins.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\modals.css">
+    <Content Include="Content\Bootstrap\modals.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>modals.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\navbar.css">
+    <Content Include="Content\Bootstrap\navbar.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>navbar.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\navs.css">
+    <Content Include="Content\Bootstrap\navs.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>navs.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\pager.css">
+    <Content Include="Content\Bootstrap\pager.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>pager.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\pagination.css">
+    <Content Include="Content\Bootstrap\pagination.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>pagination.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\popovers.css">
+    <Content Include="Content\Bootstrap\popovers.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>popovers.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\progress-bars.css">
+    <Content Include="Content\Bootstrap\progress-bars.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>progress-bars.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\reset.css">
+    <Content Include="Content\Bootstrap\reset.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>reset.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\responsive.css">
+    <Content Include="Content\Bootstrap\responsive.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>responsive.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\scaffolding.css">
+    <Content Include="Content\Bootstrap\scaffolding.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>scaffolding.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\sprites.css">
+    <Content Include="Content\Bootstrap\sprites.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>sprites.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\tables.css">
+    <Content Include="Content\Bootstrap\tables.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>tables.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\thumbnails.css">
+    <Content Include="Content\Bootstrap\thumbnails.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>thumbnails.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\tooltip.css">
+    <Content Include="Content\Bootstrap\tooltip.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>tooltip.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\type.css">
+    <Content Include="Content\Bootstrap\type.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>type.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\mis_utilities.css">
+    <Content Include="Content\Bootstrap\mis_utilities.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>mis_utilities.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\utilities.css">
+    <Content Include="Content\Bootstrap\utilities.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>utilities.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\variables.css">
+    <Content Include="Content\Bootstrap\variables.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>variables.less</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\wells.css">
+    <Content Include="Content\Bootstrap\wells.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>wells.less</DependentUpon>
     </Content>
     <Content Include="Content\favicon.png" />
+    <Content Include="Content\FileUpload\canvas-to-blob.min.js" />
+    <Content Include="Content\FileUpload\jquery.fileupload-ip.js" />
+    <Content Include="Content\FileUpload\jquery.fileupload-ui.css" />
+    <Content Include="Content\FileUpload\jquery.fileupload-ui.js" />
+    <Content Include="Content\FileUpload\jquery.fileupload.js" />
+    <Content Include="Content\FileUpload\jquery.iframe-transport.js" />
+    <Content Include="Content\FileUpload\load-image.min.js" />
+    <Content Include="Content\FileUpload\locale.js" />
+    <Content Include="Content\FileUpload\main.js" />
+    <Content Include="Content\FileUpload\tmpl.min.js" />
     <Content Include="Content\flow.css" />
     <Content Include="Content\galleriffic.css" />
     <Content Include="Content\icons.png" />
     <Content Include="Content\img\ajax-loader.gif" />
+    <Content Include="Content\img\generalFile.png" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\loading.gif" />
+    <Content Include="Content\img\progressbar.gif" />
     <Content Include="Content\jquery.jgrowl.css" />
     <Content Include="Content\main.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -417,16 +443,13 @@
     <Content Include="Content\themes\base\jquery.ui.slider.css" />
     <Content Include="Content\themes\base\jquery.ui.tabs.css" />
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
-    <Content Include="Content\themes\classic\classic-loader.gif" />
-    <Content Include="Content\themes\classic\classic-map.png" />
-    <Content Include="Content\themes\classic\galleria.classic.css" />
-    <Content Include="Content\themes\classic\galleria.classic.min.js" />
     <Content Include="Content\themes\jquerymobile\images\ajax-loader.png" />
     <Content Include="Content\themes\jquerymobile\images\icons-18-black.png" />
     <Content Include="Content\themes\jquerymobile\images\icons-18-white.png" />
     <Content Include="Content\themes\jquerymobile\images\icons-36-black.png" />
     <Content Include="Content\themes\jquerymobile\images\icons-36-white.png" />
     <Content Include="Content\themes\jquerymobile\jquery.mobile.css" />
+    <Content Include="Content\themes\jquerymobile\jquery.mobile.datebox.min.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap\bootstrap-alert.js" />
     <Content Include="Scripts\bootstrap\bootstrap-button.js" />
@@ -442,7 +465,6 @@
     <Content Include="Scripts\bootstrap\bootstrap-typeahead.js" />
     <Content Include="Scripts\bootstrap\bootstrap.min.js" />
     <Content Include="Scripts\flow.js" />
-    <Content Include="Scripts\galleria-1.2.6.min.js" />
     <Content Include="Scripts\gallery\jquery.galleriffic.js" />
     <Content Include="Scripts\gallery\jquery.opacityrollover.js" />
     <Content Include="Scripts\Html5\LocalStorage.js" />
@@ -457,6 +479,7 @@
     <Content Include="Scripts\jquery.jgrowl.min.js" />
     <Content Include="Scripts\jquery.jsPlumb-1.3.4-all-min.js" />
     <Content Include="Scripts\jquery.jsPlumb-1.3.4-all.js" />
+    <Content Include="Scripts\Html5\jquery.mobile.datebox.min.js" />
     <Content Include="Scripts\jquery.numeric.js" />
     <Content Include="Scripts\jquery.tmpl.min.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
@@ -465,7 +488,7 @@
     <Content Include="Scripts\modal.js" />
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
-    <Content Include="Scripts\screen\screeni.js" />
+    <Content Include="Scripts\screen\screeniv.js" />
     <Content Include="Scripts\sorter.js" />
     <Content Include="Scripts\take.js" />
     <Content Include="Views\CompleteQuestionnaire\Index.cshtml" />
@@ -480,7 +503,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Content\icons.css" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -587,147 +609,147 @@
     <Content Include="Views\Location\EditorTemplates\StatusView.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\bootstrap\accordion.less">
+    <None Include="Content\Bootstrap\accordion.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>accordion.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\alerts.less">
+    <None Include="Content\Bootstrap\alerts.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>alerts.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\bootstrap.less">
+    <None Include="Content\Bootstrap\bootstrap.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>bootstrap.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\breadcrumbs.less">
+    <None Include="Content\Bootstrap\breadcrumbs.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>breadcrumbs.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\button-groups.less">
+    <None Include="Content\Bootstrap\button-groups.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>button-groups.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\buttons.less">
+    <None Include="Content\Bootstrap\buttons.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>buttons.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\carousel.less">
+    <None Include="Content\Bootstrap\carousel.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>carousel.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\close.less">
+    <None Include="Content\Bootstrap\close.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>close.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\code.less">
+    <None Include="Content\Bootstrap\code.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>code.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\component-animations.less">
+    <None Include="Content\Bootstrap\component-animations.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>component-animations.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\mis_utilities.less">
+    <None Include="Content\Bootstrap\mis_utilities.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>mis_utilities.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\dropdowns.less">
+    <None Include="Content\Bootstrap\dropdowns.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>dropdowns.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\forms.less">
+    <None Include="Content\Bootstrap\forms.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>forms.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\grid.less">
+    <None Include="Content\Bootstrap\grid.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>grid.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\hero-unit.less">
+    <None Include="Content\Bootstrap\hero-unit.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>hero-unit.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\labels.less">
+    <None Include="Content\Bootstrap\labels.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>labels.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\layouts.less">
+    <None Include="Content\Bootstrap\layouts.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>layouts.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\mixins.less">
+    <None Include="Content\Bootstrap\mixins.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>mixins.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\modals.less">
+    <None Include="Content\Bootstrap\modals.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>modals.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\navbar.less">
+    <None Include="Content\Bootstrap\navbar.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>navbar.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\navs.less">
+    <None Include="Content\Bootstrap\navs.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>navs.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\pager.less">
+    <None Include="Content\Bootstrap\pager.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>pager.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\pagination.less">
+    <None Include="Content\Bootstrap\pagination.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>pagination.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\popovers.less">
+    <None Include="Content\Bootstrap\popovers.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>popovers.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\progress-bars.less">
+    <None Include="Content\Bootstrap\progress-bars.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>progress-bars.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\reset.less">
+    <None Include="Content\Bootstrap\reset.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>reset.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\responsive.less">
+    <None Include="Content\Bootstrap\responsive.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>responsive.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\scaffolding.less">
+    <None Include="Content\Bootstrap\scaffolding.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>scaffolding.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\sprites.less">
+    <None Include="Content\Bootstrap\sprites.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>sprites.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\tables.less">
+    <None Include="Content\Bootstrap\tables.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>tables.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\thumbnails.less">
+    <None Include="Content\Bootstrap\thumbnails.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>thumbnails.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\tooltip.less">
+    <None Include="Content\Bootstrap\tooltip.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>tooltip.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\type.less">
+    <None Include="Content\Bootstrap\type.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>type.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\utilities.less">
+    <None Include="Content\Bootstrap\utilities.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>utilities.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\variables.less">
+    <None Include="Content\Bootstrap\variables.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>variables.css</LastGenOutput>
     </None>
-    <None Include="Content\bootstrap\wells.less">
+    <None Include="Content\Bootstrap\wells.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>wells.css</LastGenOutput>
     </None>
@@ -782,6 +804,9 @@
     <Content Include="Views\Group\GroupTemplates\_PropagatebleGroup.cshtml" />
     <Content Include="Views\Group\GroupTemplates\_SimpleGroup.cshtml" />
     <Content Include="Views\Group\GroupTemplates\_CompleteGroup.cshtml" />
+    <Content Include="Views\Resource\Upload.cshtml" />
+    <Content Include="Views\Resource\Index.cshtml" />
+    <Content Include="Views\Answer\AnswerView\_Image.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\QuestionHtml5.cshtml" />
     <Content Include="Views\Group\_ScreenHtml5.cshtml" />
     <Content Include="Views\Shared\_LayputHtml5.cshtml" />
@@ -799,6 +824,12 @@
     <Content Include="Views\Answer\answerViewHtml5\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_ExtendedDropDownList.cshtml" />
     <Content Include="Views\Answer\_EditDataBaseSettings.cshtml" />
+     <Content Include="Views\Group\Mobile\_CompleteGroup.cshtml" />
+    <Content Include="Views\Group\Mobile\_SimpleGroup.cshtml" />
+    <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
+    <Content Include="Views\Statistic\Details.cshtml" />
+    <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
+    <Content Include="Views\Statistic\Details.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
@@ -815,7 +846,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>24525</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

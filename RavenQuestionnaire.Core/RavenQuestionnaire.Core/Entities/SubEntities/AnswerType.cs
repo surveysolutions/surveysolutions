@@ -8,6 +8,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     public enum AnswerType
     {
         Select,
-        Text
+        Text,
+        Image
     }
 }

@@ -1,5 +1,4 @@
-﻿
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+﻿@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
 @model CompleteQuestionnaireViewV
 @{
     ViewBag.AjaxOptions = new AjaxOptions
@@ -13,7 +12,6 @@
     ViewBag.CurrentGroupPublicKey = Model.CurrentGroup.PublicKey;
     ViewBag.QuestionnaireId = Model.Id;
 }
-
 <script src="../../Scripts/screen/screeniv.js" type="text/javascript"> </script>
 <div class="subnav">
     <div class="row-fluid">
@@ -27,4 +25,3 @@
 </div>
 @Html.Partial("~/Views/Group/GroupTemplates/_CompleteGroup.cshtml", Model.CurrentGroup)
 @Html.Partial("GroupNavigation", Model)
-

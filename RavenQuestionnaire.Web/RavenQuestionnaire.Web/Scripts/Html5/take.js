@@ -5,25 +5,25 @@ function ReInitMobile(id) {
     ReinitInputs();
 }
 
-
-/*$(document).bind("mobileinit", function () {
-  
-});
-*/
-
 $('div[data-role=page]').live('pageshow', function (event) {
     ReinitInputs();
 });
+
 function ReinitInputs() {
     $("input[input-label=True]").each(function () {
         var div = $(this).parent();
         //  div.parent().css('position','relative');
-        div.css('margin', '0');
+       /* div.css('margin', '0');
         div.css('position', 'absolute');
         div.css('z-index', '100');
         div.css('top', div.prev().offset().top + 3 + 'px');
         div.css('width', '25%');
-        div.css('right', div.width() / 2 + 'px');
-
+        div.css('right', div.width() / 2 + 'px');*/
     });
 }
+$(document).ready(function () {
+    jQuery.extend(jQuery.mobile.datebox.prototype.options, {
+        'dateFormat': 'MM/dd/YYYY',
+        'headerFormat': 'MM/dd/YYYY'
+    });  
+})

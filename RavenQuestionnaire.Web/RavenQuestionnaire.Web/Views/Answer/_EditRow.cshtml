@@ -1,10 +1,13 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.Answer
+@using RavenQuestionnaire.Core.Views.File
 @using RavenQuestionnaire.Web.Utils
 @model AnswerView
-           
-@{ var currentRowId = "divEditAnswer" + Model.PublicKey.ToString(); }
+@{ 
+    var currentRowId = "divEditAnswer" + Model.PublicKey.ToString();
+    var images = ViewBag.Images as SelectList;
+}
 @using (Html.BeginCollectionItem("answers"))
 {
     <div id="@currentRowId">
@@ -22,7 +25,12 @@
                     <i class="icon-remove icon-white"></i>Delete</a> <span class="help-inline">@Html.ValidationMessageFor(model => Model.AnswerText)</span>
             </div>
         </div>
+        <div class="control-group">
+            @Html.LabelFor(model => Model.AnswerImage, new { @class = "control-label" })
+            <div class="controls">
+               @Html.DropDownListFor(model => Model.AnswerImage, images)
+            </div>
+        </div>
         @Html.HiddenFor(model => Model.PublicKey)
     </div>
-    
 }

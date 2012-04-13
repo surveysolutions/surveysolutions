@@ -131,7 +131,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 ModelState.AddModelError("PropagationError", e.Message);
             }
 
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>( new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
 
             return PartialView("~/Views/Group/_ScreenV.cshtml", model);
         }
@@ -143,7 +143,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                     GlobalInfo.GetCurrentUser()));
 
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
-            
+
             return PartialView("~/Views/Group/_ScreenV.cshtml", model);
         }
 
@@ -201,6 +201,32 @@ namespace RavenQuestionnaire.Web.Controllers
             return PartialView("~/Views/Group/_ScreenI.cshtml", model);
         }
 
-    
+        public ActionResult PropagateGroupHtml5(Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
+        {
+            try
+            {
+                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser()));
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("PropagationError", e.Message);
+            }
+
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
+
+            return PartialView("~/Views/Group/_ScreenHtml5.cshtml", model);
+        }
+
+        public ActionResult DeletePropagatedGroupHtml5(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey,
+                                                  string questionnaireId)
+        {
+            commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
+                                                                    GlobalInfo.GetCurrentUser()));
+
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
+
+            return PartialView("~/Views/Group/_ScreenHtml5.cshtml", model);
+        }
+
     }
 }

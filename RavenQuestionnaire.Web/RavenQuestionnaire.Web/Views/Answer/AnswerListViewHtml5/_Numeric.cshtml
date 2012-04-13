@@ -11,20 +11,10 @@
     viewBag.Add("name", Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue"));
     var id = Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
     viewBag.Add("id", id);
-    string tbClientId = "#" + id;
 
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
     @Html.Hidden("QuestionId", Model.PublicKey)
-    <div class="answer">
-        @Html.Html5Number(int.MinValue, int.MaxValue, 1, 
-        Model.Answers.Length > 0 && !string.IsNullOrEmpty(Model.Answers[0].AnswerValue) ? Convert.ToInt32(Model.Answers[0].AnswerValue) : 0,
-        viewBag)
-    </div>
-
-    <script>
-        $(document).ready(function () {
-            $('@tbClientId').numeric();
-        });
-    </script>
+    @Html.Label("AnswerValue", Model.QuestionText)
+    @Html.Html5Range(int.MinValue, int.MaxValue, 1, Model.Answers.Length > 0 && !string.IsNullOrEmpty(Model.Answers[0].AnswerValue) ? Convert.ToInt32(Model.Answers[0].AnswerValue) : 0, viewBag)
 }

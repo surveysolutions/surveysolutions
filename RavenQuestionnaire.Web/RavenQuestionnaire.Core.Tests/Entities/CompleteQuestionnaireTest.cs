@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Moq;
 using NUnit.Framework;
@@ -227,6 +228,32 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             completeQuestionnaire.Add(((CompleteGroup)innerDocument.Groups[0]).Groups[0], null);
             Assert.AreEqual(completeQuestionnaire.Find<IComposite>(c => true).Count(), 15);
             Assert.AreEqual(completeQuestionnaire.Find<IPropogate>(c => true).Count(), 4);
+        }
+        [Test]
+        public void ExplicitConversion_ValidQuestionneir_AllFieldAreConverted()
+        {
+            List<IGroup> groups = new List<IGroup>() {new Group("test")};
+            List<IQuestion> questions = new List<IQuestion>() {new Question("question", QuestionType.Text)};
+
+            List<Guid> triggers = new List<Guid>() { Guid.NewGuid() };
+            QuestionnaireDocument doc = new QuestionnaireDocument()
+                                            {
+                                                Id = "test",
+                                                Propagated = Propagate.Propagated,
+                                                Title = "new title",
+                                                Groups = groups,
+                                                Questions = questions,
+                                                Triggers = triggers
+                                            };
+            CompleteQuestionnaireDocument target = (CompleteQuestionnaireDocument) doc;
+            var propertiesForCheck =
+                typeof (IQuestionnaireDocument).GetPublicPropertiesExcept("Id", "CreationDate", "LastEntryDate",
+                                                                          "OpenDate", "CloseDate");
+            foreach (PropertyInfo publicProperty in propertiesForCheck)
+            {
+
+                Assert.AreEqual(publicProperty.GetValue(doc, null), publicProperty.GetValue(target, null));
+            }
         }
 
         /*   [Test]

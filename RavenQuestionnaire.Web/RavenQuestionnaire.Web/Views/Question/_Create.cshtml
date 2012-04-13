@@ -2,7 +2,13 @@
 @using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Web.Utils
 @model QuestionView
-@{var hideFunctionName = Model.GroupPublicKey.HasValue ? "HideCreateQuestionForm" + Model.GroupPublicKey.ToString().Replace('-', '_') : "HideCreateQuestionForm";}
+@{var hideFunctionName = Model.GroupPublicKey.HasValue ? "HideCreateQuestionForm" + Model.GroupPublicKey.ToString().Replace('-', '_') : "HideCreateQuestionForm";
+  if (ViewBag.Images != null)
+  {
+      var images = ViewBag.Images as SelectList;
+      this.ViewBag.Images = images;
+  }
+}
 @using (Ajax.BeginForm("Save", "Question",
                                          new AjaxOptions
                                              {
@@ -13,8 +19,7 @@
     <div id="divCreateForm" class="modal open form-horizontal">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">&times;</a>
-            <h3>
-                Edit question form</h3>
+            <h3>Edit question form</h3>
         </div>
         <div class="modal-body">
             @using (Html.BeginCollectionItem("question", Model.PublicKey))
@@ -36,10 +41,16 @@
                 </div>
                  
                 <div class="control-group">
-                    <label class="control-label">
-                        Type</label>
+                    <label class="control-label">Type</label>
                     <div class="controls">
                         @Html.EnumDropDownListFor(model => Model.QuestionType)
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">
+                        Answer order</label>
+                    <div class="controls">
+                        @Html.EnumDropDownListFor(model => Model.AnswerOrder)
                     </div>
                 </div>
                 <div class="control-group">

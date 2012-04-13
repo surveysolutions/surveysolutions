@@ -14,14 +14,10 @@
     @Html.Hidden("QuestionId", Model.PublicKey)
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
-    <div class="answer">
-        @Html.TextBox("AnswerValue", value, settings)
-        <p class="help-block"> Latitude & Longitude separated by semicolon</p>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('.geomask').inputmask('99.9[99999];99.9[99999]', { });
-            });
-        </script>
 
-    </div>
+    <fieldset data-role="controlgroup">
+			    	<legend>@Model.QuestionText</legend>
+                    <p>Latitude & Longitude separated by semicolon</p>
+                     @Html.TextBox("AnswerValue", value, settings)
+   </fieldset>
 }

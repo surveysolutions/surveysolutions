@@ -2,8 +2,7 @@
 @model SwitcherModel
 <p>
     <div class="btn-group">
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Switch view <span
-            class="caret"></span></a>
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Switch view <span class="caret"></span></a>
         <ul class="dropdown-menu">
             <li><a href="@Url.Action("Question", "CompleteQuestionnaire", new { id = Model.Id, group = Model.PublicKey })">
                 Horizontal</a></li>
@@ -13,6 +12,8 @@
                 Modal</a></li>
             <li><a href="@Url.Action("QuestionI", "CompleteQuestionnaire", new { id = Model.Id, group = Model.PublicKey })">
                 Tabbable</a></li>
+            <li><a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.Id, group = Model.PublicKey })">
+                Modile</a></li>
         </ul>
     </div>
 </p>

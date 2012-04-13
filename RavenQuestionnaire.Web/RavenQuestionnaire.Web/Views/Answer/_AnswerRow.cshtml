@@ -1,4 +1,5 @@
 ﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.Answer
 @model AnswerView
 <div class="answer">
@@ -7,9 +8,17 @@
         @if (!string.IsNullOrEmpty(Model.AnswerValue))
         {
             @Model.AnswerValue;
-                              <b> = </b>
+            <b>= </b>
         }
-        
         @Html.DisplayFor(modelItem => Model.AnswerText)
+        @if (Model.AnswerType == AnswerType.Image && Model.Image!=null)
+        {
+            var i = Model.Image;
+            <div class="span2" id="image@(i.PublicKey)">
+                <div class="thumbnail">
+                    <img src="@Url.Action("Images", "Resource", new { id = i.Thumb })" alt="@i.Title" />
+                </div>
+            </div>
+        }
     </p>
 </div>

@@ -16,6 +16,7 @@ using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Card;
+using RavenQuestionnaire.Core.Views.File;
 using RavenQuestionnaire.Core.Views.Collection;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
@@ -136,12 +137,25 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Create(string id, Guid? groupPublicKey)
         {
+            LoadImages();
             return PartialView("_Create",
                                new QuestionView(id, groupPublicKey));
+        }
+        private void LoadImages()
+        {
+            var images = viewRepository.Load<FileBrowseInputModel, FileBrowseView>(new FileBrowseInputModel { PageSize = int.MaxValue });
+            var imagesList = new SelectList(images.Items.Select(i => new SelectListItem
+            {
+                Selected = false,
+                Text = i.Id,
+                Value = i.Id
+            }).ToList(), "Value", "Text");
+            ViewBag.Images = imagesList;
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Edit(Guid publicKey, string questionnaireId)
         {
+            LoadImages();
             if (publicKey == Guid.Empty)
                 throw new HttpException(404, "Invalid query string parameters");
             var model =
@@ -167,7 +181,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                         model.QuestionType,
                                                                                         model.QuestionnaireId, model.GroupPublicKey,
                                                                                         model.ConditionExpression,model.ValidationExpression,
-                                                                                        model.Instructions,
+                                                                                        model.Instructions,model.AnswerOrder,
                                                                                         answers, GlobalInfo.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
 
@@ -181,7 +195,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                          model.QuestionType,
                                                                          model.ConditionExpression, model.ValidationExpression,
                                                                          model.Instructions,
-                                                                         answers,
+                                                                         answers,model.AnswerOrder,
                                                                          GlobalInfo.GetCurrentUser()));
                     }
                 }

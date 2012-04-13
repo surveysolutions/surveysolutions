@@ -1,0 +1,32 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+@using RavenQuestionnaire.Web.Utils
+@model CompleteGroupViewV
+@if (Model.Propagated != Propagate.None)
+{
+    if (Model.PropagatedGroupsCount > 0)
+    {
+    @Html.Partial("~/Views/Group/Mobile/_PropagatebleGroup.cshtml", Model)
+    }
+    if (Model.Propagated != Propagate.AutoPropagated)
+    { 
+    @Html.ValidationMessage("PropagationError")
+    @RenderAddButton(Model.PublicKey)
+    }
+}
+else
+{
+    @Html.Partial("~/Views/Group/Mobile/_SimpleGroup.cshtml", Model)
+}
+@helper RenderAddButton(Guid currentGroupPublicKey)
+    {
+        var requestParams = new
+        {
+            publicKey = currentGroupPublicKey,
+            questionnaireId = ViewBag.QuestionnaireId,
+            parentGroupPublicKey = ViewBag.CurrentGroupPublicKey,
+            salt = (new Random()).NextDouble()
+        };
+    @Ajax.ActionLinkHtml5("Add", "PropagateGroupHtml5", "Group", requestParams, ViewBag.AjaxOptions as AjaxOptions, new { data_role = "button", data_icon = "plus", data_theme = "a" })
+}

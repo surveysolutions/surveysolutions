@@ -34,7 +34,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, null);
+            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, Order.AsIs, null);
             var questionView = new QuestionView(innerDocument, question);
 
 
@@ -55,7 +55,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, null);
+            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, Order.AsIs, null);
 
             var questionView = new QuestionView(innerDocument, question);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
@@ -77,7 +77,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, null);
+            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, Order.AsIs, null);
 
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
@@ -94,7 +94,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, null);
+            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, Order.AsIs, null);
             var questionView = new QuestionView(innerDocument, question);
 
             var input = new QuestionViewInputModel(question.PublicKey, entity.QuestionnaireId);

@@ -6,10 +6,17 @@
         {
             return string.Format("images/{0}", id);
         }
-
+        public static string CreateFileId(string id)
+        {
+            return string.Format("filedocuments/{0}", id);
+        }
         public static string CreateFlowGraphId(string id)
         {
             return string.Format("flowgraphdocuments/{0}", id);
+        }
+        public static string CreateStatisticId(string id)
+        {
+            return string.Format("completeqquestionnairestatisticdocument/{0}", id);
         }
         public static string CreateQuestionnaireId(string id)
         {

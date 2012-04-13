@@ -12,9 +12,10 @@
             var selectedClass = item.Selected ? "btn-primary" : "";
             
             <li class="btn @selectedClass ">
-                @if (item.AnswerType == AnswerType.Text)
+                @switch (item.AnswerType)
                 {
-                    <label class="radio">
+                    case AnswerType.Text:
+                   <label class="radio">
                         @Html.RadioButton("PublicKey", item.PublicKey, item.Selected,
                         (IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings)
                         @item.AnswerText
@@ -22,15 +23,19 @@
                     <div style = "padding-left: 30px;" >
                         @Html.TextBox("AnswerValue", item.AnswerValue, new { onchange =  "$(this.form).submit();", onfocus = "$(this).parent().parent().children('label').children('input').prop('checked', true).change();" })
                     </div>
-                }
-                else
-                {
+                    break;
+                    case AnswerType.Image:
                     <label class="radio">
                         @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
                         @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}
-                    </label>
+                    </label>break;
+                    default:
+                    <label class="radio">
+                        @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
+                        @{Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item);}
+                    </label>break;
                 }
-                 @Html.Hidden("Selected", true)
+                @Html.Hidden("Selected", true)
             </li>
            
         }

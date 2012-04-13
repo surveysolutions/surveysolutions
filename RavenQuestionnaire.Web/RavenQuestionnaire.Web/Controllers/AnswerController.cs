@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region
+
+using System;
 using System.Linq;
 using System.Web.Mvc;
 using RavenQuestionnaire.Core;
@@ -7,6 +8,9 @@ using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Collection;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.File;
+
+#endregion
 
 
 namespace RavenQuestionnaire.Web.Controllers
@@ -14,8 +18,8 @@ namespace RavenQuestionnaire.Web.Controllers
     [Authorize]
     public class AnswerController : Controller
     {
+        private readonly IViewRepository viewRepository;
         private ICommandInvoker commandInvoker;
-        private IViewRepository viewRepository;
 
         public AnswerController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
         {
@@ -26,7 +30,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Create(Guid questionPublicKey)
         {
-            return PartialView("_EditRow", new AnswerView(){ QuestionId = questionPublicKey, PublicKey = Guid.NewGuid()});
+            LoadImages();
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
@@ -36,6 +40,21 @@ namespace RavenQuestionnaire.Web.Controllers
             this.ViewBag.Collection = new SelectList(res.Items.ToList(), "Id", "Name");
             return PartialView("_EditDataBaseSettings", new AnswerView() { QuestionId = questionPublicKey, PublicKey = Guid.NewGuid() });
         }
+        
+        private void LoadImages()
+        {
+            var images =
+                viewRepository.Load<FileBrowseInputModel, FileBrowseView>(new FileBrowseInputModel
+                                                                              {PageSize = int.MaxValue});
+            var imagesList = new SelectList(images.Items.Select(i => new SelectListItem
+                                                                         {
+                                                                             Selected = false,
+                                                                             Text = i.Id,
+                                                                             Value = i.Id
+                                                                         }).ToList(), "Value", "Text");
+            ViewBag.Images = imagesList;
+        }
+
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult FillAnswers(Guid questionPublicKey, string collectionId)

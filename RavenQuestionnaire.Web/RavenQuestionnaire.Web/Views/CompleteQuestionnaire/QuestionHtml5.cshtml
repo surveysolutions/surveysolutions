@@ -6,6 +6,7 @@
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
     //  IDictionary<string, object> validateButtonAttr = new Dictionary<string, object>() { { "data-role", "button" }/*, { "data-inline", "true" } */};
     object buttonAttributs = new { data_role = "button", data_icon = "check", data_theme = "e", data_iconpos = "top" };
+
 }
 <div class="content-primary">
         @Ajax.ActionLinkHtml5("Validate", "Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
@@ -29,8 +30,7 @@
 </div>
 <div class="content-secondary">
     <div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="d">
-        <h3>
-            More in this section</h3>
+        <h3>More in this section</h3>
         <ul data-role="listview" data-theme="c" data-dividertheme="d">
             @foreach (var gh in Model.Groups)
             {

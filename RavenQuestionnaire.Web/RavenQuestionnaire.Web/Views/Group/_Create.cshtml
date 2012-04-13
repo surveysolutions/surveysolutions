@@ -2,8 +2,7 @@
 @using RavenQuestionnaire.Core.Views.Group
 @using RavenQuestionnaire.Web.Utils
 @model GroupView
-@using (Ajax.BeginForm("Save", "Group",
-                                         new AjaxOptions
+@using (Ajax.BeginForm("Save", "Group", new AjaxOptions
                                              {
                                                  UpdateTargetId = "addNewQuestion",
                                                  OnComplete = "HideCreateGroupForm"
@@ -17,7 +16,7 @@
         <div class="modal-body form-horizontal">
             @Html.BootstrapValidationSummary("")
             <div class="control-group">
-                @Html.LabelFor(model => model.GroupText, new { @class = "control-label" })
+                @Html.LabelFor(model => model.GroupText, new {@class = "control-label"})
                 <div class="controls">
                     @Html.EditorFor(model => model.GroupText)
                     @Html.ValidationMessageFor(model => model.GroupText)

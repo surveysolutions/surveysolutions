@@ -90,7 +90,7 @@ namespace RavenQuestionnaire.Web.App_Start
                 s.BindWith(new GenericBindingGenerator(typeof(Iterator<>)));
             });
 
-            kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
+            kernel.Bind<IFormsAuthentication>().To <FormsAuthentication>();
             kernel.Bind<IBagManager>().To<ViewBagManager>();
             kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
         }        
