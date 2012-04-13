@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -13,6 +14,21 @@ namespace Questionnaire.Core.Web.Helpers
 {
     public static class SelectExtensions
     {
+
+        public static MvcHtmlString ExtendedDropDownListFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
+            where TModel : class
+        {
+            if (!typeof(TProperty).IsGenericType)
+            {
+                throw new ArgumentException("T must be an generic type");
+            }
+            var value = htmlHelper.ViewData.Model == null
+                ? default(TProperty)
+                : expression.Compile()(htmlHelper.ViewData.Model);
+            SelectList sl = ToSelectList(value as Dictionary<string, string>);
+            MvcHtmlString mvcHtmlString = htmlHelper.DropDownListFor(expression, sl, sl.SelectedValue);
+            return mvcHtmlString;
+        }
 
         public static MvcHtmlString EnumDropDownListFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
             where TModel : class
@@ -47,5 +63,12 @@ namespace Questionnaire.Core.Web.Helpers
 
             return new SelectList(items, "Key", "Value", selectedItem);
         }
+
+        public static SelectList ToSelectList(Dictionary<string, string> collection)
+        {
+            return new SelectList(collection, "Key", "Value", collection.FirstOrDefault());
+        }
+        
     }
+
 }

@@ -16,6 +16,7 @@ namespace RavenQuestionnaire.Core.Views.Answer
         public bool Mandatory { get; set; }
         public AnswerType AnswerType { get; set; }
         public Guid QuestionId { get; set; }
+        public string NameCollection { get; set; }
 
         public  AnswerView()
         {
@@ -29,6 +30,7 @@ namespace RavenQuestionnaire.Core.Views.Answer
             this.Mandatory = doc.Mandatory;
             this.AnswerType = doc.AnswerType;
             this.QuestionId = questionPublicKey;
+            this.NameCollection = doc.NameCollection;
         }
 
         public  AnswerView (Guid questionPublicKey)

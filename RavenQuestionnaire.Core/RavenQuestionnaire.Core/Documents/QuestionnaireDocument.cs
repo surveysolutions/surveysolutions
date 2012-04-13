@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Documents

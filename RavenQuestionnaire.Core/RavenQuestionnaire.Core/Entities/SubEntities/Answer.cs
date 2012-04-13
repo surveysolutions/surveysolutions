@@ -12,6 +12,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         string AnswerText { get; set; }
         bool Mandatory { get; set; }
         AnswerType AnswerType { get; set; }
+        string NameCollection { get; set; }
     }
 
     public class Answer :IAnswer
@@ -28,7 +29,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public bool Mandatory { get; set; }
         public object AnswerValue { get; set; }
         public AnswerType AnswerType { get; set; }
-       // public string QuestionId { get; set; }
+        public string NameCollection { get; set; }
+
+        // public string QuestionId { get; set; }
 
         public void Add(IComposite c, Guid? parent)
         {

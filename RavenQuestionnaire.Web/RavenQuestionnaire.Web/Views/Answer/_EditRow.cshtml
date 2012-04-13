@@ -3,6 +3,7 @@
 @using RavenQuestionnaire.Core.Views.Answer
 @using RavenQuestionnaire.Web.Utils
 @model AnswerView
+           
 @{ var currentRowId = "divEditAnswer" + Model.PublicKey.ToString(); }
 @using (Html.BeginCollectionItem("answers"))
 {
@@ -11,8 +12,7 @@
             @Html.LabelFor(model => Model.AnswerText, new { @class = "control-label" })
             <div class="controls">
                 @Html.TextBoxFor(model => Model.AnswerValue, new { @class = "span1" })
-                @Html.EnumDropDownListFor(model => Model.AnswerType)
-                
+                @Html.EnumDropDownListFor(model => Model.AnswerType)                
             </div>
         </div>
         <div class="control-group">

@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCalc", "..\ExpressionEvalu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCalc.Tests", "..\ExpressionEvaluator\Evaluant.Calculator.Tests\NCalc.Tests.csproj", "{F8E5E800-F842-4F84-A0C6-B3E1E5DB2BB4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Questionnaire.Core.Web.Tests", "Questionnaire.Core.Web.Tests\Questionnaire.Core.Web.Tests.csproj", "{3CA026F4-D544-4C67-9906-A1BE03617AED}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = RavenQuestionnaire.Web.vsmdi
@@ -59,6 +61,10 @@ Global
 		{F8E5E800-F842-4F84-A0C6-B3E1E5DB2BB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8E5E800-F842-4F84-A0C6-B3E1E5DB2BB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8E5E800-F842-4F84-A0C6-B3E1E5DB2BB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CA026F4-D544-4C67-9906-A1BE03617AED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CA026F4-D544-4C67-9906-A1BE03617AED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CA026F4-D544-4C67-9906-A1BE03617AED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CA026F4-D544-4C67-9906-A1BE03617AED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

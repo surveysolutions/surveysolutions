@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {

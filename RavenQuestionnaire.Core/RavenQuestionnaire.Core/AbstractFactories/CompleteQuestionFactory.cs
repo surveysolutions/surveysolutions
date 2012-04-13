@@ -44,7 +44,8 @@ namespace RavenQuestionnaire.Core.AbstractFactories
                     return new GpsAnswerCompleteQuestion(baseQuestion);
                 case QuestionType.Percentage:
                     return new PercentageAnswerCompleteQuestion(baseQuestion);
-
+                case QuestionType.ExtendedDropDownList:
+                    return new SingleAnswerCompleteQuestion(baseQuestion);
             }
             return new TextAnswerCompleteQuestion(baseQuestion);
         }

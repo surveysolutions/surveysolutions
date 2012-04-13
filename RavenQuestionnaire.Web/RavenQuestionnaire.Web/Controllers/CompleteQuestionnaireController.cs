@@ -7,6 +7,7 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Commands.Collection;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -141,7 +142,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
            /* if (!ModelState.IsValid)
                 return false;*/
-            commandInvoker.Execute(new ValidateGroupCommand(id, group, propagationKey, _globalProvider.GetCurrentUser()));
+          //  commandInvoker.Execute(new ValidateGroupCommand(id, group, propagationKey, _globalProvider.GetCurrentUser()));
            // return true;
 
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
