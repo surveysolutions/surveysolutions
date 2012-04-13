@@ -10,58 +10,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@Model.Title</title>
     <link href="@Url.Content("~/Content/themes/jquerymobile/jquery.mobile.css")" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="http://jquerymobile.com/demos/1.1.0-rc.1/docs/_assets/css/jqm-docs.css" />
-    <script src="http://code.jquery.com/jquery-1.7.1.js"></script>
-    <script src="http://jquerymobile.com/demos/1.1.0-rc.1/docs/_assets/js/jqm-docs.js"></script>
-    <script src="http://jquerymobile.com/demos/1.1.0-rc.1/js/jquery.mobile.docs.js"></script>
+    <link rel="stylesheet" href="@Url.Content("~/Content/themes/jquerymobile/jqm-docs.css")" />
+    <script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/Html5/jqm-docs.js")"></script>
+    <script src="@Url.Content("~/Scripts/Html5/jquery.mobile.docs.js")"></script>
 </head>
 <body>
-<div data-role="page">
-    <div data-role="header" role="banner">
-      
-        <h1>Statistics</h1>
-
-    </div>
-    
-
-    <div data-role="content" role="main">
-        <div data-role="collapsible" data-collapsed="false">
-            <h3>@Model.Title</h3>
-            <p>
-                Started: @Model.StartDate.ToShortTimeString()
-                @if (Model.EndDate.HasValue)
-                {
-                    <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
-                }
-            </p>
-            <div data-role="collapsible" data-theme="b" data-content-theme="b"  data-collapsed="false">
-                <h3>
-                    Answered questions</h3>
-                @foreach (QuestionStatisticView question in Model.AnsweredQuestions)
-                {
+    <div data-role="page">
+        <div data-role="header" role="banner">
+            <h1>
+                Statistics</h1>
+        </div>
+        <div data-role="content" role="main">
+            <div data-role="collapsible" data-collapsed="false">
+                <h3>@Model.Title</h3>
+                <p>
+                    Started: @Model.StartDate.ToShortTimeString()
+                    @if (Model.EndDate.HasValue)
+                    {
+                        <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
+                    }
+                </p>
+                <div data-role="collapsible" data-theme="b" data-content-theme="b" data-collapsed="false">
+                    <h3>
+                        Answered questions</h3>
+                    @foreach (QuestionStatisticView question in Model.AnsweredQuestions)
+                    {
                 
-                    <p>@question.QuestionText - @question.AnswerValue
-                        @if (question.ApproximateTime.HasValue)
-                        {<b> , Timing : @question.ApproximateTime.Value.Minutes
-                             minutes @question.ApproximateTime.Value.Seconds seconds</b>
-                        }
-                    </p>
-                }
-            </div>
-            <div data-role="collapsible" data-theme="e" data-content-theme="e">
-                <h3>
-                    Invalid questions</h3>
-                @foreach (QuestionStatisticView question in Model.InvalidQuestions)
-                {
+                        <p>@question.QuestionText - @question.AnswerValue
+                            @if (question.ApproximateTime.HasValue)
+                            {<b> , Timing : @question.ApproximateTime.Value.Minutes
+                            minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                            }
+                        </p>
+                    }
+                </div>
+                <div data-role="collapsible" data-theme="e" data-content-theme="e">
+                    <h3>
+                        Invalid questions</h3>
+                    @foreach (QuestionStatisticView question in Model.InvalidQuestions)
+                    {
                 
-                    <p>@question.QuestionText - @question.AnswerValue
-                    </p>
+                        <p>@question.QuestionText - @question.AnswerValue
+                        </p>
                    
-                }
+                    }
+                </div>
             </div>
         </div>
     </div>
-</div>
 @*<div class="content-secondary">
     <div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="d">
         <h3>

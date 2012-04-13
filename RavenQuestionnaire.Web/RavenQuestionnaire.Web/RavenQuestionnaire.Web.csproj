@@ -144,7 +144,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\accordion.css"/>
+    <Content Include="Content\Bootstrap\accordion.css" />
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\AsyncCtpLibrary.dll" />
     <Content Include="bin\CsvHelper.dll" />
@@ -448,8 +448,10 @@
     <Content Include="Content\themes\jquerymobile\images\icons-18-white.png" />
     <Content Include="Content\themes\jquerymobile\images\icons-36-black.png" />
     <Content Include="Content\themes\jquerymobile\images\icons-36-white.png" />
+    <Content Include="Content\themes\jquerymobile\jqm-docs.css" />
     <Content Include="Content\themes\jquerymobile\jquery.mobile.css" />
     <Content Include="Content\themes\jquerymobile\jquery.mobile.datebox.min.css" />
+    <Content Include="Content\themes\jquerymobile\jquery.ui.datepicker.mobile.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap\bootstrap-alert.js" />
     <Content Include="Scripts\bootstrap\bootstrap-button.js" />
@@ -467,6 +469,9 @@
     <Content Include="Scripts\flow.js" />
     <Content Include="Scripts\gallery\jquery.galleriffic.js" />
     <Content Include="Scripts\gallery\jquery.opacityrollover.js" />
+    <Content Include="Scripts\Html5\jqm-docs.js" />
+    <Content Include="Scripts\Html5\jquery.mobile.docs.js" />
+    <Content Include="Scripts\Html5\jquery.ui.datepicker.mobile.js" />
     <Content Include="Scripts\Html5\LocalStorage.js" />
     <Content Include="Scripts\Html5\take.js" />
     <Content Include="Scripts\iscroll.js" />
@@ -482,6 +487,7 @@
     <Content Include="Scripts\Html5\jquery.mobile.datebox.min.js" />
     <Content Include="Scripts\jquery.numeric.js" />
     <Content Include="Scripts\jquery.tmpl.min.js" />
+    <Content Include="Scripts\jQuery.ui.datepicker.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -824,7 +830,7 @@
     <Content Include="Views\Answer\answerViewHtml5\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_ExtendedDropDownList.cshtml" />
     <Content Include="Views\Answer\_EditDataBaseSettings.cshtml" />
-     <Content Include="Views\Group\Mobile\_CompleteGroup.cshtml" />
+    <Content Include="Views\Group\Mobile\_CompleteGroup.cshtml" />
     <Content Include="Views\Group\Mobile\_SimpleGroup.cshtml" />
     <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
     <Content Include="Views\Statistic\Details.cshtml" />
