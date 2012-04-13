@@ -1,5 +1,7 @@
 ﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Documents.Statistics
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+@using RavenQuestionnaire.Core.Views.Statistics
 @using RavenQuestionnaire.Web.Models
 @model CompleteQuestionnaireViewV
 @{
@@ -8,42 +10,50 @@
     object buttonAttributs = new { data_role = "button", data_icon = "check", data_theme = "e", data_iconpos = "top" };
 
 }
-<div class="content-primary">
-        @Ajax.ActionLinkHtml5("Validate", "Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
-                                                                                                {
-                                                                                                    UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
-                                                                                                    OnComplete = "ReInitMobile('#" + Model.CurrentGroup.GetClientId("div") + "')" ,
-                                                                                                    InsertionMode = InsertionMode.Replace
-                                                                                                }, buttonAttributs)
-                                                                                                 
-   @* <a href="javascript:void(0)"  data-ajax-method="post" data-ajax-url="@Url.Action("Validate", "CompleteQuestionnaire",new { id = Model.Id, group = Model.CurrentGroup.PublicKey })" data-ajax-complete="ReInitMobile('#@Model.CurrentGroup.GetClientId("div")')" data-theme="a" data-role="button" data-iconpos="top" data-icon="check" data-ajax-update="#@Model.CurrentGroup.GetClientId("div")" data-ajax-mode="replace" data-ajax="true">
+        <div class="content-primary">
+            <div data-type="horizontal" data-role="controlgroup">
+                @Ajax.ActionLinkHtml5("Validate", "Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
+                                                                                                                                              {
+                                                                                                                                                  UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
+                                                                                                                                                  OnComplete = "ReInitMobile('#" + Model.CurrentGroup.GetClientId("div") + "')",
+                                                                                                                                                  InsertionMode = InsertionMode.Replace
+                                                                                                                                              }, buttonAttributs)
+                @Ajax.ActionLinkHtml5("Refresh Statistic", "Genereate", "Statistic", new { id = Model.Id }, new AjaxOptions { }, new { data_role = "button", data_icon = "refresh", data_iconpos = "top" })
+                @Html.ActionLink("Statistic", "Details", "Statistic", new { id = Model.Id }, 
+                               new { data_role = "button", data_rel = "dialog", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })
+           @*     <a href="#bar" data-rel="dialog">Open dialog</a>*@
+            </div>
+            @* <a href="javascript:void(0)"  data-ajax-method="post" data-ajax-url="@Url.Action("Validate", "CompleteQuestionnaire",new { id = Model.Id, group = Model.CurrentGroup.PublicKey })" data-ajax-complete="ReInitMobile('#@Model.CurrentGroup.GetClientId("div")')" data-theme="a" data-role="button" data-iconpos="top" data-icon="check" data-ajax-update="#@Model.CurrentGroup.GetClientId("div")" data-ajax-mode="replace" data-ajax="true">
         Validate</a>*@
-   <div  id="@Model.CurrentGroup.GetClientId("div")">
-        @Html.Partial("~/Views/Group/_ScreenHtml5.cshtml", Model)
-    </div>
-     @Ajax.ActionLinkHtml5("Validate", "Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
-                                                                                                {
-                                                                                                    UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
-                                                                                                    OnComplete = "ReInitMobile('#" + Model.CurrentGroup.GetClientId("div") + "')" ,
-                                                                                                    InsertionMode = InsertionMode.Replace
-                                                                                                }, buttonAttributs)
-</div>
+            <div  id="@Model.CurrentGroup.GetClientId("div")">
+                @Html.Partial("~/Views/Group/_ScreenHtml5.cshtml", Model)
+            </div>
+        </div>
 <div class="content-secondary">
     <div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="d">
-        <h3>More in this section</h3>
+        <h3>
+            More in this section</h3>
         <ul data-role="listview" data-theme="c" data-dividertheme="d">
             @foreach (var gh in Model.Groups)
             {
                 if (!gh.IsCurrent)
                 {
-                <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })">@gh.GroupText</a></li>
+                    <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })">@gh.GroupText</a></li>
                 }
                 else
                 {
-                <li data-theme="a"><a>@gh.GroupText</a></li>
+                    <li data-theme="a"><a>@gh.GroupText</a></li>
                 }
 
             }
         </ul>
     </div>
 </div>
+@section PopupsContainer{
+    <div data-role="page" data-url="bar" id="bar">
+        <!-- /header -->
+        <div data-role="content" role="main">
+           @*   @Html.Partial("~/Views/Statistic/Details.cshtml", null)*@
+        </div>
+    </div>
+}
