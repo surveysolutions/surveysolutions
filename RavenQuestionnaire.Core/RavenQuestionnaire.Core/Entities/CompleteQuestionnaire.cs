@@ -140,6 +140,11 @@ namespace RavenQuestionnaire.Core.Entities
         {
             get { return innerDocument.PublicKey; }
         }
+        protected void UpdateLastEntryDate()
+        {
+            this.innerDocument.LastEntryDate = DateTime.Now;
+
+        }
 
         public virtual void Add(IComposite c, Guid? parent)
         {
@@ -151,17 +156,19 @@ namespace RavenQuestionnaire.Core.Entities
 
             }
             innerDocument.Add(c, parent);
-
+            UpdateLastEntryDate();
         }
 
         public void Remove(IComposite c)
         {
             innerDocument.Remove(c);
+            UpdateLastEntryDate();
         }
 
         public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
             innerDocument.Remove<T>(publicKey);
+            UpdateLastEntryDate();
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
