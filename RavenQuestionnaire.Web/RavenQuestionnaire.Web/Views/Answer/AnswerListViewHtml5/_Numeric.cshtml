@@ -7,7 +7,7 @@
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {
     var viewBag = (IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings;
-    viewBag.Add("onchange", "$(this.form).submit();");
+  
     viewBag.Add("name", Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue"));
     var id = Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
     viewBag.Add("id", id);
@@ -17,4 +17,8 @@
     @Html.Hidden("QuestionId", Model.PublicKey)
     @Html.Label("AnswerValue", Model.QuestionText)
     @Html.Html5Range(int.MinValue, int.MaxValue, 1, Model.Answers.Length > 0 && !string.IsNullOrEmpty(Model.Answers[0].AnswerValue) ? Convert.ToInt32(Model.Answers[0].AnswerValue) : 0, viewBag)
+ 
+    
+    
+    <input type="submit" value="Set Number" data-inline="true"/>
 }
