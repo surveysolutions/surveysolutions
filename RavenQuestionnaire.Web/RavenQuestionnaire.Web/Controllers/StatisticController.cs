@@ -33,6 +33,9 @@ namespace RavenQuestionnaire.Web.Controllers
         }
         public ActionResult Details(string id)
         {
+            var command = new GenerateQuestionnaireStatisticCommand(id, _globalProvider.GetCurrentUser());
+
+            commandInvoker.Execute(command);
             var stat =viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                 new CompleteQuestionnaireStatisticViewInputModel(id));
             return View(stat);

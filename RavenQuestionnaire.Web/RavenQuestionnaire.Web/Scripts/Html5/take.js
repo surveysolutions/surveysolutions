@@ -2,12 +2,13 @@
 function ReInitMobile(id) {
     //  alert('test');
     $(id).trigger('create');
+
 //    ReinitInputs();
 }
 
-//$('div[data-role=page]').live('pageshow', function (event) {
-//    ReinitInputs();
-//});
+$('div[data-role=page]').live('pageshow', function (event) {
+    resizeContent();
+});
 
 //function ReinitInputs() {
 //    $("input[input-label=True]").each(function () {

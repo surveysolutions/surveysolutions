@@ -18,7 +18,7 @@
                                                                                                                                                   OnComplete = "ReInitMobile('#" + Model.CurrentGroup.GetClientId("div") + "')",
                                                                                                                                                   InsertionMode = InsertionMode.Replace
                                                                                                                                               }, buttonAttributs)
-                @Ajax.ActionLinkHtml5("Refresh Statistic", "Genereate", "Statistic", new { id = Model.Id }, new AjaxOptions { }, new { data_role = "button", data_icon = "refresh", data_iconpos = "top" })
+             @*   @Ajax.ActionLinkHtml5("Refresh Statistic", "Genereate", "Statistic", new { id = Model.Id }, new AjaxOptions { }, new { data_role = "button", data_icon = "refresh", data_iconpos = "top" })*@
                 @Html.ActionLink("Statistic", "Details", "Statistic", new { id = Model.Id }, 
                                new { data_role = "button", data_rel = "dialog", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })
            @*     <a href="#bar" data-rel="dialog">Open dialog</a>*@
