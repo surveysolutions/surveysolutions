@@ -60,7 +60,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 x.Load<StatusViewInputModel, StatusView>(
                     It.Is<StatusViewInputModel>(v => v.StatusId.Equals(input.StatusId))))
                 .Returns(output);
-
+            // command  Roles.GetAllRoles(); from AddRolesListToViewBag() method throw exception. 
+            // Role set up is needed.
             var result = Controller.Edit(output.Id);
             Assert.AreEqual(output, result.ViewData.Model);
         }

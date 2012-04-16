@@ -1,51 +1,104 @@
 ﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Documents.Statistics
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
-@using RavenQuestionnaire.Core.Views.Statistics
-@using RavenQuestionnaire.Web.Models
-@model CompleteQuestionnaireViewV
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@model CompleteQuestionnaireMobileView
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
     //  IDictionary<string, object> validateButtonAttr = new Dictionary<string, object>() { { "data-role", "button" }/*, { "data-inline", "true" } */};
     object buttonAttributs = new { data_role = "button", data_icon = "check", data_theme = "e", data_iconpos = "top" };
 
 }
-        <div class="content-primary">
-            <div data-type="horizontal" data-role="controlgroup">
-                @Ajax.ActionLinkHtml5("Validate", "Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
-                                                                                                                                              {
-                                                                                                                                                  UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
-                                                                                                                                                  OnComplete = "ReInitMobile('#" + Model.CurrentGroup.GetClientId("div") + "')",
-                                                                                                                                                  InsertionMode = InsertionMode.Replace
-                                                                                                                                              }, buttonAttributs)
-             @*   @Ajax.ActionLinkHtml5("Refresh Statistic", "Genereate", "Statistic", new { id = Model.Id }, new AjaxOptions { }, new { data_role = "button", data_icon = "refresh", data_iconpos = "top" })*@
-                @Html.ActionLink("Statistic", "Details", "Statistic", new { id = Model.Id }, 
-                               new { data_role = "button", data_rel = "dialog", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })
-           @*     <a href="#bar" data-rel="dialog">Open dialog</a>*@
-            </div>
-            @* <a href="javascript:void(0)"  data-ajax-method="post" data-ajax-url="@Url.Action("Validate", "CompleteQuestionnaire",new { id = Model.Id, group = Model.CurrentGroup.PublicKey })" data-ajax-complete="ReInitMobile('#@Model.CurrentGroup.GetClientId("div")')" data-theme="a" data-role="button" data-iconpos="top" data-icon="check" data-ajax-update="#@Model.CurrentGroup.GetClientId("div")" data-ajax-mode="replace" data-ajax="true">
-        Validate</a>*@
-            <div  id="@Model.CurrentGroup.GetClientId("div")">
-                @Html.Partial("~/Views/Group/_ScreenHtml5.cshtml", Model)
-            </div>
-        </div>
+<script type="text/javascript">
+    (function (window, $, PhotoSwipe) {
+        $(document).ready(function () {
+            $('div.gallery-page')
+					.live('pageshow', function (e) {
+
+					    var currentPage = $(e.target),
+							options = {},
+							photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options, currentPage.attr('id'));
+
+					    return true;
+					})
+
+					.live('pagehide', function (e) {
+
+					    var currentPage = $(e.target),
+							photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+
+					    if (typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null) {
+					        PhotoSwipe.detatch(photoSwipeInstance);
+					    }
+
+					    return true;
+					});
+        });
+    } (window, window.jQuery, window.Code.PhotoSwipe));
+</script>
+<div class="content-primary">
+    <div data-type="horizontal" data-role="controlgroup">
+        @Ajax.ActionLinkHtml5("Validate", "Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
+   {
+       UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
+       OnComplete = "ReInitMobile('#" + Model.CurrentGroup.GetClientId("div") + "')",
+       InsertionMode = InsertionMode.Replace
+   }, buttonAttributs)
+        @Html.ActionLink("Statistic", "Details", "Statistic", new { id = Model.Id }, new { data_role = "button", data_rel = "dialog", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })
+    </div>
+    <div  id="@Model.CurrentGroup.GetClientId("div")">
+        @Html.Partial("~/Views/Group/_ScreenHtml5.cshtml", Model)
+    </div>
+</div>
 <div class="content-secondary">
     <div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="d">
-        <h3>
-            More in this section</h3>
+        <h3>More in this section</h3>
         <ul data-role="listview" data-theme="c" data-dividertheme="d">
             @foreach (var gh in Model.Groups)
             {
                 if (!gh.IsCurrent)
                 {
-                    <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })">@gh.GroupText</a></li>
+                <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })">@gh.GroupText</a></li>
                 }
                 else
                 {
-                    <li data-theme="a"><a>@gh.GroupText</a></li>
+                <li data-theme="a"><a>@gh.GroupText</a></li>
                 }
-
             }
         </ul>
     </div>
 </div>
+
+@section Header{
+    @Html.Partial("MobileGroupNavigation", Model)
+}
+
+@section PopupsContainer{
+@foreach (var question in Model.QuestionsWithCards)
+{
+    <div data-role="page" data-add-back-btn="true" id="gallery-@(question.PublicKey)" class="gallery-page">
+        <div data-role="header">
+            <h1>Question cards</h1>
+        </div>
+
+        <div data-role="content">	
+            <ul class="gallery">
+                @foreach (var card in question.Cards)
+                {
+                    <li><a href="@Url.Action("Images", "Resource", new { id = card.Original })" rel="external"><img src="@Url.Action("Images", "Resource", new { id = card.Thumb })" alt="@card.Title" /></a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@foreach (var question in Model.QuestionsWithInstructions)
+{
+    <div data-role="page" id="inctruction-@(question.PublicKey)">
+        <div data-role="header">
+            <h1>Instructions</h1>
+        </div>
+
+        <div data-role="content">	
+            <h3>@question.Instructions</h3>
+        </div>
+    </div>
+}
+}

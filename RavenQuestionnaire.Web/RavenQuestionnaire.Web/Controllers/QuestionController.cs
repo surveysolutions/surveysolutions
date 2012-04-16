@@ -144,13 +144,16 @@ namespace RavenQuestionnaire.Web.Controllers
         private void LoadImages()
         {
             var images = viewRepository.Load<FileBrowseInputModel, FileBrowseView>(new FileBrowseInputModel { PageSize = int.MaxValue });
-            var imagesList = new SelectList(images.Items.Select(i => new SelectListItem
+            if (images != null)
             {
-                Selected = false,
-                Text = i.Id,
-                Value = i.Id
-            }).ToList(), "Value", "Text");
-            ViewBag.Images = imagesList;
+                var imagesList = new SelectList(images.Items.Select(i => new SelectListItem
+                                                                             {
+                                                                                 Selected = false,
+                                                                                 Text = i.Id,
+                                                                                 Value = i.Id
+                                                                             }).ToList(), "Value", "Text");
+                ViewBag.Images = imagesList;
+            }
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Edit(Guid publicKey, string questionnaireId)

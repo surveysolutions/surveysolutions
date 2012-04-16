@@ -1,11 +1,7 @@
-@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Entities.SubEntities
-@using RavenQuestionnaire.Core.Views.Answer
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
-@using System.Web.Mvc.Html5
-@model CompleteQuestionnaireViewV
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@model CompleteQuestionnaireMobileView
 @{
-    ViewBag.AjaxOptions = new AjaxOptions()
+    ViewBag.AjaxOptions = new AjaxOptions
                               {
                                   InsertionMode = InsertionMode.Replace,
                                   UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
@@ -16,6 +12,7 @@
 }
 
 @Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", Model.CurrentGroup)
+
 
 
 @*@RenderSimpleGroup(Model.CurrentGroup)*@

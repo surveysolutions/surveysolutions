@@ -1,0 +1,48 @@
+﻿@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@model CompleteQuestionnaireMobileView
+@{
+    CompleteGroupHeaders prev = null;
+    CompleteGroupHeaders curr = null;
+    CompleteGroupHeaders next = null;
+
+    foreach (var gh in Model.Groups)
+    {
+        if (!gh.IsCurrent && curr == null)
+        {
+            prev = gh;
+        }
+        else if (gh.IsCurrent)
+        {
+            curr = gh;
+        }
+        else
+        {
+            next = gh;
+            break;
+        }
+    }
+
+
+    if (prev != null)
+    {
+        @Html.ActionLink("Prev Group", "QuestionHtml5", "CompleteQuestionnaire", new { id = Model.Id, group = prev.PublicKey }, new { data_theme = "b", @class = "", data_icon = "arrow-l", iconpos = "notext" })
+    }
+    else
+    {
+        <a href="#" class="ui-disabled"  data-icon = "arrow-l"  data-theme = "b" iconpos = "notext">Prev Group</a>
+    }
+    if (curr != null)
+    {
+    <h1>@curr.GroupText</h1> 
+    }
+    if (next != null)
+    {
+    @Html.ActionLink("Next Group", "QuestionHtml5", "CompleteQuestionnaire", new { id = Model.Id, group = next.PublicKey }, new { data_icon = "arrow-r", data_iconpos = "right", data_theme = "b" })
+    }
+    else
+    {
+        <a href="#" class="ui-disabled"  data-icon = "arrow-r" data-iconpos = "right" data-theme = "b">Next Group</a>
+    }
+    
+}

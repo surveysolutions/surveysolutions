@@ -112,11 +112,11 @@ namespace RavenQuestionnaire.Web.Controllers
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters.");
             StatusView model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(id));
+            var statuses = viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(new StatusBrowseInputModel() { PageSize = 100, QId = model.QuestionnaireId });
 
-            if (model != null)
+            if (model != null && statuses != null)
             {
-                foreach (var status in viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(
-                    new StatusBrowseInputModel() { PageSize = 100, QId = model.QuestionnaireId}).Items)
+                foreach (var status in statuses.Items)
                 {
                     var statusByRole = new StatusByRole {Status = status};
 
@@ -134,7 +134,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                 }
                             }
                         }
-                        
+
                         statusByRole.StatusRestriction.Add(new RolePermission(role, flag));
                     }
 

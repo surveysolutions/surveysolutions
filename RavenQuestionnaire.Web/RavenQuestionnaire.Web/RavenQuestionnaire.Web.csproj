@@ -407,7 +407,6 @@
     <Content Include="Content\FileUpload\tmpl.min.js" />
     <Content Include="Content\flow.css" />
     <Content Include="Content\galleriffic.css" />
-    <Content Include="Content\icons.png" />
     <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\generalFile.png" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
@@ -416,6 +415,7 @@
     <Content Include="Content\img\progressbar.gif" />
     <Content Include="Content\jquery.jgrowl.css" />
     <Content Include="Content\main.css" />
+    <Content Include="Content\photoswipe.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -443,6 +443,8 @@
     <Content Include="Content\themes\base\jquery.ui.slider.css" />
     <Content Include="Content\themes\base\jquery.ui.tabs.css" />
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\icons%402x.png" />
+    <Content Include="Content\icons.png" />
     <Content Include="Content\themes\jquerymobile\images\ajax-loader.png" />
     <Content Include="Content\themes\jquerymobile\images\icons-18-black.png" />
     <Content Include="Content\themes\jquerymobile\images\icons-18-white.png" />
@@ -469,9 +471,11 @@
     <Content Include="Scripts\flow.js" />
     <Content Include="Scripts\gallery\jquery.galleriffic.js" />
     <Content Include="Scripts\gallery\jquery.opacityrollover.js" />
+    <Content Include="Scripts\Html5\code.photoswipe.jquery-3.0.4.min.js" />
     <Content Include="Scripts\Html5\jqm-docs.js" />
     <Content Include="Scripts\Html5\jquery.mobile.docs.js" />
     <Content Include="Scripts\Html5\jquery.ui.datepicker.mobile.js" />
+    <Content Include="Scripts\Html5\klass.min.js" />
     <Content Include="Scripts\Html5\LocalStorage.js" />
     <Content Include="Scripts\Html5\take.js" />
     <Content Include="Scripts\iscroll.js" />
@@ -836,6 +840,8 @@
     <Content Include="Views\Statistic\Details.cshtml" />
     <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
     <Content Include="Views\Statistic\Details.cshtml" />
+    <Content Include="Views\Shared\MobileGroupNavigation.cshtml" />
+    <Content Include="Views\Shared\MobileProgressBar.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

@@ -1,6 +1,6 @@
 ﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
-@model CompleteGroupViewV
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@model CompleteGroupMobileView
 @foreach (var question in Model.Questions)
 {
     using (Ajax.BeginFormHtml5("SaveSingleResultI", "CompleteQuestionnaire", new { type = "Html5" },ViewBag.AjaxOptions as AjaxOptions))

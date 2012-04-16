@@ -92,6 +92,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void Participate_EmptyId_404Exception()
         {
+            //statusView is null. statusView.Id throws NullReferenceException. Status mocking is needed.
             Assert.Throws<HttpException>(() => Controller.Participate(null,""));
         }
         [Test]

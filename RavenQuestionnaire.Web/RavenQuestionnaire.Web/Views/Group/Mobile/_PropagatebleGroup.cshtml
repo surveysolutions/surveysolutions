@@ -1,8 +1,7 @@
 ﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @using RavenQuestionnaire.Core.Views.Question
-@using RavenQuestionnaire.Web.Utils
-@model CompleteGroupViewV
+@model CompleteGroupMobileView
 @for (int index = 0; index < Model.PropagatedGroups.Count; index++)
 {
     var pg = Model.PropagatedGroups[index];
@@ -32,7 +31,7 @@
 }
 @helper RenderQuestion(CompleteQuestionView question, Guid groupKey, Guid propagationKey)
     {
-    using (Ajax.BeginFormHtml5("SaveSingleResultI", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions, new { autocomplete = "off" }))
+        using (Ajax.BeginFormHtml5("SaveSingleResultHtml5", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions, new { autocomplete = "off" }))
     {
         using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + propagationKey))
         {

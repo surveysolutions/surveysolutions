@@ -11,21 +11,21 @@ using RavenQuestionnaire.Core.Views.Question;
 
 #endregion
 
-namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
+namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
-    public class CompleteGroupViewV
+    public class CompleteGroupMobileView
     {
-        public CompleteGroupViewV()
+        public CompleteGroupMobileView()
         {
             Questions = new List<CompleteQuestionView>();
-            Groups = new List<CompleteGroupViewV>();
+            Groups = new List<CompleteGroupMobileView>();
             Propagated = Propagate.None;
             PropagatedQuestions = new List<PropagatedQuestion>();
             PropagatedGroups = new List<PropagatedGroup>();
             PropogationPublicKeys = new List<Guid>();
             AutoPropagate = new List<bool>();
         }
-        public CompleteGroupViewV(CompleteQuestionnaireDocument doc, CompleteGroup currentGroup)
+        public CompleteGroupMobileView(CompleteQuestionnaireDocument doc, CompleteGroup currentGroup)
             : this()
         {
             PublicKey = currentGroup.PublicKey;
@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             Propagated = currentGroup.Propagated;
             if (currentGroup.Questions.Count > 0 && currentGroup.Propagated == Propagate.None)
             {
-                var questionQgroup = new CompleteGroupViewV();
+                var questionQgroup = new CompleteGroupMobileView();
                 questionQgroup.Questions = currentGroup.Questions.Select(q => new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q)).ToList();
                 questionQgroup.PublicKey = Guid.Empty;
                 questionQgroup.GroupText = "Main";
@@ -57,13 +57,13 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                     prop = Propagate.None;
                 }
                 Groups.Add(prop != Propagate.Propagated
-                               ? new CompleteGroupViewV(doc, k.Value[0] as CompleteGroup)
-                               : new CompleteGroupViewV(doc, k.Value));
+                               ? new CompleteGroupMobileView(doc, k.Value[0] as CompleteGroup)
+                               : new CompleteGroupMobileView(doc, k.Value));
             }
 
            
         }
-        public CompleteGroupViewV(CompleteQuestionnaireDocument doc, List<CompleteGroup> propGroups)
+        public CompleteGroupMobileView(CompleteQuestionnaireDocument doc, List<CompleteGroup> propGroups)
             : this()
         {
             var propagatable = propGroups.Single(g => (g as PropagatableCompleteGroup) == null);
@@ -112,7 +112,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             }
         }
 
-     
+        
 
         public Guid PublicKey { get; set; }
 
@@ -124,7 +124,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
 
         public List<CompleteQuestionView> Questions { get; set; }
 
-        public List<CompleteGroupViewV> Groups { get; set; }
+        public List<CompleteGroupMobileView> Groups { get; set; }
 
         public List<PropagatedQuestion> PropagatedQuestions { get; set; }
 

@@ -10,7 +10,16 @@
     var bodyTheme = Model.Valid ? "" : "ui-body ui-body-e";
 }
 <div class="@bodyTheme">
+    @if (!string.IsNullOrWhiteSpace(Model.Instructions))
+    {
+        <a href="#inctruction-@(Model.PublicKey)" data-icon="info" data-role="button" data-inline="true" data-rel="dialog" data-transition="flip">Read instructions</a>
+    }
+    @if (Model.Cards.Length > 0)
+    {
+        <a data-role="button" data-icon="grid" data-inline="true" href="#gallery-@(Model.PublicKey)">Cards</a>
+    }
     @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListViewHtml5/_{0}.cshtml", Model.QuestionType), Model);}
+    
 </div>
 @Html.ValidationMessage("AnswerValue")
 @Html.Hidden("PublicKey", Model.PublicKey)
