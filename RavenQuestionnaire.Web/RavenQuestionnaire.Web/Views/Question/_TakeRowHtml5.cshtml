@@ -5,12 +5,15 @@
     ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
     if (!Model.Enabled)
     {
-        ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+      //  ViewBag.EnabledRadioBoxSettings.Add("disabled", "disabled");
+     //   ViewBag.EnabledRadioBoxSettings.Add("class",  "ui-disabled");
     }
-    var bodyTheme = Model.Valid ? "" : "ui-body ui-body-e";
+    var bodyClass = Model.Valid ? Model.Enabled ? "" : "ui-disabled" : "ui-body ui-body-e";
+
 }
-<div class="@bodyTheme">
+<div  class="@bodyClass">
     @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListViewHtml5/_{0}.cshtml", Model.QuestionType), Model);}
 </div>
 @Html.ValidationMessage("AnswerValue")
 @Html.Hidden("PublicKey", Model.PublicKey)
+

@@ -31,7 +31,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             if (!DateTime.TryParseExact(stringValue, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out value))
                 throw new InvalidCastException("answer is no data value");
             currentAnswer.Selected = true;
-            currentAnswer.AnswerType = AnswerType.Text;
+         //  currentAnswer.AnswerType = AnswerType.Text;
             currentAnswer.AnswerValue = value;
             this.document.Answers.Clear();
             this.document.Answers.Add(currentAnswer);

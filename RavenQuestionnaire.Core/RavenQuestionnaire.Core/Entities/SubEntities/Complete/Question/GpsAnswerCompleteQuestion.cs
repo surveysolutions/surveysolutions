@@ -43,7 +43,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 }
             }
             currentAnswer.Selected = true;
-            currentAnswer.AnswerType = AnswerType.Text;
+          //  currentAnswer.AnswerType = AnswerType.Text;
             currentAnswer.AnswerValue = currentAnswer.AnswerValue.ToString();
             this.document.Answers.Clear();
             this.document.Answers.Add(currentAnswer);

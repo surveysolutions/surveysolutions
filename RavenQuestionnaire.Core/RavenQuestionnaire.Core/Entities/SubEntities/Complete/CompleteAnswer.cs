@@ -66,15 +66,15 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         protected void Set(object text)
         {
             this.Selected = true;
-            if (this.AnswerType == AnswerType.Text)
-                this.AnswerValue = text;
+          //  if (this.AnswerType == AnswerType.Text)
+           //     this.AnswerValue = text;
         }
 
         protected void Reset()
         {
             this.Selected = false;
-            if (this.AnswerType == AnswerType.Text)
-                this.AnswerValue = null;
+          //  if (this.AnswerType == AnswerType.Text)
+          //  this.AnswerValue = null;
         }
 
         #region Implementation of IComposite

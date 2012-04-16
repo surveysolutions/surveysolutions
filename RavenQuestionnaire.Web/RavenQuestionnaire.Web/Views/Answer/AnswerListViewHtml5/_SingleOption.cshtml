@@ -2,7 +2,11 @@
 @using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.Answer
 @model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
-@{ ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "$(this.form).submit();"); }
+@{
+
+    var settings = ((IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings);
+    settings.Add("onclick", "$(this.form).submit();");
+}
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
 {
     @Html.Hidden("QuestionId", Model.PublicKey)
@@ -11,12 +15,21 @@
         @foreach (var item in Model.Answers)
         {
             @Html.Hidden("Selected", true)
-            
+
+            {
                 var radibutonname = string.Format("radiobutton-{0}", item.PublicKey);
-                ((IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings)["id"] = radibutonname;
-            
-            @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
-            Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);
+                settings["id"] = radibutonname;
+           /*     if (item.Selected)
+                {
+                    settings["data-theme"] = "b";
+                }
+                else
+                {
+                    settings["data-theme"] = "";
+                }*/
+            }
+            @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, settings)
+       Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);
         }
     </fieldset>
 }

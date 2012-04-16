@@ -59,7 +59,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             doc.Questions.Add(question);
 
             var completeAnswer = new CompleteAnswer(new Answer(), doc.Questions[0].PublicKey);
-            completeAnswer.AnswerType = AnswerType.Text;
+            completeAnswer.AnswerType = AnswerType.Select;
             completeAnswer.AnswerValue = "3";
             completeAnswer.Selected = true;
             question.Answers.Add(completeAnswer);
