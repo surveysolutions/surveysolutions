@@ -53,7 +53,7 @@
 
         public static string CreateCollectionId(string id)
         {
-            return string.Format("collectiondocument/{0}", id);
+            return string.Format("collectiondocuments/{0}", id);
         }
 
     }

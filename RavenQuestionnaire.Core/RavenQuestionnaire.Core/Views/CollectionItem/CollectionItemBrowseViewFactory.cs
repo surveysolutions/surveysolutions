@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Raven.Client;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.Documents;
 
 namespace RavenQuestionnaire.Core.Views.CollectionItem
@@ -17,11 +18,14 @@ namespace RavenQuestionnaire.Core.Views.CollectionItem
         {
             var count = documentSession.Query<CollectionDocument>().Count();
             if (count==0)
-                return new CollectionItemBrowseView(0,0,0);
+                return new CollectionItemBrowseView(input.CollectionId, new List<CollectionItemBrowseItem>(), input.QuestionId);
             var doc = documentSession.Load<CollectionDocument>(input.CollectionId);
-            var collectionItem = new Entities.Collection(doc).GetAllItems();
+            IList<Entities.SubEntities.CollectionItem> collectionItem = new Entities.Collection(doc).GetAllItems();
             if (collectionItem.Count != 0)
-                return new CollectionItemBrowseView(input.Page, input.PageSize, input.TotalCount);
+            {
+                List<CollectionItemBrowseItem> result = collectionItem.Select(item => new CollectionItemBrowseItem(item.Key, item.Value)).ToList();
+                return new CollectionItemBrowseView(input.CollectionId, result, input.QuestionId);
+            }
             return null;
         }
     }

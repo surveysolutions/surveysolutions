@@ -1,32 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace RavenQuestionnaire.Core.Views.CollectionItem
 {
     public class CollectionItemBrowseView
     {
-        public int TotalCount { get; private set; }
+        public string CollectionId { get; set; }
+        public List<CollectionItemBrowseItem> Items { get; set; }
+        public Guid PublicKey { get; set; }
+        public Guid QuestionId { get; set; }
 
-        public int PageSize
+
+        public CollectionItemBrowseView(string collectionId, List<CollectionItemBrowseItem> items, Guid questionId)
         {
-            get;
-            private set;
-        }
-
-        public int Page
-        {
-            get;
-            private set;
-        }
-
-
-        public CollectionItemBrowseView(int page, int pageSize, int totalCount)
-        {
-            this.TotalCount = totalCount;
-            this.Page = page;
-            this.PageSize = pageSize;
+            this.CollectionId = collectionId;
+            this.Items = items;
+            this.QuestionId = questionId;
+            this.PublicKey=new Guid();
         }
     }
 }
