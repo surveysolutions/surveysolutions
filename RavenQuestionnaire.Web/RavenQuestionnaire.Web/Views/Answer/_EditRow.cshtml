@@ -1,7 +1,5 @@
 ﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.Answer
-@using RavenQuestionnaire.Core.Views.File
 @using RavenQuestionnaire.Web.Utils
 @model AnswerView
 @{ 
@@ -28,7 +26,10 @@
         <div class="control-group">
             @Html.LabelFor(model => Model.AnswerImage, new { @class = "control-label" })
             <div class="controls">
-               @Html.DropDownListFor(model => Model.AnswerImage, images)
+            @if (images != null)
+            {
+                @Html.DropDownListFor(model => Model.AnswerImage, images)
+            }
             </div>
         </div>
         @Html.HiddenFor(model => Model.PublicKey)

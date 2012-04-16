@@ -840,6 +840,7 @@
     <Content Include="Views\Statistic\Details.cshtml" />
     <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
     <Content Include="Views\Statistic\Details.cshtml" />
+    <Content Include="Views\Answer\_EditCollectionItem.cshtml" />
     <Content Include="Views\Shared\MobileGroupNavigation.cshtml" />
     <Content Include="Views\Shared\MobileProgressBar.cshtml" />
   </ItemGroup>

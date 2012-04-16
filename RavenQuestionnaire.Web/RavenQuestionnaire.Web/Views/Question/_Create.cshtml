@@ -1,7 +1,23 @@
-﻿@using Questionnaire.Core.Web.Helpers
+﻿@using System.Collections.Concurrent
+@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Web.Utils
 @model QuestionView
+           
+ <script charset="utf-8" type="text/javascript" language="javascript">
+     $(function () {
+        if ($("[customName=questionName] option:selected").text() == "ExtendedDropDownList") 
+            $("#fromDB").removeAttr('style');
+        $('[customName=questionName]').change(function () {
+            if ($("[customName=questionName] option:selected").text() == "ExtendedDropDownList") {
+                 $("#fromDB").removeAttr('style');
+             }
+             else
+                 $("#fromDB").css('display', 'none');
+         });
+     });
+</script>
+
 @{var hideFunctionName = Model.GroupPublicKey.HasValue ? "HideCreateQuestionForm" + Model.GroupPublicKey.ToString().Replace('-', '_') : "HideCreateQuestionForm";
   if (ViewBag.Images != null)
   {
@@ -43,7 +59,11 @@
                 <div class="control-group">
                     <label class="control-label">Type</label>
                     <div class="controls">
-                        @Html.EnumDropDownListFor(model => Model.QuestionType)
+                        @{
+                            IDictionary<string, object> html = new Dictionary<string, object>();
+                            html.Add("customName", "questionName");
+                            @Html.EnumDropDownListFor(model => Model.QuestionType, html)
+                        }
                     </div>
                 </div>
                 <div class="control-group">

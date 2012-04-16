@@ -9,6 +9,7 @@ using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Collection;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.CollectionItem;
 using RavenQuestionnaire.Core.Views.File;
 
 #endregion
@@ -59,16 +60,11 @@ namespace RavenQuestionnaire.Web.Controllers
 
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult FillAnswers(Guid questionPublicKey, string collectionId)
+        public ActionResult FillAnswers(string NameCollection, Guid questionId)
         {
-            var list = new Dictionary<string,string>();
-            //List<ListItem> list = new List<ListItem>()
-            //                          {
-            //                              new ListItem() {Value = "1", Text = "VA"},
-            //                              new ListItem() {Value = "2", Text = "MD"},
-            //                              new ListItem() {Value = "3", Text = "DC"}
-            //                          };
-            return Json(list, JsonRequestBehavior.AllowGet);
+            var result = viewRepository.Load<CollectionItemBrowseInputModel, CollectionItemBrowseView>(new CollectionItemBrowseInputModel(NameCollection, questionId));
+            var answers= result.Items.Select(item => new AnswerView(new Guid(), new Answer() {AnswerText = item.Value, AnswerType = AnswerType.Select, AnswerValue = item.Key, Image = new Image(), Mandatory = false, NameCollection = NameCollection})).ToList();
+            return PartialView("_EditCollectionItem", answers);
         }
     }
 }
