@@ -144,7 +144,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\accordion.css"/>
+    <Content Include="Content\Bootstrap\accordion.css" />
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\AsyncCtpLibrary.dll" />
     <Content Include="bin\CsvHelper.dll" />
@@ -824,12 +824,13 @@
     <Content Include="Views\Answer\answerViewHtml5\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_ExtendedDropDownList.cshtml" />
     <Content Include="Views\Answer\_EditDataBaseSettings.cshtml" />
-     <Content Include="Views\Group\Mobile\_CompleteGroup.cshtml" />
+    <Content Include="Views\Group\Mobile\_CompleteGroup.cshtml" />
     <Content Include="Views\Group\Mobile\_SimpleGroup.cshtml" />
     <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
     <Content Include="Views\Statistic\Details.cshtml" />
     <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
     <Content Include="Views\Statistic\Details.cshtml" />
+    <Content Include="Views\Answer\_EditCollectionItem.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

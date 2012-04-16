@@ -15,6 +15,8 @@ namespace Questionnaire.Core.Web.Helpers
     public static class SelectExtensions
     {
 
+        #region Public
+
         public static MvcHtmlString ExtendedDropDownListFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
             where TModel : class
         {
@@ -34,17 +36,18 @@ namespace Questionnaire.Core.Web.Helpers
             where TModel : class
             where TProperty : struct, IConvertible
         {
-            if (!typeof(TProperty).IsEnum)
-            {
-                throw new ArgumentException("T must be an enumerated type");
-            }
-            var value = htmlHelper.ViewData.Model == null
-                ? default(TProperty)
-                : expression.Compile()(htmlHelper.ViewData.Model);
-
+            var value = GetValue(htmlHelper, expression);
             return htmlHelper.DropDownListFor(expression, ToSelectList(typeof(TProperty), value.ToInt32(CultureInfo.InvariantCulture).ToString()));
         }
 
+        public static MvcHtmlString EnumDropDownListFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, IDictionary<string, object> htmlAttributes)
+            where TModel : class
+            where TProperty : struct, IConvertible
+        {
+            var value = GetValue(htmlHelper, expression);
+            return htmlHelper.DropDownListFor(expression, ToSelectList(typeof(TProperty), value.ToInt32(CultureInfo.InvariantCulture).ToString()), htmlAttributes);
+        }
+        
         public static SelectList ToSelectList(Type enumType, string selectedItem)
         {
             Dictionary<string, string> items = new Dictionary<string, string>();
@@ -68,6 +71,24 @@ namespace Questionnaire.Core.Web.Helpers
         {
             return new SelectList(collection, "Key", "Value", collection.FirstOrDefault());
         }
+
+        #endregion
+
+        #region Private
+
+        private static TProperty GetValue<TModel, TProperty>(HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
+        {
+            if (!typeof(TProperty).IsEnum)
+            {
+                throw new ArgumentException("T must be an enumerated type");
+            }
+            var value = htmlHelper.ViewData.Model == null
+                ? default(TProperty)
+                : expression.Compile()(htmlHelper.ViewData.Model);
+            return value;
+        }
+
+        #endregion
         
     }
 
