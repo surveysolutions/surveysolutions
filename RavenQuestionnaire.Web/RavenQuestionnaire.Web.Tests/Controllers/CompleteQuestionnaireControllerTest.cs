@@ -84,7 +84,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void When_DeleteQuestionnaireIsExecuted()
         {
-             Controller.Delete("some_id");
+            Controller.Delete("some_id");
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<DeleteCompleteQuestionnaireCommand>()), Times.Once());
         }
 

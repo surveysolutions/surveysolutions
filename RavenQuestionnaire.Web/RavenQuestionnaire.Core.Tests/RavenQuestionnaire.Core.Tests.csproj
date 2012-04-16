@@ -160,7 +160,7 @@
     <Compile Include="CommandHandlers\UpdateQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateStatusRestrictionsHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateUserHandlerTest.cs" />
-    <Compile Include="CommandHandlers\ValidateGroupCommandHandlerTest.cs" />
+    <Compile Include="Entities\CollectionEntityTest.cs" />
     <Compile Include="Entities\CompleteGroupTest.cs" />
     <Compile Include="Entities\CompleteQuestionnaireTest.cs" />
     <Compile Include="Entities\FlowGraphEntityTest.cs" />

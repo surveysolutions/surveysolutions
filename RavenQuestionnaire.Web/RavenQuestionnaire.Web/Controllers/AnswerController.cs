@@ -1,15 +1,18 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Views.Answer;
+using RavenQuestionnaire.Core.Views.Collection;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.File;
 
 #endregion
+
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -29,9 +32,17 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult Create(Guid questionPublicKey)
         {
             LoadImages();
-            return PartialView("_EditRow", new AnswerView {QuestionId = questionPublicKey, PublicKey = Guid.NewGuid()});
+            return PartialView("_EditRow", new AnswerView { QuestionId = questionPublicKey, PublicKey = Guid.NewGuid() });
         }
 
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ActionResult CreateTabForDatabase(Guid questionPublicKey)
+        {
+            var res = viewRepository.Load<CollectionBrowseInputModel, CollectionBrowseView>(new CollectionBrowseInputModel());
+            this.ViewBag.Collection = new SelectList(res.Items.ToList(), "Id", "Name");
+            return PartialView("_EditDataBaseSettings", new AnswerView() { QuestionId = questionPublicKey, PublicKey = Guid.NewGuid() });
+        }
+        
         private void LoadImages()
         {
             var images =
@@ -44,6 +55,20 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                              Value = i.Id
                                                                          }).ToList(), "Value", "Text");
             ViewBag.Images = imagesList;
+        }
+
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ActionResult FillAnswers(Guid questionPublicKey, string collectionId)
+        {
+            var list = new Dictionary<string,string>();
+            //List<ListItem> list = new List<ListItem>()
+            //                          {
+            //                              new ListItem() {Value = "1", Text = "VA"},
+            //                              new ListItem() {Value = "2", Text = "MD"},
+            //                              new ListItem() {Value = "3", Text = "DC"}
+            //                          };
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
     }
 }

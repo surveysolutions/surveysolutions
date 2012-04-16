@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.GroupPublicKey = groupPublicKey;
         }
 
-        public AbstractQuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
+        protected AbstractQuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
             : this()
         {
             this.PublicKey = doc.PublicKey;

@@ -27,7 +27,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
     public class Question : /*IEntity<QuestionDocument>*/IQuestion<IAnswer>
     {
-
         public Question()
         {
             PublicKey = Guid.NewGuid();
@@ -44,6 +43,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             QuestionText = text;
             QuestionType = type;
         }
+
         protected void OnAdded(CompositeAddedEventArgs e)
         {
             foreach (IObserver<CompositeEventArgs> observer in observers)
@@ -80,6 +80,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         private string conditionExpression;
         private QuestionnaireParametersParser parser = new QuestionnaireParametersParser();
+
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
 

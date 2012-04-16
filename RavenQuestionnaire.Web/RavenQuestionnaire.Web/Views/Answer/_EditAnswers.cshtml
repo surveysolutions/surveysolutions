@@ -22,5 +22,11 @@
                                                                                                     UpdateTargetId = "divNewAnswer",
                                                                                                     InsertionMode = InsertionMode.InsertAfter
                                                                                                 })
+        &nbsp;&nbsp;
+        @Ajax.ActionLink("Choose from database", "CreateTabForDatabase", "Answer", new { questionPublicKey = Model.PublicKey }, new AjaxOptions
+                                                                                                {
+                                                                                                    UpdateTargetId = "divNewAnswer",
+                                                                                                    InsertionMode = InsertionMode.InsertAfter
+                                                                                                })
     </div>
 </div>
