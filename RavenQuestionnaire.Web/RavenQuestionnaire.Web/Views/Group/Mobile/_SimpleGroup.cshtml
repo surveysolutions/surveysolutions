@@ -3,7 +3,7 @@
 @model CompleteGroupMobileView
 @foreach (var question in Model.Questions)
 {
-    using (Ajax.BeginFormHtml5("SaveSingleResultI", "CompleteQuestionnaire", new { type = "Html5" },ViewBag.AjaxOptions as AjaxOptions))
+    using (Ajax.BeginFormHtml5("SaveSingleResultM", "CompleteQuestionnaire", new { type = "Html5" },ViewBag.AjaxOptions as AjaxOptions))
     {
         using (Html.BeginCollectionItem("questions", true, question.PublicKey))
         {
