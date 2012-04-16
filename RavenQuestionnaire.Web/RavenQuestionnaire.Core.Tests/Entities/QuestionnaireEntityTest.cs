@@ -129,7 +129,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                                                  new Answer()
                                                      {
                                                          AnswerText = "answer 2",
-                                                         AnswerType = AnswerType.Text,
+                                                         AnswerType = AnswerType.Select,
                                                          Mandatory = false
                                                      }
                                              });

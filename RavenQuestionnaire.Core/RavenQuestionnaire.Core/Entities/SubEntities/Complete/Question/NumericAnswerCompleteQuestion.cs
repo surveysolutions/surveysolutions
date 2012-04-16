@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 value = 0;
               //  throw new InvalidCastException("answer is no numeric value");
             currentAnswer.Selected = true;
-            currentAnswer.AnswerType = AnswerType.Text;
+           // currentAnswer.AnswerType = AnswerType.Text;
             currentAnswer.AnswerValue = value;
             this.document.Answers.Clear();
             this.document.Answers.Add(currentAnswer);
