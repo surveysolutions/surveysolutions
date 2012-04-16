@@ -21,7 +21,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             if (currentAnswer == null || currentAnswer.QuestionPublicKey != this.document.PublicKey)
                 throw new CompositeException("answer wasn't found");
             currentAnswer.Selected = true;
-            currentAnswer.AnswerType= AnswerType.Text;
+       //     currentAnswer.AnswerType= AnswerType.Text;
             this.document.Answers.Clear();
             this.document.Answers.Add(currentAnswer);
 
