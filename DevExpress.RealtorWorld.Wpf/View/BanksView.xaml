@@ -1,0 +1,96 @@
+﻿<view:ModuleView x:Class="DevExpress.RealtorWorld.Xpf.View.BanksView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers"
+    xmlns:view="clr-namespace:DevExpress.RealtorWorld.Xpf.View"
+    mc:Ignorable="d"
+    d:DesignHeight="800" d:DesignWidth="1000">
+
+    <view:ModuleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/DevExpress.RealtorWorld.Xpf;component/Themes/Palette.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </view:ModuleView.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ContentControl Content="{Binding Navigator.View}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top" />
+        <Grid Grid.Row="1" Margin="62,0,10,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.65*" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="0.35*" MaxWidth="400" />
+            </Grid.ColumnDefinitions>
+            <dxc:ChartControl DataSource="{Binding Data.Rates}" Palette="{StaticResource CustomPalette}">
+                <dxc:ChartControl.Titles>
+                    <dxc:Title Dock="Top" HorizontalAlignment="Center" Content="Mortgage Rate Data" />
+                </dxc:ChartControl.Titles>
+                <dxc:ChartControl.Legend>
+                        <dxc:Legend HorizontalPosition="Right" VerticalPosition="Top" Foreground="#FFE3E3E3" />
+                </dxc:ChartControl.Legend>
+                <dxc:ChartControl.Diagram>
+                    <dxc:XYDiagram2D EnableAxisXNavigation="True">
+                        <dxc:XYDiagram2D.AxisY>
+                            <dxc:AxisY2D Interlaced="False" GridLinesMinorVisible="True" TickmarksMinorVisible="True" MinorCount="2" GridSpacing="0.3">
+                                <dxc:AxisY2D.Range>
+                                    <dxc:AxisRange dxc:AxisY2D.AlwaysShowZeroLevel="False" />
+                                </dxc:AxisY2D.Range>
+                            </dxc:AxisY2D>
+                        </dxc:XYDiagram2D.AxisY>
+                        <dxc:XYDiagram2D.AxisX>
+                            <dxc:AxisX2D Interlaced="False" GridLinesMinorVisible="True" GridLinesVisible="True" TickmarksMinorVisible="True" MinorCount="4">
+                                <dxc:AxisX2D.Range>
+                                    <dxc:AxisRange MinValue="{Binding TimeRangeMinValue, Mode=TwoWay}" MaxValue="{Binding TimeRangeMaxValue, Mode=TwoWay}" />
+                                </dxc:AxisX2D.Range>
+                                <dxc:AxisX2D.Label>
+                                    <dxc:AxisLabel />
+                                </dxc:AxisX2D.Label>
+                            </dxc:AxisX2D>
+                        </dxc:XYDiagram2D.AxisX>
+                        <dxc:XYDiagram2D.Series>
+                            <dxc:LineSeries2D DisplayName="30 year Fixed" MarkerVisible="False" ArgumentDataMember="Date" ValueDataMember="FRM30" ArgumentScaleType="DateTime" ValueScaleType="Numerical">
+                                <dxc:LineSeries2D.Label>
+                                    <dxc:SeriesLabel Visible="False" />
+                                </dxc:LineSeries2D.Label>
+                            </dxc:LineSeries2D>
+                            <dxc:LineSeries2D DisplayName="15 year Fixed" MarkerVisible="False" ArgumentDataMember="Date" ValueDataMember="FRM15" ArgumentScaleType="DateTime" ValueScaleType="Numerical">
+                                <dxc:LineSeries2D.Label>
+                                    <dxc:SeriesLabel Visible="False" />
+                                </dxc:LineSeries2D.Label>
+                            </dxc:LineSeries2D>
+                            <dxc:LineSeries2D DisplayName="1 year ARM" MarkerVisible="False" ArgumentDataMember="Date" ValueDataMember="ARM1" ArgumentScaleType="DateTime" ValueScaleType="Numerical">
+                                <dxc:LineSeries2D.Label>
+                                    <dxc:SeriesLabel Visible="False" />
+                                </dxc:LineSeries2D.Label>
+                            </dxc:LineSeries2D>
+                        </dxc:XYDiagram2D.Series>
+                    </dxc:XYDiagram2D>
+                </dxc:ChartControl.Diagram>
+            </dxc:ChartControl>
+            <dxg:GridControl Grid.Column="2" ItemsSource="{Binding Data.Rates}" helpers:GridControlHelper.ExpandAllGroups="True">
+                <dxg:GridControl.View>
+                    <dxg:TableView AllowPerPixelScrolling="True" AllowFilterEditor="False" AllowEditing="False" NavigationStyle="Row" AllowHorizontalScrollingVirtualization="False" FadeSelectionOnLostFocus="False"
+                            AutoWidth="True" ShowHorizontalLines="False" ShowIndicator="False">
+                    </dxg:TableView>
+                </dxg:GridControl.View>
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn FieldName="Date" Header="Date" Width="110" GroupIndex="0" GroupInterval="DateMonth" />
+                    <dxg:GridColumn FieldName="FRM30" Header="30 year Fixed" Width="92" />
+                    <dxg:GridColumn FieldName="FRM15" Header="15 year Fixed" Width="92" />
+                    <dxg:GridColumn FieldName="ARM1" Header="1 year ARM" Width="92" />
+                </dxg:GridControl.Columns>
+            </dxg:GridControl>
+        </Grid>
+    </Grid>
+</view:ModuleView>

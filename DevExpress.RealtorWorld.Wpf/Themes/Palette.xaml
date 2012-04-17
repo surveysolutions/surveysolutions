@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts">
+    
+    <dxc:CustomPalette x:Key="CustomPalette">
+        <dxc:CustomPalette.Colors>
+            <Color>#FFF78A09</Color>
+            <Color>#FF27D9A4</Color>
+            <Color>#FFCD5F95</Color>
+            <Color>#FF7565C7</Color>
+            <Color>#FF65A5C7</Color>
+        </dxc:CustomPalette.Colors>
+    </dxc:CustomPalette>
+</ResourceDictionary>

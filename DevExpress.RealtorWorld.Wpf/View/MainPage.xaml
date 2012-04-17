@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="DevExpress.RealtorWorld.Xpf.View.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers"
+    xmlns:view="clr-namespace:DevExpress.RealtorWorld.Xpf.View"
+    mc:Ignorable="d"
+    d:DesignHeight="800" d:DesignWidth="1000">
+
+    <dx:BackgroundPanel>
+        <Grid>
+            <!--BEGIN WPF-->
+            <Grid.Margin>0,-10,32,32</Grid.Margin>
+            <!--END WPF-->
+            <!--ONLY SL
+            <Grid.Margin>0,6,32,32</Grid.Margin>
+            ONLY SL-->
+            <helpers:ViewPresenter Content="{Binding CurrentModule.View}" StoryboardSelector="{Binding StoryboardSelector}">
+                <helpers:ViewPresenter.Resources>
+                    <Storyboard x:Key="FromRight">
+                        <DoubleAnimation To="1" Duration="0" Storyboard.TargetProperty="(helpers:ViewPresenter.NewContent).(UIElement.Opacity)" />
+                        <DoubleAnimation From="0" To="-1" Duration="00:00:01.00" Storyboard.TargetProperty="OldContentTranslateX" />
+                        <DoubleAnimation From="1" To="0" Duration="00:00:01.00" Storyboard.TargetProperty="NewContentTranslateX" />
+                    </Storyboard>
+                    <Storyboard x:Key="FromLeft">
+                        <DoubleAnimation To="1" Duration="0" Storyboard.TargetProperty="(helpers:ViewPresenter.NewContent).(UIElement.Opacity)" />
+                        <DoubleAnimation From="0" To="1" Duration="00:00:01.00" Storyboard.TargetProperty="OldContentTranslateX" />
+                        <DoubleAnimation From="-1" To="0" Duration="00:00:01.00" Storyboard.TargetProperty="NewContentTranslateX" />
+                    </Storyboard>
+                </helpers:ViewPresenter.Resources>
+            </helpers:ViewPresenter>
+            <!--ONLY SL
+            <view:WaitScreen helpers:WaitScreenHelperBase.IsWaitScreen="True" />
+            ONLY SL-->
+        </Grid>
+    </dx:BackgroundPanel>
+</UserControl>
