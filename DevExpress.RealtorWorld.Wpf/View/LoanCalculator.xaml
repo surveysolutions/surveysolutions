@@ -1,0 +1,182 @@
+﻿<view:ModuleView x:Class="DevExpress.RealtorWorld.Xpf.View.LoanCalculatorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers"
+    xmlns:view="clr-namespace:DevExpress.RealtorWorld.Xpf.View"
+    mc:Ignorable="d"
+    d:DesignHeight="800" d:DesignWidth="1000">
+
+    <view:ModuleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/DevExpress.RealtorWorld.Xpf;component/Themes/Palette.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <helpers:StringFormatConverter x:Key="StringFormatConverter" />
+            <helpers:ComboBoxFormatConverter x:Key="ComboBoxFormatConverter" />
+            <helpers:YearsCountConverter x:Key="YearsCountConverter" />
+        </ResourceDictionary>
+    </view:ModuleView.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ContentControl Content="{Binding Navigator.View}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top" />
+        <Grid Grid.Row="1" Margin="62,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="400" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="*" MaxWidth="500" />
+            </Grid.ColumnDefinitions>
+            <dxlc:LayoutControl VerticalAlignment="Stretch" HorizontalAlignment="Left" Orientation="Vertical" ItemSpace="12" Padding="0">
+                <dxlc:LayoutGroup VerticalAlignment="Top" Orientation="Horizontal">
+                    <dxlc:LayoutGroup HorizontalAlignment="Stretch" Orientation="Vertical">
+                        <dxlc:LayoutItem Label="Loan Amount:">
+                            <dxe:SpinEdit EditValue="{Binding LoanAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Mask="c0" MaskUseAsDisplayFormat="True" MinValue="1000" AllowNullInput="False" Increment="1000" MaxValue="1000000000000" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Interest Rate:">
+                            <dxe:ComboBoxEdit IsTextEditable="False" ItemsSource="{Binding InterestRatesList}" HorizontalContentAlignment="Right"
+                                    EditValue="{Binding InterestRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMember="Text" ValueMember="Value" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Term of Loan:">
+                            <dxe:ComboBoxEdit IsTextEditable="False" ItemsSource="{Binding TermOfLoanList}" HorizontalContentAlignment="Right"
+                                EditValue="{Binding TermOfLoan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMember="Text" ValueMember="Value" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Start Month:">
+                            <dxe:ComboBoxEdit IsTextEditable="False" ItemsSource="{Binding StartMonthList}" HorizontalContentAlignment="Right"
+                                EditValue="{Binding StartMonth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMember="Text" ValueMember="Value" />
+                        </dxlc:LayoutItem>
+                        <Button Content="Calculate" Command="{Binding CalculateCommand}" />
+                    </dxlc:LayoutGroup>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Your Mounthly Payment" HorizontalAlignment="Center" FontSize="16" />
+                        <TextBlock Text="{Binding Payment, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:c\}}" HorizontalAlignment="Center" FontSize="18" />
+                    </StackPanel>
+                </dxlc:LayoutGroup>
+                <dxc:ChartControl DataSource="{Binding YearPayments}" Palette="{StaticResource CustomPalette}">
+                    <dxc:ChartControl.Resources>
+                        <DataTemplate x:Key="TransparentLabel">
+                            <Border BorderThickness="1" CornerRadius="9" RenderTransformOrigin="0.5,0.5" Background="Transparent">
+                                <Border.RenderTransform>
+                                    <RotateTransform Angle="-90" />
+                                </Border.RenderTransform>
+                                <TextBlock Text="{Binding Path=Text}" Padding="5,1,5,1" FontSize="10" />
+                            </Border>
+                        </DataTemplate>
+                    </dxc:ChartControl.Resources>
+                    <dxc:ChartControl.Titles>
+                        <dxc:Title Dock="Top" HorizontalAlignment="Center" Content="Payment by Year" />
+                    </dxc:ChartControl.Titles>
+                    <dxc:ChartControl.Legend>
+                        <dxc:Legend HorizontalPosition="Right" VerticalAlignment="Top" Foreground="#FFE3E3E3" />
+                    </dxc:ChartControl.Legend>
+                    <dxc:ChartControl.Diagram>
+                        <dxc:XYDiagram2D>
+                            <dxc:XYDiagram2D.AxisY>
+                                <dxc:AxisY2D Interlaced="False">
+                                    <dxc:AxisY2D.NumericOptions>
+                                        <dxc:NumericOptions Format="Currency" Precision="0" />
+                                    </dxc:AxisY2D.NumericOptions>
+                                </dxc:AxisY2D>
+                            </dxc:XYDiagram2D.AxisY>
+                            <dxc:XYDiagram2D.AxisX>
+                                <dxc:AxisX2D GridSpacing="2" MinorCount="1" />
+                            </dxc:XYDiagram2D.AxisX>
+                            <dxc:XYDiagram2D.Series>
+                                <dxc:BarStackedSeries2D DisplayName="Interest" ArgumentDataMember="Year" ValueDataMember="Interest" ArgumentScaleType="Numerical" ValueScaleType="Numerical">
+                                    <dxc:BarStackedSeries2D.PointOptions>
+                                        <dxc:PointOptions PointView="Values">
+                                            <dxc:PointOptions.ValueNumericOptions>
+                                                <dxc:NumericOptions Format="Currency" Precision="0" />
+                                            </dxc:PointOptions.ValueNumericOptions>
+                                        </dxc:PointOptions>
+                                    </dxc:BarStackedSeries2D.PointOptions>
+                                    <dxc:BarStackedSeries2D.Label>
+                                        <dxc:SeriesLabel ElementTemplate="{StaticResource TransparentLabel}" />
+                                    </dxc:BarStackedSeries2D.Label>
+                                    <dxc:BarStackedSeries2D.Model>
+                                        <dxc:BorderlessSimpleBar2DModel />
+                                    </dxc:BarStackedSeries2D.Model>
+                                </dxc:BarStackedSeries2D>
+                                <dxc:BarStackedSeries2D DisplayName="Principal" ArgumentDataMember="Year" ValueDataMember="Principal" ArgumentScaleType="Numerical" ValueScaleType="Numerical">
+                                    <dxc:BarStackedSeries2D.PointOptions>
+                                        <dxc:PointOptions PointView="Values">
+                                            <dxc:PointOptions.ValueNumericOptions>
+                                                <dxc:NumericOptions Format="Currency" Precision="0" />
+                                            </dxc:PointOptions.ValueNumericOptions>
+                                        </dxc:PointOptions>
+                                    </dxc:BarStackedSeries2D.PointOptions>
+                                    <dxc:BarStackedSeries2D.Label>
+                                        <dxc:SeriesLabel ElementTemplate="{StaticResource TransparentLabel}" />
+                                    </dxc:BarStackedSeries2D.Label>
+                                    <dxc:BarStackedSeries2D.Model>
+                                        <dxc:BorderlessSimpleBar2DModel />
+                                    </dxc:BarStackedSeries2D.Model>
+                                </dxc:BarStackedSeries2D>
+                            </dxc:XYDiagram2D.Series>
+                        </dxc:XYDiagram2D>
+                    </dxc:ChartControl.Diagram>
+                </dxc:ChartControl>
+            </dxlc:LayoutControl>
+            <dxg:GridControl ItemsSource="{Binding Payments}" Grid.Column="2">
+                <dxg:GridControl.View>
+                    <dxg:TableView AllowPerPixelScrolling="True" AllowFilterEditor="False" AllowEditing="False" NavigationStyle="Row" AllowHorizontalScrollingVirtualization="False"
+                            ShowGroupPanel="False" ShowTotalSummary="True" AutoWidth="True" FadeSelectionOnLostFocus="False" ShowHorizontalLines="False" ShowIndicator="False" />
+                </dxg:GridControl.View>
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn FieldName="Month" Header="Month" Width="130" AllowColumnFiltering="False">
+                        <dxg:GridColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="3,0" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding RowData.Row.MonthNumber}" />
+                                    <TextBlock Text="(" Margin="5,0,0,0" />
+                                    <TextBlock Text="{Binding RowData.Row.Month, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:MMMM\, yyyy\}}" />
+                                    <TextBlock Text=")" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </dxg:GridColumn.CellTemplate>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn Header="Balance" Width="92" FieldName="Balance" AllowColumnFiltering="False">
+                        <dxg:GridColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="3,0" Text="{Binding RowData.Row.Balance, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:c0\}}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </dxg:GridColumn.CellTemplate>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="MonthlyPayment" Header="Interest/Principal" Width="243" HorizontalHeaderContentAlignment="Center" AllowColumnFiltering="False" AllowSorting="False">
+                        <dxg:GridColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.5*" />
+                                        <ColumnDefinition Width="0.5*" />
+                                    </Grid.ColumnDefinitions>
+                                    <dxe:ProgressBarEdit Grid.ColumnSpan="2" EditValue="{Binding RowData.Row.Interest, Mode=OneWay}" Minimum="0" Maximum="{Binding RowData.Row.MonthlyPayment, Mode=OneWay}" Margin="3,2,2,2" />
+                                    <TextBlock Margin="6,0" Text="{Binding RowData.Row.Interest, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:c0\}}" VerticalAlignment="Center" />
+                                    <TextBlock Margin="3,0" Grid.Column="1" HorizontalAlignment="Right" Text="{Binding RowData.Row.Principal, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:c0\}}" VerticalAlignment="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </dxg:GridColumn.CellTemplate>
+                        <dxg:GridColumn.TotalSummaryContentStyle>
+                            <Style TargetType="FrameworkElement">
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                            </Style>
+                        </dxg:GridColumn.TotalSummaryContentStyle>
+                    </dxg:GridColumn>
+                </dxg:GridControl.Columns>
+                <dxg:GridControl.TotalSummary>
+                    <dxg:GridSummaryItem SummaryType="Sum" FieldName="Interest" ShowInColumn="MonthlyPayment" DisplayFormat="{}Interest:&#x09; {0:c0}" />
+                    <dxg:GridSummaryItem SummaryType="Sum" FieldName="Principal" ShowInColumn="MonthlyPayment" DisplayFormat="{}Principal:&#x09; {0:c0}" />
+                </dxg:GridControl.TotalSummary>
+            </dxg:GridControl>
+        </Grid>
+    </Grid>
+</view:ModuleView>

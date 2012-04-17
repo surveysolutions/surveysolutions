@@ -1,0 +1,84 @@
+﻿<view:ModuleView x:Class="DevExpress.RealtorWorld.Xpf.View.ListingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers"
+    xmlns:view="clr-namespace:DevExpress.RealtorWorld.Xpf.View"
+    mc:Ignorable="d"
+    d:DesignHeight="800" d:DesignWidth="1000">
+
+    <view:ModuleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/DevExpress.RealtorWorld.Xpf;component/Themes/TileHoverAnimation.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <dx:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <helpers:StringFormatConverter x:Key="StringFormatConverter" />
+            <helpers:ImageSourceConverter x:Key="ImageSourceConverter" />
+        </ResourceDictionary>
+    </view:ModuleView.Resources>
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ContentControl Content="{Binding Navigator.View}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top" />
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border BorderBrush="#FF515151" BorderThickness="1" Margin="62,0,0,10" Padding="0">
+                <dxlc:TileLayoutControl x:Name="HomesEdit" AllowItemMoving="False" Orientation="Vertical" Padding="12" BreakFlowToFit="False" ItemsSource="{Binding Data.Homes}">
+                    <dxlc:TileLayoutControl.ItemTemplate>
+                        <DataTemplate>
+                            <dxlc:Tile Width="270" Height="140" Header="{Binding}" Content="{Binding}" VerticalHeaderAlignment="Stretch" helpers:ZoomHelper.SupressZoomFactor="300"
+                                Command="{Binding Path=DataContext.SetCurrentHomeCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
+                                CommandParameter="{Binding}"
+                                helpers:TileSelectHelper.ComparisonPropertyPath="ID"
+                                helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.CurrentHome.ID, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}" Padding="0">
+                                <dxlc:Tile.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <helpers:VisualStateControl Style="{StaticResource TileHoverAnimation}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                                <Grid>
+                                                    <Border Background="#f78a09" Opacity="0.25" />
+                                                    <Grid>
+                                                        <Border Background="#f78a09" VerticalAlignment="Top" HorizontalAlignment="Right">
+                                                            <StackPanel Margin="6,2,6,3">
+                                                                <TextBlock FontSize="10" Text="{Binding Beds, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0\} Beds}" />
+                                                                <TextBlock FontSize="10" Text="{Binding Baths, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0\} Baths}" />
+                                                            </StackPanel>
+                                                        </Border>
+                                                        <Border Background="#f78a09" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                                                            <StackPanel Margin="10,0,10,1">
+                                                                <TextBlock FontSize="28" Text="{Binding Price, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:c0\}}" />
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </Grid>
+                                                </Grid>
+                                            </helpers:VisualStateControl>
+                                            <Grid IsHitTestVisible="False" Visibility="{Binding Path=(helpers:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                                            </Grid>
+                                        </Grid>
+                                    </DataTemplate>
+                                </dxlc:Tile.HeaderTemplate>
+                                <dxlc:Tile.ContentTemplate>
+                                    <DataTemplate>
+                                        <Image Stretch="UniformToFill" Source="{Binding Photo, Converter={StaticResource ImageSourceConverter}}" />
+                                    </DataTemplate>
+                                </dxlc:Tile.ContentTemplate>
+                            </dxlc:Tile>
+                        </DataTemplate>
+                    </dxlc:TileLayoutControl.ItemTemplate>
+                </dxlc:TileLayoutControl>
+            </Border>
+            <helpers:ViewPresenter Grid.Column="1" Margin="12,0,10,10" Content="{Binding Detail.View}" />
+        </Grid>
+    </Grid>
+</view:ModuleView>
