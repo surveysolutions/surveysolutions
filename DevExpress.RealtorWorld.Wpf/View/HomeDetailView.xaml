@@ -1,0 +1,120 @@
+﻿<view:ModuleView x:Class="DevExpress.RealtorWorld.Xpf.View.HomeDetailView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers"
+    xmlns:view="clr-namespace:DevExpress.RealtorWorld.Xpf.View"
+    xmlns:interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    mc:Ignorable="d"
+    d:DesignHeight="800" d:DesignWidth="1000">
+
+    <view:ModuleView.Resources>
+        <helpers:StringFormatConverter x:Key="StringFormatConverter" />
+        <helpers:ListFormatConverter x:Key="ListFormatConverter" />
+        <helpers:ImageSourceConverter x:Key="ImageSourceConverter" />
+    </view:ModuleView.Resources>
+
+    <!--BEGIN REPLACE 'WrapPanel'dx:WrapPanel'-->
+    <Grid x:Name="LayoutRoot">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid Width="420" helpers:ZoomHelper.SupressZoomFactor="135">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Border BorderBrush="#50000000" BorderThickness="1" Background="#FFE3E3E3" Padding="5" Height="280" helpers:ZoomHelper.SupressZoomFactor="135">
+                <helpers:ElementSlider x:Name="AppearanceEdit" ItemsSource="{Binding Photos}">
+                    <helpers:ElementSlider.ItemTemplate>
+                        <DataTemplate>
+                            <Image Stretch="Uniform" Source="{Binding Photo, Converter={StaticResource ImageSourceConverter}}" />
+                        </DataTemplate>
+                    </helpers:ElementSlider.ItemTemplate>
+                </helpers:ElementSlider>
+            </Border>
+            <ScrollViewer Grid.Row="1" BorderBrush="#FF515151" BorderThickness="1" Margin="0,12,0,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="12" Background="#FF444444">
+                <!--BEGIN WPF-->
+                <ScrollViewer.IsManipulationEnabled>True</ScrollViewer.IsManipulationEnabled>
+                <ScrollViewer.PanningMode>VerticalOnly</ScrollViewer.PanningMode>
+                <!--END WPF-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.ColumnSpan="2" Grid.Row="1" Margin="0,10,0,0">
+                        <TextBlock x:Name="AddressEdit" FontSize="19" Foreground="#FFF78A09" Text="{Binding Data.Home.Address}" TextWrapping="Wrap" HorizontalAlignment="Left" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="BedroomsEdit" Text="{Binding Data.Home.Beds}" />
+                                    <TextBlock Text="bedrooms," Margin="4,0,4,0" />
+                                    <TextBlock x:Name="BathroomsEdit" Text="{Binding Data.Home.Baths}" />
+                                    <TextBlock Text="bathrooms" Margin="4,0,0,0" />
+                                </StackPanel>
+                                <WrapPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="House size"  Margin="0,0,4,0" />
+                                        <TextBlock x:Name="HouseSizeEdit" Text="{Binding Data.Home.HouseSize, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:n0\} Sq Ft}" />
+                                        <TextBlock Text="," Margin="0,0,4,0" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="lot size" Margin="0,0,4,0" />
+                                        <TextBlock x:Name="LotSizeEdit" Text="{Binding Data.Home.LotSize, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:n\} Acres}" />
+                                    </StackPanel>
+                                </WrapPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Built in" Margin="0,0,4,0" />
+                                    <TextBlock x:Name="YearBuiltEdit" Text="{Binding Data.Home.YearBuilt}" />
+                                </StackPanel>
+                            </StackPanel>
+                            <Border Background="#FFF78A09" Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock FontSize="21" Margin="10,4" x:Name="PriceEdit" Text="{Binding Data.Home.Price, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:c0\}}" />
+                            </Border>
+                        </Grid>
+                        <TextBlock x:Name="FeaturesEdit" Margin="0,15,0,0" Text="{Binding Data.Home.Features, Converter={StaticResource ListFormatConverter}}" />
+                    </StackPanel>
+                    <Grid Grid.Row="0" Cursor="Hand" Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <interactivity:Interaction.Triggers>
+                            <interactivity:EventTrigger EventName="MouseLeftButtonDown">
+                                <interactivity:InvokeCommandAction Command="{Binding Parent.Parent.ShowAgentsCommand}" CommandParameter="{Binding Data.Agent}"/>
+                            </interactivity:EventTrigger>
+                        </interactivity:Interaction.Triggers>
+                        <StackPanel Grid.Column="1" Margin="20,0,0,20" VerticalAlignment="Center">
+                            <TextBlock FontSize="19" Text="Agent"  Foreground="#FFF78A09"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="16" Text="{Binding Data.Agent.FirstName}"/>
+                                <TextBlock FontSize="16" Text="{Binding Data.Agent.LastName}" Margin="6,0,0,0"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Data.Agent.Phone}"/>
+                            <TextBlock Text="{Binding Data.Agent.Email}"/>
+                        </StackPanel>
+                        <Border BorderBrush="#50000000" BorderThickness="1" Background="#FFE3E3E3" Padding="5" HorizontalAlignment="Left" VerticalAlignment="Top" Height="120" Width="100">
+                            <Image Source="{Binding Data.Agent.Photo, Converter={StaticResource ImageSourceConverter}}" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+        <helpers:ImageScrollViewer Source="{Binding Data.Layout, Converter={StaticResource ImageSourceConverter}}" Grid.Column="1" Padding="0" Margin="12,0,0,0" />
+    </Grid>
+    <!--END REPLACE 'WrapPanel'dx:WrapPanel'-->
+</view:ModuleView>

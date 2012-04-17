@@ -1,0 +1,107 @@
+﻿<view:ModuleView x:Class="DevExpress.RealtorWorld.Xpf.View.AgentDetailView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts"
+    xmlns:helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers"
+    xmlns:view="clr-namespace:DevExpress.RealtorWorld.Xpf.View"
+    xmlns:local="clr-namespace:DevExpress.RealtorWorld.Xpf"    
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    mc:Ignorable="d"
+    d:DesignHeight="800" d:DesignWidth="1000">
+
+    <view:ModuleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/DevExpress.RealtorWorld.Xpf;component/Themes/Palette.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <helpers:StringFormatConverter x:Key="StringFormatConverter" />
+            <helpers:ImageSourceConverter x:Key="ImageSourceConverter" />
+        </ResourceDictionary>
+    </view:ModuleView.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.4*" />
+            <RowDefinition Height="12" />
+            <RowDefinition Height="0.6*" MaxHeight="400" />
+        </Grid.RowDefinitions>
+        <dxg:GridControl x:Name="CurrentAgentHomesEdit" ItemsSource="{Binding Data.Homes}">
+            <dxg:GridControl.View>
+                <dxg:TableView x:Name="HomesView" AutoWidth="True" AllowPerPixelScrolling="True" ShowGroupPanel="False" AllowFilterEditor="False" ShowGroupedColumns="True"
+                        BestFitMode="Smart" BestFitArea="All" ShowHorizontalLines="False" AllowEditing="False" NavigationStyle="Row" AllowHorizontalScrollingVirtualization="False" FadeSelectionOnLostFocus="False"
+                        ShowIndicator="False">
+                    <interactivity:Interaction.Triggers>
+                        <interactivity:EventTrigger EventName="KeyDown">
+                            <helpers:KeyEventAction Key="Enter" Command="{Binding Parent.Parent.ShowListingCommand}" CommandParameter="{Binding ElementName=HomesView, Path=FocusedRow}"/>
+                        </interactivity:EventTrigger>
+                        <interactivity:EventTrigger EventName="RowDoubleClick">
+                            <interactivity:InvokeCommandAction Command="{Binding Parent.Parent.ShowListingCommand}" CommandParameter="{Binding ElementName=HomesView, Path=FocusedRow}"/>
+                        </interactivity:EventTrigger>
+                    </interactivity:Interaction.Triggers>
+                </dxg:TableView>
+            </dxg:GridControl.View>
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn FieldName="PhotoImage" Header="Photo" AllowColumnFiltering="False" FixedWidth="True" Width="100">
+                    <dxg:GridColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding RowData.Row.Photo, Converter={StaticResource ImageSourceConverter}}" Stretch="Uniform" Margin="3" />
+                        </DataTemplate>
+                    </dxg:GridColumn.CellTemplate>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="Address" Header="Address" Width="536" />
+                <dxg:GridColumn FieldName="Beds" Header="Bedrooms" Width="160" />
+                <dxg:GridColumn FieldName="Baths" Header="Bathrooms" Width="160" />
+                <dxg:GridColumn FieldName="HouseSize" Header="House Size" Width="160">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings DisplayFormat='{}{0:n0} Sq Ft' />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="Price" Header="Price" Width="160">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings DisplayFormat="C0" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+            </dxg:GridControl.Columns>
+        </dxg:GridControl>
+        <dxc:ChartControl x:Name="SoldsEdit" Grid.Row="2"  VerticalAlignment="Bottom" helpers:ChartAnimationHelper.AnimateOnDataSourceChanged="True"
+                DataSource="{Binding Data.SalesStatistic}" Palette="{StaticResource CustomPalette}">
+            <dxc:ChartControl.Titles>
+                <dxc:Title Dock="Top" HorizontalAlignment="Center" Content="{Binding Data.Agent.FullName, Converter={StaticResource StringFormatConverter}, ConverterParameter=Homes Sold by \{0\}}" />
+            </dxc:ChartControl.Titles>
+            <dxc:ChartControl.Legend>
+                <dxc:Legend HorizontalPosition="Right" VerticalPosition="Top" Foreground="#FFE3E3E3" />
+            </dxc:ChartControl.Legend>
+            <dxc:ChartControl.Diagram>
+                <dxc:XYDiagram2D BarDistance="0.04" EnableAxisXNavigation="True" SeriesDataMember="Region">
+                    <dxc:XYDiagram2D.AxisY>
+                        <dxc:AxisY2D Interlaced="False" GridSpacing="2" MinorCount="1" />
+                    </dxc:XYDiagram2D.AxisY>
+                    <dxc:XYDiagram2D.AxisX>
+                        <dxc:AxisX2D Interlaced="False" GridSpacing="1" TickmarksMinorVisible="False">
+                            <dxc:AxisX2D.Range>
+                                <dxc:AxisRange MinValue="{Binding YearRangeMinValue, Mode=TwoWay}" MaxValue="{Binding YearRangeMaxValue, Mode=TwoWay}" />
+                            </dxc:AxisX2D.Range>
+                        </dxc:AxisX2D>
+                    </dxc:XYDiagram2D.AxisX>
+                    <dxc:XYDiagram2D.SeriesTemplate>
+                        <dxc:BarSideBySideSeries2D AnimationAutoStartMode="SetStartState" ValueDataMember="Value" ArgumentDataMember="Year" ArgumentScaleType="Numerical" ValueScaleType="Numerical">
+                            <dxc:BarSideBySideSeries2D.Label>
+                                <dxc:SeriesLabel Indent="20" ResolveOverlappingMode="Default" ConnectorThickness="1" />
+                            </dxc:BarSideBySideSeries2D.Label>
+                            <dxc:BarSideBySideSeries2D.Model>
+                                <dxc:BorderlessSimpleBar2DModel />
+                            </dxc:BarSideBySideSeries2D.Model>
+                        </dxc:BarSideBySideSeries2D>
+                    </dxc:XYDiagram2D.SeriesTemplate>
+                </dxc:XYDiagram2D>
+            </dxc:ChartControl.Diagram>
+        </dxc:ChartControl>
+    </Grid>
+</view:ModuleView>

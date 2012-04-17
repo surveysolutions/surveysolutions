@@ -1,0 +1,25 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers">
+
+    <Style TargetType="helpers:ViewPresenter">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="DefaultStoryboard">
+            <Setter.Value>
+                <Storyboard>
+                    <DoubleAnimation To="1" Duration="00:00:00.50" Storyboard.TargetProperty="(helpers:ViewPresenter.NewContent).(UIElement.Opacity)" />
+                    <DoubleAnimation To="0" Duration="00:00:00.50" Storyboard.TargetProperty="(helpers:ViewPresenter.OldContent).(UIElement.Opacity)" />
+                </Storyboard>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="helpers:ViewPresenter">
+                    <ContentPresenter x:Name="Root" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

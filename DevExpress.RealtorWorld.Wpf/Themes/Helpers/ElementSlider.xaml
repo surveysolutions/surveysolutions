@@ -1,0 +1,96 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers">
+
+    <Style x:Key="PrevNextButton" TargetType="Button">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid Background="#00FF0000" Cursor="Hand">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition From="Normal" To="Disabled" GeneratedDuration="00:00:00.05" />
+                                    <VisualTransition From="MouseOver" To="Disabled" GeneratedDuration="00:00:00.05" />
+                                    <VisualTransition From="Disabled" To="Normal" GeneratedDuration="00:00:00.05" />
+                                    <VisualTransition From="Disabled" To="MouseOver" GeneratedDuration="00:00:00.05" />
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.Storyboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0" To="0" Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Opacity" />
+                                        </Storyboard>
+                                    </VisualState.Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver" />
+                                <VisualState x:Name="Pressed" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="helpers:ElementSlider">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="helpers:ElementSlider">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition From="Normal" To="MouseOver" GeneratedDuration="00:00:00.05" />
+                                    <VisualTransition From="MouseOver" To="Normal" GeneratedDuration="00:00:00.05" />
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver">
+                                    <VisualState.Storyboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="PrevButton" Storyboard.TargetProperty="Opacity" />
+                                            <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="NextButton" Storyboard.TargetProperty="Opacity" />
+                                        </Storyboard>
+                                    </VisualState.Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <helpers:RenderScrollViewer x:Name="ScrollViewer" Grid.ColumnSpan="3" Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="0" IsManipulationEnabled="False"
+                            ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <ItemsPresenter />
+                        </helpers:RenderScrollViewer>
+                        <Button x:Name="PrevButton" Style="{StaticResource PrevNextButton}" Margin="12" HorizontalAlignment="Left" VerticalAlignment="Center" Opacity="0"
+                            Command="{Binding ShowPrevElementCommand, RelativeSource={RelativeSource TemplatedParent}}">
+                            <Image Source="/DevExpress.RealtorWorld.Xpf;component/Images/Prev.png" Stretch="None" />
+                        </Button>
+                        <Button x:Name="NextButton" Style="{StaticResource PrevNextButton}" Margin="12" HorizontalAlignment="Right" VerticalAlignment="Center" Opacity="0"
+                            Command="{Binding ShowNextElementCommand, RelativeSource={RelativeSource TemplatedParent}}">
+                            <Image Source="/DevExpress.RealtorWorld.Xpf;component/Images/Next.png" Stretch="None" />
+                        </Button>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="helpers:ElementSliderItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="helpers:ElementSliderItem">
+                    <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="{TemplateBinding Padding}"
+                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

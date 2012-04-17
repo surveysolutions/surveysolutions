@@ -1,0 +1,145 @@
+﻿<view:ModuleView x:Class="DevExpress.RealtorWorld.Xpf.View.HomeStatisticView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts"
+    xmlns:helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers"
+    xmlns:view="clr-namespace:DevExpress.RealtorWorld.Xpf.View"
+    xmlns:interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    mc:Ignorable="d"
+    d:DesignHeight="800" d:DesignWidth="1000">
+
+    <view:ModuleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/DevExpress.RealtorWorld.Xpf;component/Themes/Palette.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <helpers:DecimalRangeConverter x:Key="DecimalRangeConverter" />
+        </ResourceDictionary>
+    </view:ModuleView.Resources>
+
+    <!--BEGIN REPLACE 'RectanglePie3DModel'GlassPie2DModel'-->
+    <!--BEGIN REPLACE '3D'2D'-->
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="0.5*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="0.5*" />
+        </Grid.ColumnDefinitions>
+        <dxc:ChartControl Grid.RowSpan="2" DataSource="{Binding Data.PopularityRating}" Palette="{StaticResource CustomPalette}">
+            <dxc:ChartControl.Titles>
+                <dxc:Title Dock="Top" Content="Housing Type Rating by Region" HorizontalAlignment="Center" FontSize="20" />
+            </dxc:ChartControl.Titles>
+            <dxc:ChartControl.Diagram>
+                <dxc:SimpleDiagram3D>
+                    <!--BEGIN WPF-->
+                    <dxc:SimpleDiagram3D.ContentTransform>
+                        <RotateTransform3D>
+                            <RotateTransform3D.Rotation>
+                                <AxisAngleRotation3D Axis="0,0.5,1" Angle="-55">
+                                </AxisAngleRotation3D>
+                            </RotateTransform3D.Rotation>
+                        </RotateTransform3D>
+                    </dxc:SimpleDiagram3D.ContentTransform>
+                    <!--END WPF-->
+                    <dxc:SimpleDiagram3D.Series>
+                        <dxc:PieSeries3D ArgumentDataMember="Argument" ValueDataMember="Value">
+                            <dxc:PieSeries3D.Model>
+                                <dxc:RectanglePie3DModel />
+                            </dxc:PieSeries3D.Model>
+                            <dxc:PieSeries3D.PointOptions>
+                                <dxc:PointOptions>
+                                    <dxc:PointOptions.ValueNumericOptions>
+                                        <dxc:NumericOptions Format="Percent" Precision="0" />
+                                    </dxc:PointOptions.ValueNumericOptions>
+                                </dxc:PointOptions>
+                            </dxc:PieSeries3D.PointOptions>
+                            <dxc:PieSeries3D.LegendPointOptions>
+                                <dxc:PointOptions PointView="Argument" />
+                            </dxc:PieSeries3D.LegendPointOptions>
+                        </dxc:PieSeries3D>
+                    </dxc:SimpleDiagram3D.Series>
+                </dxc:SimpleDiagram3D>
+            </dxc:ChartControl.Diagram>
+            <dxc:ChartControl.Legend>
+                <dxc:Legend BorderThickness="0" BorderBrush="Transparent" HorizontalPosition="Center" VerticalPosition="BottomOutside" Orientation="Horizontal" Foreground="#FFE3E3E3" />
+            </dxc:ChartControl.Legend>
+        </dxc:ChartControl>
+        <dxc:ChartControl Grid.Column="1" DataSource="{Binding Data.Prices}" Margin="12,0,0,12" Palette="{StaticResource CustomPalette}">
+            <dxc:ChartControl.Titles>
+                <dxc:Title Dock="Top" Content="House Price Over Time" HorizontalAlignment="Center" FontSize="20" />
+            </dxc:ChartControl.Titles>
+            <dxc:ChartControl.Diagram>
+                <dxc:XYDiagram2D EnableAxisXNavigation="True">
+                    <dxc:XYDiagram2D.AxisY>
+                        <dxc:AxisY2D Interlaced="False" GridLinesMinorVisible="True" GridLinesVisible="True">
+                            <dxc:AxisY2D.Range>
+                                <dxc:AxisRange dxc:AxisY2D.AlwaysShowZeroLevel="False" />
+                            </dxc:AxisY2D.Range>
+                        </dxc:AxisY2D>
+                    </dxc:XYDiagram2D.AxisY>
+                    <dxc:XYDiagram2D.AxisX>
+                        <dxc:AxisX2D Interlaced="False" GridLinesMinorVisible="True" GridLinesVisible="True" TickmarksMinorVisible="True" MinorCount="4">
+                            <dxc:AxisX2D.Range>
+                                <dxc:AxisRange MinValue="{Binding TimeRangeMinValue, Mode=TwoWay}" MaxValue="{Binding TimeRangeMaxValue, Mode=TwoWay}" />
+                            </dxc:AxisX2D.Range>
+                            <dxc:AxisX2D.Label>
+                                <dxc:AxisLabel />
+                            </dxc:AxisX2D.Label>
+                        </dxc:AxisX2D>
+                    </dxc:XYDiagram2D.AxisX>
+                    <dxc:XYDiagram2D.Series>
+                        <dxc:LineSeries2D MarkerVisible="False" ArgumentDataMember="Argument" ValueDataMember="Value" ArgumentScaleType="DateTime" ValueScaleType="Numerical">
+                            <dxc:LineSeries2D.Label>
+                                <dxc:SeriesLabel Visible="False" />
+                            </dxc:LineSeries2D.Label>
+                        </dxc:LineSeries2D>
+                    </dxc:XYDiagram2D.Series>
+                </dxc:XYDiagram2D>
+            </dxc:ChartControl.Diagram>
+        </dxc:ChartControl>
+        <dxc:ChartControl Grid.Column="1" Grid.Row="1" DataSource="{Binding Data.SimilarHouses}" Margin="12,0,0,0" Palette="{StaticResource CustomPalette}">
+            <dxc:ChartControl.Titles>
+                <dxc:Title Dock="Top" Content="The Demand and Supply for Similar Houses" HorizontalAlignment="Center" FontSize="20" />
+            </dxc:ChartControl.Titles>
+            <dxc:ChartControl.Diagram>
+                <dxc:XYDiagram2D EnableAxisXNavigation="True">
+                    <dxc:XYDiagram2D.AxisX>
+                        <dxc:AxisX2D Interlaced="False" TickmarksMinorVisible="False" GridSpacing="1">
+                            <dxc:AxisX2D.Range>
+                                <dxc:AxisRange MinValue="{Binding YearRangeMinValue, Mode=TwoWay, Converter={StaticResource DecimalRangeConverter}}" MaxValue="{Binding YearRangeMaxValue, Mode=TwoWay, Converter={StaticResource DecimalRangeConverter}}" />
+                            </dxc:AxisX2D.Range>
+                        </dxc:AxisX2D>
+                    </dxc:XYDiagram2D.AxisX>
+                    <dxc:XYDiagram2D.AxisY>
+                        <dxc:AxisY2D Interlaced="False" />
+                    </dxc:XYDiagram2D.AxisY>
+                    <dxc:XYDiagram2D.Series>
+                        <dxc:BarSideBySideSeries2D DisplayName="Proposals" ArgumentDataMember="Year" ValueDataMember="ProposalCount" ArgumentScaleType="Numerical" ValueScaleType="Numerical">
+                            <dxc:BarSideBySideSeries2D.Model>
+                                <dxc:BorderlessSimpleBar2DModel />
+                            </dxc:BarSideBySideSeries2D.Model>
+                        </dxc:BarSideBySideSeries2D>
+                        <dxc:BarSideBySideSeries2D DisplayName="Sold" ArgumentDataMember="Year" ValueDataMember="SoldCount" ArgumentScaleType="Numerical" ValueScaleType="Numerical">
+                            <dxc:BarSideBySideSeries2D.Model>
+                                <dxc:BorderlessSimpleBar2DModel />
+                            </dxc:BarSideBySideSeries2D.Model>
+                        </dxc:BarSideBySideSeries2D>
+                    </dxc:XYDiagram2D.Series>
+                </dxc:XYDiagram2D>
+            </dxc:ChartControl.Diagram>
+            <dxc:ChartControl.Legend>
+                <dxc:Legend HorizontalPosition="Right" VerticalPosition="Top" Foreground="#FFE3E3E3" />
+            </dxc:ChartControl.Legend>
+        </dxc:ChartControl>
+    </Grid>
+    <!--END REPLACE '3D'2D'-->
+    <!--END REPLACE 'RectanglePie3DModel'GlassPie2DModel'-->
+</view:ModuleView>
