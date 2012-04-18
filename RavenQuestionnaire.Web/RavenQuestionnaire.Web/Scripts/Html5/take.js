@@ -2,11 +2,11 @@
 function ReInitMobile(id) {
     //  alert('test');
     $(id).trigger('create');
-
+    initCardGalleries();
 //    ReinitInputs();
 }
 
-$('div[data-role=page]').live('pageshow', function (event) {
+$('div[data-role=page]').live('pageshow', function(event) {
     resizeContent();
 });
 
@@ -24,19 +24,19 @@ $('div[data-role=page]').live('pageshow', function (event) {
 //}
 
 function resizeContent() {
-    var newSize = $(window).height()-100;
+    var newSize = $(window).height() - 100;
     var content = $('.content-primary');
     content.css("height", newSize + "px");
     content.css("overflow-y", "auto");
 }
-$(document).ready(function () {
+
+$(document).ready(function() {
     jQuery.extend(jQuery.mobile.datebox.prototype.options, {
         'dateFormat': 'MM/dd/YYYY',
         'headerFormat': 'MM/dd/YYYY'
     });
     resizeContent();
-    $(window).resize(function () {
+    $(window).resize(function() {
         resizeContent();
     });
-})
-
+});

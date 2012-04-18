@@ -12,16 +12,16 @@
         $(document).ready(function () {
             $('div.gallery-page')
 					.live('pageshow', function (e) {
-
-					    var currentPage = $(e.target),
-							options = {},
-							photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options, currentPage.attr('id'));
-
+					    var currentPage = $(e.target);
+					    var options = {};
+					    var photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+					    if (!(typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null)) {
+					        photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options, currentPage.attr('id'));
+					    }
 					    return true;
 					})
 
 					.live('pagehide', function (e) {
-
 					    var currentPage = $(e.target),
 							photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
 
@@ -56,7 +56,7 @@
             {
                 if (!gh.IsCurrent)
                 {
-                <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })">@gh.GroupText</a></li>
+                <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })" rel="external" data-ajax="false">@gh.GroupText</a></li>
                 }
                 else
                 {
