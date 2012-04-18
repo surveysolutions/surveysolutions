@@ -414,6 +414,7 @@
     <Content Include="Content\img\loading.gif" />
     <Content Include="Content\img\progressbar.gif" />
     <Content Include="Content\jquery.jgrowl.css" />
+    <Content Include="Content\jquery.mobile.splitview.css" />
     <Content Include="Content\main.css" />
     <Content Include="Content\photoswipe.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -475,6 +476,7 @@
     <Content Include="Scripts\Html5\jqm-docs.js" />
     <Content Include="Scripts\Html5\jquery.mobile.docs.js" />
     <Content Include="Scripts\Html5\jquery.ui.datepicker.mobile.js" />
+    <Content Include="Scripts\Html5\jquery.mobile.splitview.js" />
     <Content Include="Scripts\Html5\klass.min.js" />
     <Content Include="Scripts\Html5\LocalStorage.js" />
     <Content Include="Scripts\Html5\take.js" />

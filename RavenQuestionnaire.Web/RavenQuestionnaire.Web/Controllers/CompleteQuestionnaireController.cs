@@ -264,7 +264,7 @@ namespace RavenQuestionnaire.Web.Controllers
             return PartialView("~/Views/Group/_Screen" + type + ".cshtml", model);
         }
 
-        public ActionResult SaveSingleResultM(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions, string type)
+        public ActionResult SaveSingleResultHtml5(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions, string type)
         {
             if (string.IsNullOrEmpty(type))
                 type = "Html5";

@@ -1,10 +1,14 @@
 ﻿using NUnit.Framework;
 using Moq;
+using Ninject.Activation;
+using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Status;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Web.Controllers;
+using RavenQuestionnaire.Web.Tests.Stubs;
+using System.Configuration.Provider;
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
@@ -14,6 +18,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public StatusController Controller { get; set; }
+        public TestRoleProvider Provider { get; set; }
 
         [SetUp]
         public void CreateObjects()
@@ -38,8 +43,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void When_GetStatusIsExecutedModelIsReturned()
         {
             string questionnaryId = "-1";
-            StatusBrowseInputModel  input = new StatusBrowseInputModel {QId = questionnaryId};
-            
+            StatusBrowseInputModel input = new StatusBrowseInputModel { QId = questionnaryId };
+
             var output = new StatusBrowseView(0, 10, 0, new StatusBrowseItem[0], questionnaryId);
             ViewRepositoryMock.Setup(x => x.Load<StatusBrowseInputModel, StatusBrowseView>(input))
                 .Returns(output);
@@ -52,7 +57,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void When_GetQuestionnaireDetailsIsExecuted()
         {
-            var output = new StatusView("statusdocuments/sId", "test", true, null,"-1",null );
+            var output = new StatusView("statusdocuments/sId", "test", true, null, "-1", null);
             var input = new StatusViewInputModel("sId");
 
             ViewRepositoryMock.Setup(
