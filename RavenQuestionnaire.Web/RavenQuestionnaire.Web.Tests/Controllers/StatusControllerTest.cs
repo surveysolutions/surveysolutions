@@ -18,7 +18,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public StatusController Controller { get; set; }
-        public TestRoleProvider Provider { get; set; }
 
         [SetUp]
         public void CreateObjects()

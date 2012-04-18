@@ -147,12 +147,9 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public ActionResult Validate(string id, Guid? group, Guid? propagationKey)
         {
-            /* if (!ModelState.IsValid)
-                return false;*/
             commandInvoker.Execute(new ValidateGroupCommand(id, group, propagationKey, _globalProvider.GetCurrentUser()));
-            // return true;
 
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                 new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
             return PartialView("~/Views/Group/_ScreenHtml5.cshtml", model);
         }

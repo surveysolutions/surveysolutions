@@ -2,7 +2,6 @@
 function ReInitMobile(id) {
     //  alert('test');
     $(id).trigger('create');
-    initCardGalleries();
 //    ReinitInputs();
 }
 
