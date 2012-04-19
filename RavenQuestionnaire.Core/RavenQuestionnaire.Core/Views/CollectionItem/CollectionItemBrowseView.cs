@@ -16,7 +16,7 @@ namespace RavenQuestionnaire.Core.Views.CollectionItem
             this.CollectionId = collectionId;
             this.Items = items;
             this.QuestionId = questionId;
-            this.PublicKey=new Guid();
+            this.PublicKey = Guid.NewGuid();
         }
     }
 }

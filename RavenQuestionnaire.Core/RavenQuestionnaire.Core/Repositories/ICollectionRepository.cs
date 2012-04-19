@@ -5,5 +5,6 @@ namespace RavenQuestionnaire.Core.Repositories
 {
     public interface ICollectionRepository:IEntityRepository<Collection, CollectionDocument>
     {
+
     }
 }

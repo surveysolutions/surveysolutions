@@ -89,6 +89,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Reactive">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
@@ -108,6 +109,9 @@
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
     <Compile Include="CommandHandlers\Collection\CreateNewCollectionHandler.cs" />
+    <Compile Include="CommandHandlers\Collection\DeleteCollectionHandler.cs" />
+    <Compile Include="CommandHandlers\Collection\DeleteCollectionItemHandler.cs" />
+    <Compile Include="CommandHandlers\Collection\UpdateCollectionHandler.cs" />
     <Compile Include="CommandHandlers\File\UpdateFileMetaCommandHandler.cs" />
     <Compile Include="CommandHandlers\File\UploadFileCommandHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\ValidateGroupCommandHandler.cs" />
@@ -144,6 +148,9 @@
     <Compile Include="CommandHandlers\Questionnaire\UploadImageCommandHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
     <Compile Include="Commands\Collection\CreateNewCollectionCommand.cs" />
+    <Compile Include="Commands\Collection\DeleteCollectionCommand.cs" />
+    <Compile Include="Commands\Collection\DeleteCollectionItemCommand.cs" />
+    <Compile Include="Commands\Collection\UpdateCollectionCommand.cs" />
     <Compile Include="Commands\File\UpdateFileMetaCommand.cs" />
     <Compile Include="Commands\File\UploadFileCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\CreateNewFlowGraphCommand.cs" />
@@ -315,10 +322,14 @@
     <Compile Include="Views\CollectionItem\CollectionItemBrowseItem.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseView.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseViewFactory.cs" />
+    <Compile Include="Views\CollectionItem\CollectionItemView.cs" />
     <Compile Include="Views\Collection\CollectionBrowseInputModel.cs" />
     <Compile Include="Views\Collection\CollectionBrowseItem.cs" />
     <Compile Include="Views\Collection\CollectionBrowseView.cs" />
     <Compile Include="Views\Collection\CollectionBrowseViewFactory.cs" />
+    <Compile Include="Views\Collection\CollectionView.cs" />
+    <Compile Include="Views\Collection\CollectionViewFactory.cs" />
+    <Compile Include="Views\Collection\CollectionViewInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseView.cs" />

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Web;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 
@@ -19,9 +21,9 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
             UserLight executor)
         {
             if(string.IsNullOrEmpty(questionnaireId))
-                throw  new ArgumentNullException("QuestionnaireId can't be null");
+                throw  new HttpException(404, "QuestionnaireId can't be null");
             if (string.IsNullOrEmpty(creator.Id))
-                throw new ArgumentNullException("User id can't be null");
+                throw new HttpException(404, "User id can't be null");
             this.QuestionnaireId =IdUtil.CreateQuestionnaireId(questionnaireId);
             this.Creator = creator;
             this .Status = status;

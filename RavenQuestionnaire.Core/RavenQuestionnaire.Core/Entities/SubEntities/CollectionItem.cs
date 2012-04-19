@@ -1,12 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public class CollectionItem 
+    public interface ICollectionItem
     {
-        public string Id { get; set; }
+        Guid PublicKey { get; set; }
+        string Key { get; set; }
+        string Value { get; set; }
+    }
+
+    public class CollectionItem :ICollectionItem
+    {
+        public Guid PublicKey { get; set; }
         public string Key { get; set; }
         public string Value { get; set; }
 
@@ -14,9 +19,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
         }
 
-        public CollectionItem(string id, string _key, string _value)
+        public CollectionItem(Guid _id, string _key, string _value)
         {
-            this.Id = id;
+            this.PublicKey = _id;
             this.Key = _key;
             this.Value = _value;
         }
