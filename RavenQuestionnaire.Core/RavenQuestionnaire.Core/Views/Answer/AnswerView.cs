@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Card;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+
 
 namespace RavenQuestionnaire.Core.Views.Answer
 {
@@ -26,7 +23,7 @@ namespace RavenQuestionnaire.Core.Views.Answer
         {
         }
 
-        public AnswerView(Guid questionPublicKey, RavenQuestionnaire.Core.Entities.SubEntities.IAnswer doc)
+        public AnswerView(Guid questionPublicKey, IAnswer doc)
         {
             this.PublicKey = doc.PublicKey;
             this.AnswerText = doc.AnswerText;

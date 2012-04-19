@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using Moq;
 using NUnit.Framework;
@@ -92,14 +93,23 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void Participate_EmptyId_404Exception()
         {
-            //statusView is null. statusView.Id throws NullReferenceException. Status mocking is needed.
-            Assert.Throws<HttpException>(() => Controller.Participate(null,""));
+            StatusDocument innerDoc = new StatusDocument();
+            innerDoc.Id = "statusdocuments/cqId";
+            StatusView status = new StatusView(innerDoc.Id, innerDoc.Title, innerDoc.IsVisible, innerDoc.StatusRoles, innerDoc.QuestionnaireId, innerDoc.FlowRules); 
+            ViewRepositoryMock.Setup(
+               x =>
+               x.Load<StatusViewInputModel, StatusView>(
+                   It.IsAny<StatusViewInputModel>()))
+               .Returns(status);
+            Assert.Throws<HttpException>(() => Controller.Participate("",""));
         }
+
         [Test]
         public void Participate_ValidId_FormIsReturned()
         {
         
         }
+
         [Test]
         public void Question_ValidId_FormIsReturned()
         {

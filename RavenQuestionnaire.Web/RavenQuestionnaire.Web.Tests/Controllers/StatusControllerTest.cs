@@ -1,8 +1,12 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
 using Moq;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Status;
+using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Web.Controllers;
 
@@ -52,16 +56,16 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void When_GetQuestionnaireDetailsIsExecuted()
         {
-            var output = new StatusView("statusdocuments/sId", "test", true, null,"-1",null );
+            StatusDocument innerDocument=new StatusDocument();
+            innerDocument.Id = "statusdocuments/sId";
+            innerDocument.StatusRoles.Add("test", new List<SurveyStatus>() {new SurveyStatus("idtest", "test")});
+            var output = new StatusView(innerDocument.Id, "test", true, innerDocument.StatusRoles,"-1", new Dictionary<Guid, FlowRule>());
             var input = new StatusViewInputModel("sId");
-
             ViewRepositoryMock.Setup(
                 x =>
                 x.Load<StatusViewInputModel, StatusView>(
                     It.Is<StatusViewInputModel>(v => v.StatusId.Equals(input.StatusId))))
                 .Returns(output);
-            // command  Roles.GetAllRoles(); from AddRolesListToViewBag() method throw exception. 
-            // Role set up is needed.
             var result = Controller.Edit(output.Id);
             Assert.AreEqual(output, result.ViewData.Model);
         }

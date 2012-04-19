@@ -30,6 +30,10 @@
             {
                 @Html.DropDownListFor(model => Model.AnswerImage, images)
             }
+            else
+            {
+                @Html.TextBoxFor(model => Model.AnswerImage)
+            }
             </div>
         </div>
         @Html.HiddenFor(model => Model.PublicKey)

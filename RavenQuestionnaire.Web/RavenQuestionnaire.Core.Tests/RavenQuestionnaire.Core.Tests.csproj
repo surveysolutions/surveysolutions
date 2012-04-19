@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandlers\AddNewQuestionHandlerTest.cs" />
+    <Compile Include="CommandHandlers\CreateNewCollectionHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewFlowGraphHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewStatusFlowHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewStatusHandlerTest.cs" />

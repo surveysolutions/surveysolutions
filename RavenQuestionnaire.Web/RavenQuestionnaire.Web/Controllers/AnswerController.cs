@@ -63,7 +63,15 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult FillAnswers(string NameCollection, Guid questionId)
         {
             var result = viewRepository.Load<CollectionItemBrowseInputModel, CollectionItemBrowseView>(new CollectionItemBrowseInputModel(NameCollection, questionId));
-            var answers= result.Items.Select(item => new AnswerView(new Guid(), new Answer() {AnswerText = item.Value, AnswerType = AnswerType.Select, AnswerValue = item.Key, Image = new Image(), Mandatory = false, NameCollection = NameCollection})).ToList();
+            var answers = result.Items.Select(item => new AnswerView(new Guid(), new Answer()
+                                                                                     {
+                                                                                         AnswerText = item.Value, 
+                                                                                         AnswerType = AnswerType.Select, 
+                                                                                         AnswerValue = item.Key, 
+                                                                                         Image = new Image(), 
+                                                                                         Mandatory = false, 
+                                                                                         NameCollection = NameCollection
+                                                                                     })).ToList();
             return PartialView("_EditCollectionItem", answers);
         }
     }

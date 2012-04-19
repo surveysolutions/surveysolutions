@@ -27,26 +27,5 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Collection collection = new Collection(innerDocument);
             Assert.AreEqual(collection.GetAllItems().Count, 2);
         }
-        
-        [Test]
-        public void AddItemToCollection()
-        {
-            CollectionDocument innerDocument = new CollectionDocument();
-            Collection collection = new Collection(innerDocument);
-            collection.AddNewItems("Canada", "Canada");
-            Assert.AreEqual(innerDocument.Items.Count, 1);
-        }
-
-        [Test]
-        public void FindItemFromCollection()
-        {
-            CollectionDocument innerDocument = new CollectionDocument();
-            Collection collection = new Collection(innerDocument);
-            collection.AddNewItems("Canada", "Canada");
-            collection.AddNewItems("USA", "United States");
-            collection.AddNewItems("Ukraine", "Ukraine");
-            CollectionItem result = collection.FindCollectionItem("Ukraine");
-            Assert.AreEqual(result.Key, "Ukraine");
-        }
     }
 }
