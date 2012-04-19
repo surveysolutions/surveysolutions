@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Utility;
-
-namespace RavenQuestionnaire.Core.Views.Collection
+﻿namespace RavenQuestionnaire.Core.Views.Collection
 {
     public class CollectionBrowseInputModel
     {
+        public string CollectionId { get; set; }
+
         public int Page
         {
             get { return _page; }
