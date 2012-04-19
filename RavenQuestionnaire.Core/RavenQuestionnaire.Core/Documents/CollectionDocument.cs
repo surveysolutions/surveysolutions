@@ -1,12 +1,24 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Documents
 {
-    public class CollectionDocument
+    public interface ICollectionDocument
+    {
+        string Id { get; set; }
+
+        string Name { get; set; }
+    }
+
+    public interface ICollectionDocument<TCollectionItem> : ICollectionDocument
+        where TCollectionItem : ICollectionItem
+    {
+        List<CollectionItem> Items { get; set; }
+    }
+
+    public class CollectionDocument:ICollectionDocument<ICollectionItem>
     {
         public CollectionDocument()
         {
@@ -14,7 +26,7 @@ namespace RavenQuestionnaire.Core.Documents
         }
 
         public string Id { get; set; }
-        
+
         public string Name { get; set; }
 
         public List<CollectionItem> Items { get; set; }

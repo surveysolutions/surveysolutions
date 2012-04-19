@@ -112,6 +112,7 @@
     <Compile Include="App_Start\NinjectMVC3.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
+    <Compile Include="Controllers\CollectionController.cs" />
     <Compile Include="Controllers\CompleteQuestionnaireController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -845,6 +846,9 @@
     <Content Include="Views\Answer\_EditCollectionItem.cshtml" />
     <Content Include="Views\Shared\MobileGroupNavigation.cshtml" />
     <Content Include="Views\Shared\MobileProgressBar.cshtml" />
+    <Content Include="Views\Collection\Index.cshtml" />
+    <Content Include="Views\Collection\Edit.cshtml" />
+    <Content Include="Views\Collection\EditCollectionItem.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

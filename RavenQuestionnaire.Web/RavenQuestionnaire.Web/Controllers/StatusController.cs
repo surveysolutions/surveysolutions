@@ -134,10 +134,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                 }
                             }
                         }
-
                         statusByRole.StatusRestriction.Add(new RolePermission(role, flag));
                     }
-
                     model.StatusRolesMatrix.Add(statusByRole);
                 }
             }

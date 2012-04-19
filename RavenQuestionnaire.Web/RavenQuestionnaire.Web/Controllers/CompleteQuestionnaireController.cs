@@ -104,7 +104,6 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult Participate(string id, string mode)
         {
             var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
-
             var command = new CreateNewCompleteQuestionnaireCommand(id,
                                                                     _globalProvider.GetCurrentUser(),
                                                                     new SurveyStatus(statusView.Id, statusView.Title),

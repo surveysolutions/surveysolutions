@@ -99,6 +99,7 @@
     <Compile Include="Membership\QuestionnaireRoleProviderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs\TestMembershipProvider.cs" />
+    <Compile Include="Stubs\TestRoleProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config">
