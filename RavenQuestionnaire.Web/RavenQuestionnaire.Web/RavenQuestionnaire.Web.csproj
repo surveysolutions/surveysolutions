@@ -76,7 +76,8 @@
     <Reference Include="Ninject.Extensions.Conventions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.Extensions.Conventions.2.2.0.5\lib\net40-Full\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.Mvc">
+    <Reference Include="Ninject.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.MVC3.2.2.2.0\lib\net40-Full\Ninject.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Entity" />
@@ -113,6 +114,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\CollectionController.cs" />
+    <Compile Include="Controllers\AsyncQuestionnaireUpdater.cs" />
+    <Compile Include="Controllers\CompleteQuestionnaireAsync1Controller.cs" />
     <Compile Include="Controllers\CompleteQuestionnaireController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -456,6 +459,7 @@
     <Content Include="Content\themes\jquerymobile\jquery.mobile.css" />
     <Content Include="Content\themes\jquerymobile\jquery.mobile.datebox.min.css" />
     <Content Include="Content\themes\jquerymobile\jquery.ui.datepicker.mobile.css" />
+    <Content Include="Content\themes\jquerymobile\keyboard.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap\bootstrap-alert.js" />
     <Content Include="Scripts\bootstrap\bootstrap-button.js" />
@@ -475,6 +479,8 @@
     <Content Include="Scripts\gallery\jquery.opacityrollover.js" />
     <Content Include="Scripts\Html5\code.photoswipe.jquery-3.0.4.min.js" />
     <Content Include="Scripts\Html5\jqm-docs.js" />
+    <Content Include="Scripts\Html5\jquery.keyboard.extension-mobile.js" />
+    <Content Include="Scripts\Html5\jquery.keyboard.js" />
     <Content Include="Scripts\Html5\jquery.mobile.docs.js" />
     <Content Include="Scripts\Html5\jquery.ui.datepicker.mobile.js" />
     <Content Include="Scripts\Html5\jquery.mobile.splitview.js" />
