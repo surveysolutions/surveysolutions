@@ -3,12 +3,14 @@ function ReInitMobile(id) {
     //  alert('test');
     $(id).trigger('create');
 //    ReinitInputs();
- createKeyBoard();
+    createKeyBoard();
+    
 }
 
-$('div[data-role=page]').live('pageshow', function(event) {
-    resizeContent();
-});
+//$('div[data-role=page]').live('pageshow', function(event) {
+//    //resizeContent();
+//    
+//});
 
 //function ReinitInputs() {
 //    $("input[input-label=True]").each(function () {
@@ -23,24 +25,24 @@ $('div[data-role=page]').live('pageshow', function(event) {
 //    });
 //}
 
-function resizeContent() {
+/*function resizeContent() {
     var newSize = $(window).height() - 100;
     var content = $('.content-primary');
     content.css("height", newSize + "px");
     content.css("overflow-y", "auto");
-}
+}*/
 
 function createKeyBoard() {
     var k = $('input[type=text]');
 
     var kbOptions = {
         keyBinding: 'mousedown touchstart',
-        position: {
-            of: 'center bottom', // optional - null (attach to input/textarea) or a jQuery object (attach elsewhere)
-            my: 'center top',
-            at: 'center top',
-            at2: 'center bottom' // used when "usePreview" is false (centers the keyboard at the bottom of the input/textarea)
-        },
+        position     : {
+			of : null, // optional - null (attach to input/textarea) or a jQuery object (attach elsewhere)
+			my : 'center top',
+			at: 'center top',
+			at2: 'center bottom' // used when "usePreview" is false (centers the keyboard at the bottom of the input/textarea)
+		},
         // make sure jQuery UI styles aren't applied even if the stylesheet has loaded
         // the Mobile UI theme will still over-ride the jQuery UI theme
         css: {
@@ -57,7 +59,7 @@ function createKeyBoard() {
         // keyboard wrapper theme
         container: { theme: 'c' },
         // theme added to all regular buttons
-        buttonMarkup: { theme: 'c', shadow: 'true', corners: 'true' },
+        buttonMarkup: { theme: 'c', shadow: 'true', corners: 'false' },
         // theme added to all buttons when they are being hovered
         buttonHover: { theme: 'c' },
         // theme added to action buttons (e.g. tab, shift, accept, cancel);
@@ -70,17 +72,31 @@ function createKeyBoard() {
     k.bind('accepted.keyboard', function (event) {
         $(this.form).submit();
     });
+    k.bind('canceled.keyboard', function (event) {
+        $(this).getkeyboard().accept();
+    });
+    k.bind('visible.keyboard', function (event) {
+        // $(this).getkeyboard().css
+        var keyboard = $(this).getkeyboard().$keyboard;
+        keyboard.css('width', '892px');
+        keyboard.css('left', '0px');
+    });
 }
-$(document).ready(function () {
-    createKeyBoard();
+
+function initDateTime() {
     jQuery.extend(jQuery.mobile.datebox.prototype.options, {
         'dateFormat': 'MM/dd/YYYY',
         'headerFormat': 'MM/dd/YYYY'
     });
-    resizeContent();
+}
+$(document).ready(function () {
+
+    initDateTime();
+    createKeyBoard();
+    /*   resizeContent();
     $(window).resize(function () {
-        resizeContent();
-    });
-   
+    resizeContent();
+    });*/
+
 
 });

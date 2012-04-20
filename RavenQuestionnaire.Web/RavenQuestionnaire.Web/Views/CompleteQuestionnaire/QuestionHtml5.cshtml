@@ -7,7 +7,7 @@
     object buttonAttributs = new { data_role = "button", data_icon = "check", data_theme = "e", data_iconpos = "top" };
 
 }
-<script type="text/javascript">
+@*<script type="text/javascript">
     (function (window, $, PhotoSwipe) {
         $(document).ready(function () {
             $('div.gallery-page')
@@ -33,12 +33,13 @@
 					});
         });
     } (window, window.jQuery, window.Code.PhotoSwipe));
-</script>
+</script>*@
 <div data-role="panel" data-id="menu">
     <!-- Start of first page -->
     <div data-role="page" id="foo">
         <div data-role="header">
-            <h1>Screens</h1>
+            <h1>
+                Screens</h1>
         </div>
         <!-- /header -->
         <div data-role="content">
@@ -70,13 +71,12 @@
                     </li>
                     <li>
                         @Html.ActionLink("Statistic", "Details", "Statistic", new { id = Model.Id }, new { data_role = "button", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })
-                    @*         @Ajax.ActionLinkHtml5("Statistic", "Details", "Statistic", new { id = Model.Id },new AjaxOptions
+                        @*         @Ajax.ActionLinkHtml5("Statistic", "Details", "Statistic", new { id = Model.Id },new AjaxOptions
                    {
                        UpdateTargetId = "statistics",
                        InsertionMode = InsertionMode.Replace
                    }, new { data_role = "button", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })
-                    *@
-                    </li>
+                    *@ </li>
                 </ul>
             </div>
             <!-- /navbar -->
@@ -84,7 +84,7 @@
         <!-- /footer -->
     </div>
     <!-- /page -->
-    <div  data-role="page" id="statistics">
+    <div data-role="page" id="statistics">
     </div>
     <!-- other side panel pages here -->
 </div>
@@ -97,6 +97,8 @@
         <!-- /header -->
         <div data-role="content" id="@Model.CurrentGroup.GetClientId("div")">
             @Html.Partial("~/Views/Group/_ScreenHtml5.cshtml", Model)
+            
+            <div style="width:100%; height: 50px;">&nbsp;</div>
         </div>
         <!-- /content -->
     </div>
@@ -106,7 +108,8 @@
     {
         <div data-role="page" data-add-back-btn="true" id="gallery-@(question.PublicKey)" class="gallery-page">
             <div data-role="header">
-                <h1>Question cards</h1>
+                <h1>
+                    Question cards</h1>
             </div>
             <div data-role="content">
                 <ul class="gallery">
@@ -123,7 +126,8 @@
     {
         <div data-role="page" id="inctruction-@(question.PublicKey)">
             <div data-role="header">
-                <h1>Instructions</h1>
+                <h1>
+                    Instructions</h1>
             </div>
             <div data-role="content">
                 <h3>@question.Instructions</h3>

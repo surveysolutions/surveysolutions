@@ -31,7 +31,7 @@
 
 /* over-ride padding set by mobile ui theme - needed because the mobile script wraps button text with several more spans */
 .ui-bar .ui-btn-inner { height: 2em; padding: 0.2em 0; margin: 0; }
-.ui-bar .ui-btn { margin: 0; font-size: 13px; } /* mobile default size is 13px */
+.ui-bar .ui-btn { margin: 0; font-size: 20px; } /* mobile default size is 13px */
 
 /* Media Queries (optimized for jQuery UI themes; may be slightly off in jQuery Mobile themes) */
 /* 240 x 320 (small phone)  */
