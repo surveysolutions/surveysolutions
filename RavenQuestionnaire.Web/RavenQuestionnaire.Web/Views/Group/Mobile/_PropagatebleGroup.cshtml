@@ -31,7 +31,7 @@
 }
 @helper RenderQuestion(CompleteQuestionView question, Guid groupKey, Guid propagationKey)
     {
-        using (Ajax.BeginFormHtml5("SaveSingleResultM", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions, new { autocomplete = "off" }))
+        using (Ajax.BeginFormHtml5("SaveSingleResultHtml5", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions, new { autocomplete = "off" }))
     {
         using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + propagationKey))
         {
