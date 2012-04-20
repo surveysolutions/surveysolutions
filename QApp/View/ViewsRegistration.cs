@@ -13,7 +13,13 @@ namespace QApp.View {
             viewsManager.RegisterView(typeof(CompletedQuestionnaires), typeof(CompletedQuestionnairesView));
             viewsManager.RegisterView(typeof(QuestionnaireTemplates), typeof(QuestionnaireTemplatesView));
             viewsManager.RegisterView(typeof(Question), typeof(QuestionView));
-        }
+
+            viewsManager.RegisterView(typeof(CommonGroupDetail), typeof(CommonGroupDetailView));
+
+            viewsManager.RegisterView(typeof(QuestionnaireDetail), typeof(QuestionnaireDetailView));
+            viewsManager.RegisterView(typeof(PropagatedGroupDetail), typeof(PropagatedGroupDetailView));
+
+       }
     }
 
     

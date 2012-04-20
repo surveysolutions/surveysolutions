@@ -10,16 +10,16 @@ using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Question;
 
 namespace QApp.ViewModel {
-    public class CompletedQuestionnaireData : ModuleData
+    public class QuestionnaireDetailData : ModuleData
     {
-        private string _questionnaireId ;
+        private string _questionnaireId;
         private Guid? group = null;
 
-        public CompletedQuestionnaireData()
+        public QuestionnaireDetailData()
         {
         }
 
-        public CompletedQuestionnaireData(string questionnaireId, Guid? group)
+        public QuestionnaireDetailData(string questionnaireId, Guid? group)
         {
             QuestionnaireId = questionnaireId;
             GroupId = group;
@@ -64,11 +64,11 @@ namespace QApp.ViewModel {
       
 
     }
-    public class CompletedQuestionnaire : ModuleWithNavigator
+    public class QuestionnaireDetail : ModuleWithNavigator
     {
-        private string completedQuestionnaireId /*= "171009"*/;
+        private string completedQuestionnaireId ;
 
-        public CompletedQuestionnaire(){}
+        public QuestionnaireDetail(){}
 
         public override void InitData(object parameter) {
             base.InitData(parameter);
@@ -81,8 +81,8 @@ namespace QApp.ViewModel {
                 //due to init manager doesn't support parameter passing
                 //TODO: rewrite!!!
 
-                Data = new CompletedQuestionnaireData(completedQuestionnaireId, null);
-                (Data as CompletedQuestionnaireData).Load();
+                Data = new QuestionnaireDetailData(completedQuestionnaireId, null);
+                (Data as QuestionnaireDetailData).Load();
 
             }
 
@@ -115,7 +115,7 @@ namespace QApp.ViewModel {
         }
 
 
-        public CompletedQuestionnaireData CompletedQuestionnaireData { get { return (CompletedQuestionnaireData)Data; } }
+        public QuestionnaireDetailData CompletedQuestionnaireData { get { return (QuestionnaireDetailData)Data; } }
 
         Question detail;
 
@@ -130,18 +130,18 @@ namespace QApp.ViewModel {
         protected override void InitializeCommands() {
             base.InitializeCommands();
             SetCurrentGroupCommand = new SimpleActionCommand(DoSetCurrentGroup);
+            SetCurrentSubGroupCommand = new SimpleActionCommand(DoSetCurrentSubGroup);
             ShowQuestionCommand = new SimpleActionCommand(DoShowQuestion);
         }
 
 
         void RaiseCurrentGroupChanged(CompleteGroupViewV oldValue, CompleteGroupViewV newValue)
         {
-
             if (newValue.Propagated == Propagate.None)
-                GroupDetail = (CommonGroupDetail)ModulesManager.CreateModule(GroupDetail, new CommonGroupDetailData(newValue), this, newValue);
+                GroupDetail = (CommonGroupDetail)ModulesManager.CreateModule(null, new CommonGroupDetailData(newValue), this, newValue);
             else
             {
-                GroupDetail = (PropagatedGroupDetail)ModulesManager.CreateModule(GroupDetail, new PropagatedGroupDetailData(newValue), this, newValue);
+                GroupDetail = (PropagatedGroupDetail)ModulesManager.CreateModule(null, new PropagatedGroupDetailData(newValue), this, newValue);
             }
         }
 
@@ -150,14 +150,24 @@ namespace QApp.ViewModel {
             //bad approach!!!
             //reload current data
             //TODO: !!!
-            var currentGroup = p as CompleteGroupHeaders;
-            if (currentGroup != null)
+            var group = p as CompleteGroupHeaders;
+            if (group != null)
             {
-                Data = new CompletedQuestionnaireData(completedQuestionnaireId, currentGroup.PublicKey);
-                (Data as CompletedQuestionnaireData).Load();
+                Data = new QuestionnaireDetailData(completedQuestionnaireId, group.PublicKey);
+                (Data as QuestionnaireDetailData).Load();
             }
             
-            CurrentGroup = CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentGroup;
+            
+            DoSetCurrentSubGroup(CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentGroup);
+        }
+
+        void DoSetCurrentSubGroup(object p)
+        {
+            var group = p as CompleteGroupViewV;
+            if (group != null)
+            {
+                CurrentGroup = group;
+            }
         }
 
         void DoShowQuestion(object p)
@@ -176,6 +186,8 @@ namespace QApp.ViewModel {
 
         public ICommand SetCurrentGroupCommand { get; private set; }
 
+
+        public ICommand SetCurrentSubGroupCommand { get; private set; }
 
         public ICommand ShowQuestionCommand { get; private set; }
 

@@ -75,7 +75,7 @@ namespace QApp.ViewModel {
             
             ShowTakeNewCommand = new ExtendedActionCommand(DoShowModule<QuestionnaireTemplatesData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(QuestionnaireTemplatesData));
             ShowCompletedItemsCommand = new ExtendedActionCommand(DoShowModule<CompletedQuestionnairesData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(CompletedQuestionnairesData));
-            ShowCompletedItemCommand = new ExtendedActionCommand(DoShowModule<CompletedQuestionnaireData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(CompletedQuestionnaireData));
+            ShowCompletedItemCommand = new ExtendedActionCommand(DoShowModule<QuestionnaireDetailData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(QuestionnaireDetailData));
 
             
             ShowModalQuestionCommand = new ExtendedActionCommand(DoShowModuleModal<QuestionData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(QuestionData));

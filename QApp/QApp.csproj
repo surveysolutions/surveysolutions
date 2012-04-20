@@ -97,6 +97,9 @@
     <Compile Include="Initializer.cs" />
     <Compile Include="ViewModel\CompletedQuestionnaires.cs" />
     <Compile Include="ViewModel\CompletedQuestionnaire.cs" />
+    <Compile Include="ViewModel\CommonGroupDetail.cs" />
+    <Compile Include="ViewModel\PropagatedGroupDetail.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetail.cs" />
     <Compile Include="ViewModel\QuestionnaireTemplates.cs" />
     <Compile Include="ViewModel\Draft.cs" />
     <Compile Include="ViewModel\GroupDetail.cs" />
@@ -110,6 +113,15 @@
     </Compile>
     <Compile Include="View\CompletedQuestionnairesView.xaml.cs">
       <DependentUpon>CompletedQuestionnairesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CommonGroupDetailView.xaml.cs">
+      <DependentUpon>CommonGroupDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PropagatedGroupDetailView.xaml.cs">
+      <DependentUpon>PropagatedGroupDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\QuestionnaireDetailView.xaml.cs">
+      <DependentUpon>QuestionnaireDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\QuestionView.xaml.cs">
       <DependentUpon>QuestionView.xaml</DependentUpon>
@@ -138,6 +150,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CompletedQuestionnairesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\CommonGroupDetailView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\PropagatedGroupDetailView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\QuestionnaireDetailView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -227,6 +251,7 @@
     <ProjectReference Include="..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
       <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
       <Name>RavenQuestionnaire.Core</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
