@@ -17,6 +17,7 @@
         <a data-role="button" rel="external" data-icon="grid" data-inline="true" href="#gallery-@(Model.PublicKey)">Cards</a>
     }
     @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListViewHtml5/_{0}.cshtml", Model.QuestionType), Model);}
+   
     
 </div>
 @Html.ValidationMessage("AnswerValue")
