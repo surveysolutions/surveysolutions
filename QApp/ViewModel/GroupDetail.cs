@@ -106,7 +106,7 @@ namespace QApp.ViewModel
             var question = p as CompleteQuestionView;
             if (question != null)
             {
-               var Detail = (Question)ModulesManager.CreateModule(null, new QuestionData(question), this);
+               var Detail = (Question)ModulesManager.CreateModule(null, new QuestionData(question), this, question);
                 
                 DXWindow _window = new DXWindow();
                 _window.Content = Detail.View;
