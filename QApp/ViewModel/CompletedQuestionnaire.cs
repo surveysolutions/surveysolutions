@@ -4,6 +4,7 @@ using System.Windows.Input;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Question;
@@ -11,7 +12,7 @@ using RavenQuestionnaire.Core.Views.Question;
 namespace QApp.ViewModel {
     public class CompletedQuestionnaireData : ModuleData
     {
-        private string _questionnaireId /*= "171009"*/;
+        private string _questionnaireId ;
         private Guid? group = null;
 
         public CompletedQuestionnaireData()
@@ -106,11 +107,11 @@ namespace QApp.ViewModel {
             set { SetValue<CompleteGroupViewV>("CurrentGroup", ref currentGroup, value, RaiseCurrentGroupChanged); }
         }
 
-        private GroupDetail groupDetail;
-        public GroupDetail GroupDetail
+        private Module groupDetail;
+        public Module GroupDetail
         {
             get { return groupDetail; }
-            private set { SetValue<GroupDetail>("GroupDetail", ref groupDetail, value); }
+            private set { SetValue<Module>("GroupDetail", ref groupDetail, value); }
         }
 
 
@@ -135,7 +136,13 @@ namespace QApp.ViewModel {
 
         void RaiseCurrentGroupChanged(CompleteGroupViewV oldValue, CompleteGroupViewV newValue)
         {
-            GroupDetail = (GroupDetail)ModulesManager.CreateModule(GroupDetail, new GroupDetailData(newValue), this, newValue);
+
+            if (newValue.Propagated == Propagate.None)
+                GroupDetail = (CommonGroupDetail)ModulesManager.CreateModule(GroupDetail, new CommonGroupDetailData(newValue), this, newValue);
+            else
+            {
+                GroupDetail = (PropagatedGroupDetail)ModulesManager.CreateModule(GroupDetail, new PropagatedGroupDetailData(newValue), this, newValue);
+            }
         }
 
         void DoSetCurrentGroup(object p)
