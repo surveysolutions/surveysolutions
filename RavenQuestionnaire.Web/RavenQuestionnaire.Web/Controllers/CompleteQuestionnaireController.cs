@@ -289,6 +289,34 @@ namespace RavenQuestionnaire.Web.Controllers
 
             return PartialView("~/Views/Group/_ScreenHtml5.cshtml", model);
         }
+        public JsonResult SaveSingleResultJson(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
+        {
+
+            var question = questions[0];
+            try
+            {
+                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
+                                                                                      question.Answers,
+                                                                                      settings[0].PropogationPublicKey,
+                                                                                      _globalProvider.GetCurrentUser()));
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(
+                    "questions[" + question.PublicKey +
+                    (settings[0].PropogationPublicKey.HasValue
+                         ? string.Format("_{0}", settings[0].PropogationPublicKey.Value)
+                         : "") + "].AnswerValue", e.Message);
+            }
+
+
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId)
+                    {CurrentGroupPublicKey = settings[0].ParentGroupPublicKey});
+
+            return Json(model.CurrentGroup);
+        }
+
         public ActionResult SaveSingleResultV(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
         {
             if (questions == null || questions.Length <= 0 || !ModelState.IsValid)

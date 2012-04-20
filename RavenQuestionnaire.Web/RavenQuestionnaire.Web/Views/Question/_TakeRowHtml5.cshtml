@@ -5,9 +5,10 @@
     ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
     
      var bodyClass = Model.Valid ? Model.Enabled ? "" : "ui-disabled" : "ui-body ui-body-e";
+    var questionId = "question" + Model.PublicKey;
 
 }
-<div class="@bodyClass">
+<div class="@bodyClass" id="@questionId">
     @if (!string.IsNullOrWhiteSpace(Model.Instructions))
     {
         <a href="#inctruction-@(Model.PublicKey)" data-icon="info" data-role="button" data-inline="true" data-rel="dialog" data-transition="flip">Read instructions</a>

@@ -4,8 +4,37 @@ function ReInitMobile(id) {
     $(id).trigger('create');
 //    ReinitInputs();
     createKeyBoard();
-    
+
 }
+
+function JsonResults (data, status, xhr) {
+
+    var group = jQuery.parseJSON(data.responseText);
+    UpdateGroup(group);
+    }
+
+function UpdateGroup(group) {
+    for (var i = 0; i < group.Questions.length; i++) {
+        UpdateQuestion(group.Questions[i]);
+    }
+    for (var p = 0; p < group.PropagatedQuestions.length; p++) {
+        UpdateQuestion(group.PropagatedQuestions[p].Questions[0], group.PropogationPublicKeys[0]);
+    }
+    for (var j = 0; j < group.Groups.length; j++) {
+        UpdateGroup(group.Groups[j]);
+    }
+}
+function UpdateQuestion(question, propagationKey) {
+    var questionElement = propagationKey ? $('#propagatedGroup' + propagationKey + ' #question' + question.PublicKey) : $('#question' + question.PublicKey);
+
+    var bodyClass = question.Valid ? question.Enabled ? "" : "ui-disabled" : "ui-body ui-body-e";
+    questionElement.attr("class", bodyClass);
+   
+        
+}
+//function ReInitMobileTemplate(target,id,data) {
+//    $(target).html($(id).render(data));
+//}
 
 //$('div[data-role=page]').live('pageshow', function(event) {
 //    //resizeContent();

@@ -1,19 +1,15 @@
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteQuestionnaireMobileView
 @{
+  
     ViewBag.AjaxOptions = new AjaxOptions
                               {
-                                  InsertionMode = InsertionMode.Replace,
-                                  UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
-                                  OnComplete = "ReInitMobile('#" + Model.CurrentGroup.GetClientId("div") + "')"
+                                  OnComplete = "JsonResults"
                               };
     ViewBag.CurrentGroupPublicKey = Model.CurrentGroup.PublicKey;
     ViewBag.QuestionnaireId = Model.Id;
+    
 }
 
 @Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", Model.CurrentGroup)
-
-
-
-@*@RenderSimpleGroup(Model.CurrentGroup)*@
 

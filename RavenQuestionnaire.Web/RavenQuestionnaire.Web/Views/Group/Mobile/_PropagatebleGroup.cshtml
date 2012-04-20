@@ -5,9 +5,9 @@
 @for (int index = 0; index < Model.PropagatedGroups.Count; index++)
 {
     var pg = Model.PropagatedGroups[index];
-   
+    var groupKey = "propagatedGroup" + pg.PropogationKey;
     
-    <ul data-role="listview" data-inset="true">
+    <ul data-role="listview" data-inset="true" id="@groupKey">
         @if (!pg.AutoPropagate)
         {
             var rparams = new { propagationKey = pg.PropogationKey, publicKey = Model.PublicKey, questionnaireId = ViewBag.QuestionnaireId, parentGroupPublicKey = ViewBag.CurrentGroupPublicKey, salt = (new Random()).NextDouble() };
@@ -41,7 +41,7 @@
 }
 @helper RenderQuestion(CompleteQuestionView question, Guid groupKey, Guid propagationKey)
     {
-        using (Ajax.BeginFormHtml5("SaveSingleResultHtml5", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions, new { autocomplete = "off" }))
+        using (Ajax.BeginFormHtml5("SaveSingleResultJson", "CompleteQuestionnaire", ViewBag.AjaxOptions as AjaxOptions, new { autocomplete = "off" }))
         {
             using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + propagationKey))
             {
