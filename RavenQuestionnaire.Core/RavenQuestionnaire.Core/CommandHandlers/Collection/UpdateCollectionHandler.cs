@@ -18,7 +18,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Collection
             var entity = _collectionRepository.Load(IdUtil.CreateCollectionId(command.CollectionId));
             entity.UpdateText(command.Name);
             entity.ClearItems();
-            entity.AddCollectionItem(command.Items);
+            entity.AddCollectionItems(command.Items);
         }
     }
 }

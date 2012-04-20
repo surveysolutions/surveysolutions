@@ -38,12 +38,7 @@ namespace RavenQuestionnaire.Core.Documents
 
         public void Remove(IComposite c)
         {
-            //var collectionItem = this.Items.FirstOrDefault(g => c is ICollectionItem && g.Key.Equals(((ICollectionItem)c).Key));
-            //if (collectionItem != null)
-            //{
-            //    this.Items.Remove(collectionItem);
-            //    return;
-            //}
+            throw new NotImplementedException();
         }
     }
 }
