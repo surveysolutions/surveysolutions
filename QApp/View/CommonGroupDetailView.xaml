@@ -1,0 +1,104 @@
+﻿<View:ModuleView x:Class="QApp.View.CommonGroupDetailView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
+    xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" 
+    mc:Ignorable="d"
+    d:DesignHeight="800" d:DesignWidth="1000">
+
+    <View:ModuleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/DevExpress.RealtorWorld.Xpf;component/Themes/Palette.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Helpers:StringFormatConverter x:Key="StringFormatConverter" />
+        </ResourceDictionary>
+    </View:ModuleView.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <dxlc:TileLayoutControl Padding="5" Orientation="Horizontal" ItemsSource="{Binding Data.Group.Groups}" AllowItemMoving="False">
+            <dxlc:TileLayoutControl.ItemTemplate>
+                <DataTemplate>
+                    <dxlc:Tile Background="#FF54AF0E" Width="240" Height="70" Content="{Binding}"
+                                               Command="{Binding Path=DataContext.Parent.SetCurrentSubGroupCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
+                                               CommandParameter="{Binding}"                                               
+                                               Padding="0">
+                        <!-- <dxlc:Tile.ContentTemplate>
+                            <DataTemplate>                          
+                                <Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.3*" />
+                                            <ColumnDefinition Width="0.7*" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                                            <TextBlock Text="{Binding GroupText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </dxlc:Tile.ContentTemplate>-->
+
+                        <dxlc:Tile.ContentTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding GroupText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </dxlc:Tile.ContentTemplate>
+                        <dxlc:Tile.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Border Background="#4f4f4f" VerticalAlignment="Top" HorizontalAlignment="Right">
+                                        <StackPanel >
+                                            <TextBlock FontSize="10" Text="{Binding GroupText}" />
+                                            <TextBlock FontSize="10" Text="Test" />
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="#4f4f4f" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                                        <StackPanel >
+                                            <TextBlock FontSize="20" Text="{Binding Questions.Count, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0\} Questions}" />
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </dxlc:Tile.HeaderTemplate>
+                    </dxlc:Tile>
+                </DataTemplate>
+            </dxlc:TileLayoutControl.ItemTemplate>
+        </dxlc:TileLayoutControl>
+        
+        <dxlc:TileLayoutControl Grid.Row="1" Orientation="Vertical" ItemsSource="{Binding Data.Group.Questions}" AllowItemMoving="False">
+            <dxlc:TileLayoutControl.ItemTemplate>
+                <DataTemplate>
+                    <dxlc:Tile Background="#FF00ABBB" Width="240" Height="70" Content="{Binding}"
+                                               Command="{Binding Path=DataContext.ShowQuestionCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
+                                               CommandParameter="{Binding}"                                               
+                                               Padding="0">
+                        <dxlc:Tile.ContentTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.3*" />
+                                            <ColumnDefinition Width="0.7*" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                                            <TextBlock Text="{Binding QuestionText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </dxlc:Tile.ContentTemplate>
+                    </dxlc:Tile>
+                </DataTemplate>
+            </dxlc:TileLayoutControl.ItemTemplate>
+        </dxlc:TileLayoutControl>
+    </Grid>
+</View:ModuleView>
