@@ -11,19 +11,20 @@
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
 {
     @Html.Hidden("QuestionId", Model.PublicKey)
-    <div  data-role="fieldcontain">
-    <fieldset data-role="controlgroup">
-        <legend>@Html.DisplayFor(modelItem => Model.QuestionText)</legend>
-        @foreach (var item in Model.Answers)
-        {
-            @Html.Hidden("Selected", true)
+   @* <div  data-role="fieldcontain">*@
+        <fieldset data-role="controlgroup">
+            <legend>@Html.DisplayFor(modelItem => Model.QuestionText)</legend>
+            @foreach (var item in Model.Answers)
             {
-                var radibutonname = string.Format("radiobutton-{0}", item.PublicKey);
-                settings["id"] = radibutonname;
+                @Html.Hidden("Selected", true)
+                {
+                    var radibutonname = string.Format("radiobutton-{0}", item.PublicKey);
+                    settings["id"] = radibutonname;
+                }
+                @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, settings)
+                Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);
             }
-            @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, settings)
-            Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);
-        }
-    </fieldset>
-    </div>
+        </fieldset>
+       
+  @*  </div>*@
 }

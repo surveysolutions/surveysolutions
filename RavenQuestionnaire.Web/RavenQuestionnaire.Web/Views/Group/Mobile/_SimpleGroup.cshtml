@@ -5,6 +5,7 @@
 {
     using (Ajax.BeginFormHtml5("SaveSingleResultHtml5", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions))
     {
+      //  using (Ajax.BeginFormHtml5("Index", "CompleteQuestionnaireAsync1", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions)){
         using (Html.BeginCollectionItem("questions", true, question.PublicKey))
         {
             Html.RenderPartial("~/Views/Question/_TakeRowHtml5.cshtml", question);
