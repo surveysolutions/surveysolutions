@@ -142,6 +142,9 @@
     <Compile Include="CommandHandlers\CreateNewFlowGraphHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewStatusFlowHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewStatusHandlerTest.cs" />
+    <Compile Include="CommandHandlers\DeleteCollectionHandlerTest.cs" />
+    <Compile Include="CommandHandlers\DeleteCollectionItemHandlerTest.cs" />
+    <Compile Include="CommandHandlers\UpdateCollectionHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateConditionsHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewCompleteQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewGroupHandlerTest.cs" />

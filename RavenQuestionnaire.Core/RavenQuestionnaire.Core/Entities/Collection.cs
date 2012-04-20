@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Core.Entities
             return result;
         }
 
-        public void AddCollectionItem(List<CollectionItem> item)
+        public void AddCollectionItems(List<CollectionItem> item)
         {
             foreach (var collectionItem in item)
                 innerDocument.Items.Add(collectionItem);

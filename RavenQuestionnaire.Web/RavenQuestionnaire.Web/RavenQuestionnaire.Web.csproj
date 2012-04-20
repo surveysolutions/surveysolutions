@@ -149,8 +149,6 @@
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\AsyncCtpLibrary.dll" />
     <Content Include="bin\CsvHelper.dll" />
-    <Content Include="bin\CsvHelper.pdb" />
-    <Content Include="bin\CsvHelper.xml" />
     <Content Include="bin\dotless.Core.dll" />
     <Content Include="bin\Esent.Interop.dll" />
     <Content Include="bin\Esent.Interop.pdb" />

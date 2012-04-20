@@ -37,7 +37,7 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(string collectionId, string change)
+        public ActionResult Delete(string collectionId)
         {
             commandInvoker.Execute(new DeleteCollectionCommand(collectionId, GlobalInfo.GetCurrentUser()));
             return RedirectToAction("Index");
@@ -70,7 +70,7 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult DeleteItem(string collectionId, Guid id)
         {
             commandInvoker.Execute(new DeleteCollectionItemCommand(collectionId, GlobalInfo.GetCurrentUser(), id));
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", new { collectionId = collectionId});
         }
     }
 }
