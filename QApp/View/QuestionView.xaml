@@ -5,9 +5,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
     xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
-    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-                 xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
-                 xmlns:System="clr-namespace:System;assembly=mscorlib" mc:Ignorable="d"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" 
+    mc:Ignorable="d"
     d:DesignHeight="800" d:DesignWidth="1000">
 
     <View:ModuleView.Resources>
@@ -15,28 +14,25 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/DevExpress.RealtorWorld.Xpf;component/Themes/Palette.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Helpers:StringFormatConverter x:Key="StringFormatConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-            <ImageSourceConverter x:Key="ImageSourceConverter" />
         </ResourceDictionary>
     </View:ModuleView.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition MaxHeight="50" Height="50" />
-            <RowDefinition Height="300*" />
-            <!--<RowDefinition MaxHeight="50" Height="50" />-->
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />            
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding Data.Question.QuestionText}" FontSize="16" Foreground="#FFFFFFFF" Grid.Row="1" />
+        
+        <TextBlock Text="{Binding Data.Question.QuestionText}" FontSize="20" Margin="10" Foreground="#FFFFFFFF" Grid.Row="1" />
 
         <dxlc:TileLayoutControl  ItemsSource="{Binding Data.Question.Answers}" AllowItemMoving="False" Grid.Row="2">
             <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
                     <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
                                                Command="{Binding Path=DataContext.SetCurrentAnswerCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
-                                               CommandParameter="{Binding}" 
-                               
-                               Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey"
+                                               CommandParameter="{Binding}"                                
+                            Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey"
                             Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
                                
                                                Padding="0">
