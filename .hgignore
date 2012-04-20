@@ -33,3 +33,9 @@ DevExpress.RealtorWorld.Wpf/obj.Wpf/
 QApp/bin/
 QApp/obj/
 QApp/Questionnaire.suo
+DevExpress.RealtorWorld.Wpf/_ReSharper.*
+QApp/_ReSharper.*
+QApp/Questionnaire.6.0.ReSharper.user
+QApp/Questionnaire.1.2.dotCover
+DevExpress.RealtorWorld.Wpf/DevExpress.RealtorWorld.Wpf.suo
+RavenQuestionnaire.Web/RavenQuestionnaire.Web.6.0.ReSharper.user
