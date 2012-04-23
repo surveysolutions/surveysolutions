@@ -4,7 +4,7 @@
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
     //  IDictionary<string, object> validateButtonAttr = new Dictionary<string, object>() { { "data-role", "button" }/*, { "data-inline", "true" } */};
-    object buttonAttributs = new { data_role = "button", data_icon = "check", data_theme = "e", data_iconpos = "top" };
+   // object buttonAttributs = new { data_role = "button", data_icon = "check", data_theme = "e", data_iconpos = "top" };
 
 }
 <script type="text/javascript">
@@ -62,12 +62,22 @@
             <div data-role="navbar">
                 <ul>
                     <li>
-                        @Ajax.ActionLinkHtml5("Validate", "Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
+                    @*    @Ajax.ActionLinkHtml5("Validate", "Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
    {
        UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
        OnComplete = "ReInitMobile('#" + Model.CurrentGroup.GetClientId("div") + "')",
        InsertionMode = InsertionMode.Replace
    }, buttonAttributs)
+   *@
+   
+     @using (Ajax.BeginFormHtml5("Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
+     {
+         OnComplete = "JsonResults"
+     }))
+     {
+         <input value="Validate" type="submit" data-role = "button"  data-icon = "check"  data-theme = "e"  data-iconpos = "top" />
+         
+     }
                     </li>
                     <li>
                         @Html.ActionLink("Statistic", "Details", "Statistic", new { id = Model.Id }, new { data_role = "button", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })
