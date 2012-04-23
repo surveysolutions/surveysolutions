@@ -7,9 +7,22 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     public class PropagatedGroup
     {
-        public bool AutoPropagate { get; set; }
-        public Guid PropogationKey { get; set; }
-        public List<CompleteQuestionView> Questions { get; set; }
+
+        public PropagatedGroup(Guid key, string text, bool isAutoPropagate, Guid propagationKey, List<CompleteQuestionView> questions)
+        {
+
+            this.PublicKey = key;
+            this.GroupText = text;
+            this.AutoPropagate = isAutoPropagate;
+            this.PropogationKey = propagationKey;
+            this.Questions = questions;
+        }
+
+        public Guid PublicKey { get;private set; }
+        public string GroupText { get; private set; }
+        public bool AutoPropagate { get; private set; }
+        public Guid PropogationKey { get; private set; }
+        public List<CompleteQuestionView> Questions { get; private set; }
         public string FirstAnswer
         {
             get

@@ -202,31 +202,30 @@ namespace RavenQuestionnaire.Web.Controllers
             return PartialView("~/Views/Group/_ScreenI.cshtml", model);
         }
 
-        public ActionResult PropagateGroupHtml5(Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
+        public JsonResult PropagateGroupHtml5(Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
         {
             try
             {
-                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser()));
+                var command = new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser());
+                commandInvoker.Execute(command);
+                return Json(new { propagationKey = command.PropagationKey, parentGroupPublicKey = publicKey });
             }
             catch (Exception e)
             {
                 ModelState.AddModelError("PropagationError", e.Message);
+                return Json(new {error = e.Message});
             }
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
-
-            return PartialView("~/Views/Group/_ScreenHtml5.cshtml", model);
         }
 
-        public ActionResult DeletePropagatedGroupHtml5(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey,
+        public JsonResult DeletePropagatedGroupHtml5(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey,
                                                   string questionnaireId)
         {
             commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
                                                                     GlobalInfo.GetCurrentUser()));
+            return Json(new {propagationKey = propagationKey});
+            /*     var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
 
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
-
-            return PartialView("~/Views/Group/_ScreenHtml5.cshtml", model);
+            return PartialView("~/Views/Group/_ScreenHtml5.cshtml", model);*/
         }
 
     }

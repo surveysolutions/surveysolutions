@@ -16,13 +16,15 @@
             <legend>@Html.DisplayFor(modelItem => Model.QuestionText)</legend>
             @foreach (var item in Model.Answers)
             {
+                
                 @Html.Hidden("Selected", true)
-                {
-                    var radibutonname = string.Format("radiobutton-{0}", item.PublicKey);
+                
+                    var radibutonname = string.Format("{0}-{1}",ViewData.TemplateInfo.GetFullHtmlFieldId("PublicKey"), item.PublicKey);
                     settings["id"] = radibutonname;
-                }
+                
                 @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, settings)
-                Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);
+                //Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);
+                <label for="@radibutonname">@item.AnswerText</label>
             }
         </fieldset>
        

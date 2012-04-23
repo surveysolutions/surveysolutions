@@ -16,11 +16,13 @@
         using (Html.BeginCollectionItem("Answers", true, item.PublicKey))
         {
         @Html.Hidden("QuestionId", Model.PublicKey)
-        var radibutonname = string.Format("radiobutton-{0}", item.PublicKey);
-        ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)["id"] = radibutonname;
+        //var radibutonname = string.Format("radiobutton-{0}", item.PublicKey);
+        //((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)["id"] = radibutonname;
         @Html.CheckBox("Selected", item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
         @Html.Hidden("PublicKey", item.PublicKey)
-            Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);
+            //Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);
+            
+            @Html.Label("Selected", item.AnswerText)
 
         }
     }

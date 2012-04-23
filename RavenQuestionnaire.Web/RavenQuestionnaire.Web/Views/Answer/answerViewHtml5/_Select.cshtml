@@ -1,4 +1,7 @@
 ﻿@using RavenQuestionnaire.Core.Views.Answer
 @model CompleteAnswerView
-@{var radibutonname = string.Format("radiobutton-{0}", Model.PublicKey);     }
-<label for="@radibutonname">@Model.AnswerText</label>
+@*@{var radibutonname = ViewData.TemplateInfo.GetFullHtmlFieldId("PublicKey");    }
+<label for="@radibutonname">@Model.AnswerText</label>*@
+
+
+@Html.Label("PublicKey", Model.AnswerText)

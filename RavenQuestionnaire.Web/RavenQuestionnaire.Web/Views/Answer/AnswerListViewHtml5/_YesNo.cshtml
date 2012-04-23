@@ -17,12 +17,12 @@
         @Html.Hidden("QuestionId", Model.PublicKey)
         @foreach (var item in Model.Answers)
         {
-            var radibutonname = string.Format("radiobutton-{0}", item.PublicKey);
+            var radibutonname = string.Format("{0}-{1}", ViewData.TemplateInfo.GetFullHtmlFieldId("PublicKey"), item.PublicKey);
             ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)["id"] = radibutonname;
             @Html.RadioButton("PublicKey", item.PublicKey, (item).Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
          
-            Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);
-            
+            //Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);
+              <label for="@radibutonname">@item.AnswerText</label>
                @Html.Hidden("Selected", true)
 
         }

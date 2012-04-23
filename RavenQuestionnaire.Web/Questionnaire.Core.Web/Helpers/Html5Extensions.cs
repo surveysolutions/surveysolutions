@@ -335,19 +335,23 @@ namespace Questionnaire.Core.Web.Helpers
         private static string GenerateLink(AjaxHelper ajaxHelper, string linkText, string targetUrl, AjaxOptions ajaxOptions, IDictionary<string, object> htmlAttributes)
         {
             TagBuilder tag = new TagBuilder("a")
-            {
-                InnerHtml = HttpUtility.HtmlEncode(linkText)
-            };
+                                 {
+                                     InnerHtml = HttpUtility.HtmlEncode(linkText)
+                                 };
 
             tag.MergeAttributes(htmlAttributes);
             tag.MergeAttribute("href", "javascript:void(0)");
-            tag.MergeAttribute("data-ajax-url", targetUrl);
+             tag.MergeAttribute("data-ajax-url", targetUrl);
 
-            if (ajaxHelper.ViewContext.UnobtrusiveJavaScriptEnabled)
-            {
-                tag.MergeAttributes(ajaxOptions.ToUnobtrusiveHtmlAttributes());
-            }
-        /*    else
+            /*    if (ajaxHelper.ViewContext.UnobtrusiveJavaScriptEnabled)
+                {*/
+            var attr = ajaxOptions.ToUnobtrusiveHtmlAttributes();
+            
+           /* attr["data-ajax"]="false";
+            attr.Add("data-ajax-mobile-custom", "true");*/
+            tag.MergeAttributes(attr);
+            /*}
+            else
             {
                 tag.MergeAttribute("onclick", GenerateAjaxScript(ajaxOptions, LinkOnClickFormat));
             }*/

@@ -476,10 +476,13 @@
     <Content Include="Scripts\gallery\jquery.galleriffic.js" />
     <Content Include="Scripts\gallery\jquery.opacityrollover.js" />
     <Content Include="Scripts\Html5\code.photoswipe.jquery-3.0.4.min.js" />
+    <Content Include="Scripts\Html5\iscroll-wrapper.js" />
+    <Content Include="Scripts\Html5\iscroll.js" />
     <Content Include="Scripts\Html5\jqm-docs.js" />
     <Content Include="Scripts\Html5\jquery.keyboard.extension-mobile.js" />
     <Content Include="Scripts\Html5\jquery.keyboard.js" />
     <Content Include="Scripts\Html5\jquery.mobile.docs.js" />
+    <Content Include="Scripts\Html5\jquery.mobile.js" />
     <Content Include="Scripts\Html5\jquery.ui.datepicker.mobile.js" />
     <Content Include="Scripts\Html5\jquery.mobile.splitview.js" />
     <Content Include="Scripts\Html5\klass.min.js" />
@@ -853,6 +856,8 @@
     <Content Include="Views\Collection\Index.cshtml" />
     <Content Include="Views\Collection\Edit.cshtml" />
     <Content Include="Views\Collection\EditCollectionItem.cshtml" />
+    <Content Include="Views\Group\CompleteGroupTemplates\_CompleteGroupTemplate.cshtml" />
+    <Content Include="Views\Group\Mobile\_PropagatedGrooup.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

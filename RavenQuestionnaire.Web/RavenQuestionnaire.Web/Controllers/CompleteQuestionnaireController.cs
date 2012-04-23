@@ -302,11 +302,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             catch (Exception e)
             {
-                ModelState.AddModelError(
-                    "questions[" + question.PublicKey +
-                    (settings[0].PropogationPublicKey.HasValue
-                         ? string.Format("_{0}", settings[0].PropogationPublicKey.Value)
-                         : "") + "].AnswerValue", e.Message);
+                return Json(new {question = questions[0], error = e.Message});
             }
 
 
