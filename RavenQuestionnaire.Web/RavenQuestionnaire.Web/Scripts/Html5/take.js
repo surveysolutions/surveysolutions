@@ -14,16 +14,24 @@ function JsonResults (data, status, xhr) {
     }
 
 function UpdateGroup(group) {
-    for (var i = 0; i < group.Questions.length; i++) {
-        UpdateQuestion(group.Questions[i]);
-    }
-    for (var p = 0; p < group.PropagatedGroups.length; p++) {
-        for (var qp = 0; qp < group.PropagatedGroups[p].Questions.length; qp++) {
-            UpdateQuestion(group.PropagatedGroups[p].Questions[qp], group.PropagatedGroups[p].PropogationKey);
+    if(group.Questions) {
+        for (var i = 0; i < group.Questions.length; i++) {
+            UpdateQuestion(group.Questions[i]);
         }
     }
-    for (var j = 0; j < group.Groups.length; j++) {
-        UpdateGroup(group.Groups[j]);
+    if (group.PropagatedGroups) {
+        for (var p = 0; p < group.PropagatedGroups.length; p++) {
+            if (group.PropagatedGroups[p].Questions) {
+                for (var qp = 0; qp < group.PropagatedGroups[p].Questions.length; qp++) {
+                    UpdateQuestion(group.PropagatedGroups[p].Questions[qp], group.PropagatedGroups[p].PropogationKey);
+                }
+            }
+        }
+    }
+    if (group.Groups) {
+        for (var j = 0; j < group.Groups.length; j++) {
+            UpdateGroup(group.Groups[j]);
+        }
     }
 }
 function UpdateQuestion(question, propagationKey) {
@@ -52,7 +60,7 @@ function PropagatedGroup(data, status, xhr) {
     } else {
         newGroup.insertAfter(container);    
     }
-    newGroup.createKeyBoard();
+    newGroup.find('input[type=text]').createKeyBoard();
     newGroup.numericSubmit();
     newGroup.trigger('create');
   //  $('#foo').trigger('updatelayout');
@@ -94,14 +102,16 @@ $(document).on('mobileinit', function () {
     //jquery extension method to handle exceptions and log them
     $.fn.numericSubmit =function()
     {
-        var target = this.find('input[type=number]').parent();
+        var input = this.find('input[type=number]');
+        var target = input.parent();
         target.find('.ui-slider a').bind('vmouseup', function() {  $($(this).parent().siblings('input')[0].form).submit(); });
+        input.createKeyBoard('num');
     },
-    $.fn.createKeyBoard = function() {
-        
-        var k = this.find('input[type=text]');
+    $.fn.createKeyBoard = function(layout) {
+        layout = typeof layout !== 'undefined' ? layout : 'qwerty';
+     //   var k = this.find('input[type=text], input[type=number]');
         if($.client.os!='Windows') {
-            k.each(function() {
+            this.each(function() {
                 var input = this;
                 $(input.form).bind('submit', function() {
                     input.blur();
@@ -111,6 +121,7 @@ $(document).on('mobileinit', function () {
         }
         var kbOptions = {
             keyBinding: 'mousedown touchstart',
+             layout : layout,
             position: {
                 of: null, // optional - null (attach to input/textarea) or a jQuery object (attach elsewhere)
                 my: 'center top',
@@ -129,7 +140,7 @@ $(document).on('mobileinit', function () {
             }
         };
 
-        k.keyboard(kbOptions).addMobile({
+        this.keyboard(kbOptions).addMobile({
         // keyboard wrapper theme
             container: { theme: 'c' },
             // theme added to all regular buttons
@@ -143,17 +154,21 @@ $(document).on('mobileinit', function () {
             // All extra parameters will be ignored
             buttonActive: { theme: 'e' }
         });
-        k.bind('accepted.keyboard', function(event) {
+        this.bind('accepted.keyboard', function(event) {
             $(this.form).submit();
         });
-        k.bind('canceled.keyboard', function(event) {
+        this.bind('canceled.keyboard', function(event) {
             $(this).getkeyboard().accept();
         });
-        k.bind('visible.keyboard', function(event) {
+        this.bind('visible.keyboard', function(event) {
             // $(this).getkeyboard().css
+            
             var keyboard = $(this).getkeyboard().$keyboard;
-            keyboard.css('width', '892px');
+            var input =keyboard.find('input');
+            if(layout=='qwerty')
+                keyboard.css('width', '892px');
             keyboard.css('left', '0px');
+            input.caretToEnd();
         });
     };
 
@@ -172,7 +187,7 @@ $(document).ready(function () {
 
     initDateTime();
     var doc = $(document);
-    doc.createKeyBoard();
+    doc.find('input[type=text]').createKeyBoard();
     doc.numericSubmit();
     /*   resizeContent();
     $(window).resize(function () {

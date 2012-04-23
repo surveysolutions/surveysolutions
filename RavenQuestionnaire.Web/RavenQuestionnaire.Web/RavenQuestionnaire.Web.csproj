@@ -143,6 +143,8 @@
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuestionConditionModel.cs" />
     <Compile Include="Models\SwitcherModel.cs" />
+    <Content Include="Scripts\jquery.caret.js" />
+    <Content Include="Scripts\jquery.client.js" />
     <Compile Include="Utils\LoadImagesAttribute.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
