@@ -10,9 +10,17 @@ function ReInitMobile(id) {
 function JsonResults (data, status, xhr) {
 
     var group = jQuery.parseJSON(data.responseText);
-    UpdateGroup(group);
-    }
+    if (!group.error)
+        UpdateGroup(group);
+    else
+        SetErrorToQuestion(group.question,group.settings.PropogationPublicKey,group.error);
+    
+}
 
+function SetErrorToQuestion(question, key,error) {
+     var questionElement = key? $('#propagatedGroup' + key + ' #question' + question.PublicKey) : $('#question' + question.PublicKey);
+    questionElement.find('[data-valmsg-replace=true]').text(error);
+}
 function UpdateGroup(group) {
     if(group.Questions) {
         for (var i = 0; i < group.Questions.length; i++) {
@@ -39,6 +47,7 @@ function UpdateQuestion(question, propagationKey) {
 
     var bodyClass = question.Valid ? question.Enabled ? "" : "ui-disabled" : "ui-body ui-body-e";
     questionElement.attr("class", bodyClass);
+    SetErrorToQuestion(question,propagationKey, '');
 }
 
 function RemovePropagatedGroup(data, status, xhr) {
@@ -185,14 +194,11 @@ function initDateTime() {
 }
 $(document).ready(function () {
 
-    initDateTime();
+    
     var doc = $(document);
     doc.find('input[type=text]').createKeyBoard();
     doc.numericSubmit();
-    /*   resizeContent();
-    $(window).resize(function () {
-    resizeContent();
-    });*/
+    initDateTime();
 
 
 });
