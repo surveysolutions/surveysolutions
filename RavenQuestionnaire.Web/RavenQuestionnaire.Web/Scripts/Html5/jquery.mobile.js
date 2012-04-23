@@ -5249,7 +5249,11 @@ $.widget( "mobile.slider", $.mobile.widget, {
 					data.pageX > this.slider.offset().left + this.slider.width() + tol ) {
 				return;
 			}
-			percent = Math.round( ( ( data.pageX - this.slider.offset().left ) / this.slider.width() ) * 100 );
+		    //TODO very-very dirty hack. I intorapted in  jquery.mobile code (nastya_k). Original code is comented. data.pageX was undefiner
+		    var pageX = data.pageX;
+		    if(!pageX)
+		        pageX = jQuery.event.fix(data.originalEvent).pageX  ;
+			percent = Math.round( ( ( pageX - this.slider.offset().left ) / this.slider.width() ) * 100 );
 		} else {
 			if ( val == null ) {
 				val = cType === "input" ? parseFloat( control.val() || 0 ) : control[0].selectedIndex;

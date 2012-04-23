@@ -53,6 +53,7 @@ function PropagatedGroup(data, status, xhr) {
         newGroup.insertAfter(container);    
     }
     newGroup.createKeyBoard();
+    newGroup.numericSubmit();
     newGroup.trigger('create');
   //  $('#foo').trigger('updatelayout');
   //  createKeyBoard();
@@ -91,10 +92,23 @@ $(document).on('mobileinit', function () {
 }*/
 (function($) {
     //jquery extension method to handle exceptions and log them
-
+    $.fn.numericSubmit =function()
+    {
+        var target = this.find('input[type=number]').parent();
+        target.find('.ui-slider a').bind('vmouseup', function() {  $($(this).parent().siblings('input')[0].form).submit(); });
+    },
     $.fn.createKeyBoard = function() {
+        
         var k = this.find('input[type=text]');
-
+        if($.client.os!='Windows') {
+            k.each(function() {
+                var input = this;
+                $(input.form).bind('submit', function() {
+                    input.blur();
+                });
+            });
+            return;
+        }
         var kbOptions = {
             keyBinding: 'mousedown touchstart',
             position: {
@@ -157,7 +171,9 @@ function initDateTime() {
 $(document).ready(function () {
 
     initDateTime();
-    $(document).createKeyBoard();
+    var doc = $(document);
+    doc.createKeyBoard();
+    doc.numericSubmit();
     /*   resizeContent();
     $(window).resize(function () {
     resizeContent();
