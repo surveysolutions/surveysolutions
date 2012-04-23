@@ -8,7 +8,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
     {
         public string CompleteQuestionnaireId { get; private set; }
         public Guid GroupPublicKey { get; private set; }
-
+        public Guid PropagationKey { get; set; }
         #region Implementation of ICommand
 
         public UserLight Executor { get; set; }

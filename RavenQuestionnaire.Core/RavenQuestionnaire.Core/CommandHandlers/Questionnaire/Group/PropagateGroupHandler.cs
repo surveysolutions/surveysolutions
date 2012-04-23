@@ -28,9 +28,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Group
             var executor = new CompleteQuestionnaireConditionExecutor(entity.GetInnerDocument());
             foreach (CompleteQuestion completeQuestion in template.Questions)
             {
-                if (
-                    executor.Execute(
-                                                                         completeQuestion))
+                if (executor.Execute(completeQuestion))
                 {
                     isCondition = true;
                     completeQuestion.Enabled = true;
@@ -42,7 +40,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Group
             }
             if (isCondition)
             {
-                entity.Add(entity.Find<CompleteGroup>(command.GroupPublicKey), null);
+                command.PropagationKey = Guid.NewGuid();
+                var newGroup = new PropagatableCompleteGroup(template, command.PropagationKey);
+                entity.Add(newGroup, null);
                 return;
             }
             throw new InvalidOperationException("Group can't be added");

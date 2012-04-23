@@ -80,12 +80,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                 foreach (var @group in propagated)
                 {
 
-                    var pgroup = new PropagatedGroup
-                                     {
-                                         AutoPropagate = @group.AutoPropagate,
-                                         PropogationKey = @group.PropogationPublicKey,
-                                         Questions = new List<CompleteQuestionView>()
-                                     };
+                    var pgroup = new PropagatedGroup(@group.PublicKey, @group.Title, @group.AutoPropagate,
+                                                     @group.PropogationPublicKey, new List<CompleteQuestionView>());
                     PropagatedGroups.Add(pgroup);
                     AutoPropagate.Add(@group.AutoPropagate);
                 }

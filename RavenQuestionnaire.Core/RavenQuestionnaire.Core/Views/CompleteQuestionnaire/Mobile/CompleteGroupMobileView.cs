@@ -31,14 +31,25 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             PublicKey = currentGroup.PublicKey;
             GroupText = currentGroup.Title;
             Propagated = currentGroup.Propagated;
-            if (currentGroup.Questions.Count > 0 && currentGroup.Propagated == Propagate.None)
+            if (currentGroup.Questions.Count > 0)
             {
-                var questionQgroup = new CompleteGroupMobileView();
-                questionQgroup.Questions = currentGroup.Questions.Select(q => new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q)).ToList();
-                questionQgroup.PublicKey = Guid.Empty;
-                questionQgroup.GroupText = "Main";
-                Groups.Add(questionQgroup);
+                if (currentGroup.Propagated == Propagate.None)
+                {
+                    var questionQgroup = new CompleteGroupMobileView();
+                    questionQgroup.Questions =
+                        currentGroup.Questions.Select(
+                            q => new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q)).ToList();
+                    questionQgroup.PublicKey = Guid.Empty;
+                    questionQgroup.GroupText = "Main";
+                    Groups.Add(questionQgroup);
+                }
+                else if (currentGroup.Propagated == Propagate.Propagated)
+                {
+                    this.Questions = currentGroup.Questions.Select(
+                            q => new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q)).ToList();
+                }
             }
+
             // grouping by group's PublicKey
             var propGroups = new Dictionary<Guid, List<CompleteGroup>>();
             foreach (var @group in currentGroup.Groups)
@@ -71,7 +82,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             PublicKey = propagatable.PublicKey;
             GroupText = propagatable.Title;
             Propagated = propagatable.Propagated;
-
+            this.Questions = propagatable.Questions.Select(
+                           q => new CompleteQuestionFactory().CreateQuestion(doc, propagatable, q)).ToList();
             var propagated = propGroups.Where(g => g != propagatable).Select(g => g as PropagatableCompleteGroup).ToList();
 
             if (propagated.Count > 0)
@@ -80,12 +92,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                 foreach (var @group in propagated)
                 {
 
-                    var pgroup = new PropagatedGroup
-                                     {
-                                         AutoPropagate = @group.AutoPropagate,
-                                         PropogationKey = @group.PropogationPublicKey,
-                                         Questions = new List<CompleteQuestionView>()
-                                     };
+                    var pgroup = new PropagatedGroup(@group.PublicKey, @group.Title, @group.AutoPropagate,
+                                                     @group.PropogationPublicKey, new List<CompleteQuestionView>());
+                                     
                     PropagatedGroups.Add(pgroup);
                     AutoPropagate.Add(@group.AutoPropagate);
                 }
