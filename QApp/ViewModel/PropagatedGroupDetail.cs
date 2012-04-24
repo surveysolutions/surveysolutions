@@ -58,6 +58,7 @@ namespace QApp.ViewModel
                 DXWindow window = new DXWindow();
                 window.Content = detail.View;
                 window.WindowState = WindowState.Maximized;
+                window.MinHeight = 350;
                 window.ShowDialog();
             }
         }

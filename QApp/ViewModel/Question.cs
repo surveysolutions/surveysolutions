@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
 using Ninject;
@@ -54,14 +56,10 @@ namespace QApp.ViewModel
                          SelectedAnswer = completeAnswerView;
                      }
                  }
-                 
              }
-
          }
 
-
          public QuestionData QuestionData { get { return (QuestionData)Data; } }
-
 
          private CompleteAnswerView selectedAnswer;
          public CompleteAnswerView SelectedAnswer
@@ -70,26 +68,29 @@ namespace QApp.ViewModel
              set { SetValue<CompleteAnswerView>("SelectedAnswer", ref selectedAnswer, value); }
          }
 
-
-        /* void RaiseSelectedAnswerChanged(CompleteAnswerView oldValue, CompleteAnswerView newValue) {
-            Detail = (AgentDetail)ModulesManager.CreateModule(Detail, new AgentDetailData(newValue), this);
-*/
-
-
          #region Commands
          protected override void InitializeCommands()
          {
              base.InitializeCommands();
              SetCurrentAnswerCommand = new SimpleActionCommand(DoSetCurrentAnswer);
+             CloseWindowCommand = new SimpleActionCommand(DoClose);
+
          }
 
+        private void DoClose(object obj)
+        {
+            //BAD!
+            //don't do this
+            //open in main window
+            
+            var singleOrDefault = Application.Current.Windows.Cast<Window>().SingleOrDefault(x => x.IsActive);
+            if (singleOrDefault != null)
+                singleOrDefault.Close();
+            //window.Close;
+        }
 
-        /* void RaiseCurrentGroupChanged(CompleteGroupViewV oldValue, CompleteGroupViewV newValue)
-         {
-             GroupDetail = (GroupDetail)ModulesManager.CreateModule(GroupDetail, new GroupDetailData(newValue), this, newValue);
-         }*/
 
-         void DoSetCurrentAnswer(object p)
+        void DoSetCurrentAnswer(object p)
          {
              //bad approach!!!
              //reload current data
@@ -119,21 +120,12 @@ namespace QApp.ViewModel
                  commandInvoker.Execute(command);
 
              }
-             
-             /*if (currentGroup != null)
-             {
-                 Data = new CompletedQuestionnaireData(completedQuestionnaireId, currentGroup.PublicKey);
-                 (Data as CompletedQuestionnaireData).Load();
-             }
-
-
-             CurrentGroup = CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentGroup;*/
          }
 
 
          public ICommand SetCurrentAnswerCommand { get; private set; }
 
-
+         public ICommand CloseWindowCommand { get; private set; }
 
          #endregion
 

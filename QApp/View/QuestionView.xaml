@@ -21,12 +21,13 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />            
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
-        <TextBlock Text="{Binding Data.Question.QuestionText}" FontSize="20" Margin="10" Foreground="#FFFFFFFF" Grid.Row="1" />
+        <TextBlock Text="{Binding Data.Question.QuestionText}" FontSize="20" Margin="5" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
 
-        <dxlc:TileLayoutControl  ItemsSource="{Binding Data.Question.Answers}" AllowItemMoving="False" Grid.Row="2">
+        <dxlc:TileLayoutControl  ItemsSource="{Binding Data.Question.Answers}" AllowItemMoving="False" Grid.Row="1" Margin="5">
             <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
                     <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
@@ -34,7 +35,6 @@
                                                CommandParameter="{Binding}"                                
                             Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey"
                             Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
-                               
                                                Padding="0">
                         <dxlc:Tile.ContentTemplate>
                             <DataTemplate>
@@ -60,7 +60,7 @@
         </dxlc:TileLayoutControl>
 
 
-<!--
+
         <Grid  VerticalAlignment="Bottom" Margin="0,5" Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -69,9 +69,9 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" MaxWidth="30" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Margin="5,0" Content="Cancel"  Command="{Binding ShowTakeNewCommand}" />
-            <Button Grid.Column="3" Margin="5,0" Content="Save"   Command="{Binding ShowCompletedItemsCommand}"/>
-        </Grid>-->
+
+            <Button Grid.Column="3" FontSize="20" Margin="5" Content="Close" Command="{Binding CloseWindowCommand}" Padding="10" />
+        </Grid>
        
     </Grid>
 </View:ModuleView>

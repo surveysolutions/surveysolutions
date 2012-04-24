@@ -74,12 +74,13 @@ namespace QApp.ViewModel
             var question = p as CompleteQuestionView;
             if (question != null)
             {
-                var Detail = (Question)ModulesManager.CreateModule(null, new QuestionData(question), this, question);
+                var detail = (Question)ModulesManager.CreateModule(null, new QuestionData(question), this, question);
                 
-                DXWindow _window = new DXWindow();
-                _window.Content = Detail.View;
-                _window.WindowState = WindowState.Maximized;
-                _window.ShowDialog();
+                DXWindow window = new DXWindow();
+                window.Content = detail.View;
+                window.WindowState = WindowState.Maximized;
+                window.MinHeight = 350;
+                window.ShowDialog();
             }
         }
 
