@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 
@@ -28,7 +29,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             if (array != null && array.Length > 0)
                 stringValue = array[0];
             //if (!DateTime.TryParse(stringValue, out value))
-            if (!DateTime.TryParseExact(stringValue, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out value))
+            var culture = CultureInfo.InvariantCulture;
+            if (!DateTime.TryParseExact(stringValue, culture.DateTimeFormat.ShortDatePattern, culture, DateTimeStyles.None, out value))
                 throw new InvalidCastException("answer is no data value");
             currentAnswer.Selected = true;
          //  currentAnswer.AnswerType = AnswerType.Text;
