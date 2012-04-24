@@ -117,7 +117,7 @@ $(document).on('mobileinit', function () {
     //jquery extension method to handle exceptions and log them
     $.fn.numericSubmit =function()
     {
-        var input = this.find('input[type=number]');
+        var input = this.find('input[type=number], input[type=range]');
         var target = input.parent();
         target.find('.ui-slider a').bind('vmouseup', function() {  $($(this).parent().siblings('input')[0].form).submit(); });
         input.createKeyBoard('num');
