@@ -117,6 +117,23 @@ $(document).on('mobileinit', function () {
     content.css("overflow-y", "auto");
 }*/
 (function($) {
+    $.extend($.keyboard.layouts,{'qwertyNoEnter' : {
+			'default': [
+				'` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
+				'{tab} q w e r t y u i o p [ ] \\',
+				'a s d f g h j k l ; \' {accept}',
+				'{shift} z x c v b n m , . / {shift}',
+				'{accept} {space} {cancel}'
+			],
+			'shift': [
+				'~ ! @ # $ % ^ & * ( ) _ + {bksp}',
+				'{tab} Q W E R T Y U I O P { } |',
+				'A S D F G H J K L : " {enter}',
+				'{shift} Z X C V B N M < > ? {shift}',
+				' {space} {cancel}'
+			]
+		}});
+
     $.fn.clear_form_elements=function() {
 
     $(this).find(':input').each(function() {
@@ -145,7 +162,7 @@ $(document).on('mobileinit', function () {
         input.createKeyBoard('num');
     },
     $.fn.createKeyBoard = function(layout) {
-        layout = typeof layout !== 'undefined' ? layout : 'qwerty';
+        layout = typeof layout !== 'undefined' ? layout : 'qwertyNoEnter';
      //   var k = this.find('input[type=text], input[type=number]');
         if($.client.os!='Windows') {
             this.each(function() {
@@ -165,6 +182,7 @@ $(document).on('mobileinit', function () {
                 at: 'center top',
                 at2: 'center bottom' // used when "usePreview" is false (centers the keyboard at the bottom of the input/textarea)
             },
+            autoAccept   : true,
             // make sure jQuery UI styles aren't applied even if the stylesheet has loaded
             // the Mobile UI theme will still over-ride the jQuery UI theme
             css: {
@@ -194,15 +212,12 @@ $(document).on('mobileinit', function () {
         this.bind('accepted.keyboard', function(event) {
             $(this.form).submit();
         });
-        this.bind('canceled.keyboard', function(event) {
-            $(this).getkeyboard().accept();
-        });
         this.bind('visible.keyboard', function(event) {
             // $(this).getkeyboard().css
             
             var keyboard = $(this).getkeyboard().$keyboard;
             var input =keyboard.find('input');
-            if(layout=='qwerty')
+            if(layout=='qwertyNoEnter')
                 keyboard.css('width', '892px');
             keyboard.css('left', '0px');
             input.caretToEnd();
