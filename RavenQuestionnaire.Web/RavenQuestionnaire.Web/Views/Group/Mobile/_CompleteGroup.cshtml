@@ -35,7 +35,9 @@ else
         using (Ajax.BeginFormHtml5("PropagateGroupHtml5", "Group",requestParams, new AjaxOptions { HttpMethod = "POST", OnComplete = "PropagatedGroup" }))
      {
             @* @Ajax.ActionLinkHtml5("Add", "PropagateGroupHtml5", "Group", requestParams, new AjaxOptions { HttpMethod = "POST", OnComplete = "PropagatedGroup" }, new { data_role = "button", data_icon = "plus", data_theme = "a" })*@
-         <input value="Add" type="submit" data-role = "button" data-icon = "plus" data-theme = "a"/>
+        
+        
+         <input value="@Model.GroupText" type="submit" data-role = "button" data-icon = "plus" data-theme = "a"/>
         
         @Html.ValidationMessage("PublicKey")
      }
