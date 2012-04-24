@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Core.Views.CollectionItem
             if (count==0)
                 return new CollectionItemBrowseView(input.CollectionId, new List<CollectionItemBrowseItem>(), input.QuestionId);
             var doc = documentSession.Load<CollectionDocument>(input.CollectionId);
-            IList<Entities.SubEntities.CollectionItem> collectionItem = new Entities.Collection(doc).GetAllItems();
+            IList<Entities.SubEntities.CollectionItem> collectionItem = doc.Items;
             if (collectionItem.Count != 0)
             {
                 List<CollectionItemBrowseItem> result = collectionItem.Select(item => new CollectionItemBrowseItem(item.Key, item.Value)).ToList();

@@ -11,11 +11,6 @@ namespace RavenQuestionnaire.Core.Entities
         string Id { get; set; }
     }
 
-    public interface ICollection<T> : IQuestion where T : ICollectionItem
-    {
-        List<T> Items { get; set; }
-    }
-
     public class Collection : IEntity<CollectionDocument>
     {
         private CollectionDocument innerDocument;
@@ -47,13 +42,6 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Items.Clear();
         }
       
-        public IList<CollectionItem> GetAllItems()
-        {
-            var result = new List<CollectionItem>();
-            result.AddRange(innerDocument.Items);
-            return result;
-        }
-
         public void AddCollectionItems(List<CollectionItem> item)
         {
             foreach (var collectionItem in item)
