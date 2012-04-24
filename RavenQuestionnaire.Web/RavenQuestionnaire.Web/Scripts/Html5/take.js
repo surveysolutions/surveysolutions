@@ -47,7 +47,9 @@ function UpdateQuestion(question, propagationKey) {
 
     var bodyClass = question.Valid ? question.Enabled ? "" : "ui-disabled" : "ui-body ui-body-e";
     questionElement.attr("class", bodyClass);
-    SetErrorToQuestion(question,propagationKey, '');
+    if (!question.Enabled)
+        questionElement.closest("form").clear_form_elements();
+    SetErrorToQuestion(question, propagationKey, '');
 }
 
 function RemovePropagatedGroup(data, status, xhr) {
@@ -75,9 +77,10 @@ function PropagatedGroup(data, status, xhr) {
     } else {
         newGroup.insertAfter(container);    
     }
+
+    newGroup.trigger('create');
     newGroup.find('input[type=text]').createKeyBoard();
     newGroup.numericSubmit();
-    newGroup.trigger('create');
   //  $('#foo').trigger('updatelayout');
   //  createKeyBoard();
 }
@@ -114,6 +117,25 @@ $(document).on('mobileinit', function () {
     content.css("overflow-y", "auto");
 }*/
 (function($) {
+    $.fn.clear_form_elements=function() {
+
+    $(this).find(':input').each(function() {
+        switch(this.type) {
+            case 'password':
+            case 'select-multiple':
+            case 'select-one':
+            case 'text':
+            case 'textarea':
+                $(this).val('');
+                break;
+            case 'checkbox':
+            case 'radio':
+                this.checked = false;
+                $(this).checkboxradio("refresh");
+        }
+    });
+
+},
     //jquery extension method to handle exceptions and log them
     $.fn.numericSubmit =function()
     {
