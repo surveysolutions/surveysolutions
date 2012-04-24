@@ -10,7 +10,7 @@
 <div class="@bodyClass">
     @if (!string.IsNullOrWhiteSpace(Model.Instructions))
     {
-        <a href="#inctruction-@(Model.PublicKey)" data-icon="info" data-role="button" data-inline="true" data-rel="dialog" data-transition="flip">Read instructions</a>
+        <a href="#inctruction-@(Model.PublicKey)"  data-icon="info" data-role="button" data-inline="true" data-rel="page" data-transition="flip">Read instructions</a>
     }
     @if (Model.Cards.Length > 0)
     {
