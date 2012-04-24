@@ -4,11 +4,11 @@
 @{
     ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
 
-    var bodyClass = Model.Valid ? Model.Enabled ? "" : "ui-disabled" : "ui-body ui-body-e";
+    var bodyClass = Model.Valid ? Model.Enabled ? "" : "ui-disabled" : "ui-body error_block";
     var questionId = "question" + Model.PublicKey;
 
 }
-<div class="@bodyClass" id="@questionId">
+<div class="@bodyClass" id="@questionId"><a href="#" class="error"></a>
     @if (!string.IsNullOrWhiteSpace(Model.Instructions))
     {
         <a href="#inctruction-@(Model.PublicKey)"  data-icon="info" data-role="button" data-inline="true" data-rel="page" data-transition="flip">Read instructions</a>
@@ -18,6 +18,7 @@
         <a data-role="button" rel="external" data-icon="grid" data-inline="true" href="#gallery-@(Model.PublicKey)">
             Cards</a>
     }
+ 
     @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListViewHtml5/_{0}.cshtml", Model.QuestionType), Model);}
     @Html.ValidationMessage("AnswerValue")
     @Html.Hidden("PublicKey", Model.PublicKey)

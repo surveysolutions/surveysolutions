@@ -45,7 +45,7 @@ function UpdateGroup(group) {
 function UpdateQuestion(question, propagationKey) {
     var questionElement = propagationKey ? $('#propagatedGroup' + propagationKey + ' #question' + question.PublicKey) : $('#question' + question.PublicKey);
 
-    var bodyClass = question.Valid ? question.Enabled ? "" : "ui-disabled" : "ui-body ui-body-e";
+    var bodyClass = question.Valid ? question.Enabled ? "" : "ui-disabled" : "ui-body error_block";
     questionElement.attr("class", bodyClass);
     if (!question.Enabled)
         questionElement.closest("form").clear_form_elements();
