@@ -16,7 +16,7 @@
         @Html.Hidden("Selected", true)
         
         @Html.Label("AnswerValue", Model.QuestionText)
-        <input  data-role="datebox" data-options='{"mode": "datebox","calStartDay": 1}'
+        <input  data-role="datebox" data-options='{"mode": "datebox","calStartDay": 1, "dateFormat": "MM/dd/YYYY"}'
             name='@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue")' 
                id='@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue")' 
                value='@dateValue' onchange ="$(this.form).submit();" />

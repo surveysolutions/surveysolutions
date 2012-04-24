@@ -26,6 +26,7 @@ using RavenQuestionnaire.Web.Models;
 namespace RavenQuestionnaire.Web.Controllers
 {
     [Authorize]
+    [ValidateInput(false)]
     public class QuestionController : Controller
     {
         private ICommandInvoker commandInvoker;

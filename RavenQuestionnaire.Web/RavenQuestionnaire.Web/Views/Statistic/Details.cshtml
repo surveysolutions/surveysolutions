@@ -3,79 +3,50 @@
 @using RavenQuestionnaire.Core.Views.Statistics
 @using RavenQuestionnaire.Web.Models
 @model RavenQuestionnaire.Core.Views.Statistics.CompleteQuestionnaireStatisticView
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@Model.Title</title>
-    <link href="@Url.Content("~/Content/themes/jquerymobile/jquery.mobile.css")" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/themes/jquerymobile/jqm-docs.css")" />
-    <script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/Html5/jqm-docs.js")"></script>
-    <script src="@Url.Content("~/Scripts/Html5/jquery.mobile.docs.js")"></script>
-</head>
-<body>
-    <div data-role="page">
-        <div data-role="header" data-backbtn="true">
-            <h1>Statistics</h1>
-        </div>
-        <div data-role="content" role="main">
-            <div data-role="collapsible" data-collapsed="false">
-                <h3>@Model.Title</h3>
-                <p>
-                    Started: @Model.StartDate.ToShortTimeString()
-                    @if (Model.EndDate.HasValue)
-                    {
-                        <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
-                    }
-                </p>
-                <div data-role="collapsible" data-theme="b" data-content-theme="b" data-collapsed="false">
-                    <h3>
-                        Answered questions</h3>
-                    @foreach (QuestionStatisticView question in Model.AnsweredQuestions)
-                    {
+@{
+    Layout = "~/Views/Shared/_LayputHtml5.cshtml";
+}
+<div data-role="panel" data-id="main">
+    <div data-role="page" data-add-back-btn="true" id="statistics">
+       @* <div data-role="page" data-add-back-btn="true">*@
+            <div data-role="header" data-theme="b">
+                <h1>
+                    Statistics</h1>
+            </div>
+            <div data-role="content">
+                <div data-role="collapsible" data-collapsed="false">
+                    <h3>@Model.Title</h3>
+                    <p>
+                        Started: @Model.StartDate.ToShortTimeString()
+                        @if (Model.EndDate.HasValue)
+                        {
+                            <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
+                        }
+                    </p>
+                    <div data-role="collapsible" data-theme="b" data-content-theme="b" data-collapsed="false">
+                        <h3>
+                            Answered questions</h3>
+                        @foreach (QuestionStatisticView question in Model.AnsweredQuestions)
+                        {
                 
-                        <p>@question.QuestionText - @question.AnswerValue
-                            @if (question.ApproximateTime.HasValue)
-                            {<b> , Timing : @question.ApproximateTime.Value.Minutes
-                            minutes @question.ApproximateTime.Value.Seconds seconds</b>
-                            }
-                        </p>
-                    }
-                </div>
-                <div data-role="collapsible" data-theme="e" data-content-theme="e">
-                    <h3>
-                        Invalid questions</h3>
-                    @foreach (QuestionStatisticView question in Model.InvalidQuestions)
-                    {
-                
-                        <p>@question.QuestionText - @question.AnswerValue
-                        </p>
-                   
-                    }
+                            <p>@question.QuestionText - @question.AnswerValue
+                                @if (question.ApproximateTime.HasValue)
+                                {<b> , Timing : @question.ApproximateTime.Value.Minutes
+                    minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                                }
+                            </p>
+                        }
+                    </div>
+                    <div data-role="collapsible" data-theme="e" data-content-theme="e">
+                        <h3>
+                            Invalid questions</h3>
+                        @foreach (QuestionStatisticView question in Model.InvalidQuestions)
+                        {
+                            <p>@question.QuestionText - @question.AnswerValue</p>
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-@*<div class="content-secondary">
-    <div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="d">
-        <h3>
-            More in this section</h3>
-        <ul data-role="listview" data-theme="c" data-dividertheme="d">
-            @foreach (var gh in Model.Groups)
-            {
-                if (!gh.IsCurrent)
-                {
-                <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })">@gh.GroupText</a></li>
-                }
-                else
-                {
-                <li data-theme="a"><a>@gh.GroupText</a></li>
-                }
-
-            }
-        </ul>
+      @*  </div>*@
     </div>
 </div>
-*@

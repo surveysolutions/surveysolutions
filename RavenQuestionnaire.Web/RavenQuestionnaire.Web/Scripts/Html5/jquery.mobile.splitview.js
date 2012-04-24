@@ -169,7 +169,7 @@
                     var $link = $(link),
                     //remove active link class if external (then it won't be there if you come back)
               httpCleanup = function () {
-                  window.setTimeout(function () { removeActiveLinkClass(true); }, 200);
+                  window.setTimeout(function () { /*removeActiveLinkClass(true);*/ }, 200);
               };
 
                     //if there's a data-rel=back attr, go back in history

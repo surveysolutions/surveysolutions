@@ -45,9 +45,11 @@ function UpdateGroup(group) {
 function UpdateQuestion(question, propagationKey) {
     var questionElement = propagationKey ? $('#propagatedGroup' + propagationKey + ' #question' + question.PublicKey) : $('#question' + question.PublicKey);
 
-    var bodyClass = question.Valid ? question.Enabled ? "" : "ui-disabled" : "ui-body ui-body-e";
+    var bodyClass = question.Valid ? question.Enabled ? "" : "ui-disabled" : "ui-body error_block";
     questionElement.attr("class", bodyClass);
-    SetErrorToQuestion(question,propagationKey, '');
+    if (!question.Enabled)
+        questionElement.closest("form").clear_form_elements();
+    SetErrorToQuestion(question, propagationKey, '');
 }
 
 function RemovePropagatedGroup(data, status, xhr) {
@@ -60,6 +62,12 @@ function PropagatedGroup(data, status, xhr) {
     var group = jQuery.parseJSON(data.responseText);
     var templateDivPath = '#groupTemplate' + group.parentGroupPublicKey;
     var parent = $(templateDivPath).parent();
+    var validator = parent.find('[data-valmsg-replace=true]');
+    if (group.error) {
+        validator.text(group.error);
+        return; 
+    }
+    validator.text('');
     var template = $(templateDivPath).html();
     var str = template.replace(/00000000-0000-0000-0000-000000000000/gi, group.propagationKey);
     var newGroup = $(str);
@@ -69,9 +77,10 @@ function PropagatedGroup(data, status, xhr) {
     } else {
         newGroup.insertAfter(container);    
     }
+
+    newGroup.trigger('create');
     newGroup.find('input[type=text]').createKeyBoard();
     newGroup.numericSubmit();
-    newGroup.trigger('create');
   //  $('#foo').trigger('updatelayout');
   //  createKeyBoard();
 }
@@ -108,16 +117,52 @@ $(document).on('mobileinit', function () {
     content.css("overflow-y", "auto");
 }*/
 (function($) {
+    $.extend($.keyboard.layouts,{'qwertyNoEnter' : {
+			'default': [
+				'` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
+				'{tab} q w e r t y u i o p [ ] \\',
+				'a s d f g h j k l ; \' {accept}',
+				'{shift} z x c v b n m , . / {shift}',
+				'{accept} {space} {cancel}'
+			],
+			'shift': [
+				'~ ! @ # $ % ^ & * ( ) _ + {bksp}',
+				'{tab} Q W E R T Y U I O P { } |',
+				'A S D F G H J K L : " {enter}',
+				'{shift} Z X C V B N M < > ? {shift}',
+				' {space} {cancel}'
+			]
+		}});
+
+    $.fn.clear_form_elements=function() {
+
+    $(this).find(':input').each(function() {
+        switch(this.type) {
+            case 'password':
+            case 'select-multiple':
+            case 'select-one':
+            case 'text':
+            case 'textarea':
+                $(this).val('');
+                break;
+            case 'checkbox':
+            case 'radio':
+                this.checked = false;
+                $(this).checkboxradio("refresh");
+        }
+    });
+
+},
     //jquery extension method to handle exceptions and log them
     $.fn.numericSubmit =function()
     {
-        var input = this.find('input[type=number]');
+        var input = this.find('input[type=number], input[type=range]');
         var target = input.parent();
         target.find('.ui-slider a').bind('vmouseup', function() {  $($(this).parent().siblings('input')[0].form).submit(); });
         input.createKeyBoard('num');
     },
     $.fn.createKeyBoard = function(layout) {
-        layout = typeof layout !== 'undefined' ? layout : 'qwerty';
+        layout = typeof layout !== 'undefined' ? layout : 'qwertyNoEnter';
      //   var k = this.find('input[type=text], input[type=number]');
         if($.client.os!='Windows') {
             this.each(function() {
@@ -137,6 +182,7 @@ $(document).on('mobileinit', function () {
                 at: 'center top',
                 at2: 'center bottom' // used when "usePreview" is false (centers the keyboard at the bottom of the input/textarea)
             },
+            autoAccept   : true,
             // make sure jQuery UI styles aren't applied even if the stylesheet has loaded
             // the Mobile UI theme will still over-ride the jQuery UI theme
             css: {
@@ -166,15 +212,12 @@ $(document).on('mobileinit', function () {
         this.bind('accepted.keyboard', function(event) {
             $(this.form).submit();
         });
-        this.bind('canceled.keyboard', function(event) {
-            $(this).getkeyboard().accept();
-        });
         this.bind('visible.keyboard', function(event) {
             // $(this).getkeyboard().css
             
             var keyboard = $(this).getkeyboard().$keyboard;
             var input =keyboard.find('input');
-            if(layout=='qwerty')
+            if(layout=='qwertyNoEnter')
                 keyboard.css('width', '892px');
             keyboard.css('left', '0px');
             input.caretToEnd();
@@ -183,22 +226,11 @@ $(document).on('mobileinit', function () {
 
 })(jQuery);
 
-     
-
-
-function initDateTime() {
-    jQuery.extend(jQuery.mobile.datebox.prototype.options, {
-        'dateFormat': 'MM/dd/YYYY',
-        'headerFormat': 'MM/dd/YYYY'
-    });
-}
 $(document).ready(function () {
 
     
     var doc = $(document);
     doc.find('input[type=text]').createKeyBoard();
     doc.numericSubmit();
-    initDateTime();
-
 
 });

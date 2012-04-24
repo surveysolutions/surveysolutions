@@ -213,7 +213,7 @@ namespace RavenQuestionnaire.Web.Controllers
             catch (Exception e)
             {
                 ModelState.AddModelError("PropagationError", e.Message);
-                return Json(new {error = e.Message});
+                return Json(new { error = e.Message, parentGroupPublicKey = publicKey });
             }
         }
 
