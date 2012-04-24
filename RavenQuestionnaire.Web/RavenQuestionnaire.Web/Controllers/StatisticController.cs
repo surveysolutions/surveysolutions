@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Web.Controllers
             commandInvoker.Execute(command);
             var stat =viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                 new CompleteQuestionnaireStatisticViewInputModel(id));
-            return View(stat);
+            return PartialView(stat);
         }
     }
 }

@@ -31,6 +31,16 @@
 
 					    return true;
 					});
+            $('#statistics').live('pagebeforeshow', function (event, ui) {
+               /* $.ajax({
+                    type: 'GET',
+                    url: $("#statisticsLink").attr("href"),
+                    success: function (resp) {
+                        $('#statisticsContent').html(resp);
+                        $('#statistics').page();
+                    }
+                });*/
+            });
         });
     } (window, window.jQuery, window.Code.PhotoSwipe));
 </script>
@@ -79,14 +89,15 @@
          
      }
                     </li>
-                    <li>
-                        @Html.ActionLink("Statistic", "Details", "Statistic", new { id = Model.Id }, new { data_role = "button", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })
-                        @*         @Ajax.ActionLinkHtml5("Statistic", "Details", "Statistic", new { id = Model.Id },new AjaxOptions
+                    <li>@*@Html.ActionLink("Statistic", "Details", "Statistic", new { id = Model.Id }, new { data_role = "button", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })*@
+                       @* @Ajax.ActionLinkHtml5("Statistic", "Details", "Statistic", new { id = Model.Id }, new AjaxOptions
                    {
-                       UpdateTargetId = "statistics",
-                       InsertionMode = InsertionMode.Replace
-                   }, new { data_role = "button", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })
+                       /*UpdateTargetId = "statisticsContent",
+                       InsertionMode = InsertionMode.Replace*/
+                   }, new { data_role = "button", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })*@
                     *@ </li>
+                   <a href="#statistics" data-role = "button" data-icon = "grid" data-iconpos = "top" data-transition = "flip">Statistic</a>
+                    </li>
                 </ul>
             </div>
             <!-- /navbar -->
@@ -95,6 +106,15 @@
     </div>
     <!-- /page -->
     <div data-role="page" id="statistics">
+        <div data-role="page" data-add-back-btn="true">
+            <div data-role="header" data-theme="b">
+                <h1>Statistics</h1>
+                @Html.ActionLink("Statistic", "Details", "Statistic", new { id = Model.Id }, new {id="statisticsLink", data_role = "button", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })
+            </div>
+            <div data-role="content" id="statisticsContent">
+                
+            </div>
+        </div>
     </div>
     <!-- other side panel pages here -->
 </div>
@@ -134,8 +154,8 @@
     }
     @foreach (var question in Model.QuestionsWithInstructions)
     {
-        <div data-role="page" id="inctruction-@(question.PublicKey)">
-            <div data-role="header">
+        <div data-role="page" data-add-back-btn="true" id="inctruction-@(question.PublicKey)">
+            <div data-role="header" data-theme="b">
                 <h1>
                     Instructions</h1>
             </div>
