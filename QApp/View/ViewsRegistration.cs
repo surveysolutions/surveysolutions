@@ -8,7 +8,6 @@ namespace QApp.View {
             viewsManager.RegisterView(typeof(MainScreen), typeof(MainScreenView));
             viewsManager.RegisterView(typeof(Draft), typeof(DraftView));
             viewsManager.RegisterView(typeof(Navigator), typeof(NavigatorView));
-            viewsManager.RegisterView(typeof(CompletedQuestionnaire), typeof(CompletedQuestionnaireView));
             viewsManager.RegisterView(typeof(GroupDetail), typeof(GroupDetailView));
             viewsManager.RegisterView(typeof(CompletedQuestionnaires), typeof(CompletedQuestionnairesView));
             viewsManager.RegisterView(typeof(QuestionnaireTemplates), typeof(QuestionnaireTemplatesView));

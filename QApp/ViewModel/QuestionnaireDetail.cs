@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
@@ -47,7 +50,6 @@ namespace QApp.ViewModel {
             //replace with injections
             ViewRepository viewRepository = new ViewRepository(Initializer.Kernel);
 
-
             CompleteQuestionnaireItem =
                  viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
                      new CompleteQuestionnaireViewInputModel(QuestionnaireId) { CurrentGroupPublicKey = GroupId });
@@ -60,38 +62,154 @@ namespace QApp.ViewModel {
             get { return completeQuestionnaireItem; }
             private set { SetValue<CompleteQuestionnaireViewV>("CompleteQuestionnaireItem", ref completeQuestionnaireItem, value); }
         }
-
-      
-
     }
+    #region research
+
+    public class ModelBase : DependencyObject
+    {
+        public static readonly DependencyProperty NameProperty;
+
+        static ModelBase()
+        {
+            NameProperty = DependencyProperty.Register("Name", typeof(string), typeof(ModelBase), new PropertyMetadata(""));
+        }
+        public string Name
+        {
+            get { return (string)GetValue(NameProperty); }
+            set { SetValue(NameProperty, value); }
+        }
+    }
+
+    public class BarModel : ModelBase
+    {
+        public static readonly DependencyProperty CommandsProperty;
+
+        static BarModel()
+        {
+            CommandsProperty = DependencyProperty.Register("Commands", typeof(ObservableCollection<MyCommand>), typeof(BarModel), new PropertyMetadata(null));
+        }
+        public BarModel()
+        {
+            Commands = new ObservableCollection<MyCommand>();
+        }
+        public ObservableCollection<MyCommand> Commands
+        {
+            get { return ((ObservableCollection<MyCommand>)GetValue(CommandsProperty)); }
+            set { SetValue(CommandsProperty, value); }
+        }
+    }
+
+    public class MyCommand : DependencyObject, ICommand
+    {
+        Action action;
+        public static readonly DependencyProperty CaptionProperty;
+        public static readonly DependencyProperty LargeGlyphProperty;
+        public static readonly DependencyProperty SmallGlyphProperty;
+
+        static MyCommand()
+        {
+            CaptionProperty = DependencyProperty.Register("Caption", typeof(string), typeof(MyCommand), new PropertyMetadata(""));
+            
+        }
+        public MyCommand()
+        {
+
+        }
+        private void ShowMSGBX()
+        {
+            MessageBox.Show(String.Format("Command \"{0}\" executed", this.Caption));
+        }
+        public MyCommand(Action action)
+        {
+            this.action = action;
+        }
+
+        public string Caption
+        {
+            get { return (string)GetValue(CaptionProperty); }
+            set { SetValue(CaptionProperty, value); }
+        }
+       
+
+        #region ICommand
+        bool b = false;
+        public bool CanExecute(object parameter)
+        {
+            if (b == true) CanExecuteChanged.Invoke(this, new EventArgs());
+            return true;
+        }
+
+        public event EventHandler CanExecuteChanged;
+
+        public virtual void Execute(object parameter)
+        {
+            if (action != null)
+                action();
+            else
+                ShowMSGBX();
+        }
+        #endregion
+    }
+
+    public class MyGroupCommand : MyCommand
+    {
+        public static readonly DependencyProperty CommandsProperty;
+
+        public ObservableCollection<MyCommand> Commands
+        {
+            get { return (ObservableCollection<MyCommand>)GetValue(CommandsProperty); }
+            set { SetValue(CommandsProperty, value); }
+        }
+        static MyGroupCommand()
+        {
+            CommandsProperty = DependencyProperty.Register("Commands", typeof(ObservableCollection<MyCommand>), typeof(MyGroupCommand), new PropertyMetadata(null));
+        }
+        public MyGroupCommand()
+            : base(emptyFunc)
+        {
+            Commands = new ObservableCollection<MyCommand>();
+        }
+        public static void emptyFunc()
+        {
+        }
+    }
+
+    #endregion research
+
     public class QuestionnaireDetail : ModuleWithNavigator
     {
-        private string completedQuestionnaireId ;
+        private string _completedQuestionnaireId ;
 
-        public QuestionnaireDetail(){}
+        public QuestionnaireDetail()
+        {
+           Navigation = new ObservableCollection<NavigationItem>();
+        }
 
         public override void InitData(object parameter) {
             base.InitData(parameter);
             string questionnaireId =  parameter as string;
             if (!String.IsNullOrEmpty(questionnaireId))
             {
-                completedQuestionnaireId = questionnaireId;
+                _completedQuestionnaireId = questionnaireId;
 
                 //bad approach!!!
                 //due to init manager doesn't support parameter passing
                 //TODO: rewrite!!!
 
-                Data = new QuestionnaireDetailData(completedQuestionnaireId, null);
+                Data = new QuestionnaireDetailData(_completedQuestionnaireId, null);
                 (Data as QuestionnaireDetailData).Load();
 
             }
 
             CurrentGroup = CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentGroup;
         }
-        public override void SaveData() {
-            base.SaveData();
-        }
 
+        ObservableCollection<NavigationItem> navigation;
+        public ObservableCollection<NavigationItem> Navigation
+        {
+            get { return navigation; }
+            set { SetValue<ObservableCollection<NavigationItem>>("Navigation", ref navigation, value); }
+        }
 
         public override List<Module> GetSubmodules()
         {
@@ -117,22 +235,46 @@ namespace QApp.ViewModel {
 
         public QuestionnaireDetailData CompletedQuestionnaireData { get { return (QuestionnaireDetailData)Data; } }
 
-        Question detail;
-
+        private Question _detail;
         public Question Detail
         {
-            get { return detail; }
-            private set { SetValue<Question>("Detail", ref detail, value); }
+            get { return _detail; }
+            private set { SetValue<Question>("Detail", ref _detail, value); }
         }
 
 
         #region Commands
         protected override void InitializeCommands() {
             base.InitializeCommands();
+
             SetCurrentGroupCommand = new SimpleActionCommand(DoSetCurrentGroup);
             SetCurrentSubGroupCommand = new SimpleActionCommand(DoSetCurrentSubGroup);
             ShowQuestionCommand = new SimpleActionCommand(DoShowQuestion);
+            SelectMenuItemCommand = new SimpleActionCommand(DoSelectMenuItem);
+
         }
+
+        private void DoSelectMenuItem(object obj)
+        {
+            var item = obj as NavigationItem;
+            if (item != null)
+            {
+                item.Command.Execute(null);
+            }
+        }
+
+        private void BuildMenu()
+        {
+            var root = new NavigationItem();
+            root.Text = "root";
+            root.Command = new SimpleActionCommand(DoSetCurrentGroup);
+
+            Navigation.Clear();
+            Navigation.Add(root);
+            
+        }
+
+
 
 
         void RaiseCurrentGroupChanged(CompleteGroupViewV oldValue, CompleteGroupViewV newValue)
@@ -143,18 +285,32 @@ namespace QApp.ViewModel {
             {
                 GroupDetail = (PropagatedGroupDetail)ModulesManager.CreateModule(null, new PropagatedGroupDetailData(newValue), this, newValue);
             }
+
+            BuildMenu();
         }
 
         void DoSetCurrentGroup(object p)
         {
             //bad approach!!!
             //reload current data
-            //TODO: !!!
+            //TODO: load whole questionnaire!!!
             var group = p as CompleteGroupHeaders;
             if (group != null)
             {
-                Data = new QuestionnaireDetailData(completedQuestionnaireId, group.PublicKey);
+                Data = new QuestionnaireDetailData(_completedQuestionnaireId, group.PublicKey);
+
+                Stopwatch stopWatch = new Stopwatch();
+
+                stopWatch.Start();
+
+                DateTime start = DateTime.Now;
                 (Data as QuestionnaireDetailData).Load();
+                stopWatch.Start();
+                var diff = start - DateTime.Now;
+
+                //stopWatch.Elapsed;
+
+
             }
             
             
@@ -191,6 +347,20 @@ namespace QApp.ViewModel {
 
         public ICommand ShowQuestionCommand { get; private set; }
 
+        public ICommand SelectMenuItemCommand { get; private set; }
+
         #endregion
+    }
+
+    public class NavigationItem
+    {
+        public NavigationItem()
+        {
+        }
+
+        public string Text { set; get; }
+
+        public ICommand Command { set; get; }
+
     }
 }

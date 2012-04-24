@@ -20,33 +20,18 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />            
         </Grid.RowDefinitions>
 
-        <dxlc:TileLayoutControl Padding="5" Orientation="Horizontal" ItemsSource="{Binding Data.Group.Groups}" AllowItemMoving="False">
+        <dxlc:TileLayoutControl Padding="5" Orientation="Horizontal" ItemsSource="{Binding Data.Group.Groups}" AllowItemMoving="False" Grid.Row="1">
             <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
                     <dxlc:Tile Background="#FF54AF0E" Width="240" Height="70" Content="{Binding}"
                                                Command="{Binding Path=DataContext.Parent.SetCurrentSubGroupCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
                                                CommandParameter="{Binding}"                                               
                                                Padding="0">
-                        <!-- <dxlc:Tile.ContentTemplate>
-                            <DataTemplate>                          
-                                <Grid>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="0.3*" />
-                                            <ColumnDefinition Width="0.7*" />
-                                        </Grid.ColumnDefinitions>
-                                        <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
-                                            <TextBlock Text="{Binding GroupText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Grid>
-                            </DataTemplate>
-                        </dxlc:Tile.ContentTemplate>-->
-
                         <dxlc:Tile.ContentTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding GroupText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
@@ -74,26 +59,15 @@
             </dxlc:TileLayoutControl.ItemTemplate>
         </dxlc:TileLayoutControl>
         
-        <dxlc:TileLayoutControl Grid.Row="1" Orientation="Vertical" ItemsSource="{Binding Data.Group.Questions}" AllowItemMoving="False">
+        <dxlc:TileLayoutControl Grid.Row="2" Margin="0,80,0,0" Orientation="Vertical" ItemsSource="{Binding Data.Group.Questions}" AllowItemMoving="False">
             <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
-                    <dxlc:Tile Background="#FF00ABBB" Width="240" Height="70" Content="{Binding}"
+                    <dxlc:Tile Background="#FF00ABBB" Width="240" Height="80" Content="{Binding}"
                                                Command="{Binding Path=DataContext.ShowQuestionCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
-                                               CommandParameter="{Binding}"                                               
-                                               Padding="0">
+                                               CommandParameter="{Binding}">
                         <dxlc:Tile.ContentTemplate>
                             <DataTemplate>
-                                <Grid>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="0.3*" />
-                                            <ColumnDefinition Width="0.7*" />
-                                        </Grid.ColumnDefinitions>
-                                        <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
-                                            <TextBlock Text="{Binding QuestionText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Grid>
+                                <TextBlock Text="{Binding QuestionText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
                             </DataTemplate>
                         </dxlc:Tile.ContentTemplate>
                     </dxlc:Tile>

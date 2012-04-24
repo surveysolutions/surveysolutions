@@ -45,8 +45,7 @@ namespace QApp
                                                             MessageBox.Show(args.Exception.Message, "Exception Caught",
                                                             MessageBoxButton.OK, MessageBoxImage.Error);
                                                             args.Handled = true;
-                                                        };  
-                
+                                                        };
                 return app;
             }
             protected override bool DoStartup()
