@@ -189,22 +189,11 @@ $(document).on('mobileinit', function () {
 
 })(jQuery);
 
-     
-
-
-function initDateTime() {
-    jQuery.extend(jQuery.mobile.datebox.prototype.options, {
-        'dateFormat': 'MM/dd/YYYY',
-        'headerFormat': 'MM/dd/YYYY'
-    });
-}
 $(document).ready(function () {
 
     
     var doc = $(document);
     doc.find('input[type=text]').createKeyBoard();
     doc.numericSubmit();
-    initDateTime();
-
 
 });
