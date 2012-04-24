@@ -6,43 +6,47 @@
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
 }
- <div data-role="page" id="statistics">
-        <div data-role="page" data-add-back-btn="true">
+<div data-role="panel" data-id="main">
+    <div data-role="page" id="main" data-add-back-btn="true">
+       @* <div data-role="page" data-add-back-btn="true">*@
             <div data-role="header" data-theme="b">
-                <h1>Statistics</h1>
-                
+                <h1>
+                    Statistics</h1>
             </div>
-            <div data-role="content" >
+            <div data-role="content">
                 <div data-role="collapsible" data-collapsed="false">
-    <h3>@Model.Title</h3>
-    <p>Started: @Model.StartDate.ToShortTimeString()
-        @if (Model.EndDate.HasValue)
-        {
-            <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
-        }
-    </p>
-    <div data-role="collapsible" data-theme="b" data-content-theme="b" data-collapsed="false">
-        <h3>Answered questions</h3>
-        @foreach (QuestionStatisticView question in Model.AnsweredQuestions)
-        {
+                    <h3>@Model.Title</h3>
+                    <p>
+                        Started: @Model.StartDate.ToShortTimeString()
+                        @if (Model.EndDate.HasValue)
+                        {
+                            <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
+                        }
+                    </p>
+                    <div data-role="collapsible" data-theme="b" data-content-theme="b" data-collapsed="false">
+                        <h3>
+                            Answered questions</h3>
+                        @foreach (QuestionStatisticView question in Model.AnsweredQuestions)
+                        {
                 
-            <p>@question.QuestionText - @question.AnswerValue
-                @if (question.ApproximateTime.HasValue)
-                {<b> , Timing : @question.ApproximateTime.Value.Minutes
-                                minutes @question.ApproximateTime.Value.Seconds seconds</b>
-                }
-            </p>
-        }
-    </div>
-    <div data-role="collapsible" data-theme="e" data-content-theme="e">
-        <h3>Invalid questions</h3>
-        @foreach (QuestionStatisticView question in Model.InvalidQuestions)
-        {
-            <p>@question.QuestionText - @question.AnswerValue</p>
-        }
+                            <p>@question.QuestionText - @question.AnswerValue
+                                @if (question.ApproximateTime.HasValue)
+                                {<b> , Timing : @question.ApproximateTime.Value.Minutes
+                    minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                                }
+                            </p>
+                        }
+                    </div>
+                    <div data-role="collapsible" data-theme="e" data-content-theme="e">
+                        <h3>
+                            Invalid questions</h3>
+                        @foreach (QuestionStatisticView question in Model.InvalidQuestions)
+                        {
+                            <p>@question.QuestionText - @question.AnswerValue</p>
+                        }
+                    </div>
+                </div>
+            </div>
+      @*  </div>*@
     </div>
 </div>
-            </div>
-        </div>
-    </div>
-
