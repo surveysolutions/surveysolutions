@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 
             IOrderedQueryable<CompleteQuestionnaireDocument> query;
 
-            if (!String.IsNullOrEmpty(input.QuestionnaryId)) //filter result by responsible
+            if (!String.IsNullOrEmpty(input.QuestionnaryId))
             {
                 query =
                     (IOrderedQueryable<CompleteQuestionnaireDocument>)

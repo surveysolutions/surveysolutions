@@ -24,7 +24,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ItemsControl ItemsSource="{Binding Data.Group.PropagatedGroups}" >
+        <ItemsControl ItemsSource="{Binding Data.Group.PropagatedGroups}" Grid.Row="1">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
