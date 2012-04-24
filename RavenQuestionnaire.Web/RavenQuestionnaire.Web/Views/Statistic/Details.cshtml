@@ -3,8 +3,17 @@
 @using RavenQuestionnaire.Core.Views.Statistics
 @using RavenQuestionnaire.Web.Models
 @model RavenQuestionnaire.Core.Views.Statistics.CompleteQuestionnaireStatisticView
-           
-<div data-role="collapsible" data-collapsed="false">
+@{
+    Layout = "~/Views/Shared/_LayputHtml5.cshtml";
+}
+ <div data-role="page" id="statistics">
+        <div data-role="page" data-add-back-btn="true">
+            <div data-role="header" data-theme="b">
+                <h1>Statistics</h1>
+                
+            </div>
+            <div data-role="content" >
+                <div data-role="collapsible" data-collapsed="false">
     <h3>@Model.Title</h3>
     <p>Started: @Model.StartDate.ToShortTimeString()
         @if (Model.EndDate.HasValue)
@@ -29,9 +38,11 @@
         <h3>Invalid questions</h3>
         @foreach (QuestionStatisticView question in Model.InvalidQuestions)
         {
-                
             <p>@question.QuestionText - @question.AnswerValue</p>
-                   
         }
     </div>
 </div>
+            </div>
+        </div>
+    </div>
+

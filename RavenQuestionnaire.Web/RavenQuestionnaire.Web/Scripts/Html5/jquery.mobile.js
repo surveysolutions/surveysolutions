@@ -5774,13 +5774,13 @@ $( document ).bind( "pagecreate create", function( e ){
 				var self = this,
 					menuHeight = self.list.parent().outerHeight(),
 					menuWidth = self.list.parent().outerWidth(),
-					activePage = $( ".ui-page-active" ),
+					activePage =$(this.label).parents(".ui-page-active"),
 					tOverflow = $.support.touchOverflow && $.mobile.touchOverflowEnabled,
 					tScrollElem = activePage.is( ".ui-native-fixed" ) ? activePage.find( ".ui-content" ) : activePage;
-					scrollTop = tOverflow ? tScrollElem.scrollTop() : $( window ).scrollTop(),
-					btnOffset = self.button.offset().top,
-					screenHeight = window.innerHeight,
-					screenWidth = window.innerWidth;
+			    scrollTop = tOverflow ? tScrollElem.scrollTop() : $(window).scrollTop(),
+			    btnOffset = self.button.offset().top,
+			    screenHeight = window.innerHeight,
+			    screenWidth = $(activePage).innerWidth();//window.innerWidth;
 
 				//add active class to button
 				self.button.addClass( $.mobile.activeBtnClass );
@@ -5852,7 +5852,7 @@ $( document ).bind( "pagecreate create", function( e ){
 					} else {
 
 						//otherwise insure a >= 30px offset from the left
-						newleft = self.button.offset().left + self.button.outerWidth() / 2 - menuWidth / 2;
+						newleft = (self.button.offset().left-$(activePage).offset().left) + self.button.outerWidth() / 2 - menuWidth / 2;
 
 						// 30px tolerance off the edges
 						if ( newleft < 30 ) {

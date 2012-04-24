@@ -3,8 +3,8 @@
 @model CompleteQuestionnaireMobileView
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
-    //  IDictionary<string, object> validateButtonAttr = new Dictionary<string, object>() { { "data-role", "button" }/*, { "data-inline", "true" } */};
-   // object buttonAttributs = new { data_role = "button", data_icon = "check", data_theme = "e", data_iconpos = "top" };
+                    //  IDictionary<string, object> validateButtonAttr = new Dictionary<string, object>() { { "data-role", "button" }/*, { "data-inline", "true" } */};
+                    // object buttonAttributs = new { data_role = "button", data_icon = "check", data_theme = "e", data_iconpos = "top" };
 
 }
 <script type="text/javascript">
@@ -31,25 +31,14 @@
 
 					    return true;
 					});
-            $('#statistics').live('pagebeforeshow', function (event, ui) {
-               /* $.ajax({
-                    type: 'GET',
-                    url: $("#statisticsLink").attr("href"),
-                    success: function (resp) {
-                        $('#statisticsContent').html(resp);
-                        $('#statistics').page();
-                    }
-                });*/
-            });
         });
     } (window, window.jQuery, window.Code.PhotoSwipe));
 </script>
 <div data-role="panel" data-id="menu">
     <!-- Start of first page -->
-    <div data-role="page" id="foo">
+    <div data-role="page" id="sidebar">
         <div data-role="header">
-            <h1>
-                Screens</h1>
+            <h1>Screens</h1>
         </div>
         <!-- /header -->
         <div data-role="content">
@@ -71,33 +60,25 @@
         <div data-role="footer">
             <div data-role="navbar">
                 <ul>
-                    <li>
-                    @*    @Ajax.ActionLinkHtml5("Validate", "Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
+                    <li class="ui-no-corners">@*    @Ajax.ActionLinkHtml5("Validate", "Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
    {
        UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
        OnComplete = "ReInitMobile('#" + Model.CurrentGroup.GetClientId("div") + "')",
        InsertionMode = InsertionMode.Replace
    }, buttonAttributs)
    *@
-   
-     @using (Ajax.BeginFormHtml5("Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
+                        @using (Ajax.BeginFormHtml5("Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
      {
          OnComplete = "JsonResults"
      }))
-     {
-         <input value="Validate" type="submit" data-role = "button"  data-icon = "check"  data-theme = "e"  data-iconpos = "top" />
+                        {
+                            <input value="Validate" type="submit" data-role="button" data-icon="check" data-theme="e"
+                                data-iconpos="top" />
          
-     }
+                        }
                     </li>
-                    <li>@*@Html.ActionLink("Statistic", "Details", "Statistic", new { id = Model.Id }, new { data_role = "button", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })*@
-                       @* @Ajax.ActionLinkHtml5("Statistic", "Details", "Statistic", new { id = Model.Id }, new AjaxOptions
-                   {
-                       /*UpdateTargetId = "statisticsContent",
-                       InsertionMode = InsertionMode.Replace*/
-                   }, new { data_role = "button", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })*@
-                    *@ </li>
-                   <a href="#statistics" data-role = "button" data-icon = "grid" data-iconpos = "top" data-transition = "flip">Statistic</a>
-                    </li>
+                    <li><a href="javascript:void(0)" data-role = "button"  data-icon = "grid" data-iconpos = "top" data-transition = "flip" data-ajax-url = "@Url.Action("Details", "Statistic", new { id = Model.Id })">
+                        Statistics</a></li>
                 </ul>
             </div>
             <!-- /navbar -->
@@ -105,30 +86,19 @@
         <!-- /footer -->
     </div>
     <!-- /page -->
-    <div data-role="page" id="statistics">
-        <div data-role="page" data-add-back-btn="true">
-            <div data-role="header" data-theme="b">
-                <h1>Statistics</h1>
-                @Html.ActionLink("Statistic", "Details", "Statistic", new { id = Model.Id }, new {id="statisticsLink", data_role = "button", data_icon = "grid", data_iconpos = "top", data_transition = "flip" })
-            </div>
-            <div data-role="content" id="statisticsContent">
-                
-            </div>
-        </div>
-    </div>
     <!-- other side panel pages here -->
 </div>
 <div data-role="panel" data-id="main">
     <!-- Start of second page -->
-    <div data-role="page" id="bar">
+    <div data-role="page" id="main">
         <div data-role="header" data-theme="b">
             @Html.Partial("MobileGroupNavigation", Model)
         </div>
         <!-- /header -->
         <div data-role="content" id="@Model.CurrentGroup.GetClientId("div")">
             @Html.Partial("~/Views/Group/_ScreenHtml5.cshtml", Model)
-            
-            <div style="width:100%; height: 50px;">&nbsp;</div>
+            <div style="width: 100%; height: 50px;">
+                &nbsp;</div>
         </div>
         <!-- /content -->
     </div>
@@ -138,8 +108,7 @@
     {
         <div data-role="page" data-add-back-btn="true" id="gallery-@(question.PublicKey)" class="gallery-page">
             <div data-role="header">
-                <h1>
-                    Question cards</h1>
+                <h1>Question cards</h1>
             </div>
             <div data-role="content">
                 <ul class="gallery">
@@ -156,8 +125,7 @@
     {
         <div data-role="page" data-add-back-btn="true" id="inctruction-@(question.PublicKey)">
             <div data-role="header" data-theme="b">
-                <h1>
-                    Instructions</h1>
+                <h1>Instructions</h1>
             </div>
             <div data-role="content">
                 <h3>@question.Instructions</h3>
