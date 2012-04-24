@@ -60,6 +60,12 @@ function PropagatedGroup(data, status, xhr) {
     var group = jQuery.parseJSON(data.responseText);
     var templateDivPath = '#groupTemplate' + group.parentGroupPublicKey;
     var parent = $(templateDivPath).parent();
+    var validator = parent.find('[data-valmsg-replace=true]');
+    if (group.error) {
+        validator.text(group.error);
+        return; 
+    }
+    validator.text('');
     var template = $(templateDivPath).html();
     var str = template.replace(/00000000-0000-0000-0000-000000000000/gi, group.propagationKey);
     var newGroup = $(str);
