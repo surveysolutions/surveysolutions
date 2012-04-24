@@ -90,7 +90,6 @@
     </Compile>
     <Compile Include="Initializer.cs" />
     <Compile Include="ViewModel\CompletedQuestionnaires.cs" />
-    <Compile Include="ViewModel\CompletedQuestionnaire.cs" />
     <Compile Include="ViewModel\CommonGroupDetail.cs" />
     <Compile Include="ViewModel\PropagatedGroupDetail.cs" />
     <Compile Include="ViewModel\QuestionnaireDetail.cs" />
@@ -125,9 +124,6 @@
     </Compile>
     <Compile Include="View\GroupDetailView.xaml.cs">
       <DependentUpon>GroupDetailView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\CompletedQuestionnaireView.xaml.cs">
-      <DependentUpon>CompletedQuestionnaireView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\DraftView.xaml.cs">
       <DependentUpon>DraftView.xaml</DependentUpon>
@@ -168,10 +164,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\GroupDetailView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\CompletedQuestionnaireView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -218,6 +210,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

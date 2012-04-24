@@ -7,7 +7,7 @@
     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
     xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
     xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
-    mc:Ignorable="d"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" mc:Ignorable="d"
     d:DesignHeight="800" d:DesignWidth="1000">
 
     <View:ModuleView.Resources>
@@ -16,14 +16,20 @@
                 <ResourceDictionary Source="/DevExpress.RealtorWorld.Xpf;component/Themes/TileHoverAnimation.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <dx:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <dx:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" Invert="True"/>
-            <Helpers:ImageSourceConverter x:Key="ImageSourceConverter" />
-        </ResourceDictionary>
+            <DataTemplate x:Key="barTemplate">
+                <ContentControl>
+                    <dxb:Bar Caption="{Binding Name}"
+                             ItemLinksSource="{Binding Commands}" AllowCustomizationMenu="False"  AllowRename="False" BarTypeName=""
+                             AllowDrop="False" AllowCollapse="False" AllowHide="False" AllowQuickCustomization="False" ShowDragWidget="False" 
+                             UseWholeRow="True"/>
+                </ContentControl>
+            </DataTemplate>
+        </ResourceDictionary>      
+                
     </View:ModuleView.Resources>
-
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />            
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <ContentControl Content="{Binding Navigator.View}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top" />
@@ -31,9 +37,29 @@
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Border BorderBrush="#FF515151" BorderThickness="1" Padding="5">
+           
+            <Border BorderBrush="#FF515151" BorderThickness="1" Padding="5" Grid.Row="1" Margin="5">
+                <dxlc:TileLayoutControl x:Name="Navifation" Orientation="Horizontal" AllowItemMoving="False" Padding="5" BreakFlowToFit="False" ItemsSource="{Binding Navigation}">
+                    <dxlc:TileLayoutControl.ItemTemplate>
+                        <DataTemplate>
+                            <dxlc:Tile Background="#ffbbdddd" Width="100" Height="50" Content="{Binding}"  
+                             Command="{Binding Path=DataContext.SelectMenuItemCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
+                             CommandParameter="{Binding}">                                
+                                <dxlc:Tile.ContentTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Text}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </dxlc:Tile.ContentTemplate>
+                            </dxlc:Tile>
+                        </DataTemplate>
+                    </dxlc:TileLayoutControl.ItemTemplate>                    
+                </dxlc:TileLayoutControl>
+            </Border>
+            
+            <Border BorderBrush="#FF515151" BorderThickness="1" Padding="5" Grid.Row="1" Margin="5,75,5,5">
                 <dxlc:TileLayoutControl x:Name="RootGroups" Orientation="Horizontal" AllowItemMoving="False" Padding="5" BreakFlowToFit="False" ItemsSource="{Binding Data.CompleteQuestionnaireItem.Groups}">
                 <dxlc:TileLayoutControl.ItemTemplate>
                     <DataTemplate>
@@ -66,7 +92,8 @@
                 </dxlc:TileLayoutControl.ItemTemplate>
             </dxlc:TileLayoutControl>
             </Border>
-            <Helpers:ViewPresenter Grid.Row="1" Margin="5" Content="{Binding GroupDetail.View}" />
+
+            <Helpers:ViewPresenter Grid.Row="2"  Content="{Binding GroupDetail.View}" />
            
         </Grid>
 

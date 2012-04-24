@@ -26,7 +26,7 @@
         </Grid.RowDefinitions>
 
 
-        <dxlc:TileLayoutControl Grid.Column="1" Margin="30,0,0,0" Padding="32,0,30,10" Orientation="Vertical" ItemsSource="{Binding Data.Group.Questions}" AllowItemMoving="False">
+        <dxlc:TileLayoutControl Grid.Column="1" Orientation="Vertical" ItemsSource="{Binding Data.Group.Questions}" AllowItemMoving="False">
             <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
                     <dxlc:Tile Background="#FF00ABBB" Width="240" Height="70" Content="{Binding}"
