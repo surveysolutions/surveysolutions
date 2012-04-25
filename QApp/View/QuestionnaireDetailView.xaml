@@ -38,28 +38,75 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition
+                    Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
            
-            <Border BorderBrush="#FF515151" BorderThickness="1" Padding="5" Grid.Row="1" Margin="5">
-                <dxlc:TileLayoutControl x:Name="Navifation" Orientation="Horizontal" AllowItemMoving="False" Padding="5" BreakFlowToFit="False" ItemsSource="{Binding Navigation}">
+            <Border BorderBrush="#FF515151" BorderThickness="1" Padding="5" Grid.Row="1" Margin="5" >
+                <dxlc:TileLayoutControl x:Name="Nav" Orientation="Horizontal" AllowItemMoving="False" Padding="5" BreakFlowToFit="False" 
+                                        ItemsSource="{Binding Navigation}">
                     <dxlc:TileLayoutControl.ItemTemplate>
                         <DataTemplate>
-                            <dxlc:Tile Background="#ffbbdddd" Width="100" Height="50" Content="{Binding}"  
-                             Command="{Binding Path=DataContext.SelectMenuItemCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
-                             CommandParameter="{Binding}">                                
-                                <dxlc:Tile.ContentTemplate>
+
+                            <dxlc:TileLayoutControl                               
+                                Orientation="Vertical"
+                                AllowItemMoving="False"
+                                Padding="5"
+                                BreakFlowToFit="False"
+                                ItemsSource="{Binding}"
+                                Height="85" >
+                                <dxlc:TileLayoutControl.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Text}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                        <dxlc:Tile Background="#66ffccdd"
+                                            Width="200" Height="60" Content="{Binding}"
+                                            Command="{Binding Command}" CommandParameter="{Binding Item}">
+                                            <dxlc:Tile.ContentTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Grid>
+                                                            <StackPanel Orientation="Vertical"
+                                                                HorizontalAlignment="Left" VerticalAlignment="Top"
+                                                                Margin="5,5,0,0">
+
+                                                                <TextBlock
+                                                                    Text="{Binding Text}"
+                                                                    FontSize="16" Foreground="#FFFFFFFF"
+                                                                    TextWrapping="Wrap" />
+
+                                                            </StackPanel>
+                                                        </Grid>
+                                                        <Helpers:VisualStateControl
+                                                            Style="{StaticResource TileHoverAnimation}"
+                                                            HorizontalAlignment="Stretch"
+                                                            VerticalAlignment="Stretch">
+                                                            <Border
+                                                                Background="Aqua"
+                                                                Opacity="0.25" />
+                                                        </Helpers:VisualStateControl>
+                                                        
+                                                        <Border
+                                                            BorderBrush="#f78a09" Background="Transparent"
+                                                            BorderThickness="3" HorizontalAlignment="Stretch"
+                                                            VerticalAlignment="Stretch" IsHitTestVisible="False"
+                                                            Visibility="{Binding Path=(Helpers:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                    </Grid>
+
+
+                                                   
+                                                </DataTemplate>
+                                            </dxlc:Tile.ContentTemplate>
+                                        </dxlc:Tile>
                                     </DataTemplate>
-                                </dxlc:Tile.ContentTemplate>
-                            </dxlc:Tile>
+                                </dxlc:TileLayoutControl.ItemTemplate>
+                            </dxlc:TileLayoutControl>
+
                         </DataTemplate>
                     </dxlc:TileLayoutControl.ItemTemplate>                    
                 </dxlc:TileLayoutControl>
             </Border>
             
-            <Border BorderBrush="#FF515151" BorderThickness="1" Padding="5" Grid.Row="1" Margin="5,75,5,5">
+           <!-- <Border BorderBrush="#FF515151" BorderThickness="1" Padding="5" Grid.Row="2" Margin="5,5,5,5">
                 <dxlc:TileLayoutControl x:Name="RootGroups" Orientation="Horizontal" AllowItemMoving="False" Padding="5" BreakFlowToFit="False" ItemsSource="{Binding Data.CompleteQuestionnaireItem.Groups}">
                 <dxlc:TileLayoutControl.ItemTemplate>
                     <DataTemplate>
@@ -91,9 +138,9 @@
                     </DataTemplate>
                 </dxlc:TileLayoutControl.ItemTemplate>
             </dxlc:TileLayoutControl>
-            </Border>
+            </Border>-->
 
-            <Helpers:ViewPresenter Grid.Row="2"  Content="{Binding GroupDetail.View}" />
+            <Helpers:ViewPresenter Grid.Row="3"  Content="{Binding GroupDetail.View}" />
            
         </Grid>
 

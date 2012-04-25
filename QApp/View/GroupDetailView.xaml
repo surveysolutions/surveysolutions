@@ -25,8 +25,16 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <TextBlock
+            Text="{Binding Data.Group.GroupText}"
+            FontSize="16"
+            Margin="10"
+            Foreground="#FFFFFFFF"
+            TextWrapping="Wrap"
+            Grid.Column="1" />
 
-        <dxlc:TileLayoutControl Grid.Column="1" Orientation="Vertical" ItemsSource="{Binding Data.Group.Questions}" AllowItemMoving="False">
+
+        <dxlc:TileLayoutControl Grid.Column="1" Orientation="Vertical" ItemsSource="{Binding Data.Group.Questions}" AllowItemMoving="False" Margin="0,15,0,0">
             <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
                     <dxlc:Tile Background="#FF00ABBB" Width="240" Height="70" Content="{Binding}"

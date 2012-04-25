@@ -178,7 +178,7 @@
         <TextBlock
             Text="{Binding Data.Question.QuestionText}"
             FontSize="20" Margin="10"  Foreground="#FFFFFFFF" TextWrapping="Wrap" />
-        <ContentControl x:Name="ContentArea" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,40,10,10"
+        <ContentControl x:Name="ContentArea" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10"
             Content="{Binding Data.Question}"
             ContentTemplateSelector="{StaticResource QuestionDataTemplateSelector}"
             Grid.Row="1">  
