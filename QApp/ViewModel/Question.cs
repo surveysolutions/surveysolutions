@@ -54,9 +54,7 @@ namespace QApp.ViewModel
                          SelectedAnswer = completeAnswerView;
                      }
                  }
-                 
              }
-
          }
 
 
@@ -69,7 +67,6 @@ namespace QApp.ViewModel
              get { return selectedAnswer; }
              set { SetValue<CompleteAnswerView>("SelectedAnswer", ref selectedAnswer, value); }
          }
-
 
         /* void RaiseSelectedAnswerChanged(CompleteAnswerView oldValue, CompleteAnswerView newValue) {
             Detail = (AgentDetail)ModulesManager.CreateModule(Detail, new AgentDetailData(newValue), this);
