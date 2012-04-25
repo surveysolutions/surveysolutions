@@ -15,8 +15,14 @@
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
     @Html.Hidden("QuestionId", Model.PublicKey)
+@*
     @Html.Label("AnswerValue", Model.QuestionText)
     @Html.Html5Range(0, 100, 1, Model.Answers.Length > 0 && !string.IsNullOrEmpty(Model.Answers[0].AnswerValue) ? Convert.ToInt32(Model.Answers[0].AnswerValue) : 0, viewBag)
+*@
+    
+    @Model.QuestionText <b>:</b>
+    @Html.IconInput("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, new { draw_key_board = "true", type="number" }, new { @class = "keyboard" })
+     @*  @Html.IconInput("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, new { draw_key_board = "true" }, new { @class = "keyboard" })*@
  @*   <input type="number" value="" id="@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue")" name="@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue")" />*@
     
     @*<div id="@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue")" custom-numeric="true"></div>*@

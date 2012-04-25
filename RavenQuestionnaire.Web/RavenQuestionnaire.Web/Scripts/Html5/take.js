@@ -70,11 +70,14 @@ function PropagatedGroup(data, status, xhr) {
     } else {
         newGroup.insertAfter(container);    
     }
-
-    newGroup.trigger('create');
+    newGroup.listview();
+    newGroup.trigger('pagecreate');
+   // newGroup.parent().listview('refresh');
+  //  newGroup.page();
     newGroup.createKeyBoard();
     newGroup.numericSubmit();
     newGroup.hideInputsWithVirtualKeyboard();
+ //  
   //  $('#foo').trigger('updatelayout');
   //  createKeyBoard();
 }
@@ -115,7 +118,7 @@ $(document).on('mobileinit', function () {
 			'default': [
 				'` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
 				'{tab} q w e r t y u i o p [ ] \\',
-				'a s d f g h j k l ; \' {accept}',
+				'a s d f g h j k l ; \'',
 				'{shift} z x c v b n m , . / {shift}',
 				'{accept} {space} {cancel}'
 			],
@@ -163,7 +166,12 @@ $(document).on('mobileinit', function () {
             var targetInput = $('#' + target);
           //  targetInput.createKeyBoard();
             var label = $('[for=' + target+']');
-            targetInput.css('display', 'none');
+            if($.client.os=='Windows' || targetInput.attr('data-role')=='datebox') {
+                targetInput.css('display', 'none');
+            } else {
+                button.css('display', 'none');
+                label.css('display', 'none');
+            }
 
             targetInput.change(function() {
                 label.html(targetInput.val());
@@ -211,7 +219,7 @@ $(document).on('mobileinit', function () {
             }
         };
 
-        k.keyboard(kbOptions).each(function () {
+        k.each(function () {
             var jInput = $(this);
             var options = $.extend(kbOptions, { layout: jInput.attr('type')=='text' ? 'qwertyNoEnter': 'num' });
             jInput.keyboard(options);
@@ -239,9 +247,9 @@ $(document).on('mobileinit', function () {
             
             var keyboard = $(this).getkeyboard().$keyboard;
             var input =keyboard.find('input');
-            if(layout=='qwertyNoEnter')
+            if($(this).attr('type')=='text'){
                 keyboard.css('width', '892px');
-            keyboard.css('left', '0px');
+            keyboard.css('left', '0px');}
             input.caretToEnd();
         });
     };
