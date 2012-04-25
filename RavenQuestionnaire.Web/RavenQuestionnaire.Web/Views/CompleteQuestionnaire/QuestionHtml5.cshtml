@@ -42,16 +42,16 @@
         </div>
         <!-- /header -->
         <div data-role="content">
-            <ul data-role="listview" data-theme="c" data-dividertheme="d">
+            <ul data-role="listview" data-theme="c" data-dividertheme="d" data-counttheme="e">
                 @foreach (var gh in Model.Groups)
                 {
                     if (!gh.IsCurrent)
                     {
-                    <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })" rel="external" data-ajax="false">@gh.GroupText</a></li>
+                    <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })" rel="external" data-ajax="false">@gh.GroupText <span class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Total</span></a></li>
                     }
                     else
                     {
-                    <li data-theme="a"><a>@gh.GroupText</a></li>
+                    <li data-theme="a" ><a>@gh.GroupText <span data-theme="a" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Total</span></a></li>
                     }
                 }
             </ul>
