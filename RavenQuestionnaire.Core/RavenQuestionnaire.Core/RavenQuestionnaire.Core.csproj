@@ -61,8 +61,7 @@
       <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.Extensions.Conventions.2.2.0.5\lib\net40-Full\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\QApp\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Abstractions">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB-Embedded.1.0.499\lib\net40\Raven.Abstractions.dll</HintPath>
