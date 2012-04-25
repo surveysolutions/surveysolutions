@@ -24,7 +24,16 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ItemsControl ItemsSource="{Binding Data.Group.PropagatedGroups}" Grid.Row="1">
+        <TextBlock
+            Text="{Binding Data.Group.GroupText}"
+            FontSize="16"
+            Margin="10"
+            Foreground="#FFFFFFFF"
+            TextWrapping="Wrap"
+             />
+
+
+        <ItemsControl ItemsSource="{Binding Data.Group.PropagatedGroups}" Grid.Row="1" Margin="0,15,0,0">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">

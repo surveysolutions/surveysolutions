@@ -59,7 +59,7 @@ namespace QApp
                 Width = 1200.0;
                 Height = 550.0;
                 MinWidth = 300.0;
-                MinHeight = 100.0;
+                MinHeight = 300.0;
                 ExitAtRequest = true;
                 SetCultureInfo();
                 //DataSource.Current = new FilesDataSource();

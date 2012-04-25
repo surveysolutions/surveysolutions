@@ -182,7 +182,7 @@ namespace QApp.ViewModel {
 
         public QuestionnaireDetail()
         {
-           Navigation = new ObservableCollection<NavigationItem>();
+           Navigation = new ObservableCollection<List<NavigationItem>>();
         }
 
         public override void InitData(object parameter) {
@@ -202,13 +202,14 @@ namespace QApp.ViewModel {
             }
 
             CurrentGroup = CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentGroup;
+            BuildMenu();
         }
 
-        ObservableCollection<NavigationItem> navigation;
-        public ObservableCollection<NavigationItem> Navigation
+        ObservableCollection<List<NavigationItem>> navigation;
+        public ObservableCollection<List<NavigationItem>> Navigation
         {
             get { return navigation; }
-            set { SetValue<ObservableCollection<NavigationItem>>("Navigation", ref navigation, value); }
+            set { SetValue<ObservableCollection<List<NavigationItem>>>("Navigation", ref navigation, value); }
         }
 
         public override List<Module> GetSubmodules()
@@ -267,11 +268,22 @@ namespace QApp.ViewModel {
         {
             var root = new NavigationItem();
             root.Text = "root";
-            root.Command = new SimpleActionCommand(DoSetCurrentGroup);
+            root.Command = SetCurrentGroupCommand;
+
+            var item = CompletedQuestionnaireData.CompleteQuestionnaireItem;
 
             Navigation.Clear();
-            Navigation.Add(root);
-            
+
+            Navigation.Add(new List<NavigationItem>() { root });
+
+            var subgroups = new List<NavigationItem>();
+
+            foreach (var group in item.Groups)
+            {
+                subgroups.Add(new NavigationItem() { Text = group.GroupText, Command = SetCurrentGroupCommand, Item = group }); 
+            }
+
+            Navigation.Add(subgroups);
         }
 
 
@@ -285,8 +297,6 @@ namespace QApp.ViewModel {
             {
                 GroupDetail = (PropagatedGroupDetail)ModulesManager.CreateModule(null, new PropagatedGroupDetailData(newValue), this, newValue);
             }
-
-            BuildMenu();
         }
 
         void DoSetCurrentGroup(object p)
@@ -298,21 +308,9 @@ namespace QApp.ViewModel {
             if (group != null)
             {
                 Data = new QuestionnaireDetailData(_completedQuestionnaireId, group.PublicKey);
-
-                Stopwatch stopWatch = new Stopwatch();
-
-                stopWatch.Start();
-
-                DateTime start = DateTime.Now;
                 (Data as QuestionnaireDetailData).Load();
-                stopWatch.Start();
-                var diff = start - DateTime.Now;
-
                 //stopWatch.Elapsed;
-
-
             }
-            
             
             DoSetCurrentSubGroup(CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentGroup);
         }
@@ -342,7 +340,6 @@ namespace QApp.ViewModel {
 
         public ICommand SetCurrentGroupCommand { get; private set; }
 
-
         public ICommand SetCurrentSubGroupCommand { get; private set; }
 
         public ICommand ShowQuestionCommand { get; private set; }
@@ -356,11 +353,13 @@ namespace QApp.ViewModel {
     {
         public NavigationItem()
         {
+            
         }
 
         public string Text { set; get; }
 
         public ICommand Command { set; get; }
 
+        public CompleteGroupHeaders Item { set; get; }
     }
 }
