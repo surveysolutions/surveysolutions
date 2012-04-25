@@ -11,7 +11,7 @@
     viewBag.Add("name", Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue"));
     var id = Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
     viewBag.Add("id", id);
-
+    viewBag.Add("draw-key-board","true");
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
     @Html.Hidden("QuestionId", Model.PublicKey)

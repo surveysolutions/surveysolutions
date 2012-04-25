@@ -3,15 +3,24 @@
 @model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
 @{
     var answerGuid = Model.Answers.Length > 0 ? Model.Answers[0].PublicKey : Guid.NewGuid();
-    var settings = ((IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings);
-    //settings.Add("onchange", "$(this.form).submit();");
+    var settings = ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings);
+   
 }
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {
     @Html.Hidden("QuestionId", Model.PublicKey)
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
-    @Html.Label("AnswerValue", Model.QuestionText)
-    @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, settings)
+var id = ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
+@*  @Html.Label("AnswerValue",  Model.QuestionText)*@
+    @Model.QuestionText <b>:</b>
+    
+@*    <span for="@id">
+    @(Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty)</span> <a href="javascript:void(0)" open-virtual-keyboar="true" target-input="@id" class="keyboard"></a>
+    
+    @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, new {@class="ert"})*@
+
+    
+    @Html.IconInput("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, new { draw_key_board = "true" }, new { @class = "keyboard" })
 
 }
