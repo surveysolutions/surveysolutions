@@ -8,19 +8,20 @@
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {
     ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onchange", "$(this.form).submit();");
-    
+
     var dateValue = Model.Answers.Length > 0 ? Model.Answers[0].AnswerValue : string.Empty;
     @Html.Hidden("QuestionId", Model.PublicKey)
-    <div class="answer">
+    <div class="answer hide-date-box">
         @Html.Hidden("PublicKey", answerGuid)
         @Html.Hidden("Selected", true)
+       
         
-        @Html.Label("AnswerValue", Model.QuestionText)
-        <input  data-role="datebox" data-options='{"mode": "datebox","calStartDay": 1, "dateFormat": "MM/dd/YYYY"}'
-            name='@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue")' 
-               id='@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue")' 
-               value='@dateValue' onchange ="$(this.form).submit();" />
-
-    </div>
+           @Model.QuestionText <b>:</b>
+      @*     <input  data-role="datebox" data-options='{"mode": "flipbox","calStartDay": 1, "dateFormat": "MM/dd/YYYY"}'
+                name='@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue")' 
+                id='@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue")' 
+                value='@dateValue' onchange ="$(this.form).submit();" />*@
+    @Html.IconInput("AnswerValue", dateValue, new { data_options = "{\"mode\": \"calbox\",\"calStartDay\": 1,\"noButton\": true,\"focusMode\": true, \"dateFormat\": \"MM/dd/YYYY\"}", type = "hidden", @class = "hidden", data_role = "datebox", onchange = "$(this.form).submit();" }, new { @class = "keyboard" })
+   </div>
    
 }

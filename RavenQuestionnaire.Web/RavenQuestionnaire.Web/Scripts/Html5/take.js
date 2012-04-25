@@ -1,11 +1,4 @@
 ﻿
-function ReInitMobile(id) {
-    //  alert('test');
-    $(id).trigger('create');
-//    ReinitInputs();
-    createKeyBoard();
-
-}
 
 function JsonResults (data, status, xhr) {
 
@@ -77,10 +70,14 @@ function PropagatedGroup(data, status, xhr) {
     } else {
         newGroup.insertAfter(container);    
     }
-
-    newGroup.trigger('create');
-    newGroup.find('input[type=text]').createKeyBoard();
+    newGroup.listview();
+    newGroup.trigger('pagecreate');
+   // newGroup.parent().listview('refresh');
+  //  newGroup.page();
+    newGroup.createKeyBoard();
     newGroup.numericSubmit();
+    newGroup.hideInputsWithVirtualKeyboard();
+ //  
   //  $('#foo').trigger('updatelayout');
   //  createKeyBoard();
 }
@@ -121,7 +118,7 @@ $(document).on('mobileinit', function () {
 			'default': [
 				'` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
 				'{tab} q w e r t y u i o p [ ] \\',
-				'a s d f g h j k l ; \' {accept}',
+				'a s d f g h j k l ; \'',
 				'{shift} z x c v b n m , . / {shift}',
 				'{accept} {space} {cancel}'
 			],
@@ -159,13 +156,40 @@ $(document).on('mobileinit', function () {
         var input = this.find('input[type=number], input[type=range]');
         var target = input.parent();
         target.find('.ui-slider a').bind('vmouseup', function() {  $($(this).parent().siblings('input')[0].form).submit(); });
-        input.createKeyBoard('num');
+      //  this.createKeyBoard('num');
+    },
+    $.fn.hideInputsWithVirtualKeyboard = function () {
+        var virtualIcons = this.find('a[open-virtual-keyboar=true]');
+        virtualIcons.each(function() {
+            var button = $(this);
+            var target = button.attr('target-input');
+            var targetInput = $('#' + target);
+          //  targetInput.createKeyBoard();
+            var label = $('[for=' + target+']');
+            if($.client.os=='Windows' || targetInput.attr('data-role')=='datebox') {
+                targetInput.css('display', 'none');
+            } else {
+                button.css('display', 'none');
+                label.css('display', 'none');
+            }
+
+            targetInput.change(function() {
+                label.html(targetInput.val());
+            });
+            button.bind('click', function() {
+                targetInput.focus();
+                 targetInput.click();
+            });
+
+
+        });
     },
     $.fn.createKeyBoard = function(layout) {
-        layout = typeof layout !== 'undefined' ? layout : 'qwertyNoEnter';
-     //   var k = this.find('input[type=text], input[type=number]');
+        //layout = typeof layout !== 'undefined' ? layout : 'qwertyNoEnter';
+        var k = this.find('input[draw-key-board=true]');
+        k.removeAttr("draw-key-board");
         if($.client.os!='Windows') {
-            this.each(function() {
+            k.each(function() {
                 var input = this;
                 $(input.form).bind('submit', function() {
                     input.blur();
@@ -175,7 +199,7 @@ $(document).on('mobileinit', function () {
         }
         var kbOptions = {
             keyBinding: 'mousedown touchstart',
-             layout : layout,
+            // layout : 'num',
             position: {
                 of: null, // optional - null (attach to input/textarea) or a jQuery object (attach elsewhere)
                 my: 'center top',
@@ -195,7 +219,12 @@ $(document).on('mobileinit', function () {
             }
         };
 
-        this.keyboard(kbOptions).addMobile({
+        k.each(function () {
+            var jInput = $(this);
+            var options = $.extend(kbOptions, { layout: jInput.attr('type')=='text' ? 'qwertyNoEnter': 'num' });
+            jInput.keyboard(options);
+        
+        }).addMobile({
         // keyboard wrapper theme
             container: { theme: 'c' },
             // theme added to all regular buttons
@@ -209,17 +238,18 @@ $(document).on('mobileinit', function () {
             // All extra parameters will be ignored
             buttonActive: { theme: 'e' }
         });
-        this.bind('accepted.keyboard', function(event) {
+        k.bind('accepted.keyboard', function(event) {
+            $(this).change();
             $(this.form).submit();
         });
-        this.bind('visible.keyboard', function(event) {
+        k.bind('visible.keyboard', function(event) {
             // $(this).getkeyboard().css
             
             var keyboard = $(this).getkeyboard().$keyboard;
             var input =keyboard.find('input');
-            if(layout=='qwertyNoEnter')
+            if($(this).attr('type')=='text'){
                 keyboard.css('width', '892px');
-            keyboard.css('left', '0px');
+            keyboard.css('left', '0px');}
             input.caretToEnd();
         });
     };
@@ -230,7 +260,8 @@ $(document).ready(function () {
 
     
     var doc = $(document);
-    doc.find('input[type=text]').createKeyBoard();
+    doc.createKeyBoard();
     doc.numericSubmit();
+    doc.hideInputsWithVirtualKeyboard();
 
 });
