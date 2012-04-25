@@ -42,7 +42,6 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.PublicKey = template.PublicKey;
             this.QuestionText = template.QuestionText;
             this.Instructions = template.Instructions;
-            this.QuestionType = template.QuestionType;
             this.ConditionExpression = template.ConditionExpression;
             this.StataExportCaption = template.StataExportCaption;
             this.GroupPublicKey = group.PublicKey;
