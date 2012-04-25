@@ -10,6 +10,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
         public bool IsCurrent { get; set; }
 
+        public Counter Totals { get; set; }
+
         public virtual string GetClientId(string prefix)
         {
             return string.Format("{0}_{1}", prefix, PublicKey);
