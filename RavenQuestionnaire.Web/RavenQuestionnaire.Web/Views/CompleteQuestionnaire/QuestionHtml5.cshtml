@@ -56,33 +56,6 @@
                 }
             </ul>
         </div>
-        <!-- /content -->
-        <div data-role="footer">
-            <div data-role="navbar">
-                <ul>
-                    <li class="ui-no-corners">@*    @Ajax.ActionLinkHtml5("Validate", "Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
-   {
-       UpdateTargetId = Model.CurrentGroup.GetClientId("div"),
-       OnComplete = "ReInitMobile('#" + Model.CurrentGroup.GetClientId("div") + "')",
-       InsertionMode = InsertionMode.Replace
-   }, buttonAttributs)
-   *@
-                        @using (Ajax.BeginFormHtml5("Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
-     {
-         OnComplete = "JsonResults"
-     }))
-                        {
-                            <input value="Validate" type="submit" data-role="button" data-icon="check" data-theme="e"
-                                data-iconpos="top" />
-         
-                        }
-                    </li>
-                    <li><a href="@Url.Action("Details", "Statistic", new { id = Model.Id })" data-role = "button"  data-icon = "grid" data-iconpos = "top" data-transition = "flip"  data-rel="panel">
-                        Statistics</a></li>
-                </ul>
-            </div>
-            <!-- /navbar -->
-        </div>
         <!-- /footer -->
     </div>
     <!-- /page -->

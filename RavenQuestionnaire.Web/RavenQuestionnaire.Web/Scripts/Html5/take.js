@@ -228,7 +228,7 @@ $(document).on('mobileinit', function () {
                 additionalOptions = { layout: 'qwertyNoEnter', min_width: '900px' };
             }
             else {
-                additionalOptions = { layout: 'num'};
+                additionalOptions = { layout: 'num', min_width: null};
             }
             var options = $.extend(kbOptions, additionalOptions);
             jInput.keyboard(options);
