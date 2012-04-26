@@ -12,9 +12,28 @@
         </ResourceDictionary>        
     </View:ModuleView.Resources>      
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
         <TextBlock Text="{Binding Data.Question.QuestionText}" FontSize="20" Margin="5" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
-        <ContentControl x:Name="ContentArea" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
-                        Content="{Binding Data.Question}" ContentTemplateSelector="{StaticResource QuestionDataTemplateSelector}">  
+        <ContentControl x:Name="ContentArea" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding Data.Question}" ContentTemplateSelector="{StaticResource QuestionDataTemplateSelector}" 
+                        Grid.Row="1">  
         </ContentControl>
+
+        <Grid VerticalAlignment="Bottom" Margin="0,5" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MaxWidth="30" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MaxWidth="30" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="3" FontSize="20" Margin="5" Content="Close" Command="{Binding CloseWindowCommand}" Padding="10" />
+        </Grid>
+
     </Grid>
 </View:ModuleView>

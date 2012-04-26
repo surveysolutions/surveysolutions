@@ -58,8 +58,8 @@ namespace QApp
                 Icon = ImageSourceHelper.GetImageSource(AssemblyHelper.GetResourceUri(typeof(Startup).Assembly, "Images/AppIcon.ico"));
                 Width = 1200.0;
                 Height = 550.0;
-                MinWidth = 300.0;
-                MinHeight = 300.0;
+                MinWidth = 400.0;
+                MinHeight = 350.0;
                 ExitAtRequest = true;
                 SetCultureInfo();
                 //DataSource.Current = new FilesDataSource();
