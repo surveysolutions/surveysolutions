@@ -3,13 +3,13 @@ using System.Windows.Controls;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
-namespace QApp.ViewModel
+namespace QApp.Helpers.DataTemplateSelectors
 {
-    public class QuestionDataTemplateSelector:DataTemplateSelector
+    public class QuestionDataTemplateSelector : DataTemplateSelector
     {
         public DataTemplate DropDownTemplate { get; set; }
-        
-        public DataTemplate DateTimeTemplate { get; set; } 
+
+        public DataTemplate DateTimeTemplate { get; set; }
 
         public DataTemplate GpsCoordinatesTemplate { get; set; }
 
@@ -45,6 +45,6 @@ namespace QApp.ViewModel
                 }
             }
             return null;
-         }
+        }
     }
 }
