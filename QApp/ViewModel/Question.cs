@@ -1,10 +1,15 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
 using Ninject;
+using Raven.Client.Document;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Repositories;
+using RavenQuestionnaire.Core.Services;
+using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
 
@@ -95,16 +100,8 @@ namespace QApp.ViewModel
 
              if (answer != null)
              {
-
                  foreach (var completeAnswerView in QuestionData.Question.Answers)
-                 {
-                     if (completeAnswerView.PublicKey != answer.PublicKey)
-                         completeAnswerView.Selected = false;
-                     else
-                     {
-                         completeAnswerView.Selected = true;
-                     }
-                 }
+                     completeAnswerView.Selected = completeAnswerView.PublicKey == answer.PublicKey;
                  SelectedAnswer = answer;
  
                  var command =new UpdateAnswerInCompleteQuestionnaireCommand(QuestionData.Question.QuestionnaireId,

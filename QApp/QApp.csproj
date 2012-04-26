@@ -91,12 +91,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>App.settings</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DataTemplateSelectors\QuestionDataTemplateSelector.cs" />
+    <Compile Include="Helpers\DataTemplateSelectors\SingleOptionDataTemplateSelector.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="ViewModel\CompletedQuestionnaires.cs" />
     <Compile Include="ViewModel\CompletedQuestionnaire.cs" />
     <Compile Include="ViewModel\CommonGroupDetail.cs" />
     <Compile Include="ViewModel\PropagatedGroupDetail.cs" />
-    <Compile Include="ViewModel\QuestionDataTemplateSelector.cs" />
     <Compile Include="ViewModel\QuestionnaireDetail.cs" />
     <Compile Include="ViewModel\QuestionnaireTemplates.cs" />
     <Compile Include="ViewModel\Draft.cs" />
@@ -106,7 +107,6 @@
     <Compile Include="ViewModel\ModuleWithNavigator.cs" />
     <Compile Include="ViewModel\Navigator.cs" />
     <Compile Include="ViewModel\Question.cs" />
-    <Compile Include="ViewModel\SingleOptionDataTemplateSelector.cs" />
     <Compile Include="View\AllQuestionsView.xaml.cs">
       <DependentUpon>AllQuestionsView.xaml</DependentUpon>
     </Compile>
@@ -144,6 +144,14 @@
       <DependentUpon>NavigatorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ViewsRegistration.cs" />
+    <Page Include="Resources\QuestionDataTemplateResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\SingleOptionDataTemplateResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\AllQuestionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
