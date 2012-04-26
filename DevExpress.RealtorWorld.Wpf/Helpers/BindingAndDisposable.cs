@@ -74,7 +74,7 @@ namespace DevExpress.RealtorWorld.Xpf.Helpers {
             if(object.Equals(field, newValue)) return;
             T oldValue = field;
             field = newValue;
-            RaisePropertyChanged(propertyName);
+             RaisePropertyChanged(propertyName);
             if(raiseChangedDelegate != null)
                 raiseChangedDelegate(oldValue, newValue);
             if(!disposeOldValue) return;
