@@ -1,0 +1,132 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+                    xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
+                    xmlns:local="clr-namespace:QApp.Helpers.DataTemplateSelectors">
+
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <DataTemplate x:Key="DefaultDataTemplate">
+        <ListBox ItemsSource="{Binding Answers}" ItemTemplateSelector="{DynamicResource SingleOptionDataTemplateSelector}"  Grid.IsSharedSizeScope="True" HorizontalContentAlignment="Stretch"></ListBox>
+    </DataTemplate>
+    <DataTemplate x:Key="DropDownDataTemplate">
+        <Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.3*" />
+                    <ColumnDefinition Width="0.7*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                    <ComboBox Margin="4" Height="23" Width="250" ItemsSource="{Binding Answers}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding AnswerText}" Margin="4,0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="DateTimeDataTemplate">
+        <Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.3*" />
+                    <ColumnDefinition Width="0.7*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                    <DatePicker Name="MonthlyCalendar" FirstDayOfWeek="Monday" IsTodayHighlighted="True" Margin="15,39,88,19" Foreground="White"></DatePicker>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="GpsCoordinatesDataTemplate">
+        <Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.3*" />
+                    <ColumnDefinition Width="0.7*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                    <Border BorderThickness="1" BorderBrush="White">
+                        <TextBox Width="100" Height="20" Canvas.Top="50" Canvas.Left="20"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="MultyOptionDataTemplate">
+        <ListBox ItemsSource="{Binding Answers}" Grid.IsSharedSizeScope="True" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
+                                               Command="{Binding Path=DataContext.SetCurrentAnswerCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
+                                               CommandParameter="{Binding}"                                
+                            Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey"
+                            Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}" Padding="0">
+                        <dxlc:Tile.ContentTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.3*" />
+                                            <ColumnDefinition Width="0.7*" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                                            <CheckBox Name="CheckBoxZone" Content="{Binding AnswerText}" Tag="{Binding AnswerValue}" />
+                                        </StackPanel>
+                                        <TextBlock Visibility="{Binding Path=Selected, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding Selected}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                    </Grid>
+                                    <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False"                                                
+                                            Visibility="{Binding Path=(Helpers:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </dxlc:Tile.ContentTemplate>
+                    </dxlc:Tile>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DataTemplate>
+    <DataTemplate x:Key="NumericDataTemplate">
+        <Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.3*" />
+                    <ColumnDefinition Width="0.7*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                    <Border BorderThickness="1" BorderBrush="White">
+                        <TextBox Width="100" Height="20" Canvas.Top="50" Canvas.Left="20"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="PercentageDataTemplate">
+        <Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.3*" />
+                    <ColumnDefinition Width="0.7*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                    <Border BorderThickness="1" BorderBrush="White">
+                        <TextBox Width="100" Height="20" Canvas.Top="50" Canvas.Left="20"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </DataTemplate>
+
+    <local:QuestionDataTemplateSelector x:Key="QuestionDataTemplateSelector"
+              DefaultTemplate="{StaticResource DefaultDataTemplate}"
+              DropDownTemplate="{StaticResource DropDownDataTemplate}"
+              DateTimeTemplate="{StaticResource DateTimeDataTemplate}"
+              GpsCoordinatesTemplate="{StaticResource GpsCoordinatesDataTemplate}"
+              MultyOptionTemplate="{StaticResource MultyOptionDataTemplate}"
+              NumericTemplate="{StaticResource NumericDataTemplate}"
+              PercentageTemplate="{StaticResource PercentageDataTemplate}" />
+
+</ResourceDictionary>
