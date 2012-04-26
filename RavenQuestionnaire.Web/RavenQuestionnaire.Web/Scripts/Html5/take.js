@@ -77,6 +77,8 @@ function PropagatedGroup(data, status, xhr) {
     newGroup.createKeyBoard();
     newGroup.numericSubmit();
     newGroup.hideInputsWithVirtualKeyboard();
+  //  $($('div:jqmData(role="content")')[1]).iscroll().refresh();
+   // $(window.document).trigger("mobileinit");
  //  
   //  $('#foo').trigger('updatelayout');
   //  createKeyBoard();
@@ -221,7 +223,14 @@ $(document).on('mobileinit', function () {
 
         k.each(function () {
             var jInput = $(this);
-            var options = $.extend(kbOptions, { layout: jInput.attr('type')=='text' ? 'qwertyNoEnter': 'num' });
+            var additionalOptions = { };
+            if(jInput.attr('type')=='text') {
+                additionalOptions = { layout: 'qwertyNoEnter', min_width: '900px' };
+            }
+            else {
+                additionalOptions = { layout: 'num'};
+            }
+            var options = $.extend(kbOptions, additionalOptions);
             jInput.keyboard(options);
         
         }).addMobile({
@@ -244,11 +253,11 @@ $(document).on('mobileinit', function () {
         });
         k.bind('visible.keyboard', function(event) {
             // $(this).getkeyboard().css
-            
-            var keyboard = $(this).getkeyboard().$keyboard;
-            var input =keyboard.find('input');
-            if($(this).attr('type')=='text'){
-                keyboard.css('width', '892px');
+             var input =$(this);
+            var keyboard = input.getkeyboard();
+           
+            if(keyboard.options.min_width){
+                keyboard.$keyboard.css('width', keyboard.options.min_width);
             keyboard.css('left', '0px');}
             input.caretToEnd();
         });
