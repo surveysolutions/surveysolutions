@@ -11,7 +11,7 @@ namespace Questionnaire.Core.Web.Helpers
 {
     public static class InputExtensions
     {
-        public static MvcHtmlString IconInput(this HtmlHelper htmlHelper, string name, object value, IDictionary<string, object> inputHtmlAttributes, IDictionary<string, object> htmlAttributes)
+        public static MvcHtmlString IconInput(this HtmlHelper htmlHelper, string name, object value, string labelText, IDictionary<string, object> inputHtmlAttributes, IDictionary<string, object> buttonAttributes, IDictionary<string, object> labelAttributes)
         {
             string fullId = htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId(name);
             if (String.IsNullOrEmpty(fullId))
@@ -19,13 +19,14 @@ namespace Questionnaire.Core.Web.Helpers
                 throw new ArgumentException("Name is empty");
             }
             TagBuilder spanTagBuilder = new TagBuilder("span");
-            spanTagBuilder.MergeAttribute("for", fullId, true);
+            spanTagBuilder.MergeAttributes(labelAttributes);
+            spanTagBuilder.MergeAttribute("from", fullId, true);
             spanTagBuilder.SetInnerText(value.ToString());
 
             TagBuilder aTagBuilder = new TagBuilder("a");
-            aTagBuilder.MergeAttributes(htmlAttributes);
+            aTagBuilder.MergeAttributes(buttonAttributes);
             aTagBuilder.MergeAttribute("open-virtual-keyboar", "true", true);
-            aTagBuilder.MergeAttribute("href", "javascript:void(0)", true);
+            aTagBuilder.MergeAttribute("href", "#", true);
             aTagBuilder.MergeAttribute("target-input", fullId, true);
             aTagBuilder.SetInnerText(string.Empty);
             if(!inputHtmlAttributes.ContainsKey("type"))
@@ -33,24 +34,27 @@ namespace Questionnaire.Core.Web.Helpers
                 inputHtmlAttributes.Add("type", "text");
             }
             var additionTags =
-                new MvcHtmlString(spanTagBuilder.ToString(TagRenderMode.Normal) +
-                                  aTagBuilder.ToString(TagRenderMode.Normal) +
+                new MvcHtmlString(string.Format("<label for=\"{0}\" >{1}",fullId,labelText)+aTagBuilder.ToString(TagRenderMode.Normal) +"</label>"+
+                                  spanTagBuilder.ToString(TagRenderMode.Normal) +
                                   InputHelper(htmlHelper, name, value, true, true, inputHtmlAttributes));
             return additionTags;
 
         }
 
-        public static MvcHtmlString IconInput(this HtmlHelper htmlHelper, string name, object value, object inputHtmlAttributes, object htmlAttributes)
+        public static MvcHtmlString IconInput(this HtmlHelper htmlHelper, string name, object value, string labelText, object inputHtmlAttributes, object buttonAttributes, object labelAttributes)
         {
-            return IconInput(htmlHelper, name, value, HtmlHelper.AnonymousObjectToHtmlAttributes(inputHtmlAttributes), HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
+            return IconInput(htmlHelper, name, value, labelText,
+                             HtmlHelper.AnonymousObjectToHtmlAttributes(inputHtmlAttributes),
+                             HtmlHelper.AnonymousObjectToHtmlAttributes(buttonAttributes),
+                             HtmlHelper.AnonymousObjectToHtmlAttributes(labelAttributes));
         }
-        public static MvcHtmlString IconInput(this HtmlHelper htmlHelper, string name, object value)
+        public static MvcHtmlString IconInput(this HtmlHelper htmlHelper, string name, string labelText, object value)
         {
-            return IconInput(htmlHelper, name, value, (object)null, (object)null);
+            return IconInput(htmlHelper, name, value, labelText, (object)null, (object)null, (object)null);
         }
-        public static MvcHtmlString IconInput(this HtmlHelper htmlHelper, string name, object value, object htmlAttributes)
+        public static MvcHtmlString IconInput(this HtmlHelper htmlHelper, string name, object value, string labelText, object htmlAttributes)
         {
-            return IconInput(htmlHelper, name, value, (object)null, htmlAttributes);
+            return IconInput(htmlHelper, name, value, labelText, (object)null, htmlAttributes, (object)null);
         }
 
         #region private

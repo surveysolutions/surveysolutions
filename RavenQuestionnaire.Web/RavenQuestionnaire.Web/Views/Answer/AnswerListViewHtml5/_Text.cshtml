@@ -12,15 +12,14 @@
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
 var id = ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
-@*  @Html.Label("AnswerValue",  Model.QuestionText)*@
-    @Model.QuestionText <b>:</b>
-    
+  @*@Html.Label("AnswerValue",  Model.QuestionText)*@
+   
 @*    <span for="@id">
     @(Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty)</span> <a href="javascript:void(0)" open-virtual-keyboar="true" target-input="@id" class="keyboard"></a>
     
     @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, new {@class="ert"})*@
 
     
-    @Html.IconInput("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, new { draw_key_board = "true" }, new { @class = "keyboard" })
-
+    @Html.IconInput("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, Model.QuestionText, new { draw_key_board = "true" }, new { @class = "keyboard" }, new { @class = "bold" })
+   
 }

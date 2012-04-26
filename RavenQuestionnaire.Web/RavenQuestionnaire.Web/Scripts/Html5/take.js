@@ -165,7 +165,7 @@ $(document).on('mobileinit', function () {
             var target = button.attr('target-input');
             var targetInput = $('#' + target);
           //  targetInput.createKeyBoard();
-            var label = $('[for=' + target+']');
+            var label = $('[from=' + target+']');
             if($.client.os=='Windows' || targetInput.attr('data-role')=='datebox') {
                 targetInput.css('display', 'none');
             } else {
