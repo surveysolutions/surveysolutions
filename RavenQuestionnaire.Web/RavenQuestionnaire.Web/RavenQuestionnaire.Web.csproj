@@ -145,6 +145,7 @@
     <Compile Include="Models\SwitcherModel.cs" />
     <Content Include="Content\themes\jquerymobile\custom.css" />
     <Content Include="Content\themes\jquerymobile\images\error.jpg" />
+    <Content Include="Content\themes\jquerymobile\images\keyboard.jpg" />
     <Content Include="Content\themes\jquerymobile\images\keyboard.png" />
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.client.js" />
