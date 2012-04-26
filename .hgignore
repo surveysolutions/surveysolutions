@@ -66,3 +66,5 @@ QApp/packages/NLog.2.0.0.2000/lib/net20/NLog.xml
 QApp/packages/NLog.2.0.0.2000/lib/net20/NLog.dll
 QApp/packages/NLog.2.0.0.2000/NLog.2.0.0.2000.nupkg
 QApp/packages.config
+RavenQuestionnaire.Core/RavenQuestionnaire.Core/RavenQuestionnaire.Core.csproj.user
+QApp/QApp.csproj.user
