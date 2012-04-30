@@ -143,10 +143,9 @@
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuestionConditionModel.cs" />
     <Compile Include="Models\SwitcherModel.cs" />
-    <Content Include="Content\themes\jquerymobile\custom.css" />
-    <Content Include="Content\themes\jquerymobile\images\error.jpg" />
-    <Content Include="Content\themes\jquerymobile\images\keyboard.jpg" />
-    <Content Include="Content\themes\jquerymobile\images\keyboard.png" />
+    <Content Include="Content\img\bar-chart.png" />
+    <Content Include="Content\img\lock.png" />
+    <Content Include="Content\mobile.css" />
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.client.js" />
     <Compile Include="Utils\LoadImagesAttribute.cs" />
@@ -880,7 +879,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>24525</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

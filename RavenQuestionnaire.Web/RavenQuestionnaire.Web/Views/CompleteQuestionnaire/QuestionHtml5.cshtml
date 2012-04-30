@@ -34,7 +34,7 @@
 <div data-role="panel" data-id="menu">
     <!-- Start of first page -->
     <div data-role="page" id="sidebar">
-        <div data-role="header">
+        <div data-role="header" data-theme="b">
             <h1>@Model.Title</h1>
         </div>
         <!-- /header -->
@@ -54,7 +54,7 @@
                 }
             </ul>
         </div>
-        <!-- /footer -->
+        <!-- /content -->
     </div>
     <!-- /page -->
     <!-- other side panel pages here -->
@@ -66,7 +66,8 @@
             <div data-role="navbar" data-iconpos="left" class="nav-glyphish-example">
                 <ul>
                     <li><a href="#" id="dashboard" data-icon="custom">Dashboard</a></li>
-                    <li><a href="@Url.Action("Details", "Statistic", new { id = Model.Id })" id="statistics-btn" data-icon="custom" rel="external" data-ajax="false">Statistics</a></li>
+                    <li><a href="@Url.Action("Details", "Statistic", new { id = Model.Id })" id="statistics-btn" data-icon="custom" rel="external" data-ajax="false">
+                        Statistics</a></li>
                     <li><a href="#" id="complete" data-icon="custom">Complete</a></li>
                 </ul>
             </div>
@@ -112,3 +113,15 @@
         </div>
     }
 </div>
+@*
+Validation button
+
+@using (Ajax.BeginFormHtml5("Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
+     {
+         OnComplete = "JsonResults"
+     }))
+{
+    <input value="Validate" type="submit" data-role="button" data-icon="check" data-theme="e"
+        data-iconpos="top" />
+         
+}*@

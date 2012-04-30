@@ -13,12 +13,12 @@
 
 .ui-header .ui-btn-left, .ui-header .ui-btn-right
 {
-	top: 32px;
+	top: 37px;
 }
 .nav-glyphish-example .ui-btn .ui-btn-inner
 {
-	padding-top: 10px !important;
-	padding-bottom: 10px !important;
+	padding-top: 12px !important;
+	padding-bottom: 13px !important;
 }
 .nav-glyphish-example .ui-btn .ui-icon
 {
@@ -50,4 +50,9 @@
 .ui-header .ui-title
 {
 	 margin: 0.6em 0 0.8em;
+}
+
+.ui-grid-b .ui-block-a, .ui-grid-b .ui-block-b, .ui-grid-b .ui-block-c
+{
+	width: 33.33333333%;
 }
