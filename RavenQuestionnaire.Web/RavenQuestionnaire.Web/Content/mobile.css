@@ -1,0 +1,53 @@
+﻿.ui-no-corners .ui-btn-corner-all
+{
+	border-radius: 0;
+}
+.splitview .ui-selectmenu .ui-header
+{
+	position: relative !important;
+}
+.splitview #main .ui-content
+{
+	top: 80px !important;
+}
+
+.ui-header .ui-btn-left, .ui-header .ui-btn-right
+{
+	top: 32px;
+}
+.nav-glyphish-example .ui-btn .ui-btn-inner
+{
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+}
+.nav-glyphish-example .ui-btn .ui-icon
+{
+	width: 30px !important;
+	height: 30px !important;
+	margin-top: -15px !important;
+	box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	-webkit-box-shadow: none !important;
+	-webkit-border-radius: 0 !important;
+	border-radius: 0 !important;
+}
+#dashboard .ui-icon
+{
+	background: url(img/bar-chart.png) 50% 50% no-repeat;
+	background-size: 24px 22px;
+}
+#statistics-btn .ui-icon
+{
+	background: url(img/bar-chart.png) 50% 50% no-repeat;
+	background-size: 29px 24px;
+}
+#complete .ui-icon
+{
+	background: url(img/lock.png) 50% 50% no-repeat;
+	background-size: 20px 24px;
+}
+
+.ui-header .ui-title
+{
+	 margin: 0.6em 0 0.8em;
+}
