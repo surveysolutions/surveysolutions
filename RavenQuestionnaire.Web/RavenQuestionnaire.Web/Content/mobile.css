@@ -6,7 +6,7 @@
 {
 	position: relative !important;
 }
-.splitview #main .ui-content
+.splitview .page .ui-content
 {
 	top: 80px !important;
 }

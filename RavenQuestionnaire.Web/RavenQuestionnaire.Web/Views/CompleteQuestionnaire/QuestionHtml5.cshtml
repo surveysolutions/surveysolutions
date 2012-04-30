@@ -34,7 +34,7 @@
 <div data-role="panel" data-id="menu">
     <!-- Start of first page -->
     <div data-role="page" id="sidebar">
-        <div data-role="header" data-theme="b">
+        <div data-role="header" data-theme="c">
             <h1>@Model.Title</h1>
         </div>
         <!-- /header -->
@@ -49,7 +49,7 @@
                     }
                     else
                     {
-                    <li data-theme="a"><a>@gh.GroupText <span data-theme="a" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Total</span></a></li>
+                    <li data-theme="b"><a>@gh.GroupText <span data-theme="a" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Total</span></a></li>
                     }
                 }
             </ul>
@@ -61,7 +61,7 @@
 </div>
 <div data-role="panel" data-id="main">
     <!-- Start of second page -->
-    <div data-role="page" id="main">
+    <div data-role="page" id="main" class="page">
         <div data-role="header" data-theme="b">
             <div data-role="navbar" data-iconpos="left" class="nav-glyphish-example">
                 <ul>

@@ -6,14 +6,14 @@
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
 }
-<div data-role="panel" data-id="main">
+@*<div data-role="panel" data-id="main">
     <div data-role="page" data-add-back-btn="true" id="statistics">
-       @* <div data-role="page" data-add-back-btn="true">*@
             <div data-role="header" data-theme="b">
              <div data-role="navbar" data-iconpos="left" class="nav-glyphish-example">
                 <ul>
+                    
                     <li><a href="#" id="dashboard" data-icon="custom">Dashboard</a></li>
-                    <li><a href="@Url.Action("Details", "Statistic", new { id = Model.Id })" id="statistics-btn" data-icon="custom" rel="external" data-ajax="false">Survey</a></li>
+                    <li><a href="@Url.Action("Html5", "Statistic", new { id = Model.Id })" id="statistics-btn" data-icon="custom" rel="external" data-ajax="false">Survey</a></li>
                     <li><a href="#" id="complete" data-icon="custom">Complete</a></li>
                 </ul>
             </div>
@@ -47,13 +47,91 @@
                     <div data-role="collapsible" data-theme="e" data-content-theme="e">
                         <h3>
                             Invalid questions</h3>
-                        @foreach (QuestionStatisticView question in Model.InvalidQuestions)
-                        {
-                            <p>@question.QuestionText - @question.AnswerValue</p>
-                        }
+                       
                     </div>
                 </div>
             </div>
-      @*  </div>*@
     </div>
 </div>
+*@
+<div data-role="panel" data-id="menu">
+    <!-- Start of first page -->
+    <div data-role="page" id="sidebar">
+        <div data-role="header" data-theme="c">
+            <h1>Statistics</h1>
+        </div>
+        <!-- /header -->
+        <div data-role="content">
+            <ul data-role="listview" data-theme="c" data-dividertheme="d" data-counttheme="e">
+                <li><a href="#main"  data-panel="main">Answered questions</a></li>
+                <li><a href="#invalid"  data-panel="main">Invalid questions</a></li>
+                <li><a href="#general"  data-panel="main">General info</a></li>
+            </ul>
+        </div>
+        <!-- /content -->
+    </div>
+    <!-- /page -->
+    <!-- other side panel pages here -->
+</div>
+<div data-role="panel" data-id="main">
+    <!-- Start of second page -->
+    <div data-role="page" id="main" class="page">
+        <div data-role="header" data-theme="b">
+            @RenderNavBar()
+            <h1>Answered questions</h1> 
+            <!-- /navbar -->
+        </div>
+        <!-- /header -->
+        <div data-role="content">
+            @foreach (QuestionStatisticView question in Model.AnsweredQuestions)
+            {
+                
+                <p>@question.QuestionText - @question.AnswerValue
+                    @if (question.ApproximateTime.HasValue)
+                    {<b> , Timing : @question.ApproximateTime.Value.Minutes
+                        minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                    }
+                </p>
+            }
+        </div>
+        <!-- /content -->
+    </div>
+    <div data-role="page" data-add-back-btn="true" id="invalid" class="page">
+        <div data-role="header" data-theme="b">
+            @RenderNavBar()
+            <h1>Invalid questions</h1>
+        </div>
+        <div data-role="content">
+            <h3>Invalid questions</h3>
+            @foreach (QuestionStatisticView question in Model.InvalidQuestions)
+            {
+                <p>@question.QuestionText - @question.AnswerValue</p>
+            }
+        </div>
+    </div>
+    <div data-role="page" data-add-back-btn="true" id="general" class="page">
+        <div data-role="header" data-theme="b">
+            @RenderNavBar()
+            <h1>General info</h1>
+        </div>
+        <div data-role="content">
+            <h3>@Model.Title</h3>
+            <p>Started: @Model.StartDate.ToShortTimeString()
+                @if (Model.EndDate.HasValue)
+                {
+                    <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
+                }
+            </p>
+        </div>
+    </div>
+</div>
+
+@helper RenderNavBar(){
+    <div data-role="navbar" data-iconpos="left" class="nav-glyphish-example">
+        <ul>
+            <li><a href="#" id="dashboard" data-icon="custom">Dashboard</a></li>
+            <li><a href="#" id="statistics-btn" data-icon="custom" rel="external" data-ajax="false">Survey</a></li>
+            <li><a href="#" id="complete" data-icon="custom">Complete</a></li>
+        </ul>
+    </div>
+}
