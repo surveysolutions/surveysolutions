@@ -26,8 +26,18 @@
                                 &nbsp;
                             </div>
                             <div class="ui-block-c">
-                                <a href="#" data-inline="true" data-icon="plus" data-role="button" data-theme="b"
-                                    data-iconpos="notext">New</a></div>
+                                @*      <a href="#" data-inline="true" data-icon="plus" data-role="button" data-theme="b"
+                                   data-iconpos="notext">New</a>*@
+                                @Html.ActionLink("New", "Participate", "CompleteQuestionnaire", new { id = group.Id, mode = "Html5" }, new
+                           {
+                               data_inline = "true",
+                               data_icon = "plus",
+                               data_role = "button",
+                               data_theme = "b",
+                               rel = "external",
+                               data_iconpos = "notext"
+                           })
+                            </div>
                         </fieldset>
                         <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>
                     </li>
@@ -36,14 +46,42 @@
                     <li>
                         <fieldset class="ui-grid-b">
                             <div class="ui-block-a">
-                                <h1>@survey.Id @survey.QuestionnaireTitle</h1>
+                                <h1>@survey.Id
+                                    @foreach (var column in survey.FeaturedQuestions)
+                                    {
+                                        <b>
+                                            @column.AnswerValue?? column.AnswerText</b>
+                                    }</h1>
                             </div>
                             <div class="ui-block-b">
                                 @survey.Status.Name
                             </div>
                             <div class="ui-block-c">
-                                <a href="#" data-inline="true" data-role="button" data-theme="b" data-mini="true">edit</a>
-                                <a href="#" data-inline="true" data-role="button" data-mini="true">stat</a></div>
+                                @Html.ActionLink("edit", "QuestionHtml5", "CompleteQuestionnaire", new { id = survey.Id }, new
+                            {
+                                data_inline = "true",
+                                data_role = "button",
+                                data_theme = "b",
+                                data_mini = "true",
+                                rel = "external"
+                            })
+                                @Html.ActionLink("stat", "Details", "Statistic", new { id = survey.Id }, new
+                            {
+                                data_inline = "true",
+                                data_role = "button",
+                                data_mini = "true",
+                                rel = "external"
+                            })
+                              @Html.ActionLink("del", "Delete", "CompleteQuestionnaire", new { id = survey.Id }, new
+                            {
+                                data_inline = "true",
+                                data_role = "button",
+                                data_theme = "e",
+                                data_mini = "true",
+                                data_icon = "delete",
+                                rel = "external"
+                            })
+                            </div>
                         </fieldset>
                         <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@survey.AnsweredQuestionCouont
                             / @survey.TotalQuestionCouont</span> </li>

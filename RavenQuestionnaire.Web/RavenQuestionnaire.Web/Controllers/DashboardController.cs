@@ -29,7 +29,7 @@ namespace RavenQuestionnaire.Web.Controllers
         }
         public ActionResult Index()
         {
-            var model = new CQGroupedBrowseView(0, 1, 2, new List<CQGroupItem>(){ 
+           /* var model = new CQGroupedBrowseView(0, 1, 2, new List<CQGroupItem>(){ 
                 new CQGroupItem(0,1,3, new List<CompleteQuestionnaireBrowseItem>()
                                            {
                                                new CompleteQuestionnaireBrowseItem("1","t1", DateTime.Now.AddDays(-1), DateTime.Now, new SurveyStatus("1","Initial"), 15,0,_globalProvider.GetCurrentUser() ),
@@ -41,8 +41,9 @@ namespace RavenQuestionnaire.Web.Controllers
                                                 
                                                new CompleteQuestionnaireBrowseItem("4","t4", DateTime.Now.AddDays(-4), DateTime.Now.AddYears(1), new SurveyStatus("1","Initial"), 0,0,_globalProvider.GetCurrentUser() )
                                            },"Buissines","2" )
-            });
-            
+            });*/
+            var model =
+                viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(new CQGroupedBrowseInputModel());
             return View(model);
         }
 

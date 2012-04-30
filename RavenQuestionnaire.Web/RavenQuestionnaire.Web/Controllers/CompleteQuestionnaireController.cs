@@ -384,7 +384,7 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult Delete(string id)
         {
             commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id, _globalProvider.GetCurrentUser()));
-            return RedirectToAction("Index");
+            return RedirectToAction("Index","Dashboard");
         }
 
         protected void AddAllowedStatusesToViewBag(string statusId, string statusName, string Qid)

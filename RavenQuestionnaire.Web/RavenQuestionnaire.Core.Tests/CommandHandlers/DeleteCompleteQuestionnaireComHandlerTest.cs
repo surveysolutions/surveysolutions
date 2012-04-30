@@ -10,6 +10,7 @@ using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Repositories;
+using RavenQuestionnaire.Core.Services;
 
 namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 {
@@ -28,12 +29,12 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             CompleteQuestionnaire entity = new CompleteQuestionnaire(innerDocument);
 
-            Mock<ICompleteQuestionnaireRepository> questionnaireRepositoryMock = new Mock<ICompleteQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqID")).Returns(entity);
+            Mock<ICompleteQuestionnaireUploaderService> questionnaireRepositoryMock = new Mock<ICompleteQuestionnaireUploaderService>();
+         //   questionnaireRepositoryMock.Setup(x => x.DeleteCompleteQuestionnaire("completequestionnairedocuments/cqID")).Returns(entity);
 
             DeleteCompleteQuestionnaireHandler handler = new DeleteCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object);
             handler.Handle(new DeleteCompleteQuestionnaireCommand(entity.CompleteQuestinnaireId, null));
-            questionnaireRepositoryMock.Verify(x => x.Remove(entity));
+            questionnaireRepositoryMock.Verify(x => x.DeleteCompleteQuestionnaire("completequestionnairedocuments/cqID"));
         }
     }
 }

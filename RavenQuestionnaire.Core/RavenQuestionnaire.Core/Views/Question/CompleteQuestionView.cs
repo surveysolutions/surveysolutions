@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Documents.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.Answer;
@@ -16,6 +17,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         public CompleteQuestionView()
         {
         }
+
         public CompleteQuestionView(string questionnaireId, Guid? groupPublicKey)
             : base(questionnaireId, groupPublicKey)
         {
