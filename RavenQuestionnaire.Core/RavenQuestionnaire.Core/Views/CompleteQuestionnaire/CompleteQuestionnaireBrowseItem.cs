@@ -16,19 +16,22 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public string QuestionnaireTitle { get; private set; }
         public DateTime CreationDate { get; private set; }
         public DateTime LastEntryDate { get; private set; }
-
+        public int TotalQuestionCouont { get; private set; }
+        public int AnsweredQuestionCouont { get; private set; }
         public UserLight Responsible { get; private set; }
 
         public SurveyStatus Status { get; private set; }
 
         public CompleteQuestionnaireBrowseItem(string id, string questionnaireTitle, DateTime creationDate,
-                                               DateTime lastEntryDate, SurveyStatus status, UserLight responsible)
+                                               DateTime lastEntryDate, SurveyStatus status,int totalQuestionCount, int answeredQuestionCount, UserLight responsible)
         {
             this.Id = id;
             this.QuestionnaireTitle = questionnaireTitle;
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
             this.Status = status;
+            this.TotalQuestionCouont = totalQuestionCount;
+            this.AnsweredQuestionCouont = answeredQuestionCount;
             this.Responsible = responsible;
         }
     }

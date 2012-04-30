@@ -344,6 +344,8 @@
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteGroupHeaders.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupedBrowseView.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteQuestionnaireMabileViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteGroupMobileView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteQuestionnaireMobileView.cs" />

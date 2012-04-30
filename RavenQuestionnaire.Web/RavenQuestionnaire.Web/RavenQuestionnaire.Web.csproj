@@ -119,6 +119,7 @@
     <Compile Include="Controllers\CompleteQuestionnaireController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FlowGraphController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
@@ -864,6 +865,7 @@
     <Content Include="Views\Collection\EditCollectionItem.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_CompleteGroupTemplate.cshtml" />
     <Content Include="Views\Group\Mobile\_PropagatedGrooup.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
