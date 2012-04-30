@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.Documents.Statistics;
 using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
@@ -20,12 +21,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
             private set;
         }
 
-        public int TotalCount { get; private set; }
+        public int TotalCount { get; set; }
 
         public IEnumerable<CompleteQuestionnaireBrowseItem> Items
         {
             get;
-            private set;
+            set;
         }
 
         public string Title { get; set; }
@@ -37,12 +38,18 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 
         private string _id;
 
-        public CQGroupItem(int page, int pageSize, int totalCount, IEnumerable<CompleteQuestionnaireBrowseItem> items, string title, string id)
+        public CQGroupItem()
+        {
+            this.Items = new CompleteQuestionnaireBrowseItem[0];
+        }
+
+        public CQGroupItem(int page, int pageSize, int totalCount, /*IEnumerable<CompleteQuestionnaireStatisticDocument> items,*/ string title, string id)
         {
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
-            this.Items = items;
+          
+     //       this.Items = items.Select(x => new CompleteQuestionnaireBrowseItem(x));
             this.Title = title;
             this.Id = id;
         }

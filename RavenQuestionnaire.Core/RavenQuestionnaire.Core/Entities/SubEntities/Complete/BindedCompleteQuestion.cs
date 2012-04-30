@@ -90,6 +90,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public Order AnswerOrder { get; set; }
 
+        public bool Featured
+        {
+            get { return false; }
+            set { }
+        }
+
         #endregion
 
         #region Implementation of ICompleteQuestion

@@ -38,6 +38,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         [JsonIgnore]
         public Order AnswerOrder { get; set; }
 
+        public bool Featured
+        {
+            get { return false; }
+            set { }
+        }
+
         [JsonIgnore]
         public string ConditionExpression { get; set; }
         [JsonIgnore]

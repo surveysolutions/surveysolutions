@@ -1,21 +1,23 @@
 ﻿using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Repositories;
+using RavenQuestionnaire.Core.Services;
 
 namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
 {
     public class DeleteCompleteQuestionnaireHandler:ICommandHandler<DeleteCompleteQuestionnaireCommand>
     {
-        private ICompleteQuestionnaireRepository _repository;
-        public DeleteCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository repository)
+        private ICompleteQuestionnaireUploaderService _completeQuestionnaireUploader;
+        public DeleteCompleteQuestionnaireHandler(
+            ICompleteQuestionnaireUploaderService completeQuestionnaireUploader)
         {
-            this._repository = repository;
+            this._completeQuestionnaireUploader = completeQuestionnaireUploader;
         }
 
         public void Handle(DeleteCompleteQuestionnaireCommand command)
         {
-            var entity = _repository.Load(command.CompleteQuestionnaireId);
-            this._repository.Remove(entity);
+            this._completeQuestionnaireUploader.DeleteCompleteQuestionnaire(command.CompleteQuestionnaireId);
+
         }
     }
 }

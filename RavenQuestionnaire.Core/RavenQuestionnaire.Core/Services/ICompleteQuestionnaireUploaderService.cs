@@ -12,5 +12,6 @@ namespace RavenQuestionnaire.Core.Services
     {
         CompleteQuestionnaire AddCompleteAnswer(Questionnaire questionnaire, IEnumerable<CompleteAnswer> answers, UserLight user, SurveyStatus status);
         CompleteQuestionnaire CreateCompleteQuestionnaire(Questionnaire questionnaire, UserLight user, SurveyStatus status);
+        void DeleteCompleteQuestionnaire(string id);
     }
 }

@@ -270,6 +270,7 @@
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
+    <Compile Include="Indexes\QuestionnaireGroupedByTemplateIndex.cs" />
     <Compile Include="Indexes\UsersInLocationIndex.cs" />
     <Compile Include="Repositories\CollectionRepository.cs" />
     <Compile Include="Repositories\ICollectionRepository.cs" />
@@ -344,6 +345,8 @@
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteGroupHeaders.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupedBrowseFactory.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupedBrowseInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupedBrowseView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteQuestionnaireMabileViewFactory.cs" />

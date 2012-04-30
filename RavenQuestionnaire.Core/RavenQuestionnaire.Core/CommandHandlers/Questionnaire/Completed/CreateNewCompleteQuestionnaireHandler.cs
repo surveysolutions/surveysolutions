@@ -1,6 +1,8 @@
-﻿using RavenQuestionnaire.Core.Commands;
+﻿using System;
+using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Entities.Extensions;
+using RavenQuestionnaire.Core.Entities.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
@@ -12,25 +14,32 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
     public class CreateNewCompleteQuestionnaireHandler : ICommandHandler<CreateNewCompleteQuestionnaireCommand>
     {
         private IQuestionnaireRepository _questionnaireRepository;
+        
         private ICompleteQuestionnaireUploaderService _completeQuestionnaireUploader;
         
         
-        public CreateNewCompleteQuestionnaireHandler(IQuestionnaireRepository questionnaireRepository, 
+        public CreateNewCompleteQuestionnaireHandler(IQuestionnaireRepository questionnaireRepository,
             ICompleteQuestionnaireUploaderService completeQuestionnaireUploader)
         {
             this._questionnaireRepository = questionnaireRepository;
             this._completeQuestionnaireUploader = completeQuestionnaireUploader;
+           
         }
 
         public void Handle(CreateNewCompleteQuestionnaireCommand command)
         {
             var questionnaire = this._questionnaireRepository.Load(command.QuestionnaireId);
-            var result =this._completeQuestionnaireUploader.CreateCompleteQuestionnaire(questionnaire, 
-                command.Creator, command.Status);
+            var result = this._completeQuestionnaireUploader.CreateCompleteQuestionnaire(questionnaire,
+                                                                                         command.Creator, command.Status);
+
+
+            if (result == null)
+                throw new ArgumentException("questionnaire wasn't created");
+
+           
+            command.CompleteQuestionnaireId = IdUtil.ParseId(result.CompleteQuestinnaireId);
             
-            
-            if (result != null)
-                command.CompleteQuestionnaireId = IdUtil.ParseId(result.CompleteQuestinnaireId);
+           
 
             var questions = result.GetInnerDocument().GetAllQuestions();
             var executor = new CompleteQuestionnaireConditionExecutor(result.GetInnerDocument());

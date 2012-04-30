@@ -18,6 +18,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         string Instructions { get; set; }
         List<Image> Cards { get; set; }
         Order AnswerOrder { get; set; }
+        bool Featured { get; set; }
+
     }
 
     public interface IQuestion<T> : IQuestion where T : IAnswer
@@ -65,6 +67,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public List<Image> Cards { get; set; }
 
         public Order AnswerOrder { get; set; }
+
+        public bool Featured { get; set; }
 
         public string ConditionExpression
         {

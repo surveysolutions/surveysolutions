@@ -106,6 +106,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public Order AnswerOrder { get; set; }
 
+        public bool Featured { get; set; }
+
         public bool Enabled { get; set; }
 
         public bool Valid { get; set; }
