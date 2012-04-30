@@ -3,9 +3,6 @@
 @model CompleteQuestionnaireMobileView
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
-                    //  IDictionary<string, object> validateButtonAttr = new Dictionary<string, object>() { { "data-role", "button" }/*, { "data-inline", "true" } */};
-                    // object buttonAttributs = new { data_role = "button", data_icon = "check", data_theme = "e", data_iconpos = "top" };
-
 }
 <script type="text/javascript">
     (function (window, $, PhotoSwipe) {
@@ -38,7 +35,7 @@
     <!-- Start of first page -->
     <div data-role="page" id="sidebar">
         <div data-role="header">
-            <h1>Screens</h1>
+            <h1>@Model.Title</h1>
         </div>
         <!-- /header -->
         <div data-role="content">
@@ -47,11 +44,12 @@
                 {
                     if (!gh.IsCurrent)
                     {
-                    <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })" rel="external" data-ajax="false">@gh.GroupText <span class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Total</span></a></li>
+                    <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })" rel="external" data-ajax="false">@gh.GroupText
+                        <span class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Total</span></a></li>
                     }
                     else
                     {
-                    <li data-theme="a" ><a>@gh.GroupText <span data-theme="a" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Total</span></a></li>
+                    <li data-theme="a"><a>@gh.GroupText <span data-theme="a" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Total</span></a></li>
                     }
                 }
             </ul>
@@ -77,7 +75,7 @@
          
                         }
                     </li>
-                    <li><a href="@Url.Action("Details", "Statistic", new { id = Model.Id })" data-role = "button"  data-icon = "grid" data-iconpos = "top" data-transition = "flip"  data-rel="panel">
+                    <li><a href="#" data-role = "button"  data-icon = "grid" data-iconpos = "top" data-transition = "flip"  data-rel="panel">
                         Statistics</a></li>
                 </ul>
             </div>
@@ -92,6 +90,14 @@
     <!-- Start of second page -->
     <div data-role="page" id="main">
         <div data-role="header" data-theme="b">
+            <div data-role="navbar" data-iconpos="left" class="nav-glyphish-example">
+                <ul>
+                    <li><a href="#" id="dashboard" data-icon="custom">Dashboard</a></li>
+                    <li><a href="@Url.Action("Details", "Statistic", new { id = Model.Id })" id="statistics-btn" data-icon="custom" rel="external" data-ajax="false">Statistics</a></li>
+                    <li><a href="#" id="complete" data-icon="custom">Complete</a></li>
+                </ul>
+            </div>
+            <!-- /navbar -->
             @Html.Partial("MobileGroupNavigation", Model)
         </div>
         <!-- /header -->
@@ -128,8 +134,7 @@
                 <h1>Instructions</h1>
             </div>
             <div data-role="content">
-              
-                <h3>  @Html.Raw(question.Instructions)</h3>
+                <h3>@Html.Raw(question.Instructions)</h3>
             </div>
         </div>
     }
