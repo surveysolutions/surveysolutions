@@ -47,5 +47,15 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Statistics
             var newDoc = ((IEntity<CompleteQuestionnaireStatisticDocument>)statistics).GetInnerDocument();
             Assert.AreEqual(newDoc.InvalidQuestions.Count, 1);
         }
+        [Test]
+        public void Statistics_CollectFeaturedQuestions_AllInvalidAreCollected()
+        {
+            CompleteQuestionnaireDocument template = new CompleteQuestionnaireDocument() { Id = "test", CloseDate = DateTime.Now.AddDays(1), Title = "test" };
+            template.Questions.Add(new CompleteQuestion("q1", QuestionType.Text) { Featured = false });
+            template.Questions.Add(new CompleteQuestion("q2", QuestionType.Text) { Featured = true });
+            CompleteQuestionnaireStatistics statistics = new CompleteQuestionnaireStatistics(template);
+            var newDoc = ((IEntity<CompleteQuestionnaireStatisticDocument>)statistics).GetInnerDocument();
+            Assert.AreEqual(newDoc.FeturedQuestions.Count, 1);
+        }
     }
 }

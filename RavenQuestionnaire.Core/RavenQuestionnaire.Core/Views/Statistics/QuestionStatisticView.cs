@@ -15,6 +15,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
             this.AnswerValue = doc.AnswerValue;
             this.AnswerDate = doc.AnswerDate;
             this.ApproximateTime = doc.ApproximateTime;
+            this.AnswerText = doc.AnswerText;
         }
 
         public Guid PublicKey { get; set; }
@@ -23,5 +24,6 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         public TimeSpan? ApproximateTime { get; set; }
         public string QuestionText { get; set; }
         public object AnswerValue { get; set; }
+        public object AnswerText { get; set; }
     }
 }

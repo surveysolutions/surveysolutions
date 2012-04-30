@@ -31,12 +31,16 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
         public void UpdateStatistic(CompleteQuestionnaireDocument target)
         {
             this.innerDocument.CompleteQuestionnaireId = target.Id;
+            this.innerDocument.TemplateId = target.TemplateId;
             this.innerDocument.StartDate = target.CreationDate;
             this.innerDocument.EndDate = target.CloseDate;
             this.innerDocument.Title = target.Title;
-            CollectAnsweredQuestions(target);
+            this.innerDocument.Status = target.Status;
 
-            CollectInvalidQuestions(target);
+
+            HandleQuestionTree(target);
+         /*   CollectFeturedQuestions(target);
+            CollectInvalidQuestions(target);*/
         }
 
         #region Implementation of IEntity<CompleteQuestionnaireStatisticDocument>
@@ -49,6 +53,56 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
 
         #endregion
 
+        protected void HandleQuestionTree(CompleteQuestionnaireDocument target)
+        {
+            this.innerDocument.InvalidQuestions.Clear();
+            this.innerDocument.AnsweredQuestions.Clear();
+            this.innerDocument.FeturedQuestions.Clear();
+            Queue<ICompleteGroup<ICompleteGroup, ICompleteQuestion>> nodes =
+                new Queue<ICompleteGroup<ICompleteGroup, ICompleteQuestion>>(
+                    new List<ICompleteGroup<ICompleteGroup, ICompleteQuestion>>() {target});
+            this.innerDocument.TotalQuestionCount = 0;
+            while (nodes.Count > 0)
+            {
+                ICompleteGroup<ICompleteGroup, ICompleteQuestion> group = nodes.Dequeue();
+                ProccessQuestions(group.Questions);
+                foreach (ICompleteGroup subGroup in group.Groups)
+                {
+                    ICompleteGroup<ICompleteGroup, ICompleteQuestion> groupWithQuestions =
+                        subGroup as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
+                    if (groupWithQuestions != null)
+                        nodes.Enqueue(groupWithQuestions);
+                }
+            }
+            CalculateApproximateAnswerTime(this.innerDocument.AnsweredQuestions);
+        }
+        protected void ProccessQuestions(IEnumerable<ICompleteQuestion> questions)
+        {
+            foreach (ICompleteQuestion completeQuestion in questions)
+            {
+                var statItem = new QuestionStatisticDocument(completeQuestion);
+                if(completeQuestion.Featured)
+                    this.innerDocument.FeturedQuestions.Add(statItem);
+                if (!completeQuestion.Valid)
+                    this.innerDocument.InvalidQuestions.Add(statItem);
+                ICompleteQuestion<ICompleteAnswer> withAnswers = completeQuestion as ICompleteQuestion<ICompleteAnswer>;
+                if (withAnswers != null && withAnswers.Answers.Any(a => a.Selected))
+                    this.innerDocument.AnsweredQuestions.Add(statItem);
+                this.innerDocument.TotalQuestionCount++;
+            }
+        }
+
+      /*  protected void CollectFeturedQuestions(CompleteQuestionnaireDocument target)
+        {
+            this.innerDocument.AnsweredQuestions.Clear();
+            var questions = target.Find<ICompleteQuestion<ICompleteAnswer>>(q => q.Featured);
+
+            foreach (ICompleteQuestion<ICompleteAnswer> completeQuestion in questions)
+            {
+                this.innerDocument.FeturedQuestions.Add(new QuestionStatisticDocument(completeQuestion));
+            }
+           // CalculateApproximateAnswerTime(this.innerDocument.AnsweredQuestions);
+        }
         protected void CollectAnsweredQuestions(CompleteQuestionnaireDocument target)
         {
             this.innerDocument.AnsweredQuestions.Clear();
@@ -59,7 +113,7 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
                 this.innerDocument.AnsweredQuestions.Add(new QuestionStatisticDocument(completeQuestion));
             }
             CalculateApproximateAnswerTime(this.innerDocument.AnsweredQuestions);
-        }
+        }*/
         protected void CalculateApproximateAnswerTime(IList<QuestionStatisticDocument> list)
         {
             //todo optimizaton. current order by by could be optimized manualy
@@ -77,7 +131,7 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
             list.Union(unansweredList);
         }
 
-        protected void CollectInvalidQuestions(CompleteQuestionnaireDocument target)
+      /*  protected void CollectInvalidQuestions(CompleteQuestionnaireDocument target)
         {
             this.innerDocument.InvalidQuestions.Clear();
          
@@ -88,6 +142,6 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
                 this.innerDocument.InvalidQuestions.Add(new QuestionStatisticDocument(completeQuestion));
             }
           //  CalculateApproximateAnswerTime(this.innerDocument.InvalidQuestions);
-        }
+        }*/
     }
 }

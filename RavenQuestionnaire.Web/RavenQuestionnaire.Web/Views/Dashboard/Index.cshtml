@@ -1,0 +1,93 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
+@model RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped.CQGroupedBrowseView
+@{
+    Layout = "~/Views/Shared/_LayputHtml5.cshtml";
+}
+<div data-role="panel" data-id="main">
+    <!-- Start of second page -->
+    <div data-role="page" id="main">
+        <div data-role="header" data-theme="b">
+            <h1>
+                Dashboard</h1>
+        </div>
+        <div data-role="content">
+            <ul data-divider-theme="d" data-theme="d" data-role="listview">
+                @foreach (CQGroupItem group in Model.Groups)
+                {
+                    <li data-role="list-divider" role="heading">
+                        <fieldset class="ui-grid-b">
+                            <div class="ui-block-a">
+                                <h1>
+                                    Survey - @group.Title</h1>
+                            </div>
+                            <div class="ui-block-b">
+                                &nbsp;
+                            </div>
+                            <div class="ui-block-c">
+                                @*      <a href="#" data-inline="true" data-icon="plus" data-role="button" data-theme="b"
+                                   data-iconpos="notext">New</a>*@
+                                @Html.ActionLink("New", "Participate", "CompleteQuestionnaire", new { id = group.Id, mode = "Html5" }, new
+                           {
+                               data_inline = "true",
+                               data_icon = "plus",
+                               data_role = "button",
+                               data_theme = "b",
+                               rel = "external",
+                               data_iconpos = "notext"
+                           })
+                            </div>
+                        </fieldset>
+                        <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>
+                    </li>
+                                                                           foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
+                                                                           {
+                    <li>
+                        <fieldset class="ui-grid-b">
+                            <div class="ui-block-a">
+                                <h1>@survey.Id
+                                    @foreach (var column in survey.FeaturedQuestions)
+                                    {
+                                        <b>
+                                            @column.AnswerValue?? column.AnswerText</b>
+                                    }</h1>
+                            </div>
+                            <div class="ui-block-b">
+                                @survey.Status.Name
+                            </div>
+                            <div class="ui-block-c">
+                                @Html.ActionLink("edit", "QuestionHtml5", "CompleteQuestionnaire", new { id = survey.Id }, new
+                            {
+                                data_inline = "true",
+                                data_role = "button",
+                                data_theme = "b",
+                                data_mini = "true",
+                                rel = "external"
+                            })
+                                @Html.ActionLink("stat", "Details", "Statistic", new { id = survey.Id }, new
+                            {
+                                data_inline = "true",
+                                data_role = "button",
+                                data_mini = "true",
+                                rel = "external"
+                            })
+                              @Html.ActionLink("del", "Delete", "CompleteQuestionnaire", new { id = survey.Id }, new
+                            {
+                                data_inline = "true",
+                                data_role = "button",
+                                data_theme = "e",
+                                data_mini = "true",
+                                data_icon = "delete",
+                                rel = "external"
+                            })
+                            </div>
+                        </fieldset>
+                        <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@survey.AnsweredQuestionCouont
+                            / @survey.TotalQuestionCouont</span> </li>
+                                                                           }
+                }
+            </ul>
+        </div>
+    </div>
+</div>
