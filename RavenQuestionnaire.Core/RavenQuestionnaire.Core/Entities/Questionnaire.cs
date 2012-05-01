@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
@@ -49,7 +50,47 @@ namespace RavenQuestionnaire.Core.Entities
                                                           groupPublicKey.Value));
             }
         }
-
+        public void MoveItem(Guid? parentGroupPublicKey, Guid itemPublicKey, Guid? after)
+        {
+            IGroup<IGroup, IQuestion> item;
+            item = parentGroupPublicKey.HasValue ? this.Find<IGroup<IGroup, IQuestion>>(parentGroupPublicKey.Value) : this.innerDocument;
+            if (item == null)
+                throw new ArgumentException(string.Format("parent group doesn't exists -{0}", parentGroupPublicKey));
+            try
+            {
+                Move(item.Groups, itemPublicKey, after);
+            }
+            catch (ArgumentException)
+            {
+                //second try with questions
+                Move(item.Questions, itemPublicKey, after);
+            }
+            
+        }
+        protected void Move<T>(List<T> groups, Guid itemPublicKey, Guid? after) where T : class ,IComposite
+        {
+            var moveble = groups.FirstOrDefault(g => g.PublicKey == itemPublicKey);
+            if(moveble==null)
+                throw new ArgumentException(string.Format("item doesn't exists -{0}", itemPublicKey));
+            if (!after.HasValue)
+            {
+                groups.Remove(moveble);
+                groups.Insert(0, moveble);
+                return;
+            }
+           
+            
+            for (int i = 0; i < groups.Count; i++)
+            {
+                if (groups[i].PublicKey == after.Value)
+                {
+                    groups.Remove(moveble);
+                    groups.Insert(i + 1, moveble);
+                    return;
+                }
+            }
+            throw new ArgumentException(string.Format("target item doesn't exists -{0}", itemPublicKey));
+        }
         public void AddGroup(string groupText,Propagate propageted, Guid? parent)
         {
             Group group = new Group();

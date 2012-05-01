@@ -149,5 +149,64 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             (innerDocument.Groups[0] as Group).Questions.Add(new Question("first level", QuestionType.MultyOption));
             Assert.AreEqual(questionnaire.GetAllQuestions().Count, 2);
         }
+
+
+        [Test]
+        public void InserQuestionAfter_QuestionNOtExists_ArgumentException()
+        {
+            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+            Questionnaire questionnaire = new Questionnaire(innerDocument);
+            Assert.Throws<ArgumentException>(() => questionnaire.MoveItem(null, Guid.NewGuid(), null));
+        }
+        [Test]
+        public void InserQuestionAfter_ParentGroupNOtExists_ArgumentException()
+        {
+            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+            Questionnaire questionnaire = new Questionnaire(innerDocument);
+            var question = new Question("top", QuestionType.SingleOption);
+            innerDocument.Questions.Add(question);
+            Assert.Throws<ArgumentException>(() => questionnaire.MoveItem(Guid.NewGuid(), question.PublicKey, null));
+        }
+        [Test]
+        public void InserQuestionAfter_InserAfterNOtExists_ArgumentException()
+        {
+            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+            Questionnaire questionnaire = new Questionnaire(innerDocument);
+            var question = new Question("top", QuestionType.SingleOption);
+            innerDocument.Questions.Add(question);
+            Assert.Throws<ArgumentException>(() => questionnaire.MoveItem(null, question.PublicKey, Guid.NewGuid()));
+        }
+
+        [Test]
+        public void InserQuestionAfter_InserAfterIsNull_InsertedInFirstPlace()
+        {
+            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+            Questionnaire questionnaire = new Questionnaire(innerDocument);
+            var question1 = new Question("top", QuestionType.SingleOption);
+            innerDocument.Questions.Add(question1);
+            var question2 = new Question("sub", QuestionType.SingleOption);
+            innerDocument.Questions.Add(question2);
+            questionnaire.MoveItem(null, question2.PublicKey, null);
+            Assert.AreEqual(innerDocument.Questions.Count,2);
+            Assert.AreEqual(innerDocument.Questions[0], question2);
+            Assert.AreEqual(innerDocument.Questions[1], question1);
+        }
+        [Test]
+        public void InserQuestionAfter_InserAfterIsGuid_InsertedAfterItemWithGuid()
+        {
+            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+            Questionnaire questionnaire = new Questionnaire(innerDocument);
+            var question1 = new Question("top", QuestionType.SingleOption);
+            innerDocument.Questions.Add(question1);
+            var question2 = new Question("sub", QuestionType.SingleOption);
+            innerDocument.Questions.Add(question2);
+            var question3 = new Question("third", QuestionType.SingleOption);
+            innerDocument.Questions.Add(question3);
+            questionnaire.MoveItem(null, question3.PublicKey, question1.PublicKey);
+            Assert.AreEqual(innerDocument.Questions.Count, 3);
+            Assert.AreEqual(innerDocument.Questions[0], question1);
+            Assert.AreEqual(innerDocument.Questions[1], question3);
+            Assert.AreEqual(innerDocument.Questions[2], question2);
+        }
     }
 }
