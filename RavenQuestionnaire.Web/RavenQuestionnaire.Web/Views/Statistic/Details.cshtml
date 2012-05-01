@@ -129,8 +129,10 @@
 @helper RenderNavBar(){
     <div data-role="navbar" data-iconpos="left" class="nav-glyphish-example">
         <ul>
-            <li><a href="#" id="dashboard" data-icon="custom">Dashboard</a></li>
-            <li><a href="#" id="statistics-btn" data-icon="custom" rel="external" data-ajax="false">Survey</a></li>
+       
+          <li><a href="@Url.Action("Index", "Dashboard")" id="dashboard" data-icon="custom"  rel = "external">Dashboard</a></li> 
+                    <li><a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId })" id="statistics-btn" data-icon="custom" rel="external" data-ajax="false">Survey</a></li>
+                   
             <li><a href="#" id="complete" data-icon="custom">Complete</a></li>
         </ul>
     </div>
