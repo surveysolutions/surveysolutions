@@ -89,6 +89,44 @@ namespace RavenQuestionnaire.Core.AbstractFactories
             return retval;
         }
 
+        public string GetAnswerString(QuestionType type, object answer)
+        {
+            if (answer == null)
+                return null;
+            switch (type)
+            {
+               /* case QuestionType.MultyOption:
+                    return new MultyAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.DropDownList:
+                    return new SingleAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.SingleOption:
+                    return new SingleAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.YesNo:
+                    return new YesNoAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.Text:
+                    return new TextAnswerCompleteQuestion(baseQuestion);*/
+                case QuestionType.DateTime:
+                    if (answer is string)
+                    {
+                        DateTime date;
+                        if (DateTime.TryParse((string) answer, out date))
+                            return date.ToShortDateString();
+                    }
+                    if (answer is DateTime)
+                        return ((DateTime) answer).ToShortTimeString();
+                    break;
+                    /*case QuestionType.Numeric:
+                    return new NumericAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.GpsCoordinates:
+                    return new GpsAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.Percentage:
+                    return new PercentageAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.ExtendedDropDownList:
+                    return new SingleAnswerCompleteQuestion(baseQuestion);*/
+            }
+            return answer.ToString();
+        }
+
         public CompleteQuestionView CreateQuestion(CompleteQuestionnaireDocument doc,ICompleteGroup group, ICompleteQuestion question)
         {
         /*    BindedCompleteQuestion bindedQuestion = question as BindedCompleteQuestion;
