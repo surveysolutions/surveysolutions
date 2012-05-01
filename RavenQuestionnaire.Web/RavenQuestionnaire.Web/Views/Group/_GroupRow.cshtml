@@ -18,7 +18,7 @@
 </script>
 <div id="@currentRowId" class="display-group">
     <div class="group-header">
-        <h3>@Html.DisplayFor(modelItem => Model.GroupText)</h3>
+        <h3>@Html.DisplayFor(modelItem => Model.GroupText) - @Model.PublicKey</h3>
         <div class="btn-group">
             @Ajax.ActionLinkWithIcon("Add Question", "Create", "Question", new { id = Model.QuestionnaireId, groupPublicKey = Model.PublicKey }, new AjaxOptions
                                                                                    {
@@ -39,6 +39,7 @@
                                             new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, 
                                             new { @class = "btn btn-danger btn-mini" }, 
                                             "icon-remove  icon-white")
+                                            <a href="#" onclick="OpenMoveDialog('@Model.GroupText','@Model.PublicKey')" class="btn btn-danger btn-mini">Move</a>
         </div>
     </div>
     <div id='@allQuestions'>

@@ -108,6 +108,7 @@
     <div id="divAllGroups">
         @{Html.RenderPartial("~/Views/Group/_Index.cshtml", Model.Groups);}
     </div>
+      @{Html.RenderPartial("~/Views/Question/_MoveItem.cshtml", Model.Id);}
     <div id="addNewQuestion">
     </div>
     <div class="navbar  navbar-fixed-bottom">

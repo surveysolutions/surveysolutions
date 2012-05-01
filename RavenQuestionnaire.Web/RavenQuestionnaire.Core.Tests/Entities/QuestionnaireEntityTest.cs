@@ -156,16 +156,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            Assert.Throws<ArgumentException>(() => questionnaire.MoveItem(null, Guid.NewGuid(), null));
-        }
-        [Test]
-        public void InserQuestionAfter_ParentGroupNOtExists_ArgumentException()
-        {
-            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            Questionnaire questionnaire = new Questionnaire(innerDocument);
-            var question = new Question("top", QuestionType.SingleOption);
-            innerDocument.Questions.Add(question);
-            Assert.Throws<ArgumentException>(() => questionnaire.MoveItem(Guid.NewGuid(), question.PublicKey, null));
+            Assert.Throws<ArgumentException>(() => questionnaire.MoveItem(Guid.NewGuid(), null));
         }
         [Test]
         public void InserQuestionAfter_InserAfterNOtExists_ArgumentException()
@@ -174,7 +165,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             var question = new Question("top", QuestionType.SingleOption);
             innerDocument.Questions.Add(question);
-            Assert.Throws<ArgumentException>(() => questionnaire.MoveItem(null, question.PublicKey, Guid.NewGuid()));
+            Assert.Throws<ArgumentException>(() => questionnaire.MoveItem(question.PublicKey, Guid.NewGuid()));
         }
 
         [Test]
@@ -186,7 +177,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             innerDocument.Questions.Add(question1);
             var question2 = new Question("sub", QuestionType.SingleOption);
             innerDocument.Questions.Add(question2);
-            questionnaire.MoveItem(null, question2.PublicKey, null);
+            questionnaire.MoveItem( question2.PublicKey, null);
             Assert.AreEqual(innerDocument.Questions.Count,2);
             Assert.AreEqual(innerDocument.Questions[0], question2);
             Assert.AreEqual(innerDocument.Questions[1], question1);
@@ -202,7 +193,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             innerDocument.Questions.Add(question2);
             var question3 = new Question("third", QuestionType.SingleOption);
             innerDocument.Questions.Add(question3);
-            questionnaire.MoveItem(null, question3.PublicKey, question1.PublicKey);
+            questionnaire.MoveItem(question3.PublicKey, question1.PublicKey);
             Assert.AreEqual(innerDocument.Questions.Count, 3);
             Assert.AreEqual(innerDocument.Questions[0], question1);
             Assert.AreEqual(innerDocument.Questions[1], question3);

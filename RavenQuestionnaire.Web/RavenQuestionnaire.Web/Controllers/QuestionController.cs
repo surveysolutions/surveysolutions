@@ -62,6 +62,13 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ActionResult Move(string questionnaireId, Guid publicKey, Guid? afterGuid)
+        {
+            commandInvoker.Execute(new MoveQuestionnaireItemCommand(questionnaireId, publicKey, afterGuid, GlobalInfo.GetCurrentUser()));
+            return RedirectToAction("Details", "Questionnaire", new {id = questionnaireId});
+        }
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult EditCard(ImageNewViewModel model)
         {

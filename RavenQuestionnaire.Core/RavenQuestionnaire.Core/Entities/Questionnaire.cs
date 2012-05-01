@@ -3,7 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities
 {
@@ -50,33 +52,38 @@ namespace RavenQuestionnaire.Core.Entities
                                                           groupPublicKey.Value));
             }
         }
-        public void MoveItem(Guid? parentGroupPublicKey, Guid itemPublicKey, Guid? after)
+        public void MoveItem(Guid itemPublicKey, Guid? after)
         {
-            IGroup<IGroup, IQuestion> item;
-            item = parentGroupPublicKey.HasValue ? this.Find<IGroup<IGroup, IQuestion>>(parentGroupPublicKey.Value) : this.innerDocument;
-            if (item == null)
-                throw new ArgumentException(string.Format("parent group doesn't exists -{0}", parentGroupPublicKey));
-            try
-            {
-                Move(item.Groups, itemPublicKey, after);
-            }
-            catch (ArgumentException)
-            {
-                //second try with questions
-                Move(item.Questions, itemPublicKey, after);
-            }
-            
+            MoveItem(this.innerDocument, itemPublicKey, after);
         }
-        protected void Move<T>(List<T> groups, Guid itemPublicKey, Guid? after) where T : class ,IComposite
+        protected bool MoveItem(IGroup root, Guid itemPublicKey, Guid? after)
+        {
+            var withQuestions = root as IGroup<IGroup, IQuestion>;
+            if (withQuestions == null)
+                return false;
+
+            if (Move(withQuestions.Questions, itemPublicKey, after))
+                return true;
+            if (Move(withQuestions.Groups, itemPublicKey, after))
+                return true;
+            foreach (IGroup group in withQuestions.Groups)
+            {
+                if (MoveItem(group, itemPublicKey, after))
+                    return true;
+            }
+            throw new ArgumentException(string.Format("item doesn't exists -{0}", itemPublicKey));
+        }
+
+        protected bool Move<T>(List<T> groups, Guid itemPublicKey, Guid? after) where T : class ,IComposite
         {
             var moveble = groups.FirstOrDefault(g => g.PublicKey == itemPublicKey);
-            if(moveble==null)
-                throw new ArgumentException(string.Format("item doesn't exists -{0}", itemPublicKey));
+            if (moveble == null)
+                return false;
             if (!after.HasValue)
             {
                 groups.Remove(moveble);
                 groups.Insert(0, moveble);
-                return;
+                return true;
             }
            
             
@@ -86,10 +93,10 @@ namespace RavenQuestionnaire.Core.Entities
                 {
                     groups.Remove(moveble);
                     groups.Insert(i + 1, moveble);
-                    return;
+                    return true;
                 }
             }
-            throw new ArgumentException(string.Format("target item doesn't exists -{0}", itemPublicKey));
+            throw new ArgumentException(string.Format("target item doesn't exists -{0}", after));
         }
         public void AddGroup(string groupText,Propagate propageted, Guid? parent)
         {

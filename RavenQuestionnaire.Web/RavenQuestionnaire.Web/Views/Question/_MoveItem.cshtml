@@ -1,0 +1,39 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Web.Utils
+@using RavenQuestionnaire.Web.Models
+@model string
+<div id="divMoveForm" class="modal  form-horizontal" style="display: none">
+    @using (Html.BeginForm("Move", "Question", FormMethod.Post))
+    {
+
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">&times;</a>
+            <h3>
+                Move <b id="itemText"></b></h3>
+        </div>
+        <div class="modal-body">
+            <fieldset class="form-horizontal">
+                <input type="hidden" id="questionnaireId" name="questionnaireId" value="@Model"/>
+                <input type="hidden" id="publicKey" name="publicKey" />
+                <div class="control-group">
+                    <label class="control-label">
+                        Insert after(item guid), leave empty if you want to make item first in group</label>
+                    <div class="controls">
+                        <input type="text" id="afterGuid" name="afterGuid" />
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+  
+    }
+</div>
+<script>
+    function OpenMoveDialog(text, itemKey, groupKey) {
+        $('#divMoveForm #itemText').html(text);
+        $('#divMoveForm #publicKey').val(itemKey);
+        $('#divMoveForm').modal('show');
+    }
+</script>
