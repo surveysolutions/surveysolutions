@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Raven.Client;
+using Raven.Client.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Documents.Statistics;
 using RavenQuestionnaire.Core.Indexes;

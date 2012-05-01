@@ -12,13 +12,13 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
            public int PageSize
         {
             get;
-            private set;
+            set;
         }
 
         public int Page
         {
             get;
-            private set;
+            set;
         }
 
         public int TotalCount { get; set; }
@@ -29,11 +29,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
             set;
         }
 
-        public string Title { get; set; }
+        public string SurveyTitle { get; set; }
         public string Id
         {
             get { return IdUtil.ParseId(_id); }
-            private set { _id = value; }
+            set { _id = value; }
         }
 
         private string _id;
@@ -43,14 +43,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
             this.Items = new CompleteQuestionnaireBrowseItem[0];
         }
 
-        public CQGroupItem(int page, int pageSize, int totalCount, /*IEnumerable<CompleteQuestionnaireStatisticDocument> items,*/ string title, string id)
+        public CQGroupItem(int page, int pageSize, int totalCount, /*IEnumerable<CompleteQuestionnaireStatisticDocument> items,*/ string title, string id):this()
         {
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
           
      //       this.Items = items.Select(x => new CompleteQuestionnaireBrowseItem(x));
-            this.Title = title;
+            this.SurveyTitle = title;
             this.Id = id;
         }
     }

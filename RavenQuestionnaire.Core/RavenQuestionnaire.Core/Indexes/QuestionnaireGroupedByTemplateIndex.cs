@@ -52,19 +52,19 @@ namespace RavenQuestionnaire.Core.Indexes
                                                        select new
                                                                   {
                                                                       Id = template.Id,
-                                                                      Title = template.Title,
+                                                                      SurveyTitle = template.Title,
                                                                       TotalCount = 0
                                                                   });
 
-         /*   AddMap<CompleteQuestionnaireStatisticDocument>(
+            AddMap<CompleteQuestionnaireStatisticDocument>(
                 completeQuestionnaires => from completeQuestionnaire in completeQuestionnaires
                                           select new
                                                      {
                                                          Id = completeQuestionnaire.TemplateId,
-                                                         Title = (string)null,
+                                                         SurveyTitle = completeQuestionnaire.Title,
                                                          TotalCount = 1
                                                      });
-            */
+            
 
 
             Reduce = results => from result in results
@@ -73,11 +73,13 @@ namespace RavenQuestionnaire.Core.Indexes
                                 select new
                                            {
                                                Id = g.Key,
-                                               Title = g.Select(x => x.Title).First(x => x != null),
+                                               SurveyTitle = g.Select(x => x.SurveyTitle).First(x => x != null),
                                                TotalCount = g.Sum(x => x.TotalCount)
                                            };
-        
-            Index(x => x.Title, FieldIndexing.Analyzed);
+
+            Index(x => x.SurveyTitle, FieldIndexing.Analyzed);
+           /* Store(x => x.SurveyTitle, FieldStorage.Yes);
+            Store(x => x.TotalCount, FieldStorage.Yes);**/
         }
     }
 }
