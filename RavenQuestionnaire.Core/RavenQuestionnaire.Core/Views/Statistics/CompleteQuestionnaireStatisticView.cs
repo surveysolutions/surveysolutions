@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Documents.Statistics;
+using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Views.Statistics
 {
@@ -17,6 +18,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
             this.EndDate = doc.EndDate;
             this.AnsweredQuestions = doc.AnsweredQuestions.Select(q => new QuestionStatisticView(q)).ToList();
             this.InvalidQuestions = doc.InvalidQuestions.Select(q => new QuestionStatisticView(q)).ToList();
+            this.CompleteQuestionnaireId = IdUtil.ParseId(doc.CompleteQuestionnaireId);
 
         }
         public string Id { get; set; }

@@ -116,7 +116,8 @@
         </div>
         <div data-role="content">
             <h3>@Model.Title</h3>
-            <p>Started: @Model.StartDate.ToShortTimeString()
+            <p>
+                Started: @Model.StartDate.ToShortTimeString()
                 @if (Model.EndDate.HasValue)
                 {
                     <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
