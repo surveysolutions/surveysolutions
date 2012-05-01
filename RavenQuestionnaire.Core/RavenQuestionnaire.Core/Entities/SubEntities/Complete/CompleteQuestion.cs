@@ -44,7 +44,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                                               Triggers = doc.Triggers,
                                               ValidationExpression = doc.ValidationExpression,
                                               AnswerOrder = doc.AnswerOrder,
-                                              Valid = true
+                                              Valid = true,
+                                              Featured = doc.Featured
                                           };
             var ansersToCopy = new OrderStrategyFactory().Get(result.AnswerOrder).Reorder(doc.Answers);
             foreach (IAnswer answer in ansersToCopy)

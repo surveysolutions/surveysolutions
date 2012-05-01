@@ -50,7 +50,7 @@
                                     @foreach (var column in survey.FeaturedQuestions)
                                     {
                                         <b>
-                                            @column.AnswerValue?? column.AnswerText</b>
+                                            @(column.AnswerValue??column.AnswerText)</b>
                                     }</h1>
                             </div>
                             <div class="ui-block-b">

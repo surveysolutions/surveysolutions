@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Entities.Extensions;
 
@@ -17,6 +18,7 @@ namespace RavenQuestionnaire.Core.Documents.Statistics
         {
             this.PublicKey = question.PublicKey;
             this.QuestionText = question.QuestionText;
+            this.QuestionType = question.QuestionType;
             this.AnswerValue = question.GetValue();
             this.AnswerDate = question.AnswerDate;
             this.AnswerText = question.QuestionText;
@@ -27,7 +29,8 @@ namespace RavenQuestionnaire.Core.Documents.Statistics
         public DateTime? AnswerDate { get; set; }
         public TimeSpan? ApproximateTime { get; set; }
         public string QuestionText { get; set; }
-        public object AnswerText { get; set; }
+        public QuestionType QuestionType { get; set; }
+        public string AnswerText { get; set; }
         public object AnswerValue { get; set; }
     }
 }
