@@ -115,6 +115,7 @@
     <Compile Include="CommandHandlers\File\UpdateFileMetaCommandHandler.cs" />
     <Compile Include="CommandHandlers\File\UploadFileCommandHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\ValidateGroupCommandHandler.cs" />
+    <Compile Include="CommandHandlers\Questionnaire\MoveQuestionnaireItemHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Question\AddNewQuestionHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UpdateConditionsHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UpdateImageCommandHandler.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Commands\File\UploadFileCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\CreateNewFlowGraphCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\ValidateGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\MoveQuestionnaireItemCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateConditionsCommand.cs" />
     <Compile Include="Commands\Statistics\GenerateQuestionnaireStatisticCommand.cs" />
     <Compile Include="Commands\Status\AddNewStatusFlowItem.cs" />
