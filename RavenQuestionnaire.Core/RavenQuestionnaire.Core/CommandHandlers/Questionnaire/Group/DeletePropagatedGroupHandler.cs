@@ -3,27 +3,25 @@ using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Repositories;
+using RavenQuestionnaire.Core.Services;
 
 namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Group
 {
     public class DeletePropagatedGroupHandler : ICommandHandler<DeletePropagatedGroupCommand>
     {
-        private ICompleteQuestionnaireRepository _questionnaireRepository;
+        private ICompleteQuestionnaireUploaderService _questionnaireservice;
 
-        public DeletePropagatedGroupHandler(ICompleteQuestionnaireRepository questionnaireRepository)
+        public DeletePropagatedGroupHandler(ICompleteQuestionnaireUploaderService questionnaireservice)
         {
-            this._questionnaireRepository = questionnaireRepository;
+            this._questionnaireservice = questionnaireservice;
         }
 
         #region Implementation of ICommandHandler<DeletePropagatedGroupCommand>
 
         public void Handle(DeletePropagatedGroupCommand command)
         {
-            CompleteQuestionnaire entity = _questionnaireRepository.Load(command.CompleteQuestionnaireId);
-            //   entity.Remove(new PropagatableCompleteGroup(entity.Find<CompleteGroup>(command.GroupPublicKey)))
-
-            entity.Remove(new PropagatableCompleteGroup(entity.Find<CompleteGroup>(command.GroupPublicKey),
-                                                        command.PropagationPublicKey));
+            _questionnaireservice.RemovePropagatedGroup(command.CompleteQuestionnaireId, command.GroupPublicKey,
+                                                        command.PropagationPublicKey);
         }
 
         #endregion
