@@ -12,11 +12,11 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Statistics
     public class GenerateQuestionnaireStatisticHandler : ICommandHandler<GenerateQuestionnaireStatisticCommand>
     {
         private IStatisticRepository statisticRepository;
-        private ICompleteQuestionnaireRepository questionnaireRepository;
-        public GenerateQuestionnaireStatisticHandler(IStatisticRepository repository, ICompleteQuestionnaireRepository questionnaireRepository)
+       // private ICompleteQuestionnaireRepository questionnaireRepository;
+        public GenerateQuestionnaireStatisticHandler(IStatisticRepository repository/*, ICompleteQuestionnaireRepository questionnaireRepository*/)
         {
             this.statisticRepository = repository;
-            this.questionnaireRepository = questionnaireRepository;
+          //  this.questionnaireRepository = questionnaireRepository;
         }
 
         #region Implementation of ICommandHandler<in GenerateQuestionnaireStatisticCommand>
@@ -24,18 +24,18 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Statistics
         public void Handle(GenerateQuestionnaireStatisticCommand command)
         {
             CompleteQuestionnaireStatistics statistics =
-                this.statisticRepository.Load(IdUtil.CreateStatisticId(command.CompleteQuestionnaireId));
-            var entity =
+                this.statisticRepository.Load(IdUtil.CreateStatisticId(IdUtil.ParseId(command.CompleteQuestionnaire.CompleteQuestinnaireId)));
+         /*   var entity =
                 this.questionnaireRepository.Load(IdUtil.CreateCompleteQuestionnaireId(command.CompleteQuestionnaireId));
-
+            */
             if (statistics == null)
             {
-                statistics = new CompleteQuestionnaireStatistics(entity.GetInnerDocument());
+                statistics = new CompleteQuestionnaireStatistics(command.CompleteQuestionnaire.GetInnerDocument());
                 statisticRepository.Add(statistics);
             }
             else
             {
-                statistics.UpdateStatistic(entity.GetInnerDocument());
+                statistics.UpdateStatistic(command.CompleteQuestionnaire.GetInnerDocument());
             }
         }
 

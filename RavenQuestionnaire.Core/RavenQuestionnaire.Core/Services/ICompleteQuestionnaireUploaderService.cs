@@ -10,7 +10,7 @@ namespace RavenQuestionnaire.Core.Services
 {
     public interface ICompleteQuestionnaireUploaderService
     {
-        CompleteQuestionnaire AddCompleteAnswer(Questionnaire questionnaire, IEnumerable<CompleteAnswer> answers, UserLight user, SurveyStatus status);
+        CompleteQuestionnaire AddCompleteAnswer(string id, CompleteAnswer[] completeAnswers);
         CompleteQuestionnaire CreateCompleteQuestionnaire(Questionnaire questionnaire, UserLight user, SurveyStatus status);
         void DeleteCompleteQuestionnaire(string id);
     }
