@@ -115,5 +115,50 @@ namespace RavenQuestionnaire.Core.Services
             if (statEntity != null)
                 this._statisticsRepository.Remove(statEntity);
         }
+
+        public Guid PropagateGroup(string id, Guid publicKey)
+        {
+            CompleteQuestionnaire entity = _questionRepository.Load(id);
+            var template = entity.Find<CompleteGroup>(publicKey);
+            bool isCondition = false;
+            var executor = new CompleteQuestionnaireConditionExecutor(entity.GetInnerDocument());
+            foreach (CompleteQuestion completeQuestion in template.Questions)
+            {
+                if (executor.Execute(completeQuestion))
+                {
+                    isCondition = true;
+                    completeQuestion.Enabled = true;
+                }
+                else
+                {
+                    completeQuestion.Enabled = false;
+                }
+            }
+            if (isCondition)
+            {
+                var propagationKey = Guid.NewGuid();
+                var newGroup = new PropagatableCompleteGroup(template, propagationKey);
+                entity.Add(newGroup, null);
+
+                var command = new GenerateQuestionnaireStatisticCommand(entity, null);
+
+                _asyncInvocker.Execute(command);
+                return propagationKey;
+            }
+            throw new InvalidOperationException("Group can't be added");
+        }
+
+        public void RemovePropagatedGroup(string id, Guid publicKey, Guid propagationKey)
+        {
+            CompleteQuestionnaire entity = _questionRepository.Load(id);
+            //   entity.Remove(new PropagatableCompleteGroup(entity.Find<CompleteGroup>(command.GroupPublicKey)))
+
+            entity.Remove(new PropagatableCompleteGroup(entity.Find<CompleteGroup>(publicKey),
+                                                        propagationKey));
+
+            var command = new GenerateQuestionnaireStatisticCommand(entity, null);
+
+            _asyncInvocker.Execute(command);
+        }
     }
 }
