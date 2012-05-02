@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -23,6 +24,7 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public QuestionType QuestionType { get; set; }
 
+        public dynamic Attributes { get; set; }
 
         public Order AnswerOrder { get; set; }
         //remove when exportSchema will be done 
@@ -64,6 +66,19 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.StataExportCaption = doc.StataExportCaption;
             this.Instructions = doc.Instructions;
             this.AnswerOrder = doc.AnswerOrder;
+           /* this.Attributes = doc.Attributes;
+
+            var dict = new Dictionary<string, object> { { "Property", "foo" } };*/
+            if (doc.Attributes != null)
+            {
+                var eo = new ExpandoObject();
+                var eoColl = (ICollection<KeyValuePair<string, object>>) eo;
+                foreach (var kvp in doc.Attributes)
+                {
+                    eoColl.Add(kvp);
+                }
+                this.Attributes = eo;
+            }
         }
     }
 

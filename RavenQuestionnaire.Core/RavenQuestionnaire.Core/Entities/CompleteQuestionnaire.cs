@@ -48,7 +48,56 @@ namespace RavenQuestionnaire.Core.Entities
         {
             innerDocument.GetGroupPropagatedEvents().Subscribe(Observer.Create<CompositeAddedEventArgs>(AutoPropagate));
             innerDocument.GetGroupPropagatedRemovedEvents().Subscribe(Observer.Create<CompositeRemovedEventArgs>(RemoveAutoPropagate));
+
+            var addAnswers = from q in this.GetAllAnswerAddedEvents()
+                             let question =
+                                 ((CompositeAddedEventArgs)q.ParentEvent).AddedComposite as
+                                 ICompleteQuestion
+                             where question.QuestionType== QuestionType.AutoPropagate
+                             select q;
+
+            addAnswers
+               .Subscribe(Observer.Create<CompositeAddedEventArgs>(
+                   MultyGroupPropagation));
+          
         }
+
+        private void MultyGroupPropagation(CompositeAddedEventArgs e)
+        {
+            var question = ((CompositeAddedEventArgs)e.ParentEvent).AddedComposite as ICompleteQuestion;
+
+            if (question == null || question.QuestionType != QuestionType.AutoPropagate)
+                return;
+
+            var countObj = question.GetValue();
+
+            int count = Convert.ToInt32(countObj);
+
+            if(count<0)
+                throw new InvalidOperationException("caount can't be bellow zero");
+            if (!question.Attributes.ContainsKey("TargetGroupKey"))
+                return;
+            Guid target = Guid.Parse(question.Attributes["TargetGroupKey"].ToString());
+            var groups = this.innerDocument.Find<PropagatableCompleteGroup>(g=>g.PublicKey==target).ToList();
+            if(groups.Count==count)
+                return;
+            if(groups.Count<count)
+            {
+                var template = this.innerDocument.Find<ICompleteGroup>(g => g.PublicKey == target && !(g is PropagatableCompleteGroup)).FirstOrDefault();
+                for (int i = 0; i < count - groups.Count; i++)
+                {
+                    this.Add(new PropagatableCompleteGroup(template, Guid.NewGuid()), null);
+                }
+            }
+            else
+            {
+                for (int i = count; i < groups.Count; i++)
+                {
+                    this.Remove(groups[i]);
+                }
+            }
+        }
+
         protected void SubscribeBindedQuestions()
         {
             var addAnswers = from q in this.GetAllAnswerAddedEvents()
@@ -63,6 +112,7 @@ namespace RavenQuestionnaire.Core.Entities
                 .Subscribe(Observer.Create<CompositeAddedEventArgs>(
                     BindQuestion));
         }
+       
         protected void BindQuestion(CompositeAddedEventArgs e)
         {
             var template = ((CompositeAddedEventArgs)e.ParentEvent).AddedComposite as ICompleteQuestion;

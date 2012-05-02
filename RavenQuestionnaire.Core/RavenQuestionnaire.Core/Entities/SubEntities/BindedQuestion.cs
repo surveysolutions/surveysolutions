@@ -44,6 +44,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             set { }
         }
 
+        public Dictionary<string, object> Attributes
+        {
+            get { return new Dictionary<string, object>(0);}
+            set {  }
+        }
+
         [JsonIgnore]
         public string ConditionExpression { get; set; }
         [JsonIgnore]

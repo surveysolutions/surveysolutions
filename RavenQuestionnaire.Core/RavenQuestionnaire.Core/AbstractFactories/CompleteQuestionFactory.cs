@@ -40,6 +40,8 @@ namespace RavenQuestionnaire.Core.AbstractFactories
                     return new DateAnswerStrategy(baseQuestion);
                 case QuestionType.Numeric:
                     return new NumericAnswerCompleteQuestion(baseQuestion);
+                case QuestionType.AutoPropagate:
+                    return new NumericAnswerCompleteQuestion(baseQuestion);
                 case QuestionType.GpsCoordinates:
                     return new GpsAnswerCompleteQuestion(baseQuestion);
                 case QuestionType.Percentage:
