@@ -25,17 +25,17 @@ namespace RavenQuestionnaire.Web.Controllers
           //  this._bagManager = bagManager;
             this._globalProvider = globalProvider;
         }
-        public void Genereate(string id)
+    /*    public void Genereate(string id)
         {
             var command = new GenerateQuestionnaireStatisticCommand(id, _globalProvider.GetCurrentUser());
 
             commandInvoker.Execute(command);
-        }
+        }*/
         public ActionResult Details(string id)
         {
-            var command = new GenerateQuestionnaireStatisticCommand(id, _globalProvider.GetCurrentUser());
+        /*    var command = new GenerateQuestionnaireStatisticCommand(id, _globalProvider.GetCurrentUser());
 
-            commandInvoker.Execute(command);
+            commandInvoker.Execute(command);*/
             var stat =viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                 new CompleteQuestionnaireStatisticViewInputModel(id));
             return PartialView(stat);

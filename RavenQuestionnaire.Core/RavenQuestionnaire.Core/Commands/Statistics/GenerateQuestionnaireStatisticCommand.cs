@@ -15,13 +15,13 @@ namespace RavenQuestionnaire.Core.Commands.Statistics
 
         #endregion
 
-        public string CompleteQuestionnaireId { get; private set; }
+        public RavenQuestionnaire.Core.Entities.CompleteQuestionnaire CompleteQuestionnaire { get; private set; }
 
 
-        public GenerateQuestionnaireStatisticCommand(string completeQuestionanireId, UserLight executor)
+        public GenerateQuestionnaireStatisticCommand(RavenQuestionnaire.Core.Entities.CompleteQuestionnaire completeQuestionnaire, UserLight executor)
         {
             this.Executor = executor;
-            this.CompleteQuestionnaireId = completeQuestionanireId;
+            this.CompleteQuestionnaire = completeQuestionnaire;
         }
     }
 }

@@ -16,6 +16,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
+using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Core.Views.Answer;
 
 namespace RavenQuestionnaire.Core.Tests.CommandHandlers
@@ -33,6 +34,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_NewAnswerIsAddedTCompleteQuestionnaire()
         {
             Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
+            Mock<IStatisticRepository> statisticMock = new Mock<IStatisticRepository>();
+            Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
             CompleteQuestionnaireDocument qDoqument= new CompleteQuestionnaireDocument();
             CompleteQuestion question = new CompleteQuestion("q",
                                              QuestionType.SingleOption);
@@ -42,7 +45,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             qDoqument.Questions.Add(question);
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
-            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object);
+            CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
                                                                                                                     (
@@ -53,8 +56,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                 null
                                                                                                                 ,
                                                                                                                 null);
-            
-            handler.Handle(command);
+
+            service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.CompleteAnswers);
             repositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqId"), Times.Once());
             Assert.AreEqual(qDoqument.Questions[0].PublicKey, question.PublicKey);
             Assert.AreEqual((qDoqument.Questions[0] as CompleteQuestion).Answers[0].Selected, true);
@@ -74,11 +77,14 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             qDoqument.Groups.Add(group);
             questionanire.Add(group, null);
             Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
+            Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
+
+            Mock<IStatisticRepository> statisticMock = new Mock<IStatisticRepository>();
 
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
             completeAnswer.Selected = true;
-            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object);
+            CompleteQuestionnaireUploaderService handler = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
                 new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
@@ -96,7 +102,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                     PropogationPublicKey
                                                                                                                 ,
                                                                                                                 null);
-            handler.Handle(command);
+            handler.AddCompleteAnswer(command.CompleteQuestionnaireId, command.CompleteAnswers);
 
             Assert.AreEqual(((qDoqument.Groups[0] as CompleteGroup).Questions[0] as CompleteQuestion).Answers[0].Selected, false);
             Assert.AreEqual(((qDoqument.Groups[1] as CompleteGroup).Questions[0] as CompleteQuestion).Answers[0].Selected, true);
@@ -117,11 +123,13 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             qDoqument.Groups.Add(group);
             questionanire.Add(group, null);
             Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
+            Mock<IStatisticRepository> statisticMock = new Mock<IStatisticRepository>();
+            Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
 
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
 
-            UpdateAnswerInCompleteQuestionnaireHandler handler = new UpdateAnswerInCompleteQuestionnaireHandler(repositoryMock.Object);
+            CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
                                                                                                                     (completeAnswer)},
@@ -132,7 +140,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                 null);
 
 
-            Assert.Throws<CompositeException>(() => handler.Handle(command));
+            Assert.Throws<CompositeException>(
+                () => service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.CompleteAnswers));
             //  group.Add(group, null);
         }
     }

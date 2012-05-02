@@ -49,12 +49,12 @@
                         {
                             <li>
                                 <div class="ui-grid-b">
-                                    <div class="ui-block-a">@survey.Id-@survey.Status.Name    </div>                                    
+                                    <div class="ui-block-a">@survey.Id is @survey.Status.Name    </div>                                    
                                     <div class="ui-block-b">
                                         @for (int i = 0; i < Math.Min(4, survey.FeaturedQuestions.Count()); i++)
                                         {
 
-                                            @(survey.FeaturedQuestions[i].AnswerValue ?? survey.FeaturedQuestions[i].AnswerText)
+                                            @(survey.FeaturedQuestions[i].AnswerValue ?? survey.FeaturedQuestions[i].AnswerText)<b>&nbsp;</b>
                                             
                                         }
                               

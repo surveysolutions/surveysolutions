@@ -148,6 +148,7 @@
     <Compile Include="CommandHandlers\User\UpdateUserHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UploadImageCommandHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
+    <Compile Include="CommandInvokerAsync.cs" />
     <Compile Include="Commands\Collection\CreateNewCollectionCommand.cs" />
     <Compile Include="Commands\Collection\DeleteCollectionCommand.cs" />
     <Compile Include="Commands\Collection\DeleteCollectionItemCommand.cs" />
