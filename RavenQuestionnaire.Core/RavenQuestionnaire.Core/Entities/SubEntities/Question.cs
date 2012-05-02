@@ -19,7 +19,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         List<Image> Cards { get; set; }
         Order AnswerOrder { get; set; }
         bool Featured { get; set; }
-
+        Dictionary<string, object> Attributes { get; set; }
     }
 
     public interface IQuestion<T> : IQuestion where T : IAnswer
@@ -34,6 +34,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             PublicKey = Guid.NewGuid();
             Answers = new List<IAnswer>();
             Cards = new List<Image>();
+            Attributes=new Dictionary<string, object>();
             this.Triggers = new List<Guid>();
             this.observers = new List<IObserver<CompositeEventArgs>>();
 
@@ -69,6 +70,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Order AnswerOrder { get; set; }
 
         public bool Featured { get; set; }
+
+        public Dictionary<string, object> Attributes { get; set; }
 
         public string ConditionExpression
         {

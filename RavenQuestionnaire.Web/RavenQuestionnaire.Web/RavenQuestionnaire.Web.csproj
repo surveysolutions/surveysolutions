@@ -866,6 +866,7 @@
     <Content Include="Views\Group\Mobile\_PropagatedGrooup.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Question\_MoveItem.cshtml" />
+    <Content Include="Views\Answer\AnswerListViewHtml5\_AutoPropagate.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

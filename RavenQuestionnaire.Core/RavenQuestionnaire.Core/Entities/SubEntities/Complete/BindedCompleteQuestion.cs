@@ -96,6 +96,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             set { }
         }
 
+        public Dictionary<string, object> Attributes
+        {
+            get { return new Dictionary<string, object>(0); }
+            set { }
+        }
+
         #endregion
 
         #region Implementation of ICompleteQuestion

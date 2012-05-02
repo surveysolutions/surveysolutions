@@ -11,6 +11,7 @@
         DateTime,
         GpsCoordinates,
         Text,
-        Percentage
+        Percentage,
+        AutoPropagate,
     }
 }

@@ -19,6 +19,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.Answers = new List<ICompleteAnswer>();
             this.Cards = new List<Image>();
             this.Triggers = new List<Guid>();
+            this.Attributes=new Dictionary<string, object>();
             //this.Answers.GetObservablePropertyChanges().Subscribe(e=>e.EventArgs)
             this.observers = new List<IObserver<CompositeEventArgs>>();
             SubscribeAddedAnswers();
@@ -45,7 +46,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                                               ValidationExpression = doc.ValidationExpression,
                                               AnswerOrder = doc.AnswerOrder,
                                               Valid = true,
-                                              Featured = doc.Featured
+                                              Featured = doc.Featured,
+                                              Attributes = doc.Attributes
                                           };
             var ansersToCopy = new OrderStrategyFactory().Get(result.AnswerOrder).Reorder(doc.Answers);
             foreach (IAnswer answer in ansersToCopy)
@@ -108,6 +110,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public Order AnswerOrder { get; set; }
 
         public bool Featured { get; set; }
+
+        public Dictionary<string, object> Attributes { get; set; }
 
         public bool Enabled { get; set; }
 
