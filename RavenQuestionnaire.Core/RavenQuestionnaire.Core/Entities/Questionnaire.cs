@@ -54,7 +54,9 @@ namespace RavenQuestionnaire.Core.Entities
         }
         public void MoveItem(Guid itemPublicKey, Guid? after)
         {
-            MoveItem(this.innerDocument, itemPublicKey, after);
+            var result= MoveItem(this.innerDocument, itemPublicKey, after);
+            if(!result)
+                throw new ArgumentException(string.Format("item doesn't exists -{0}", itemPublicKey));
         }
         protected bool MoveItem(IGroup root, Guid itemPublicKey, Guid? after)
         {
@@ -71,7 +73,7 @@ namespace RavenQuestionnaire.Core.Entities
                 if (MoveItem(group, itemPublicKey, after))
                     return true;
             }
-            throw new ArgumentException(string.Format("item doesn't exists -{0}", itemPublicKey));
+            return false;
         }
 
         protected bool Move<T>(List<T> groups, Guid itemPublicKey, Guid? after) where T : class ,IComposite
