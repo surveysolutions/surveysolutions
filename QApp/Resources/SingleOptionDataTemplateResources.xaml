@@ -2,18 +2,16 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
                     xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
-                    xmlns:local="clr-namespace:QApp.Helpers.DataTemplateSelectors">
+                    xmlns:local="clr-namespace:QApp.Helpers.DataTemplateSelectors"
+                    xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     
     <DataTemplate x:Key="SingleOptionWithoutImageTemplate">
         <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
-                                   Command="{Binding Path=DataContext.SetCurrentAnswerCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
-                                   CommandParameter="{Binding}"                                
-                Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey"
-                Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
-                   
-                                   Padding="0">
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
+                        CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0"
+                        Helpers:TileSelectHelper.SelectedValue="{Binding Path=Data.Question.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType=ListBox}}">
             <dxlc:Tile.ContentTemplate>
                 <DataTemplate>
                     <Grid>
@@ -28,7 +26,7 @@
                             <TextBlock Visibility="{Binding Path=Selected, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding Selected}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
                         </Grid>
                         <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False"                                                
-                                Visibility="{Binding Path=(Helpers:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            Visibility="{Binding Path=(Helpers:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </Grid>
                 </DataTemplate>
             </dxlc:Tile.ContentTemplate>
@@ -36,12 +34,9 @@
     </DataTemplate>
     <DataTemplate x:Key="SingleOptionWithImageTemplate">
         <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
-                                   Command="{Binding Path=DataContext.SetCurrentAnswerCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
-                                   CommandParameter="{Binding}"                                
-                Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey"
-                Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
-                   
-                                   Padding="0">
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
+                        CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0"
+                        Helpers:TileSelectHelper.SelectedValue="{Binding Path=Data.Question.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType=ListBox}}">                   
             <dxlc:Tile.ContentTemplate>
                 <DataTemplate>
                     <Grid>

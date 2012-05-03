@@ -1,18 +1,14 @@
-﻿using System.Linq;
+﻿using Ninject;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using DevExpress.RealtorWorld.Xpf.Helpers;
-using DevExpress.RealtorWorld.Xpf.ViewModel;
-using Ninject;
-using Raven.Client.Document;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Repositories;
-using RavenQuestionnaire.Core.Services;
-using RavenQuestionnaire.Core.Utility;
+using DevExpress.RealtorWorld.Xpf.Helpers;
 using RavenQuestionnaire.Core.Views.Answer;
+using DevExpress.RealtorWorld.Xpf.ViewModel;
 using RavenQuestionnaire.Core.Views.Question;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 
 namespace QApp.ViewModel
 {
@@ -78,7 +74,6 @@ namespace QApp.ViewModel
              base.InitializeCommands();
              SetCurrentAnswerCommand = new SimpleActionCommand(DoSetCurrentAnswer);
              CloseWindowCommand = new SimpleActionCommand(DoClose);
-
          }
 
         private void DoClose(object obj)
@@ -92,40 +87,38 @@ namespace QApp.ViewModel
                 singleOrDefault.Close();
             //window.Close;
         }
-
-
+        
         void DoSetCurrentAnswer(object p)
          {
              //bad approach!!!
              //reload current data
              //TODO: !!!
              var answer = p as CompleteAnswerView;
-
              if (answer != null)
              {
                  foreach (var completeAnswerView in QuestionData.Question.Answers)
-                     completeAnswerView.Selected = completeAnswerView.PublicKey == answer.PublicKey;
+                 {
+                     if (completeAnswerView.PublicKey == answer.PublicKey)
+                         if (QuestionData.Question.QuestionType == QuestionType.MultyOption)
+                             completeAnswerView.Selected = !completeAnswerView.Selected;
+                         else
+                            completeAnswerView.Selected = completeAnswerView.PublicKey == answer.PublicKey;
+                 }
                  SelectedAnswer = answer;
- 
-                 var command =new UpdateAnswerInCompleteQuestionnaireCommand(QuestionData.Question.QuestionnaireId,
-                                                                                          new CompleteAnswerView[] { answer },
-                                                                                          null/*add propogation later*/,
-                                                                                          new UserLight("0", "system"));
-
+                 var command = new UpdateAnswerInCompleteQuestionnaireCommand(QuestionData.Question.QuestionnaireId,
+                                                                              new CompleteAnswerView[] { answer },
+                                                                              null /*add propogation later*/,
+                                                                              new UserLight("0", "system"));
                  var commandInvoker = Initializer.Kernel.Get<ICommandInvoker>();
                  commandInvoker.Execute(command);
-
              }
          }
 
+        public ICommand SetCurrentAnswerCommand { get; private set; }
 
-         public ICommand SetCurrentAnswerCommand { get; private set; }
+        public ICommand CloseWindowCommand { get; private set; }
 
-         public ICommand CloseWindowCommand { get; private set; }
-
-         #endregion
-
-
-
+        #endregion
+        
     }
 }
