@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Questions.Clear();
         }
 
-        public Question AddQuestion(string text, string stataExportCaption, QuestionType type, string condition, string validation, Order answerOrder, Guid? groupPublicKey)
+        public Question AddQuestion(string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, Order answerOrder, Guid? groupPublicKey)
         {
 
             Question result = new Question()
@@ -41,6 +41,7 @@ namespace RavenQuestionnaire.Core.Entities
             result.ConditionExpression = condition;
             result.ValidationExpression = validation;
             result.AnswerOrder = answerOrder;
+            result.Featured = featured;
             try
             {
                 Add(result, groupPublicKey);
@@ -131,7 +132,7 @@ namespace RavenQuestionnaire.Core.Entities
             return this.innerDocument;
         }
         public void UpdateQuestion(Guid publicKey, string text, string stataExportCaption, QuestionType type,
-            string condition, string validation, string instructions, Order answerOrder, IEnumerable<Answer> answers)
+            string condition, string validation, string instructions, bool featured, Order answerOrder, IEnumerable<Answer> answers)
         {
             var question = Find<Question>(publicKey);
             if (question == null)
@@ -143,6 +144,7 @@ namespace RavenQuestionnaire.Core.Entities
             question.ConditionExpression = condition;
             question.ValidationExpression = validation;
             question.Instructions = instructions;
+            question.Featured = featured;
             question.AnswerOrder = answerOrder;
         }
         public void UpdateConditionExpression(Guid publicKey, string condition)
