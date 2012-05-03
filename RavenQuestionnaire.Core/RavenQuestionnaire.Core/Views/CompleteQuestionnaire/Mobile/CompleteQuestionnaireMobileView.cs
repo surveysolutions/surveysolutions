@@ -84,7 +84,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                                 {
                                     PublicKey = Guid.Empty,
                                     GroupText = "Main",
-                                    Totals = CountQuestions((List<ICompleteQuestion<ICompleteAnswer>>) doc.Questions.Select(q => (ICompleteQuestion<ICompleteAnswer>)q))
+                                    Totals = CountQuestions(doc.Questions.Select(q => (ICompleteQuestion<ICompleteAnswer>)q).ToList())
                                 };
                 for (var i = 1; i <= doc.Groups.Count; i++)
                 {
@@ -93,7 +93,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                                         PublicKey = doc.Groups[i - 1].PublicKey,
                                         GroupText = doc.Groups[i - 1].Title
                                     };
-                    Groups[i].Totals = CalcProgress((ICompleteGroup<ICompleteGroup, ICompleteQuestion>)doc.Groups[i]);
+                    Groups[i].Totals = CalcProgress((ICompleteGroup<ICompleteGroup, ICompleteQuestion>)doc.Groups[i-1]);
                 }
             }
             else

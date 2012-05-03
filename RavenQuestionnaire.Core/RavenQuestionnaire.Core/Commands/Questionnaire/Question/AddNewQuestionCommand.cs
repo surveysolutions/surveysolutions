@@ -50,6 +50,11 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             get;
             private set;
         }
+        public bool Featured
+        {
+            get;
+            private set;
+        }
         public Order AnswerOrder
         {
             get;
@@ -60,7 +65,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public UserLight Executor { get; set; }
 
         public AddNewQuestionCommand(string text, string stataExportCaption, QuestionType type, string questionnaireId,
-            Guid? groupPublicKey, string condition, string validation, string instructions, Order answerOrder, AnswerView[] answers, UserLight executor)
+            Guid? groupPublicKey, string condition, string validation, string instructions, bool featured, Order answerOrder, AnswerView[] answers, UserLight executor)
         {
             QuestionText = text;
 this.AnswerOrder = answerOrder;
@@ -72,7 +77,7 @@ this.AnswerOrder = answerOrder;
             Instructions = instructions;
             Answers = new Answer[0];
             this.ValidationExpression = validation;
-
+            this.Featured = featured;
             if (answers != null)
                 Answers = answers.Select(a => ConvertAnswer(a)).ToArray();
 
