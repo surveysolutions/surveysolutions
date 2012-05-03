@@ -28,7 +28,7 @@ namespace Questionnaire.Core.Web.Helpers
             aTagBuilder.MergeAttribute("open-virtual-keyboar", "true", true);
             aTagBuilder.MergeAttribute("href", "#", true);
             aTagBuilder.MergeAttribute("target-input", fullId, true);
-            aTagBuilder.SetInnerText(string.Empty);
+            aTagBuilder.SetInnerText(/*System.Web.HttpUtility.HtmlDecode("&nbsp;")*/ string.Empty);
             if(!inputHtmlAttributes.ContainsKey("type"))
             {
                 inputHtmlAttributes.Add("type", "text");

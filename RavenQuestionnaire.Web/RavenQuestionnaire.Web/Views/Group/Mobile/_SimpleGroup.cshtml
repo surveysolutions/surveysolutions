@@ -1,23 +1,28 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteGroupMobileView
+       
 @foreach (var question in Model.Questions)
 {
-    using (Ajax.BeginFormHtml5("SaveSingleResultJson", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions))
-    {
-      //  using (Ajax.BeginFormHtml5("Index", "CompleteQuestionnaireAsync1", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions)){
-        using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+    <div class="ui-body ui-body-c">
+        @using (Ajax.BeginFormHtml5("SaveSingleResultJson", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions))
         {
-            Html.RenderPartial("~/Views/Question/_TakeRowHtml5.cshtml", question);
+            //  using (Ajax.BeginFormHtml5("Index", "CompleteQuestionnaireAsync1", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions)){
+            using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+            {
+                Html.RenderPartial("~/Views/Question/_TakeRowHtml5.cshtml", question);
+            }
+            using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+            {
+                @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+                @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
+            }
         }
-        using (Html.BeginCollectionItem("settings", true, question.PublicKey))
-        {
-            @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
-            @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
-        }
-    }
+    </div>
+      <div class="ui-body">&nbsp;</div>
 }
 @foreach (var @group in Model.Groups)
 {
     @Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", @group)
+
 }

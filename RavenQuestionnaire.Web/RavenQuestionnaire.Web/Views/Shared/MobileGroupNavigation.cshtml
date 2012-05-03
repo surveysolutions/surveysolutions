@@ -26,11 +26,11 @@
 
     if (prev != null)
     {
-        @Html.ActionLink("Prev Group", "QuestionHtml5", "CompleteQuestionnaire", new { id = Model.Id, group = prev.PublicKey }, new { data_theme = "b", @class = "", data_icon = "arrow-l", iconpos = "notext", rel="external", data_ajax="false" })
+        @Html.ActionLink("Prev Group", "QuestionHtml5", "CompleteQuestionnaire", new { id = Model.Id, group = prev.PublicKey }, new { data_corners="false", bdata_theme = "b", @class = "", data_icon = "arrow-l", iconpos = "notext", rel="external", data_ajax="false" })
     }
     else
     {
-        <a href="#" class="ui-disabled"  data-icon = "arrow-l"  data-theme = "b" iconpos = "notext">Prev Group</a>
+        <a href="#" class="ui-disabled"  data-icon = "arrow-l"  data-theme = "b" iconpos = "notext" data-corners="false">Prev Group</a>
     }
     if (curr != null)
     {
@@ -38,11 +38,12 @@
     }
     if (next != null)
     {
-    @Html.ActionLink("Next Group", "QuestionHtml5", "CompleteQuestionnaire", new { id = Model.Id, group = next.PublicKey }, new { data_icon = "arrow-r", data_iconpos = "right", data_theme = "b", rel = "external", data_ajax = "false" })
+    @Html.ActionLink("Next Group", "QuestionHtml5", "CompleteQuestionnaire", new { id = Model.Id, group = next.PublicKey }, new {data_corners="false", data_icon = "arrow-r", data_iconpos = "right", data_theme = "b", rel = "external", data_ajax = "false" })
     }
     else
     {
-        <a href="#" class="ui-disabled"  data-icon = "arrow-r" data-iconpos = "right" data-theme = "b">Next Group</a>
+        <a href="#" class="ui-disabled"  data-icon = "arrow-r" data-iconpos = "right" data-theme = "b" data-corners="false">Next Group</a>
     }
+    
     
 }
