@@ -168,7 +168,7 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
-        public ViewResult QuestionHtml5(string id, Guid? group)
+        public ViewResult QuestionHtml5(string id, Guid? group, Guid? question)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
@@ -176,7 +176,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
             ViewBag.CurrentGroup = model.CurrentGroup;
-
+            ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             return View(model);
         }
 

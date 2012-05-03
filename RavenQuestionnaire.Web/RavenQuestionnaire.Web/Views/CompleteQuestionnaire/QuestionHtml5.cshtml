@@ -3,8 +3,25 @@
 @model CompleteQuestionnaireMobileView
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
+    var questionKey = (Guid) ViewBag.CurrentQuestion;
+    this.ViewBag.CurrentQuestion = questionKey;
 }
 <script type="text/javascript">
+
+    jQuery(document).bind("pageshow", function () {
+        var scrollHere = $('.scrollHere').length > 0 ? $('.scrollHere').get(0) : null;
+        if (scrollHere != null) {
+            scrollHere.focus();
+            $(scrollHere).effect("highlight", { color: "#5393C5" }, 2000);
+                /*for (i = 0; i < 2; i++) {
+                    $(scrollHere).fadeTo('slow', 0.5).fadeTo('slow', 1.0);
+                }*/
+           
+
+        }
+    });
+
+
     (function (window, $, PhotoSwipe) {
         $(document).ready(function () {
             $('div.gallery-page')
@@ -29,7 +46,8 @@
 					    return true;
 					});
         });
-    } (window, window.jQuery, window.Code.PhotoSwipe));
+} (window, window.jQuery, window.Code.PhotoSwipe));
+
 </script>
 <div data-role="panel" data-id="menu">
     <!-- Start of first page -->
