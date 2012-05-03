@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace DevExpress.RealtorWorld.Xpf.Helpers {
@@ -29,7 +30,7 @@ namespace DevExpress.RealtorWorld.Xpf.Helpers {
     public static class DependencyObjectExtensions {
         public static T TryFindVisualParent<T>(this DependencyObject d) where T : DependencyObject {
             DependencyObject parent = VisualTreeHelper.GetParent(d);
-            return parent != null && parent is T ? (T)parent : parent.TryFindVisualParent<T>();
+            return parent != null && (parent is ListBox || parent is T) ? (T)parent : parent.TryFindVisualParent<T>();
         }
     }
     public static class ReflectionHelper {
