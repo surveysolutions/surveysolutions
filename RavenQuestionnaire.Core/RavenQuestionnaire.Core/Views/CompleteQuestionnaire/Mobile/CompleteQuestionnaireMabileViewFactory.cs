@@ -29,8 +29,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                 var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
                 ICompleteGroup group = null;
 
-                Iterator<ICompleteGroup> iterator =
-                    new QuestionnaireScreenIterator(doc);
+                Iterator<ICompleteGroup> iterator = new QuestionnaireScreenIterator(doc);
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
                     group = completeQuestionnaireRoot.Find<CompleteGroup>(input.CurrentGroupPublicKey.Value);

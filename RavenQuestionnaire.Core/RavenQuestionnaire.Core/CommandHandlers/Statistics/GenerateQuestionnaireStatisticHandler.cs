@@ -23,8 +23,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Statistics
 
         public void Handle(GenerateQuestionnaireStatisticCommand command)
         {
-            CompleteQuestionnaireStatistics statistics =
-                this.statisticRepository.Load(IdUtil.CreateStatisticId(IdUtil.ParseId(command.CompleteQuestionnaire.CompleteQuestinnaireId)));
+            CompleteQuestionnaireStatistics statistics = this.statisticRepository.Load(IdUtil.CreateStatisticId(IdUtil.ParseId(command.CompleteQuestionnaire.CompleteQuestinnaireId)));
          /*   var entity =
                 this.questionnaireRepository.Load(IdUtil.CreateCompleteQuestionnaireId(command.CompleteQuestionnaireId));
             */

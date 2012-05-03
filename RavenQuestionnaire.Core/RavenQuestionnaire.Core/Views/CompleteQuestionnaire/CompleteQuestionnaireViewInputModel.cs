@@ -35,6 +35,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             }
         }
         private Guid? currentGroupPublicKey;
+
         public bool IsReverse { get; private set; }
         public string TemplateQuestionanireId
         {
