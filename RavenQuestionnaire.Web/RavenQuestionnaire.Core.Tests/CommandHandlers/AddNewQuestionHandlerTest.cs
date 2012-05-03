@@ -29,7 +29,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Select } };
             handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId, null, string.Empty, string.Empty,
-                                                              null, Order.AsIs, answers, null));
+                                                              null, false, Order.AsIs, answers, null));
 
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
 
@@ -50,7 +50,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Select } };
             handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId,
                 topGroup.PublicKey, string.Empty, string.Empty,
-                null, Order.AsIs, answers, null));
+                null, false, Order.AsIs, answers, null));
 
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
             Assert.AreEqual((innerDocument.Groups[0] as Group).Questions.Count,1);
@@ -72,7 +72,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                 () =>
                 handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption,
                                                                   entity.QuestionnaireId, Guid.NewGuid(), string.Empty,
-                                                                  string.Empty, string.Empty, Order.AsIs,
+                                                                  string.Empty, string.Empty, false, Order.AsIs,
                                                                   answers, null)));
         }
 
@@ -89,7 +89,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Select } };
             handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId,
-               null, string.Empty, string.Empty, string.Empty, Order.AsIs,
+               null, string.Empty, string.Empty, string.Empty, false, Order.AsIs,
                 answers, null));
 
             Assert.AreEqual(innerDocument.Questions.Count,0);
