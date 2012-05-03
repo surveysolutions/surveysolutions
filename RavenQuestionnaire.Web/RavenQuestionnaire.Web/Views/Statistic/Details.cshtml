@@ -15,9 +15,9 @@
         <!-- /header -->
         <div data-role="content">
             <ul data-role="listview" data-theme="c" data-dividertheme="d" data-counttheme="e">
+                 <li><a href="#general"  data-panel="main">General info</a></li>
                 <li><a href="#main"  data-panel="main">Answered questions</a></li>
                 <li><a href="#invalid"  data-panel="main">Invalid questions</a></li>
-                <li><a href="#general"  data-panel="main">General info</a></li>
             </ul>
         </div>
         <!-- /content -->
@@ -27,6 +27,25 @@
 </div>
 <div data-role="panel" data-id="main">
     <!-- Start of second page -->
+    <div data-role="page" data-add-back-btn="true" id="general" class="page">
+        <div data-role="header" data-theme="b">
+            @RenderNavBar()
+        </div>
+        <div data-role="content">
+            <h3>@Model.Title</h3>
+            <p>
+                Started: @Model.StartDate.ToShortTimeString()
+                @if (Model.EndDate.HasValue)
+                {
+                    <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
+                }
+            </p>
+        </div>
+         <div data-role="footer" data-theme="b">
+            <h1>Answered questions</h1> 
+            <!-- /navbar -->
+        </div>
+    </div>
     <div data-role="page" id="main" class="page">
         <div data-role="header" data-theme="b">
             @RenderNavBar()
@@ -54,7 +73,6 @@
     <div data-role="page" data-add-back-btn="true" id="invalid" class="page">
         <div data-role="header" data-theme="b">
             @RenderNavBar()
-            <h1>Invalid questions</h1>
         </div>
         <div data-role="content">
             <h3>Invalid questions</h3>
@@ -63,23 +81,12 @@
                 <p>@question.QuestionText - @question.AnswerValue</p>
             }
         </div>
-    </div>
-    <div data-role="page" data-add-back-btn="true" id="general" class="page">
-        <div data-role="header" data-theme="b">
-            @RenderNavBar()
-            <h1>General info</h1>
-        </div>
-        <div data-role="content">
-            <h3>@Model.Title</h3>
-            <p>
-                Started: @Model.StartDate.ToShortTimeString()
-                @if (Model.EndDate.HasValue)
-                {
-                    <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
-                }
-            </p>
+         <div data-role="footer" data-theme="b">
+            <h1>Answered questions</h1> 
+            <!-- /navbar -->
         </div>
     </div>
+    
 </div>
 
 @helper RenderNavBar(){
