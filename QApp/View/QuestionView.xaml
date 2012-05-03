@@ -1,8 +1,11 @@
 ﻿<View:ModuleView x:Class="QApp.View.QuestionView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf">
+    xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf">
 
+ 
     <View:ModuleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,7 +21,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{Binding Data.Question.QuestionText}" FontSize="20" Margin="5" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+        <TextBlock Text="{Binding Data.Question.QuestionText}" FontSize="20" Margin="5" Foreground="#FFFFFFFF" TextWrapping="Wrap" />        
         <ContentControl x:Name="ContentArea" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding Data.Question}" ContentTemplateSelector="{StaticResource QuestionDataTemplateSelector}" 
                         Grid.Row="1">  
         </ContentControl>
@@ -36,4 +39,98 @@
         </Grid>
 
     </Grid>
+
+    <!--<View:ModuleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/DevExpress.RealtorWorld.Xpf;component/Themes/Palette.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </ResourceDictionary>
+    </View:ModuleView.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{Binding Data.Question.QuestionText}" FontSize="20" Margin="5" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+        <dxlc:TileLayoutControl  ItemsSource="{Binding Data.Question.Answers}" AllowItemMoving="False" Grid.Row="2">
+            <dxlc:TileLayoutControl.ItemTemplate>
+                <DataTemplate>
+                    <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
+                        Command="{Binding Path=DataContext.SetCurrentAnswerCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
+                        CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0"
+                        Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}">                        
+                            <dxlc:Tile.ContentTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.3*" />
+                                            <ColumnDefinition Width="0.7*" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                                            <TextBlock Text="{Binding AnswerText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <TextBlock Visibility="{Binding Path=Selected, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding Selected}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                    </Grid>
+                                    <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False"                                                
+                                            Visibility="{Binding Path=(Helpers:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </dxlc:Tile.ContentTemplate>
+                    </dxlc:Tile>
+                </DataTemplate>
+            </dxlc:TileLayoutControl.ItemTemplate>
+        </dxlc:TileLayoutControl>-->
+        <!--<dxlc:TileLayoutControl  ItemsSource="{Binding Data.Question.Answers}" AllowItemMoving="False" Grid.Row="1" Margin="5">
+            <dxlc:TileLayoutControl.ItemTemplate>
+                <DataTemplate>
+                    <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
+                                               Command="{Binding Path=DataContext.SetCurrentAnswerCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
+                                               CommandParameter="{Binding}"                                
+                            Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey"
+                            Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
+                                               Padding="0">
+                        <dxlc:Tile.ContentTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.3*" />
+                                            <ColumnDefinition Width="0.7*" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                                            <TextBlock Text="{Binding AnswerText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <TextBlock Visibility="{Binding Path=Selected, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding Selected}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                    </Grid>
+                                    <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False"                                                
+                                            Visibility="{Binding Path=(Helpers:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </dxlc:Tile.ContentTemplate>
+                    </dxlc:Tile>
+                </DataTemplate>
+            </dxlc:TileLayoutControl.ItemTemplate>
+        </dxlc:TileLayoutControl>-->
+
+
+
+        <!--<Grid  VerticalAlignment="Bottom" Margin="0,5" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MaxWidth="30" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MaxWidth="30" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="3" FontSize="20" Margin="5" Content="Close" Command="{Binding CloseWindowCommand}" Padding="10" />
+        </Grid>
+    </Grid>-->
+
 </View:ModuleView>
