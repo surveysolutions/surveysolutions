@@ -45,6 +45,7 @@
                     @Html.LabelFor(model => model.QuestionText, new { @class = "control-label" })
                     <div class="controls">
                         @Html.EditorFor(model => model.QuestionText)
+                        @Html.CheckBoxFor(model=>model.Featured)
                         @Html.ValidationMessageFor(model => model.QuestionText)
                     </div>
                 </div>

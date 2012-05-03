@@ -24,6 +24,8 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public QuestionType QuestionType { get; set; }
 
+        public bool Featured { get; set; }
+
         public dynamic Attributes { get; set; }
 
         public Order AnswerOrder { get; set; }
@@ -66,6 +68,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.StataExportCaption = doc.StataExportCaption;
             this.Instructions = doc.Instructions;
             this.AnswerOrder = doc.AnswerOrder;
+            this.Featured = doc.Featured;
            /* this.Attributes = doc.Attributes;
 
             var dict = new Dictionary<string, object> { { "Property", "foo" } };*/

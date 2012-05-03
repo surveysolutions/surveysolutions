@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            questionnaire.AddQuestion("question", "Exportquestion", QuestionType.SingleOption, string.Empty, "validation", Order.AsIs, null);
+            questionnaire.AddQuestion("question", "Exportquestion", QuestionType.SingleOption, string.Empty, "validation", false, Order.AsIs, null);
 
             Assert.AreEqual(innerDocument.Questions[0].QuestionText, "question");
             Assert.AreEqual(innerDocument.Questions[0].QuestionType, QuestionType.SingleOption);
@@ -99,7 +99,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            questionnaire.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, Order.AsIs, null);
+            questionnaire.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null);
 
             questionnaire.ClearQuestions();
             Assert.AreEqual(innerDocument.Questions.Count, 0);
@@ -110,7 +110,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            var question = questionnaire.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, Order.AsIs, null);
+            var question = questionnaire.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null);
 
             questionnaire.Remove<Question>(question.PublicKey);
             Assert.AreEqual(innerDocument.Questions.Count, 0);
@@ -120,10 +120,10 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            var question = questionnaire.AddQuestion("old question title", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, Order.AsIs, null);
+            var question = questionnaire.AddQuestion("old question title", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null);
 
             questionnaire.UpdateQuestion(question.PublicKey, "new question title", "stataCap", QuestionType.MultyOption, string.Empty, string.Empty,
-                string.Empty, Order.AsIs, new Answer[]
+                string.Empty, false, Order.AsIs, new Answer[]
                                              {
 
                                                  new Answer()

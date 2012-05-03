@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, Order.AsIs, null);
+            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null);
             var questionView = new QuestionView(innerDocument, question);
 
 
