@@ -28,9 +28,9 @@ namespace DevExpress.RealtorWorld.Xpf.Helpers {
             if(tile == null || selectedValue == null) return;
             bool isSelected = selectedValue.Equals(string.IsNullOrEmpty(propertyPath) ? tile.Content : GetPropertyValue(tile.Content, propertyPath));
             SetIsSelected(tile, isSelected);
-            if(isSelected) {
-                tile.TryFindVisualParent<TileLayoutControl>().BringChildIntoView(tile, true);
-            }
+            //if(isSelected) {
+               // tile.TryFindVisualParent<TileLayoutControl>().BringChildIntoView(tile, true);
+           // }
         }
         static object GetPropertyValue(object instance, string propertyPath) {
             string[] properties = propertyPath.Split('.');
