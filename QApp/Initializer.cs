@@ -24,7 +24,7 @@ namespace QApp
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new CoreRegistry("http://localhost:8080", false));//add settings reading or embedded mode
+            var kernel = new StandardKernel(new CoreRegistry("http://localhost:8080"));//add settings reading or embedded mode
 
             RegisterServices(kernel);
 

@@ -208,6 +208,9 @@
     <Compile Include="Entities\CompleteQuestionnaire.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
+    <Compile Include="Entities\Composite\Observers\ITriggerable.cs" />
+    <Compile Include="Entities\Composite\Observers\ObservableCollectionExtensions.cs" />
+    <Compile Include="Entities\Composite\Observers\ObservableCollectionS.cs" />
     <Compile Include="Entities\Extensions\ICompleteQuestionExtensions.cs" />
     <Compile Include="Entities\File.cs" />
     <Compile Include="Entities\Event.cs" />
@@ -222,9 +225,6 @@
     <Compile Include="Entities\Iterators\Iterator.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
     <Compile Include="Entities\Location.cs" />
-    <Compile Include="Entities\Observers\ITriggerable.cs" />
-    <Compile Include="Entities\Observers\ObservableCollectionExtensions.cs" />
-    <Compile Include="Entities\Observers\ObservableCollectionS.cs" />
     <Compile Include="Entities\Questionnaire.cs" />
     <Compile Include="Entities\Report.cs" />
     <Compile Include="Entities\Status.cs" />

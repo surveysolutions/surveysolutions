@@ -81,6 +81,7 @@
                                             </Grid.ColumnDefinitions>
                                             <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">                                                
                                                 <CheckBox IsChecked="{Binding Path=Selected}" CommandParameter="{Binding}" 
+                                                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
                                                           Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" 
                                                           Helpers:TileSelectHelper.SelectedValue="{Binding Path=Data.Question.SelectedAnswer.PublicKey, 
                                                           RelativeSource={RelativeSource AncestorType=ListBox}}" Content="{Binding AnswerText}"/>
