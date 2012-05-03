@@ -30,7 +30,6 @@
     <div data-role="page" id="main" class="page">
         <div data-role="header" data-theme="b">
             @RenderNavBar()
-            <h1>Answered questions</h1> 
             <!-- /navbar -->
         </div>
         <!-- /header -->
@@ -41,10 +40,14 @@
                 <p><a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@question.QuestionText</a> - @question.AnswerValue
                     @if (question.ApproximateTime.HasValue)
                     {<b> , Timing : @question.ApproximateTime.Value.Minutes
-                        minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                         minutes @question.ApproximateTime.Value.Seconds seconds</b>
                     }
                 </p>
             }
+        </div>
+         <div data-role="footer" data-theme="b">
+            <h1>Answered questions</h1> 
+            <!-- /navbar -->
         </div>
         <!-- /content -->
     </div>

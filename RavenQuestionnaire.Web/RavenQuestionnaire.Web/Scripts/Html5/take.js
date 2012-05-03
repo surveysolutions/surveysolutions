@@ -168,13 +168,13 @@ $(document).on('mobileinit', function () {
             var targetInput = $('#' + target);
           //  targetInput.createKeyBoard();
             var label = $('[from=' + target+']');
-            if($.client.os=='Windows' || targetInput.attr('data-role')=='datebox') {
+           // if($.client.os=='Windows' || targetInput.attr('data-role')=='datebox') {
                 targetInput.css('display', 'none');
-            } else {
+          /*  } else {
                 button.css('display', 'none');
                 label.css('display', 'none');
             }
-
+            */
             targetInput.change(function() {
                 label.html(targetInput.val());
             });
