@@ -8,12 +8,14 @@
 }
 .splitview .page .ui-content
 {
-	top: 80px !important;
+	top: 45px !important;
+    bottom: 45px !important;
 }
 
-.ui-header .ui-btn-left, .ui-header .ui-btn-right
+.ui-footer .ui-btn-left, .ui-footer .ui-btn-right
 {
-	top: 37px;
+	top: -4px;
+	position:absolute;
 }
 .nav-glyphish-example .ui-btn .ui-btn-inner
 {
@@ -47,7 +49,7 @@
 	background-size: 20px 24px;
 }
 
-.ui-header .ui-title
+.ui-footer .ui-title
 {
 	 margin: 0.6em 0 0.8em;
 }

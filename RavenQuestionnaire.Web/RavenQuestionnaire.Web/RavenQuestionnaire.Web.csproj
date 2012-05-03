@@ -147,6 +147,7 @@
     <Content Include="Content\img\bar-chart.png" />
     <Content Include="Content\img\lock.png" />
     <Content Include="Content\mobile.css" />
+    <Content Include="Content\themes\jquerymobile\custom.css" />
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.client.js" />
     <Compile Include="Utils\LoadImagesAttribute.cs" />
