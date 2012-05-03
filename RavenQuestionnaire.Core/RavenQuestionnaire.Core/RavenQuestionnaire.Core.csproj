@@ -208,9 +208,6 @@
     <Compile Include="Entities\CompleteQuestionnaire.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
-    <Compile Include="Entities\Composite\Observers\ITriggerable.cs" />
-    <Compile Include="Entities\Composite\Observers\ObservableCollectionExtensions.cs" />
-    <Compile Include="Entities\Composite\Observers\ObservableCollectionS.cs" />
     <Compile Include="Entities\Extensions\ICompleteQuestionExtensions.cs" />
     <Compile Include="Entities\File.cs" />
     <Compile Include="Entities\Event.cs" />
@@ -218,6 +215,9 @@
     <Compile Include="Entities\Extensions\CompositeObservebleExtensions.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\IEntity.cs" />
+    <Compile Include="Entities\Observers\ITriggerable.cs" />
+    <Compile Include="Entities\Observers\ObservableCollectionExtensions.cs" />
+    <Compile Include="Entities\Observers\ObservableCollectionS.cs" />
     <Compile Include="Entities\SubEntities\AnswerOrder.cs" />
     <Compile Include="Entities\SubEntities\CollectionItem.cs" />
     <Compile Include="Entities\Statistics\CompleteQuestionnaireStatistics.cs" />
@@ -444,10 +444,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DevExpress.RealtorWorld.Wpf\DevExpress.RealtorWorld.Wpf.csproj">
-      <Project>{5B477ABF-9D38-4033-9131-3B56DF206AD0}</Project>
-      <Name>DevExpress.RealtorWorld.Wpf</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
       <Project>{5F014003-50D8-49E0-8AFE-91D38DCCC97C}</Project>
       <Name>NCalc</Name>
