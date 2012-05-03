@@ -58,29 +58,46 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
             this.innerDocument.InvalidQuestions.Clear();
             this.innerDocument.AnsweredQuestions.Clear();
             this.innerDocument.FeturedQuestions.Clear();
-            Queue<ICompleteGroup<ICompleteGroup, ICompleteQuestion>> nodes =
-                new Queue<ICompleteGroup<ICompleteGroup, ICompleteQuestion>>(
-                    new List<ICompleteGroup<ICompleteGroup, ICompleteQuestion>>() {target});
+            Queue<ICompleteGroup<ICompleteGroup, ICompleteQuestion>> nodes = new Queue<ICompleteGroup<ICompleteGroup, ICompleteQuestion>>(new List<ICompleteGroup<ICompleteGroup, ICompleteQuestion>>() { target });
+            Queue<Guid> keys = new Queue<Guid>();
+            keys.Enqueue(target.PublicKey);
             this.innerDocument.TotalQuestionCount = 0;
+            {
+                ICompleteGroup<ICompleteGroup, ICompleteQuestion> group = nodes.Dequeue();
+                var key = keys.Dequeue();
+                ProccessQuestions(group.Questions, group.PublicKey, key);
+                foreach (ICompleteGroup subGroup in group.Groups)
+                {
+                    ICompleteGroup<ICompleteGroup, ICompleteQuestion> groupWithQuestions = subGroup as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
+                    if (groupWithQuestions != null)
+                    {
+                        nodes.Enqueue(groupWithQuestions);
+                        keys.Enqueue(subGroup.PublicKey);
+                    }
+                }
+            }
             while (nodes.Count > 0)
             {
                 ICompleteGroup<ICompleteGroup, ICompleteQuestion> group = nodes.Dequeue();
-                ProccessQuestions(group.Questions);
+                var key = keys.Dequeue();
+                ProccessQuestions(group.Questions, group.PublicKey, key);
                 foreach (ICompleteGroup subGroup in group.Groups)
                 {
-                    ICompleteGroup<ICompleteGroup, ICompleteQuestion> groupWithQuestions =
-                        subGroup as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
+                    ICompleteGroup<ICompleteGroup, ICompleteQuestion> groupWithQuestions = subGroup as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
                     if (groupWithQuestions != null)
+                    {
                         nodes.Enqueue(groupWithQuestions);
+                        keys.Enqueue(key);
+                    }
                 }
             }
             CalculateApproximateAnswerTime(this.innerDocument.AnsweredQuestions);
         }
-        protected void ProccessQuestions(IEnumerable<ICompleteQuestion> questions)
+        protected void ProccessQuestions(IEnumerable<ICompleteQuestion> questions, Guid gropPublicKey, Guid screenPublicKey)
         {
             foreach (ICompleteQuestion completeQuestion in questions)
             {
-                var statItem = new QuestionStatisticDocument(completeQuestion);
+                var statItem = new QuestionStatisticDocument(completeQuestion, gropPublicKey, screenPublicKey);
                 if(completeQuestion.Featured)
                     this.innerDocument.FeturedQuestions.Add(statItem);
                 if (!completeQuestion.Valid)

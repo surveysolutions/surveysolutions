@@ -8,6 +8,8 @@
                               };
     ViewBag.CurrentGroupPublicKey = Model.CurrentGroup.PublicKey;
     ViewBag.QuestionnaireId = Model.Id;
+    var questionKey = (Guid)ViewBag.CurrentQuestion;
+    this.ViewBag.CurrentQuestion = questionKey;
     
 }
 

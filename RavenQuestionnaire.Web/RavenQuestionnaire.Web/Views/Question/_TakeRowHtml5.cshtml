@@ -3,12 +3,13 @@
 @model CompleteQuestionView
 @{
     ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
-
+    var questionKey = (Guid)ViewBag.CurrentQuestion;
     var bodyClass = Model.Valid ? Model.Enabled ? "" : "ui-disabled" : "ui-body error_block";
+    bodyClass += " " + (questionKey == Model.PublicKey ? "scrollHere" : "");
     var questionId = "question" + Model.PublicKey;
 
 }
-<div class="@bodyClass" id="@questionId"><a href="#" class="error"></a>
+<div class="@bodyClass" id="@questionId" tabindex="2"><a href="#" class="error"></a>
     @if (!string.IsNullOrWhiteSpace(Model.Instructions))
     {
         <a href="#inctruction-@(Model.PublicKey)"  data-icon="info" data-role="button" data-inline="true" data-rel="page" data-transition="flip">Read instructions</a>

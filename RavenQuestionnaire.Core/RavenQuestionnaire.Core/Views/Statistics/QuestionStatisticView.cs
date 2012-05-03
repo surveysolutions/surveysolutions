@@ -17,9 +17,13 @@ namespace RavenQuestionnaire.Core.Views.Statistics
             this.AnswerDate = doc.AnswerDate;
             this.ApproximateTime = doc.ApproximateTime;
             this.AnswerText = doc.AnswerText;
+            this.GroupPublicKey = doc.GroupPublicKey;
+            this.ScreenPublicKey = doc.ScreenPublicKey;
         }
 
         public Guid PublicKey { get; set; }
+        public Guid GroupPublicKey { get; set; }
+        public Guid ScreenPublicKey { get; set; }
 
         public DateTime? AnswerDate { get; set; }
         public TimeSpan? ApproximateTime { get; set; }

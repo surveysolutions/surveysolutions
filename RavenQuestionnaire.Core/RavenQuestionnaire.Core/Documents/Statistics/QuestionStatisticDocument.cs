@@ -1,31 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿#region
+
+using System;
+using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.Entities.Extensions;
+
+#endregion
 
 namespace RavenQuestionnaire.Core.Documents.Statistics
 {
     public class QuestionStatisticDocument
     {
+        private ICompleteQuestion completeQuestion;
+
         public QuestionStatisticDocument()
         {
         }
 
-        public QuestionStatisticDocument(ICompleteQuestion question )
+        public QuestionStatisticDocument(ICompleteQuestion question, Guid gropPublicKey, Guid screenPublicKey)
         {
-            this.PublicKey = question.PublicKey;
-            this.QuestionText = question.QuestionText;
-            this.QuestionType = question.QuestionType;
-            this.AnswerValue = question.GetValue();
-            this.AnswerDate = question.AnswerDate;
-            this.AnswerText = question.QuestionText;
+            PublicKey = question.PublicKey;
+            GroupPublicKey = gropPublicKey;
+            ScreenPublicKey = screenPublicKey;
+            QuestionText = question.QuestionText;
+            QuestionType = question.QuestionType;
+            AnswerValue = question.GetValue();
+            AnswerDate = question.AnswerDate;
+            AnswerText = question.QuestionText;
         }
 
         public Guid PublicKey { get; set; }
-        
+        public Guid GroupPublicKey { get; set; }
+        public Guid ScreenPublicKey { get; set; }
+
         public DateTime? AnswerDate { get; set; }
         public TimeSpan? ApproximateTime { get; set; }
         public string QuestionText { get; set; }

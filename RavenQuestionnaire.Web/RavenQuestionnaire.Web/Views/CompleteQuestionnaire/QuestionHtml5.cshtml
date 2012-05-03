@@ -3,38 +3,24 @@
 @model CompleteQuestionnaireMobileView
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
+    var questionKey = (Guid) ViewBag.CurrentQuestion;
+    this.ViewBag.CurrentQuestion = questionKey;
 }
 <script type="text/javascript">
 
     jQuery(document).bind("pageshow", function () {
-        var target;
-        // if there's an element with id 'current_user'
-        if (location.href.search("!") != -1) {
-            target = $("#" + location.href.substring(location.href.search("!") + 1));
-            if (target != null) {
-                iscrollScrollEventHandler(target);
+        var scrollHere = $('.scrollHere').length > 0 ? $('.scrollHere').get(0) : null;
+        if (scrollHere != null) {
+            scrollHere.focus();
+            $(scrollHere).effect("highlight", { color: "#5393C5" }, 2000);
+                /*for (i = 0; i < 2; i++) {
+                    $(scrollHere).fadeTo('slow', 0.5).fadeTo('slow', 1.0);
+                }*/
+           
 
-                //return setTimeout(function () { $.mobile.silentScroll(target.get(0).offsetTop); }, 100);
-            }
         }
     });
 
-    iscrollScrollEventHandler   : function (event) {
-        var contentDiv = $('div:jqmData(id="main") .ui-page-active div[data-role*="content"] ul li');
-        var totalItemsonList = contentDiv.length;
-
-        var cont = $('div:jqmData(id="main") .ui-page-active div:jqmData(role="content")');
-
-        var itemToScrollOn = totalItemsonList - x; // x is the item no. from the top u want to scroll on. u need to keep updating i guess
-        var docViewBottom = $(cont).scrollTop() + $(cont).height();
-        var itemOffset = $(contentDiv[itemToScrollOn]).offset();
-        if (itemOffset) {
-            var elemTop = itemOffset.top;
-            if (elemTop <= docViewBottom) {
-                event.data.callback();
-            }
-        }
-    }
 
     (function (window, $, PhotoSwipe) {
         $(document).ready(function () {
