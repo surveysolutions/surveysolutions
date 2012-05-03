@@ -100,7 +100,7 @@ namespace QApp.ViewModel
                  {
                      if (completeAnswerView.PublicKey == answer.PublicKey)
                          if (QuestionData.Question.QuestionType == QuestionType.MultyOption)
-                             completeAnswerView.Selected = !completeAnswerView.Selected;
+                             completeAnswerView.Selected = answer.Selected;
                          else
                             completeAnswerView.Selected = completeAnswerView.PublicKey == answer.PublicKey;
                  }

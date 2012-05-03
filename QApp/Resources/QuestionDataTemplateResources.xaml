@@ -79,14 +79,14 @@
                                                 <ColumnDefinition Width="0.3*" />
                                                 <ColumnDefinition Width="0.7*" />
                                             </Grid.ColumnDefinitions>
-                                            <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">                                                
+                                            <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
                                                 <CheckBox IsChecked="{Binding Path=Selected}" CommandParameter="{Binding}" 
                                                           Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
                                                           Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" 
-                                                          Helpers:TileSelectHelper.SelectedValue="{Binding Path=Data.Question.SelectedAnswer.PublicKey, 
+                                                          Helpers:TileSelectHelper.SelectedValue="{Binding Path=Data.Question.SelectedAnswer.Selected, 
                                                           RelativeSource={RelativeSource AncestorType=ListBox}}" Content="{Binding AnswerText}"/>
                                             </StackPanel>
-                                            <TextBlock Visibility="{Binding Path=Selected, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding Selected}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                            <!--<TextBlock Visibility="{Binding Path=Selected, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding Selected}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />-->
                                         </Grid>
                                         <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False"                                                
                                             Visibility="{Binding Path=(Helpers:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}"/>

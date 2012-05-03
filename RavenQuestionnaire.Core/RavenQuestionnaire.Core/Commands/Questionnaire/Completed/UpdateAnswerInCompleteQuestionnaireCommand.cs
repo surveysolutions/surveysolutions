@@ -28,7 +28,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
                                                                     Mandatory = answer.Mandatory,
                                                                     PublicKey = answer.PublicKey,
                                                                     QuestionPublicKey = answer.QuestionId,
-                                                                    Selected = answer.Selected
+                                                                    Selected =  answer.Selected
                                                                 }).ToArray();
             if (propogationPublicKey.HasValue)
             {
