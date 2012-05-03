@@ -20,7 +20,7 @@
     @Html.Html5Range(0, 100, 1, Model.Answers.Length > 0 && !string.IsNullOrEmpty(Model.Answers[0].AnswerValue) ? Convert.ToInt32(Model.Answers[0].AnswerValue) : 0, viewBag)
 *@
     
-    @Html.IconInput("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, Model.QuestionText, new { draw_key_board = "true", type = "number" }, new { @class = "keyboard" }, new { @class="bold"})
+    @Html.IconInput("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, Model.QuestionText, new { draw_key_board = "true", type = "number" }, new { @class = "calculator"}, new { @class = "bold" })
      @*  @Html.IconInput("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, new { draw_key_board = "true" }, new { @class = "keyboard" })*@
  @*   <input type="number" value="" id="@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue")" name="@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue")" />*@
     
