@@ -1,4 +1,8 @@
-﻿@using Questionnaire.Core.Web.Helpers
+﻿
+
+
+
+@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 @model RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped.CQGroupedBrowseView
@@ -9,8 +13,7 @@
     <!-- Start of second page -->
     <div data-role="page" id="main">
         <div data-role="header" data-theme="b">
-            <h1>
-                Dashboard</h1>
+            <h1>Dashboard</h1>
         </div>
         <div data-role="content">
             <ul data-inset="true" data-divider-theme="d" data-theme="d" data-role="listview" data-split-icon="plus"
@@ -20,25 +23,16 @@
                     <li data-role="list-divider" data-theme="b" role="heading">
                         <a>
                             @group.SurveyTitle <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
-                            @Html.ActionLink("New", "Participate", "CompleteQuestionnaire", new { id = group.Id, mode = "Html5" }, new
-                                                                                                                 {
-                                                                                                                     data_inline = "true",
-                                                                                                                     data_icon = "plus",
-                                                                                                                     data_role = "button",
-                                                                                                                     data_theme = "b",
-                                                                                                                     rel = "external",
-                                                                                                                     data_iconpos = "notext",
-                                                                                                                     disable_after_click="true"
-                                                                                                                 })
-                             @*       @using (Ajax.BeginFormHtml5("Participate", "CompleteQuestionnaire", new { id = group.Id, mode = "Html5" }, new AjaxOptions { HttpMethod = "POST" }))
-        {
-            
-                                        <input value="New" type="submit" data-inline="true" data-icon="plus" data-role="button"
-                                            data-theme="b" rel="external" data-iconpos="notext" />
-        }*@
-                                </label>
-                             <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>
-                      @*  <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>*@
+                                                       @Html.ActionLink("New", "Participate", "CompleteQuestionnaire", new { id = group.Id, mode = "Html5" }, new
+                                                  {
+                                                      data_inline = "true",
+                                                      data_icon = "plus",
+                                                      data_role = "button",
+                                                      data_theme = "b",
+                                                      rel = "external",
+                                                      data_iconpos = "notext",
+                                                      disable_after_click = "true"
+                                                  })
                         @*  <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>*@
                     </li>
                
@@ -97,8 +91,7 @@
                                                                                                                            data_role = "button",
                                                                                                                            data_theme = "e",
                                                                                                                            data_mini = "true",
-                                                                                                                           rel = "external",
-                                                                                                                           disable_after_click = "true"
+                                                                                                                           rel = "external"
                                                                                                                        })
                                 </div>
                             </div>
