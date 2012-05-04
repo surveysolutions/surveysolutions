@@ -82,7 +82,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
                     
                     break;*/
                 case QuestionType.Numeric:
-                    if (retval == null || string.IsNullOrEmpty(retval.ToString()))
+                    if (retval == null || string.IsNullOrEmpty(retval.ToString()) || !baseQuestion.Valid)
                         retval = 0;
                     break;
                /* case QuestionType.GpsCoordinates:

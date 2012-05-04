@@ -297,10 +297,10 @@ $(document).on('mobileinit', function () {
             // $(this).getkeyboard().css
              var input =$(this);
             var keyboard = input.getkeyboard();   
-            if(keyboard.options.min_width) {
-             //   keyboard.$keyboard.css('width', keyboard.options.min_width);
-             //   keyboard.$keyboard.css('left', '0px');
-            }
+            /*if(keyboard.options.min_width) {
+                keyboard.$keyboard.css('width', keyboard.options.min_width);
+                keyboard.$keyboard.css('left', '0px');
+            }**/
             keyboard.$preview.caretToEnd();
         });
     };

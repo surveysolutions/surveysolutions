@@ -26,9 +26,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
               var array = currentAnswer.CustomAnswer as string[];
               if (array != null && array.Length > 0)
                   stringValue = array[0];*/
+            this.document.Valid = true;
             string[] coordinates = currentAnswer.AnswerValue.ToString().Split(';') ?? new string[2];
             if (coordinates.Length != 2)
-                throw new InvalidCastException("incorrect format");
+              //  throw new InvalidCastException("incorrect format");
+                this.document.Valid = false;
             foreach (string coordinate in coordinates)
             {
                 double value;
@@ -38,7 +40,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                     if (!double.TryParse(coordinate.Replace(altSeparator,
                                                     CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator), out value))
                     {
-                        throw new InvalidCastException("incorrect format");
+                      //  throw new InvalidCastException("incorrect format");
+                            this.document.Valid = false;
                     }
                 }
             }
