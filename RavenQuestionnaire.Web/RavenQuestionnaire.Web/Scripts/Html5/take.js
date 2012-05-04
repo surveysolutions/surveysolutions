@@ -120,20 +120,32 @@ $(document).on('mobileinit', function () {
 (function($) {
     $.extend($.keyboard.layouts,{'qwertyNoEnter' : {
 			'default': [
-				'` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
-				'{tab} q w e r t y u i o p [ ] \\',
+				' 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
+				'` q w e r t y u i o p [ ] \\',
 				'a s d f g h j k l ; \'',
-				'{shift} z x c v b n m , . / {shift}',
+				'{shift} z x c v b n m , . / ',
 				'{accept} {space} {cancel}'
 			],
 			'shift': [
-				'~ ! @ # $ % ^ & * ( ) _ + {bksp}',
-				'{tab} Q W E R T Y U I O P { } |',
-				'A S D F G H J K L : " {enter}',
-				'{shift} Z X C V B N M < > ? {shift}',
-				' {space} {cancel}'
+				' ! @ # $ % ^ & * ( ) _ + {bksp}',
+				'~ Q W E R T Y U I O P { } |',
+				'A S D F G H J K L : "',
+				'{shift} Z X C V B N M < > ? ',
+				'{accept} {space} {cancel}'
 			]
-		}});
+		},
+        
+        'numOnly' : {
+			'default' : [
+				'. {sign} {b}',
+				'7 8 9',
+				'4 5 6',
+				'1 2 3',
+				'0 {a} {c}'
+			]
+		}
+   
+    });
          $.fn.disableAfterSubmit =function() {
           /*   var inputs = this.find('input[type=submit]');
              setTimeout(function() {
@@ -255,7 +267,7 @@ $(document).on('mobileinit', function () {
                 additionalOptions = { layout: 'qwertyNoEnter', min_width: '900px' };
             }
             else {
-                additionalOptions = { layout: 'num', min_width: null};
+                additionalOptions = { layout: 'numOnly', min_width: null};
             }
             var options = $.extend(kbOptions, additionalOptions);
             jInput.keyboard(options);
@@ -282,10 +294,10 @@ $(document).on('mobileinit', function () {
             // $(this).getkeyboard().css
              var input =$(this);
             var keyboard = input.getkeyboard();   
-            if(keyboard.options.min_width) {
+           /* if(keyboard.options.min_width) {
                 keyboard.$keyboard.css('width', keyboard.options.min_width);
                 keyboard.$keyboard.css('left', '0px');
-            }
+            }*/
             keyboard.$preview.caretToEnd();
         });
     };
