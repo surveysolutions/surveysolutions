@@ -16,6 +16,6 @@
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
     @Html.Hidden("QuestionId", Model.PublicKey)
-    @Html.IconInput("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, Model.QuestionText, new { draw_key_board = "true", type = "number" }, new { @class = "keyboard" }, new { @class = "bold" })
+    @Html.IconInput("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, Model.QuestionText, new { draw_key_board = "true", type = "number" }, new { @class = "calculator" }, new { @class = "bold" })
   
 }
