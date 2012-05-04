@@ -3,10 +3,12 @@
 function JsonResults (data, status, xhr) {
 
     var group = jQuery.parseJSON(data.responseText);
-    if (!group.error)
+    if (!group.error) {
         UpdateGroup(group);
+        $("#counter-" + group.PublicKey).html(group.Totals.Answered + "/" + group.Totals.Enablad);
+    }
     else
-        SetErrorToQuestion(group.question,group.settings.PropogationPublicKey,group.error);
+        SetErrorToQuestion(group.question, group.settings.PropogationPublicKey, group.error);
     
 }
 

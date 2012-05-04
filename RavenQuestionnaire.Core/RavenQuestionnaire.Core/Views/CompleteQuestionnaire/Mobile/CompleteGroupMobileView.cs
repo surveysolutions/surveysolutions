@@ -121,8 +121,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             }
         }
 
-        
-
         public Guid PublicKey { get; set; }
 
         public string GroupText { get; set; }
@@ -143,7 +141,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
         public int PropagatedGroupsCount { get { return PropagatedQuestions.Count > 0 ? PropagatedQuestions[0].Questions.Count : 0; } }
 
-        
+        public Counter Totals { get; set; }
 
         public virtual string GetClientId(string prefix)
         {
