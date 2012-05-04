@@ -109,8 +109,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                     Groups[i].Totals = CalcProgress((ICompleteGroup<ICompleteGroup, ICompleteQuestion>)doc.Groups[i]);
                 }
             }
+            
             var current = Groups.FirstOrDefault(g => g.PublicKey == currentGroupPublicKey);
             current.IsCurrent = true;
+            CurrentGroup.Totals = current.Totals;
         }
 
         private void CollectGalleries(CompleteGroupMobileView @group)
