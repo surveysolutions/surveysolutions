@@ -19,19 +19,22 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         {
             CompleteAnswer currentAnswer = c as CompleteAnswer;
             if (currentAnswer == null || currentAnswer.QuestionPublicKey != this.document.PublicKey)
-                throw new CompositeException("answer wasn't found");
-            
+                  throw new CompositeException("answer wasn't found");
+                
             double value;
           /*  string stringValue = currentAnswer.CustomAnswer.ToString();
             var array = currentAnswer.CustomAnswer as string[];
             if (array != null && array.Length > 0)
                 stringValue = array[0];*/
             if (currentAnswer.AnswerValue ==null || !double.TryParse(currentAnswer.AnswerValue.ToString(), out value))
-                value = 0;
+              //  value = 0;
               //  throw new InvalidCastException("answer is no numeric value");
+                this.document.Valid = false;
+            else
+                this.document.Valid = true;
             currentAnswer.Selected = true;
            // currentAnswer.AnswerType = AnswerType.Text;
-            currentAnswer.AnswerValue = value;
+            currentAnswer.AnswerValue = currentAnswer.AnswerValue;
             this.document.Answers.Clear();
             this.document.Answers.Add(currentAnswer);
 

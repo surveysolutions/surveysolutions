@@ -31,10 +31,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             //if (!DateTime.TryParse(stringValue, out value))
             var culture = CultureInfo.InvariantCulture;
             if (!DateTime.TryParse(stringValue, culture.DateTimeFormat, DateTimeStyles.None, out value))
-                throw new InvalidCastException("answer is no data value");
+                this.document.Valid = false;
+            else
+                this.document.Valid = true;
+               // throw new InvalidCastException("answer is no data value");
             currentAnswer.Selected = true;
          //  currentAnswer.AnswerType = AnswerType.Text;
-            currentAnswer.AnswerValue = value;
+            currentAnswer.AnswerValue = stringValue;
             this.document.Answers.Clear();
             this.document.Answers.Add(currentAnswer);
         }
