@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 stringValue = array[0];
             //if (!DateTime.TryParse(stringValue, out value))
             var culture = CultureInfo.InvariantCulture;
-            if (!DateTime.TryParseExact(stringValue, culture.DateTimeFormat.ShortDatePattern, culture, DateTimeStyles.None, out value))
+            if (!DateTime.TryParse(stringValue, culture.DateTimeFormat, DateTimeStyles.None, out value))
                 throw new InvalidCastException("answer is no data value");
             currentAnswer.Selected = true;
          //  currentAnswer.AnswerType = AnswerType.Text;
