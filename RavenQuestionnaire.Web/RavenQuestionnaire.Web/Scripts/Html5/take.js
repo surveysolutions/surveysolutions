@@ -232,7 +232,7 @@ $(document).on('mobileinit', function () {
         //layout = typeof layout !== 'undefined' ? layout : 'qwertyNoEnter';
         var k = this.find('input[draw-key-board=true]');
         k.removeAttr("draw-key-board");
-        if($.client.os!='Windows') {
+       /* if($.client.os!='Windows') {
             k.each(function() {
                 var input = this;
                 $(input.form).bind('submit', function() {
@@ -240,7 +240,7 @@ $(document).on('mobileinit', function () {
                 });
             });
             return;
-        }
+        }*/
         var kbOptions = {
             keyBinding: 'mousedown touchstart',
             // layout : 'num',
