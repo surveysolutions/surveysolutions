@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Web
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "CompleteQuestionnaire", action = "MyItems", id = UrlParameter.Optional } // Parameter defaults
+                new { controller = "Dashboard", action = "Index", id = UrlParameter.Optional } // Parameter defaults
                 );
 
         }

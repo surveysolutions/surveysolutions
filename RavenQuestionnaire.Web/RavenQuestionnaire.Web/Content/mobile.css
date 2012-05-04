@@ -58,3 +58,10 @@
 {
 	width: 33.33333333%;
 }
+.grid-header {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+.grid-header h3 {
+	margin: 0;
+}
