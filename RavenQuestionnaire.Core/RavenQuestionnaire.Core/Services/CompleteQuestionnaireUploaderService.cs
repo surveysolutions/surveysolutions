@@ -110,7 +110,8 @@ namespace RavenQuestionnaire.Core.Services
         public void DeleteCompleteQuestionnaire(string id)
         {
             var entity = _questionRepository.Load(id);
-            this._questionRepository.Remove(entity);
+            if(entity!=null)
+                this._questionRepository.Remove(entity);
             var statEntity = _statisticsRepository.Load(IdUtil.CreateStatisticId(IdUtil.ParseId(id)));
             if (statEntity != null)
                 this._statisticsRepository.Remove(statEntity);
