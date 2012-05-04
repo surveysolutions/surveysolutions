@@ -132,7 +132,26 @@ $(document).on('mobileinit', function () {
 				' {space} {cancel}'
 			]
 		}});
+         $.fn.disableAfterSubmit =function() {
+          /*   var inputs = this.find('input[type=submit]');
+             setTimeout(function() {
+                 inputs.attr('disabled', 'disabled');
+             }, 1);*/
 
+            /* this.on('submit', 'form', function() {
+                 var button = $(this).find('input[type="submit"]');
+                 setTimeout(function() {
+                     button.attr('disabled', 'disabled');
+                 }, 0);
+             });*/
+             var anchors = this.find('a[disable-after-click=true]');
+             anchors.click(function() {
+                 var button = $(this);
+                  setTimeout(function() {
+                     button.attr('href', '#');
+                 }, 0);
+             });
+         },
     $.fn.clear_form_elements=function() {
 
     $(this).find(':input').each(function() {
@@ -272,5 +291,6 @@ $(document).ready(function () {
     doc.createKeyBoard();
     doc.numericSubmit();
     doc.hideInputsWithVirtualKeyboard();
+    doc.disableAfterSubmit();
 
 });

@@ -26,8 +26,16 @@
                                                                                                                      data_role = "button",
                                                                                                                      data_theme = "b",
                                                                                                                      rel = "external",
-                                                                                                                     data_iconpos = "notext"
-                                                                                                                 })</label>
+                                                                                                                     data_iconpos = "notext",
+                                                                                                                     disable_after_click="true"
+                                                                                                                 })
+                             @*       @using (Ajax.BeginFormHtml5("Participate", "CompleteQuestionnaire", new { id = group.Id, mode = "Html5" }, new AjaxOptions { HttpMethod = "POST" }))
+        {
+            
+                                        <input value="New" type="submit" data-inline="true" data-icon="plus" data-role="button"
+                                            data-theme="b" rel="external" data-iconpos="notext" />
+        }*@
+                                </label>
                              <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>
                       @*  <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>*@
                     </li>
@@ -82,7 +90,8 @@
                                                                                                                            data_role = "button",
                                                                                                                            data_theme = "e",
                                                                                                                            data_mini = "true",
-                                                                                                                           rel = "external"
+                                                                                                                           rel = "external",
+                                                                                                                           disable_after_click = "true"
                                                                                                                        })   
                                         </div>
                                     </div>
