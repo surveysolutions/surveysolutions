@@ -157,18 +157,22 @@ $(document).on('mobileinit', function () {
     $.fn.clear_form_elements=function() {
 
     $(this).find(':input').each(function() {
+        var jThis = $(this);
         switch(this.type) {
             case 'password':
             case 'select-multiple':
             case 'select-one':
             case 'text':
+                 jThis.val('');
+                 jThis.change();
             case 'textarea':
-                $(this).val('');
+                jThis.val('');
+                jThis.change();
                 break;
             case 'checkbox':
             case 'radio':
                 this.checked = false;
-                $(this).checkboxradio("refresh");
+                jThis.checkboxradio("refresh");
         }
     });
 
@@ -199,11 +203,13 @@ $(document).on('mobileinit', function () {
             targetInput.change(function() {
                 label.html(targetInput.val());
             });
-            button.bind('click', function() {
+           
+            var openKeyboard = function() {
                 targetInput.focus();
-                 targetInput.click();
-            });
-
+                targetInput.click();
+            };
+            button.click(openKeyboard);
+            label.parent().click(openKeyboard);
 
         });
     },
@@ -275,12 +281,12 @@ $(document).on('mobileinit', function () {
         k.bind('visible.keyboard', function(event) {
             // $(this).getkeyboard().css
              var input =$(this);
-            var keyboard = input.getkeyboard();
-           
-            if(keyboard.options.min_width){
+            var keyboard = input.getkeyboard();   
+            if(keyboard.options.min_width) {
                 keyboard.$keyboard.css('width', keyboard.options.min_width);
-            keyboard.css('left', '0px');}
-            input.caretToEnd();
+                keyboard.$keyboard.css('left', '0px');
+            }
+            keyboard.$preview.caretToEnd();
         });
     };
 

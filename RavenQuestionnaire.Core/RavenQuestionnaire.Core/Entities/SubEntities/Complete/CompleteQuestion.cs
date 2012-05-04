@@ -133,11 +133,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             {
                 if (!this.PublicKey.Equals(question.PublicKey))
                     throw new CompositeException();
-                foreach (CompleteAnswer answer in this.Answers)
-                {
-                    answer.Remove(answer);
-
-                }
+                new CompleteQuestionFactory().Create(this).Remove();
                 OnRemoved(new CompositeRemovedEventArgs(this));
                 return;
             }
@@ -161,10 +157,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             if (typeof(T) == GetType() && this.PublicKey.Equals(publicKey))
             {
-                foreach (CompleteAnswer answer in this.Answers)
-                {
-                    answer.Remove(answer);
-                }
+                new CompleteQuestionFactory().Create(this).Remove();
                 OnRemoved(new CompositeRemovedEventArgs(this));
                 return;
             }

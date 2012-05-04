@@ -49,5 +49,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             this.document.Answers.Add(currentAnswer);
 
         }
+        public void Remove()
+        {
+            document.Answers.Clear();
+        }
     }
 }

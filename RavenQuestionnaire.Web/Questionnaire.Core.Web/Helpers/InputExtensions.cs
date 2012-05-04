@@ -34,9 +34,13 @@ namespace Questionnaire.Core.Web.Helpers
                 inputHtmlAttributes.Add("type", "text");
             }
             var additionTags =
-                new MvcHtmlString(string.Format("<label for=\"{0}\" >{1}",fullId,labelText)+aTagBuilder.ToString(TagRenderMode.Normal) +"</label>"+
-                                  spanTagBuilder.ToString(TagRenderMode.Normal) +
-                                  InputHelper(htmlHelper, name, value, true, true, inputHtmlAttributes));
+                new MvcHtmlString(
+                    string.Format(
+                        "<div>{3}<p><label for=\"{0}\" style=\"display:inline-block\">{1} </label>{2}</p>{4}<div style=\"clear: both;\"></div></div>",
+                        fullId, labelText, spanTagBuilder.ToString(TagRenderMode.Normal),
+                        aTagBuilder.ToString(TagRenderMode.Normal),
+                        InputHelper(htmlHelper, name, value, true, true, inputHtmlAttributes)));
+            
             return additionTags;
 
         }

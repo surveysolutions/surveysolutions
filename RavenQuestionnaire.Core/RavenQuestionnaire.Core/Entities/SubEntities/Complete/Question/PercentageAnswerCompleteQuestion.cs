@@ -34,6 +34,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             }
             throw new CompositeException("answer wasn't found");
         }
+        public void Remove()
+        {
+            foreach (CompleteAnswer answer in this.document.Answers)
+            {
+                answer.Remove(answer);
+            }
+        }
     }
    
 }
