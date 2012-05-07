@@ -1,0 +1,8 @@
+﻿@using RavenQuestionnaire.Core.Views.Answer
+@model CompleteAnswerView
+
+<div>@Model.Image.Description</div>
+
+    <img src="@Url.Action("Images", "Resource", new { id = Model.Image.Thumb })" alt="@Model.Image.Title"  height="100"/>
+    @*   <h5>@i.Title</h5>*@
+   
