@@ -23,4 +23,4 @@ namespace QApp.Helpers.DataTemplateSelectors
             return null;
         }
     }
-}
+ }
