@@ -20,11 +20,14 @@
                     <ColumnDefinition Width="0.7*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
-                    <Extensions:ComboBoxDropDownCommand Margin="4" Height="23" Width="250" ItemsSource="{Binding Answers}"  Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
+                    <Extensions:ComboBoxDropDownCommand Margin="4" Height="23" Width="250" ItemsSource="{Binding Answers}"  
+                                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
+                                                        SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer}">
                         <Extensions:ComboBoxDropDownCommand.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">                                    
                                     <TextBlock Text="{Binding AnswerText}" Margin="4,0"/>
+                                    <!--<TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}"/>-->
                                 </StackPanel>
                             </DataTemplate>
                         </Extensions:ComboBoxDropDownCommand.ItemTemplate>
