@@ -24,5 +24,6 @@ namespace RavenQuestionnaire.Core.Documents.Statistics
         public IList<QuestionStatisticDocument> FeturedQuestions { get; set; }
         public SurveyStatus Status { set; get; }
         public int TotalQuestionCount { get; set; }
+        public UserLight Creator { get; set; }
     }
 }

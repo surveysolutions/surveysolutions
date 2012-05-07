@@ -20,8 +20,12 @@
                 name='@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue")' 
                 id='@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue")' 
                 value='@dateValue' onchange ="$(this.form).submit();" />*@
-    @Html.IconInput("AnswerValue", dateValue, Model.QuestionText, new { data_options = "{\"centerWindow\": true, \"mode\": \"datebox\",\"calStartDay\": 1,\"noButton\": true,\"focusMode\": true, \"dateFormat\": \"MM/dd/YYYY\"}", type = "hidden", @class = "hidden", data_role = "datebox", onchange = "$(this.form).submit();" }, new { @class = "calendar" },
+    @Html.IconInput("AnswerValue", dateValue, Model.QuestionText, new { data_options = "{\"zindex\": 9999999, \"centerWindow\": true, \"mode\": \"datebox\",\"calStartDay\": 1,\"noButton\": true,\"focusMode\": true, \"dateFormat\": \"MM/dd/YYYY\"}", type = "hidden", @class = "hidden", data_role = "datebox", onchange = "$(this.form).submit();" }, new { @class = "calendar" },
     new { @class="bold"})
    </div>
    
 }
+
+
+
+

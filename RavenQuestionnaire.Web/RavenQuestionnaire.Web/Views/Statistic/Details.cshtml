@@ -40,6 +40,18 @@
                     <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
                 }
             </p>
+            <p>Interviewer: @Model.Creator.Name</p>
+            <h4>Featured questions</h4>
+             @foreach (QuestionStatisticView question in Model.FeaturedQuestions)
+             {
+                
+                <p><a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@question.QuestionText</a> - @question.AnswerValue
+                    @if (question.ApproximateTime.HasValue)
+                    {<b> , Timing : @question.ApproximateTime.Value.Minutes
+                         minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                    }
+                </p>
+             }
         </div>
         
     </div>
@@ -50,9 +62,9 @@
         </div>
         <!-- /header -->
         <div data-role="content">
+            <h3>Answered questions</h3>
             @foreach (QuestionStatisticView question in Model.AnsweredQuestions)
             {
-                
                 <p><a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@question.QuestionText</a> - @question.AnswerValue
                     @if (question.ApproximateTime.HasValue)
                     {<b> , Timing : @question.ApproximateTime.Value.Minutes
@@ -72,7 +84,12 @@
             <h3>Invalid questions</h3>
             @foreach (QuestionStatisticView question in Model.InvalidQuestions)
             {
-                <p>@question.QuestionText - @question.AnswerValue</p>
+                <p><a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@question.QuestionText</a> - @question.AnswerValue
+                    @if (question.ApproximateTime.HasValue)
+                    {<b> , Timing : @question.ApproximateTime.Value.Minutes
+                         minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                    }
+                </p>
             }
         </div>
         
@@ -80,7 +97,8 @@
     
 </div>
 
-@helper RenderNavBar(){
+@helper RenderNavBar()
+    {
     <div data-role="navbar" data-iconpos="left" class="nav-glyphish-example">
         <ul>
        
