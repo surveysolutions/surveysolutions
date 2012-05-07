@@ -3,7 +3,7 @@
 @model CompleteQuestionnaireMobileView
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
-    var questionKey = (Guid) ViewBag.CurrentQuestion;
+    var questionKey = (Guid)ViewBag.CurrentQuestion;
     this.ViewBag.CurrentQuestion = questionKey;
 }
 <script type="text/javascript">
@@ -41,14 +41,15 @@
 					    return true;
 					});
         });
-} (window, window.jQuery, window.Code.PhotoSwipe));
+    } (window, window.jQuery, window.Code.PhotoSwipe));
 
 </script>
 <div data-role="panel" data-id="menu">
     <!-- Start of first page -->
     <div data-role="page" id="sidebar">
         <div data-role="header" data-theme="c">
-            <h1>@Model.Title</h1>
+            <a data-corners="false"  data-icon="arrow-l" href="@Url.Action("Index", "Dashboard")" rel = "external">Dashboard</a>
+            <h3></h3>
         </div>
         <!-- /header -->
         <div data-role="content">
@@ -75,16 +76,12 @@
 <div data-role="panel" data-id="main">
     <!-- Start of second page -->
     <div data-role="page" id="main" class="page">
-        <div data-role="header" data-theme="b">
-            <div data-role="navbar" data-iconpos="left" class="nav-glyphish-example">
-                <ul>
-                    <li><a href="@Url.Action("Index", "Dashboard")" id="dashboard" data-icon="custom"  rel = "external">Dashboard</a></li>
-                    <li><a href="@Url.Action("Details", "Statistic", new { id = Model.Id })" id="statistics-btn" data-icon="custom" rel="external" data-ajax="false">
-                        Statistics</a></li>
-                    <li><a href="#" id="complete" data-icon="custom">Complete</a></li>
-                </ul>
+        <div data-role="header" data-theme="b" class="navigation">
+            <h1>@Model.Title</h1>
+            <div data-type="horizontal" class="ui-btn-right navigation-btn-group">
+                <a data-role="button" data-corners="false" href="@Url.Action("Details", "Statistic", new { id = Model.Id })" rel="external" data-ajax="false">
+                    Survey</a><a data-corners="false" data-role="button" href="#">Complete</a>
             </div>
-          
         </div>
         <!-- /header -->
         <div data-role="content" id="@Model.CurrentGroup.GetClientId("div")">
@@ -93,8 +90,7 @@
                 &nbsp;</div>
         </div>
         <div data-role="footer" data-theme="b">
-            
-              <!-- /navbar -->
+            <!-- /navbar -->
             @Html.Partial("MobileGroupNavigation", Model)
         </div>
         <!-- /content -->

@@ -10,14 +10,15 @@
     <!-- Start of first page -->
     <div data-role="page" id="sidebar">
         <div data-role="header" data-theme="c">
-            <h1>Statistics</h1>
+            <a data-corners="false"  data-icon="arrow-l" href="@Url.Action("Index", "Dashboard")" rel = "external">Dashboard</a>
+            <h3></h3>
         </div>
         <!-- /header -->
         <div data-role="content">
             <ul data-role="listview" data-theme="c" data-dividertheme="d" data-counttheme="e">
-                 <li><a href="#general"  data-panel="main">General info</a></li>
-                <li><a href="#main"  data-panel="main">Answered questions</a></li>
-                <li><a href="#invalid"  data-panel="main">Invalid questions</a></li>
+                <li><a href="#general" data-panel="main">General info</a></li>
+                <li><a href="#main" data-panel="main">Answered questions</a></li>
+                <li><a href="#invalid" data-panel="main">Invalid questions</a></li>
             </ul>
         </div>
         <!-- /content -->
@@ -28,66 +29,93 @@
 <div data-role="panel" data-id="main">
     <!-- Start of second page -->
     <div data-role="page" data-add-back-btn="true" id="general" class="page">
-        <div data-role="header" data-theme="b">
-            @RenderNavBar()
-        </div>
+        @RenderNavBar()
         <div data-role="content">
             <h3>@Model.Title</h3>
-            <p>
-                Started: @Model.StartDate.ToShortTimeString()
+            <p>Started: @Model.StartDate.ToShortTimeString()
                 @if (Model.EndDate.HasValue)
                 {
                     <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
                 }
             </p>
-        </div>
-        
-    </div>
-    <div data-role="page" id="main" class="page">
-        <div data-role="header" data-theme="b">
-            @RenderNavBar()
-            <!-- /navbar -->
-        </div>
-        <!-- /header -->
-        <div data-role="content">
-            @foreach (QuestionStatisticView question in Model.AnsweredQuestions)
+            <p>Interviewer: @Model.Creator.Name</p>
+            <h4>Featured questions</h4>
+            @foreach (QuestionStatisticView question in Model.FeaturedQuestions)
             {
+               
                 
-                <p><a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@question.QuestionText</a> - @question.AnswerValue
+                <p><a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@question.QuestionText</a>
+                    - @question.AnswerValue
                     @if (question.ApproximateTime.HasValue)
                     {<b> , Timing : @question.ApproximateTime.Value.Minutes
-                         minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                        minutes @question.ApproximateTime.Value.Seconds seconds</b>
                     }
                 </p>
             }
         </div>
-        
+    </div>
+    <div data-role="page" id="main" class="page">
+        @RenderNavBar()
+        <!-- /header -->
+        <div data-role="content">
+            <h3>Answered questions</h3>
+            <ul data-role="listview" data-theme="c">
+                <li data-role="list-divider" data-theme="b">
+                    <div class="ui-grid-b">
+                        <div class="ui-block-a">
+                            Question</div>
+                        <div class="ui-block-b">
+                            Answer</div>
+                        <div class="ui-block-c">
+                            Timing</div>
+                    </div>
+                </li>
+                @foreach (QuestionStatisticView question in Model.AnsweredQuestions)
+                {
+                    <li>
+                        <div class="ui-grid-b">
+                            <div class="ui-block-a">
+                                <a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@question.QuestionText</a></div>
+                            <div class="ui-block-b">
+                                <div class="answer-cell">@question.AnswerValue</div>
+                            </div>
+                            <div class="ui-block-c">
+                                @if (question.ApproximateTime.HasValue)
+                                {<b>@question.ApproximateTime.Value.Minutes
+                                    minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                                }</div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
         <!-- /content -->
     </div>
     <div data-role="page" id="invalid" class="page">
-        <div data-role="header" data-theme="b">
-            @RenderNavBar()
-        </div>
+        @RenderNavBar()
         <div data-role="content">
             <h3>Invalid questions</h3>
             @foreach (QuestionStatisticView question in Model.InvalidQuestions)
             {
-                <p>@question.QuestionText - @question.AnswerValue</p>
+                <p><a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@question.QuestionText</a>
+                    - @question.AnswerValue
+                    @if (question.ApproximateTime.HasValue)
+                    {<b> , Timing : @question.ApproximateTime.Value.Minutes
+                        minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                    }
+                </p>
             }
         </div>
-        
+    </div>
+</div>
+@helper RenderNavBar()
+    {
+    <div data-role="header" data-theme="b" class="navigation">
+        <h1>@Model.Title</h1>
+        <div data-type="horizontal" class="ui-btn-right navigation-btn-group">
+            <a data-role="button" data-corners="false" href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId })" rel="external" data-ajax="false">
+                Survey</a><a data-corners="false"  data-role="button" href="#">Complete</a>
+        </div>
     </div>
     
-</div>
-
-@helper RenderNavBar(){
-    <div data-role="navbar" data-iconpos="left" class="nav-glyphish-example">
-        <ul>
-       
-          <li><a href="@Url.Action("Index", "Dashboard")" id="dashboard" data-icon="custom"  rel = "external">Dashboard</a></li> 
-                    <li><a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId })" id="statistics-btn" data-icon="custom" rel="external" data-ajax="false">Survey</a></li>
-                   
-            <li><a href="#" id="complete" data-icon="custom">Complete</a></li>
-        </ul>
-    </div>
 }
