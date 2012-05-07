@@ -2,22 +2,24 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Collection;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Status;
+using RavenQuestionnaire.Core.Views.Status.StatusElement;
 using RavenQuestionnaire.Web.Models;
 
 #endregion
@@ -73,14 +75,14 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
-        public ActionResult UpdateResult(string id, SurveyStatus status, UserLight responsible, string changeComment)
+        public ActionResult UpdateResult(string id, SurveyStatus Status, UserLight responsible, string StatusHolderId)
         {
             if (ModelState.IsValid)
             {
                 commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
-                                                                              status,
-                                                                              changeComment,
-                                                                              responsible,
+                                                                              Status.PublicId,
+                                                                              StatusHolderId,
+                                                                              responsible.Id,
                                                                               _globalProvider.GetCurrentUser()));
             }
             return RedirectToAction("Index");
@@ -94,22 +96,55 @@ namespace RavenQuestionnaire.Web.Controllers
                 CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
 
             if (model != null)
-                AddAllowedStatusesToViewBag(model.Status.Id, model.Status.Name, model.Id);
+            {
+                string Qid = IdUtil.ParseId(model.TemplateId); //TODO: avoid parse and then build
+                var status = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(Qid));
+
+                if (status != null)
+                {
+                    ViewBag.StatusHolderId = status.Id;
+                    AddAllowedStatusesToViewBag(model.Status.PublicId, model.Status.Name, Qid, status);
+                }
+
+                AddAllowedStatusesToViewBag(model.Status.PublicId, model.Status.Name, Qid, status);
+            }
+           
 
             _bagManager.AddUsersToBag(ViewBag, viewRepository);
             return View(model);
         }
 
+        // move out of there!!
+        private SurveyStatus GetStatus(string id)
+        {
+            var statusView = viewRepository.Load<StatusItemViewInputModel, StatusItemView>(new StatusItemViewInputModel(id, true));
+
+            SurveyStatus status = new SurveyStatus();
+
+            if (statusView == null)
+            {
+                status.PublicId = new Guid("{A90E95AC-95E7-4ADC-B070-FDE36952769B}");
+                status.Name = "[Unknown]";
+            }
+
+            else
+            {
+                status.PublicId = statusView.PublicKey;
+                status.Name = statusView.Title;
+            }
+            return status;
+        }
+
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public ActionResult Participate(string id, string mode)
         {
-            var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
+            SurveyStatus status = GetStatus(id);
+
             var command = new CreateNewCompleteQuestionnaireCommand(id,
                                                                     _globalProvider.GetCurrentUser(),
-                                                                    new SurveyStatus(statusView.Id, statusView.Title),
+                                                                   status,
                                                                     _globalProvider.GetCurrentUser());
             commandInvoker.Execute(command);
-
 
             return RedirectToAction("Question" + mode,
                                     new
@@ -387,39 +422,34 @@ namespace RavenQuestionnaire.Web.Controllers
             return RedirectToAction("Index","Dashboard");
         }
 
-        protected void AddAllowedStatusesToViewBag(string statusId, string statusName, string Qid)
+
+        protected void AddAllowedStatusesToViewBag(Guid publicKey, string statusName, string Qid, StatusView statusView)
         {
             var statuses = new List<SurveyStatus>();
-
             var isCurrentPresent = false;
-
-
-            var rawStatuses = viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(new StatusBrowseInputModel
-                     {
-                         PageSize = 300,
-                         QId = Qid
-                     });
-            var model1 = rawStatuses == null ? new List<StatusBrowseItem>() : rawStatuses.Items;
-
-            var model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(statusId));
-            if (model != null)
-            {
-                foreach (var role in Roles.GetRolesForUser())
+            
+            var status = statusView.StatusElements.FirstOrDefault(x => x.PublicKey == publicKey);
+            if (status != null)
                 {
-                    if (model.StatusRoles.ContainsKey(role))
-                        foreach (var item in model.StatusRoles[role])
-                        {
-                            if (statuses.Contains(item)) continue;
-                            statuses.Add(item);
-                            if (isCurrentPresent) continue;
 
-                            if (item.Id == statusId && item.Name == statusName)
-                                isCurrentPresent = true;
-                        }
+                    foreach (var role in Roles.GetRolesForUser())
+                    {
+                        if (status.StatusRoles.ContainsKey(role))
+                            foreach (var item in status.StatusRoles[role])
+                            {
+                                if (statuses.Contains(item)) continue;
+                                statuses.Add(item);
+                                if (isCurrentPresent) continue;
+
+                                if (item.PublicId == publicKey)
+                                    isCurrentPresent = true;
+                            }
+                    }
                 }
-            }
+            
+
             if (!isCurrentPresent)
-                statuses.Add(new SurveyStatus(statusId, statusName));
+                statuses.Add(new SurveyStatus(publicKey, statusName));
 
             ViewBag.AvailableStatuses = statuses;
         }

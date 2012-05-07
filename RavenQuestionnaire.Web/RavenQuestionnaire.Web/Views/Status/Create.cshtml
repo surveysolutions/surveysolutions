@@ -1,5 +1,5 @@
-﻿@using RavenQuestionnaire.Core.Views.Status
-@model StatusBrowseItem
+﻿@using RavenQuestionnaire.Core.Views.Status.StatusElement
+@model StatusItemView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -9,6 +9,7 @@
     <fieldset>
         <legend>Status</legend>
         @Html.HiddenFor(model => model.QuestionnaireId)
+        @Html.HiddenFor(model => model.StatusId)
         <div class="editor-label">
             @Html.LabelFor(model => model.Title)
         </div>

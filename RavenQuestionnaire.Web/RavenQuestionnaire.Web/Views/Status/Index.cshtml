@@ -1,11 +1,10 @@
 ﻿@using RavenQuestionnaire.Core.Views.Status
-@using RavenQuestionnaire.Web.Models
-@model StatusBrowseView
+@model StatusView
 
 <h1>Statuses</h1>
 <p>Questionnaire: @Model.QuestionnaireId </p>
 <p>
-    @Html.ActionLink("Create New", "Create", new { qId = Model.QuestionnaireId }, new { @class = "btn small btn-primary" })
+    @Html.ActionLink("Create New", "Create", new { qId = Model.QuestionnaireId, id = Model.Id }, new { @class = "btn small btn-primary" })
 </p>
 <table class="table table-striped table-bordered table-condensed">
     <thead>
@@ -16,22 +15,22 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Items)
+        @foreach (var item in Model.StatusElements)
         {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td class="buttons">
-                    @Html.ActionLink("Manage", "Edit", new { id = item.Id }, new { @class = "btn small " })
+                    @Html.ActionLink("Manage", "Edit", new { Qid = Model.QuestionnaireId, publicKey = item.PublicKey }, new { @class = "btn small " })
                 </td>
                 <td class="buttons">
-                    @Html.ActionLink("Route", "Route", new { id = item.Id }, new { @class = "btn small " })
+                    @Html.ActionLink("Route", "Route", new { Qid = Model.QuestionnaireId, publicKey = item.PublicKey }, new { @class = "btn small " })
                 </td>
             </tr>
         }
     </tbody>
 </table>
-<div class="pagination">
+@*<div class="pagination">
     @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount)
-</div>
+</div>*@

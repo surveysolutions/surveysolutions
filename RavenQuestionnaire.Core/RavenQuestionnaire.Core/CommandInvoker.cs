@@ -2,7 +2,6 @@
 using Raven.Client;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core
 {

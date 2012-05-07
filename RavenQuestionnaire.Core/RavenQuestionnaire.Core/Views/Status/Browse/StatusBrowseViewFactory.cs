@@ -2,7 +2,7 @@
 using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
 
-namespace RavenQuestionnaire.Core.Views.Status
+namespace RavenQuestionnaire.Core.Views.Status.Browse
 {
     public class StatusBrowseViewFactory : IViewFactory<StatusBrowseInputModel, StatusBrowseView>
     {
@@ -31,7 +31,7 @@ namespace RavenQuestionnaire.Core.Views.Status
 
             // And enact this query
             var items = query
-                .Select(x => new StatusBrowseItem(x.Id, x.Title, x.QuestionnaireId))
+                .Select(x => new StatusBrowseItem(x.Id, string.Empty, x.QuestionnaireId))
                 .ToArray();
 
             return new StatusBrowseView(

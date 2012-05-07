@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
 using System.Xml.Serialization;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.Extensions;
-using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
@@ -18,14 +14,9 @@ namespace RavenQuestionnaire.Core.Documents
         where TGroup : ICompleteGroup
     {
          UserLight Creator { get; set; }
-
          string TemplateId { get; set; }
-
          SurveyStatus Status { set; get; }
-
          UserLight Responsible { get; set; }
-
-         string StatusChangeComment { get; set; }
     }
 
 

@@ -7,8 +7,10 @@ namespace RavenQuestionnaire.Core.Views.Status.Processing
 {
     public class StatusProcessView
     {
-        public string Id { get; set; }
+        public string Id { get; set; }//?
         public string Title { get; set; }
+
+        public Guid PublicKey { set; get; }
 
         public bool IsVisible { get; set; }
         public string QuestionnaireId { get; set; }
@@ -26,11 +28,14 @@ namespace RavenQuestionnaire.Core.Views.Status.Processing
             string title, bool isVisible,
             Dictionary<Guid, FlowRule> flowRules,
             bool IsDefaultStuck,
-            string questionnaireId):this()
+            string questionnaireId,
+            Guid publicKey)
+            : this()
         {
             this.Id = IdUtil.ParseId(id); 
             this.Title = title;
             this.IsVisible = isVisible;
+            this.PublicKey = publicKey;
             QuestionnaireId = questionnaireId;
             FlowRules = flowRules;
             this.IsDefaultStuck = IsDefaultStuck;
