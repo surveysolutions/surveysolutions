@@ -24,9 +24,15 @@ namespace RavenQuestionnaire.Core.Documents.Statistics
             ScreenPublicKey = screenPublicKey;
             QuestionText = question.QuestionText;
             QuestionType = question.QuestionType;
-            AnswerValue = question.GetValue();
-            AnswerDate = question.AnswerDate;
-            AnswerText = question.QuestionText;
+
+            var answer =
+                question.FirstOrDefault<ICompleteAnswer>(a => a.Selected);
+            if (answer != null)
+            {
+                AnswerValue = answer.AnswerText?? answer.AnswerValue;
+                AnswerDate = question.AnswerDate;
+                AnswerText = answer.AnswerText;
+            }
         }
 
         public Guid PublicKey { get; set; }
