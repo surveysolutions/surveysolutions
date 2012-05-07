@@ -18,7 +18,7 @@ namespace QApp.Helpers.Extensions
             if (values.Count() == 0)
                 return null;
             var param = values[0] as CompleteQuestionView;
-            CompleteAnswerView[] answers = new CompleteAnswerView[1]  {
+            var answers = new CompleteAnswerView[1]  {
                 new CompleteAnswerView(
                     new CompleteAnswer
                         {
