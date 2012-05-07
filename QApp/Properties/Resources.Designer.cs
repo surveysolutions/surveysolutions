@@ -63,11 +63,10 @@ namespace QApp.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;ResourceDictionary xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
         ///                    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+        ///                    xmlns:Extensions=&quot;clr-namespace:QApp.Helpers.Extensions&quot;                                       
+        ///                    xmlns:local=&quot;clr-namespace:QApp.Helpers.DataTemplateSelectors&quot;                    
         ///                    xmlns:dxlc=&quot;http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol&quot;
-        ///                    xmlns:Helpers=&quot;clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf&quot;
-        ///                    xmlns:local=&quot;clr-namespace:QApp.Helpers.DataTemplateSelectors&quot;&gt;
-        ///
-        ///    &lt;local:QuestionDataTemplateSelector x:Ke [rest of string was truncated]&quot;;.
+        ///                    xmlns:View=&quot;cl [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string QuestionDataTemplateResources {
             get {
@@ -80,9 +79,8 @@ namespace QApp.Properties {
         ///                    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
         ///                    xmlns:dxlc=&quot;http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol&quot;
         ///                    xmlns:Helpers=&quot;clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf&quot;
-        ///                    xmlns:local=&quot;clr-namespace:QApp.Helpers.DataTemplateSelectors&quot;&gt;
-        ///
-        ///    &lt;local:SingleOptionDataTemplateSelector  [rest of string was truncated]&quot;;.
+        ///                    xmlns:local=&quot;clr-namespace:QApp.Helpers.DataTemplateSelectors&quot;
+        ///                    xmlns:View=&quot;clr-namespace:D [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SingleOptionDataTemplateResources {
             get {
