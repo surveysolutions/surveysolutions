@@ -100,7 +100,7 @@ namespace QApp.ViewModel
                  {
                      if (completeAnswerView.PublicKey == answer.PublicKey)
                          if (QuestionData.Question.QuestionType == QuestionType.MultyOption)
-                             completeAnswerView.Selected = !completeAnswerView.Selected;
+                             completeAnswerView.Selected = answer.Selected;
                          else
                             completeAnswerView.Selected = completeAnswerView.PublicKey == answer.PublicKey;
                  }
@@ -111,6 +111,20 @@ namespace QApp.ViewModel
                                                                               new UserLight("0", "system"));
                  var commandInvoker = Initializer.Kernel.Get<ICommandInvoker>();
                  commandInvoker.Execute(command);
+             }
+             else
+             {
+                 var question = p as CompleteQuestionView;
+                 if (question!=null)
+                 {
+                     foreach (CompleteAnswerView answerView in question.Answers)
+                         answerView.QuestionId = question.PublicKey;
+                     var command = new UpdateAnswerInCompleteQuestionnaireCommand(question.QuestionnaireId,
+                                                                                  question.Answers, null,
+                                                                                  new UserLight("0", "system"));
+                     var commandInvoker = Initializer.Kernel.Get<ICommandInvoker>();
+                     commandInvoker.Execute(command);
+                 }
              }
          }
 
