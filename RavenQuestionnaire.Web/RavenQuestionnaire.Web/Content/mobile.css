@@ -95,15 +95,16 @@
 .navigation  h1.ui-title {
 	text-align: left;
 	margin-left: 15px;
-	margin-right: 210px;
+	margin-right: 225px;
 }
 .navigation-btn-group {
-	width: 200px;
+	width: 215px;
+	text-align: right;
 }
 .navigation-btn-group a
 {
 	display: inline-block;
 	margin: 0;
 	margin-top: 9px;
-	margin-right: 5px;
+	margin-left: 5px;
 }
