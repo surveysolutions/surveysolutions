@@ -7,7 +7,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
-    class NumericAnswerCompleteQuestion: IAnswerStrategy
+    public class NumericAnswerCompleteQuestion: IAnswerStrategy
     {
         private ICompleteQuestion<ICompleteAnswer> document;
         public NumericAnswerCompleteQuestion(ICompleteQuestion<ICompleteAnswer> document)
