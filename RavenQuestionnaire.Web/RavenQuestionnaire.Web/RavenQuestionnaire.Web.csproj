@@ -626,13 +626,13 @@
     <Content Include="Views\CompleteQuestionnaire\MyItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Location\EditorTemplates\StatusByRole.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\StatusByRole.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Location\EditorTemplates\RolePermission.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\RolePermission.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Location\EditorTemplates\StatusView.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\StatusItemView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Bootstrap\accordion.less">
@@ -823,9 +823,6 @@
     <Content Include="Views\Answer\AnswerListView\_Percentage.cshtml" />
     <Content Include="Views\Question\_AddCards.cshtml" />
     <Content Include="Views\Question\_EditCard.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\StatusByRole.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\StatusView.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\RolePermission.cshtml" />
     <Content Include="Views\Shared\GroupNavigation.cshtml" />
     <Content Include="Views\Group\GroupTemplates\_PropagatebleGroup.cshtml" />
     <Content Include="Views\Group\GroupTemplates\_SimpleGroup.cshtml" />
@@ -881,7 +878,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>24525</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

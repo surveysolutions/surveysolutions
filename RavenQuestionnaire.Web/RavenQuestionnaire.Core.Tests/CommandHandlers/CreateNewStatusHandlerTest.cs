@@ -16,7 +16,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         {
             Mock<IStatusRepository> statusRepositoryMock = new Mock<IStatusRepository>();
             CreateNewStatusHandler handler=new CreateNewStatusHandler(statusRepositoryMock.Object);
-            handler.Handle(new CreateNewStatusCommand("Create", true, "uID", null));
+            handler.Handle(new CreateNewStatusCommand("Create", true, "SId", "QID", null));
             statusRepositoryMock.Verify(x=>x.Add(It.IsAny<Status>()), Times.Once());
         }
     }

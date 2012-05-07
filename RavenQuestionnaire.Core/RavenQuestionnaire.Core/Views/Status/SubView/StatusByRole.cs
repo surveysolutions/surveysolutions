@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using RavenQuestionnaire.Core.Views.Status.Browse;
+using RavenQuestionnaire.Core.Views.Status.StatusElement;
 
 namespace RavenQuestionnaire.Core.Views.Status.SubView
 {
@@ -8,13 +10,13 @@ namespace RavenQuestionnaire.Core.Views.Status.SubView
         {
         }
 
-        public StatusBrowseItem Status
+        public StatusItemView Status
         {
             set { _status = value; }
-            get { return _status ?? (_status = new StatusBrowseItem()); }
+            get { return _status ?? (_status = new StatusItemView()); }
         }
 
-        public StatusBrowseItem _status;
+        public StatusItemView _status;
 
         public List<RolePermission> StatusRestriction 
         { 

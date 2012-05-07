@@ -1,6 +1,6 @@
 ﻿@using RavenQuestionnaire.Core.Views.Status
 @using RavenQuestionnaire.Web.Utils
-@model StatusView
+@model RavenQuestionnaire.Core.Views.Status.StatusElement.StatusItemView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -29,7 +29,7 @@
     
     <p>
         @Ajax.ActionLinkWithIcon("Add route", "AddRoute", "Status",
-            new { Model.Id, Qid = Model.QuestionnaireId },
+            new { Model.PublicKey, Qid = Model.QuestionnaireId },
             new AjaxOptions { UpdateTargetId = "addNewRoute", OnSuccess = "OpenModal" },
             new { @class = "btn btn-success" },
             "icon-plus icon-white")

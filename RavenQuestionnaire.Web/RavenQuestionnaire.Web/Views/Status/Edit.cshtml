@@ -1,11 +1,13 @@
-﻿@using RavenQuestionnaire.Core.Views.Status
-@model StatusView
+﻿@using RavenQuestionnaire.Core.Views.Status.StatusElement
+@model StatusItemView
 @if (Model != null)
 {
     using (Html.BeginForm("Update", "Status"))
     {
         @Html.ValidationSummary(true)
         @Html.EditorForModel()
+
+        /*{Html.RenderPartial("~/Views/EditorTemplates/StatusItemView.cshtml", Model);}*/
     <p>
         <input type="submit" value="Save" />
     </p>

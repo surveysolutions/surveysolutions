@@ -32,7 +32,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Assert.Throws<NullReferenceException>(
                 () => handler.Handle(new CreateNewCompleteQuestionnaireCommand("invalid id",
                                                                                new UserLight("-1", "dummyUser"),
-                                                                               new SurveyStatus("-1", "dummyStatus"),
+                                                                               new SurveyStatus(Guid.Empty, "dummyStatus"),
                                                                                null))); 
         }
 
@@ -55,7 +55,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             handler.Handle(new CreateNewCompleteQuestionnaireCommand("qID",
                                                                      new UserLight("-2", "dummy-2"),
-                                                                     new SurveyStatus("-100", "dummyStatus100"), 
+                                                                     new SurveyStatus(Guid.NewGuid(), "dummyStatus100"), 
                                                                      null));
 
             coompleteQuestionnaireRepositoryMock.Verify(x => x.Add(It.IsAny<CompleteQuestionnaire>()), Times.Once());

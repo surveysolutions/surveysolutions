@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Moq;
-using Ninject.Activation;
-using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Status;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Status;
+using RavenQuestionnaire.Core.Views.Status.Browse;
+using RavenQuestionnaire.Core.Views.Status.StatusElement;
 using RavenQuestionnaire.Web.Controllers;
-using RavenQuestionnaire.Web.Tests.Stubs;
-using System.Configuration.Provider;
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
@@ -36,7 +33,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void WhenNewStatusIsSubmittedWIthValidModel_CommandIsSent()
         {
-            Controller.Save(new StatusBrowseItem() { Title = "testStatus" });
+            Controller.Save(new StatusItemView() { Title = "testStatus" });
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewStatusCommand>()), Times.Once());
 
         }
@@ -52,7 +49,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             ViewRepositoryMock.Setup(x => x.Load<StatusBrowseInputModel, StatusBrowseView>(input))
                 .Returns(output);
 
-            var result = Controller.Index(input);
+            var result = Controller.Index(questionnaryId);
             Assert.AreEqual(output, result.ViewData.Model);
         }
 
@@ -62,15 +59,20 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             StatusDocument innerDocument=new StatusDocument();
             innerDocument.Id = "statusdocuments/sId";
-            innerDocument.StatusRoles.Add("test", new List<SurveyStatus>() {new SurveyStatus("idtest", "test")});
-            var output = new StatusView(innerDocument.Id, "test", true, innerDocument.StatusRoles,"-1", new Dictionary<Guid, FlowRule>());
+
+            innerDocument.Statuses.Add(new StatusItem(){Title = "testtt"});
+
+            innerDocument.Statuses[0].StatusRoles.Add("test", new List<SurveyStatus>() {new SurveyStatus(Guid.NewGuid(), "test")});
+            var doc = new StatusDocument();//{innerDocument.Id, "test", true, innerDocument.Statuses[0].StatusRoles, "-1", new Dictionary<Guid, FlowRule>()}
+
+            var output = new StatusView(doc);
             var input = new StatusViewInputModel("sId");
             ViewRepositoryMock.Setup(
                 x =>
                 x.Load<StatusViewInputModel, StatusView>(
                     It.Is<StatusViewInputModel>(v => v.StatusId.Equals(input.StatusId))))
                 .Returns(output);
-            var result = Controller.Edit(output.Id);
+            var result = Controller.Edit("Qid", Guid.Empty);
             Assert.AreEqual(output, result.ViewData.Model);
         }
 

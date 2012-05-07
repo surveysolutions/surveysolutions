@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Status;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Status;
+using RavenQuestionnaire.Core.Views.Status.Browse;
+using RavenQuestionnaire.Core.Views.Status.StatusElement;
 using RavenQuestionnaire.Core.Views.Status.SubView;
 
 namespace RavenQuestionnaire.Web.Controllers
@@ -26,27 +28,33 @@ namespace RavenQuestionnaire.Web.Controllers
             this.viewRepository = viewRepository;
         }
 
-        public ViewResult Index(StatusBrowseInputModel input)
+        public ViewResult Index(string Qid)
         {
-            if ((input == null) || string.IsNullOrEmpty(input.QId))
+            if ( string.IsNullOrEmpty(Qid))
                 throw new HttpException(404, "Invalid query string parameters.");
-            var model = viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(input);
+
+            var model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(Qid));
             return View(model);
         }
 
-        public ViewResult Create(string qId)
+        public ViewResult Create(string qId, string Id)
         {
-            return View(StatusBrowseItem.New(qId));
+            return View(new StatusItemView()
+                            {
+                                QuestionnaireId = qId,
+                                StatusId = Id
+                            }
+        );
         }
 
         [HttpPost]
-        public ActionResult Save(StatusBrowseItem model)
+        public ActionResult Save(StatusItemView model)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && model != null && !string.IsNullOrEmpty(model.StatusId))
             {
-                if (string.IsNullOrEmpty(model.Id))
+                if (model.PublicKey == null || model.PublicKey == Guid.Empty)
                 {
-                    commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial, model.QuestionnaireId, GlobalInfo.GetCurrentUser()));
+                    commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial, model.StatusId, model.QuestionnaireId, GlobalInfo.GetCurrentUser()));
                 }
                 return RedirectToAction("Index", new
                 {
@@ -58,13 +66,14 @@ namespace RavenQuestionnaire.Web.Controllers
 
         [HttpPost]
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Update(StatusView model)
+        public ActionResult Update(StatusItemView model)
         {
             if (ModelState.IsValid)
             {
-                if (!string.IsNullOrEmpty(model.Id) && model.StatusRolesMatrix != null)
+                if (model.PublicKey != null && model.StatusRolesMatrix != null)
                 {
                     Dictionary<string, List<SurveyStatus>> roles = new Dictionary<string, List<SurveyStatus>>();
+
                     foreach (var item in model.StatusRolesMatrix)
                     {
                         foreach (var roleItem in item.StatusRestriction)
@@ -72,10 +81,11 @@ namespace RavenQuestionnaire.Web.Controllers
                             {
                                 if (!roles.ContainsKey(roleItem.RoleName))
                                     roles.Add(roleItem.RoleName, new List<SurveyStatus>());
-                                roles[roleItem.RoleName].Add(new SurveyStatus(item.Status.Id, item.Status.Title));
+                                roles[roleItem.RoleName].Add(new SurveyStatus(item.Status.PublicKey, item.Status.Title));
                             }
                     }
-                    commandInvoker.Execute(new UpdateStatusRestrictionsCommand(model.Id, roles, GlobalInfo.GetCurrentUser()));
+
+                    commandInvoker.Execute(new UpdateStatusRestrictionsCommand(model.QuestionnaireId, model.StatusId, model.PublicKey, roles, GlobalInfo.GetCurrentUser()));
                     return RedirectToAction("Index", new
                     {
                         Qid = model.QuestionnaireId
@@ -107,27 +117,30 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ViewResult Edit(string id)
+        public ViewResult Edit(string Qid, Guid PublicKey)
         {
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(Qid) || PublicKey == null)
                 throw new HttpException(404, "Invalid query string parameters.");
-            StatusView model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(id));
-            var statuses = viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>(new StatusBrowseInputModel() { PageSize = 100, QId = model.QuestionnaireId });
 
-            if (model != null && statuses != null)
+            StatusView model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(Qid));
+
+            //rewrite!!!
+            if (model != null)
             {
-                foreach (var status in statuses.Items)
+                var currentStatus = model.StatusElements.FirstOrDefault(x => x.PublicKey == PublicKey);
+
+                foreach (var status in model.StatusElements)
                 {
                     var statusByRole = new StatusByRole {Status = status};
 
                     foreach (var role in Roles.GetAllRoles())
                     {
                         bool flag = false;
-                        if (model.StatusRoles.ContainsKey(role))
+                        if (currentStatus.StatusRoles.ContainsKey(role))
                         {
-                            foreach (var item in model.StatusRoles[role])
+                            foreach (var item in currentStatus.StatusRoles[role])
                             {
-                                if (String.Compare(item.Id, status.Id, StringComparison.OrdinalIgnoreCase) == 0)
+                                if (item.PublicId == status.PublicKey)
                                 {
                                     flag = true;
                                     break;
@@ -136,33 +149,42 @@ namespace RavenQuestionnaire.Web.Controllers
                         }
                         statusByRole.StatusRestriction.Add(new RolePermission(role, flag));
                     }
-                    model.StatusRolesMatrix.Add(statusByRole);
+                    currentStatus.StatusRolesMatrix.Add(statusByRole);
                 }
+
+                AddRolesListToViewBag();
+
+                return View("Edit", currentStatus);
             }
+
             AddRolesListToViewBag();
-            return View("Edit", model);
+            return View("Edit", null);
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ViewResult Route(string id)
+        public ViewResult Route(string Qid, Guid publicKey)
         {
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(Qid) || publicKey == null)
                 throw new HttpException(404, "Invalid query string parameters.");
-            StatusView model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(id));
 
-            return View(model);
+            StatusView model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(Qid));
+
+            StatusItemView item = null;
+            if (model != null)
+                item = model.StatusElements.FirstOrDefault(x => x.PublicKey == publicKey);
+            return View(item);
         }
 
         [HttpPost]
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult SaveRoute(string StatusId, SurveyStatus TargetStatus, string changeComment, string ConditionExpression)
+        public ActionResult SaveRoute(string StatusId, SurveyStatus TargetStatus, string changeComment, Guid PublicKey,  string ConditionExpression)
         {
             if (ModelState.IsValid)
             {
                 if (!string.IsNullOrEmpty(StatusId))
                 {
-                    commandInvoker.Execute(new AddNewStatusFlowItem(StatusId, ConditionExpression, 
-                        changeComment, TargetStatus, GlobalInfo.GetCurrentUser()));
+                    commandInvoker.Execute(new AddNewStatusFlowItem(StatusId, ConditionExpression,
+                        changeComment, TargetStatus, PublicKey, GlobalInfo.GetCurrentUser()));
                 }
 
                 StatusView m = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(StatusId));
@@ -173,14 +195,22 @@ namespace RavenQuestionnaire.Web.Controllers
 
        
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult EditRoute(Guid publicId, string qId, string statusId)
+        public ActionResult EditRoute(Guid publicId, string Qid, string statusId)
         {
-            AddStatusListToViewBag(qId);
-            StatusView dO = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(statusId));
-            if (dO.FlowRules.ContainsKey(publicId))
-                return PartialView("AddRoute", dO.FlowRules[publicId]);
-            else
-                throw new HttpException(404, "Invalid query string parameters.");
+            AddStatusListToViewBag(Qid);
+
+            StatusView model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(Qid));
+
+            if (model != null)
+            {
+                var currentStatus = model.StatusElements.FirstOrDefault(x => x.PublicKey == publicId);
+
+                if (currentStatus.FlowRules.ContainsKey(publicId))
+                    return PartialView("AddRoute", currentStatus.FlowRules[publicId]);
+
+            }
+
+            throw new HttpException(404, "Invalid query string parameters.");
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]

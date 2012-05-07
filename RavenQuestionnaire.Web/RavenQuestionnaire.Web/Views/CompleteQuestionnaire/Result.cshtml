@@ -18,16 +18,16 @@
                 <p class="text-block">@Html.DisplayFor(model => model.CreationDate)</p>
             </div>
         </div>
-        <div class="control-group">
+      @*  <div class="control-group">
             <label class="control-label">Last edit Date</label>
             <div class="controls">
                 <p class="text-block">@Html.DisplayFor(model => model.LastEntryDate)</p>
             </div>
-        </div>
+        </div>*@
         <div class="control-group">
             <label class="control-label">Status</label>
             <div class="controls">
-                @Html.DropDownListFor(model => model.Status.Id, new SelectList(ViewBag.AvailableStatuses, "Id", "Name", Model.Status.Id))
+                @Html.DropDownListFor(model => model.Status.PublicId, new SelectList(ViewBag.AvailableStatuses, "PublicId", "Name", Model.Status.PublicId))
             </div>
         </div>
         <div class="control-group">
@@ -43,6 +43,12 @@
             </div>
         </div>
         @Html.HiddenFor(model => Model.Id)
+        
+        @if (!String.IsNullOrEmpty(ViewBag.StatusHolderId))
+        {
+            @Html.Hidden("StatusHolderId", (string)ViewBag.StatusHolderId)     
+        }
+       
         <p>
             <input type="submit" value="Save" class="btn btn-primary" />
         </p>

@@ -68,7 +68,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             innerDoc.Id = "completequestionnairedocuments/cqId";
             innerDoc.CreationDate = DateTime.Now;
             innerDoc.LastEntryDate = DateTime.Now;
-            innerDoc.Status = new SurveyStatus("-1", "dummyStatus");
+            innerDoc.Status = new SurveyStatus(Guid.NewGuid(), "dummyStatus");
             innerDoc.Responsible = new UserLight("-1", "dummyUser");
             var output = new CompleteQuestionnaireView(innerDoc);
             var input = new CompleteQuestionnaireViewInputModel("cqId");
@@ -95,7 +95,12 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             StatusDocument innerDoc = new StatusDocument();
             innerDoc.Id = "statusdocuments/cqId";
-            StatusView status = new StatusView(innerDoc.Id, innerDoc.Title, innerDoc.IsVisible, innerDoc.StatusRoles, innerDoc.QuestionnaireId, innerDoc.FlowRules); 
+
+            StatusView status = new StatusView();
+
+                //innerDoc.Id, innerDoc.Title, innerDoc.IsVisible, innerDoc.StatusRoles, innerDoc.QuestionnaireId, innerDoc.FlowRules); 
+            
+            
             ViewRepositoryMock.Setup(
                x =>
                x.Load<StatusViewInputModel, StatusView>(

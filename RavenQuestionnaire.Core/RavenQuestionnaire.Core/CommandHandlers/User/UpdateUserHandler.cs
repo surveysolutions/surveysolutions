@@ -5,11 +5,11 @@ namespace RavenQuestionnaire.Core.CommandHandlers.User
 {
     public class UpdateUserHandler : ICommandHandler<UpdateUserCommand>
     {
-        private IUserRepository _repository;
+        private IUserRepository _userRepository;
         private ILocationRepository _locationalRepository;
         public UpdateUserHandler(IUserRepository repository, ILocationRepository locationRepository)
         {
-            _repository = repository;
+            _userRepository = repository;
             _locationalRepository = locationRepository;
         }
 
@@ -17,14 +17,14 @@ namespace RavenQuestionnaire.Core.CommandHandlers.User
 
         public void Handle(UpdateUserCommand command)
         {
-            Entities.User user = _repository.Load(command.UserId);
+            Entities.User user = _userRepository.Load(command.UserId);
             user.ChangeEmail(command.Email);
             user.ChangeLockStatus(command.IsLocked);
       //      user.ChangePassword(command.Password);
             user.ChangeRoleList(command.Roles);
             if (!string.IsNullOrEmpty(command.SupervisorId))
             {
-                Entities.User supervisor = _repository.Load(command.SupervisorId);
+                Entities.User supervisor = _userRepository.Load(command.SupervisorId);
                 user.SetSupervisor(supervisor.CreateSupervisor());
             }
             else
