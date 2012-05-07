@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RavenQuestionnaire.Core.Views.Status
+namespace RavenQuestionnaire.Core.Views.Status.Browse
 {
     public class StatusBrowseView
     {

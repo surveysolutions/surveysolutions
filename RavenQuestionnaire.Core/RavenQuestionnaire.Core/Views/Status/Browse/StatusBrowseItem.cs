@@ -1,7 +1,7 @@
 ﻿using System;
 using RavenQuestionnaire.Core.Utility;
 
-namespace RavenQuestionnaire.Core.Views.Status
+namespace RavenQuestionnaire.Core.Views.Status.Browse
 {
     public class StatusBrowseItem
     {

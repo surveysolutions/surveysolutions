@@ -1,4 +1,5 @@
-﻿using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿using System;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Commands.Status
@@ -10,15 +11,18 @@ namespace RavenQuestionnaire.Core.Commands.Status
         public string ChangeRule { set; get; }
         public string ChangeComment { set; get; }
 
+        public Guid PublicKey { get; set; }
+
         public SurveyStatus TargetStatus { set; get; }
 
-        public AddNewStatusFlowItem(string status, string changeRule, string changeComment, SurveyStatus targetStatus, UserLight executor)
+        public AddNewStatusFlowItem(string status, string changeRule, string changeComment, SurveyStatus targetStatus, Guid publicKey, UserLight executor)
         {
             ChangeRule = changeRule;
             ChangeComment = changeComment;
             TargetStatus = targetStatus;
             Status = IdUtil.CreateStatusId(status); 
             Executor = executor;
+            PublicKey = publicKey;
         }
 
         public UserLight Executor

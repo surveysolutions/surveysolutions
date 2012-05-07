@@ -1,4 +1,5 @@
-﻿using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿using System;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
@@ -7,23 +8,23 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
     {
         public string CompleteQuestionnaireId { get; private set; }
         
-        public SurveyStatus Status { get; private set; }
-        public UserLight Responsible { get; private set; }
+        public Guid? Status { get; private set; }
+        public string Responsible { get; private set; }
 
         public UserLight Executor { get; set; }
-        public string ChangeComment { get; set; }
+        public string StatusHolderId { get; set; }
 
         public UpdateCompleteQuestionnaireCommand(string completeQuestionanireId, 
-            SurveyStatus statusId,
-            string changeComment,
-            UserLight responsible,
+            Guid status,
+            string statusHolderId,
+            string responsible,
             UserLight executor)
         {
             this.CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(completeQuestionanireId);
-            this.Status = statusId;
-            this.Responsible = responsible;
+            this.Status = status;
+            this.Responsible = IdUtil.CreateUserId(responsible);
             this.Executor = executor;
-            ChangeComment = changeComment;
+            StatusHolderId = IdUtil.CreateStatusId(statusHolderId);
         }
     }
 }
