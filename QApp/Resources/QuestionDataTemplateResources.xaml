@@ -41,7 +41,7 @@
                     <ColumnDefinition Width="0.7*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
-                    <DatePicker Name="MonthlyCalendar" FirstDayOfWeek="Monday" IsTodayHighlighted="True" Margin="15,39,88,19" Foreground="White">                                               
+                    <DatePicker SelectedDate="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" Name="MonthlyCalendar" FirstDayOfWeek="Monday" IsTodayHighlighted="True" Margin="15,39,88,19" Foreground="White">                                               
                     </DatePicker>
                     <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
@@ -68,7 +68,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
                     <Border BorderThickness="1" BorderBrush="White">
-                        <TextBox Name="GpsCoordinateText" Text="" Width="100" Height="20" Canvas.Top="50" Canvas.Left="20"/>
+                        <TextBox Name="GpsCoordinateText" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" Width="100" Height="20" Canvas.Top="50" Canvas.Left="20"/>
                     </Border>
                     <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
@@ -124,16 +124,16 @@
     </DataTemplate>
     <DataTemplate x:Key="NumericDataTemplate">
         <ContentControl>            
-            <ContentControl.Content>
+            <ContentControl.Content>                
                 <Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.3*" />
                             <ColumnDefinition Width="0.7*" />
-                        </Grid.ColumnDefinitions>
+                        </Grid.ColumnDefinitions>                       
                         <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
                             <Border BorderThickness="1" BorderBrush="White">
-                                <TextBox Name="txtBox" Width="100" Height="20" Canvas.Top="50" Canvas.Left="20"/>
+                                <TextBox Name="txtBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" Width="100" Height="20" Canvas.Top="50" Canvas.Left="20"/>
                             </Border>
                             <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
                                 Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
@@ -147,7 +147,7 @@
                                     </MultiBinding>                                    
                                 </Button.CommandParameter>
                             </Button>                            
-                        </StackPanel>
+                        </StackPanel>                        
                     </Grid>
                 </Grid>
             </ContentControl.Content>
