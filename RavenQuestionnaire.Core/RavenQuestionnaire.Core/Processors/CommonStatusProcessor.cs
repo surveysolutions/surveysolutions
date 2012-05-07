@@ -1,4 +1,4 @@
-﻿using RavenQuestionnaire.Core.Commands;
+﻿using System;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -31,7 +31,7 @@ namespace RavenQuestionnaire.Core.Processors
             {
                 if (executor.Execute(completedQ.Find<ICompleteAnswer>(a=>a.Selected), item.ConditionExpression))
                 {
-                    CallStatusChange(completedQ.CompleteQuestinnaireId, item.TargetStatus, item.ChangeComment);
+                    CallStatusChange(completedQ.CompleteQuestinnaireId, item.TargetStatus.PublicId, status.Id);
                     return;
                 }
             }
@@ -48,11 +48,11 @@ namespace RavenQuestionnaire.Core.Processors
         }
 
 
-        private void CallStatusChange(string completeQuestionanireId, SurveyStatus newStatus, string changeComment)
+        private void CallStatusChange(string completeQuestionanireId, Guid newStatus, string statusHolderId)
         {
             _commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(completeQuestionanireId,
                     newStatus,
-                    changeComment,
+                    statusHolderId,
                     null,
                     new UserLight("-1", "system")));
         }

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿using RavenQuestionnaire.Core.Documents;
 
 namespace RavenQuestionnaire.Core.Entities
 {
     public class Status : IEntity<StatusDocument>
     {
         private StatusDocument innerDocument;
+
         public string StatusId
         {
             get { return innerDocument.Id; }
@@ -23,14 +21,16 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument = document;
         }
 
-        public Status(string title, bool isInitial, string questionnaireId)
+
+        public Status(string questionnaireId)
         {
-            innerDocument = new StatusDocument() { 
-                Title = title, 
-                IsInitial = isInitial, 
+            innerDocument = new StatusDocument() {
                 QuestionnaireId = questionnaireId 
             };
         }
+
+/*
+
 
         public Status(string title, bool isInitial, Dictionary<string, List<SurveyStatus>> statusRoles, 
             string questionnaireId) : this(title, isInitial, questionnaireId)
@@ -64,6 +64,7 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.FlowRules.Add(Guid.NewGuid(), flowRule);
         }
 
+*/
 
     }
 }
