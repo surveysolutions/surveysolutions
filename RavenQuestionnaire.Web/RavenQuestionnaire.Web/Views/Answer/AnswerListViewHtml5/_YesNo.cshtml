@@ -13,7 +13,7 @@
                        rel = "popover"
                        </text>
                 } >
-            @Html.DisplayFor(modelItem => Model.QuestionText)</legend>
+           @Html.Raw( Model.QuestionText)</legend>
         @Html.Hidden("QuestionId", Model.PublicKey)
         @foreach (var item in Model.Answers)
         {
@@ -21,8 +21,8 @@
             ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)["id"] = radibutonname;
             @Html.RadioButton("PublicKey", item.PublicKey, (item).Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
          
-            //Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);
-              <label for="@radibutonname">@item.AnswerText</label>
+           
+              <label for="@radibutonname"> @{Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);}</label>
                @Html.Hidden("Selected", true)
 
         }

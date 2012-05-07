@@ -13,7 +13,7 @@
     @Html.Hidden("QuestionId", Model.PublicKey)
    @* <div  data-role="fieldcontain">*@
         <fieldset data-role="controlgroup">
-            <legend>@Html.DisplayFor(modelItem => Model.QuestionText)</legend>
+            <legend>@Html.Raw( Model.QuestionText)</legend>
             @foreach (var item in Model.Answers)
             {
                 
@@ -23,8 +23,8 @@
                     settings["id"] = radibutonname;
                 
                 @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, settings)
-                //Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item);
-                <label for="@radibutonname">@item.AnswerText</label>
+               <label for="@radibutonname">@{ Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item); }</label>
+          
             }
         </fieldset>
        
