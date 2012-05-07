@@ -17,11 +17,11 @@ namespace RavenQuestionnaire.Core.Views.Statistics
             this.Title = doc.Title;
             this.StartDate = doc.StartDate;
             this.EndDate = doc.EndDate;
-            this.AnsweredQuestions = doc.AnsweredQuestions.Select(q => new QuestionStatisticView(q)).ToList();
-            this.InvalidQuestions = doc.InvalidQuestions.Select(q => new QuestionStatisticView(q)).ToList();
+            this.AnsweredQuestions = doc.AnsweredQuestions.Select(q => new QuestionStatisticView(q)).OrderBy(q => q.ApproximateTime).ToList();
+            this.InvalidQuestions = doc.InvalidQuestions.Select(q => new QuestionStatisticView(q)).OrderBy(q => q.ApproximateTime).ToList();
             this.CompleteQuestionnaireId = IdUtil.ParseId(doc.CompleteQuestionnaireId);
             Creator = doc.Creator;
-            FeaturedQuestions = doc.FeturedQuestions.Select(q => new QuestionStatisticView(q)).ToList();
+            FeaturedQuestions = doc.FeturedQuestions.Select(q => new QuestionStatisticView(q)).OrderBy(q => q.ApproximateTime).ToList();
         }
         public string Id { get; set; }
         public string Title { get; set; }

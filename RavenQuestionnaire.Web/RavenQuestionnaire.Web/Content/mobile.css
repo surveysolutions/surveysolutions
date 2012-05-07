@@ -65,15 +65,45 @@
 .grid-header h3 {
 	margin: 0;
 }
-#main .ui-grid-b  .ui-block-a
+#main .dashboard-list  .ui-grid-b  .ui-block-a
 {
 	width: 20%;
 }
-#main .ui-grid-b  .ui-block-b
+#main .dashboard-list .ui-grid-b  .ui-block-b
 {
 	width: 46.6666666%;
 }
 #main .ui-block-c .ui-btn-inner
 {
 	padding: 0.6em 14px;
+}
+#main .answer-cell
+{
+	border: 1px solid #ccc;
+	font-size: 16px;
+    line-height: 1.4;
+    outline: 0 none;
+    padding: 0.4em;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) inset;
+	border-radius: 0.6em 0.6em 0.6em 0.6em;
+	cursor: not-allowed;
+	margin-right: 10px;
+}
+.navigation {
+	
+}
+.navigation  h1.ui-title {
+	text-align: left;
+	margin-left: 15px;
+	margin-right: 210px;
+}
+.navigation-btn-group {
+	width: 200px;
+}
+.navigation-btn-group a
+{
+	display: inline-block;
+	margin: 0;
+	margin-top: 9px;
+	margin-right: 5px;
 }
