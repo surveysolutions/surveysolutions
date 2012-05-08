@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 
@@ -14,6 +12,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
     {
         public string Id { get; set; }
         public string Title { get; set; }
+        public bool IsValid { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate { get; set; }
 

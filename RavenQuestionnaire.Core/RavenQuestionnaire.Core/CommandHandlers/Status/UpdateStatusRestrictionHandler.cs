@@ -1,4 +1,4 @@
-﻿using RavenQuestionnaire.Core.Commands;
+﻿using System.Linq;
 using RavenQuestionnaire.Core.Commands.Status;
 using RavenQuestionnaire.Core.Repositories;
 
@@ -18,7 +18,13 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Status
         {
             Entities.Status entity = _repository.Load(command.StatusId);
             if (entity != null)
-                entity.UpdateRestrictions(command.StatusRoles);
+            {
+                var currentStatus = entity.GetInnerDocument().Statuses.FirstOrDefault(x => x.PublicKey == command.PublicKey);
+                if (currentStatus != null)
+                {
+                    currentStatus.StatusRoles = command.StatusRoles;
+                }
+            }
         }
 
     }

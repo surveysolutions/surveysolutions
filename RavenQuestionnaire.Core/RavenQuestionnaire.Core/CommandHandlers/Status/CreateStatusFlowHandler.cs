@@ -19,7 +19,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Status
 
             if (status != null)
             {
-                status.AddFlowRule(new FlowRule(command.ChangeRule, command.ChangeComment, command.TargetStatus));
+                //status.AddFlowRule(new FlowRule(command.ChangeRule, command.ChangeComment, command.TargetStatus));
             }
         }
     }

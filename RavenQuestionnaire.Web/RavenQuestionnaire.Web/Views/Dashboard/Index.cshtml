@@ -58,8 +58,12 @@
                         {
                     <li>
                         <div class="ui-grid-b">
-                            <div class="ui-block-a">@survey.Id is @survey.Status.Name
-                            </div>
+                            <div class="ui-block-a">
+                                <div>@survey.Id
+                            </div> 
+                                <div>@survey.Status.Name
+                                </div>
+                                </div>
                             <div class="ui-block-b">
                                 @for (int i = 0; i < Math.Min(4, survey.FeaturedQuestions.Count()); i++)
                                 {

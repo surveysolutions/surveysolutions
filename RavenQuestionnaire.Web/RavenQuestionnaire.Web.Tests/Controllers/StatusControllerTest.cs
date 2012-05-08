@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Moq;
-using Ninject.Activation;
-using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Status;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Status;
+using RavenQuestionnaire.Core.Views.Status.StatusElement;
 using RavenQuestionnaire.Web.Controllers;
-using RavenQuestionnaire.Web.Tests.Stubs;
-using System.Configuration.Provider;
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
@@ -36,7 +32,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void WhenNewStatusIsSubmittedWIthValidModel_CommandIsSent()
         {
-            Controller.Save(new StatusBrowseItem() { Title = "testStatus" });
+            Controller.Save(new StatusItemView() { Title = "testStatus" , StatusId = "1", QuestionnaireId = "1"});
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewStatusCommand>()), Times.Once());
 
         }
@@ -46,13 +42,17 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void When_GetStatusIsExecutedModelIsReturned()
         {
             string questionnaryId = "-1";
-            StatusBrowseInputModel input = new StatusBrowseInputModel { QId = questionnaryId };
+            StatusViewInputModel input = new StatusViewInputModel(questionnaryId) ;
 
-            var output = new StatusBrowseView(0, 10, 0, new StatusBrowseItem[0], questionnaryId);
-            ViewRepositoryMock.Setup(x => x.Load<StatusBrowseInputModel, StatusBrowseView>(input))
+            var output = new StatusView() {QuestionnaireId = questionnaryId};
+
+            ViewRepositoryMock.Setup(
+                x =>
+                x.Load<StatusViewInputModel, StatusView>(
+                    It.Is<StatusViewInputModel>(v => v.QId.Equals(input.QId))))
                 .Returns(output);
 
-            var result = Controller.Index(input);
+            var result = Controller.Index(questionnaryId);
             Assert.AreEqual(output, result.ViewData.Model);
         }
 
@@ -62,16 +62,39 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             StatusDocument innerDocument=new StatusDocument();
             innerDocument.Id = "statusdocuments/sId";
-            innerDocument.StatusRoles.Add("test", new List<SurveyStatus>() {new SurveyStatus("idtest", "test")});
-            var output = new StatusView(innerDocument.Id, "test", true, innerDocument.StatusRoles,"-1", new Dictionary<Guid, FlowRule>());
-            var input = new StatusViewInputModel("sId");
+            innerDocument.QuestionnaireId = "questionnairedocuments/sId";
+
+            Guid status0PublicKey = Guid.NewGuid();
+            Guid status1PublicKey = Guid.NewGuid();
+
+
+            innerDocument.Statuses.Add(new StatusItem() { PublicKey = status1PublicKey, Title = "test1" });
+            innerDocument.Statuses.Add(new StatusItem() { PublicKey = status0PublicKey , Title = "testtt0"});
+            
+
+            innerDocument.Statuses[0].StatusRoles.Add("test", new List<SurveyStatus>() { new SurveyStatus(status0PublicKey, "testtt0") });
+            innerDocument.Statuses[1].StatusRoles.Add("test", new List<SurveyStatus>() { new SurveyStatus(status1PublicKey, "test1") });
+
+            
+            var doc = new StatusDocument()
+                          {
+                              Id = innerDocument.Id,
+                              Statuses = innerDocument.Statuses,
+                              QuestionnaireId = innerDocument.QuestionnaireId
+                          };
+
+            var output = new StatusView(doc);
+            var input = new StatusViewInputModel("Qid");
+
             ViewRepositoryMock.Setup(
                 x =>
                 x.Load<StatusViewInputModel, StatusView>(
-                    It.Is<StatusViewInputModel>(v => v.StatusId.Equals(input.StatusId))))
+                    It.Is<StatusViewInputModel>(v => v.QId.Equals(input.QId))))
                 .Returns(output);
-            var result = Controller.Edit(output.Id);
-            Assert.AreEqual(output, result.ViewData.Model);
+
+            var result = Controller.Edit("Qid", status1PublicKey);
+
+            Assert.AreEqual(output.StatusElements[0], result.ViewData.Model);
         }
 
     }

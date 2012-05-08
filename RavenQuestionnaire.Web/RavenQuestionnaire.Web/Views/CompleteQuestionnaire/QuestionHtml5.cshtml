@@ -20,26 +20,26 @@
     (function (window, $, PhotoSwipe) {
         $(document).ready(function () {
             $('div.gallery-page')
-					.live('pageshow', function (e) {
-					    var currentPage = $(e.target);
-					    var options = {};
-					    var photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
-					    if (!(typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null)) {
-					        photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options, currentPage.attr('id'));
-					    }
-					    return true;
-					})
+                    .live('pageshow', function (e) {
+                        var currentPage = $(e.target);
+                        var options = {};
+                        var photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+                        if (!(typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null)) {
+                            photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options, currentPage.attr('id'));
+                        }
+                        return true;
+                    })
 
-					.live('pagehide', function (e) {
-					    var currentPage = $(e.target),
-							photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+                    .live('pagehide', function (e) {
+                        var currentPage = $(e.target),
+                            photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
 
-					    if (typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null) {
-					        PhotoSwipe.detatch(photoSwipeInstance);
-					    }
+                        if (typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null) {
+                            PhotoSwipe.detatch(photoSwipeInstance);
+                        }
 
-					    return true;
-					});
+                        return true;
+                    });
         });
     } (window, window.jQuery, window.Code.PhotoSwipe));
 
@@ -79,8 +79,10 @@
         <div data-role="header" data-theme="b" class="navigation">
             <h1>@Model.Title</h1>
             <div data-type="horizontal" class="ui-btn-right navigation-btn-group">
-                <a data-role="button" data-corners="false" href="@Url.Action("Details", "Statistic", new { id = Model.Id })" rel="external" data-ajax="false">
-                    Statistics</a><a data-corners="false" data-role="button" href="#">Complete</a>
+                <a data-role="button" data-corners="false" href="@Url.Action("Details", "Statistic", new { id = Model.Id })" 
+                   rel="external" data-ajax="false">Statistic</a> 
+                   <a data-corners="false" data-ajax="false" data-role="button"  rel="external" href="@Url.Action("Complete", "CompleteQuestionnaire", new { id = Model.Id })">
+                       Complete</a>
             </div>
         </div>
         <!-- /header -->

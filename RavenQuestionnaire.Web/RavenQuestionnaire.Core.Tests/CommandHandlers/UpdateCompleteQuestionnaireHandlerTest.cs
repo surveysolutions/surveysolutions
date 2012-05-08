@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers;
 using RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed;
@@ -32,6 +33,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             CompleteQuestionnaire entity = new CompleteQuestionnaire(innerDocument);
             Mock<ICompleteQuestionnaireRepository> coompleteQuestionnaireRepositoryMock = new Mock<ICompleteQuestionnaireRepository>();
+            Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
 
             Mock<IStatusRepository> statusRepositoryMock = new Mock<IStatusRepository>();
             Mock<IUserRepository> userRepositoryMock = new Mock<IUserRepository>();
@@ -39,12 +41,12 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             coompleteQuestionnaireRepositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqID")).Returns(entity);
 
             UpdateCompleteQuestionnaireHandler handler = new UpdateCompleteQuestionnaireHandler(coompleteQuestionnaireRepositoryMock.Object,
-                statusRepositoryMock.Object, userRepositoryMock.Object);
+                statusRepositoryMock.Object, userRepositoryMock.Object, asyncMock.Object);
 
             handler.Handle(new UpdateCompleteQuestionnaireCommand("cqID", 
-                new SurveyStatus( "-11", "unknownStatus"),
+                Guid.Empty,
                 "test status change",
-                new UserLight("-111", "unknownUser"), 
+                "-111", 
                 null));
 
             coompleteQuestionnaireRepositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqID"));

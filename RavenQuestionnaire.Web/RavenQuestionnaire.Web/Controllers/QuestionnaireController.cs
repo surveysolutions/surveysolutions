@@ -16,6 +16,7 @@ using RavenQuestionnaire.Core.Export.csv;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
 using RavenQuestionnaire.Core.Views.File;
 using RavenQuestionnaire.Core.Views.Questionnaire;
+using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Web.Models;
 
 #endregion
@@ -99,7 +100,11 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (string.IsNullOrEmpty(model.Id))
                 {
-                    commandInvoker.Execute(new CreateNewQuestionnaireCommand(model.Title, GlobalInfo.GetCurrentUser()));
+                    //maybe better move loading defaults to the handler?
+                    var statusDefault =
+                        viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel("0"));
+
+                    commandInvoker.Execute(new CreateNewQuestionnaireCommand(model.Title, statusDefault != null ? statusDefault.Id : null, GlobalInfo.GetCurrentUser()));
                 }
                 else
                 {

@@ -25,7 +25,8 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
         public void Handle(ValidateGroupCommand command)
         {
             var entity = _questionnaireRepository.Load(command.QuestionnaireId);
-            _validator.Validate(entity, command.GroupPublicKey, command.PropagationKeyKey);
+            bool isValid = _validator.Validate(entity, command.GroupPublicKey, command.PropagationKeyKey);
+            entity.GetInnerDocument().IsValid = isValid;
         }
 
         #endregion
