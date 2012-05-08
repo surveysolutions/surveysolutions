@@ -31,7 +31,7 @@ namespace QApp.ViewModel
             get { return question; }
             private set { SetValue<CompleteQuestionView>("Question", ref question, value); }
         }
-
+        
         public override void Load()
         {
             base.Load();

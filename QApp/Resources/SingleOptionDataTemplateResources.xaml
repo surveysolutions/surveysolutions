@@ -3,11 +3,12 @@
                     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
                     xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
                     xmlns:local="clr-namespace:QApp.Helpers.DataTemplateSelectors"
-                    xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf">
+                    xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
+                    xmlns:Extensions="clr-namespace:QApp.Helpers.Extensions" xmlns:QApp="clr-namespace:QApp">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     
-    <DataTemplate x:Key="SingleOptionWithoutImageTemplate">
+   <DataTemplate x:Key="SingleOptionWithoutImageTemplate">
         <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
                         CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0"
@@ -32,7 +33,9 @@
             </dxlc:Tile.ContentTemplate>
         </dxlc:Tile>
     </DataTemplate>
-    <DataTemplate x:Key="SingleOptionWithImageTemplate">
+
+  
+  <DataTemplate x:Key="SingleOptionWithImageTemplate">
         <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
                         CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0"
@@ -46,7 +49,10 @@
                                 <ColumnDefinition Width="0.7*" />
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.ColumnSpan="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5">
-                                <Image Source="..\Images\UnderConstruction.png"/>
+                                 <StackPanel.Resources>
+                                   <Extensions:ImageConverter x:Key="ImageConverter" />
+                                </StackPanel.Resources>
+                                <Image Source="{Binding Image, Converter={StaticResource ImageConverter}}" />
                             </StackPanel>
                             <TextBlock Visibility="{Binding Path=Selected, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding Selected}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
                         </Grid>

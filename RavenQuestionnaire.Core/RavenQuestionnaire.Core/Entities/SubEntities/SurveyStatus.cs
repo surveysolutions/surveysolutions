@@ -8,12 +8,16 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
         }
 
+        public SurveyStatus(Guid id)
+        {
+            PublicId = id;
+        }
+
         public SurveyStatus(Guid id, string name)
         {
             PublicId = id;
             Name = name;
         }
-
 
         public Guid PublicId { get; set; }
         public string Name { get; set; }
