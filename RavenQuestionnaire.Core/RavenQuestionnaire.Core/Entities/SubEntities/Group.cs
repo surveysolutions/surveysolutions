@@ -17,6 +17,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     {
         string Title { get; set; }
         Propagate Propagated { get; set; }
+        bool IsValid { get; set; }
     }
 
     public interface IGroup<TGroup, TQuestion> : IGroup
@@ -46,6 +47,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public Guid PublicKey { get; set; }
         public string Title { get; set; }
+        public bool IsValid { get; set; }
+
         public Propagate Propagated { get; set; }
 
         public List<Guid> Triggers { get; set; }

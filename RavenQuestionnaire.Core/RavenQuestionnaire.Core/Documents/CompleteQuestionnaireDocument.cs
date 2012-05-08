@@ -95,6 +95,8 @@ namespace RavenQuestionnaire.Core.Documents
 
         public string Title { get; set; }
 
+        public bool IsValid { get; set; }
+
         public DateTime CreationDate { get; set; }
 
         public DateTime LastEntryDate { get; set; }

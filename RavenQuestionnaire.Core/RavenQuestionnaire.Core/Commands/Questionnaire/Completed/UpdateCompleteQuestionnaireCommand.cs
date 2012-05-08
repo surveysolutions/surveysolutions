@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
         {
             this.CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(completeQuestionanireId);
             this.Status = status;
-            this.Responsible = IdUtil.CreateUserId(responsible);
+            this.Responsible = responsible;
             this.Executor = executor;
             StatusHolderId = IdUtil.CreateStatusId(statusHolderId);
         }

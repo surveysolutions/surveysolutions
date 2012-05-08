@@ -56,6 +56,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public string Title { get; set; }
 
+        public bool IsValid { get; set; }
+
         public Propagate Propagated { get; set; }
 
         public List<Guid> Triggers { get; set; }

@@ -45,6 +45,8 @@ namespace RavenQuestionnaire.Core.Documents
             get { return Propagate.None; }
             set {  }
         }
+        [JsonIgnore]
+        public bool IsValid { get; set; }
 
         public List<Guid> Triggers
         {
