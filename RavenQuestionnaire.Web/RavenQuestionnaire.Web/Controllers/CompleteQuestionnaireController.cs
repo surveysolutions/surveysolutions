@@ -133,10 +133,11 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                           statusItem.PublicKey,
                                                                                           status.Id,
                                                                                           modelChecked.Responsible.Id,
-                                                                                          _globalProvider.GetCurrentUser
-                                                                                              ()));
+                                                                                          _globalProvider.GetCurrentUser()));
 
-                            return RedirectToAction("Details", "Statistic", new {id = id});
+
+                           return Redirect(Url.RouteUrl(new { controller = "Statistic", action = "Details", id = id }) + "#" + "invalid");
+                           // return RedirectToAction("Details", "Statistic", new {id = id});
                         }
 
                         
