@@ -46,15 +46,15 @@ namespace RavenQuestionnaire.Core.Views.Answer
             if (value == null || string.IsNullOrEmpty(value.ToString()))
                 return string.Empty;
 
-            try
+         /*   try
             {
                 return DateTime.Parse(value.ToString()).ToString(@"MM/dd/yyyy", DateTimeFormatInfo.InvariantInfo);
             }
             catch (FormatException)
-            {
+            {*/
 
                 return value.ToString();
-            }
+           // }
 
         }
     }
