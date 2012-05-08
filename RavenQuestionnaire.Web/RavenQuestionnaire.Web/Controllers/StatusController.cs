@@ -119,7 +119,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ViewResult Edit(string Qid, Guid PublicKey)
         {
-            if (string.IsNullOrEmpty(Qid) || PublicKey == null)
+            if (string.IsNullOrEmpty(Qid) || PublicKey == null )
                 throw new HttpException(404, "Invalid query string parameters.");
 
             StatusView model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(Qid));

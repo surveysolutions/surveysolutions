@@ -11,6 +11,7 @@ using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
+using RavenQuestionnaire.Core.Commands.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
@@ -82,10 +83,69 @@ namespace RavenQuestionnaire.Web.Controllers
                 commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
                                                                               Status.PublicId,
                                                                               StatusHolderId,
-                                                                              responsible.Id,
+                                                                              IdUtil.CreateUserId(responsible.Id),
                                                                               _globalProvider.GetCurrentUser()));
             }
             return RedirectToAction("Index");
+        }
+
+
+
+        public ActionResult Complete(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel,
+                CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
+
+            if (model != null)
+            {
+                commandInvoker.Execute(new ValidateGroupCommand(id, null, null, _globalProvider.GetCurrentUser()));
+
+                var modelChecked = viewRepository.Load<CompleteQuestionnaireViewInputModel,
+                    CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
+
+                if (modelChecked != null )
+                {
+                    var status = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(IdUtil.ParseId(modelChecked.TemplateId)));
+
+                    if (status != null)
+                    {
+                        if (modelChecked.IsValid)
+                        {
+                            var statusItem = status.StatusElements.FirstOrDefault(x => x.Title == "Completed");//temporary hardcoded
+
+                            commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
+                                                                                          statusItem.PublicKey,
+                                                                                          status.Id,
+                                                                                          modelChecked.Responsible.Id,
+                                                                                          _globalProvider.GetCurrentUser
+                                                                                              ()));
+
+                       
+                            return RedirectToAction("Index", "Dashboard");
+                        }
+                        else
+                        {
+                            var statusItem = status.StatusElements.FirstOrDefault(x => x.Title == "Error");//temporary hardcoded
+                            commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
+                                                                                          statusItem.PublicKey,
+                                                                                          status.Id,
+                                                                                          modelChecked.Responsible.Id,
+                                                                                          _globalProvider.GetCurrentUser
+                                                                                              ()));
+
+                            return RedirectToAction("Details", "Statistic", new {id = id});
+                        }
+
+                        
+                    }
+                }
+            }
+
+            return RedirectToAction("Index", "Dashboard");
+            
         }
 
         public ViewResult Result(string id)
@@ -105,8 +165,6 @@ namespace RavenQuestionnaire.Web.Controllers
                     ViewBag.StatusHolderId = status.Id;
                     AddAllowedStatusesToViewBag(model.Status.PublicId, model.Status.Name, Qid, status);
                 }
-
-                AddAllowedStatusesToViewBag(model.Status.PublicId, model.Status.Name, Qid, status);
             }
            
 
@@ -348,6 +406,8 @@ namespace RavenQuestionnaire.Web.Controllers
 
             return Json(model.CurrentGroup);
         }
+
+
 
         public ActionResult SaveSingleResultV(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
         {

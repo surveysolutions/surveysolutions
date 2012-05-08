@@ -12,6 +12,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
     {
         public string Id { get; set; }
         public string Title { get; set; }
+        public bool IsValid { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate { get; set; }
 

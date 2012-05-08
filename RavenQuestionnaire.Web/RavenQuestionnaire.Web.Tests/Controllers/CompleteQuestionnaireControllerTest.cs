@@ -79,6 +79,13 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     It.Is<CompleteQuestionnaireViewInputModel>(v => v.CompleteQuestionnaireId.Equals(input.CompleteQuestionnaireId))))
                 .Returns(output);
 
+/*
+            StatusDocument statusDoc = new StatusDocument();
+            statusDoc.Id = "statusdocuments/sId";
+            statusDoc.QuestionnaireId = "questionnairedocuments/cqId";
+            statusDoc.Statuses.Add( new StatusItem(){PublicKey = Guid.NewGuid(), Title = "dummy"});
+
+            */
             var result = Controller.Result(output.Id);
             Assert.AreEqual(output, result.ViewData.Model);
         }

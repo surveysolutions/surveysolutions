@@ -31,6 +31,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.Responsible = doc.Responsible;
             this.Questions = doc.Questions.Select(q => new CompleteQuestionView(doc, q)).ToArray();
             this.TemplateId = doc.TemplateId;
+            this.IsValid = doc.IsValid;
         }
     }
 }

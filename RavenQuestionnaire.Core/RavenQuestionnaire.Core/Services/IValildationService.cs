@@ -8,6 +8,6 @@ namespace RavenQuestionnaire.Core.Services
 {
     public interface IValildationService
     {
-         void Validate(CompleteQuestionnaire entity, Guid? groupKey, Guid? propagationKey);
+         bool Validate(CompleteQuestionnaire entity, Guid? groupKey, Guid? propagationKey);
     }
 }

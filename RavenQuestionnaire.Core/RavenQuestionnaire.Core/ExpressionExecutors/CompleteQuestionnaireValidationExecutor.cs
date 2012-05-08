@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NCalc;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -15,13 +12,17 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         {
             this.questionnaire = questionnaire;
         }
-        public void Execute(ICompleteGroup targetGroup)
+        public bool Execute(ICompleteGroup targetGroup)
         {
+            bool isValid = true;
+
             var questions = targetGroup.GetAllQuestions();
             foreach (ICompleteQuestion completeQuestion in questions)
             {
                 completeQuestion.Valid = Execute(completeQuestion);
+                isValid = isValid && completeQuestion.Valid;
             }
+            return isValid;
         }
 
         protected bool Execute(ICompleteQuestion question)
