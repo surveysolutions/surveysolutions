@@ -191,6 +191,7 @@
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="Conventions\RegisterGenericTypesOfInterface.cs" />
     <Compile Include="CoreRegistry.cs" />
+    <Compile Include="Documents\AbstractDocument.cs" />
     <Compile Include="Documents\CollectionDocument.cs" />
     <Compile Include="Documents\CompleteQuestionnaireDocument.cs" />
     <Compile Include="Documents\EventDocument.cs" />
@@ -258,6 +259,7 @@
     <Compile Include="Entities\SubEntities\LocationWithUserStatistic.cs" />
     <Compile Include="Entities\SubEntities\Question.cs" />
     <Compile Include="Entities\SubEntities\QuestionType.cs" />
+    <Compile Include="Entities\SubEntities\StatusItem.cs" />
     <Compile Include="Entities\SubEntities\UserLight.cs" />
     <Compile Include="Entities\SubEntities\SurveyStatus.cs" />
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
@@ -427,6 +429,9 @@
     <Compile Include="Views\Status\Processing\StatusProcessView.cs" />
     <Compile Include="Views\Status\Processing\StatusProcessViewFactory.cs" />
     <Compile Include="Views\Status\Processing\StatusProcessViewInputModel.cs" />
+    <Compile Include="Views\Status\StatusElement\StatusItemView.cs" />
+    <Compile Include="Views\Status\StatusElement\StatusItemViewFactory.cs" />
+    <Compile Include="Views\Status\StatusElement\StatusItemViewInputModel.cs" />
     <Compile Include="Views\Status\StatusView.cs" />
     <Compile Include="Views\Status\StatusViewFactory.cs" />
     <Compile Include="Views\Status\StatusViewInputModel.cs" />

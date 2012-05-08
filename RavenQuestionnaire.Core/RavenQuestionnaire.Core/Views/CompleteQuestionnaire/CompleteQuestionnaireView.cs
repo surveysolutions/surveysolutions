@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
@@ -13,6 +11,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             <CompleteGroupView, CompleteQuestionView>
     {
         public SurveyStatus Status { get; set; }
+
+        public string TemplateId { get; set; }
+
 
         public UserLight Responsible { set; get; }
          public CompleteQuestionnaireView()
@@ -29,6 +30,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
             this.Questions = doc.Questions.Select(q => new CompleteQuestionView(doc, q)).ToArray();
+            this.TemplateId = doc.TemplateId;
+            this.IsValid = doc.IsValid;
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿using System.Collections.Generic;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.Status.SubView;
+using RavenQuestionnaire.Core.Views.Status.StatusElement;
+using System.Linq;
 
 namespace RavenQuestionnaire.Core.Views.Status
 {
@@ -11,41 +11,35 @@ namespace RavenQuestionnaire.Core.Views.Status
     /// </summary>
     public class StatusView
     {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public bool IsVisible { get; set; }
-        public string QuestionnaireId { get; set; }
-
-        public Dictionary<Guid, FlowRule> FlowRules { get; set; }
-
-        public Dictionary<string, List<SurveyStatus>> StatusRoles { private set; get; }
-
-        private List<StatusByRole> _statusRolesMatrix;
-        public List<StatusByRole> StatusRolesMatrix
+        public string QuestionnaireId
         {
-            set { _statusRolesMatrix = value; }
-            get { return _statusRolesMatrix ?? (_statusRolesMatrix = new List<StatusByRole>()); }
+            get { return IdUtil.ParseId(_questionnaireId); }
+            set { _questionnaireId = value; }
         }
 
+        private string _questionnaireId;
+
+        public string Id
+        {
+            get { return IdUtil.ParseId(_statusId); }
+            set { _statusId = value; }
+        }
+        private string _statusId;
+
+        public List<StatusItemView> StatusElements { get; set; }
 
         public StatusView()
         {
-            StatusRolesMatrix = new List<StatusByRole>();
+            StatusElements = new List<StatusItemView>();
         }
 
-        public StatusView(string id, 
-            string title, bool isVisible, 
-            Dictionary<string, List<SurveyStatus>> statusRoles, 
-            string questionnaireId,
-            Dictionary <Guid, FlowRule> flowRules):this()
+        public StatusView(StatusDocument doc)
         {
-            this.Id = IdUtil.ParseId(id); 
-            this.Title = title;
-            this.IsVisible = isVisible;
-            StatusRoles = statusRoles;
-            QuestionnaireId = questionnaireId;
-            this.FlowRules = flowRules;
+            Id = doc.Id;
+            QuestionnaireId = doc.QuestionnaireId;
+            StatusElements = doc.Statuses.Select(x => new StatusItemView(x, doc.Id, doc.QuestionnaireId)).ToList();
         }
+
         public static StatusView New()
         {
             return new StatusView();
