@@ -4,7 +4,8 @@
                     xmlns:local="clr-namespace:QApp.Helpers.DataTemplateSelectors"                    
                     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
                     xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
-                    xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf">
+                    xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
+                    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <DataTemplate x:Key="DefaultDataTemplate">
@@ -26,8 +27,7 @@
                         <Extensions:ComboBoxDropDownCommand.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">                                    
-                                    <TextBlock Text="{Binding AnswerText}" Margin="4,0"/>
-                                    <!--<TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}"/>-->
+                                    <TextBlock Text="{Binding AnswerText}" Margin="4,0"/>                                    
                                 </StackPanel>
                             </DataTemplate>
                         </Extensions:ComboBoxDropDownCommand.ItemTemplate>
@@ -71,7 +71,8 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
                     <Border BorderThickness="1" BorderBrush="White">
-                        <TextBox Name="GpsCoordinateText" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" Width="100" Height="20" Canvas.Top="50" Canvas.Left="20"/>
+                        <dxe:TextEdit Name="GpsCoordinateText" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" 
+                                 Width="100" Height="20" Canvas.Top="50" Canvas.Left="20" MaskType="Simple" Mask="00.0000;00.0000" />
                     </Border>
                     <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
@@ -136,7 +137,8 @@
                         </Grid.ColumnDefinitions>                       
                         <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
                             <Border BorderThickness="1" BorderBrush="White">
-                                <TextBox Name="txtBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" Width="100" Height="20" Canvas.Top="50" Canvas.Left="20"/>
+                                <dxe:TextEdit Name="txtBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" 
+                                              Width="100" Height="20" Canvas.Top="50" Canvas.Left="20" MaskType="Numeric" />
                             </Border>
                             <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
                                 Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
