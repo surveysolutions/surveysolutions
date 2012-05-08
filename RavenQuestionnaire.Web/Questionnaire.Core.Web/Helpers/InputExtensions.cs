@@ -36,7 +36,7 @@ namespace Questionnaire.Core.Web.Helpers
             var additionTags =
                 new MvcHtmlString(
                     string.Format(
-                        "<div>{3}<p><label for=\"{0}\" style=\"display:inline-block\">{1} </label>{2}</p>{4}<div style=\"clear: both;\"></div></div>",
+                        "<div>{3}<p><label for=\"{0}\" style=\"display:inline\">{1} </label>{2}</p>{4}<div style=\"clear: both;\"></div></div>",
                         fullId, System.Web.HttpUtility.HtmlDecode(labelText), spanTagBuilder.ToString(TagRenderMode.Normal),
                         aTagBuilder.ToString(TagRenderMode.Normal),
                         InputHelper(htmlHelper, name, value, true, true, inputHtmlAttributes)));
