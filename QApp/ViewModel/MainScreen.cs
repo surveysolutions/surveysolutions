@@ -103,14 +103,10 @@ namespace QApp.ViewModel {
             string qId = id as string;
             if (String.IsNullOrEmpty(qId))
                 return;
-
-            ViewRepository viewRepository = new ViewRepository(Initializer.Kernel);
-            var statusView = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(true));
             var command = new CreateNewCompleteQuestionnaireCommand(qId,
                                                                     new UserLight("0", "system"), 
-                                                                    new SurveyStatus(statusView.Id, statusView.Title),
+                                                                    new SurveyStatus(Guid.NewGuid()), 
                                                                     new UserLight("0", "system"));
-
             var commandInvoker = Initializer.Kernel.Get<ICommandInvoker>();
             commandInvoker.Execute(command);
 
