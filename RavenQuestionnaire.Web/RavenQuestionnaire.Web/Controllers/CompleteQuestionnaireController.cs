@@ -91,6 +91,37 @@ namespace RavenQuestionnaire.Web.Controllers
 
 
 
+        public ActionResult ReInit(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel,
+                CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
+
+            if (model != null)
+            {
+                var status = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(IdUtil.ParseId(model.TemplateId)));
+                if (status != null)
+                {
+                    var statusItem = status.StatusElements.FirstOrDefault(x => x.IsInitial == true);//temporary hardcoded
+                    if (statusItem != null)
+                    {
+                        commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
+                                                                                          statusItem.PublicKey,
+                                                                                          status.Id,
+                                                                                          null,
+                                                                                          _globalProvider.GetCurrentUser()));
+
+                    }
+                }
+
+            }
+
+            return RedirectToAction("QuestionHtml5", "CompleteQuestionnaire", new { id = id });
+             
+        }
+
         public ActionResult Complete(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -119,9 +150,8 @@ namespace RavenQuestionnaire.Web.Controllers
                             commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
                                                                                           statusItem.PublicKey,
                                                                                           status.Id,
-                                                                                          modelChecked.Responsible.Id,
-                                                                                          _globalProvider.GetCurrentUser
-                                                                                              ()));
+                                                                                          null,
+                                                                                          _globalProvider.GetCurrentUser()));
 
                        
                             return RedirectToAction("Index", "Dashboard");
@@ -132,7 +162,7 @@ namespace RavenQuestionnaire.Web.Controllers
                             commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
                                                                                           statusItem.PublicKey,
                                                                                           status.Id,
-                                                                                          modelChecked.Responsible.Id,
+                                                                                          null,
                                                                                           _globalProvider.GetCurrentUser()));
 
 
