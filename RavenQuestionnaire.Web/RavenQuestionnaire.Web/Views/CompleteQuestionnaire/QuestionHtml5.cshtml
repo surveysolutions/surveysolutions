@@ -80,13 +80,22 @@
             <h1>@Model.Title</h1>
             <div data-type="horizontal" class="ui-btn-right navigation-btn-group">
                 <a data-role="button" data-corners="false" href="@Url.Action("Details", "Statistic", new { id = Model.Id })" 
-                   rel="external" data-ajax="false">Statistic</a> 
-                   <a data-corners="false" data-ajax="false" data-role="button"  rel="external" href="@Url.Action("Complete", "CompleteQuestionnaire", new { id = Model.Id })">
+                   rel="external" data-ajax="false">Statistic</a>
+                   
+                @if (Model.Status.Name == "Completed")
+                {
+                    <a data-corners="false" data-ajax="false" data-role="button" data-theme="e" rel="external" href="@Url.Action("ReInit", "CompleteQuestionnaire", new { id = Model.Id })">
+                       ReInit</a>
+                }
+                else
+                {
+                       <a data-corners="false" data-ajax="false" data-role="button" data-theme="d" rel="external" href="@Url.Action("Complete", "CompleteQuestionnaire", new { id = Model.Id })">
                        Complete</a>
+                }
             </div>
         </div>
         <!-- /header -->
-        <div data-role="content" id="@Model.CurrentGroup.GetClientId("div")">
+        <div data-role="content" class="@(Model.Status.Name == "Completed" ? "ui-disabled" : "" )" id="@Model.CurrentGroup.GetClientId("div")">
             @Html.Partial("~/Views/Group/_ScreenHtml5.cshtml", Model)
             <div style="width: 100%; height: 50px;">
                 &nbsp;</div>
