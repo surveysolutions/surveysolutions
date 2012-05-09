@@ -58,6 +58,8 @@ namespace RavenQuestionnaire.Core.Views.Status.StatusElement
             this.IsVisible = item.IsVisible;
             StatusRoles = item.StatusRoles;
             this.FlowRules = item.FlowRules;
+            this.IsInitial = item.IsInitial;
+
 
             StatusId = statusId;
             QuestionnaireId = questionnaireId;
