@@ -29,10 +29,10 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
         public void First_FirstItemIsReturned()
         {
             var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
-            questionnaire.GetInnerDocument().Groups.Add(
+            questionnaire.GetInnerDocument().Children.Add(
                 new 
                     CompleteGroup("first"));
-            questionnaire.GetInnerDocument().Groups.Add(
+            questionnaire.GetInnerDocument().Children.Add(
                 new CompleteGroup("second"));
             var iterator = new QuestionnaireScreenIterator(questionnaire.GetInnerDocument());
             Assert.AreEqual(iterator.First().Title, "first");
@@ -45,9 +45,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
         public void Iteration_WithoutConditions_GeneralTestForIteration()
         {
             var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
-            questionnaire.GetInnerDocument().Groups.Add(
+            questionnaire.GetInnerDocument().Children.Add(
                 new CompleteGroup("first"));
-            questionnaire.GetInnerDocument().Groups.Add(
+            questionnaire.GetInnerDocument().Children.Add(
                 new CompleteGroup("second"));
             var iterator = new QuestionnaireScreenIterator(questionnaire.GetInnerDocument());
 

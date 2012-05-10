@@ -9,7 +9,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities
 {
-    public class Questionnaire : IEntity<QuestionnaireDocument>, IComposite
+    public class Questionnaire : IEntity<QuestionnaireDocument>
     {
         private QuestionnaireDocument innerDocument;
 
@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Core.Entities
         }
         public void ClearQuestions()
         {
-            innerDocument.Questions.Clear();
+            innerDocument.Children.RemoveAll(a=>a is IQuestion);
         }
 
         public Question AddQuestion(string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, Order answerOrder, Guid? groupPublicKey)
@@ -59,17 +59,12 @@ namespace RavenQuestionnaire.Core.Entities
             if(!result)
                 throw new ArgumentException(string.Format("item doesn't exists -{0}", itemPublicKey));
         }
-        protected bool MoveItem(IGroup root, Guid itemPublicKey, Guid? after)
+        protected bool MoveItem(IComposite root, Guid itemPublicKey, Guid? after)
         {
-            var withQuestions = root as IGroup<IGroup, IQuestion>;
-            if (withQuestions == null)
-                return false;
+            if (Move(root.Children, itemPublicKey, after))
+                return true;
 
-            if (Move(withQuestions.Questions, itemPublicKey, after))
-                return true;
-            if (Move(withQuestions.Groups, itemPublicKey, after))
-                return true;
-            foreach (IGroup group in withQuestions.Groups)
+            foreach (IComposite group in root.Children)
             {
                 if (MoveItem(group, itemPublicKey, after))
                     return true;
@@ -77,7 +72,7 @@ namespace RavenQuestionnaire.Core.Entities
             return false;
         }
 
-        protected bool Move<T>(List<T> groups, Guid itemPublicKey, Guid? after) where T : class ,IComposite
+        protected bool Move(List<IComposite> groups, Guid itemPublicKey, Guid? after)
         {
             var moveble = groups.FirstOrDefault(g => g.PublicKey == itemPublicKey);
             if (moveble == null)
@@ -94,8 +89,8 @@ namespace RavenQuestionnaire.Core.Entities
             {
                 if (groups[i].PublicKey == after.Value)
                 {
-                    int movableIndex = groups.IndexOf(moveble);
-                  /*  var temp = groups[i];
+                  /*  int movableIndex = groups.IndexOf(moveble);
+                    var temp = groups[i];
                     groups[i] = moveble;
                     groups[movableIndex] = temp;*/
                        groups.Remove(moveble);
@@ -104,7 +99,7 @@ namespace RavenQuestionnaire.Core.Entities
                         groups.Insert(i + 1, moveble);
                     else
                         groups.Add(moveble);
-                  //  groups.RemoveAt(movableIndex);
+                 //   groups.RemoveAt(movableIndex);
                     return true;
                 }
             }
@@ -178,9 +173,9 @@ namespace RavenQuestionnaire.Core.Entities
         {
            innerDocument.Remove(c);
         }
-        public void Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove(Guid publicKey)
         {
-            innerDocument.Remove<T>(publicKey);
+            innerDocument.Remove(publicKey);
         }
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
@@ -201,25 +196,7 @@ namespace RavenQuestionnaire.Core.Entities
 
         public IList<IQuestion> GetAllQuestions()
         {
-            List<IQuestion> result = new List<IQuestion>();
-            result.AddRange(innerDocument.Questions);
-            Queue<IGroup> groups = new Queue<IGroup>();
-            foreach (var child in innerDocument.Groups)
-            {
-                groups.Enqueue(child);
-            }
-            while (groups.Count != 0)
-            {
-                var queueItem = groups.Dequeue() as IGroup<IGroup, IQuestion>;
-                if (queueItem == null)
-                    continue;
-                result.AddRange(queueItem.Questions);
-                foreach (var child in queueItem.Groups)
-                {
-                    groups.Enqueue(child);
-                }
-            }
-            return result;
+            return this.innerDocument.GetAllQuestions<IQuestion>().ToList();
         }
 
 

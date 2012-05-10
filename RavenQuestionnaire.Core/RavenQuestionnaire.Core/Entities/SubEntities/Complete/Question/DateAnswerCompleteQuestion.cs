@@ -11,8 +11,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
     public class DateAnswerStrategy : IAnswerStrategy
     {
-        private ICompleteQuestion<ICompleteAnswer> document;
-        public DateAnswerStrategy(ICompleteQuestion<ICompleteAnswer> document)
+        private ICompleteQuestion document;
+        public DateAnswerStrategy(ICompleteQuestion document)
         {
             this.document = document;
         }
@@ -38,13 +38,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             currentAnswer.Selected = true;
          //  currentAnswer.AnswerType = AnswerType.Text;
             currentAnswer.AnswerValue = stringValue;
-            this.document.Answers.Clear();
-            this.document.Answers.Add(currentAnswer);
+            this.document.Children.Clear();
+            this.document.Children.Add(currentAnswer);
         }
 
         public void Remove()
         {
-            document.Answers.Clear();
+            document.Children.Clear();
         }
     }
 }

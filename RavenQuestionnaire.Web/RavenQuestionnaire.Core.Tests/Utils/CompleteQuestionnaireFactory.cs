@@ -11,11 +11,11 @@ namespace RavenQuestionnaire.Core.Tests.Utils
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "completequestionnairedocuments/cqID";
-            innerDocument.Questions.Add(new Question("test question", QuestionType.SingleOption));
+            innerDocument.Children.Add(new Question("test question", QuestionType.SingleOption));
             Answer answer = new Answer() { AnswerText = "answer", AnswerType = AnswerType.Select };
-            innerDocument.Questions[0].Add(answer, null);
+            innerDocument.Children[0].Add(answer, null);
             Answer answer2 = new Answer() { AnswerText = "answer2", AnswerType = AnswerType.Select };
-            innerDocument.Questions[0].Add(answer2, null);
+            innerDocument.Children[0].Add(answer2, null);
             return new CompleteQuestionnaire(new Questionnaire(innerDocument), new UserLight(), new SurveyStatus());
         }
     }

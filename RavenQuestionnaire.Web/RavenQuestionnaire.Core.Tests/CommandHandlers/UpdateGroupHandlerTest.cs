@@ -25,13 +25,13 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             innerDocument.Id = "qID";
             Questionnaire entity = new Questionnaire(innerDocument);
             Group groupForUpdate = new Group();
-            innerDocument.Groups.Add(groupForUpdate);
+            innerDocument.Children.Add(groupForUpdate);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
             UpdateGroupHandler handler = new UpdateGroupHandler(questionnaireRepositoryMock.Object);
       /*      AnswerView[] answers = new AnswerView[] { new AnswerView() { AnswerText = "answer", AnswerType = AnswerType.Text } };*/
             handler.Handle(new UpdateGroupCommand("test", Propagate.None, entity.QuestionnaireId, groupForUpdate.PublicKey, null));
-            Assert.AreEqual(innerDocument.Groups[0].Title, "test");
+            Assert.AreEqual(((IGroup)innerDocument.Children[0]).Title, "test");
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
 
         }

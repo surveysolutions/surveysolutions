@@ -58,7 +58,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Group group = new Group("test");
-            innerDocument.Groups.Add(group);
+            innerDocument.Children.Add(group);
 
             var groupView = new GroupView(innerDocument, group);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
@@ -81,7 +81,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
             Group group = new Group("test");
-            innerDocument.Groups.Add(group);
+            innerDocument.Children.Add(group);
 
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
@@ -99,7 +99,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
             Group group = new Group("test");
-            innerDocument.Groups.Add(group);
+            innerDocument.Children.Add(group);
             var groupView = new GroupView(innerDocument, group);
 
             var input = new QuestionViewInputModel(group.PublicKey, entity.QuestionnaireId);

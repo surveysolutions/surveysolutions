@@ -41,8 +41,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                               string.Empty, string.Empty, false, string.Empty, Order.AsIs, null));
 
             Assert.True(
-                innerDocument.Questions[0].QuestionText == "question after update" &&
-                innerDocument.Questions[0].QuestionType == QuestionType.MultyOption);
+                ((IQuestion)innerDocument.Children[0]).QuestionText == "question after update" &&
+                ((IQuestion)innerDocument.Children[0]).QuestionType == QuestionType.MultyOption);
 
         }
     }

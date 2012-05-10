@@ -27,9 +27,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             innerDocument.Id = "cqID";
             CompleteQuestion question = new CompleteQuestion("?", QuestionType.SingleOption);
 
-            innerDocument.Questions.Add(question);
+            innerDocument.Children.Add(question);
             CompleteAnswer answer = new CompleteAnswer(new Answer(), question.PublicKey);
-            question.Answers.Add(answer);
+            question.Children.Add(answer);
 
             CompleteQuestionnaire entity = new CompleteQuestionnaire(innerDocument);
             Mock<ICompleteQuestionnaireRepository> coompleteQuestionnaireRepositoryMock = new Mock<ICompleteQuestionnaireRepository>();

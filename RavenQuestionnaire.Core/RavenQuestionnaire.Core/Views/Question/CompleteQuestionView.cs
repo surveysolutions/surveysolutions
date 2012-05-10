@@ -33,9 +33,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.QuestionnaireId = questionnaire.Id;
             this.Valid = doc.Valid;
             this.Enabled = doc.Enabled;
-            var questionWithAnswer = doc as ICompleteQuestion<ICompleteAnswer>;
-            if (questionWithAnswer != null)
-                this.Answers = questionWithAnswer.Answers.Select(a => new CompleteAnswerView(a)).ToArray();
+                this.Answers = doc.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(a)).ToArray();
             if (doc.Cards != null)
             {
                 this.Cards = doc.Cards.Select(card => new CardView(doc.PublicKey, card)).OrderBy(a => Guid.NewGuid()).ToArray();

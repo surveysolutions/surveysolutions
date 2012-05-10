@@ -11,11 +11,14 @@ namespace RavenQuestionnaire.Core.Entities.Composite
         Guid PublicKey { get; }
         void Add(IComposite c, Guid? parent);
         void Remove(IComposite c);
-        void Remove<T>(Guid publicKey) where T : class, IComposite;
+        void Remove(Guid publicKey);
         T Find<T>(Guid publicKey) where T : class, IComposite;
         IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class;
         T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
 
+
+        List<IComposite> Children { get; set; }
+        IComposite Parent { get; }
     }
 
     public class Unsubscriber<T> : IDisposable

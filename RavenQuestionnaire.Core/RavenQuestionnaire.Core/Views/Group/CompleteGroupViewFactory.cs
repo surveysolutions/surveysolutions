@@ -33,8 +33,8 @@ namespace RavenQuestionnaire.Core.Views.Group
             {
                 group = new Entities.SubEntities.Complete.CompleteGroup()
                             {
-                                Questions =
-                                    doc.Questions};
+                                Children = 
+                                    doc.Children.Where(c=>c is ICompleteQuestion).ToList()};
                 group.PublicKey = Guid.Empty;
 
             }

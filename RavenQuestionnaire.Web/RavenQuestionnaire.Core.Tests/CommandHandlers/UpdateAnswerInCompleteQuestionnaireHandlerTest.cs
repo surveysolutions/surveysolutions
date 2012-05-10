@@ -41,8 +41,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                              QuestionType.SingleOption);
             
             CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
-            question.Answers.Add(answer);
-            qDoqument.Questions.Add(question);
+            question.Children.Add(answer);
+            qDoqument.Children.Add(question);
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
             CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object);
@@ -59,8 +59,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.CompleteAnswers);
             repositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqId"), Times.Once());
-            Assert.AreEqual(qDoqument.Questions[0].PublicKey, question.PublicKey);
-            Assert.AreEqual((qDoqument.Questions[0] as CompleteQuestion).Answers[0].Selected, true);
+            Assert.AreEqual(qDoqument.Children[0].PublicKey, question.PublicKey);
+            Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[0] as CompleteQuestion).Children[0])).Selected, true);
         }
         [Test]
         public void 
@@ -72,9 +72,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
             CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
-            question.Answers.Add(answer);
-            group.Questions.Add(question);
-            qDoqument.Groups.Add(group);
+            question.Children.Add(answer);
+            group.Children.Add(question);
+            qDoqument.Children.Add(group);
             questionanire.Add(group, null);
             Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
@@ -94,7 +94,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                  )
                                                                                                                  qDoqument
                                                                                                                      .
-                                                                                                                     Groups
+                                                                                                                     Children
                                                                                                                      [
                                                                                                                          1
                                                                                                                      ])
@@ -104,8 +104,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                 null);
             handler.AddCompleteAnswer(command.CompleteQuestionnaireId, command.CompleteAnswers);
 
-            Assert.AreEqual(((qDoqument.Groups[0] as CompleteGroup).Questions[0] as CompleteQuestion).Answers[0].Selected, false);
-            Assert.AreEqual(((qDoqument.Groups[1] as CompleteGroup).Questions[0] as CompleteQuestion).Answers[0].Selected, true);
+            Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[0] as CompleteGroup).Children[0] as CompleteQuestion).Children[0]).Selected, false);
+            Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[1] as CompleteGroup).Children[0] as CompleteQuestion).Children[0]).Selected, true);
             //  group.Add(group, null);
         }
 
@@ -118,16 +118,16 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
             CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
-            question.Answers.Add(answer);
-            group.Questions.Add(question);
-            qDoqument.Groups.Add(group);
+            question.Children.Add(answer);
+            group.Children.Add(question);
+            qDoqument.Children.Add(group);
             questionanire.Add(group, null);
             Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             Mock<IStatisticRepository> statisticMock = new Mock<IStatisticRepository>();
             Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
 
-            CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
+            CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey){ Selected = true };
 
             CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
@@ -142,7 +142,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             Assert.Throws<CompositeException>(
                 () => service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.CompleteAnswers));
-            //  group.Add(group, null);
+            //  group.Add(group, null);fnk
         }
     }
 }

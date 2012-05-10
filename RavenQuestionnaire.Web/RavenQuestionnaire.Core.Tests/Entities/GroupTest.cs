@@ -37,13 +37,13 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                         (a) => { Assert.IsNotNull(a);
                                    test = true;
                         }));
-            target.Remove(target.Groups[0]);
+            target.Remove(target.Children[0]);
             Assert.IsTrue(test);
             //target.Subscribe()
         }
 
         [Test]
-        public void ObserveChanges_InnerObjects_ObserversNotified()
+        public void kObserveChanges_InnerObjects_ObserversNotified()
         {
             Group target = new Group("under test");
             var test = false;
@@ -57,7 +57,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                             test = true;
                         }));
             target.Add(new Group("test"), null);
-            target.Add(new Question("se", QuestionType.Text), target.Groups[0].PublicKey);
+            target.Add(new Question("se", QuestionType.Text), target.Children[0].PublicKey);
             Assert.IsTrue(test);
         }
        

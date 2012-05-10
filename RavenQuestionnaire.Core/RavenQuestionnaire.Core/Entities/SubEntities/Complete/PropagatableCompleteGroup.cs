@@ -19,25 +19,35 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.Propagated = group.Propagated;
             this.AutoPropagate = group.Propagated == Propagate.AutoPropagated;
             this.PublicKey = group.PublicKey;
-            var groupWithQuestion = group as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
-            if (groupWithQuestion != null)
+
+            for (int i = 0; i < group.Children.Count; i++)
             {
-                for (int i = 0; i < groupWithQuestion.Questions.Count; i++)
+                var question = group.Children[i] as ICompleteQuestion;
+                if (question != null)
                 {
-                    if (!(groupWithQuestion.Questions[i] is IBinded))
-                        this.Questions.Add(new PropagatableCompleteQuestion(groupWithQuestion.Questions[i],
+                    if (!(question is IBinded))
+                        this.Children.Add(new PropagatableCompleteQuestion(question,
                                                                             propogationPublicKey));
                     else
-                        this.Questions.Add((BindedCompleteQuestion) groupWithQuestion.Questions[i]);
-
+                        this.Children.Add((BindedCompleteQuestion)question);
+                    continue;
+                    
                 }
+                var groupChild = group.Children[i] as ICompleteGroup;
+                if(groupChild!=null)
+                {
+                    this.Children.Add(new PropagatableCompleteGroup(groupChild, propogationPublicKey));
+                    continue;
+                }
+                throw new InvalidOperationException("uncnown children type");
+            }
 
-                for (int i = 0; i < groupWithQuestion.Groups.Count; i++)
+            /* for (int i = 0; i < groupWithQuestion.Groups.Count; i++)
                 {
                     this.Groups.Add(new PropagatableCompleteGroup(groupWithQuestion.Groups[i], propogationPublicKey));
-                    //    this.Groups[i] = new PropagatableCompleteGroup(group.Groups[i], propogationPublicKey);
-                }
-            }
+                   
+                }*/
+          
             this.PropogationPublicKey = propogationPublicKey;
         }
 
@@ -78,14 +88,15 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                            PropogationPublicKey = Guid.NewGuid(),
                            PublicKey = this.PublicKey
                        };
-            for (int i = 0; i < this.Questions.Count; i++)
+           /* for (int i = 0; i < this.Questions.Count; i++)
             {
                 result.Questions.Add(new PropagatableCompleteQuestion(this.Questions[i], result.PublicKey));
             }
             for (int i = 0; i < result.Groups.Count; i++)
             {
                 result.Groups[i] = new PropagatableCompleteGroup(this.Groups[i], result.PublicKey);
-            }
+            }*/
+            throw new NotImplementedException();
             return result;
         }
 
@@ -109,7 +120,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             base.Remove(c);
         }
 
-        public override void Remove<T>(Guid publicKey){
+        public override void Remove(Guid publicKey){
             //  IPropogate propagate = c as IPropogate;
           /*  if (!typeof (T).IsAssignableFrom(typeof (IPropogate)))
                 return false;
@@ -123,22 +134,18 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public override T Find<T>(Guid publicKey)
         {
-          /*  if (!typeof (IPropogate).IsAssignableFrom(typeof (T)))
-                return null;*/
+            /*  if (!typeof (IPropogate).IsAssignableFrom(typeof (T)))
+                  return null;*/
 
             if (this.PublicKey.Equals(publicKey))
                 return this as T;
 
             var resultInsideGroups =
-                Groups.Select(group => group.Find<T>(publicKey)).
+                Children.Select(group => group.Find<T>(publicKey)).
                     FirstOrDefault(result => result != null);
-            if (resultInsideGroups != null)
-                return resultInsideGroups;
-            var resultInsideQuestions =
-                Questions.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
-            if (resultInsideQuestions != null)
-                return resultInsideQuestions;
-            return null;
+
+            return resultInsideGroups;
+
         }
     }
 }

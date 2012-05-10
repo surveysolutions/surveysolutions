@@ -56,13 +56,13 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(doc);
             var question = new CompleteQuestion("", QuestionType.SingleOption);
             question.ConditionExpression = "[" + question.PublicKey + "]==3";
-            doc.Questions.Add(question);
+            doc.Children.Add(question);
 
-            var completeAnswer = new CompleteAnswer(new Answer(), doc.Questions[0].PublicKey);
+            var completeAnswer = new CompleteAnswer(new Answer(), doc.Children[0].PublicKey);
             completeAnswer.AnswerType = AnswerType.Select;
             completeAnswer.AnswerValue = "3";
             completeAnswer.Selected = true;
-            question.Answers.Add(completeAnswer);
+            question.Children.Add(completeAnswer);
             bool result = executor.Execute(question);
             Assert.AreEqual(result, true);
         }
@@ -78,8 +78,8 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(doc);
             var question = new CompleteQuestion("", QuestionType.SingleOption);
             question.ConditionExpression = "[" + question.PublicKey + "]==3";
-            doc.Questions.Add(question);
-            question.Answers.Add(answer);
+            doc.Children.Add(question);
+            question.Children.Add(answer);
             bool result = executor.Execute(question);
             Assert.AreEqual(result, false);
         }

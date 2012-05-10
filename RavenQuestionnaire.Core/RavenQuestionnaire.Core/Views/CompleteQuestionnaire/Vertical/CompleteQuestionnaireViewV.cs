@@ -19,7 +19,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             Status = doc.Status;
             Responsible = doc.Responsible;
 
-            var cg = currentGroup as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
             CurrentGroup = new CompleteGroupViewV(doc, currentGroup as CompleteGroup);
 
             InitGroups(doc, CurrentGroup.PublicKey);
@@ -35,7 +34,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             Status = doc.Status;
             Responsible = doc.Responsible;
 
-            var group = new CompleteGroup { Questions = doc.Questions };
+            var group = new CompleteGroup { Children = doc.Children.Where(c=> c is ICompleteQuestion).ToList() };
             CurrentGroup = new CompleteGroupViewV(doc, group);
             InitGroups(doc, CurrentGroup.PublicKey);
 
@@ -56,9 +55,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
 
         protected void InitGroups(CompleteQuestionnaireDocument doc, Guid currentGroupPublicKey)
         {
-            if (doc.Questions.Count > 0)
+            var questions = doc.Children.OfType<ICompleteQuestion>().ToList();
+            var groups = doc.Children.OfType<ICompleteGroup>().ToList();
+            if (questions.Count > 0)
             {
-                Groups = new CompleteGroupHeaders[doc.Groups.Count + 1];
+                Groups = new CompleteGroupHeaders[groups.Count + 1];
 
                 Groups[0] = new CompleteGroupHeaders
                                 {
@@ -66,24 +67,24 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                                     GroupText = "Main",
 
                                 };
-                for (var i = 1; i <= doc.Groups.Count; i++)
+                for (var i = 1; i <= groups.Count; i++)
                 {
                     Groups[i] = new CompleteGroupHeaders
                                     {
-                                        PublicKey = doc.Groups[i - 1].PublicKey,
-                                        GroupText = doc.Groups[i - 1].Title
+                                        PublicKey = groups[i - 1].PublicKey,
+                                        GroupText = groups[i - 1].Title
                                     };
                 }
             }
             else
             {
-                Groups = new CompleteGroupHeaders[doc.Groups.Count];
-                for (var i = 0; i < doc.Groups.Count; i++)
+                Groups = new CompleteGroupHeaders[groups.Count];
+                for (var i = 0; i < groups.Count; i++)
                 {
                     Groups[i] = new CompleteGroupHeaders
                                     {
-                                        PublicKey = doc.Groups[i].PublicKey,
-                                        GroupText = doc.Groups[i].Title
+                                        PublicKey = groups[i].PublicKey,
+                                        GroupText = groups[i].Title
                                     };
                 }
             }
@@ -91,30 +92,26 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             current.IsCurrent = true;
         }
 
-        private Counter CalcProgress(ICompleteGroup<ICompleteGroup, ICompleteQuestion> @group)
+        private Counter CalcProgress(ICompleteGroup @group)
         {
             var total = new Counter();
 
             var propagated = @group as PropagatableCompleteGroup;
             if (propagated != null)
             {
-                total = total + CountQuestions(propagated.Questions.Select(q => q as ICompleteQuestion<ICompleteAnswer>).ToList());
+                total = total + CountQuestions(propagated.Children.Select(q => q as ICompleteQuestion).ToList());
                 return total;
             }
             var complete = @group as CompleteGroup;
             if (complete != null && complete.Propagated != Propagate.None)
                 return total;
 
-            total = total + CountQuestions(@group.Questions.Select(q => q as ICompleteQuestion<ICompleteAnswer>).ToList());
+            total = total + CountQuestions(@group.Children.Select(q => q as ICompleteQuestion).ToList());
 
-            foreach (var g in @group.Groups)
-            {
-                total = total + CalcProgress(g as ICompleteGroup<ICompleteGroup, ICompleteQuestion>);
-            }
-            return total;
+            return @group.Children.OfType<ICompleteGroup>().Aggregate(total, (current, g) => current + CalcProgress(g as ICompleteGroup));
         }
 
-        private Counter CountQuestions(List<ICompleteQuestion<ICompleteAnswer>> questions)
+        private Counter CountQuestions(List<ICompleteQuestion> questions)
         {
             if (questions == null || questions.Count == 0)
                 return new Counter();
@@ -125,7 +122,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                             {
                                 Total = questions.Count,
                                 Enablad = enabled.Count(),
-                                Answered = enabled.Count(question => question.Answers.Any(a => a.Selected))
+                                Answered = enabled.Count(question => question.Children.Any(a => a is ICompleteAnswer &&  ((ICompleteAnswer)a).Selected))
                             };
             return total;
         }

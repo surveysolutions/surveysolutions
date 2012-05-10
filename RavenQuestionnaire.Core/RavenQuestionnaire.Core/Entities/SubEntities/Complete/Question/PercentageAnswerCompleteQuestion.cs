@@ -9,8 +9,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
     public class PercentageAnswerCompleteQuestion : IAnswerStrategy
     {
-        private ICompleteQuestion<ICompleteAnswer> document;
-        public PercentageAnswerCompleteQuestion(ICompleteQuestion<ICompleteAnswer> document)
+        private ICompleteQuestion document;
+        public PercentageAnswerCompleteQuestion(ICompleteQuestion document)
         {
             this.document = document;
         }
@@ -21,7 +21,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             if (currentAnswer == null || currentAnswer.QuestionPublicKey != this.document.PublicKey)
                 throw new CompositeException("answer wasn't found");
 
-            foreach (CompleteAnswer completeAnswer in this.document.Answers)
+            foreach (CompleteAnswer completeAnswer in this.document.Children)
             {
                 try
                 {
@@ -36,7 +36,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         }
         public void Remove()
         {
-            foreach (CompleteAnswer answer in this.document.Answers)
+            foreach (CompleteAnswer answer in this.document.Children)
             {
                 answer.Remove(answer);
             }

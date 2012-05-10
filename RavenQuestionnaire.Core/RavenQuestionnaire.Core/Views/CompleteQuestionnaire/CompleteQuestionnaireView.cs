@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
@@ -29,7 +30,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
-            this.Questions = doc.Questions.Select(q => new CompleteQuestionView(doc, q)).ToArray();
+            this.Questions = doc.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionView(doc, q)).ToArray();
             this.TemplateId = doc.TemplateId;
             this.IsValid = doc.IsValid;
         }

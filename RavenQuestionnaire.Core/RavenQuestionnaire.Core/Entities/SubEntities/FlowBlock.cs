@@ -4,7 +4,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public interface IFlowBlock : IComposite
+    public interface IFlowBlock
     {
         int Left { get; set; }
         int Top { get; set; }
@@ -16,7 +16,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     {
         public FlowBlock()
         {
-            this.observers=new List<IObserver<CompositeEventArgs>>();
         }
 
         public FlowBlock(Guid questionId)
@@ -28,46 +27,5 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public int Left { get; set; }
         public int Top { get; set; }
         public Guid PublicKey { get; set; }
-
-        public void Add(IComposite c, Guid? parent)
-        {
-            throw new CompositeException("flow block is not hierarchical");
-        }
-
-        public void Remove(IComposite c)
-        {
-            throw new CompositeException("flow block is not hierarchical");
-        }
-
-        public void Remove<T>(Guid publicKey) where T : class, IComposite
-        {
-            throw new CompositeException("flow block is not hierarchical");
-        }
-
-        public T Find<T>(Guid publicKey) where T : class, IComposite
-        {
-            return null;
-        }
-
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class{
-            return new T[0];
-        }
-
-        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
-        {
-            return null;
-        }
-
-        #region Implementation of IObservable<out CompositeEventArgs>
-
-        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
-        {
-            if (!observers.Contains(observer))
-                observers.Add(observer);
-            return new Unsubscriber<CompositeEventArgs>(observers, observer);
-        }
-        private List<IObserver<CompositeEventArgs>> observers;
-
-        #endregion
     }
 }

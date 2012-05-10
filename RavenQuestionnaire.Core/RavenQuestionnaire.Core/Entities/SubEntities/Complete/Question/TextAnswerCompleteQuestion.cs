@@ -9,8 +9,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
     public class TextAnswerCompleteQuestion : IAnswerStrategy
     {
-        private ICompleteQuestion<ICompleteAnswer> document;
-        public TextAnswerCompleteQuestion(ICompleteQuestion<ICompleteAnswer> document)
+        private ICompleteQuestion document;
+        public TextAnswerCompleteQuestion(ICompleteQuestion document)
         {
             this.document = document;
         }
@@ -22,13 +22,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 throw new CompositeException("answer wasn't found");
             currentAnswer.Selected = true;
        //     currentAnswer.AnswerType= AnswerType.Text;
-            this.document.Answers.Clear();
-            this.document.Answers.Add(currentAnswer);
+            this.document.Children.Clear();
+            this.document.Children.Add(currentAnswer);
 
         }
         public void Remove()
         {
-            document.Answers.Clear();
+            document.Children.Clear();
         }
     }
 }

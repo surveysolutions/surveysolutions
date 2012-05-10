@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Group topGroup = new Group("top group");
-            innerDocument.Groups.Add(topGroup);
+            innerDocument.Children.Add(topGroup);
             Questionnaire entity = new Questionnaire(innerDocument);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
@@ -53,8 +53,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                 null, false, Order.AsIs, answers, null));
 
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
-            Assert.AreEqual((innerDocument.Groups[0] as Group).Questions.Count,1);
-            Assert.AreEqual((innerDocument.Groups[0] as Group).Questions[0].QuestionText, "test");
+            Assert.AreEqual((innerDocument.Children[0] as Group).Children.Count, 1);
+            Assert.AreEqual(((IQuestion)(innerDocument.Children[0] as Group).Children[0]).QuestionText, "test");
         }
         [Test]
         public void WhenCommandIsReceived_ToNotExistingGroup_NewQuestionnIsAddedToRepository()
@@ -92,7 +92,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                null, string.Empty, string.Empty, string.Empty, false, Order.AsIs,
                 answers, null));
 
-            Assert.AreEqual(innerDocument.Questions.Count,0);
+            Assert.AreEqual(innerDocument.Children.Count, 0);
         }
         /*
         [Test]

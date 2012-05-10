@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
@@ -94,20 +95,15 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public void Remove(IComposite c)
         {
-            CompleteAnswer answer = c as CompleteAnswer;
-            if (answer == null)
-                throw new CompositeException("answer wasn't found");
-            if (answer.PublicKey == PublicKey)
+            if (c.PublicKey == PublicKey)
             {
                 Reset();
                 return;
             }
             throw new CompositeException("answer wasn't found");
         }
-        public void Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove(Guid publicKey)
         {
-            if (typeof(T) != GetType())
-                throw new CompositeException("answer wasn't found");
             if (publicKey == PublicKey)
             {
                 Reset();
@@ -148,6 +144,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 return  this as T ;
             }
             return null;
+        }
+
+        public List<IComposite> Children { get; set; }
+         [JsonIgnore]
+        public IComposite Parent
+        {
+            get { throw new NotImplementedException(); }
         }
 
         #endregion

@@ -45,9 +45,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             handler.Handle(new UpdateConditionsCommand(entity.QuestionnaireId, conditions, null));
 
-            Assert.AreEqual(conditions[question1.PublicKey], innerDocument.Questions[0].ConditionExpression);
-            Assert.AreEqual(conditions[question2.PublicKey], innerDocument.Questions[1].ConditionExpression);
-            Assert.AreEqual(conditions[question3.PublicKey], innerDocument.Questions[2].ConditionExpression);
+            Assert.AreEqual(conditions[question1.PublicKey], ((IQuestion)innerDocument.Children[0]).ConditionExpression);
+            Assert.AreEqual(conditions[question2.PublicKey], ((IQuestion)innerDocument.Children[1]).ConditionExpression);
+            Assert.AreEqual(conditions[question3.PublicKey], ((IQuestion)innerDocument.Children[2]).ConditionExpression);
         }
     
         [Test]
@@ -75,9 +75,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             handler.Handle(new UpdateConditionsCommand(entity.QuestionnaireId, conditions, null));
 
-            Assert.AreEqual(string.Empty, innerDocument.Questions[0].ConditionExpression);
-            Assert.AreEqual(string.Empty, innerDocument.Questions[1].ConditionExpression);
-            Assert.AreEqual(string.Empty, innerDocument.Questions[2].ConditionExpression);
+            Assert.AreEqual(string.Empty, ((IQuestion)innerDocument.Children[0]).ConditionExpression);
+            Assert.AreEqual(string.Empty, ((IQuestion)innerDocument.Children[1]).ConditionExpression);
+            Assert.AreEqual(string.Empty, ((IQuestion)innerDocument.Children[2]).ConditionExpression);
         }
     }
 }

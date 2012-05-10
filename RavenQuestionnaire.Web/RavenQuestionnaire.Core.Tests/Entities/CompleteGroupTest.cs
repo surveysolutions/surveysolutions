@@ -24,14 +24,14 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
          //   Mock<IComposite> document = new Mock<IComposite>();
             CompleteGroup baseGroup = new CompleteGroup("target");
-            document.Groups.Add(baseGroup);
+            document.Children.Add(baseGroup);
            
        //     CompositeHandler handler = new CompositeHandler(document.Object);
             
 
             CompleteGroup targetGroup = new CompleteGroup("some group") { Propagated = Propagate.Propagated };
             targetGroup.Triggers.Add(baseGroup.PublicKey);
-            document.Groups.Add(targetGroup);
+            document.Children.Add(targetGroup);
            /* document.Setup(x => x.Find<CompleteGroup>(targetGroup.PublicKey)).Returns(targetGroup);
             GroupObserver observeble = new GroupObserver(targetGroup.PublicKey, target.PublicKey);
             observeble.Subscribe(handler);
@@ -39,9 +39,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             handler.Add(target);*/
             PropagatableCompleteGroup target = new PropagatableCompleteGroup(baseGroup, Guid.NewGuid());
             questionnaire.Add(target, null);
-            Assert.AreEqual(document.Groups.Count, 4);
+            Assert.AreEqual(document.Children.Count, 4);
             questionnaire.Remove(target);
-            Assert.AreEqual(document.Groups.Count, 2);
+            Assert.AreEqual(document.Children.Count, 2);
             /*   document.Verify(
                 x =>
                 x.Add(
@@ -90,12 +90,12 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             CompleteGroup target = new CompleteGroup("target");
             var propogatedGroup = new CompleteGroup("propagated") {Propagated = Propagate.Propagated};
-            target.Groups.Add(propogatedGroup);
+            target.Children.Add(propogatedGroup);
             var groupForRemove = new PropagatableCompleteGroup(propogatedGroup, Guid.NewGuid());
             target.Add(groupForRemove, null);
-            Assert.AreEqual(target.Groups.Count, 2);
+            Assert.AreEqual(target.Children.Count, 2);
             target.Remove(groupForRemove);
-            Assert.AreEqual(target.Groups.Count, 1);
+            Assert.AreEqual(target.Children.Count, 1);
         }
     }
 }

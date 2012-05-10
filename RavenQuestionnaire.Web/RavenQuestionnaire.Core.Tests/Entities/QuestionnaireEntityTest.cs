@@ -22,9 +22,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             questionnaire.AddQuestion("question", "Exportquestion", QuestionType.SingleOption, string.Empty, "validation", false, Order.AsIs, null);
 
-            Assert.AreEqual(innerDocument.Questions[0].QuestionText, "question");
-            Assert.AreEqual(innerDocument.Questions[0].QuestionType, QuestionType.SingleOption);
-            Assert.AreEqual(innerDocument.Questions[0].ValidationExpression, "validation");
+            Assert.AreEqual(((IQuestion)innerDocument.Children[0]).QuestionText, "question");
+            Assert.AreEqual(((IQuestion)innerDocument.Children[0]).QuestionType, QuestionType.SingleOption);
+            Assert.AreEqual(((IQuestion)innerDocument.Children[0]).ValidationExpression, "validation");
         }
         [Test]
         public void AddGroup_Root_GroupIsAddedToDocument()
@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             questionnaire.AddGroup("group", Propagate.None, null);
 
-            Assert.AreEqual(innerDocument.Groups[0].Title, "group");
+            Assert.AreEqual(((IGroup)innerDocument.Children[0]).Title, "group");
         }
         [Test]
         public void AddGroup_FirstLevel_GroupIsAddedToDocument()
@@ -41,11 +41,11 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             Group parent= new Group();
-            innerDocument.Groups.Add(parent);
+            innerDocument.Children.Add(parent);
             questionnaire.AddGroup("group", Propagate.None, parent.PublicKey);
 
-            Assert.AreEqual((innerDocument.Groups[0] as Group).Groups[0].Title, "group");
-            Assert.AreEqual(innerDocument.Groups[0], parent);
+            Assert.AreEqual(((Group)(innerDocument.Children[0] as Group).Children[0]).Title, "group");
+            Assert.AreEqual(innerDocument.Children[0], parent);
         }
         [Test]
         public void AddGroup_SubLevel_GroupIsAddedToDocument()
@@ -53,13 +53,13 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             Group topParent = new Group();
-            innerDocument.Groups.Add(topParent);
+            innerDocument.Children.Add(topParent);
             Group subParent = new Group();
-            topParent.Groups.Add(subParent);
+            topParent.Children.Add(subParent);
             questionnaire.AddGroup("group", Propagate.None, subParent.PublicKey);
 
-            Assert.AreEqual(((innerDocument.Groups[0] as Group).Groups[0] as Group).Groups[0].Title, "group");
-            Assert.AreEqual((innerDocument.Groups[0] as Group).Groups[0], subParent);
+            Assert.AreEqual(((Group)((innerDocument.Children[0] as Group).Children[0] as Group).Children[0]).Title, "group");
+            Assert.AreEqual((innerDocument.Children[0] as Group).Children[0], subParent);
         }
         [Test]
         public void AddGroup_InvalidParentPublicKey_ArgumentException()
@@ -74,7 +74,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             Group group = new Group();
-            innerDocument.Groups.Add(group);
+            innerDocument.Children.Add(group);
             questionnaire.UpdateGroup("group", Propagate.None, group.PublicKey);
             Assert.AreEqual(group.Title, "group");
         }
@@ -102,7 +102,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             questionnaire.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null);
 
             questionnaire.ClearQuestions();
-            Assert.AreEqual(innerDocument.Questions.Count, 0);
+            Assert.AreEqual(innerDocument.Children.Count, 0);
         }
 
         [Test]
@@ -112,8 +112,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             var question = questionnaire.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null);
 
-            questionnaire.Remove<Question>(question.PublicKey);
-            Assert.AreEqual(innerDocument.Questions.Count, 0);
+            questionnaire.Remove(question.PublicKey);
+            Assert.AreEqual(innerDocument.Children.Count, 0);
         }
         [Test]
         public void UpdateQuestion_UpdatesQuestionWithAnswersToDocument()
@@ -134,9 +134,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                                                      }
                                              });
 
-            Assert.AreEqual(innerDocument.Questions[0].QuestionText, "new question title");
-            Assert.AreEqual(innerDocument.Questions[0].QuestionType, QuestionType.MultyOption);
-            Assert.AreEqual((innerDocument.Questions[0] as Question).Answers.Count, 1);
+            Assert.AreEqual(((IQuestion)innerDocument.Children[0]).QuestionText, "new question title");
+            Assert.AreEqual(((IQuestion)innerDocument.Children[0]).QuestionType, QuestionType.MultyOption);
+            Assert.AreEqual((innerDocument.Children[0] as Question).Children.Count, 1);
         }
        
         [Test]
@@ -144,9 +144,10 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            innerDocument.Questions.Add(new Question("top", QuestionType.SingleOption));
-            innerDocument.Groups.Add(new Group("g1"));
-            (innerDocument.Groups[0] as Group).Questions.Add(new Question("first level", QuestionType.MultyOption));
+            innerDocument.Children.Add(new Question("top", QuestionType.SingleOption));
+            var group = new Group("g1");
+            innerDocument.Children.Add(group);
+            group.Children.Add(new Question("first level", QuestionType.MultyOption));
             Assert.AreEqual(questionnaire.GetAllQuestions().Count, 2);
         }
 
@@ -164,7 +165,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             var question = new Question("top", QuestionType.SingleOption);
-            innerDocument.Questions.Add(question);
+            innerDocument.Children.Add(question);
             Assert.Throws<ArgumentException>(() => questionnaire.MoveItem(question.PublicKey, Guid.NewGuid()));
         }
 
@@ -174,13 +175,13 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             var question1 = new Question("top", QuestionType.SingleOption);
-            innerDocument.Questions.Add(question1);
+            innerDocument.Children.Add(question1);
             var question2 = new Question("sub", QuestionType.SingleOption);
-            innerDocument.Questions.Add(question2);
+            innerDocument.Children.Add(question2);
             questionnaire.MoveItem( question2.PublicKey, null);
-            Assert.AreEqual(innerDocument.Questions.Count,2);
-            Assert.AreEqual(innerDocument.Questions[0], question2);
-            Assert.AreEqual(innerDocument.Questions[1], question1);
+            Assert.AreEqual(innerDocument.Children.Count, 2);
+            Assert.AreEqual(innerDocument.Children[0], question2);
+            Assert.AreEqual(innerDocument.Children[1], question1);
         }
         [Test]
         public void InserQuestionAfter_InserAfterIsGuid_InsertedAfterItemWithGuid()
@@ -188,16 +189,16 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             var question1 = new Question("top", QuestionType.SingleOption);
-            innerDocument.Questions.Add(question1);
+            innerDocument.Children.Add(question1);
             var question2 = new Question("sub", QuestionType.SingleOption);
-            innerDocument.Questions.Add(question2);
+            innerDocument.Children.Add(question2);
             var question3 = new Question("third", QuestionType.SingleOption);
-            innerDocument.Questions.Add(question3);
+            innerDocument.Children.Add(question3);
             questionnaire.MoveItem(question3.PublicKey, question1.PublicKey);
-            Assert.AreEqual(innerDocument.Questions.Count, 3);
-            Assert.AreEqual(innerDocument.Questions[0], question1);
-            Assert.AreEqual(innerDocument.Questions[1], question3);
-            Assert.AreEqual(innerDocument.Questions[2], question2);
+            Assert.AreEqual(innerDocument.Children.Count, 3);
+            Assert.AreEqual(innerDocument.Children[0], question1);
+            Assert.AreEqual(innerDocument.Children[1], question3);
+            Assert.AreEqual(innerDocument.Children[2], question2);
         }
 
         [Test]
@@ -206,16 +207,16 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             var question1 = new Question("top", QuestionType.SingleOption);
-            innerDocument.Questions.Add(question1);
+            innerDocument.Children.Add(question1);
             var question2 = new Question("sub", QuestionType.SingleOption);
-            innerDocument.Questions.Add(question2);
+            innerDocument.Children.Add(question2);
             var question3 = new Question("third", QuestionType.SingleOption);
-            innerDocument.Questions.Add(question3);
+            innerDocument.Children.Add(question3);
             questionnaire.MoveItem(question1.PublicKey, question3.PublicKey);
-            Assert.AreEqual(innerDocument.Questions.Count, 3);
-            Assert.AreEqual(innerDocument.Questions[0], question2);
-            Assert.AreEqual(innerDocument.Questions[1], question3);
-            Assert.AreEqual(innerDocument.Questions[2], question1);
+            Assert.AreEqual(innerDocument.Children.Count, 3);
+            Assert.AreEqual(innerDocument.Children[0], question2);
+            Assert.AreEqual(innerDocument.Children[1], question3);
+            Assert.AreEqual(innerDocument.Children[2], question1);
         }
     }
 }

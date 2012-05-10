@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         {
             QuestionnaireDocument doc = new QuestionnaireDocument();
             var question = new Question("some", QuestionType.SingleOption);
-            doc.Questions.Add(question);
+            doc.Children.Add(question);
             QuestionnaireParametersParser executor = new QuestionnaireParametersParser();
             var result = executor.Execute(new Questionnaire(doc), string.Format("[{0}]==1", question.PublicKey));
             Assert.AreEqual(result.Count, 1);
@@ -37,9 +37,9 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         {
             QuestionnaireDocument doc = new QuestionnaireDocument();
             var question1 = new Question("some1", QuestionType.SingleOption);
-            doc.Questions.Add(question1);
+            doc.Children.Add(question1);
             var question2 = new Question("some2", QuestionType.SingleOption);
-            doc.Questions.Add(question2);
+            doc.Children.Add(question2);
             QuestionnaireParametersParser executor = new QuestionnaireParametersParser();
             var result = executor.Execute(new Questionnaire(doc), string.Format("[{0}]==1 and [{1}]>3", question1.PublicKey, question2.PublicKey));
             Assert.AreEqual(result.Count,2);

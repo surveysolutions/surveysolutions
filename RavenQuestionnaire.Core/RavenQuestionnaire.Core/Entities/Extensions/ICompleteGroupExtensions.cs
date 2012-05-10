@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
@@ -41,24 +42,28 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
                 q => q.PublicKey.Equals(target) && !(q is IPropogate));
             return dependency;
         }
-        public static IEnumerable<ICompleteQuestion> GetAllQuestions(this ICompleteGroup entity)
+        public static IEnumerable<T> GetAllQuestions<T>(this IGroup entity) where T: class, IComposite 
         {
-            var groups =
-                entity.Find<ICompleteGroup>(
-                    g =>
-                    (g.Propagated == Propagate.None || g is IPropogate) &&
-                    (g is ICompleteGroup<ICompleteGroup, ICompleteQuestion> &&
-                     ((ICompleteGroup<ICompleteGroup, ICompleteQuestion>)g).Questions.Count > 0)).Select(
-                         g => g as ICompleteGroup<ICompleteGroup, ICompleteQuestion>);
-            var groupWithQuestions = entity as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
-            if (groupWithQuestions != null)
-                return
-                    groups.SelectMany(
-                        g => g.Questions).Union(
-                            groupWithQuestions.Questions).Where(q => !(q is IBinded));
-            return
-                groups.SelectMany(
-                    g => g.Questions).Where(q => !(q is IBinded));
+            List<T> result = new List<T>();
+            Queue<IComposite> groups = new Queue<IComposite>();
+            groups.Enqueue(entity);
+
+            while (groups.Count != 0)
+            {
+                var queueItem = groups.Dequeue();
+                var question = queueItem as T;
+                if (question != null)
+                {
+
+                    result.Add(question);
+                    continue;
+                }
+                foreach (var child in queueItem.Children)
+                {
+                    groups.Enqueue(child);
+                }
+            }
+            return result;
         }
         public static ICompleteQuestion GetQuestionByKey(this ICompleteGroup entity, Guid key, Guid? propagationKey)
         {

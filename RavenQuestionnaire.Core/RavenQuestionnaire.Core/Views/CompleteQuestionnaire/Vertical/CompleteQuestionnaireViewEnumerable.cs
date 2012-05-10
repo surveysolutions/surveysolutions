@@ -28,20 +28,22 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
         public CompleteGroupViewV(CompleteQuestionnaireDocument doc, CompleteGroup currentGroup)
             : this()
         {
+            var questions = currentGroup.Children.OfType<ICompleteQuestion>().ToList();
+            var groups = currentGroup.Children.OfType<ICompleteGroup>().ToList();
             PublicKey = currentGroup.PublicKey;
             GroupText = currentGroup.Title;
             Propagated = currentGroup.Propagated;
-            if (currentGroup.Questions.Count > 0 && currentGroup.Propagated == Propagate.None)
+            if (questions.Count > 0 && currentGroup.Propagated == Propagate.None)
             {
                 var questionQgroup = new CompleteGroupViewV();
-                questionQgroup.Questions = currentGroup.Questions.Select(q => new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q)).ToList();
+                questionQgroup.Questions = questions.Select(q => new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q)).ToList();
                 questionQgroup.PublicKey = Guid.Empty;
                 questionQgroup.GroupText = "Main";
                 Groups.Add(questionQgroup);
             }
             // grouping by group's PublicKey
             var propGroups = new Dictionary<Guid, List<CompleteGroup>>();
-            foreach (var @group in currentGroup.Groups)
+            foreach (var @group in groups)
             {
                 if (!propGroups.ContainsKey(@group.PublicKey))
                 {
@@ -86,9 +88,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                     AutoPropagate.Add(@group.AutoPropagate);
                 }
             }
-            for (int i = 0; i < propagatable.Questions.Count; i++)
+            var questions = propagatable.Children.OfType<ICompleteQuestion>().ToList();
+         
+            for (int i = 0; i < questions.Count; i++)
             {
-                var question = propagatable.Questions[i];
+                var question = questions[i];
                 var pq = new PropagatedQuestion
                              {
                                  PublicKey = question.PublicKey,
@@ -100,7 +104,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                 for (int index = 0; index < propagated.Count; index++)
                 {
                     var p = propagated[index];
-                    var cq = qf.CreateQuestion(doc, p, p.Questions[i]);
+                    var cq = qf.CreateQuestion(doc, p, questions[i]);
                     pq.Questions.Add(cq);
                     PropagatedGroups[index].Questions.Add(cq);
                 }

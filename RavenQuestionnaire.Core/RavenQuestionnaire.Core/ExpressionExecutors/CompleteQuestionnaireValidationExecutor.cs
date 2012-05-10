@@ -16,7 +16,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         {
             bool isValid = true;
 
-            var questions = targetGroup.GetAllQuestions();
+            var questions = targetGroup.GetAllQuestions<ICompleteQuestion>();
             foreach (ICompleteQuestion completeQuestion in questions)
             {
                 completeQuestion.Valid = Execute(completeQuestion);

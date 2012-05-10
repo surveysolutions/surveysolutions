@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Tests.Utils;
@@ -26,7 +27,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         public void ExplicitConversion_ValidQuestion_AllFieldAreConverted()
         {
           //  List<IGroup> groups = new List<IGroup>() { new Group("test") };
-            List<IAnswer> answers = new List<IAnswer>() { new Answer(), new Answer(), new Answer() };
+            List<IComposite> answers = new List<IComposite>() { new Answer(), new Answer(), new Answer() };
 
             List<Guid> triggers = new List<Guid>() { Guid.NewGuid() };
             Question question = new Question("test", QuestionType.MultyOption)
@@ -36,20 +37,20 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                                         AnswerOrder = Order.Random,
                                         StataExportCaption = "stata",
                                         Triggers = triggers,
-                                        Answers = answers
+                                        Children = answers
                                     };
             CompleteQuestion target = (CompleteQuestion)question;
             var propertiesForCheck =
-                typeof(IQuestion).GetPublicPropertiesExcept("PublicKey");
+                typeof(IQuestion).GetPublicPropertiesExcept("PublicKey", "Children","Parent");
             foreach (PropertyInfo publicProperty in propertiesForCheck)
             {
 
                 Assert.AreEqual(publicProperty.GetValue(question, null), publicProperty.GetValue(target, null));
             }
-            Assert.AreEqual(question.Answers.Count, target.Answers.Count);
-            for (int i = 0; i < question.Answers.Count; i++)
+            Assert.AreEqual(question.Children.Count, target.Children.Count);
+            for (int i = 0; i < question.Children.Count; i++)
             {
-                var answer = target.Find<ICompleteAnswer>(question.Answers[i].PublicKey);
+                var answer = target.Find<ICompleteAnswer>(question.Children[i].PublicKey);
                 Assert.IsTrue(answer != null);
             }
         }

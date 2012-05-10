@@ -25,7 +25,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             Questionnaire entity = new Questionnaire(innerDocument);
             var group = new Group("group");
-            innerDocument.Groups.Add(group);
+            innerDocument.Children.Add(group);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
 
@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             handler.Handle(new DeleteGroupCommand(group.PublicKey, entity.QuestionnaireId, null));
 
             Assert.True(
-                innerDocument.Questions.Count == 0);
+                innerDocument.Children.Count == 0);
 
         }
     }

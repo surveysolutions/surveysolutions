@@ -5,18 +5,18 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class BindedCompleteQuestion : ICompleteQuestion<ICompleteAnswer>, IBinded
+    public class BindedCompleteQuestion : ICompleteQuestion, IBinded
     {
         public BindedCompleteQuestion()
         {
             PublicKey = Guid.NewGuid();
-            Answers = new List<ICompleteAnswer>();
+            Children=new List<IComposite>();
         }
-
-        public BindedCompleteQuestion(ICompleteQuestion<ICompleteAnswer> template)
+/*
+        public BindedCompleteQuestion(ICompleteQuestion template)
         {
             this.ParentPublicKey = template.PublicKey;
-        }
+        }*/
         public static explicit operator BindedCompleteQuestion(BindedQuestion doc)
         {
             BindedCompleteQuestion result = new BindedCompleteQuestion
@@ -28,9 +28,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
         public void Copy(ICompleteQuestion template)
         {
-            var witAnswers = template as ICompleteQuestion<ICompleteAnswer>;
+            var witAnswers = template as ICompleteQuestion;
             if (witAnswers != null)
-                this.Answers = witAnswers.Answers;
+                this.Children = witAnswers.Children;
             this.QuestionText = template.QuestionText;
             this.QuestionType = template.QuestionType;
 
@@ -48,7 +48,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             throw new CompositeException();
         }
 
-        public void Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove(Guid publicKey)
         {
             throw new CompositeException();
         }
@@ -66,6 +66,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
         {
             return null;
+        }
+
+        public List<IComposite> Children { get; set; }
+        [JsonIgnore]
+        public IComposite Parent
+        {
+            get { throw new NotImplementedException(); }
         }
 
         #endregion
@@ -119,12 +126,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
 
         public DateTime? AnswerDate { get; set; }
-
-        #endregion
-
-        #region Implementation of IQuestion<CompleteAnswer>
-
-        public List<ICompleteAnswer> Answers { get; set; }
 
         #endregion
 
