@@ -4,14 +4,16 @@
                     xmlns:local="clr-namespace:QApp.Helpers.DataTemplateSelectors"                    
                     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
                     xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
-                    xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
                     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <DataTemplate x:Key="DefaultDataTemplate">
-        <ListBox ItemsSource="{Binding Answers}" ItemTemplateSelector="{DynamicResource SingleOptionDataTemplateSelector}" 
-                 Grid.IsSharedSizeScope="True" HorizontalContentAlignment="Stretch">
-        </ListBox>
+        <dxlc:TileLayoutControl Orientation="Horizontal" Padding="5" BreakFlowToFit="False" ItemTemplateSelector="{DynamicResource SingleOptionDataTemplateSelector}" ItemsSource="{Binding Answers}" AllowItemMoving="False" >
+            <dxlc:TileLayoutControl.ItemTemplate>
+                <DataTemplate>
+                </DataTemplate>
+            </dxlc:TileLayoutControl.ItemTemplate>
+        </dxlc:TileLayoutControl>
     </DataTemplate>
     <DataTemplate x:Key="DropDownDataTemplate">
         <Grid>
@@ -72,7 +74,7 @@
                 <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
                     <Border BorderThickness="1" BorderBrush="White">
                         <dxe:TextEdit Name="GpsCoordinateText" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" 
-                                 Width="100" Height="20" Canvas.Top="50" Canvas.Left="20" MaskType="Simple" Mask="00.0000;00.0000" />
+                                 Width="100" Height="20" Canvas.Top="50" Canvas.Left="20" MaskType="Simple" Mask="00.000000;00.000000" />
                     </Border>
                     <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
@@ -91,14 +93,11 @@
         </Grid>
     </DataTemplate>
     <DataTemplate x:Key="MultyOptionDataTemplate">
-        <ListBox ItemsSource="{Binding Answers}" Grid.IsSharedSizeScope="True" HorizontalContentAlignment="Stretch">
-            <ListBox.ItemTemplate>
+        <dxlc:TileLayoutControl Orientation="Horizontal" Padding="5" BreakFlowToFit="False" ItemsSource="{Binding Answers}" AllowItemMoving="False" >
+            <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
-                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
-                        CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0"
-                        Helpers:TileSelectHelper.SelectedValue="{Binding Path=Data.Question.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType=ListBox}}">
+                        <dxlc:Tile Background="#FF00ABBA" Content="{Binding}">
                             <dxlc:Tile.ContentTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -108,33 +107,28 @@
                                                 <ColumnDefinition Width="0.7*" />
                                             </Grid.ColumnDefinitions>
                                             <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
-                                                <CheckBox IsChecked="{Binding Path=Selected}" CommandParameter="{Binding}" 
-                                                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
-                                                          Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" 
-                                                          Helpers:TileSelectHelper.SelectedValue="{Binding Path=Data.Question.SelectedAnswer.Selected, 
-                                                          RelativeSource={RelativeSource AncestorType=ListBox}}" Content="{Binding AnswerText}"/>
-                                            </StackPanel>                                            
-                                        </Grid>
-                                        <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False"                                                
-                                            Visibility="{Binding Path=(Helpers:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                    </Grid>
+                                                <CheckBox IsChecked="{Binding Path=Selected}" CommandParameter="{Binding}" Content="{Binding AnswerText}"
+                                                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"/>
+                                            </StackPanel>
+                                        </Grid>                                        
+                                    </Grid>                                    
                                 </DataTemplate>
                             </dxlc:Tile.ContentTemplate>
                         </dxlc:Tile>
                     </StackPanel>
                 </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>      
+            </dxlc:TileLayoutControl.ItemTemplate>
+        </dxlc:TileLayoutControl>
     </DataTemplate>
     <DataTemplate x:Key="NumericDataTemplate">
-        <ContentControl>            
-            <ContentControl.Content>                
+        <ContentControl>
+            <ContentControl.Content>
                 <Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.3*" />
                             <ColumnDefinition Width="0.7*" />
-                        </Grid.ColumnDefinitions>                       
+                        </Grid.ColumnDefinitions>
                         <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
                             <Border BorderThickness="1" BorderBrush="White">
                                 <dxe:TextEdit Name="txtBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" 
@@ -148,11 +142,43 @@
                                 <Button.CommandParameter>
                                     <MultiBinding Converter="{StaticResource ChangeObjectMultiConverter}">
                                         <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}" Path="DataContext"/>
-                                        <Binding ElementName="txtBox" Path="Text"/>                                        
-                                    </MultiBinding>                                    
+                                        <Binding ElementName="txtBox" Path="Text"/>
+                                    </MultiBinding>
                                 </Button.CommandParameter>
-                            </Button>                            
-                        </StackPanel>                        
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </ContentControl.Content>
+        </ContentControl>
+    </DataTemplate>
+    <DataTemplate x:Key="TextDataTemplate">
+        <ContentControl>
+            <ContentControl.Content>
+                <Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.3*" />
+                            <ColumnDefinition Width="0.7*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                            <Border BorderThickness="1" BorderBrush="White">
+                                <dxe:TextEdit Name="txtTextBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" 
+                                              Width="100" Height="20" Canvas.Top="50" Canvas.Left="20" />
+                            </Border>
+                            <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
+                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
+                                <Button.Resources>
+                                    <Extensions:ChangeObjectMultiConverter x:Key="ChangeObjectMultiConverter"/>
+                                </Button.Resources>
+                                <Button.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource ChangeObjectMultiConverter}">
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}" Path="DataContext"/>
+                                        <Binding ElementName="txtTextBox" Path="Text"/>
+                                    </MultiBinding>
+                                </Button.CommandParameter>
+                            </Button>
+                        </StackPanel>
                     </Grid>
                 </Grid>
             </ContentControl.Content>
@@ -193,6 +219,7 @@
               GpsCoordinatesTemplate="{StaticResource GpsCoordinatesDataTemplate}"
               MultyOptionTemplate="{StaticResource MultyOptionDataTemplate}"
               NumericTemplate="{StaticResource NumericDataTemplate}"
-              PercentageTemplate="{StaticResource PercentageDataTemplate}" />
+              PercentageTemplate="{StaticResource PercentageDataTemplate}"
+              TextTemplate ="{StaticResource TextDataTemplate}"/>
 
 </ResourceDictionary>

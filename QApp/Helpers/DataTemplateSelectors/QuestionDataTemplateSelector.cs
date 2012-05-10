@@ -17,6 +17,8 @@ namespace QApp.Helpers.DataTemplateSelectors
 
         public DataTemplate NumericTemplate { get; set; }
 
+        public DataTemplate TextTemplate { get; set; }
+
         public DataTemplate PercentageTemplate { get; set; }
 
         public DataTemplate DefaultTemplate { get; set; }
@@ -38,6 +40,8 @@ namespace QApp.Helpers.DataTemplateSelectors
                         return MultyOptionTemplate;
                     case QuestionType.Numeric:
                         return NumericTemplate;
+                    case QuestionType.Text:
+                        return TextTemplate;
                     case QuestionType.Percentage:
                         return PercentageTemplate;
                     default:
