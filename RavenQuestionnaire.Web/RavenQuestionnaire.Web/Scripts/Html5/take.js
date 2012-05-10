@@ -17,17 +17,19 @@ function SetErrorToQuestion(question, key,error) {
     questionElement.find('[data-valmsg-replace=true]').text(error);
 }
 function UpdateGroup(group) {
-    if(group.Questions) {
-        for (var i = 0; i < group.Questions.length; i++) {
-            UpdateQuestion(group.Questions[i]);
-        }
-    }
-    if (group.PropagatedGroups) {
+
+    if (group.PropagatedGroups && group.PropagatedGroups.length>0) {
         for (var p = 0; p < group.PropagatedGroups.length; p++) {
             if (group.PropagatedGroups[p].Questions) {
                 for (var qp = 0; qp < group.PropagatedGroups[p].Questions.length; qp++) {
                     UpdateQuestion(group.PropagatedGroups[p].Questions[qp], group.PropagatedGroups[p].PropogationKey);
                 }
+            }
+        }
+    }else {
+        if (group.Questions) {
+            for (var i = 0; i < group.Questions.length; i++) {
+                UpdateQuestion(group.Questions[i]);
             }
         }
     }
