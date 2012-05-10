@@ -199,5 +199,23 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Assert.AreEqual(innerDocument.Questions[1], question3);
             Assert.AreEqual(innerDocument.Questions[2], question2);
         }
+
+        [Test]
+        public void InserQuestionAfter_InserAfterLastItemWithGuid_InsertedAfterItemWLastItem()
+        {
+            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+            Questionnaire questionnaire = new Questionnaire(innerDocument);
+            var question1 = new Question("top", QuestionType.SingleOption);
+            innerDocument.Questions.Add(question1);
+            var question2 = new Question("sub", QuestionType.SingleOption);
+            innerDocument.Questions.Add(question2);
+            var question3 = new Question("third", QuestionType.SingleOption);
+            innerDocument.Questions.Add(question3);
+            questionnaire.MoveItem(question1.PublicKey, question3.PublicKey);
+            Assert.AreEqual(innerDocument.Questions.Count, 3);
+            Assert.AreEqual(innerDocument.Questions[0], question2);
+            Assert.AreEqual(innerDocument.Questions[1], question3);
+            Assert.AreEqual(innerDocument.Questions[2], question1);
+        }
     }
 }
