@@ -12,7 +12,7 @@ using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities
 {
-    public class CompleteQuestionnaire : IEntity<CompleteQuestionnaireDocument>, IComposite//, IPropogate
+    public class CompleteQuestionnaire : IEntity<CompleteQuestionnaireDocument>//, IPropogate
     {
         private CompleteQuestionnaireDocument innerDocument;
        // private CompositeHandler handler;
@@ -49,7 +49,7 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.GetGroupPropagatedEvents().Subscribe(Observer.Create<CompositeAddedEventArgs>(AutoPropagate));
             innerDocument.GetGroupPropagatedRemovedEvents().Subscribe(Observer.Create<CompositeRemovedEventArgs>(RemoveAutoPropagate));
 
-            var addAnswers = from q in this.GetAllAnswerAddedEvents()
+            var addAnswers = from q in this.innerDocument.GetAllAnswerAddedEvents()
                              let question =
                                  ((CompositeAddedEventArgs)q.ParentEvent).AddedComposite as
                                  ICompleteQuestion
@@ -100,7 +100,7 @@ namespace RavenQuestionnaire.Core.Entities
 
         protected void SubscribeBindedQuestions()
         {
-            var addAnswers = from q in this.GetAllAnswerAddedEvents()
+            var addAnswers = from q in this.innerDocument.GetAllAnswerAddedEvents()
                              let question =
                                  ((CompositeAddedEventArgs)q.ParentEvent).AddedComposite as
                                  ICompleteQuestion
@@ -217,7 +217,7 @@ namespace RavenQuestionnaire.Core.Entities
 
         public void Remove<T>(Guid publicKey) where T : class, IComposite
         {
-            innerDocument.Remove<T>(publicKey);
+            innerDocument.Remove(publicKey);
             UpdateLastEntryDate();
         }
 

@@ -21,7 +21,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers
         public void Handle(DeleteQuestionCommand command)
         {
             var entity = _questionnaireRepository.Load(command.QuestionnaireId);
-            entity.Remove<Question>(command.QuestionId);
+            entity.Remove(command.QuestionId);
             //  this._questionRepository.Remove(entity);
             //  entity.
         }

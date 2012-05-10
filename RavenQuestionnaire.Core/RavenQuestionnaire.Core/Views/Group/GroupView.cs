@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Answer;
@@ -110,29 +111,29 @@ namespace RavenQuestionnaire.Core.Views.Group
         {
         }
 
-        public GroupView(IQuestionnaireDocument<TGroup, TQuestion> doc, TGroup group)
+        public GroupView(IQuestionnaireDocument doc, TGroup group)
             : base(doc, group)
         {
             this.ParentGroup = GetGroupParent(doc, group);
         }
-        protected Guid? GetGroupParent(IQuestionnaireDocument<TGroup, TQuestion> questionnaire, TGroup group)
+        protected Guid? GetGroupParent(IQuestionnaireDocument questionnaire, TGroup group)
         {
-            if (questionnaire.Groups.Any(q => q.PublicKey.Equals(group.PublicKey)))
+            if (questionnaire.Children.Any(q => q.PublicKey.Equals(group.PublicKey)))
                 return null;
-            var groups = new Queue<TGroup>();
-            foreach (var child in questionnaire.Groups)
+            var groups = new Queue<IComposite>();
+            foreach (var child in questionnaire.Children)
             {
                 groups.Enqueue(child);
             }
             while (groups.Count != 0)
             {
-                var queueItem = groups.Dequeue() as IGroup<TGroup, TQuestion>;
+                var queueItem = groups.Dequeue();
                 if(queueItem==null)
                     continue;
-                
-                if (queueItem.Groups.Any(q => q.PublicKey.Equals(group.PublicKey)))
+
+                if (queueItem.Children.Any(q => q.PublicKey.Equals(group.PublicKey)))
                     return queueItem.PublicKey;
-                foreach (var child in queueItem.Groups)
+                foreach (var child in queueItem.Children)
                 {
                     groups.Enqueue(child);
                 }
@@ -153,17 +154,14 @@ namespace RavenQuestionnaire.Core.Views.Group
         }
 
         public GroupView(
-            IQuestionnaireDocument<IGroup, IQuestion> doc, IGroup group)
+            IQuestionnaireDocument doc, IGroup group)
             : base(doc, group)
         {
-            var groupTyped = group as IGroup<IGroup, IQuestion>;
-            if (groupTyped == null)
-                return;
             Questions =
-                groupTyped.Questions.Select(
+                group.Children.OfType<IQuestion>().Select(
                     q =>
                     new QuestionView(doc, q)).ToArray();
-            this.Groups = groupTyped.Groups.Select(g => new GroupView(doc, g)).ToArray();
+            this.Groups = group.Children.OfType<IGroup>().Select(g => new GroupView(doc, g)).ToArray();
         }
 
     }

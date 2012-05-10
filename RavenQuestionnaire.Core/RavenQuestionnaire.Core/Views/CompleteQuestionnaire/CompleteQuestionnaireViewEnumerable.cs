@@ -43,8 +43,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.Title = doc.Title;
             Entities.SubEntities.Complete.CompleteGroup group = new Entities.SubEntities.Complete.CompleteGroup()
                                                                     {
-                                                                        Questions =
-                                                                            doc.Questions
+                                                                        Children = 
+                                                                            doc.Children.Where(c=>c is ICompleteQuestion).ToList()
                                                                     };
             this.CurrentGroup = GroupFactory.CreateGroup(doc,
                                                       group);
@@ -55,22 +55,24 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
         protected void InitGroups(CompleteQuestionnaireDocument doc)
         {
-            if (doc.Questions.Count > 0)
+            var questions = doc.Children.OfType<ICompleteQuestion>().ToList();
+            var groups = doc.Children.OfType<ICompleteGroup>().ToList();
+            if (questions.Count > 0)
             {
-                this.Groups = new CompleteGroupView[doc.Groups.Count + 1];
+                this.Groups = new CompleteGroupView[groups.Count + 1];
                 this.Groups[0] = GroupFactory.CreateGroup(doc,
                                                new Entities.SubEntities.Complete.CompleteGroup("Main") { PublicKey = Guid.Empty });
-                for (int i = 1; i <= doc.Groups.Count; i++)
+                for (int i = 1; i <= groups.Count; i++)
                 {
-                    this.Groups[i] = GroupFactory.CreateGroup(doc, doc.Groups[i - 1]);
+                    this.Groups[i] = GroupFactory.CreateGroup(doc, groups[i - 1]);
                 }
             }
             else
             {
-                this.Groups = new CompleteGroupView[doc.Groups.Count];
-                for (int i = 0; i < doc.Groups.Count; i++)
+                this.Groups = new CompleteGroupView[groups.Count];
+                for (int i = 0; i < groups.Count; i++)
                 {
-                    this.Groups[i] = GroupFactory.CreateGroup(doc, doc.Groups[i]);
+                    this.Groups[i] = GroupFactory.CreateGroup(doc, groups[i]);
                 }
             }
         }

@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
 
         #region Implementation of ICompleteQuestionFactory
 
-        public IAnswerStrategy Create(ICompleteQuestion<ICompleteAnswer> baseQuestion)
+        public IAnswerStrategy Create(ICompleteQuestion baseQuestion)
         {
             switch (baseQuestion.QuestionType)
             {

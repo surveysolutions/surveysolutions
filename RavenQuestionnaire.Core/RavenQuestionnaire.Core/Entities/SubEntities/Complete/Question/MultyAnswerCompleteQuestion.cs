@@ -9,8 +9,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
     public class MultyAnswerCompleteQuestion : IAnswerStrategy
     {
-        private ICompleteQuestion<ICompleteAnswer> document;
-        public MultyAnswerCompleteQuestion(ICompleteQuestion<ICompleteAnswer> document)
+        private ICompleteQuestion document;
+        public MultyAnswerCompleteQuestion(ICompleteQuestion document)
         {
             this.document = document;
         }
@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             CompleteAnswer currentAnswer = c as CompleteAnswer;
             if (currentAnswer == null || currentAnswer.QuestionPublicKey != this.document.PublicKey)
                 throw new CompositeException("answer wasn't found");
-            foreach (CompleteAnswer completeAnswer in this.document.Answers)
+            foreach (CompleteAnswer completeAnswer in this.document.Children)
             {
                 try
                 {
@@ -35,7 +35,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         }
         public void Remove()
         {
-            foreach (CompleteAnswer answer in this.document.Answers)
+            foreach (CompleteAnswer answer in this.document.Children)
             {
                 answer.Remove(answer);
             }

@@ -75,19 +75,13 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
             : base()
         {
         }
-        public QuestionnaireView(IQuestionnaireDocument doc)
-            : base(doc)
-        {
-        }
 
         public QuestionnaireView(
-            IQuestionnaireDocument
-                <IGroup,
-                IQuestion> doc)
+            IQuestionnaireDocument doc)
             : base(doc)
         {
-            this.Questions = doc.Questions.Select(q => new QuestionView(doc, q)).ToArray();
-            this.Groups = doc.Groups.Select(g => new GroupView(doc, g)).ToArray();
+            this.Questions = doc.Children.OfType<IQuestion>().Select(q => new QuestionView(doc, q)).ToArray();
+            this.Groups = doc.Children.OfType<IGroup>().Select(g => new GroupView(doc, g)).ToArray();
         }
     }
 }

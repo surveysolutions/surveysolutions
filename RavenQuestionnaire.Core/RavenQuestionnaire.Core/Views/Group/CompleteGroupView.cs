@@ -21,15 +21,13 @@ namespace RavenQuestionnaire.Core.Views.Group
         public CompleteGroupView(CompleteQuestionnaireDocument doc, ICompleteGroup group, ICompleteGroupFactory groupFactory)
             : base(doc, group)
         {
-            var groupWithQuestions = group as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
-            if (groupWithQuestions != null)
-            {
+            
 
                 this.Questions =
-                    groupWithQuestions.Questions.Select(
+                    group.Children.OfType<ICompleteQuestion>().Select(
                         q => new CompleteQuestionFactory().CreateQuestion(doc,group, q)).ToArray();
-                this.Groups = groupWithQuestions.Groups.Select(g => groupFactory.CreateGroup(doc, g)).ToArray();
-            }
+                this.Groups = group.Children.OfType<ICompleteGroup>().Select(g => groupFactory.CreateGroup(doc, g)).ToArray();
+            
         }
         public virtual string GetClientId(string prefix)
         {

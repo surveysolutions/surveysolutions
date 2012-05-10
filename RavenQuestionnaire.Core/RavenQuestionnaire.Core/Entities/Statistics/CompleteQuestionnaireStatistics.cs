@@ -59,37 +59,31 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
             this.innerDocument.InvalidQuestions.Clear();
             this.innerDocument.AnsweredQuestions.Clear();
             this.innerDocument.FeturedQuestions.Clear();
-            Queue<ICompleteGroup<ICompleteGroup, ICompleteQuestion>> nodes = new Queue<ICompleteGroup<ICompleteGroup, ICompleteQuestion>>(new List<ICompleteGroup<ICompleteGroup, ICompleteQuestion>>() { target });
+            Queue<ICompleteGroup> nodes = new Queue<ICompleteGroup>(new List<ICompleteGroup>() { target });
             Queue<Guid> keys = new Queue<Guid>();
             keys.Enqueue(target.PublicKey);
             this.innerDocument.TotalQuestionCount = 0;
             {
-                ICompleteGroup<ICompleteGroup, ICompleteQuestion> group = nodes.Dequeue();
+                ICompleteGroup group = nodes.Dequeue();
                 var key = keys.Dequeue();
-                ProccessQuestions(group.Questions, group.PublicKey, key);
-                foreach (ICompleteGroup subGroup in group.Groups)
+                ProccessQuestions(@group.Children.OfType<ICompleteQuestion>(), group.PublicKey, key);
+                foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
                 {
-                    ICompleteGroup<ICompleteGroup, ICompleteQuestion> groupWithQuestions = subGroup as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
-                    if (groupWithQuestions != null)
-                    {
-                        nodes.Enqueue(groupWithQuestions);
-                        keys.Enqueue(subGroup.PublicKey);
-                    }
+                    nodes.Enqueue(subGroup);
+                    keys.Enqueue(subGroup.PublicKey);
+
                 }
             }
             while (nodes.Count > 0)
             {
-                ICompleteGroup<ICompleteGroup, ICompleteQuestion> group = nodes.Dequeue();
+                ICompleteGroup group = nodes.Dequeue();
                 var key = keys.Dequeue();
-                ProccessQuestions(group.Questions, group.PublicKey, key);
-                foreach (ICompleteGroup subGroup in group.Groups)
+                ProccessQuestions(group.Children.OfType<ICompleteQuestion>(), group.PublicKey, key);
+                foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
                 {
-                    ICompleteGroup<ICompleteGroup, ICompleteQuestion> groupWithQuestions = subGroup as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
-                    if (groupWithQuestions != null)
-                    {
-                        nodes.Enqueue(groupWithQuestions);
-                        keys.Enqueue(key);
-                    }
+                    nodes.Enqueue(subGroup);
+                    keys.Enqueue(key);
+
                 }
             }
             CalculateApproximateAnswerTime(this.innerDocument.AnsweredQuestions);
@@ -103,8 +97,7 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
                     this.innerDocument.FeturedQuestions.Add(statItem);
                 if (!completeQuestion.Valid)
                     this.innerDocument.InvalidQuestions.Add(statItem);
-                ICompleteQuestion<ICompleteAnswer> withAnswers = completeQuestion as ICompleteQuestion<ICompleteAnswer>;
-                if (withAnswers != null && withAnswers.Answers.Any(a => a.Selected))
+                if(completeQuestion.Children.OfType<ICompleteAnswer>().Any(a => a.Selected))
                     this.innerDocument.AnsweredQuestions.Add(statItem);
                 this.innerDocument.TotalQuestionCount++;
             }
@@ -113,9 +106,9 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
       /*  protected void CollectFeturedQuestions(CompleteQuestionnaireDocument target)
         {
             this.innerDocument.AnsweredQuestions.Clear();
-            var questions = target.Find<ICompleteQuestion<ICompleteAnswer>>(q => q.Featured);
+            var questions = target.Find<ICompleteQuestion>(q => q.Featured);
 
-            foreach (ICompleteQuestion<ICompleteAnswer> completeQuestion in questions)
+            foreach (ICompleteQuestion completeQuestion in questions)
             {
                 this.innerDocument.FeturedQuestions.Add(new QuestionStatisticDocument(completeQuestion));
             }
@@ -124,9 +117,9 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
         protected void CollectAnsweredQuestions(CompleteQuestionnaireDocument target)
         {
             this.innerDocument.AnsweredQuestions.Clear();
-            var questions = target.Find<ICompleteQuestion<ICompleteAnswer>>(q => q.Answers.Any(a => a.Selected));
+            var questions = target.Find<ICompleteQuestion>(q => q.Answers.Any(a => a.Selected));
             
-            foreach (ICompleteQuestion<ICompleteAnswer> completeQuestion in questions)
+            foreach (ICompleteQuestion completeQuestion in questions)
             {
                 this.innerDocument.AnsweredQuestions.Add(new QuestionStatisticDocument(completeQuestion));
             }
@@ -153,9 +146,9 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
         {
             this.innerDocument.InvalidQuestions.Clear();
          
-            var questions = target.Find<ICompleteQuestion<ICompleteAnswer>>(q => !q.Valid);
+            var questions = target.Find<ICompleteQuestion>(q => !q.Valid);
 
-            foreach (ICompleteQuestion<ICompleteAnswer> completeQuestion in questions)
+            foreach (ICompleteQuestion completeQuestion in questions)
             {
                 this.innerDocument.InvalidQuestions.Add(new QuestionStatisticDocument(completeQuestion));
             }

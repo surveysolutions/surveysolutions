@@ -15,22 +15,20 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public PropagatableCompleteQuestion(ICompleteQuestion question, Guid propogationPublicKey)
         {
             this.ConditionExpression = question.ConditionExpression;
-           
             this.Enabled = question.Enabled;
             this.PublicKey = question.PublicKey;
-            
+
             this.QuestionText = question.QuestionText;
             this.QuestionType = question.QuestionType;
             this.Triggers = question.Triggers;
             this.StataExportCaption = question.StataExportCaption;
-            var questionWithAnswer = question as ICompleteQuestion<ICompleteAnswer>;
-            if (questionWithAnswer != null)
+
+            for (int i = 0; i < question.Children.Count; i++)
             {
-                for (int i = 0; i < questionWithAnswer.Answers.Count; i++)
-                {
-                    this.Answers.Add(new PropagatableCompleteAnswer(questionWithAnswer.Answers[i], propogationPublicKey));
-                }
+                this.Children.Add(new PropagatableCompleteAnswer(question.Children[i] as ICompleteAnswer, propogationPublicKey));
             }
+         
+
             this.PropogationPublicKey = propogationPublicKey;
         }
 

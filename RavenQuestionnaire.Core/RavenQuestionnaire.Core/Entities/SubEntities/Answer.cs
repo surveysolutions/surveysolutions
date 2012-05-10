@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
@@ -47,7 +48,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             throw new CompositeException("answer is not hierarchical");
         }
-        public void Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove(Guid publicKey)
         {
             throw new CompositeException("answer is not hierarchical");
         }
@@ -65,6 +66,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
         {
             throw new CompositeException("answer is not hierarchical");
+        }
+
+        public List<IComposite> Children { get; set; }
+        [JsonIgnore]
+        public IComposite Parent
+        {
+            get { throw new NotImplementedException(); }
         }
 
         #region Implementation of IObservable<out CompositeEventArgs>

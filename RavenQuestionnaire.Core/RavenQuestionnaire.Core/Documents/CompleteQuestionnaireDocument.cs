@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -9,9 +10,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Documents
 {
-    public interface ICompleteQuestionnaireDocument<TGroup, TQuestion> : IQuestionnaireDocument<TGroup, TQuestion>, ICompleteGroup<TGroup, TQuestion>
-        where TQuestion : ICompleteQuestion
-        where TGroup : ICompleteGroup
+    public interface ICompleteQuestionnaireDocument: IQuestionnaireDocument, ICompleteGroup
     {
          UserLight Creator { get; set; }
          string TemplateId { get; set; }
@@ -20,7 +19,7 @@ namespace RavenQuestionnaire.Core.Documents
     }
 
 
-    public class CompleteQuestionnaireDocument : ICompleteQuestionnaireDocument<ICompleteGroup, ICompleteQuestion>
+    public class CompleteQuestionnaireDocument : ICompleteQuestionnaireDocument
     {
         public CompleteQuestionnaireDocument()
         {
@@ -28,10 +27,7 @@ namespace RavenQuestionnaire.Core.Documents
             this.LastEntryDate = DateTime.Now;
 
             this.compositeobservers = new List<IObserver<CompositeEventArgs>>();
-            this.Questions = new List<ICompleteQuestion>();
-
-
-            this.Groups = new List<ICompleteGroup>();
+            this.Children = new List<IComposite>();
         }
         public static explicit operator CompleteQuestionnaireDocument(QuestionnaireDocument doc)
         {
@@ -41,14 +37,30 @@ namespace RavenQuestionnaire.Core.Documents
                 Title = doc.Title,
                 Triggers = doc.Triggers
             };
-            foreach (IQuestion question in doc.Questions)
+            foreach (IComposite child in doc.Children)
+            {
+                var question = child as IQuestion;
+                if (question != null)
+                {
+                    result.Children.Add(new CompleteQuestionFactory().ConvertToCompleteQuestion(question));
+                    continue;
+                }
+                var group = child as IGroup;
+                if (group != null)
+                {
+                    result.Children.Add(new CompleteGroupFactory().ConvertToCompleteGroup(group));
+                    continue;
+                }
+                throw new InvalidOperationException("unknown children type");
+            }
+         /*   foreach (IQuestion question in doc.Questions)
             {
                 result.Questions.Add(new CompleteQuestionFactory().ConvertToCompleteQuestion(question));
             }
             foreach (IGroup group in doc.Groups)
             {
                 result.Groups.Add(new CompleteGroupFactory().ConvertToCompleteGroup(group));
-            }
+            }**/
             return result;
         }
        
@@ -64,32 +76,6 @@ namespace RavenQuestionnaire.Core.Documents
 
         #region Implementation of IQuestionnaireDocument
 
-        public List<ICompleteQuestion> Questions
-        {
-            get { return questions; }
-            set
-            {
-                questions = value;
-                foreach (ICompleteQuestion completeQuestion in questions)
-                {
-                    this.OnAdded(new CompositeAddedEventArgs(completeQuestion));
-                }
-            }
-        }
-        private List<ICompleteQuestion> questions;
-        public List<ICompleteGroup> Groups
-        {
-            get { return groups; }
-            set
-            {
-                groups = value;
-                foreach (ICompleteGroup completeGroup in groups)
-                {
-                    this.OnAdded(new CompositeAddedEventArgs(completeGroup));
-                }
-            }
-        }
-        private List<ICompleteGroup> groups;
 
         public string Id { get; set; }
 
@@ -133,33 +119,21 @@ namespace RavenQuestionnaire.Core.Documents
 
         public virtual void Add(IComposite c, Guid? parent)
         {
-            ICompleteGroup group = c as ICompleteGroup;
-            if (group != null && group is IPropogate && !parent.HasValue)
+            if (c is PropagatableCompleteGroup && !parent.HasValue)
             {
-                if (this.Groups.Count(g => g.PublicKey.Equals(group.PublicKey)) > 0)
+                if (this.Children.Count(g => g.PublicKey.Equals(c.PublicKey)) > 0)
                 {
-                    this.Groups.Add(group);
-                    OnAdded(new CompositeAddedEventArgs(group));
+                    this.Children.Add(c);
+                    OnAdded(new CompositeAddedEventArgs(c));
                     return;
                 }
             }
             //      }
-            foreach (CompleteGroup completeGroup in this.Groups)
+            foreach (IComposite completeGroup in this.Children)
             {
                 try
                 {
                     completeGroup.Add(c, parent);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-            foreach (CompleteQuestion completeQuestion in this.Questions)
-            {
-                try
-                {
-                    completeQuestion.Add(c, parent);
                     return;
                 }
                 catch (CompositeException)
@@ -175,13 +149,13 @@ namespace RavenQuestionnaire.Core.Documents
             if (propogate != null)
             {
                 bool isremoved = false;
-                var propagatedGroups = this.Groups.Where(
+                var propagatedGroups = this.Children.Where(
                     g =>
                     g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
                     ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)).ToList();
                 foreach (PropagatableCompleteGroup propagatableCompleteGroup in propagatedGroups)
                 {
-                    Groups.Remove(propagatableCompleteGroup);
+                    Children.Remove(propagatableCompleteGroup);
                     OnRemoved(new CompositeRemovedEventArgs(propagatableCompleteGroup));
                     isremoved = true;
                 }
@@ -189,7 +163,7 @@ namespace RavenQuestionnaire.Core.Documents
                     return;
 
             }
-            foreach (CompleteGroup completeGroup in this.Groups)
+            foreach (IComposite completeGroup in this.Children)
             {
                 try
                 {
@@ -200,48 +174,25 @@ namespace RavenQuestionnaire.Core.Documents
                 {
                 }
             }
-            foreach (CompleteQuestion completeQuestion in this.Questions)
-            {
-                try
-                {
-                    completeQuestion.Remove(c);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
             throw new CompositeException();
         }
 
-        public void Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove(Guid publicKey)
         {
-            if (typeof(T) == typeof(PropagatableCompleteGroup))
-            {
-                var forRemove = this.Groups.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
-                if (forRemove!=null)
+            
+                var forRemove = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
+                if (forRemove!=null && forRemove is PropagatableCompleteGroup)
                 {
-                    this.Groups.Remove(forRemove);
+                    this.Children.Remove(forRemove);
                     OnRemoved(new CompositeRemovedEventArgs(forRemove));
                     return;
                 }
-            }
-            foreach (CompleteGroup completeGroup in this.Groups)
+            
+            foreach (IComposite completeGroup in this.Children)
             {
                 try
                 {
-                    completeGroup.Remove<T>(publicKey);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-            foreach (CompleteQuestion completeQuestion in this.Questions)
-            {
-                try
-                {
-                    completeQuestion.Remove<T>(publicKey);
+                    completeGroup.Remove(publicKey);
                     return;
                 }
                 catch (CompositeException)
@@ -253,30 +204,31 @@ namespace RavenQuestionnaire.Core.Documents
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            var resultInsideGroups = this.Groups.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+            var resultInsideGroups = this.Children.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
             if (resultInsideGroups != null)
                 return resultInsideGroups;
-            var resultInsideQuestions = this.Questions.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
-            if (resultInsideQuestions != null)
-                return resultInsideQuestions;
+            
             return null;
         }
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
-              this.Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
-                  this.Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
-                      this.Questions.SelectMany(q => q.Find<T>(condition))).Union(
-                          this.Groups.SelectMany(g => g.Find<T>(condition)));
+              this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
+                      this.Children.SelectMany(q => q.Find<T>(condition)));
 
         }
 
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
         {
-            return ((Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault() ??
-                  Groups.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault()) ??
-                 Questions.SelectMany(q => q.Find<T>(condition)).FirstOrDefault()) ??
-                Groups.SelectMany(g => g.Find<T>(condition)).FirstOrDefault();
+            return Children.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault() ??
+                   Children.SelectMany(q => q.Find<T>(condition)).FirstOrDefault();
+        }
+
+        public List<IComposite> Children { get; set; }
+        [JsonIgnore]
+        public IComposite Parent
+        {
+            get { throw new NotImplementedException(); }
         }
 
         protected void OnAdded(CompositeAddedEventArgs e)
@@ -301,13 +253,9 @@ namespace RavenQuestionnaire.Core.Documents
         {
             if (!compositeobservers.Contains(observer))
                 compositeobservers.Add(observer);
-            foreach (ICompleteQuestion completeQuestion in Questions)
+            foreach (IComposite completeQuestion in Children)
             {
                 completeQuestion.Subscribe(observer);
-            }
-            foreach (ICompleteGroup completeGroup in Groups)
-            {
-                completeGroup.Subscribe(observer);
             }
             return new Unsubscriber<CompositeEventArgs>(compositeobservers, observer);
         }

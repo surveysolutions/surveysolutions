@@ -9,9 +9,4 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
     {
     }
 
-    public interface ICompleteGroup<TGroup, TQuestion> : ICompleteGroup, IGroup<TGroup, TQuestion>
-        where TQuestion : ICompleteQuestion
-        where TGroup : ICompleteGroup
-    {
-    }
 }

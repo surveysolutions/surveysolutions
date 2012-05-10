@@ -41,7 +41,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
             
            
 
-            var questions = result.GetInnerDocument().GetAllQuestions();
+            var questions = result.GetInnerDocument().GetAllQuestions<ICompleteQuestion>();
             var executor = new CompleteQuestionnaireConditionExecutor(result.GetInnerDocument());
             foreach (ICompleteQuestion completeQuestion in questions)
             {

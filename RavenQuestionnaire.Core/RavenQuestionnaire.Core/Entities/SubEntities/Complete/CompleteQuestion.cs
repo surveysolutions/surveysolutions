@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using Newtonsoft.Json;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
@@ -9,14 +10,14 @@ using RavenQuestionnaire.Core.Utility.OrderStrategy;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class CompleteQuestion : ICompleteQuestion<ICompleteAnswer>
+    public class CompleteQuestion : ICompleteQuestion
     {
         public CompleteQuestion()
         {
             this.PublicKey = Guid.NewGuid();
             this.Enabled = true;
             this.Valid = true;
-            this.Answers = new List<ICompleteAnswer>();
+            this.Children = new List<IComposite>();
             this.Cards = new List<Image>();
             this.Triggers = new List<Guid>();
             this.Attributes=new Dictionary<string, object>();
@@ -49,11 +50,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                                               Featured = doc.Featured,
                                               Attributes = doc.Attributes
                                           };
-            var ansersToCopy = new OrderStrategyFactory().Get(result.AnswerOrder).Reorder(doc.Answers);
+            var ansersToCopy = new OrderStrategyFactory().Get(result.AnswerOrder).Reorder(doc.Children);
             foreach (IAnswer answer in ansersToCopy)
             {
                 var newanswer = new CompleteAnswerFactory().ConvertToCompleteAnswer(answer);
-                result.Answers.Add(newanswer);
+                result.Children.Add(newanswer);
                 result.OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(result), newanswer));
             }
             if (doc.Cards != null)
@@ -79,22 +80,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public string QuestionText { get; set; }
 
         public QuestionType QuestionType { get; set; }
-
-        public List<ICompleteAnswer> Answers
-        {
-            get { return answers; }
-            set
-            {
-                answers = value;
-                foreach (ICompleteAnswer completeAnswer in answers)
-                {
-                    OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), completeAnswer));
-                }
-            }
-        }
-
-        private List<ICompleteAnswer> answers;
-
 
         public string ConditionExpression { get; set; }
 
@@ -128,52 +113,30 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public void Remove(IComposite c)
         {
-            CompleteQuestion question = c as CompleteQuestion;
-            if (question != null)
-            {
-                if (!this.PublicKey.Equals(question.PublicKey))
-                    throw new CompositeException();
-                new CompleteQuestionFactory().Create(this).Remove();
-                OnRemoved(new CompositeRemovedEventArgs(this));
-                return;
-            }
-            if (c as CompleteAnswer != null)
-                foreach (CompleteAnswer completeAnswer in this.Answers)
-                {
-                    try
-                    {
-                        completeAnswer.Remove(c);
-                        OnRemoved(new CompositeRemovedEventArgs(new CompositeRemovedEventArgs(this), completeAnswer));
-                        return;
-                    }
-                    catch (CompositeException)
-                    {
-                    }
-                }
-            throw new CompositeException("answer wasn't found");
+            this.Remove(this.PublicKey);
         }
 
-        public void Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove(Guid publicKey)
         {
-            if (typeof(T) == GetType() && this.PublicKey.Equals(publicKey))
+            if (this.PublicKey == publicKey)
             {
                 new CompleteQuestionFactory().Create(this).Remove();
                 OnRemoved(new CompositeRemovedEventArgs(this));
                 return;
             }
-            if (typeof(T) != typeof(CompleteAnswer))
-                foreach (CompleteAnswer completeAnswer in this.Answers)
+
+            foreach (CompleteAnswer completeAnswer in this.Children)
+            {
+                try
                 {
-                    try
-                    {
-                        completeAnswer.Remove<T>(publicKey);
-                        OnRemoved(new CompositeRemovedEventArgs(new CompositeRemovedEventArgs(this), completeAnswer));
-                        return;
-                    }
-                    catch (CompositeException)
-                    {
-                    }
+                    completeAnswer.Remove(publicKey);
+                    OnRemoved(new CompositeRemovedEventArgs(new CompositeRemovedEventArgs(this), completeAnswer));
+                    return;
                 }
+                catch (CompositeException)
+                {
+                }
+            }
             throw new CompositeException("answer wasn't found");
         }
 
@@ -186,7 +149,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             }
             if (typeof(T).IsAssignableFrom(typeof(CompleteAnswer)))
             {
-                return this.Answers.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+                return this.Children.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
             }
             return null;
         }
@@ -194,13 +157,20 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
-                Answers.Where(a => a is T && condition(a as T)).Select
+                Children.Where(a => a is T && condition(a as T)).Select
                     (a => a as T);
         }
 
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
         {
             return Find<T>(condition).FirstOrDefault();
+        }
+
+        public List<IComposite> Children { get; set; }
+        [JsonIgnore]
+        public IComposite Parent
+        {
+            get { throw new NotImplementedException(); }
         }
 
         protected void OnAdded(CompositeAddedEventArgs e)
@@ -223,7 +193,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
         {
-            foreach (ICompleteAnswer completeAnswer in Answers)
+            foreach (IComposite completeAnswer in Children)
             {
                 completeAnswer.Subscribe(observer);
             }

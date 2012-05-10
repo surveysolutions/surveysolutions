@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Answer;
@@ -150,8 +151,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         }
 
         public QuestionView(
-            IQuestionnaireDocument
-                <TGroup, TQuestion> questionnaire, TQuestion doc)
+            IQuestionnaireDocument questionnaire, TQuestion doc)
             :
                 base(questionnaire, doc)
         {
@@ -159,24 +159,21 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.GroupPublicKey = GetQuestionGroup(questionnaire, doc.PublicKey);
         }
 
-        protected Guid? GetQuestionGroup(IQuestionnaireDocument<TGroup, TQuestion> questionnaire, Guid questionKey)
+        protected Guid? GetQuestionGroup(IQuestionnaireDocument questionnaire, Guid questionKey)
         {
-            if (questionnaire.Questions.Any(q => q.PublicKey.Equals(questionKey)))
+            if (questionnaire.Children.Any(q => q.PublicKey.Equals(questionKey)))
                 return null;
-            var group = new Queue<IGroup>();
-            foreach (var child in questionnaire.Groups)
+            var group = new Queue<IComposite>();
+            foreach (var child in questionnaire.Children)
             {
                 group.Enqueue(child);
             }
             while (group.Count != 0)
             {
-                var queueItem = group.Dequeue() as IGroup<TGroup, TQuestion>;
-                if(queueItem==null)
-                    continue;
-                
-                if (queueItem.Questions.Any(q => q.PublicKey.Equals(questionKey)))
+                var queueItem = group.Dequeue();
+                if (queueItem.Children.Any(q => q.PublicKey.Equals(questionKey)))
                     return queueItem.PublicKey;
-                foreach (var child in queueItem.Groups)
+                foreach (var child in queueItem.Children)
                 {
                    /* var childWithQuestion = child as IGroup<IGroup, TQuestion>;
                     if(childWithQuestion!=null)*/
@@ -199,27 +196,17 @@ namespace RavenQuestionnaire.Core.Views.Question
         {
         }
 
-        protected QuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
-            : base(questionnaire, doc)
-        {
-            
-        }
-
         public QuestionView(
-            IQuestionnaireDocument
-                <IGroup,
-                IQuestion> questionnaire,
+            IQuestionnaireDocument questionnaire,
             IQuestion doc)
             :
                 base(questionnaire, doc)
         {
-            var question = doc as IQuestion<IAnswer>;
-            if (question != null)
-            {
-                this.Answers = question.Answers.Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
-                if (question.Cards!=null)
-                    this.Cards = question.Cards.Select(c => new CardView(doc.PublicKey, c)).OrderBy(a => Guid.NewGuid()).ToArray();
-            }
+            this.Answers = doc.Children.Where(a=>a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
+            if (doc.Cards != null)
+                this.Cards =
+                    doc.Cards.Select(c => new CardView(doc.PublicKey, c)).OrderBy(a => Guid.NewGuid()).ToArray();
+
         }
     }
 }

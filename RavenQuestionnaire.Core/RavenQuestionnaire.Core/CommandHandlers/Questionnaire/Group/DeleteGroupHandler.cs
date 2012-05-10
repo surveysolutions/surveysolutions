@@ -15,7 +15,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Group
         public void Handle(DeleteGroupCommand command)
         {
             var entity = _questionnaireRepository.Load(command.QuestionnaireId);
-            entity.Remove<Entities.SubEntities.Group>(command.GroupPublicKey);
+            entity.Remove(command.GroupPublicKey);
             //  this._questionRepository.Remove(entity);
             //  entity.
         }

@@ -11,8 +11,4 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         bool Valid { get; set; }
         DateTime? AnswerDate { get; set; }
     }
-
-    public interface ICompleteQuestion<T> : ICompleteQuestion, IQuestion<T> where T : IAnswer
-    {
-    }
 }

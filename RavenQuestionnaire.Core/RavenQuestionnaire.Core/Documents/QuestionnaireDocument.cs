@@ -17,20 +17,14 @@ namespace RavenQuestionnaire.Core.Documents
         DateTime? CloseDate { get; set; }
     }
 
-    public interface IQuestionnaireDocument<TGroup, TQuestion> : IQuestionnaireDocument, IGroup<TGroup, TQuestion>
-        where TQuestion : IQuestion
-        where TGroup : IGroup
-    {
-    }
 
-    public class QuestionnaireDocument : IQuestionnaireDocument<IGroup, IQuestion>
+    public class QuestionnaireDocument : IQuestionnaireDocument
     {
         public QuestionnaireDocument()
         {
             CreationDate = DateTime.Now;
             LastEntryDate = DateTime.Now;
-            Questions = new List<IQuestion>();
-            Groups = new List<IGroup>();
+            Children = new List<IComposite>();
             this.observers=new List<IObserver<CompositeEventArgs>>();
         }
 
@@ -67,30 +61,19 @@ namespace RavenQuestionnaire.Core.Documents
 
         public DateTime? CloseDate { get; set; }
 
-        public List<IQuestion> Questions { get; set; }
-        public List<IGroup> Groups { get; set; }
 
         #region Implementation of IComposite
         public void Add(IComposite c, Guid? parent)
         {
             if (!parent.HasValue)
             {
-                IGroup group = c as IGroup;
-                if (group != null)
-                {
-                    this.Groups.Add(group);
-                    OnAdded(new CompositeAddedEventArgs(c));
-                    return;
-                }
-                IQuestion question = c as IQuestion;
-                if (question != null)
-                {
-                    this.Questions.Add(question);
-                    OnAdded(new CompositeAddedEventArgs(c));
-                    return;
-                }
+
+                this.Children.Add(c);
+                OnAdded(new CompositeAddedEventArgs(c));
+                return;
+
             }
-            foreach (IGroup child in this.Groups)
+            foreach (IComposite child in this.Children)
             {
                 try
                 {
@@ -103,97 +86,29 @@ namespace RavenQuestionnaire.Core.Documents
                 /* if (child.Add(c, parent))
                      return true;*/
             }
-            foreach (IQuestion child in this.Questions)
-            {
-                try
-                {
-                    child.Add(c, parent);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-                /*  if (child.Add(c, parent))
-                      return true;*/
-            }
+            
             throw new CompositeException();
         }
 
         public void Remove(IComposite c)
         {
-            var group = this.Groups.FirstOrDefault(g => c is IGroup && g.PublicKey.Equals(((IGroup)c).PublicKey));
-            if (group != null)
-            {
-                this.Groups.Remove(group);
-                OnRemoved( new CompositeRemovedEventArgs(group));
-                return;
-            }
-            var question = this.Questions.FirstOrDefault(g => c is IQuestion && g.PublicKey.Equals(((IQuestion)c).PublicKey));
-            if (question != null)
-            {
-                this.Questions.Remove(question);
-                OnRemoved(new CompositeRemovedEventArgs(question));
-                return;
-            }
-            foreach (IGroup child in this.Groups)
-            {
-                try
-                {
-                    child.Remove(c);
-                    return;
-                }
-                catch (CompositeException)
-                {
-
-                }
-            }
-            foreach (IQuestion child in this.Questions)
-            {
-                try
-                {
-                    child.Remove(c);
-                    return;
-                }
-                catch (CompositeException)
-                {
-
-                }
-            }
-            throw new CompositeException();
+           this.Remove(c.PublicKey);
         }
-        public void Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove(Guid publicKey)
         {
-            var group = this.Groups.FirstOrDefault(g => typeof(IGroup).IsAssignableFrom(typeof(T)) && g.PublicKey.Equals(publicKey));
+            var group = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
             if (group != null)
             {
-                this.Groups.Remove(group);
+                this.Children.Remove(group);
                 OnRemoved(new CompositeRemovedEventArgs(group));
                 return;
             }
-            var question = this.Questions.FirstOrDefault(g => typeof(IQuestion).IsAssignableFrom(typeof(T)) && g.PublicKey.Equals(publicKey));
-            if (question != null)
-            {
-                this.Questions.Remove(question);
-                OnRemoved(new CompositeRemovedEventArgs(question));
-                return;
-            }
-            foreach (IGroup child in this.Groups)
-            {
-                try
-                {
-                    child.Remove<T>(publicKey);
-                    return;
-                }
-                catch (CompositeException)
-                {
 
-                }
-            }
-            foreach (IQuestion child in this.Questions)
+            foreach (IGroup child in this.Children)
             {
                 try
                 {
-                    child.Remove<T>(publicKey);
+                    child.Remove(publicKey);
                     return;
                 }
                 catch (CompositeException)
@@ -205,15 +120,7 @@ namespace RavenQuestionnaire.Core.Documents
         }
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            foreach (IGroup child in Groups)
-            {
-                if (child is T && child.PublicKey == publicKey)
-                    return child as T;
-                T subNodes = child.Find<T>(publicKey);
-                if (subNodes != null)
-                    return subNodes;
-            }
-            foreach (IQuestion child in Questions)
+            foreach (IComposite child in Children)
             {
                 if (child is T && child.PublicKey == publicKey)
                     return child as T;
@@ -226,10 +133,8 @@ namespace RavenQuestionnaire.Core.Documents
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
-             Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
-                 Groups.Where(a => a is T && condition(a as T)).Select(a => a as T)).Union(
-                     Questions.SelectMany(q => q.Find<T>(condition))).Union(
-                         Groups.SelectMany(g => g.Find<T>(condition)));
+                Children.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
+                    Children.SelectMany(q => q.Find<T>(condition)));
 
             /*   foreach (Group child in innerDocument.Groups)
                {
@@ -252,11 +157,16 @@ namespace RavenQuestionnaire.Core.Documents
 
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
         {
-            return ((Questions.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault() ??
-                     Groups.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault()) ??
-                    Questions.SelectMany(q => q.Find<T>(condition)).FirstOrDefault()) ??
-                   Groups.SelectMany(g => g.Find<T>(condition)).FirstOrDefault();
-            
+            return Children.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault() ??
+                   Children.SelectMany(q => q.Find<T>(condition)).FirstOrDefault();
+
+        }
+
+        public List<IComposite> Children { get; set; }
+        [JsonIgnore]
+        public IComposite Parent
+        {
+            get { throw new NotImplementedException(); }
         }
 
         protected void OnAdded(CompositeAddedEventArgs e)

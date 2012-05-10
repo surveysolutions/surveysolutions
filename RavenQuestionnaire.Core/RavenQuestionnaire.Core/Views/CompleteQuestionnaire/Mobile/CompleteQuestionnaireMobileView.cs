@@ -26,7 +26,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             Status = doc.Status;
             Responsible = doc.Responsible;
 
-            var cg = currentGroup as ICompleteGroup<ICompleteGroup, ICompleteQuestion>;
             CurrentGroup = new CompleteGroupMobileView(doc, currentGroup as CompleteGroup);
 
             InitGroups(doc, CurrentGroup.PublicKey);
@@ -49,7 +48,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             QuestionsWithCards = new List<CompleteQuestionView>();
             QuestionsWithInstructions = new List<CompleteQuestionView>();
 
-            var group = new CompleteGroup { Questions = doc.Questions };
+            var group = new CompleteGroup { Children = doc.Children.Where(c=>c is ICompleteQuestion).ToList() };
             CurrentGroup = new CompleteGroupMobileView(doc, group);
             InitGroups(doc, CurrentGroup.PublicKey);
 
@@ -76,37 +75,39 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
         protected void InitGroups(CompleteQuestionnaireDocument doc, Guid currentGroupPublicKey)
         {
-            if (doc.Questions.Count > 0)
+            var questions = doc.Children.OfType<ICompleteQuestion>().ToList();
+            var groups = doc.Children.OfType<ICompleteGroup>().ToList();
+            if (questions.Count > 0)
             {
-                Groups = new CompleteGroupHeaders[doc.Groups.Count + 1];
+                Groups = new CompleteGroupHeaders[groups.Count + 1];
 
                 Groups[0] = new CompleteGroupHeaders
                                 {
                                     PublicKey = Guid.Empty,
                                     GroupText = "Main",
-                                    Totals = CountQuestions(doc.Questions.Select(q => (ICompleteQuestion<ICompleteAnswer>)q).ToList())
+                                    Totals = CountQuestions(questions)
                                 };
-                for (var i = 1; i <= doc.Groups.Count; i++)
+                for (var i = 1; i <= groups.Count; i++)
                 {
                     Groups[i] = new CompleteGroupHeaders
                                     {
-                                        PublicKey = doc.Groups[i - 1].PublicKey,
-                                        GroupText = doc.Groups[i - 1].Title
+                                        PublicKey = groups[i - 1].PublicKey,
+                                        GroupText = groups[i - 1].Title
                                     };
-                    Groups[i].Totals = CalcProgress((ICompleteGroup<ICompleteGroup, ICompleteQuestion>)doc.Groups[i-1]);
+                    Groups[i].Totals = CalcProgress(groups[i - 1]);
                 }
             }
             else
             {
-                Groups = new CompleteGroupHeaders[doc.Groups.Count];
-                for (var i = 0; i < doc.Groups.Count; i++)
+                Groups = new CompleteGroupHeaders[groups.Count];
+                for (var i = 0; i < groups.Count; i++)
                 {
                     Groups[i] = new CompleteGroupHeaders
                                     {
-                                        PublicKey = doc.Groups[i].PublicKey,
-                                        GroupText = doc.Groups[i].Title
+                                        PublicKey = groups[i].PublicKey,
+                                        GroupText = groups[i].Title
                                     };
-                    Groups[i].Totals = CalcProgress((ICompleteGroup<ICompleteGroup, ICompleteQuestion>)doc.Groups[i]);
+                    Groups[i].Totals = CalcProgress(groups[i]);
                 }
             }
             
@@ -153,30 +154,31 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             }
         }
 
-        private Counter CalcProgress(ICompleteGroup<ICompleteGroup, ICompleteQuestion> @group)
+        private Counter CalcProgress(ICompleteGroup @group)
         {
             var total = new Counter();
 
             var propagated = @group as PropagatableCompleteGroup;
             if (propagated != null)
             {
-                total = total + CountQuestions(propagated.Questions.Select(q => q as ICompleteQuestion<ICompleteAnswer>).ToList());
+                total = total + CountQuestions(propagated.Children.Select(q => q as ICompleteQuestion).ToList());
                 return total;
             }
             var complete = @group as CompleteGroup;
             if (complete != null && complete.Propagated != Propagate.None)
                 return total;
+            var gruoSubGroup = @group.Children.OfType<ICompleteGroup>().ToList();
+            var gruoSubQuestions = @group.Children.OfType<ICompleteQuestion>().ToList();
+            total = total + CountQuestions(gruoSubQuestions);
 
-            total = total + CountQuestions(@group.Questions.Select(q => q as ICompleteQuestion<ICompleteAnswer>).ToList());
-
-            foreach (var g in @group.Groups)
+            foreach (var g in gruoSubGroup)
             {
-                total = total + CalcProgress(g as ICompleteGroup<ICompleteGroup, ICompleteQuestion>);
+                total = total + CalcProgress(g);
             }
             return total;
         }
 
-        private Counter CountQuestions(List<ICompleteQuestion<ICompleteAnswer>> questions)
+        private Counter CountQuestions(List<ICompleteQuestion> questions)
         {
             if (questions == null || questions.Count == 0)
                 return new Counter();
@@ -187,7 +189,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                             {
                                 Total = questions.Count,
                                 Enablad = enabled.Count(),
-                                Answered = enabled.Count(question => question.Answers.Any(a => a.Selected))
+                                Answered =
+                                    enabled.Count(
+                                        question =>
+                                        question.Children.Any(
+                                            a => a is ICompleteAnswer && ((ICompleteAnswer) a).Selected))
                             };
             return total;
         }

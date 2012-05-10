@@ -6,17 +6,17 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public class BindedQuestion : IQuestion<IAnswer>, IBinded
+    public class BindedQuestion : IQuestion, IBinded
     {
         public BindedQuestion()
         {
             PublicKey = Guid.NewGuid();
-            Answers=new List<IAnswer>();
+            this.Children=new List<IComposite>();
         }
-        public BindedQuestion(IQuestion<IAnswer> template)
-        {
-            this.ParentPublicKey=template.PublicKey;
-        }
+        //public BindedQuestion(IQuestion template)
+        //{
+        //    this.ParentPublicKey=template.PublicKey;
+        //}
 
 
         public Guid PublicKey { get; set; }
@@ -29,8 +29,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         [JsonIgnore]
         public QuestionType QuestionType { get; set; }
 
-        [JsonIgnore]
-        public List<IAnswer> Answers { get; set; }
 
         [JsonIgnore]
         public List<Image> Cards { get; set; }
@@ -73,7 +71,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             throw new CompositeException();
         }
-        public void Remove<T>(Guid publicKey) where T : class, IComposite
+        public void Remove(Guid publicKey)
         {
             throw new CompositeException();
         }
@@ -91,6 +89,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
         {
             return null;
+        }
+
+        [JsonIgnore]
+        public List<IComposite> Children { get; set; }
+        [JsonIgnore]
+        public IComposite Parent
+        {
+            get { throw new NotImplementedException(); }
         }
 
         #region Implementation of IObservable<out CompositeEventArgs>

@@ -9,8 +9,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
     public class YesNoAnswerCompleteQuestion : IAnswerStrategy
     {
-        private ICompleteQuestion<ICompleteAnswer> document;
-        public YesNoAnswerCompleteQuestion(ICompleteQuestion<ICompleteAnswer> document)
+        private ICompleteQuestion document;
+        public YesNoAnswerCompleteQuestion(ICompleteQuestion document)
         {
             this.document = document;
         }
@@ -21,12 +21,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             if (currentAnswer == null || currentAnswer.QuestionPublicKey != this.document.PublicKey)
                 throw new CompositeException("answer wasn't found");
 
-            foreach (CompleteAnswer completeAnswer in this.document.Answers)
+            foreach (CompleteAnswer completeAnswer in this.document.Children)
             {
                 try
                 {
                     completeAnswer.Add(c, parent);
-                    foreach (var answer in this.document.Answers.Where(answer => answer.PublicKey != currentAnswer.PublicKey))
+                    foreach (CompleteAnswer answer in this.document.Children.Where(answer => answer.PublicKey != currentAnswer.PublicKey))
                     {
                         answer.Selected = false;
                     }
@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         }
         public void Remove()
         {
-            foreach (CompleteAnswer answer in this.document.Answers)
+            foreach (CompleteAnswer answer in this.document.Children)
             {
                 answer.Remove(answer);
             }

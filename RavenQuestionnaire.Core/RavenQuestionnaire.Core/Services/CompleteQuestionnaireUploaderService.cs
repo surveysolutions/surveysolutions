@@ -123,7 +123,7 @@ namespace RavenQuestionnaire.Core.Services
             var template = entity.Find<CompleteGroup>(publicKey);
             bool isCondition = false;
             var executor = new CompleteQuestionnaireConditionExecutor(entity.GetInnerDocument());
-            foreach (CompleteQuestion completeQuestion in template.Questions)
+            foreach (CompleteQuestion completeQuestion in template.GetAllQuestions<ICompleteQuestion>())
             {
                 if (executor.Execute(completeQuestion))
                 {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.ExpressionExecutors;
@@ -22,17 +23,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         Dictionary<string, object> Attributes { get; set; }
     }
 
-    public interface IQuestion<T> : IQuestion where T : IAnswer
-    {
-        List<T> Answers { get; set; }
-    }
 
-    public class Question : /*IEntity<QuestionDocument>*/IQuestion<IAnswer>
+    public class Question : /*IEntity<QuestionDocument>*/IQuestion
     {
         public Question()
         {
             PublicKey = Guid.NewGuid();
-            Answers = new List<IAnswer>();
+            Children = new List<IComposite>();
             Cards = new List<Image>();
             Attributes=new Dictionary<string, object>();
             this.Triggers = new List<Guid>();
@@ -64,7 +61,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
-        public List<IAnswer> Answers { get; set; }
         public List<Image> Cards { get; set; }
 
         public Order AnswerOrder { get; set; }
@@ -95,7 +91,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public void ClearAnswers()
         {
-            Answers.Clear();
+            Children.Clear();
         }
 
         public void UpdateAnswerList(IEnumerable<Answer> answers)
@@ -132,9 +128,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         }
         public void AddAnswer(IAnswer answer)
         {
-            if (Answers.Any(a => a.PublicKey.Equals(answer.PublicKey)))
+            if (Children.Any(a => a.PublicKey.Equals(answer.PublicKey)))
                 throw new DuplicateNameException("answer with current publick key already exist");
-            Answers.Add(answer);
+            Children.Add(answer);
             OnAdded(new CompositeAddedEventArgs(answer));
         }
 
@@ -154,38 +150,29 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public void Remove(IComposite c)
         {
-            IAnswer answer = c as IAnswer;
-            if (answer != null)
+            this.Remove(c.PublicKey);
+        }
+        public void Remove(Guid publicKey)
+        {
+            if (Children.RemoveAll(a => a.PublicKey.Equals(publicKey)) > 0)
             {
-                Answers.Remove(answer);
-                OnRemoved(new CompositeRemovedEventArgs(answer));
                 return;
             }
-            throw new CompositeException();
-        }
-        public void Remove<T>(Guid publicKey) where T : class, IComposite
-        {
-            if (typeof(T).IsAssignableFrom(typeof(IAnswer)))
-            {
-                if (Answers.RemoveAll(a => a.PublicKey.Equals(publicKey)) > 0)
-                {
-                    return;
-                }
-            }
+
             throw new CompositeException();
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
             if (typeof(T).IsAssignableFrom(typeof(IAnswer)))
-                return Answers.FirstOrDefault(a => a.PublicKey.Equals(publicKey)) as T;
+                return Children.FirstOrDefault(a => a.PublicKey.Equals(publicKey)) as T;
             return null;
         }
 
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
 
-            return Answers.Where(a => a is T && condition(a as T)).Select(a => a as T);
+            return Children.Where(a => a is T && condition(a as T)).Select(a => a as T);
             /* if (typeof(T) == typeof(Answer))
                  return Answers.Where(a => condition(a)).Select(a => a as T);
              return null;*/
@@ -193,7 +180,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
         {
-            return Answers.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault();
+            return Children.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault();
+        }
+
+        public List<IComposite> Children { get; set; }
+         [JsonIgnore]
+        public IComposite Parent
+        {
+            get { throw new NotImplementedException(); }
         }
 
         #region Implementation of IObservable<out CompositeEventArgs>
