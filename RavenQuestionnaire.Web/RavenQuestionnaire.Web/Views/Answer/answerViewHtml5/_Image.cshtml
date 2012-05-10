@@ -3,6 +3,6 @@
 
 <div>@Model.Image.Description</div>
 
-    <img src="@Url.Action("Images", "Resource", new { id = Model.Image.Thumb })" alt="@Model.Image.Title"  height="100" width="100"/>
+    <img src="@Url.Action("Images", "Resource", new { id = Model.Image.Thumb })" alt="@Model.Image.Title"  height="100" width="@((Model.Image.Width*100)/Model.Image.Height)"/>
     @*   <h5>@i.Title</h5>*@
    

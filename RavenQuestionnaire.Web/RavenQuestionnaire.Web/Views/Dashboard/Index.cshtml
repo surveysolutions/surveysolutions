@@ -25,12 +25,13 @@
                             @group.SurveyTitle <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
                                                        @Html.ActionLink("New", "Participate", "CompleteQuestionnaire", new { id = group.Id, mode = "Html5" }, new
                                                   {
+                                                      @class = "splited-button",
                                                       data_inline = "true",
                                                       data_icon = "plus",
+                                                      data_iconpos="left",
                                                       data_role = "button",
                                                       data_theme = "b",
                                                       rel = "external",
-                                                      data_iconpos = "notext",
                                                       disable_after_click = "true"
                                                   })
                         @*  <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>*@

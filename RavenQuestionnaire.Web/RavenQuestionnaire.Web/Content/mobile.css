@@ -108,3 +108,17 @@
 	margin-top: 9px;
 	margin-left: 5px;
 }
+.splited-button.ui-li-link-alt {
+	width: 80px;
+}
+.splited-button.ui-li-link-alt .ui-btn-inner {
+	
+}
+.splited-button.ui-li-link-alt .ui-btn{
+	left: 5px;
+	right: auto;
+}
+.splited-button.ui-li-link-alt .ui-btn-text{
+	display: block;
+    padding: 10px 10px 10px 30px;
+}

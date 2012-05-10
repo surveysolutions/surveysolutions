@@ -309,11 +309,16 @@ $(document).on('mobileinit', function () {
 
 $(document).ready(function () {
 
-    
+
     var doc = $(document);
     doc.createKeyBoard();
     doc.numericSubmit();
     doc.hideInputsWithVirtualKeyboard();
     doc.disableAfterSubmit();
+
+    $('.splited-button.ui-li-link-alt').each(function () {
+        var text = $(this).attr('title');
+        $(this).find('.ui-btn-text').html(text);
+    });
 
 });
