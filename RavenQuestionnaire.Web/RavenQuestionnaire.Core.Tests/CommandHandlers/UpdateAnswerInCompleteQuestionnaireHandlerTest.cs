@@ -14,6 +14,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Services;
@@ -45,7 +46,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             qDoqument.Children.Add(question);
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
-            CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object);
+            Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
+            CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object, subscriberMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
                                                                                                                     (
@@ -84,7 +86,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
             completeAnswer.Selected = true;
-            CompleteQuestionnaireUploaderService handler = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object);
+            Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
+            CompleteQuestionnaireUploaderService handler = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object, subscriberMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
                 new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
@@ -128,8 +131,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
 
             CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey){ Selected = true };
-
-            CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object);
+            Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
+            CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object, subscriberMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
                                                                                                                     (completeAnswer)},

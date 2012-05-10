@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Utility;
@@ -19,11 +20,13 @@ namespace RavenQuestionnaire.Core.Services
         private ICompleteQuestionnaireRepository _questionRepository;
         private IStatisticRepository _statisticsRepository;
         private ICommandInvokerAsync _asyncInvocker;
-        public CompleteQuestionnaireUploaderService(ICompleteQuestionnaireRepository questionRepository, IStatisticRepository statisticsRepository, ICommandInvokerAsync asyncInvocker)
+        private ISubscriber subscriber;
+        public CompleteQuestionnaireUploaderService(ICompleteQuestionnaireRepository questionRepository, IStatisticRepository statisticsRepository, ICommandInvokerAsync asyncInvocker, ISubscriber subscriber)
         {
             this._questionRepository = questionRepository;
             this._statisticsRepository = statisticsRepository;
             this._asyncInvocker = asyncInvocker;
+            this.subscriber = subscriber;
         }
         public CompleteQuestionnaire AddCompleteAnswer(string id, CompleteAnswer[] completeAnswers)
         {
@@ -97,7 +100,7 @@ namespace RavenQuestionnaire.Core.Services
         #endregion
         public CompleteQuestionnaire CreateCompleteQuestionnaire(Questionnaire questionnaire,UserLight user, SurveyStatus status)
         {
-            CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire, user, status);
+            CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire, user, status, this.subscriber);
            
             _questionRepository.Add(entity);
             var command = new GenerateQuestionnaireStatisticCommand(entity, null);

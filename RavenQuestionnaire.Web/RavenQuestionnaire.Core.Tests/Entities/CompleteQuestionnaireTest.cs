@@ -6,12 +6,14 @@ using System.Reflection;
 using System.Text;
 using Moq;
 using NUnit.Framework;
+using Ninject;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.Tests.Utils;
 
 namespace RavenQuestionnaire.Core.Tests.Entities
@@ -22,7 +24,14 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         [SetUp]
         public void CreateObjects()
         {
+            IKernel kernel = new StandardKernel();
+            subscriber = new Subscriber(kernel);
+            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<PropagationSubscriber>();
+            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<BindedQuestionSubscriber>();
+
         }
+
+        private ISubscriber subscriber;
   /*      [Test]
         public void WhenAddCompletedAnswerNotInQuestionnaireList_InvalidExceptionThrowed()
         {
@@ -126,7 +135,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             otherGroup.Triggers.Add(group.PublicKey);
           //  qDoqument.Observers = new List<IObserver<CompositeInfo>> { new GroupObserver(otherGroup.PublicKey, group.PublicKey) };
 
-            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
+            CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument, subscriber);
         
             questionanire.Add(group, null);
 
@@ -250,7 +259,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteQuestionnaireDocument target = (CompleteQuestionnaireDocument) doc;
             var propertiesForCheck =
                 typeof (IQuestionnaireDocument).GetPublicPropertiesExcept("Id", "CreationDate", "LastEntryDate",
-                                                                          "OpenDate", "CloseDate", "Parent", "Children");
+                                                                          "OpenDate", "CloseDate", "Parent", "Children","PublicKey");
             foreach (PropertyInfo publicProperty in propertiesForCheck)
             {
 

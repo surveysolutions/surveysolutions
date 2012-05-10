@@ -267,6 +267,12 @@
     <Compile Include="Entities\SubEntities\UserLight.cs" />
     <Compile Include="Entities\SubEntities\SurveyStatus.cs" />
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
+    <Compile Include="Entities\Subscribers\BindedQuestionSubscriber.cs" />
+    <Compile Include="Entities\Subscribers\EntitySubscriber.cs" />
+    <Compile Include="Entities\Subscribers\IEntitySubscriber.cs" />
+    <Compile Include="Entities\Subscribers\ISubscriber.cs" />
+    <Compile Include="Entities\Subscribers\PropagationSubscriber.cs" />
+    <Compile Include="Entities\Subscribers\Subscriber.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />

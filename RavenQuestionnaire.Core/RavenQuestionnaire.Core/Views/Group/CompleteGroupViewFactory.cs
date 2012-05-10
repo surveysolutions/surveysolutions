@@ -25,8 +25,7 @@ namespace RavenQuestionnaire.Core.Views.Group
             Entities.SubEntities.Complete.CompleteGroup group;
             if (input.PublicKey.HasValue)
             {
-                group =
-                    new Entities.CompleteQuestionnaire(doc).Find<Entities.SubEntities.Complete.CompleteGroup>(
+                group = doc.Find<Entities.SubEntities.Complete.CompleteGroup>(
                         input.PublicKey.Value);
             }
             else

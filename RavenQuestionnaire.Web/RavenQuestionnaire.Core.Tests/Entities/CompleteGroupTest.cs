@@ -4,23 +4,35 @@ using System.Linq;
 using System.Text;
 using Moq;
 using NUnit.Framework;
+using Ninject;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.Subscribers;
 
 namespace RavenQuestionnaire.Core.Tests.Entities
 {
     [TestFixture]
     public class CompleteGroupTest
     {
+        [SetUp]
+        public void CreateObjects()
+        {
+            IKernel kernel = new StandardKernel();
+            subscriber = new Subscriber(kernel);
+            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<PropagationSubscriber>();
+            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<BindedQuestionSubscriber>();
+
+        }
+        protected  ISubscriber subscriber;
         [Test]
         public void SubscribeOnGroupAdd_CorrectData_GroupIsAdded()
         {
             CompleteQuestionnaireDocument document = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionnaire = new CompleteQuestionnaire(document);
+            CompleteQuestionnaire questionnaire = new CompleteQuestionnaire(document, subscriber);
 
          //   Mock<IComposite> document = new Mock<IComposite>();
             CompleteGroup baseGroup = new CompleteGroup("target");

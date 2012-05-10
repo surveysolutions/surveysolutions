@@ -24,6 +24,7 @@ namespace RavenQuestionnaire.Core.Documents
         {
             CreationDate = DateTime.Now;
             LastEntryDate = DateTime.Now;
+            PublicKey = Guid.NewGuid();
             Children = new List<IComposite>();
             this.observers=new List<IObserver<CompositeEventArgs>>();
         }
@@ -31,7 +32,6 @@ namespace RavenQuestionnaire.Core.Documents
         public string Id { get; set; }
        
         public string Title { get; set; }
-        [JsonIgnore]
         public Guid PublicKey { get; set; }
         [JsonIgnore]
         public Propagate Propagated

@@ -25,7 +25,7 @@ namespace RavenQuestionnaire.Core.Documents
         {
             this.CreationDate = DateTime.Now;
             this.LastEntryDate = DateTime.Now;
-
+            this.PublicKey = Guid.NewGuid();
             this.compositeobservers = new List<IObserver<CompositeEventArgs>>();
             this.Children = new List<IComposite>();
         }
@@ -91,7 +91,6 @@ namespace RavenQuestionnaire.Core.Documents
 
         public DateTime? CloseDate { get; set; }
 
-        [XmlIgnore]
         public Guid PublicKey { get; set; }
         [XmlIgnore]
         public Propagate Propagated
