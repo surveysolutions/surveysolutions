@@ -19,9 +19,8 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="{Binding Data.Question.QuestionText}" FontSize="20" Margin="5" Foreground="#FFFFFFFF" TextWrapping="Wrap" />        
-        <ContentControl x:Name="ContentArea" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding Data.Question}" ContentTemplateSelector="{StaticResource QuestionDataTemplateSelector}" 
-                        Grid.Row="1">  
-        </ContentControl>
+        <ContentControl x:Name="ContentArea" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding Data.Question}" 
+                        ContentTemplateSelector="{StaticResource QuestionDataTemplateSelector}" Grid.Row="1"/>
         <Grid VerticalAlignment="Bottom" Margin="0,5" Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
