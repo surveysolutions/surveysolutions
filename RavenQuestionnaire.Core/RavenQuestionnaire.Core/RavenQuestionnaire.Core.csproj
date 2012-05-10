@@ -267,6 +267,7 @@
     <Compile Include="Entities\SubEntities\UserLight.cs" />
     <Compile Include="Entities\SubEntities\SurveyStatus.cs" />
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
+    <Compile Include="Entities\Subscribers\AnswerSubscriber.cs" />
     <Compile Include="Entities\Subscribers\BindedQuestionSubscriber.cs" />
     <Compile Include="Entities\Subscribers\EntitySubscriber.cs" />
     <Compile Include="Entities\Subscribers\IEntitySubscriber.cs" />
