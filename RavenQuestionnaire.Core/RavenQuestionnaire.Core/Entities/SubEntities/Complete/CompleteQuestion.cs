@@ -20,10 +20,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.Children = new List<IComposite>();
             this.Cards = new List<Image>();
             this.Triggers = new List<Guid>();
-            this.Attributes=new Dictionary<string, object>();
+            this.Attributes = new Dictionary<string, object>();
             //this.Answers.GetObservablePropertyChanges().Subscribe(e=>e.EventArgs)
             this.observers = new List<IObserver<CompositeEventArgs>>();
-            SubscribeAddedAnswers();
         }
 
         public CompleteQuestion(string text, QuestionType type)
@@ -64,17 +63,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 }
             return result;
         }
-
-        protected void SubscribeAddedAnswers()
-        {
-            this.GetAllAnswerAddedEvents().Subscribe(
-                    Observer.Create<CompositeAddedEventArgs>(HandleAddedAnswer));
-        }
-        protected void HandleAddedAnswer(CompositeAddedEventArgs e)
-        {
-            ((ICompleteAnswer)e.AddedComposite).QuestionPublicKey = this.PublicKey;
-        }
-
         public Guid PublicKey { get; set; }
 
         public string QuestionText { get; set; }

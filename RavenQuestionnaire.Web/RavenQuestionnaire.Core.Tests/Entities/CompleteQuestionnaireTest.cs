@@ -28,7 +28,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             subscriber = new Subscriber(kernel);
             kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<PropagationSubscriber>();
             kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<BindedQuestionSubscriber>();
-
+            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<AnswerSubscriber>();
         }
 
         private ISubscriber subscriber;
@@ -226,7 +226,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
             CompleteQuestionnaire completeQuestionnaire =
                 new CompleteQuestionnaire(new Questionnaire(questionnaireInnerDocument), new UserLight(),
-                                          new SurveyStatus());
+                                          new SurveyStatus(), subscriber);
             CompleteQuestionnaireDocument innerDocument =
                 ((IEntity<CompleteQuestionnaireDocument>) completeQuestionnaire).GetInnerDocument();
             var result = completeQuestionnaire.Find<IComposite>(c => true);
