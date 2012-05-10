@@ -19,7 +19,7 @@ namespace RavenQuestionnaire.Core.Views.Question
                 throw new ArgumentException();
             }
             var templates =
-                new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc).Find<CompleteQuestion>(
+                doc.Find<CompleteQuestion>(
                     q => q.PublicKey ==
                          bindedQuestion.ParentPublicKey);
             var template = templates.FirstOrDefault();
@@ -28,8 +28,8 @@ namespace RavenQuestionnaire.Core.Views.Question
                 IPropogate propagatebleGroup = group as IPropogate;
                 if (propagatebleGroup == null)
                     return;
-                var questionnaire = new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc);
-                template = questionnaire.Find<PropagatableCompleteGroup>(
+              //  var questionnaire = new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc);
+                template = doc.Find<PropagatableCompleteGroup>(
                     g => g.PropogationPublicKey.Equals(propagatebleGroup.PropogationPublicKey)).SelectMany(
                         g => g.Find<CompleteQuestion>(q => q.PublicKey.Equals(bindedQuestion.ParentPublicKey))).
                     FirstOrDefault();

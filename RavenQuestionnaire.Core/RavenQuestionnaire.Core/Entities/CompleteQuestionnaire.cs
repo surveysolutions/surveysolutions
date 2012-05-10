@@ -3,173 +3,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using Ninject;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities
 {
-    public class CompleteQuestionnaire : IEntity<CompleteQuestionnaireDocument>//, IPropogate
+    public class CompleteQuestionnaire : IEntity<CompleteQuestionnaireDocument>
     {
         private CompleteQuestionnaireDocument innerDocument;
-       // private CompositeHandler handler;
         public CompleteQuestionnaireDocument GetInnerDocument()
         {
             return innerDocument;
-        }
-        public CompleteQuestionnaire(Questionnaire template, UserLight user, SurveyStatus status)
-        {
-            innerDocument =
-                (CompleteQuestionnaireDocument)((IEntity<QuestionnaireDocument>)template).GetInnerDocument();
-            innerDocument.Creator = user;
-            innerDocument.Status = status;
-            innerDocument.Responsible = user;
-            
-            /* foreach (ICompleteGroup completeGroup in GroupIterator)
-             {
-                 var group = completeGroup as CompleteGroup;
-                 if (group != null)
-                     group.Subscribe(this.handler);
-             }*/
-            SubscibeAutoPropogation();
-            SubscribeBindedQuestions();
         }
 
         public CompleteQuestionnaire(CompleteQuestionnaireDocument document)
         {
             this.innerDocument = document;
-            SubscibeAutoPropogation();
-            SubscribeBindedQuestions();
         }
-        protected void SubscibeAutoPropogation()
+        public CompleteQuestionnaire(Questionnaire template, UserLight user, SurveyStatus status)
         {
-            innerDocument.GetGroupPropagatedEvents().Subscribe(Observer.Create<CompositeAddedEventArgs>(AutoPropagate));
-            innerDocument.GetGroupPropagatedRemovedEvents().Subscribe(Observer.Create<CompositeRemovedEventArgs>(RemoveAutoPropagate));
 
-            var addAnswers = from q in this.innerDocument.GetAllAnswerAddedEvents()
-                             let question =
-                                 ((CompositeAddedEventArgs)q.ParentEvent).AddedComposite as
-                                 ICompleteQuestion
-                             where question.QuestionType== QuestionType.AutoPropagate
-                             select q;
-
-            addAnswers
-               .Subscribe(Observer.Create<CompositeAddedEventArgs>(
-                   MultyGroupPropagation));
-          
+            innerDocument =
+           (CompleteQuestionnaireDocument)((IEntity<QuestionnaireDocument>)template).GetInnerDocument();
+            innerDocument.Creator = user;
+            innerDocument.Status = status;
+            innerDocument.Responsible = user;
         }
-
-        private void MultyGroupPropagation(CompositeAddedEventArgs e)
+        public CompleteQuestionnaire(Questionnaire template, UserLight user, SurveyStatus status, ISubscriber subscriber):this(template,user,status)
         {
-            var question = ((CompositeAddedEventArgs)e.ParentEvent).AddedComposite as ICompleteQuestion;
-
-            if (question == null || question.QuestionType != QuestionType.AutoPropagate)
-                return;
-
-            var countObj = question.GetValue();
-
-            int count = Convert.ToInt32(countObj);
-
-            if(count<0)
-                throw new InvalidOperationException("caount can't be bellow zero");
-            if (!question.Attributes.ContainsKey("TargetGroupKey"))
-                return;
-            Guid target = Guid.Parse(question.Attributes["TargetGroupKey"].ToString());
-            var groups = this.innerDocument.Find<PropagatableCompleteGroup>(g=>g.PublicKey==target).ToList();
-            if(groups.Count==count)
-                return;
-            if(groups.Count<count)
-            {
-                var template = this.innerDocument.Find<ICompleteGroup>(g => g.PublicKey == target && !(g is PropagatableCompleteGroup)).FirstOrDefault();
-                for (int i = 0; i < count - groups.Count; i++)
-                {
-                    this.Add(new PropagatableCompleteGroup(template, Guid.NewGuid()), null);
-                }
-            }
-            else
-            {
-                for (int i = count; i < groups.Count; i++)
-                {
-                    this.Remove(groups[i]);
-                }
-            }
+            subscriber.Subscribe(this.innerDocument);
         }
 
-        protected void SubscribeBindedQuestions()
+        public CompleteQuestionnaire(CompleteQuestionnaireDocument document, ISubscriber subscriber)
+            : this(document)
         {
-            var addAnswers = from q in this.innerDocument.GetAllAnswerAddedEvents()
-                             let question =
-                                 ((CompositeAddedEventArgs)q.ParentEvent).AddedComposite as
-                                 ICompleteQuestion
-                             let binded =
-                                 this.innerDocument.GetAllBindedQuestions(question.PublicKey)
-                             where binded.Any()
-                             select q;
-            addAnswers
-                .Subscribe(Observer.Create<CompositeAddedEventArgs>(
-                    BindQuestion));
-        }
-       
-        protected void BindQuestion(CompositeAddedEventArgs e)
-        {
-            var template = ((CompositeAddedEventArgs)e.ParentEvent).AddedComposite as ICompleteQuestion;
 
-            if (template == null)
-                return;
-            var propagatedTemplate = template as IPropogate;
-            IEnumerable<BindedCompleteQuestion> binded;
-            if (propagatedTemplate == null)
-            {
-                binded =
-                    this.innerDocument.GetAllBindedQuestions(template.PublicKey);
-            }
-            else
-            {
-                binded = this.innerDocument.GetPropagatedGroupsByKey(propagatedTemplate.PropogationPublicKey).SelectMany(
-                    pg => pg.GetAllBindedQuestions(template.PublicKey));
-            }
-            foreach (BindedCompleteQuestion bindedCompleteQuestion in binded)
-            {
-                bindedCompleteQuestion.Copy(template);
-            }
-
+            subscriber.Subscribe(this.innerDocument);
         }
-
-        protected void AutoPropagate(CompositeAddedEventArgs e)
-        {
-           // ICompleteGroup template = ((CompositeAddedEventArgs) e.ParentEvent).AddedComposite as ICompleteGroup; 
-            PropagatableCompleteGroup group = e.AddedComposite as PropagatableCompleteGroup;
-            if(group==null)
-                return;
-            var triggeres =
-                this.Find<ICompleteGroup>(
-                    g => g.Triggers.Count(gp => gp.Equals(group.PublicKey)) > 0).ToList();
-            foreach (ICompleteGroup triggere in triggeres)
-            {
-                var propagatebleGroup = new PropagatableCompleteGroup(triggere, group.PropogationPublicKey);
-                innerDocument.Add(propagatebleGroup, null);
-            }
-        }
-       
-        protected void RemoveAutoPropagate(CompositeRemovedEventArgs e)
-        {
-            PropagatableCompleteGroup group = e.RemovedComposite as PropagatableCompleteGroup;
-            if (group == null)
-                return;
-              var triggeres =
-                this.Find<ICompleteGroup>(
-                    g => g.Triggers.Count(gp => gp.Equals(group.PublicKey)) > 0).ToList();
-              foreach (ICompleteGroup triggere in triggeres)
-              {
-                  var propagatebleGroup = new PropagatableCompleteGroup(triggere, group.PropogationPublicKey);
-                  innerDocument.Remove(propagatebleGroup);
-              }
-        }
-       
-
         public string CompleteQuestinnaireId
         {
             get { return innerDocument.Id; }

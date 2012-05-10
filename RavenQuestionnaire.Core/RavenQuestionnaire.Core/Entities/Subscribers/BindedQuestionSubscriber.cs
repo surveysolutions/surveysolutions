@@ -1,0 +1,69 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Text;
+using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Extensions;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+
+namespace RavenQuestionnaire.Core.Entities.Subscribers
+{
+    public class BindedQuestionSubscriber : EntitySubscriber<ICompleteGroup>
+    {
+        #region Implementation of IDisposable
+
+        public override void Subscribe(ICompleteGroup target)
+        {
+            var addAnswers = from q in target.GetAllAnswerAddedEvents()
+                             let question =
+                                 ((CompositeAddedEventArgs) q.ParentEvent).AddedComposite as
+                                 ICompleteQuestion
+                             let binded =
+                                 target.GetAllBindedQuestions(question.PublicKey)
+                             where binded.Any()
+                             select q;
+            subsribers.Add(target.PublicKey, addAnswers
+                                                 .Subscribe(Observer.Create<CompositeAddedEventArgs>(
+                                                     (e) =>
+                                                         {
+                                                             var template =
+                                                                 ((CompositeAddedEventArgs) e.ParentEvent).
+                                                                     AddedComposite as
+                                                                 ICompleteQuestion;
+
+                                                             if (template == null)
+                                                                 return;
+                                                             var propagatedTemplate = template as IPropogate;
+                                                             IEnumerable<BindedCompleteQuestion> binded;
+                                                             if (propagatedTemplate == null)
+                                                             {
+                                                                 binded =
+                                                                     target.GetAllBindedQuestions(template.PublicKey);
+                                                             }
+                                                             else
+                                                             {
+                                                                 binded = target.GetPropagatedGroupsByKey(
+                                                                     propagatedTemplate.PropogationPublicKey).
+                                                                     SelectMany(
+                                                                         pg =>
+                                                                         pg.GetAllBindedQuestions(template.PublicKey));
+                                                             }
+                                                             foreach (
+                                                                 BindedCompleteQuestion bindedCompleteQuestion in binded
+                                                                 )
+                                                             {
+                                                                 bindedCompleteQuestion.Copy(template);
+                                                             }
+
+                                                         })));
+
+
+        }
+
+        #endregion
+
+
+    }
+}

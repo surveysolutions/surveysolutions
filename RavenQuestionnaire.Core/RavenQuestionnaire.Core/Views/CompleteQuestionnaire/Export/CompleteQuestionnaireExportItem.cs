@@ -21,8 +21,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         public CompleteQuestionnaireExportItem(CompleteQuestionnaireDocument doc)
         {
             this.Id = IdUtil.ParseId(doc.Id);
-            this.CompleteAnswers =
-                new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc).Find<ICompleteAnswer>(a => a.Selected).
+            this.CompleteAnswers =doc.Find<ICompleteAnswer>(a => a.Selected).
                     ToArray();
                 
         }

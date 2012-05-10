@@ -26,17 +26,17 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
             {
                 var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
-                var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
+             //   var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
                 ICompleteGroup group = null;
 
                 Iterator<ICompleteGroup> iterator = new QuestionnaireScreenIterator(doc);
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
-                    group = completeQuestionnaireRoot.Find<CompleteGroup>(input.CurrentGroupPublicKey.Value);
+                    group = doc.Find<CompleteGroup>(input.CurrentGroupPublicKey.Value);
                 }
                 else if (input.PreviousGroupPublicKey.HasValue)
                 {
-                    iterator.SetCurrent(completeQuestionnaireRoot.Find<CompleteGroup>(input.PreviousGroupPublicKey.Value));
+                    iterator.SetCurrent(doc.Find<CompleteGroup>(input.PreviousGroupPublicKey.Value));
                     group = input.IsReverse ? iterator.Previous : iterator.Next;
                 }
                 else

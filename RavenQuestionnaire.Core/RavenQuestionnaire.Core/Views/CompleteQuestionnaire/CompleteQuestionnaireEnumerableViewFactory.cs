@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
             {
                 var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
-                var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
+              //  var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
                 ICompleteGroup group = null;
 
                 Iterator<ICompleteGroup> iterator =
@@ -38,14 +38,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
                     group =
-                        completeQuestionnaireRoot.Find
+                        doc.Find
                             <RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup>(
                                 input.CurrentGroupPublicKey.Value);
                 }
                 else if (input.PreviousGroupPublicKey.HasValue)
                 {
 
-                    iterator.SetCurrent(completeQuestionnaireRoot.Find
+                    iterator.SetCurrent(doc.Find
                                             <RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup>(
                                                 input.PreviousGroupPublicKey.Value));
                     group = input.IsReverse
