@@ -48,14 +48,9 @@ namespace QApp.ViewModel
              if (item != null)
              {
                  Data = new QuestionData(item);
-
                  foreach (var completeAnswerView in QuestionData.Question.Answers)
-                 {
                      if (completeAnswerView.Selected)
-                     {
                          SelectedAnswer = completeAnswerView;
-                     }
-                 }
              }
          }
 
