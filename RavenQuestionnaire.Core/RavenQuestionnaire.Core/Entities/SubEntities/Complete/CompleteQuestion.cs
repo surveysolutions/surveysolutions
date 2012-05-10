@@ -113,7 +113,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public void Remove(IComposite c)
         {
-            this.Remove(this.PublicKey);
+            this.Remove(c.PublicKey);
         }
 
         public void Remove(Guid publicKey)
