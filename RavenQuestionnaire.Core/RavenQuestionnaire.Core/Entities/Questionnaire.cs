@@ -94,8 +94,17 @@ namespace RavenQuestionnaire.Core.Entities
             {
                 if (groups[i].PublicKey == after.Value)
                 {
-                    groups.Remove(moveble);
-                    groups.Insert(i + 1, moveble);
+                    int movableIndex = groups.IndexOf(moveble);
+                  /*  var temp = groups[i];
+                    groups[i] = moveble;
+                    groups[movableIndex] = temp;*/
+                       groups.Remove(moveble);
+                    
+                    if (i < groups.Count)
+                        groups.Insert(i + 1, moveble);
+                    else
+                        groups.Add(moveble);
+                  //  groups.RemoveAt(movableIndex);
                     return true;
                 }
             }
