@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace RavenQuestionnaire.Web
@@ -31,6 +32,13 @@ namespace RavenQuestionnaire.Web
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+        }
+
+        protected void Application_Error()
+        {
+            Exception lastException = Server.GetLastError();
+            NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Fatal(lastException);
         }
     }
 }
