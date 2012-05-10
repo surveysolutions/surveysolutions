@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Kaliko.ImageLibrary;
 using Kaliko.ImageLibrary.Filters;
+using NLog;
 using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.File;
@@ -33,6 +34,7 @@ namespace RavenQuestionnaire.Web.Controllers
     }
     public class ResourceController : Controller
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
         private IFileStorageService fileStorageService;
@@ -78,15 +80,19 @@ namespace RavenQuestionnaire.Web.Controllers
 
         //DONT USE THIS IF YOU NEED TO ALLOW LARGE FILES UPLOADS
         [HttpGet]
-        public void Delete(string id)
+        public ActionResult Delete(string id)
         {
             var filename = id;
-            var filePath = Path.Combine(Server.MapPath("~/Files"), filename);
 
-            if (System.IO.File.Exists(filePath))
+            try
             {
-                System.IO.File.Delete(filePath);
+                commandInvoker.Execute(new DeleteFileCommand(id, GlobalInfo.GetCurrentUser()));
             }
+            catch (Exception exception)
+            {
+                logger.Error("Can't delete image. "+exception.Message);
+            }
+            return RedirectToAction("Index", "Resource", new FileBrowseInputModel());
         }
 
         //DONT USE THIS IF YOU NEED TO ALLOW LARGE FILES UPLOADS

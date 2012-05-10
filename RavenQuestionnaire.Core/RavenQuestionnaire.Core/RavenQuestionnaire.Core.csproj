@@ -113,6 +113,7 @@
     <Compile Include="CommandHandlers\Collection\DeleteCollectionHandler.cs" />
     <Compile Include="CommandHandlers\Collection\DeleteCollectionItemHandler.cs" />
     <Compile Include="CommandHandlers\Collection\UpdateCollectionHandler.cs" />
+    <Compile Include="CommandHandlers\File\DeleteFileCommandHandler.cs" />
     <Compile Include="CommandHandlers\File\UpdateFileMetaCommandHandler.cs" />
     <Compile Include="CommandHandlers\File\UploadFileCommandHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\ValidateGroupCommandHandler.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Commands\Collection\DeleteCollectionCommand.cs" />
     <Compile Include="Commands\Collection\DeleteCollectionItemCommand.cs" />
     <Compile Include="Commands\Collection\UpdateCollectionCommand.cs" />
+    <Compile Include="Commands\File\DeleteFileCommand.cs" />
     <Compile Include="Commands\File\UpdateFileMetaCommand.cs" />
     <Compile Include="Commands\File\UploadFileCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\CreateNewFlowGraphCommand.cs" />

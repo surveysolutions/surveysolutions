@@ -1,3 +1,14 @@
+================================================================
+
+To make dump file
+C:\Users\Slava\Desktop\RavenDB-888\Smuggler\Raven.Smuggler out http://localhost:8080/  D:\Projects\MIS2\testdata\init.raven.dump
+
+To import from dump file
+C:\Users\Slava\Desktop\RavenDB-888\Smuggler\Raven.Smuggler in http://localhost:8080/  D:\Projects\MIS2\testdata\init.raven.dump
+
+================================================================
+
+
 1. Start ravenDb server.
 2. Exec 
 Raven.Smuggler in http://localhost:8081/  init.dump
@@ -12,5 +23,3 @@ if you want to update use out command
 
 Raven.Smuggler out http://localhost:8081/  init.dump
 
-
-C:\Users\Slava\Desktop\RavenDB-888\Smuggler\Raven.Smuggler in http://localhost:8080/  D:\Projects\MIS2\testdata\init.raven.dump
