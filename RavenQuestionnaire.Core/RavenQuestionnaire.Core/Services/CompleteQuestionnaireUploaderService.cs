@@ -30,33 +30,27 @@ namespace RavenQuestionnaire.Core.Services
         }
         public CompleteQuestionnaire AddCompleteAnswer(string id, CompleteAnswer[] completeAnswers)
         {
+            PropagatableCompleteAnswer propagated = completeAnswers[0] as PropagatableCompleteAnswer;
+
             CompleteQuestionnaire entity = _questionRepository.Load(id);
+            ICompleteGroup general = entity.GetInnerDocument();
+            ICompleteQuestion question;
+            question = propagated == null ? FindQuestion(completeAnswers[0].PublicKey, null, general) : FindQuestion(completeAnswers[0].PublicKey, propagated.PropogationPublicKey, general);
+            if (question == null)
+                throw new ArgumentException("question wasn't found");
+
             foreach (var completeAnswer in completeAnswers)
             {
                 if (completeAnswer.Selected)
-                    entity.Add(completeAnswer, null);
+                    entity.Add(completeAnswer, question.PublicKey);
                 else
                     entity.Remove(completeAnswer);
             }
-            PropagatableCompleteAnswer propagated = completeAnswers[0] as PropagatableCompleteAnswer;
-            ICompleteGroup general = entity.GetInnerDocument();
-            if (propagated == null)
-                ExecuteConditions(FindQuestion(completeAnswers[0].QuestionPublicKey, null, general), general);
-            else
+            ExecuteConditions(question, general);
 
-                ExecuteConditions(FindQuestion(propagated.QuestionPublicKey, propagated.PropogationPublicKey, general),
-                                  general);
 
             var command = new GenerateQuestionnaireStatisticCommand(entity, null);
-
             _asyncInvocker.Execute(command);
-           /* new Thread(() =>
-                           {
-                               CompleteQuestionnaireStatistics statistics =
-                                   this._statisticsRepository.Load(IdUtil.CreateStatisticId(id));
-                               statistics.UpdateStatistic(entity.GetInnerDocument());
-
-                           }).Start();*/
             return entity;
         }
 
@@ -90,13 +84,16 @@ namespace RavenQuestionnaire.Core.Services
                 }
             }
         }
-        protected ICompleteQuestion FindQuestion(Guid questionKey, Guid? propagationKey, ICompleteGroup entity)
+        protected ICompleteQuestion FindQuestion(Guid answerKey, Guid? propagationKey, ICompleteGroup entity)
         {
             //PropagatableCompleteAnswer propagated = answer as PropagatableCompleteAnswer;
+
+            var question = entity.FirstOrDefault<ICompleteQuestion>(q => q.Children.Any(a => a.PublicKey == answerKey));
             if (!propagationKey.HasValue)
-                return entity.FirstOrDefault<ICompleteQuestion>(q => q.PublicKey == questionKey);
-            return entity.GetPropagatedQuestion(questionKey, propagationKey.Value);
+                return question;
+            return entity.GetPropagatedQuestion(question.PublicKey, propagationKey.Value);
         }
+
         #endregion
         public CompleteQuestionnaire CreateCompleteQuestionnaire(Questionnaire questionnaire,UserLight user, SurveyStatus status)
         {

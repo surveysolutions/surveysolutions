@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Entities.Extensions;
@@ -41,10 +42,12 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
             
            
 
-            var questions = result.GetInnerDocument().GetAllQuestions<ICompleteQuestion>();
+            var questions = result.GetInnerDocument().GetAllQuestions<ICompleteQuestion>().ToList();
             var executor = new CompleteQuestionnaireConditionExecutor(result.GetInnerDocument());
             foreach (ICompleteQuestion completeQuestion in questions)
             {
+                if(completeQuestion is IBinded)
+                    continue;
                 completeQuestion.Enabled = executor.Execute(completeQuestion);
                 if (!completeQuestion.Enabled)
                     result.Remove(completeQuestion);

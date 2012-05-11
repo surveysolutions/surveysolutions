@@ -50,12 +50,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                                               Attributes = doc.Attributes
                                           };
             var ansersToCopy = new OrderStrategyFactory().Get(result.AnswerOrder).Reorder(doc.Children);
-            foreach (IAnswer answer in ansersToCopy)
+            new CompleteQuestionFactory().Create(result).Create(ansersToCopy);
+         /*   foreach (IAnswer answer in ansersToCopy)
             {
                 var newanswer = new CompleteAnswerFactory().ConvertToCompleteAnswer(answer);
                 result.Children.Add(newanswer);
                 result.OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(result), newanswer));
-            }
+            }*/
             if (doc.Cards != null)
                 foreach (var card in doc.Cards)
                 {

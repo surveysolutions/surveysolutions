@@ -29,7 +29,7 @@ namespace RavenQuestionnaire.Core.Processors
             //order of items is important
             foreach (var item in status.FlowRules.Values)
             {
-                if (executor.Execute(completedQ.Find<ICompleteAnswer>(a=>a.Selected), item.ConditionExpression))
+                if (executor.Execute(completedQ.GetInnerDocument(), item.ConditionExpression))
                 {
                     CallStatusChange(completedQ.CompleteQuestinnaireId, item.TargetStatus.PublicId, status.Id);
                     return;

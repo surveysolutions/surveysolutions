@@ -57,10 +57,10 @@ namespace RavenQuestionnaire.Core.Export.csv
                     writer.WriteField(item.Id);
                     foreach (var guid in template.Keys)
                     {
-                        var completeAnswer = item.CompleteAnswers.FirstOrDefault(a => a.QuestionPublicKey.Equals(guid));
+                 /*     TODO  var completeAnswer = item.CompleteAnswers.FirstOrDefault(a => a.QuestionPublicKey == guid);
                         writer.WriteField(completeAnswer != null
                                               ? completeAnswer.AnswerValue?? completeAnswer.AnswerText
-                                              : null);
+                                              : null);*/
                     }
                     writer.NextRecord();
                 }
