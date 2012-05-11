@@ -9,7 +9,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
     public interface ICompleteAnswer : IAnswer
     {
        bool Selected { get; set; }
-       Guid QuestionPublicKey { get; set; }
     }
 
     public class CompleteAnswer : ICompleteAnswer
@@ -20,7 +19,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.observers=new List<IObserver<CompositeEventArgs>>();
         }
 
-        public CompleteAnswer(IAnswer answer, Guid questionPublicKey):this()
+        public CompleteAnswer(IAnswer answer):this()
         {
             this.AnswerText = answer.AnswerText;
             this.AnswerType = answer.AnswerType;
@@ -30,7 +29,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.Mandatory = answer.Mandatory;
             this.PublicKey = answer.PublicKey;
             this.Selected = false;
-            this.QuestionPublicKey = questionPublicKey;
        
           /*  this.PublicKey = answer.PublicKey;
             this.QuestionPublicKey = questionPublicKey;*/
@@ -60,8 +58,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public Image Image { get; set; }
 
         public object AnswerValue { get; set; }
-        [XmlIgnore]
-        public Guid QuestionPublicKey { get; set; }
         public bool Selected { get; set; }
 
         protected void Set(object text)
