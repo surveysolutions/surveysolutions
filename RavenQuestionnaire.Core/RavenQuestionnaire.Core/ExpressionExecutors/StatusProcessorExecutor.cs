@@ -1,23 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using NCalc;
+using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
-    class StatusProcessorExecutor : IExpressionExecutor<IEnumerable<ICompleteAnswer>, bool>
+    class StatusProcessorExecutor : IExpressionExecutor<ICompleteGroup, bool>
     {
-        public bool Execute(IEnumerable<ICompleteAnswer> entity, string condition)
+        public bool Execute(ICompleteGroup entity, string condition)
         {
             if (string.IsNullOrEmpty(condition))
                 return true;
             var expressionItem = new Expression(condition);
-
-            foreach (var answer in entity)
+            var questions = entity.GetAllQuestions<ICompleteQuestion>();
+            foreach (ICompleteQuestion completeQuestion in questions)
             {
-                expressionItem.Parameters[answer.QuestionPublicKey.ToString()] =
-                    answer.AnswerValue ?? answer.AnswerText;
+                var answers = completeQuestion.Find<ICompleteAnswer>(a => a.Selected);
+                foreach (var answer in answers)
+                {
+                    expressionItem.Parameters[completeQuestion.PublicKey.ToString()] =
+                        answer.AnswerValue ?? answer.AnswerText;
+                }
             }
+       
 
             bool result = false;
             try

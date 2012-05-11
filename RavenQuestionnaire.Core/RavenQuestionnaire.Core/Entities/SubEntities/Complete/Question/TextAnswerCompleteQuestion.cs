@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 
@@ -17,18 +18,30 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         public void Add(IComposite c, Guid? parent)
         {
+            ICompleteAnswer questionAnswer = this.document.Children[0] as ICompleteAnswer;
+            if (questionAnswer == null)
+                throw new CompositeException("document is corrapted");
+         
             CompleteAnswer currentAnswer = c as CompleteAnswer;
-            if (currentAnswer == null || currentAnswer.QuestionPublicKey != this.document.PublicKey)
+            if (currentAnswer == null || !this.document.Children.Any(a=>a.PublicKey== currentAnswer.PublicKey))
                 throw new CompositeException("answer wasn't found");
-            currentAnswer.Selected = true;
-       //     currentAnswer.AnswerType= AnswerType.Text;
-            this.document.Children.Clear();
-            this.document.Children.Add(currentAnswer);
+            questionAnswer.Selected = true;
+            questionAnswer.AnswerValue = currentAnswer.AnswerValue;
+     
 
         }
         public void Remove()
         {
-            document.Children.Clear();
+            ICompleteAnswer questionAnswer = this.document.Children[0] as ICompleteAnswer;
+            if (questionAnswer == null)
+                throw new CompositeException("document is corrapted");
+            questionAnswer.Selected = false;
+            questionAnswer.AnswerValue = null;
+        }
+        public void Create(IEnumerable<IComposite> answers)
+        {
+            document.Children.Add(new CompleteAnswerFactory().ConvertToCompleteAnswer(new Answer()));
+            //  document.OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(result), newanswer));
         }
     }
 }

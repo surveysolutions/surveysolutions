@@ -14,7 +14,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
       /*  public PropagatableCompleteAnswer(IAnswer answer, Guid questionPublicKey):base(answer,questionPublicKey)
         {
         }*/
-        public PropagatableCompleteAnswer(ICompleteAnswer answer, Guid propogationPublicKey):base(answer,answer.QuestionPublicKey)
+        public PropagatableCompleteAnswer(ICompleteAnswer answer, Guid propogationPublicKey):base(answer)
         {
             this.Selected = answer.Selected;
             this.PropogationPublicKey = propogationPublicKey;

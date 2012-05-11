@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 
@@ -18,7 +19,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         public void Add(IComposite c, Guid? parent)
         {
             CompleteAnswer currentAnswer = c as CompleteAnswer;
-            if (currentAnswer == null || currentAnswer.QuestionPublicKey != this.document.PublicKey)
+            if (currentAnswer == null || !this.document.Children.Any(a=>a.PublicKey== currentAnswer.PublicKey))
                 throw new CompositeException("answer wasn't found");
             foreach (CompleteAnswer completeAnswer in this.document.Children)
             {
@@ -39,6 +40,15 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             {
                 answer.Remove(answer);
             }
+        }
+        public void Create(IEnumerable<IComposite> answers)
+        {
+            foreach (IComposite composite in answers)
+            {
+                document.Children.Add(new CompleteAnswerFactory().ConvertToCompleteAnswer(composite as IAnswer));
+            }
+
+            //  document.OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(result), newanswer));
         }
     }
 }

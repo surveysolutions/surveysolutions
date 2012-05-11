@@ -41,7 +41,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteQuestion question = new CompleteQuestion("q",
                                              QuestionType.SingleOption);
             
-            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             qDoqument.Children.Add(question);
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
@@ -73,7 +73,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated};
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
-            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);
             qDoqument.Children.Add(group);
@@ -84,14 +84,14 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             Mock<IStatisticRepository> statisticMock = new Mock<IStatisticRepository>();
 
-            CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
+            CompleteAnswer completeAnswer = new CompleteAnswer(answer);
             completeAnswer.Selected = true;
             Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
             CompleteQuestionnaireUploaderService handler = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object, subscriberMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
                 new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
-                                                                                                                    (completeAnswer)},
+                                                                                                                    ( Guid.NewGuid(),completeAnswer)},
                                                                                                                 ((
                                                                                                                  PropagatableCompleteGroup
                                                                                                                  )
@@ -120,7 +120,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
-            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);
             qDoqument.Children.Add(group);
@@ -130,12 +130,12 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
             repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
 
-            CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey){ Selected = true };
+            CompleteAnswer completeAnswer = new CompleteAnswer(answer){ Selected = true };
             Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
             CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object, subscriberMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
                                                                                                                 new CompleteAnswerView
-                                                                                                                    (completeAnswer)},
+                                                                                                                    ( Guid.NewGuid(),completeAnswer)},
                                                                                                                 Guid.
                                                                                                                     NewGuid
                                                                                                                     ()
@@ -143,7 +143,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                 null);
 
 
-            Assert.Throws<CompositeException>(
+            Assert.Throws<ArgumentException>(
                 () => service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.CompleteAnswers));
             //  group.Add(group, null);fnk
         }

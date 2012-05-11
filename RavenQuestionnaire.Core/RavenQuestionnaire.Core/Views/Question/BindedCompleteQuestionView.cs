@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.Views.Question
                     return;
                 }
             }
-            this.Answers = template.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(a)).ToArray();
+            this.Answers = template.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(template.PublicKey,a)).ToArray();
             this.PublicKey = template.PublicKey;
             this.QuestionText = template.QuestionText;
             this.Instructions = template.Instructions;

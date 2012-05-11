@@ -28,7 +28,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteQuestion question = new CompleteQuestion("?", QuestionType.SingleOption);
 
             innerDocument.Children.Add(question);
-            CompleteAnswer answer = new CompleteAnswer(new Answer(), question.PublicKey);
+            CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
 
             CompleteQuestionnaire entity = new CompleteQuestionnaire(innerDocument);

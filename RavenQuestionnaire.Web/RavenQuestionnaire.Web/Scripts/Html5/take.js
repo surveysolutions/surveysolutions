@@ -178,13 +178,13 @@ $(document).on('mobileinit', function () {
             case 'select-one':
             case 'text':
                  jThis.val('');
-                 jThis.change();
+                // jThis.change();
             case 'number':
                  jThis.val('');
-                 jThis.change();
+               //  jThis.change();
             case 'textarea':
                 jThis.val('');
-                jThis.change();
+            //    jThis.change();
                 break;
             case 'checkbox':
             case 'radio':

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
@@ -7,5 +8,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
     {
         void Add(IComposite c, Guid? parent);
         void Remove();
+        void Create(IEnumerable<IComposite> answers);
     }
 }

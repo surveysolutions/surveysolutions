@@ -149,7 +149,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     It.IsAny<StatusViewInputModel>()))
                 .Returns(new StatusView());
             CompleteQuestionView question = new CompleteQuestionView("cId",Guid.NewGuid());
-            question.Answers = new CompleteAnswerView[] {new CompleteAnswerView(new CompleteAnswer())};
+            question.Answers = new CompleteAnswerView[] {new CompleteAnswerView(question.PublicKey,new CompleteAnswer())};
             Controller.SaveSingleResult(
                 new CompleteQuestionSettings[]
                     {new CompleteQuestionSettings() {QuestionnaireId = "cId", PropogationPublicKey = Guid.NewGuid()}},

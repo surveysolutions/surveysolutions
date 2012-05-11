@@ -58,7 +58,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             question.ConditionExpression = "[" + question.PublicKey + "]==3";
             doc.Children.Add(question);
 
-            var completeAnswer = new CompleteAnswer(new Answer(), doc.Children[0].PublicKey);
+            var completeAnswer = new CompleteAnswer(new Answer());
             completeAnswer.AnswerType = AnswerType.Select;
             completeAnswer.AnswerValue = "3";
             completeAnswer.Selected = true;
@@ -69,7 +69,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         [Test]
         public void EvaluateCondition_ConditionIsInValidParamsAreNotEmpty_ReturnsTrue()
         {
-            var answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            var answer = new CompleteAnswer(new Answer());
             answer.AnswerValue = "invalid value";
 
             

@@ -28,7 +28,6 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             subscriber = new Subscriber(kernel);
             kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<PropagationSubscriber>();
             kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<BindedQuestionSubscriber>();
-            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<AnswerSubscriber>();
         }
 
         private ISubscriber subscriber;
@@ -91,7 +90,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
-            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);
             qDoqument.Children.Add(group);
@@ -111,7 +110,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteGroup group = new CompleteGroup("test");
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
-            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);
             qDoqument.Children.Add(group);
@@ -127,7 +126,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteGroup otherGroup = new CompleteGroup("other") { Propagated = Propagate.Propagated };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
-            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);
             qDoqument.Children.Add(group);
@@ -154,13 +153,13 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
-            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);
             qDoqument.Children.Add(group);
             questionanire.Add(group, null);
             questionanire.Add(group, null);
-            CompleteAnswer completeAnswer = new CompleteAnswer(answer, question.PublicKey);
+            CompleteAnswer completeAnswer = new CompleteAnswer(answer);
 
             questionanire.Add(
                 new PropagatableCompleteAnswer(completeAnswer,
@@ -181,7 +180,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
             CompleteQuestion question = new CompleteQuestion("q",
                                            QuestionType.SingleOption);
-            CompleteAnswer answer = new CompleteAnswer(new Answer(), Guid.NewGuid());
+            CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);
             qDoqument.Children.Add(group);
@@ -232,8 +231,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             var result = completeQuestionnaire.Find<IComposite>(c => true);
             Assert.AreEqual(result.Count(), 11);
             Assert.AreEqual(completeQuestionnaire.Find<ICompleteAnswer>(c => true).Count(), 6);
-            Assert.IsTrue(
-                completeQuestionnaire.Find<ICompleteAnswer>(c => true).All(a => a.QuestionPublicKey != Guid.Empty));
+        /*    Assert.IsTrue(
+                completeQuestionnaire.Find<ICompleteAnswer>(c => true).All(a => a.QuestionPublicKey != Guid.Empty));*/
             Assert.AreEqual(completeQuestionnaire.Find<ICompleteQuestion>(c => true).Count(), 3);
             Assert.AreEqual(completeQuestionnaire.Find<ICompleteGroup>(c => true).Count(), 2);
 
