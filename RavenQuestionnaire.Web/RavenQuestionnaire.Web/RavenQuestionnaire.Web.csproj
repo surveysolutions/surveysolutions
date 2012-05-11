@@ -159,6 +159,31 @@
     <Compile Include="Utils\LoadImagesAttribute.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="www\css\metro\images\ajax-loader.png" />
+    <Content Include="www\css\metro\images\checkbox-disabled.png" />
+    <Content Include="www\css\metro\images\checkbox.png" />
+    <Content Include="www\css\metro\images\icons-18-black.png" />
+    <Content Include="www\css\metro\images\icons-18-white.png" />
+    <Content Include="www\css\metro\images\icons-36-black.png" />
+    <Content Include="www\css\metro\images\icons-36-white.png" />
+    <Content Include="www\css\metro\images\radiobtn-disabled.png" />
+    <Content Include="www\css\metro\images\radiobtn.png" />
+    <Content Include="www\css\metro\images\wait-indicator.gif" />
+    <Content Include="www\css\metro\jquery.mobile.metro.theme.css" />
+    <Content Include="www\css\metro\jquery.mobile.metro.theme.init.js" />
+    <Content Include="www\css\progress-bar.css" />
+    <Content Include="www\css\toggle-button.css" />
+    <Content Include="www\images\empty.png" />
+    <Content Include="www\images\set.dark.png" />
+    <Content Include="www\images\set.light.png" />
+    <Content Include="www\images\wait-indicator.gif" />
+    <Content Include="www\js\jquery.globalstylesheet.js" />
+    <Content Include="www\js\jquery.js" />
+    <Content Include="www\js\jquery.mobile.js" />
+    <Content Include="www\js\jquery.mobile.themeswitcher.js" />
+    <Content Include="www\js\progress-bar.js" />
+    <Content Include="www\js\toggle-button.js" />
+    <Content Include="www\metroStartPage.html" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Bootstrap\accordion.css" />
