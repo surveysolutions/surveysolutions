@@ -74,7 +74,7 @@ namespace RavenQuestionnaire.Core.Entities
             int count = Convert.ToInt32(countObj);
 
             if(count<0)
-                throw new InvalidOperationException("caount can't be bellow zero");
+                throw new InvalidOperationException("can't be bellow zero");
             if (!question.Attributes.ContainsKey("TargetGroupKey"))
                 return;
             Guid target = Guid.Parse(question.Attributes["TargetGroupKey"].ToString());
