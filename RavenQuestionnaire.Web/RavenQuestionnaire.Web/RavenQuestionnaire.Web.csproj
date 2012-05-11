@@ -16,8 +16,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <SccProjectName>
     </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
+      <SccLocalPath>
+      </SccLocalPath>
     <SccAuxPath>
     </SccAuxPath>
     <SccProvider>
@@ -855,9 +855,7 @@
     <Content Include="Views\Answer\AnswerListView\_ExtendedDropDownList.cshtml" />
     <Content Include="Views\Answer\_EditDataBaseSettings.cshtml" />
     <Content Include="Views\Group\Mobile\_CompleteGroup.cshtml" />
-    <Content Include="Views\Group\Mobile\_SimpleGroup.cshtml" />
-    <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
-    <Content Include="Views\Statistic\Details.cshtml" />
+    <Content Include="Views\Group\Mobile\_SimpleGroup.cshtml" />   
     <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
     <Content Include="Views\Statistic\Details.cshtml" />
     <Content Include="Views\Answer\_EditCollectionItem.cshtml" />
