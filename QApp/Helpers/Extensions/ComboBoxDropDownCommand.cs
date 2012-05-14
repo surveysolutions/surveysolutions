@@ -102,7 +102,8 @@ namespace QApp.Helpers.Extensions
                     if (this.CommandParameter!=null)
                         ((ICommand)Command).Execute(CommandParameter);
                     else
-                        ((ICommand)Command).Execute(((System.Windows.Controls.Primitives.Selector)(e.Source)).SelectedValue);
+                        if (!((RavenQuestionnaire.Core.Views.Answer.CompleteAnswerView)(((ComboBox)(e.Source)).SelectionBoxItem)).Selected)
+                            ((ICommand)Command).Execute(((System.Windows.Controls.Primitives.Selector)(e.Source)).SelectedValue);
             }
         }
     }

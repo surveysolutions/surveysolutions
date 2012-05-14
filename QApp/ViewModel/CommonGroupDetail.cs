@@ -75,7 +75,7 @@ namespace QApp.ViewModel
             if (question != null)
             {
                 var detail = (Question)ModulesManager.CreateModule(null, new QuestionData(question), this, question);
-                
+
                 DXWindow window = new DXWindow();
                 window.Content = detail.View;
                 window.WindowState = WindowState.Maximized;
