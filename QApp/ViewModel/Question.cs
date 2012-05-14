@@ -6,6 +6,8 @@ using RavenQuestionnaire.Core;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using RavenQuestionnaire.Core.Views.Answer;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
@@ -43,15 +45,6 @@ namespace QApp.ViewModel
     {
          public override void InitData(object parameter) {
             base.InitData(parameter);
-
-             var item = parameter as CompleteQuestionView;
-             if (item != null)
-             {
-                 Data = new QuestionData(item);
-                 foreach (var completeAnswerView in QuestionData.Question.Answers)
-                     if (completeAnswerView.Selected)
-                         SelectedAnswer = completeAnswerView;
-             }
          }
 
          public QuestionData QuestionData { get { return (QuestionData)Data; } }
@@ -93,9 +86,9 @@ namespace QApp.ViewModel
              {
                  foreach (var completeAnswerView in QuestionData.Question.Answers)
                  {
-                     if (completeAnswerView.PublicKey == answer.PublicKey)
                          if (QuestionData.Question.QuestionType == QuestionType.MultyOption)
-                             completeAnswerView.Selected = answer.Selected;
+                             if (completeAnswerView.PublicKey == answer.PublicKey)
+                             completeAnswerView.Selected = !completeAnswerView.Selected;
                          else
                             completeAnswerView.Selected = completeAnswerView.PublicKey == answer.PublicKey;
                  }
@@ -121,13 +114,38 @@ namespace QApp.ViewModel
                      commandInvoker.Execute(command);
                  }
              }
-         }
+            UpdateCurrentDataQuestion();
+        }
 
         public ICommand SetCurrentAnswerCommand { get; private set; }
 
         public ICommand CloseWindowCommand { get; private set; }
 
         #endregion
-        
+
+        #region Private Method
+
+        ////bad approach!!!
+        //reload current data and add async update in database
+        private void UpdateCurrentDataQuestion()
+        {
+            ViewRepository viewRepository = new ViewRepository(Initializer.Kernel);
+            var test =
+                viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                    new CompleteQuestionnaireViewInputModel(QuestionData.Question.QuestionnaireId) { CurrentGroupPublicKey = QuestionData.Question.GroupPublicKey });
+            var item = new CompleteQuestionView();
+            foreach (CompleteQuestionView cqv in test.CurrentGroup.Groups[0].Questions.Where(cqv => cqv.PublicKey == QuestionData.Question.PublicKey))
+                item = cqv;
+            if (item != null)
+            {
+                Data = new QuestionData(item);
+                foreach (var completeAnswerView in QuestionData.Question.Answers)
+                    if (completeAnswerView.Selected)
+                        SelectedAnswer = completeAnswerView;
+            }
+        }
+
+        #endregion
+
     }
 }

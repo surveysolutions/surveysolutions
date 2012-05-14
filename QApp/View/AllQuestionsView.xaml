@@ -5,10 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
                  xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-                 xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
-                 mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
-    >
+                 mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
