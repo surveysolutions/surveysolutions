@@ -93,9 +93,8 @@
     </Compile>
     <Compile Include="Helpers\DataTemplateSelectors\QuestionDataTemplateSelector.cs" />
     <Compile Include="Helpers\DataTemplateSelectors\SingleOptionDataTemplateSelector.cs" />
-    <Compile Include="Helpers\Extensions\ChangeObjectMultiConverter.cs" />
     <Compile Include="Helpers\Extensions\ComboBoxDropDownCommand.cs" />
-    <Compile Include="Helpers\Extensions\ImageConverter.cs" />
+    <Compile Include="Helpers\Extensions\Converters.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="ViewModel\CompletedQuestionnaires.cs" />
     <Compile Include="ViewModel\CommonGroupDetail.cs" />

@@ -4,7 +4,8 @@
                     xmlns:local="clr-namespace:QApp.Helpers.DataTemplateSelectors"                    
                     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
                     xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
-                    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors">
+                    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+                    xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <DataTemplate x:Key="DefaultDataTemplate">
@@ -97,7 +98,9 @@
             <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <dxlc:Tile Background="#FF00ABBA" Content="{Binding}">
+                        <dxlc:Tile Background="#FF00ABBA" Content="{Binding}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
+                            CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0" 
+                            Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType={x:Type View:ModuleView}}}">
                             <dxlc:Tile.ContentTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -107,11 +110,12 @@
                                                 <ColumnDefinition Width="0.7*" />
                                             </Grid.ColumnDefinitions>
                                             <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
-                                                <CheckBox IsChecked="{Binding Path=Selected}" CommandParameter="{Binding}" Content="{Binding AnswerText}"
-                                                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"/>
+                                                    <TextBlock Text="{Binding AnswerText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
                                             </StackPanel>
-                                        </Grid>                                        
-                                    </Grid>                                    
+                                        </Grid>
+                                       <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False"                                                
+                                            Visibility="{Binding Selected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </Grid>                                   
                                 </DataTemplate>
                             </dxlc:Tile.ContentTemplate>
                         </dxlc:Tile>
@@ -131,8 +135,12 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
                             <Border BorderThickness="1" BorderBrush="White">
-                                <dxe:TextEdit Name="txtBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" 
-                                              Width="100" Height="20" Canvas.Top="50" Canvas.Left="20" MaskType="Numeric" />
+                                <!--<dxe:TextEdit Name="txtBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" 
+                                              Width="100" Height="20" Canvas.Top="50" Canvas.Left="20" MaskType="Numeric" MaskUseAsDisplayFormat="True" />-->
+                                <dxe:TextEdit Name="txtBox" EditValue="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                              Width="100" Height="20" Canvas.Top="50" Canvas.Left="20" MaskType="Numeric" MaskUseAsDisplayFormat="True" />
+                                <!--<dxe:ComboBoxEdit IsTextEditable="False" ItemsSource="{Binding InterestRatesList}" HorizontalContentAlignment="Right"
+                                    EditValue="{Binding InterestRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMember="Text" ValueMember="Value" />-->
                             </Border>
                             <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
                                 Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">

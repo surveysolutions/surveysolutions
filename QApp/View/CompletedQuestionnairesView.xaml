@@ -46,9 +46,7 @@
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
                                             <StackPanel Orientation="Horizontal" Helpers:ZoomHelper.ChangeOrientationZoomFactor="105">
-                                                <TextBlock Text="{Binding Id}" FontSize="14" Foreground="#FFFFFFFF" />
-                                                
-
+                                                <TextBlock Text="{Binding Id}" FontSize="14" Foreground="#FFFFFFFF" />               
                                             </StackPanel>
                                             <TextBlock Text="{Binding CreationDate}" FontSize="14" Foreground="#FFFFFFFF" />
                                             <TextBlock Text="{Binding QuestionnaireTitle}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap"/>
