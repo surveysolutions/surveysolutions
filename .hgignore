@@ -69,3 +69,4 @@ QApp/packages.config
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/RavenQuestionnaire.Core.csproj.user
 QApp/QApp.csproj.user
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/logs/*
+DevExpress.RealtorWorld.Wpf/DevExpress.RealtorWorld.Wpf.csproj.user

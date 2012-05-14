@@ -8,11 +8,11 @@ namespace RavenQuestionnaire.Core.Views.Answer
         public CompleteAnswerView()
         {
         }
-        public CompleteAnswerView(Guid questionPublicKey, RavenQuestionnaire.Core.Entities.SubEntities.IAnswer doc):base(questionPublicKey, doc)
+        public CompleteAnswerView(Guid questionPublicKey, Entities.SubEntities.IAnswer doc):base(questionPublicKey, doc)
         {
             this.Selected = false;
         }
-        public CompleteAnswerView(RavenQuestionnaire.Core.Entities.SubEntities.Complete.ICompleteAnswer answer)
+        public CompleteAnswerView(Entities.SubEntities.Complete.ICompleteAnswer answer)
             : this(answer.QuestionPublicKey, answer)
         {
             this.Selected = answer.Selected;
