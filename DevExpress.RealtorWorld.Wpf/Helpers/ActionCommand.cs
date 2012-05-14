@@ -1,13 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Reflection;
-using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
-using System.Collections.ObjectModel;
-using DevExpress.Xpf.Grid;
-using System.Windows.Markup;
+using System.ComponentModel;
 
 namespace DevExpress.RealtorWorld.Xpf.Helpers {
     public class ActionCommandBase : ICommand {
