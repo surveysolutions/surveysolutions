@@ -95,6 +95,7 @@
     <Compile Include="Helpers\DataTemplateSelectors\SingleOptionDataTemplateSelector.cs" />
     <Compile Include="Helpers\Extensions\ComboBoxDropDownCommand.cs" />
     <Compile Include="Helpers\Extensions\Converters.cs" />
+    <Compile Include="Helpers\Extensions\VisualStateControl.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="ViewModel\CompletedQuestionnaires.cs" />
     <Compile Include="ViewModel\CommonGroupDetail.cs" />
@@ -149,6 +150,10 @@
     <Page Include="Resources\SingleOptionDataTemplateResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\TileHoverAnimation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\AllQuestionsView.xaml">
       <SubType>Designer</SubType>
