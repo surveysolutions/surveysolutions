@@ -219,12 +219,15 @@ $(document).on('mobileinit', function () {
                 label.html(targetInput.val());
             });
            
-            var openKeyboard = function() {
+          /*  var openKeyboard = function() {
                 targetInput.focus();
                 targetInput.click();
-            };
-            button.click(openKeyboard);
-            label.parent().click(openKeyboard);
+            };*/
+      //      button.click(openKeyboard);
+            button.parent().click(function() {
+                targetInput.focus();
+               // targetInput.click();
+            });
 
         });
     },
