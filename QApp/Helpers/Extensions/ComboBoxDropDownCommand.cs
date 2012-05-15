@@ -99,11 +99,15 @@ namespace QApp.Helpers.Extensions
                 if (command != null)
                     command.Execute(this.CommandParameter, this.CommandTarget);
                 else
-                    if (this.CommandParameter!=null)
+                    if (this.CommandParameter != null)
                         ((ICommand)Command).Execute(CommandParameter);
                     else
-                        if (!((RavenQuestionnaire.Core.Views.Answer.CompleteAnswerView)(((ComboBox)(e.Source)).SelectionBoxItem)).Selected)
-                            ((ICommand)Command).Execute(((System.Windows.Controls.Primitives.Selector)(e.Source)).SelectedValue);
+                    {
+                        var answer=(((ComboBox)(e.Source)).SelectionBoxItem) as RavenQuestionnaire.Core.Views.Answer.CompleteAnswerView;
+                        if (answer!=null && string.IsNullOrEmpty(answer.ToString()) && !answer.Selected)
+                            ((ICommand) Command).Execute(
+                                ((System.Windows.Controls.Primitives.Selector) (e.Source)).SelectedValue);
+                    }
             }
         }
     }
