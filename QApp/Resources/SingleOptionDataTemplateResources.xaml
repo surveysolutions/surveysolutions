@@ -41,7 +41,7 @@
                 <DataTemplate>
                     <Grid>
                         <Grid>
-                            <StackPanel Grid.ColumnSpan="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5">
+                            <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5">
                                  <StackPanel.Resources>
                                    <Extensions:ImageConverter x:Key="ImageConverter" />
                                 </StackPanel.Resources>

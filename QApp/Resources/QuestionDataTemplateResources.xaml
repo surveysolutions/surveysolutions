@@ -9,7 +9,7 @@
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <DataTemplate x:Key="DefaultDataTemplate">
-        <dxlc:TileLayoutControl Orientation="Horizontal" Padding="5" BreakFlowToFit="False" ItemTemplateSelector="{DynamicResource SingleOptionDataTemplateSelector}" ItemsSource="{Binding Answers}" AllowItemMoving="False" >
+        <dxlc:TileLayoutControl Orientation="Horizontal" Margin="5,35,0,0" Padding="5" BreakFlowToFit="False" ItemTemplateSelector="{DynamicResource SingleOptionDataTemplateSelector}" ItemsSource="{Binding Answers}" AllowItemMoving="False" >
             <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
                 </DataTemplate>
@@ -18,13 +18,14 @@
     </DataTemplate>
     <DataTemplate x:Key="DropDownDataTemplate">
         <Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*" />
-                    <ColumnDefinition Width="0.7*" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
-                    <Extensions:ComboBoxDropDownCommand Margin="4" Height="23" Width="250" ItemsSource="{Binding Answers}"  
+            <Grid Grid.Row="1">                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />                    
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
+                    <Extensions:ComboBoxDropDownCommand Margin="4" Height="50" Width="250" ItemsSource="{Binding Answers}"  
                                                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
                                                         SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer}">
                         <Extensions:ComboBoxDropDownCommand.ItemTemplate>
@@ -42,14 +43,15 @@
     <DataTemplate x:Key="DateTimeDataTemplate">
         <Grid>
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*" />
-                    <ColumnDefinition Width="0.7*" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
-                    <DatePicker SelectedDate="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" Name="MonthlyCalendar" FirstDayOfWeek="Monday" IsTodayHighlighted="True" Margin="15,39,88,19" Foreground="White">                                               
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
+                    <DatePicker Height="30" SelectedDate="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" Name="MonthlyCalendar" FirstDayOfWeek="Monday" IsTodayHighlighted="True" Foreground="White">                                               
                     </DatePicker>
-                    <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
+                    <Button FontSize="20" Margin="5" Content="Save" Padding="10"
                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
                         <Button.Resources>
                             <Extensions:ChangeObjectMultiConverter x:Key="ChangeObjectMultiConverter"/>
@@ -68,14 +70,15 @@
     <DataTemplate x:Key="GpsCoordinatesDataTemplate">
         <Grid>
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*" />
-                    <ColumnDefinition Width="0.7*" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
                     <Border BorderThickness="1" BorderBrush="White">
                         <dxe:TextEdit Name="GpsCoordinateText" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" 
-                                 Width="100" Height="20" Canvas.Top="50" Canvas.Left="20" MaskType="Simple" Mask="00.000000;00.000000" />
+                                 Width="100" Height="30" Canvas.Top="50" Canvas.Left="20" MaskType="Simple" Mask="00.000000;00.000000" />
                     </Border>
                     <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
@@ -97,7 +100,7 @@
         <dxlc:TileLayoutControl Orientation="Horizontal" Padding="5" BreakFlowToFit="False" ItemsSource="{Binding Answers}" AllowItemMoving="False" >
             <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel>
+                    <StackPanel Margin="5,35,0,0">
                         <dxlc:Tile Background="#FF00ABBA" Content="{Binding}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
                             CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0" 
                             Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType={x:Type View:ModuleView}}}">
@@ -105,11 +108,12 @@
                                 <DataTemplate>
                                     <Grid>
                                         <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="0.3*" />
-                                                <ColumnDefinition Width="0.7*" />
-                                            </Grid.ColumnDefinitions>
-                                            <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+                                            <StackPanel Grid.ColumnSpan="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
                                                     <TextBlock Text="{Binding AnswerText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
                                             </StackPanel>
                                         </Grid>
@@ -129,18 +133,17 @@
             <ContentControl.Content>
                 <Grid>
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.3*" />
-                            <ColumnDefinition Width="0.7*" />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
                             <Border BorderThickness="1" BorderBrush="White">
                                 <!--<dxe:TextEdit Name="txtBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" 
                                               Width="100" Height="20" Canvas.Top="50" Canvas.Left="20" MaskType="Numeric" MaskUseAsDisplayFormat="True" />-->
                                 <dxe:TextEdit Name="txtBox" EditValue="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                              Width="100" Height="20" Canvas.Top="50" Canvas.Left="20" MaskType="Numeric" MaskUseAsDisplayFormat="True" />
-                                <!--<dxe:ComboBoxEdit IsTextEditable="False" ItemsSource="{Binding InterestRatesList}" HorizontalContentAlignment="Right"
-                                    EditValue="{Binding InterestRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMember="Text" ValueMember="Value" />-->
+                                              Width="100" Height="30" Canvas.Top="50" Canvas.Left="20" MaskType="Numeric" MaskUseAsDisplayFormat="True" />                                
                             </Border>
                             <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
                                 Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
@@ -165,14 +168,15 @@
             <ContentControl.Content>
                 <Grid>
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.3*" />
-                            <ColumnDefinition Width="0.7*" />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
                             <Border BorderThickness="1" BorderBrush="White">
                                 <dxe:TextEdit Name="txtTextBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" 
-                                              Width="100" Height="20" Canvas.Top="50" Canvas.Left="20" />
+                                              Width="100" Height="30" Canvas.Top="50" Canvas.Left="20" />
                             </Border>
                             <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
                                 Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
@@ -199,7 +203,7 @@
                     <ColumnDefinition Width="0.3*" />
                     <ColumnDefinition Width="0.7*" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
+                <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
                     <!--<Border BorderThickness="1" BorderBrush="White">
                         <TextBox Name="percentText" Text="" Width="100" Height="20" Canvas.Top="50" Canvas.Left="20"/>
                     </Border>

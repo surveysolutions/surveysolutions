@@ -141,10 +141,6 @@
             </Border>-->
 
             <Helpers:ViewPresenter Grid.Row="3"  Content="{Binding GroupDetail.View}" />
-           
         </Grid>
-
-    </Grid>
-    
-    
+    </Grid> 
 </View:ModuleView>
