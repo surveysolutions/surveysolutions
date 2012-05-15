@@ -154,6 +154,9 @@
     <Content Include="Content\themes\jquerymobile\images\1336075488_keyboard.png" />
     <Content Include="Content\themes\jquerymobile\images\1336075535_calculator.png" />
     <Content Include="Content\themes\jquerymobile\images\1336075556_calendar.png" />
+    <Content Include="Content\themes\themeswitcher\jquery.globalstylesheet.js" />
+    <Content Include="Content\themes\themeswitcher\jquery.mobile.themeswitcher.js" />
+    <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.client.js" />
     <Compile Include="Utils\LoadImagesAttribute.cs" />
