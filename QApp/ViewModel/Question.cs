@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using DevExpress.Xpf.Core;
+using Ninject;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -88,6 +89,12 @@ namespace QApp.ViewModel
             //////window.Close;
             Data = new QuestionnaireDetailData(QuestionnaireId, null);
             (Data as QuestionnaireDetailData).Load();
+            var module = ModulesManager.CreateModule(null, Data, this, null);
+            Window singleOrDefault = Application.Current.MainWindow;
+            if (singleOrDefault != null)
+            {
+                singleOrDefault.Content = module.View;
+            }
         }
         
         void DoSetCurrentAnswer(object p)
