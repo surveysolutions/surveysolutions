@@ -117,8 +117,23 @@
 .splited-button.ui-li-link-alt .ui-btn{
 	left: 5px;
 	right: auto;
+	 margin-top: -14px;
 }
 .splited-button.ui-li-link-alt .ui-btn-text{
 	display: block;
     padding: 10px 10px 10px 30px;
+}
+
+#sidebar .ui-listview .ui-btn-text
+{
+	padding-right: 0;
+}
+
+#sidebar .ui-listview .ui-btn-text .ui-link-inherit 
+{
+	padding-right: 30px;
+}
+#sidebar  .ui-li-has-count .ui-li-count
+{
+	right: 10px;
 }

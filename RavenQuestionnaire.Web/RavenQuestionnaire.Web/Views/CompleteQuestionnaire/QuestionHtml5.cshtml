@@ -58,12 +58,12 @@
                 {
                     if (!gh.IsCurrent)
                     {
-                    <li><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })" rel="external" data-ajax="false">@gh.GroupText
+                    <li data-icon="false"><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })" rel="external" data-ajax="false">@gh.GroupText
                         <span  id="counter-@(gh.PublicKey)" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                     else
                     {
-                    <li data-theme="b"><a>@gh.GroupText <span id="counter-@(gh.PublicKey)" data-theme="a" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
+                    <li data-icon="false" data-theme="b"><a>@gh.GroupText <span id="counter-@(gh.PublicKey)" data-theme="a" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                 }
             </ul>
