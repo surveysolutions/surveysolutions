@@ -1,8 +1,5 @@
-﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
-@using RavenQuestionnaire.Core.Views.Statistics
-@using RavenQuestionnaire.Web.Models
-@model RavenQuestionnaire.Core.Views.Statistics.CompleteQuestionnaireStatisticView
+﻿@using RavenQuestionnaire.Core.Views.Statistics
+@model CompleteQuestionnaireStatisticView
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
 }
@@ -114,7 +111,18 @@
         <h1>@Model.Title</h1>
         <div data-type="horizontal" class="ui-btn-right navigation-btn-group">
             <a data-role="button" data-corners="false" href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId })" rel="external" data-ajax="false">
-                Survey</a><a data-corners="false"  data-role="button" href="#">Complete</a>
+                Survey</a>
+            
+             @if (Model.Status.Name == "Completed")
+                {
+                    <a data-corners="false" data-ajax="false" data-role="button" data-theme="e" rel="external" href="@Url.Action("ReInit", "CompleteQuestionnaire", new { id = Model.Id })">
+                       ReInit</a>
+                }
+                else
+                {
+                       <a data-corners="false" data-ajax="false" data-role="button" data-theme="d" rel="external" href="@Url.Action("Complete", "CompleteQuestionnaire", new { id = Model.Id })">
+                       Complete</a>
+                }
         </div>
     </div>
     

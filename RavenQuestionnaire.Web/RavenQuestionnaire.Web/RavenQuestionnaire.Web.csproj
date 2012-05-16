@@ -16,8 +16,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <SccProjectName>
     </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
+      <SccLocalPath>
+      </SccLocalPath>
     <SccAuxPath>
     </SccAuxPath>
     <SccProvider>
@@ -154,6 +154,9 @@
     <Content Include="Content\themes\jquerymobile\images\1336075488_keyboard.png" />
     <Content Include="Content\themes\jquerymobile\images\1336075535_calculator.png" />
     <Content Include="Content\themes\jquerymobile\images\1336075556_calendar.png" />
+    <Content Include="Content\themes\themeswitcher\jquery.globalstylesheet.js" />
+    <Content Include="Content\themes\themeswitcher\jquery.mobile.themeswitcher.js" />
+    <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.client.js" />
     <Compile Include="Utils\LoadImagesAttribute.cs" />
@@ -855,9 +858,7 @@
     <Content Include="Views\Answer\AnswerListView\_ExtendedDropDownList.cshtml" />
     <Content Include="Views\Answer\_EditDataBaseSettings.cshtml" />
     <Content Include="Views\Group\Mobile\_CompleteGroup.cshtml" />
-    <Content Include="Views\Group\Mobile\_SimpleGroup.cshtml" />
-    <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
-    <Content Include="Views\Statistic\Details.cshtml" />
+    <Content Include="Views\Group\Mobile\_SimpleGroup.cshtml" />   
     <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
     <Content Include="Views\Statistic\Details.cshtml" />
     <Content Include="Views\Answer\_EditCollectionItem.cshtml" />
