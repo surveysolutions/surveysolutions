@@ -1,14 +1,19 @@
-﻿using Ninject;
+﻿using DevExpress.Xpf.Core;
+using Ninject;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using RavenQuestionnaire.Core;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using RavenQuestionnaire.Core.Views.Answer;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 
 namespace QApp.ViewModel
 {
@@ -18,6 +23,7 @@ namespace QApp.ViewModel
 
         public QuestionData()
         {
+
         }
 
         public QuestionData(CompleteQuestionView question)
@@ -39,24 +45,28 @@ namespace QApp.ViewModel
         }
 
     }
-    public class Question : Module
+    public class Question : ModuleWithNavigator
     {
          public override void InitData(object parameter) {
             base.InitData(parameter);
+             SetSelectedAnswer(parameter as CompleteQuestionView);
+             QuestionnaireId = (parameter as CompleteQuestionView).QuestionnaireId;
+             Navigation = new ObservableCollection<List<NavigationItem>>();
+             BuildMenu();
+         }
 
-             var item = parameter as CompleteQuestionView;
-             if (item != null)
-             {
-                 Data = new QuestionData(item);
-                 foreach (var completeAnswerView in QuestionData.Question.Answers)
-                     if (completeAnswerView.Selected)
-                         SelectedAnswer = completeAnswerView;
-             }
+         ObservableCollection<List<NavigationItem>> navigation;
+         public ObservableCollection<List<NavigationItem>> Navigation
+         {
+             get { return navigation; }
+             set { SetValue<ObservableCollection<List<NavigationItem>>>("Navigation", ref navigation, value); }
          }
 
          public QuestionData QuestionData { get { return (QuestionData)Data; } }
 
-         private CompleteAnswerView selectedAnswer;
+         public string QuestionnaireId { get; set; }
+
+        private CompleteAnswerView selectedAnswer;
          public CompleteAnswerView SelectedAnswer
          {
              get { return selectedAnswer; }
@@ -73,14 +83,18 @@ namespace QApp.ViewModel
 
         private void DoClose(object obj)
         {
-            //BAD!
-            //don't do this
-            //open in main window
-            
-            var singleOrDefault = Application.Current.Windows.Cast<Window>().SingleOrDefault(x => x.IsActive);
+            ////var singleOrDefault = Application.Current.Windows.Cast<Window>().SingleOrDefault(x => x.IsActive);
+            ////if (singleOrDefault != null)
+            ////    singleOrDefault.Close();
+            //////window.Close;
+            Data = new QuestionnaireDetailData(QuestionnaireId, null);
+            (Data as QuestionnaireDetailData).Load();
+            var module = ModulesManager.CreateModule(null, Data, this, null);
+            Window singleOrDefault = Application.Current.MainWindow;
             if (singleOrDefault != null)
-                singleOrDefault.Close();
-            //window.Close;
+            {
+                singleOrDefault.Content = module.View;
+            }
         }
         
         void DoSetCurrentAnswer(object p)
@@ -92,13 +106,11 @@ namespace QApp.ViewModel
              if (answer != null)
              {
                  foreach (var completeAnswerView in QuestionData.Question.Answers)
-                 {
-                     if (completeAnswerView.PublicKey == answer.PublicKey)
-                         if (QuestionData.Question.QuestionType == QuestionType.MultyOption)
-                             completeAnswerView.Selected = answer.Selected;
+                     if (QuestionData.Question.QuestionType == QuestionType.MultyOption)
+                         if (completeAnswerView.PublicKey == answer.PublicKey)
+                             completeAnswerView.Selected = !completeAnswerView.Selected;
                          else
-                            completeAnswerView.Selected = completeAnswerView.PublicKey == answer.PublicKey;
-                 }
+                             completeAnswerView.Selected = completeAnswerView.PublicKey == answer.PublicKey;
                  SelectedAnswer = answer;
                  var command = new UpdateAnswerInCompleteQuestionnaireCommand(QuestionData.Question.QuestionnaireId,
                                                                               new CompleteAnswerView[] { answer },
@@ -121,13 +133,51 @@ namespace QApp.ViewModel
                      commandInvoker.Execute(command);
                  }
              }
-         }
+            UpdateCurrentDataQuestion();
+        }
 
         public ICommand SetCurrentAnswerCommand { get; private set; }
 
         public ICommand CloseWindowCommand { get; private set; }
 
         #endregion
-        
+
+        #region Private Method
+
+        ////bad approach!!!
+        //reload current data and add async update in database
+        private void UpdateCurrentDataQuestion()
+        {
+            ViewRepository viewRepository = new ViewRepository(Initializer.Kernel);
+            var test =
+                viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                    new CompleteQuestionnaireViewInputModel(QuestionData.Question.QuestionnaireId) { CurrentGroupPublicKey = QuestionData.Question.GroupPublicKey });
+            var item = new CompleteQuestionView();
+            foreach (CompleteQuestionView cqv in test.CurrentGroup.Groups[0].Questions.Where(cqv => cqv.PublicKey == QuestionData.Question.PublicKey))
+                item = cqv;
+            SetSelectedAnswer(item);
+        }
+
+        private void SetSelectedAnswer(CompleteQuestionView questionView)
+        {
+            if (questionView != null)
+            {
+                Data = new QuestionData(questionView);
+                foreach (var completeAnswerView in QuestionData.Question.Answers)
+                    if (completeAnswerView.Selected)
+                        SelectedAnswer = completeAnswerView;
+            }
+        }
+
+        private void BuildMenu()
+        {
+            //bad -load from currentdata
+            var detail = new QuestionnaireDetail();
+            detail.InitData(QuestionData.Question.QuestionnaireId);
+            Navigation = detail.Navigation;
+        }
+
+        #endregion
+
     }
 }
