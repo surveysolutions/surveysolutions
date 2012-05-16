@@ -224,9 +224,9 @@ $(document).on('mobileinit', function () {
                 targetInput.click();
             };*/
       //      button.click(openKeyboard);
-            button.parent().click(function() {
+            button.parent().bind('tap',function() {
                 targetInput.focus();
-               // targetInput.click();
+                targetInput.click();
             });
 
         });
