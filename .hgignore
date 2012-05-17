@@ -70,3 +70,14 @@ RavenQuestionnaire.Core/RavenQuestionnaire.Core/RavenQuestionnaire.Core.csproj.u
 QApp/QApp.csproj.user
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/logs/*
 DevExpress.RealtorWorld.Wpf/DevExpress.RealtorWorld.Wpf.csproj.user
+Synchronization/_ReSharper.Synchronization/*
+Synchronization/DataEntryClient/bin/*
+Synchronization/DataEntryClient/obj/*
+Synchronization/DataEntryServer/bin/*
+Synchronization/DataEntryServer/obj/*
+Synchronization/SynchronizationMessages/obj/*
+Synchronization/SynchronizationMessages/bin/*
+Synchronization/SynchronizationMessages/Properties/*
+Synchronization/Synchronization.suo
+Synchronization/DataEntryServer/Properties/AssemblyInfo.cs
+Synchronization/DataEntryClient/Properties/*
