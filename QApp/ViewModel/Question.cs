@@ -1,7 +1,5 @@
-﻿using DevExpress.Xpf.Core;
-using Ninject;
+﻿using Ninject;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 using RavenQuestionnaire.Core;
 using System.Collections.Generic;
@@ -38,6 +36,7 @@ namespace QApp.ViewModel
             private set { SetValue<CompleteQuestionView>("Question", ref question, value); }
         }
         
+
         public override void Load()
         {
             base.Load();
@@ -49,10 +48,19 @@ namespace QApp.ViewModel
     {
          public override void InitData(object parameter) {
             base.InitData(parameter);
-             SetSelectedAnswer(parameter as CompleteQuestionView);
-             QuestionnaireId = (parameter as CompleteQuestionView).QuestionnaireId;
+             var currentQuestion = parameter as CompleteQuestionView;
+             SetSelectedAnswer(currentQuestion);
              Navigation = new ObservableCollection<List<NavigationItem>>();
              BuildMenu();
+
+             //bad approach!!!
+             //get from current data
+            var viewRepository = new ViewRepository(Initializer.Kernel);
+            var test = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                    new CompleteQuestionnaireViewInputModel(currentQuestion.QuestionnaireId) { CurrentGroupPublicKey = currentQuestion.GroupPublicKey });
+            for (int i = 0; i < test.CurrentGroup.Groups[0].Questions.Count(); i++)
+                if (test.CurrentGroup.Groups[0].Questions[i].PublicKey == currentQuestion.PublicKey)
+                    NextQuestion = test.CurrentGroup.Groups[0].Questions.Count()>i+1 ? test.CurrentGroup.Groups[0].Questions[i+1] : null;
          }
 
          ObservableCollection<List<NavigationItem>> navigation;
@@ -64,14 +72,19 @@ namespace QApp.ViewModel
 
          public QuestionData QuestionData { get { return (QuestionData)Data; } }
 
-         public string QuestionnaireId { get; set; }
-
-        private CompleteAnswerView selectedAnswer;
+         private CompleteAnswerView selectedAnswer;
          public CompleteAnswerView SelectedAnswer
          {
              get { return selectedAnswer; }
              set { SetValue<CompleteAnswerView>("SelectedAnswer", ref selectedAnswer, value); }
          }
+
+        private CompleteQuestionView nextQuestion;
+        public CompleteQuestionView NextQuestion
+        {
+            get { return nextQuestion; }
+            set { SetValue<CompleteQuestionView>("NextQuestion", ref nextQuestion, value); }
+        }
 
          #region Commands
          protected override void InitializeCommands()
@@ -81,20 +94,15 @@ namespace QApp.ViewModel
              CloseWindowCommand = new SimpleActionCommand(DoClose);
          }
 
-        private void DoClose(object obj)
+        private void DoClose(object p)
         {
             ////var singleOrDefault = Application.Current.Windows.Cast<Window>().SingleOrDefault(x => x.IsActive);
             ////if (singleOrDefault != null)
             ////    singleOrDefault.Close();
             //////window.Close;
-            Data = new QuestionnaireDetailData(QuestionnaireId, null);
-            (Data as QuestionnaireDetailData).Load();
-            var module = ModulesManager.CreateModule(null, Data, this, null);
-            Window singleOrDefault = Application.Current.MainWindow;
-            if (singleOrDefault != null)
-            {
-                singleOrDefault.Content = module.View;
-            }
+            var next = p as CompleteQuestionView;
+            if(next != null)
+                InitData(next);
         }
         
         void DoSetCurrentAnswer(object p)
@@ -106,11 +114,11 @@ namespace QApp.ViewModel
              if (answer != null)
              {
                  foreach (var completeAnswerView in QuestionData.Question.Answers)
-                     if (QuestionData.Question.QuestionType == QuestionType.MultyOption)
                          if (completeAnswerView.PublicKey == answer.PublicKey)
-                             completeAnswerView.Selected = !completeAnswerView.Selected;
-                         else
-                             completeAnswerView.Selected = completeAnswerView.PublicKey == answer.PublicKey;
+                             if (QuestionData.Question.QuestionType == QuestionType.MultyOption)
+                                completeAnswerView.Selected = !completeAnswerView.Selected;
+                            else
+                                completeAnswerView.Selected = completeAnswerView.PublicKey == answer.PublicKey;
                  SelectedAnswer = answer;
                  var command = new UpdateAnswerInCompleteQuestionnaireCommand(QuestionData.Question.QuestionnaireId,
                                                                               new CompleteAnswerView[] { answer },
@@ -148,13 +156,14 @@ namespace QApp.ViewModel
         //reload current data and add async update in database
         private void UpdateCurrentDataQuestion()
         {
-            ViewRepository viewRepository = new ViewRepository(Initializer.Kernel);
+            var viewRepository = new ViewRepository(Initializer.Kernel);
             var test =
                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
                     new CompleteQuestionnaireViewInputModel(QuestionData.Question.QuestionnaireId) { CurrentGroupPublicKey = QuestionData.Question.GroupPublicKey });
             var item = new CompleteQuestionView();
-            foreach (CompleteQuestionView cqv in test.CurrentGroup.Groups[0].Questions.Where(cqv => cqv.PublicKey == QuestionData.Question.PublicKey))
-                item = cqv;
+            for (int i = 0; i < test.CurrentGroup.Groups[0].Questions.Count(); i++)
+                if (test.CurrentGroup.Groups[0].Questions[i].PublicKey == QuestionData.Question.PublicKey)
+                    item = test.CurrentGroup.Groups[0].Questions[i];
             SetSelectedAnswer(item);
         }
 
