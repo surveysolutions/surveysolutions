@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
+using Newtonsoft.Json;
 using Raven.Client.Document;
 using RavenQuestionnaire.Core.Documents;
 using SynchronizationMessages.CompleteQuestionnaire;
@@ -34,7 +35,7 @@ namespace DataEntryClient
                     var message = new CompleteQuestionnaireMessage
                     {
                        SynchronizationKey = Guid.NewGuid(),
-                       Questionanire = completeQuestionnaireDocument.Title
+                       Questionanire = JsonConvert.SerializeObject(completeQuestionnaireDocument)
                     };
 
                     Console.WriteLine("Sending message with SynchronizationKey {0}.", message.SynchronizationKey);
