@@ -1,10 +1,13 @@
 ﻿<View:ModuleView x:Class="QApp.View.QuestionView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
-                 xmlns:Extensions="clr-namespace:QApp.Helpers.Extensions"
-                 xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-                 xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf">
+    xmlns:Extensions="clr-namespace:QApp.Helpers.Extensions"  mc:Ignorable="d"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
+    d:DesignHeight="800" d:DesignWidth="1000">
  
     <View:ModuleView.Resources>
         <ResourceDictionary>
@@ -14,24 +17,26 @@
                 <ResourceDictionary Source="..\Resources\TileHoverAnimation.xaml" />
             </ResourceDictionary.MergedDictionaries>            
           <Extensions:EnabledDisabledConverter x:Key="EnabledDisabledConverter" />
+          <Extensions:FromBoolToColorConverter x:Key="FromBoolToColorConverter" />
         </ResourceDictionary>                
-    </View:ModuleView.Resources>
-    <Grid x:Name="LayoutRoot">
+    </View:ModuleView.Resources>  
+    
+    <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+              
         <ContentControl Content="{Binding Navigator.View}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top" />
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />                
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Border BorderBrush="#FF515151" BorderThickness="1" Padding="5" Grid.Row="1" Margin="5" >
-                <dxlc:TileLayoutControl x:Name="Nav" Orientation="Horizontal" AllowItemMoving="False" Padding="5" BreakFlowToFit="False" 
-                                        ItemsSource="{Binding Navigation}">
+            <Border BorderBrush="#FF515151" BorderThickness="1" Padding="5" Margin="5" >
+                <dxlc:TileLayoutControl x:Name="Nav" Orientation="Horizontal" AllowItemMoving="False" Padding="5" BreakFlowToFit="False"  ItemsSource="{Binding Navigation}">
                     <dxlc:TileLayoutControl.ItemTemplate>
                         <DataTemplate>
                             <dxlc:TileLayoutControl Orientation="Vertical" AllowItemMoving="False" Padding="5" BreakFlowToFit="False" ItemsSource="{Binding}" Height="85" >
@@ -40,12 +45,12 @@
                                         <dxlc:Tile Background="#66ffccdd" Width="200" Height="60" Content="{Binding}" Command="{Binding Command}" CommandParameter="{Binding Item}">
                                             <dxlc:Tile.ContentTemplate>
                                                 <DataTemplate>
-                                                    <Grid>                                                      
-                                                      <Grid>
+                                                    <Grid>
+                                                        <Grid>
                                                             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
                                                                 <TextBlock Text="{Binding Text}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
                                                             </StackPanel>
-                                                        </Grid>                                                        
+                                                        </Grid>
                                                         <Helpers:VisualStateControl  Style="{StaticResource TileHoverAnimation}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                                             <Border Background="Aqua"  Opacity="0.25" />
                                                         </Helpers:VisualStateControl>
@@ -62,23 +67,22 @@
                     </dxlc:TileLayoutControl.ItemTemplate>
                 </dxlc:TileLayoutControl>
             </Border>
-            <Border Grid.Row="2">
-                <Grid>
-                    <TextBlock Text="{Binding Data.Question.QuestionText}" FontSize="20" Margin="5" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
-                    <ContentControl x:Name="ContentArea" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding Data.Question}" 
-                        ContentTemplateSelector="{StaticResource QuestionDataTemplateSelector}" Grid.Row="1" IsEnabled="{Binding Data.Question, Converter={StaticResource EnabledDisabledConverter}}" />
-                </Grid>
-            </Border>
-            <Grid VerticalAlignment="Bottom" Margin="0,5" Grid.Row="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" MaxWidth="30" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" MaxWidth="30" />
-                </Grid.ColumnDefinitions>                
-                <Button Grid.Column="3" FontSize="20" Margin="5" Content="Back" Command="{Binding CloseWindowCommand}" Padding="10" />
-            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <TextBlock Text="{Binding Data.Question.QuestionText}" FontSize="20" Margin="5" Foreground="#FFFFFFFF" TextWrapping="Wrap" Opacity="{Binding Data.Question.Enabled, Converter={StaticResource FromBoolToColorConverter}}" />
+            <ContentControl x:Name="ContentArea" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding Data.Question}" ContentTemplateSelector="{StaticResource QuestionDataTemplateSelector}"  
+                            IsEnabled="{Binding Data.Question, Converter={StaticResource EnabledDisabledConverter}}" Opacity="{Binding Data.Question.Enabled, Converter={StaticResource FromBoolToColorConverter}}" Margin="5,30" />
+        </Grid>
+        <Grid VerticalAlignment="Bottom"  Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MaxWidth="30" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MaxWidth="30" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="3" FontSize="20" Margin="5" Content="Next" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding NextQuestion}" Padding="10" />            
         </Grid>
     </Grid>
 </View:ModuleView>

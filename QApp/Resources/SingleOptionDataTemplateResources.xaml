@@ -11,7 +11,7 @@
    <DataTemplate x:Key="SingleOptionWithoutImageTemplate">
         <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
-                        CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0" 
+                        CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0" Margin="5,5,5,5"
                         Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType={x:Type View:ModuleView}}}">            
             <dxlc:Tile.ContentTemplate>
                 <DataTemplate>
@@ -33,7 +33,7 @@
         </dxlc:Tile>
     </DataTemplate>
    <DataTemplate x:Key="SingleOptionWithImageTemplate">
-        <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
+        <dxlc:Tile Background="#FF00ABBA" Content="{Binding}" Margin="5,5,5,5"
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
                         CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0" Width="145" Height="145"
                         Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType={x:Type View:ModuleView}}}">                   

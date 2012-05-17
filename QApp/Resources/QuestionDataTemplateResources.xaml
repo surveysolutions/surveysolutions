@@ -7,27 +7,39 @@
                     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
                     xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf">
 
+    <Style x:Key="calendarCustom" TargetType="{x:Type Calendar}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Calendar}">                    
+                    <Grid>
+                        <Viewbox Height="300" Width="300">
+                            <CalendarItem x:Name="PART_CalendarItem" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"/>                        
+                        </Viewbox>                        
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type DatePickerTextBox}">
+        <Setter Property="Width" Value="150" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="FontSize" Value="18"/>
+    </Style>    
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <DataTemplate x:Key="DefaultDataTemplate">
-        <dxlc:TileLayoutControl Orientation="Horizontal" Margin="5,35,0,0" Padding="5" BreakFlowToFit="False" ItemTemplateSelector="{DynamicResource SingleOptionDataTemplateSelector}" ItemsSource="{Binding Answers}" AllowItemMoving="False" >
-            <dxlc:TileLayoutControl.ItemTemplate>
-                <DataTemplate>
-                </DataTemplate>
-            </dxlc:TileLayoutControl.ItemTemplate>
-        </dxlc:TileLayoutControl>
+        <ItemsControl ItemsSource="{Binding Answers}" ItemTemplateSelector="{DynamicResource SingleOptionDataTemplateSelector}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>            
+        </ItemsControl>
     </DataTemplate>
     <DataTemplate x:Key="DropDownDataTemplate">
-        <Grid>
-            <Grid Grid.Row="1">                
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />                    
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
-                    <Extensions:ComboBoxDropDownCommand Margin="4" Height="50" Width="250" ItemsSource="{Binding Answers}"  
-                                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
-                                                        SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer}">
+
+                <StackPanel  Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
+                    <Extensions:ComboBoxDropDownCommand Margin="4" Height="50" Width="250" FontSize="16" HorizontalContentAlignment="Left"  VerticalContentAlignment="Center" ItemsSource="{Binding Answers}"  
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}" SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer}">
                         <Extensions:ComboBoxDropDownCommand.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">                                    
@@ -37,19 +49,12 @@
                         </Extensions:ComboBoxDropDownCommand.ItemTemplate>
                     </Extensions:ComboBoxDropDownCommand>
                 </StackPanel>
-            </Grid>
-        </Grid>
-    </DataTemplate>
+
+    </DataTemplate>    
     <DataTemplate x:Key="DateTimeDataTemplate">
-        <Grid>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
-                    <DatePicker Height="30" SelectedDate="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" Name="MonthlyCalendar" FirstDayOfWeek="Monday" IsTodayHighlighted="True" Foreground="White">                                               
+
+                <StackPanel  Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
+                    <DatePicker CalendarStyle="{StaticResource calendarCustom}" SelectedDate="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" Name="MonthlyCalendar" FirstDayOfWeek="Monday" IsTodayHighlighted="True" Foreground="White">                                               
                     </DatePicker>
                     <Button FontSize="20" Margin="5" Content="Save" Padding="10"
                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
@@ -64,23 +69,16 @@
                         </Button.CommandParameter>
                     </Button>
                 </StackPanel>
-            </Grid>
-        </Grid>
+
     </DataTemplate>
     <DataTemplate x:Key="GpsCoordinatesDataTemplate">
-        <Grid>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
+
+                <StackPanel  Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
                     <Border BorderThickness="1" BorderBrush="White">
                         <dxe:TextEdit Name="GpsCoordinateText" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" 
                                  Width="100" Height="30" Canvas.Top="50" Canvas.Left="20" MaskType="Simple" Mask="00.000000;00.000000" />
                     </Border>
-                    <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
+                    <Button FontSize="20" Margin="5" Content="Save" Padding="10"
                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
                         <Button.Resources>
                             <Extensions:ChangeObjectMultiConverter x:Key="ChangeObjectMultiConverter"/>
@@ -93,92 +91,68 @@
                         </Button.CommandParameter>
                     </Button>
                 </StackPanel>
-            </Grid>
-        </Grid>
+
     </DataTemplate>
     <DataTemplate x:Key="MultyOptionDataTemplate">
-        <dxlc:TileLayoutControl Orientation="Horizontal" Padding="5" BreakFlowToFit="False" ItemsSource="{Binding Answers}" AllowItemMoving="False" >
-            <dxlc:TileLayoutControl.ItemTemplate>
+        <ItemsControl ItemsSource="{Binding Answers}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>                       
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Margin="5,35,0,0">
-                        <dxlc:Tile Background="#FF00ABBA" Content="{Binding}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
-                            CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0" 
+                    <dxlc:Tile Background="#FF00ABBA" Content="{Binding}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
+                            CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="2"  Margin="5,5,5,5"
                             Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType={x:Type View:ModuleView}}}">
                             <dxlc:Tile.ContentTemplate>
                                 <DataTemplate>
                                     <Grid>
                                         <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="*" />
-                                            </Grid.RowDefinitions>
-                                            <StackPanel Grid.ColumnSpan="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
-                                                    <TextBlock Text="{Binding AnswerText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
-                                            </StackPanel>
+                                            <TextBlock Text="{Binding AnswerText}" Margin="5,5,5,5" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                            <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False" Visibility="{Binding Selected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         </Grid>
-                                       <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False"                                                
-                                            Visibility="{Binding Selected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                    </Grid>                                   
+                                    </Grid>
                                 </DataTemplate>
                             </dxlc:Tile.ContentTemplate>
-                        </dxlc:Tile>
-                    </StackPanel>
+                    </dxlc:Tile>
                 </DataTemplate>
-            </dxlc:TileLayoutControl.ItemTemplate>
-        </dxlc:TileLayoutControl>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>     
     </DataTemplate>
     <DataTemplate x:Key="NumericDataTemplate">
         <ContentControl>
-            <ContentControl.Content>
-                <Grid>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
-                            <Border BorderThickness="1" BorderBrush="White">
-                                <!--<dxe:TextEdit Name="txtBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" 
-                                              Width="100" Height="20" Canvas.Top="50" Canvas.Left="20" MaskType="Numeric" MaskUseAsDisplayFormat="True" />-->
-                                <dxe:TextEdit Name="txtBox" EditValue="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                              Width="100" Height="30" Canvas.Top="50" Canvas.Left="20" MaskType="Numeric" MaskUseAsDisplayFormat="True" />                                
-                            </Border>
-                            <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
-                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
-                                <Button.Resources>
-                                    <Extensions:ChangeObjectMultiConverter x:Key="ChangeObjectMultiConverter"/>
-                                </Button.Resources>
-                                <Button.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource ChangeObjectMultiConverter}">
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}" Path="DataContext"/>
-                                        <Binding ElementName="txtBox" Path="Text"/>
-                                    </MultiBinding>
-                                </Button.CommandParameter>
-                            </Button>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
+            <ContentControl.Content>               
+                     <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
+                         <Border BorderThickness="1" BorderBrush="White">                                
+                             <dxe:TextEdit Name="txtBox" EditValue="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                           Width="100" Height="30" Canvas.Top="50" Canvas.Left="20" MaskType="Numeric" MaskUseAsDisplayFormat="True" />                                
+                         </Border>
+                         <Button FontSize="20" Margin="5" Content="Save" Padding="10"
+                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
+                             <Button.Resources>
+                                 <Extensions:ChangeObjectMultiConverter x:Key="ChangeObjectMultiConverter"/>
+                             </Button.Resources>
+                             <Button.CommandParameter>
+                                 <MultiBinding Converter="{StaticResource ChangeObjectMultiConverter}">
+                                     <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}" Path="DataContext"/>
+                                     <Binding ElementName="txtBox" Path="Text"/>
+                                 </MultiBinding>
+                             </Button.CommandParameter>
+                         </Button>
+                     </StackPanel>                    
             </ContentControl.Content>
         </ContentControl>
     </DataTemplate>
     <DataTemplate x:Key="TextDataTemplate">
         <ContentControl>
             <ContentControl.Content>
-                <Grid>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
                             <Border BorderThickness="1" BorderBrush="White">
                                 <dxe:TextEdit Name="txtTextBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerText}" 
                                               Width="100" Height="30" Canvas.Top="50" Canvas.Left="20" />
                             </Border>
-                            <Button Grid.Column="1" FontSize="20" Margin="5" Content="Save" Padding="10"
+                            <Button FontSize="20" Margin="5" Content="Save" Padding="10"
                                 Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
                                 <Button.Resources>
                                     <Extensions:ChangeObjectMultiConverter x:Key="ChangeObjectMultiConverter"/>
@@ -191,8 +165,6 @@
                                 </Button.CommandParameter>
                             </Button>
                         </StackPanel>
-                    </Grid>
-                </Grid>
             </ContentControl.Content>
         </ContentControl>
     </DataTemplate>
