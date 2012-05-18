@@ -21,12 +21,13 @@ namespace QApp.Helpers.Extensions
                 return null;
             var param = values[0] as CompleteQuestionView;
             var answers = new CompleteAnswerView[1]  {
-                new CompleteAnswerView(
-                    new CompleteAnswer
+                new CompleteAnswerView(param.PublicKey,
+                        new CompleteAnswer
                         {
                             AnswerText = values[1].ToString(),
                             AnswerValue= values[1].ToString(),
                             AnswerType = AnswerType.Select,
+                            PublicKey = param.Answers[0].PublicKey,
                             Selected = true
                         })
                 };

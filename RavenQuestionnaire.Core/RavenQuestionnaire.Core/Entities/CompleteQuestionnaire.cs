@@ -25,7 +25,7 @@ namespace RavenQuestionnaire.Core.Entities
         public CompleteQuestionnaire(CompleteQuestionnaireDocument document)
         {
             this.innerDocument = document;
-                throw new InvalidOperationException("can't be bellow zero");
+               // throw new InvalidOperationException("can't be bellow zero");
         }
         public CompleteQuestionnaire(Questionnaire template, UserLight user, SurveyStatus status)
         {

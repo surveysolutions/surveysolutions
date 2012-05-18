@@ -45,10 +45,10 @@ namespace QApp.ViewModel {
             base.Load();
             if (string.IsNullOrEmpty(QuestionnaireId)) return;
             //replace with injections
-            ViewRepository viewRepository = new ViewRepository(Initializer.Kernel);
+            var viewRepository = new ViewRepository(Initializer.Kernel);
             CompleteQuestionnaireItem =
-                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
-                     new CompleteQuestionnaireViewInputModel(QuestionnaireId) { CurrentGroupPublicKey = GroupId });
+               viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                   new CompleteQuestionnaireViewInputModel(QuestionnaireId) { CurrentGroupPublicKey = group });
             
         }
 
