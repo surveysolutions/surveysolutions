@@ -227,7 +227,7 @@ namespace RavenQuestionnaire.Core.Documents
         [JsonIgnore]
         public IComposite Parent
         {
-            get { throw new NotImplementedException(); }
+            get; set;
         }
 
         protected void OnAdded(CompositeAddedEventArgs e)

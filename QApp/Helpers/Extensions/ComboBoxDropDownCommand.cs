@@ -104,7 +104,7 @@ namespace QApp.Helpers.Extensions
                     else
                     {
                         var answer=(((ComboBox)(e.Source)).SelectionBoxItem) as RavenQuestionnaire.Core.Views.Answer.CompleteAnswerView;
-                        if (answer!=null && string.IsNullOrEmpty(answer.ToString()) && !answer.Selected)
+                        if (answer != null && !answer.Selected)
                             ((ICommand) Command).Execute(
                                 ((System.Windows.Controls.Primitives.Selector) (e.Source)).SelectedValue);
                     }

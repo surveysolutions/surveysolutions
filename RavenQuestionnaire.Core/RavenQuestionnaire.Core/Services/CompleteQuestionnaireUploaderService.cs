@@ -35,7 +35,9 @@ namespace RavenQuestionnaire.Core.Services
             CompleteQuestionnaire entity = _questionRepository.Load(id);
             ICompleteGroup general = entity.GetInnerDocument();
             ICompleteQuestion question;
+            
             question = propagated == null ? FindQuestion(completeAnswers[0].PublicKey, null, general) : FindQuestion(completeAnswers[0].PublicKey, propagated.PropogationPublicKey, general);
+            
             if (question == null)
                 throw new ArgumentException("question wasn't found");
 
