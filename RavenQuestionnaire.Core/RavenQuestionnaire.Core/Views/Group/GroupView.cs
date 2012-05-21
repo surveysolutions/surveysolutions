@@ -131,12 +131,13 @@ namespace RavenQuestionnaire.Core.Views.Group
                 if(queueItem==null)
                     continue;
 
-                if (queueItem.Children.Any(q => q.PublicKey.Equals(group.PublicKey)))
+                if (queueItem.Children != null && queueItem.Children.Any(q => q.PublicKey.Equals(group.PublicKey)))
                     return queueItem.PublicKey;
-                foreach (var child in queueItem.Children)
-                {
-                    groups.Enqueue(child);
-                }
+                if (queueItem.Children != null)
+                    foreach (var child in queueItem.Children)
+                    {
+                        groups.Enqueue(child);
+                    }
             }
             return null;
         }

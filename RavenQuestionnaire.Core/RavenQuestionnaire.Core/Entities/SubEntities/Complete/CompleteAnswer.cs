@@ -143,7 +143,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
 
         public List<IComposite> Children { get; set; }
-         [JsonIgnore]
+
+        [JsonIgnore]
         public IComposite Parent
         {
             get { throw new NotImplementedException(); }

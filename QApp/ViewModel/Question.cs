@@ -56,14 +56,16 @@ namespace QApp.ViewModel
              //bad approach!!!
              //get from current data
             var viewRepository = new ViewRepository(Initializer.Kernel);
-            var test = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+            _Questionnaire = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
                     new CompleteQuestionnaireViewInputModel(currentQuestion.QuestionnaireId) { CurrentGroupPublicKey = currentQuestion.GroupPublicKey });
-            for (int i = 0; i < test.CurrentGroup.Groups[0].Questions.Count(); i++)
-                if (test.CurrentGroup.Groups[0].Questions[i].PublicKey == currentQuestion.PublicKey)
-                    NextQuestion = test.CurrentGroup.Groups[0].Questions.Count()>i+1 ? test.CurrentGroup.Groups[0].Questions[i+1] : null;
+            for (int i = 0; i < _Questionnaire.CurrentGroup.Groups[0].Questions.Count(); i++)
+                if (_Questionnaire.CurrentGroup.Groups[0].Questions[i].PublicKey == currentQuestion.PublicKey)
+                    NextQuestion = _Questionnaire.CurrentGroup.Groups[0].Questions.Count()>i+1 ? _Questionnaire.CurrentGroup.Groups[0].Questions[i+1] : null;
          }
 
-         ObservableCollection<List<NavigationItem>> navigation;
+         private CompleteQuestionnaireViewV _Questionnaire { get; set; }
+
+        ObservableCollection<List<NavigationItem>> navigation;
          public ObservableCollection<List<NavigationItem>> Navigation
          {
              get { return navigation; }
@@ -132,10 +134,6 @@ namespace QApp.ViewModel
                  var question = p as CompleteQuestionView;
                  if (question!=null)
                  {
-                     //foreach (CompleteAnswerView answerView in question.Answers)
-                     //{
-                     //    answerView.QuestionId = question.PublicKey;
-                     //}
                      var command = new UpdateAnswerInCompleteQuestionnaireCommand(question.QuestionnaireId,
                                                                                   question.Answers, null,
                                                                                   new UserLight("0", "system"));

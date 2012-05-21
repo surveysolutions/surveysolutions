@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using DevExpress.RealtorWorld.Xpf.Helpers;
@@ -262,23 +263,11 @@ namespace QApp.ViewModel {
 
         private void BuildMenu()
         {
-            var root = new NavigationItem();
-            root.Text = "root";
-            root.Command = SetCurrentGroupCommand;
-
+            var root = new NavigationItem {Text = "root", Command = SetCurrentGroupCommand};
             var item = CompletedQuestionnaireData.CompleteQuestionnaireItem;
-
             Navigation.Clear();
-
             Navigation.Add(new List<NavigationItem>() { root });
-
-            var subgroups = new List<NavigationItem>();
-
-            foreach (var group in item.Groups)
-            {
-                subgroups.Add(new NavigationItem() { Text = group.GroupText, Command = SetCurrentGroupCommand, Item = group }); 
-            }
-
+            var subgroups = (from g in item.Groups select new NavigationItem() {Text = g.GroupText, Command = SetCurrentGroupCommand, Item = g}).ToList();
             Navigation.Add(subgroups);
         }
 
@@ -300,6 +289,7 @@ namespace QApp.ViewModel {
             //bad approach!!!
             //reload current data
             //TODO: load whole questionnaire!!!
+
             var group = p as CompleteGroupHeaders;
             if (group != null)
             {
