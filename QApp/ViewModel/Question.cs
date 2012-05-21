@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using RavenQuestionnaire.Core.Views.Answer;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
@@ -56,14 +57,15 @@ namespace QApp.ViewModel
              //bad approach!!!
              //get from current data
             var viewRepository = new ViewRepository(Initializer.Kernel);
-            _Questionnaire = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+            _Questionnaire = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                     new CompleteQuestionnaireViewInputModel(currentQuestion.QuestionnaireId) { CurrentGroupPublicKey = currentQuestion.GroupPublicKey });
-            for (int i = 0; i < _Questionnaire.CurrentGroup.Groups[0].Questions.Count(); i++)
+            
+             for (int i = 0; i < _Questionnaire.CurrentGroup.Groups[0].Questions.Count(); i++)
                 if (_Questionnaire.CurrentGroup.Groups[0].Questions[i].PublicKey == currentQuestion.PublicKey)
                     NextQuestion = _Questionnaire.CurrentGroup.Groups[0].Questions.Count()>i+1 ? _Questionnaire.CurrentGroup.Groups[0].Questions[i+1] : null;
          }
 
-         private CompleteQuestionnaireViewV _Questionnaire { get; set; }
+         private CompleteQuestionnaireMobileView _Questionnaire { get; set; }
 
         ObservableCollection<List<NavigationItem>> navigation;
          public ObservableCollection<List<NavigationItem>> Navigation
@@ -88,7 +90,7 @@ namespace QApp.ViewModel
             set { SetValue<CompleteQuestionView>("NextQuestion", ref nextQuestion, value); }
         }
 
-         #region Commands
+        #region Commands
          protected override void InitializeCommands()
          {
              base.InitializeCommands();
@@ -158,7 +160,7 @@ namespace QApp.ViewModel
         {
             var viewRepository = new ViewRepository(Initializer.Kernel);
             var test =
-                viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                     new CompleteQuestionnaireViewInputModel(QuestionData.Question.QuestionnaireId) { CurrentGroupPublicKey = QuestionData.Question.GroupPublicKey });
             var item = new CompleteQuestionView();
             for (int i = 0; i < test.CurrentGroup.Groups[0].Questions.Count(); i++)
