@@ -10,6 +10,7 @@ using DevExpress.RealtorWorld.Xpf.ViewModel;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Question;
 
@@ -48,16 +49,16 @@ namespace QApp.ViewModel {
             //replace with injections
             var viewRepository = new ViewRepository(Initializer.Kernel);
             CompleteQuestionnaireItem =
-               viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+               viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                    new CompleteQuestionnaireViewInputModel(QuestionnaireId) { CurrentGroupPublicKey = group });
             
         }
 
-        private CompleteQuestionnaireViewV completeQuestionnaireItem;
-        public CompleteQuestionnaireViewV CompleteQuestionnaireItem
+        private CompleteQuestionnaireMobileView completeQuestionnaireItem;
+        public CompleteQuestionnaireMobileView CompleteQuestionnaireItem
         {
             get { return completeQuestionnaireItem; }
-            private set { SetValue<CompleteQuestionnaireViewV>("CompleteQuestionnaireItem", ref completeQuestionnaireItem, value); }
+            private set { SetValue<CompleteQuestionnaireMobileView>("CompleteQuestionnaireItem", ref completeQuestionnaireItem, value); }
         }
     }
     #region research
@@ -216,11 +217,11 @@ namespace QApp.ViewModel {
             return submodules;
         }
 
-        private CompleteGroupViewV currentGroup;
-        public CompleteGroupViewV CurrentGroup
+        private CompleteGroupMobileView currentGroup;
+        public CompleteGroupMobileView CurrentGroup
         {
             get { return currentGroup; }
-            set { SetValue<CompleteGroupViewV>("CurrentGroup", ref currentGroup, value, RaiseCurrentGroupChanged); }
+            set { SetValue<CompleteGroupMobileView>("CurrentGroup", ref currentGroup, value, RaiseCurrentGroupChanged); }
         }
 
         private Module groupDetail;
@@ -274,7 +275,7 @@ namespace QApp.ViewModel {
 
 
 
-        void RaiseCurrentGroupChanged(CompleteGroupViewV oldValue, CompleteGroupViewV newValue)
+        void RaiseCurrentGroupChanged(CompleteGroupMobileView oldValue, CompleteGroupMobileView newValue)
         {
             if (newValue.Propagated == Propagate.None)
                 GroupDetail = (CommonGroupDetail)ModulesManager.CreateModule(null, new CommonGroupDetailData(newValue), this, newValue);
@@ -303,7 +304,7 @@ namespace QApp.ViewModel {
 
         void DoSetCurrentSubGroup(object p)
         {
-            var group = p as CompleteGroupViewV;
+            var group = p as CompleteGroupMobileView;
             if (group != null)
             {
                 CurrentGroup = group;
