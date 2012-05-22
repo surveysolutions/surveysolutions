@@ -26,16 +26,11 @@ namespace DataEntryClient
 
         private static void Main()
         {
-            var store = new DocumentStore() { Url = "http://localhost:8080" }.Initialize();
-            var session = store.OpenSession();
-            var events =
-                session.Query<EventDocument>();
-
             var kernel = new StandardKernel(new CoreRegistry("http://localhost:8080"));
 
             RegisterServices(kernel);
 
-            new CompleteQuestionnaireSync(kernel.Get<ICommandInvoker>()).Execute();
+            new CompleteQuestionnaireSync(kernel.Get<ICommandInvoker>(), kernel.Get<IViewRepository>()).Execute();
         }
         /// <summary>
         /// Load your modules or register your services here!

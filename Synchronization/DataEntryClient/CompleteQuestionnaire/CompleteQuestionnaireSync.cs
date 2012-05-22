@@ -8,16 +8,19 @@ using Raven.Client.Document;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Views.Event;
 using SynchronizationMessages.CompleteQuestionnaire;
 
 namespace DataEntryClient.CompleteQuestionnaire
 {
     public class CompleteQuestionnaireSync
     {
-        private ICommandInvoker invoker; 
-        public CompleteQuestionnaireSync(ICommandInvoker invoker)
+        private ICommandInvoker invoker;
+        private IViewRepository viewRepository;
+        public CompleteQuestionnaireSync(ICommandInvoker invoker, IViewRepository viewRepository)
         {
             this.invoker = invoker;
+            this.viewRepository = viewRepository;
         }
 
        
@@ -29,22 +32,15 @@ namespace DataEntryClient.CompleteQuestionnaire
 
             try
             {
-                var store = new DocumentStore() { Url = "http://localhost:8080" }.Initialize();
-                var session = store.OpenSession();
-                var events =
-                    session.Query<EventDocument>();
-                foreach (var eventItem in events)
+                var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(new EventBrowseInputModel(null));
+                foreach (var eventItem in events.Items)
                 {
-
-               /*     var settings = new JsonSerializerSettings();
-                    settings.TypeNameHandling = TypeNameHandling.Objects;*/
                     var message = new EventSyncMessage
                     {
                         SynchronizationKey = syncKey,
                         Command = eventItem.Command
                     };
-
-
+                    
                     ErrorCodes returnCode = client.Process(message);
                 }
             }

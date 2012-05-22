@@ -10,7 +10,7 @@ RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/bin/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/obj/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/bin/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/obj/*
-RavenQuestionnaire.Web/RavenQuestionnaire.Web/Content/Bootstrap/*.less
+RavenQuestionnaire.Web/RavenQuestionnaire.Web/Content/Bootstrap/*
 ExpressionEvaluator/Evaluant.Calculator.Tests/bin/*
 ExpressionEvaluator/Evaluant.Calculator.Tests/obj/*
 ExpressionEvaluator/Evaluant.Calculator/bin/*
