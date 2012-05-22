@@ -17,22 +17,37 @@ namespace QApp.Helpers.Extensions
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             ///bad !!! Need refactoring
-            if (values.Count() == 0)
-                return null;
-            var param = values[0] as CompleteQuestionView;
-            var answers = new CompleteAnswerView[1]  {
-                new CompleteAnswerView(param.PublicKey,
-                        new CompleteAnswer
-                        {
-                            AnswerText = values[1].ToString(),
-                            AnswerValue= values[1].ToString(),
-                            AnswerType = AnswerType.Select,
-                            PublicKey = param.Answers[0].PublicKey,
-                            Selected = true
-                        })
-                };
-            param.Answers = answers;
-            return param;
+            try
+            {
+                if (values.Count() == 0)
+                    return null;
+                CompleteQuestionView param = null;
+                if (values[0] is CompleteQuestionView)
+                    param = values[0] as CompleteQuestionView;
+                else
+                    param = ((ViewModel.Question)(values[0])).QuestionData.Question;
+                if (param != null)
+                {
+                    var answers = new CompleteAnswerView[1]
+                                  {
+                                      new CompleteAnswerView(param.PublicKey,
+                                                             new CompleteAnswer
+                                                                 {
+                                                                     AnswerText = values[1].ToString(),
+                                                                     AnswerValue = values[1].ToString(),
+                                                                     AnswerType = AnswerType.Select,
+                                                                     PublicKey = param.Answers[0].PublicKey,
+                                                                     Selected = true
+                                                                 })
+                                  };
+                    param.Answers = answers;
+                }
+                return param;
+            }
+            catch (Exception)
+            {
+               return null;
+            }
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
