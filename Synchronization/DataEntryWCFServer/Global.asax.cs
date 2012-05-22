@@ -55,7 +55,7 @@ namespace DataEntryWCFServer
 
         protected override IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new CoreRegistry("http://localhost:8080"));
+            var kernel = new StandardKernel(new CoreRegistry("http://localhost:8082"));
             RegisterServices(kernel);
             return kernel;
         }
