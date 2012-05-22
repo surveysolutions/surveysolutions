@@ -1,11 +1,11 @@
 using System;
-using NServiceBus;
+using RavenQuestionnaire.Core.Commands;
 
 namespace SynchronizationMessages.CompleteQuestionnaire
 {
-    public class CompleteQuestionnaireMessage: IMessage
+    public class EventSyncMessage
     {
         public Guid SynchronizationKey { get; set; }
-        public string Questionanire { get; set; }
+        public ICommand Command { get; set; }
     }
 }
