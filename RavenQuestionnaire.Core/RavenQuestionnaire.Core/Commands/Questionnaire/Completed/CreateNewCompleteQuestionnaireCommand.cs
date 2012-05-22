@@ -11,7 +11,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
         public string QuestionnaireId { get; private set; }
         public UserLight Creator { get; private set; }
         public Guid CompleteQuestionnaireGuid { get;private set; }
-        public SurveyStatus Status { set; get; }
+        public SurveyStatus Status { private set; get; }
 
         public UserLight Executor { get; set; }
 
@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
             this.QuestionnaireId =IdUtil.CreateQuestionnaireId(questionnaireId);
             this.CompleteQuestionnaireGuid = completeQuestionnaireGuid;
             this.Creator = creator;
-            this .Status = status;
+            this.Status = status;
             this.Executor = executor;
         }
     }

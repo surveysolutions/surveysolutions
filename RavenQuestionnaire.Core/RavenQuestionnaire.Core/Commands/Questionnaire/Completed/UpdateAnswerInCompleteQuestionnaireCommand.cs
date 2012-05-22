@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -14,31 +15,45 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
         public CompleteAnswer[] CompleteAnswers { get; private set; }
      //   public Guid? Group { get; private set; }
 		public UserLight Executor { get; set; }
+        protected UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionanireId, UserLight executer)
+        {
+            this.CompleteQuestionnaireId = completeQuestionanireId;
+            Executor = executer;
+        }
+        [JsonConstructor]
+        public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionanireId/*, Guid? group*/,
+                                                 CompleteAnswer[] answers, UserLight executer):this(completeQuestionanireId,executer)
+        {
+            this.CompleteAnswers = answers;
+
+        }
 
         public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionanireId/*, Guid? group*/,
                                                   CompleteAnswerView[] answers, Guid? propogationPublicKey, UserLight executer)
+            : this(completeQuestionanireId, executer)
         {
-            this.CompleteQuestionnaireId = completeQuestionanireId;
-            /*   if (group != Guid.Empty)
-                   this.Group = group;*/
-            this.CompleteAnswers = answers.Select(answer => new CompleteAnswer()
-                                                                {
-                                                                    AnswerText = answer.AnswerText,
-                                                                    AnswerType = answer.AnswerType,
-                                                                    AnswerValue = answer.AnswerValue,
-                                                                    Mandatory = answer.Mandatory,
-                                                                    PublicKey = answer.PublicKey,
-                                                                    Selected =  answer.Selected
-                                                                }).ToArray();
-            if (propogationPublicKey.HasValue)
+         
+            if (answers != null)
             {
-                for (int i = 0; i < this.CompleteAnswers.Length; i++)
+                this.CompleteAnswers = answers.Select(answer => new CompleteAnswer()
+                                                                    {
+                                                                        AnswerText = answer.AnswerText,
+                                                                        AnswerType = answer.AnswerType,
+                                                                        AnswerValue = answer.AnswerValue,
+                                                                        Mandatory = answer.Mandatory,
+                                                                        PublicKey = answer.PublicKey,
+                                                                        Selected = answer.Selected
+                                                                    }).ToArray();
+                if (propogationPublicKey.HasValue)
                 {
-                    this.CompleteAnswers[i] = new PropagatableCompleteAnswer(this.CompleteAnswers[i],
-                                                                             propogationPublicKey.Value);
+                    for (int i = 0; i < this.CompleteAnswers.Length; i++)
+                    {
+                        this.CompleteAnswers[i] = new PropagatableCompleteAnswer(this.CompleteAnswers[i],
+                                                                                 propogationPublicKey.Value);
+                    }
                 }
             }
-            Executor = executer;
+           
         }
     }
 }
