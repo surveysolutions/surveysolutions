@@ -15,6 +15,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
     /// values is to host the service and inspect the auto-generated
     /// WSDL by appending ?wsdl to the URL of the service.
     /// </summary>
+    [JsonNewSerializerContractBehavior]
     [ServiceContract]
     public interface ICompleteQuestionnaireService
     {
