@@ -39,8 +39,8 @@ namespace RavenQuestionnaire.Core
                 var handler = container.Get<ICommandHandler<T>>();
                 handler.Handle(command);
                 //store the command in the store
-                documentSession.Store(new EventDocument(command));
-                documentSession.SaveChanges();
+              /*  documentSession.Store(new EventDocument(command));
+                documentSession.SaveChanges();*/
             };
             if (_asyncActiveEvent == null)
             {

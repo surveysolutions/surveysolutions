@@ -1,61 +1,83 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
-using Newtonsoft.Json;
+using DataEntryClient.CompleteQuestionnaire;
+using Ninject;
+using Ninject.Activation;
+using Ninject.Extensions.Conventions;
+using Ninject.Syntax;
 using Raven.Client.Document;
+using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.Conventions;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.Iterators;
+using RavenQuestionnaire.Core.Entities.Subscribers;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using SynchronizationMessages.CompleteQuestionnaire;
 
 namespace DataEntryClient
 {
     internal class Program
     {
-        private static readonly ChannelFactory<ICompleteQuestionnaireService> ChannelFactory = new ChannelFactory<ICompleteQuestionnaireService>("");
 
         private static void Main()
         {
-            Console.WriteLine("This will send requests to the CancelOrder WCF service");
-            Console.WriteLine("Press 'Enter' to send a message.To exit, Ctrl + C");
+            var store = new DocumentStore() { Url = "http://localhost:8080" }.Initialize();
+            var session = store.OpenSession();
+            var events =
+                session.Query<EventDocument>();
 
-            ICompleteQuestionnaireService client = ChannelFactory.CreateChannel();
-           
+            var kernel = new StandardKernel(new CoreRegistry("http://localhost:8080"));
 
-            try
-            {
-                var store = new DocumentStore() {Url = "http://localhost:8080"}.Initialize();
-                var session = store.OpenSession();
-                var questionnaires = session.Query<CompleteQuestionnaireDocument>();
-                foreach (var completeQuestionnaireDocument in questionnaires)
-                {
-                    
-               
-                    var message = new CompleteQuestionnaireMessage
-                    {
-                       SynchronizationKey = Guid.NewGuid(),
-                       Questionanire = JsonConvert.SerializeObject(completeQuestionnaireDocument)
-                    };
+            RegisterServices(kernel);
 
-                    Console.WriteLine("Sending message with SynchronizationKey {0}.", message.SynchronizationKey);
-
-                    ErrorCodes returnCode = client.Process(message);
-
-                    Console.WriteLine("Error code returned: " + returnCode);
-                }
-            }
-            finally
-            {
-                try
-                {
-                    ((IChannel)client).Close();
-                }
-                catch
-                {
-                    ((IChannel)client).Abort();
-                }
-            }
+            new CompleteQuestionnaireSync(kernel.Get<ICommandInvoker>()).Execute();
         }
+        /// <summary>
+        /// Load your modules or register your services here!
+        /// </summary>
+        /// <param name="kernel">The kernel.</param>
+        private static void RegisterServices(IKernel kernel)
+        {
+          
+
+            kernel.Scan(s =>
+            {
+                s.FromAssembliesMatching("RavenQuestionnaire.*");
+                s.BindWith(new GenericBindingGenerator(typeof(ICommandHandler<>)));
+            });
+
+            kernel.Scan(s =>
+            {
+                s.FromAssembliesMatching("RavenQuestionnaire.*");
+                s.BindWith(new GenericBindingGenerator(typeof(IViewFactory<,>)));
+            });
+            kernel.Scan(s =>
+            {
+                s.FromAssembliesMatching("RavenQuestionnaire.*");
+                s.BindWith(new GenericBindingGenerator(typeof(IExpressionExecutor<,>)));
+            });
+          
+            kernel.Scan(s =>
+            {
+                s.FromAssembliesMatching("RavenQuestionnaire.*");
+                s.BindWith(new RegisterFirstInstanceOfInterface());
+            });
+            kernel.Scan(s =>
+            {
+                s.FromAssembliesMatching("RavenQuestionnaire.*");
+                s.BindWith(new GenericBindingGenerator(typeof(Iterator<>)));
+            });
+            kernel.Scan(s =>
+            {
+                s.FromAssembliesMatching("RavenQuestionnaire.*");
+                s.BindWith(new GenericBindingGenerator(typeof(IEntitySubscriber<>)));
+            });
+        }
+       
     }
 }

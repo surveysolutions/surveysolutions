@@ -18,7 +18,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
     [ServiceContract]
     public interface ICompleteQuestionnaireService
     {
-        [OperationContract(Action = "http://tempuri.org/IWcfServiceOf_CompleteQuestionnaireMessage_ErrorCodes/Process", ReplyAction = "http://tempuri.org/IWcfServiceOf_CompleteQuestionnaireMessage_ErrorCodes/ProcessResponse")]
-        ErrorCodes Process(CompleteQuestionnaireMessage request);
+        [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/ICompleteQuestionnaireService/Process", ReplyAction = "http://tempuri.org/ICompleteQuestionnaireService/ProcessResponse")]
+        ErrorCodes Process(EventSyncMessage request);
     }
 }
