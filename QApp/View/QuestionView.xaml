@@ -4,9 +4,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
-    xmlns:Extensions="clr-namespace:QApp.Helpers.Extensions"  mc:Ignorable="d"
-    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-    xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
+    xmlns:Extensions="clr-namespace:QApp.Helpers.Extensions"
+                 xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
+                 xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" mc:Ignorable="d"
     d:DesignHeight="800" d:DesignWidth="1000">
  
     <View:ModuleView.Resources>
@@ -14,6 +14,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\Resources\SingleOptionDataTemplateResources.xaml"/>
                 <ResourceDictionary Source="..\Resources\QuestionDataTemplateResources.xaml"/>
+
                 <ResourceDictionary Source="..\Resources\TileHoverAnimation.xaml" />
             </ResourceDictionary.MergedDictionaries>            
           <Extensions:EnabledDisabledConverter x:Key="EnabledDisabledConverter" />
@@ -29,46 +30,7 @@
         </Grid.RowDefinitions>
               
         <ContentControl Content="{Binding Navigator.View}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top" />
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Border BorderBrush="#FF515151" BorderThickness="1" Padding="5" Margin="5" >
-                <dxlc:TileLayoutControl x:Name="Nav" Orientation="Horizontal" AllowItemMoving="False" Padding="5" BreakFlowToFit="False"  ItemsSource="{Binding Navigation}">
-                    <dxlc:TileLayoutControl.ItemTemplate>
-                        <DataTemplate>
-                            <dxlc:TileLayoutControl Orientation="Vertical" AllowItemMoving="False" Padding="5" BreakFlowToFit="False" ItemsSource="{Binding}" Height="85" >
-                                <dxlc:TileLayoutControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <dxlc:Tile Background="#66ffccdd" Width="200" Height="60" Content="{Binding}" Command="{Binding Command}" CommandParameter="{Binding Item}">
-                                            <dxlc:Tile.ContentTemplate>
-                                                <DataTemplate>
-                                                    <Grid>
-                                                        <Grid>
-                                                            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
-                                                                <TextBlock Text="{Binding Text}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
-                                                            </StackPanel>
-                                                        </Grid>
-                                                        <Helpers:VisualStateControl  Style="{StaticResource TileHoverAnimation}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                                                            <Border Background="Aqua"  Opacity="0.25" />
-                                                        </Helpers:VisualStateControl>
-                                                        <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch"
-                                                            VerticalAlignment="Stretch" IsHitTestVisible="False"  Visibility="{Binding Path=(Helpers:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                                    </Grid>
-                                                </DataTemplate>
-                                            </dxlc:Tile.ContentTemplate>
-                                        </dxlc:Tile>
-                                    </DataTemplate>
-                                </dxlc:TileLayoutControl.ItemTemplate>
-                            </dxlc:TileLayoutControl>
-                        </DataTemplate>
-                    </dxlc:TileLayoutControl.ItemTemplate>
-                </dxlc:TileLayoutControl>
-            </Border>
-        </Grid>
-
+        <Grid Grid.Row="1"/>
         <Grid Grid.Row="2">
             <TextBlock Text="{Binding Data.Question.QuestionText}" FontSize="20" Margin="5" Foreground="#FFFFFFFF" TextWrapping="Wrap" Opacity="{Binding Data.Question.Enabled, Converter={StaticResource FromBoolToColorConverter}}" />
             <ContentControl x:Name="ContentArea" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding Data.Question}" ContentTemplateSelector="{StaticResource QuestionDataTemplateSelector}"  
@@ -81,8 +43,25 @@
                 <ColumnDefinition Width="*" MaxWidth="30" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" MaxWidth="30" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MaxWidth="30" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="3" FontSize="20" Margin="5" Content="Next" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding NextQuestion}" Padding="10" />            
+            <dxe:TextEdit Name="txtBox1" Visibility="Hidden" EditValue="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Grid.Column="1" FontSize="20" Padding="10" Margin="5" Width="70" Content="Up" Command="{Binding GoToParentGroup}" />
+            <Button Grid.Column="3" FontSize="20" Padding="10" Margin="5" Width="70" Content="Save" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
+                            Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" 
+                            Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType={x:Type View:ModuleView}}}" >
+                <Button.Resources>
+                    <Extensions:ChangeObjectMultiConverter x:Key="ChangeObjectMultiConverter"/>
+                </Button.Resources>
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource ChangeObjectMultiConverter}">
+                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}" Path="DataContext"/>
+                        <Binding ElementName="txtBox1" Path="Text" />
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+            <Button Grid.Column="5" FontSize="20" Margin="5" Content="Next" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding NextQuestion}" Padding="10" />            
         </Grid>
     </Grid>
 </View:ModuleView>
