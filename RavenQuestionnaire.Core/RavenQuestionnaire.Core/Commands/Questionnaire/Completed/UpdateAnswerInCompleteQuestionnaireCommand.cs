@@ -21,10 +21,11 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
             Executor = executer;
         }
         [JsonConstructor]
-        public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionanireId/*, Guid? group*/,
-                                                 CompleteAnswer[] answers, UserLight executer):this(completeQuestionanireId,executer)
+        public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionnaireId/*, Guid? group*/,
+                                                 CompleteAnswer[] completeAnswers, UserLight executor)
+            : this(completeQuestionnaireId, executor)
         {
-            this.CompleteAnswers = answers;
+            this.CompleteAnswers = completeAnswers;
 
         }
 
