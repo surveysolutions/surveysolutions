@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
             string responsible,
             UserLight executor)
         {
-            this.CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(completeQuestionanireId);
+            this.CompleteQuestionnaireId = completeQuestionanireId;
             this.Status = status;
             this.Responsible = responsible;
             this.Executor = executor;

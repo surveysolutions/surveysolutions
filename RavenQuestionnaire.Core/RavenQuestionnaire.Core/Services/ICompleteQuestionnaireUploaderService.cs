@@ -11,9 +11,9 @@ namespace RavenQuestionnaire.Core.Services
     public interface ICompleteQuestionnaireUploaderService
     {
         CompleteQuestionnaire AddCompleteAnswer(string id, CompleteAnswer[] completeAnswers);
-        CompleteQuestionnaire CreateCompleteQuestionnaire(Questionnaire questionnaire, UserLight user, SurveyStatus status);
+        CompleteQuestionnaire CreateCompleteQuestionnaire(Questionnaire questionnaire,Guid completeQuestionnaireGuid, UserLight user, SurveyStatus status);
         void DeleteCompleteQuestionnaire(string id);
-        Guid PropagateGroup(string id, Guid publicKey);
+        void PropagateGroup(string id, Guid publicKey, Guid groupPublicKey);
         void RemovePropagatedGroup(string id, Guid publicKey, Guid propagationKey);
     }
 }
