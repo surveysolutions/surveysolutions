@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="DataEntryWCFServer.CompleteQuestionnaireSyncService" CodeBehind="CompleteQuestionnaireSyncService.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="DataEntryWCFServer.CompleteQuestionnaireSyncService" CodeBehind="CompleteQuestionnaireSyncService.svc.cs" Factory="Ninject.Extensions.Wcf.NinjectServiceHostFactory"  %>

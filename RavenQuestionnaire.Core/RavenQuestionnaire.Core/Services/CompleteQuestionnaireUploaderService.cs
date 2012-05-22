@@ -97,9 +97,9 @@ namespace RavenQuestionnaire.Core.Services
         }
 
         #endregion
-        public CompleteQuestionnaire CreateCompleteQuestionnaire(Questionnaire questionnaire,UserLight user, SurveyStatus status)
+        public CompleteQuestionnaire CreateCompleteQuestionnaire(Questionnaire questionnaire, Guid completeQuestionnaireGuid, UserLight user, SurveyStatus status)
         {
-            CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire, user, status, this.subscriber);
+            CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire,completeQuestionnaireGuid, user, status, this.subscriber);
            
             _questionRepository.Add(entity);
             var command = new GenerateQuestionnaireStatisticCommand(entity, null);
@@ -119,10 +119,10 @@ namespace RavenQuestionnaire.Core.Services
                 this._statisticsRepository.Remove(statEntity);
         }
 
-        public Guid PropagateGroup(string id, Guid publicKey)
+        public void PropagateGroup(string id, Guid publicKey, Guid groupPublicKey)
         {
             CompleteQuestionnaire entity = _questionRepository.Load(id);
-            var template = entity.Find<CompleteGroup>(publicKey);
+            var template = entity.Find<CompleteGroup>(groupPublicKey);
             bool isCondition = false;
             var executor = new CompleteQuestionnaireConditionExecutor(entity.GetInnerDocument());
             foreach (CompleteQuestion completeQuestion in template.GetAllQuestions<ICompleteQuestion>())
@@ -139,14 +139,13 @@ namespace RavenQuestionnaire.Core.Services
             }
             if (isCondition)
             {
-                var propagationKey = Guid.NewGuid();
-                var newGroup = new PropagatableCompleteGroup(template, propagationKey);
+                var newGroup = new PropagatableCompleteGroup(template, publicKey);
                 entity.Add(newGroup, null);
 
                 var command = new GenerateQuestionnaireStatisticCommand(entity, null);
 
                 _asyncInvocker.Execute(command);
-                return propagationKey;
+                return;
             }
             throw new InvalidOperationException("Group can't be added");
         }

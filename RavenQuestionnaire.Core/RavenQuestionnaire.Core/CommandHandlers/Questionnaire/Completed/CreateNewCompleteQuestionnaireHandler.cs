@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
         public void Handle(CreateNewCompleteQuestionnaireCommand command)
         {
             var questionnaire = this._questionnaireRepository.Load(command.QuestionnaireId);
-            var result = this._completeQuestionnaireUploader.CreateCompleteQuestionnaire(questionnaire,
+            var result = this._completeQuestionnaireUploader.CreateCompleteQuestionnaire(questionnaire,command.CompleteQuestionnaireGuid,
                                                                                          command.Creator, command.Status);
 
 
@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
                 throw new ArgumentException("questionnaire wasn't created");
 
            
-            command.CompleteQuestionnaireId = IdUtil.ParseId(result.CompleteQuestinnaireId);
+         //   command.CompleteQuestionnaireId = IdUtil.ParseId(result.CompleteQuestinnaireId);
             
            
 

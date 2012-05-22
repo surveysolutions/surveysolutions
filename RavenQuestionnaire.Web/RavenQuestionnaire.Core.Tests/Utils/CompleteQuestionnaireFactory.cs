@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -19,7 +20,7 @@ namespace RavenQuestionnaire.Core.Tests.Utils
             Answer answer2 = new Answer() { AnswerText = "answer2", AnswerType = AnswerType.Select };
             innerDocument.Children[0].Add(answer2, null);
             Mock<ISubscriber> subscriberMoq= new Mock<ISubscriber>();
-            return new CompleteQuestionnaire(new Questionnaire(innerDocument), new UserLight(), new SurveyStatus(), subscriberMoq.Object);
+            return new CompleteQuestionnaire(new Questionnaire(innerDocument),Guid.NewGuid(), new UserLight(), new SurveyStatus(), subscriberMoq.Object);
         }
     }
 }

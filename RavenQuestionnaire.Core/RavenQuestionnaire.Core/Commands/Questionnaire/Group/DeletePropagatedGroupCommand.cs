@@ -19,7 +19,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
         public DeletePropagatedGroupCommand(string completequestionanireId,Guid groupPublicKey, Guid propagationPublicKey,
                                             UserLight executer)
         {
-            this.CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(completequestionanireId);
+            this.CompleteQuestionnaireId = completequestionanireId;
             this.Executor = executer;
             this.GroupPublicKey = groupPublicKey;
             this.PropagationPublicKey = propagationPublicKey;

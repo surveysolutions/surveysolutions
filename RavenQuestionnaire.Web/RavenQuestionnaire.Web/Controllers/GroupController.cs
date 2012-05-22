@@ -94,7 +94,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             try
             {
-                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser()));
+                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, Guid.NewGuid(), publicKey, GlobalInfo.GetCurrentUser()));
             }
             catch (Exception e)
             {
@@ -125,7 +125,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             try
             {
-                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser()));
+                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, Guid.NewGuid(), publicKey, GlobalInfo.GetCurrentUser()));
             }
             catch (Exception e)
             {
@@ -152,7 +152,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             try
             {
-                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser()));
+                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, Guid.NewGuid(), publicKey, GlobalInfo.GetCurrentUser()));
             }
             catch (Exception e)
             {
@@ -179,7 +179,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             try
             {
-                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser()));
+                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, Guid.NewGuid(), publicKey, GlobalInfo.GetCurrentUser()));
             }
             catch (Exception e)
             {
@@ -206,9 +206,10 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             try
             {
-                var command = new PropagateGroupCommand(questionnaireId, publicKey, GlobalInfo.GetCurrentUser());
+                var propagationKey = Guid.NewGuid();
+                var command = new PropagateGroupCommand(questionnaireId, propagationKey, publicKey, GlobalInfo.GetCurrentUser());
                 commandInvoker.Execute(command);
-                return Json(new { propagationKey = command.PropagationKey, parentGroupPublicKey = publicKey });
+                return Json(new { propagationKey = propagationKey, parentGroupPublicKey = publicKey });
             }
             catch (Exception e)
             {

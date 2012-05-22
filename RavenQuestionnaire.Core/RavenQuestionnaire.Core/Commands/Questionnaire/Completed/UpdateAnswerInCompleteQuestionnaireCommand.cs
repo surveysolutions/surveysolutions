@@ -18,7 +18,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
         public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionanireId/*, Guid? group*/,
                                                   CompleteAnswerView[] answers, Guid? propogationPublicKey, UserLight executer)
         {
-            this.CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(completeQuestionanireId);
+            this.CompleteQuestionnaireId = completeQuestionanireId;
             /*   if (group != Guid.Empty)
                    this.Group = group;*/
             this.CompleteAnswers = answers.Select(answer => new CompleteAnswer()

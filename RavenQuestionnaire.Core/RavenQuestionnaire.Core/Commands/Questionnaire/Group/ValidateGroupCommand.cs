@@ -21,7 +21,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
 
         public ValidateGroupCommand(string questionnaireId, Guid? groupKey, Guid? propagationKey, UserLight executor)
         {
-            this.QuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(questionnaireId);
+            this.QuestionnaireId = questionnaireId;
             this.GroupPublicKey = groupKey;
             this.PropagationKeyKey = propagationKey;
             this.Executor = executor;

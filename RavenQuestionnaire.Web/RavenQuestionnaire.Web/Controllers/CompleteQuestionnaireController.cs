@@ -228,8 +228,8 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult Participate(string id, string mode)
         {
             SurveyStatus status = GetStatus(id);
-
-            var command = new CreateNewCompleteQuestionnaireCommand(id,
+            var questionnairePublicKey = Guid.NewGuid();
+            var command = new CreateNewCompleteQuestionnaireCommand(id,questionnairePublicKey,
                                                                     _globalProvider.GetCurrentUser(),
                                                                    status,
                                                                     _globalProvider.GetCurrentUser());
@@ -238,7 +238,7 @@ namespace RavenQuestionnaire.Web.Controllers
             return RedirectToAction("Question" + mode,
                                     new
                                         {
-                                            id = command.CompleteQuestionnaireId
+                                            id = questionnairePublicKey
                                         });
         }
 
