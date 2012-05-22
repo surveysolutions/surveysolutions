@@ -24,7 +24,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
                 throw  new HttpException(404, "QuestionnaireId can't be null");
             if (string.IsNullOrEmpty(creator.Id))
                 throw new HttpException(404, "User id can't be null");
-            this.QuestionnaireId =IdUtil.CreateQuestionnaireId(questionnaireId);
+            this.QuestionnaireId = IdUtil.CreateQuestionnaireId(IdUtil.ParseId(questionnaireId));
             this.CompleteQuestionnaireGuid = completeQuestionnaireGuid;
             this.Creator = creator;
             this.Status = status;
