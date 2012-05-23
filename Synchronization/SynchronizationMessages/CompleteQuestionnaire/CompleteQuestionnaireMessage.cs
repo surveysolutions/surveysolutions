@@ -9,12 +9,14 @@ namespace SynchronizationMessages.CompleteQuestionnaire
     public class EventSyncMessage : ICustomSerializable
     {
         public Guid SynchronizationKey { get; set; }
+        public Guid CommandKey { get; set; }
         public ICommand Command { get; set; }
 
 
         public void WriteTo(Stream stream)
         {
             FormatHelper.WriteGuid(stream, this.SynchronizationKey);
+            FormatHelper.WriteGuid(stream, this.CommandKey);
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
 
@@ -25,6 +27,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
         public void InitializeFrom(Stream stream)
         {
             this.SynchronizationKey = FormatHelper.ReadGuid(stream);
+            this.CommandKey = FormatHelper.ReadGuid(stream);
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
             var commandString = FormatHelper.ReadString(stream);

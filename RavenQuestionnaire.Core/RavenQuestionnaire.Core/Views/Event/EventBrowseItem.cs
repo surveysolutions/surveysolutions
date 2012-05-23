@@ -16,12 +16,6 @@ namespace RavenQuestionnaire.Core.Views.Event
             this.Command = command;
         }
 
-        public string Id
-        {
-            get { return IdUtil.ParseId(_id); }
-            private set { _id = value; }
-        }
-        private string _id;
 
         public Guid PublicKey { get; private set; }
         public DateTime CreationDate { get; private set; }
