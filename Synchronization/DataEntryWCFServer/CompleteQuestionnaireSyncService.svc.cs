@@ -25,7 +25,7 @@ namespace DataEntryWCFServer
         {
             try
             {
-                invoker.Execute(request.Command);
+                invoker.Execute(request.Command, request.CommandKey,request.SynchronizationKey);
 
                 return ErrorCodes.None;
             }

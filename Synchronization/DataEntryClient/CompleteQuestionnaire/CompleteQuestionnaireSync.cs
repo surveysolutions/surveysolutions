@@ -73,6 +73,7 @@ namespace DataEntryClient.CompleteQuestionnaire
                     var message = new EventSyncMessage
                     {
                         SynchronizationKey = clientKey,
+                        CommandKey = eventItem.PublicKey,
                         Command = eventItem.Command
                     };
 

@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.Text;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.Views.Event;
 using SynchronizationMessages.Handshake;
 
 namespace DataEntryWCFServer
@@ -15,16 +16,21 @@ namespace DataEntryWCFServer
     public class GetLastSyncEventService : IGetLastSyncEvent
     {
         private ICommandInvoker invoker;
-
-        public GetLastSyncEventService(ICommandInvoker invoker)
+        private IViewRepository viewRepository;
+        public GetLastSyncEventService(ICommandInvoker invoker, IViewRepository viewRepository)
         {
             this.invoker = invoker;
+            this.viewRepository = viewRepository;
         }
 
 
         public Guid? Process(Guid clientGuid)
         {
-            throw new NotImplementedException();
+            var eventItem =
+                viewRepository.Load<EventViewInputModel, EventView>(new EventViewInputModel(clientGuid));
+            if (eventItem == null)
+                return null;
+            return eventItem.PublicKey;
         }
     }
 }

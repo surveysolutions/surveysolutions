@@ -10,5 +10,6 @@ namespace RavenQuestionnaire.Core
     public interface ICommandInvoker
     {
         void Execute<T>(T command) where T : ICommand;
+        void Execute(ICommand command, Guid eventPublicKey, Guid clientPublicKey);
     }
 }
