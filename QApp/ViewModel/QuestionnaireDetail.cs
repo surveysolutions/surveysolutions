@@ -196,7 +196,8 @@ namespace QApp.ViewModel {
                 (Data as QuestionnaireDetailData).Load();
 
             }
-
+            else
+                _completedQuestionnaireId = (parameter as CompleteQuestionView).QuestionnaireId;
             CurrentGroup = CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentGroup;
             BuildMenu();
         }

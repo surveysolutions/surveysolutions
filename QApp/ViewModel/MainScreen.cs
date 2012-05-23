@@ -43,10 +43,17 @@ namespace QApp.ViewModel {
             CurrentModuleDataType = typeof(T);
             if (typeof(T) == typeof(MainScreenData))
                 CurrentModule = this;
-             else
-                CurrentModule = typeof(T) == typeof(QuestionData) ? 
-                        ModulesManager.CreateModule(null, new QuestionData(parameter as CompleteQuestionView) , this, parameter) : 
-                        ModulesManager.CreateModule(null, new T(), this, parameter);
+            else
+                if (typeof(T) == typeof(QuestionData))
+                    CurrentModule = ModulesManager.CreateModule(null, new QuestionData(parameter as CompleteQuestionView), this, parameter);
+                else
+                    if (typeof(T) == typeof(QuestionnaireDetailData))
+                    {
+                        var question = parameter as CompleteQuestionView;
+                        CurrentModule = question != null ? ModulesManager.CreateModule(null, new QuestionnaireDetailData(question.QuestionnaireId, question.GroupPublicKey), this, parameter) : ModulesManager.CreateModule(null, new T(), this, parameter);
+                    }
+                    else
+                        CurrentModule = ModulesManager.CreateModule(null, new T(), this, parameter);
             
         }
         public IEnumerable<ListingTileData> ListingTileDataSource {
@@ -78,7 +85,6 @@ namespace QApp.ViewModel {
             ShowCompletedItemsCommand = new ExtendedActionCommand(DoShowModule<CompletedQuestionnairesData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(CompletedQuestionnairesData));
             ShowCompletedItemCommand = new ExtendedActionCommand(DoShowModule<QuestionnaireDetailData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(QuestionnaireDetailData));
 
-            
             //ShowModalQuestionCommand = new ExtendedActionCommand(DoShowModuleModal<QuestionData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(QuestionData));
             ShowModalQuestionCommand = new ExtendedActionCommand(DoShowModule<QuestionData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(QuestionData));
 
