@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
 using DataEntryClient.CompleteQuestionnaire;
+using DataEntryClient.WcfInfrastructure;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
@@ -27,10 +28,10 @@ namespace DataEntryClient
         private static void Main()
         {
             var kernel = new StandardKernel(new CoreRegistry("http://localhost:8080"));
-
+            kernel.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
             RegisterServices(kernel);
 
-            new CompleteQuestionnaireSync(kernel.Get<ICommandInvoker>(), kernel.Get<IViewRepository>()).Execute();
+            new CompleteQuestionnaireSync(kernel.Get<ICommandInvoker>(), kernel.Get<IViewRepository>(), kernel.Get<IChanelFactoryWrapper>()).Execute();
         }
         /// <summary>
         /// Load your modules or register your services here!

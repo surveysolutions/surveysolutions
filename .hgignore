@@ -84,3 +84,5 @@ Synchronization/DataEntryServer/Properties/AssemblyInfo.cs
 Synchronization/DataEntryClient/Properties/*
 Synchronization/DataEntryWCFServer/bin/*
 Synchronization/DataEntryWCFServer/obj/*
+Synchronization/DataEntryClientTests/bin/*
+Synchronization/DataEntryClientTests/obj/*
