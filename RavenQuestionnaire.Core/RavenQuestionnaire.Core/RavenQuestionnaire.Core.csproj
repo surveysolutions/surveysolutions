@@ -194,6 +194,7 @@
     <Compile Include="Conventions\RegisterGenericTypesOfInterface.cs" />
     <Compile Include="CoreRegistry.cs" />
     <Compile Include="Documents\AbstractDocument.cs" />
+    <Compile Include="Documents\ClientSettingsDocument.cs" />
     <Compile Include="Documents\CollectionDocument.cs" />
     <Compile Include="Documents\CompleteQuestionnaireDocument.cs" />
     <Compile Include="Documents\EventDocument.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Documents\Statistics\QuestionStatisticDocument.cs" />
     <Compile Include="Documents\StatusDocument.cs" />
     <Compile Include="Documents\UserDocument.cs" />
+    <Compile Include="Entities\ClientSettings.cs" />
     <Compile Include="Entities\Collection.cs" />
     <Compile Include="Entities\CompleteQuestionnaire.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
@@ -335,6 +337,9 @@
     <Compile Include="Views\Card\CardView.cs" />
     <Compile Include="Views\Card\CardViewFactory.cs" />
     <Compile Include="Views\Card\CardViewInputModel.cs" />
+    <Compile Include="Views\ClientSettings\ClientSettingsInputModel.cs" />
+    <Compile Include="Views\ClientSettings\ClientSettingsView.cs" />
+    <Compile Include="Views\ClientSettings\ClientSettingsViewFactory.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseInputModel.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseItem.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseView.cs" />

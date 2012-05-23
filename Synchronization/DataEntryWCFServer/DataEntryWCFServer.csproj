@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CompleteQuestionnaireSyncService.svc" />
+    <Content Include="GetLastSyncEventService.svc" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -88,6 +89,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetLastSyncEventService.svc.cs">
+      <DependentUpon>GetLastSyncEventService.svc</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

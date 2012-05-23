@@ -51,6 +51,7 @@
     <Compile Include="CompleteQuestionnaire\ICompleteQuestionnaireService.cs" />
     <Compile Include="CompleteQuestionnaire\JsonNewSerializerContractBehaviorAttribute.cs" />
     <Compile Include="CompleteQuestionnaire\JsonSerrializer.cs" />
+    <Compile Include="Handshake\IGetLastSyncEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Synchronization\FormatHelper.cs" />
     <Compile Include="Synchronization\ICustomSerializable.cs" />
