@@ -2,17 +2,14 @@
 using System.Linq;
 using System.Windows.Input;
 using RavenQuestionnaire.Core;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using RavenQuestionnaire.Core.Views.Answer;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 
 namespace QApp.ViewModel
 {
@@ -51,9 +48,6 @@ namespace QApp.ViewModel
             base.InitData(parameter);
              var currentQuestion = parameter as CompleteQuestionView;
              SetSelectedAnswer(currentQuestion);
-             Navigation = new ObservableCollection<List<NavigationItem>>();
-             BuildMenu();
-
              //bad approach!!!
              //get from current data
             var viewRepository = new ViewRepository(Initializer.Kernel);
@@ -66,13 +60,6 @@ namespace QApp.ViewModel
          }
 
          private CompleteQuestionnaireMobileView _Questionnaire { get; set; }
-
-        ObservableCollection<List<NavigationItem>> navigation;
-         public ObservableCollection<List<NavigationItem>> Navigation
-         {
-             get { return navigation; }
-             set { SetValue<ObservableCollection<List<NavigationItem>>>("Navigation", ref navigation, value); }
-         }
 
          public QuestionData QuestionData { get { return (QuestionData)Data; } }
 
@@ -91,6 +78,7 @@ namespace QApp.ViewModel
         }
 
         #region Commands
+
          protected override void InitializeCommands()
          {
              base.InitializeCommands();
@@ -100,10 +88,6 @@ namespace QApp.ViewModel
 
         private void DoClose(object p)
         {
-            ////var singleOrDefault = Application.Current.Windows.Cast<Window>().SingleOrDefault(x => x.IsActive);
-            ////if (singleOrDefault != null)
-            ////    singleOrDefault.Close();
-            //////window.Close;
             var next = p as CompleteQuestionView;
             if(next != null)
                 InitData(next);
@@ -150,6 +134,8 @@ namespace QApp.ViewModel
 
         public ICommand CloseWindowCommand { get; private set; }
 
+        public ICommand GoToParentGroup { get; private set; }
+
         #endregion
 
         #region Private Method
@@ -178,14 +164,6 @@ namespace QApp.ViewModel
                     if (completeAnswerView.Selected || QuestionData.Question.Answers.Count()==1)
                         SelectedAnswer = completeAnswerView;
             }
-        }
-
-        private void BuildMenu()
-        {
-            //bad -load from currentdata
-            var detail = new QuestionnaireDetail();
-            detail.InitData(QuestionData.Question.QuestionnaireId);
-            Navigation = detail.Navigation;
         }
 
         #endregion

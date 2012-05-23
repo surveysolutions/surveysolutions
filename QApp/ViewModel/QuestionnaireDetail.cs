@@ -1,18 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using RavenQuestionnaire.Core;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
-using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
-using RavenQuestionnaire.Core.Views.Question;
 
 namespace QApp.ViewModel {
     public class QuestionnaireDetailData : ModuleData
@@ -198,7 +196,8 @@ namespace QApp.ViewModel {
                 (Data as QuestionnaireDetailData).Load();
 
             }
-
+            else
+                _completedQuestionnaireId = (parameter as CompleteQuestionView).QuestionnaireId;
             CurrentGroup = CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentGroup;
             BuildMenu();
         }
