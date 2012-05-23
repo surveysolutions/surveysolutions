@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
+using DataEntryClient.WcfInfrastructure;
 using Raven.Client.Document;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
@@ -19,16 +20,17 @@ namespace DataEntryClient.CompleteQuestionnaire
     {
         private ICommandInvoker invoker;
         private IViewRepository viewRepository;
-        public CompleteQuestionnaireSync(ICommandInvoker invoker, IViewRepository viewRepository)
+        private IChanelFactoryWrapper chanelFactoryWrapper;
+        public CompleteQuestionnaireSync(ICommandInvoker invoker, IViewRepository viewRepository, IChanelFactoryWrapper chanelFactoryWrapper)
         {
             this.invoker = invoker;
             this.viewRepository = viewRepository;
+            this.chanelFactoryWrapper = chanelFactoryWrapper;
         }
 
 
         public void Execute()
         {
-
             Guid syncKey =
                 this.viewRepository.Load<ClientSettingsInputModel, ClientSettingsView>(new ClientSettingsInputModel()).
                     PublicKey;
@@ -36,61 +38,33 @@ namespace DataEntryClient.CompleteQuestionnaire
             UploadEvents(syncKey, lastSyncEventGuid);
 
         }
-        protected Guid? GetLastSyncEventGuid(Guid clientKey)
+        public Guid? GetLastSyncEventGuid(Guid clientKey)
         {
-            Guid? result=null;
-            ChannelFactory<IGetLastSyncEvent> ChannelFactory = new ChannelFactory<IGetLastSyncEvent>("");
-            IGetLastSyncEvent client = ChannelFactory.CreateChannel();
-            try
-            {
-
-                result = client.Process(clientKey);
-            }
-            finally
-            {
-                try
-                {
-                    ((IChannel)client).Close();
-                }
-                catch
-                {
-                    ((IChannel)client).Abort();
-                }
-            }
+            Guid? result = null;
+            this.chanelFactoryWrapper.Execute<IGetLastSyncEvent>((client) => { result = client.Process(clientKey); });
             return result;
         }
 
-        protected void UploadEvents(Guid clientKey, Guid? lastSyncEvent)
+        public void UploadEvents(Guid clientKey, Guid? lastSyncEvent)
         {
-            ChannelFactory<ICompleteQuestionnaireService> ChannelFactory = new ChannelFactory<ICompleteQuestionnaireService>("");
-            ICompleteQuestionnaireService client = ChannelFactory.CreateChannel();
-            try
-            {
-
-                var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(new EventBrowseInputModel(lastSyncEvent));
-                foreach (var eventItem in events.Items)
-                {
-                    var message = new EventSyncMessage
+            this.chanelFactoryWrapper.Execute<ICompleteQuestionnaireService>(
+                (client)=>
                     {
-                        SynchronizationKey = clientKey,
-                        CommandKey = eventItem.PublicKey,
-                        Command = eventItem.Command
-                    };
+                        var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(new EventBrowseInputModel(lastSyncEvent));
+                        foreach (var eventItem in events.Items)
+                        {
+                            var message = new EventSyncMessage
+                            {
+                                SynchronizationKey = clientKey,
+                                CommandKey = eventItem.PublicKey,
+                                Command = eventItem.Command
+                            };
 
-                    ErrorCodes returnCode = client.Process(message);
-                }
-            }
-            finally
-            {
-                try
-                {
-                    ((IChannel)client).Close();
-                }
-                catch
-                {
-                    ((IChannel)client).Abort();
-                }
-            }
+                            ErrorCodes returnCode = client.Process(message);
+                        }
+                    }
+                );
         }
+
     }
 }
