@@ -9,6 +9,7 @@ using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using System.Windows;
 
 namespace QApp.Helpers.Extensions
 {
@@ -88,14 +89,24 @@ namespace QApp.Helpers.Extensions
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value != null)
-            {
-                var question = value as CompleteQuestionView;
-                if (question.Enabled)
-                    return true;
-                return false;
-            }
-            return value;
+            var myObject = value as CompleteQuestionView;
+            return myObject != null && myObject.Enabled;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class HiddenVisibleConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var myObject = value as CompleteQuestionView;
+            if (myObject.QuestionType == QuestionType.ExtendedDropDownList || myObject.QuestionType == QuestionType.MultyOption || myObject.QuestionType == QuestionType.SingleOption)
+                return Visibility.Collapsed;
+            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

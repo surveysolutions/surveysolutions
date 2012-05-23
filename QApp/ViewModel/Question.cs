@@ -78,27 +78,16 @@ namespace QApp.ViewModel
         }
 
         #region Commands
+
          protected override void InitializeCommands()
          {
              base.InitializeCommands();
              SetCurrentAnswerCommand = new SimpleActionCommand(DoSetCurrentAnswer);
              CloseWindowCommand = new SimpleActionCommand(DoClose);
-             GoToParentGroup = new SimpleActionCommand(DoGoToParent);
          }
-
-        private void DoGoToParent(object p)
-        {
-            CompleteGroupMobileView currentGroup = _Questionnaire.CurrentGroup;
-            //if (currentGroup!=null)
-                //InitData(currentGroup);
-        }
 
         private void DoClose(object p)
         {
-            ////var singleOrDefault = Application.Current.Windows.Cast<Window>().SingleOrDefault(x => x.IsActive);
-            ////if (singleOrDefault != null)
-            ////    singleOrDefault.Close();
-            //////window.Close;
             var next = p as CompleteQuestionView;
             if(next != null)
                 InitData(next);
