@@ -55,7 +55,7 @@ namespace DataEntryWCFServer
 
         protected override IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new CoreRegistry("http://localhost:8082"));
+            var kernel = new StandardKernel(new CoreRegistry(System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"]));
             RegisterServices(kernel);
             return kernel;
         }
