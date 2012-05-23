@@ -9,6 +9,7 @@ using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using System.Windows;
 
 namespace QApp.Helpers.Extensions
 {
@@ -17,22 +18,37 @@ namespace QApp.Helpers.Extensions
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             ///bad !!! Need refactoring
-            if (values.Count() == 0)
-                return null;
-            var param = values[0] as CompleteQuestionView;
-            var answers = new CompleteAnswerView[1]  {
-                new CompleteAnswerView(param.PublicKey,
-                        new CompleteAnswer
-                        {
-                            AnswerText = values[1].ToString(),
-                            AnswerValue= values[1].ToString(),
-                            AnswerType = AnswerType.Select,
-                            PublicKey = param.Answers[0].PublicKey,
-                            Selected = true
-                        })
-                };
-            param.Answers = answers;
-            return param;
+            try
+            {
+                if (values.Count() == 0)
+                    return null;
+                CompleteQuestionView param = null;
+                if (values[0] is CompleteQuestionView)
+                    param = values[0] as CompleteQuestionView;
+                else
+                    param = ((ViewModel.Question)(values[0])).QuestionData.Question;
+                if (param != null)
+                {
+                    var answers = new CompleteAnswerView[1]
+                                  {
+                                      new CompleteAnswerView(param.PublicKey,
+                                                             new CompleteAnswer
+                                                                 {
+                                                                     AnswerText = values[1].ToString(),
+                                                                     AnswerValue = values[1].ToString(),
+                                                                     AnswerType = AnswerType.Select,
+                                                                     PublicKey = param.Answers[0].PublicKey,
+                                                                     Selected = true
+                                                                 })
+                                  };
+                    param.Answers = answers;
+                }
+                return param;
+            }
+            catch (Exception)
+            {
+               return null;
+            }
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -73,14 +89,24 @@ namespace QApp.Helpers.Extensions
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value != null)
-            {
-                var question = value as CompleteQuestionView;
-                if (question.Enabled)
-                    return true;
-                return false;
-            }
-            return value;
+            var myObject = value as CompleteQuestionView;
+            return myObject != null && myObject.Enabled;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class HiddenVisibleConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var myObject = value as CompleteQuestionView;
+            if (myObject.QuestionType == QuestionType.ExtendedDropDownList || myObject.QuestionType == QuestionType.MultyOption || myObject.QuestionType == QuestionType.SingleOption)
+                return Visibility.Collapsed;
+            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
