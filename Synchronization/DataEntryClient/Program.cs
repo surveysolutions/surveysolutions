@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
@@ -27,7 +28,7 @@ namespace DataEntryClient
 
         private static void Main()
         {
-            var kernel = new StandardKernel(new CoreRegistry("http://localhost:8080"));
+            var kernel = new StandardKernel(new CoreRegistry(ConfigurationManager.AppSettings["Raven.DocumentStore"]));
             kernel.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
             RegisterServices(kernel);
 
