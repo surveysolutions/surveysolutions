@@ -86,3 +86,5 @@ Synchronization/DataEntryWCFServer/bin/*
 Synchronization/DataEntryWCFServer/obj/*
 Synchronization/DataEntryClientTests/bin/*
 Synchronization/DataEntryClientTests/obj/*
+Synchronization/DataEntryWCFServerTests/bin/*
+Synchronization/DataEntryWCFServerTests/obj/*
