@@ -42,7 +42,11 @@ namespace DataEntryClient.CompleteQuestionnaire
         public Guid? GetLastSyncEventGuid(Guid clientKey)
         {
             Guid? result = null;
-            this.chanelFactoryWrapper.Execute<IGetLastSyncEvent>((client) => { result = client.Process(clientKey); });
+            this.chanelFactoryWrapper.Execute<IGetLastSyncEvent>(
+                (client) =>
+                    {
+                        result = client.Process(clientKey);
+                    });
             return result;
         }
 
