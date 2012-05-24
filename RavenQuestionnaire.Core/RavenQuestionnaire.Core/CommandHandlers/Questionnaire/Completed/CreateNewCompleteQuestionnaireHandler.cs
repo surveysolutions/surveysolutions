@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Entities.Extensions;
-using RavenQuestionnaire.Core.Entities.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
@@ -39,9 +37,8 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
 
            
          //   command.CompleteQuestionnaireId = IdUtil.ParseId(result.CompleteQuestinnaireId);
-            
-           
 
+            
             var questions = result.GetInnerDocument().GetAllQuestions<ICompleteQuestion>().ToList();
             var executor = new CompleteQuestionnaireConditionExecutor(result.GetInnerDocument());
             foreach (ICompleteQuestion completeQuestion in questions)
@@ -49,8 +46,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
                 if(completeQuestion is IBinded)
                     continue;
                 completeQuestion.Enabled = executor.Execute(completeQuestion);
-                if (!completeQuestion.Enabled)
-                    result.Remove(completeQuestion);
+             
+                /*if (!completeQuestion.Enabled)
+                    result.Remove(completeQuestion);*/
             }
         }
     }
