@@ -7,6 +7,7 @@ using System.Text;
 using DataEntryClient.WcfInfrastructure;
 using Raven.Client.Document;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Views.ClientSettings;
@@ -21,19 +22,19 @@ namespace DataEntryClient.CompleteQuestionnaire
         private ICommandInvoker invoker;
         private IViewRepository viewRepository;
         private IChanelFactoryWrapper chanelFactoryWrapper;
-        public CompleteQuestionnaireSync(ICommandInvoker invoker, IViewRepository viewRepository, IChanelFactoryWrapper chanelFactoryWrapper)
+        private IClientSettingsProvider clientSettingsProvider;
+        public CompleteQuestionnaireSync(ICommandInvoker invoker, IViewRepository viewRepository, IChanelFactoryWrapper chanelFactoryWrapper,  IClientSettingsProvider clientSettingsProvider)
         {
             this.invoker = invoker;
             this.viewRepository = viewRepository;
             this.chanelFactoryWrapper = chanelFactoryWrapper;
+            this.clientSettingsProvider = clientSettingsProvider;
         }
 
 
         public void Execute()
         {
-            Guid syncKey =
-                this.viewRepository.Load<ClientSettingsInputModel, ClientSettingsView>(new ClientSettingsInputModel()).
-                    PublicKey;
+            Guid syncKey = clientSettingsProvider.ClientSettings.PublicKey;
             Guid? lastSyncEventGuid = GetLastSyncEventGuid(syncKey);
             UploadEvents(syncKey, lastSyncEventGuid);
 

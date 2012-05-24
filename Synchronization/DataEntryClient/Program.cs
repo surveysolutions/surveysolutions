@@ -14,6 +14,7 @@ using Ninject.Extensions.Conventions;
 using Ninject.Syntax;
 using Raven.Client.Document;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.Conventions;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Iterators;
@@ -32,7 +33,7 @@ namespace DataEntryClient
             kernel.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
             RegisterServices(kernel);
 
-            new CompleteQuestionnaireSync(kernel.Get<ICommandInvoker>(), kernel.Get<IViewRepository>(), kernel.Get<IChanelFactoryWrapper>()).Execute();
+            new CompleteQuestionnaireSync(kernel.Get<ICommandInvoker>(), kernel.Get<IViewRepository>(), kernel.Get<IChanelFactoryWrapper>(), kernel.Get<IClientSettingsProvider>()).Execute();
         }
         /// <summary>
         /// Load your modules or register your services here!

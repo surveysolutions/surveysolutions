@@ -109,6 +109,7 @@
     <Compile Include="AbstractFactories\ICompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
+    <Compile Include="ClientSettingsProvider\IClientSettingsProvider.cs" />
     <Compile Include="CommandHandlers\Collection\CreateNewCollectionHandler.cs" />
     <Compile Include="CommandHandlers\Collection\DeleteCollectionHandler.cs" />
     <Compile Include="CommandHandlers\Collection\DeleteCollectionItemHandler.cs" />
