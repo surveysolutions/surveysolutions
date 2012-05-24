@@ -2,6 +2,7 @@
 using System.Linq;
 using Ninject;
 using Raven.Client;
+using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
 
@@ -11,10 +12,12 @@ namespace RavenQuestionnaire.Core
     {
         private IKernel container;
         private IDocumentSession documentSession;
-        public CommandInvoker(IKernel container, IDocumentSession documentSession)
+        private IClientSettingsProvider clientSettingsProvider;
+        public CommandInvoker(IKernel container, IDocumentSession documentSession, IClientSettingsProvider clientSettingsProvider)
         {
             this.container = container;
             this.documentSession = documentSession;
+            this.clientSettingsProvider=clientSettingsProvider;
         }
 
         public void Execute<T>(T command) where T : ICommand
@@ -27,8 +30,7 @@ namespace RavenQuestionnaire.Core
             }*/
             handler.Handle(command);
             //store the command in the store
-            var clientPublicKey = this.documentSession.Query<ClientSettingsDocument>().FirstOrDefault().PublicKey;
-            documentSession.Store(new EventDocument(command, Guid.NewGuid(), clientPublicKey));
+            documentSession.Store(new EventDocument(command, Guid.NewGuid(), clientSettingsProvider.ClientSettings.PublicKey));
             documentSession.SaveChanges();
         }
 

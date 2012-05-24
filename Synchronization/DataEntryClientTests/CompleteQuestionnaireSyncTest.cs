@@ -8,7 +8,10 @@ using DataEntryClientTests.Stubs;
 using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
+using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Views.ClientSettings;
 using RavenQuestionnaire.Core.Views.Event;
 using SynchronizationMessages.CompleteQuestionnaire;
 using SynchronizationMessages.Handshake;
@@ -33,9 +36,11 @@ namespace DataEntryClientTests
             var eventGuid = Guid.NewGuid();
 
             serviceMock.Setup(x => x.Process(clientGuid)).Returns(eventGuid);
-
+            Mock<IClientSettingsProvider> clientSettingsMock = new Mock<IClientSettingsProvider>();
+            clientSettingsMock.Setup(x => x.ClientSettings).Returns(
+                new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
             var target = new CompleteQuestionnaireSync(invokerMock.Object, repositoryMock.Object,
-                                                       chanelFactoryStub);
+                                                       chanelFactoryStub, clientSettingsMock.Object);
 
             var result =target.GetLastSyncEventGuid(clientGuid);
             Assert.AreEqual(result, eventGuid);
@@ -55,9 +60,11 @@ namespace DataEntryClientTests
             Guid? eventGuid = null;
 
             serviceMock.Setup(x => x.Process(clientGuid)).Returns(eventGuid);
-
+            Mock<IClientSettingsProvider> clientSettingsMock = new Mock<IClientSettingsProvider>();
+            clientSettingsMock.Setup(x => x.ClientSettings).Returns(
+                new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
             var target = new CompleteQuestionnaireSync(invokerMock.Object, repositoryMock.Object,
-                                                       chanelFactoryStub);
+                                                       chanelFactoryStub, clientSettingsMock.Object);
 
             var result = target.GetLastSyncEventGuid(clientGuid);
             Assert.AreEqual(result, null);
@@ -84,9 +91,11 @@ namespace DataEntryClientTests
                                                      new EventBrowseItem(Guid.NewGuid(), DateTime.Now, null),
                                                      new EventBrowseItem(Guid.NewGuid(), DateTime.Now, null)
                                                  }));
-
+            Mock<IClientSettingsProvider> clientSettingsMock = new Mock<IClientSettingsProvider>();
+            clientSettingsMock.Setup(x => x.ClientSettings).Returns(
+                new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
             var target = new CompleteQuestionnaireSync(invokerMock.Object, repositoryMock.Object,
-                                                       chanelFactoryStub);
+                                                       chanelFactoryStub, clientSettingsMock.Object);
 
             target.UploadEvents(clientGuid,eventGuid);
 
