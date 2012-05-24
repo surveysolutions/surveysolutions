@@ -9,7 +9,11 @@
     <!-- Start of second page -->
     <div data-role="page" id="main">
         <div data-role="header" data-theme="b">
-            <h1>Dashboard</h1>
+            <h1>Dashboard </h1>@Ajax.ActionLinkHtml5("Synchronize", "Index", "Synchronizations", new { }, 
+            new AjaxOptions(){ OnBegin = "sichronizationStarted", OnComplete = "sinchronizationCompleted"},
+  new { data_inline = "true", data_role = "button", data_mini = "true", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
+            
+            
             <div id="jqm-themeswitcher"></div>
         </div>
         <div data-role="content">
@@ -20,7 +24,9 @@
                     <li data-role="list-divider" data-theme="b" role="heading">
                         <a>
                             @group.SurveyTitle <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
-                                                       @Html.ActionLink("New", "Participate", "CompleteQuestionnaire", new { id = group.Id, mode = "Html5" }, new
+                            
+
+                        @Html.ActionLink("New", "Participate", "CompleteQuestionnaire", new { id = group.Id, mode = "Html5" }, new
                                                   {
                                                       @class = "splited-button",
                                                       data_inline = "true",
