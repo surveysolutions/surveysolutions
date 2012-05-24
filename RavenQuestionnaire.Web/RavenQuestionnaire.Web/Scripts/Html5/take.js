@@ -1,4 +1,16 @@
 ﻿
+function sichronizationStarted(data, status, xhr) {
+    $('a#btnSync span span').html('Processing');
+
+    $('[data-id=main]').addClass('ui-disabled');
+}
+function sinchronizationCompleted(data, status, xhr) {
+    $('a#btnSync span span').html('Synchronize');
+    $('a#btnSync').removeClass('ui-btn-active');
+    $('[data-id=main]').removeClass('ui-disabled');
+    if (data.responseText != 'True')
+        alert('synchronization wasn\'t succefull');
+}
 
 function JsonResults (data, status, xhr) {
 

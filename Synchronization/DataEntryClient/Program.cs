@@ -6,6 +6,7 @@ using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
+using System.Threading;
 using DataEntryClient.CompleteQuestionnaire;
 using DataEntryClient.WcfInfrastructure;
 using Ninject;
@@ -26,15 +27,41 @@ namespace DataEntryClient
 {
     internal class Program
     {
-
-        private static void Main()
+        static Mutex mSingleton;
+        private static int result = 1;
+        private static int Main()
         {
-            var kernel = new StandardKernel(new CoreRegistry(ConfigurationManager.AppSettings["Raven.DocumentStore"]));
-            kernel.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
-            RegisterServices(kernel);
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
+            bool created;
+            mSingleton = new Mutex(true, "e622fa4b-7b23-4ee7-8bd6-09e8be84cb5d", out created);
+            if (!created)
+            {
+                return 0;
+            }
+            try
+            {
 
-            new CompleteQuestionnaireSync(kernel.Get<ICommandInvoker>(), kernel.Get<IViewRepository>(), kernel.Get<IChanelFactoryWrapper>(), kernel.Get<IClientSettingsProvider>()).Execute();
+                var kernel =
+                    new StandardKernel(new CoreRegistry(ConfigurationManager.AppSettings["Raven.DocumentStore"]));
+                kernel.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
+                RegisterServices(kernel);
+
+                new CompleteQuestionnaireSync(kernel.Get<ICommandInvoker>(), kernel.Get<IViewRepository>(),
+                                              kernel.Get<IChanelFactoryWrapper>(), kernel.Get<IClientSettingsProvider>())
+                    .
+                    Execute();
+            }catch
+            {
+                return 0;
+            }
+            return result;
         }
+
+        private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
+        {
+            result = 0;
+        }
+
         /// <summary>
         /// Load your modules or register your services here!
         /// </summary>
