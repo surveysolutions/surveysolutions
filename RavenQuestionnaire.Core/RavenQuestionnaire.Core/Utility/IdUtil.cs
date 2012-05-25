@@ -29,10 +29,6 @@
             return ravenId.Substring(ravenId.IndexOf('/') + 1);
 
         }
-        public static string CreateCompleteQuestionnaireId(string id)
-        {
-            return string.Format("completequestionnairedocuments/{0}", id);
-        }
         public static string CreateUserId(string id)
         {
             return string.Format("userdocuments/{0}", id);

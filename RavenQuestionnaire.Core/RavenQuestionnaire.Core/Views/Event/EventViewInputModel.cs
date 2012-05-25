@@ -7,11 +7,11 @@ namespace RavenQuestionnaire.Core.Views.Event
 {
     public class EventViewInputModel
     {
-        public EventViewInputModel(Guid publicKey)
+        public EventViewInputModel(Guid clientPublicKey)
         {
-            PublickKey = publicKey;
+            ClientPublickKey = clientPublicKey;
         }
 
-        public Guid PublickKey { get; private set; }
+        public Guid ClientPublickKey { get; private set; }
     }
 }

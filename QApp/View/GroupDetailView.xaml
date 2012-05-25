@@ -32,8 +32,7 @@
             Foreground="#FFFFFFFF"
             TextWrapping="Wrap"
             Grid.Column="1" />
-
-
+       
         <dxlc:TileLayoutControl Grid.Column="1" Orientation="Vertical" ItemsSource="{Binding Data.Group.Questions}" AllowItemMoving="False" Margin="0,15,0,0">
             <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
@@ -59,8 +58,7 @@
                     </dxlc:Tile>
                 </DataTemplate>
             </dxlc:TileLayoutControl.ItemTemplate>
-        </dxlc:TileLayoutControl>
-
+        </dxlc:TileLayoutControl>        
         <ItemsControl ItemsSource="{Binding GroupDetails}" Grid.Column="2" Margin="5,0,10,10" HorizontalContentAlignment="Left">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>                    
@@ -72,9 +70,6 @@
                     <StackPanel Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-
         </ItemsControl>
-
-
     </Grid>
 </View:ModuleView>

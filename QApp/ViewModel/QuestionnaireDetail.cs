@@ -1,16 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using RavenQuestionnaire.Core;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
-using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
-using RavenQuestionnaire.Core.Views.Question;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 
 namespace QApp.ViewModel {
     public class QuestionnaireDetailData : ModuleData
@@ -43,24 +43,20 @@ namespace QApp.ViewModel {
 
         public override void Load() {
             base.Load();
-
-
             if (string.IsNullOrEmpty(QuestionnaireId)) return;
-            
             //replace with injections
-            ViewRepository viewRepository = new ViewRepository(Initializer.Kernel);
-
+            var viewRepository = new ViewRepository(Initializer.Kernel);
             CompleteQuestionnaireItem =
-                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
-                     new CompleteQuestionnaireViewInputModel(QuestionnaireId) { CurrentGroupPublicKey = GroupId });
+               viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+                   new CompleteQuestionnaireViewInputModel(QuestionnaireId) { CurrentGroupPublicKey = group });
             
         }
 
-        private CompleteQuestionnaireViewV completeQuestionnaireItem;
-        public CompleteQuestionnaireViewV CompleteQuestionnaireItem
+        private CompleteQuestionnaireMobileView completeQuestionnaireItem;
+        public CompleteQuestionnaireMobileView CompleteQuestionnaireItem
         {
             get { return completeQuestionnaireItem; }
-            private set { SetValue<CompleteQuestionnaireViewV>("CompleteQuestionnaireItem", ref completeQuestionnaireItem, value); }
+            private set { SetValue<CompleteQuestionnaireMobileView>("CompleteQuestionnaireItem", ref completeQuestionnaireItem, value); }
         }
     }
     #region research
@@ -200,7 +196,8 @@ namespace QApp.ViewModel {
                 (Data as QuestionnaireDetailData).Load();
 
             }
-
+            else
+                _completedQuestionnaireId = (parameter as CompleteQuestionView).QuestionnaireId;
             CurrentGroup = CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentGroup;
             BuildMenu();
         }
@@ -219,11 +216,11 @@ namespace QApp.ViewModel {
             return submodules;
         }
 
-        private CompleteGroupViewV currentGroup;
-        public CompleteGroupViewV CurrentGroup
+        private CompleteGroupMobileView currentGroup;
+        public CompleteGroupMobileView CurrentGroup
         {
             get { return currentGroup; }
-            set { SetValue<CompleteGroupViewV>("CurrentGroup", ref currentGroup, value, RaiseCurrentGroupChanged); }
+            set { SetValue<CompleteGroupMobileView>("CurrentGroup", ref currentGroup, value, RaiseCurrentGroupChanged); }
         }
 
         private Module groupDetail;
@@ -266,30 +263,18 @@ namespace QApp.ViewModel {
 
         private void BuildMenu()
         {
-            var root = new NavigationItem();
-            root.Text = "root";
-            root.Command = SetCurrentGroupCommand;
-
+            var root = new NavigationItem {Text = "root", Command = SetCurrentGroupCommand};
             var item = CompletedQuestionnaireData.CompleteQuestionnaireItem;
-
             Navigation.Clear();
-
             Navigation.Add(new List<NavigationItem>() { root });
-
-            var subgroups = new List<NavigationItem>();
-
-            foreach (var group in item.Groups)
-            {
-                subgroups.Add(new NavigationItem() { Text = group.GroupText, Command = SetCurrentGroupCommand, Item = group }); 
-            }
-
+            var subgroups = (from g in item.Groups select new NavigationItem() {Text = g.GroupText, Command = SetCurrentGroupCommand, Item = g}).ToList();
             Navigation.Add(subgroups);
         }
 
 
 
 
-        void RaiseCurrentGroupChanged(CompleteGroupViewV oldValue, CompleteGroupViewV newValue)
+        void RaiseCurrentGroupChanged(CompleteGroupMobileView oldValue, CompleteGroupMobileView newValue)
         {
             if (newValue.Propagated == Propagate.None)
                 GroupDetail = (CommonGroupDetail)ModulesManager.CreateModule(null, new CommonGroupDetailData(newValue), this, newValue);
@@ -304,6 +289,7 @@ namespace QApp.ViewModel {
             //bad approach!!!
             //reload current data
             //TODO: load whole questionnaire!!!
+
             var group = p as CompleteGroupHeaders;
             if (group != null)
             {
@@ -317,7 +303,7 @@ namespace QApp.ViewModel {
 
         void DoSetCurrentSubGroup(object p)
         {
-            var group = p as CompleteGroupViewV;
+            var group = p as CompleteGroupMobileView;
             if (group != null)
             {
                 CurrentGroup = group;

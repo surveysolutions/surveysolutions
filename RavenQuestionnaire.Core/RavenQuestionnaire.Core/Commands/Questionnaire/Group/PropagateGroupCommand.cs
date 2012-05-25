@@ -8,18 +8,19 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
     {
         public string CompleteQuestionnaireId { get; private set; }
         public Guid GroupPublicKey { get; private set; }
-        public Guid PropagationKey { get; set; }
+        public Guid PropagationKey { get; private set; }
         #region Implementation of ICommand
 
         public UserLight Executor { get; set; }
 
         #endregion
 
-        public PropagateGroupCommand(string completequestionanireId, Guid propagatedGroupPublickey, UserLight executer)
+        public PropagateGroupCommand(string completequestionanireId, Guid propagationKey, Guid propagatedGroupPublickey, UserLight executer)
         {
-            this.CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(completequestionanireId);
+            this.CompleteQuestionnaireId = completequestionanireId;
             this.Executor = executer;
             this.GroupPublicKey = propagatedGroupPublickey;
+            this.PropagationKey = propagationKey;
         }
     }
 }

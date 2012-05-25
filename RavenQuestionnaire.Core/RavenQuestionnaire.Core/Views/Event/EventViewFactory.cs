@@ -18,8 +18,10 @@ namespace RavenQuestionnaire.Core.Views.Event
 
         public EventView Load(EventViewInputModel input)
         {
-            var doc = documentSession.Load<EventDocument>(input.PublickKey);
-            throw new NotImplementedException();
+            var doc = documentSession.Query<EventDocument>().OrderByDescending(e=>e.CreationDate).FirstOrDefault(e=>e.ClientPublicKey==input.ClientPublickKey);
+            if (doc == null)
+                return null;
+            return new EventView(doc.PublicKey, doc.ClientPublicKey, doc.CreationDate, doc.Command);
         }
     }
 }

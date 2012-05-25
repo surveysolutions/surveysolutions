@@ -23,7 +23,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Group
 
         public void Handle(PropagateGroupCommand command)
         {
-            command.PropagationKey = _questionnaireservice.PropagateGroup(command.CompleteQuestionnaireId,
+            _questionnaireservice.PropagateGroup(command.CompleteQuestionnaireId,command.PropagationKey,
                                                                           command.GroupPublicKey);
 
 
