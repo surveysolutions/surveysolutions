@@ -13,6 +13,7 @@ namespace RavenQuestionnaire.Core.Views.Question
     {
         public bool Enabled { get; set; }
         public bool Valid { get; set; }
+        public bool Answered { get; set; }
 
         public CompleteQuestionView()
         {
@@ -34,6 +35,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.Valid = doc.Valid;
             this.Enabled = doc.Enabled;
             this.Answers = doc.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(doc.PublicKey,a)).ToArray();
+            this.Answered = this.Answers.Any(a => a.Selected == true);
             if (doc.Cards != null)
             {
                 this.Cards = doc.Cards.Select(card => new CardView(doc.PublicKey, card)).OrderBy(a => Guid.NewGuid()).ToArray();
