@@ -1,7 +1,6 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteGroupMobileView
-       
 @foreach (var question in Model.Questions)
 {
     <div class="ui-body ui-body-c">
@@ -14,15 +13,22 @@
             }
             using (Html.BeginCollectionItem("settings", true, question.PublicKey))
             {
-                @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
-                @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
+            @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+            @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
             }
         }
     </div>
-      <div class="ui-body">&nbsp;</div>
+    <div class="ui-body">
+        &nbsp;</div>
 }
 @foreach (var @group in Model.Groups)
 {
+    if (@group.PublicKey != Guid.Empty)
+    {
+        <a href="#screen-@(@group.PublicKey)" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.GroupText)</a>
+    }
+    else
+    {
     @Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", @group)
-
+    }
 }

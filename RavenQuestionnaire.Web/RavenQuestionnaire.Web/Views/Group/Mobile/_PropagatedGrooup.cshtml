@@ -1,59 +1,34 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 @model PropagatedGroup
-@{ var groupKey = "propagatedGroup" + Model.PropogationKey; }
-<ul data-role="listview" data-inset="true" id="@groupKey">
+@{ var groupKey = "propagatedGroup" + Model.PropogationKey;
+   var rparams = new
+          {
+              propagationKey = Model.PropogationKey,
+              publicKey = Model.PublicKey,
+              questionnaireId = ViewBag.QuestionnaireId,
+              parentGroupPublicKey = ViewBag.CurrentGroupPublicKey,
+              salt = (new Random()).NextDouble()
+          }; 
+}
+<li data-role="fieldcontain" id="@groupKey">
     @if (!Model.AutoPropagate)
     {
-        var rparams = new { propagationKey = Model.PropogationKey, publicKey = Model.PublicKey, questionnaireId = ViewBag.QuestionnaireId, parentGroupPublicKey = ViewBag.CurrentGroupPublicKey, salt = (new Random()).NextDouble() };
-        <li data-role="fieldcontain">
-            <div class="ui-grid-a">
-                <div class="ui-block-a">
-                    <h3>
-                        @Model.GroupText</h3>
-                </div>
-                <div class="ui-block-b">@*Ajax.ActionLinkHtml5("Delete", "DeletePropagatedGroupHtml5", "Group", rparams, new AjaxOptions { OnComplete = "RemovePropagatedGroup", HttpMethod = "POST" }, new
-                                                                                                                              {
-                                                                                                                                  data_role = "button",
-                                                                                                                                  data_icon = "delete",
-                                                                                                                                  data_inline = "true",
-                                                                                                                                  data_mini = "true",
-                                                                                                                                  data_iconpos = "notext",
-                                                                                                                                  data_theme = "b",
-                                                                                                                                  style = "float:right"
-                                                                                                                              })
-                *@
-                  @using (Ajax.BeginFormHtml5("DeletePropagatedGroupHtml5", "Group", rparams,  new AjaxOptions { OnComplete = "RemovePropagatedGroup", HttpMethod = "POST" }, new {style="float:right;"}))
-     {
-            @* @Ajax.ActionLinkHtml5("Add", "PropagateGroupHtml5", "Group", requestParams, new AjaxOptions { HttpMethod = "POST", OnComplete = "PropagatedGroup" }, new { data_role = "button", data_icon = "plus", data_theme = "a" })*@
-        <input value="Delete" type="submit"  data-role = "button" data-icon = "delete" data-inline = "true" data-mini = "true" data-iconpos = "notext" data-theme = "b"/>
-     }
-                </div>
+        <div class="ui-grid-a">
+            <div class="ui-block-a">
+                <a class="propagated-screen-link-@(Model.PublicKey)" href="#screen-@(Model.PropogationKey)">@Model.GroupText</a>
             </div>
-        </li>
+            <div class="ui-block-b">
+                @using (Ajax.BeginFormHtml5("DeletePropagatedGroupHtml5", "Group", rparams, new AjaxOptions { OnComplete = "RemovePropagatedGroup", HttpMethod = "POST" }, new { style = "float:right;" }))
+                {
+                    <input value="Delete" type="submit" data-role="button" data-icon="delete" data-iconpos="notext"  data-inline="true"
+                        data-mini="true"  data-theme="b" />
+                }
+            </div>
+        </div>
     }
-    @foreach (var pquestion in Model.Questions)
+    else
     {
-        <li data-role="fieldcontain">@* @RenderQuestion(pquestion, !Model.PublicKey, Model.PropogationKey)*@
-            @using (Ajax.BeginFormHtml5("SaveSingleResultJson", "CompleteQuestionnaire", ViewBag.AjaxOptions as AjaxOptions, new { autocomplete = "off" }))
-            {
-                using (Html.BeginCollectionItem("questions", true, pquestion.PublicKey + "_" + Model.PropogationKey))
-                {
-                    ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
-                    if (!pquestion.Enabled)
-                    {
-                        ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
-                    }
-                    //Html.RenderPartial(string.Format("~/Views/Answer/AnswerListView/_{0}.cshtml", question.QuestionType), question);
-                    Html.RenderPartial("~/Views/Question/_TakeRowHtml5.cshtml", pquestion);
-                }
-                using (Html.BeginCollectionItem("settings", true, groupKey + "_" + Model.PropogationKey))
-                {
-                @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
-                @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
-                @Html.Hidden("PropogationPublicKey", Model.PropogationKey)
-                }
-            }
-        </li>
+        <a class="propagated-screen-link" href="#screen-@(Model.PropogationKey)">@Model.GroupText</a>
     }
-</ul>
+</li>

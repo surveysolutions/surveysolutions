@@ -1,16 +1,8 @@
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteQuestionnaireMobileView
 @{
-  
-    ViewBag.AjaxOptions = new AjaxOptions
-                              {
-                                  OnComplete = "JsonResults"
-                              };
-    ViewBag.CurrentGroupPublicKey = Model.CurrentGroup.PublicKey;
-    ViewBag.QuestionnaireId = Model.Id;
     var questionKey = (Guid)ViewBag.CurrentQuestion;
     this.ViewBag.CurrentQuestion = questionKey;
-    
 }
 
 @Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", Model.CurrentGroup)

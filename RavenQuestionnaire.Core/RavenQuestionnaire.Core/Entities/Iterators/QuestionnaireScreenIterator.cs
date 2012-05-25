@@ -14,18 +14,17 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
     {
         public QuestionnaireScreenIterator(IQuestionnaireDocument document)
         {
-            /*   var questions = document.Children.OfType<ICompleteQuestion>().ToList();**/
-               var innerGroups = document.Children.Where(c=> c is ICompleteGroup).ToList();
-               var innerQuestions = document.Children.Where(c => c is ICompleteQuestion).ToList();
-            
+            var innerGroups = document.Children.Where(c => c is ICompleteGroup).ToList();
+            var innerQuestions = document.Children.Where(c => c is ICompleteQuestion).ToList();
+
             if (document.Children.Count == 0)
 
                 throw new ArgumentException("Questionnaires question list is empty");
 
 
             this.groups = new List<ICompleteGroup>(innerGroups.Count + 1);
-            if(innerQuestions.Count>0)
-            this.groups.Add(new CompleteGroup() { Children = innerQuestions, PublicKey = Guid.Empty });
+            if (innerQuestions.Count > 0)
+                this.groups.Add(new CompleteGroup() { Children = innerQuestions, PublicKey = Guid.Empty });
             foreach (CompleteGroup item in innerGroups)
             {
                 this.groups.Add(item);
@@ -91,7 +90,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
 
         public bool MoveNext()
         {
-            if(this.current < this.groups.Count-1)
+            if (this.current < this.groups.Count - 1)
             {
                 this.current++;
                 return true;
@@ -106,7 +105,7 @@ namespace RavenQuestionnaire.Core.Entities.Iterators
 
         public ICompleteGroup Current
         {
-            get { return this.groups[current];}
+            get { return this.groups[current]; }
         }
 
         object IEnumerator.Current

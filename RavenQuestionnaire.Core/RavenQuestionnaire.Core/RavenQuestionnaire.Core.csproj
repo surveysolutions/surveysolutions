@@ -218,7 +218,9 @@
     <Compile Include="Entities\Extensions\CompositeObservebleExtensions.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\IEntity.cs" />
-    <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs">
+    <Compile Include="Entities\Iterators\IterableCompleteGroup.cs" />
+    <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
+    <Compile Include="Entities\Iterators\CompleteGroupIterator.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\Observers\ITriggerable.cs" />

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Utility;
@@ -15,6 +16,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         {
             QuestionsWithCards = new List<CompleteQuestionView>();
             QuestionsWithInstructions = new List<CompleteQuestionView>();
+            Screens = new List<CompleteGroupMobileView>();
+            PropagatedScreens = new List<PropagatedGroup>();
+            Templates = new List<PropagatedGroup>();
         }
         public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc, ICompleteGroup currentGroup)
             : this()
@@ -26,12 +30,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             Status = doc.Status;
             Responsible = doc.Responsible;
 
+            var iterator = new CompleteGroupIterator(doc);
             CurrentGroup = new CompleteGroupMobileView(doc, currentGroup as CompleteGroup);
 
-            InitGroups(doc, CurrentGroup.PublicKey);
-            Totals = CalcProgress(doc);
-            CollectGalleries(CurrentGroup);
-            CollectInstructions(CurrentGroup);
+            CollectAll(doc);
         }
 
 
@@ -39,6 +41,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc)
             : this()
         {
+
             Id = IdUtil.ParseId(doc.Id);
             Title = doc.Title;
             CreationDate = doc.CreationDate;
@@ -48,14 +51,21 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             QuestionsWithCards = new List<CompleteQuestionView>();
             QuestionsWithInstructions = new List<CompleteQuestionView>();
 
+            var iterator = new CompleteGroupIterator(doc);
+
             var group = new CompleteGroup { Children = doc.Children.Where(c=>c is ICompleteQuestion).ToList() };
             CurrentGroup = new CompleteGroupMobileView(doc, group);
-            InitGroups(doc, CurrentGroup.PublicKey);
 
+            CollectAll(doc);
+        }
+
+        private void CollectAll(CompleteQuestionnaireDocument doc)
+        {
+            InitGroups(doc, CurrentGroup.PublicKey);
             Totals = CalcProgress(doc);
             CollectGalleries(CurrentGroup);
             CollectInstructions(CurrentGroup);
-
+            CollectScreens(CurrentGroup);           
         }
 
         public string Id { get; set; }
@@ -68,6 +78,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         public List<CompleteQuestionView> QuestionsWithCards { get; set; }
         public List<CompleteQuestionView> QuestionsWithInstructions { get; set; }
 
+        public List<CompleteGroupMobileView> Screens { get; set; }
+        public List<PropagatedGroup> Templates { get; set; }
+        public List<PropagatedGroup> PropagatedScreens { get; set; }
+        
         public UserLight Responsible { set; get; }
         public CompleteGroupMobileView CurrentGroup { get; set; }
         public CompleteGroupHeaders[] Groups { get; set; }
@@ -114,6 +128,27 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             var current = Groups.FirstOrDefault(g => g.PublicKey == currentGroupPublicKey);
             current.IsCurrent = true;
             CurrentGroup.Totals = current.Totals;
+        }
+
+        private void CollectScreens(CompleteGroupMobileView @group)
+        {
+            if (@group.Propagated == Propagate.None)
+            {
+                foreach (var g in @group.Groups)
+                {
+                    if (g.PublicKey == Guid.Empty) continue;
+                    Screens.Add(g);
+                    CollectScreens(g);
+                }    
+            }
+            else
+            {
+                Templates.Add(@group.PropagateTemplate);
+                foreach (var g in @group.PropagatedGroups)
+                {
+                    PropagatedScreens.Add(g);
+                }  
+            }
         }
 
         private void CollectGalleries(CompleteGroupMobileView @group)

@@ -1,10 +1,20 @@
 ﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteQuestionnaireMobileView
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
     var questionKey = (Guid)ViewBag.CurrentQuestion;
     this.ViewBag.CurrentQuestion = questionKey;
+}
+@{
+  
+    ViewBag.AjaxOptions = new AjaxOptions
+    {
+        OnComplete = "JsonResults"
+    };
+    ViewBag.CurrentGroupPublicKey = Model.CurrentGroup.PublicKey;
+    ViewBag.QuestionnaireId = Model.Id;
 }
 <script type="text/javascript">
 
@@ -48,7 +58,8 @@
     <!-- Start of first page -->
     <div data-role="page" id="sidebar">
         <div data-role="header" data-theme="c">
-            <a data-corners="false"  data-icon="arrow-l" href="@Url.Action("Index", "Dashboard")" rel = "external">Dashboard</a>
+            <a data-corners="false"  data-icon="arrow-l" href="@Url.Action("Index", "Dashboard")" rel = "external">
+                Dashboard</a>
             <h3></h3>
         </div>
         <!-- /header -->
@@ -63,12 +74,33 @@
                     }
                     else
                     {
-                    <li data-theme="b"><a>@gh.GroupText <span id="counter-@(gh.PublicKey)" data-theme="a" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
+                    <li data-theme="b"><a data-panel="main" href="#main">@gh.GroupText <span id="counter-@(gh.PublicKey)" data-theme="a" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                 }
             </ul>
         </div>
         <!-- /content -->
+        <div data-role="footer" data-position="fixed" data-id="ew-footer">
+            <div data-role="navbar">
+                <ul>
+                    <li><a data-role="button" data-corners="false" href="@Url.Action("Details", "Statistic", new { id = Model.Id })" 
+                   rel="external" data-ajax="false">Statistic</a></li>
+                    <li>
+                        @if (Model.Status.Name == "Completed")
+                        {
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("ReInit", "CompleteQuestionnaire", new { id = Model.Id })">
+                                ReInit</a>
+                        }
+                        else
+                        {
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("Complete", "CompleteQuestionnaire", new { id = Model.Id })">
+                                Complete</a>
+                        }</li>
+                </ul>
+            </div>
+            <!-- /navbar -->
+        </div>
+        <!-- /footer -->
     </div>
     <!-- /page -->
     <!-- other side panel pages here -->
@@ -76,26 +108,9 @@
 <div data-role="panel" data-id="main">
     <!-- Start of second page -->
     <div data-role="page" id="main" class="page">
-        <div data-role="header" data-theme="b" class="navigation">
-            <h1>@Model.Title</h1>
-            <div data-type="horizontal" class="ui-btn-right navigation-btn-group">
-                <a data-role="button" data-corners="false" href="@Url.Action("Details", "Statistic", new { id = Model.Id })" 
-                   rel="external" data-ajax="false">Statistic</a>
-                   
-                @if (Model.Status.Name == "Completed")
-                {
-                    <a data-corners="false" data-ajax="false" data-role="button" data-theme="e" rel="external" href="@Url.Action("ReInit", "CompleteQuestionnaire", new { id = Model.Id })">
-                       ReInit</a>
-                }
-                else
-                {
-                       <a data-corners="false" data-ajax="false" data-role="button" data-theme="d" rel="external" href="@Url.Action("Complete", "CompleteQuestionnaire", new { id = Model.Id })">
-                       Complete</a>
-                }
-            </div>
-        </div>
+        @RenderNavigation(Model.CurrentGroup.Navigation)
         <!-- /header -->
-        <div data-role="content" class="@(Model.Status.Name == "Completed" ? "ui-disabled" : "" )" id="@Model.CurrentGroup.GetClientId("div")">
+        <div data-role="content" class="@(Model.Status.Name == "Completed" ? "ui-disabled" : "")" id="@Model.CurrentGroup.GetClientId("div")">
             @Html.Partial("~/Views/Group/_ScreenHtml5.cshtml", Model)
             <div style="width: 100%; height: 50px;">
                 &nbsp;</div>
@@ -136,16 +151,89 @@
             </div>
         </div>
     }
+    @foreach (var screen in Model.Screens)
+    {
+        <div data-role="page" id="screen-@(screen.PublicKey)">
+            @RenderNavigation(screen.Navigation)
+            <div data-role="content">
+                @Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", screen)
+            </div>
+            @RenderFooter(screen.Navigation)
+        </div>
+    }
+    @foreach (var screen in Model.PropagatedScreens)
+    {
+        <div data-role="page" id="screen-@(screen.PropogationKey)">
+            @RenderNavigation(screen.Navigation)
+            <div data-role="content">
+                @Html.Partial("~/Views/Group/Mobile/_PropagatedScreen.cshtml", screen)
+            </div>
+            @RenderFooter(screen.Navigation)
+        </div>
+    }
+    @foreach (var screen in Model.Templates)
+    {
+        <script id="template-@(screen.PublicKey)" type="text/x-jsrender">
+        <div data-role="page" id="screen-00000000-0000-0000-0000-000000000000">
+            @RenderNavigation(screen.Navigation)
+            <div data-role="content">
+                 @Html.Partial("~/Views/Group/Mobile/_PropagatedScreen.cshtml", screen)
+            </div>
+             <div data-role="footer" data-theme="b">
+                {{if PrevScreen}}
+                    <a class="previous-screen" href="${PrevScreen}" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >Prev Group</a>
+                {{else}}
+                    <a href="#" class="previous-screen ui-disabled" data-icon="arrow-l" data-theme="b" iconpos="notext" data-corners="false">Prev Group</a>
+                {{/if}}
+                
+                <h1>@screen.Navigation.CurrentScreenTitle</h1>
+                <a href="#" class="next-screen ui-disabled" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">Next Group</a> 
+            </div>
+        </div>
+        </script>
+    }
 </div>
-@*
-Validation button
-
-@using (Ajax.BeginFormHtml5("Validate", "CompleteQuestionnaire", new { id = Model.Id, group = Model.CurrentGroup.PublicKey }, new AjaxOptions
-     {
-         OnComplete = "JsonResults"
-     }))
-{
-    <input value="Validate" type="submit" data-role="button" data-icon="check" data-theme="e"
-        data-iconpos="top" />
-         
-}*@
+@helper RenderNavigation(ScreenNavigation screen)
+    {
+        var crumbs = screen.BreadCumbs.Skip(1).ToList();
+    <div data-role="header" data-theme="b" class="navigation">
+        @for (int i = 0; i < crumbs.Count; i++)
+        {
+            var breadCumb = crumbs[i]; 
+            if (i == 0)
+            { <a href="#main" class="breadcrumb" data-inline="true" data-role="button" data-corners="false"
+            data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a> }
+            else
+            { <a href="#screen-@breadCumb.PublicKey"  class="breadcrumb" data-inline="true" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
+            }
+        }
+        <a class="breadcrumb ui-disabled" aria-disabled="true" data-role="button" data-inline="true"
+            data-corners="false" data-icon="arrow-r" data-iconpos="right">@screen.CurrentScreenTitle</a>
+    </div>
+}
+@helper  RenderFooter(ScreenNavigation screen)
+    {
+    <div data-role="footer" data-theme="b">
+        @if (screen.PrevScreen != null)
+        {
+            <a class="previous-screen" href="#screen-@(screen.PrevScreen.PublicKey)" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >
+                Prev Group</a>
+        }
+        else
+        {
+            <a class="previous-screen ui-disabled" href="#" data-icon="arrow-l" data-theme="b" iconpos="notext"
+                data-corners="false">Prev Group</a>
+        }
+        <h1>@screen.CurrentScreenTitle</h1>
+        @if (screen.NextScreen != null)
+        {
+            <a class="next-screen" href="#screen-@(screen.NextScreen.PublicKey)" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">
+                Next Group</a> 
+        }
+        else
+        { 
+            <a class="next-screen ui-disabled"  href="#"  data-icon="arrow-r" data-iconpos="right" data-theme="b"
+                data-corners="false">Next Group</a> 
+        }
+    </div>
+}

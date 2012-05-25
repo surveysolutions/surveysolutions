@@ -132,8 +132,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         [JsonIgnore]
         public IComposite Parent
         {
-            get { throw new NotImplementedException(); }
+            get {throw new NotImplementedException(); }
         }
+
+        [JsonIgnore]
+        public IComposite ParentGroup { get; set; }
 
         protected void OnAdded(CompositeAddedEventArgs e)
         {

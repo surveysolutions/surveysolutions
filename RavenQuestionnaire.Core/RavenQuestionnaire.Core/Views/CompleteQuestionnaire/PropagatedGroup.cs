@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
@@ -10,13 +11,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
         public PropagatedGroup(Guid key, string text, bool isAutoPropagate, Guid propagationKey, List<CompleteQuestionView> questions)
         {
-
             this.PublicKey = key;
             this.GroupText = text;
             this.AutoPropagate = isAutoPropagate;
             this.PropogationKey = propagationKey;
             this.Questions = questions;
+            Navigation = new ScreenNavigation();
         }
+        public ScreenNavigation Navigation { get; set; }
 
         public Guid PublicKey { get;private set; }
         public string GroupText { get; private set; }

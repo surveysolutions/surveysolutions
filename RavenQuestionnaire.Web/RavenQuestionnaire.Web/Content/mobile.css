@@ -122,3 +122,15 @@
 	display: block;
     padding: 10px 10px 10px 30px;
 }
+
+.ui-header .ui-btn-left.breadcrumb, .ui-header .ui-btn-right.breadcrumb,
+.breadcrumb
+{
+	position: relative;
+	display: inline-block;
+	margin: 0.5em 0 0 5px;
+	top: -5px;
+	left: auto;
+	right: auto;
+	max-width: 130px;
+}

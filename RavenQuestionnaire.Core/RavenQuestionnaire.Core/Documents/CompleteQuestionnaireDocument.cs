@@ -28,6 +28,7 @@ namespace RavenQuestionnaire.Core.Documents
             this.PublicKey = Guid.NewGuid();
             this.compositeobservers = new List<IObserver<CompositeEventArgs>>();
             this.Children = new List<IComposite>();
+            this.ParentGroup = null;
         }
         public static explicit operator CompleteQuestionnaireDocument(QuestionnaireDocument doc)
         {
@@ -63,7 +64,9 @@ namespace RavenQuestionnaire.Core.Documents
             }**/
             return result;
         }
-       
+
+        
+
         public UserLight Creator { get; set; }
 
         public string TemplateId { get; set; }
@@ -261,5 +264,11 @@ namespace RavenQuestionnaire.Core.Documents
         private List<IObserver<CompositeEventArgs>> compositeobservers;
         #endregion
         #endregion
+        [JsonIgnore]
+        public ICompleteGroup ParentGroup { get; set; }
+        [JsonIgnore]
+        public ICompleteGroup NextGroup { get; set; }
+        [JsonIgnore]
+        public ICompleteGroup PrevGroup { get; set; }
     }
 }

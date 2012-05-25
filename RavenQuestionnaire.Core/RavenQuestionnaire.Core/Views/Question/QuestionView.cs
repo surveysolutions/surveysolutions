@@ -171,13 +171,16 @@ namespace RavenQuestionnaire.Core.Views.Question
             while (group.Count != 0)
             {
                 var queueItem = group.Dequeue();
-                if (queueItem.Children.Any(q => q.PublicKey.Equals(questionKey)))
-                    return queueItem.PublicKey;
-                foreach (var child in queueItem.Children)
+                if (queueItem.Children != null)
                 {
-                   /* var childWithQuestion = child as IGroup<IGroup, TQuestion>;
-                    if(childWithQuestion!=null)*/
-                    group.Enqueue(child);
+                    if (queueItem.Children.Any(q => q.PublicKey.Equals(questionKey)))
+                        return queueItem.PublicKey;
+                    foreach (var child in queueItem.Children)
+                    {
+                        /* var childWithQuestion = child as IGroup<IGroup, TQuestion>;
+                         if(childWithQuestion!=null)*/
+                        group.Enqueue(child);
+                    }
                 }
             }
             throw new ArgumentException("group does not exist");

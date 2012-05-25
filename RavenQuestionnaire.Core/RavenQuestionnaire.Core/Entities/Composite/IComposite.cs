@@ -18,7 +18,7 @@ namespace RavenQuestionnaire.Core.Entities.Composite
 
 
         List<IComposite> Children { get; set; }
-        IComposite Parent { get; }
+        IComposite Parent { get;}
     }
 
     public class Unsubscriber<T> : IDisposable

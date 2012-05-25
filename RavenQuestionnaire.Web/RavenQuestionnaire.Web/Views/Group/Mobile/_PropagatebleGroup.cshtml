@@ -5,9 +5,10 @@
 @model CompleteGroupMobileView
 
 
-
+<ul data-role="listview" data-inset="true" data-split-icon="gear" data-split-theme="d" id="propagate-list-@(Model.PublicKey)">
 @foreach (PropagatedGroup propagatedGroup in Model.PropagatedGroups)
 {
       
         @Html.Partial("~/Views/Group/Mobile/_PropagatedGrooup.cshtml", propagatedGroup)
 }
+</ul>
