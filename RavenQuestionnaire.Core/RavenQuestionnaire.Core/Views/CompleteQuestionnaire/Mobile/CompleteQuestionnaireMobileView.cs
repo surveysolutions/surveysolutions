@@ -143,7 +143,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             }
             else
             {
-                Templates.Add(@group.PropagateTemplate);
+                if (@group.PropagateTemplate!=null) 
+                    Templates.Add(@group.PropagateTemplate);
                 foreach (var g in @group.PropagatedGroups)
                 {
                     PropagatedScreens.Add(g);
