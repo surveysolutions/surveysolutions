@@ -45,7 +45,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             question.Children.Add(answer);
             qDoqument.Children.Add(question);
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
-            repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
+            repositoryMock.Setup(x => x.Load("cqId")).Returns(questionanire);
             Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
             CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object, subscriberMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
@@ -60,7 +60,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                 null);
 
             service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.CompleteAnswers);
-            repositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqId"), Times.Once());
+            repositoryMock.Verify(x => x.Load("cqId"), Times.Once());
             Assert.AreEqual(qDoqument.Children[0].PublicKey, question.PublicKey);
             Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[0] as CompleteQuestion).Children[0])).Selected, true);
         }
@@ -80,7 +80,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             questionanire.Add(group, null);
             Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
-            repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
+            repositoryMock.Setup(x => x.Load("cqId")).Returns(questionanire);
 
             Mock<IStatisticRepository> statisticMock = new Mock<IStatisticRepository>();
 
@@ -128,7 +128,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             Mock<IStatisticRepository> statisticMock = new Mock<IStatisticRepository>();
             Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
-            repositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqId")).Returns(questionanire);
+            repositoryMock.Setup(x => x.Load("cqId")).Returns(questionanire);
 
             CompleteAnswer completeAnswer = new CompleteAnswer(answer){ Selected = true };
             Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();

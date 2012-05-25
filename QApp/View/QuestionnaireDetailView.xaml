@@ -74,7 +74,7 @@
                                                                     FontSize="16" Foreground="#FFFFFFFF"
                                                                     TextWrapping="Wrap" />
 
-                                                            </StackPanel>
+                                                            </StackPanel>                                                            
                                                         </Grid>
                                                         <Helpers:VisualStateControl
                                                             Style="{StaticResource TileHoverAnimation}"
@@ -141,10 +141,6 @@
             </Border>-->
 
             <Helpers:ViewPresenter Grid.Row="3"  Content="{Binding GroupDetail.View}" />
-           
         </Grid>
-
-    </Grid>
-    
-    
+    </Grid> 
 </View:ModuleView>

@@ -1,6 +1,5 @@
 ﻿using Ninject;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 using RavenQuestionnaire.Core;
 using DevExpress.RealtorWorld.Xpf.Helpers;
@@ -8,7 +7,9 @@ using RavenQuestionnaire.Core.Views.Answer;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 
 namespace QApp.ViewModel
 {
@@ -18,6 +19,7 @@ namespace QApp.ViewModel
 
         public QuestionData()
         {
+
         }
 
         public QuestionData(CompleteQuestionView question)
@@ -32,6 +34,7 @@ namespace QApp.ViewModel
             private set { SetValue<CompleteQuestionView>("Question", ref question, value); }
         }
         
+
         public override void Load()
         {
             base.Load();
@@ -39,20 +42,24 @@ namespace QApp.ViewModel
         }
 
     }
-    public class Question : Module
+    public class Question : ModuleWithNavigator
     {
          public override void InitData(object parameter) {
             base.InitData(parameter);
-
-             var item = parameter as CompleteQuestionView;
-             if (item != null)
-             {
-                 Data = new QuestionData(item);
-                 foreach (var completeAnswerView in QuestionData.Question.Answers)
-                     if (completeAnswerView.Selected)
-                         SelectedAnswer = completeAnswerView;
-             }
+             var currentQuestion = parameter as CompleteQuestionView;
+             SetSelectedAnswer(currentQuestion);
+             //bad approach!!!
+             //get from current data
+            var viewRepository = new ViewRepository(Initializer.Kernel);
+            _Questionnaire = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+                    new CompleteQuestionnaireViewInputModel(currentQuestion.QuestionnaireId) { CurrentGroupPublicKey = currentQuestion.GroupPublicKey });
+            
+             for (int i = 0; i < _Questionnaire.CurrentGroup.Groups[0].Questions.Count(); i++)
+                if (_Questionnaire.CurrentGroup.Groups[0].Questions[i].PublicKey == currentQuestion.PublicKey)
+                    NextQuestion = _Questionnaire.CurrentGroup.Groups[0].Questions.Count()>i+1 ? _Questionnaire.CurrentGroup.Groups[0].Questions[i+1] : null;
          }
+
+         private CompleteQuestionnaireMobileView _Questionnaire { get; set; }
 
          public QuestionData QuestionData { get { return (QuestionData)Data; } }
 
@@ -63,7 +70,15 @@ namespace QApp.ViewModel
              set { SetValue<CompleteAnswerView>("SelectedAnswer", ref selectedAnswer, value); }
          }
 
-         #region Commands
+        private CompleteQuestionView nextQuestion;
+        public CompleteQuestionView NextQuestion
+        {
+            get { return nextQuestion; }
+            set { SetValue<CompleteQuestionView>("NextQuestion", ref nextQuestion, value); }
+        }
+
+        #region Commands
+
          protected override void InitializeCommands()
          {
              base.InitializeCommands();
@@ -71,16 +86,11 @@ namespace QApp.ViewModel
              CloseWindowCommand = new SimpleActionCommand(DoClose);
          }
 
-        private void DoClose(object obj)
+        private void DoClose(object p)
         {
-            //BAD!
-            //don't do this
-            //open in main window
-            
-            var singleOrDefault = Application.Current.Windows.Cast<Window>().SingleOrDefault(x => x.IsActive);
-            if (singleOrDefault != null)
-                singleOrDefault.Close();
-            //window.Close;
+            var next = p as CompleteQuestionView;
+            if(next != null)
+                InitData(next);
         }
         
         void DoSetCurrentAnswer(object p)
@@ -92,13 +102,11 @@ namespace QApp.ViewModel
              if (answer != null)
              {
                  foreach (var completeAnswerView in QuestionData.Question.Answers)
-                 {
-                     if (completeAnswerView.PublicKey == answer.PublicKey)
-                         if (QuestionData.Question.QuestionType == QuestionType.MultyOption)
-                             completeAnswerView.Selected = answer.Selected;
-                         else
-                            completeAnswerView.Selected = completeAnswerView.PublicKey == answer.PublicKey;
-                 }
+                         if (completeAnswerView.PublicKey == answer.PublicKey)
+                             if (QuestionData.Question.QuestionType == QuestionType.MultyOption)
+                                completeAnswerView.Selected = !completeAnswerView.Selected;
+                            else
+                                completeAnswerView.Selected = completeAnswerView.PublicKey == answer.PublicKey;
                  SelectedAnswer = answer;
                  var command = new UpdateAnswerInCompleteQuestionnaireCommand(QuestionData.Question.QuestionnaireId,
                                                                               new CompleteAnswerView[] { answer },
@@ -112,8 +120,6 @@ namespace QApp.ViewModel
                  var question = p as CompleteQuestionView;
                  if (question!=null)
                  {
-                     foreach (CompleteAnswerView answerView in question.Answers)
-                         answerView.QuestionId = question.PublicKey;
                      var command = new UpdateAnswerInCompleteQuestionnaireCommand(question.QuestionnaireId,
                                                                                   question.Answers, null,
                                                                                   new UserLight("0", "system"));
@@ -121,13 +127,46 @@ namespace QApp.ViewModel
                      commandInvoker.Execute(command);
                  }
              }
-         }
+            UpdateCurrentDataQuestion();
+        }
 
         public ICommand SetCurrentAnswerCommand { get; private set; }
 
         public ICommand CloseWindowCommand { get; private set; }
 
+        public ICommand GoToParentGroup { get; private set; }
+
         #endregion
-        
+
+        #region Private Method
+
+        ////bad approach!!!
+        //reload current data and add async update in database
+        private void UpdateCurrentDataQuestion()
+        {
+            var viewRepository = new ViewRepository(Initializer.Kernel);
+            var test =
+                viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+                    new CompleteQuestionnaireViewInputModel(QuestionData.Question.QuestionnaireId) { CurrentGroupPublicKey = QuestionData.Question.GroupPublicKey });
+            var item = new CompleteQuestionView();
+            for (int i = 0; i < test.CurrentGroup.Groups[0].Questions.Count(); i++)
+                if (test.CurrentGroup.Groups[0].Questions[i].PublicKey == QuestionData.Question.PublicKey)
+                    item = test.CurrentGroup.Groups[0].Questions[i];
+            SetSelectedAnswer(item);
+        }
+
+        private void SetSelectedAnswer(CompleteQuestionView questionView)
+        {
+            if (questionView != null)
+            {
+                Data = new QuestionData(questionView);
+                foreach (var completeAnswerView in QuestionData.Question.Answers)
+                    if (completeAnswerView.Selected || QuestionData.Question.Answers.Count()==1)
+                        SelectedAnswer = completeAnswerView;
+            }
+        }
+
+        #endregion
+
     }
 }

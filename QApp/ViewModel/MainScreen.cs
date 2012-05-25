@@ -10,6 +10,7 @@ using Ninject;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Views.Status;
 
@@ -41,12 +42,19 @@ namespace QApp.ViewModel {
         public void ShowModule<T>(object parameter) where T : ModuleData, new() {
             CurrentModuleDataType = typeof(T);
             if (typeof(T) == typeof(MainScreenData))
-            {
                 CurrentModule = this;
-            } else {
-                T data = new T();
-                CurrentModule = ModulesManager.CreateModule(null, data, this, parameter);
-            }
+            else
+                if (typeof(T) == typeof(QuestionData))
+                    CurrentModule = ModulesManager.CreateModule(null, new QuestionData(parameter as CompleteQuestionView), this, parameter);
+                else
+                    if (typeof(T) == typeof(QuestionnaireDetailData))
+                    {
+                        var question = parameter as CompleteQuestionView;
+                        CurrentModule = question != null ? ModulesManager.CreateModule(null, new QuestionnaireDetailData(question.QuestionnaireId, question.GroupPublicKey), this, parameter) : ModulesManager.CreateModule(null, new T(), this, parameter);
+                    }
+                    else
+                        CurrentModule = ModulesManager.CreateModule(null, new T(), this, parameter);
+            
         }
         public IEnumerable<ListingTileData> ListingTileDataSource {
             get { return listingTileDataSource; }
@@ -77,8 +85,8 @@ namespace QApp.ViewModel {
             ShowCompletedItemsCommand = new ExtendedActionCommand(DoShowModule<CompletedQuestionnairesData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(CompletedQuestionnairesData));
             ShowCompletedItemCommand = new ExtendedActionCommand(DoShowModule<QuestionnaireDetailData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(QuestionnaireDetailData));
 
-            
-            ShowModalQuestionCommand = new ExtendedActionCommand(DoShowModuleModal<QuestionData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(QuestionData));
+            //ShowModalQuestionCommand = new ExtendedActionCommand(DoShowModuleModal<QuestionData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(QuestionData));
+            ShowModalQuestionCommand = new ExtendedActionCommand(DoShowModule<QuestionData>, this, "CurrentModuleDataType", AllowSwitchToTheModule, typeof(QuestionData));
 
             CreateNewCompletedAndOpen = new SimpleActionCommand(CreateNew);
 

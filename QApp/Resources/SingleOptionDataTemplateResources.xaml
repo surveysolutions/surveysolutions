@@ -11,7 +11,7 @@
    <DataTemplate x:Key="SingleOptionWithoutImageTemplate">
         <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
-                        CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0" 
+                        CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0" Margin="5,5,5,5"
                         Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType={x:Type View:ModuleView}}}">            
             <dxlc:Tile.ContentTemplate>
                 <DataTemplate>
@@ -33,7 +33,7 @@
         </dxlc:Tile>
     </DataTemplate>
    <DataTemplate x:Key="SingleOptionWithImageTemplate">
-        <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
+        <dxlc:Tile Background="#FF00ABBA" Content="{Binding}" Margin="5,5,5,5"
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
                         CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0" Width="145" Height="145"
                         Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType={x:Type View:ModuleView}}}">                   
@@ -41,14 +41,14 @@
                 <DataTemplate>
                     <Grid>
                         <Grid>
-                            <StackPanel Grid.ColumnSpan="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5">
+                            <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5">
                                  <StackPanel.Resources>
                                    <Extensions:ImageConverter x:Key="ImageConverter" />
                                 </StackPanel.Resources>
                                 <Image Source="{Binding Image, Converter={StaticResource ImageConverter}}" />
                             </StackPanel>                            
                         </Grid>
-                        <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False"                                                
+                        <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False"                                                
                                 Visibility="{Binding Path=(Helpers:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </Grid>
                 </DataTemplate>

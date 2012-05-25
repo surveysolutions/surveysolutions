@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Entities.Extensions;
-using RavenQuestionnaire.Core.Entities.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
@@ -30,7 +28,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
         public void Handle(CreateNewCompleteQuestionnaireCommand command)
         {
             var questionnaire = this._questionnaireRepository.Load(command.QuestionnaireId);
-            var result = this._completeQuestionnaireUploader.CreateCompleteQuestionnaire(questionnaire,
+            var result = this._completeQuestionnaireUploader.CreateCompleteQuestionnaire(questionnaire,command.CompleteQuestionnaireGuid,
                                                                                          command.Creator, command.Status);
 
 
@@ -38,10 +36,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
                 throw new ArgumentException("questionnaire wasn't created");
 
            
-            command.CompleteQuestionnaireId = IdUtil.ParseId(result.CompleteQuestinnaireId);
-            
-           
+         //   command.CompleteQuestionnaireId = IdUtil.ParseId(result.CompleteQuestinnaireId);
 
+            
             var questions = result.GetInnerDocument().GetAllQuestions<ICompleteQuestion>().ToList();
             var executor = new CompleteQuestionnaireConditionExecutor(result.GetInnerDocument());
             foreach (ICompleteQuestion completeQuestion in questions)
@@ -49,8 +46,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
                 if(completeQuestion is IBinded)
                     continue;
                 completeQuestion.Enabled = executor.Execute(completeQuestion);
-                if (!completeQuestion.Enabled)
-                    result.Remove(completeQuestion);
+             
+                /*if (!completeQuestion.Enabled)
+                    result.Remove(completeQuestion);*/
             }
         }
     }

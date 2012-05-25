@@ -224,7 +224,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             group.Add(groupPropogated, null);
 
             CompleteQuestionnaire completeQuestionnaire =
-                new CompleteQuestionnaire(new Questionnaire(questionnaireInnerDocument), new UserLight(),
+                new CompleteQuestionnaire(new Questionnaire(questionnaireInnerDocument), Guid.NewGuid(), new UserLight(),
                                           new SurveyStatus(), subscriber);
             CompleteQuestionnaireDocument innerDocument =
                 ((IEntity<CompleteQuestionnaireDocument>) completeQuestionnaire).GetInnerDocument();

@@ -63,7 +63,6 @@ namespace RavenQuestionnaire.Core.AbstractFactories
             }
             else
             {
-
                 retval = answer.AnswerValue ?? answer.AnswerText;
             }
             switch (baseQuestion.QuestionType)

@@ -25,17 +25,20 @@ namespace RavenQuestionnaire.Core.Entities
         public CompleteQuestionnaire(CompleteQuestionnaireDocument document)
         {
             this.innerDocument = document;
+               // throw new InvalidOperationException("can't be bellow zero");
         }
-        public CompleteQuestionnaire(Questionnaire template, UserLight user, SurveyStatus status)
+        public CompleteQuestionnaire(Questionnaire template, Guid completeQuestionnaireGuid, UserLight user, SurveyStatus status)
         {
 
             innerDocument =
            (CompleteQuestionnaireDocument)((IEntity<QuestionnaireDocument>)template).GetInnerDocument();
+            innerDocument.PublicKey = completeQuestionnaireGuid;
             innerDocument.Creator = user;
             innerDocument.Status = status;
             innerDocument.Responsible = user;
         }
-        public CompleteQuestionnaire(Questionnaire template, UserLight user, SurveyStatus status, ISubscriber subscriber):this(template,user,status)
+        public CompleteQuestionnaire(Questionnaire template, Guid completeQuestionnaireGuid, UserLight user, SurveyStatus status, ISubscriber subscriber)
+            : this(template, completeQuestionnaireGuid, user, status)
         {
             subscriber.Subscribe(this.innerDocument);
         }

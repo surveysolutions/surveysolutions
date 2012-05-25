@@ -10,7 +10,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
 
         public DeleteCompleteQuestionnaireCommand(string completeQeuestionnaireId, UserLight executor)
         {
-            this.CompleteQuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(completeQeuestionnaireId);
+            this.CompleteQuestionnaireId = completeQeuestionnaireId;
             Executor = executor;
         }
     }

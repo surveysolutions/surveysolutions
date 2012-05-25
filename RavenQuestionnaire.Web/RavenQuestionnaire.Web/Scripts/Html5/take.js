@@ -1,4 +1,16 @@
 ﻿
+function sichronizationStarted(data, status, xhr) {
+    $('a#btnSync span span').html('Processing');
+
+    $('[data-id=main]').addClass('ui-disabled');
+}
+function sinchronizationCompleted(data, status, xhr) {
+    $('a#btnSync span span').html('Synchronize');
+    $('a#btnSync').removeClass('ui-btn-active');
+    $('[data-id=main]').removeClass('ui-disabled');
+    if (data.responseText != 'True')
+        alert('synchronization wasn\'t succefull');
+}
 
 function JsonResults (data, status, xhr) {
 
@@ -173,7 +185,7 @@ function updateCounter() {
         
         'numOnly' : {
 			'default' : [
-				'{dec}  {sign} {b}',
+				'{dec} {sign} {b}',
 				'7 8 9',
 				'4 5 6',
 				'1 2 3',
@@ -234,21 +246,67 @@ function updateCounter() {
                 label.html(targetInput.val());
             });
            
-            var openKeyboard = function() {
+          /*  var openKeyboard = function() {
                 targetInput.focus();
                 targetInput.click();
-            };
-            button.click(openKeyboard);
-            label.parent().click(openKeyboard);
+            };*/
+      //      button.click(openKeyboard);
+            button.parent().bind('tap',function() {
+                targetInput.focus();
+                targetInput.click();
+            });
 
         });
     },
     $.fn.createKeyBoard = function(layout) {
         var k = this.find('input[draw-key-board=true]');
         k.removeAttr("draw-key-board");
-       
+        /*
+        var key = $('.ui-keyboard-button');
+        
+        key.live('click',function() {
+            var name = $(this).attr('data-value');
+            var input = $(this).parents('.ui-keyboard').find('.ui-keyboard-preview');
+            var old = $(input).attr('val-backup');
+            old = (old == undefined ? '' : old);
+            if ($(this).attr('name')=='dec') {
+                old = old + '.';
+                $(input).attr('val-backup', old);
+            }else if ($(this).attr('name')=='sign') {
+                if (old[0]!='-')
+                    old = '-' + old;
+                else {
+                    old = old.substr(1);
+                }
+                $(input).attr('val-backup', old);
+            }else if ($(this).attr('name')=='bksp') {
+                old = old.substr(0, old.length - 1);
+                $(input).val(old);
+                $(input).attr('val-backup', old);
+            } else if (isNumber(name))
+            {
+                
+                $(input).attr('val-backup', old + name);
+                //old = $(input).val();
+                if (old.length > 0 && old[old.length-1]=='.') {
+                    old = old + name;    
+                    $(input).val(old);
+                }
+            }
+        });
+        */
+       /* if($.client.os!='Windows') {
+            k.each(function() {
+                var input = this;
+                $(input.form).bind('submit', function() {
+                    input.blur();
+                });
+            });
+            return;
+        }*/
         var kbOptions = {
             keyBinding: 'mousedown touchstart',
+            // layout : 'num',
             position: {
                 of: null, // optional - null (attach to input/textarea) or a jQuery object (attach elsewhere)
                 my: 'center top',
@@ -320,3 +378,6 @@ $(document).ready(function () {
     });
 
 });
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}

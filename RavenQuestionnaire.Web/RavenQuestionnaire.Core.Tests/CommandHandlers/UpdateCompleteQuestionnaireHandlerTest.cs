@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Mock<IStatusRepository> statusRepositoryMock = new Mock<IStatusRepository>();
             Mock<IUserRepository> userRepositoryMock = new Mock<IUserRepository>();
 
-            coompleteQuestionnaireRepositoryMock.Setup(x => x.Load("completequestionnairedocuments/cqID")).Returns(entity);
+            coompleteQuestionnaireRepositoryMock.Setup(x => x.Load("cqID")).Returns(entity);
 
             UpdateCompleteQuestionnaireHandler handler = new UpdateCompleteQuestionnaireHandler(coompleteQuestionnaireRepositoryMock.Object,
                 statusRepositoryMock.Object, userRepositoryMock.Object, asyncMock.Object);
@@ -49,7 +49,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                 "-111", 
                 null));
 
-            coompleteQuestionnaireRepositoryMock.Verify(x => x.Load("completequestionnairedocuments/cqID"));
+            coompleteQuestionnaireRepositoryMock.Verify(x => x.Load("cqID"));
        
         }
     }

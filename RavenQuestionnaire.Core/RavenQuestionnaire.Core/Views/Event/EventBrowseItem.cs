@@ -9,21 +9,16 @@ namespace RavenQuestionnaire.Core.Views.Event
 {
     public class EventBrowseItem
     {
-
-        public string Id
+        public EventBrowseItem(Guid publickey, DateTime creationDate, ICommand command)
         {
-            get { return IdUtil.ParseId(_id); }
-            private set { _id = value; }
+            this.PublicKey = publickey;
+            this.CreationDate = creationDate;
+            this.Command = command;
         }
-        private string _id;
+
 
         public Guid PublicKey { get; private set; }
         public DateTime CreationDate { get; private set; }
         public ICommand Command { get;private set; }
-        
-
-        public EventBrowseItem()
-        {
-        }
     }
 }

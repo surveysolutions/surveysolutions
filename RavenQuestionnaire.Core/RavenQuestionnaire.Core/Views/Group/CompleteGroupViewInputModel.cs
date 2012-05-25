@@ -13,7 +13,7 @@ namespace RavenQuestionnaire.Core.Views.Group
             PropagationKey = propagationkey;
             if (publicKey.HasValue && publicKey.Value != Guid.Empty)
                 PublicKey = publicKey;
-            QuestionnaireId = IdUtil.CreateCompleteQuestionnaireId(questionnaireId);
+            QuestionnaireId = questionnaireId;
         }
 
         public string QuestionnaireId { get; set; }

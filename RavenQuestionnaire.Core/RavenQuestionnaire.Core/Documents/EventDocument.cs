@@ -7,19 +7,19 @@ namespace RavenQuestionnaire.Core.Documents
     {
         //public string EventId { get; set; }
         public Guid PublicKey { get; set; }
+        public Guid ClientPublicKey { get; set; }
         public DateTime CreationDate { get; set; }
         public ICommand Command { get; set; }
 
         
         public EventDocument()
         {
-            PublicKey = Guid.NewGuid();
             CreationDate = DateTime.UtcNow;
         }
-        public EventDocument(ICommand command)
+        public EventDocument(ICommand command, Guid publicKey, Guid clientPublicKey):this()
         {
-            PublicKey = Guid.NewGuid();
-            CreationDate = DateTime.UtcNow;
+            PublicKey = publicKey;
+            ClientPublicKey = clientPublicKey;
             Command = command;
         }
 

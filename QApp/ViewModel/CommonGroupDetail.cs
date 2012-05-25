@@ -5,6 +5,7 @@ using System.Windows.Input;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
 using DevExpress.Xpf.Core;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Question;
 
@@ -12,17 +13,18 @@ namespace QApp.ViewModel
 {
     public class CommonGroupDetailData : ModuleData
     {
-        private CompleteGroupViewV group;
+        private CompleteGroupMobileView group;
 
 
-        public CommonGroupDetailData(CompleteGroupViewV group)
+        public CommonGroupDetailData(CompleteGroupMobileView group)
         {
             Group = group;
         }
 
-         public CompleteGroupViewV  Group {
+        public CompleteGroupMobileView Group
+        {
             get { return group; }
-            private set { SetValue<CompleteGroupViewV >("Group", ref group, value); }
+            private set { SetValue<CompleteGroupMobileView>("Group", ref group, value); }
         }
 
     }
@@ -75,7 +77,7 @@ namespace QApp.ViewModel
             if (question != null)
             {
                 var detail = (Question)ModulesManager.CreateModule(null, new QuestionData(question), this, question);
-                
+
                 DXWindow window = new DXWindow();
                 window.Content = detail.View;
                 window.WindowState = WindowState.Maximized;

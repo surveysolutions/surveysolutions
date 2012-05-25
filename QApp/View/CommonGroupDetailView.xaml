@@ -5,8 +5,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
     xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
-    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" 
-    mc:Ignorable="d"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:Extensions="clr-namespace:QApp.Helpers.Extensions" mc:Ignorable="d"
     d:DesignHeight="800" d:DesignWidth="1000">
 
     <View:ModuleView.Resources>
@@ -71,12 +71,19 @@
         <dxlc:TileLayoutControl Grid.Row="2" Orientation="Horizontal" ItemsSource="{Binding Data.Group.Questions}" AllowItemMoving="False" Padding="5" Margin="5">
             <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
-                    <dxlc:Tile Background="#FF00ABBB" Width="240" Height="80" Content="{Binding}"
-                               Command="{Binding Path=DataContext.ShowQuestionCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
-                               CommandParameter="{Binding}" Padding="0">
+                  <DataTemplate.Resources>
+                    <Extensions:FromBoolToColorConverter x:Key="FromBoolToColorConverter" />
+                  </DataTemplate.Resources>
+                  <dxlc:Tile Background="#FF00ABBB" Width="240" Height="80" Content="{Binding}"
+                               Command="{Binding Path=DataContext.Parent.Parent.ShowModalQuestionCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
+                               CommandParameter="{Binding}" Opacity ="{Binding Enabled, Converter={StaticResource FromBoolToColorConverter}}" Padding="0">
                         <dxlc:Tile.ContentTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding QuestionText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                <Grid>                                  
+                                  <Grid>
+                                        <TextBlock Text="{Binding QuestionText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                    </Grid>                                                                      
+                                </Grid>
                             </DataTemplate>
                         </dxlc:Tile.ContentTemplate>
                     </dxlc:Tile>
