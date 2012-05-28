@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -30,11 +31,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             Status = doc.Status;
             Responsible = doc.Responsible;
 
-            var iterator = new CompleteGroupIterator(doc);
-            CurrentGroup = new CompleteGroupMobileView(doc, currentGroup as CompleteGroup);
-
-            CollectAll(doc);
+            CollectAll(doc, currentGroup as CompleteGroup);
         }
+
 
 
 
@@ -51,21 +50,71 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             QuestionsWithCards = new List<CompleteQuestionView>();
             QuestionsWithInstructions = new List<CompleteQuestionView>();
 
-            var iterator = new CompleteGroupIterator(doc);
+            var group = new CompleteGroup { Children = doc.Children.Where(c => c is ICompleteQuestion).ToList() };
 
-            var group = new CompleteGroup { Children = doc.Children.Where(c=>c is ICompleteQuestion).ToList() };
-            CurrentGroup = new CompleteGroupMobileView(doc, group);
-
-            CollectAll(doc);
+            CollectAll(doc, group);
         }
 
-        private void CollectAll(CompleteQuestionnaireDocument doc)
+        private void CollectAll(CompleteQuestionnaireDocument doc, CompleteGroup group)
         {
-            InitGroups(doc, CurrentGroup.PublicKey);
+            IList<ScreenNavigation> navigations = new List<ScreenNavigation>();
+
+            var queue = new Queue<ICompleteGroup>();
+            queue.Enqueue(doc);
+            while (queue.Count != 0)
+            {
+                ICompleteGroup item = queue.Dequeue();
+                List<IComposite> innerGroups = item.Children.Where(c => c is ICompleteGroup).ToList();
+                ScreenNavigation prevScreen = null;
+                ICompleteGroup prevGroup = null;
+                foreach (CompleteGroup g in innerGroups)
+                {
+                    var ng = new ScreenNavigation
+                                 {
+                                     CurrentScreenTitle = g.Title,
+                                     PublicKey = g.PublicKey,
+                                     PrevScreen = prevGroup == null ? null : new CompleteGroupHeaders(prevGroup),
+                                     Parent = new CompleteGroupHeaders(item)
+                                 };
+                    if ((g as PropagatableCompleteGroup) != null)
+                        ng.PropagateKey = (g as PropagatableCompleteGroup).PropogationPublicKey;
+
+                    if (prevGroup != null)
+                        prevScreen.NextScreen = new CompleteGroupHeaders(g);
+
+                    if (item.PublicKey == doc.PublicKey)
+                    {
+                        if (ng.NextScreen != null)
+                            ng.NextScreen.IsExternal = true;
+                        if (ng.PrevScreen != null)
+                            ng.PrevScreen.IsExternal = true;
+                        if (prevScreen != null && prevScreen.NextScreen != null)
+                            prevScreen.NextScreen.IsExternal = true;
+                    }
+                    queue.Enqueue(g);
+                    prevGroup = g;
+                    prevScreen = ng;
+                    navigations.Add(ng);
+                }
+            }
+
+
+            var currentGroup = new CompleteGroupMobileView(doc, group, navigations);
+
+            InitGroups(doc, currentGroup.PublicKey);
             Totals = CalcProgress(doc);
-            CollectGalleries(CurrentGroup);
-            CollectInstructions(CurrentGroup);
-            CollectScreens(CurrentGroup);           
+            CollectGalleries(currentGroup);
+            CollectInstructions(currentGroup);
+            CollectScreens(currentGroup);
+            CurrentScreen = new CompleteGroupMobileView()
+                                {
+                                    Navigation = currentGroup.Navigation,
+                                    Questions = currentGroup.Questions,
+                                    Groups = currentGroup.Groups,
+                                    GroupText = currentGroup.GroupText,
+                                    PublicKey = currentGroup.PublicKey,
+                                    Propagated = currentGroup.Propagated
+                                };
         }
 
         public string Id { get; set; }
@@ -78,12 +127,13 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         public List<CompleteQuestionView> QuestionsWithCards { get; set; }
         public List<CompleteQuestionView> QuestionsWithInstructions { get; set; }
 
+        public CompleteGroupMobileView CurrentScreen { get; set; }
         public List<CompleteGroupMobileView> Screens { get; set; }
         public List<PropagatedGroup> Templates { get; set; }
         public List<PropagatedGroup> PropagatedScreens { get; set; }
-        
+
         public UserLight Responsible { set; get; }
-        public CompleteGroupMobileView CurrentGroup { get; set; }
+
         public CompleteGroupHeaders[] Groups { get; set; }
         public Counter Totals { get; set; }
 
@@ -99,14 +149,16 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                                 {
                                     PublicKey = Guid.Empty,
                                     GroupText = "Main",
-                                    Totals = CountQuestions(questions)
+                                    Totals = CountQuestions(questions),
+                                    IsExternal = true
                                 };
                 for (var i = 1; i <= groups.Count; i++)
                 {
                     Groups[i] = new CompleteGroupHeaders
                                     {
                                         PublicKey = groups[i - 1].PublicKey,
-                                        GroupText = groups[i - 1].Title
+                                        GroupText = groups[i - 1].Title,
+                                        IsExternal = true
                                     };
                     Groups[i].Totals = CalcProgress(groups[i - 1]);
                 }
@@ -119,15 +171,16 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                     Groups[i] = new CompleteGroupHeaders
                                     {
                                         PublicKey = groups[i].PublicKey,
-                                        GroupText = groups[i].Title
+                                        GroupText = groups[i].Title,
+                                        IsExternal = true
                                     };
                     Groups[i].Totals = CalcProgress(groups[i]);
                 }
             }
-            
+
             var current = Groups.FirstOrDefault(g => g.PublicKey == currentGroupPublicKey);
             current.IsCurrent = true;
-            CurrentGroup.Totals = current.Totals;
+            //CurrentGroup.Totals = current.Totals;
         }
 
         private void CollectScreens(CompleteGroupMobileView @group)
@@ -136,19 +189,17 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             {
                 foreach (var g in @group.Groups)
                 {
-                    if (g.PublicKey == Guid.Empty) continue;
+                    //if (g.PublicKey == Guid.Empty) continue;
                     Screens.Add(g);
                     CollectScreens(g);
-                }    
+                }
             }
-            else
+
+            if (@group.PropagateTemplate != null)
+                Templates.Add(@group.PropagateTemplate);
+            foreach (var g in @group.PropagatedGroups)
             {
-                if (@group.PropagateTemplate!=null) 
-                    Templates.Add(@group.PropagateTemplate);
-                foreach (var g in @group.PropagatedGroups)
-                {
-                    PropagatedScreens.Add(g);
-                }  
+                PropagatedScreens.Add(g);
             }
         }
 
@@ -225,11 +276,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                             {
                                 Total = questions.Count,
                                 Enablad = enabled.Count(),
-                                Answered =
-                                    enabled.Count(
-                                        question =>
-                                        question.Children.Any(
-                                            a => a is ICompleteAnswer && ((ICompleteAnswer) a).Selected))
+                                Answered = enabled.Count(question => question.Children.Any(a => a is ICompleteAnswer && ((ICompleteAnswer)a).Selected))
                             };
             return total;
         }

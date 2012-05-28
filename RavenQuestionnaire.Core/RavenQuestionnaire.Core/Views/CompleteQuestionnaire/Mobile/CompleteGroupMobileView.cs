@@ -13,21 +13,6 @@ using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
-    public class ScreenNavigation
-    {
-        public ScreenNavigation()
-        {
-            BreadCumbs = new List<CompleteGroupHeaders>();
-        }
-        public List<CompleteGroupHeaders> BreadCumbs { get; set; }
-
-        public CompleteGroupHeaders NextScreen { get; set; }
-
-        public CompleteGroupHeaders PrevScreen { get; set; }
-
-        public string CurrentScreenTitle { get; set; }
-
-    }
     public class CompleteGroupMobileView
     {
         public CompleteGroupMobileView()
@@ -49,32 +34,20 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                 PublicKey = group.PublicKey
             };
         }
-        public CompleteGroupMobileView(CompleteQuestionnaireDocument doc, CompleteGroup currentGroup) : this()
+        public CompleteGroupMobileView(CompleteQuestionnaireDocument doc, CompleteGroup currentGroup, IList<ScreenNavigation> navigations)
+            : this()
         {
-            InitNavigation(currentGroup);
+            InitNavigation(currentGroup, navigations);
 
             var questions = currentGroup.Children.OfType<ICompleteQuestion>().ToList();
             var groups = currentGroup.Children.OfType<ICompleteGroup>().ToList();
-          
+
             PublicKey = currentGroup.PublicKey;
             GroupText = currentGroup.Title;
             Propagated = currentGroup.Propagated;
             if (questions.Count > 0)
             {
-                if (currentGroup.Propagated == Propagate.None)
-                {
-                    var questionQgroup = new CompleteGroupMobileView();
-                    questionQgroup.Questions =
-                        questions.Select(
-                            q => new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q)).ToList();
-                    questionQgroup.PublicKey = Guid.Empty;
-                    questionQgroup.GroupText = "Main";
-                    Groups.Add(questionQgroup);
-                }
-                else if (currentGroup.Propagated == Propagate.Propagated)
-                {
-                    this.Questions = questions.Select(q => new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q)).ToList();
-                }
+                this.Questions = questions.Select(q => new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q)).ToList();
             }
 
             // grouping by group's PublicKey
@@ -95,17 +68,19 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                     prop = Propagate.None;
                 }
                 Groups.Add(prop != Propagate.Propagated
-                               ? new CompleteGroupMobileView(doc, k.Value[0] as CompleteGroup)
-                               : new CompleteGroupMobileView(doc, k.Value));
+                               ? new CompleteGroupMobileView(doc, k.Value[0] as CompleteGroup, navigations)
+                               : new CompleteGroupMobileView(doc, k.Value, navigations));
             }
         }
 
-        public CompleteGroupMobileView(CompleteQuestionnaireDocument doc, List<CompleteGroup> propGroups)
+
+
+        public CompleteGroupMobileView(CompleteQuestionnaireDocument doc, List<CompleteGroup> propGroups, IList<ScreenNavigation> navigations)
             : this()
         {
             var propagatable = propGroups.Single(g => (g as PropagatableCompleteGroup) == null);
 
-            InitNavigation(propagatable);
+            InitNavigation(propagatable, navigations);
 
             var qf = new CompleteQuestionFactory();
             PublicKey = propagatable.PublicKey;
@@ -170,18 +145,30 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             }
         }
 
-        private void InitNavigation(CompleteGroup currentGroup)
+        private void InitNavigation(CompleteGroup currentGroup, IList<ScreenNavigation> navigations)
         {
-            var parent = currentGroup.ParentGroup;
+            var pKey = Guid.Empty;
+            if (currentGroup as PropagatableCompleteGroup!=null)
+                pKey = (currentGroup as PropagatableCompleteGroup).PropogationPublicKey;
+
+            var current = navigations.Single(n => (n.PublicKey == currentGroup.PublicKey) && (n.PropagateKey == pKey));
+            var parent = current.Parent;
             while (parent != null)
             {
-                var bc = GetHeader(parent);
-                Navigation.BreadCumbs.Add(bc);
-                parent = parent.ParentGroup;
+                Navigation.BreadCumbs.Add(parent);
+                var nav = navigations.SingleOrDefault(n => n.PublicKey == parent.PublicKey);
+                parent = nav == null ? null : nav.Parent;
             }
             Navigation.BreadCumbs.Reverse();
-            Navigation.NextScreen = GetHeader(currentGroup.NextGroup);
-            Navigation.PrevScreen = GetHeader(currentGroup.PrevGroup);
+            Navigation.NextScreen = current.NextScreen;
+            Navigation.PrevScreen = current.PrevScreen;
+            if (Navigation.BreadCumbs.Count == 1)
+            {
+                if (Navigation.NextScreen != null)
+                    Navigation.NextScreen.IsExternal = true;
+                if (Navigation.PrevScreen != null)
+                    Navigation.PrevScreen.IsExternal = true;
+            }
             Navigation.CurrentScreenTitle = currentGroup.Title;
         }
 

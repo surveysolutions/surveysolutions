@@ -1,14 +1,28 @@
 using System;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     public class CompleteGroupHeaders
     {
+
+        public CompleteGroupHeaders(ICompleteGroup group)
+        {
+            PublicKey = group.PublicKey;
+            GroupText = group.Title;
+        }
+
+        public CompleteGroupHeaders()
+        {
+        }
+
         public Guid PublicKey { get; set; }
 
         public string GroupText { get; set; }
 
         public bool IsCurrent { get; set; }
+
+        public bool IsExternal { get; set; }
 
         public Counter Totals { get; set; }
 

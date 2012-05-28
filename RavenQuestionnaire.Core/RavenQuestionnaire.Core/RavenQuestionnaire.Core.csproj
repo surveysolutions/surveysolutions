@@ -221,11 +221,7 @@
     <Compile Include="Entities\Extensions\CompositeObservebleExtensions.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\IEntity.cs" />
-    <Compile Include="Entities\Iterators\IterableCompleteGroup.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
-    <Compile Include="Entities\Iterators\CompleteGroupIterator.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Entities\Observers\ITriggerable.cs" />
     <Compile Include="Entities\Observers\ObservableCollectionExtensions.cs" />
     <Compile Include="Entities\Observers\ObservableCollectionS.cs" />
@@ -376,6 +372,7 @@
     <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteQuestionnaireMabileViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteGroupMobileView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteQuestionnaireMobileView.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Mobile\ScreenNavigation.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Vertical\CompleteQuestionnaireEnumerableViewVFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportItem.cs" />
