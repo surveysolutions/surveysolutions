@@ -274,7 +274,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                 new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
-            return Json(model.CurrentGroup);
+            return Json(model);
             //  return PartialView("~/Views/Group/_ScreenHtml5.cshtml", model);
         }
 
@@ -299,7 +299,7 @@ namespace RavenQuestionnaire.Web.Controllers
             var model =
                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
-            ViewBag.CurrentGroup = model.CurrentGroup;
+            //ViewBag.CurrentGroup = model.CurrentGroup;
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             return View(model);
         }
@@ -435,7 +435,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId)
                     {CurrentGroupPublicKey = settings[0].ParentGroupPublicKey});
 
-            return Json(model.CurrentGroup);
+            return Json(model);
         }
 
 

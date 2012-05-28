@@ -227,12 +227,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             get { throw new NotImplementedException(); }
         }
-        [JsonIgnore]
-        public ICompleteGroup ParentGroup { get; set; }
-        [JsonIgnore]
-        public ICompleteGroup NextGroup { get; set; }
-        [JsonIgnore]
-        public ICompleteGroup PrevGroup { get; set; }
 
         protected void OnAdded(CompositeAddedEventArgs e)
         {

@@ -16,8 +16,21 @@ function JsonResults (data, status, xhr) {
 
     var group = jQuery.parseJSON(data.responseText);
     if (!group.error) {
-        UpdateGroup(group);
-        $("#counter-" + group.PublicKey).html(group.Totals.Answered + "/" + group.Totals.Enablad);
+        UpdateGroup(group.CurrentScreen);
+        if (group.Screens) {
+            for (var j = 0; j < group.Screens.length; j++) {
+                UpdateGroup(group.Screens[j]);
+            }
+        }
+        if (group.PropagatedScreens) {
+            for (var j = 0; j < group.PropagatedScreens.length; j++) {
+                UpdateGroup(group.PropagatedScreens[j]);
+            }
+        }
+        for (var j = 0; j < group.Groups.length; j++) {
+            var total = group.Groups[j].Totals;
+            $("#counter-" + group.Groups[j].PublicKey).html(total.Answered + "/" + total.Enablad);
+        }
     }
     else
         SetErrorToQuestion(group.question, group.settings.PropogationPublicKey, group.error);
@@ -45,9 +58,14 @@ function UpdateGroup(group) {
             }
         }
     }
-    if (group.Groups) {
-        for (var j = 0; j < group.Groups.length; j++) {
-            UpdateGroup(group.Groups[j]);
+    if (group.Screens) {
+        for (var j = 0; j < group.Screens.length; j++) {
+            UpdateGroup(group.Screens[j]);
+        }
+    }
+    if (group.PropagatedScreens) {
+        for (var j = 0; j < group.PropagatedScreens.length; j++) {
+            UpdateGroup(group.PropagatedScreens[j]);
         }
     }
 }

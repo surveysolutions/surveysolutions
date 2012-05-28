@@ -13,7 +13,7 @@
     {
         OnComplete = "JsonResults"
     };
-    ViewBag.CurrentGroupPublicKey = Model.CurrentGroup.PublicKey;
+    ViewBag.CurrentGroupPublicKey = Model.CurrentScreen.PublicKey;
     ViewBag.QuestionnaireId = Model.Id;
 }
 <script type="text/javascript">
@@ -108,17 +108,14 @@
 <div data-role="panel" data-id="main">
     <!-- Start of second page -->
     <div data-role="page" id="main" class="page">
-        @RenderNavigation(Model.CurrentGroup.Navigation)
+        @RenderNavigation(Model.CurrentScreen.Navigation)
         <!-- /header -->
-        <div data-role="content" class="@(Model.Status.Name == "Completed" ? "ui-disabled" : "")" id="@Model.CurrentGroup.GetClientId("div")">
-            @Html.Partial("~/Views/Group/_ScreenHtml5.cshtml", Model)
+        <div data-role="content" class="@(Model.Status.Name == "Completed" ? "ui-disabled" : "")">
+            @Html.Partial("~/Views/Group/_ScreenHtml5.cshtml", Model.CurrentScreen)
             <div style="width: 100%; height: 50px;">
                 &nbsp;</div>
         </div>
-        <div data-role="footer" data-theme="b">
-            <!-- /navbar -->
-            @Html.Partial("MobileGroupNavigation", Model)
-        </div>
+        @RenderFooter(Model.CurrentScreen.Navigation)
         <!-- /content -->
     </div>
     <!-- /page -->
@@ -199,10 +196,10 @@
     <div data-role="header" data-theme="b" class="navigation">
         @for (int i = 0; i < crumbs.Count; i++)
         {
-            var breadCumb = crumbs[i]; 
+            var breadCumb = crumbs[i];
             if (i == 0)
             { <a href="#main" class="breadcrumb" data-inline="true" data-role="button" data-corners="false"
-            data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a> }
+                data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a> }
             else
             { <a href="#screen-@breadCumb.PublicKey"  class="breadcrumb" data-inline="true" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
             }
@@ -216,24 +213,40 @@
     <div data-role="footer" data-theme="b">
         @if (screen.PrevScreen != null)
         {
+            if (!screen.PrevScreen.IsExternal)
+            {
             <a class="previous-screen" href="#screen-@(screen.PrevScreen.PublicKey)" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >
                 Prev Group</a>
+            }
+            else
+            {
+            <a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = screen.PrevScreen.PublicKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" rel="external" data-ajax="false">
+                Next Group</a>
+            }
         }
         else
         {
-            <a class="previous-screen ui-disabled" href="#" data-icon="arrow-l" data-theme="b" iconpos="notext"
-                data-corners="false">Prev Group</a>
+            <a class="previous-screen ui-disabled" href="#" data-icon="arrow-l" data-theme="b"
+                iconpos="notext" data-corners="false">Prev Group</a>
         }
         <h1>@screen.CurrentScreenTitle</h1>
         @if (screen.NextScreen != null)
         {
-            <a class="next-screen" href="#screen-@(screen.NextScreen.PublicKey)" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">
-                Next Group</a> 
+            if (!screen.NextScreen.IsExternal)
+            {
+            <a class="next-screen" href="#screen-@screen.NextScreen.PublicKey" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">
+                Next Group</a>
+            }
+            else
+            {
+            <a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = screen.NextScreen.PublicKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false"  rel="external" data-ajax="false">
+                Next Group</a>
+            }
         }
         else
         { 
-            <a class="next-screen ui-disabled"  href="#"  data-icon="arrow-r" data-iconpos="right" data-theme="b"
-                data-corners="false">Next Group</a> 
+            <a class="next-screen ui-disabled" href="#" data-icon="arrow-r" data-iconpos="right"
+                data-theme="b" data-corners="false">Next Group</a> 
         }
     </div>
 }

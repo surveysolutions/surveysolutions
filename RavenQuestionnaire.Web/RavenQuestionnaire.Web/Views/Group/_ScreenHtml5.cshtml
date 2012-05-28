@@ -1,9 +1,9 @@
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
-@model CompleteQuestionnaireMobileView
+@model CompleteGroupMobileView
 @{
     var questionKey = (Guid)ViewBag.CurrentQuestion;
     this.ViewBag.CurrentQuestion = questionKey;
 }
 
-@Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", Model.CurrentGroup)
+@Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", Model)
 
