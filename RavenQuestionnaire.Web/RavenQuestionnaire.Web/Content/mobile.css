@@ -149,3 +149,38 @@
 	right: auto;
 	max-width: 130px;
 }
+.ui-simpledialog-container .ui-header{
+    position: relative;
+}
+
+.ui-listview-inset .ui-li.propagated-list-item {
+	padding: 0;
+}
+.propagated-list-item  .ui-block-a {
+	width: 100%;
+}
+.propagated-list-item  .ui-block-b {
+	width: 35px;
+	position: absolute;
+	right: 0;
+	border-left: 1px solid #CCCCCC;
+}
+.propagated-list-item  .ui-block-a a{
+	color: #2F3E46 !important;
+	text-decoration: none;
+	padding: 0.7em 15px;
+	display: block;
+	margin-right: 35px;
+}
+.propagated-list-item  .ui-block-a a:hover{
+	background: 			#dadada /*{c-bhover-background-color}*/;
+	font-weight: bold;
+	color: 					#101010 /*{c-bhover-color}*/;
+	text-shadow: 0 /*{c-bhover-shadow-x}*/ 1px /*{c-bhover-shadow-y}*/ 1px /*{c-bhover-shadow-radius}*/ #fff /*{c-bhover-shadow-color}*/;
+	background-image: -webkit-gradient(linear, left top, left bottom, from( #ededed /*{c-bhover-background-start}*/), to( #dadada /*{c-bhover-background-end}*/)); /* Saf4+, Chrome */
+	background-image: -webkit-linear-gradient(#ededed /*{c-bhover-background-start}*/, #dadada /*{c-bhover-background-end}*/); /* Chrome 10+, Saf5.1+ */
+	background-image:    -moz-linear-gradient(#ededed /*{c-bhover-background-start}*/, #dadada /*{c-bhover-background-end}*/); /* FF3.6 */
+	background-image:     -ms-linear-gradient(#ededed /*{c-bhover-background-start}*/, #dadada /*{c-bhover-background-end}*/); /* IE10 */
+	background-image:      -o-linear-gradient(#ededed /*{c-bhover-background-start}*/, #dadada /*{c-bhover-background-end}*/); /* Opera 11.10+ */
+	background-image:         linear-gradient(#ededed /*{c-bhover-background-start}*/, #dadada /*{c-bhover-background-end}*/);
+}

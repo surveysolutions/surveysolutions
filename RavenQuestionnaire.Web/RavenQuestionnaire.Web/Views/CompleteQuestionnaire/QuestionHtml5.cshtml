@@ -160,7 +160,7 @@
     }
     @foreach (var screen in Model.PropagatedScreens)
     {
-        <div data-role="page" id="screen-@(screen.PropogationKey)">
+        <div data-role="page" id="screen-@(screen.PropogationKey)" data-refresh="true">
             @RenderNavigation(screen.Navigation)
             <div data-role="content">
                 @Html.Partial("~/Views/Group/Mobile/_PropagatedScreen.cshtml", screen)

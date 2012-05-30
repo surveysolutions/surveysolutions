@@ -126,55 +126,71 @@ function RemovePropagatedGroup(data, status, xhr) {
 
 function PropagatedGroup(data, status, xhr) {
     var group = jQuery.parseJSON(data.responseText);
-    var templateDivPath = '#groupTemplate' + group.parentGroupPublicKey;
-    var screenTemplateDiv = '#template-' + group.parentGroupPublicKey;
-    var parent = $('#propagate-list-' + group.parentGroupPublicKey);
-    
-    var validator = parent.find('[data-valmsg-replace=true]');
-    if (group.error) {
-        validator.text(group.error);
-        return; 
-    }
-    validator.text('');
-    var template = $(templateDivPath).html();
-    var screenTemplate = $(screenTemplateDiv).html();
-    var str = template.replace(/00000000-0000-0000-0000-000000000000/gi, group.propagationKey);
-    var screenStr = screenTemplate.replace(/00000000-0000-0000-0000-000000000000/gi, group.propagationKey);
+    if (!group.error) {
+        var templateDivPath = '#groupTemplate' + group.parentGroupPublicKey;
+        var screenTemplateDiv = '#template-' + group.parentGroupPublicKey;
+        var parent = $('#propagate-list-' + group.parentGroupPublicKey);
 
-    var screenLinks = $('.propagated-screen-link-' + group.parentGroupPublicKey);
-    var lastScreen = screenLinks.last().length == 0 ? '' : screenLinks.last().attr('href');
-    
-    var newGroup = $(str);
-    var newScreen = $.tmpl(screenStr, { PrevScreen: lastScreen, NextScreen: "#", Key: group.propagationKey }).appendTo($(screenTemplateDiv).parent());
+        var validator = parent.find('[data-valmsg-replace=true]');
+        if (group.error) {
+            validator.text(group.error);
+            return;
+        }
+        validator.text('');
+        var template = $(templateDivPath).html();
+        var screenTemplate = $(screenTemplateDiv).html();
+        var str = template.replace( /00000000-0000-0000-0000-000000000000/gi , group.propagationKey);
+        var screenStr = screenTemplate.replace( /00000000-0000-0000-0000-000000000000/gi , group.propagationKey);
 
-    var prevScreenNextLink = $(lastScreen + ' .next-screen');
-    $(prevScreenNextLink).attr('href', '#screen-' + group.propagationKey);
-    $(prevScreenNextLink).removeClass('ui-disabled');
+        var screenLinks = $('.propagated-screen-link-' + group.parentGroupPublicKey);
+        var lastScreen = screenLinks.last().length == 0 ? '' : screenLinks.last().attr('href');
 
-    
-    
-    var container = parent.find(" > li:last");
-   
-    if (container.length == 0) {
-        parent.prepend(newGroup);
+        var newGroup = $(str);
+        var newScreen = $.tmpl(screenStr, { PrevScreen: lastScreen, NextScreen: "#", Key: group.propagationKey }).appendTo($(screenTemplateDiv).parent());
+
+        var prevScreenNextLink = $(lastScreen + ' .next-screen');
+        $(prevScreenNextLink).attr('href', '#screen-' + group.propagationKey);
+        $(prevScreenNextLink).removeClass('ui-disabled');
+
+
+
+        var container = parent.find(" > li:last");
+
+        if (container.length == 0) {
+            parent.prepend(newGroup);
+        } else {
+            newGroup.insertAfter(container);
+        }
+
+
+
+        //newGroup.listview();
+        newGroup.trigger('pagecreate');
+        $(parent).listview('refresh');
+
+
+        newScreen.page();
+        newScreen.trigger('pagecreate');
+        newScreen.createKeyBoard();
+        newScreen.numericSubmit();
+        newScreen.hideInputsWithVirtualKeyboard();
+
+        updateCounter();
     } else {
-        newGroup.insertAfter(container);
+        $('<div>').simpledialog2({
+                mode: 'button',
+                headerText: 'Propagation error',
+                headerClose: true,
+                buttonPrompt: group.error,
+                buttons : {
+                  'OK': {
+                    click: function () { 
+          
+                    }
+                  } 
+                }
+        });
     }
-
-
-    
-    //newGroup.listview();
-    newGroup.trigger('pagecreate');
-    $(parent).listview('refresh');
-   
-    
-    newScreen.page();
-    newScreen.trigger('pagecreate');
-    newScreen.createKeyBoard();
-    newScreen.numericSubmit();
-    newScreen.hideInputsWithVirtualKeyboard();
-
-    updateCounter();
 }
 function updateCounter() {
     var all = $('#main').parent().find('.question').length;
@@ -225,21 +241,28 @@ function updateCounter() {
 
     $(this).find(':input').each(function() {
         var jThis = $(this);
-        switch(this.type) {
+        try {
+            switch (this.type) {
             case 'password':
             case 'select-multiple':
             case 'select-one':
             case 'text':
-                 jThis.val('');
+                jThis.val('');
             case 'number':
-                 jThis.val('');
+                jThis.val('');
             case 'textarea':
                 jThis.val('');
                 break;
             case 'checkbox':
             case 'radio':
                 this.checked = false;
-                jThis.checkboxradio("refresh");
+                jThis.controlgroup("refresh");
+                jThis.trigger("create");
+            case 'hidden':
+                break;
+            }
+        }catch (e) {
+            alert($(this));
         }
     });
 
@@ -394,6 +417,11 @@ $(document).ready(function () {
         var text = $(this).attr('title');
         $(this).find('.ui-btn-text').html(text);
     });
+    
+    $('[data-role=page]').live('pageshow', function(event) {
+        //data-type="horizontal"
+        $("input[type='checkbox'][checked]").checkboxradio("refresh");
+  });
 
 });
 function isNumber(n) {

@@ -11,24 +11,25 @@
               salt = (new Random()).NextDouble()
           }; 
 }
-<li data-role="fieldcontain" id="@groupKey">
-    @if (!Model.AutoPropagate)
-    {
-        <div class="ui-grid-a">
+@if (!Model.AutoPropagate)
+{
+    <li id="@groupKey" class="propagated-list-item">
+        <fieldset  class="ui-grid-a">
             <div class="ui-block-a">
                 <a class="propagated-screen-link-@(Model.PublicKey)" href="#screen-@(Model.PropogationKey)">@Model.GroupText</a>
             </div>
             <div class="ui-block-b">
                 @using (Ajax.BeginFormHtml5("DeletePropagatedGroupHtml5", "Group", rparams, new AjaxOptions { OnComplete = "RemovePropagatedGroup", HttpMethod = "POST" }, new { style = "float:right;" }))
                 {
-                    <input value="Delete" type="submit" data-role="button" data-icon="delete" data-iconpos="notext"  data-inline="true"
-                        data-mini="true"  data-theme="b" />
+                    <input value="Delete" type="submit" data-role="button" data-icon="delete" data-iconpos="notext"
+                        data-inline="true" data-mini="true" data-theme="b" />
                 }
             </div>
-        </div>
-    }
-    else
-    {
-        <a class="propagated-screen-link" href="#screen-@(Model.PropogationKey)">@Model.GroupText</a>
-    }
-</li>
+        </fieldset >
+    </li>
+}
+else
+{
+    <li data-role="fieldcontain" id="@groupKey" ><a class="propagated-screen-link" href="#screen-@(Model.PropogationKey)">@Model.GroupText</a>
+    </li>
+}

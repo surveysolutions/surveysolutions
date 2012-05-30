@@ -16,8 +16,6 @@
         using (Html.BeginCollectionItem("Answers", true, item.PublicKey))
         {
         @Html.Hidden("QuestionId", Model.PublicKey)
-        //var radibutonname = string.Format("radiobutton-{0}", item.PublicKey);
-        //((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)["id"] = radibutonname;
         @Html.CheckBox("Selected", item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
         @Html.Hidden("PublicKey", item.PublicKey)
         <label for="@ViewData.TemplateInfo.GetFullHtmlFieldId("Selected")">
