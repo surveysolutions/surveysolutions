@@ -92,7 +92,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             PropagateTemplate = new PropagatedGroup(propagatable.PublicKey, propagatable.Title, false, Guid.Empty, this.Questions);
             PropagateTemplate.Navigation.CurrentScreenTitle = propagatable.Title;
             PropagateTemplate.Navigation.BreadCumbs.AddRange(this.Navigation.BreadCumbs);
-            PropagateTemplate.Navigation.BreadCumbs.Add(new CompleteGroupHeaders() { GroupText = this.GroupText, PublicKey = this.PublicKey });
+            //PropagateTemplate.Navigation.BreadCumbs.Add(new CompleteGroupHeaders() { GroupText = this.GroupText, PublicKey = this.PublicKey });
 
 
             var propagated = propGroups.Where(g => g != propagatable).Select(g => g as PropagatableCompleteGroup).ToList();
@@ -115,7 +115,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                     }
                     pgroup.Navigation.CurrentScreenTitle = @group.Title;
                     pgroup.Navigation.BreadCumbs.AddRange(this.Navigation.BreadCumbs);
-                    pgroup.Navigation.BreadCumbs.Add(new CompleteGroupHeaders() { GroupText = this.GroupText, PublicKey = this.PublicKey });
+                    //pgroup.Navigation.BreadCumbs.Add(new CompleteGroupHeaders() { GroupText = this.GroupText, PublicKey = this.PublicKey });
 
                     PropagatedGroups.Add(pgroup);
                     AutoPropagate.Add(@group.AutoPropagate);

@@ -1,4 +1,5 @@
 ﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteGroupMobileView
 @foreach (var question in Model.Questions)
@@ -25,7 +26,14 @@
 {
     if (@group.PublicKey != Guid.Empty)
     {
-        <a href="#screen-@(@group.PublicKey)" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.GroupText)</a>
+        if (@group.Propagated != Propagate.None)
+        {
+            @Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", @group)
+        }
+        else
+        {
+            <a href="#screen-@(@group.PublicKey)" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.GroupText)</a>
+        }
     }
     else
     {
