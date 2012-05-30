@@ -93,6 +93,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public DateTime? AnswerDate { get; set; }
 
+        public object Answer { get; set; }
+
         public void Add(IComposite c, Guid? parent)
         {
             new CompleteQuestionFactory().Create(this).Add(c, parent);
