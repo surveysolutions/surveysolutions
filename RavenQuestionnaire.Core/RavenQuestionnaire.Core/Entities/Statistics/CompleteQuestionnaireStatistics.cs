@@ -66,7 +66,12 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
             {
                 ICompleteGroup group = nodes.Dequeue();
                 var key = keys.Dequeue();
-                ProccessQuestions(@group.Children.OfType<ICompleteQuestion>(), group.PublicKey, key);
+                var groupKey = group.PublicKey;
+                if (group as PropagatableCompleteGroup!=null)
+                {
+                    groupKey = (group as PropagatableCompleteGroup).PropogationPublicKey;
+                }
+                ProccessQuestions(@group.Children.OfType<ICompleteQuestion>(), groupKey, key);
                 foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
                 {
                     nodes.Enqueue(subGroup);
@@ -78,7 +83,12 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
             {
                 ICompleteGroup group = nodes.Dequeue();
                 var key = keys.Dequeue();
-                ProccessQuestions(group.Children.OfType<ICompleteQuestion>(), group.PublicKey, key);
+                var groupKey = group.PublicKey;
+                if (group as PropagatableCompleteGroup != null)
+                {
+                    groupKey = (group as PropagatableCompleteGroup).PropogationPublicKey;
+                }
+                ProccessQuestions(group.Children.OfType<ICompleteQuestion>(), groupKey, key);
                 foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
                 {
                     nodes.Enqueue(subGroup);
