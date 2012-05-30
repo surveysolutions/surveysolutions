@@ -228,6 +228,15 @@
     <Compile Include="Entities\SubEntities\AnswerOrder.cs" />
     <Compile Include="Entities\SubEntities\CollectionItem.cs" />
     <Compile Include="Entities\Statistics\CompleteQuestionnaireStatistics.cs" />
+    <Compile Include="Entities\SubEntities\Complete\AbstractCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\DateTimeCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\GpsCoordinateCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\MultyOptionsCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\NumericCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\PercentageQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\SingleCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\TextCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\YesNoCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Image.cs" />
     <Compile Include="Entities\Iterators\Iterator.cs" />
     <Compile Include="Entities\Location.cs" />
