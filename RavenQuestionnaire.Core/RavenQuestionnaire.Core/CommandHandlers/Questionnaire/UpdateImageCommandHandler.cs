@@ -1,4 +1,5 @@
 ﻿using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Utility;
 
@@ -16,7 +17,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire
         {
             var questionnaire = _questionnaireRepository.Load(IdUtil.CreateQuestionnaireId(command.QuestionnaireId));
 
-            var question = questionnaire.Find<Entities.SubEntities.Question>(command.QuestionKey);
+            var question = questionnaire.Find<AbstractQuestion>(command.QuestionKey);
 
             question.UpdateCard(command.ImageKey, command.Title, command.Description);
        }

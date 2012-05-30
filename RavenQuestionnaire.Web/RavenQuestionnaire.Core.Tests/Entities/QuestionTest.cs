@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.SubEntities.Question;
 using RavenQuestionnaire.Core.Tests.Utils;
 
 namespace RavenQuestionnaire.Core.Tests.Entities
@@ -18,7 +19,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         [Test]
         public void WhenSetConditionExpression_ExpressionIsAdded()
         {
-            Question question = new Question();
+            SingleQuestion question = new SingleQuestion();
             question.ConditionExpression="some expression";
             Assert.AreEqual(question.ConditionExpression, "some expression");
         }
@@ -30,7 +31,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             List<IComposite> answers = new List<IComposite>() { new Answer(), new Answer(), new Answer() };
 
             List<Guid> triggers = new List<Guid>() { Guid.NewGuid() };
-            Question question = new Question("test", QuestionType.MultyOption)
+            SingleQuestion question = new SingleQuestion("test")
                                     {
                                         ConditionExpression = "expr",
                                         Instructions = "instructions",

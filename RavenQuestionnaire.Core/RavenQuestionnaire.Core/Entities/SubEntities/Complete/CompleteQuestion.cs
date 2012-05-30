@@ -32,7 +32,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.QuestionText = text;
             this.QuestionType = type;
         }
-        public static explicit operator CompleteQuestion(RavenQuestionnaire.Core.Entities.SubEntities.Question doc)
+        public static explicit operator CompleteQuestion(AbstractQuestion doc)
         {
             CompleteQuestion result = new CompleteQuestion
                                           {

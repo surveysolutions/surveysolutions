@@ -1,5 +1,6 @@
 ﻿using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Views.Question
 {
@@ -17,7 +18,7 @@ namespace RavenQuestionnaire.Core.Views.Question
 
              var question =
                  new RavenQuestionnaire.Core.Entities.Questionnaire(doc).Find
-                     <RavenQuestionnaire.Core.Entities.SubEntities.Question>(input.PublicKey);
+                     <IQuestion>(input.PublicKey);
              if (question == null)
                  return null;
 
