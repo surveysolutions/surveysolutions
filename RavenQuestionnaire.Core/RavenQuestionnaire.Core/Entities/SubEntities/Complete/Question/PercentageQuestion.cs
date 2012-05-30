@@ -5,7 +5,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
-    public class PercentageQuestion:AbstractCompleteQuestion, IPercentageQuestion
+    public class PercentageCompleteQuestion:AbstractCompleteQuestion, IPercentageQuestion
     {
         #region Properties
 

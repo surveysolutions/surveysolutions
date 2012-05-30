@@ -229,6 +229,7 @@
     <Compile Include="Entities\SubEntities\CollectionItem.cs" />
     <Compile Include="Entities\Statistics\CompleteQuestionnaireStatistics.cs" />
     <Compile Include="Entities\SubEntities\Complete\AbstractCompleteQuestion.cs" />
+    <Compile Include="Entities\SubEntities\AbstractQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\DateTimeCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\GpsCoordinateCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\MultyOptionsCompleteQuestion.cs" />
@@ -271,8 +272,14 @@
     <Compile Include="Entities\SubEntities\FlowRule.cs" />
     <Compile Include="Entities\SubEntities\Group.cs" />
     <Compile Include="Entities\SubEntities\LocationWithUserStatistic.cs" />
-    <Compile Include="Entities\SubEntities\Question.cs" />
+    <Compile Include="Entities\SubEntities\IQuestion.cs" />
     <Compile Include="Entities\SubEntities\QuestionType.cs" />
+    <Compile Include="Entities\SubEntities\Question\DateTimeQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Question\GpsCoordinateQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Question\MultyOptionsQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Question\NumericQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Question\SingleQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Question\TextQuestion.cs" />
     <Compile Include="Entities\SubEntities\StatusItem.cs" />
     <Compile Include="Entities\SubEntities\UserLight.cs" />
     <Compile Include="Entities\SubEntities\SurveyStatus.cs" />

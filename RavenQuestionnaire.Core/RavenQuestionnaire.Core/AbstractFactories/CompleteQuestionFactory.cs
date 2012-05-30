@@ -7,6 +7,7 @@ using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
+using RavenQuestionnaire.Core.Entities.SubEntities.Question;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 
@@ -21,6 +22,35 @@ namespace RavenQuestionnaire.Core.AbstractFactories
            }*/
 
         #region Implementation of ICompleteQuestionFactory
+        public  AbstractQuestion Create(QuestionType type)
+        {
+            switch (type)
+            {
+                case QuestionType.MultyOption:
+                    return new MultyOptionsQuestion();
+                case QuestionType.DropDownList:
+                    return new SingleQuestion();
+                case QuestionType.SingleOption:
+                    return new SingleQuestion();
+                case QuestionType.YesNo:
+                    return new SingleQuestion();
+                case QuestionType.Text:
+                    return new TextQuestion();
+                case QuestionType.DateTime:
+                    return new DateTimeQuestion();
+                case QuestionType.Numeric:
+                    return new NumericQuestion();
+                case QuestionType.AutoPropagate:
+                    return new NumericQuestion();
+                case QuestionType.GpsCoordinates:
+                    return new GpsCoordinateQuestion();
+           /*     case QuestionType.Percentage:
+                    return new PercentageQuestion();*/
+                case QuestionType.ExtendedDropDownList:
+                    return new SingleQuestion();
+            }
+            return new TextQuestion();
+        }
 
         public IAnswerStrategy Create(ICompleteQuestion baseQuestion)
         {
@@ -138,7 +168,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
 
         public ICompleteQuestion ConvertToCompleteQuestion(IQuestion question)
         {
-            var simpleQuestion = question as Question;
+            var simpleQuestion = question as AbstractQuestion;
             if (simpleQuestion != null)
                 return (CompleteQuestion) simpleQuestion;
             var bindedQuestion = question as BindedQuestion;
