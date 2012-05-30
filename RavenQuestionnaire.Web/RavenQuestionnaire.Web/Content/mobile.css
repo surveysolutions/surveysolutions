@@ -164,11 +164,12 @@
 	position: absolute;
 	right: 0;
 	border-left: 1px solid #CCCCCC;
+	height: 100%;
 }
 .propagated-list-item  .ui-block-a a{
 	color: #2F3E46 !important;
 	text-decoration: none;
-	padding: 0.7em 15px;
+	padding: 0.9em 15px;
 	display: block;
 	margin-right: 35px;
 }
