@@ -19,29 +19,29 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
         {
             target.GetGroupPropagatedEvents().Subscribe(Observer.Create<CompositeAddedEventArgs>((e) =>
             {
-                PropagatableCompleteGroup group = e.AddedComposite as PropagatableCompleteGroup;
-                if (group == null)
+                ICompleteGroup group = e.AddedComposite as ICompleteGroup;
+                if (group == null || !group.PropogationPublicKey.HasValue)
                     return;
                 var triggeres =
                     target.Find<ICompleteGroup>(
-                        g => g.Triggers.Count(gp => gp.Equals(group.PublicKey)) > 0).ToList();
+                        g => g.Triggers.Count(gp => gp == group.PublicKey) > 0).ToList();
                 foreach (ICompleteGroup triggere in triggeres)
                 {
-                    var propagatebleGroup = new PropagatableCompleteGroup(triggere, group.PropogationPublicKey);
+                    var propagatebleGroup = new CompleteGroup(triggere, group.PropogationPublicKey.Value);
                     target.Add(propagatebleGroup, null);
                 }
             }));
             target.GetGroupPropagatedRemovedEvents().Subscribe(Observer.Create<CompositeRemovedEventArgs>((e)=>
                                                                                                               {
-                                                                                                                  PropagatableCompleteGroup group = e.RemovedComposite as PropagatableCompleteGroup;
-                                                                                                                  if (group == null)
+                                                                                                                  ICompleteGroup group = e.RemovedComposite as ICompleteGroup;
+                                                                                                                  if (group == null || !group.PropogationPublicKey.HasValue)
                                                                                                                       return;
                                                                                                                   var triggeres =
                                                                                                                     target.Find<ICompleteGroup>(
                                                                                                                         g => g.Triggers.Count(gp => gp.Equals(group.PublicKey)) > 0).ToList();
                                                                                                                   foreach (ICompleteGroup triggere in triggeres)
                                                                                                                   {
-                                                                                                                      var propagatebleGroup = new PropagatableCompleteGroup(triggere, group.PropogationPublicKey);
+                                                                                                                      var propagatebleGroup = new CompleteGroup(triggere, group.PropogationPublicKey.Value);
                                                                                                                       target.Remove(propagatebleGroup);
                                                                                                                   }
                                                                                                               }));
@@ -62,7 +62,7 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                             if (question == null || question.QuestionType != QuestionType.AutoPropagate)
                                 return;
 
-                            var countObj = question.GetValue();
+                            var countObj = question.Answer;
 
                             int count = Convert.ToInt32(countObj);
 
@@ -72,18 +72,18 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                                 return;
                             Guid targetGroupKey = Guid.Parse(question.Attributes["TargetGroupKey"].ToString());
                             var groups =
-                                target.Find<PropagatableCompleteGroup>(g => g.PublicKey == targetGroupKey).ToList();
+                                target.Find<ICompleteGroup>(g => g.PublicKey == targetGroupKey && g.PropogationPublicKey.HasValue).ToList();
                             if (groups.Count == count)
                                 return;
                             if (groups.Count < count)
                             {
                                 var template =
                                     target.Find<ICompleteGroup>(
-                                        g => g.PublicKey == targetGroupKey && !(g is PropagatableCompleteGroup)).
+                                        g => g.PublicKey == targetGroupKey && !g.PropogationPublicKey.HasValue).
                                         FirstOrDefault();
                                 for (int i = 0; i < count - groups.Count; i++)
                                 {
-                                    target.Add(new PropagatableCompleteGroup(template, Guid.NewGuid()), null);
+                                    target.Add(new CompleteGroup(template, Guid.NewGuid()), null);
                                 }
                             }
                             else

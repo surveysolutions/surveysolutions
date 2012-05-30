@@ -14,6 +14,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
 using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
@@ -38,8 +39,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Mock<IStatisticRepository> statisticMock = new Mock<IStatisticRepository>();
             Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
             CompleteQuestionnaireDocument qDoqument= new CompleteQuestionnaireDocument();
-            CompleteQuestion question = new CompleteQuestion("q",
-                                             QuestionType.SingleOption);
+            var question = new SingleCompleteQuestion("q");
             
             CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
@@ -62,7 +62,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.CompleteAnswers);
             repositoryMock.Verify(x => x.Load("cqId"), Times.Once());
             Assert.AreEqual(qDoqument.Children[0].PublicKey, question.PublicKey);
-            Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[0] as CompleteQuestion).Children[0])).Selected, true);
+            Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[0] as AbstractCompleteQuestion).Children[0])).Selected, true);
         }
         [Test]
         public void 
@@ -71,8 +71,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated};
-            CompleteQuestion question = new CompleteQuestion("q",
-                                           QuestionType.SingleOption);
+            var question = new SingleCompleteQuestion("q");
             CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);
@@ -93,7 +92,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                 new CompleteAnswerView
                                                                                                                     ( Guid.NewGuid(),completeAnswer)},
                                                                                                                 ((
-                                                                                                                 PropagatableCompleteGroup
+                                                                                                                 CompleteGroup
                                                                                                                  )
                                                                                                                  qDoqument
                                                                                                                      .
@@ -107,8 +106,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                                                                 null);
             handler.AddCompleteAnswer(command.CompleteQuestionnaireId, command.CompleteAnswers);
 
-            Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[0] as CompleteGroup).Children[0] as CompleteQuestion).Children[0]).Selected, false);
-            Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[1] as CompleteGroup).Children[0] as CompleteQuestion).Children[0]).Selected, true);
+            Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[0] as CompleteGroup).Children[0] as AbstractCompleteQuestion).Children[0]).Selected, false);
+            Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[1] as CompleteGroup).Children[0] as AbstractCompleteQuestion).Children[0]).Selected, true);
             //  group.Add(group, null);
         }
 
@@ -118,8 +117,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
-            CompleteQuestion question = new CompleteQuestion("q",
-                                           QuestionType.SingleOption);
+            var question = new SingleCompleteQuestion("q");
             CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);

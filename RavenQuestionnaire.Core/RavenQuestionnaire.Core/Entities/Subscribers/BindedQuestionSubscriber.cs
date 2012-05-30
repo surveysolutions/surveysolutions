@@ -35,9 +35,9 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
 
                                                              if (template == null)
                                                                  return;
-                                                             var propagatedTemplate = template as IPropogate;
+                                                           //  var propagatedTemplate = template as IPropogate;
                                                              IEnumerable<BindedCompleteQuestion> binded;
-                                                             if (propagatedTemplate == null)
+                                                             if (!template.PropogationPublicKey.HasValue)
                                                              {
                                                                  binded =
                                                                      target.GetAllBindedQuestions(template.PublicKey);
@@ -45,7 +45,7 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                                                              else
                                                              {
                                                                  binded = target.GetPropagatedGroupsByKey(
-                                                                     propagatedTemplate.PropogationPublicKey).
+                                                                     template.PropogationPublicKey.Value).
                                                                      SelectMany(
                                                                          pg =>
                                                                          pg.GetAllBindedQuestions(template.PublicKey));

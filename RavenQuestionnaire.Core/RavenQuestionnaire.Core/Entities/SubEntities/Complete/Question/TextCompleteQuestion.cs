@@ -9,6 +9,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
     {
         #region Properties
 
+        public TextCompleteQuestion()
+        {
+        }
+
+        public TextCompleteQuestion(string text) : base(text)
+        {
+        }
+
         public override object Answer
         {
             get { return _answer; }
@@ -47,6 +55,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         {
             if (publicKey != this.PublicKey)
                 throw new CompositeException();
+            this._answer = null;
             OnRemoved(new CompositeRemovedEventArgs(this));
         }
 
@@ -61,10 +70,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
             if (!(this is T))
-                return null;
+                return new T[0];
             if (condition(this as T))
                 return new T[] { this as T };
-            return null;
+            return new T[0];
         }
 
         public override T FirstOrDefault<T>(Func<T, bool> condition)

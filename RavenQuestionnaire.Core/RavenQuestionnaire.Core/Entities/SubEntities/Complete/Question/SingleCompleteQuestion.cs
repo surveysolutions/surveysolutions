@@ -9,10 +9,19 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
     {
         #region Properties
 
-      
+        public SingleCompleteQuestion()
+        {
+            this.Children=new List<IComposite>();
+        }
+
+        public SingleCompleteQuestion(string text) : base(text)
+        {
+            this.Children = new List<IComposite>();
+        }
+
         public override object Answer
         {
-            get { return (this.Children.Where(c => ((ICompleteAnswer) c).Selected)).FirstOrDefault(); }
+            get { return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).FirstOrDefault(); }
         }
       
 

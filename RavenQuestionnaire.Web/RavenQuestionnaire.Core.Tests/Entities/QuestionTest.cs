@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using NUnit.Framework;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -40,7 +41,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                                         Triggers = triggers,
                                         Children = answers
                                     };
-            CompleteQuestion target = (CompleteQuestion)question;
+            var target = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
             var propertiesForCheck =
                 typeof(IQuestion).GetPublicPropertiesExcept("PublicKey", "Children","Parent");
             foreach (PropertyInfo publicProperty in propertiesForCheck)

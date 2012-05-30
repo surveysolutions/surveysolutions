@@ -10,9 +10,9 @@ namespace RavenQuestionnaire.Core.AbstractFactories
     {
         public CompleteGroupView CreateGroup(CompleteQuestionnaireDocument doc, ICompleteGroup group)
         {
-            PropagatableCompleteGroup propagatableGroup = group as PropagatableCompleteGroup;
-            if (propagatableGroup != null)
-                return new PropagatableCompleteGroupView(doc, propagatableGroup, this);
+       //     PropagatableCompleteGroup propagatableGroup = group as PropagatableCompleteGroup;
+            if (group.PropogationPublicKey.HasValue)
+                return new PropagatableCompleteGroupView(doc, group, this);
             return new CompleteGroupView(doc, group, this);
         }
 

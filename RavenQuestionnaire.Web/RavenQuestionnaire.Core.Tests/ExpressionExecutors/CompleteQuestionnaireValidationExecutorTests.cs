@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
@@ -25,8 +26,8 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         {
             //Mock<ICompleteGroup> questionnaireMoq= new Mock<ICompleteGroup>();
             var mainGroup = new CompleteGroup("root");
-            mainGroup.Children.Add(new CompleteQuestion("q1", QuestionType.Text) { ValidationExpression = "1 = 1", Valid = false });
-            mainGroup.Children.Add(new CompleteQuestion("q2", QuestionType.Text) { ValidationExpression = "2 = 2", Valid = false });
+            mainGroup.Children.Add(new SingleCompleteQuestion("q1") { ValidationExpression = "1 = 1", Valid = false });
+            mainGroup.Children.Add(new SingleCompleteQuestion("q2") { ValidationExpression = "2 = 2", Valid = false });
             CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(mainGroup);
             executor.Execute(mainGroup);
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[0]).Valid, true);
@@ -37,8 +38,8 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         {
             //Mock<ICompleteGroup> questionnaireMoq= new Mock<ICompleteGroup>();
             var mainGroup = new CompleteGroup("root");
-            mainGroup.Children.Add(new CompleteQuestion("q1", QuestionType.Text) { ValidationExpression = "1 != 1", Valid = true });
-            mainGroup.Children.Add(new CompleteQuestion("q2", QuestionType.Text) { ValidationExpression = "2 != 2", Valid = true });
+            mainGroup.Children.Add(new SingleCompleteQuestion("q1") { ValidationExpression = "1 != 1", Valid = true });
+            mainGroup.Children.Add(new SingleCompleteQuestion("q2") { ValidationExpression = "2 != 2", Valid = true });
             CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(mainGroup);
             executor.Execute(mainGroup);
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[0]).Valid, false);
@@ -53,8 +54,8 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             mainGroup.Children.Add(subGroup1);
             var subGroup2 = new CompleteGroup("subgroup2");
             mainGroup.Children.Add(subGroup2);
-            subGroup1.Children.Add(new CompleteQuestion("q1", QuestionType.Text) { ValidationExpression = "1 != 1", Valid = true });
-            subGroup2.Children.Add(new CompleteQuestion("q2", QuestionType.Text) { ValidationExpression = "2 != 2", Valid = true });
+            subGroup1.Children.Add(new SingleCompleteQuestion("q1") { ValidationExpression = "1 != 1", Valid = true });
+            subGroup2.Children.Add(new SingleCompleteQuestion("q2") { ValidationExpression = "2 != 2", Valid = true });
             CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(mainGroup);
             executor.Execute(subGroup1);
             Assert.AreEqual(((ICompleteQuestion)subGroup1.Children[0]).Valid, false);
@@ -66,11 +67,11 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         {
             //Mock<ICompleteGroup> questionnaireMoq= new Mock<ICompleteGroup>();
             var mainGroup = new CompleteGroup("root");
-            ICompleteQuestion q1 = new CompleteQuestion("q1", QuestionType.Text) {Valid = false};
+            ICompleteQuestion q1 = new SingleCompleteQuestion("q1") { Valid = false };
             q1.Children = new List<IComposite>() { new CompleteAnswer() { AnswerValue = 1, Selected = true } };
 
             mainGroup.Children.Add(q1);
-            ICompleteQuestion q2 = new CompleteQuestion("q2", QuestionType.Text) { Valid = false };
+            ICompleteQuestion q2 = new SingleCompleteQuestion("q2") { Valid = false };
             q2.Children = new List<IComposite>() { new CompleteAnswer() { AnswerValue = 2, Selected = true } };
 
             q1.ValidationExpression = string.Format("[{0}]==2", q2.PublicKey);

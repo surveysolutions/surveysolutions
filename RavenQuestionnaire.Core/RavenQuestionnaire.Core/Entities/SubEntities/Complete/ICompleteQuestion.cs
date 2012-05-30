@@ -4,6 +4,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
     public interface ICompleteQuestion : IQuestion
     {
+        Guid? PropogationPublicKey { get; set; }
         bool Enabled { get; set; }
         bool Valid { get; set; }
         DateTime? AnswerDate { get; set; }

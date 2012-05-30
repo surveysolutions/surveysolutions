@@ -9,11 +9,19 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
     {
         #region Properties
 
+        public GpsCoordinateCompleteQuestion()
+        {
+        }
+
+        public GpsCoordinateCompleteQuestion(string text) : base(text)
+        {
+        }
+
         public override object Answer
         {
             get { return _answer; }
         }
-        private char _answer;
+        private string _answer;
 
         public override List<IComposite> Children
         {
@@ -34,7 +42,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             var question = c as ICompleteQuestion;
             if (question == null || question.PublicKey != this.PublicKey)
                 throw new CompositeException();
-            _answer = (char)question.Answer;
+            _answer = (string)question.Answer;
             this.AnswerDate = DateTime.Now;
             OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), c));
         }
@@ -48,6 +56,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         {
             if (publicKey != this.PublicKey)
                 throw new CompositeException();
+            this._answer = null;
             OnRemoved(new CompositeRemovedEventArgs(this));
         }
 
@@ -62,10 +71,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
             if (!(this is T))
-                return null;
+                return new T[0];
             if (condition(this as T))
                 return new T[] { this as T };
-            return null;
+            return new T[0];
         }
 
         public override T FirstOrDefault<T>(Func<T, bool> condition)

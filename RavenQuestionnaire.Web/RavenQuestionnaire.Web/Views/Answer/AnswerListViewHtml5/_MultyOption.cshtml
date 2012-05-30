@@ -17,7 +17,7 @@
         {
         @Html.Hidden("QuestionId", Model.PublicKey)
         @Html.CheckBox("Selected", item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
-        @Html.Hidden("PublicKey", item.PublicKey)
+        @Html.Hidden("PublicKey", item.PublicKey) 
         <label for="@ViewData.TemplateInfo.GetFullHtmlFieldId("Selected")">
             @{ Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item); }
             </label>
