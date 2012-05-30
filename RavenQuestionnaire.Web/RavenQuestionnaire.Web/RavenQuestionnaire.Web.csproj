@@ -149,6 +149,7 @@
     <Compile Include="Models\SwitcherModel.cs" />
     <Content Include="Content\img\bar-chart.png" />
     <Content Include="Content\img\lock.png" />
+    <Content Include="Content\jquery.mobile.simpledialog.min.css" />
     <Content Include="Content\mobile.css" />
     <Content Include="Content\themes\jquerymobile\custom.css" />
     <Content Include="Content\themes\jquerymobile\images\1336075488_keyboard.png" />
@@ -156,6 +157,7 @@
     <Content Include="Content\themes\jquerymobile\images\1336075556_calendar.png" />
     <Content Include="Content\themes\themeswitcher\jquery.globalstylesheet.js" />
     <Content Include="Content\themes\themeswitcher\jquery.mobile.themeswitcher.js" />
+    <Content Include="Scripts\Html5\jquery.mobile.simpledialog2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.client.js" />
@@ -515,6 +517,7 @@
     <Content Include="Scripts\jquery.jsPlumb-1.3.4-all-min.js" />
     <Content Include="Scripts\jquery.jsPlumb-1.3.4-all.js" />
     <Content Include="Scripts\Html5\jquery.mobile.datebox.min.js" />
+    <Content Include="Scripts\jquery.mobile.js" />
     <Content Include="Scripts\jquery.numeric.js" />
     <Content Include="Scripts\jquery.tmpl.min.js" />
     <Content Include="Scripts\jQuery.ui.datepicker.js" />
