@@ -39,7 +39,6 @@ namespace RavenQuestionnaire.Web.Controllers
                 throw new HttpException(404, "Invalid quesry string parameters");
 
             var model = viewRepository.Load<FlowGraphViewInputModel, FlowGraphView>(new FlowGraphViewInputModel(id));
-
             return View(model);
         }
 

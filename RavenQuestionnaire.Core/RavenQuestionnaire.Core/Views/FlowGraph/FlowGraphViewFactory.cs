@@ -26,9 +26,7 @@ namespace RavenQuestionnaire.Core.Views.FlowGraph
                 questionnaire = documentSession.Load<QuestionnaireDocument>(input.QuestionnaireId);
             }
             else
-            {
                 questionnaire = documentSession.Load<QuestionnaireDocument>(flowGraph.QuestionnaireDocumentId);
-            }
             return new FlowGraphView(flowGraph, new QuestionnaireView(questionnaire));
         }
         #endregion
