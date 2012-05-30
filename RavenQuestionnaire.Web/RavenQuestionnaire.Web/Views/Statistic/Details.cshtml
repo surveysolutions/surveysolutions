@@ -7,7 +7,8 @@
     <!-- Start of first page -->
     <div data-role="page" id="sidebar">
         <div data-role="header" data-theme="c">
-            <a data-corners="false"  data-icon="arrow-l" href="@Url.Action("Index", "Dashboard")" rel = "external">Dashboard</a>
+            <a data-corners="false"  data-icon="arrow-l" href="@Url.Action("Index", "Dashboard")" rel = "external">
+                Dashboard</a>
             <h3></h3>
         </div>
         <!-- /header -->
@@ -19,10 +20,30 @@
             </ul>
         </div>
         <!-- /content -->
+        <div data-role="footer" data-position="fixed" data-id="ew-footer">
+            <div data-role="navbar">
+                <ul><li><a data-role="button" data-corners="false" href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId })" rel="external" data-ajax="false">
+                    Survey</a></li>
+                    <li>
+                        @if (Model.Status.Name == "Completed")
+                        {
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("ReInit", "CompleteQuestionnaire", new { id = Model.Id })">
+                                ReInit</a>
+                        }
+                        else
+                        {
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("Complete", "CompleteQuestionnaire", new { id = Model.Id })">
+                                Complete</a>
+                        }</li>
+                </ul>
+            </div>
+            <!-- /navbar -->
+        </div>
     </div>
     <!-- /page -->
     <!-- other side panel pages here -->
 </div>
+
 <div data-role="panel" data-id="main">
     <!-- Start of second page -->
     <div data-role="page" data-add-back-btn="true" id="general" class="page">
@@ -109,21 +130,5 @@
     {
     <div data-role="header" data-theme="b" class="navigation">
         <h1>@Model.Title</h1>
-        <div data-type="horizontal" class="ui-btn-right navigation-btn-group">
-            <a data-role="button" data-corners="false" href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId })" rel="external" data-ajax="false">
-                Survey</a>
-            
-             @if (Model.Status.Name == "Completed")
-             {
-                    <a data-corners="false" data-ajax="false" data-role="button" data-theme="e" rel="external" href="@Url.Action("ReInit", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId })">
-                       ReInit</a>
-             }
-             else
-             {
-                       <a data-corners="false" data-ajax="false" data-role="button" data-theme="d" rel="external" href="@Url.Action("Complete", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId })">
-                       Complete</a>
-             }
-        </div>
     </div>
-    
 }
