@@ -1,13 +1,14 @@
 ﻿using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Utility.OrderStrategy;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
     public abstract class AbstractCompleteQuestion:ICompleteQuestion
     {
-
         #region Properties
 
         public Guid PublicKey { get; set; }
@@ -31,6 +32,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public bool Featured { get; set; }
 
         public Dictionary<string, object> Attributes { get; set; }
+
+        public Guid? PropogationPublicKey { get; set; }
 
         public bool Enabled { get; set; }
 
@@ -64,12 +67,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.observers = new List<IObserver<CompositeEventArgs>>();
         }
 
-        protected AbstractCompleteQuestion(string text, QuestionType type)
+        protected AbstractCompleteQuestion(string text)
             : this()
         {
 
             this.QuestionText = text;
-            this.QuestionType = type;
         }
 
         #endregion

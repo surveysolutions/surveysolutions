@@ -76,8 +76,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                                      PrevScreen = prevGroup == null ? null : new CompleteGroupHeaders(prevGroup),
                                      Parent = new CompleteGroupHeaders(item)
                                  };
-                    if ((g as PropagatableCompleteGroup) != null)
-                        ng.PropagateKey = (g as PropagatableCompleteGroup).PropogationPublicKey;
+                    if (g.PropogationPublicKey.HasValue)
+                        ng.PropagateKey = g.PropogationPublicKey.Value;
 
                     if (prevGroup != null)
                         prevScreen.NextScreen = new CompleteGroupHeaders(g);
@@ -245,10 +245,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         {
             var total = new Counter();
 
-            var propagated = @group as PropagatableCompleteGroup;
-            if (propagated != null)
+      //      var propagated = @group as PropagatableCompleteGroup;
+            if (@group.PropogationPublicKey.HasValue)
             {
-                total = total + CountQuestions(propagated.Children.Select(q => q as ICompleteQuestion).ToList());
+                total = total + CountQuestions(@group.Children.Select(q => q as ICompleteQuestion).ToList());
                 return total;
             }
             var complete = @group as CompleteGroup;

@@ -114,6 +114,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         #region Implementation of ICompleteQuestion
 
+        public Guid? PropogationPublicKey
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
         public bool Enabled
         {
             get { return false; }

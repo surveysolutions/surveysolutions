@@ -30,13 +30,12 @@ namespace RavenQuestionnaire.Core.Services
         }
         public CompleteQuestionnaire AddCompleteAnswer(string id, CompleteAnswer[] completeAnswers)
         {
-            PropagatableCompleteAnswer propagated = completeAnswers[0] as PropagatableCompleteAnswer;
+         //   PropagatableCompleteAnswer propagated = completeAnswers[0] as PropagatableCompleteAnswer;
 
             CompleteQuestionnaire entity = _questionRepository.Load(id);
             ICompleteGroup general = entity.GetInnerDocument();
-            ICompleteQuestion question;
-            
-            question = propagated == null ? FindQuestion(completeAnswers[0].PublicKey, null, general) : FindQuestion(completeAnswers[0].PublicKey, propagated.PropogationPublicKey, general);
+
+            ICompleteQuestion question = FindQuestion(completeAnswers[0].PublicKey, completeAnswers[0].PropogationPublicKey, general);
             
             if (question == null)
                 throw new ArgumentException("question wasn't found");
@@ -59,20 +58,20 @@ namespace RavenQuestionnaire.Core.Services
         #region update utilitie
         protected void ExecuteConditions(ICompleteQuestion question, ICompleteGroup entity)
         {
-            PropagatableCompleteQuestion propagated = question as PropagatableCompleteQuestion;
+       //     PropagatableCompleteQuestion propagated = question as PropagatableCompleteQuestion;
             IEnumerable<ICompleteQuestion> triggeres;
-            if (propagated == null)
-            {
+           /* if (propagated == null)
+            {*/
                 triggeres =
                entity.Find<ICompleteQuestion>(
                    g => g.Triggers.Count(gp => gp.Equals(question.PublicKey)) > 0).ToList();
-            }
+         /*   }
             else
             {
                 triggeres =
                     entity.GetPropagatedGroupsByKey(propagated.PropogationPublicKey).SelectMany(g => g.Find<ICompleteQuestion>(
                         q => q.Triggers.Count(gp => gp.Equals(question.PublicKey)) > 0)).ToList();
-            }
+            }*/
             var executor = new CompleteQuestionnaireConditionExecutor(entity);
             foreach (ICompleteQuestion completeQuestion in triggeres)
             {
@@ -125,7 +124,7 @@ namespace RavenQuestionnaire.Core.Services
             var template = entity.Find<CompleteGroup>(groupPublicKey);
             bool isCondition = false;
             var executor = new CompleteQuestionnaireConditionExecutor(entity.GetInnerDocument());
-            foreach (CompleteQuestion completeQuestion in template.GetAllQuestions<ICompleteQuestion>())
+            foreach (ICompleteQuestion completeQuestion in template.GetAllQuestions<ICompleteQuestion>())
             {
                 if (executor.Execute(completeQuestion))
                 {
@@ -139,7 +138,7 @@ namespace RavenQuestionnaire.Core.Services
             }
             if (isCondition)
             {
-                var newGroup = new PropagatableCompleteGroup(template, publicKey);
+                var newGroup = new CompleteGroup(template, publicKey);
                 entity.Add(newGroup, null);
 
                 var command = new GenerateQuestionnaireStatisticCommand(entity, null);
@@ -155,7 +154,7 @@ namespace RavenQuestionnaire.Core.Services
             CompleteQuestionnaire entity = _questionRepository.Load(id);
             //   entity.Remove(new PropagatableCompleteGroup(entity.Find<CompleteGroup>(command.GroupPublicKey)))
 
-            entity.Remove(new PropagatableCompleteGroup(entity.Find<CompleteGroup>(publicKey),
+            entity.Remove(new CompleteGroup(entity.Find<CompleteGroup>(publicKey),
                                                         propagationKey));
 
             var command = new GenerateQuestionnaireStatisticCommand(entity, null);

@@ -63,7 +63,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             foreach (var k in propGroups)
             {
                 var prop = Propagate.Propagated;
-                if (k.Value.Count == 1 && (k.Value[0] as PropagatableCompleteGroup) == null)
+                if (k.Value.Count == 1 && !k.Value[0].PropogationPublicKey.HasValue)
                 {
                     prop = Propagate.None;
                 }
@@ -78,7 +78,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         public CompleteGroupMobileView(CompleteQuestionnaireDocument doc, List<CompleteGroup> propGroups, IList<ScreenNavigation> navigations)
             : this()
         {
-            var propagatable = propGroups.Single(g => (g as PropagatableCompleteGroup) == null);
+            var propagatable = propGroups.Single(g => !g.PropogationPublicKey.HasValue);
 
             InitNavigation(propagatable, navigations);
 
@@ -95,30 +95,30 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             //PropagateTemplate.Navigation.BreadCumbs.Add(new CompleteGroupHeaders() { GroupText = this.GroupText, PublicKey = this.PublicKey });
 
 
-            var propagated = propGroups.Where(g => g != propagatable).Select(g => g as PropagatableCompleteGroup).ToList();
+            var propagated = propGroups.Where(g => g != propagatable).ToList();
 
             if (propagated.Count > 0)
             {
-                PropogationPublicKeys = propagated.Select(g => g.PropogationPublicKey).ToList();
+                PropogationPublicKeys = propagated.Select(g => g.PropogationPublicKey.Value).ToList();
                 PropagatedGroup lastGroup = null;
                 foreach (var @group in propagated)
                 {
 
-                    var pgroup = new PropagatedGroup(@group.PublicKey, @group.Title, @group.AutoPropagate,
-                                                     @group.PropogationPublicKey, new List<CompleteQuestionView>());
+                    var pgroup = new PropagatedGroup(@group.PublicKey, @group.Title, @group.Propagated == Propagate.AutoPropagated,
+                                                     @group.PropogationPublicKey.Value, new List<CompleteQuestionView>());
 
 
                     if (lastGroup != null)
                     {
                         pgroup.Navigation.PrevScreen = new CompleteGroupHeaders { GroupText = lastGroup.GroupText, PublicKey = lastGroup.PropogationKey };
-                        lastGroup.Navigation.NextScreen = new CompleteGroupHeaders { GroupText = pgroup.GroupText, PublicKey = @group.PropogationPublicKey };
+                        lastGroup.Navigation.NextScreen = new CompleteGroupHeaders { GroupText = pgroup.GroupText, PublicKey = @group.PropogationPublicKey.Value };
                     }
                     pgroup.Navigation.CurrentScreenTitle = @group.Title;
                     pgroup.Navigation.BreadCumbs.AddRange(this.Navigation.BreadCumbs);
                     //pgroup.Navigation.BreadCumbs.Add(new CompleteGroupHeaders() { GroupText = this.GroupText, PublicKey = this.PublicKey });
 
                     PropagatedGroups.Add(pgroup);
-                    AutoPropagate.Add(@group.AutoPropagate);
+                    AutoPropagate.Add(@group.Propagated == Propagate.AutoPropagated);
                     lastGroup = pgroup;
                 }
             }
@@ -148,8 +148,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         private void InitNavigation(CompleteGroup currentGroup, IList<ScreenNavigation> navigations)
         {
             var pKey = Guid.Empty;
-            if (currentGroup as PropagatableCompleteGroup!=null)
-                pKey = (currentGroup as PropagatableCompleteGroup).PropogationPublicKey;
+            if (currentGroup.PropogationPublicKey.HasValue)
+                pKey = currentGroup .PropogationPublicKey.Value;
 
             var current = navigations.Single(n => (n.PublicKey == currentGroup.PublicKey) && (n.PropagateKey == pKey));
             var parent = current.Parent;

@@ -49,7 +49,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
                 {
                     for (int i = 0; i < this.CompleteAnswers.Length; i++)
                     {
-                        this.CompleteAnswers[i] = new PropagatableCompleteAnswer(this.CompleteAnswers[i],
+                        this.CompleteAnswers[i] = new CompleteAnswer(this.CompleteAnswers[i],
                                                                                  propogationPublicKey.Value);
                     }
                 }

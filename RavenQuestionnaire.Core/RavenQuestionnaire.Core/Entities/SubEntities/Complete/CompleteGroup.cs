@@ -11,6 +11,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.Observers;
+using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
@@ -30,7 +31,50 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             this.Title = name;
         }
+        public CompleteGroup(ICompleteGroup group, Guid propogationPublicKey)
+            : this()
+        {
+            this.Title = group.Title;
+            this.Propagated = group.Propagated;
+            this.PublicKey = group.PublicKey;
 
+            for (int i = 0; i < group.Children.Count; i++)
+            {
+                var question = group.Children[i] as ICompleteQuestion;
+                if (question != null)
+                {
+                    var newQuestion = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
+                    newQuestion.PropogationPublicKey = propogationPublicKey;
+                    if (!(newQuestion is IBinded))
+                    {
+                        foreach (ICompleteAnswer completeAnswer in newQuestion.Children)
+                        {
+                            completeAnswer.PropogationPublicKey = propogationPublicKey;
+                        }
+                        this.Children.Add(newQuestion);
+                    }
+                    else
+                        this.Children.Add((BindedCompleteQuestion)newQuestion);
+                    continue;
+                    
+                }
+                var groupChild = group.Children[i] as ICompleteGroup;
+                if(groupChild!=null)
+                {
+                    this.Children.Add(new CompleteGroup(groupChild, propogationPublicKey));
+                    continue;
+                }
+                throw new InvalidOperationException("uncnown children type");
+            }
+
+            /* for (int i = 0; i < groupWithQuestion.Groups.Count; i++)
+                {
+                    this.Groups.Add(new PropagatableCompleteGroup(groupWithQuestion.Groups[i], propogationPublicKey));
+                   
+                }*/
+          
+            this.PropogationPublicKey = propogationPublicKey;
+        }
         public static explicit operator CompleteGroup(Group doc)
         {
             CompleteGroup result = new CompleteGroup(null)
@@ -85,12 +129,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public virtual void Add(IComposite c, Guid? parent)
         {
-            if (!parent.HasValue || parent.Value == PublicKey)
+            if (!parent.HasValue || parent.Value == PublicKey )
             {
-                PropagatableCompleteGroup propogateGroup = c as PropagatableCompleteGroup;
-                if (propogateGroup != null)
+                ICompleteGroup propogateGroup = c as ICompleteGroup;
+                if (propogateGroup != null && propogateGroup.PropogationPublicKey.HasValue)
                 {
-                    var group = Children.FirstOrDefault(g => g.PublicKey.Equals(propogateGroup.PublicKey));
+                    var group = Children.FirstOrDefault(g => g.PublicKey==propogateGroup.PublicKey);
                     if (group != null)
                     {
                         Children.Add(propogateGroup);
@@ -99,13 +143,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                     }
                 }
             }
-            IPropogate propogated = c as IPropogate;
             foreach (IComposite child in this.Children)
             {
                 try
                 {
-                    if (propogated != null && !(child is IPropogate))
-                        continue;
                     child.Add(c, parent);
                     return;
                 }
@@ -113,35 +154,21 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 {
                 }
             }
-           /* IPropogate propogated = c as IPropogate;
-            if (propogated != null && !(this is IPropogate))
-                throw new CompositeException();*/
-            //foreach (ICompleteQuestion completeQuestion in Questions)
-            //{
-            //    try
-            //    {
-            //        completeQuestion.Add(c, parent);
-            //        return;
-            //    }
-            //    catch (CompositeException)
-            //    {
-            //    }
-            //}
             throw new CompositeException();
         }
 
         public virtual void Remove(IComposite c)
         {
 
-            PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
-            if (propogate != null)
+            ICompleteGroup propogate = c as ICompleteGroup;
+            if (propogate != null && propogate.PropogationPublicKey.HasValue)
             {
                 bool isremoved = false;
                 var propagatedGroups = this.Children.Where(
                      g =>
-                     g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
-                     ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)).ToList();
-                foreach (PropagatableCompleteGroup propagatableCompleteGroup in propagatedGroups)
+                     g.PublicKey==propogate.PublicKey && g is ICompleteGroup &&
+                     ((ICompleteGroup)g).PropogationPublicKey == propogate.PropogationPublicKey).ToList();
+                foreach (ICompleteGroup propagatableCompleteGroup in propagatedGroups)
                 {
                     Children.Remove(propagatableCompleteGroup);
                     OnRemoved(new CompositeRemovedEventArgs(propagatableCompleteGroup));
@@ -150,13 +177,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 if(isremoved)
                 return;
             }
-            IPropogate propogated = c as IPropogate;
             foreach (IComposite child in Children)
             {
                 try
                 {
-                    if (propogated != null && !(child is IPropogate))
-                        continue;
                     child.Remove(c);
                     return;
                 }
@@ -171,7 +195,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
 
             var forRemove = Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
-            if (forRemove != null && forRemove is PropagatableCompleteGroup)
+            if (forRemove != null && forRemove is ICompleteGroup && ((ICompleteGroup)forRemove).PropogationPublicKey.HasValue)
             {
 
                 Children.Remove(forRemove);
@@ -260,6 +284,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         #endregion
 
-        
+        public Guid? PropogationPublicKey { get; set; }
     }
 }
