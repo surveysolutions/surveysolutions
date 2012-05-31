@@ -8,7 +8,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         bool Enabled { get; set; }
         bool Valid { get; set; }
         DateTime? AnswerDate { get; set; }
-        object Answer { get; }
+        object Answer { get; set; }
     }
 
     public interface INumericQuestion

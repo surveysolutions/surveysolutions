@@ -21,6 +21,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         public override object Answer
         {
             get { return _answer; }
+            set
+            {
+                if (value != null)
+                _answer = Convert.ToDateTime(value);
+               
+            }
         }
 
         private DateTime? _answer;
@@ -44,9 +50,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             var question = c as ICompleteQuestion;
             if (question == null || question.PublicKey != this.PublicKey)
                 throw new CompositeException();
-            _answer = Convert.ToDateTime(question.Answer);
+            this.Answer = question.Answer;
             this.AnswerDate = DateTime.Now;
-            OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), c));
+            OnAdded(new CompositeAddedEventArgs(this));
         }
 
         public override void Remove(IComposite c)
