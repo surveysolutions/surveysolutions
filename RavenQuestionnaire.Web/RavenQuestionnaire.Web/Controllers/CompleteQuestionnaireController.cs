@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -543,6 +544,21 @@ namespace RavenQuestionnaire.Web.Controllers
                 statuses.Add(new SurveyStatus(publicKey, statusName));
 
             ViewBag.AvailableStatuses = statuses;
+        }
+
+
+        public ActionResult SaveInFile(string id)
+        {
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
+                new CompleteQuestionnaireViewInputModel(id));
+            using (var retStream = new MemoryStream())
+            {
+                using (var tw = new StreamWriter(retStream))
+                {
+                    tw.WriteLine("Hello, I am a new text file");
+                }
+                return File(retStream.ToArray(), "application/vnd.txt", string.Format("CompleteQuestionnaire-{0}", id));
+            }
         }
     }
 }
