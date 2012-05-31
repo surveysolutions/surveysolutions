@@ -7,7 +7,7 @@
     var settings = ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings);
     settings.Add("onchange", "$(this.form).submit();");
     settings.Add("class", "geomask");
-    var value = Model.Answers.Length > 0 ? Model.Answers[0].AnswerValue : "";
+    var value =  Model.Answer ?? string.Empty;
 }
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
@@ -19,10 +20,28 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         {
             this.Children = new List<IComposite>();
         }
-
+        [JsonIgnore]
         public override object Answer
         {
             get { return CollectAnswers(); }
+            set
+            {
+                
+                var selecteAnswers = (List<Guid>)value;
+                var answerObjects = this.Find<ICompleteAnswer>(a => selecteAnswers.Contains(a.PublicKey));
+                if (answerObjects != null && answerObjects.Any())
+                {
+                    this.Children.ForEach(c => ((ICompleteAnswer)c).Selected = false);
+                    foreach (ICompleteAnswer completeAnswer in answerObjects)
+                    {
+                        completeAnswer.Add(completeAnswer, null);
+                    }
+                    this.AnswerDate = DateTime.Now;
+                    OnAdded(new CompositeAddedEventArgs(this));
+                    return;
+                }
+                throw new CompositeException("answer wasn't found");
+            }
         }
 
         private IEnumerable<object> CollectAnswers()
@@ -43,44 +62,31 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         public override void Add(IComposite c, Guid? parent)
         {
-            CompleteAnswer currentAnswer = c as CompleteAnswer;
-            if (currentAnswer == null || !this.Children.Any(a => a.PublicKey == currentAnswer.PublicKey))
-                throw new CompositeException("answer wasn't found");
-
-            foreach (CompleteAnswer completeAnswer in this.Children)
+            var question = c as ICompleteQuestion;
+            if (question != null && question.PublicKey == this.PublicKey)
             {
-                try
-                {
-                    completeAnswer.Add(c, parent);
-                    this.AnswerDate = DateTime.Now;
-                     OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), c));
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
+                this.Answer = question.Answer;
+                return;
             }
-            throw new CompositeException("answer wasn't found");
-
-
-          /*  var question = c as ICompleteQuestion;
-            if (question == null || question.PublicKey != this.PublicKey)
-                throw new CompositeException();
-            var answers = CollectAnswers();
-
-            foreach (var answer in answers)
+            CompleteAnswer currentAnswer = c as CompleteAnswer;
+            if (currentAnswer != null)
             {
-                var completeAnswer = answer as CompleteAnswer;
-                if (completeAnswer != null)
+                foreach (IComposite child in this.Children)
                 {
-                    completeAnswer.Add(c, parent);
-                    return;
+                    try
+                    {
+                        child.Add(c, null);
+                        return;
+                    }
+                    catch (CompositeException)
+                    {
+
+                    }
                 }
+                //this.Answer = currentAnswer.PublicKey;
 
-
-                this.AnswerDate = DateTime.Now;
-                OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), c));
-            }*/
+            }
+            throw new CompositeException();
         }
 
         public override void Remove(IComposite c)

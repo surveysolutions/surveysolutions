@@ -150,7 +150,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 .Returns(new StatusView());
             CompleteQuestionView question = new CompleteQuestionView("cId",Guid.NewGuid());
             question.Answers = new CompleteAnswerView[] {new CompleteAnswerView(question.PublicKey,new CompleteAnswer())};
-            Controller.SaveSingleResult(
+            Controller.SaveSingleResultJson(
                 new CompleteQuestionSettings[]
                     {new CompleteQuestionSettings() {QuestionnaireId = "cId", PropogationPublicKey = Guid.NewGuid()}},
                 new CompleteQuestionView[]

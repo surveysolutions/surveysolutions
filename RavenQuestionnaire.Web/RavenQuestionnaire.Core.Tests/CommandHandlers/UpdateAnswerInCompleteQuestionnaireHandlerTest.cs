@@ -48,18 +48,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             repositoryMock.Setup(x => x.Load("cqId")).Returns(questionanire);
             Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
             CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object, subscriberMock.Object);
-            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
-                                                                                                                new CompleteAnswerView
-                                                                                                                    (
-                                                                                                                    question
-                                                                                                                        .
-                                                                                                                        PublicKey,
-                                                                                                                    answer){ Selected = true}},
-                                                                                                                null
-                                                                                                                ,
-                                                                                                                null);
+            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId", question.PublicKey, null, answer.PublicKey,null);
 
-            service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.CompleteAnswers);
+            service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.QuestionPublickey,command.Propagationkey,command.CompleteAnswers);
             repositoryMock.Verify(x => x.Load("cqId"), Times.Once());
             Assert.AreEqual(qDoqument.Children[0].PublicKey, question.PublicKey);
             Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[0] as AbstractCompleteQuestion).Children[0])).Selected, true);
@@ -87,24 +78,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             completeAnswer.Selected = true;
             Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
             CompleteQuestionnaireUploaderService handler = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object, subscriberMock.Object);
-            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",
-                new CompleteAnswerView[]{
-                                                                                                                new CompleteAnswerView
-                                                                                                                    ( Guid.NewGuid(),completeAnswer)},
-                                                                                                                ((
-                                                                                                                 CompleteGroup
-                                                                                                                 )
-                                                                                                                 qDoqument
-                                                                                                                     .
-                                                                                                                     Children
-                                                                                                                     [
-                                                                                                                         1
-                                                                                                                     ])
-                                                                                                                    .
-                                                                                                                    PropogationPublicKey
-                                                                                                                ,
-                                                                                                                null);
-            handler.AddCompleteAnswer(command.CompleteQuestionnaireId, command.CompleteAnswers);
+            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId", question.PublicKey, ((CompleteGroup)qDoqument.Children[1]).PropogationPublicKey, completeAnswer.PublicKey, null);
+            handler.AddCompleteAnswer(command.CompleteQuestionnaireId, command.QuestionPublickey, command.Propagationkey, command.CompleteAnswers);
 
             Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[0] as CompleteGroup).Children[0] as AbstractCompleteQuestion).Children[0]).Selected, false);
             Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[1] as CompleteGroup).Children[0] as AbstractCompleteQuestion).Children[0]).Selected, true);
@@ -131,18 +106,11 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteAnswer completeAnswer = new CompleteAnswer(answer){ Selected = true };
             Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
             CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object, subscriberMock.Object);
-            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId",new CompleteAnswerView[]{
-                                                                                                                new CompleteAnswerView
-                                                                                                                    ( Guid.NewGuid(),completeAnswer)},
-                                                                                                                Guid.
-                                                                                                                    NewGuid
-                                                                                                                    ()
-                                                                                                                ,
-                                                                                                                null);
+            UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId", Guid.NewGuid(), Guid.NewGuid(), completeAnswer.PublicKey,null);
 
 
             Assert.Throws<ArgumentException>(
-                () => service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.CompleteAnswers));
+                () => service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.QuestionPublickey, command.Propagationkey, command.CompleteAnswers));
             //  group.Add(group, null);fnk
         }
     }

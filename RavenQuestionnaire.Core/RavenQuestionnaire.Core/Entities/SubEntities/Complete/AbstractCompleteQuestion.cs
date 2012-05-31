@@ -41,7 +41,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public DateTime? AnswerDate { get; set; }
 
-        public abstract object Answer { get;}
+        public abstract object Answer { get; set; }
 
         [JsonIgnore]
         public IComposite Parent

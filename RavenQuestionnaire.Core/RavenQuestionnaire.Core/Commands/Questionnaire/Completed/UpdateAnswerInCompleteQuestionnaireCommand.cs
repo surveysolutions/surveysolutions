@@ -6,55 +6,55 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Answer;
+using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
 {
     public class UpdateAnswerInCompleteQuestionnaireCommand: ICommand
     {
         public string CompleteQuestionnaireId { get; private set; }
-        public CompleteAnswer[] CompleteAnswers { get; private set; }
-     //   public Guid? Group { get; private set; }
+        public Guid QuestionPublickey { get; private set; }
+        public Guid? Propagationkey { get; private set; }
+        public object CompleteAnswers { get; private set; }
 		public UserLight Executor { get; set; }
-        protected UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionanireId, UserLight executer)
+       
+        [JsonConstructor]
+        public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionnaireId,Guid questionPublickey,Guid? propagationkey,
+                                                 object completeAnswers, UserLight executor)
+           
+        {
+            this.CompleteQuestionnaireId = completeQuestionnaireId;
+            Executor = executor;
+            this.CompleteAnswers = completeAnswers;
+            this.QuestionPublickey = questionPublickey;
+            this.Propagationkey = propagationkey;
+        }
+
+        public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionanireId,
+                                                  CompleteQuestionView question, Guid? propogationPublicKey, UserLight executer)
+          
         {
             this.CompleteQuestionnaireId = completeQuestionanireId;
             Executor = executer;
-        }
-        [JsonConstructor]
-        public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionnaireId/*, Guid? group*/,
-                                                 CompleteAnswer[] completeAnswers, UserLight executor)
-            : this(completeQuestionnaireId, executor)
-        {
-            this.CompleteAnswers = completeAnswers;
-
-        }
-
-        public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionanireId/*, Guid? group*/,
-                                                  CompleteAnswerView[] answers, Guid? propogationPublicKey, UserLight executer)
-            : this(completeQuestionanireId, executer)
-        {
-         
-            if (answers != null)
+            this.QuestionPublickey = question.PublicKey;
+            this.Propagationkey = propogationPublicKey;
+            if (question.QuestionType == QuestionType.ExtendedDropDownList || question.QuestionType == QuestionType.DropDownList ||
+                question.QuestionType == QuestionType.MultyOption || question.QuestionType == QuestionType.SingleOption)
             {
-                this.CompleteAnswers = answers.Select(answer => new CompleteAnswer()
-                                                                    {
-                                                                        AnswerText = answer.AnswerText,
-                                                                        AnswerType = answer.AnswerType,
-                                                                        AnswerValue = answer.AnswerValue,
-                                                                        Mandatory = answer.Mandatory,
-                                                                        PublicKey = answer.PublicKey,
-                                                                        Selected = answer.Selected
-                                                                    }).ToArray();
-                if (propogationPublicKey.HasValue)
+                if (question.Answers != null)
                 {
-                    for (int i = 0; i < this.CompleteAnswers.Length; i++)
+
+                    for (int i = 0; i < question.Answers.Length; i++)
                     {
-                        this.CompleteAnswers[i] = new CompleteAnswer(this.CompleteAnswers[i],
-                                                                                 propogationPublicKey.Value);
+                        this.CompleteAnswers = question.Answers[i].PublicKey;
                     }
                 }
             }
-           
+            else
+            {
+                this.CompleteAnswers = question.Answers[0].AnswerValue;
+            }
+
         }
     }
 }

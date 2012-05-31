@@ -20,6 +20,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         public override object Answer
         {
             get { return answer; }
+            set
+            {
+                if (value != null)
+                answer = Convert.ToInt32(value);
+               
+            }
         }
         private int? answer;
 
@@ -46,9 +52,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             var question = c as ICompleteQuestion;
             if (question == null || question.PublicKey != this.PublicKey)
                 throw new CompositeException();
-            answer = (int)question.Answer;
+            this.Answer = question.Answer;
             this.AnswerDate = DateTime.Now;
-            OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), c));
+            OnAdded(new CompositeAddedEventArgs(this));
         }
 
         public override void Remove(IComposite c)

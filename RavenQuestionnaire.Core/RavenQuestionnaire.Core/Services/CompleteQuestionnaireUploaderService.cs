@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Commands.Statistics;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Extensions;
@@ -28,25 +29,21 @@ namespace RavenQuestionnaire.Core.Services
             this._asyncInvocker = asyncInvocker;
             this.subscriber = subscriber;
         }
-        public CompleteQuestionnaire AddCompleteAnswer(string id, CompleteAnswer[] completeAnswers)
+        public CompleteQuestionnaire AddCompleteAnswer(string id, Guid questionKey, Guid? propagationKey, object answers)
         {
          //   PropagatableCompleteAnswer propagated = completeAnswers[0] as PropagatableCompleteAnswer;
 
             CompleteQuestionnaire entity = _questionRepository.Load(id);
             ICompleteGroup general = entity.GetInnerDocument();
 
-            ICompleteQuestion question = FindQuestion(completeAnswers[0].PublicKey, completeAnswers[0].PropogationPublicKey, general);
-            
-            if (question == null)
-                throw new ArgumentException("question wasn't found");
+            ICompleteQuestion question = FindQuestion(questionKey, propagationKey, general);
 
-            foreach (var completeAnswer in completeAnswers)
-            {
-                if (completeAnswer.Selected)
-                    entity.Add(completeAnswer, question.PublicKey);
-                else
-                    entity.Remove(completeAnswer);
-            }
+
+
+            question.Answer = answers;
+
+      
+           
             ExecuteConditions(question, general);
 
 
@@ -85,11 +82,13 @@ namespace RavenQuestionnaire.Core.Services
                 }
             }
         }
-        protected ICompleteQuestion FindQuestion(Guid answerKey, Guid? propagationKey, ICompleteGroup entity)
+        protected ICompleteQuestion FindQuestion(Guid questionKey, Guid? propagationKey, ICompleteGroup entity)
         {
             //PropagatableCompleteAnswer propagated = answer as PropagatableCompleteAnswer;
 
-            var question = entity.FirstOrDefault<ICompleteQuestion>(q => q.Children.Any(a => a.PublicKey == answerKey));
+            var question = entity.FirstOrDefault<ICompleteQuestion>(q => q.PublicKey == questionKey);
+            if (question == null)
+                throw new ArgumentException("question wasn't found");
             if (!propagationKey.HasValue)
                 return question;
             return entity.GetPropagatedQuestion(question.PublicKey, propagationKey.Value);
