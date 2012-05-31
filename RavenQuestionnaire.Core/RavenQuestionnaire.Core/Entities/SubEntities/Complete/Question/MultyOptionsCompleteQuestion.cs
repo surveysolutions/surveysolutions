@@ -29,7 +29,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 
                 var selecteAnswers = (List<Guid>)value;
                 var answerObjects = this.Find<ICompleteAnswer>(a => selecteAnswers.Contains(a.PublicKey));
-                if (answerObjects != null && answerObjects.Any())
+                if (answerObjects != null)
                 {
                     this.Children.ForEach(c => ((ICompleteAnswer)c).Selected = false);
                     foreach (ICompleteAnswer completeAnswer in answerObjects)

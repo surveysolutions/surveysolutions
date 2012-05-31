@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
@@ -39,16 +40,24 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
             this.QuestionPublickey = question.PublicKey;
             this.Propagationkey = propogationPublicKey;
             if (question.QuestionType == QuestionType.ExtendedDropDownList || question.QuestionType == QuestionType.DropDownList ||
-                question.QuestionType == QuestionType.MultyOption || question.QuestionType == QuestionType.SingleOption)
+                question.QuestionType == QuestionType.SingleOption || question.QuestionType == QuestionType.YesNo)
             {
                 if (question.Answers != null)
                 {
 
-                    for (int i = 0; i < question.Answers.Length; i++)
-                    {
-                        this.CompleteAnswers = question.Answers[i].PublicKey;
-                    }
+                    this.CompleteAnswers = question.Answers[0].PublicKey;
+
                 }
+            }
+            else if(question.QuestionType == QuestionType.MultyOption)
+            {
+                var answers = new List<Guid>();
+                for (int i = 0; i < question.Answers.Length; i++)
+                {
+                    if(question.Answers[i].Selected)
+                        answers.Add(question.Answers[i].PublicKey);
+                }
+                this.CompleteAnswers = answers;
             }
             else
             {

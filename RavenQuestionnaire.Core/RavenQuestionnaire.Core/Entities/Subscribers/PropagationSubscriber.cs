@@ -46,10 +46,9 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                                                                                                                   }
                                                                                                               }));
 
-            var addAnswers = from q in target.GetAllAnswerAddedEvents()
+            var addAnswers = from q in target.GetAllQuestionAnsweredEvents()
                              let question =
-                                 ((CompositeAddedEventArgs)q.ParentEvent).AddedComposite as
-                                 ICompleteQuestion
+                                 q.AddedComposite as ICompleteQuestion
                              where question.QuestionType == QuestionType.AutoPropagate
                              select q;
 
@@ -57,7 +56,7 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                 .Subscribe(Observer.Create<CompositeAddedEventArgs>(
                     (e) =>
                         {
-                            var question = ((CompositeAddedEventArgs) e.ParentEvent).AddedComposite as ICompleteQuestion;
+                            var question = e.AddedComposite as ICompleteQuestion;
 
                             if (question == null || question.QuestionType != QuestionType.AutoPropagate)
                                 return;
