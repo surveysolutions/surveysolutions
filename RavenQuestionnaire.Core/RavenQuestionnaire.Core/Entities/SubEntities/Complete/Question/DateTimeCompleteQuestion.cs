@@ -31,6 +31,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         private DateTime? _answer;
 
+        public override string GetAnswerString()
+        {
+            return _answer.HasValue ? _answer.Value.ToShortDateString() : string.Empty;
+        }
+
         public override List<IComposite> Children
         {
             get { return new List<IComposite>(); }

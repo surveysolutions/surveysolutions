@@ -15,6 +15,5 @@ namespace RavenQuestionnaire.Core.AbstractFactories
         AbstractQuestion Create(QuestionType type);
         CompleteQuestionView CreateQuestion(CompleteQuestionnaireDocument doc, ICompleteGroup group, ICompleteQuestion question);
         ICompleteQuestion ConvertToCompleteQuestion(IQuestion question);
-        string GetAnswerString(QuestionType type, object answer);
     }
 }

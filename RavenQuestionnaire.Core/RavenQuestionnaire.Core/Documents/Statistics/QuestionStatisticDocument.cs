@@ -25,13 +25,12 @@ namespace RavenQuestionnaire.Core.Documents.Statistics
             QuestionText = question.QuestionText;
             QuestionType = question.QuestionType;
 
-            var answer =
-                question.FirstOrDefault<ICompleteAnswer>(a => a.Selected);
-            if (answer != null)
+        
+            if (question.Answer!=null)
             {
-                AnswerValue = answer.AnswerText?? answer.AnswerValue;
+           //     AnswerValue = answer.AnswerText?? answer.AnswerValue;
                 AnswerDate = question.AnswerDate;
-                AnswerText = answer.AnswerText;
+                AnswerText = question.GetAnswerString();
             }
         }
 
@@ -44,6 +43,6 @@ namespace RavenQuestionnaire.Core.Documents.Statistics
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
         public string AnswerText { get; set; }
-        public object AnswerValue { get; set; }
+     //   public object AnswerValue { get; set; }
     }
 }

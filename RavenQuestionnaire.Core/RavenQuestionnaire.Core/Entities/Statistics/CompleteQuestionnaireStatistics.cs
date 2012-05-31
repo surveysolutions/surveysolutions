@@ -107,7 +107,7 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
                     this.innerDocument.FeturedQuestions.Add(statItem);
                 if (!completeQuestion.Valid)
                     this.innerDocument.InvalidQuestions.Add(statItem);
-                if(completeQuestion.Children.OfType<ICompleteAnswer>().Any(a => a.Selected))
+                if (completeQuestion.Answer != null)
                     this.innerDocument.AnsweredQuestions.Add(statItem);
                 this.innerDocument.TotalQuestionCount++;
             }

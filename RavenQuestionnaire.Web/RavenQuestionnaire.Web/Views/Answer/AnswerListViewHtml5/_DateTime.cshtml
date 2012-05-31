@@ -7,7 +7,7 @@
 {
     ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onchange", "$(this.form).submit();");
 
-    var dateValue = Model.Answer == null ? string.Empty : ((DateTime)Model.Answer).ToShortDateString();
+    var dateValue = Model.Answer == null ? string.Empty : Model.Answer.ToString();
     @Html.Hidden("QuestionId", Model.PublicKey)
    
     <div class="answer hide-date-box">

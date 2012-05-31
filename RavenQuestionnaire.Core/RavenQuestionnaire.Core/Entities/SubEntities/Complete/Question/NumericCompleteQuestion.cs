@@ -29,6 +29,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         }
         private int? answer;
 
+        public override string GetAnswerString()
+        {
+            return answer.HasValue ? answer.Value.ToString() : string.Empty;
+        }
+
         public override List<IComposite> Children
         {
             get { return new List<IComposite>(); }
