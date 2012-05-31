@@ -27,8 +27,6 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public bool Featured { get; set; }
 
-        public dynamic Attributes { get; set; }
-
         public Order AnswerOrder { get; set; }
         //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
@@ -70,19 +68,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.Instructions = doc.Instructions;
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
-           /* this.Attributes = doc.Attributes;
-
-            var dict = new Dictionary<string, object> { { "Property", "foo" } };*/
-            if (doc.Attributes != null)
-            {
-                var eo = new ExpandoObject();
-                var eoColl = (ICollection<KeyValuePair<string, object>>) eo;
-                foreach (var kvp in doc.Attributes)
-                {
-                    eoColl.Add(kvp);
-                }
-                this.Attributes = eo;
-            }
+          
         }
     }
 

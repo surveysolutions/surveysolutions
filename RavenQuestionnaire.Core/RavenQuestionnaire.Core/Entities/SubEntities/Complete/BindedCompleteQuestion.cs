@@ -12,10 +12,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             PublicKey = Guid.NewGuid();
             Children=new List<IComposite>();
         }
-        public BindedCompleteQuestion(Guid publicKey, Guid parentKey)
+        public BindedCompleteQuestion(Guid publicKey,IBinded template)
         {
             PublicKey = publicKey;
-            ParentPublicKey = parentKey;
+            ParentPublicKey = template.ParentPublicKey;
         }
 
 /*

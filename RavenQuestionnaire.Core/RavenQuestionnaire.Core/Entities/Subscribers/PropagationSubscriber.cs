@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
 
 namespace RavenQuestionnaire.Core.Entities.Subscribers
 {
@@ -47,18 +48,16 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                                                                                                               }));
 
             var addAnswers = from q in target.GetAllQuestionAnsweredEvents()
-                             let question =
-                                 q.AddedComposite as ICompleteQuestion
-                             where question.QuestionType == QuestionType.AutoPropagate
+                             where q.AddedComposite is IAutoPropagate
                              select q;
 
             addAnswers
                 .Subscribe(Observer.Create<CompositeAddedEventArgs>(
                     (e) =>
                         {
-                            var question = e.AddedComposite as ICompleteQuestion;
+                            var question = e.AddedComposite as AutoPropagateCompleteQuestion;
 
-                            if (question == null || question.QuestionType != QuestionType.AutoPropagate)
+                            if (question == null)
                                 return;
 
                             var countObj = question.Answer;
@@ -67,9 +66,8 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
 
                             if (count < 0)
                                 throw new InvalidOperationException("caount can't be bellow zero");
-                            if (!question.Attributes.ContainsKey("TargetGroupKey"))
-                                return;
-                            Guid targetGroupKey = Guid.Parse(question.Attributes["TargetGroupKey"].ToString());
+
+                            Guid targetGroupKey = question.TargetGroupKey;
                             var groups =
                                 target.Find<ICompleteGroup>(g => g.PublicKey == targetGroupKey && g.PropogationPublicKey.HasValue).ToList();
                             if (groups.Count == count)
