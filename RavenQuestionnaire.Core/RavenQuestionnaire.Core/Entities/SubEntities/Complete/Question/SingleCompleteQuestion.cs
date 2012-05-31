@@ -25,7 +25,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             get { return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).FirstOrDefault(); }
             set
             {
-                Guid selecteAnswer = (Guid)value;
+                if(value==null)
+                    return;
+                Guid selecteAnswer = Guid.Parse(value.ToString());
                 var answerObject = this.FirstOrDefault<ICompleteAnswer>(a => a.PublicKey == selecteAnswer);
                 if(answerObject!=null)
                 {
