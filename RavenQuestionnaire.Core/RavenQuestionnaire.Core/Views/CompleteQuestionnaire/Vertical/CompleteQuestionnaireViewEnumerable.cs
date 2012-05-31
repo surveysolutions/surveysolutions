@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             foreach (var k in propGroups)
             {
                 var prop = Propagate.Propagated;
-                if (k.Value.Count == 1 && (k.Value[0] as PropagatableCompleteGroup) == null)
+                if (k.Value.Count == 1 && !k.Value[0].PropogationPublicKey.HasValue)
                 {
                     prop = Propagate.None;
                 }
@@ -68,24 +68,24 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
         public CompleteGroupViewV(CompleteQuestionnaireDocument doc, List<CompleteGroup> propGroups)
             : this()
         {
-            var propagatable = propGroups.Single(g => (g as PropagatableCompleteGroup) == null);
+            var propagatable = propGroups.Single(g => g.PropogationPublicKey.HasValue);
             var qf = new CompleteQuestionFactory();
             PublicKey = propagatable.PublicKey;
             GroupText = propagatable.Title;
             Propagated = propagatable.Propagated;
 
-            var propagated = propGroups.Where(g => g != propagatable).Select(g => g as PropagatableCompleteGroup).ToList();
+            var propagated = propGroups.Where(g => g != propagatable).ToList();
 
             if (propagated.Count > 0)
             {
-                PropogationPublicKeys = propagated.Select(g => g.PropogationPublicKey).ToList();
+                PropogationPublicKeys = propagated.Select(g => g.PropogationPublicKey.Value).ToList();
                 foreach (var @group in propagated)
                 {
 
-                    var pgroup = new PropagatedGroup(@group.PublicKey, @group.Title, @group.AutoPropagate,
-                                                     @group.PropogationPublicKey, new List<CompleteQuestionView>());
+                    var pgroup = new PropagatedGroup(@group.PublicKey, @group.Title, @group.Propagated == Propagate.AutoPropagated,
+                                                     @group.PropogationPublicKey.Value, new List<CompleteQuestionView>());
                     PropagatedGroups.Add(pgroup);
-                    AutoPropagate.Add(@group.AutoPropagate);
+                    AutoPropagate.Add(@group.Propagated == Propagate.AutoPropagated);
                 }
             }
             var questions = propagatable.Children.OfType<ICompleteQuestion>().ToList();

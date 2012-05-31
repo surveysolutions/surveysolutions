@@ -1,47 +1,29 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public interface IQuestion : IComposite, ITriggerable
+    public abstract class AbstractQuestion: IQuestion
     {
-        string QuestionText { get; set; }
-        QuestionType QuestionType { get; set; }
-        string ConditionExpression { get; set; }
-        string ValidationExpression { get; set; }
-        string StataExportCaption { get; set; }
-        string Instructions { get; set; }
-        List<Image> Cards { get; set; }
-        Order AnswerOrder { get; set; }
-        bool Featured { get; set; }
-        Dictionary<string, object> Attributes { get; set; }
-    }
-
-
-    public class Question : /*IEntity<QuestionDocument>*/IQuestion
-    {
-        public Question()
+        protected AbstractQuestion()
         {
             PublicKey = Guid.NewGuid();
-            Children = new List<IComposite>();
             Cards = new List<Image>();
-            Attributes=new Dictionary<string, object>();
             this.Triggers = new List<Guid>();
             this.observers = new List<IObserver<CompositeEventArgs>>();
 
         }
 
-        public Question(string text, QuestionType type)
+        protected AbstractQuestion(string text)
             : this()
         {
             QuestionText = text;
-            QuestionType = type;
         }
 
         protected void OnAdded(CompositeAddedEventArgs e)
@@ -67,7 +49,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public bool Featured { get; set; }
 
-        public Dictionary<string, object> Attributes { get; set; }
 
         public string ConditionExpression
         {
@@ -84,24 +65,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         private string conditionExpression;
         private QuestionnaireParametersParser parser = new QuestionnaireParametersParser();
 
-        //remove when exportSchema will be done 
         public string StataExportCaption { get; set; }
 
         public string Instructions { get; set; }
-
-        public void ClearAnswers()
-        {
-            Children.Clear();
-        }
-
-        public void UpdateAnswerList(IEnumerable<Answer> answers)
-        {
-            ClearAnswers();
-            foreach (Answer answer in answers)
-            {
-                Add(answer, PublicKey);
-            }
-        }
 
         public void AddCard(Image card)
         {
@@ -126,65 +92,21 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             card.Title = title;
             card.Description = desc;
         }
-        public void AddAnswer(IAnswer answer)
-        {
-            if (Children.Any(a => a.PublicKey.Equals(answer.PublicKey)))
-                throw new DuplicateNameException("answer with current publick key already exist");
-            Children.Add(answer);
-            OnAdded(new CompositeAddedEventArgs(answer));
-        }
+        public abstract void Add(IComposite c, Guid? parent);
 
-        public void Add(IComposite c, Guid? parent)
-        {
-            if (!parent.HasValue || parent.Value == PublicKey)
-            {
-                IAnswer answer = c as IAnswer;
-                if (answer != null)
-                {
-                    AddAnswer(answer);
-                    return;
-                }
-            }
-            throw new CompositeException();
-        }
+        public abstract void Remove(IComposite c);
 
-        public void Remove(IComposite c)
-        {
-            this.Remove(c.PublicKey);
-        }
-        public void Remove(Guid publicKey)
-        {
-            if (Children.RemoveAll(a => a.PublicKey.Equals(publicKey)) > 0)
-            {
-                return;
-            }
+        public abstract void Remove(Guid publicKey);
 
-            throw new CompositeException();
-        }
+        public abstract T Find<T>(Guid publicKey) where T : class, IComposite;
 
-        public T Find<T>(Guid publicKey) where T : class, IComposite
-        {
-            if (typeof(T).IsAssignableFrom(typeof(IAnswer)))
-                return Children.FirstOrDefault(a => a.PublicKey.Equals(publicKey)) as T;
-            return null;
-        }
+        public abstract IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class;
 
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
-        {
+        public abstract T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
 
-            return Children.Where(a => a is T && condition(a as T)).Select(a => a as T);
-            /* if (typeof(T) == typeof(Answer))
-                 return Answers.Where(a => condition(a)).Select(a => a as T);
-             return null;*/
-        }
+        public abstract List<IComposite> Children { get; set; }
 
-        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
-        {
-            return Children.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault();
-        }
-
-        public List<IComposite> Children { get; set; }
-         [JsonIgnore]
+        [JsonIgnore]
         public IComposite Parent
         {
             get { throw new NotImplementedException(); }
@@ -207,7 +129,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public List<Guid> Triggers { get; set; }
 
         #endregion
-
 
     }
 }

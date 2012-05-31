@@ -318,102 +318,6 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
-
-        public ActionResult SaveSingleResult(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
-        {
-            if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
-            {
-                //?? if it is used as prtial render on postback
-                //this behaviour is wrong
-                return RedirectToAction("Question", new { id = settings[0].QuestionnaireId });
-            }
-
-            var question = questions[0];
-            try
-            {
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
-                                                                                      question.Answers,
-                                                                                      settings[0].PropogationPublicKey,
-                                                                                      _globalProvider.GetCurrentUser()));
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError(
-                    "questions[" + question.PublicKey +
-                    (settings[0].PropogationPublicKey.HasValue
-                         ? string.Format("_{0}", settings[0].PropogationPublicKey.Value)
-                         : "") + "].AnswerValue", e.Message);
-            }
-            var model =
-                viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
-                    new CompleteGroupViewInputModel(settings[0].PropogationPublicKey, settings[0].ParentGroupPublicKey,
-                                                    settings[0].QuestionnaireId));
-            ViewBag.CurrentGroup = model;
-            return PartialView("~/Views/Group/_Screen.cshtml", model);
-        }
-
-
-        public ActionResult SaveSingleResultI(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions,
-                                              string type)
-        {
-            if (string.IsNullOrEmpty(type))
-                type = "I";
-            if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
-            {
-                //return RedirectToAction("QuestionI", new { id = settings[0].QuestionnaireId });
-                //fix wrong render on unselecting in dropdown
-            }
-            else
-            {
-                var question = questions[0];
-                try
-                {
-                    commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
-                                                                                          question.Answers,
-                                                                                          settings[0].PropogationPublicKey,
-                                                                                          _globalProvider.GetCurrentUser()));
-                }
-                catch (Exception e)
-                {
-                    ModelState.AddModelError("questions[" + question.PublicKey + (settings[0].PropogationPublicKey.HasValue ? string.Format("_{0}", settings[0].PropogationPublicKey.Value) : "") + "].AnswerValue", e.Message);
-                }
-            }
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
-                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
-
-            return PartialView("~/Views/Group/_Screen" + type + ".cshtml", model);
-        }
-
-        public ActionResult SaveSingleResultHtml5(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions, string type)
-        {
-            if (string.IsNullOrEmpty(type))
-                type = "Html5";
-            if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
-            {
-
-            }
-            else
-            {
-                var question = questions[0];
-                try
-                {
-                    commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
-                                                                                          question.Answers,
-                                                                                          settings[0].PropogationPublicKey,
-                                                                                          _globalProvider.GetCurrentUser()));
-                }
-                catch (Exception e)
-                {
-                    ModelState.AddModelError("questions[" + question.PublicKey + (settings[0].PropogationPublicKey.HasValue ? string.Format("_{0}", settings[0].PropogationPublicKey.Value) : "") + "].AnswerValue", e.Message);
-                }
-            }
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
-                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
-
-            return PartialView("~/Views/Group/_ScreenHtml5.cshtml", model);
-        }
         public JsonResult SaveSingleResultJson(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
         {
 
@@ -421,7 +325,7 @@ namespace RavenQuestionnaire.Web.Controllers
             try
             {
                 commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
-                                                                                      question.Answers,
+                                                                                      question,
                                                                                       settings[0].PropogationPublicKey,
                                                                                       _globalProvider.GetCurrentUser()));
             }
@@ -438,73 +342,6 @@ namespace RavenQuestionnaire.Web.Controllers
             return Json(model);
         }
 
-
-
-        public ActionResult SaveSingleResultV(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
-        {
-            if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
-            {
-                return RedirectToAction("QuestionV", new { id = settings[0].QuestionnaireId });
-            }
-
-            var question = questions[0];
-            try
-            {
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
-                                                                                      question.Answers,
-                                                                                      settings[0].PropogationPublicKey,
-                                                                                      _globalProvider.GetCurrentUser()));
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("questions[" + question.PublicKey + (settings[0].PropogationPublicKey.HasValue
-                                                                                  ? string.Format("_{0}",
-                                                                                                  settings[0].
-                                                                                                      PropogationPublicKey
-                                                                                                      .Value)
-                                                                                  : "") + "].AnswerValue", e.Message);
-            }
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
-                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
-
-            return PartialView("~/Views/Group/_ScreenV.cshtml", model);
-        }
-
-        public ActionResult SaveSingleResultC(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
-        {
-            if (questions == null || questions.Length <= 0 || !ModelState.IsValid)
-            {
-                return RedirectToAction("QuestionC", new { id = settings[0].QuestionnaireId });
-            }
-
-            var question = questions[0];
-
-            try
-            {
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
-                                                                                      question.Answers,
-                                                                                      settings[0].PropogationPublicKey,
-                                                                                      _globalProvider.GetCurrentUser()));
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("questions[" + question.PublicKey + (settings[0].PropogationPublicKey.HasValue
-                                                                                  ? string.Format("_{0}",
-                                                                                                  settings[0].
-                                                                                                      PropogationPublicKey
-                                                                                                      .Value)
-                                                                                  : "") + "].AnswerValue", e.Message);
-            }
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
-                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
-
-            ViewBag.AnsweredQuestionKey = question.PublicKey;
-            ViewBag.PropogationGroupKey = settings[0].PropogationPublicKey;
-
-            return PartialView("~/Views/Group/_ScreenC.cshtml", model);
-        }
 
 
         public ActionResult Delete(string id)

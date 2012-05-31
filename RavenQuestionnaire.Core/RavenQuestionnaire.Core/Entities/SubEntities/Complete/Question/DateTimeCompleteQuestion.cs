@@ -10,14 +10,32 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         #region Properties
 
-        public override object Answer
+        public DateTimeCompleteQuestion(string text) : base(text)
         {
-            get { return ((CompleteAnswer)(this.Children).FirstOrDefault()).AnswerValue; }
         }
 
-        private object _answer;
-        
-        public override List<IComposite> Children { get; set; }
+        public DateTimeCompleteQuestion()
+        {
+        }
+
+        public override object Answer
+        {
+            get { return _answer; }
+            set
+            {
+                if (value != null)
+                _answer = Convert.ToDateTime(value);
+               
+            }
+        }
+
+        private DateTime? _answer;
+
+        public override List<IComposite> Children
+        {
+            get { return new List<IComposite>(); }
+            set { }
+        }
 
         public string AddDateTimeAttr { get; set; }
 
@@ -32,9 +50,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             var question = c as ICompleteQuestion;
             if (question == null || question.PublicKey != this.PublicKey)
                 throw new CompositeException();
-            _answer = Convert.ToDateTime(question.Answer);
+            this.Answer = question.Answer;
             this.AnswerDate = DateTime.Now;
-            OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), c));
+            OnAdded(new CompositeAddedEventArgs(this));
         }
 
         public override void Remove(IComposite c)
@@ -46,6 +64,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         {
             if (publicKey != this.PublicKey)
                 throw new CompositeException();
+            this._answer = null;
             OnRemoved(new CompositeRemovedEventArgs(this));
         }
 
@@ -56,10 +75,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 if (this.PublicKey.Equals(publicKey))
                     return this as T;
             }
-            if (typeof(T).IsAssignableFrom(typeof(CompleteAnswer)))
-            {
-                return (T) this.Children.SingleOrDefault();
-            }
             return null;
         }
 
@@ -67,10 +82,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
             if (!(this is T))
-                return null;
+                return new T[0];
             if (condition(this as T))
                 return new T[] { this as T };
-            return null;
+            return new T[0];
         }
 
         public override T FirstOrDefault<T>(Func<T, bool> condition)

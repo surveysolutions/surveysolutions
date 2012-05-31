@@ -16,9 +16,9 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
 
         public override void Subscribe(ICompleteGroup target)
         {
-            var addAnswers = from q in target.GetAllAnswerAddedEvents()
+            var addAnswers = from q in target.GetAllQuestionAnsweredEvents()
                              let question =
-                                 ((CompositeAddedEventArgs) q.ParentEvent).AddedComposite as
+                                q.AddedComposite as
                                  ICompleteQuestion
                              let binded =
                                  target.GetAllBindedQuestions(question.PublicKey)
@@ -28,16 +28,13 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                                                  .Subscribe(Observer.Create<CompositeAddedEventArgs>(
                                                      (e) =>
                                                          {
-                                                             var template =
-                                                                 ((CompositeAddedEventArgs) e.ParentEvent).
-                                                                     AddedComposite as
-                                                                 ICompleteQuestion;
+                                                             var template =e.AddedComposite as ICompleteQuestion;
 
                                                              if (template == null)
                                                                  return;
-                                                             var propagatedTemplate = template as IPropogate;
+                                                           //  var propagatedTemplate = template as IPropogate;
                                                              IEnumerable<BindedCompleteQuestion> binded;
-                                                             if (propagatedTemplate == null)
+                                                             if (!template.PropogationPublicKey.HasValue)
                                                              {
                                                                  binded =
                                                                      target.GetAllBindedQuestions(template.PublicKey);
@@ -45,7 +42,7 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                                                              else
                                                              {
                                                                  binded = target.GetPropagatedGroupsByKey(
-                                                                     propagatedTemplate.PropogationPublicKey).
+                                                                     template.PropogationPublicKey.Value).
                                                                      SelectMany(
                                                                          pg =>
                                                                          pg.GetAllBindedQuestions(template.PublicKey));

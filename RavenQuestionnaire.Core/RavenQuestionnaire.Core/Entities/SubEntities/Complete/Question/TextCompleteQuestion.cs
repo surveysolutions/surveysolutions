@@ -9,9 +9,23 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
     {
         #region Properties
 
+        public TextCompleteQuestion()
+        {
+        }
+
+        public TextCompleteQuestion(string text) : base(text)
+        {
+        }
+
         public override object Answer
         {
             get { return _answer; }
+            set
+            {
+                if(value!=null)
+                _answer = value.ToString();
+               
+            }
         }
 
         private string _answer;
@@ -33,9 +47,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             var question = c as ICompleteQuestion;
             if (question == null || question.PublicKey != this.PublicKey)
                 throw new CompositeException();
-            _answer = question.Answer.ToString();
+            this.Answer = question.Answer;
             this.AnswerDate = DateTime.Now;
-            OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), c));
+            OnAdded(new CompositeAddedEventArgs(this));
         }
 
         public override void Remove(IComposite c)
@@ -47,6 +61,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         {
             if (publicKey != this.PublicKey)
                 throw new CompositeException();
+            this._answer = null;
             OnRemoved(new CompositeRemovedEventArgs(this));
         }
 
@@ -61,10 +76,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
             if (!(this is T))
-                return null;
+                return new T[0];
             if (condition(this as T))
                 return new T[] { this as T };
-            return null;
+            return new T[0];
         }
 
         public override T FirstOrDefault<T>(Func<T, bool> condition)

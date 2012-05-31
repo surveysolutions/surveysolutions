@@ -26,8 +26,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 if (question != null)
                 {
                     if (!(question is IBinded))
-                        this.Children.Add(new PropagatableCompleteQuestion(question,
-                                                                            propogationPublicKey));
+                        this.Children.Add(question);
                     else
                         this.Children.Add((BindedCompleteQuestion)question);
                     continue;

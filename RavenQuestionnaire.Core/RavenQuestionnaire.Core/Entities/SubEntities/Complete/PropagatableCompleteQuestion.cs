@@ -6,7 +6,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
-    public class PropagatableCompleteQuestion : CompleteQuestion, IPropogate
+    public class PropagatableCompleteQuestion : AbstractCompleteQuestion, IPropogate
     {
         public PropagatableCompleteQuestion()
         {

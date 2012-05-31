@@ -80,8 +80,8 @@ namespace RavenQuestionnaire.Core.Entities
             CompleteGroup group = c as CompleteGroup;
             if (group != null && group.Propagated != Propagate.None)
             {
-                if (!(group is PropagatableCompleteGroup))
-                    c = new PropagatableCompleteGroup(group, Guid.NewGuid());
+                if (!group.PropogationPublicKey.HasValue)
+                    c = new CompleteGroup(group, Guid.NewGuid());
 
             }
             innerDocument.Add(c, parent);

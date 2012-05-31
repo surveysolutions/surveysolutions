@@ -10,10 +10,10 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
 {
     public static class ICompleteGroupExtensions
     {
-        public static IEnumerable<PropagatableCompleteGroup> GetPropagatedGroupsByKey(this ICompleteGroup entity, Guid propagationKey)
+        public static IEnumerable<ICompleteGroup> GetPropagatedGroupsByKey(this ICompleteGroup entity, Guid propagationKey)
         {
             return
-                entity.Find<PropagatableCompleteGroup>(g => g.PropogationPublicKey.Equals(propagationKey));
+                entity.Find<ICompleteGroup>(g => g.PropogationPublicKey.Equals(propagationKey));
         }
 
         public static IEnumerable<BindedCompleteQuestion> GetAllBindedQuestions(this ICompleteGroup group, Guid questionKey)
@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
         public static ICompleteQuestion GetPropagatedQuestion(this ICompleteGroup group, Guid questionKey, Guid propagationKey)
         {
             var groups = group.GetPropagatedGroupsByKey(propagationKey);
-            foreach (PropagatableCompleteGroup propagatableCompleteGroup in groups)
+            foreach (ICompleteGroup propagatableCompleteGroup in groups)
             {
                 var question =
                     propagatableCompleteGroup.FirstOrDefault<ICompleteQuestion>(q => q.PublicKey == questionKey);
@@ -39,7 +39,7 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
         public static ICompleteQuestion GetRegularQuestion(this ICompleteGroup entity, Guid target)
         {
             var dependency = entity.FirstOrDefault<ICompleteQuestion>(
-                q => q.PublicKey.Equals(target) && !(q is IPropogate));
+                q => q.PublicKey.Equals(target) && !q.PropogationPublicKey.HasValue);
             return dependency;
         }
         public static IEnumerable<T> GetAllQuestions<T>(this IGroup entity) where T: class, IComposite 

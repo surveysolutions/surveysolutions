@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
 using RavenQuestionnaire.Core.Repositories;
 
 namespace RavenQuestionnaire.Core.Tests.CommandHandlers
@@ -25,7 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         {
             CompleteQuestionnaireDocument innerDocument = new CompleteQuestionnaireDocument();
             innerDocument.Id = "cqID";
-            CompleteQuestion question = new CompleteQuestion("?", QuestionType.SingleOption);
+            var question = new SingleCompleteQuestion("?");
 
             innerDocument.Children.Add(question);
             CompleteAnswer answer = new CompleteAnswer(new Answer());
