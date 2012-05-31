@@ -15,11 +15,11 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
 
         #endregion
 
-        public PropagateGroupCommand(string completequestionanireId, Guid propagationKey, Guid propagatedGroupPublickey, UserLight executer)
+        public PropagateGroupCommand(string completeQuestionnaireId, Guid propagationKey, Guid groupPublicKey, UserLight executer)
         {
-            this.CompleteQuestionnaireId = completequestionanireId;
+            this.CompleteQuestionnaireId = completeQuestionnaireId;
             this.Executor = executer;
-            this.GroupPublicKey = propagatedGroupPublickey;
+            this.GroupPublicKey = groupPublicKey;
             this.PropagationKey = propagationKey;
         }
     }

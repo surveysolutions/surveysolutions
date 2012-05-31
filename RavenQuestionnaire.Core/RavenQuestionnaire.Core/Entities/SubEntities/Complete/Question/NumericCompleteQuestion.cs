@@ -9,13 +9,31 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
     {
         #region Properties
 
+        public NumericCompleteQuestion()
+        {
+        }
+
+        public NumericCompleteQuestion(string text) : base(text)
+        {
+        }
+
         public override object Answer
         {
-            get { return ((CompleteAnswer)(this.Children).FirstOrDefault()).AnswerValue;; }
+            get { return answer; }
+            set
+            {
+                if (value != null)
+                answer = Convert.ToInt32(value);
+               
+            }
         }
-        private int answer;
+        private int? answer;
 
-        public override List<IComposite> Children { get; set; }
+        public override List<IComposite> Children
+        {
+            get { return new List<IComposite>(); }
+            set { }
+        }
         //{
         //    get { return new List<IComposite>(); }
         //    set { }
@@ -34,21 +52,21 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             var question = c as ICompleteQuestion;
             if (question == null || question.PublicKey != this.PublicKey)
                 throw new CompositeException();
-            answer = (int)question.Answer;
+            this.Answer = question.Answer;
             this.AnswerDate = DateTime.Now;
-            OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), c));
+            OnAdded(new CompositeAddedEventArgs(this));
         }
 
         public override void Remove(IComposite c)
         {
-            this.Remove(c.PublicKey);
+           this.Remove(c.PublicKey);
         }
 
         public override void Remove(Guid publicKey)
         {
             if (publicKey != this.PublicKey)
                 throw new CompositeException();
-            OnRemoved(new CompositeRemovedEventArgs(this));
+            this.answer = null;
         }
 
         public override T Find<T>(Guid publicKey)
@@ -58,20 +76,16 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 if (this.PublicKey.Equals(publicKey))
                     return this as T;
             }
-            if (typeof(T).IsAssignableFrom(typeof(CompleteAnswer)))
-            {
-                return (T)this.Children.SingleOrDefault();
-            }
             return null;
         }
 
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
             if (!(this is T))
-                return null;
+                return new T[0];
             if (condition(this as T))
                 return new T[] { this as T };
-            return null;
+            return new T[0];
         }
 
         public override T FirstOrDefault<T>(Func<T, bool> condition)

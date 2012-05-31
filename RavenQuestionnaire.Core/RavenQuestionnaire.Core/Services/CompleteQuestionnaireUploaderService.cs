@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Commands.Statistics;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Extensions;
@@ -28,26 +29,21 @@ namespace RavenQuestionnaire.Core.Services
             this._asyncInvocker = asyncInvocker;
             this.subscriber = subscriber;
         }
-        public CompleteQuestionnaire AddCompleteAnswer(string id, CompleteAnswer[] completeAnswers)
+        public CompleteQuestionnaire AddCompleteAnswer(string id, Guid questionKey, Guid? propagationKey, object answers)
         {
-            PropagatableCompleteAnswer propagated = completeAnswers[0] as PropagatableCompleteAnswer;
+         //   PropagatableCompleteAnswer propagated = completeAnswers[0] as PropagatableCompleteAnswer;
 
             CompleteQuestionnaire entity = _questionRepository.Load(id);
             ICompleteGroup general = entity.GetInnerDocument();
-            ICompleteQuestion question;
-            
-            question = propagated == null ? FindQuestion(completeAnswers[0].PublicKey, null, general) : FindQuestion(completeAnswers[0].PublicKey, propagated.PropogationPublicKey, general);
-            
-            if (question == null)
-                throw new ArgumentException("question wasn't found");
 
-            foreach (var completeAnswer in completeAnswers)
-            {
-                if (completeAnswer.Selected)
-                    entity.Add(completeAnswer, question.PublicKey);
-                else
-                    entity.Remove(completeAnswer);
-            }
+            ICompleteQuestion question = FindQuestion(questionKey, propagationKey, general);
+
+
+
+            question.SetAnswer(answers);
+
+      
+           
             ExecuteConditions(question, general);
 
 
@@ -59,38 +55,40 @@ namespace RavenQuestionnaire.Core.Services
         #region update utilitie
         protected void ExecuteConditions(ICompleteQuestion question, ICompleteGroup entity)
         {
-            PropagatableCompleteQuestion propagated = question as PropagatableCompleteQuestion;
+       //     PropagatableCompleteQuestion propagated = question as PropagatableCompleteQuestion;
             IEnumerable<ICompleteQuestion> triggeres;
-            if (propagated == null)
-            {
+           /* if (propagated == null)
+            {*/
                 triggeres =
                entity.Find<ICompleteQuestion>(
-                   g => g.Triggers.Count(gp => gp.Equals(question.PublicKey)) > 0).ToList();
-            }
+                   g => g.Triggers.Count(gp => gp==question.PublicKey) > 0).ToList();
+         /*   }
             else
             {
                 triggeres =
                     entity.GetPropagatedGroupsByKey(propagated.PropogationPublicKey).SelectMany(g => g.Find<ICompleteQuestion>(
                         q => q.Triggers.Count(gp => gp.Equals(question.PublicKey)) > 0)).ToList();
-            }
+            }*/
             var executor = new CompleteQuestionnaireConditionExecutor(entity);
             foreach (ICompleteQuestion completeQuestion in triggeres)
             {
                 bool previousState = completeQuestion.Enabled;
                 completeQuestion.Enabled = executor.Execute(completeQuestion);
-                if (!completeQuestion.Enabled)
-                    entity.Remove(completeQuestion);
+                /*if (!completeQuestion.Enabled)
+                    entity.Remove(completeQuestion);*/
                 if (previousState != completeQuestion.Enabled)
                 {
                     ExecuteConditions(completeQuestion, entity);
                 }
             }
         }
-        protected ICompleteQuestion FindQuestion(Guid answerKey, Guid? propagationKey, ICompleteGroup entity)
+        protected ICompleteQuestion FindQuestion(Guid questionKey, Guid? propagationKey, ICompleteGroup entity)
         {
             //PropagatableCompleteAnswer propagated = answer as PropagatableCompleteAnswer;
 
-            var question = entity.FirstOrDefault<ICompleteQuestion>(q => q.Children.Any(a => a.PublicKey == answerKey));
+            var question = entity.FirstOrDefault<ICompleteQuestion>(q => q.PublicKey == questionKey);
+            if (question == null)
+                throw new ArgumentException("question wasn't found");
             if (!propagationKey.HasValue)
                 return question;
             return entity.GetPropagatedQuestion(question.PublicKey, propagationKey.Value);
@@ -125,7 +123,7 @@ namespace RavenQuestionnaire.Core.Services
             var template = entity.Find<CompleteGroup>(groupPublicKey);
             bool isCondition = false;
             var executor = new CompleteQuestionnaireConditionExecutor(entity.GetInnerDocument());
-            foreach (CompleteQuestion completeQuestion in template.GetAllQuestions<ICompleteQuestion>())
+            foreach (ICompleteQuestion completeQuestion in template.GetAllQuestions<ICompleteQuestion>())
             {
                 if (executor.Execute(completeQuestion))
                 {
@@ -139,7 +137,7 @@ namespace RavenQuestionnaire.Core.Services
             }
             if (isCondition)
             {
-                var newGroup = new PropagatableCompleteGroup(template, publicKey);
+                var newGroup = new CompleteGroup(template, publicKey);
                 entity.Add(newGroup, null);
 
                 var command = new GenerateQuestionnaireStatisticCommand(entity, null);
@@ -155,7 +153,7 @@ namespace RavenQuestionnaire.Core.Services
             CompleteQuestionnaire entity = _questionRepository.Load(id);
             //   entity.Remove(new PropagatableCompleteGroup(entity.Find<CompleteGroup>(command.GroupPublicKey)))
 
-            entity.Remove(new PropagatableCompleteGroup(entity.Find<CompleteGroup>(publicKey),
+            entity.Remove(new CompleteGroup(entity.Find<CompleteGroup>(publicKey),
                                                         propagationKey));
 
             var command = new GenerateQuestionnaireStatisticCommand(entity, null);

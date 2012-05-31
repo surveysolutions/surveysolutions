@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
+using RavenQuestionnaire.Core.Entities.SubEntities.Question;
+using RavenQuestionnaire.Core.Utility.OrderStrategy;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 
@@ -21,74 +24,36 @@ namespace RavenQuestionnaire.Core.AbstractFactories
            }*/
 
         #region Implementation of ICompleteQuestionFactory
-
-        public IAnswerStrategy Create(ICompleteQuestion baseQuestion)
+        public  AbstractQuestion Create(QuestionType type)
         {
-            switch (baseQuestion.QuestionType)
+            switch (type)
             {
                 case QuestionType.MultyOption:
-                    return new MultyAnswerCompleteQuestion(baseQuestion);
+                    return new MultyOptionsQuestion();
                 case QuestionType.DropDownList:
-                    return new SingleAnswerCompleteQuestion(baseQuestion);
+                    return new SingleQuestion();
                 case QuestionType.SingleOption:
-                    return new SingleAnswerCompleteQuestion(baseQuestion);
+                    return new SingleQuestion();
                 case QuestionType.YesNo:
-                    return new YesNoAnswerCompleteQuestion(baseQuestion);
+                    return new SingleQuestion();
                 case QuestionType.Text:
-                    return new TextAnswerCompleteQuestion(baseQuestion);
+                    return new TextQuestion();
                 case QuestionType.DateTime:
-                    return new DateAnswerStrategy(baseQuestion);
+                    return new DateTimeQuestion();
                 case QuestionType.Numeric:
-                    return new NumericAnswerCompleteQuestion(baseQuestion);
+                    return new NumericQuestion();
                 case QuestionType.AutoPropagate:
-                    return new NumericAnswerCompleteQuestion(baseQuestion);
+                    return new AutoPropagateQuestion();
                 case QuestionType.GpsCoordinates:
-                    return new GpsAnswerCompleteQuestion(baseQuestion);
-                case QuestionType.Percentage:
-                    return new PercentageAnswerCompleteQuestion(baseQuestion);
+                    return new GpsCoordinateQuestion();
+           /*     case QuestionType.Percentage:
+                    return new PercentageQuestion();*/
                 case QuestionType.ExtendedDropDownList:
-                    return new SingleAnswerCompleteQuestion(baseQuestion);
+                    return new SingleQuestion();
             }
-            return new TextAnswerCompleteQuestion(baseQuestion);
+            return new TextQuestion();
         }
 
-        public object GetAnswerValue(ICompleteQuestion baseQuestion)
-        {
-            var answer =
-                baseQuestion.FirstOrDefault<ICompleteAnswer>(a => a.Selected);
-            object retval;
-            if (answer == null)
-            {
-                retval = string.Empty;
-            }
-            else
-            {
-                retval = answer.AnswerValue ?? answer.AnswerText;
-            }
-            switch (baseQuestion.QuestionType)
-            {
-               /* case QuestionType.MultyOption:
-                    return new MultyAnswerCompleteQuestion(baseQuestion);
-                case QuestionType.DropDownList:
-                    return new SingleAnswerCompleteQuestion(baseQuestion);
-                case QuestionType.SingleOption:
-                    return new SingleAnswerCompleteQuestion(baseQuestion);
-                case QuestionType.YesNo:
-                    return new YesNoAnswerCompleteQuestion(baseQuestion);
-                case QuestionType.Text:
-                    return new TextAnswerCompleteQuestion(baseQuestion);*/
-          /*      case QuestionType.DateTime:
-                    
-                    break;*/
-                case QuestionType.Numeric:
-                    if (retval == null || string.IsNullOrEmpty(retval.ToString()) || !baseQuestion.Valid)
-                        retval = 0;
-                    break;
-               /* case QuestionType.GpsCoordinates:
-                    return new GpsAnswerCompleteQuestion(baseQuestion);*/
-            }
-            return retval;
-        }
 
         public string GetAnswerString(QuestionType type, object answer)
         {
@@ -138,14 +103,69 @@ namespace RavenQuestionnaire.Core.AbstractFactories
 
         public ICompleteQuestion ConvertToCompleteQuestion(IQuestion question)
         {
-            var simpleQuestion = question as Question;
-            if (simpleQuestion != null)
-                return (CompleteQuestion) simpleQuestion;
+            //   var simpleQuestion = question as AbstractQuestion;
+
             var bindedQuestion = question as BindedQuestion;
             if (bindedQuestion != null)
-                return (BindedCompleteQuestion)bindedQuestion;
-            throw new ArgumentException();
+                return (BindedCompleteQuestion) bindedQuestion;
+            if (question is IBinded)
+                return new BindedCompleteQuestion(question.PublicKey, (IBinded)question);
+            AbstractCompleteQuestion completeQuestion;
+            
+            if (question is IMultyOptionsQuestion)
+                completeQuestion = new MultyOptionsCompleteQuestion();
+            else if (question is ISingleQuestion)
+                completeQuestion = new SingleCompleteQuestion();
+            else if (question is IDateTimeQuestion)
+                completeQuestion = new DateTimeCompleteQuestion();
+            else if (question is INumericQuestion)
+                completeQuestion = new NumericCompleteQuestion();
+            else if (question is IAutoPropagate)
+                completeQuestion = new AutoPropagateCompleteQuestion(question as IAutoPropagate);
+            else if (question is IGpsCoordinatesQuestion)
+                completeQuestion = new GpsCoordinateCompleteQuestion();
+            else completeQuestion = new TextCompleteQuestion();
+
+            completeQuestion.PublicKey = question.PublicKey;
+            completeQuestion.ConditionExpression = question.ConditionExpression;
+            completeQuestion.QuestionText = question.QuestionText;
+            completeQuestion.QuestionType = question.QuestionType;
+            completeQuestion.StataExportCaption = question.StataExportCaption;
+            completeQuestion.Instructions = question.Instructions;
+            completeQuestion.Triggers = question.Triggers;
+            completeQuestion.ValidationExpression = question.ValidationExpression;
+            completeQuestion.AnswerOrder = question.AnswerOrder;
+            completeQuestion.Valid = true;
+            completeQuestion.Featured = question.Featured;
+
+            var ansersToCopy =
+                new OrderStrategyFactory().Get(completeQuestion.AnswerOrder).Reorder(question.Children);
+            if (ansersToCopy != null)
+            {
+                foreach (IAnswer composite in ansersToCopy)
+                {
+                    IComposite newAnswer;
+                    if (question is ICompleteQuestion)
+                    {
+                        newAnswer = new CompleteAnswer(composite as CompleteAnswer, ((ICompleteQuestion)question).PropogationPublicKey);
+                    }
+                    else
+                    {
+                        newAnswer = (CompleteAnswer) (composite as Answer);
+                    }
+                    completeQuestion.Children.Add(newAnswer);
+                }
+            }
+            //  new CompleteQuestionFactory().Create(completeQuestion).Create(ansersToCopy);
+            if (question.Cards != null)
+                foreach (var card in question.Cards)
+                {
+                    completeQuestion.Cards.Add(card);
+                }
+            return completeQuestion;
+
         }
+
         #endregion
     }
 }
