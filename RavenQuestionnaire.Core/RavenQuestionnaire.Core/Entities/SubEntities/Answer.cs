@@ -68,7 +68,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             throw new CompositeException("answer is not hierarchical");
         }
 
-        public List<IComposite> Children { get; set; }
+        public List<IComposite> Children
+        {
+            get { return new List<IComposite>(); }
+            set { }
+        }
         [JsonIgnore]
         public IComposite Parent
         {
