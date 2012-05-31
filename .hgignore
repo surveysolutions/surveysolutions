@@ -88,3 +88,6 @@ Synchronization/DataEntryClientTests/bin/*
 Synchronization/DataEntryClientTests/obj/*
 Synchronization/DataEntryWCFServerTests/bin/*
 Synchronization/DataEntryWCFServerTests/obj/*
+Synchronization/DataEntryWCFServer/DataEntryWCFServer.Publish.xml
+Synchronization/Synchronization.1.2.dotCover
+Synchronization/Synchronization.6.0.ReSharper.user

@@ -1,27 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Reflection;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.Text;
-using System.Threading;
-using DataEntryClient.CompleteQuestionnaire;
-using DataEntryClient.WcfInfrastructure;
 using Ninject;
-using Ninject.Activation;
-using Ninject.Extensions.Conventions;
-using Ninject.Syntax;
-using Raven.Client.Document;
+using System.Threading;
+using System.Configuration;
+using Ninject.Parameters;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.ClientSettingsProvider;
+using Ninject.Extensions.Conventions;
+using DataEntryClient.WcfInfrastructure;
 using RavenQuestionnaire.Core.Conventions;
-using RavenQuestionnaire.Core.Documents;
+using DataEntryClient.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Entities.Iterators;
-using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.ExpressionExecutors;
-using SynchronizationMessages.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Entities.Subscribers;
+using RavenQuestionnaire.Core.ClientSettingsProvider;
 
 namespace DataEntryClient
 {
@@ -35,17 +25,12 @@ namespace DataEntryClient
             bool created;
             mSingleton = new Mutex(true, "e622fa4b-7b23-4ee7-8bd6-09e8be84cb5d", out created);
             if (!created)
-            {
                 return 0;
-            }
             try
             {
-
-                var kernel =
-                    new StandardKernel(new CoreRegistry(ConfigurationManager.AppSettings["Raven.DocumentStore"]));
+                var kernel = new StandardKernel(new CoreRegistry(ConfigurationManager.AppSettings["Raven.DocumentStore"]));
                 kernel.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
                 RegisterServices(kernel);
-
                 new CompleteQuestionnaireSync(kernel.Get<ICommandInvoker>(), kernel.Get<IViewRepository>(),
                                               kernel.Get<IChanelFactoryWrapper>(), kernel.Get<IClientSettingsProvider>())
                     .
