@@ -177,13 +177,8 @@
                  @Html.Partial("~/Views/Group/Mobile/_PropagatedScreen.cshtml", screen)
             </div>
              <div data-role="footer" data-theme="b">
-                {{if PrevScreen}}
-                    <a class="previous-screen" href="${PrevScreen}" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >Prev Group</a>
-                {{else}}
-                    <a href="#" class="previous-screen ui-disabled" data-icon="arrow-l" data-theme="b" iconpos="notext" data-corners="false">Prev Group</a>
-                {{/if}}
-                
-                <h1>@screen.Navigation.CurrentScreenTitle</h1>
+                <a class="previous-screen" href="${PrevScreen}" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >Prev Group</a>
+                <h1><span></span>@screen.Navigation.CurrentScreenTitle</h1>
                 <a href="#" class="next-screen ui-disabled" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">Next Group</a> 
             </div>
         </div>
@@ -229,7 +224,7 @@
             <a class="previous-screen ui-disabled" href="#" data-icon="arrow-l" data-theme="b"
                 iconpos="notext" data-corners="false">Prev Group</a>
         }
-        <h1>@screen.CurrentScreenTitle</h1>
+        <h1><span></span> @screen.CurrentScreenTitle</h1>
         @if (screen.NextScreen != null)
         {
             if (!screen.NextScreen.IsExternal)

@@ -27,12 +27,12 @@
                     <li>
                         @if (Model.Status.Name == "Completed")
                         {
-                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("ReInit", "CompleteQuestionnaire", new { id = Model.Id })">
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("ReInit", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId })">
                                 ReInit</a>
                         }
                         else
                         {
-                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("Complete", "CompleteQuestionnaire", new { id = Model.Id })">
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("Complete", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId })">
                                 Complete</a>
                         }</li>
                 </ul>

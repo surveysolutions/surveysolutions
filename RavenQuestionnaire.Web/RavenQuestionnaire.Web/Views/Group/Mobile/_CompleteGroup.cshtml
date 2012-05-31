@@ -6,10 +6,9 @@
 @if (Model.Propagated != Propagate.None)
 {
     <div>
-        @if (Model.PropagatedGroupsCount > 0)
-        {
-            @Html.Partial("~/Views/Group/Mobile/_PropagatebleGroup.cshtml", Model)
-        }
+        
+        @Html.Partial("~/Views/Group/Mobile/_PropagatebleGroup.cshtml", Model)
+        
         @if (Model.Propagated != Propagate.AutoPropagated)
         { 
     
@@ -44,7 +43,7 @@ else
         }
         
     <script id="@templateId"  type="text/x-jsrender">
-        @Html.Partial("~/Views/Group/Mobile/_PropagatedGrooup.cshtml", new PropagatedGroup(Model.PublicKey, Model.GroupText, false, Guid.Empty, Model.Questions))
+        @Html.Partial("~/Views/Group/Mobile/_PropagatedGrooup.cshtml", Model.PropagateTemplate)
     </script>
 
 }
