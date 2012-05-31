@@ -22,6 +22,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.QuestionType = question.QuestionType;
             this.Triggers = question.Triggers;
             this.StataExportCaption = question.StataExportCaption;
+            this.Featured = question.Featured;
 
             for (int i = 0; i < question.Children.Count; i++)
             {

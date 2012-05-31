@@ -20,8 +20,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         }
         public ScreenNavigation Navigation { get; set; }
 
-        public Guid PublicKey { get;private set; }
+        
+        public Guid PublicKey { get; private set; }
         public string GroupText { get; private set; }
+        public string FeaturedTitle { get; set; }
         public bool AutoPropagate { get; private set; }
         public Guid PropogationKey { get; private set; }
         public List<CompleteQuestionView> Questions { get; private set; }
