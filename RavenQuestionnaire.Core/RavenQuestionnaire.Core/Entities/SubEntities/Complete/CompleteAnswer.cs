@@ -153,7 +153,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return null;
         }
 
-        public List<IComposite> Children { get; set; }
+        public List<IComposite> Children
+        {
+            get { return new List<IComposite>(); }
+            set { }
+        }
 
         [JsonIgnore]
         public IComposite Parent
