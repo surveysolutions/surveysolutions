@@ -29,6 +29,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         }
         private string _answer;
 
+        public override string GetAnswerString()
+        {
+            return _answer;
+        }
+
         public override List<IComposite> Children
         {
             get { return new List<IComposite>(); }

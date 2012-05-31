@@ -40,7 +40,15 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 throw new CompositeException("answer wasn't found");
             }
         }
-      
+
+
+        public override string GetAnswerString()
+        {
+            var answer = this.Find<ICompleteAnswer>(a => a.Selected).FirstOrDefault();
+            if (answer == null)
+                return string.Empty;
+            else return answer.AnswerText;
+        }
 
         public override List<IComposite> Children { get; set; }
 

@@ -23,7 +23,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         [JsonIgnore]
         public override object Answer
         {
-            get { return CollectAnswers(); }
+            get
+            {
+                var answers = CollectAnswers();
+                return !answers.Any() ? null : answers;
+            }
             set
             {
                 
@@ -51,6 +55,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         }
 
+
+        public override string GetAnswerString()
+        {
+            var answers = this.Find<ICompleteAnswer>(a => a.Selected);
+            if (!answers.Any())
+                return string.Empty;
+            else return string.Join(",", answers.Select(a => a.AnswerText));
+        }
 
         public override List<IComposite> Children { get; set; }
 

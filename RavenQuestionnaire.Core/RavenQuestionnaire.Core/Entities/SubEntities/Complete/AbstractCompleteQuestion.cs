@@ -48,6 +48,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             OnAdded(new CompositeAddedEventArgs(this));
         }
 
+        public abstract string GetAnswerString();
+
         [JsonIgnore]
         public IComposite Parent
         {

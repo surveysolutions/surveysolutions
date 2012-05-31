@@ -10,6 +10,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         DateTime? AnswerDate { get; set; }
         object Answer { get; set; }
         void SetAnswer(object answer);
+        string GetAnswerString();
     }
 
     public interface INumericQuestion
