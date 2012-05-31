@@ -189,7 +189,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             {
                 foreach (var g in @group.Groups)
                 {
-                    //if (g.PublicKey == Guid.Empty) continue;
                     Screens.Add(g);
                     CollectScreens(g);
                 }
