@@ -61,7 +61,7 @@ namespace RavenQuestionnaire.Core.Services
             {*/
                 triggeres =
                entity.Find<ICompleteQuestion>(
-                   g => g.Triggers.Count(gp => gp.Equals(question.PublicKey)) > 0).ToList();
+                   g => g.Triggers.Count(gp => gp==question.PublicKey) > 0).ToList();
          /*   }
             else
             {

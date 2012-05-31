@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             e.EvaluateParameter += (name, args) =>
                                        {
                                            Guid nameGuid = Guid.Parse(name);
-                                           Guid? propagationKey = null;
+                                           Guid? propagationKey = question.PropogationPublicKey;
                                           /* var propagation = question;
                                            if (propagation != null)
                                            {*/

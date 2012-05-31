@@ -28,10 +28,7 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                                                  .Subscribe(Observer.Create<CompositeAddedEventArgs>(
                                                      (e) =>
                                                          {
-                                                             var template =
-                                                                 ((CompositeAddedEventArgs) e.ParentEvent).
-                                                                     AddedComposite as
-                                                                 ICompleteQuestion;
+                                                             var template =e.AddedComposite as ICompleteQuestion;
 
                                                              if (template == null)
                                                                  return;

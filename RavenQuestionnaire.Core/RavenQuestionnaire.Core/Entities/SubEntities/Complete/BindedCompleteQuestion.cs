@@ -12,6 +12,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             PublicKey = Guid.NewGuid();
             Children=new List<IComposite>();
         }
+        public BindedCompleteQuestion(Guid publicKey, Guid parentKey)
+        {
+            PublicKey = publicKey;
+            ParentPublicKey = parentKey;
+        }
+
 /*
         public BindedCompleteQuestion(ICompleteQuestion template)
         {
@@ -28,9 +34,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
         public void Copy(ICompleteQuestion template)
         {
-            var witAnswers = template as ICompleteQuestion;
-            if (witAnswers != null)
-                this.Children = witAnswers.Children;
+
+            this.Children = template.Children;
+
+            this.Answer = template.Answer;
+            
             this.QuestionText = template.QuestionText;
             this.QuestionType = template.QuestionType;
 
@@ -68,7 +76,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return null;
         }
 
-        public List<IComposite> Children { get; set; }
+        public List<IComposite> Children
+        {
+            get { return new List<IComposite>(); }
+            set { }
+        }
         [JsonIgnore]
         public IComposite Parent
         {
@@ -121,8 +133,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public Guid? PropogationPublicKey
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get { return null; }
+            set { }
         }
 
         public bool Enabled

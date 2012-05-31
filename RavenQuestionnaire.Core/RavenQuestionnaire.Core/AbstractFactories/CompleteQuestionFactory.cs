@@ -108,9 +108,10 @@ namespace RavenQuestionnaire.Core.AbstractFactories
             var bindedQuestion = question as BindedQuestion;
             if (bindedQuestion != null)
                 return (BindedCompleteQuestion) bindedQuestion;
-
+            if (question is IBinded)
+                return new BindedCompleteQuestion(question.PublicKey, ((IBinded)question).ParentPublicKey);
             AbstractCompleteQuestion completeQuestion;
-
+            
             if (question is IMultyOptionsQuestion)
                 completeQuestion = new MultyOptionsCompleteQuestion();
             else if (question is ISingleQuestion)
