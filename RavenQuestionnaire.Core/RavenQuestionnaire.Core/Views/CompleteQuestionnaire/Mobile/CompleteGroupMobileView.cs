@@ -102,8 +102,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                 {
                     var @group = propagated[i];
                     var groupTitle = @group.Title;
-                    var pgroup = new PropagatedGroup(@group.PublicKey, groupTitle, @group.AutoPropagate,
-                                                     @group.PropogationPublicKey, new List<CompleteQuestionView>());
+                    var pgroup = new PropagatedGroup(@group.PublicKey, groupTitle, @group.Propagated== Propagate.AutoPropagated,
+                                                     @group.PropogationPublicKey.Value, new List<CompleteQuestionView>());
 
                     if (lastGroup != null)
                     {
@@ -115,7 +115,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                         lastGroup.Navigation.NextScreen = new CompleteGroupHeaders
                                                               {
                                                                   GroupText = pgroup.GroupText,
-                                                                  PublicKey = @group.PropogationPublicKey
+                                                                  PublicKey = @group.PropogationPublicKey.Value
                                                               };
                     }
                     pgroup.Navigation.CurrentScreenTitle = groupTitle;
