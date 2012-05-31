@@ -80,6 +80,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         #region Implementation of IQuestion
 
         public object Answer { get; set; }
+        public void SetAnswer(object answer)
+        {
+            
+        }
+
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
 

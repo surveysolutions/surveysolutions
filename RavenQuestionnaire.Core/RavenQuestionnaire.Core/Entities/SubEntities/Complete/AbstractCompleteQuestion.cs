@@ -42,6 +42,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public DateTime? AnswerDate { get; set; }
 
         public abstract object Answer { get; set; }
+        public void SetAnswer(object answer)
+        {
+            this.Answer = answer;
+            this.AnswerDate = DateTime.Now;
+            OnAdded(new CompositeAddedEventArgs(this));
+        }
 
         [JsonIgnore]
         public IComposite Parent

@@ -16,9 +16,9 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
 
         public override void Subscribe(ICompleteGroup target)
         {
-            var addAnswers = from q in target.GetAllAnswerAddedEvents()
+            var addAnswers = from q in target.GetAllQuestionAnsweredEvents()
                              let question =
-                                 ((CompositeAddedEventArgs) q.ParentEvent).AddedComposite as
+                                q.AddedComposite as
                                  ICompleteQuestion
                              let binded =
                                  target.GetAllBindedQuestions(question.PublicKey)

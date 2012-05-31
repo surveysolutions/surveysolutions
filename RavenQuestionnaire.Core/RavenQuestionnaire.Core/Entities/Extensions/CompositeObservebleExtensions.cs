@@ -11,12 +11,12 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
 {
     public static class CompositeObservebleExtensions
     {
-        public static IObservable<CompositeAddedEventArgs> GetAllAnswerAddedEvents(this IObservable<CompositeEventArgs> observeble)
+        public static IObservable<CompositeAddedEventArgs> GetAllQuestionAnsweredEvents(this IObservable<CompositeEventArgs> observeble)
         {
             return from q in observeble
-                   where q.ParentEvent != null &&
+                   where 
                          q is CompositeAddedEventArgs &&
-                         ((CompositeAddedEventArgs)q).AddedComposite is ICompleteAnswer
+                         ((CompositeAddedEventArgs)q).AddedComposite is ICompleteQuestion
                    select q as CompositeAddedEventArgs;
         }
         public static IObservable<CompositeAddedEventArgs> GetGroupPropagatedEvents(this IComposite observeble)

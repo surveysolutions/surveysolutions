@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Core.Services
 
 
 
-            question.Answer = answers;
+            question.SetAnswer(answers);
 
       
            
@@ -74,8 +74,8 @@ namespace RavenQuestionnaire.Core.Services
             {
                 bool previousState = completeQuestion.Enabled;
                 completeQuestion.Enabled = executor.Execute(completeQuestion);
-                if (!completeQuestion.Enabled)
-                    entity.Remove(completeQuestion);
+                /*if (!completeQuestion.Enabled)
+                    entity.Remove(completeQuestion);*/
                 if (previousState != completeQuestion.Enabled)
                 {
                     ExecuteConditions(completeQuestion, entity);
