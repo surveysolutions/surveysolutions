@@ -20,7 +20,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         List<Image> Cards { get; set; }
         Order AnswerOrder { get; set; }
         bool Featured { get; set; }
-        Dictionary<string, object> Attributes { get; set; }
     }
 
 }

@@ -43,7 +43,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
                 case QuestionType.Numeric:
                     return new NumericQuestion();
                 case QuestionType.AutoPropagate:
-                    return new NumericQuestion();
+                    return new AutoPropagateQuestion();
                 case QuestionType.GpsCoordinates:
                     return new GpsCoordinateQuestion();
            /*     case QuestionType.Percentage:
@@ -109,7 +109,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
             if (bindedQuestion != null)
                 return (BindedCompleteQuestion) bindedQuestion;
             if (question is IBinded)
-                return new BindedCompleteQuestion(question.PublicKey, ((IBinded)question).ParentPublicKey);
+                return new BindedCompleteQuestion(question.PublicKey, (IBinded)question);
             AbstractCompleteQuestion completeQuestion;
             
             if (question is IMultyOptionsQuestion)
@@ -120,7 +120,8 @@ namespace RavenQuestionnaire.Core.AbstractFactories
                 completeQuestion = new DateTimeCompleteQuestion();
             else if (question is INumericQuestion)
                 completeQuestion = new NumericCompleteQuestion();
-
+            else if (question is IAutoPropagate)
+                completeQuestion = new AutoPropagateCompleteQuestion(question as IAutoPropagate);
             else if (question is IGpsCoordinatesQuestion)
                 completeQuestion = new GpsCoordinateCompleteQuestion();
             else completeQuestion = new TextCompleteQuestion();
@@ -136,7 +137,6 @@ namespace RavenQuestionnaire.Core.AbstractFactories
             completeQuestion.AnswerOrder = question.AnswerOrder;
             completeQuestion.Valid = true;
             completeQuestion.Featured = question.Featured;
-            completeQuestion.Attributes = question.Attributes;
 
             var ansersToCopy =
                 new OrderStrategyFactory().Get(completeQuestion.AnswerOrder).Reorder(question.Children);

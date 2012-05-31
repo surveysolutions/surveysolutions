@@ -229,6 +229,7 @@
     <Compile Include="Entities\Statistics\CompleteQuestionnaireStatistics.cs" />
     <Compile Include="Entities\SubEntities\Complete\AbstractCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\AbstractQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\Question\AutoPropagateCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\DateTimeCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\GpsCoordinateCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\MultyOptionsCompleteQuestion.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="Entities\SubEntities\LocationWithUserStatistic.cs" />
     <Compile Include="Entities\SubEntities\IQuestion.cs" />
     <Compile Include="Entities\SubEntities\QuestionType.cs" />
+    <Compile Include="Entities\SubEntities\Question\AutoPropagateQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\DateTimeQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\GpsCoordinateQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\MultyOptionsQuestion.cs" />

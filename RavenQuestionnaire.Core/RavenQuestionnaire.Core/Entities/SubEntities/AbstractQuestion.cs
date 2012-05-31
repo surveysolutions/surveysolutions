@@ -15,7 +15,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             PublicKey = Guid.NewGuid();
             Cards = new List<Image>();
-            Attributes=new Dictionary<string, object>();
             this.Triggers = new List<Guid>();
             this.observers = new List<IObserver<CompositeEventArgs>>();
 
@@ -50,7 +49,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public bool Featured { get; set; }
 
-        public Dictionary<string, object> Attributes { get; set; }
 
         public string ConditionExpression
         {

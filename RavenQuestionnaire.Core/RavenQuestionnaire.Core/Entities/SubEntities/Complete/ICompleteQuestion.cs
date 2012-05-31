@@ -54,6 +54,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
     {
         string AddYesNoAttr { get; set; }
     }
+    public interface IAutoPropagate
+    {
+        Guid TargetGroupKey { get; set; }
+    }
 }
 
                

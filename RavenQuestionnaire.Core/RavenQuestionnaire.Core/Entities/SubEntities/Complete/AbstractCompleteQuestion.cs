@@ -31,7 +31,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public bool Featured { get; set; }
 
-        public Dictionary<string, object> Attributes { get; set; }
 
         public Guid? PropogationPublicKey { get; set; }
 
@@ -68,7 +67,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.Valid = true;
             this.Cards = new List<Image>();
             this.Triggers = new List<Guid>();
-            this.Attributes = new Dictionary<string, object>();
             //this.Answers.GetObservablePropertyChanges().Subscribe(e=>e.EventArgs)
             this.observers = new List<IObserver<CompositeEventArgs>>();
         }
