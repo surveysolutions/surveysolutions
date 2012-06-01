@@ -25,7 +25,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public UserLight Responsible { get; private set; }
         public QuestionStatisticView[] FeaturedQuestions { get; private set; }
         public SurveyStatus Status { get; private set; }
-
+        public UserLight Creator { get; set; }
         public CompleteQuestionnaireBrowseItem(string id, string questionnaireTitle, DateTime creationDate,
                                                DateTime lastEntryDate, SurveyStatus status,int totalQuestionCount, int answeredQuestionCount, UserLight responsible)
         {
@@ -47,6 +47,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.Status = doc.Status;
             this.TotalQuestionCouont = doc.TotalQuestionCount;
             this.AnsweredQuestionCouont = doc.AnsweredQuestions.Count;
+            this.Creator = doc.Creator;
             this.FeaturedQuestions = doc.FeturedQuestions.Select(q => new QuestionStatisticView(q)).ToArray();
             //this.Responsible = doc.r;
         }
