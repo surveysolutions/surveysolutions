@@ -111,17 +111,19 @@ namespace QApp.ViewModel {
             string qId = id as string;
             if (String.IsNullOrEmpty(qId))
                 return;
-            var command = new CreateNewCompleteQuestionnaireCommand(qId,
-                                                                    new UserLight("0", "system"), 
+
+
+            Guid publickey = Guid.NewGuid();
+
+            var command = new CreateNewCompleteQuestionnaireCommand(qId,publickey, new UserLight("0", "system"), 
                                                                     new SurveyStatus(Guid.NewGuid()), 
                                                                     new UserLight("0", "system"));
             var commandInvoker = Initializer.Kernel.Get<ICommandInvoker>();
             commandInvoker.Execute(command);
 
-            id = command.CompleteQuestionnaireId;
-            
-            if (ShowCompletedItemCommand.CanExecute(id))
-                ShowCompletedItemCommand.Execute(id);
+
+            if (ShowCompletedItemCommand.CanExecute(publickey.ToString()))
+                ShowCompletedItemCommand.Execute(publickey.ToString());
         }
 
         public ICommand ShowMainCommand { get; private set; }
