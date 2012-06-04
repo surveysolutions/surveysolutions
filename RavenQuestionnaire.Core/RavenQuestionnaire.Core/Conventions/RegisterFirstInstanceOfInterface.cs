@@ -27,6 +27,8 @@ namespace RavenQuestionnaire.Core.Conventions
             {
                 return;
             }
+            if(kernel.TryGet(type)!=null)
+                return;
             kernel.Bind(type).To(matchedType);
           //  registry.For(type).Use(matchedType);
         }

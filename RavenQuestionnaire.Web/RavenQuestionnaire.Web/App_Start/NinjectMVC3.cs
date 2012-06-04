@@ -4,6 +4,7 @@ using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.Conventions;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.Subscribers;
@@ -64,6 +65,7 @@ namespace RavenQuestionnaire.Web.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            kernel.Bind<IClientSettingsProvider>().To<ClientSettingsProvider>().InSingletonScope();
             kernel.Scan(s =>
             {
                 s.FromAssembliesMatching("RavenQuestionnaire.*");
