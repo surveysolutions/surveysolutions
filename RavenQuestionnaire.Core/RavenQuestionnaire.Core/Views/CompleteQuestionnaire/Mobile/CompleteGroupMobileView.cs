@@ -101,26 +101,34 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             {
                 PropogationPublicKeys = propagated.Select(g => g.PropogationPublicKey.Value).ToList();
                 PropagatedGroup lastGroup = null;
-                foreach (var @group in propagated)
+                for (int i = 0; i < propagated.Count; i++)
                 {
-
-                    var pgroup = new PropagatedGroup(@group.PublicKey, @group.Title, @group.Propagated== Propagate.AutoPropagated,
+                    var @group = propagated[i];
+                    var groupTitle = @group.Title;
+                    var pgroup = new PropagatedGroup(@group.PublicKey, groupTitle, @group.Propagated == Propagate.AutoPropagated,
                                                      @group.PropogationPublicKey.Value, new List<CompleteQuestionView>());
-
 
                     if (lastGroup != null)
                     {
-                        pgroup.Navigation.PrevScreen = new CompleteGroupHeaders { GroupText = lastGroup.GroupText, PublicKey = lastGroup.PropogationKey };
-                        lastGroup.Navigation.NextScreen = new CompleteGroupHeaders { GroupText = pgroup.GroupText, PublicKey = @group.PropogationPublicKey.Value };
+                        pgroup.Navigation.PrevScreen = new CompleteGroupHeaders
+                        {
+                            GroupText = lastGroup.GroupText,
+                            PublicKey = lastGroup.PropogationKey
+                        };
+                        lastGroup.Navigation.NextScreen = new CompleteGroupHeaders
+                        {
+                            GroupText = pgroup.GroupText,
+                            PublicKey = @group.PropogationPublicKey.Value
+                        };
                     }
-                    pgroup.Navigation.CurrentScreenTitle = @group.Title;
+                    pgroup.Navigation.CurrentScreenTitle = groupTitle;
                     pgroup.Navigation.BreadCumbs.AddRange(this.Navigation.BreadCumbs);
-                    //pgroup.Navigation.BreadCumbs.Add(new CompleteGroupHeaders() { GroupText = this.GroupText, PublicKey = this.PublicKey });
 
                     PropagatedGroups.Add(pgroup);
                     AutoPropagate.Add(@group.Propagated == Propagate.AutoPropagated);
                     lastGroup = pgroup;
                 }
+
             }
             var questions = propagatable.Children.OfType<ICompleteQuestion>().ToList();
             for (int i = 0; i < questions.Count; i++)
@@ -143,6 +151,15 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                 }
                 PropagatedQuestions.Add(pq);
             }
+            foreach (var group in PropagatedGroups)
+            {
+                var featuredList = group.Questions.Where(q => q.Featured)
+                    .Select(questionView => string.Join(",", questionView.Answers.Where(a => a.Selected)
+                        .Select(answer => !string.IsNullOrEmpty(answer.AnswerText) ? answer.AnswerText : answer.AnswerValue)
+                        .Where(a => !string.IsNullOrEmpty(a)).ToArray())).ToList();
+                group.FeaturedTitle = string.Join(",", featuredList.Where(f => !string.IsNullOrEmpty(f)));
+            }
+
         }
 
         private void InitNavigation(CompleteGroup currentGroup, IList<ScreenNavigation> navigations)
