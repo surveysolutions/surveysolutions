@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         [JsonIgnore]
         public override object Answer
         {
-            get { return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).FirstOrDefault(); }
+            get { return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText ?? string.Empty).FirstOrDefault(); }
             set
             {
                 if(value==null)
