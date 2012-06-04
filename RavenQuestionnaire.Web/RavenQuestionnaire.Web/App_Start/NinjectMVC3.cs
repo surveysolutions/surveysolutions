@@ -4,6 +4,7 @@ using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.Conventions;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.Subscribers;
@@ -98,6 +99,8 @@ namespace RavenQuestionnaire.Web.App_Start
             kernel.Bind<IFormsAuthentication>().To <FormsAuthentication>();
             kernel.Bind<IBagManager>().To<ViewBagManager>();
             kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
+
+
         }        
     }
 
