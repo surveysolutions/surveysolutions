@@ -102,6 +102,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return Answer == null ? string.Empty : Answer.ToString();
         }
 
+        public object GetAnswerObject()
+        {
+            return Answer;
+        }
+
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
 

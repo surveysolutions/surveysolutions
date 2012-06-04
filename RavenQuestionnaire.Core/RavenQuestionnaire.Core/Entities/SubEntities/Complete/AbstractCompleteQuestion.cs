@@ -49,6 +49,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
 
         public abstract string GetAnswerString();
+        public abstract object GetAnswerObject();
 
         [JsonIgnore]
         public IComposite Parent
