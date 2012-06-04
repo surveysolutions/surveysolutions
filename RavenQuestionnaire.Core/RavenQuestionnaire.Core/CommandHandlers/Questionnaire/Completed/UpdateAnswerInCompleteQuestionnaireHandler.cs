@@ -25,7 +25,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
 
         public void Handle(UpdateAnswerInCompleteQuestionnaireCommand command)
         {
-            this._completeQuestionnaireUploader.AddCompleteAnswer(command.CompleteQuestionnaireId,
+            this._completeQuestionnaireUploader.AddCompleteAnswer(command.CompleteQuestionnaireId,command.QuestionPublickey,command.Propagationkey,
                                                                   command.CompleteAnswers);
         }
     }

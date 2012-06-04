@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
@@ -10,25 +11,60 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         #region Properties
 
+        public MultyOptionsCompleteQuestion()
+        {
+            this.Children = new List<IComposite>();
+        }
+
+        public MultyOptionsCompleteQuestion(string text) : base(text)
+        {
+            this.Children = new List<IComposite>();
+        }
+        [JsonIgnore]
         public override object Answer
         {
-            get { return _answers; }
-        }
-
-        private List<object> _answers { 
             get
             {
-                return (List<object>) this.Children.Where(c => ((ICompleteAnswer)c).Selected);
+                var answers = CollectAnswers();
+                return !answers.Any() ? null : answers;
             }
-            set { _answers = value; }
+            set
+            {
+                
+                var selecteAnswers = (List<Guid>)value;
+                var answerObjects = this.Find<ICompleteAnswer>(a => selecteAnswers.Contains(a.PublicKey));
+                if (answerObjects != null)
+                {
+                    this.Children.ForEach(c => ((ICompleteAnswer)c).Selected = false);
+                    foreach (ICompleteAnswer completeAnswer in answerObjects)
+                    {
+                        completeAnswer.Add(completeAnswer, null);
+                    }
+                    this.AnswerDate = DateTime.Now;
+                    OnAdded(new CompositeAddedEventArgs(this));
+                    return;
+                }
+                throw new CompositeException("answer wasn't found");
+            }
         }
-    
 
-        public override List<IComposite> Children
+        private IEnumerable<object> CollectAnswers()
         {
-            get { return new List<IComposite>(); }
-            set { }
+           //  return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).FirstOrDefault(); 
+            return this.Children.Where(c => ((ICompleteAnswer)c).Selected).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText);
+
         }
+
+
+        public override string GetAnswerString()
+        {
+            var answers = this.Find<ICompleteAnswer>(a => a.Selected);
+            if (!answers.Any())
+                return string.Empty;
+            else return string.Join(",", answers.Select(a => a.AnswerText));
+        }
+
+        public override List<IComposite> Children { get; set; }
 
         public string AddMultyAttr { get; set; }
 
@@ -39,28 +75,30 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         public override void Add(IComposite c, Guid? parent)
         {
             var question = c as ICompleteQuestion;
-            if (question == null || question.PublicKey != this.PublicKey)
-                throw new CompositeException();
-            _answers = question.Answer as List<object>;
-            if (_answers!=null)
-                foreach (var answer in _answers)
+            if (question != null && question.PublicKey == this.PublicKey)
+            {
+                this.Answer = question.Answer;
+                return;
+            }
+            CompleteAnswer currentAnswer = c as CompleteAnswer;
+            if (currentAnswer != null)
+            {
+                foreach (IComposite child in this.Children)
                 {
                     try
                     {
-                        var completeAnswer = answer as CompleteAnswer;
-                        if (completeAnswer != null)
-                        {
-                            completeAnswer.Add(c, parent);
-                            return;
-                        }
+                        child.Add(c, null);
+                        return;
                     }
-                    catch (Exception)
+                    catch (CompositeException)
                     {
-                        throw;
+
                     }
                 }
-            this.AnswerDate = DateTime.Now;
-            OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), c));
+                //this.Answer = currentAnswer.PublicKey;
+
+            }
+            throw new CompositeException();
         }
 
         public override void Remove(IComposite c)
@@ -70,9 +108,32 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         public override void Remove(Guid publicKey)
         {
-            if (publicKey != this.PublicKey)
-                throw new CompositeException();
-            OnRemoved(new CompositeRemovedEventArgs(this));
+            if (publicKey == this.PublicKey)
+            {
+                foreach (ICompleteAnswer composite in Children)
+                {
+                    composite.Remove(composite.PublicKey);
+                }
+                OnRemoved(new CompositeRemovedEventArgs(this));
+                return;
+
+            }
+            foreach (ICompleteAnswer composite in Children)
+            {
+                try
+                {
+
+                    composite.Remove(publicKey);
+                    OnRemoved(new CompositeRemovedEventArgs(this));
+                    return;
+                }
+                catch (CompositeException)
+                {
+
+                }
+            }
+            throw new CompositeException();
+
         }
 
         public override T Find<T>(Guid publicKey)
@@ -80,16 +141,22 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             if (typeof(T).IsAssignableFrom(GetType()))
                 if (this.PublicKey.Equals(publicKey))
                     return this as T;
+            if (typeof(T).IsAssignableFrom(typeof(CompleteAnswer)))
+            {
+                return this.Children.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+            }
             return null;
         }
 
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
             if (!(this is T))
-                return null;
+                return
+                    Children.Where(a => a is T && condition(a as T)).Select
+                        (a => a as T);
             if (condition(this as T))
-                return new T[] { this as T };
-            return null;
+                return new T[] {this as T};
+            return new T[0];
         }
 
         public override T FirstOrDefault<T>(Func<T, bool> condition)

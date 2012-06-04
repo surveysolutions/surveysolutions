@@ -13,7 +13,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         {
             this.PublicKey = doc.PublicKey;
             this.QuestionText = doc.QuestionText;
-            this.AnswerValue = new CompleteQuestionFactory().GetAnswerString(doc.QuestionType, doc.AnswerValue);
+            this.AnswerValue = doc.AnswerText;
             this.AnswerDate = doc.AnswerDate;
             this.ApproximateTime = doc.ApproximateTime;
             this.AnswerText = doc.AnswerText;

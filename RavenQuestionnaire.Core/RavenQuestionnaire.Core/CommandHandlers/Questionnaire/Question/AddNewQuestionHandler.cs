@@ -26,8 +26,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question
             var question = questionnaire.AddQuestion(command.QuestionText, command.StataExportCaption,
                                                      command.QuestionType,
                                                      command.ConditionExpression, command.ValidationExpression, command.Featured,command.AnswerOrder,
-                                                     command.GroupPublicKey);
-            question.UpdateAnswerList(command.Answers);
+                                                     command.GroupPublicKey, command.Answers);
         }
     }
 }

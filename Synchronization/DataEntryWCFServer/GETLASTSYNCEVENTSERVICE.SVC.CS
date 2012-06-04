@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.Text;
+using Ninject;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Views.Event;
 using SynchronizationMessages.Handshake;
@@ -12,17 +13,18 @@ using SynchronizationMessages.Handshake;
 namespace DataEntryWCFServer
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "GetLastSyncEventService" in code, svc and config file together.
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    //[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class GetLastSyncEventService : IGetLastSyncEvent
     {
-        private ICommandInvoker invoker;
-        private IViewRepository viewRepository;
-        public GetLastSyncEventService(ICommandInvoker invoker, IViewRepository viewRepository)
+        //ninject wcf bug https://groups.google.com/forum/#!msg/ninject/Q8uGKIjBnyM/U3iM0EWp4_EJ
+        [Inject]
+        public ICommandInvoker invoker { get; set; }
+        [Inject]
+        public IViewRepository viewRepository { get; set; }
+    
+        /*public GetLastSyncEventService()
         {
-            this.invoker = invoker;
-            this.viewRepository = viewRepository;
-        }
-
+        }*/
 
         public Guid? Process(Guid clientGuid)
         {
