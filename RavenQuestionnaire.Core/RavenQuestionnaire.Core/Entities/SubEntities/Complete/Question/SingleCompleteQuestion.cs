@@ -22,7 +22,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         [JsonIgnore]
         public override object Answer
         {
-            get { return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText ?? string.Empty).FirstOrDefault(); }
+            get
+            {
+                var answers = this.Children.Where(c => ((ICompleteAnswer) c).Selected).Select(c => c.PublicKey);
+                if (answers.Any()) return answers.First();
+                return null;
+            }
             set
             {
                 if(value==null)
@@ -48,6 +53,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             if (answer == null)
                 return string.Empty;
             else return answer.AnswerText;
+        }
+
+        public override object GetAnswerObject()
+        {
+            return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).FirstOrDefault();
         }
 
         public override List<IComposite> Children { get; set; }

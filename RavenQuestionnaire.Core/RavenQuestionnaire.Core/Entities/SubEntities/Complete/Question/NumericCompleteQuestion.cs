@@ -34,6 +34,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             return answer.HasValue ? answer.Value.ToString() : string.Empty;
         }
 
+        public override object GetAnswerObject()
+        {
+            return answer;
+        }
+
         public override List<IComposite> Children
         {
             get { return new List<IComposite>(); }

@@ -41,7 +41,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
 
                                          //  }
                                            args.Result =
-                                               questionnaire.GetQuestionByKey(nameGuid, propagationKey).Answer;
+                                               questionnaire.GetQuestionByKey(nameGuid, propagationKey).GetAnswerObject();
                                        };
                 
             bool result = false;
