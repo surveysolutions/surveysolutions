@@ -48,10 +48,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             }
         }
 
-        private IEnumerable<object> CollectAnswers()
+        private IEnumerable<Guid> CollectAnswers()
         {
            //  return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).FirstOrDefault(); 
-            return this.Children.Where(c => ((ICompleteAnswer)c).Selected).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText);
+            return this.Children.Where(c => ((ICompleteAnswer)c).Selected).Select(c => c.PublicKey);
 
         }
 
@@ -62,6 +62,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             if (!answers.Any())
                 return string.Empty;
             else return string.Join(",", answers.Select(a => a.AnswerText));
+        }
+
+        public override object GetAnswerObject()
+        {
+            return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText);
         }
 
         public override List<IComposite> Children { get; set; }

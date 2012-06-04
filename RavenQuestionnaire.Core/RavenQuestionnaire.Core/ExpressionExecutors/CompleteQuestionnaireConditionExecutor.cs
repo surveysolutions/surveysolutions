@@ -34,7 +34,12 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
                                            //    propagationKey = propagation.PropogationPublicKey;
 
                                          //  }
-                                           args.Result = questionnaire.GetQuestionByKey(nameGuid, propagationKey).Answer;
+                                           var value =
+                                               questionnaire.GetQuestionByKey(nameGuid, propagationKey).GetAnswerObject();
+                                           if (value != null)
+                                               args.Result = value;
+                                           else
+                                               args.Result = string.Empty;
 //                                               questionnaire.GetQuestionByKey(nameGuid, propagationKey).GetValue();
                                        }
                 ;

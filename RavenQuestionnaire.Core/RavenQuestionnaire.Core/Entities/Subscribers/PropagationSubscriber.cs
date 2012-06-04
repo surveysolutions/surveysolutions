@@ -60,7 +60,7 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                             if (question == null)
                                 return;
 
-                            var countObj = question.Answer;
+                            var countObj = question.GetAnswerObject();
 
                             int count = Convert.ToInt32(countObj);
 

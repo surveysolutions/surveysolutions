@@ -275,7 +275,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                             {
                                 Total = questions.Count,
                                 Enablad = enabled.Count(),
-                                Answered = enabled.Count(question => question.Children.Any(a => a is ICompleteAnswer && ((ICompleteAnswer)a).Selected))
+                                Answered = enabled.Count(question => question.Answer!=null)
                             };
             return total;
         }

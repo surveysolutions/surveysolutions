@@ -11,6 +11,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         object Answer { get; set; }
         void SetAnswer(object answer);
         string GetAnswerString();
+        object GetAnswerObject();
     }
 
     public interface INumericQuestion
