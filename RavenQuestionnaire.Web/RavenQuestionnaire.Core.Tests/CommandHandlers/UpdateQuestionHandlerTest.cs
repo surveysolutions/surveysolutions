@@ -5,6 +5,7 @@ using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Question;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
 
@@ -19,7 +20,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Questionnaire entity = new Questionnaire(innerDocument);
-            Question question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty,false, Order.AsIs, null);
+            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null,null);
             FileDocument innerFileDocument = new FileDocument();
             innerFileDocument.Id = "fID";
             File fEntity = new File(innerFileDocument);

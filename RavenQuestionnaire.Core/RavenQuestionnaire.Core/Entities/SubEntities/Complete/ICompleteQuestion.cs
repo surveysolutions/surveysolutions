@@ -4,10 +4,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
     public interface ICompleteQuestion : IQuestion
     {
+        Guid? PropogationPublicKey { get; set; }
         bool Enabled { get; set; }
         bool Valid { get; set; }
         DateTime? AnswerDate { get; set; }
-        object Answer { get; }
+        object Answer { get; set; }
+        void SetAnswer(object answer);
+        string GetAnswerString();
     }
 
     public interface INumericQuestion
@@ -51,6 +54,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
     public interface IYesNoQuestion
     {
         string AddYesNoAttr { get; set; }
+    }
+    public interface IAutoPropagate
+    {
+        Guid TargetGroupKey { get; set; }
     }
 }
 

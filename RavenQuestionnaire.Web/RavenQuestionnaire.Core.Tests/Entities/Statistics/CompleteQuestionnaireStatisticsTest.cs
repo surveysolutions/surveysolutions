@@ -10,6 +10,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
 
 namespace RavenQuestionnaire.Core.Tests.Entities.Statistics
 {
@@ -31,8 +32,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Statistics
         public void Statistics_CollectAnsweredQuestions_AllAnswersAreCollected()
         {
             CompleteQuestionnaireDocument template = new CompleteQuestionnaireDocument() { Id = "test", CloseDate = DateTime.Now.AddDays(1), Title = "test" };
-            template.Children.Add(new CompleteQuestion("q1", QuestionType.Text) { Children = new List<IComposite>() { new CompleteAnswer() { Selected = true } } });
-            template.Children.Add(new CompleteQuestion("q2", QuestionType.Text));
+            template.Children.Add(new SingleCompleteQuestion("q1") { Children = new List<IComposite>() { new CompleteAnswer() { Selected = true } } });
+            template.Children.Add(new SingleCompleteQuestion("q2"));
            CompleteQuestionnaireStatistics statistics = new CompleteQuestionnaireStatistics(template);
             var newDoc = ((IEntity<CompleteQuestionnaireStatisticDocument>)statistics).GetInnerDocument();
             Assert.AreEqual(newDoc.AnsweredQuestions.Count, 1);
@@ -41,8 +42,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Statistics
         public void Statistics_CollectInvalidQuestions_AllInvalidAreCollected()
         {
             CompleteQuestionnaireDocument template = new CompleteQuestionnaireDocument() { Id = "test", CloseDate = DateTime.Now.AddDays(1), Title = "test" };
-            template.Children.Add(new CompleteQuestion("q1", QuestionType.Text) { Valid = false });
-            template.Children.Add(new CompleteQuestion("q2", QuestionType.Text) { Valid = true });
+            template.Children.Add(new SingleCompleteQuestion("q1") { Valid = false });
+            template.Children.Add(new SingleCompleteQuestion("q2") { Valid = true });
             CompleteQuestionnaireStatistics statistics = new CompleteQuestionnaireStatistics(template);
             var newDoc = ((IEntity<CompleteQuestionnaireStatisticDocument>)statistics).GetInnerDocument();
             Assert.AreEqual(newDoc.InvalidQuestions.Count, 1);
@@ -51,8 +52,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Statistics
         public void Statistics_CollectFeaturedQuestions_AllInvalidAreCollected()
         {
             CompleteQuestionnaireDocument template = new CompleteQuestionnaireDocument() { Id = "test", CloseDate = DateTime.Now.AddDays(1), Title = "test" };
-            template.Children.Add(new CompleteQuestion("q1", QuestionType.Text) { Featured = false });
-            template.Children.Add(new CompleteQuestion("q2", QuestionType.Text) { Featured = true });
+            template.Children.Add(new SingleCompleteQuestion("q1") { Featured = false });
+            template.Children.Add(new SingleCompleteQuestion("q2") { Featured = true });
             CompleteQuestionnaireStatistics statistics = new CompleteQuestionnaireStatistics(template);
             var newDoc = ((IEntity<CompleteQuestionnaireStatisticDocument>)statistics).GetInnerDocument();
             Assert.AreEqual(newDoc.FeturedQuestions.Count, 1);

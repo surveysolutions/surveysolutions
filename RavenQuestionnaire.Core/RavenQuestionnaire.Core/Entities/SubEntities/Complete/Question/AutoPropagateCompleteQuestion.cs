@@ -1,26 +1,52 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
-    public class PercentageQuestion:AbstractCompleteQuestion, IPercentageQuestion
+    public class AutoPropagateCompleteQuestion:AbstractCompleteQuestion, IAutoPropagate
     {
-        #region Properties
 
-        public override object Answer
+        public AutoPropagateCompleteQuestion()
         {
-            get { return _answer; }
         }
 
-        private string _answer;
+        public AutoPropagateCompleteQuestion(string text)
+            : base(text)
+        {
+        }
+        public AutoPropagateCompleteQuestion(IAutoPropagate template)
+        {
+            this.TargetGroupKey = template.TargetGroupKey;
+        }
+        public override object Answer
+        {
+            get { return answer; }
+            set
+            {
+                if (value != null)
+                answer = Convert.ToInt32(value);
+               
+            }
+        }
+        private int? answer;
 
-        public override List<IComposite> Children { get; set; }
+        public override string GetAnswerString()
+        {
+            return answer.HasValue ? answer.Value.ToString() : string.Empty;
+        }
 
-        public double AddPercentageAttr { get; set; }
-
-        #endregion
+        public override List<IComposite> Children
+        {
+            get { return new List<IComposite>(); }
+            set { }
+        }
+        //{
+        //    get { return new List<IComposite>(); }
+        //    set { }
+        //}
 
         #region Method
 
@@ -29,38 +55,40 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             var question = c as ICompleteQuestion;
             if (question == null || question.PublicKey != this.PublicKey)
                 throw new CompositeException();
-            _answer = question.Answer.ToString();
+            this.Answer = question.Answer;
             this.AnswerDate = DateTime.Now;
-            OnAdded(new CompositeAddedEventArgs(new CompositeAddedEventArgs(this), c));
+            OnAdded(new CompositeAddedEventArgs(this));
         }
 
         public override void Remove(IComposite c)
         {
-            this.Remove(c.PublicKey);
+           this.Remove(c.PublicKey);
         }
 
         public override void Remove(Guid publicKey)
         {
             if (publicKey != this.PublicKey)
                 throw new CompositeException();
-            OnRemoved(new CompositeRemovedEventArgs(this));
+            this.answer = null;
         }
 
         public override T Find<T>(Guid publicKey)
         {
             if (typeof(T).IsAssignableFrom(GetType()))
+            {
                 if (this.PublicKey.Equals(publicKey))
                     return this as T;
+            }
             return null;
         }
 
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
             if (!(this is T))
-                return null;
+                return new T[0];
             if (condition(this as T))
                 return new T[] { this as T };
-            return null;
+            return new T[0];
         }
 
         public override T FirstOrDefault<T>(Func<T, bool> condition)
@@ -69,5 +97,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         }
 
         #endregion
+
+        public Guid TargetGroupKey { get; set; }
     }
 }

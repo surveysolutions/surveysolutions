@@ -11,12 +11,12 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
 {
     public static class CompositeObservebleExtensions
     {
-        public static IObservable<CompositeAddedEventArgs> GetAllAnswerAddedEvents(this IObservable<CompositeEventArgs> observeble)
+        public static IObservable<CompositeAddedEventArgs> GetAllQuestionAnsweredEvents(this IObservable<CompositeEventArgs> observeble)
         {
             return from q in observeble
-                   where q.ParentEvent != null &&
+                   where 
                          q is CompositeAddedEventArgs &&
-                         ((CompositeAddedEventArgs)q).AddedComposite is ICompleteAnswer
+                         ((CompositeAddedEventArgs)q).AddedComposite is ICompleteQuestion
                    select q as CompositeAddedEventArgs;
         }
         public static IObservable<CompositeAddedEventArgs> GetGroupPropagatedEvents(this IComposite observeble)
@@ -24,8 +24,8 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
             return from q in observeble
                    where
                        q is CompositeAddedEventArgs &&
-                       ((CompositeAddedEventArgs) q).AddedComposite is PropagatableCompleteGroup
-                   let propagatedGroup = ((CompositeAddedEventArgs) q).AddedComposite as PropagatableCompleteGroup
+                       ((CompositeAddedEventArgs)q).AddedComposite is ICompleteGroup && ((ICompleteGroup)((CompositeAddedEventArgs)q).AddedComposite).PropogationPublicKey.HasValue
+                   let propagatedGroup = ((CompositeAddedEventArgs) q).AddedComposite as ICompleteGroup
                    let triggeres =
                        observeble.Find<ICompleteGroup>(
                            g => g.Triggers.Count(gp => gp.Equals(propagatedGroup.PublicKey)) > 0)
@@ -38,8 +38,8 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
         {
             return from q in observeble
                    where q is CompositeRemovedEventArgs &&
-                         ((CompositeRemovedEventArgs) q).RemovedComposite is PropagatableCompleteGroup
-                   let propagatedGroup = ((CompositeRemovedEventArgs) q).RemovedComposite as PropagatableCompleteGroup
+                         ((CompositeRemovedEventArgs)q).RemovedComposite is ICompleteGroup && ((ICompleteGroup)((CompositeRemovedEventArgs)q).RemovedComposite).PropogationPublicKey.HasValue
+                   let propagatedGroup = ((CompositeRemovedEventArgs)q).RemovedComposite as ICompleteGroup
                    let triggeres =
                        observeble.Find<ICompleteGroup>(
                            g => g.Triggers.Count(gp => gp.Equals(propagatedGroup.PublicKey)) > 0)
