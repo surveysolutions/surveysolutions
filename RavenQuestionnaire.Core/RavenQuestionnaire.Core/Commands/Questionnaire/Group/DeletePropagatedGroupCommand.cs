@@ -16,11 +16,11 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
 
         #endregion
 
-        public DeletePropagatedGroupCommand(string completequestionanireId,Guid groupPublicKey, Guid propagationPublicKey,
-                                            UserLight executer)
+        public DeletePropagatedGroupCommand(string completeQuestionnaireId, Guid groupPublicKey, Guid propagationPublicKey,
+                                            UserLight executor)
         {
-            this.CompleteQuestionnaireId = completequestionanireId;
-            this.Executor = executer;
+            this.CompleteQuestionnaireId = completeQuestionnaireId;
+            this.Executor = executor;
             this.GroupPublicKey = groupPublicKey;
             this.PropagationPublicKey = propagationPublicKey;
         }

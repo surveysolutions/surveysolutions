@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
@@ -33,15 +34,20 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Children.RemoveAll(a=>a is IQuestion);
         }
 
-        public Question AddQuestion(string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, Order answerOrder, Guid? groupPublicKey)
+        public AbstractQuestion AddQuestion(string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, Order answerOrder, Guid? groupPublicKey,
+            IEnumerable<Answer> answers)
         {
 
-            Question result = new Question()
-                                  {QuestionText = text, QuestionType = type, StataExportCaption = stataExportCaption};
+            var result = new CompleteQuestionFactory().Create(type);
+            result.QuestionText = text;
+            result.StataExportCaption = stataExportCaption;
             result.ConditionExpression = condition;
             result.ValidationExpression = validation;
             result.AnswerOrder = answerOrder;
             result.Featured = featured;
+            UpdateAnswerList(answers, result);
+          
+
             try
             {
                 Add(result, groupPublicKey);
@@ -53,6 +59,18 @@ namespace RavenQuestionnaire.Core.Entities
                                                           groupPublicKey.Value));
             }
         }
+        protected void UpdateAnswerList( IEnumerable<Answer> answers, AbstractQuestion question)
+        {
+            if (answers != null && answers.Any())
+            {
+                question.Children.Clear();
+                foreach (Answer answer in answers)
+                {
+                    question.Add(answer, question.PublicKey);
+                }
+            }
+        }
+
         public void MoveItem(Guid itemPublicKey, Guid? after)
         {
             var result= MoveItem(this.innerDocument, itemPublicKey, after);
@@ -138,13 +156,15 @@ namespace RavenQuestionnaire.Core.Entities
         public void UpdateQuestion(Guid publicKey, string text, string stataExportCaption, QuestionType type,
             string condition, string validation, string instructions, bool featured, Order answerOrder, IEnumerable<Answer> answers)
         {
-            var question = Find<Question>(publicKey);
+            var question = Find<AbstractQuestion>(publicKey);
             if (question == null)
                 return;
             question.QuestionText = text;
             question.StataExportCaption = stataExportCaption;
             question.QuestionType = type;
-            question.UpdateAnswerList(answers);
+
+            UpdateAnswerList(answers, question);
+
             question.ConditionExpression = condition;
             question.ValidationExpression = validation;
             question.Instructions = instructions;
@@ -153,7 +173,7 @@ namespace RavenQuestionnaire.Core.Entities
         }
         public void UpdateConditionExpression(Guid publicKey, string condition)
         {
-            var question = Find<Question>(publicKey);
+            var question = Find<AbstractQuestion>(publicKey);
             if (question == null)
                 return;
             question.ConditionExpression = condition;

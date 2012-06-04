@@ -57,14 +57,23 @@ namespace RavenQuestionnaire.Core
         protected IDocumentSession GetIDocumentSession(IDocumentStore store)
         {
             var context = HttpContext.Current;
-            if(context!=null)
+            if (context != null)
             {
-                if (context.Request != request)
+                try
                 {
+
+
+                    if (context.Request != request)
+                    {
                     currentSessionRequestScope = new CachableDocumentSession(store, cache);
-                    request = context.Request;
+                        request = context.Request;
+                    }
+                    return currentSessionRequestScope;
                 }
-                return currentSessionRequestScope;
+                catch (HttpException)
+                {
+
+                }
             }
             var thread = System.Threading.Thread.CurrentThread;
            /* if (thread != null)
