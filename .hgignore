@@ -88,3 +88,8 @@ Synchronization/DataEntryClientTests/bin/*
 Synchronization/DataEntryClientTests/obj/*
 Synchronization/DataEntryWCFServerTests/bin/*
 Synchronization/DataEntryWCFServerTests/obj/*
+Assemblies/Debug/*
+Awesomium/Awesomium.NET Samples.suo
+Awesomium/Windows Forms/CSharp/WinFormsSample/obj/*
+Awesomium/_ReSharper.Awesomium.NET Samples/*
+Awesomium/Core/C/Awesomium/Debug/*
