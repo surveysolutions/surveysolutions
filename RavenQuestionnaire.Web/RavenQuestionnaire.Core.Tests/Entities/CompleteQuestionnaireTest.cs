@@ -13,6 +13,8 @@ using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
+using RavenQuestionnaire.Core.Entities.SubEntities.Question;
 using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.Tests.Utils;
 
@@ -88,8 +90,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
-            CompleteQuestion question = new CompleteQuestion("q",
-                                           QuestionType.SingleOption);
+            var question = new SingleCompleteQuestion("q");
             CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);
@@ -99,7 +100,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
             Assert.AreEqual(qDoqument.Children.Count, 2);
             Assert.AreEqual(qDoqument.Children[0].PublicKey, qDoqument.Children[1].PublicKey);
-            Assert.True(qDoqument.Children[1] is IPropogate);
+            Assert.True(((ICompleteGroup)qDoqument.Children[1]).PropogationPublicKey.HasValue);
         }
         [Test]
         public void PropogateGroup_InValidDataNotPropogatebleGroup_GroupIsNotAdded()
@@ -108,8 +109,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             CompleteGroup group = new CompleteGroup("test");
-            CompleteQuestion question = new CompleteQuestion("q",
-                                           QuestionType.SingleOption);
+            SingleCompleteQuestion question = new SingleCompleteQuestion("q");
             CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);
@@ -124,8 +124,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
             CompleteGroup otherGroup = new CompleteGroup("other") { Propagated = Propagate.Propagated };
-            CompleteQuestion question = new CompleteQuestion("q",
-                                           QuestionType.SingleOption);
+            var question = new SingleCompleteQuestion("q");
             CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);
@@ -141,8 +140,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Assert.AreEqual(qDoqument.Children.Count, 4);
             Assert.AreEqual(qDoqument.Children[0].PublicKey, qDoqument.Children[2].PublicKey);
             Assert.AreEqual(qDoqument.Children[1].PublicKey, qDoqument.Children[3].PublicKey);
-            Assert.True(qDoqument.Children[2] is IPropogate);
-            Assert.True(qDoqument.Children[3] is IPropogate);
+            Assert.True(((ICompleteGroup)qDoqument.Children[2]).PropogationPublicKey.HasValue);
+            Assert.True(((ICompleteGroup)qDoqument.Children[3]).PropogationPublicKey.HasValue);
         }
         [Test]
         public void Add_AnswerInPropogatedGroup_AnswerIsAdded()
@@ -151,8 +150,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
-            CompleteQuestion question = new CompleteQuestion("q",
-                                           QuestionType.SingleOption);
+            var question = new SingleCompleteQuestion("q");
             CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);
@@ -162,12 +160,12 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteAnswer completeAnswer = new CompleteAnswer(answer);
 
             questionanire.Add(
-                new PropagatableCompleteAnswer(completeAnswer,
-                                               ((PropagatableCompleteGroup)qDoqument.Children[1]).PropogationPublicKey),
+                new CompleteAnswer(completeAnswer,
+                                               ((CompleteGroup)qDoqument.Children[1]).PropogationPublicKey.Value),
                 null);
-            Assert.AreEqual((((qDoqument.Children[0] as CompleteGroup).Children[0] as CompleteQuestion).Children[0] as CompleteAnswer).Selected, false);
-            Assert.AreEqual((((qDoqument.Children[1] as CompleteGroup).Children[0] as CompleteQuestion).Children[0] as CompleteAnswer).Selected, true);
-            Assert.AreEqual((((qDoqument.Children[2] as CompleteGroup).Children[0] as CompleteQuestion).Children[0] as CompleteAnswer).Selected, false);
+            Assert.AreEqual((((qDoqument.Children[0] as CompleteGroup).Children[0] as AbstractCompleteQuestion).Children[0] as CompleteAnswer).Selected, false);
+            Assert.AreEqual((((qDoqument.Children[1] as CompleteGroup).Children[0] as AbstractCompleteQuestion).Children[0] as CompleteAnswer).Selected, true);
+            Assert.AreEqual((((qDoqument.Children[2] as CompleteGroup).Children[0] as AbstractCompleteQuestion).Children[0] as CompleteAnswer).Selected, false);
 
         }
 
@@ -178,8 +176,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteQuestionnaireDocument qDoqument = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             CompleteGroup group = new CompleteGroup("test") { Propagated = Propagate.Propagated };
-            CompleteQuestion question = new CompleteQuestion("q",
-                                           QuestionType.SingleOption);
+            var question = new SingleCompleteQuestion("q");
             CompleteAnswer answer = new CompleteAnswer(new Answer());
             question.Children.Add(answer);
             group.Children.Add(question);
@@ -187,10 +184,11 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             questionanire.Add(group, null);
 
             Assert.AreEqual(qDoqument.Children.Count, 2);
-            Assert.AreEqual(qDoqument.Children[1].GetType(), typeof(PropagatableCompleteGroup));
-            questionanire.Remove(new PropagatableCompleteGroup(group,
-                                                               ((PropagatableCompleteGroup)qDoqument.Children[1]).
-                                                                   PropogationPublicKey));
+            Assert.IsTrue(((CompleteGroup) qDoqument.Children[1]).
+                              PropogationPublicKey.HasValue);
+            questionanire.Remove(new CompleteGroup(group,
+                                                               ((CompleteGroup)qDoqument.Children[1]).
+                                                                   PropogationPublicKey.Value));
             Assert.AreEqual(qDoqument.Children.Count, 1);
             Assert.AreEqual(qDoqument.Children[0].GetType(), typeof(CompleteGroup));
 
@@ -201,7 +199,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             QuestionnaireDocument questionnaireInnerDocument = new QuestionnaireDocument();
             //queston without group
             questionnaireInnerDocument.Id = "completequestionnairedocuments/cqID";
-            var testQuestion1 = new Question("test question", QuestionType.SingleOption);
+            var testQuestion1 = new SingleQuestion("test question");
             questionnaireInnerDocument.Children.Add(testQuestion1);
             Answer answer = new Answer() {AnswerText = "answer", AnswerType = AnswerType.Select};
             testQuestion1.Add(answer, null);
@@ -209,7 +207,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             testQuestion1.Add(answer2, null);
             //group
             Group group = new Group("group");
-            var testQuestion2 = new Question("test question", QuestionType.SingleOption);
+            var testQuestion2 = new SingleQuestion("test question");
             group.Children.Add(testQuestion2);
             testQuestion2.Add(new Answer() { AnswerText = "answer", AnswerType = AnswerType.Select }, null);
             testQuestion2.Add(new Answer() { AnswerText = "answer2", AnswerType = AnswerType.Select }, null);
@@ -217,7 +215,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
             //group for propagation
             Group groupPropogated = new Group("group") {Propagated = Propagate.Propagated};
-            var testQuestion3 = new Question("test question", QuestionType.SingleOption);
+            var testQuestion3 = new SingleQuestion("test question");
             groupPropogated.Children.Add(testQuestion3);
             testQuestion3.Add(new Answer() { AnswerText = "answer", AnswerType = AnswerType.Select }, null);
             testQuestion3.Add(new Answer() { AnswerText = "answer2", AnswerType = AnswerType.Select }, null);
@@ -231,19 +229,19 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             var result = completeQuestionnaire.Find<IComposite>(c => true);
             Assert.AreEqual(result.Count(), 11);
             Assert.AreEqual(completeQuestionnaire.Find<ICompleteAnswer>(c => true).Count(), 6);
-        /*    Assert.IsTrue(
-                completeQuestionnaire.Find<ICompleteAnswer>(c => true).All(a => a.QuestionPublicKey != Guid.Empty));*/
             Assert.AreEqual(completeQuestionnaire.Find<ICompleteQuestion>(c => true).Count(), 3);
             Assert.AreEqual(completeQuestionnaire.Find<ICompleteGroup>(c => true).Count(), 2);
 
             completeQuestionnaire.Add((CompleteGroup)groupPropogated, null);
             Assert.AreEqual(completeQuestionnaire.Find<IComposite>(c => true).Count(), 15);
-            Assert.AreEqual(completeQuestionnaire.Find<IPropogate>(c => true).Count(), 4);
+            Assert.AreEqual(completeQuestionnaire.Find<ICompleteGroup>(c => c.PropogationPublicKey.HasValue).Count(), 1);
+            Assert.AreEqual(completeQuestionnaire.Find<ICompleteQuestion>(c => c.PropogationPublicKey.HasValue).Count(), 1);
+            Assert.AreEqual(completeQuestionnaire.Find<ICompleteAnswer>(c => c.PropogationPublicKey.HasValue).Count(), 2);
         }
         [Test]
         public void ExplicitConversion_ValidQuestionneir_AllFieldAreConverted()
         {
-            List<IComposite> children = new List<IComposite>() { new Group("test"), new Question("question", QuestionType.Text) };
+            List<IComposite> children = new List<IComposite>() { new Group("test"), new SingleQuestion("question") };
           
 
             List<Guid> triggers = new List<Guid>() { Guid.NewGuid() };

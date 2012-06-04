@@ -48,6 +48,8 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Discovery" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -77,11 +79,16 @@
     <Compile Include="Security\QuestionnaireMembershipProvider.cs" />
     <Compile Include="Security\QuestionnaireRoleProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WCF\ServiceDiscover.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
       <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
       <Name>RavenQuestionnaire.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
+      <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
+      <Name>SynchronizationMessages</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

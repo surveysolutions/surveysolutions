@@ -9,6 +9,7 @@ using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
@@ -27,7 +28,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         {
             CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
             bool result = executor.Execute(
-                                           new CompleteQuestion());
+                                           new SingleCompleteQuestion());
             Assert.AreEqual(result, true);
         }
         [Test]
@@ -35,7 +36,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         {
             CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
             bool result = executor.Execute(
-                                           new CompleteQuestion() {ConditionExpression = "invalid condition"});
+                                           new SingleCompleteQuestion() { ConditionExpression = "invalid condition" });
             Assert.AreEqual(result, false);
         }
         [Test]
@@ -44,7 +45,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
 
             bool result = executor.Execute(
-                                           new CompleteQuestion() {ConditionExpression = "5>3"});
+                                           new SingleCompleteQuestion() { ConditionExpression = "5>3" });
             Assert.AreEqual(result, true);
         }
         [Test]
@@ -54,7 +55,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire entity = new CompleteQuestionnaire(doc);
             CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(doc);
-            var question = new CompleteQuestion("", QuestionType.SingleOption);
+            var question = new SingleCompleteQuestion("");
             question.ConditionExpression = "[" + question.PublicKey + "]==3";
             doc.Children.Add(question);
 
@@ -76,7 +77,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire entity = new CompleteQuestionnaire(doc);
             CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(doc);
-            var question = new CompleteQuestion("", QuestionType.SingleOption);
+            var question = new SingleCompleteQuestion("");
             question.ConditionExpression = "[" + question.PublicKey + "]==3";
             doc.Children.Add(question);
             question.Children.Add(answer);

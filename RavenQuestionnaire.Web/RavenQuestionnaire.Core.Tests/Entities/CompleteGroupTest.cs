@@ -34,31 +34,23 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteQuestionnaireDocument document = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire questionnaire = new CompleteQuestionnaire(document, subscriber);
 
-         //   Mock<IComposite> document = new Mock<IComposite>();
+            //add group 1
             CompleteGroup baseGroup = new CompleteGroup("target");
             document.Children.Add(baseGroup);
-           
-       //     CompositeHandler handler = new CompositeHandler(document.Object);
-            
-
+            // add group 2
             CompleteGroup targetGroup = new CompleteGroup("some group") { Propagated = Propagate.Propagated };
+            // group 2 is triggered by group 1
             targetGroup.Triggers.Add(baseGroup.PublicKey);
             document.Children.Add(targetGroup);
-           /* document.Setup(x => x.Find<CompleteGroup>(targetGroup.PublicKey)).Returns(targetGroup);
-            GroupObserver observeble = new GroupObserver(targetGroup.PublicKey, target.PublicKey);
-            observeble.Subscribe(handler);
-
-            handler.Add(target);*/
-            PropagatableCompleteGroup target = new PropagatableCompleteGroup(baseGroup, Guid.NewGuid());
+            
+            //clone group 1
+            var target = new CompleteGroup(baseGroup, Guid.NewGuid());
+            // add clone
             questionnaire.Add(target, null);
+            //group 2 have to be triggered also, so insed of 3 groups we will have 4
             Assert.AreEqual(document.Children.Count, 4);
             questionnaire.Remove(target);
             Assert.AreEqual(document.Children.Count, 2);
-            /*   document.Verify(
-                x =>
-                x.Add(
-                    It.Is<PropagatableCompleteGroup>(
-                        a => a.PublicKey.Equals(targetGroup.PublicKey)), null), Times.Once());*/
         }
       /*  [Test]
         public void SubscribeOnGroupRemove_ForcingKeyIsIncorrect_GroupIsRemoved()
@@ -103,7 +95,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             CompleteGroup target = new CompleteGroup("target");
             var propogatedGroup = new CompleteGroup("propagated") {Propagated = Propagate.Propagated};
             target.Children.Add(propogatedGroup);
-            var groupForRemove = new PropagatableCompleteGroup(propogatedGroup, Guid.NewGuid());
+            var groupForRemove = new CompleteGroup(propogatedGroup, Guid.NewGuid());
             target.Add(groupForRemove, null);
             Assert.AreEqual(target.Children.Count, 2);
             target.Remove(groupForRemove);
