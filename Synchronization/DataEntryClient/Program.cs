@@ -38,7 +38,6 @@ namespace DataEntryClient
             {
                 return 0;
             }
-            new ServiceDiscover().WcfTestClient_DiscoverChannel();
             try
             {
 

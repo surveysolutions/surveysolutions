@@ -83,10 +83,10 @@ namespace RavenQuestionnaire.Web.Controllers
                 AsyncManager.OutstandingOperations.Decrement();
             });
         }
-        public JsonResult DiscoverCompleted(IEnumerable<ServiceDiscover.SyncSpot> result)
+        public ActionResult DiscoverCompleted(IEnumerable<ServiceDiscover.SyncSpot> result)
         {
 
-            return Json(result.ToArray(), JsonRequestBehavior.AllowGet);
+            return PartialView("Spots",result.ToArray());
         }
 
 

@@ -12,3 +12,20 @@ a.calculator{display: block;margin-left: 10px; height: 48px;width: 48px;border: 
 span.bold{ font-weight: bold;font-size: 16px;margin-left: 10px;}
 
 .hide-date-box .ui-input-datebox { display: none;}
+.spot{ bottom: auto !important;width: 50% !important;}
+.spot .ui-header {
+ 
+    bottom: auto;
+    left: auto;
+    position: relative;
+    right: auto;
+    top: auto;
+    z-index: 1000;
+
+}
+.spot .ui-content{   bottom: auto;
+    bottom: auto;
+    left: auto;
+    position: relative;
+    right: auto;
+    top: auto;}

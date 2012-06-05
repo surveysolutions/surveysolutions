@@ -17,7 +17,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
     /// </summary>
     [JsonNewSerializerContractBehavior]
     [ServiceContract]
-    public interface ICompleteQuestionnaireService
+    public interface ICompleteQuestionnaireSync
     {
         [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/ICompleteQuestionnaireService/Process", ReplyAction = "http://tempuri.org/ICompleteQuestionnaireService/ProcessResponse")]
         ErrorCodes Process(EventSyncMessage request);

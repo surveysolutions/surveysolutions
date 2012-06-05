@@ -52,7 +52,7 @@ namespace DataEntryClient.CompleteQuestionnaire
 
         public void UploadEvents(Guid clientKey, Guid? lastSyncEvent)
         {
-            this.chanelFactoryWrapper.Execute<ICompleteQuestionnaireService>(
+            this.chanelFactoryWrapper.Execute<ICompleteQuestionnaireSync>(
                 (client)=>
                     {
                         var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(new EventBrowseInputModel(lastSyncEvent));
