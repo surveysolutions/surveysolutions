@@ -1,0 +1,42 @@
+﻿@using RavenQuestionnaire.Web.Utils;
+@model RavenQuestionnaire.Web.Models.LogOnModel
+@{
+    Layout = "~/Views/Shared/_LayputHtml5.cshtml";
+    ViewBag.Title = "Log On";
+}
+<div data-role="panel" data-id="main">
+    <!-- Start of second page -->
+    <div data-role="page" id="main">
+        <div data-role="header" data-theme="b">
+            <h1>Log in</h1>
+        </div>
+        <div data-role="content">
+            @using (Html.BeginForm("LogOn","Account"))
+            {
+                @Html.BootstrapValidationSummary("Login was unsuccessful. Please correct the errors and try again.")
+                <ul data-role="listview" data-inset="true">
+                    <li data-role="fieldcontain">
+                        @Html.LabelFor(m => m.UserName, new { })
+                        @Html.TextBoxFor(m => m.UserName, new { })
+                        @Html.ValidationMessageFor(m => m.UserName)
+                    </li>
+                    <li data-role="fieldcontain">
+                        @Html.LabelFor(m => m.Password, new { })
+                        @Html.PasswordFor(m => m.Password, new { })
+                        @Html.ValidationMessageFor(m => m.Password)
+                    </li>
+                    <li data-role="fieldcontain">
+                         <fieldset data-role="controlgroup">
+	                       <legend>Remember?</legend>
+	                       @Html.CheckBoxFor(m => m.RememberMe)
+                           <label for="RememberMe">Yes, remember me</label>
+                        </fieldset>
+                    </li>
+                    <li>
+                    <button type="submit" data-theme="b" name="submit" value="submit-value">Login</button>
+                    </li>
+                </ul>
+            }
+        </div>
+    </div>
+</div>

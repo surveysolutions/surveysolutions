@@ -8,38 +8,23 @@
    var hideFunctionName = "HideCreateQuestionForm" + Model.PublicKey.ToString().Replace('-', '_');
 }
 <script>
-               function @hideFunctionName (content) {
-                   //      $('#addNewQuestion').modal('hide');
-                   if ($(content.responseText).children('div#divCreateForm form').length == 0) {
-                       $('#@allQuestions').html(content.responseText);
-                       $('#addNewQuestion').modal('hide');
-                   }
-               }
+    function @hideFunctionName (content) {
+        //      $('#addNewQuestion').modal('hide');
+        if ($(content.responseText).children('div#divCreateForm form').length == 0) {
+            $('#@allQuestions').html(content.responseText);
+            $('#addNewQuestion').modal('hide');
+        }
+    }
 </script>
 <div id="@currentRowId" class="display-group">
     <div class="group-header">
         <h3>@Html.DisplayFor(modelItem => Model.GroupText) - @Model.PublicKey</h3>
         <div class="btn-group">
-            @Ajax.ActionLinkWithIcon("Add Question", "Create", "Question", new { id = Model.QuestionnaireId, groupPublicKey = Model.PublicKey }, new AjaxOptions
-                                                                                   {
-                                                                                       UpdateTargetId = "addNewQuestion",
-                                                                                       OnSuccess = "OpenModal"
-                                                                                   }, new { @class = "btn btn-info btn-mini" }, "icon-plus icon-white")
-            @Ajax.ActionLinkWithIcon("Add Group", "Create", "Group", new { id = Model.QuestionnaireId, parentGroup = Model.PublicKey }, new AjaxOptions
-                                                                                   {
-                                                                                       UpdateTargetId = "addNewQuestion",
-                                                                                       OnSuccess = "OpenModal"
-                                                                                   }, new { @class = "btn btn-info btn-mini" }, "icon-plus icon-white")
-            @Ajax.ActionLinkWithIcon("Edit", "Edit", "Group", new { Model.PublicKey, Model.QuestionnaireId }, 
-                                            new AjaxOptions() { UpdateTargetId = "addNewQuestion", 
-                                                                OnBegin = "OpenModal" }, 
-                                                new { @class = "btn btn-primary btn-mini" }, 
-                                                "icon-pencil icon-white")
-            @Ajax.ActionLinkWithIcon("Delete", "Delete", "Group", new { Model.PublicKey, Model.QuestionnaireId }, 
-                                            new AjaxOptions() { OnSuccess = "onDeleteSuccess('" + @currentRowId + "')" }, 
-                                            new { @class = "btn btn-danger btn-mini" }, 
-                                            "icon-remove  icon-white")
-                                            <a href="#" onclick="OpenMoveDialog('@Model.GroupText','@Model.PublicKey')" class="btn btn-danger btn-mini">Move</a>
+            @Html.ActionLink("Add Question", "Create", "Question", new { id = Model.QuestionnaireId, groupPublicKey = Model.PublicKey }, new { @class = "btn btn-primary btn-mini" })
+            @Html.ActionLink("Add Group", "Create", "Group", new { id = Model.QuestionnaireId, parentGroup = Model.PublicKey }, new { @class = "btn btn-primary btn-mini" })
+            @Html.ActionLink("Edit", "Edit", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new { @class = "btn btn-primary btn-mini" })
+            @Html.ActionLink("Delete", "Delete", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new { @class = "btn btn-primary btn-mini" })
+            <a href="#" onclick="OpenMoveDialog('@Model.GroupText','@Model.PublicKey')" class="btn btn-danger btn-mini">Move</a>
         </div>
     </div>
     <div id='@allQuestions'>

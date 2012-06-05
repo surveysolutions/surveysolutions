@@ -435,6 +435,11 @@ $(document).ready(function () {
         $("input[type='checkbox'][checked]").checkboxradio("refresh");
     });
 
+    $('[data-role=page]').live('pagehide', function (event) {
+        //data-type="horizontal"
+        $("input[type='checkbox'][checked]").checkboxradio("refresh");
+    });
+    
     $('.propagated-list-item').each(function () {
         var index = $(this).find('h3 span').html();
         var screenId = $(this).attr('id').replace("propagatedGroup","#screen-");

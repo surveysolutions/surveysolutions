@@ -60,9 +60,15 @@
             <h4>Featured questions</h4>
             @foreach (QuestionStatisticView question in Model.FeaturedQuestions)
             {
-               
-                
-                <p><a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a>
+                <p>
+                @if (question.GroupPublicKey == question.ScreenPublicKey)
+                {
+                    <a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@Html.Raw(question.QuestionText)</a>
+                }
+                else
+                {
+                    <a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a>
+                }
                     - @question.AnswerValue
                     @if (question.ApproximateTime.HasValue)
                     {<b> , Timing : @question.ApproximateTime.Value.Minutes
@@ -93,7 +99,15 @@
                     <li>
                         <div class="ui-grid-b">
                             <div class="ui-block-a">
-                                <a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a></div>
+                                @if (question.GroupPublicKey == question.ScreenPublicKey)
+                                {
+                    <a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@Html.Raw(question.QuestionText)</a>
+                                }
+                                else
+                                {
+                    <a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a>
+                                }
+                                </div>
                             <div class="ui-block-b">
                                 <div class="answer-cell">@question.AnswerValue</div>
                             </div>
@@ -115,7 +129,16 @@
             <h3>Invalid questions</h3>
             @foreach (QuestionStatisticView question in Model.InvalidQuestions)
             {
-                <p><a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@Html.Raw(question.QuestionText)</a>
+                <p>
+                @if (question.GroupPublicKey == question.ScreenPublicKey)
+                {
+<a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@Html.Raw(question.QuestionText)</a>
+                }
+                else
+                {
+<a href="@Url.Action("QuestionHtml5", "CompleteQuestionnaire", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a>
+                }
+                
                     - @question.AnswerValue
                     @if (question.ApproximateTime.HasValue)
                     {<b> , Timing : @question.ApproximateTime.Value.Minutes

@@ -2,6 +2,9 @@
 @using RavenQuestionnaire.Web.Utils
 @using RavenQuestionnaire.Web.Models
 @model ImageNewViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 @using (Ajax.BeginForm("EditCard", "Question", new AjaxOptions()
 {
     UpdateTargetId = "addNewQuestion",
