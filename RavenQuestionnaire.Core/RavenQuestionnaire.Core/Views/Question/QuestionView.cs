@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
@@ -17,10 +18,13 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public Guid PublicKey { get; set; }
 
+        [Display(Prompt = "Type question here")]
         public string QuestionText { get; set; }
 
+        [Display(Prompt = "When this question is enabled?")]
         public string ConditionExpression { get; set; }
 
+        [Display(Prompt = "When this question is valid?")]
         public string ValidationExpression { get; set; }
 
         public QuestionType QuestionType { get; set; }

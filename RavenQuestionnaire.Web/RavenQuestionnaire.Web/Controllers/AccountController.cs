@@ -18,6 +18,10 @@ namespace RavenQuestionnaire.Web.Controllers
 
         //
         // GET: /Account/LogOn
+        public ActionResult LogOnMobile()
+        {
+            return View();
+        }
 
         public ActionResult LogOn()
         {

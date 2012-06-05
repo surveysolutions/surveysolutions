@@ -3,21 +3,22 @@
 @using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Web.Utils
 @model QuestionView
-           
- <script charset="utf-8" type="text/javascript" language="javascript">
-     $(function () {
-        if ($("[customName=questionName] option:selected").text() == "ExtendedDropDownList") 
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script charset="utf-8" type="text/javascript" language="javascript">
+    $(function () {
+        if ($("[customName=questionName] option:selected").text() == "ExtendedDropDownList")
             $("#fromDB").removeAttr('style');
         $('[customName=questionName]').change(function () {
             if ($("[customName=questionName] option:selected").text() == "ExtendedDropDownList") {
-                 $("#fromDB").removeAttr('style');
-             }
-             else
-                 $("#fromDB").css('display', 'none');
-         });
-     });
+                $("#fromDB").removeAttr('style');
+            }
+            else
+                $("#fromDB").css('display', 'none');
+        });
+    });
 </script>
-
 @{var hideFunctionName = Model.GroupPublicKey.HasValue ? "HideCreateQuestionForm" + Model.GroupPublicKey.ToString().Replace('-', '_') : "HideCreateQuestionForm";
   if (ViewBag.Images != null)
   {
@@ -25,89 +26,99 @@
       this.ViewBag.Images = images;
   }
 }
-@using (Ajax.BeginForm("Save", "Question",
-                                         new AjaxOptions
-                                             {
-                                                 UpdateTargetId = "addNewQuestion",
-                                                 OnComplete = @hideFunctionName
-                                             }))
+<h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId })" class="btn">
+    <i class="icon-arrow-left"></i></a>Edit Question</h3>
+@using (Html.BeginForm("Save", "Question"))
 {
-    <div id="divCreateForm" class="modal open form-horizontal">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">&times;</a>
-            <h3>Edit question form</h3>
+    using (Html.BeginCollectionItem("question", Model.PublicKey))
+    {
+    <div class="row-fluid">
+        <div class="span5 form-horizontal">
+            @Html.BootstrapValidationSummary("")
+            <div class="control-group">
+                @Html.LabelFor(model => model.QuestionText, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.TextAreaFor(model => model.QuestionText, new { placeholder = ViewData.ModelMetadata.Watermark })
+                    @Html.ValidationMessageFor(model => model.QuestionText)
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.Featured, new { @class = "control-label" })
+                <div class="controls">
+                    <label class="checkbox">@Html.CheckBoxFor(model => model.Featured) Yes </label>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.StataExportCaption, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => model.StataExportCaption, new { placeholder = ViewData.ModelMetadata.Watermark })
+                    @Html.ValidationMessageFor(model => model.StataExportCaption)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Type</label>
+                <div class="controls">
+                    @{
+        IDictionary<string, object> html = new Dictionary<string, object>();
+        html.Add("customName", "questionName");
+                        @Html.EnumDropDownListFor(model => Model.QuestionType, html)
+                    }
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Answer order</label>
+                <div class="controls">
+                    @Html.EnumDropDownListFor(model => Model.AnswerOrder)
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.ConditionExpression, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => Model.ConditionExpression, new { placeholder = ViewData.ModelMetadata.Watermark })
+                    @Html.ValidationMessageFor(model => model.ConditionExpression)
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.ValidationExpression, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => Model.ValidationExpression, new { placeholder = ViewData.ModelMetadata.Watermark })
+                    @Html.ValidationMessageFor(model => model.ValidationExpression)
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.Instructions, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.TextAreaFor(model => model.Instructions, new { placeholder = ViewData.ModelMetadata.Watermark })
+                    @Html.ValidationMessageFor(model => model.Instructions)
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    @Ajax.ActionLink("Choose from database", "CreateTabForDatabase", "Answer", new { questionPublicKey = Model.PublicKey }, new AjaxOptions
+                                                                                                {
+                                                                                                    UpdateTargetId = "divNewAnswer",
+                                                                                                    InsertionMode = InsertionMode.InsertAfter
+                                                                                                }, new { id = "fromDB", @style = "display:none" })
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-            @using (Html.BeginCollectionItem("question", Model.PublicKey))
+        <div class="span7">
+            @if (Model.PublicKey != Guid.Empty)
             {
-                @Html.BootstrapValidationSummary("")
-                <div class="control-group">
-                    @Html.LabelFor(model => model.QuestionText, new { @class = "control-label" })
-                    <div class="controls">
-                        @Html.EditorFor(model => model.QuestionText)
-                        @Html.CheckBoxFor(model=>model.Featured)
-                        @Html.ValidationMessageFor(model => model.QuestionText)
-                    </div>
-                </div>
-                <div class="control-group">
-                    @Html.LabelFor(model => model.StataExportCaption, new { @class = "control-label" })
-                    <div class="controls">
-                        @Html.EditorFor(model => model.StataExportCaption)
-                        @Html.ValidationMessageFor(model => model.StataExportCaption)
-                    </div>
-                </div>
-                 
-                <div class="control-group">
-                    <label class="control-label">Type</label>
-                    <div class="controls">
-                        @{
-                            IDictionary<string, object> html = new Dictionary<string, object>();
-                            html.Add("customName", "questionName");
-                            @Html.EnumDropDownListFor(model => Model.QuestionType, html)
-                        }
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">
-                        Answer order</label>
-                    <div class="controls">
-                        @Html.EnumDropDownListFor(model => Model.AnswerOrder)
-                    </div>
-                </div>
-                <div class="control-group">
-                    @Html.LabelFor(model => model.ConditionExpression, new { @class = "control-label" })
-                    <div class="controls">
-                        @Html.EditorFor(model => Model.ConditionExpression)
-                        @Html.ValidationMessageFor(model => model.ConditionExpression)
-                    </div>
-                </div>
-                <div class="control-group">
-                    @Html.LabelFor(model => model.ValidationExpression, new { @class = "control-label" })
-                    <div class="controls">
-                        @Html.EditorFor(model => Model.ValidationExpression)
-                        @Html.ValidationMessageFor(model => model.ValidationExpression)
-                    </div>
-                </div>
-                <div class="control-group">
-                    @Html.LabelFor(model => model.Instructions, new { @class = "control-label" })
-                    <div class="controls">
-                        @Html.TextAreaFor(model => model.Instructions)
-                        @Html.ValidationMessageFor(model => model.Instructions)
-                    </div>
-                </div>
-                   if (Model.PublicKey != Guid.Empty)
-                   {
                 @Html.HiddenFor(model => model.PublicKey)
-                   }
-                @Html.HiddenFor(model => model.GroupPublicKey)
-                @Html.HiddenFor(model => model.QuestionnaireId)
-
-           Html.RenderPartial("~/Views/Answer/_EditAnswers.cshtml", Model);
-
             }
+            @Html.HiddenFor(model => model.GroupPublicKey)
+            @Html.HiddenFor(model => model.QuestionnaireId)
+            @Html.Partial("~/Views/Answer/_EditAnswers.cshtml", Model)
         </div>
-        <div class="modal-footer">
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
+    </div>
+    
+        
+
+    }
+    <div class="form-actions">
+        <input type="submit" value="Save" class="btn btn-primary btn-large" />
+        <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId })" class="btn btn-large">
+            <i class="icon-arrow-left"></i>Back to Questionnaire</a>
     </div>
 }

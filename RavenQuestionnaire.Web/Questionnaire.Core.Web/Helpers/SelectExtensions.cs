@@ -47,24 +47,20 @@ namespace Questionnaire.Core.Web.Helpers
             var value = GetValue(htmlHelper, expression);
             return htmlHelper.DropDownListFor(expression, ToSelectList(typeof(TProperty), value.ToInt32(CultureInfo.InvariantCulture).ToString()), htmlAttributes);
         }
-        
-        public static SelectList ToSelectList(Type enumType, string selectedItem)
+
+        public static List<SelectListItem> ToSelectList(Type enumType, string selectedItem)
         {
-            Dictionary<string, string> items = new Dictionary<string, string>();
+            var items = new List<SelectListItem>();
             foreach (var item in Enum.GetValues(enumType))
             {
                 FieldInfo fi = enumType.GetField(item.ToString());
                 var attribute = fi.GetCustomAttributes(typeof (DescriptionAttribute), true).FirstOrDefault();
                 var title = attribute == null ? item.ToString() : ((DescriptionAttribute) attribute).Description;
-                /*  var listItem = new SelectListItem
-                  {
-                      Value = ((int)item).ToString(),
-                      Text = title
-                  };*/
-                items.Add(((int) item).ToString(), title);
+                var value = (item).ToString();
+                items.Add(new SelectListItem{Value = value, Text = title, Selected = (value == selectedItem) });
             }
 
-            return new SelectList(items, "Key", "Value", selectedItem);
+            return items;
         }
 
         public static SelectList ToSelectList(Dictionary<string, string> collection)

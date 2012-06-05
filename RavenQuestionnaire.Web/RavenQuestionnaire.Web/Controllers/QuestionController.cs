@@ -58,7 +58,7 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult EditCard(Guid publicKey, string questionnaireId, Guid imageKey)
         {
             var source = viewRepository.Load<CardViewInputModel, CardView>(new CardViewInputModel(publicKey, questionnaireId, imageKey));
-            return PartialView("_EditCard", new ImageNewViewModel()
+            return View("_EditCard", new ImageNewViewModel()
             {
                 Desc = source.Description,
                 Title = source.Title,
@@ -82,7 +82,7 @@ namespace RavenQuestionnaire.Web.Controllers
             if (ModelState.IsValid)
                 commandInvoker.Execute(new UpdateImageCommand(model.QuestionnaireId, model.PublicKey, model.ImageKey,
                                                               model.Title, model.Desc, GlobalInfo.GetCurrentUser()));
-            return PartialView("_EditCard", model);
+            return View("_EditCard", model);
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
@@ -108,13 +108,13 @@ namespace RavenQuestionnaire.Web.Controllers
                 }
                 ModelState.AddModelError("file", "Please select a file for upload");
             }
-            return PartialView("_AddCards");
+            return View("_AddCards");
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult AddCards(Guid publicKey, string questionnaireId)
         {
-            return PartialView("_AddCards", new ImageNewViewModel { PublicKey = publicKey, QuestionnaireId = questionnaireId });
+            return View("_AddCards", new ImageNewViewModel { PublicKey = publicKey, QuestionnaireId = questionnaireId });
         }
 
 
@@ -134,7 +134,7 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult Create(string id, Guid? groupPublicKey)
         {
             LoadImages();
-            return PartialView("_Create",
+            return View("_Create",
                                new QuestionView(id, groupPublicKey));
         }
 
@@ -193,6 +193,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                              e.Message);
                     return PartialView("_Create", model);
                 }
+                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
                 //     var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
                 if (model.GroupPublicKey.HasValue)
                 {
@@ -205,7 +206,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
                 return PartialView("_Index", questionnaire.Questions);
             }
-            return PartialView("_Create", model);
+            return View("_Create", model);
         }
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public string Delete(Guid publicKey, string questionnaireId)
