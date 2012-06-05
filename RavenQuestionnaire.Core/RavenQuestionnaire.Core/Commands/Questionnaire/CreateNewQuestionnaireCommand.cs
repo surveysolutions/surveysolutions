@@ -23,6 +23,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire
             this.Executor = executor;
             this.DefaultStatusGroupId = defaultStatusGroupId == null? null : IdUtil.CreateStatusId(defaultStatusGroupId);
         }
+
         public UserLight Executor
         {
             get;

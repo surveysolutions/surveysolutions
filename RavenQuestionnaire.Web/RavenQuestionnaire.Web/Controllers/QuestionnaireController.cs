@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
@@ -105,6 +107,12 @@ namespace RavenQuestionnaire.Web.Controllers
                         viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel("0"));
 
                     commandInvoker.Execute(new CreateNewQuestionnaireCommand(model.Title, statusDefault != null ? statusDefault.Id : null, GlobalInfo.GetCurrentUser()));
+
+
+                    var commandService = NcqrsEnvironment.Get<ICommandService>();
+
+                    commandService.Execute(new CreateQuestionnaireCommand(Guid.NewGuid(), model.Title));
+                
                 }
                 else
                 {

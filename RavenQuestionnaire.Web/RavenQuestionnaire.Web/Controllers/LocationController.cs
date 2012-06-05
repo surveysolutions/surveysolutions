@@ -1,10 +1,14 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using System.Web.Mvc;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Location;
+using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Location;
 using RavenQuestionnaire.Core.Views.Questionnaire;
@@ -51,10 +55,9 @@ namespace RavenQuestionnaire.Web.Controllers
                 if (string.IsNullOrEmpty(model.Id))
                 {
                     commandInvoker.Execute(new CreateNewLocationCommand(model.Location, GlobalInfo.GetCurrentUser()));
-                }
-                else
-                {
-                    //   commandInvoker.Execute(new UpdateQuestionnaireCommand(model.Id, model.Title));
+
+                    var commandService = NcqrsEnvironment.Get<ICommandService>();
+                    commandService.Execute(new CreateQuestionnaireCommand(Guid.NewGuid(), model.Location));
                 }
                 return RedirectToAction("Index");
 
