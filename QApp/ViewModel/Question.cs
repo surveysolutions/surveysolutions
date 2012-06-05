@@ -53,10 +53,16 @@ namespace QApp.ViewModel
             var viewRepository = new ViewRepository(Initializer.Kernel);
             _Questionnaire = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                     new CompleteQuestionnaireViewInputModel(currentQuestion.QuestionnaireId) { CurrentGroupPublicKey = currentQuestion.GroupPublicKey });
-            
-             for (int i = 0; i < _Questionnaire.CurrentGroup.Groups[0].Questions.Count(); i++)
-                if (_Questionnaire.CurrentGroup.Groups[0].Questions[i].PublicKey == currentQuestion.PublicKey)
-                    NextQuestion = _Questionnaire.CurrentGroup.Groups[0].Questions.Count()>i+1 ? _Questionnaire.CurrentGroup.Groups[0].Questions[i+1] : null;
+
+            for (int i = 0; i < _Questionnaire.CurrentScreen.Questions.Count(); i++)
+            {
+                if (_Questionnaire.CurrentScreen.Questions[i].PublicKey == currentQuestion.PublicKey)
+                {
+                    NextQuestion = _Questionnaire.CurrentScreen.Questions.Count() > i + 1 ? _Questionnaire.CurrentScreen.Questions[i + 1] : null;
+                    PrevQuestion =  i - 1 >= 0  ? _Questionnaire.CurrentScreen.Questions[i - 1] : null;
+                    break; // minimize iterations
+                }
+            }
          }
 
          private CompleteQuestionnaireMobileView _Questionnaire { get; set; }
@@ -75,6 +81,13 @@ namespace QApp.ViewModel
         {
             get { return nextQuestion; }
             set { SetValue<CompleteQuestionView>("NextQuestion", ref nextQuestion, value); }
+        }
+
+        private CompleteQuestionView prevQuestion;
+        public CompleteQuestionView PrevQuestion
+        {
+            get { return prevQuestion; }
+            set { SetValue<CompleteQuestionView>("PrevQuestion", ref prevQuestion, value); }
         }
 
         #region Commands
@@ -149,9 +162,9 @@ namespace QApp.ViewModel
                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                     new CompleteQuestionnaireViewInputModel(QuestionData.Question.QuestionnaireId) { CurrentGroupPublicKey = QuestionData.Question.GroupPublicKey });
             var item = new CompleteQuestionView();
-            for (int i = 0; i < test.CurrentGroup.Groups[0].Questions.Count(); i++)
-                if (test.CurrentGroup.Groups[0].Questions[i].PublicKey == QuestionData.Question.PublicKey)
-                    item = test.CurrentGroup.Groups[0].Questions[i];
+            for (int i = 0; i < test.CurrentScreen.Questions.Count(); i++)
+                if (test.CurrentScreen.Questions[i].PublicKey == QuestionData.Question.PublicKey)
+                    item = test.CurrentScreen.Questions[i];
             SetSelectedAnswer(item);
         }
 

@@ -78,13 +78,15 @@ Synchronization/DataEntryServer/bin/*
 Synchronization/DataEntryServer/obj/*
 Synchronization/SynchronizationMessages/obj/*
 Synchronization/SynchronizationMessages/bin/*
-Synchronization/SynchronizationMessages/Properties/*
 Synchronization/Synchronization.suo
-Synchronization/DataEntryServer/Properties/AssemblyInfo.cs
-Synchronization/DataEntryClient/Properties/*
 Synchronization/DataEntryWCFServer/bin/*
 Synchronization/DataEntryWCFServer/obj/*
 Synchronization/DataEntryClientTests/bin/*
 Synchronization/DataEntryClientTests/obj/*
 Synchronization/DataEntryWCFServerTests/bin/*
 Synchronization/DataEntryWCFServerTests/obj/*
+Assemblies/Debug/*
+Awesomium/Awesomium.NET Samples.suo
+Awesomium/Windows Forms/CSharp/WinFormsSample/obj/*
+Awesomium/_ReSharper.Awesomium.NET Samples/*
+Awesomium/Core/C/Awesomium/Debug/*

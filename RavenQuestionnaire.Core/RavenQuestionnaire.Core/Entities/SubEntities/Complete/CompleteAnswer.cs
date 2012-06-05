@@ -9,6 +9,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
     public interface ICompleteAnswer : IAnswer
     {
        bool Selected { get; set; }
+       Guid? PropogationPublicKey { get; set; }
     }
 
     public class CompleteAnswer : ICompleteAnswer
@@ -33,6 +34,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
           /*  this.PublicKey = answer.PublicKey;
             this.QuestionPublicKey = questionPublicKey;*/
             // this.CustomAnswer = answer.AnswerText;
+        }
+        public CompleteAnswer(ICompleteAnswer answer, Guid? propogationPublicKey)
+            : this(answer)
+        {
+            this.Selected = answer.Selected;
+            this.PropogationPublicKey = propogationPublicKey;
         }
         public static explicit operator CompleteAnswer(Answer doc)
         {
@@ -60,6 +67,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public object AnswerValue { get; set; }
         public bool Selected { get; set; }
 
+        public Guid? PropogationPublicKey { get; set; }
+
         protected void Set(object text)
         {
             this.Selected = true;
@@ -81,7 +90,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             CompleteAnswer answer = c as CompleteAnswer;
             if (answer == null)
                 throw new CompositeException("answer wasn't found");
-            if (answer.PublicKey == PublicKey)
+            if (answer.PublicKey == PublicKey &&
+                ((!answer.PropogationPublicKey.HasValue && !this.PropogationPublicKey.HasValue) ||
+                 answer.PropogationPublicKey == this.PropogationPublicKey))
             {
                 Set(answer.AnswerValue);
                 return;
@@ -142,7 +153,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return null;
         }
 
-        public List<IComposite> Children { get; set; }
+        public List<IComposite> Children
+        {
+            get { return new List<IComposite>(); }
+            set { }
+        }
 
         [JsonIgnore]
         public IComposite Parent

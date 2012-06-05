@@ -1,4 +1,6 @@
-﻿using System.Web;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Web;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
@@ -26,7 +28,7 @@ namespace RavenQuestionnaire.Core
         public override void Load()
         {
             Bind<DocumentStoreProvider>().ToSelf().InSingletonScope().WithConstructorArgument("storage", _repositoryPath);
-            Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>();
+            Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
           //  if (_isWeb)
             Bind<IDocumentSession>().ToMethod(context => GetIDocumentSession(Kernel.Get<IDocumentStore>()));
           //  Bind<ICommandHandler<GenerateQuestionnaireStatisticCommand>>().To<GenerateQuestionnaireStatisticHandler>();
@@ -49,24 +51,36 @@ namespace RavenQuestionnaire.Core
         private HttpRequest request;
         private int threadId;
 
+
+        private static ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>();
+
         protected IDocumentSession GetIDocumentSession(IDocumentStore store)
         {
             var context = HttpContext.Current;
-            if(context!=null)
+            if (context != null)
             {
-                if (context.Request != request)
+                try
                 {
-                    currentSessionRequestScope = store.OpenSession();
-                    request = context.Request;
+
+
+                    if (context.Request != request)
+                    {
+                    currentSessionRequestScope = new CachableDocumentSession(store, cache);
+                        request = context.Request;
+                    }
+                    return currentSessionRequestScope;
                 }
-                return currentSessionRequestScope;
+                catch (HttpException)
+                {
+
+                }
             }
             var thread = System.Threading.Thread.CurrentThread;
            /* if (thread != null)
             {**/
                 if (thread.ManagedThreadId != threadId)
                 {
-                    currentSessionThreadScope = store.OpenSession();
+                    currentSessionThreadScope = new CachableDocumentSession(store, cache);
                     threadId = thread.ManagedThreadId;
                 }
                 return currentSessionThreadScope;
@@ -87,8 +101,9 @@ namespace RavenQuestionnaire.Core
         protected override IDocumentStore CreateInstance(IContext context)
         {
             var store = new DocumentStore() { Url = _storage }; //System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"]
-
+            
             store.Initialize();
+            
             //  IndexCreation.CreateIndexes(typeof(QuestionnaireContainingQuestions).Assembly, store);
             IndexCreation.CreateIndexes(typeof(UsersInLocationIndex).Assembly, store);
             IndexCreation.CreateIndexes(typeof(QuestionnaireGroupedByTemplateIndex).Assembly, store);

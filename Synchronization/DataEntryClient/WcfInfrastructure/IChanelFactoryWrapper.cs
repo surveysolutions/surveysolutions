@@ -15,6 +15,12 @@ namespace DataEntryClient.WcfInfrastructure
 
     public class ChanelFactoryWrapper : IChanelFactoryWrapper
     {
+        public ChanelFactoryWrapper(string baseAdress)
+        {
+            this.baseAdress = baseAdress;
+        }
+
+        private string baseAdress;
         public void Execute<T>(Action<T> handler) where T : class
         {
             T client = GetChanel<T>();
@@ -38,7 +44,9 @@ namespace DataEntryClient.WcfInfrastructure
 
         public T GetChanel<T>() where T : class
         {
-            ChannelFactory<T> channelFactory = new ChannelFactory<T>("");
+            ChannelFactory<T> channelFactory = new ChannelFactory<T>(new BasicHttpBinding(),
+                                                                     string.Format("{0}/{1}Service.svc", baseAdress,
+                                                                                   typeof (T).Name.Substring(1)));
             return channelFactory.CreateChannel();
         }
     }
