@@ -4,6 +4,6 @@
     <ProjectView>ShowAllFiles</ProjectView>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>http://localhost:8083</StartArguments>
+    <StartArguments>http://stacy-pc</StartArguments>
   </PropertyGroup>
 </Project>

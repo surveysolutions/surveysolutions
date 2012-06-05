@@ -75,8 +75,8 @@ namespace DataEntryClientTests
             Mock<ICommandInvoker> invokerMock = new Mock<ICommandInvoker>();
             Mock<IViewRepository> repositoryMock = new Mock<IViewRepository>();
 
-            Mock<ICompleteQuestionnaireService> serviceMock = new Mock<ICompleteQuestionnaireService>();
-            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub<ICompleteQuestionnaireService>(serviceMock);
+            Mock<ICompleteQuestionnaireSync> serviceMock = new Mock<ICompleteQuestionnaireSync>();
+            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub<ICompleteQuestionnaireSync>(serviceMock);
 
 
 

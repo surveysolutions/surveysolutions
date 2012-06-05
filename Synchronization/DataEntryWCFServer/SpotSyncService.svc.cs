@@ -13,7 +13,7 @@ namespace DataEntryWCFServer
     {
         public string Process()
         {
-            return "Nastya laptop";
+            return System.Environment.MachineName;
         }
     }
 }
