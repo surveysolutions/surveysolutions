@@ -65,9 +65,9 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
                 ICompleteGroup group = nodes.Dequeue();
                 var key = keys.Dequeue();
                 var groupKey = group.PublicKey;
-                if (group as PropagatableCompleteGroup!=null)
+                if (group.PropogationPublicKey.HasValue)
                 {
-                    groupKey = (group as PropagatableCompleteGroup).PropogationPublicKey;
+                    groupKey = group.PropogationPublicKey.Value;
                 }
                 ProccessQuestions(@group.Children.OfType<ICompleteQuestion>(), groupKey, key);
                 foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
@@ -82,9 +82,9 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
                 ICompleteGroup group = nodes.Dequeue();
                 var key = keys.Dequeue();
                 var groupKey = group.PublicKey;
-                if (group as PropagatableCompleteGroup != null)
+                if (group.PropogationPublicKey.HasValue)
                 {
-                    groupKey = (group as PropagatableCompleteGroup).PropogationPublicKey;
+                    groupKey = group.PropogationPublicKey.Value;
                 }
                 ProccessQuestions(group.Children.OfType<ICompleteQuestion>(), groupKey, key);
                 foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
@@ -105,7 +105,7 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
                     this.innerDocument.FeturedQuestions.Add(statItem);
                 if (!completeQuestion.Valid)
                     this.innerDocument.InvalidQuestions.Add(statItem);
-                if(completeQuestion.Children.OfType<ICompleteAnswer>().Any(a => a.Selected))
+                if (completeQuestion.Answer != null)
                     this.innerDocument.AnsweredQuestions.Add(statItem);
                 this.innerDocument.TotalQuestionCount++;
             }

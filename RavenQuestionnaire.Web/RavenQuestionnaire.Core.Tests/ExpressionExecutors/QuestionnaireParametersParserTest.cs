@@ -6,6 +6,7 @@ using NUnit.Framework;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Question;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
@@ -25,7 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         public void ParseCondition_ConditionWithSilgleParameter_ParameterIsReturned()
         {
             QuestionnaireDocument doc = new QuestionnaireDocument();
-            var question = new Question("some", QuestionType.SingleOption);
+            var question = new SingleQuestion("some");
             doc.Children.Add(question);
             QuestionnaireParametersParser executor = new QuestionnaireParametersParser();
             var result = executor.Execute(new Questionnaire(doc), string.Format("[{0}]==1", question.PublicKey));
@@ -36,9 +37,9 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         public void ParseCondition_ConditionWith2Parameter_ParametersareReturned()
         {
             QuestionnaireDocument doc = new QuestionnaireDocument();
-            var question1 = new Question("some1", QuestionType.SingleOption);
+            var question1 = new SingleQuestion("some1");
             doc.Children.Add(question1);
-            var question2 = new Question("some2", QuestionType.SingleOption);
+            var question2 = new SingleQuestion("some2");
             doc.Children.Add(question2);
             QuestionnaireParametersParser executor = new QuestionnaireParametersParser();
             var result = executor.Execute(new Questionnaire(doc), string.Format("[{0}]==1 and [{1}]>3", question1.PublicKey, question2.PublicKey));

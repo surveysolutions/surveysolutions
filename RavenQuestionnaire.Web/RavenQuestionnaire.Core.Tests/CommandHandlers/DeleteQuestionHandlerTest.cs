@@ -9,6 +9,7 @@ using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Question;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Views.Answer;
 
@@ -24,7 +25,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             innerDocument.Id = "qID";
 
             Questionnaire entity = new Questionnaire(innerDocument);
-            var question = new Question("question", QuestionType.MultyOption);
+            var question = new SingleQuestion("question");
             innerDocument.Children.Add(question);
             Assert.True(
                 innerDocument.Children.Count == 1);

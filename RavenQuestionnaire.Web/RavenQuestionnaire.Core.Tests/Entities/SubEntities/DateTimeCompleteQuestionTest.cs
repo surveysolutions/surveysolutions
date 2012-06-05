@@ -17,8 +17,6 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
             DateTimeCompleteQuestion completeQuestion = new DateTimeCompleteQuestion();
             completeQuestion.AnswerDate = DateTime.Today;
             completeQuestion.AnswerOrder = Order.MaxMin;
-            completeQuestion.Attributes.Add("Lenght", "12");
-            completeQuestion.Attributes.Add("Size", "10px");
             completeQuestion.Cards.Add(new Image(){Description = "some image", Title = "some image"});
             completeQuestion.ConditionExpression = "some expression";
             completeQuestion.Instructions = "some instructions";
@@ -29,11 +27,6 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
             completeQuestion.Triggers = new List<Guid>() { Guid.NewGuid() };
             Assert.AreEqual(completeQuestion.AnswerDate, DateTime.Today);
             Assert.AreEqual(completeQuestion.AnswerOrder, Order.MaxMin);
-            Assert.AreEqual(completeQuestion.Attributes.Count, 2);
-            Assert.IsTrue(completeQuestion.Attributes.ContainsKey("Lenght"));
-            Assert.IsTrue(completeQuestion.Attributes.ContainsKey("Size"));
-            Assert.IsTrue(completeQuestion.Attributes.ContainsValue("12"));
-            Assert.IsTrue(completeQuestion.Attributes.ContainsValue("10px"));
             Assert.AreEqual(completeQuestion.Cards.Count, 1);
             Assert.AreEqual(completeQuestion.Cards[0].Title, "some image");
             Assert.AreEqual(completeQuestion.Cards[0].Description, "some image");

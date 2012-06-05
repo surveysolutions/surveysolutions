@@ -53,7 +53,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
                 var answer = completeQuestion.Find<ICompleteAnswer>(question.Children[i].PublicKey);
                 Assert.IsNotNull(answer);
             }
-            Assert.AreEqual(question.Answer, completeAnswer);
+            Assert.AreEqual(question.GetAnswerObject(), completeAnswer.AnswerValue);
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
             var newSelectedAnswer = new CompleteAnswer() { AnswerValue = 56, AnswerText = "56" };
             var question = new SingleCompleteQuestion { Children = new List<IComposite>() { completeAnswer, newSelectedAnswer } };
             question.Add(newSelectedAnswer, question.PublicKey);
-            Assert.AreEqual(question.Answer, newSelectedAnswer);
+            Assert.AreEqual(question.GetAnswerObject(), newSelectedAnswer.AnswerValue);
         }
     }
 }

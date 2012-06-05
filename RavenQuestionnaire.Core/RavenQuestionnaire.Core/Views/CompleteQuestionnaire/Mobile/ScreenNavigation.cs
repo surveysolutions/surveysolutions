@@ -5,8 +5,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
     public class ScreenNavigation
     {
-
-
         public ScreenNavigation()
         {
             BreadCumbs = new List<CompleteGroupHeaders>();

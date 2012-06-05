@@ -6,9 +6,10 @@
 
 
 <ul data-role="listview" data-inset="true" data-split-icon="gear" data-split-theme="d" id="propagate-list-@(Model.PublicKey)">
-@foreach (PropagatedGroup propagatedGroup in Model.PropagatedGroups)
+@for (int i = 0; i < Model.PropagatedGroups.Count; i++)
 {
-      
-        @Html.Partial("~/Views/Group/Mobile/_PropagatedGrooup.cshtml", propagatedGroup)
+    ViewBag.GroupIndex = i+1;
+    PropagatedGroup propagatedGroup = Model.PropagatedGroups[i];
+    @Html.Partial("~/Views/Group/Mobile/_PropagatedGrooup.cshtml", propagatedGroup)
 }
 </ul>

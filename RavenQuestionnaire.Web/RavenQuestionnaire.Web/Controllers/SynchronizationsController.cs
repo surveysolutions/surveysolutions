@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Services;
 using Questionnaire.Core.Web.Helpers;
+using Questionnaire.Core.Web.WCF;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -32,7 +33,7 @@ namespace RavenQuestionnaire.Web.Controllers
             _globalProvider = globalProvider;
         }
 
-        public void IndexAsync()
+        public void IndexAsync(string url)
         {
             AsyncManager.OutstandingOperations.Increment();
             var user = _globalProvider.GetCurrentUser();
@@ -40,6 +41,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                  {
                                                      Process p = new Process();
                                                      p.StartInfo.UseShellExecute = false;
+                                                     p.StartInfo.Arguments = url;
                                                      p.StartInfo.RedirectStandardOutput = true;
                                                      p.StartInfo.FileName = System.Web.Configuration.WebConfigurationManager.AppSettings["SynchronizerPath"];
                                                      try
@@ -63,6 +65,30 @@ namespace RavenQuestionnaire.Web.Controllers
            
             return result;
         }
+        public void DiscoverAsync()
+        {
+            AsyncManager.OutstandingOperations.Increment();
+            var user = _globalProvider.GetCurrentUser();
+            AsyncQuestionnaireUpdater.Update(() =>
+            {
+                try
+                {
+                    AsyncManager.Parameters["result"] = new ServiceDiscover().DiscoverChannels();
+
+                }
+                catch
+                {
+                    AsyncManager.Parameters["result"] = null;
+                }
+                AsyncManager.OutstandingOperations.Decrement();
+            });
+        }
+        public JsonResult DiscoverCompleted(IEnumerable<ServiceDiscover.SyncSpot> result)
+        {
+
+            return Json(result.ToArray(), JsonRequestBehavior.AllowGet);
+        }
+
 
     }
 }

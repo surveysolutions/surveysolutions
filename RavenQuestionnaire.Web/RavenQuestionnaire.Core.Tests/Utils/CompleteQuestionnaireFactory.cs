@@ -4,6 +4,7 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Entities.SubEntities.Question;
 using RavenQuestionnaire.Core.Entities.Subscribers;
 
 namespace RavenQuestionnaire.Core.Tests.Utils
@@ -14,7 +15,7 @@ namespace RavenQuestionnaire.Core.Tests.Utils
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "completequestionnairedocuments/cqID";
-            innerDocument.Children.Add(new Question("test question", QuestionType.SingleOption));
+            innerDocument.Children.Add(new SingleQuestion("test question"));
             Answer answer = new Answer() { AnswerText = "answer", AnswerType = AnswerType.Select };
             innerDocument.Children[0].Add(answer, null);
             Answer answer2 = new Answer() { AnswerText = "answer2", AnswerType = AnswerType.Select };

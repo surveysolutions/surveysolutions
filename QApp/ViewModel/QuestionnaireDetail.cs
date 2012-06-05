@@ -198,7 +198,7 @@ namespace QApp.ViewModel {
             }
             else
                 _completedQuestionnaireId = (parameter as CompleteQuestionView).QuestionnaireId;
-            CurrentGroup = CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentGroup;
+            CurrentGroup = CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentScreen;
             BuildMenu();
         }
 
@@ -298,7 +298,7 @@ namespace QApp.ViewModel {
                 //stopWatch.Elapsed;
             }
             
-            DoSetCurrentSubGroup(CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentGroup);
+            DoSetCurrentSubGroup(CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentScreen);
         }
 
         void DoSetCurrentSubGroup(object p)

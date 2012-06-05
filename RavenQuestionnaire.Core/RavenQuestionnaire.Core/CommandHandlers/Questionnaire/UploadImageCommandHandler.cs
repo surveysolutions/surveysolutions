@@ -41,7 +41,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire
 
             var questionnaire = _questionnaireRepository.Load(IdUtil.CreateQuestionnaireId(command.QuestionnaireId));
 
-            var question = questionnaire.Find<Entities.SubEntities.Question>(command.PublicKey);
+            var question = questionnaire.Find<AbstractQuestion>(command.PublicKey);
 
             question.AddCard(newImage);
         }

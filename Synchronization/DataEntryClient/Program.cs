@@ -29,7 +29,7 @@ namespace DataEntryClient
     {
         static Mutex mSingleton;
         private static int result = 1;
-        private static int Main()
+        private static int Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
             bool created;
@@ -38,12 +38,13 @@ namespace DataEntryClient
             {
                 return 0;
             }
+            new ServiceDiscover().WcfTestClient_DiscoverChannel();
             try
             {
 
                 var kernel =
                     new StandardKernel(new CoreRegistry(ConfigurationManager.AppSettings["Raven.DocumentStore"]));
-                kernel.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
+                kernel.Bind<IChanelFactoryWrapper>().ToMethod((c) => new ChanelFactoryWrapper(args[0]));
                 RegisterServices(kernel);
 
                 new CompleteQuestionnaireSync(kernel.Get<ICommandInvoker>(), kernel.Get<IViewRepository>(),

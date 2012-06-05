@@ -34,14 +34,14 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
                                        {
                                            Guid nameGuid = Guid.Parse(name);
                                            Guid? propagationKey = null;
-                                           var propagation = question as PropagatableCompleteQuestion;
+                                          /* var propagation = question as PropagatableCompleteQuestion;
                                            if (propagation != null)
-                                           {
-                                               propagationKey = propagation.PropogationPublicKey;
+                                           {*/
+                                        //   propagationKey = question.PropogationPublicKey;
 
-                                           }
+                                         //  }
                                            args.Result =
-                                               questionnaire.GetQuestionByKey(nameGuid, propagationKey).GetValue();
+                                               questionnaire.GetQuestionByKey(nameGuid, propagationKey).GetAnswerObject();
                                        };
                 
             bool result = false;

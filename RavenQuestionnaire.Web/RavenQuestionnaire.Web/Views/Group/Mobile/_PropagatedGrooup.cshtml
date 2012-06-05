@@ -16,7 +16,10 @@
     <li id="@groupKey" class="propagated-list-item">
         <fieldset  class="ui-grid-a">
             <div class="ui-block-a">
-                <a class="propagated-screen-link-@(Model.PublicKey)" href="#screen-@(Model.PropogationKey)">@Model.GroupText</a>
+                <a class="propagated-screen-link-@(Model.PublicKey)" href="#screen-@(Model.PropogationKey)">
+                    <h3><span>@ViewBag.GroupIndex)</span> @Model.GroupText</h3>
+					<p  id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
+                </a>
             </div>
             <div class="ui-block-b">
                 @using (Ajax.BeginFormHtml5("DeletePropagatedGroupHtml5", "Group", rparams, new AjaxOptions { OnComplete = "RemovePropagatedGroup", HttpMethod = "POST" }, new { style = "float:right;" }))
@@ -30,6 +33,9 @@
 }
 else
 {
-    <li data-role="fieldcontain" id="@groupKey" ><a class="propagated-screen-link" href="#screen-@(Model.PropogationKey)">@Model.GroupText</a>
+    <li data-role="fieldcontain" id="@groupKey" ><a class="propagated-screen-link" href="#screen-@(Model.PropogationKey)">
+        <h3><span>@ViewBag.GroupIndex)</span> @Model.GroupText</h3>
+	    <p id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
+    </a>
     </li>
 }

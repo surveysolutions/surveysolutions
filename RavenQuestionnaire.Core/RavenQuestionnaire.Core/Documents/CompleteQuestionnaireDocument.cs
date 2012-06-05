@@ -28,7 +28,7 @@ namespace RavenQuestionnaire.Core.Documents
            // this.PublicKey = Guid.NewGuid();
             this.compositeobservers = new List<IObserver<CompositeEventArgs>>();
             this.Children = new List<IComposite>();
-            this.ParentGroup = null;
+          
         }
         public static explicit operator CompleteQuestionnaireDocument(QuestionnaireDocument doc)
         {
@@ -131,7 +131,7 @@ namespace RavenQuestionnaire.Core.Documents
 
         public virtual void Add(IComposite c, Guid? parent)
         {
-            if (c is PropagatableCompleteGroup && !parent.HasValue)
+            if (c is ICompleteGroup && ((ICompleteGroup)c).PropogationPublicKey.HasValue && !parent.HasValue)
             {
                 if (this.Children.Count(g => g.PublicKey.Equals(c.PublicKey)) > 0)
                 {
@@ -157,15 +157,15 @@ namespace RavenQuestionnaire.Core.Documents
 
         public void Remove(IComposite c)
         {
-            PropagatableCompleteGroup propogate = c as PropagatableCompleteGroup;
-            if (propogate != null)
+            ICompleteGroup propogate = c as ICompleteGroup;
+            if (propogate != null && propogate.PropogationPublicKey.HasValue)
             {
                 bool isremoved = false;
                 var propagatedGroups = this.Children.Where(
                     g =>
-                    g.PublicKey.Equals(propogate.PublicKey) && g is IPropogate &&
-                    ((IPropogate)g).PropogationPublicKey.Equals(propogate.PropogationPublicKey)).ToList();
-                foreach (PropagatableCompleteGroup propagatableCompleteGroup in propagatedGroups)
+                    g.PublicKey.Equals(propogate.PublicKey)  &&
+                    ((ICompleteGroup)g).PropogationPublicKey==propogate.PropogationPublicKey).ToList();
+                foreach (ICompleteGroup propagatableCompleteGroup in propagatedGroups)
                 {
                     Children.Remove(propagatableCompleteGroup);
                     OnRemoved(new CompositeRemovedEventArgs(propagatableCompleteGroup));
@@ -193,7 +193,7 @@ namespace RavenQuestionnaire.Core.Documents
         {
             
                 var forRemove = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
-                if (forRemove!=null && forRemove is PropagatableCompleteGroup)
+                if (forRemove!=null && forRemove is ICompleteGroup &&((ICompleteGroup)forRemove).PropogationPublicKey.HasValue)
                 {
                     this.Children.Remove(forRemove);
                     OnRemoved(new CompositeRemovedEventArgs(forRemove));
@@ -274,11 +274,11 @@ namespace RavenQuestionnaire.Core.Documents
         private List<IObserver<CompositeEventArgs>> compositeobservers;
         #endregion
         #endregion
-        [JsonIgnore]
-        public ICompleteGroup ParentGroup { get; set; }
-        [JsonIgnore]
-        public ICompleteGroup NextGroup { get; set; }
-        [JsonIgnore]
-        public ICompleteGroup PrevGroup { get; set; }
+
+        public Guid? PropogationPublicKey
+        {
+            get { return null; }
+            set {}
+        }
     }
 }
