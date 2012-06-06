@@ -16,16 +16,18 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
         public string CompleteQuestionnaireId { get; private set; }
         public Guid QuestionPublickey { get; private set; }
         public Guid? Propagationkey { get; private set; }
-        public object CompleteAnswers { get; private set; }
+        public object CompleteAnswer { get; private set; }
+        public List<object> CompleteAnswers { get; private set; }
 		public UserLight Executor { get; set; }
        
         [JsonConstructor]
         public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionnaireId,Guid questionPublickey,Guid? propagationkey,
-                                                 object completeAnswers, UserLight executor)
+                                                 object completeAnswer, List<object> completeAnswers, UserLight executor)
            
         {
             this.CompleteQuestionnaireId = completeQuestionnaireId;
             Executor = executor;
+            this.CompleteAnswer = completeAnswer;
             this.CompleteAnswers = completeAnswers;
             this.QuestionPublickey = questionPublickey;
             this.Propagationkey = propagationkey;
@@ -45,13 +47,13 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
                 if (question.Answers != null)
                 {
 
-                    this.CompleteAnswers = question.Answers[0].PublicKey;
+                    this.CompleteAnswer = question.Answers[0].PublicKey;
 
                 }
             }
             else if(question.QuestionType == QuestionType.MultyOption)
             {
-                var answers = new List<Guid>();
+                var answers = new List<object>();
                 for (int i = 0; i < question.Answers.Length; i++)
                 {
                     if(question.Answers[i].Selected)
@@ -61,7 +63,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
             }
             else
             {
-                this.CompleteAnswers = question.Answers[0].AnswerValue;
+                this.CompleteAnswer = question.Answers[0].AnswerValue;
             }
 
         }
