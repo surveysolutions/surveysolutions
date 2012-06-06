@@ -29,9 +29,28 @@ namespace RavenQuestionnaire.Core
                 return;
             }*/
             handler.Handle(command);
-            //store the command in the store
-            documentSession.Store(new EventDocument(command, Guid.NewGuid(), clientSettingsProvider.ClientSettings.PublicKey));
+            SaveEvent(handler.GetType(), command);
             documentSession.SaveChanges();
+        }
+        //TODO remove that spike after event soursing implementation
+        protected void SaveEvent<T>(Type handlerType, T command) where T : ICommand
+        {
+            System.Attribute[] attrs = System.Attribute.GetCustomAttributes(handlerType); // Reflection.
+
+            // Displaying output.
+            foreach (System.Attribute attr in attrs)
+            {
+                if (attr is CommandHandlerAttribute)
+                {
+                    CommandHandlerAttribute a = (CommandHandlerAttribute) attr;
+                    if (a.IgnoreAsEvent)
+                        //store the command in the store
+                        return;
+
+                }
+            }
+            documentSession.Store(new EventDocument(command, Guid.NewGuid(),
+                                                    clientSettingsProvider.ClientSettings.PublicKey));
         }
 
         public void Execute(ICommand command, Guid eventPublicKey, Guid clientPublicKey) 
@@ -44,7 +63,7 @@ namespace RavenQuestionnaire.Core
             reflectionGeneric.GetMethod("Handle").Invoke(handler, new object[] {command});
             //handler.Handle(command);
             //store the command in the store
-            documentSession.Store(new EventDocument(command, eventPublicKey, clientPublicKey));
+            SaveEvent(handler.GetType(), command);
             documentSession.SaveChanges();
 
         }

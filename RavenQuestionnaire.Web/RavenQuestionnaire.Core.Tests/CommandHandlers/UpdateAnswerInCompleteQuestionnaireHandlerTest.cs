@@ -50,7 +50,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object, subscriberMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId", question.PublicKey, null, answer.PublicKey,null,null);
 
-            service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.QuestionPublickey,command.Propagationkey,command.CompleteAnswers);
+            service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.QuestionPublickey,command.Propagationkey,command.CompleteAnswer);
             repositoryMock.Verify(x => x.Load("cqId"), Times.Once());
             Assert.AreEqual(qDoqument.Children[0].PublicKey, question.PublicKey);
             Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[0] as AbstractCompleteQuestion).Children[0])).Selected, true);
