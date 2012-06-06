@@ -56,7 +56,10 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             return View(viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
         }
-
+        public ActionResult ProgressPartial(Guid id)
+        {
+            return PartialView("_ProgressContent",viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+        }
         /*   public bool IndexCompleted(bool result)
         {
            
