@@ -31,7 +31,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             set
             {
                 
-                var selecteAnswers = (List<Guid>)value;
+                var selecteAnswers = (IEnumerable<Guid>)value;
                 var answerObjects = this.Find<ICompleteAnswer>(a => selecteAnswers.Contains(a.PublicKey));
                 if (answerObjects != null)
                 {

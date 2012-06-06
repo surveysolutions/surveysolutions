@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="CompleteQuestionnaire\CompleteQuestionnaireMessage.cs" />
     <Compile Include="CompleteQuestionnaire\ErrorCodes.cs" />
-    <Compile Include="CompleteQuestionnaire\ICompleteQuestionnaireService.cs" />
+    <Compile Include="CompleteQuestionnaire\IEventDocumentSync.cs" />
     <Compile Include="CompleteQuestionnaire\JsonNewSerializerContractBehaviorAttribute.cs" />
     <Compile Include="CompleteQuestionnaire\JsonSerrializer.cs" />
     <Compile Include="Discover\ISpotSync.cs" />
