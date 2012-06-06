@@ -111,6 +111,7 @@
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
     <Compile Include="CachableDocumentSession.cs" />
     <Compile Include="ClientSettingsProvider\IClientSettingsProvider.cs" />
+    <Compile Include="CommandHandlerAttribute.cs" />
     <Compile Include="CommandHandlers\Collection\CreateNewCollectionHandler.cs" />
     <Compile Include="CommandHandlers\Collection\DeleteCollectionHandler.cs" />
     <Compile Include="CommandHandlers\Collection\DeleteCollectionItemHandler.cs" />
