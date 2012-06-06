@@ -2,44 +2,35 @@
 @using RavenQuestionnaire.Core.Views.Group
 @using RavenQuestionnaire.Web.Utils
 @model GroupView
-@using (Ajax.BeginForm("Save", "Group", new AjaxOptions
-                                             {
-                                                 UpdateTargetId = "addNewQuestion",
-                                                 OnComplete = "HideCreateGroupForm"
-                                             }))
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Save", "Group"))
 {
-    <div id="divCreateForm" class="modal open">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">&times;</a>
-            <h3>Edit screen form</h3>
+    @Html.BootstrapValidationSummary("")
+    <div class="control-group">
+        @Html.LabelFor(model => model.GroupText, new { @class = "control-label" })
+        <div class="controls">
+            @Html.EditorFor(model => model.GroupText)
+            @Html.ValidationMessageFor(model => model.GroupText)
         </div>
-        <div class="modal-body form-horizontal">
-            @Html.BootstrapValidationSummary("")
-            <div class="control-group">
-                @Html.LabelFor(model => model.GroupText, new {@class = "control-label"})
-                <div class="controls">
-                    @Html.EditorFor(model => model.GroupText)
-                    @Html.ValidationMessageFor(model => model.GroupText)
-                </div>
+    </div>
+    if (Model.ParentGroup.HasValue)
+    {
+        <div class="control-group">
+            <label class="control-label">Is Group propagateble?</label>
+            <div class="controls">
+                @Html.EnumDropDownListFor(model => Model.Propagated)
             </div>
-            @if (Model.ParentGroup.HasValue)
-            {
-                <div class="control-group">
-                    <label class="control-label">Is Group propagateble?</label>
-                    <div class="controls">
-                        @Html.EnumDropDownListFor(model => Model.Propagated)
-                    </div>
-                </div>
-            }
-            @if (Model.PublicKey != Guid.Empty)
-            {
-                @Html.HiddenFor(model => model.PublicKey)
-            }
-            @Html.HiddenFor(model => model.QuestionnaireId)
-            @Html.HiddenFor(model => model.ParentGroup)
         </div>
-        <div class="modal-footer">
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
+    }
+    if (Model.PublicKey != Guid.Empty)
+    {
+        @Html.HiddenFor(model => model.PublicKey)
+    }
+    @Html.HiddenFor(model => model.QuestionnaireId)
+    @Html.HiddenFor(model => model.ParentGroup)
+    <div class="form-actions">
+        <input type="submit" value="Save" class="btn btn-primary btn-large" />
     </div>
 }

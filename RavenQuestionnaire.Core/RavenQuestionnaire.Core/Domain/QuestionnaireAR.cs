@@ -16,11 +16,11 @@ namespace RavenQuestionnaire.Core.Domain
     {
         private DateTime _creationDate;
 
-        private QuestionnaireDocument _innerDocument;
+        private QuestionnaireDocument _innerDocument = new QuestionnaireDocument();
 
         public QuestionnaireAR()
         {
-            _innerDocument = new QuestionnaireDocument();
+            
         }
         
         public QuestionnaireAR(Guid questionnaireId, String text)

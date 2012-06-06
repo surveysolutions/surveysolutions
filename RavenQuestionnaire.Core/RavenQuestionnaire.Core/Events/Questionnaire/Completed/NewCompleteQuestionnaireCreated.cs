@@ -9,6 +9,7 @@ namespace RavenQuestionnaire.Core.Events
     {
         public Guid CompletedQuestionnaireId { get; set; }
         public Guid QuestionnaireId { get; set; }
+        public string QuestionnaireIdOld { get; set; }
         
         public DateTime CreationDate { get; set; }
         

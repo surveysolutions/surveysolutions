@@ -6,9 +6,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Commands.Statistics;
@@ -234,6 +237,12 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                    status,
                                                                     _globalProvider.GetCurrentUser());
             commandInvoker.Execute(command);
+
+            //new handling
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            var pubKey = Guid.NewGuid();
+            commandService.Execute(new CreateCompleteQuestionnaireCommand(pubKey, id));
+
 
             return RedirectToAction("Question" + mode,
                                     new

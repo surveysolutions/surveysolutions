@@ -1,6 +1,7 @@
 ﻿using System;
 using Ncqrs;
 using Ncqrs.Domain;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Events;
 
 namespace RavenQuestionnaire.Core.Domain
@@ -14,10 +15,11 @@ namespace RavenQuestionnaire.Core.Domain
         {
         }
 
+        private CompleteQuestionnaireDocument _doc = new CompleteQuestionnaireDocument();
         private Guid _questionnaireId;
         private DateTime _creationDate;
-
-        public CompleteQuestionnaireAR(Guid completeQuestionnaireId, Guid questionnaireId)
+     
+        public CompleteQuestionnaireAR(Guid completeQuestionnaireId, string questionnaireId)
             : base(completeQuestionnaireId)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
@@ -29,10 +31,11 @@ namespace RavenQuestionnaire.Core.Domain
             ApplyEvent(new NewCompleteQuestionnaireCreated
             {
                 CompletedQuestionnaireId = completeQuestionnaireId,
-                QuestionnaireId = questionnaireId,
+                QuestionnaireIdOld = questionnaireId,
                 CreationDate = clock.UtcNow()
             });
         }
+
 
         // Event handler for the NewQuestionnaireCreated event. This method
         // is automaticly wired as event handler based on convension.

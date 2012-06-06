@@ -9,65 +9,65 @@
     <!-- Start of second page -->
     <div data-role="page" id="main">
         <div data-role="header" data-theme="b">
-            <h1>Dashboard </h1>@Ajax.ActionLinkHtml5("Synchronize", "Discover", "Synchronizations", new { }, 
-            new AjaxOptions(){ OnBegin = "sichronizationStarted", OnComplete = "sinchronizationCompleted"},
-  new { data_inline = "true", data_role = "button", data_mini = "true", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
-            
-            
-            <div id="jqm-themeswitcher"></div>
+               <h1>Dashboard </h1>@Ajax.ActionLinkHtml5("Synchronize", "Discover", "Synchronizations", new { },
+new AjaxOptions() { OnBegin = "sichronizationStarted", OnComplete = "spotScanCompleted" },
+        
+            new { data_inline = "true", data_role = "button", data_mini = "true", data_corners="false", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
+       
+            <a href="@Url.Action("LogOff", "Account")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Log off</a>
         </div>
         <div data-role="content">
-            <ul class="dashboard-list" data-inset="true" data-divider-theme="d" data-theme="d" data-role="listview" data-split-icon="plus"
-                data-split-theme="d">
+            <ul class="dashboard-list" data-inset="true" data-divider-theme="d" data-theme="d"
+                data-role="listview" data-split-icon="plus" data-split-theme="d">
                 @foreach (CQGroupItem group in Model.Groups)
                 {
-                    <li data-role="list-divider" data-theme="b" role="heading">
-                        <a>
-                            @group.SurveyTitle <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
-                            
-
+                    <li data-role="list-divider" data-theme="b" role="heading"><a>
+                        @group.SurveyTitle <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
                         @Html.ActionLink("New", "Participate", "CompleteQuestionnaire", new { id = group.Id, mode = "Html5" }, new
-                                                  {
-                                                      @class = "splited-button",
-                                                      data_inline = "true",
-                                                      data_icon = "plus",
-                                                      data_iconpos="left",
-                                                      data_role = "button",
-                                                      data_theme = "b",
-                                                      rel = "external",
-                                                      disable_after_click = "true"
-                                                  })
+                                                                                                                 {
+                                                                                                                     @class = "splited-button",
+                                                                                                                     data_inline = "true",
+                                                                                                                     data_icon = "plus",
+                                                                                                                     data_iconpos = "left",
+                                                                                                                     data_role = "button",
+                                                                                                                     data_theme = "b",
+                                                                                                                     rel = "external",
+                                                                                                                     disable_after_click = "true"
+                                                                                                                 })
                         @*  <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>*@
                     </li>
                
-                    if (@group.Items.Any())
-                    {
+                   if (@group.Items.Any())
+                   {
                     <li data-theme="c" class="grid-header">
-                        <div class="ui-grid-b " >
+                        <div class="ui-grid-b ">
                             <div class="ui-block-a">
-                                <h3>Id</h3>
+                                <h3>
+                                    Id</h3>
                             </div>
-                            <div class="ui-block-b" >
-                                <h3>Info</h3>
+                            <div class="ui-block-b">
+                                <h3>
+                                    Info</h3>
                             </div>
                             <div class="ui-block-c">
-                                <h3>Actions</h3>
+                                <h3>
+                                    Actions</h3>
                             </div>
                         </div>
                         <span class="ui-li-count ui-btn-up-c ui-btn-corner-all" style="visibility: hidden">@group.TotalCount</span>
                     </li>
 
 
-                        foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
-                        {
+                                                                                                      foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
+                                                                                                      {
                     <li>
                         <div class="ui-grid-b">
                             <div class="ui-block-a">
-                             @*   <div>@survey.Id
+                                @*   <div>@survey.Id
                             </div> *@
                                 <div>@survey.Status.Name, Created by @survey.Creator.Name
                                 </div>
-                                </div>
+                            </div>
                             <div class="ui-block-b">
                                 @for (int i = 0; i < Math.Min(4, survey.FeaturedQuestions.Count()); i++)
                                 {
@@ -79,38 +79,40 @@
                             <div class="ui-block-c">
                                 <div data-role="controlgroup" data-type="horizontal">
                                     @Html.ActionLink("edit", "QuestionHtml5", "CompleteQuestionnaire", new { id = survey.Id }, new
-                                                                                                                               {
-                                                                                                                                   data_inline = "true",
-                                                                                                                                   data_role = "button",
-                                                                                                                                   data_theme = "b",
-                                                                                                                                   data_mini = "true",
-                                                                                                                                   rel = "external"
-                                                                                                                               })
+                                                                                                     {
+                                                                                                         data_inline = "true",
+                                                                                                         data_role = "button",
+                                                                                                         data_theme = "b",
+                                                                                                         data_mini = "true",
+                                                                                                         rel = "external"
+                                                                                                     })
                                     @Html.ActionLink("stat", "Details", "Statistic", new { id = survey.Id }, new
-                                                                                                             {
-                                                                                                                 data_inline = "true",
-                                                                                                                 data_role = "button",
-                                                                                                                 data_mini = "true",
-                                                                                                                 rel = "external"
-                                                                                                             })
+                                                                                   {
+                                                                                       data_inline = "true",
+                                                                                       data_role = "button",
+                                                                                       data_mini = "true",
+                                                                                       rel = "external"
+                                                                                   })
                                     @Html.ActionLink("del", "Delete", "CompleteQuestionnaire", new { id = survey.Id }, new
-                                                                                                                       {
-                                                                                                                           data_inline = "true",
-                                                                                                                           data_role = "button",
-                                                                                                                           data_theme = "e",
-                                                                                                                           data_mini = "true",
-                                                                                                                           rel = "external"
-                                                                                                                       })
+                                                                                             {
+                                                                                                 data_inline = "true",
+                                                                                                 data_role = "button",
+                                                                                                 data_theme = "e",
+                                                                                                 data_mini = "true",
+                                                                                                 rel = "external"
+                                                                                             })
                                 </div>
                             </div>
                         </div>
                         <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@survey.AnsweredQuestionCouont
                             / @survey.TotalQuestionCouont</span> </li>
-                        }
-                   
-                    }
+                                                                                                      }
+
+                   }
                 }
             </ul>
         </div>
+    </div>
+    <div id="dialogContainer">
     </div>
 </div>

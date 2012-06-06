@@ -9,10 +9,12 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.WCF;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
+using RavenQuestionnaire.Core.Commands.Synchronization;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.Question;
+using RavenQuestionnaire.Core.Views.Synchronization;
 using RavenQuestionnaire.Web.Models;
 
 namespace RavenQuestionnaire.Web.Controllers
@@ -33,38 +35,36 @@ namespace RavenQuestionnaire.Web.Controllers
             _globalProvider = globalProvider;
         }
 
-        public void IndexAsync(string url)
+        public ActionResult Index(string url)
         {
-            AsyncManager.OutstandingOperations.Increment();
+        //    AsyncManager.OutstandingOperations.Increment();
             var user = _globalProvider.GetCurrentUser();
-            AsyncQuestionnaireUpdater.Update(() =>
-                                                 {
+            
+                                                     Guid syncProcess = Guid.NewGuid();
+                                                     commandInvoker.Execute(
+                                                         new CreateNewSynchronizationProcessCommand(syncProcess, user));
                                                      Process p = new Process();
                                                      p.StartInfo.UseShellExecute = false;
-                                                     p.StartInfo.Arguments = url;
+                                                     p.StartInfo.Arguments = url + " " + syncProcess;
                                                      p.StartInfo.RedirectStandardOutput = true;
                                                      p.StartInfo.FileName = System.Web.Configuration.WebConfigurationManager.AppSettings["SynchronizerPath"];
-                                                     try
-                                                     {
-                                                         p.Start();
-                                                         p.WaitForExit();
-                                                         int result = p.ExitCode;
-                                                         AsyncManager.Parameters["result"] = result == 1;
-                                                        
-                                                     }
-                                                     catch
-                                                     {
-                                                         AsyncManager.Parameters["result"] = false;
-                                                     }
-                                                     AsyncManager.OutstandingOperations.Decrement();
-                                                 });
-        }
+                                                     p.Start();
+            return RedirectToAction("Progress", new {id = syncProcess});
 
-        public bool IndexCompleted(bool result)
+        }
+        public ActionResult Progress(Guid id)
+        {
+            return View(viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+        }
+        public ActionResult ProgressPartial(Guid id)
+        {
+            return PartialView("_ProgressContent",viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+        }
+        /*   public bool IndexCompleted(bool result)
         {
            
             return result;
-        }
+        }*/
         public void DiscoverAsync()
         {
             AsyncManager.OutstandingOperations.Increment();
@@ -83,10 +83,10 @@ namespace RavenQuestionnaire.Web.Controllers
                 AsyncManager.OutstandingOperations.Decrement();
             });
         }
-        public JsonResult DiscoverCompleted(IEnumerable<ServiceDiscover.SyncSpot> result)
+        public ActionResult DiscoverCompleted(IEnumerable<ServiceDiscover.SyncSpot> result)
         {
 
-            return Json(result.ToArray(), JsonRequestBehavior.AllowGet);
+            return PartialView("Spots",result.ToArray());
         }
 
 

@@ -242,7 +242,7 @@
               from = null;
 
                     //still need this hack apparently:
-                    $('.ui-btn.' + $.mobile.activeBtnClass).removeClass($.mobile.activeBtnClass);
+                    $('a.ui-btn.' + $.mobile.activeBtnClass).removeClass($.mobile.activeBtnClass);
                     $activeClickedLink = $link.closest(".ui-btn").addClass($.mobile.activeBtnClass);
 
                     if (isExternal) {

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using RavenQuestionnaire.Core.Domain;
@@ -14,24 +11,22 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
     {
         public CreateCompleteQuestionnaireCommand(){}
 
-        public Guid CompletedQuestionnaireId
+        public Guid CompleteQuestionnaireId
         {
             get; set;
         }
-
-        public Guid QuestionnaireId
+        public string QuestionnaireId
         {
             get;
             set;
         }
 
-        public CreateCompleteQuestionnaireCommand(Guid completedQuestionnaireId, Guid questionnaireId)
+        public CreateCompleteQuestionnaireCommand(Guid completedQuestionnaireId, string questionnaireId)
             : base(completedQuestionnaireId)
         {
-            CompletedQuestionnaireId = completedQuestionnaireId;
+            CompleteQuestionnaireId = completedQuestionnaireId;
             QuestionnaireId = questionnaireId;
         }
-
 
     }
 }

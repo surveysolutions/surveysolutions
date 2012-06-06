@@ -1,12 +1,13 @@
 ﻿@using RavenQuestionnaire.Core.Entities.SubEntities
-<ul class="nav pull-right">
+<div class="pull-right">
+<ul id="menu" class="nav" >
     @if (Request.IsAuthenticated)
     {
         if (Roles.IsUserInRole(UserRoles.Administrator.ToString()))
         {     
-        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">Administration
+        <li  class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">Administration
             <b class="caret"></b></a>
-            <ul class="dropdown-menu">
+            <ul  class="dropdown-menu">
                 <li>@Html.ActionLink("Users", "Index", "User") </li>
                 <li>@Html.ActionLink("Locations", "Index", "Location") </li>
                 <li>@Html.ActionLink("Survey templates", "Index", "Questionnaire") </li>
@@ -16,8 +17,8 @@
         </li>
         <li>@Html.ActionLink("Reports", "Index", "Report")</li>
         }
-        <li class="divider-vertical"></li>
-        <li class="navbar-text">@User.Identity.Name</li>
+         <li class="divider-vertical"></li>
+        <li  class="navbar-text">@User.Identity.Name</li>
         <li>@Html.ActionLink("Log Off", "LogOff", "Account")</li>
     }
     else
@@ -25,3 +26,4 @@
         <li>@Html.ActionLink("Log On", "LogOn", "Account")</li>
     }
 </ul>
+</div>

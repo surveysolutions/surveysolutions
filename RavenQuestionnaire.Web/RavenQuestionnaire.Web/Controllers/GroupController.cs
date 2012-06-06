@@ -33,8 +33,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Create(string id, Guid? parentGroup)
         {
-            return PartialView("_Create",
-                               new GroupView(id, parentGroup));
+            return View("_Create", new GroupView(id, parentGroup));
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
@@ -63,13 +62,13 @@ namespace RavenQuestionnaire.Web.Controllers
                     ModelState.AddModelError("ConditionExpression", e.Message);
                     return PartialView("_Create", model);
                 }
-                var questionnaire =
+               /* var questionnaire =
                     viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                         new QuestionnaireViewInputModel(model.QuestionnaireId));
-
-                return PartialView("_Index", questionnaire.Groups);
+                */
+                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
             }
-            return PartialView("_Create", model);
+            return View("_Create", model);
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
@@ -80,7 +79,7 @@ namespace RavenQuestionnaire.Web.Controllers
             var model =
                 viewRepository.Load<GroupViewInputModel, GroupView>(new GroupViewInputModel(publicKey, questionnaireId));
 
-            return PartialView("_Create", model);
+            return View("_Create", model);
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
