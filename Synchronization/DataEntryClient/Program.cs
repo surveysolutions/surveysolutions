@@ -38,7 +38,6 @@ namespace DataEntryClient
             {
                 return 0;
             }
-            new ServiceDiscover().WcfTestClient_DiscoverChannel();
             try
             {
 
@@ -47,11 +46,12 @@ namespace DataEntryClient
                 kernel.Bind<IChanelFactoryWrapper>().ToMethod((c) => new ChanelFactoryWrapper(args[0]));
                 RegisterServices(kernel);
 
-                new CompleteQuestionnaireSync(kernel.Get<ICommandInvoker>(), kernel.Get<IViewRepository>(),
-                                              kernel.Get<IChanelFactoryWrapper>(), kernel.Get<IClientSettingsProvider>())
+                new CompleteQuestionnaireSync(kernel,
+                                              Guid.Parse(args[1]))
                     .
                     Execute();
-            }catch
+            }
+            catch
             {
                 return 0;
             }

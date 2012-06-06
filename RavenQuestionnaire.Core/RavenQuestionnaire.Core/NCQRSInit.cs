@@ -7,6 +7,7 @@ using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.RavenDB;
 using RavenQuestionnaire.Core.Commands.Location;
 using RavenQuestionnaire.Core.Commands.Questionnaire;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Events;
 
 namespace RavenQuestionnaire.Web.App_Start
@@ -29,6 +30,8 @@ namespace RavenQuestionnaire.Web.App_Start
             var service = new CommandService();
             service.RegisterExecutor(typeof(CreateQuestionnaireCommand), new UoWMappedCommandExecutor(mapper));
             service.RegisterExecutor(typeof(CreateLocationCommand), new UoWMappedCommandExecutor(mapper));
+            service.RegisterExecutor(typeof(CreateCompleteQuestionnaireCommand), new UoWMappedCommandExecutor(mapper));
+
             return service;
         }
 

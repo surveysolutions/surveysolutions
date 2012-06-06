@@ -20,7 +20,7 @@ namespace DataEntryWCFServerTests
         {
             Mock<ICommandInvoker> invokerMock = new Mock<ICommandInvoker>();
 
-            CompleteQuestionnaireSyncService target = new CompleteQuestionnaireSyncService(invokerMock.Object);
+            EventDocumentSyncService target = new EventDocumentSyncService(invokerMock.Object);
 
             for (int i = 0; i < 10; i++)
             {

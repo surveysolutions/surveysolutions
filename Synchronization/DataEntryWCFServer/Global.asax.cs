@@ -31,9 +31,8 @@ namespace DataEntryWCFServer
 
         protected void HostServices(IKernel kernel)
         {
-
-            string hostname = System.Environment.MachineName;
-            var baseAddress = new UriBuilder("http", hostname, 7400, "SpotSyncService");
+            string hostname = System.Net.Dns.GetHostName();
+            var baseAddress = new UriBuilder("http", hostname, 80, "SpotSyncService");
             var h = new ServiceHost(typeof(SpotSyncService), baseAddress.Uri);
             // enable processing of discovery messages.  use UdpDiscoveryEndpoint to enable listening. use EndpointDiscoveryBehavior for fine control.
             h.Description.Behaviors.Add(new ServiceDiscoveryBehavior());

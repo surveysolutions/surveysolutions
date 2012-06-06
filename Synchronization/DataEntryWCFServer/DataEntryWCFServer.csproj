@@ -76,7 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CompleteQuestionnaireSyncService.svc" />
+    <Content Include="EventDocumentSyncService.svc" />
     <Content Include="GetLastSyncEventService.svc" />
     <Content Include="Global.asax" />
     <Content Include="SpotSyncService.svc" />
@@ -98,8 +98,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CompleteQuestionnaireSyncService.svc.cs">
-      <DependentUpon>CompleteQuestionnaireSyncService.svc</DependentUpon>
+    <Compile Include="EventDocumentSyncService.svc.cs">
+      <DependentUpon>EventDocumentSyncService.svc</DependentUpon>
     </Compile>
     <Compile Include="SpotSyncService.svc.cs">
       <DependentUpon>SpotSyncService.svc</DependentUpon>
@@ -131,7 +131,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>15401</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:8083</IISUrl>
+          <IISUrl>http://localhost</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

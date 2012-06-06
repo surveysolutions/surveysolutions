@@ -5,10 +5,13 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
 using DataEntryClient.WcfInfrastructure;
+using Ninject;
+using Raven.Client;
 using Raven.Client.Document;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
+using RavenQuestionnaire.Core.Commands.Synchronization;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Views.ClientSettings;
 using RavenQuestionnaire.Core.Views.Event;
@@ -19,18 +22,35 @@ namespace DataEntryClient.CompleteQuestionnaire
 {
     public class CompleteQuestionnaireSync
     {
-        private ICommandInvoker invoker;
+        private IKernel kernel;
         private IViewRepository viewRepository;
         private IChanelFactoryWrapper chanelFactoryWrapper;
         private IClientSettingsProvider clientSettingsProvider;
-        public CompleteQuestionnaireSync(ICommandInvoker invoker, IViewRepository viewRepository, IChanelFactoryWrapper chanelFactoryWrapper,  IClientSettingsProvider clientSettingsProvider)
+        private Guid processGuid;
+        private int invokeCount = 0;
+        private int invokeLimit = 15;
+        private ICommandInvoker invoker;
+        public CompleteQuestionnaireSync(IKernel kernel, Guid processGuid)
         {
-            this.invoker = invoker;
-            this.viewRepository = viewRepository;
-            this.chanelFactoryWrapper = chanelFactoryWrapper;
-            this.clientSettingsProvider = clientSettingsProvider;
+            this.kernel = kernel;
+            this.viewRepository = kernel.Get<IViewRepository>();
+            this.chanelFactoryWrapper = kernel.Get<IChanelFactoryWrapper>();
+            this.clientSettingsProvider = kernel.Get<IClientSettingsProvider>();
+            this.processGuid = processGuid;
         }
 
+        protected ICommandInvoker Invoker
+        {
+            get
+            {
+                if (invokeCount == invokeLimit)
+                    invokeCount = 0;
+                if (invokeCount == 0)
+                    invoker = kernel.Get<ICommandInvoker>();
+                invokeCount++;
+                return invoker;
+            }
+        }
 
         public void Execute()
         {
@@ -52,12 +72,15 @@ namespace DataEntryClient.CompleteQuestionnaire
 
         public void UploadEvents(Guid clientKey, Guid? lastSyncEvent)
         {
-            this.chanelFactoryWrapper.Execute<ICompleteQuestionnaireService>(
+            this.chanelFactoryWrapper.Execute<IEventDocumentSync>(
                 (client)=>
                     {
                         var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(new EventBrowseInputModel(lastSyncEvent));
+                        
+                        Invoker.Execute(new PushEventsCommand(processGuid, events.Items.Select(i => new EventDocument(i.Command, i.PublicKey, clientKey)), null));
                         foreach (var eventItem in events.Items)
                         {
+                          //  Invoker.Execute(new ChangeEventStatusCommand(processGuid, eventItem.PublicKey, EventState.InProgress, null));
                             var message = new EventSyncMessage
                             {
                                 SynchronizationKey = clientKey,
@@ -66,9 +89,14 @@ namespace DataEntryClient.CompleteQuestionnaire
                             };
 
                             ErrorCodes returnCode = client.Process(message);
+                          /*  Invoker.Execute(new ChangeEventStatusCommand(processGuid, eventItem.PublicKey,
+                                                                         returnCode == ErrorCodes.None
+                                                                             ? EventState.Completed
+                                                                             : EventState.Error, null));*/
                         }
                     }
                 );
+            Invoker.Execute(new EndProcessComand(processGuid, null));
         }
 
     }
