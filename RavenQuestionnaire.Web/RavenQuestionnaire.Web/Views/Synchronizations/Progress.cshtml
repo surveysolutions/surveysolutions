@@ -1,0 +1,27 @@
+﻿@model RavenQuestionnaire.Core.Views.Synchronization.SyncProgressView
+@{
+    Layout = "~/Views/Shared/_LayputHtml5.cshtml";
+}
+<div data-role="panel" data-id="main">
+    <div data-role="page" id="main" class="page">
+        @{Html.Partial("~/Views/Synchronizations/_ProgressContent.cshtml", Model);}
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var interval = 5000;   //number of mili seconds between each call
+        var refresh = function () {
+            $.ajax({
+                url: '@Url.Action("ProgressPartial", new { id = Model.ProcessPublicKey })',
+                cache: false,
+                success: function (html) {
+                    $('#main').html(html);
+                    $('#main').page();
+                    setTimeout(function () {
+                        refresh();
+                    }, interval);
+                }
+            });
+        };
+        refresh();
+    });</script>

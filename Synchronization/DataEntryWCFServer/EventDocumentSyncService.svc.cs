@@ -13,10 +13,10 @@ namespace DataEntryWCFServer
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
-    public class CompleteQuestionnaireSyncService : ICompleteQuestionnaireService
+    public class EventDocumentSyncService : IEventDocumentSync
     {
         private ICommandInvoker invoker;
-        public CompleteQuestionnaireSyncService(ICommandInvoker invoker)
+        public EventDocumentSyncService(ICommandInvoker invoker)
         {
             this.invoker = invoker;
         }

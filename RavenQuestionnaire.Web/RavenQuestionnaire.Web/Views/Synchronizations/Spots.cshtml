@@ -1,0 +1,32 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Statistics
+@model IEnumerable<Questionnaire.Core.Web.WCF.ServiceDiscover.SyncSpot>
+@*<div data-role="header" data-position="fixed">
+    <h1>
+        Spots</h1>
+</div>*@
+<div data-role="dialog" role="dialog" data-theme="b" id="spotsDialog" class="spot">
+    <div data-role="content" role="main">
+        @if (Model.Any())
+        {
+            <h1>
+                Avalible spots</h1>
+            foreach (var spot in Model)
+            {
+            <p>
+       @*     @Ajax.ActionLinkHtml5(spot.SpotName, "Index", "Synchronizations", new { url=spot.SpotUri.AbsoluteUri },
+                                     new AjaxOptions() { OnBegin = "sichronizationStarted", OnComplete = "sinchronizationCompleted" },
+                            new { data_role = "button", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })*@
+                            
+                               @Html.ActionLink(spot.SpotName, "Index", "Synchronizations", new { url = spot.SpotUri.AbsoluteUri }, new {  rel = "external", data_role = "button", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
+            </p>
+            }
+        }
+        else
+        {
+            <h1>
+                No spots avalible for synchronization</h1>
+        }
+        <a data-theme="a" data-role="button" href="#" id="spotsClose">Cancel</a>
+    </div>
+</div>

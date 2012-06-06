@@ -4,6 +4,32 @@ function sichronizationStarted(data, status, xhr) {
 
     $('[data-id=main]').addClass('ui-disabled');
 }
+function spotScanCompleted(data, status, xhr) {
+    $('a#btnSync span span').html('Synchronize');
+    $('a#btnSync').removeClass('ui-btn-active');
+    $('[data-id=main]').removeClass('ui-disabled');
+    var dialog = $(data.responseText);
+    var dialogContainer = $('#dialogContainer');
+ //   var dialogClasses = dialogContainer.attr("class");
+    dialogContainer.html(dialog);
+    dialog.page();
+   //    $("#lnkDialog").click();
+    //$.mobile.changePage('#spotsDialog', 'slidedown', true, true);
+    dialog.attr('class', dialog.attr('class') + ' ui-page-active');
+    var main = $('#main');
+   // main.removeClass('pop out');
+    main.addClass('ui-disabled');
+    main.attr('class', main.attr('class') + ' ui-page-active');
+  //  main[0].className = main[0].className + ' ui-page-active';
+    dialog.find('#spotsClose').click(function () {
+        dialogContainer.html('');
+     //   dialogContainer.attr('class', dialogClasses);
+        main.removeClass('ui-disabled');
+        // $.mobile.changePage('#main', 'slidedown', true, true);
+    });
+    
+}
+
 function sinchronizationCompleted(data, status, xhr) {
     $('a#btnSync span span').html('Synchronize');
     $('a#btnSync').removeClass('ui-btn-active');

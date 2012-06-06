@@ -915,6 +915,9 @@
     </None>
     <Content Include="Views\Group\Mobile\_PropagatedScreen.cshtml" />
     <Content Include="Views\Account\LogOnMobile.cshtml" />
+    <Content Include="Views\Synchronizations\Spots.cshtml" />
+    <Content Include="Views\Synchronizations\Progress.cshtml" />
+    <Content Include="Views\Synchronizations\_ProgressContent.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
