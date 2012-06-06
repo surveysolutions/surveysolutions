@@ -14,9 +14,11 @@
             foreach (var spot in Model)
             {
             <p>
-            @Ajax.ActionLinkHtml5(spot.SpotName, "Index", "Synchronizations", new { url=spot.SpotUri.AbsoluteUri },
+       @*     @Ajax.ActionLinkHtml5(spot.SpotName, "Index", "Synchronizations", new { url=spot.SpotUri.AbsoluteUri },
                                      new AjaxOptions() { OnBegin = "sichronizationStarted", OnComplete = "sinchronizationCompleted" },
-                            new { data_role = "button", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
+                            new { data_role = "button", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })*@
+                            
+                               @Html.ActionLink(spot.SpotName, "Index", "Synchronizations", new { url = spot.SpotUri.AbsoluteUri }, new {  rel = "external", data_role = "button", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
             </p>
             }
         }

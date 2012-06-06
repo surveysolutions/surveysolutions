@@ -884,6 +884,7 @@
     </None>
     <Content Include="Views\Group\Mobile\_PropagatedScreen.cshtml" />
     <Content Include="Views\Synchronizations\Spots.cshtml" />
+    <Content Include="Views\Synchronizations\Progress.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
