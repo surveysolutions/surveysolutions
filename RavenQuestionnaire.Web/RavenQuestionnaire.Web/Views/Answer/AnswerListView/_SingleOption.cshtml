@@ -5,7 +5,7 @@
 
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
 {
-    @Html.Hidden("QuestionId", Model.PublicKey)
+    @Html.Hidden("Parent", Model.PublicKey)
     <ul class="btn-group-vertical">
         @foreach (var item in Model.Answers)
         {

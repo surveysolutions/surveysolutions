@@ -92,7 +92,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             PropagateTemplate = new PropagatedGroup(propagatable.PublicKey, propagatable.Title, false, Guid.Empty, this.Questions);
             PropagateTemplate.Navigation.CurrentScreenTitle = propagatable.Title;
             PropagateTemplate.Navigation.BreadCumbs.AddRange(this.Navigation.BreadCumbs);
-            //PropagateTemplate.Navigation.BreadCumbs.Add(new CompleteGroupHeaders() { GroupText = this.GroupText, PublicKey = this.PublicKey });
+            //PropagateTemplate.Navigation.BreadCumbs.Add(new CompleteGroupHeaders() { Title = this.Title, PublicKey = this.PublicKey });
 
 
             var propagated = propGroups.Where(g => g != propagatable && g.PropogationPublicKey.HasValue).ToList();
@@ -155,7 +155,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             {
                 var featuredList = group.Questions.Where(q => q.Featured)
                     .Select(questionView => string.Join(",", questionView.Answers.Where(a => a.Selected)
-                        .Select(answer => !string.IsNullOrEmpty(answer.AnswerText) ? answer.AnswerText : answer.AnswerValue)
+                        .Select(answer => !string.IsNullOrEmpty(answer.Title) ? answer.Title : answer.AnswerValue)
                         .Where(a => !string.IsNullOrEmpty(a)).ToArray())).ToList();
                 group.FeaturedTitle = string.Join(",", featuredList.Where(f => !string.IsNullOrEmpty(f)));
             }

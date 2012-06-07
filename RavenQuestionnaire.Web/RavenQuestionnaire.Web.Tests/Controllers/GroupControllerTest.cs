@@ -48,7 +48,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     It.Is<QuestionnaireViewInputModel>(
                         v => v.QuestionnaireId.Equals("questionnairedocuments/qID"))))
                 .Returns(new QuestionnaireView(innerDocument));
-            Controller.Save(new GroupView() { GroupText = "test", QuestionnaireId = innerDocument.Id });
+            Controller.Save(new GroupView() { Title = "test", QuestionnaireId = innerDocument.Id });
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewGroupCommand>()), Times.Once());
         }
 

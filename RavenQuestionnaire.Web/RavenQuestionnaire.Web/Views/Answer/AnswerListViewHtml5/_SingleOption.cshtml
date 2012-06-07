@@ -10,10 +10,10 @@
 
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
 {
-    @Html.Hidden("QuestionId", Model.PublicKey)
+    @Html.Hidden("Parent", Model.PublicKey)
    @* <div  data-role="fieldcontain">*@
         <fieldset data-role="controlgroup">
-            <legend>@Html.Raw( Model.QuestionText)</legend>
+            <legend>@Html.Raw( Model.Title)</legend>
             @foreach (var item in Model.Answers)
             {
                 

@@ -10,7 +10,7 @@
             @Model.AnswerValue;
             <b>= </b>
         }
-        @Html.DisplayFor(modelItem => Model.AnswerText)
+        @Html.DisplayFor(modelItem => Model.Title)
         @if (Model.AnswerType == AnswerType.Image && Model.Image!=null)
         {
             var i = Model.Image;

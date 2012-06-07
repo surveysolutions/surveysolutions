@@ -13,12 +13,12 @@
         <h3>Edit condition</h3>
     </div>
     <div class="modal-body">
-        <p>Ask guestion if "@Model.Source.QuestionText" answer equals:</p>
+        <p>Ask guestion if "@Model.Source.Title" answer equals:</p>
         @foreach (var answer in Model.Source.Answers)
         {
             <p>
-                @Html.RadioButton("AnswerPublicKey", answer.PublicKey, false, new{ text=answer.AnswerText, num = answer.AnswerValue})
-                @answer.AnswerText
+                @Html.RadioButton("AnswerPublicKey", answer.PublicKey, false, new{ text=answer.Title, num = answer.AnswerValue})
+                @answer.Title
             </p>
         }
         @Html.HiddenFor(model => sourceQuestionPublicKey)

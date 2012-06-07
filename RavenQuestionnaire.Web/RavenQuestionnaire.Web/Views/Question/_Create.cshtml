@@ -19,7 +19,7 @@
         });
     });
 </script>
-@{var hideFunctionName = Model.GroupPublicKey.HasValue ? "HideCreateQuestionForm" + Model.GroupPublicKey.ToString().Replace('-', '_') : "HideCreateQuestionForm";
+@{var hideFunctionName = Model.Parent.HasValue ? "HideCreateQuestionForm" + Model.Parent.ToString().Replace('-', '_') : "HideCreateQuestionForm";
   if (ViewBag.Images != null)
   {
       var images = ViewBag.Images as SelectList;
@@ -36,10 +36,10 @@
         <div class="span5 form-horizontal">
             @Html.BootstrapValidationSummary("")
             <div class="control-group">
-                @Html.LabelFor(model => model.QuestionText, new { @class = "control-label" })
+                @Html.LabelFor(model => model.Title, new { @class = "control-label" })
                 <div class="controls">
-                    @Html.TextAreaFor(model => model.QuestionText, new { placeholder = ViewData.ModelMetadata.Watermark })
-                    @Html.ValidationMessageFor(model => model.QuestionText)
+                    @Html.TextAreaFor(model => model.Title, new { placeholder = ViewData.ModelMetadata.Watermark })
+                    @Html.ValidationMessageFor(model => model.Title)
                 </div>
             </div>
             <div class="control-group">
@@ -107,7 +107,7 @@
             {
                 @Html.HiddenFor(model => model.PublicKey)
             }
-            @Html.HiddenFor(model => model.GroupPublicKey)
+            @Html.HiddenFor(model => model.Parent)
             @Html.HiddenFor(model => model.QuestionnaireId)
             @Html.Partial("~/Views/Answer/_EditAnswers.cshtml", Model)
         </div>

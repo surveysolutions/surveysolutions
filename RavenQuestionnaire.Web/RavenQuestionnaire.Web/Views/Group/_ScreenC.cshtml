@@ -156,7 +156,7 @@
         using (Ajax.BeginForm("SaveSingleResultC", "CompleteQuestionnaire", null, options, new { autocomplete = "off", @class = qOptions.isHorizontal ? "form-horizontal" : "" }))
         {
     <div class="control-group">
-        <label class="control-label">@question.QuestionText</label>
+        <label class="control-label">@question.Title</label>
         <div class="controls">
             @using (Html.BeginCollectionItem("questions", true, question.PublicKey + "_" + propogationPublicKey))
             {

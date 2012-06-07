@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Answer answer = new Answer()
                                 {
                                     PublicKey = innerDocument.Questions[0].Answers[0].PublicKey,
-                                    AnswerText = innerDocument.Questions[0].Answers[0].AnswerText
+                                    Title = innerDocument.Questions[0].Answers[0].Title
                                 };
             completeQuestionnaire.AddAnswer(innerDocument.Questions[0].Answers[0].PublicKey,
                                             "custom text");

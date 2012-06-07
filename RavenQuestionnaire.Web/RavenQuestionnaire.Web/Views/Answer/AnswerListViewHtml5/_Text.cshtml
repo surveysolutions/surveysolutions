@@ -8,11 +8,11 @@
 }
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {
-    @Html.Hidden("QuestionId", Model.PublicKey)
+    @Html.Hidden("Parent", Model.PublicKey)
     @Html.Hidden("PublicKey", answerGuid)
         @Html.Hidden("Selected", true)
 var id = ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
-  @*@Html.Label("AnswerValue",  Model.QuestionText)*@
+  @*@Html.Label("AnswerValue",  Model.Title)*@
    
 @*    <span for="@id">
     @(Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty)</span> <a href="javascript:void(0)" open-virtual-keyboar="true" target-input="@id" class="keyboard"></a>
@@ -20,6 +20,6 @@ var id = ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
     @Html.TextBox("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, new {@class="ert"})*@
    
     
-    @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, Model.QuestionText, new { draw_key_board = "true" }, new { @class = "keyboard" }, new { @class = "bold" })
+    @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, Model.Title, new { draw_key_board = "true" }, new { @class = "keyboard" }, new { @class = "bold" })
    
 }

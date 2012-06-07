@@ -12,7 +12,7 @@
         <div class="answer-header">
             <div>
                 <a href="javascript:void(0)" onclick="$('#@currentRowId').remove()" class="btn btn-danger btn-mini">
-                    <i class="icon-remove icon-white"></i>Delete</a> <span class="help-inline">@Html.ValidationMessageFor(model => Model.AnswerText)</span>
+                    <i class="icon-remove icon-white"></i>Delete</a> <span class="help-inline">@Html.ValidationMessageFor(model => Model.Title)</span>
             </div>
         </div>
         <div class="answer-body">
@@ -21,7 +21,7 @@
                     @Html.TextBoxFor(model => Model.AnswerValue, new { @class = "span12", placeholder = "stata value" })
                 </div>
                 <div class="span9">
-                    @Html.TextBoxFor(model => Model.AnswerText, new { @class = "span12", placeholder = "answer text" })
+                    @Html.TextBoxFor(model => Model.Title, new { @class = "span12", placeholder = "answer text" })
                 </div>
             </div>
              <div class="row-fluid">

@@ -18,7 +18,7 @@
             <div class="span@(headerSpan)">
                 <b @if (!String.IsNullOrEmpty(Model.Instructions))
                        { <text>data-original-title = "Instructions" data-content = "@Model.Instructions" rel = "popover"</text> } >
-                    @Html.DisplayFor(modelItem => Model.QuestionText)</b>
+                    @Html.DisplayFor(modelItem => Model.Title)</b>
             </div>
             @if (Model.Cards.Length > 0)
             {

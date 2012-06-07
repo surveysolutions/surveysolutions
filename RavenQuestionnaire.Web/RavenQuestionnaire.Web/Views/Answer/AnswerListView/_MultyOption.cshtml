@@ -11,7 +11,7 @@
             <label class="checkbox">
                 @Html.CheckBox("Selected", item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
                 @{ Html.RenderPartial(string.Format("~/Views/Answer/answerView/_{0}.cshtml", item.AnswerType), item); }
-                @Html.Hidden("QuestionId", Model.PublicKey)
+                @Html.Hidden("Parent", Model.PublicKey)
                 @Html.Hidden("PublicKey", item.PublicKey)
             </label>
         </li>
