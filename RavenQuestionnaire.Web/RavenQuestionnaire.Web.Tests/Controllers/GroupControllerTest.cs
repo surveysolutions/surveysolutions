@@ -112,7 +112,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 .Returns(groupView);
 
             var result = Controller.Edit(group.PublicKey, innerDocument.Id);
-            Assert.AreEqual(groupView, ((PartialViewResult)result).ViewData.Model);
+            Assert.AreEqual(groupView, ((ViewResult)result).ViewData.Model);
         }
     }
 }
