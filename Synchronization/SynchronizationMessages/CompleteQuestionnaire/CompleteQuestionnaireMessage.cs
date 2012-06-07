@@ -11,12 +11,13 @@ namespace SynchronizationMessages.CompleteQuestionnaire
         public Guid SynchronizationKey { get; set; }
         public Guid CommandKey { get; set; }
         public ICommand Command { get; set; }
-
+        public DateTime CreationDate { get; set; }
 
         public void WriteTo(Stream stream)
         {
             FormatHelper.WriteGuid(stream, this.SynchronizationKey);
             FormatHelper.WriteGuid(stream, this.CommandKey);
+            FormatHelper.WriteString(stream, this.CreationDate.ToString());
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
 
