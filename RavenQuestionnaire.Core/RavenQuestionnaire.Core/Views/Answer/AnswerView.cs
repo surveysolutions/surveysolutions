@@ -6,17 +6,18 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Views.Answer
 {
-    public class AnswerView
+    public class AnswerView : ICompositeView
     {
-        public int Index { get; set; }
         public Guid PublicKey { get; set; }
+        public string Title { get; set; }
+        public Guid? Parent { get; set; }
+
+        public int Index { get; set; }
         public string AnswerValue { get; set; }
-        public string AnswerText { get; set; }
         public string AnswerImage { get; set; }
         public CardView Image { get; set; }
         public bool Mandatory { get; set; }
         public AnswerType AnswerType { get; set; }
-        public Guid QuestionId { get; set; }
         public string NameCollection { get; set; }
 
         public AnswerView()
@@ -26,11 +27,11 @@ namespace RavenQuestionnaire.Core.Views.Answer
         public AnswerView(Guid questionPublicKey, IAnswer doc)
         {
             this.PublicKey = doc.PublicKey;
-            this.AnswerText = doc.AnswerText;
+            this.Title = doc.AnswerText;
             this.AnswerValue = GetAnswerValue(doc.AnswerValue);
             this.Mandatory = doc.Mandatory;
             this.AnswerType = doc.AnswerType;
-            this.QuestionId = questionPublicKey;
+            this.Parent = questionPublicKey;
             this.NameCollection = doc.NameCollection;
             if (doc.Image != null)
                 Image = new CardView(PublicKey, doc.Image);
@@ -38,7 +39,7 @@ namespace RavenQuestionnaire.Core.Views.Answer
 
         public AnswerView(Guid questionPublicKey)
         {
-            this.QuestionId = questionPublicKey;
+            this.Parent = questionPublicKey;
         }
 
         protected string GetAnswerValue(object value)

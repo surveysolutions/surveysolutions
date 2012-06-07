@@ -101,7 +101,7 @@ namespace RavenQuestionnaire.Core.Views.FlowGraph
                                                                {
                                                                    Id = question.PublicKey.ToString(),
                                                                    Scope = parent.Id,
-                                                                   Question = question.QuestionText
+                                                                   Question = question.Title
                                                                }))
             {
                 parent.Blocks.Add(b);
@@ -114,7 +114,7 @@ namespace RavenQuestionnaire.Core.Views.FlowGraph
                                  {
                                      Id = group.PublicKey.ToString(),
                                      Scope = parent.Id,
-                                     Title = group.GroupText
+                                     Title = group.Title
                                  };
                 var blocks = AddGroup(gBlock, group.Questions, group.Groups);
                 parent.Blocks.Add(gBlock);
