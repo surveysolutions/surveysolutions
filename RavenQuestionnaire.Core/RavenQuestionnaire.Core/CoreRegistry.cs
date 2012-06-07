@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Reflection;
 using System.Web;
 using Ninject;
 using Ninject.Activation;
@@ -8,8 +9,13 @@ using Ninject.Modules;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
+using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.CommandHandlers.Statistics;
 using RavenQuestionnaire.Core.Commands.Statistics;
+using RavenQuestionnaire.Core.Conventions;
+using RavenQuestionnaire.Core.Entities.Iterators;
+using RavenQuestionnaire.Core.Entities.Subscribers;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Indexes;
 
 namespace RavenQuestionnaire.Core
@@ -29,20 +35,41 @@ namespace RavenQuestionnaire.Core
         {
             Bind<DocumentStoreProvider>().ToSelf().InSingletonScope().WithConstructorArgument("storage", _repositoryPath);
             Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
-          //  if (_isWeb)
+            //  if (_isWeb)
             Bind<IDocumentSession>().ToMethod(context => GetIDocumentSession(Kernel.Get<IDocumentStore>()));
-          //  Bind<ICommandHandler<GenerateQuestionnaireStatisticCommand>>().To<GenerateQuestionnaireStatisticHandler>();
-            /*  kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(ICommandHandler<>)));
-            });**/
+            Bind<IClientSettingsProvider>().To<RavenQuestionnaire.Core.ClientSettingsProvider.ClientSettingsProvider>().
+                InSingletonScope();
+            this.Kernel.Scan(s =>
+                                 {
+                                     s.FromAssembliesMatching("RavenQuestionnaire.*");
+                                     s.BindWith(new GenericBindingGenerator(typeof (ICommandHandler<>)));
+                                 });
 
-            //  Bind<IDocumentSession>().ToMethod(context => Kernel.Get<IDocumentStore>().OpenSession()).When(_ => HttpContext.Current == null).InThreadScope();
-            /*else
-            {
-                Bind<IDocumentSession>().ToMethod(context => Kernel.Get<IDocumentStore>().OpenSession()).InThreadScope();
-            }*/
+            this.Kernel.Scan(s =>
+                                 {
+                                     s.FromAssembliesMatching("RavenQuestionnaire.*");
+                                     s.BindWith(new GenericBindingGenerator(typeof (IViewFactory<,>)));
+                                 });
+            this.Kernel.Scan(s =>
+                                 {
+                                     s.FromAssembliesMatching("RavenQuestionnaire.*");
+                                     s.BindWith(new GenericBindingGenerator(typeof (IExpressionExecutor<,>)));
+                                 });
+            this.Kernel.Scan(s =>
+                                 {
+                                     s.FromAssembliesMatching("RavenQuestionnaire.*");
+                                     s.BindWith(new RegisterFirstInstanceOfInterface());
+                                 });
+            this.Kernel.Scan(s =>
+                                 {
+                                     s.FromAssembliesMatching("RavenQuestionnaire.*");
+                                     s.BindWith(new GenericBindingGenerator(typeof (Iterator<>)));
+                                 });
+            this.Kernel.Scan(s =>
+                                 {
+                                     s.FromAssembliesMatching("RavenQuestionnaire.*");
+                                     s.BindWith(new GenericBindingGenerator(typeof (IEntitySubscriber<>)));
+                                 });
 
         }
 

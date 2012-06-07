@@ -44,7 +44,6 @@ namespace DataEntryClient
                 var kernel =
                     new StandardKernel(new CoreRegistry(ConfigurationManager.AppSettings["Raven.DocumentStore"]));
                 kernel.Bind<IChanelFactoryWrapper>().ToMethod((c) => new ChanelFactoryWrapper(args[0]));
-                RegisterServices(kernel);
 
                 new CompleteQuestionnaireSync(kernel,
                                               Guid.Parse(args[1]))
@@ -61,48 +60,6 @@ namespace DataEntryClient
         private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
         {
             result = 0;
-        }
-
-        /// <summary>
-        /// Load your modules or register your services here!
-        /// </summary>
-        /// <param name="kernel">The kernel.</param>
-        private static void RegisterServices(IKernel kernel)
-        {
-          
-
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(ICommandHandler<>)));
-            });
-
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(IViewFactory<,>)));
-            });
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(IExpressionExecutor<,>)));
-            });
-          
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new RegisterFirstInstanceOfInterface());
-            });
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(Iterator<>)));
-            });
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(IEntitySubscriber<>)));
-            });
         }
        
     }
