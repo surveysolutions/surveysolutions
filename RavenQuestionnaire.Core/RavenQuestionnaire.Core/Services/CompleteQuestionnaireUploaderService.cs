@@ -35,18 +35,9 @@ namespace RavenQuestionnaire.Core.Services
 
             CompleteQuestionnaire entity = _questionRepository.Load(id);
             ICompleteGroup general = entity.GetInnerDocument();
-
             ICompleteQuestion question = FindQuestion(questionKey, propagationKey, general);
-
-
-
             question.SetAnswer(answers);
-
-      
-           
             ExecuteConditions(question, general);
-
-
             var command = new GenerateQuestionnaireStatisticCommand(entity, null);
             _asyncInvocker.Execute(command);
             return entity;
