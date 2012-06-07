@@ -5,15 +5,23 @@
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
 }
+
 <div data-role="panel" data-id="main">
     <!-- Start of second page -->
     <div data-role="page" id="main">
-        <div data-role="header" data-theme="b">
-            <h1>Dashboard </h1>@Ajax.ActionLinkHtml5("Synchronize", "Index", "Synchronizations", new { }, 
+        <div data-role="header" data-theme="b">         
+            <h1>Dashboard </h1>   
+            @Ajax.ActionLinkHtml5("Synchronize", "Index", "Synchronizations", new { }, 
             new AjaxOptions(){ OnBegin = "sichronizationStarted", OnComplete = "sinchronizationCompleted"},
-  new { data_inline = "true", data_role = "button", data_mini = "true", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
-            
-            
+            new { data_inline = "true", data_role = "button", data_mini = "true", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })            
+            @Html.ActionLink("Export", "Export", "CompleteQuestionnaire")
+            @Html.ActionLink("Import", "Import", "CompleteQuestionnaire")            
+   
+@*            @using (Html.BeginForm("Import", "CompleteQuestionnaire", FormMethod.Post, new {enctype="multipart/form-data"}))
+            {       
+                <input type="file" name="myfile" />   
+                <input type="submit" name="Submit" value="Upload" />
+            }*@
             <div id="jqm-themeswitcher"></div>
         </div>
         <div data-role="content">
@@ -27,16 +35,16 @@
                             
 
                         @Html.ActionLink("New", "Participate", "CompleteQuestionnaire", new { id = group.Id, mode = "Html5" }, new
-                                                  {
-                                                      @class = "splited-button",
-                                                      data_inline = "true",
-                                                      data_icon = "plus",
-                                                      data_iconpos="left",
-                                                      data_role = "button",
-                                                      data_theme = "b",
-                                                      rel = "external",
-                                                      disable_after_click = "true"
-                                                  })
+                   {
+                       @class = "splited-button",
+                       data_inline = "true",
+                       data_icon = "plus",
+                       data_iconpos = "left",
+                       data_role = "button",
+                       data_theme = "b",
+                       rel = "external",
+                       disable_after_click = "true"
+                   })
                         @*  <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>*@
                     </li>
                
@@ -79,36 +87,28 @@
                             <div class="ui-block-c">
                                 <div data-role="controlgroup" data-type="horizontal">
                                     @Html.ActionLink("edit", "QuestionHtml5", "CompleteQuestionnaire", new { id = survey.Id }, new
-                                                                                                                               {
-                                                                                                                                   data_inline = "true",
-                                                                                                                                   data_role = "button",
-                                                                                                                                   data_theme = "b",
-                                                                                                                                   data_mini = "true",
-                                                                                                                                   rel = "external"
-                                                                                                                               })
+                               {
+                                   data_inline = "true",
+                                   data_role = "button",
+                                   data_theme = "b",
+                                   data_mini = "true",
+                                   rel = "external"
+                               })
                                     @Html.ActionLink("stat", "Details", "Statistic", new { id = survey.Id }, new
-                                                                                                             {
-                                                                                                                 data_inline = "true",
-                                                                                                                 data_role = "button",
-                                                                                                                 data_mini = "true",
-                                                                                                                 rel = "external"
-                                                                                                             })
+                               {
+                                   data_inline = "true",
+                                   data_role = "button",
+                                   data_mini = "true",
+                                   rel = "external"
+                               })
                                     @Html.ActionLink("del", "Delete", "CompleteQuestionnaire", new { id = survey.Id }, new
-                                                                                                                       {
-                                                                                                                           data_inline = "true",
-                                                                                                                           data_role = "button",
-                                                                                                                           data_theme = "e",
-                                                                                                                           data_mini = "true",
-                                                                                                                           rel = "external"
-                                                                                                                       })
-                                   @Html.ActionLink("download", "SaveInFile", "CompleteQuestionnaire", new { id = survey.Id }, new
-                                                                                                                       {
-                                                                                                                           data_inline = "true",
-                                                                                                                           data_role = "button",
-                                                                                                                           data_theme = "b",
-                                                                                                                           data_mini = "true",
-                                                                                                                           rel = "external"
-                                                                                                                       })
+                               {
+                                   data_inline = "true",
+                                   data_role = "button",
+                                   data_theme = "e",
+                                   data_mini = "true",
+                                   rel = "external"
+                               })                                   
                                 </div>
                             </div>
                         </div>

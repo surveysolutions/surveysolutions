@@ -2,27 +2,36 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Ionic.Zip;
+using Newtonsoft.Json;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
+using Raven.Abstractions.Data;
+using Raven.Json.Linq;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
-using RavenQuestionnaire.Core.Commands.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
+using RavenQuestionnaire.Core.Views.Event;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Core.Views.Status.StatusElement;
 using RavenQuestionnaire.Web.Models;
+using Formatting = System.Xml.Formatting;
 
 #endregion
 
@@ -547,18 +556,72 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
 
-        public ActionResult SaveInFile(string id)
+        public FileResult Export()
         {
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
-                new CompleteQuestionnaireViewInputModel(id));
-            using (var retStream = new MemoryStream())
+            var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(new EventBrowseInputModel(null));
+            var outputStream = new MemoryStream();
+            using (var zip = new ZipFile())
             {
-                using (var tw = new StreamWriter(retStream))
+                using (MemoryStream stream = new MemoryStream())
                 {
-                    tw.WriteLine("Hello, I am a new text file");
+                    var settings = new JsonSerializerSettings();
+                    settings.TypeNameHandling = TypeNameHandling.Objects;
+                    string mS = JsonConvert.SerializeObject(events.Items, Newtonsoft.Json.Formatting.Indented, settings);
+                    //foreach (EventBrowseItem item in events.Items)
+                    //{
+                    //    var message = new EventSyncMessage
+                    //                      {
+                    //                          CommandKey = item.PublicKey,
+                    //                          Command = item.Command,
+                    //                          CreationDate = item.CreationDate
+                    //                      };
+                    //    message.WriteTo(stream);
+                    //}
+                    //zip.AddEntry(string.Format("{0}.txt", "events"), stream.ToArray());
+                    zip.AddEntry(string.Format("{0}.txt", "events"), mS);
                 }
-                return File(retStream.ToArray(), "application/vnd.txt", string.Format("CompleteQuestionnaire-{0}", id));
+                zip.Save(outputStream);
             }
+            outputStream.Seek(0, SeekOrigin.Begin);
+            return File(outputStream, "application/zip", "events.zip");
         }
+
+        [AcceptVerbs(HttpVerbs.Get)]
+        public ActionResult Import()
+        {
+            return View("ViewTestUploadFile");
+        }
+
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult Import(HttpPostedFileBase myfile)
+        {
+            if (myfile != null && myfile.ContentLength != 0)
+            {
+                HttpPostedFileBase uploadedFile = Request.Files[0];
+                if (ZipFile.IsZipFile(uploadedFile.InputStream, false))
+                {
+                    uploadedFile.InputStream.Position = 0;
+                    ZipFile zip = ZipFile.Read(uploadedFile.InputStream);
+                    foreach (ZipEntry e in zip)
+                    {
+                        using (MemoryStream stream = new MemoryStream())
+                        {
+                            e.Extract(stream);
+                            var settings = new JsonSerializerSettings();
+                            settings.TypeNameHandling = TypeNameHandling.Objects;
+                            var results = JsonConvert.DeserializeObject<List<EventBrowseItem>>(Encoding.Default.GetString(stream.ToArray()), settings);
+                            foreach (EventBrowseItem item in results)
+                            {
+                                commandInvoker.Execute(item.Command, item.PublicKey, Guid.NewGuid());
+                            }
+                            //  result.InitializeFrom(stream);
+                        }
+                    }
+                }
+            }
+            return RedirectToAction("Index", "Dashboard");
+        }
+
     }
 }
