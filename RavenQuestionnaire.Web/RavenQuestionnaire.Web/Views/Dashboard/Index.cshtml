@@ -5,21 +5,17 @@
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
 }
-
 <div data-role="panel" data-id="main">
     <!-- Start of second page -->
     <div data-role="page" id="main">
-        <div data-role="header" data-theme="b">         
-               <h1>Dashboard </h1>@Ajax.ActionLinkHtml5("Synchronize", "Discover", "Synchronizations", new { },
-new AjaxOptions() { OnBegin = "sichronizationStarted", OnComplete = "spotScanCompleted" },
-            @Html.ActionLink("Export", "Export", "CompleteQuestionnaire")
-            @Html.ActionLink("Import", "Import", "CompleteQuestionnaire")            
-        
-            new { data_inline = "true", data_role = "button", data_mini = "true", data_corners="false", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
-       
-            <a href="@Url.Action("LogOff", "Account")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Log off</a>
-                <input type="submit" name="Submit" value="Upload" />
-            }*@
+        <div data-role="header" data-theme="b">
+            <h1>
+                Dashboard
+            </h1>
+            @Ajax.ActionLinkHtml5("Synchronize", "Discover", "Synchronizations", new { },
+                                    new AjaxOptions() { OnBegin = "sichronizationStarted", OnComplete = "spotScanCompleted" },
+                                    new { data_inline = "true", data_role = "button", data_mini = "true", data_corners = "false", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
+            <a href="@Url.Action("LogOff", "Account")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Log off</a> 
         </div>
         <div data-role="content">
             <ul class="dashboard-list" data-inset="true" data-divider-theme="d" data-theme="d"
@@ -42,8 +38,8 @@ new AjaxOptions() { OnBegin = "sichronizationStarted", OnComplete = "spotScanCom
                         @*  <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>*@
                     </li>
                
-                   if (@group.Items.Any())
-                   {
+                    if (@group.Items.Any())
+                    {
                     <li data-theme="c" class="grid-header">
                         <div class="ui-grid-b ">
                             <div class="ui-block-a">
@@ -63,8 +59,8 @@ new AjaxOptions() { OnBegin = "sichronizationStarted", OnComplete = "spotScanCom
                     </li>
 
 
-                                                                                                      foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
-                                                                                                      {
+                        foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
+                        {
                     <li>
                         <div class="ui-grid-b">
                             <div class="ui-block-a">
@@ -111,13 +107,35 @@ new AjaxOptions() { OnBegin = "sichronizationStarted", OnComplete = "spotScanCom
                         </div>
                         <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@survey.AnsweredQuestionCouont
                             / @survey.TotalQuestionCouont</span> </li>
-                                                                                                      }
+                        }
 
-                   }
+                    }
                 }
             </ul>
+        </div>
+        <div data-role="footer">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="@Url.Action("Import", "CompleteQuestionnaire")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Import</a></li>                    
+                    <li><a href="@Url.Action("Export", "CompleteQuestionnaire")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Export</a></li>
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>              
+                </ul>
+            </div>            
         </div>
     </div>
     <div id="dialogContainer">
     </div>
+   @* <div data-role="page" id="import-popup">
+        <div data-role="header" data-theme="b">
+            <h1>Import</h1>
+        </div>
+        <div data-role="content">
+            @using (Html.BeginForm("Import", "CompleteQuestionnaire", FormMethod.Post, new {enctype="multipart/form-data"}))
+            {       
+                <input type="file" name="myfile" />   
+                <input type="submit" name="Submit" value="Upload" />
+            }
+        </div>
+    </div>*@
 </div>
