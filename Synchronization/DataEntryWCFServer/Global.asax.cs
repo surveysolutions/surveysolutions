@@ -100,53 +100,11 @@ namespace DataEntryWCFServer
         protected override IKernel CreateKernel()
         {
             var kernel = new StandardKernel(new CoreRegistry(System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"]));
-            RegisterServices(kernel);
             
        //     kernel.Bind<ServiceHost>().ToMethod(ctx => ctx.Kernel.Get<NinjectServiceHost>(new ConstructorArgument("singletonInstance", c => c.Kernel.Get<IGetLastSyncEvent>())));
       //      HostServices(kernel);
             return kernel;
         }
 
-        /// <summary>
-        /// Load your modules or register your services here!
-        /// </summary>
-        /// <param name="kernel">The kernel.</param>
-        private void RegisterServices(IKernel kernel)
-        {
-
-            
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(ICommandHandler<>)));
-            });
-
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(IViewFactory<,>)));
-            });
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(IExpressionExecutor<,>)));
-            });
-
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new RegisterFirstInstanceOfInterface());
-            });
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(Iterator<>)));
-            });
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(IEntitySubscriber<>)));
-            });
-        }
     }
 }
