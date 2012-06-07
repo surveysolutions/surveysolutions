@@ -417,6 +417,7 @@
     <Compile Include="Views\Group\GroupView.cs" />
     <Compile Include="Views\Group\GroupViewFactory.cs" />
     <Compile Include="Views\Group\GroupViewInputModel.cs" />
+    <Compile Include="Views\ICompositeView.cs" />
     <Compile Include="Views\Group\PropagatedCompleteGroupView.cs" />
     <Compile Include="Views\Location\LocationBrowseInputModel.cs" />
     <Compile Include="Views\Location\LocationBrowseItem.cs" />

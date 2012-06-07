@@ -12,14 +12,14 @@ using RavenQuestionnaire.Core.Views.Card;
 
 namespace RavenQuestionnaire.Core.Views.Question
 {
-    public abstract class AbstractQuestionView
+    public abstract class AbstractQuestionView : ICompositeView
     {
         public int Index { get; set; }
 
         public Guid PublicKey { get; set; }
 
         [Display(Prompt = "Type question here")]
-        public string QuestionText { get; set; }
+        public string Title { get; set; }
 
         [Display(Prompt = "When this question is enabled?")]
         public string ConditionExpression { get; set; }
@@ -45,7 +45,7 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         private string _questionnaireId;
 
-        public Guid? GroupPublicKey { get; set; }
+        public Guid? Parent { get; set; }
 
         public AbstractQuestionView()
         {
@@ -56,14 +56,14 @@ namespace RavenQuestionnaire.Core.Views.Question
             : this()
         {
             this.QuestionnaireId = questionnaireId;
-            this.GroupPublicKey = groupPublicKey;
+            this.Parent = groupPublicKey;
         }
 
         protected AbstractQuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
             : this()
         {
             this.PublicKey = doc.PublicKey;
-            this.QuestionText = doc.QuestionText;
+            this.Title = doc.QuestionText;
             this.QuestionType = doc.QuestionType;
             this.QuestionnaireId = questionnaire.Id;
             this.ConditionExpression = doc.ConditionExpression;
@@ -112,7 +112,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             : this()
         {
             this.QuestionnaireId = questionnaireId;
-            this.GroupPublicKey = groupPublicKey;
+            this.Parent = groupPublicKey;
         }
 
         public AbstractQuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
@@ -146,7 +146,7 @@ namespace RavenQuestionnaire.Core.Views.Question
                 base(questionnaire, doc)
         {
             
-            this.GroupPublicKey = GetQuestionGroup(questionnaire, doc.PublicKey);
+            this.Parent = GetQuestionGroup(questionnaire, doc.PublicKey);
         }
 
         protected Guid? GetQuestionGroup(IQuestionnaireDocument questionnaire, Guid questionKey)
@@ -177,7 +177,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         }
     }
 
-    public class QuestionView :QuestionView<AnswerView, RavenQuestionnaire.Core.Entities.SubEntities.Group, IQuestion>
+    public class QuestionView :QuestionView<AnswerView, Entities.SubEntities.Group, IQuestion>
     {
 
         public QuestionView()

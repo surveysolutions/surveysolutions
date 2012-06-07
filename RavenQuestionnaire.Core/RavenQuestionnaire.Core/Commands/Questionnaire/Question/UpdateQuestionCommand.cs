@@ -76,7 +76,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
                         new Answer()
                             {
                                 AnswerValue = a.AnswerValue,
-                                AnswerText = a.AnswerText,
+                                AnswerText = a.Title,
                                 AnswerType = a.AnswerType,
                                 Mandatory = a.Mandatory,
                                 PublicKey = a.PublicKey,
