@@ -40,11 +40,11 @@ namespace RavenQuestionnaire.Core.Views.Question
             }
             this.Answers = template.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(template.PublicKey,a)).ToArray();
             this.PublicKey = template.PublicKey;
-            this.QuestionText = template.QuestionText;
+            this.Title = template.QuestionText;
             this.Instructions = template.Instructions;
             this.ConditionExpression = template.ConditionExpression;
             this.StataExportCaption = template.StataExportCaption;
-            this.GroupPublicKey = group.PublicKey;
+            this.Parent = group.PublicKey;
            // thi's.QuestionnaireId = group.
         }
     }

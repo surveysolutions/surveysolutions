@@ -5,7 +5,7 @@
 <script language="javascript">
     function GetData() {
         var collectionId = $("#NameCollection").val();
-        var questionId = $("#QuestionId").val();
+        var questionId = $("#Parent").val();
         var url = $('#check').attr('url');
         url = url + "?questionId="+questionId+"&NameCollection=" + collectionId;
         $.get(url, null,
@@ -20,7 +20,7 @@
          @Html.LabelFor(model => Model.NameCollection, new { @class = "control-label" })
          <div class="controls">
              @Html.DropDownListFor(model => model.NameCollection, (SelectList)ViewBag.Collection)                                          
-             @Html.HiddenFor(model => Model.QuestionId)                      
+             @Html.HiddenFor(model => Model.Parent)                      
              <input id="check" onclick="GetData()" type="button" url="@Url.Action("FillAnswers", "Answer")" value="Fill answers" class="btn btn-mini btn-danger"/>                   
          </div>
      </div>       

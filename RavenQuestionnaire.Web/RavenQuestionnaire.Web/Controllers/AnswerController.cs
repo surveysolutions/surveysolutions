@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult Create(Guid questionPublicKey)
         {
             LoadImages();
-            return PartialView("_EditRow", new AnswerView { QuestionId = questionPublicKey, PublicKey = Guid.NewGuid() });
+            return PartialView("_EditRow", new AnswerView { Parent = questionPublicKey, PublicKey = Guid.NewGuid() });
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
@@ -41,7 +41,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             var res = viewRepository.Load<CollectionBrowseInputModel, CollectionBrowseView>(new CollectionBrowseInputModel());
             this.ViewBag.Collection = new SelectList(res.Items.ToList(), "Id", "Name");
-            return PartialView("_EditDataBaseSettings", new AnswerView() { QuestionId = questionPublicKey, PublicKey = Guid.NewGuid() });
+            return PartialView("_EditDataBaseSettings", new AnswerView() { Parent = questionPublicKey, PublicKey = Guid.NewGuid() });
         }
         
         private void LoadImages()

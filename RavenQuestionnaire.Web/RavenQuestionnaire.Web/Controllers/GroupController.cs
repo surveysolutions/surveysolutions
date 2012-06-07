@@ -45,14 +45,14 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     if (model.PublicKey == Guid.Empty)
                     {
-                        var createCommand = new CreateNewGroupCommand(model.GroupText, model.Propagated,
-                                                                      model.QuestionnaireId, model.ParentGroup,
+                        var createCommand = new CreateNewGroupCommand(model.Title, model.Propagated,
+                                                                      model.QuestionnaireId, model.Parent,
                                                                       GlobalInfo.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
                     }
                     else
                     {
-                        commandInvoker.Execute(new UpdateGroupCommand(model.GroupText, model.Propagated,
+                        commandInvoker.Execute(new UpdateGroupCommand(model.Title, model.Propagated,
                                                                       model.QuestionnaireId,
                                                                       model.PublicKey, GlobalInfo.GetCurrentUser()));
                     }

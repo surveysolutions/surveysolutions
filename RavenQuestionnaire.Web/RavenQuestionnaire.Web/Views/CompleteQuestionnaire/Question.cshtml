@@ -4,7 +4,7 @@
 @model CompleteQuestionnaireViewEnumerable
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = Model.CurrentGroup.GroupText;
+    ViewBag.Title = Model.CurrentGroup.Title;
 }
 <h1>@Model.Title</h1>
 @Html.Partial("ViewSwitcher", new SwitcherModel{Id = Model.Id, PublicKey = Model.CurrentGroup.PublicKey})
@@ -14,7 +14,7 @@
     {
         string cssClass = groupView.PublicKey == Model.CurrentGroup.PublicKey ? "active" : "";
         <li  class="@cssClass">
-            @Html.ActionLink(groupView.GroupText, "Question", new { id = Model.Id, group = groupView.PublicKey })</li>
+            @Html.ActionLink(groupView.Title, "Question", new { id = Model.Id, group = groupView.PublicKey })</li>
     }
 </ul>
 <div id='@Model.CurrentGroup.GetClientId("div")'>

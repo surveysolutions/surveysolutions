@@ -51,7 +51,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
                 new CompleteGroup("second"));
             var iterator = new QuestionnaireScreenIterator(questionnaire.GetInnerDocument());
 
-            /* Assert.AreEqual(iterator.Next.QuestionText, "first");*/
+            /* Assert.AreEqual(iterator.Next.Title, "first");*/
             Assert.AreEqual(iterator.MoveNext(), true);
             Assert.AreEqual(iterator.Current.Title, "second");
             Assert.AreEqual(iterator.MoveNext(), false);

@@ -80,13 +80,13 @@
         @foreach (var question in Model.Questions)
         {
             var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, question.PublicKey.ToString());
-            <li><a  class="text-ellipsis" href="#@id">@index) @question.QuestionText</a></li>
+            <li><a  class="text-ellipsis" href="#@id">@index) @question.Title</a></li>
             index++;
         }
         @foreach (var @group in Model.Groups)
         {
             var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Group, @group.PublicKey.ToString());
-            <li class="nav-header"><a class="text-ellipsis" href="#@id">@group.GroupText</a></li>
+            <li class="nav-header"><a class="text-ellipsis" href="#@id">@group.Title</a></li>
             <text>@RenderTOC(@group)</text>
         }
     </ul>
@@ -136,13 +136,13 @@
         foreach (var question in block.Questions)
         {
             var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, question.PublicKey.ToString());
-            <li><a class="text-ellipsis" href="#@id">@index) @question.QuestionText</a></li>
+            <li><a class="text-ellipsis" href="#@id">@index) @question.Title</a></li>
             index++;
         }
         foreach (var @group in block.Groups)
         {
             var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Group, @group.PublicKey.ToString());
-    <li class="nav-header"><a class="text-ellipsis" href="#@id">@group.GroupText</a></li>
+    <li class="nav-header"><a class="text-ellipsis" href="#@id">@group.Title</a></li>
 <text>
     @RenderTOC(@group)
 </text>

@@ -161,11 +161,11 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     if (model.PublicKey == Guid.Empty)
                     {
-                        AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.QuestionText,
+                        AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.Title,
                                                                                         model.StataExportCaption,
                                                                                         model.QuestionType,
                                                                                         model.QuestionnaireId,
-                                                                                        model.GroupPublicKey,
+                                                                                        model.Parent,
                                                                                         model.ConditionExpression,
                                                                                         model.ValidationExpression,
                                                                                         model.Instructions,
@@ -177,7 +177,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     }
                     else
                         commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId, model.PublicKey,
-                                                                         model.QuestionText,
+                                                                         model.Title,
                                                                          model.StataExportCaption,
                                                                          model.QuestionType,
                                                                          model.ConditionExpression,
@@ -195,11 +195,11 @@ namespace RavenQuestionnaire.Web.Controllers
                 }
                 return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
                 //     var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
-                if (model.GroupPublicKey.HasValue)
+                if (model.Parent.HasValue)
                 {
                     var updatedGroup =
                         viewRepository.Load<GroupViewInputModel, GroupView>(
-                            new GroupViewInputModel(model.GroupPublicKey.Value, model.QuestionnaireId));
+                            new GroupViewInputModel(model.Parent.Value, model.QuestionnaireId));
 
                     return PartialView("_Index", updatedGroup.Questions);
                 }

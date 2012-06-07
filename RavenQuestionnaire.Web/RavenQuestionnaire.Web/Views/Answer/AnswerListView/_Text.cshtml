@@ -6,7 +6,7 @@
 }
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {
-    @Html.Hidden("QuestionId", Model.PublicKey)
+    @Html.Hidden("Parent", Model.PublicKey)
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
     <div class="answer">

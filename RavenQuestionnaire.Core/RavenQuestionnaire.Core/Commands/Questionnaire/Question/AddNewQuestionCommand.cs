@@ -90,7 +90,7 @@ this.AnswerOrder = answerOrder;
             answer.AnswerValue = a.AnswerValue;
 
             answer.AnswerType = a.AnswerType;
-            answer.AnswerText = a.AnswerText;
+            answer.AnswerText = a.Title;
             answer.Mandatory = a.Mandatory;
             answer.PublicKey = a.PublicKey;
             return answer;

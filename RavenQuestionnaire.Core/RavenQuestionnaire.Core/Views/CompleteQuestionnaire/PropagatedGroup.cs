@@ -46,9 +46,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                             {
                                 firstAnswer = answer.AnswerValue;
                             }
-                            else if (!string.IsNullOrEmpty(answer.AnswerText))
+                            else if (!string.IsNullOrEmpty(answer.Title))
                             {
-                                firstAnswer = answer.AnswerText;
+                                firstAnswer = answer.Title;
                             }
                             else
                             {

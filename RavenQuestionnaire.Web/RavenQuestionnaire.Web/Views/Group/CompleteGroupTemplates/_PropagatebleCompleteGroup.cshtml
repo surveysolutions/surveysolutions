@@ -1,7 +1,7 @@
 ﻿@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.Group
 @model RavenQuestionnaire.Core.Views.Group.CompleteGroupView
-<h3>@Model.GroupText</h3>
+<h3>@Model.Title</h3>
 <br />
 @if (Model.Propagated != Propagate.AutoPropagated)
 { 
@@ -24,7 +24,7 @@
         {
 
             <td style="border: 1px solid #404040;">
-                <b style="width: 220px; display: block; color: #404040">@*@Model.Index)*@ @Html.DisplayFor(modelItem => question.QuestionText)</b>
+                <b style="width: 220px; display: block; color: #404040">@*@Model.Index)*@ @Html.DisplayFor(modelItem => question.Title)</b>
             </td>
         }
     </tr>

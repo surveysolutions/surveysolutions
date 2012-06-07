@@ -45,7 +45,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                         v => v.QuestionnaireId.Equals("questionnairedocuments/qID"))))
                 .Returns(new QuestionnaireView(innerDocument));
             Controller.Save(new QuestionView[]
-                                {new QuestionView() {QuestionText = "test", QuestionnaireId = innerDocument.Id}}, new AnswerView[0]);
+                                {new QuestionView() {Title = "test", QuestionnaireId = innerDocument.Id}}, new AnswerView[0]);
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<AddNewQuestionCommand>()), Times.Once());
         }
 
