@@ -58,10 +58,10 @@ namespace RavenQuestionnaire.Core
 
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IViewFactory<,>))));
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(ICommandHandler<>))));
-             
-             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().BindWith(new RegisterGenericTypesOfInterface(typeof(IExpressionExecutor<,>))));
-             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().BindWith(new RegisterGenericTypesOfInterface(typeof(Iterator<>))));
-             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().BindWith(new RegisterGenericTypesOfInterface(typeof(IEntitySubscriber<>))));
+
+            this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IExpressionExecutor<,>))));
+            this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(Iterator<>))));
+            this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IEntitySubscriber<>))));
              this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().Excluding<IClientSettingsProvider>().BindWith(new RegisterFirstInstanceOfInterface()));
             
 
