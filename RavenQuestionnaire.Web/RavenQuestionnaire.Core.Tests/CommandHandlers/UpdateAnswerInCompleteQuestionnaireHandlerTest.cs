@@ -53,7 +53,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.QuestionPublickey,command.Propagationkey,command.CompleteAnswer);
             repositoryMock.Verify(x => x.Load("cqId"), Times.Once());
             Assert.AreEqual(qDoqument.Children[0].PublicKey, question.PublicKey);
-            Assert.AreEqual(((ICompleteAnswer)((qDoqument.Children[0] as AbstractCompleteQuestion).Children[0])).Selected, false);
+            Assert.AreEqual(((ICompleteAnswer)(qDoqument.Children[0].Children[0])).Selected, true);
         }
         [Test]
         public void 

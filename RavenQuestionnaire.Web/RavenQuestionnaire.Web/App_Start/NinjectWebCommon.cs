@@ -1,7 +1,11 @@
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
+using Raven.Client;
 using RavenQuestionnaire.Core;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(RavenQuestionnaire.Web.App_Start.NinjectWebCommon), "Start")]
@@ -45,7 +49,7 @@ namespace RavenQuestionnaire.Web.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new CoreRegistry(System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"]));
+            var kernel = new StandardKernel(new CoreRegistry(WebConfigurationManager.AppSettings["Raven.DocumentStore"]));
 
          //   RegisterServices(kernel);
 
@@ -66,9 +70,18 @@ namespace RavenQuestionnaire.Web.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            kernel.Bind<IDocumentSession>().ToMethod(
+               context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
+                   b => HttpContext.Current != null).InScope(o => HttpContext.Current);
+
+            kernel.Bind<IDocumentSession>().ToMethod(
+                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
+                    b => HttpContext.Current == null).InScope(o => Thread.CurrentThread);
             kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
             kernel.Bind<IBagManager>().To<ViewBagManager>();
             kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
-        }        
+        }
+
+        private static ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>();
     }
 }

@@ -309,8 +309,10 @@
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
+    <Compile Include="IMemoryCommandInvoker.cs" />
     <Compile Include="Indexes\QuestionnaireGroupedByTemplateIndex.cs" />
     <Compile Include="Indexes\UsersInLocationIndex.cs" />
+    <Compile Include="MemoryCommandInvoker.cs" />
     <Compile Include="Repositories\CollectionRepository.cs" />
     <Compile Include="Repositories\ICollectionRepository.cs" />
     <Compile Include="Repositories\IFileRepository.cs" />
