@@ -19,6 +19,28 @@ namespace RavenQuestionnaire.Core
             this.documentSession = container.Get<IDocumentSession>();
             this.clientSettingsProvider=clientSettingsProvider;
         }
+        public void ExecuteInSingleScope<T>(T command) where T : ICommand
+        {
+            Action _delegate = () =>
+                                   {
+                                       var documentSession = this.container.Get<IDocumentSession>();
+                                       var handler = container.Get<ICommandHandler<T>>();
+                                       handler.Handle(command);
+                                       SaveEvent(handler.GetType(), command);
+                                       documentSession.SaveChanges();
+                                   };
+            bool areWeThere = false;
+            IAsyncResult ar = _delegate.BeginInvoke((result) =>
+                                                        {
+                                                            areWeThere = true;
+                                                        }
+
+                                                    , null);
+            while (!areWeThere)
+            {
+
+            }
+        }
 
         public void Execute<T>(T command) where T : ICommand
         {
