@@ -1,8 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Reflection;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.Text;
+using System.Threading;
+using DataEntryClient.CompleteQuestionnaire;
+using DataEntryClient.WcfInfrastructure;
 using Ninject;
 using System.Threading;
-using System.Configuration;
 using Ninject.Parameters;
+using Raven.Client;
 using RavenQuestionnaire.Core;
 using Ninject.Extensions.Conventions;
 using DataEntryClient.WcfInfrastructure;
@@ -30,7 +40,8 @@ namespace DataEntryClient
             {
                 var kernel = new StandardKernel(new CoreRegistry(ConfigurationManager.AppSettings["Raven.DocumentStore"]));
                 kernel.Bind<IChanelFactoryWrapper>().ToMethod((c) => new ChanelFactoryWrapper(args[0]));
-                RegisterServices(kernel);
+                kernel.Bind<IDocumentSession>().ToMethod(
+                    context => context.Kernel.Get<IDocumentStore>().OpenSession()).InThreadScope();
                 new CompleteQuestionnaireSync(kernel,
                                               Guid.Parse(args[1]))
                     .
@@ -46,48 +57,6 @@ namespace DataEntryClient
         private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
         {
             result = 0;
-        }
-
-        /// <summary>
-        /// Load your modules or register your services here!
-        /// </summary>
-        /// <param name="kernel">The kernel.</param>
-        private static void RegisterServices(IKernel kernel)
-        {
-          
-
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(ICommandHandler<>)));
-            });
-
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(IViewFactory<,>)));
-            });
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(IExpressionExecutor<,>)));
-            });
-          
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new RegisterFirstInstanceOfInterface());
-            });
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(Iterator<>)));
-            });
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(IEntitySubscriber<>)));
-            });
         }
        
     }
