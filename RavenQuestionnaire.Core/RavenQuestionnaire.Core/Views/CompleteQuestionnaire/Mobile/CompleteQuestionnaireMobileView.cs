@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Utility;
@@ -33,9 +32,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
             CollectAll(doc, currentGroup as CompleteGroup);
         }
-
-
-
 
         public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc)
             : this()
@@ -98,7 +94,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                 }
             }
 
-
             var currentGroup = new CompleteGroupMobileView(doc, group, navigations);
 
             InitGroups(doc, currentGroup.PublicKey);
@@ -111,7 +106,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                                     Navigation = currentGroup.Navigation,
                                     Questions = currentGroup.Questions,
                                     Groups = currentGroup.Groups,
-                                    GroupText = currentGroup.GroupText,
+                                    Title = currentGroup.Title,
                                     PublicKey = currentGroup.PublicKey,
                                     Propagated = currentGroup.Propagated
                                 };
@@ -180,7 +175,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
             var current = Groups.FirstOrDefault(g => g.PublicKey == currentGroupPublicKey);
             current.IsCurrent = true;
-            //CurrentGroup.Totals = current.Totals;
         }
 
         private void CollectScreens(CompleteGroupMobileView @group)
@@ -209,11 +203,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                 var enabled = @group.Questions.Where(q => q.Enabled).ToList();
                 QuestionsWithCards.AddRange(enabled.Where(question => (question.Cards.Length > 0)).ToList());
             }
-            if (@group.PropagatedQuestions.Count > 0)
+            if (@group.Propagated != Propagate.None)
             {
-                var enabled = (@group.PropagatedQuestions.Where(q => q.Questions.Any(qq => qq.Enabled))).ToList();
-                var hasCards = enabled.Where(question => question.Questions.Any(q => (q.Cards.Length > 0)));
-                QuestionsWithCards.AddRange(hasCards.Select(qq => qq.Questions.First()).ToList());
+                var questions = @group.PropagateTemplate.Questions;
+                var hasCards = questions.Where(question => question.Cards.Length > 0);
+                QuestionsWithCards.AddRange(hasCards.ToList());
             }
             foreach (var g in @group.Groups)
             {
@@ -228,11 +222,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                 var enabled = @group.Questions.Where(q => q.Enabled).ToList();
                 QuestionsWithInstructions.AddRange(enabled.Where(question => !string.IsNullOrWhiteSpace(question.Instructions)).ToList());
             }
-            if (@group.PropagatedQuestions.Count > 0)
+            if (@group.Propagated != Propagate.None)
             {
-                var enabled = (@group.PropagatedQuestions.Where(q => q.Questions.Any(qq => qq.Enabled))).ToList();
-                var hasCards = enabled.Where(question => question.Questions.Any(q => (!string.IsNullOrWhiteSpace(q.Instructions))));
-                QuestionsWithInstructions.AddRange(hasCards.Select(qq => qq.Questions.First()).ToList());
+                var questions = @group.PropagateTemplate.Questions;
+                var hasInstructions = questions.Where(q => (!string.IsNullOrWhiteSpace(q.Instructions)));
+                QuestionsWithInstructions.AddRange(hasInstructions.ToList());
             }
             foreach (var g in @group.Groups)
             {
