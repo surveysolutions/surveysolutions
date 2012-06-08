@@ -17,7 +17,7 @@
         <fieldset  class="ui-grid-a">
             <div class="ui-block-a">
                 <a class="propagated-screen-link-@(Model.PublicKey)" href="#screen-@(Model.PropogationKey)">
-                    <h3><span>@ViewBag.GroupIndex)</span> @Model.GroupText</h3>
+                    <h3><span>@ViewBag.GroupIndex)</span> @Model.Title</h3>
 					<p  id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
                 </a>
             </div>
@@ -34,7 +34,7 @@
 else
 {
     <li data-role="fieldcontain" id="@groupKey" ><a class="propagated-screen-link" href="#screen-@(Model.PropogationKey)">
-        <h3><span>@ViewBag.GroupIndex)</span> @Model.GroupText</h3>
+        <h3><span>@ViewBag.GroupIndex)</span> @Model.Title</h3>
 	    <p id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
     </a>
     </li>
