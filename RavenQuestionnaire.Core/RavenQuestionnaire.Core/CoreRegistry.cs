@@ -17,6 +17,7 @@ using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Indexes;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 
 namespace RavenQuestionnaire.Core
 {
@@ -35,11 +36,31 @@ namespace RavenQuestionnaire.Core
         {
             Bind<DocumentStoreProvider>().ToSelf().InSingletonScope().WithConstructorArgument("storage", _repositoryPath);
             Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
+            
             //  if (_isWeb)
-            Bind<IDocumentSession>().ToMethod(context => GetIDocumentSession(Kernel.Get<IDocumentStore>()));
+            Bind<IDocumentSession>().ToMethod(
+                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).InScope(
+                    x => HttpContext.Current.Request);
             Bind<IClientSettingsProvider>().To<RavenQuestionnaire.Core.ClientSettingsProvider.ClientSettingsProvider>().
                 InSingletonScope();
-            this.Kernel.Scan(s =>
+         /*   this.Kernel.Bind(x => x
+                                      .FromAssembliesMatching("RavenQuestionnaire.*")
+                                      .SelectAllClasses().Excluding<RavenQuestionnaire.Core.ClientSettingsProvider.ClientSettingsProvider>()
+                                      .BindDefaultInterface());*/
+           // Bind<IViewFactory<CQGroupedBrowseInputModel, CQGroupedBrowseView>>().To<CQGroupedBrowseFactory>();
+           /* Bind(typeof(ILazy<>)).ToMethod(ctx =>
+            {
+                var targetType = typeof(LazyLoader<>).MakeGenericType(ctx.GenericArguments);
+                return ctx.Kernel.Get(targetType);
+            });*/
+            this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IViewFactory<,>))));
+            this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(ICommandHandler<>))));
+             
+             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().BindWith(new RegisterGenericTypesOfInterface(typeof(IExpressionExecutor<,>))));
+             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().BindWith(new RegisterGenericTypesOfInterface(typeof(Iterator<>))));
+             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().BindWith(new RegisterGenericTypesOfInterface(typeof(IEntitySubscriber<>))));
+             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().Excluding<IClientSettingsProvider>().BindWith(new RegisterFirstInstanceOfInterface()));
+            /*   this.Kernel.Scan(s =>
                                  {
                                      s.FromAssembliesMatching("RavenQuestionnaire.*");
                                      s.BindWith(new GenericBindingGenerator(typeof (ICommandHandler<>)));
@@ -54,13 +75,16 @@ namespace RavenQuestionnaire.Core
                                  {
                                      s.FromAssembliesMatching("RavenQuestionnaire.*");
                                      s.BindWith(new GenericBindingGenerator(typeof (IExpressionExecutor<,>)));
-                                 });
-            this.Kernel.Scan(s =>
+                                 });*/
+            //new GenericBindingGenerator();
+            //Bind<ICommandHandler<>>().To<COm>()
+
+            /* this.Kernel.Scan(s =>
                                  {
                                      s.FromAssembliesMatching("RavenQuestionnaire.*");
                                      s.BindWith(new RegisterFirstInstanceOfInterface());
-                                 });
-            this.Kernel.Scan(s =>
+                                 });*/
+            /* this.Kernel.Scan(s =>
                                  {
                                      s.FromAssembliesMatching("RavenQuestionnaire.*");
                                      s.BindWith(new GenericBindingGenerator(typeof (Iterator<>)));
@@ -69,33 +93,32 @@ namespace RavenQuestionnaire.Core
                                  {
                                      s.FromAssembliesMatching("RavenQuestionnaire.*");
                                      s.BindWith(new GenericBindingGenerator(typeof (IEntitySubscriber<>)));
-                                 });
+                                 });*/
 
         }
-
-        private IDocumentSession currentSessionRequestScope;
-        private IDocumentSession currentSessionThreadScope;
-        private HttpRequest request;
-        private int threadId;
-
-
         private static ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>();
+   /*     private ConcurrentDictionary<HttpRequest, IDocumentSession> currentSessionRequestScope;
+        private  ConcurrentDictionary<int, IDocumentSession> currentSessionThreadScope;
+   
+
+
+      
 
         protected IDocumentSession GetIDocumentSession(IDocumentStore store)
         {
+            IDocumentSession session;
             var context = HttpContext.Current;
             if (context != null)
             {
                 try
                 {
-
-
-                    if (context.Request != request)
+                    if (!currentSessionRequestScope.ContainsKey(context.Request))
                     {
-                    currentSessionRequestScope = new CachableDocumentSession(store, cache);
-                        request = context.Request;
+                        session = new CachableDocumentSession(store, cache);
+                        
+                        currentSessionRequestScope.TryAdd(context.Request, session);
                     }
-                    return currentSessionRequestScope;
+                    return currentSessionRequestScope[context.Request];
                 }
                 catch (HttpException)
                 {
@@ -103,17 +126,14 @@ namespace RavenQuestionnaire.Core
                 }
             }
             var thread = System.Threading.Thread.CurrentThread;
-           /* if (thread != null)
-            {**/
-                if (thread.ManagedThreadId != threadId)
-                {
-                    currentSessionThreadScope = new CachableDocumentSession(store, cache);
-                    threadId = thread.ManagedThreadId;
-                }
-                return currentSessionThreadScope;
-            /*  }
-            return store.OpenSession();*/
-        }
+          
+            if (currentSessionThreadScope.ContainsKey(thread.ManagedThreadId))
+            {
+                session = new CachableDocumentSession(store, cache);
+                currentSessionThreadScope.TryAdd(thread.ManagedThreadId, session);
+            }
+            return currentSessionThreadScope[thread.ManagedThreadId];
+        }*/
     }
 
     public class DocumentStoreProvider : Provider<IDocumentStore>

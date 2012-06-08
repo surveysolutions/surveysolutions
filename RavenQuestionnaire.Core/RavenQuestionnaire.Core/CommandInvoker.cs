@@ -13,10 +13,10 @@ namespace RavenQuestionnaire.Core
         private IKernel container;
         private IDocumentSession documentSession;
         private IClientSettingsProvider clientSettingsProvider;
-        public CommandInvoker(IKernel container, IDocumentSession documentSession, IClientSettingsProvider clientSettingsProvider)
+        public CommandInvoker(IKernel container/*, IDocumentSession documentSession*/, IClientSettingsProvider clientSettingsProvider)
         {
             this.container = container;
-            this.documentSession = documentSession;
+            this.documentSession = container.Get<IDocumentSession>();
             this.clientSettingsProvider=clientSettingsProvider;
         }
 
