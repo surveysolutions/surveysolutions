@@ -22,34 +22,22 @@ namespace DataEntryClient.CompleteQuestionnaire
 {
     public class CompleteQuestionnaireSync
     {
-        private IKernel kernel;
+      //  private IKernel kernel;
         private IViewRepository viewRepository;
         private IChanelFactoryWrapper chanelFactoryWrapper;
         private IClientSettingsProvider clientSettingsProvider;
         private Guid processGuid;
-        private int invokeCount = 0;
-        private int invokeLimit = 15;
+     
         private ICommandInvoker invoker;
+        private ICommandInvokerAsync invokerAsync;
         public CompleteQuestionnaireSync(IKernel kernel, Guid processGuid)
         {
-            this.kernel = kernel;
+            this.invoker = kernel.Get<ICommandInvoker>();
+            this.invokerAsync = kernel.Get<ICommandInvokerAsync>();
             this.viewRepository = kernel.Get<IViewRepository>();
             this.chanelFactoryWrapper = kernel.Get<IChanelFactoryWrapper>();
             this.clientSettingsProvider = kernel.Get<IClientSettingsProvider>();
             this.processGuid = processGuid;
-        }
-
-        protected ICommandInvoker Invoker
-        {
-            get
-            {
-                if (invokeCount == invokeLimit)
-                    invokeCount = 0;
-                if (invokeCount == 0)
-                    invoker = kernel.Get<ICommandInvoker>();
-                invokeCount++;
-                return invoker;
-            }
         }
 
         public void Execute()
@@ -76,11 +64,12 @@ namespace DataEntryClient.CompleteQuestionnaire
                 (client)=>
                     {
                         var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(new EventBrowseInputModel(lastSyncEvent));
-                        
-                        Invoker.Execute(new PushEventsCommand(processGuid, events.Items.Select(i => new EventDocument(i.Command, i.PublicKey, clientKey)), null));
+
+                        invoker.Execute(new PushEventsCommand(processGuid, events.Items.Select(i => new EventDocument(i.Command, i.PublicKey, clientKey)), null));
                         foreach (var eventItem in events.Items)
                         {
-                          //  Invoker.Execute(new ChangeEventStatusCommand(processGuid, eventItem.PublicKey, EventState.InProgress, null));
+
+                            invokerAsync.Execute(new ChangeEventStatusCommand(processGuid, eventItem.PublicKey, EventState.InProgress, null));
                             var message = new EventSyncMessage
                             {
                                 SynchronizationKey = clientKey,
@@ -89,14 +78,14 @@ namespace DataEntryClient.CompleteQuestionnaire
                             };
 
                             ErrorCodes returnCode = client.Process(message);
-                          /*  Invoker.Execute(new ChangeEventStatusCommand(processGuid, eventItem.PublicKey,
+                            invokerAsync.Execute(new ChangeEventStatusCommand(processGuid, eventItem.PublicKey,
                                                                          returnCode == ErrorCodes.None
                                                                              ? EventState.Completed
-                                                                             : EventState.Error, null));*/
+                                                                             : EventState.Error, null));
                         }
                     }
                 );
-            Invoker.Execute(new EndProcessComand(processGuid, null));
+            invoker.Execute(new EndProcessComand(processGuid, null));
         }
 
     }
