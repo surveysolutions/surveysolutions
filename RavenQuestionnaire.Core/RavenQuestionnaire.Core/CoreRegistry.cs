@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Reflection;
+using System.Threading;
 using System.Web;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
+using Ninject.Extensions.NamedScope;
+using Ninject.Extensions.ContextPreservation;
 using Ninject.Modules;
 using Raven.Client;
 using Raven.Client.Document;
@@ -36,23 +39,23 @@ namespace RavenQuestionnaire.Core
         {
             Bind<DocumentStoreProvider>().ToSelf().InSingletonScope().WithConstructorArgument("storage", _repositoryPath);
             Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
-            
-            //  if (_isWeb)
+
             Bind<IDocumentSession>().ToMethod(
-                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).InScope(
-                    x => HttpContext.Current.Request);
+                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
+                    b => HttpContext.Current != null).InScope(o => HttpContext.Current);
+
+            Bind<IDocumentSession>().ToMethod(
+                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
+                    b => HttpContext.Current == null).InThreadScope();
+
+      /*      Bind<IDocumentSession>().ToMethod(
+                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
+                    request => request.ParentRequest.ParentRequest.Service == typeof (ICommandHandler<>));*/
             Bind<IClientSettingsProvider>().To<RavenQuestionnaire.Core.ClientSettingsProvider.ClientSettingsProvider>().
                 InSingletonScope();
-         /*   this.Kernel.Bind(x => x
-                                      .FromAssembliesMatching("RavenQuestionnaire.*")
-                                      .SelectAllClasses().Excluding<RavenQuestionnaire.Core.ClientSettingsProvider.ClientSettingsProvider>()
-                                      .BindDefaultInterface());*/
-           // Bind<IViewFactory<CQGroupedBrowseInputModel, CQGroupedBrowseView>>().To<CQGroupedBrowseFactory>();
-           /* Bind(typeof(ILazy<>)).ToMethod(ctx =>
-            {
-                var targetType = typeof(LazyLoader<>).MakeGenericType(ctx.GenericArguments);
-                return ctx.Kernel.Get(targetType);
-            });*/
+            
+           // this.Kernel.BindInterfaceToBinding<ICommandInvoker, IDocumentSession>();
+
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IViewFactory<,>))));
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(ICommandHandler<>))));
              
@@ -60,40 +63,7 @@ namespace RavenQuestionnaire.Core
              this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().BindWith(new RegisterGenericTypesOfInterface(typeof(Iterator<>))));
              this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().BindWith(new RegisterGenericTypesOfInterface(typeof(IEntitySubscriber<>))));
              this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().Excluding<IClientSettingsProvider>().BindWith(new RegisterFirstInstanceOfInterface()));
-            /*   this.Kernel.Scan(s =>
-                                 {
-                                     s.FromAssembliesMatching("RavenQuestionnaire.*");
-                                     s.BindWith(new GenericBindingGenerator(typeof (ICommandHandler<>)));
-                                 });
-
-            this.Kernel.Scan(s =>
-                                 {
-                                     s.FromAssembliesMatching("RavenQuestionnaire.*");
-                                     s.BindWith(new GenericBindingGenerator(typeof (IViewFactory<,>)));
-                                 });
-            this.Kernel.Scan(s =>
-                                 {
-                                     s.FromAssembliesMatching("RavenQuestionnaire.*");
-                                     s.BindWith(new GenericBindingGenerator(typeof (IExpressionExecutor<,>)));
-                                 });*/
-            //new GenericBindingGenerator();
-            //Bind<ICommandHandler<>>().To<COm>()
-
-            /* this.Kernel.Scan(s =>
-                                 {
-                                     s.FromAssembliesMatching("RavenQuestionnaire.*");
-                                     s.BindWith(new RegisterFirstInstanceOfInterface());
-                                 });*/
-            /* this.Kernel.Scan(s =>
-                                 {
-                                     s.FromAssembliesMatching("RavenQuestionnaire.*");
-                                     s.BindWith(new GenericBindingGenerator(typeof (Iterator<>)));
-                                 });
-            this.Kernel.Scan(s =>
-                                 {
-                                     s.FromAssembliesMatching("RavenQuestionnaire.*");
-                                     s.BindWith(new GenericBindingGenerator(typeof (IEntitySubscriber<>)));
-                                 });*/
+            
 
         }
         private static ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>();
