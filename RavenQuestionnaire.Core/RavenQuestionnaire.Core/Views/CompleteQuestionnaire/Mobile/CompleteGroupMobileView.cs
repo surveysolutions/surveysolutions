@@ -210,18 +210,21 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             if (currentGroup.PropogationPublicKey.HasValue)
                 pKey = currentGroup.PropogationPublicKey.Value;
 
-            ScreenNavigation current =
-                navigations.Single(n => (n.PublicKey == currentGroup.PublicKey) && (n.PropagateKey == pKey));
-            CompleteGroupHeaders parent = current.Parent;
-            while (parent != null)
+            ScreenNavigation current = navigations.SingleOrDefault(n => (n.PublicKey == currentGroup.PublicKey) && (n.PropagateKey == pKey));
+            if (current != null)
             {
-                Navigation.BreadCumbs.Add(parent);
-                ScreenNavigation nav = navigations.SingleOrDefault(n => n.PublicKey == parent.PublicKey);
-                parent = nav == null ? null : nav.Parent;
+                CompleteGroupHeaders parent = current.Parent;
+                while (parent != null)
+                {
+                    Navigation.BreadCumbs.Add(parent);
+                    ScreenNavigation nav = navigations.SingleOrDefault(n => n.PublicKey == parent.PublicKey);
+                    parent = nav == null ? null : nav.Parent;
+                }
+                Navigation.BreadCumbs.Reverse();
+
+                Navigation.NextScreen = current.NextScreen;
+                Navigation.PrevScreen = current.PrevScreen;
             }
-            Navigation.BreadCumbs.Reverse();
-            Navigation.NextScreen = current.NextScreen;
-            Navigation.PrevScreen = current.PrevScreen;
             if (Navigation.BreadCumbs.Count == 1)
             {
                 if (Navigation.NextScreen != null)
