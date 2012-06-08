@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core
     public class CoreRegistry : NinjectModule
     {
         private string _repositoryPath;
-       // private bool _isWeb;
+        // private bool _isWeb;
 
         public CoreRegistry(string repositoryPath/*, bool isWeb*/)
         {
@@ -66,7 +66,7 @@ namespace RavenQuestionnaire.Core
             
 
         }
-        private static ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>();
+       
    /*     private ConcurrentDictionary<HttpRequest, IDocumentSession> currentSessionRequestScope;
         private  ConcurrentDictionary<int, IDocumentSession> currentSessionThreadScope;
    

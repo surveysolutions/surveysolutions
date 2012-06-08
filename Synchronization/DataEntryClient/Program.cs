@@ -14,7 +14,6 @@ using System.Threading;
 using Ninject.Parameters;
 using Raven.Client;
 using RavenQuestionnaire.Core;
-using Ninject.Extensions.Conventions;
 using DataEntryClient.WcfInfrastructure;
 using RavenQuestionnaire.Core.Conventions;
 using DataEntryClient.CompleteQuestionnaire;
