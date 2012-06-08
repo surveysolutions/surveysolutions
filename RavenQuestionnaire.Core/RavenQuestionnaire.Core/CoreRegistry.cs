@@ -1,16 +1,26 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Reflection;
+using System.Threading;
 using System.Web;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
+using Ninject.Extensions.NamedScope;
+using Ninject.Extensions.ContextPreservation;
 using Ninject.Modules;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
+using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.CommandHandlers.Statistics;
 using RavenQuestionnaire.Core.Commands.Statistics;
+using RavenQuestionnaire.Core.Conventions;
+using RavenQuestionnaire.Core.Entities.Iterators;
+using RavenQuestionnaire.Core.Entities.Subscribers;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Indexes;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 
 namespace RavenQuestionnaire.Core
 {
@@ -29,46 +39,56 @@ namespace RavenQuestionnaire.Core
         {
             Bind<DocumentStoreProvider>().ToSelf().InSingletonScope().WithConstructorArgument("storage", _repositoryPath);
             Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
-          //  if (_isWeb)
-            Bind<IDocumentSession>().ToMethod(context => GetIDocumentSession(Kernel.Get<IDocumentStore>()));
-          //  Bind<ICommandHandler<GenerateQuestionnaireStatisticCommand>>().To<GenerateQuestionnaireStatisticHandler>();
-            /*  kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(ICommandHandler<>)));
-            });**/
 
-            //  Bind<IDocumentSession>().ToMethod(context => Kernel.Get<IDocumentStore>().OpenSession()).When(_ => HttpContext.Current == null).InThreadScope();
-            /*else
-            {
-                Bind<IDocumentSession>().ToMethod(context => Kernel.Get<IDocumentStore>().OpenSession()).InThreadScope();
-            }*/
+       /*     Bind<IDocumentSession>().ToMethod(
+                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
+                    b => HttpContext.Current != null).InScope(o => HttpContext.Current);
+
+            Bind<IDocumentSession>().ToMethod(
+                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
+                    b => HttpContext.Current == null).InScope(o => Thread.CurrentThread);*/
+
+      /*      Bind<IDocumentSession>().ToMethod(
+                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
+                    request => request.ParentRequest.ParentRequest.Service == typeof (ICommandHandler<>));*/
+            Bind<IClientSettingsProvider>().To<RavenQuestionnaire.Core.ClientSettingsProvider.ClientSettingsProvider>().
+                InSingletonScope();
+            
+           // this.Kernel.BindInterfaceToBinding<ICommandInvoker, IDocumentSession>();
+
+            this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IViewFactory<,>))));
+            this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(ICommandHandler<>))));
+             
+             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().BindWith(new RegisterGenericTypesOfInterface(typeof(IExpressionExecutor<,>))));
+             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().BindWith(new RegisterGenericTypesOfInterface(typeof(Iterator<>))));
+             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().BindWith(new RegisterGenericTypesOfInterface(typeof(IEntitySubscriber<>))));
+             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().Excluding<IClientSettingsProvider>().BindWith(new RegisterFirstInstanceOfInterface()));
+            
 
         }
-
-        private IDocumentSession currentSessionRequestScope;
-        private IDocumentSession currentSessionThreadScope;
-        private HttpRequest request;
-        private int threadId;
-
-
         private static ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>();
+   /*     private ConcurrentDictionary<HttpRequest, IDocumentSession> currentSessionRequestScope;
+        private  ConcurrentDictionary<int, IDocumentSession> currentSessionThreadScope;
+   
+
+
+      
 
         protected IDocumentSession GetIDocumentSession(IDocumentStore store)
         {
+            IDocumentSession session;
             var context = HttpContext.Current;
             if (context != null)
             {
                 try
                 {
-
-
-                    if (context.Request != request)
+                    if (!currentSessionRequestScope.ContainsKey(context.Request))
                     {
-                    currentSessionRequestScope = new CachableDocumentSession(store, cache);
-                        request = context.Request;
+                        session = new CachableDocumentSession(store, cache);
+                        
+                        currentSessionRequestScope.TryAdd(context.Request, session);
                     }
-                    return currentSessionRequestScope;
+                    return currentSessionRequestScope[context.Request];
                 }
                 catch (HttpException)
                 {
@@ -76,17 +96,14 @@ namespace RavenQuestionnaire.Core
                 }
             }
             var thread = System.Threading.Thread.CurrentThread;
-           /* if (thread != null)
-            {**/
-                if (thread.ManagedThreadId != threadId)
-                {
-                    currentSessionThreadScope = new CachableDocumentSession(store, cache);
-                    threadId = thread.ManagedThreadId;
-                }
-                return currentSessionThreadScope;
-            /*  }
-            return store.OpenSession();*/
-        }
+          
+            if (currentSessionThreadScope.ContainsKey(thread.ManagedThreadId))
+            {
+                session = new CachableDocumentSession(store, cache);
+                currentSessionThreadScope.TryAdd(thread.ManagedThreadId, session);
+            }
+            return currentSessionThreadScope[thread.ManagedThreadId];
+        }*/
     }
 
     public class DocumentStoreProvider : Provider<IDocumentStore>
