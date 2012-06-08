@@ -29,11 +29,11 @@ namespace DataEntryClient.CompleteQuestionnaire
         private Guid processGuid;
      
         private ICommandInvoker invoker;
-        private ICommandInvokerAsync invokerAsync;
+      //  private ICommandInvokerAsync invokerAsync;
         public CompleteQuestionnaireSync(IKernel kernel, Guid processGuid)
         {
             this.invoker = kernel.Get<ICommandInvoker>();
-            this.invokerAsync = kernel.Get<ICommandInvokerAsync>();
+       //     this.invokerAsync = kernel.Get<ICommandInvokerAsync>();
             this.viewRepository = kernel.Get<IViewRepository>();
             this.chanelFactoryWrapper = kernel.Get<IChanelFactoryWrapper>();
             this.clientSettingsProvider = kernel.Get<IClientSettingsProvider>();
@@ -65,11 +65,11 @@ namespace DataEntryClient.CompleteQuestionnaire
                     {
                         var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(new EventBrowseInputModel(lastSyncEvent));
 
-                        invoker.Execute(new PushEventsCommand(processGuid, events.Items.Select(i => new EventDocument(i.Command, i.PublicKey, clientKey)), null));
+                        invoker.ExecuteInSingleScope(new PushEventsCommand(processGuid, events.Items.Select(i => new EventDocument(i.Command, i.PublicKey, clientKey)), null));
                         foreach (var eventItem in events.Items)
                         {
 
-                            invokerAsync.Execute(new ChangeEventStatusCommand(processGuid, eventItem.PublicKey, EventState.InProgress, null));
+                            invoker.ExecuteInSingleScope(new ChangeEventStatusCommand(processGuid, eventItem.PublicKey, EventState.InProgress, null));
                             var message = new EventSyncMessage
                             {
                                 SynchronizationKey = clientKey,
@@ -78,14 +78,14 @@ namespace DataEntryClient.CompleteQuestionnaire
                             };
 
                             ErrorCodes returnCode = client.Process(message);
-                            invokerAsync.Execute(new ChangeEventStatusCommand(processGuid, eventItem.PublicKey,
+                            invoker.ExecuteInSingleScope(new ChangeEventStatusCommand(processGuid, eventItem.PublicKey,
                                                                          returnCode == ErrorCodes.None
                                                                              ? EventState.Completed
                                                                              : EventState.Error, null));
                         }
                     }
                 );
-            invoker.Execute(new EndProcessComand(processGuid, null));
+            invoker.ExecuteInSingleScope(new EndProcessComand(processGuid, null));
         }
 
     }
