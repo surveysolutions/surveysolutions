@@ -40,13 +40,13 @@ namespace RavenQuestionnaire.Core
             Bind<DocumentStoreProvider>().ToSelf().InSingletonScope().WithConstructorArgument("storage", _repositoryPath);
             Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
 
-            Bind<IDocumentSession>().ToMethod(
+       /*     Bind<IDocumentSession>().ToMethod(
                 context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
                     b => HttpContext.Current != null).InScope(o => HttpContext.Current);
 
             Bind<IDocumentSession>().ToMethod(
                 context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
-                    b => HttpContext.Current == null).InThreadScope();
+                    b => HttpContext.Current == null).InScope(o => Thread.CurrentThread);*/
 
       /*      Bind<IDocumentSession>().ToMethod(
                 context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(

@@ -11,8 +11,8 @@ using DataEntryClient.CompleteQuestionnaire;
 using DataEntryClient.WcfInfrastructure;
 using Ninject;
 using Ninject.Activation;
-using Ninject.Extensions.Conventions;
 using Ninject.Syntax;
+using Raven.Client;
 using Raven.Client.Document;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.ClientSettingsProvider;
@@ -44,7 +44,8 @@ namespace DataEntryClient
                 var kernel =
                     new StandardKernel(new CoreRegistry(ConfigurationManager.AppSettings["Raven.DocumentStore"]));
                 kernel.Bind<IChanelFactoryWrapper>().ToMethod((c) => new ChanelFactoryWrapper(args[0]));
-
+                kernel.Bind<IDocumentSession>().ToMethod(
+                    context => context.Kernel.Get<IDocumentStore>().OpenSession()).InThreadScope();
                 new CompleteQuestionnaireSync(kernel,
                                               Guid.Parse(args[1]))
                     .

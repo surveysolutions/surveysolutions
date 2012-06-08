@@ -32,16 +32,8 @@ namespace RavenQuestionnaire.Core
 
         public IAsyncResult BeginExecute<T>(T command, AsyncCallback callback, object state) where T : ICommand
         {
-            
-            _delegate = () =>
-            {
-                var documentSession = this.container.Get<IDocumentSession>();
-                var handler = container.Get<ICommandHandler<T>>();
-                handler.Handle(command);
-                //store the command in the store
-              /*  documentSession.Store(new EventDocument(command));*/
-                documentSession.SaveChanges();
-            };
+
+
             if (_asyncActiveEvent == null)
             {
                 bool flag = false;
@@ -62,6 +54,15 @@ namespace RavenQuestionnaire.Core
                 }
             }
             _asyncActiveEvent.WaitOne();
+            _delegate = () =>
+                            {
+                                var documentSession = this.container.Get<IDocumentSession>();
+                                var handler = container.Get<ICommandHandler<T>>();
+                                handler.Handle(command);
+                                //store the command in the store
+                                /*  documentSession.Store(new EventDocument(command));*/
+                                documentSession.SaveChanges();
+                            };
             return _delegate.BeginInvoke(callback, state);
         }
 
@@ -80,6 +81,7 @@ namespace RavenQuestionnaire.Core
 
         public void Execute<T>(T command) where T : ICommand
         {
+         //   ThreadPool.QueueUserWorkItem(new WaitCallback(ThreadProc));
             this.BeginExecute(command, (state) => ((ICommandInvokerAsync)state.AsyncState).EndExecute(state), this);
         }
 
