@@ -7,17 +7,16 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
     public class CompleteQuestionnaireValidationExecutor
     {
-        private readonly ICompleteGroup questionnaire;
-        public CompleteQuestionnaireValidationExecutor(ICompleteGroup questionnaire)
+        private readonly GroupHash hash;
+        public CompleteQuestionnaireValidationExecutor(GroupHash hash)
         {
-            this.questionnaire = questionnaire;
+            this.hash = hash;
         }
-        public bool Execute(ICompleteGroup targetGroup)
+        public bool Execute()
         {
             bool isValid = true;
 
-            var questions = targetGroup.GetAllQuestions<ICompleteQuestion>();
-            foreach (ICompleteQuestion completeQuestion in questions)
+            foreach (ICompleteQuestion completeQuestion in hash.Questions)
             {
                 completeQuestion.Valid = Execute(completeQuestion);
                 isValid = isValid && completeQuestion.Valid;
@@ -33,15 +32,13 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             e.EvaluateParameter += (name, args) =>
                                        {
                                            Guid nameGuid = Guid.Parse(name);
-                                           Guid? propagationKey = null;
-                                          /* var propagation = question as PropagatableCompleteQuestion;
-                                           if (propagation != null)
-                                           {*/
-                                        //   propagationKey = question.PropogationPublicKey;
+                                           Guid? propagationKey = question.PropogationPublicKey;
 
-                                         //  }
-                                           args.Result =
-                                               questionnaire.GetQuestionByKey(nameGuid, propagationKey).GetAnswerObject();
+                                           var value = hash[nameGuid, propagationKey].GetAnswerObject();
+                                           if (value != null)
+                                               args.Result = value;
+                                           else
+                                               args.Result = string.Empty;
                                        };
                 
             bool result = false;
