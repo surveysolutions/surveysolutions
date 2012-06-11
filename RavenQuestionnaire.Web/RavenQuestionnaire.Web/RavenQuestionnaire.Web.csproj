@@ -131,6 +131,7 @@
     <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\CollectionController.cs" />
     <Compile Include="Controllers\AsyncQuestionnaireUpdater.cs" />
+    <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\SynchronizationsController.cs" />
     <Compile Include="Controllers\CompleteQuestionnaireController.cs">
       <SubType>Code</SubType>
@@ -927,7 +928,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Views\Group\Mobile\_PropagatedScreen.cshtml" />
-    <Content Include="Views\CompleteQuestionnaire\ViewTestUploadFile.cshtml" />
+    <Content Include="Views\Shared\ViewTestUploadFile.cshtml" />
     <Content Include="Views\Account\LogOnMobile.cshtml" />
     <Content Include="Views\Synchronizations\Spots.cshtml" />
     <Content Include="Views\Synchronizations\Progress.cshtml" />
@@ -948,9 +949,9 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>24525</DevelopmentServerPort>
+          <DevelopmentServerPort>2933</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:8084</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
