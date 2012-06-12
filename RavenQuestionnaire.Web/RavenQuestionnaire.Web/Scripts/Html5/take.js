@@ -457,16 +457,18 @@ $(document).ready(function () {
         //data-type="horizontal"
         $("input[type='checkbox'][checked]").checkboxradio("refresh");
 
-        $('.splited-button.ui-li-link-alt').each(function () {
-            var text = $(this).attr('title');
-            $(this).find('.ui-btn-text').html(text);
-        });
+       
     });
 
     $('.propagated-list-item').each(function () {
         var index = $(this).find('h3 span').html();
         var screenId = $(this).attr('id').replace("propagatedGroup", "#screen-");
         $(screenId + ' .ui-footer h1 span').html(index);
+    });
+
+    $('.splited-button.ui-li-link-alt').each(function () {
+        var text = $(this).attr('title');
+        $(this).find('.ui-btn-text').html(text);
     });
 });
 function isNumber(n) {

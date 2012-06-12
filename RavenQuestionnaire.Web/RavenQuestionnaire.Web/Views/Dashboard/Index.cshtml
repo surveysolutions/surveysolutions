@@ -5,7 +5,7 @@
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
 }
-<div data-role="panel" data-id="main">
+<div data-role="panel" data-id="main" id="dashboard-page">
     <!-- Start of second page -->
     <div data-role="page" id="main">
         <div data-role="header" data-theme="b">
@@ -22,7 +22,7 @@
                 data-role="listview" data-split-icon="plus" data-split-theme="d">
                 @foreach (CQGroupItem group in Model.Groups)
                 {
-                    <li data-role="list-divider" data-theme="b" role="heading"><a>
+                    <li data-role="list-divider" data-theme="b" role="heading" class="divider"><a>
                         @group.SurveyTitle <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
                         @Html.ActionLink("New", "Participate", "CompleteQuestionnaire", new { id = group.Id, mode = "Html5" }, new
                                                                                                                  {

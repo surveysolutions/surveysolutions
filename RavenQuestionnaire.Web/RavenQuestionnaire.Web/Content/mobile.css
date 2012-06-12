@@ -185,8 +185,11 @@
 	background-image:      -o-linear-gradient(#ededed /*{c-bhover-background-start}*/, #dadada /*{c-bhover-background-end}*/); /* Opera 11.10+ */
 	background-image:         linear-gradient(#ededed /*{c-bhover-background-start}*/, #dadada /*{c-bhover-background-end}*/);
 }
-#main > .ui-content {
+#dashboard-page  > .ui-content {
     margin-bottom: 40px;
+}
+#dashboard-page .ui-li.divider .ui-li-count {
+	right: 90px;
 }
 #sidebar .ui-content.with-footer
 {
