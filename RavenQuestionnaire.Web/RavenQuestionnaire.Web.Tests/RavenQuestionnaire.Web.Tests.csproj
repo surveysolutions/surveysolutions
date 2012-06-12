@@ -90,6 +90,7 @@
     <Compile Include="Controllers\CollectionControllerTest.cs" />
     <Compile Include="Controllers\CompleteQuestionnaireControllerTest.cs" />
     <Compile Include="Controllers\GroupControllerTest.cs" />
+    <Compile Include="Controllers\ImportExportControllerTest.cs" />
     <Compile Include="Controllers\QuestionControllerTest.cs" />
     <Compile Include="Controllers\QuestionnaireControllerTest.cs" />
     <Compile Include="Controllers\StatusControllerTest.cs" />
