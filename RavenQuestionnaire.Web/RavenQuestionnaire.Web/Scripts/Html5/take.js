@@ -124,6 +124,7 @@ function UpdateGroup(group) {
 }
 
 
+
 function RemovePropagatedGroup(data, status, xhr) {
     var group = jQuery.parseJSON(data.responseText);
 
