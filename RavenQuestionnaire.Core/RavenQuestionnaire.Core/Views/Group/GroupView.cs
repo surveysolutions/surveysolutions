@@ -20,6 +20,7 @@ namespace RavenQuestionnaire.Core.Views.Group
 
         public AbstractGroupView()
         {
+            this.Children = new List<ICompositeView>();
         }
 
         public AbstractGroupView(string questionnaireId, Guid? parentGroup)
@@ -40,6 +41,8 @@ namespace RavenQuestionnaire.Core.Views.Group
         public string Title { get; set; }
 
         public Guid? Parent { get; set; }
+
+        public List<ICompositeView> Children { get; set; }
 
         public Propagate Propagated { get; set; }
 
