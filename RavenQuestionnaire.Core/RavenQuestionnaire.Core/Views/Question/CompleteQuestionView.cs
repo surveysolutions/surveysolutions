@@ -6,9 +6,10 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Card;
 
+
 namespace RavenQuestionnaire.Core.Views.Question
 {
-    public class CompleteQuestionView : QuestionView<CompleteAnswerView,ICompleteGroup, ICompleteQuestion>
+    public class CompleteQuestionView : QuestionView<CompleteAnswerView, ICompleteGroup, ICompleteQuestion>
     {
         public bool Enabled { get; set; }
         public bool Valid { get; set; }
@@ -34,7 +35,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.QuestionnaireId = questionnaire.Id;
             this.Valid = doc.Valid;
             this.Enabled = doc.Enabled;
-            this.Answers = doc.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(doc.PublicKey,a)).ToArray();
+            this.Answers = doc.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(doc.PublicKey, a)).ToArray();
             this.Answer = doc.GetAnswerString();
             this.Answered = this.Answers.Any(a => a.Selected == true);
             this.Featured = doc.Featured;

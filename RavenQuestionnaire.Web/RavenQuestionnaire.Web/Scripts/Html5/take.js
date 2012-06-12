@@ -42,7 +42,7 @@ function JsonResults (data, status, xhr) {
 
     var group = jQuery.parseJSON(data.responseText);
     if (!group.error) {
-        UpdateGroup(group.CurrentScreen);
+        /*UpdateGroup(group.CurrentScreen);
         if (group.Screens) {
             for (var j = 0; j < group.Screens.length; j++) {
                 UpdateGroup(group.Screens[j]);
@@ -56,6 +56,14 @@ function JsonResults (data, status, xhr) {
         for (var j = 0; j < group.Groups.length; j++) {
             var total = group.Groups[j].Totals;
             $("#counter-" + group.Groups[j].PublicKey).html(total.Answered + "/" + total.Enablad);
+        }*/
+        
+        for (var j = 0; j < group.Menu.length; j++) {
+            var total = group.Menu[j].Totals;
+            $("#counter-" + group.Menu[j].PublicKey).html(total.Answered + "/" + total.Enablad);
+        }
+        for (var j = 0; j < group.Questions.length; j++) {
+            UpdateQuestion(group.Questions[j]);
         }
     }
     else
@@ -444,35 +452,27 @@ function updateCounter() {
 
 $(document).ready(function () {
 
-
     var doc = $(document);
     doc.createKeyBoard();
     doc.numericSubmit();
     doc.hideInputsWithVirtualKeyboard();
     doc.disableAfterSubmit();
 
-    $('.splited-button.ui-li-link-alt').each(function () {
-        var text = $(this).attr('title');
-        $(this).find('.ui-btn-text').html(text);
-    });
-
     $('[data-role=page]').live('pageshow', function (event) {
         //data-type="horizontal"
         $("input[type='checkbox'][checked]").checkboxradio("refresh");
+
+        $('.splited-button.ui-li-link-alt').each(function () {
+            var text = $(this).attr('title');
+            $(this).find('.ui-btn-text').html(text);
+        });
     });
 
-    $('[data-role=page]').live('pagehide', function (event) {
-        //data-type="horizontal"
-        $("input[type='checkbox'][checked]").checkboxradio("refresh");
-    });
-    
     $('.propagated-list-item').each(function () {
         var index = $(this).find('h3 span').html();
         var screenId = $(this).attr('id').replace("propagatedGroup","#screen-");
         $(screenId + ' .ui-footer h1 span').html(index);
     });
-
-
 });
 function isNumber(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
