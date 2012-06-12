@@ -69,7 +69,7 @@ function JsonResults (data, status, xhr) {
             $("#counter-" + group.Menu[j].PublicKey).html(total.Answered + "/" + total.Enablad);
         }
         for (var j = 0; j < group.Questions.length; j++) {
-            UpdateQuestion(group.Questions[j]);
+            UpdateQuestion(group.Questions[j], group.Questions[j].GroupPublicKey);
         }
     }
     else
@@ -111,8 +111,8 @@ function UpdateGroup(group) {
         }
     }
 }
-function UpdateQuestion(question, propagationKey) {
-    var questionElement = propagationKey ? $('#propagatedGroup' + propagationKey + ' #question' + question.PublicKey) : $('#question' + question.PublicKey);
+function UpdateQuestion(question) {
+    var questionElement = $('#question' + question.PublicKey);
 
     questionElement.removeClass("ui-disabled");
     if (!question.Enabled)
@@ -131,7 +131,7 @@ function UpdateQuestion(question, propagationKey) {
 
     if (!question.Enabled)
         questionElement.closest("form").clear_form_elements();
-    SetErrorToQuestion(question, propagationKey, '');
+    //SetErrorToQuestion(question, propagationKey, '');
 }
 
 function RemovePropagatedGroup(data, status, xhr) {
