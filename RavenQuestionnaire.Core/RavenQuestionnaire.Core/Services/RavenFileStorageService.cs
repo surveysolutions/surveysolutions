@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Json.Linq;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Services
@@ -28,9 +30,16 @@ namespace RavenQuestionnaire.Core.Services
             return memoryStream.ToArray();
              */
             return a.Data;
-
         }
 
+        //public List<RavenJObject> RetrieveEventDocuments()
+        //{
+        //    return documentStore.DatabaseCommands.Query("Raven/DocumentsByEntityName", new IndexQuery
+        //                   {
+        //                        Query = "Tag:EventDocuments"
+        //                   }, null).Results;
+        //}
+        
         public void DeleteFile(string filename)
         {
             documentStore.DatabaseCommands.DeleteAttachment(filename, null);

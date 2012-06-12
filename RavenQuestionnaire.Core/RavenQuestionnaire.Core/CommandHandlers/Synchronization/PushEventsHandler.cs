@@ -7,6 +7,7 @@ using RavenQuestionnaire.Core.Repositories;
 
 namespace RavenQuestionnaire.Core.CommandHandlers.Synchronization
 {
+    [CommandHandler(IgnoreAsEvent = true)]
     public class PushEventsHandler : ICommandHandler<PushEventsCommand>
     {
          private ISyncProcessRepository repository;

@@ -22,6 +22,10 @@
         {
             return id;//string.Format("questionnairedocuments/{0}", id);
         }
+        public static string CreateCompleteQuestionnaireId(string id)
+        {
+            return string.Format("completequestionnairedocuments/{0}", id);
+        }
         public static string ParseId(string ravenId)
         {
             if (string.IsNullOrEmpty(ravenId))
