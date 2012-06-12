@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
@@ -28,8 +29,8 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var mainGroup = new CompleteGroup("root");
             mainGroup.Children.Add(new SingleCompleteQuestion("q1") { ValidationExpression = "1 = 1", Valid = false });
             mainGroup.Children.Add(new SingleCompleteQuestion("q2") { ValidationExpression = "2 = 2", Valid = false });
-            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(mainGroup);
-            executor.Execute(mainGroup);
+            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(new GroupHash(mainGroup));
+            executor.Execute();
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[0]).Valid, true);
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[1]).Valid, true);
         }
@@ -40,8 +41,8 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var mainGroup = new CompleteGroup("root");
             mainGroup.Children.Add(new SingleCompleteQuestion("q1") { ValidationExpression = "1 != 1", Valid = true });
             mainGroup.Children.Add(new SingleCompleteQuestion("q2") { ValidationExpression = "2 != 2", Valid = true });
-            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(mainGroup);
-            executor.Execute(mainGroup);
+            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(new GroupHash(mainGroup));
+            executor.Execute();
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[0]).Valid, false);
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[1]).Valid, false);
         }
@@ -56,8 +57,8 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             mainGroup.Children.Add(subGroup2);
             subGroup1.Children.Add(new SingleCompleteQuestion("q1") { ValidationExpression = "1 != 1", Valid = true });
             subGroup2.Children.Add(new SingleCompleteQuestion("q2") { ValidationExpression = "2 != 2", Valid = true });
-            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(mainGroup);
-            executor.Execute(subGroup1);
+            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(new GroupHash(subGroup1));
+            executor.Execute();
             Assert.AreEqual(((ICompleteQuestion)subGroup1.Children[0]).Valid, false);
             Assert.AreEqual(((ICompleteQuestion)subGroup2.Children[0]).Valid, true);
         }
@@ -78,8 +79,8 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             q2.ValidationExpression = string.Format("[{0}]==1", q1.PublicKey);
 
             mainGroup.Children.Add(q2);
-            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(mainGroup);
-            executor.Execute(mainGroup);
+            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(new GroupHash(mainGroup));
+            executor.Execute();
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[0]).Valid, true);
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[0]).Valid, true);
         }
