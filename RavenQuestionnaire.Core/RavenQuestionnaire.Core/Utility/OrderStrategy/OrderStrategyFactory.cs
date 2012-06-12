@@ -22,7 +22,8 @@ namespace RavenQuestionnaire.Core.Utility.OrderStrategy
                     case Order.MinMax: return new MinMaxStrategy();
                     case Order.MaxMin: return new MinMaxStrategy();
             }
-            throw new NotImplementedException(string.Format("strategy for {0} is not implemented", orderType));
+            return new AsIsStrategy();
+        //    throw new NotImplementedException(string.Format("strategy for {0} is not implemented", orderType));
         }
     }
 }
