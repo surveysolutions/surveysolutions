@@ -63,7 +63,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             
             /*-----------------------------Nastya's code pay attention-------------------------------------*/
             trigger.WaitOne();
-            ExportImportMock.Verify(x => x.Import(It.IsAny<HttpPostedFileBase>()));
+            ExportImportMock.Verify(x => x.Import(postedfile.Object), Times.Once());
             /*------------------------------------------------------------------*/
 
             Assert.AreEqual(request.Object.Files.Count, 1);
