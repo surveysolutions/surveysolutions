@@ -150,7 +150,7 @@
     }
     @foreach (var screen in Model.Screens)
     {
-        <div data-role="page" id="screen-@(screen.PublicKey)">
+        <div data-role="page" id="screen-@(screen.PublicKey)"  class="page">
             @RenderNavigation(screen.Navigation)
             <div data-role="content">
                 @Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", screen)
@@ -160,7 +160,7 @@
     }
     @foreach (var screen in Model.PropagatedScreens)
     {
-        <div data-role="page" id="screen-@(screen.PropogationKey)" data-refresh="true">
+        <div data-role="page" id="screen-@(screen.PropogationKey)" data-refresh="true"  class="page">
             @RenderNavigation(screen.Navigation)
             <div data-role="content">
                 @Html.Partial("~/Views/Group/Mobile/_PropagatedScreen.cshtml", screen)
@@ -171,7 +171,7 @@
     @foreach (var screen in Model.Templates)
     {
         <script id="template-@(screen.PublicKey)" type="text/x-jsrender">
-        <div data-role="page" id="screen-00000000-0000-0000-0000-000000000000">
+        <div data-role="page" id="screen-00000000-0000-0000-0000-000000000000"  class="page">
             @RenderNavigation(screen.Navigation)
             <div data-role="content">
                  @Html.Partial("~/Views/Group/Mobile/_PropagatedScreen.cshtml", screen)
