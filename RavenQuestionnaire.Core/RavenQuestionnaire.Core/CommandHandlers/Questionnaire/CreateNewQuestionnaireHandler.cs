@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire
 
         public void Handle(CreateNewQuestionnaireCommand command)
         {
-            var newQuestionnaire = new Entities.Questionnaire(command.Title);
+            var newQuestionnaire = new Entities.Questionnaire(command.Title, command.QuestionnaireGuid);
             _questionnaireRepository.Add(newQuestionnaire);
 
 

@@ -16,9 +16,13 @@ namespace RavenQuestionnaire.Core.Entities
 
         public string QuestionnaireId { get { return innerDocument.Id; } }
 
-        public Questionnaire(string title)
+        public Questionnaire(string title, Guid publicKey)
         {
-            innerDocument = new QuestionnaireDocument() {Title = title};
+            innerDocument = new QuestionnaireDocument()
+                                {
+                                    Title = title, 
+                                    PublicKey = publicKey
+                                };
         }
         public Questionnaire(QuestionnaireDocument innerDocument)
         {

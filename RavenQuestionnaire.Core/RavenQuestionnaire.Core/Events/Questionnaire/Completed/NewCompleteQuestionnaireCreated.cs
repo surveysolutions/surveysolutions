@@ -1,5 +1,6 @@
 ﻿using System;
 using Ncqrs.Eventing.Storage;
+using RavenQuestionnaire.Core.Documents;
 
 namespace RavenQuestionnaire.Core.Events
 {
@@ -8,9 +9,11 @@ namespace RavenQuestionnaire.Core.Events
     public class NewCompleteQuestionnaireCreated
     {
         public Guid CompletedQuestionnaireId { get; set; }
-        public Guid QuestionnaireId { get; set; }
-        public string QuestionnaireIdOld { get; set; }
-        
+     
+        public string QuestionnaireId { get; set; }
+
+        public CompleteQuestionnaireDocument Questionnaire { set; get; }
+
         public DateTime CreationDate { get; set; }
         
     }
