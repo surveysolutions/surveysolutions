@@ -129,8 +129,8 @@ function UpdateQuestion(question) {
         questionElement.addClass("answered");  
     }
 
-    if (!question.Enabled)
-        questionElement.closest("form").clear_form_elements();
+ /*   if (!question.Enabled)
+        questionElement.closest("form").clear_form_elements();*/
     //SetErrorToQuestion(question, propagationKey, '');
 }
 
