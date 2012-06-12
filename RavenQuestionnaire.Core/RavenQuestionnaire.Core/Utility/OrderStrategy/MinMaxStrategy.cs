@@ -7,7 +7,7 @@ namespace RavenQuestionnaire.Core.Utility.OrderStrategy
     {
         public IEnumerable<T> Reorder<T>(IEnumerable<T> list)
         {
-            return list.OrderBy(n=>n);
+            return list/*.OrderBy(n=>n)*/;
         }
     }
 }
