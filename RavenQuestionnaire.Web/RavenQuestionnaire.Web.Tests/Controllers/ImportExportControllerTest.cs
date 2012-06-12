@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System.Threading;
+using Moq;
 using System.Web;
 using System.Web.Mvc;
 using NUnit.Framework;
@@ -41,6 +42,9 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void When_NewFileIsImport()
         {
+            /*-----------------------------Nastya's code pay attention-------------------------------------*/
+            var trigger = new AutoResetEvent(false);
+            /*------------------------------------------------------------------*/
             var request = new Mock<HttpRequestBase>();
             var context = new Mock<HttpContextBase>();
             var postedfile = new Mock<HttpPostedFileBase>();
@@ -50,12 +54,24 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             postedfile.Setup(f => f.ContentLength).Returns(8192).Verifiable();
             postedfile.Setup(f => f.ContentType).Returns("application/zip").Verifiable();
             postedfile.Setup(f => f.FileName).Returns("event.zip").Verifiable();
+
+            /*-----------------------------Nastya's code pay attention-------------------------------------*/
+            Controller.AsyncManager.Finished += (sender, ev) => trigger.Set();
+            /*------------------------------------------------------------------*/
+
             Controller.ImportAsync(postedfile.Object);
+            
+            /*-----------------------------Nastya's code pay attention-------------------------------------*/
+            trigger.WaitOne();
+            ExportImportMock.Verify(x => x.Import(It.IsAny<HttpPostedFileBase>()));
+            /*------------------------------------------------------------------*/
+
             Assert.AreEqual(request.Object.Files.Count, 1);
             Assert.AreEqual(request.Object.Files[0], postedfile.Object);
             Assert.AreEqual(request.Object.Files[0].ContentLength, 8192);
             Assert.AreEqual(request.Object.Files[0].ContentType, "application/zip");
             Assert.AreEqual(request.Object.Files[0].FileName, "event.zip");
+           
         }
     }
 }
