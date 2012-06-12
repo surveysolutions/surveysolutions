@@ -39,6 +39,7 @@ namespace RavenQuestionnaire.Core.Entities
         {
 
             var result = new CompleteQuestionFactory().Create(type);
+            result.QuestionType = type;
             result.QuestionText = text;
             result.StataExportCaption = stataExportCaption;
             result.ConditionExpression = condition;
