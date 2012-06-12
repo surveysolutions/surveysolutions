@@ -54,14 +54,23 @@
     <Reference Include="Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\Newtonsoft.Json.4.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Extensions.Conventions">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.Extensions.Conventions.2.2.0.5\lib\net40-Full\Ninject.Extensions.Conventions.dll</HintPath>
+    <Reference Include="Ninject.Extensions.ContextPreservation">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.Extensions.ContextPreservation.3.0.0.8\lib\net40\Ninject.Extensions.ContextPreservation.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
+    <Reference Include="Ninject.Extensions.Conventions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.Extensions.Conventions.3.0.0.11\lib\net40\Ninject.Extensions.Conventions.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.NamedScope">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.Extensions.NamedScope.3.0.0.5\lib\net40\Ninject.Extensions.NamedScope.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\MIS\RavenQuestionnaire.Core\RavenQuestionnaire.Core\bin\Debug\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="Raven.Abstractions">
@@ -111,6 +120,7 @@
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
     <Compile Include="CachableDocumentSession.cs" />
     <Compile Include="ClientSettingsProvider\IClientSettingsProvider.cs" />
+    <Compile Include="CommandHandlerAttribute.cs" />
     <Compile Include="CommandHandlers\Collection\CreateNewCollectionHandler.cs" />
     <Compile Include="CommandHandlers\Collection\DeleteCollectionHandler.cs" />
     <Compile Include="CommandHandlers\Collection\DeleteCollectionItemHandler.cs" />
@@ -318,9 +328,11 @@
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
+    <Compile Include="IMemoryCommandInvoker.cs" />
     <Compile Include="Indexes\QuestionnaireGroupedByTemplateIndex.cs" />
     <Compile Include="Indexes\UsersInLocationIndex.cs" />
     <Compile Include="NCQRSInit.cs" />
+    <Compile Include="MemoryCommandInvoker.cs" />
     <Compile Include="Repositories\CollectionRepository.cs" />
     <Compile Include="Repositories\ICollectionRepository.cs" />
     <Compile Include="Repositories\IFileRepository.cs" />
@@ -358,6 +370,8 @@
     <Compile Include="Services\ValildationService.cs" />
     <Compile Include="Utility\OrderStrategy\AsIsStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\IOrderStrategy.cs" />
+    <Compile Include="Utility\OrderStrategy\MaxMinStrategy.cs" />
+    <Compile Include="Utility\OrderStrategy\MinMaxStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\OrderStrategyFactory.cs" />
     <Compile Include="Utility\OrderStrategy\RandomStrategy.cs" />
     <Compile Include="Utility\StringUtil.cs" />
@@ -436,6 +450,7 @@
     <Compile Include="Views\Group\GroupView.cs" />
     <Compile Include="Views\Group\GroupViewFactory.cs" />
     <Compile Include="Views\Group\GroupViewInputModel.cs" />
+    <Compile Include="Views\ICompositeView.cs" />
     <Compile Include="Views\Group\PropagatedCompleteGroupView.cs" />
     <Compile Include="Views\Location\LocationBrowseInputModel.cs" />
     <Compile Include="Views\Location\LocationBrowseItem.cs" />

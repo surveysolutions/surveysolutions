@@ -4,7 +4,7 @@
 @{ ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "$(this.form).submit();"); }
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
 {
-    @Html.Hidden("QuestionId", Model.PublicKey)
+    @Html.Hidden("Parent", Model.PublicKey)
     <ul class="btn-group">
         @foreach (var item in Model.Answers)
         {

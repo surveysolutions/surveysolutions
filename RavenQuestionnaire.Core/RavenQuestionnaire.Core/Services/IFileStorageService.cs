@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using Raven.Abstractions.Data;
+using Raven.Json.Linq;
 
 namespace RavenQuestionnaire.Core.Services
 {

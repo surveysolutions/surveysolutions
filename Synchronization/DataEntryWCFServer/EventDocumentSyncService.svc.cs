@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.Text;
+using Ninject;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Documents;
 using SynchronizationMessages.CompleteQuestionnaire;
@@ -15,17 +16,17 @@ namespace DataEntryWCFServer
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class EventDocumentSyncService : IEventDocumentSync
     {
-        private ICommandInvoker invoker;
-        public EventDocumentSyncService(ICommandInvoker invoker)
+        private IKernel kernel;
+        public EventDocumentSyncService(IKernel kernel)
         {
-            this.invoker = invoker;
+            this.kernel = kernel;
         }
 
         public ErrorCodes Process(EventSyncMessage request)
         {
             try
             {
-                invoker.Execute(request.Command, request.CommandKey,request.SynchronizationKey);
+                kernel.Get<ICommandInvoker>().Execute(request.Command, request.CommandKey, request.SynchronizationKey);
 
                 return ErrorCodes.None;
             }

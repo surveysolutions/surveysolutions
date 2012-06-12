@@ -27,8 +27,14 @@ function spotScanCompleted(data, status, xhr) {
         main.removeClass('ui-disabled');
         // $.mobile.changePage('#main', 'slidedown', true, true);
     });
-    
+
 }
+
+function ExportStarted() {
+    $('#btnExport').href = "@Url.Action('Export', 'ImportExport')";
+}
+
+
 
 function sinchronizationCompleted(data, status, xhr) {
     $('a#btnSync span span').html('Synchronize');

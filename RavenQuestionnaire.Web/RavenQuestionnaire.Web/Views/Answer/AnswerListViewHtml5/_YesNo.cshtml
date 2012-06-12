@@ -13,8 +13,8 @@
                        rel = "popover"
                        </text>
                 } >
-           @Html.Raw( Model.QuestionText)</legend>
-        @Html.Hidden("QuestionId", Model.PublicKey)
+           @Html.Raw( Model.Title)</legend>
+        @Html.Hidden("Parent", Model.PublicKey)
         @foreach (var item in Model.Answers)
         {
             var radibutonname = string.Format("{0}-{1}", ViewData.TemplateInfo.GetFullHtmlFieldId("PublicKey"), item.PublicKey);

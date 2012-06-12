@@ -1,4 +1,4 @@
 ﻿@using RavenQuestionnaire.Core.Views.Answer
 @model CompleteAnswerView
-@Model.AnswerText
+@Model.Title
 @Html.TextBox("AnswerValue", Model.AnswerValue, new { onchange = Model.Selected ? "$(this.form).submit();" : "" })

@@ -28,7 +28,8 @@ namespace RavenQuestionnaire.Core.Tests
             //   ObjectFactory.Configure(x => x.For<ICommandHandler<string>>().Use(mockHandler.Object));
             var kernel = new StandardKernel();
             kernel.Bind<ICommandHandler<ICommand>>().ToConstant(mockHandler.Object);
-            CommandInvoker invoker = new CommandInvoker(kernel, documentSessionMock.Object, clientSettingsMock.Object);
+            kernel.Bind<IDocumentSession>().ToConstant(documentSessionMock.Object);
+            CommandInvoker invoker = new CommandInvoker(kernel, clientSettingsMock.Object);
 
             Mock<ICommand> someCommand= new Mock<ICommand>();
 
@@ -47,7 +48,8 @@ namespace RavenQuestionnaire.Core.Tests
             Mock<IClientSettingsProvider> clientSettingsMock = new Mock<IClientSettingsProvider>();
             clientSettingsMock.Setup(x => x.ClientSettings).Returns(
                 new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
-            CommandInvoker invoker = new CommandInvoker(kernel, documentSessionMock.Object,clientSettingsMock.Object);
+            kernel.Bind<IDocumentSession>().ToConstant(documentSessionMock.Object);
+            CommandInvoker invoker = new CommandInvoker(kernel, clientSettingsMock.Object);
             Mock<ICommand> someCommand = new Mock<ICommand>();
 
             invoker.Execute(someCommand.Object);
@@ -65,7 +67,8 @@ namespace RavenQuestionnaire.Core.Tests
             Mock<IClientSettingsProvider> clientSettingsMock = new Mock<IClientSettingsProvider>();
             clientSettingsMock.Setup(x => x.ClientSettings).Returns(
                 new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
-            CommandInvoker invoker = new CommandInvoker(kernel, documentSessionMock.Object, clientSettingsMock.Object);
+            kernel.Bind<IDocumentSession>().ToConstant(documentSessionMock.Object);
+            CommandInvoker invoker = new CommandInvoker(kernel, clientSettingsMock.Object);
             Mock<ICommand> someCommand = new Mock<ICommand>();
 
             Assert.Throws<Exception>(() => invoker.Execute(someCommand.Object));
@@ -80,7 +83,8 @@ namespace RavenQuestionnaire.Core.Tests
             Mock<IClientSettingsProvider> clientSettingsMock = new Mock<IClientSettingsProvider>();
             clientSettingsMock.Setup(x => x.ClientSettings).Returns(
                 new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
-            CommandInvoker invoker = new CommandInvoker(kernel, documentSessionMock.Object, clientSettingsMock.Object);
+            kernel.Bind<IDocumentSession>().ToConstant(documentSessionMock.Object);
+            CommandInvoker invoker = new CommandInvoker(kernel, clientSettingsMock.Object);
             Mock<ICommand> someCommand = new Mock<ICommand>();
             Assert.Throws<Ninject.ActivationException>(() => invoker.Execute(someCommand.Object));
         }
@@ -94,7 +98,8 @@ namespace RavenQuestionnaire.Core.Tests
             Mock<IClientSettingsProvider> clientSettingsMock = new Mock<IClientSettingsProvider>();
             clientSettingsMock.Setup(x => x.ClientSettings).Returns(
                 new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
-            CommandInvoker invoker = new CommandInvoker(kernel, documentSessionMock.Object, clientSettingsMock.Object);
+            kernel.Bind<IDocumentSession>().ToConstant(documentSessionMock.Object);
+            CommandInvoker invoker = new CommandInvoker(kernel, clientSettingsMock.Object);
             Mock<ICommand> someCommand = new Mock<ICommand>();
             try
             {

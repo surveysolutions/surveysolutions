@@ -10,7 +10,7 @@
     //   string answerKey = string.Format("answers[{0}].", Model.PublicKey);
     string tbClientId = "#" + Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
 
-    @Html.Hidden("QuestionId", Model.PublicKey)
+    @Html.Hidden("Parent", Model.PublicKey)
     <div class="answer">
         @Html.Hidden("PublicKey", answerGuid)
         @Html.Hidden("Selected", true)

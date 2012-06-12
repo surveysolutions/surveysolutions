@@ -14,7 +14,7 @@ using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.Group
 {
-    public abstract class AbstractGroupView
+    public abstract class AbstractGroupView : ICompositeView
     {
         private string _questionnaireId;
 
@@ -25,21 +25,21 @@ namespace RavenQuestionnaire.Core.Views.Group
         public AbstractGroupView(string questionnaireId, Guid? parentGroup)
         {
             QuestionnaireId = questionnaireId;
-            ParentGroup = parentGroup;
+            Parent = parentGroup;
         }
 
         protected AbstractGroupView(IQuestionnaireDocument doc, IGroup group)
         {
             this.QuestionnaireId = doc.Id;
             this.PublicKey = group.PublicKey;
-            this.GroupText = group.Title;
+            this.Title = group.Title;
             this.Propagated = group.Propagated;
         }
         public Guid PublicKey { get; set; }
 
-        public string GroupText { get; set; }
+        public string Title { get; set; }
 
-        public Guid? ParentGroup { get; set; }
+        public Guid? Parent { get; set; }
 
         public Propagate Propagated { get; set; }
 
@@ -50,6 +50,7 @@ namespace RavenQuestionnaire.Core.Views.Group
         }
 
     }
+
     public abstract class AbstractGroupView<TGroup, TQuestion> : AbstractGroupView 
         where TGroup:AbstractGroupView
         where TQuestion : AbstractQuestionView
@@ -66,14 +67,14 @@ namespace RavenQuestionnaire.Core.Views.Group
         public AbstractGroupView(string questionnaireId, Guid? parentGroup)
         {
             QuestionnaireId = questionnaireId;
-            ParentGroup = parentGroup;
+            Parent = parentGroup;
         }
 
         protected AbstractGroupView(IQuestionnaireDocument doc, IGroup group)
         {
             this.QuestionnaireId = doc.Id;
             this.PublicKey = group.PublicKey;
-            this.GroupText = group.Title;
+            this.Title = group.Title;
             this.Propagated = group.Propagated;
         }
 
@@ -114,7 +115,7 @@ namespace RavenQuestionnaire.Core.Views.Group
         public GroupView(IQuestionnaireDocument doc, TGroup group)
             : base(doc, group)
         {
-            this.ParentGroup = GetGroupParent(doc, group);
+            this.Parent = GetGroupParent(doc, group);
         }
         protected Guid? GetGroupParent(IQuestionnaireDocument questionnaire, TGroup group)
         {

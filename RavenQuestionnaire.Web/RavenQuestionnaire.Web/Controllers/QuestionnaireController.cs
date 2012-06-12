@@ -176,7 +176,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     foreach (var q in model.Questions)
                     {
                         header.Add(q.PublicKey,
-                                   string.IsNullOrEmpty(q.StataExportCaption) ? q.QuestionText : q.StataExportCaption);
+                                   string.IsNullOrEmpty(q.StataExportCaption) ? q.Title : q.StataExportCaption);
                     }
 
                     foreach (var group in model.Groups)
@@ -185,7 +185,7 @@ namespace RavenQuestionnaire.Web.Controllers
                         {
                             header.Add(q.PublicKey,
                                        string.IsNullOrEmpty(q.StataExportCaption)
-                                           ? q.QuestionText
+                                           ? q.Title
                                            : q.StataExportCaption);
                         }
                     }

@@ -2,29 +2,40 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ionic.Zip;
+using Newtonsoft.Json;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
+using Raven.Abstractions.Data;
+using Raven.Json.Linq;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Commands.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
+using RavenQuestionnaire.Core.Views.Event;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Core.Views.Status.StatusElement;
 using RavenQuestionnaire.Web.Models;
+using Formatting = System.Xml.Formatting;
 
 #endregion
 

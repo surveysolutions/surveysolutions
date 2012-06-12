@@ -11,12 +11,12 @@
 }
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {
-    @Html.Hidden("QuestionId", Model.PublicKey)
+    @Html.Hidden("Parent", Model.PublicKey)
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
 
     <fieldset data-role="controlgroup">
-			    	<legend>@Model.QuestionText</legend>
+			    	<legend>@Model.Title</legend>
                     <p>Latitude & Longitude separated by semicolon</p>
                      @Html.TextBox("AnswerValue", value, settings)
    </fieldset>

@@ -48,7 +48,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     It.Is<QuestionnaireViewInputModel>(
                         v => v.QuestionnaireId.Equals("questionnairedocuments/qID"))))
                 .Returns(new QuestionnaireView(innerDocument));
-            Controller.Save(new GroupView() { GroupText = "test", QuestionnaireId = innerDocument.Id });
+            Controller.Save(new GroupView() { Title = "test", QuestionnaireId = innerDocument.Id });
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewGroupCommand>()), Times.Once());
         }
 
@@ -112,7 +112,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 .Returns(groupView);
 
             var result = Controller.Edit(group.PublicKey, innerDocument.Id);
-            Assert.AreEqual(groupView, ((PartialViewResult)result).ViewData.Model);
+            Assert.AreEqual(groupView, ((ViewResult)result).ViewData.Model);
         }
     }
 }

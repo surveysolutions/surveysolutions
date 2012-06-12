@@ -11,7 +11,7 @@ namespace RavenQuestionnaire.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            //filters.Add(new HandleErrorAttribute());
         }
 
         public static void RegisterRoutes(RouteCollection routes)
@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Web
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
         }
-
+        
         protected void Application_Error()
         {
             Exception lastException = Server.GetLastError();
