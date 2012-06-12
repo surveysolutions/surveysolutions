@@ -19,13 +19,15 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         public bool Valid { get; set; }
         public bool Answered { get; set; }
         public object Answer { get; set; }
+        public bool IsInPropagatebleGroup { get; set; }
 
         public CompleteQuestionsJsonView()
         {
         }
 
-        public CompleteQuestionsJsonView(ICompleteQuestion doc, Guid groupPublicKey)
+        public CompleteQuestionsJsonView(ICompleteQuestion doc, Guid groupPublicKey, bool isInPropagatebleGroup)
         {
+            IsInPropagatebleGroup = isInPropagatebleGroup;
             this.GroupPublicKey = groupPublicKey;
             this.Title = doc.QuestionText;
             this.QuestionType = doc.QuestionType;
