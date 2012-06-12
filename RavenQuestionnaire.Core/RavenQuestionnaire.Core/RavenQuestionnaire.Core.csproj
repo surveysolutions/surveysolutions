@@ -350,6 +350,8 @@
     <Compile Include="Services\ValildationService.cs" />
     <Compile Include="Utility\OrderStrategy\AsIsStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\IOrderStrategy.cs" />
+    <Compile Include="Utility\OrderStrategy\MaxMinStrategy.cs" />
+    <Compile Include="Utility\OrderStrategy\MinMaxStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\OrderStrategyFactory.cs" />
     <Compile Include="Utility\OrderStrategy\RandomStrategy.cs" />
     <Compile Include="Utility\StringUtil.cs" />

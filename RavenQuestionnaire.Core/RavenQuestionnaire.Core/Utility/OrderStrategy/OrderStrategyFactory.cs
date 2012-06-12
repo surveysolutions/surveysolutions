@@ -18,8 +18,9 @@ namespace RavenQuestionnaire.Core.Utility.OrderStrategy
             switch (orderType)
             {
                     case Order.AsIs:return new AsIsStrategy();
-                    case Order.Random:
-                    return new RandomStrategy();
+                    case Order.Random: return new RandomStrategy();
+                    case Order.MinMax: return new MinMaxStrategy();
+                    case Order.MaxMin: return new MinMaxStrategy();
             }
             throw new NotImplementedException(string.Format("strategy for {0} is not implemented", orderType));
         }

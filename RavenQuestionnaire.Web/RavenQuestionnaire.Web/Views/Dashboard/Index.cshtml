@@ -117,11 +117,7 @@
             <div data-role="navbar">
                 <ul>
                     <li><a href="@Url.Action("Import", "ImportExport")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Import</a></li>
-                    <li>
-                    @Ajax.ActionLinkHtml5("Export", "Export", "ImportExport", new { }, new AjaxOptions() { }, 
-                                    new { @class = "ui-state-persist", rel = "external", id = "btnExport" })   
-                    @*<a href="@Url.Action("Export", "ImportExport")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Export</a>*@
-                    </li>
+                    <li><a href="@Url.Action("Export", "ImportExport")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Export</a></li>
                     <li><a href="#"></a></li>
                     <li><a href="#"></a></li>              
                 </ul>
