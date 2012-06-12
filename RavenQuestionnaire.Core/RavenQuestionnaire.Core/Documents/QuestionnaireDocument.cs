@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.Documents
             set
             {
                 publicKey = value;
-                this.Id = value.ToString();
+             //   this.Id = value.ToString();
             }
         }
 
@@ -114,7 +114,7 @@ namespace RavenQuestionnaire.Core.Documents
                 return;
             }
 
-            foreach (IGroup child in this.Children)
+            foreach (IComposite child in this.Children)
             {
                 try
                 {
