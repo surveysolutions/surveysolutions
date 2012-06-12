@@ -230,24 +230,29 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public ActionResult Participate(string id, string mode)
         {
+            Guid key;
+            if (!Guid.TryParse(id, out key))
+                return RedirectToAction("Index", "Dashboard");
+
+
             SurveyStatus status = GetStatus(id);
-            var questionnairePublicKey = Guid.NewGuid();
-            var command = new CreateNewCompleteQuestionnaireCommand(id,questionnairePublicKey,
+            var newQuestionnairePublicKey = Guid.NewGuid();
+            var command = new CreateNewCompleteQuestionnaireCommand(id,
+                                                                    newQuestionnairePublicKey,
                                                                     _globalProvider.GetCurrentUser(),
-                                                                   status,
+                                                                    status,
                                                                     _globalProvider.GetCurrentUser());
             commandInvoker.Execute(command);
 
             //new handling
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            var pubKey = Guid.NewGuid();
-            commandService.Execute(new CreateCompleteQuestionnaireCommand(pubKey, id));
+            commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
 
 
             return RedirectToAction("Question" + mode,
                                     new
                                         {
-                                            id = questionnairePublicKey
+                                            id = newQuestionnairePublicKey
                                         });
         }
 

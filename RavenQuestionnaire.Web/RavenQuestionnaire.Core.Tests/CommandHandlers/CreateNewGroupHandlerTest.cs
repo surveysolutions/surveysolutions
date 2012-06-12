@@ -21,7 +21,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_TopLevelGroup_NewGroupIsIsAddedToQuestionnaire()
         {
             Mock<IQuestionnaireRepository> questionaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            Questionnaire questionnaire= new Questionnaire("some questionanire");
+            Questionnaire questionnaire= new Questionnaire("some questionanire", Guid.NewGuid());
             questionaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qId")).Returns(questionnaire);
             CreateNewGroupHandler handler = new CreateNewGroupHandler(questionaireRepositoryMock.Object);
             handler.Handle(new CreateNewGroupCommand("some text", Propagate.None, "qId", null, null));
@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_SubGroup_NewGroupIsIsAddedToQuestionnaire()
         {
             Mock<IQuestionnaireRepository> questionaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            Questionnaire questionnaire = new Questionnaire("some questionanire");
+            Questionnaire questionnaire = new Questionnaire("some questionanire", Guid.NewGuid());
             var innerDocument = ((IEntity<QuestionnaireDocument>)questionnaire).GetInnerDocument();
             Group topGroup = new Group("top group");
             innerDocument.Children.Add(topGroup);
@@ -49,7 +49,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_ParentGroupNotExists_NewGroupIsIsAddedToQuestionnaire()
         {
             Mock<IQuestionnaireRepository> questionaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            Questionnaire questionnaire = new Questionnaire("some questionanire");
+            Questionnaire questionnaire = new Questionnaire("some questionanire", Guid.NewGuid());
             questionaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qId")).Returns(questionnaire);
             CreateNewGroupHandler handler = new CreateNewGroupHandler(questionaireRepositoryMock.Object);
 

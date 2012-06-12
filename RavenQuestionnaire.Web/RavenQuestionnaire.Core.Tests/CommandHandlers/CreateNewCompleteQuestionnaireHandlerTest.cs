@@ -50,7 +50,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_NewCompleteQuestionnIsAddedToRepository()
         {
             CompleteQuestionnaire entity = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
-            Questionnaire questionnaireDocument =new Questionnaire("some");
+            Questionnaire questionnaireDocument =new Questionnaire("some", Guid.NewGuid());
 
             Mock<ICompleteQuestionnaireRepository> coompleteQuestionnaireRepositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             Mock<IStatisticRepository> statisticsRepositoryMock = new Mock<IStatisticRepository>();
