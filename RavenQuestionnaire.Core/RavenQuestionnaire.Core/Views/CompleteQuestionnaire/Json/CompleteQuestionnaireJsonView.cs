@@ -42,19 +42,25 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         private void CollectAll(CompleteQuestionnaireDocument doc, CompleteGroup group)
         {
             var queue = new Queue<ICompleteGroup>();
-            queue.Enqueue(doc);
+            queue.Enqueue(group);
             while (queue.Count != 0)
             {
                 ICompleteGroup item = queue.Dequeue();
+                if (!item.PropogationPublicKey.HasValue && item.Propagated == Propagate.Propagated)
+                {
+                    continue;
+                }
                 var parentKey = item.PublicKey;
+                var propagatable = false;
                 if (item.PropogationPublicKey.HasValue )
                 {
                     parentKey = item.PropogationPublicKey.Value;
+                    propagatable = true;
                 }
                 var questions = item.Children.OfType<ICompleteQuestion>().ToList();
                 foreach (var question in questions)
                 {
-                    Questions.Add(new CompleteQuestionsJsonView(question, parentKey));
+                    Questions.Add(new CompleteQuestionsJsonView(question, parentKey, propagatable));
                 }
 
                 List<IComposite> innerGroups = item.Children.Where(c => c is ICompleteGroup).ToList();
