@@ -234,6 +234,7 @@
     <Compile Include="Entities\CompleteQuestionnaire.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
+    <Compile Include="Entities\Extensions\GroupHash.cs" />
     <Compile Include="Entities\File.cs" />
     <Compile Include="Entities\Event.cs" />
     <Compile Include="Entities\FlowGraph.cs" />

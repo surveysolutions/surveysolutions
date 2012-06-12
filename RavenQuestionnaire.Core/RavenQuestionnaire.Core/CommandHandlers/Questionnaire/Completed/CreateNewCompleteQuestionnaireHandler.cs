@@ -39,17 +39,18 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
          //   command.CompleteQuestionnaireId = IdUtil.ParseId(result.CompleteQuestinnaireId);
 
             
-            var questions = result.GetInnerDocument().GetAllQuestions<ICompleteQuestion>().ToList();
-            var executor = new CompleteQuestionnaireConditionExecutor(result.GetInnerDocument());
-            foreach (ICompleteQuestion completeQuestion in questions)
+         //   var questions = result.GetInnerDocument().GetAllQuestions<ICompleteQuestion>().ToList();
+            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(result.GetInnerDocument()));
+            executor.Execute();
+         /*   foreach (ICompleteQuestion completeQuestion in questions)
             {
                 if(completeQuestion is IBinded)
                     continue;
                 completeQuestion.Enabled = executor.Execute(completeQuestion);
-             
+             */
                 /*if (!completeQuestion.Enabled)
                     result.Remove(completeQuestion);*/
-            }
+           // }
         }
     }
 }

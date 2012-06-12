@@ -13,10 +13,18 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
     public class CompleteQuestionnaireConditionExecutor// : IExpressionExecutor<CompleteQuestionnaire, bool>
     {
-        private readonly ICompleteGroup questionnaire;
-        public CompleteQuestionnaireConditionExecutor(ICompleteGroup questionnaire)
+        private readonly GroupHash hash;
+        public CompleteQuestionnaireConditionExecutor(GroupHash hash)
         {
-            this.questionnaire = questionnaire;
+            this.hash = hash;
+        }
+        public void Execute()
+        {
+            foreach (var completeQuestion in hash.Questions)
+            {
+              //  bool previousState = completeQuestion.Enabled;
+                completeQuestion.Enabled = Execute(completeQuestion);
+            }
         }
 
         public bool Execute(ICompleteQuestion question)
@@ -34,8 +42,8 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
                                            //    propagationKey = propagation.PropogationPublicKey;
 
                                          //  }
-                                           var value =
-                                               questionnaire.GetQuestionByKey(nameGuid, propagationKey).GetAnswerObject();
+                                           var value = hash[nameGuid, propagationKey].GetAnswerObject();
+                                              // questionnaire.GetQuestionByKey(nameGuid, propagationKey).GetAnswerObject();
                                            if (value != null)
                                                args.Result = value;
                                            else
