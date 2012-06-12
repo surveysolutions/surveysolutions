@@ -380,6 +380,9 @@
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteGroupHeaders.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Json\CompleteQuestionnaireJsonViewFactory.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Json\CompleteQuestionnaireJsonView.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Json\CompleteQuestionView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupedBrowseFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupedBrowseInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupedBrowseView.cs" />
@@ -387,6 +390,7 @@
     <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteQuestionnaireMabileViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteGroupMobileView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteQuestionnaireMobileView.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Mobile\PropagatedGroupMobileView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Mobile\ScreenNavigation.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Vertical\CompleteQuestionnaireEnumerableViewVFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportInputModel.cs" />

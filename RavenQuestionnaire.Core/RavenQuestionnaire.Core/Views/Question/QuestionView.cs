@@ -47,6 +47,8 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public Guid? Parent { get; set; }
 
+        public List<ICompositeView> Children { get; set; }
+
         public AbstractQuestionView()
         {
           
