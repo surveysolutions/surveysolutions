@@ -48,8 +48,10 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public UserLight Executor { get; set; }
 
         public Answer[] Answers { get; set; }
+
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text,
-            string stataExport, QuestionType type, string condition, string validation, bool featured, string instructions, Order answerOrder, UserLight executor)
+            string stataExport, QuestionType type, string condition, string validation, bool featured,
+            string instructions, Answer[] answers, Order answerOrder, UserLight executor)
         {
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.AnswerOrder = answerOrder;
@@ -63,11 +65,14 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.Executor = executor;
             this.Featured = featured;
             this.Instructions = instructions;
+            this.Answers = answers;
         }
-
+        /*
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text,
-           string stataExport, QuestionType type, string condition, string validation, bool featured, string instructions, AnswerView[] answers, Order answerOrder, UserLight executor) :
-            this(questionnaireId, questionPublicKey, text, stataExport, type, condition, validation,featured, instructions, answerOrder, executor)
+           string stataExport, QuestionType type, string condition, string validation, bool featured, 
+            string instructions, AnswerView[] answers, Order answerOrder, UserLight executor) :
+            this(questionnaireId, questionPublicKey, text, stataExport, type, condition, validation, 
+                featured, instructions, answerOrder, executor)
         {
             if (answers != null)
                 this.Answers =
@@ -82,6 +87,6 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
                                 PublicKey = a.PublicKey,
                                 AnswerImage = string.IsNullOrEmpty(a.AnswerImage)? "": IdUtil.CreateFileId(a.AnswerImage)
                             }).ToArray();
-        }
+        }*/
     }
 }

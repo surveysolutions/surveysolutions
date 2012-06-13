@@ -4,6 +4,8 @@ using System.Web;
 using System.Linq;
 using System.Web.Mvc;
 using Kaliko.ImageLibrary;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
 using Kaliko.ImageLibrary.Filters;
 using RavenQuestionnaire.Web.Models;
@@ -159,6 +161,12 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 try
                 {
+
+                    Answer[] ansverItems = new Answer[0];
+                    if (answers != null)
+                        ansverItems = answers.Select(a => ConvertAnswer(a)).ToArray();
+
+
                     if (model.PublicKey == Guid.Empty)
                     {
                         AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.Title,
@@ -171,20 +179,59 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                         model.Instructions,
                                                                                         model.Featured,
                                                                                         model.AnswerOrder,
-                                                                                        answers,
+                                                                                        ansverItems,
                                                                                         GlobalInfo.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
+
+
+                        //new fw
+                        var commandService = NcqrsEnvironment.Get<ICommandService>();
+                        Guid newItemKey = Guid.NewGuid(); 
+                        commandService.Execute(new AddQuestionCommand(Guid.Parse(model.QuestionnaireId),
+                                                                                        newItemKey,
+                                                                                        model.Title,
+                                                                                        model.StataExportCaption,
+                                                                                        model.QuestionType,
+                                                                                        model.Parent,
+                                                                                        model.ConditionExpression,
+                                                                                        model.ValidationExpression,
+                                                                                        model.Instructions,
+                                                                                        model.Featured,
+                                                                                        model.AnswerOrder,
+                                                                                        ansverItems)
+                                                   );
+
                     }
                     else
-                        commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId, model.PublicKey,
+                    {
+
+                        commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId,
+                                                                         model.PublicKey,
                                                                          model.Title,
                                                                          model.StataExportCaption,
                                                                          model.QuestionType,
                                                                          model.ConditionExpression,
                                                                          model.ValidationExpression,
-                                                                         model.Featured, model.Instructions,
-                                                                         answers, model.AnswerOrder,
+                                                                         model.Featured,
+                                                                         model.Instructions,
+                                                                         ansverItems,
+                                                                         model.AnswerOrder,
                                                                          GlobalInfo.GetCurrentUser()));
+                        //new fw
+                        var commandService = NcqrsEnvironment.Get<ICommandService>();
+                        commandService.Execute(new ChangeQuestionCommand(Guid.Parse(model.QuestionnaireId),
+                                                                        model.PublicKey,
+                                                                      model.Title,
+                                                                      model.StataExportCaption,
+                                                                      model.QuestionType,
+                                                                      model.ConditionExpression,
+                                                                      model.ValidationExpression,
+                                                                      model.Instructions,
+                                                                      model.Featured,
+                                                                      model.AnswerOrder,
+                                                                      ansverItems));
+
+                    }
                 }
                 catch (Exception e)
                 {
@@ -193,7 +240,9 @@ namespace RavenQuestionnaire.Web.Controllers
                                              e.Message);
                     return PartialView("_Create", model);
                 }
+
                 return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
+                
                 //     var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
                 if (model.Parent.HasValue)
                 {
@@ -208,6 +257,8 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             return View("_Create", model);
         }
+
+        
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public string Delete(Guid publicKey, string questionnaireId)
         {
@@ -247,6 +298,17 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                              }).ToList(), "Value", "Text");
                 ViewBag.Images = imagesList;
             }
+        }
+
+        private static Answer ConvertAnswer(AnswerView a)
+        {
+            var answer = new Answer();
+            answer.AnswerValue = a.AnswerValue;
+            answer.AnswerType = a.AnswerType;
+            answer.AnswerText = a.Title;
+            answer.Mandatory = a.Mandatory;
+            answer.PublicKey = a.PublicKey;
+            return answer;
         }
 
         #endregion

@@ -3,10 +3,13 @@
 using System;
 using System.Web;
 using System.Web.Mvc;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
@@ -49,6 +52,12 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                       model.QuestionnaireId, model.Parent,
                                                                       GlobalInfo.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
+
+                        //new fw
+                        var commandService = NcqrsEnvironment.Get<ICommandService>();
+                        Guid newItemKey = Guid.NewGuid(); 
+                        commandService.Execute(new AddGroupCommand(Guid.Parse(model.QuestionnaireId), newItemKey,model.Title, model.Propagated, 
+                             model.Parent));
                     }
                     else
                     {
