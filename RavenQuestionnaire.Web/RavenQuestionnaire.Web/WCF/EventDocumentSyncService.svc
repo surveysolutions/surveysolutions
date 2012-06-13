@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="DataEntryWCFServer.EventDocumentSyncService" CodeBehind="EventDocumentSyncService.svc.cs" Factory="Ninject.Extensions.Wcf.NinjectServiceHostFactory"  %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="RavenQuestionnaire.Web.WCF.EventDocumentSyncService" CodeBehind="EventDocumentSyncService.svc.cs" Factory="Ninject.Extensions.Wcf.NinjectServiceHostFactory"  %>

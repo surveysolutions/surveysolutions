@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="DataEntryWCFServer.SpotSyncService" CodeBehind="SpotSyncService.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="RavenQuestionnaire.Web.WCF.SpotSyncService" CodeBehind="SpotSyncService.svc.cs" %>

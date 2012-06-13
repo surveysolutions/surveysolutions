@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Activation;
-using System.Text;
 using Ninject;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Views.Event;
 using SynchronizationMessages.Handshake;
 
-namespace DataEntryWCFServer
+namespace RavenQuestionnaire.Web.WCF
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "GetLastSyncEventService" in code, svc and config file together.
     //[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]

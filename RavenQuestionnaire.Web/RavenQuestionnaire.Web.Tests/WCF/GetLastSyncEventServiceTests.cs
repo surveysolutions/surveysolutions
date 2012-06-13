@@ -2,11 +2,11 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using DataEntryWCFServer;
 using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Views.Event;
+using RavenQuestionnaire.Web.WCF;
 
 namespace DataEntryWCFServerTests
 {

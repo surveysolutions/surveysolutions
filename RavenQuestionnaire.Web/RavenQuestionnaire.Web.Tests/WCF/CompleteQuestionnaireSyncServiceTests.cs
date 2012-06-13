@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DataEntryWCFServer;
 using Moq;
 using NUnit.Framework;
 using Ninject;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
-using RavenQuestionnaire.Core.Views.Event;
+using RavenQuestionnaire.Web.WCF;
 using SynchronizationMessages.CompleteQuestionnaire;
 
-namespace DataEntryWCFServerTests
+namespace RavenQuestionnaire.Web.Tests.WCF
 {
     [TestFixture]
     public class CompleteQuestionnaireSyncServiceTests
