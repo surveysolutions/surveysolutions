@@ -1,10 +1,8 @@
-﻿using System.Threading;
-using Moq;
+﻿using Moq;
 using System.Web;
 using System.Web.Mvc;
 using NUnit.Framework;
-using System.Web.Routing;
-using RavenQuestionnaire.Core;
+using System.Threading;
 using RavenQuestionnaire.Web.Utils;
 using RavenQuestionnaire.Web.Controllers;
 
@@ -14,8 +12,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     [TestFixture]
     public class ImportExportControllerTest
     {
-        public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
-        public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public Mock<IExportImport> ExportImportMock { get; set; }
 
         public ImportExportController Controller { get; set; }
@@ -23,28 +19,28 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [SetUp]
         public void CreateObjects()
         {
-            CommandInvokerMock = new Mock<ICommandInvoker>();
-            ViewRepositoryMock = new Mock<IViewRepository>();
-            ExportImportMock=new Mock<IExportImport>();
+            ExportImportMock = new Mock<IExportImport>();
             Controller = new ImportExportController(ExportImportMock.Object);
         }
 
         [Test]
-        public void Return_ExportComplete()
+        public void When_ExportData()
         {
-            var r = Controller.ExportCompleted(new byte[258]);
+            var trigger = new AutoResetEvent(false);
+            Controller.AsyncManager.Finished += (sender, ev) => trigger.Set();
+            Controller.ExportAsync();
+            trigger.WaitOne();
+            ExportImportMock.Verify(x=>x.Export(), Times.Once());
+            var response = Controller.AsyncManager.Parameters["result"];
+            var r = Controller.ExportCompleted(response as byte[]);
             Assert.AreEqual(r.GetType(), typeof(FileContentResult));
-            Assert.AreNotEqual("", ((FileContentResult)r).FileContents);
-            Assert.AreEqual("event.zip", ((FileContentResult)r).FileDownloadName);
-            Assert.AreEqual("application/zip", ((FileContentResult)r).ContentType);
+            Assert.AreEqual(response.GetType(), typeof(byte[]));
         }
 
         [Test]
-        public void When_NewFileIsImport()
+        public void When_FileIsImport()
         {
-            /*-----------------------------Nastya's code pay attention-------------------------------------*/
             var trigger = new AutoResetEvent(false);
-            /*------------------------------------------------------------------*/
             var request = new Mock<HttpRequestBase>();
             var context = new Mock<HttpContextBase>();
             var postedfile = new Mock<HttpPostedFileBase>();
@@ -54,18 +50,10 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             postedfile.Setup(f => f.ContentLength).Returns(8192).Verifiable();
             postedfile.Setup(f => f.ContentType).Returns("application/zip").Verifiable();
             postedfile.Setup(f => f.FileName).Returns("event.zip").Verifiable();
-
-            /*-----------------------------Nastya's code pay attention-------------------------------------*/
             Controller.AsyncManager.Finished += (sender, ev) => trigger.Set();
-            /*------------------------------------------------------------------*/
-
             Controller.ImportAsync(postedfile.Object);
-            
-            /*-----------------------------Nastya's code pay attention-------------------------------------*/
             trigger.WaitOne();
             ExportImportMock.Verify(x => x.Import(postedfile.Object), Times.Once());
-            /*------------------------------------------------------------------*/
-
             Assert.AreEqual(request.Object.Files.Count, 1);
             Assert.AreEqual(request.Object.Files[0], postedfile.Object);
             Assert.AreEqual(request.Object.Files[0].ContentLength, 8192);

@@ -99,6 +99,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs\TestMembershipProvider.cs" />
     <Compile Include="Stubs\TestRoleProvider.cs" />
+    <Compile Include="Utils\ExportImportEventTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config">

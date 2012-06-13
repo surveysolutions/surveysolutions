@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using System.Web.Mvc;
 using RavenQuestionnaire.Web.Utils;
 
@@ -61,7 +62,7 @@ namespace RavenQuestionnaire.Web.Controllers
        
         public ActionResult ExportCompleted(byte[] result)
         {
-            return File(result, "application/zip", "event.zip");
+            return File(result, "application/zip", string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
         }
 
         #endregion
