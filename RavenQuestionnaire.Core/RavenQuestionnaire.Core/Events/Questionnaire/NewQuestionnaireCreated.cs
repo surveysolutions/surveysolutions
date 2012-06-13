@@ -7,7 +7,8 @@ namespace RavenQuestionnaire.Core.Events
     [EventName("RavenQuestionnaire.Core:Events:NewQuestionnaireCreated")]
     public class NewQuestionnaireCreated
     {
-        public Guid QuestionnaireId { get; set; }
+        public Guid PublicKey { set; get; }
+
         public string Title { get; set; }
         public DateTime CreationDate { get; set; }
     }

@@ -65,10 +65,11 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public UserLight Executor { get; set; }
 
         public AddNewQuestionCommand(string text, string stataExportCaption, QuestionType type, string questionnaireId,
-            Guid? groupPublicKey, string condition, string validation, string instructions, bool featured, Order answerOrder, AnswerView[] answers, UserLight executor)
+            Guid? groupPublicKey, string condition, string validation, string instructions, bool featured, Order answerOrder, 
+            Answer[] answers, UserLight executor)
         {
             QuestionText = text;
-this.AnswerOrder = answerOrder;
+            this.AnswerOrder = answerOrder;
             StataExportCaption = stataExportCaption;
             QuestionType = type;
             QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
@@ -78,22 +79,8 @@ this.AnswerOrder = answerOrder;
             Answers = new Answer[0];
             this.ValidationExpression = validation;
             this.Featured = featured;
-            if (answers != null)
-                Answers = answers.Select(a => ConvertAnswer(a)).ToArray();
-
+            Answers = answers;
             Executor = executor;
-        }
-
-        private static Answer ConvertAnswer(AnswerView a)
-        {
-            var answer =  new Answer();
-            answer.AnswerValue = a.AnswerValue;
-
-            answer.AnswerType = a.AnswerType;
-            answer.AnswerText = a.Title;
-            answer.Mandatory = a.Mandatory;
-            answer.PublicKey = a.PublicKey;
-            return answer;
         }
     }
 }

@@ -185,6 +185,7 @@
     <Compile Include="Commands\Questionnaire\Group\ValidateGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\MoveQuestionnaireItemCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\ChangeQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateConditionsCommand.cs" />
     <Compile Include="Commands\Statistics\GenerateQuestionnaireStatisticCommand.cs" />
     <Compile Include="Commands\Status\AddNewStatusFlowItem.cs" />
@@ -314,7 +315,9 @@
     <Compile Include="Events\Location\LocationDeleted.cs" />
     <Compile Include="Events\Location\NewLocationCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewCompleteQuestionnaireCreated.cs" />
+    <Compile Include="Events\Questionnaire\QuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\NewGroupAdded.cs" />
+    <Compile Include="Events\Questionnaire\NewQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\NewQuestionnaireCreated.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
