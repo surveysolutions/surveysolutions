@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataEntryClient", "DataEntr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynchronizationMessages", "SynchronizationMessages\SynchronizationMessages.csproj", "{AD672732-3D12-48BC-8612-09547F0065D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataEntryWCFServer", "DataEntryWCFServer\DataEntryWCFServer.csproj", "{A9FE0E00-F27E-4800-9090-51F1411485FC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCalc", "..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj", "{5F014003-50D8-49E0-8AFE-91D38DCCC97C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenQuestionnaire.Core", "..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj", "{7E143353-A648-4435-819F-93A748A90704}"
@@ -19,8 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Synchronization.vsmdi = Synchronization.vsmdi
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataEntryWCFServerTests", "DataEntryWCFServerTests\DataEntryWCFServerTests.csproj", "{52B66F4C-C1A6-4945-8548-DD53722BDC81}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -55,16 +51,6 @@ Global
 		{AD672732-3D12-48BC-8612-09547F0065D3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AD672732-3D12-48BC-8612-09547F0065D3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AD672732-3D12-48BC-8612-09547F0065D3}.Release|x86.ActiveCfg = Release|Any CPU
-		{A9FE0E00-F27E-4800-9090-51F1411485FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A9FE0E00-F27E-4800-9090-51F1411485FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A9FE0E00-F27E-4800-9090-51F1411485FC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{A9FE0E00-F27E-4800-9090-51F1411485FC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{A9FE0E00-F27E-4800-9090-51F1411485FC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A9FE0E00-F27E-4800-9090-51F1411485FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A9FE0E00-F27E-4800-9090-51F1411485FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A9FE0E00-F27E-4800-9090-51F1411485FC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{A9FE0E00-F27E-4800-9090-51F1411485FC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{A9FE0E00-F27E-4800-9090-51F1411485FC}.Release|x86.ActiveCfg = Release|Any CPU
 		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -95,16 +81,6 @@ Global
 		{206B6F47-D790-4105-BD26-41583C7D04B3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{206B6F47-D790-4105-BD26-41583C7D04B3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{206B6F47-D790-4105-BD26-41583C7D04B3}.Release|x86.ActiveCfg = Release|Any CPU
-		{52B66F4C-C1A6-4945-8548-DD53722BDC81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{52B66F4C-C1A6-4945-8548-DD53722BDC81}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{52B66F4C-C1A6-4945-8548-DD53722BDC81}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{52B66F4C-C1A6-4945-8548-DD53722BDC81}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{52B66F4C-C1A6-4945-8548-DD53722BDC81}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{52B66F4C-C1A6-4945-8548-DD53722BDC81}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{52B66F4C-C1A6-4945-8548-DD53722BDC81}.Release|Any CPU.Build.0 = Release|Any CPU
-		{52B66F4C-C1A6-4945-8548-DD53722BDC81}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{52B66F4C-C1A6-4945-8548-DD53722BDC81}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{52B66F4C-C1A6-4945-8548-DD53722BDC81}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

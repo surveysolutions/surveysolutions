@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="DataEntryWCFServer.GetLastSyncEventService" CodeBehind="GetLastSyncEventService.svc.cs" Factory="Ninject.Extensions.Wcf.NinjectServiceHostFactory"%>
