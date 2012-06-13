@@ -98,6 +98,18 @@
                              <dxe:TextEdit Name="txtBox" EditValue="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                            Width="100" Height="30" Canvas.Top="50" Canvas.Left="20" MaskType="Numeric" MaskUseAsDisplayFormat="True" />                                
                          </Border>
+                         <Button FontSize="20" Margin="5" Content="Save" Padding="10"
+                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
+                             <Button.Resources>
+                                 <Extensions:ChangeObjectMultiConverter x:Key="ChangeObjectMultiConverter"/>
+                             </Button.Resources>
+                             <Button.CommandParameter>
+                                 <MultiBinding Converter="{StaticResource ChangeObjectMultiConverter}">
+                                     <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}" Path="DataContext"/>
+                                     <Binding ElementName="txtBox" Path="Text"/>
+                                 </MultiBinding>
+                             </Button.CommandParameter>
+                         </Button>
                      </StackPanel>                    
             </ContentControl.Content>
         </ContentControl>
@@ -110,6 +122,7 @@
                                 <dxe:TextEdit Name="txtTextBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerValue}" 
                                               Width="100" Height="30" Canvas.Top="50" Canvas.Left="20" />
                             </Border>                            
+                            <Button FontSize="20" Margin="5" Content="Save" Padding="10"
                 </StackPanel>
             </ContentControl.Content>
         </ContentControl>
