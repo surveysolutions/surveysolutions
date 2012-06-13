@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                 }
                 var parentKey = item.PublicKey;
                 var propagatable = false;
-                if (item.PropogationPublicKey.HasValue )
+                if (item.PropogationPublicKey.HasValue)
                 {
                     parentKey = item.PropogationPublicKey.Value;
                     propagatable = true;
@@ -70,7 +70,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                 }
             }
 
-            InitGroups(doc, group.PublicKey);
+            InitGroups(doc);
             Totals = CalcProgress(doc);
         }
 
@@ -79,56 +79,28 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         public SurveyStatus Status { get; set; }
 
         public List<CompleteQuestionsJsonView> Questions { get; set; }
-        
+
         public UserLight Responsible { set; get; }
 
         public CompleteGroupHeaders[] Menu { get; set; }
 
         public Counter Totals { get; set; }
 
-        protected void InitGroups(CompleteQuestionnaireDocument doc, Guid currentGroupPublicKey)
+        protected void InitGroups(CompleteQuestionnaireDocument doc)
         {
-            var questions = doc.Children.OfType<ICompleteQuestion>().ToList();
             var groups = doc.Children.OfType<ICompleteGroup>().ToList();
-            if (questions.Count > 0)
-            {
-                Menu = new CompleteGroupHeaders[groups.Count + 1];
 
-                Menu[0] = new CompleteGroupHeaders
+            Menu = new CompleteGroupHeaders[groups.Count];
+            for (var i = 0; i < groups.Count; i++)
+            {
+                Menu[i] = new CompleteGroupHeaders
                                 {
-                                    PublicKey = Guid.Empty,
-                                    GroupText = "Main",
-                                    Totals = CountQuestions(questions),
+                                    PublicKey = groups[i].PublicKey,
+                                    GroupText = groups[i].Title,
                                     IsExternal = true
                                 };
-                for (var i = 1; i <= groups.Count; i++)
-                {
-                    Menu[i] = new CompleteGroupHeaders
-                                    {
-                                        PublicKey = groups[i - 1].PublicKey,
-                                        GroupText = groups[i - 1].Title,
-                                        IsExternal = true
-                                    };
-                    Menu[i].Totals = CalcProgress(groups[i - 1]);
-                }
+                Menu[i].Totals = CalcProgress(groups[i]);
             }
-            else
-            {
-                Menu = new CompleteGroupHeaders[groups.Count];
-                for (var i = 0; i < groups.Count; i++)
-                {
-                    Menu[i] = new CompleteGroupHeaders
-                                    {
-                                        PublicKey = groups[i].PublicKey,
-                                        GroupText = groups[i].Title,
-                                        IsExternal = true
-                                    };
-                    Menu[i].Totals = CalcProgress(groups[i]);
-                }
-            }
-
-            var current = Menu.FirstOrDefault(g => g.PublicKey == currentGroupPublicKey);
-            current.IsCurrent = true;
         }
 
         private Counter CalcProgress(ICompleteGroup @group)
