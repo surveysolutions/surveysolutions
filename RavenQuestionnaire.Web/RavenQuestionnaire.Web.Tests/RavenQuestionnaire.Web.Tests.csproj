@@ -100,6 +100,8 @@
     <Compile Include="Stubs\TestMembershipProvider.cs" />
     <Compile Include="Stubs\TestRoleProvider.cs" />
     <Compile Include="Utils\ExportImportEventTest.cs" />
+    <Compile Include="WCF\CompleteQuestionnaireSyncServiceTests.cs" />
+    <Compile Include="WCF\GetLastSyncEventServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config">
@@ -110,6 +112,10 @@
     <ProjectReference Include="..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
       <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
       <Name>RavenQuestionnaire.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
+      <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
+      <Name>SynchronizationMessages</Name>
     </ProjectReference>
     <ProjectReference Include="..\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>

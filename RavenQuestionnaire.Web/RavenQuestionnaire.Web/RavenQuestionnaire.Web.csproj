@@ -81,6 +81,9 @@
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject.Extensions.Wcf">
+      <HintPath>..\packages\Ninject.Extensions.Wcf.3.0.0.5\lib\net40-full\Ninject.Extensions.Wcf.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject.Web.Common, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.Web.Common.3.0.0.7\lib\net40-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
@@ -96,6 +99,11 @@
       <HintPath>..\packages\RavenDB-Embedded.1.0.499\lib\net40\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Services" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.ServiceModel.Discovery" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Mvc.Html5">
       <HintPath>..\packages\MVCHtml5Toolkit.1.2.0\lib\System.Web.Mvc.Html5.dll</HintPath>
@@ -160,6 +168,15 @@
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuestionConditionModel.cs" />
     <Compile Include="Models\SwitcherModel.cs" />
+    <Compile Include="WCF\EventDocumentSyncService.svc.cs">
+      <DependentUpon>EventDocumentSyncService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="WCF\GETLASTSYNCEVENTSERVICE.SVC.CS">
+      <DependentUpon>GETLASTSYNCEVENTSERVICE.SVC</DependentUpon>
+    </Compile>
+    <Compile Include="WCF\SpotSyncService.svc.cs">
+      <DependentUpon>SpotSyncService.svc</DependentUpon>
+    </Compile>
     <Content Include="Content\img\bar-chart.png" />
     <Content Include="Content\img\lock.png" />
     <Content Include="Content\jquery.mobile.simpledialog.min.css" />
@@ -579,6 +596,9 @@
     <Content Include="Views\CompleteQuestionnaire\Index.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Result.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Take.cshtml" />
+    <Content Include="WCF\EventDocumentSyncService.svc" />
+    <Content Include="WCF\GETLASTSYNCEVENTSERVICE.SVC" />
+    <Content Include="WCF\SpotSyncService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -618,6 +638,10 @@
     <ProjectReference Include="..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
       <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
       <Name>RavenQuestionnaire.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
+      <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
+      <Name>SynchronizationMessages</Name>
     </ProjectReference>
     <ProjectReference Include="..\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>

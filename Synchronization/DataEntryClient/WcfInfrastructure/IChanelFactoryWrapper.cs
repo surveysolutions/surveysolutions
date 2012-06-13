@@ -45,7 +45,7 @@ namespace DataEntryClient.WcfInfrastructure
         public T GetChanel<T>() where T : class
         {
             ChannelFactory<T> channelFactory = new ChannelFactory<T>(new BasicHttpBinding(),
-                                                                     string.Format("{0}/{1}Service.svc", baseAdress,
+                                                                     string.Format("{0}/WCF/{1}Service.svc", baseAdress,
                                                                                    typeof (T).Name.Substring(1)));
             return channelFactory.CreateChannel();
         }

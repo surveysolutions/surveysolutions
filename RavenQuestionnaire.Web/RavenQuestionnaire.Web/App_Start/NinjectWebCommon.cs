@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.ServiceModel;
 using System.Threading;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -74,9 +75,19 @@ namespace RavenQuestionnaire.Web.App_Start
                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
                    b => HttpContext.Current != null).InScope(o => HttpContext.Current);
 
+           /* kernel.Bind<IDocumentSession>().ToMethod(
+                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
+                    b => HttpContext.Current == null).InScope(o => Thread.CurrentThread);*/
+
+            kernel.Bind<IDocumentSession>().ToMethod(
+             context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
+                 b => OperationContext.Current != null).InScope(o => OperationContext.Current);
+
             kernel.Bind<IDocumentSession>().ToMethod(
                 context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
-                    b => HttpContext.Current == null).InScope(o => Thread.CurrentThread);
+                    b => OperationContext.Current == null && HttpContext.Current == null).InScope(
+                        o => Thread.CurrentThread);
+
             kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
             kernel.Bind<IBagManager>().To<ViewBagManager>();
             kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();

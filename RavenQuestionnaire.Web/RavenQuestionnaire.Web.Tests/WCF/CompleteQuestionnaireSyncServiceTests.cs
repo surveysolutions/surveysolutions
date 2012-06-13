@@ -5,6 +5,7 @@ using System.Text;
 using DataEntryWCFServer;
 using Moq;
 using NUnit.Framework;
+using Ninject;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Views.Event;
@@ -18,9 +19,10 @@ namespace DataEntryWCFServerTests
         [Test]
         public void Process_AventArrived_Eventprocessed()
         {
-         /*   Mock<ICommandInvoker> invokerMock = new Mock<ICommandInvoker>();
-
-            EventDocumentSyncService target = new EventDocumentSyncService(invokerMock.Object);
+            IKernel kernel=new StandardKernel();
+            Mock<ICommandInvoker> invokerMock = new Mock<ICommandInvoker>();
+            kernel.Bind<ICommandInvoker>().ToConstant(invokerMock.Object);
+            EventDocumentSyncService target = new EventDocumentSyncService(kernel);
 
             for (int i = 0; i < 10; i++)
             {
@@ -30,7 +32,7 @@ namespace DataEntryWCFServerTests
                 Assert.AreEqual(result, ErrorCodes.None);
             }
             invokerMock.Verify(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<Guid>(), It.IsAny<Guid>()),
-                               Times.Exactly(10));*/
+                               Times.Exactly(10));
         }
     }
 }
