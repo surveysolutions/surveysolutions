@@ -26,6 +26,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+              
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
               
@@ -37,6 +39,11 @@
                             IsEnabled="{Binding Data.Question, Converter={StaticResource EnabledDisabledConverter}}" Opacity="{Binding Data.Question.Enabled, Converter={StaticResource FromBoolToColorConverter}}" Margin="5,30" />
         </Grid>
         <Grid VerticalAlignment="Bottom" Grid.Row="2">
+            <TextBlock Text="{Binding Data.Question.QuestionText}" FontSize="20" Margin="5" Foreground="#FFFFFFFF" TextWrapping="Wrap" Opacity="{Binding Data.Question.Enabled, Converter={StaticResource FromBoolToColorConverter}}" />
+            <ContentControl x:Name="ContentArea" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding Data.Question}" ContentTemplateSelector="{StaticResource QuestionDataTemplateSelector}"  
+                            IsEnabled="{Binding Data.Question, Converter={StaticResource EnabledDisabledConverter}}" Opacity="{Binding Data.Question.Enabled, Converter={StaticResource FromBoolToColorConverter}}" Margin="5,30" />
+        </Grid>
+        <Grid VerticalAlignment="Bottom"  Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -70,7 +77,6 @@
                 </Button>
                 <Button Grid.Column="3" Margin="10" FontSize="20" Width="70" Content="Prev" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding PrevQuestion}" Padding="10" />
                 <Button Grid.Column="4" Margin="10" FontSize="20" Width="70" Content="Next" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding NextQuestion}" Padding="10" />
-            </Grid>
         </Grid>
     </Grid>
 </View:ModuleView>
