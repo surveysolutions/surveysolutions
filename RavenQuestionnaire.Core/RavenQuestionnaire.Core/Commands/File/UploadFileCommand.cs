@@ -1,10 +1,11 @@
-﻿using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿using System.IO;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Commands.File
 {
     public class UploadFileCommand : ICommand
     {
-        public UploadFileCommand(string title, string desc, byte[] thumbData, int thumbWidth, int thumbHeight, byte[] origData, int origWidth, int origHeight, UserLight executor)
+        public UploadFileCommand(string title, string desc, Stream thumbData, int thumbWidth, int thumbHeight, Stream origData, int origWidth, int origHeight, UserLight executor)
         {
             Executor = executor;
             Description = desc;
@@ -21,7 +22,7 @@ namespace RavenQuestionnaire.Core.Commands.File
 
         public string Description { get; private set; }
 
-        public byte[] OriginalImage { get; private set; }
+        public Stream OriginalImage { get; private set; }
 
         public int OriginalWidth { get; private set; }
 
@@ -35,7 +36,7 @@ namespace RavenQuestionnaire.Core.Commands.File
 
         public string ThumbFile { get; set; }
 
-        public byte[] ThumbnailImage { get; private set; }
+        public Stream ThumbnailImage { get; private set; }
 
         #region ICommand Members
 
