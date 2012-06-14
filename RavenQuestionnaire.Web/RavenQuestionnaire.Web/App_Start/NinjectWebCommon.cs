@@ -80,7 +80,7 @@ namespace RavenQuestionnaire.Web.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IDocumentSession>().ToMethod(
-               context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
+               context => new CachableDocumentSessionAsync(context.Kernel.Get<IDocumentStore>(), cache)).When(
                    b => HttpContext.Current != null).InScope(o => HttpContext.Current.Cache);
 
            /* kernel.Bind<IDocumentSession>().ToMethod(
