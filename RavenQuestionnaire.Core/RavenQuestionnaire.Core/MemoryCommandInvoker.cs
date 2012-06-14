@@ -29,11 +29,12 @@ namespace RavenQuestionnaire.Core
           //  var documentSession = container.Get<IDocumentSession>();
             var handler = container.Get<ICommandHandler<T>>();
             handler.Handle(command);
-            SaveEvent(handler.GetType(), command, container.Get<IDocumentSession>());
+            SaveEvent(handler.GetType(), command, container.Get<IDocumentSession>(), Guid.NewGuid());
         }
 
         //TODO remove that spike after event soursing implementation
-        protected void SaveEvent<T>(Type handlerType, T command, IDocumentSession documentSession) where T : ICommand
+        //protected void SaveEvent<T>(Type handlerType, T command, IDocumentSession documentSession) where T : ICommand
+        protected void SaveEvent<T>(Type handlerType, T command, IDocumentSession documentSession, Guid eventPublicKey) where T : ICommand
         {
             System.Attribute[] attrs = System.Attribute.GetCustomAttributes(handlerType); // Reflection.
 
@@ -49,8 +50,10 @@ namespace RavenQuestionnaire.Core
 
                 }
             }
-            documentSession.Store(new EventDocument(command, Guid.NewGuid(),
-                                                    clientSettingsProvider.ClientSettings.PublicKey));
+            //documentSession.Store(new EventDocument(command, Guid.NewGuid(),
+            //                                        clientSettingsProvider.ClientSettings.PublicKey));
+            documentSession.Store(new EventDocument(command, eventPublicKey,
+                                                   clientSettingsProvider.ClientSettings.PublicKey));
         }
 
         public void Execute(ICommand command, Guid eventPublicKey, Guid clientPublicKey)
@@ -64,7 +67,7 @@ namespace RavenQuestionnaire.Core
             reflectionGeneric.GetMethod("Handle").Invoke(handler, new object[] {command});
             //handler.Handle(command);
             //store the command in the store
-            SaveEvent(handler.GetType(), command, container.Get<IDocumentSession>());
+            SaveEvent(handler.GetType(), command, container.Get<IDocumentSession>(), eventPublicKey);
 
         }
 

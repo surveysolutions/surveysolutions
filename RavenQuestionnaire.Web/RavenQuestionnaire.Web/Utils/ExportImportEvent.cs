@@ -18,8 +18,7 @@ namespace RavenQuestionnaire.Web.Utils
         void Import(HttpPostedFileBase uploadFile);
         byte[] Export();
     }
-
-
+    
     public class ExportImportEvent:IExportImport
     {
 
@@ -62,13 +61,12 @@ namespace RavenQuestionnaire.Web.Utils
                         ExecuteCommand(result.Events, result.ClientGuid);
                     else
                     {
-                        /*****************need to fix ***********/
-                        //var ndx = result.Events.FindIndex(f => f.PublicKey == lastEventItem.PublicKey);
-                        //if (ndx > -1)
-                        //{
-                        //    result.Events.RemoveRange(0, ndx);
+                        var ndx = result.Events.FindIndex(f => f.PublicKey == lastEventItem.PublicKey);
+                        if (ndx > -1)
+                        {
+                            result.Events.RemoveRange(0, ndx+1);
                             ExecuteCommand(result.Events, result.ClientGuid);
-                        //}
+                        }
                     }
                 }
             }
@@ -99,7 +97,7 @@ namespace RavenQuestionnaire.Web.Utils
 
         #region PrivateMethod
 
-        private void ExecuteCommand(List<EventBrowseItem> items, Guid clientGuid)
+        private void ExecuteCommand(IEnumerable<EventBrowseItem> items, Guid clientGuid)
         {
             foreach (EventBrowseItem item in items)
                 commandInvoker.Execute(item.Command, item.PublicKey, clientGuid);

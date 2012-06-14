@@ -1,8 +1,19 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using Moq;
 using System.IO;
 using System.Web;
 using NUnit.Framework;
+using Ninject;
+using Raven.Client;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Views.ClientSettings;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Views.Event;
 using RavenQuestionnaire.Web.Utils;
 using RavenQuestionnaire.Core.ClientSettingsProvider;
 
@@ -14,7 +25,7 @@ namespace RavenQuestionnaire.Web.Tests.Utils
     {
         public Mock<IViewRepository> viewRepositoryMock { get; set; }
 
-        public Mock<IMemoryCommandInvoker> invoker { get; set; }
+        public Mock<IMemoryCommandInvoker>  invoker { get; set; }
 
         public Mock<IClientSettingsProvider> clientProvider { get; set; }
 
@@ -22,8 +33,8 @@ namespace RavenQuestionnaire.Web.Tests.Utils
         public void CreateObjects()
         {
             viewRepositoryMock = new Mock<IViewRepository>();
-            invoker = new Mock<IMemoryCommandInvoker>();
             clientProvider = new Mock<IClientSettingsProvider>();
+            invoker = new Mock<IMemoryCommandInvoker>();
         }
 
         [Test]
@@ -49,7 +60,17 @@ namespace RavenQuestionnaire.Web.Tests.Utils
         [Test]
         public void When_EventsExport()
         {
-            var events = new ExportImportEvent(invoker.Object, viewRepositoryMock.Object, clientProvider.Object);
+            Mock<ICommandHandler<ICommand>> mockHandler = new Mock<ICommandHandler<ICommand>>();
+            Mock<IDocumentSession> documentSessionMock = new Mock<IDocumentSession>();
+            var kernel = new StandardKernel();
+            kernel.Bind<ICommandHandler<ICommand>>().ToConstant(mockHandler.Object);
+            clientProvider.Setup(x => x.ClientSettings).Returns(new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
+            kernel.Bind<IDocumentSession>().ToConstant(documentSessionMock.Object);
+            MemoryCommandInvoker invokerMemory = new MemoryCommandInvoker(kernel, clientProvider.Object);
+            var input = new EventBrowseInputModel(Guid.NewGuid());
+            var output = new EventBrowseView(0, 20, 0, new List<EventBrowseItem>());
+            viewRepositoryMock.Setup(x => x.Load<EventBrowseInputModel, EventBrowseView>(input)).Returns(output);
+            var events = new ExportImportEvent(invokerMemory, viewRepositoryMock.Object, clientProvider.Object);
             var result = events.Export();
             Assert.AreEqual(result.GetType(), typeof(byte[]));
         }
