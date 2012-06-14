@@ -14,8 +14,6 @@ using Ionic.Zip;
 using Newtonsoft.Json;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
-using Raven.Abstractions.Data;
-using Raven.Json.Linq;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
