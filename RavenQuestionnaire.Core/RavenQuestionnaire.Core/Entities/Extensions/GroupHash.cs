@@ -57,7 +57,8 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
                 return;
             }
             var questionKey = GetQuestionKey(question);
-            hash.Add(questionKey, question);
+            if (!hash.ContainsKey(questionKey))
+                hash.Add(questionKey, question);
 
             if (trigger != null)
             {
