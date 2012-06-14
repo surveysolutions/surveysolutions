@@ -1,26 +1,15 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Reflection;
-using System.Threading;
-using System.Web;
-using Ninject;
-using Ninject.Activation;
+﻿using Ninject.Activation;
 using Ninject.Extensions.Conventions;
-using Ninject.Extensions.NamedScope;
-using Ninject.Extensions.ContextPreservation;
 using Ninject.Modules;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
 using RavenQuestionnaire.Core.ClientSettingsProvider;
-using RavenQuestionnaire.Core.CommandHandlers.Statistics;
-using RavenQuestionnaire.Core.Commands.Statistics;
 using RavenQuestionnaire.Core.Conventions;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Indexes;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 
 namespace RavenQuestionnaire.Core
 {
