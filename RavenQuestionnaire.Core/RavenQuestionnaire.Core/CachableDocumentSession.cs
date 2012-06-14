@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
@@ -14,14 +12,29 @@ namespace RavenQuestionnaire.Core
     public class CachableDocumentSession : IDocumentSession
     {
         private IDocumentSession _session;
-        private IAsyncDocumentSession _sessionAsync;
+        //private IAsyncDocumentSession _sessionAsync;
         private ConcurrentDictionary<string, object> _cache;
+
+        private int SaveLimitCount = 1000;
+        private readonly object syncObj = new object();
+        private IDocumentStore _store;
+
 
         public CachableDocumentSession(IDocumentStore store, ConcurrentDictionary<string, object> cache)
         {
             //_sessionAsync = store.OpenAsyncSession();
-            _session= store.OpenSession();
+            _store = store;
+            _session = GetNewSession();
             _cache = cache;
+        }
+
+        
+        private IDocumentSession GetSession()
+        {
+            lock (syncObj)
+            {
+                return _session;
+            }
         }
 
 
@@ -37,19 +50,23 @@ namespace RavenQuestionnaire.Core
 
         public T Load<T>(string id)
         {
-
-
-         /*   object temp;
+            /*object temp;
             if (_cache.TryGetValue(id, out temp))
+            {
+                _sessionAsync.LoadAsync<T>(id);
                 return (T)temp;
+            }
 
-            T item = _session.Load<T>(id);
+            var loader = _sessionAsync.LoadAsync<T>(id);
+            loader.Wait();
+
+            T item = loader.Result;
 
             if (item != null)
                 _cache.TryAdd(id, item);
 
-            return item;
-          */
+            return item;*/
+          
 
           /*  using (_session.Advanced.DocumentStore.AggressivelyCacheFor(TimeSpan.FromMinutes(5)))
             {
@@ -64,21 +81,24 @@ namespace RavenQuestionnaire.Core
 
         public T[] Load<T>(params string[] ids)
         {
-            return _session.Load<T>(ids);
+           return _session.Load<T>(ids);
         }
 
         public T[] Load<T>(IEnumerable<string> ids)
         {
+        
             return _session.Load<T>(ids);
         }
 
         public T Load<T>(ValueType id)
         {
+        
             return _session.Load<T>(id);
         }
 
         public IRavenQueryable<T> Query<T>(string indexName)
         {
+            
             return _session.Query<T>(indexName);
         }
 
@@ -104,9 +124,23 @@ namespace RavenQuestionnaire.Core
 
         public void SaveChanges()
         {
-            _session.SaveChanges();
-            
-            //push into the cache
+            lock (syncObj)
+            {
+                _session.SaveChanges();
+
+                if (_session.Advanced.NumberOfRequests >= SaveLimitCount - 30)
+                {
+                    _session = GetNewSession();
+                }
+            }
+        }
+
+
+        private IDocumentSession GetNewSession()
+        {
+            var session = _store.OpenSession();
+            session.Advanced.MaxNumberOfRequestsPerSession = SaveLimitCount;
+            return session;
         }
 
         public void Store(object entity, Guid etag)
