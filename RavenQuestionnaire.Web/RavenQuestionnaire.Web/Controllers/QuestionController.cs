@@ -219,18 +219,18 @@ namespace RavenQuestionnaire.Web.Controllers
 
         #region PrivateMethod
         
-        private byte[] ResizeImage(KalikoImage image, int width, int height, out int newWidth, out int newHeight)
+        private Stream ResizeImage(KalikoImage image, int width, int height, out int newWidth, out int newHeight)
         {
             var thumb = image.GetThumbnailImage(width, height, ThumbnailMethod.Fit);
             thumb.ApplyFilter(new UnsharpMaskFilter(1.4, 0.32));
             var ms = new MemoryStream();
             thumb.SavePng(ms, 80);
             ms.Position = 0;
-            var thumbData = new byte[ms.Length];
-            ms.Read(thumbData, 0, thumbData.Length);
+           // var thumbData = new byte[ms.Length];
+         //   ms.Read(thumbData, 0, thumbData.Length);
             newHeight = thumb.Height;
             newWidth = thumb.Width;
-            return thumbData;
+            return ms;
         }
 
         

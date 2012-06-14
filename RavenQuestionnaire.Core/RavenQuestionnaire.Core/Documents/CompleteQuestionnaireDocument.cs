@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
@@ -16,6 +17,7 @@ namespace RavenQuestionnaire.Core.Documents
          string TemplateId { get; set; }
          SurveyStatus Status { set; get; }
          UserLight Responsible { get; set; }
+         GroupHash QuestionHash { get; set; }
     }
 
 
@@ -74,6 +76,19 @@ namespace RavenQuestionnaire.Core.Documents
         public SurveyStatus Status { set; get; }
 
         public UserLight Responsible { get; set; }
+
+        private GroupHash questionHash;
+        [JsonIgnore]
+        public GroupHash QuestionHash
+        {
+            get
+            {
+                if (questionHash == null)
+                    questionHash = new GroupHash(this);
+                return questionHash;
+            }
+            set { questionHash = value; }
+        }
 
         public string StatusChangeComment { get; set; }
 

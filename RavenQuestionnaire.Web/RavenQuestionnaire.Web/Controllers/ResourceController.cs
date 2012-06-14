@@ -145,20 +145,22 @@ namespace RavenQuestionnaire.Web.Controllers
                                                     origData, origWidth, origHeight,
                                                     GlobalInfo.GetCurrentUser());
                 commandInvoker.Execute(command);
-
+                thumbData.Position = 0;
+                var bytes = new byte[thumbData.Length];
+                origData.Read(bytes, 0, (int)thumbData.Length);
                 statuses.Add(new ViewDataUploadFilesResult
                                  {
                                      name = file.FileName,
-                                     size = origData.Length,
+                                     size = (int)origData.Length,
                                      type = file.ContentType,
-                                     thumbnail_url = @"data:image/png;base64," + Convert.ToBase64String(thumbData),
+                                     thumbnail_url = @"data:image/png;base64," + Convert.ToBase64String(bytes),
                                      title = title,
                                      desc = desc
                                  });
             }
         }
 
-        private byte[] ResizeImage(KalikoImage image, int width, int height, out int newWidth, out int newHeight)
+        private MemoryStream ResizeImage(KalikoImage image, int width, int height, out int newWidth, out int newHeight)
         {
             var thumb = image.GetThumbnailImage(width, height, ThumbnailMethod.Fit);
             thumb.ApplyFilter(new UnsharpMaskFilter(1.4, 0.32));
@@ -167,13 +169,13 @@ namespace RavenQuestionnaire.Web.Controllers
             thumb.SavePng(ms, 80);
             ms.Position = 0;
 
-            var thumbData = new byte[ms.Length];
-            ms.Read(thumbData, 0, thumbData.Length);
+        //    var thumbData = new byte[ms.Length];
+        //    ms.Read(thumbData, 0, thumbData.Length);
 
             newHeight = thumb.Height;
             newWidth = thumb.Width;
 
-            return thumbData;
+            return ms;
         }
     }
 }

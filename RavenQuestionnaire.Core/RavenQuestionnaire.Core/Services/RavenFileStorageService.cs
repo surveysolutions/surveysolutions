@@ -16,7 +16,7 @@ namespace RavenQuestionnaire.Core.Services
         {
             this.documentStore = documentStore;
         }
-        public void StoreFile(string filename, byte[] bytes)
+        public void StoreFile(string filename, Stream bytes)
         {
             documentStore.DatabaseCommands.PutAttachment(filename, null, bytes, new RavenJObject{});
         }
@@ -25,11 +25,11 @@ namespace RavenQuestionnaire.Core.Services
         {
             Attachment a = documentStore.DatabaseCommands.GetAttachment(IdUtil.CreateImageId(filename));
             
-            /*var memoryStream = new MemoryStream();
-            (a.Data() as Stream).CopyTo(memoryStream);
+            var memoryStream = new MemoryStream();
+            a.Data().CopyTo(memoryStream);
             return memoryStream.ToArray();
-             */
-            return a.Data;
+             
+            //return a.Data;
         }
 
         //public List<RavenJObject> RetrieveEventDocuments()

@@ -37,14 +37,15 @@ namespace RavenQuestionnaire.Core.Services
             ICompleteGroup general = entity.GetInnerDocument();
             ICompleteQuestion question = FindQuestion(questionKey, propagationKey, general);
             question.SetAnswer(answers);
-            ExecuteConditions(question, general);
+         //   entity.GetInnerDocument().QuestionHash[question].SetAnswer(answers);
+            ExecuteConditions(question, entity.GetInnerDocument().QuestionHash);
             var command = new GenerateQuestionnaireStatisticCommand(entity, null);
             _asyncInvocker.Execute(command);
             return entity;
         }
 
         #region update utilitie
-        protected void ExecuteConditions(ICompleteQuestion question, ICompleteGroup entity)
+        protected void ExecuteConditions(ICompleteQuestion question, GroupHash entity)
         {
        //     PropagatableCompleteQuestion propagated = question as PropagatableCompleteQuestion;
           //  IEnumerable<ICompleteQuestion> triggeres;
@@ -60,8 +61,8 @@ namespace RavenQuestionnaire.Core.Services
                     entity.GetPropagatedGroupsByKey(propagated.PropogationPublicKey).SelectMany(g => g.Find<ICompleteQuestion>(
                         q => q.Triggers.Count(gp => gp.Equals(question.PublicKey)) > 0)).ToList();
             }*/
-            var hash = new GroupHash(entity, question);
-            var executor = new CompleteQuestionnaireConditionExecutor(hash);
+          //  var hash = new GroupHash(entity, question);
+            var executor = new CompleteQuestionnaireConditionExecutor(entity);
             executor.Execute();
        
           /*  foreach (ICompleteQuestion completeQuestion in triggeres)
@@ -115,8 +116,8 @@ namespace RavenQuestionnaire.Core.Services
         {
             CompleteQuestionnaire entity = _questionRepository.Load(id);
             var template = entity.Find<CompleteGroup>(groupPublicKey);
-            bool isCondition = false;
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(entity.GetInnerDocument()));
+        //    bool isCondition = false;
+            var executor = new CompleteQuestionnaireConditionExecutor(entity.GetInnerDocument().QuestionHash);
             executor.Execute();
           /*  foreach (ICompleteQuestion completeQuestion in template.GetAllQuestions<ICompleteQuestion>())
             {
