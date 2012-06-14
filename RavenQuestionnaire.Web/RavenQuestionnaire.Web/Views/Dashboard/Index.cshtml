@@ -12,9 +12,11 @@
             <h1>
                 Dashboard
             </h1>
-            @Ajax.ActionLinkHtml5("Synchronize", "Discover", "Synchronizations", new { },
+    @*        @Ajax.ActionLinkHtml5("Synchronize", "Discover", "Synchronizations", new { },
                                     new AjaxOptions() { OnBegin = "sichronizationStarted", OnComplete = "spotScanCompleted" },
                                     new { data_inline = "true", data_role = "button", data_mini = "true", data_corners = "false", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
+                                    
+*@    @Html.ActionLink("Synchronize", "DiscoverPage", "Synchronizations", new { }, new { rel = "external", data_inline = "true", data_role = "button", data_mini = "true", data_corners = "false", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
             <a href="@Url.Action("LogOff", "Account")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Log off</a> 
         </div>
         <div data-role="content">

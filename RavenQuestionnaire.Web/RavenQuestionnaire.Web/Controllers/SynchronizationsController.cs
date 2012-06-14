@@ -65,6 +65,11 @@ namespace RavenQuestionnaire.Web.Controllers
            
             return result;
         }*/
+        public ActionResult DiscoverPage()
+        {
+            return View("Scaning");
+        }
+
         public void DiscoverAsync()
         {
             AsyncManager.OutstandingOperations.Increment();
