@@ -17,17 +17,20 @@ namespace RavenQuestionnaire.Core
     public class CoreRegistry : NinjectModule
     {
         private string _repositoryPath;
+        private bool _isEmbeded;
         // private bool _isWeb;
 
-        public CoreRegistry(string repositoryPath/*, bool isWeb*/)
+        public CoreRegistry(string repositoryPath, bool isEmbeded)
         {
             _repositoryPath = repositoryPath;
-        //    _isWeb = isWeb;
+            _isEmbeded = isEmbeded;
+            //    _isWeb = isWeb;
         }
 
         public override void Load()
         {
-            Bind<DocumentStoreProvider>().ToSelf().InSingletonScope().WithConstructorArgument("storage", _repositoryPath);
+            DocumentStoreProvider storeProvider=new DocumentStoreProvider(_repositoryPath,_isEmbeded);
+            Bind<DocumentStoreProvider>().ToConstant(storeProvider);
             Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
 
        /*     Bind<IDocumentSession>().ToMethod(
@@ -98,17 +101,29 @@ namespace RavenQuestionnaire.Core
 
     public class DocumentStoreProvider : Provider<IDocumentStore>
     {
-        public DocumentStoreProvider(string storage)
+        public DocumentStoreProvider(string storage, bool isEmbeded)
         {
             _storage = storage;
+            _isEmbeded = isEmbeded;
         }
 
         private readonly string _storage;
-
+        private readonly bool _isEmbeded;
         protected override IDocumentStore CreateInstance(IContext context)
         {
-            var store = new EmbeddableDocumentStore() { DataDirectory = _storage, UseEmbeddedHttpServer = true }; //System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"]
-            Raven.Database.Server.NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(8080);
+            IDocumentStore store;
+            if (_isEmbeded)
+            {
+
+                store = new EmbeddableDocumentStore() {DataDirectory = _storage, UseEmbeddedHttpServer = true};
+                    //System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"]
+                Raven.Database.Server.NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(8080);
+            }
+            else
+            {
+                
+                store = new DocumentStore() {Url = _storage};
+            }
             store.Initialize();
             
             //  IndexCreation.CreateIndexes(typeof(QuestionnaireContainingQuestions).Assembly, store);

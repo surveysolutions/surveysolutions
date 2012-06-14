@@ -25,7 +25,7 @@ namespace RavenQuestionnaire.Core.Services
             if (!groupKey.HasValue)
             {
                 CompleteQuestionnaireValidationExecutor validator =
-              new CompleteQuestionnaireValidationExecutor(new GroupHash(entity.GetInnerDocument()));
+              new CompleteQuestionnaireValidationExecutor(entity.GetInnerDocument().QuestionHash);
 
                 result = validator.Execute();
 

@@ -50,7 +50,15 @@ namespace RavenQuestionnaire.Web.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new CoreRegistry(WebConfigurationManager.AppSettings["Raven.DocumentStore"]));
+            bool isEmbeded;
+            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
+                isEmbeded = false;
+            string storePath;
+            if (isEmbeded)
+                storePath = WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"];
+            else
+                storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
+            var kernel = new StandardKernel(new CoreRegistry(storePath, isEmbeded));
 
          //   RegisterServices(kernel);
 
