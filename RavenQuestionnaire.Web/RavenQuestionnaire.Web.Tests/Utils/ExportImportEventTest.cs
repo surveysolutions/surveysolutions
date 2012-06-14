@@ -67,9 +67,10 @@ namespace RavenQuestionnaire.Web.Tests.Utils
             clientProvider.Setup(x => x.ClientSettings).Returns(new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
             kernel.Bind<IDocumentSession>().ToConstant(documentSessionMock.Object);
             MemoryCommandInvoker invokerMemory = new MemoryCommandInvoker(kernel, clientProvider.Object);
-            var input = new EventBrowseInputModel(Guid.NewGuid());
+       //     var input = new EventBrowseInputModel(Guid.NewGuid());
             var output = new EventBrowseView(0, 20, 0, new List<EventBrowseItem>());
-            viewRepositoryMock.Setup(x => x.Load<EventBrowseInputModel, EventBrowseView>(input)).Returns(output);
+            // viewRepositoryMock.Setup(x => x.Load<EventBrowseInputModel, EventBrowseView>(input)).Returns(output);
+            viewRepositoryMock.Setup(x => x.Load<EventBrowseInputModel, EventBrowseView>(It.Is<EventBrowseInputModel>(input => input.PublickKey==null))).Returns(output);
             var events = new ExportImportEvent(invokerMemory, viewRepositoryMock.Object, clientProvider.Object);
             var result = events.Export();
             Assert.AreEqual(result.GetType(), typeof(byte[]));
