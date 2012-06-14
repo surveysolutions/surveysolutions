@@ -100,5 +100,14 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
                 return this.hash[GetQuestionKey(publicKey, propagationKey)];
             }
         }
+        public ICompleteQuestion this[ICompleteQuestion index]
+        {
+            get
+            {
+                if (this.hash.ContainsKey(GetQuestionKey(index.PublicKey, null)) && !this.hash.ContainsKey(GetQuestionKey(index.PublicKey, index.PropogationPublicKey)))
+                    return this.hash[GetQuestionKey(index.PublicKey, null)];
+                return this.hash[GetQuestionKey(index.PublicKey, index.PropogationPublicKey)];
+            }
+        }
     }
 }

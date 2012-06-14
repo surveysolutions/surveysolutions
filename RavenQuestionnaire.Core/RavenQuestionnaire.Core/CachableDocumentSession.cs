@@ -122,6 +122,11 @@ namespace RavenQuestionnaire.Core
             return _session.Include<T>(path);
         }
 
+        public ILoaderWithInclude<T> Include<T, TInclude>(Expression<Func<T, object>> path)
+        {
+            return _session.Include(path);
+        }
+
         public void SaveChanges()
         {
             lock (syncObj)

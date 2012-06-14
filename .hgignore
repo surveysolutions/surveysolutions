@@ -94,3 +94,5 @@ Synchronization/Synchronization.6.0.ReSharper.user
 Awesomium/_ReSharper.Awesomium.NET Samples/*
 Awesomium/Core/C/Awesomium/Debug/*
 *.log
+RavenQuestionnaire.Web/RavenQuestionnaire.Web/App_Data/LocalStorage/*
+RavenQuestionnaire.Web/RavenQuestionnaire.Web/App_Data/Tenants/*
