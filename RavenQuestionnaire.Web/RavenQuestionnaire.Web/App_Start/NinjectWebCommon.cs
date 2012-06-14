@@ -73,7 +73,7 @@ namespace RavenQuestionnaire.Web.App_Start
         {
             kernel.Bind<IDocumentSession>().ToMethod(
                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
-                   b => HttpContext.Current != null).InScope(o => HttpContext.Current);
+                   b => HttpContext.Current != null).InScope(o => HttpContext.Current.Cache);
 
            /* kernel.Bind<IDocumentSession>().ToMethod(
                 context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
