@@ -93,6 +93,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         [JsonIgnore]
         public List<IComposite> Children { get; set; }
+
+        public List<IObserver<CompositeEventArgs>> Observers
+        {
+            get { return new List<IObserver<CompositeEventArgs>>(0);}
+        }
+
         [JsonIgnore]
         public IComposite Parent
         {

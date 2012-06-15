@@ -14,6 +14,16 @@
           
             <img src="/Content/themes/jquerymobile/images/ajax-loader.gif" style="position:fixed;left:50%; top:50%;" />
         </div>
+        <div data-role="footer" data-position="fixed" data-fullscreen="true">        
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="@Url.Action("Import", "ImportExport")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Import</a></li>
+                    <li></li>
+                    <li></li>
+                    <li><a href="@Url.Action("Export", "ImportExport")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Export</a></li>              
+                </ul>
+            </div>            
+        </div>
     </div>
 </div>
 

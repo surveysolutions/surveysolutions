@@ -18,9 +18,9 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         {
             this.hash = hash;
         }
-        public void Execute()
+        public void Execute(ICompleteGroup group)
         {
-            foreach (var completeQuestion in hash.Questions)
+            foreach (ICompleteQuestion completeQuestion in group.Children.Where(c => c is ICompleteQuestion))
             {
               //  bool previousState = completeQuestion.Enabled;
                 completeQuestion.Enabled = Execute(completeQuestion);

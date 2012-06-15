@@ -23,7 +23,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             IKernel kernel = new StandardKernel();
             subscriber = new Subscriber(kernel);
-            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<PropagationSubscriber>();
+            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<PropagationAddedSubscriber>();
+            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<PropagationRemovedSubscriber>();
+            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<ScopePropagationSubscriber>();
             kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<BindedQuestionSubscriber>();
 
         }
