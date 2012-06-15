@@ -18,24 +18,38 @@ namespace RavenQuestionnaire.Core.Entities.Composite
 
 
         List<IComposite> Children { get; set; }
+        List<IObserver<CompositeEventArgs>> Observers { get; }
         IComposite Parent { get;}
     }
 
-    public class Unsubscriber<T> : IDisposable
+    public class Unsubscriber : IDisposable
     {
-        private List<IObserver<T>> _observers;
-        private IObserver<T> _observer;
-
-        public Unsubscriber(List<IObserver<T>> observers, IObserver<T> observer)
+        private IComposite composite;
+        private IObserver<CompositeEventArgs> _observer;
+   //     private List<IObserver<CompositeEventArgs>> _observers;
+        public Unsubscriber(IComposite composite, IObserver<CompositeEventArgs> observer)
         {
-            this._observers = observers;
+            this.composite = composite;
+            if (composite.Observers.Contains(observer))
+                throw new ArgumentException("observer dublicate");
+            composite.Observers.Add(observer);
             this._observer = observer;
+            foreach (IComposite child in this.composite.Children)
+            {
+                child.Subscribe(observer);
+            }
         }
 
         public void Dispose()
         {
-            if (_observer != null && _observers.Contains(_observer))
-                _observers.Remove(_observer);
+            if (_observer != null && composite.Observers.Contains(_observer))
+            {
+                composite.Observers.Remove(_observer);
+                foreach (IComposite child in this.composite.Children)
+                {
+                    child.Observers.Remove(_observer);
+                }
+            }
         }
     }
     /* public static class EventsProcessor
