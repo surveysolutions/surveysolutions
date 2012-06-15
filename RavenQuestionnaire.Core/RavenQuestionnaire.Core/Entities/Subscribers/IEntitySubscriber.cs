@@ -10,5 +10,6 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
     {
         void Subscribe(T target);
         void UnSubscribe(T target);
+        bool IsSubscribed(T target);
     }
 }
