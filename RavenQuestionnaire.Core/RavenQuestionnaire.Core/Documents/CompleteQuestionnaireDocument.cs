@@ -252,6 +252,12 @@ namespace RavenQuestionnaire.Core.Documents
         }
 
         public List<IComposite> Children { get; set; }
+
+        public List<IObserver<CompositeEventArgs>> Observers
+        {
+            get { return compositeobservers; }
+        }
+
         [JsonIgnore]
         public IComposite Parent
         {
@@ -280,13 +286,9 @@ namespace RavenQuestionnaire.Core.Documents
         {
             if (compositeobservers.Contains(observer))
                 return null;
-                compositeobservers.Add(observer);
-            foreach (IComposite completeQuestion in Children)
-            {
-                completeQuestion.Subscribe(observer);
-            }
-            return new Unsubscriber<CompositeEventArgs>(compositeobservers, observer);
+            return new Unsubscriber(this, observer);
         }
+
         private List<IObserver<CompositeEventArgs>> compositeobservers;
         #endregion
         #endregion

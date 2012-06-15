@@ -20,16 +20,12 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
 
         public void Subscribe<T>(T entity) where T : IObservable<CompositeEventArgs>
         {
+            UnSubscribe(entity);
             ExecuteMethod(entity, "Subscribe");
         }
 
         public void UnSubscribe<T>(T entity) where T : IObservable<CompositeEventArgs>
         {
-          /*  var subscribers = GetAllBindings<T>();
-            foreach (IEntitySubscriber<T> entitySubscriber in subscribers)
-            {
-                entitySubscriber.UnSubscribe(entity);
-            }*/
             ExecuteMethod(entity, "UnSubscribe");
         }
 

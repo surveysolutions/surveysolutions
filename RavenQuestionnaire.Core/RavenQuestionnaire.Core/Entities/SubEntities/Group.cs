@@ -185,8 +185,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             if (Observers.Contains(observer))
                 return null;
-                Observers.Add(observer);
-            return new Unsubscriber<CompositeEventArgs>(Observers, observer);
+            return new Unsubscriber(this, observer);
         }
 
         public List<IObserver<CompositeEventArgs>> Observers { get; set; }
