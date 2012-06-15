@@ -20,7 +20,6 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
 
         public void Subscribe<T>(T entity) where T : IObservable<CompositeEventArgs>
         {
-            UnSubscribe(entity);
             ExecuteMethod(entity, "Subscribe");
         }
 
@@ -44,6 +43,7 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                         container.GetAll(genericType);
                     foreach (object subscriber in subscribers)
                     {
+                        
                         MethodInfo methodInfo = genericType.GetMethod(method);
                         if (methodInfo != null)
                         {

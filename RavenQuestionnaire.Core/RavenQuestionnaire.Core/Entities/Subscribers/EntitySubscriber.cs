@@ -14,6 +14,8 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
 
         public  void Subscribe(T target)
         {
+            if(IsSubscribed(target))
+                return;
             subsribers.Add(target.PublicKey, GetUnsubscriber(target));
         }
 
@@ -27,6 +29,11 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                 subscriber.Dispose();
                 subsribers.Remove(target.PublicKey);
             }
+        }
+
+        public bool IsSubscribed(T target)
+        {
+            return subsribers.ContainsKey(target.PublicKey);
         }
 
 
