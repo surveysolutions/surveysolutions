@@ -19,7 +19,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire
         public void Handle(MoveQuestionnaireItemCommand command)
         {
             var entity = _questionnaireRepository.Load(command.QuestionnaireId);
-            entity.MoveItem(command.PublicKey, command.AfterItemKey);
+            entity.MoveItem(command.PublicKey, command.GroupKey, command.AfterItemKey);
         }
     }
 }

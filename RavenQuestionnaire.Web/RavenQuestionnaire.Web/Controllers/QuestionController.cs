@@ -69,10 +69,10 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Move(string questionnaireId, Guid publicKey, Guid? afterGuid)
+        public ActionResult Move(MoveItemModel model)
         {
-            commandInvoker.Execute(new MoveQuestionnaireItemCommand(questionnaireId, publicKey, afterGuid, GlobalInfo.GetCurrentUser()));
-            return RedirectToAction("Details", "Questionnaire", new { id = questionnaireId });
+            commandInvoker.Execute(new MoveQuestionnaireItemCommand(model.questionnaireId, model.publicKey, model.groupGuid, model.afterGuid, GlobalInfo.GetCurrentUser()));
+            return RedirectToAction("Details", "Questionnaire", new { id = model.questionnaireId });
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]

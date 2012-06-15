@@ -72,38 +72,46 @@ namespace RavenQuestionnaire.Core.Entities
             }
         }
 
-        public void MoveItem(Guid itemPublicKey, Guid? after)
+        public void MoveItem(Guid itemPublicKey, Guid? groupKey, Guid? after)
         {
-            var result= MoveItem(this.innerDocument, itemPublicKey, after);
+            var result= MoveItem(this.innerDocument, itemPublicKey, groupKey, after);
             if(!result)
                 throw new ArgumentException(string.Format("item doesn't exists -{0}", itemPublicKey));
         }
-        protected bool MoveItem(IComposite root, Guid itemPublicKey, Guid? after)
+        protected bool MoveItem(IComposite root, Guid itemPublicKey, Guid? groupKey,  Guid? after)
         {
-            if (Move(root.Children, itemPublicKey, after))
+            if (Move(root.Children, itemPublicKey, groupKey, after))
                 return true;
 
             foreach (IComposite group in root.Children)
             {
-                if (MoveItem(group, itemPublicKey, after))
+                if (MoveItem(group, itemPublicKey, groupKey, after))
                     return true;
             }
             return false;
         }
 
-        protected bool Move(List<IComposite> groups, Guid itemPublicKey, Guid? after)
+        protected bool Move(List<IComposite> groups, Guid itemPublicKey, Guid? groupKey, Guid? after)
         {
             var moveble = groups.FirstOrDefault(g => g.PublicKey == itemPublicKey);
             if (moveble == null)
                 return false;
+            if (groupKey.HasValue)
+            {
+                Group moveToGroup = innerDocument.Find<Group>((Guid) groupKey);
+                if (moveToGroup != null)
+                {
+                    groups.Remove(moveble);
+                    moveToGroup.Insert(moveble, after);
+                    return true;
+                }
+            }
             if (!after.HasValue)
             {
                 groups.Remove(moveble);
                 groups.Insert(0, moveble);
                 return true;
             }
-           
-            
             for (int i = 0; i < groups.Count; i++)
             {
                 if (groups[i].PublicKey == after.Value)

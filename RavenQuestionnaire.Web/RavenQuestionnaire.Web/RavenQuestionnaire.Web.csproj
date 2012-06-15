@@ -208,6 +208,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\CreateEntityViewModel.cs" />
     <Compile Include="Models\ImageNewViewModel.cs" />
+    <Compile Include="Models\MoveItemModel.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuestionConditionModel.cs" />
