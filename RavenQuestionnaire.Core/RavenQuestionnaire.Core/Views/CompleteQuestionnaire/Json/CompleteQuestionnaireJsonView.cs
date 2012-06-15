@@ -5,6 +5,7 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Question;
 
@@ -41,6 +42,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
 
         private void CollectAll(CompleteQuestionnaireDocument doc, CompleteGroup group)
         {
+            var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
+            executor.Execute(group);
             var queue = new Queue<ICompleteGroup>();
             queue.Enqueue(group);
             while (queue.Count != 0)

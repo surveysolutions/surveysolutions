@@ -13,12 +13,16 @@ namespace RavenQuestionnaire.Core.Conventions
     public class RegisterGenericTypesOfInterface : IBindingGenerator
     {
         private Type baseInterface;
-
+        private Func<IContext, object> scope;
         public RegisterGenericTypesOfInterface(Type baseInterface)
         {
             this.baseInterface = baseInterface;
         }
-        
+        public RegisterGenericTypesOfInterface(Type baseInterface, Func<IContext, object> scope )
+        {
+            this.baseInterface = baseInterface;
+            this.scope = scope;
+        }
     /*    public void Process(Type type, Func<IContext, object> scopeCallback, IKernel kernel)
         {
             if (type.IsAbstract) { return; }
@@ -50,11 +54,11 @@ namespace RavenQuestionnaire.Core.Conventions
 
                 // Create the created type
                 var genericInterface = baseInterface.MakeGenericType(wrappedTypes);
-
-                return new IBindingWhenInNamedWithOrOnSyntax<object>[1]
+            //    yield return bindingRoot.Bind(genericInterface).To(targetType).InScope(scope);
+                   return new IBindingWhenInNamedWithOrOnSyntax<object>[1]
                            {bindingRoot.Bind(genericInterface).To(targetType)};
 
-
+                
                 /*  var factoryInterface = type.MakeGenericType(originalInterface);
               //  var factory = typeof(RepositoryFactory<,>).MakeGenericType(type, originalInterface);
 

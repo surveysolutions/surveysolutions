@@ -62,8 +62,8 @@ namespace RavenQuestionnaire.Core.Services
                         q => q.Triggers.Count(gp => gp.Equals(question.PublicKey)) > 0)).ToList();
             }*/
           //  var hash = new GroupHash(entity, question);
-            var executor = new CompleteQuestionnaireConditionExecutor(entity);
-            executor.Execute();
+          /*  var executor = new CompleteQuestionnaireConditionExecutor(entity);
+            executor.Execute();*/
        
           /*  foreach (ICompleteQuestion completeQuestion in triggeres)
             {
@@ -117,8 +117,7 @@ namespace RavenQuestionnaire.Core.Services
             CompleteQuestionnaire entity = _questionRepository.Load(id);
             var template = entity.Find<CompleteGroup>(groupPublicKey);
         //    bool isCondition = false;
-            var executor = new CompleteQuestionnaireConditionExecutor(entity.GetInnerDocument().QuestionHash);
-            executor.Execute();
+       
           /*  foreach (ICompleteQuestion completeQuestion in template.GetAllQuestions<ICompleteQuestion>())
             {
                 if (executor.Execute(completeQuestion))

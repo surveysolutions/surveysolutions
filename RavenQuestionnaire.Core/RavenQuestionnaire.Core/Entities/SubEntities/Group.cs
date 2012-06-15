@@ -183,7 +183,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
         {
-            if (!Observers.Contains(observer))
+            if (Observers.Contains(observer))
+                return null;
                 Observers.Add(observer);
             return new Unsubscriber<CompositeEventArgs>(Observers, observer);
         }

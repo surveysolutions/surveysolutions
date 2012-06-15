@@ -278,7 +278,8 @@ namespace RavenQuestionnaire.Core.Documents
 
         public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
         {
-            if (!compositeobservers.Contains(observer))
+            if (compositeobservers.Contains(observer))
+                return null;
                 compositeobservers.Add(observer);
             foreach (IComposite completeQuestion in Children)
             {
