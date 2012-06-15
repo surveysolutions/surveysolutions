@@ -1,4 +1,5 @@
 ﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Web.Models
 @using RavenQuestionnaire.Web.Utils
 @using RavenQuestionnaire.Core.Views.Group
 @using RavenQuestionnaire.Core.Views.Questionnaire
@@ -111,7 +112,7 @@
     <div id="divAllGroups">
         @{Html.RenderPartial("~/Views/Group/_Index.cshtml", Model.Groups);}
     </div>
-      @{Html.RenderPartial("~/Views/Question/_MoveItem.cshtml", Model.Id);}
+      @{Html.RenderPartial("~/Views/Question/_MoveItem.cshtml", new MoveItemModel { questionnaireId = Model.Id });}
     <div id="addNewQuestion">
     </div>
     <div class="navbar  navbar-fixed-bottom">
