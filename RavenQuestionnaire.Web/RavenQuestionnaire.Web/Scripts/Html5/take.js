@@ -48,17 +48,20 @@ function JsonResults(data, status, xhr) {
 
     var group = jQuery.parseJSON(data.responseText);
     if (!group.error) {
-        for (var j = 0; j < group.Menu.length; j++) {
-            var total = group.Menu[j].Totals;
-            $("#counter-" + group.Menu[j].PublicKey).html(total.Answered + "/" + total.Enablad);
-        }
-        for (var j = 0; j < group.Questions.length; j++) {
-            UpdateQuestion(group.Questions[j], group.Questions[j].GroupPublicKey);
-        }
+        UpdateCurrentGroup(group);
     }
     else
         SetErrorToQuestion(group.question, group.settings.PropogationPublicKey, group.error);
 
+}
+function UpdateCurrentGroup(group) {
+    for (var j = 0; j < group.Menu.length; j++) {
+        var total = group.Menu[j].Totals;
+        $("#counter-" + group.Menu[j].PublicKey).html(total.Answered + "/" + total.Enablad);
+    }
+    for (var j = 0; j < group.Questions.length; j++) {
+        UpdateQuestion(group.Questions[j], group.Questions[j].GroupPublicKey);
+    }
 }
 function UpdateQuestion(question) {
     var questionElement = null;
@@ -123,8 +126,6 @@ function UpdateGroup(group) {
     }
 }
 
-
-
 function RemovePropagatedGroup(data, status, xhr) {
     var group = jQuery.parseJSON(data.responseText);
 
@@ -155,6 +156,7 @@ function RemovePropagatedGroup(data, status, xhr) {
     $(deleteScreen).remove();
     $(parent).listview('refresh');
     updateCounter();
+    
 }
 
 function PropagatedGroup(data, status, xhr) {
@@ -218,7 +220,7 @@ function PropagatedGroup(data, status, xhr) {
             var screenId = $(this).attr('id').replace("propagatedGroup", "#screen-");
             $(screenId + ' .ui-footer h1 span').html(index);
         });
-
+        UpdateCurrentGroup(group.group);
     } else {
         $('<div>').simpledialog2({
             mode: 'button',

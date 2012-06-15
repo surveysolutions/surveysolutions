@@ -10,6 +10,7 @@ using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Group;
@@ -208,7 +209,10 @@ namespace RavenQuestionnaire.Web.Controllers
                 var propagationKey = Guid.NewGuid();
                 var command = new PropagateGroupCommand(questionnaireId, propagationKey, publicKey, GlobalInfo.GetCurrentUser());
                 commandInvoker.Execute(command);
-                return Json(new { propagationKey = propagationKey, parentGroupPublicKey = publicKey });
+
+                var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
+                new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
+                return Json(new { propagationKey = propagationKey, parentGroupPublicKey = publicKey, group = model });
             }
             catch (Exception e)
             {
