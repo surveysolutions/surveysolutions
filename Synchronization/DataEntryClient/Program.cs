@@ -37,7 +37,7 @@ namespace DataEntryClient
                 return 0;
             try
             {
-                var kernel = new StandardKernel(new CoreRegistry(ConfigurationManager.AppSettings["Raven.DocumentStore"]));
+                var kernel = new StandardKernel(new CoreRegistry(ConfigurationManager.AppSettings["Raven.DocumentStore"], false));
                 kernel.Bind<IChanelFactoryWrapper>().ToMethod((c) => new ChanelFactoryWrapper(args[0]));
                 kernel.Bind<IDocumentSession>().ToMethod(
                     context => context.Kernel.Get<IDocumentStore>().OpenSession()).InThreadScope();
