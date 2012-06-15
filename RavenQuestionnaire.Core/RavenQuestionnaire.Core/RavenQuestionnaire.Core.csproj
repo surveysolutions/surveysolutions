@@ -312,7 +312,9 @@
     <Compile Include="Entities\Subscribers\EntitySubscriber.cs" />
     <Compile Include="Entities\Subscribers\IEntitySubscriber.cs" />
     <Compile Include="Entities\Subscribers\ISubscriber.cs" />
+    <Compile Include="Entities\Subscribers\PropagationRemovedSubscriber.cs" />
     <Compile Include="Entities\Subscribers\PropagationSubscriber.cs" />
+    <Compile Include="Entities\Subscribers\ScopePropagationSubscriber.cs" />
     <Compile Include="Entities\Subscribers\Subscriber.cs" />
     <Compile Include="Entities\SyncProcess.cs" />
     <Compile Include="Entities\User.cs" />

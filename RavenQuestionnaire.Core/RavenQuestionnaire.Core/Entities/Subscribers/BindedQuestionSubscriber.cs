@@ -14,7 +14,8 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
     {
         #region Implementation of IDisposable
 
-        public override void Subscribe(ICompleteGroup target)
+        protected override IDisposable GetUnsubscriber(ICompleteGroup target)
+        
         {
             var addAnswers = from q in target.GetAllQuestionAnsweredEvents()
                              let question =
@@ -24,7 +25,7 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                                  target.GetAllBindedQuestions(question.PublicKey)
                              where binded.Any()
                              select q;
-            subsribers.Add(target.PublicKey, addAnswers
+             return addAnswers
                                                  .Subscribe(Observer.Create<CompositeAddedEventArgs>(
                                                      (e) =>
                                                          {
@@ -54,7 +55,7 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                                                                  bindedCompleteQuestion.Copy(template);
                                                              }
 
-                                                         })));
+                                                         }));
 
 
         }

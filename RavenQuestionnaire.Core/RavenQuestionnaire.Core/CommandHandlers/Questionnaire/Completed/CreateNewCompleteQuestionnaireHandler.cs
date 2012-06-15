@@ -40,8 +40,8 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
 
             
          //   var questions = result.GetInnerDocument().GetAllQuestions<ICompleteQuestion>().ToList();
-            var executor = new CompleteQuestionnaireConditionExecutor(result.GetInnerDocument().QuestionHash);
-            executor.Execute();
+        /*    var executor = new CompleteQuestionnaireConditionExecutor(result.GetInnerDocument().QuestionHash);
+            executor.Execute();*/
          /*   foreach (ICompleteQuestion completeQuestion in questions)
             {
                 if(completeQuestion is IBinded)

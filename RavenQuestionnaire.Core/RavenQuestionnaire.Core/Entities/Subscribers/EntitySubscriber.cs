@@ -12,7 +12,14 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
 
         #region Implementation of IDisposable
 
-        public abstract void Subscribe(T target);
+        public  void Subscribe(T target)
+        {
+            if(IsSubscribed(target))
+                return;
+            subsribers.Add(target.PublicKey, GetUnsubscriber(target));
+        }
+
+        protected abstract IDisposable GetUnsubscriber(T target);
 
         public void UnSubscribe(T target)
         {
@@ -22,6 +29,11 @@ namespace RavenQuestionnaire.Core.Entities.Subscribers
                 subscriber.Dispose();
                 subsribers.Remove(target.PublicKey);
             }
+        }
+
+        public bool IsSubscribed(T target)
+        {
+            return subsribers.ContainsKey(target.PublicKey);
         }
 
 
