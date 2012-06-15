@@ -96,3 +96,7 @@ Awesomium/Core/C/Awesomium/Debug/*
 *.log
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/App_Data/LocalStorage/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/App_Data/Tenants/*
+Awesomium/Awesomium.NET Samples.1.1.dotCover
+Awesomium/Awesomium.NET Samples.6.0.ReSharper.user
+
+
