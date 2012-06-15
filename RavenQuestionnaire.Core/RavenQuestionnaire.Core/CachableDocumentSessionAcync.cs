@@ -123,6 +123,11 @@ namespace RavenQuestionnaire.Core
             //return _session.Include<T>(path);
         }
 
+        public ILoaderWithInclude<T> Include<T, TInclude>(Expression<Func<T, object>> path)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SaveChanges()
         {
             lock (syncObj)
