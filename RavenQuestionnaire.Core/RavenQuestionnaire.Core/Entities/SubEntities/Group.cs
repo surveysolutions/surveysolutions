@@ -73,10 +73,34 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             throw new CompositeException();
         }
 
+        public void Insert(IComposite c, Guid? afterItem)
+        {
+            try
+            {
+                int index = this.Children.FindIndex(0, this.Children.Count, x => x.PublicKey == afterItem);
+                if (index != -1)
+                {
+                    this.Children.Insert(index+1, c);
+                    return;
+                }
+                else
+                {
+                    this.Children.Add(c);
+                    return;
+                }
+            }
+            catch (CompositeException)
+            {
+            }
+            throw  new CompositeException();
+
+        }
+
         public void Remove(IComposite c)
         {
             this.Remove(c.PublicKey);
         }
+
         public void Remove(Guid publicKey)
         {
             var group = this.Children.FirstOrDefault(g =>  g.PublicKey.Equals(publicKey));
