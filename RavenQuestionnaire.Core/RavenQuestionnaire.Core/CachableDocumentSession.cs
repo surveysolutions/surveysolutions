@@ -15,7 +15,7 @@ namespace RavenQuestionnaire.Core
         //private IAsyncDocumentSession _sessionAsync;
         private ConcurrentDictionary<string, object> _cache;
 
-        private int SaveLimitCount =40;
+        private int SaveLimitCount =3000;
         private readonly object syncObj = new object();
         private IDocumentStore _store;
 
