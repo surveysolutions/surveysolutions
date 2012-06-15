@@ -229,6 +229,7 @@
     <Compile Include="Commands\Questionnaire\UploadImageCommand.cs" />
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="Conventions\RegisterGenericTypesOfInterface.cs" />
+    <Compile Include="CachableDocumentSessionAcync.cs" />
     <Compile Include="CoreRegistry.cs" />
     <Compile Include="Documents\AbstractDocument.cs" />
     <Compile Include="Documents\ClientSettingsDocument.cs" />
