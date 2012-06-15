@@ -23,6 +23,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
                 return new QuestionnaireBrowseView(input.Page, input.PageSize, count, new QuestionnaireBrowseItem[0], "");
             // Perform the paged query
             IOrderedQueryable<QuestionnaireDocument> query = documentSession.Query<QuestionnaireDocument>();
+
             if (input.Orders.Count > 0)
             {
                 query = input.Orders[0].Direction == OrderDirection.Asc
@@ -38,19 +39,18 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
                                 : query.ThenByDescending(order.Field);
                 }
 
-            var page = query.Skip((input.Page - 1) * input.PageSize)
-                    .Take(input.PageSize);
-
+            var page = query.Skip((input.Page - 1)*input.PageSize)
+                .Take(input.PageSize)
+                .ToList();
 
             // And enact this query
-            var items = page
-                .Select(x => new QuestionnaireBrowseItem(x.Id, x.Title, x.CreationDate, x.LastEntryDate))
-                .ToArray();
+            var items = page.Select(x => new QuestionnaireBrowseItem(x.Id, x.Title, x.CreationDate, x.LastEntryDate))
+                    .ToList();
 
             return new QuestionnaireBrowseView(
                 input.Page,
                 input.PageSize, count,
-                items.ToArray(),
+                items,
                 input.Order);
         }
     }
