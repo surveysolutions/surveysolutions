@@ -1,4 +1,5 @@
-﻿using Ninject.Activation;
+﻿using System.Linq;
+using Ninject.Activation;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Raven.Client;
@@ -46,7 +47,8 @@ namespace RavenQuestionnaire.Core
                     request => request.ParentRequest.ParentRequest.Service == typeof (ICommandHandler<>));*/
             Bind<IClientSettingsProvider>().To<RavenQuestionnaire.Core.ClientSettingsProvider.ClientSettingsProvider>().
                 InSingletonScope();
-            
+            Bind<ISubscriber>().To<Subscriber>().
+                InSingletonScope();
            // this.Kernel.BindInterfaceToBinding<ICommandInvoker, IDocumentSession>();
 
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IViewFactory<,>))));
@@ -54,9 +56,22 @@ namespace RavenQuestionnaire.Core
 
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IExpressionExecutor<,>))));
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(Iterator<>))));
-            this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IEntitySubscriber<>))));
-             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().Excluding<IClientSettingsProvider>().BindWith(new RegisterFirstInstanceOfInterface()));
-            
+            //this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IEntitySubscriber<>))));
+            this.Kernel.Bind(scanner => scanner.FromAssembliesMatching("RavenQuestionnaire.*")
+                                            .Select(
+                                                t =>
+                                                t.GetInterfaces().FirstOrDefault(
+                                                    i =>
+                                                    i.IsGenericType &&
+                                                    i.GetGenericTypeDefinition() == typeof (IEntitySubscriber<>)) !=
+                                                null).BindAllInterfaces()
+                                            .Configure(binding => binding.InSingletonScope()));
+  
+            this.Kernel.Bind(
+                x =>
+                x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().Excluding
+                    <IClientSettingsProvider>().Excluding<ISubscriber>().BindWith(new RegisterFirstInstanceOfInterface()));
+
 
         }
        

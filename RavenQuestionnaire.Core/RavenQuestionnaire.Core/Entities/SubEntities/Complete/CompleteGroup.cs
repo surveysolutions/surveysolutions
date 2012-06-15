@@ -272,14 +272,16 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
         {
-            if (!observers.Contains(observer))
-                observers.Add(observer);
+            if (observers.Contains(observer))
+                return null;
+            observers.Add(observer);
             foreach (IComposite completeQuestion in Children)
             {
                 completeQuestion.Subscribe(observer);
             }
             return new Unsubscriber<CompositeEventArgs>(observers, observer);
         }
+
         private List<IObserver<CompositeEventArgs>> observers;
 
         #endregion

@@ -340,7 +340,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             catch (Exception e)
             {
-              //  return Json(new {question = questions[0],settings=settings[0], error = e.Message});
+                return Json(new {question = questions[0],settings=settings[0], error = e.Message});
             }
 
 
