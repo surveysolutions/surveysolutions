@@ -1,4 +1,5 @@
 ﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Web.Models
 @using RavenQuestionnaire.Web.Utils
 @using RavenQuestionnaire.Core.Views.Group
@@ -105,6 +106,12 @@
         <div class="controls">
             <p class="text-block">@Html.DisplayFor(model => model.LastEntryDate)</p>
         </div>
+    </div>
+    <div>
+        @foreach (var item in Model.Children)
+         {
+             Html.RenderPartial((item as IQuestion) != null ? "~/Views/Question/_QuestionRow.cshtml" : "~/Views/Group/_GroupRow.cshtml", item);
+         }    
     </div>
     <div id="divAllQuestions">
         @{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}

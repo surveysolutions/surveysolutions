@@ -31,6 +31,7 @@ namespace RavenQuestionnaire.Core.Views.File
                    x.Filename, x.Width, x.Height,
                    x.Thumbnail, x.ThumbnailWidth, x.ThumbnailHeight))
                 .ToArray();
+            
 
             return new FileBrowseView(
                 input.Page,
