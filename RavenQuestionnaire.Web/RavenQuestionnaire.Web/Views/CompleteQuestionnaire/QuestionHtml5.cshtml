@@ -21,8 +21,8 @@
     jQuery(document).bind("pageshow", function () {
         var scrollHere = $('.scrollHere').length > 0 ? $('.scrollHere').get(0) : null;
         if (scrollHere != null) {
-            scrollHere.focus();
-            $(scrollHere).effect("highlight", { color: "#5393C5" }, 2000);
+            $(scrollHere).find('input').focus();
+            $(scrollHere).parents('.ui-body.ui-body-c').effect("highlight", { color: "#5393C5" }, 2000);
         }
     });
 
