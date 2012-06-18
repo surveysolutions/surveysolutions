@@ -179,7 +179,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         }
     }
 
-    public class QuestionView :QuestionView<AnswerView, Entities.SubEntities.Group, IQuestion>
+    public class QuestionView : QuestionView<AnswerView, Entities.SubEntities.Group, IQuestion>
     {
 
         public QuestionView()
