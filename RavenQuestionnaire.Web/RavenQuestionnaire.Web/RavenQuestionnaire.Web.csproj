@@ -743,7 +743,7 @@
     <Content Include="Views\Location\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Status\Index.cshtml" />
+    <Content Include="Views\Status\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Status\Create.cshtml" />
@@ -1005,6 +1005,8 @@
     <Content Include="Views\Synchronizations\Progress.cshtml" />
     <Content Include="Views\Synchronizations\_ProgressContent.cshtml" />
     <Content Include="Views\Synchronizations\Scaning.cshtml" />
+    <Content Include="Views\Status\Index.cshtml" />
+    <Content Include="Views\CompleteQuestionnaire\QStatuses.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

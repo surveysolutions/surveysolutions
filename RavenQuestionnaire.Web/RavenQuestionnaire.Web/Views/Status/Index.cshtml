@@ -1,36 +1,16 @@
-﻿@using RavenQuestionnaire.Core.Views.Status
-@model StatusView
-
-<h1>Statuses</h1>
-<p>Questionnaire: @Model.QuestionnaireId </p>
-<p>
-    @Html.ActionLink("Create New", "Create", new { qId = Model.QuestionnaireId, id = Model.Id }, new { @class = "btn small btn-primary" })
-</p>
-<table class="table table-striped table-bordered table-condensed">
-    <thead>
-        <tr>
-            <th>Title </th>
-            <th title="Defines limitations for roles">Role  restrictions</th>
-            <th>Route rules</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.StatusElements)
+﻿@using RavenQuestionnaire.Core.Views.StatusReport
+@model StatusReportView
+@{
+    ViewBag.Title = "title";
+}
+<h2>Status Report</h2>
+@foreach (var item in Model.Items)
+{
+    <h3>@item.Title</h3>
+    <ul class="nav nav-tabs nav-stacked">
+        @foreach (var status in item.Items)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td class="buttons">
-                    @Html.ActionLink("Manage", "Edit", new { Qid = Model.QuestionnaireId, publicKey = item.PublicKey }, new { @class = "btn small " })
-                </td>
-                <td class="buttons">
-                    @Html.ActionLink("Route", "Route", new { Qid = Model.QuestionnaireId, publicKey = item.PublicKey }, new { @class = "btn small " })
-                </td>
-            </tr>
+            <li><a href="@Url.Action("QStatuses", "CompleteQuestionnaire", new { QuestionnaireId = item.Id, StatusId = status.StatusId })">@status.StatusTitle <span class="pull-right badge badge-info">@status.QuestionnaireCount</span></a></li>
         }
-    </tbody>
-</table>
-@*<div class="pagination">
-    @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount)
-</div>*@
+    </ul>
+}

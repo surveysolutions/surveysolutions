@@ -304,6 +304,7 @@
     <Compile Include="Entities\SubEntities\Question\NumericQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\SingleQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\TextQuestion.cs" />
+    <Compile Include="Entities\SubEntities\StatusesWithCompleteQuestionnaireStatistic.cs" />
     <Compile Include="Entities\SubEntities\StatusItem.cs" />
     <Compile Include="Entities\SubEntities\UserLight.cs" />
     <Compile Include="Entities\SubEntities\SurveyStatus.cs" />
@@ -331,6 +332,7 @@
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
     <Compile Include="IMemoryCommandInvoker.cs" />
+    <Compile Include="Indexes\CompleteQuestionnaireByStatus.cs" />
     <Compile Include="Indexes\QuestionnaireGroupedByTemplateIndex.cs" />
     <Compile Include="Indexes\UsersInLocationIndex.cs" />
     <Compile Include="MemoryCommandInvoker.cs" />
@@ -492,6 +494,11 @@
     <Compile Include="Views\Statistics\CompleteQuestionnaireStatisticViewFactory.cs" />
     <Compile Include="Views\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />
     <Compile Include="Views\Statistics\QuestionStatisticView.cs" />
+    <Compile Include="Views\StatusReport\StatusReportGroupView.cs" />
+    <Compile Include="Views\StatusReport\StatusReportItemView.cs" />
+    <Compile Include="Views\StatusReport\StatusReportView.cs" />
+    <Compile Include="Views\StatusReport\StatusReportViewFactory.cs" />
+    <Compile Include="Views\StatusReport\StatusReportViewInputModel.cs" />
     <Compile Include="Views\Status\Browse\StatusBrowseInputModel.cs" />
     <Compile Include="Views\Status\Browse\StatusBrowseItem.cs" />
     <Compile Include="Views\Status\Browse\StatusBrowseView.cs" />

@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     It.Is<StatusViewInputModel>(v => v.QId.Equals(input.QId))))
                 .Returns(output);
 
-            var result = Controller.Index(questionnaryId);
+            var result = Controller.Details(questionnaryId);
             Assert.AreEqual(output, result.ViewData.Model);
         }
 

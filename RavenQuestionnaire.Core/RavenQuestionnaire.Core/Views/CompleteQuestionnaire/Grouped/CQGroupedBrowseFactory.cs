@@ -23,8 +23,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 
         public CQGroupedBrowseView Load(CQGroupedBrowseInputModel input)
         {
-            var query = documentSession.Query<CQGroupItem, QuestionnaireGroupedByTemplateIndex>().Skip((input.Page - 1) * input.PageSize)
-                    .Take(input.PageSize).ToArray();
+            var query = documentSession.Query<CQGroupItem, QuestionnaireGroupedByTemplateIndex>().Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
+            
             foreach (CQGroupItem cqGroupItem in query)
             {
                 var templateId = IdUtil.CreateQuestionnaireId(cqGroupItem.Id);

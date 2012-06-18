@@ -13,6 +13,7 @@ using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Core.Views.Status.Browse;
 using RavenQuestionnaire.Core.Views.Status.StatusElement;
 using RavenQuestionnaire.Core.Views.Status.SubView;
+using RavenQuestionnaire.Core.Views.StatusReport;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -28,7 +29,13 @@ namespace RavenQuestionnaire.Web.Controllers
             this.viewRepository = viewRepository;
         }
 
-        public ViewResult Index(string Qid)
+        public ViewResult Index()
+        {
+            var model = viewRepository.Load<StatusReportViewInputModel, StatusReportView>(new StatusReportViewInputModel());
+            return View(model);
+        }
+
+        public ViewResult Details(string Qid)
         {
             if ( string.IsNullOrEmpty(Qid))
                 throw new HttpException(404, "Invalid query string parameters.");
@@ -56,7 +63,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial, model.StatusId, model.QuestionnaireId, GlobalInfo.GetCurrentUser()));
                 }
-                return RedirectToAction("Index", new
+                return RedirectToAction("Details", new
                 {
                     Qid = model.QuestionnaireId
                 });
@@ -86,7 +93,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     }
 
                     commandInvoker.Execute(new UpdateStatusRestrictionsCommand(model.QuestionnaireId, model.StatusId, model.PublicKey, roles, GlobalInfo.GetCurrentUser()));
-                    return RedirectToAction("Index", new
+                    return RedirectToAction("Details", new
                     {
                         Qid = model.QuestionnaireId
                     });

@@ -22,7 +22,7 @@
             @Html.ActionLink("Participate", "Participate", "CompleteQuestionnaire", new { id = item.Id }, new { @class = "btn small btn-primary" })
         </td>
         <td class="buttons">    
-            @Html.ActionLink("View", "Index", "Status", new { Qid = item.Id }, new { @class = "btn small " })
+            @Html.ActionLink("View", "Details", "Status", new { Qid = item.Id }, new { @class = "btn small " })
         </td>
         <td class="buttons">    
             @Html.ActionLink("Export", "Export", new { id = item.Id }, new { @class = "btn small btn-primary" })

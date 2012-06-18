@@ -390,5 +390,10 @@ namespace RavenQuestionnaire.Web.Controllers
 
             ViewBag.AvailableStatuses = statuses;
         }
+
+        public ActionResult QStatuses(string questionnaireId, Guid statusId)
+        {
+            return View();
+        }
     }
 }
