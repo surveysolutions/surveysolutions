@@ -23,7 +23,7 @@ namespace RavenQuestionnaire.Core.Views.File
                 return new FileBrowseView(input.Page, input.PageSize, count, new FileBrowseItem[0]);
 
             var query = documentSession.Query<FileDocument>().Skip((input.Page - 1) * input.PageSize)
-                  .Take(input.PageSize);
+                  .Take(input.PageSize).ToList();
 
             // And enact this query
             var items = query
