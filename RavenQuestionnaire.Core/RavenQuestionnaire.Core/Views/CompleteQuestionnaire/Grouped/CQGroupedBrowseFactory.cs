@@ -23,26 +23,16 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 
         public CQGroupedBrowseView Load(CQGroupedBrowseInputModel input)
         {
-         //   var doc = documentSession.Query<CompleteQuestionnaireStatisticDocument>();
-          /*  var count = documentSession.Query<CompleteQuestionnaireStatisticDocument>().Count();
-            if (count == 0)
-                return new CQGroupedBrowseView(input.Page, input.PageSize, 0, new CQGroupItem[0]);*/
             var query = documentSession.Query<CQGroupItem, QuestionnaireGroupedByTemplateIndex>().Skip((input.Page - 1) * input.PageSize)
                     .Take(input.PageSize).ToArray();
             foreach (CQGroupItem cqGroupItem in query)
             {
                 var templateId = IdUtil.CreateQuestionnaireId(cqGroupItem.Id);
-                var items =
-                    documentSession.Query<CompleteQuestionnaireStatisticDocument>().Where(x => x.TemplateId == templateId).ToList();
+                var items = documentSession.Query<CompleteQuestionnaireStatisticDocument>().Where(x => x.TemplateId == templateId).ToList();
                 cqGroupItem.Items = items.Select(x => new CompleteQuestionnaireBrowseItem(x));
+                cqGroupItem.TotalCount = cqGroupItem.Items.Count();
             }
-         /*   var page = query.Skip((input.Page - 1) * input.PageSize)
-             .Take(input.PageSize).ToArray();
-            var groupBy = page.GroupBy(x => x.Id);
-            var items = groupBy
-                .Select(
-                    x =>
-                    new CQGroupItem(0, 50, 50, new CompleteQuestionnaireBrowseItem[0],x.));*/
+        
             return new CQGroupedBrowseView(input.Page, input.PageSize, 0, query);
         }
 
