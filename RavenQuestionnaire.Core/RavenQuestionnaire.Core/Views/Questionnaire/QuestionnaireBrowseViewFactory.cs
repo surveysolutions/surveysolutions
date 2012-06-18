@@ -44,8 +44,9 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
                 .ToList();
 
             // And enact this query
-            var items = page.Select(x => new QuestionnaireBrowseItem(x.Id, x.Title, x.CreationDate, x.LastEntryDate))
-                    .ToList();
+            var items = page
+                .Select(x => new QuestionnaireBrowseItem(x.Id, x.Title, x.CreationDate, x.LastEntryDate))
+                .ToArray();
 
             return new QuestionnaireBrowseView(
                 input.Page,
