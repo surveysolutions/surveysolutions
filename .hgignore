@@ -100,3 +100,6 @@ Awesomium/Awesomium.NET Samples.1.1.dotCover
 Awesomium/Awesomium.NET Samples.6.0.ReSharper.user
 
 
+Synchronization/SynchronizationMessages/SynchronizationMessages.csproj.user
+RavenQuestionnaire.Web/Questionnaire.Core.Web.Tests/Questionnaire.Core.Web.Tests.csproj.user
+ExpressionEvaluator/Evaluant.Calculator/NCalc.csproj.user
