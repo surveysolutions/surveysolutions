@@ -18,7 +18,7 @@ namespace RavenQuestionnaire.Core.Views.Collection
            var count = documentSession.Query<CollectionDocument>().Count();
             if (count == 0)
                 return new CollectionBrowseView(input.Page, input.PageSize, count, new CollectionBrowseItem[0]);
-            var query = documentSession.Query<CollectionDocument>().Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+            var query = documentSession.Query<CollectionDocument>().Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
             var items = query.Select(x => new CollectionBrowseItem(x.Id, x.Name)).ToArray();
             return new CollectionBrowseView(input.Page, input.PageSize, count, items);
         }
