@@ -246,8 +246,6 @@
     <Content Include="Content\themes\jquerymobile\images\1336075488_keyboard.png" />
     <Content Include="Content\themes\jquerymobile\images\1336075535_calculator.png" />
     <Content Include="Content\themes\jquerymobile\images\1336075556_calendar.png" />
-    <Content Include="Content\themes\themeswitcher\jquery.globalstylesheet.js" />
-    <Content Include="Content\themes\themeswitcher\jquery.mobile.themeswitcher.js" />
     <Content Include="Raven.Studio.xap" />
     <Content Include="Scripts\Html5\jquery.mobile.simpledialog2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
@@ -262,7 +260,6 @@
   <ItemGroup>
     <Content Include="Content\Bootstrap\accordion.css" />
     <Content Include="bin\Antlr3.Runtime.dll" />
-    <Content Include="bin\AsyncCtpLibrary.dll" />
     <Content Include="bin\CsvHelper.dll" />
     <Content Include="bin\dotless.Core.dll" />
     <Content Include="bin\Esent.Interop.dll" />
@@ -301,13 +298,9 @@
     <Content Include="bin\Questionnaire.Core.Web.pdb" />
     <Content Include="bin\Raven.Abstractions.dll" />
     <Content Include="bin\Raven.Abstractions.pdb" />
-    <Content Include="bin\Raven.Client.Debug.dll" />
-    <Content Include="bin\Raven.Client.Debug.pdb" />
     <Content Include="bin\Raven.Client.Lightweight.dll" />
     <Content Include="bin\Raven.Client.Lightweight.pdb" />
     <Content Include="bin\Raven.Client.Lightweight.xml" />
-    <Content Include="bin\Raven.Client.MvcIntegration.dll" />
-    <Content Include="bin\Raven.Client.MvcIntegration.pdb" />
     <Content Include="bin\Raven.Database.dll" />
     <Content Include="bin\Raven.Database.pdb" />
     <Content Include="bin\Raven.Munin.dll" />
@@ -652,6 +645,12 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Dev.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Main.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -1005,7 +1004,6 @@
     <Content Include="Views\Synchronizations\Progress.cshtml" />
     <Content Include="Views\Synchronizations\_ProgressContent.cshtml" />
     <Content Include="Views\Synchronizations\Scaning.cshtml" />
-    <Content Include="Views\Shared\_RenderChildren.cshtml" />
     <Content Include="Views\Status\Index.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\QStatuses.cshtml" />
   </ItemGroup>
