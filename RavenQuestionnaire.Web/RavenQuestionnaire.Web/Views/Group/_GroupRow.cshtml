@@ -1,6 +1,6 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Group
-@using RavenQuestionnaire.Web.Utils
+
 @model GroupView
 @{ var currentRowId = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Group, Model.PublicKey.ToString());
    var allQuestions = "divAllQuestions" + Model.PublicKey;
@@ -27,10 +27,13 @@
             <a href="#" onclick="OpenMoveDialog('@Model.Title','@Model.PublicKey')" class="btn btn-danger btn-mini">Move</a>
         </div>
     </div>
-    <div id='@allQuestions'>
+    <div>
+        @{ Html.RenderPartial("~/Views/Shared/_RenderChildren.cshtml", Model.Children); }
+    </div>
+    @*<div id='@allQuestions'>
         @{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}
     </div>
     <div id="@allGroups">
         @{Html.RenderPartial("~/Views/Group/_Index.cshtml", Model.Groups);}
-    </div>
+    </div>*@
 </div>

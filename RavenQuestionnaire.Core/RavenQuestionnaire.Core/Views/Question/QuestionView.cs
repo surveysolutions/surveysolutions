@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Dynamic;
 using System.Linq;
+using System.Collections.Generic;
+using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Views.Answer;
+using System.ComponentModel.DataAnnotations;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.Answer;
+
 using RavenQuestionnaire.Core.Views.Card;
 
 namespace RavenQuestionnaire.Core.Views.Question
