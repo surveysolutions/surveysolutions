@@ -23,6 +23,25 @@ namespace RavenQuestionnaire.Web.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult LogOnMobile(LogOnModel model, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                if (Membership.ValidateUser(model.UserName, SimpleHash.ComputeHash(model.Password)))
+                {
+                    authentication.SignIn(model.UserName, false);
+                    return Redirect("~/");
+
+                }
+                else
+                {
+                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                }
+            }
+            return View(model);
+        }
+
         public ActionResult LogOn()
         {
             return View();
@@ -38,7 +57,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (Membership.ValidateUser(model.UserName, SimpleHash.ComputeHash(model.Password)))
                 {
-                    authentication.SignIn(model.UserName, model.RememberMe);
+                    authentication.SignIn(model.UserName, false);
                  /*   if (returnUrl.Length > 1 && returnUrl.StartsWith("/")
                         && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
                     {

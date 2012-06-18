@@ -39,7 +39,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
                 }
 
             var page = query.Skip((input.Page - 1) * input.PageSize)
-                    .Take(input.PageSize);
+                    .Take(input.PageSize).ToList();
 
 
             // And enact this query
