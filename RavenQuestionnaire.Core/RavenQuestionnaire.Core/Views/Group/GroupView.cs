@@ -1,14 +1,13 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.Answer;
-using RavenQuestionnaire.Core.Views.Question;
 
 #endregion
 
@@ -162,7 +161,21 @@ namespace RavenQuestionnaire.Core.Views.Group
             IQuestionnaireDocument doc, IGroup group)
             : base(doc, group)
         {
-            Questions =
+            foreach (var composite in group.Children)
+            {
+                if ((composite as IQuestion) != null)
+                {
+                    var q = composite as IQuestion;
+                    List<IQuestion> r = group.Children.OfType<IQuestion>().ToList();
+                    this.Children.Add(new QuestionView(doc, q){ Index = r.IndexOf(q)+1 });
+                }
+                else
+                {
+                    var g = composite as IGroup;
+                    this.Children.Add(new GroupView(doc, g));
+                }
+            }
+            this.Questions =
                 group.Children.OfType<IQuestion>().Select(
                     q =>
                     new QuestionView(doc, q)).ToArray();
