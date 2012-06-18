@@ -1005,6 +1005,7 @@
     <Content Include="Views\Synchronizations\Progress.cshtml" />
     <Content Include="Views\Synchronizations\_ProgressContent.cshtml" />
     <Content Include="Views\Synchronizations\Scaning.cshtml" />
+    <Content Include="Views\Shared\_RenderChildren.cshtml" />
     <Content Include="Views\Status\Index.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\QStatuses.cshtml" />
   </ItemGroup>

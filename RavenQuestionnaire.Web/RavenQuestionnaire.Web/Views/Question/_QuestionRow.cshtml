@@ -1,7 +1,7 @@
-﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.Answer
+﻿@using RavenQuestionnaire.Web.Utils
+@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Question
-@using RavenQuestionnaire.Web.Utils
+
 @model QuestionView
 @{ var currentRowId = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, Model.PublicKey.ToString()); }
 <div id="@currentRowId" class="display-question">

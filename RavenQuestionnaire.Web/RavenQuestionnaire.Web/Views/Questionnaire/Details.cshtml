@@ -1,7 +1,7 @@
-﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Web.Models
-@using RavenQuestionnaire.Web.Utils
+﻿@using RavenQuestionnaire.Web.Models
+@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Group
+@using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Core.Views.Questionnaire
 @model QuestionnaireView
 @{
@@ -78,18 +78,22 @@
 <div id="sidebar" class="scroll-y">
     <ul class="nav nav-list">
         @{ var index = 1;}
-        @foreach (var question in Model.Questions)
+        @foreach (var item in Model.Children)
         {
-            var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, question.PublicKey.ToString());
-            <li><a  class="text-ellipsis" href="#@id">@index) @question.Title</a></li>
-            index++;
-        }
-        @foreach (var @group in Model.Groups)
-        {
-            var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Group, @group.PublicKey.ToString());
-            <li class="nav-header"><a class="text-ellipsis" href="#@id">@group.Title</a></li>
-            <text>@RenderTOC(@group)</text>
-        }
+            if ((item as QuestionView) != null)
+            {
+                var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, item.PublicKey.ToString());
+                <li><a  class="text-ellipsis" href="#@id">@index) @item.Title</a></li>
+                index++;
+            }
+            else
+            {
+                var @group = @item as GroupView;
+                var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Group, @group.PublicKey.ToString());
+                <li class="nav-header"><a class="text-ellipsis" href="#@id">@group.Title</a></li>
+                <text>@RenderTOC(@group)</text>
+            }
+        }            
     </ul>
 </div>
 <div id="content" class="scroll-y">
@@ -106,11 +110,8 @@
             <p class="text-block">@Html.DisplayFor(model => model.LastEntryDate)</p>
         </div>
     </div>
-    <div id="divAllQuestions">
-        @{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}
-    </div>
-    <div id="divAllGroups">
-        @{Html.RenderPartial("~/Views/Group/_Index.cshtml", Model.Groups);}
+    <div>        
+        @{ Html.RenderPartial("~/Views/Shared/_RenderChildren.cshtml", Model.Children); }             
     </div>
       @{Html.RenderPartial("~/Views/Question/_MoveItem.cshtml", new MoveItemModel { questionnaireId = Model.Id });}
     <div id="addNewQuestion">
@@ -119,7 +120,7 @@
         <div class="navbar-inner">
             <div class="container-fluid">
                 <p>
-                    @Html.ActionLink("Add Question", "Create", "Question", new { Model.Id }, new {@class="btn "})
+                    @Html.ActionLink("Add Question", "Create", "Question", new { Model.Id }, new { @class = "btn " })
                     @Html.ActionLink("Add Screen", "Create", "Group", new { Model.Id }, new { @class = "btn " })
                     <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-primary"><i class="icon-pencil icon-white"></i>Edit</a>
                     <a href="@Url.Action("Index")" class="btn"><i class="icon-arrow-left"></i>Back to Questionnaires</a>
@@ -132,20 +133,23 @@
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 </div>
 @helper RenderTOC(GroupView block)
+{
+    var index = 1;
+    foreach (var item in block.Children)
     {
-        var index = 1;
-        foreach (var question in block.Questions)
+        if ((item as QuestionView) != null)
         {
-            var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, question.PublicKey.ToString());
+            var @question = item as QuestionView;
+            var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, @question.PublicKey.ToString());
             <li><a class="text-ellipsis" href="#@id">@index) @question.Title</a></li>
             index++;
         }
-        foreach (var @group in block.Groups)
+        else
         {
+            var @group = item as GroupView;
             var id = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Group, @group.PublicKey.ToString());
-    <li class="nav-header"><a class="text-ellipsis" href="#@id">@group.Title</a></li>
-<text>
-    @RenderTOC(@group)
-</text>
+            <li class="nav-header"><a class="text-ellipsis" href="#@id">@group.Title</a></li>
+            <text>@RenderTOC(@group)</text>
         }
+    }
 }
