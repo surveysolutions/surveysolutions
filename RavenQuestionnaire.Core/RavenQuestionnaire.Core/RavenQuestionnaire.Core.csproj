@@ -494,6 +494,10 @@
     <Compile Include="Views\Statistics\CompleteQuestionnaireStatisticViewFactory.cs" />
     <Compile Include="Views\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />
     <Compile Include="Views\Statistics\QuestionStatisticView.cs" />
+    <Compile Include="Views\StatusReport\CQStatusReportView.cs" />
+    <Compile Include="Views\StatusReport\CQStatusReportViewInputModel.cs" />
+    <Compile Include="Views\StatusReport\CQStatusReportFactory.cs" />
+    <Compile Include="Views\StatusReport\CQStatusReportItemView.cs" />
     <Compile Include="Views\StatusReport\StatusReportGroupView.cs" />
     <Compile Include="Views\StatusReport\StatusReportItemView.cs" />
     <Compile Include="Views\StatusReport\StatusReportView.cs" />
