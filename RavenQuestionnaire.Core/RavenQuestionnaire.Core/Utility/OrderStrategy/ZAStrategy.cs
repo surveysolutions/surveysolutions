@@ -4,11 +4,11 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Utility.OrderStrategy
 {
-    public class MinMaxStrategy:IOrderStrategy
+    public class ZAStrategy:IOrderStrategy
     {
         public IEnumerable<T> Reorder<T>(IEnumerable<T> list)
         {
-            return list.OrderBy(n => (n as Answer).AnswerValue);
+            return list.OrderByDescending(n => (n as Answer).AnswerText);
         }
     }
 }
