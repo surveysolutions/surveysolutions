@@ -10,7 +10,17 @@
     <ul class="nav nav-tabs nav-stacked">
         @foreach (var status in item.Items)
         {
-            <li><a href="@Url.Action("QStatuses", "CompleteQuestionnaire", new { QuestionnaireId = item.Id, StatusId = status.StatusId })">@status.StatusTitle <span class="pull-right badge badge-info">@status.QuestionnaireCount</span></a></li>
+            <li>
+                @if (status.QuestionnaireCount != 0)
+                {
+                    <a href="@Url.Action("QStatuses", "CompleteQuestionnaire", new { QuestionnaireId = item.Id, StatusId = status.StatusId })">@status.StatusTitle
+                        <span class="pull-right badge badge-info">@status.QuestionnaireCount</span></a>
+                }
+                else
+                {
+                    <a>@status.StatusTitle <span class="pull-right badge badge-info">@status.QuestionnaireCount</span></a>
+                }
+            </li>
         }
     </ul>
 }

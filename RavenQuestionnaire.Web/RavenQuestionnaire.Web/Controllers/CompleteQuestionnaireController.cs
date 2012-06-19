@@ -29,6 +29,7 @@ using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Core.Views.Status.StatusElement;
+using RavenQuestionnaire.Core.Views.StatusReport;
 using RavenQuestionnaire.Web.Models;
 using Formatting = System.Xml.Formatting;
 
@@ -128,7 +129,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
 
             return RedirectToAction("QuestionHtml5", "CompleteQuestionnaire", new { id = id });
-             
+
         }
 
         public ActionResult Complete(string id)
@@ -146,7 +147,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 var modelChecked = viewRepository.Load<CompleteQuestionnaireViewInputModel,
                     CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
 
-                if (modelChecked != null )
+                if (modelChecked != null)
                 {
                     var status = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(IdUtil.ParseId(modelChecked.TemplateId)));
 
@@ -162,7 +163,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                           null,
                                                                                           _globalProvider.GetCurrentUser()));
 
-                       
+
                             return RedirectToAction("Index", "Dashboard");
                         }
                         else
@@ -175,17 +176,17 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                           _globalProvider.GetCurrentUser()));
 
 
-                           return Redirect(Url.RouteUrl(new { controller = "Statistic", action = "Details", id = id }) + "#" + "invalid");
-                           // return RedirectToAction("Details", "Statistic", new {id = id});
+                            return Redirect(Url.RouteUrl(new { controller = "Statistic", action = "Details", id = id }) + "#" + "invalid");
+                            // return RedirectToAction("Details", "Statistic", new {id = id});
                         }
 
-                        
+
                     }
                 }
             }
 
             return RedirectToAction("Index", "Dashboard");
-            
+
         }
 
         public ViewResult Result(string id)
@@ -206,7 +207,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     AddAllowedStatusesToViewBag(model.Status.PublicId, model.Status.Name, Qid, status);
                 }
             }
-           
+
 
             _bagManager.AddUsersToBag(ViewBag, viewRepository);
             return View(model);
@@ -238,7 +239,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             SurveyStatus status = GetStatus(id);
             var questionnairePublicKey = Guid.NewGuid();
-            var command = new CreateNewCompleteQuestionnaireCommand(id,questionnairePublicKey,
+            var command = new CreateNewCompleteQuestionnaireCommand(id, questionnairePublicKey,
                                                                     _globalProvider.GetCurrentUser(),
                                                                    status,
                                                                     _globalProvider.GetCurrentUser());
@@ -340,13 +341,12 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             catch (Exception e)
             {
-                return Json(new {question = questions[0],settings=settings[0], error = e.Message});
+                return Json(new { question = questions[0], settings = settings[0], error = e.Message });
             }
 
 
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
-                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId)
-                    {CurrentGroupPublicKey = settings[0].ParentGroupPublicKey});
+                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
 
             return Json(model);
         }
@@ -356,7 +356,7 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult Delete(string id)
         {
             commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id, _globalProvider.GetCurrentUser()));
-            return RedirectToAction("Index","Dashboard");
+            return RedirectToAction("Index", "Dashboard");
         }
 
 
@@ -364,26 +364,26 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             var statuses = new List<SurveyStatus>();
             var isCurrentPresent = false;
-            
+
             var status = statusView.StatusElements.FirstOrDefault(x => x.PublicKey == publicKey);
             if (status != null)
+            {
+
+                foreach (var role in Roles.GetRolesForUser())
                 {
+                    if (status.StatusRoles.ContainsKey(role))
+                        foreach (var item in status.StatusRoles[role])
+                        {
+                            if (statuses.Contains(item)) continue;
+                            statuses.Add(item);
+                            if (isCurrentPresent) continue;
 
-                    foreach (var role in Roles.GetRolesForUser())
-                    {
-                        if (status.StatusRoles.ContainsKey(role))
-                            foreach (var item in status.StatusRoles[role])
-                            {
-                                if (statuses.Contains(item)) continue;
-                                statuses.Add(item);
-                                if (isCurrentPresent) continue;
-
-                                if (item.PublicId == publicKey)
-                                    isCurrentPresent = true;
-                            }
-                    }
+                            if (item.PublicId == publicKey)
+                                isCurrentPresent = true;
+                        }
                 }
-            
+            }
+
 
             if (!isCurrentPresent)
                 statuses.Add(new SurveyStatus(publicKey, statusName));
@@ -393,7 +393,8 @@ namespace RavenQuestionnaire.Web.Controllers
 
         public ActionResult QStatuses(string questionnaireId, Guid statusId)
         {
-            return View();
+            var model = viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(new CQStatusReportViewInputModel(questionnaireId, statusId));
+            return View(model);
         }
     }
 }
