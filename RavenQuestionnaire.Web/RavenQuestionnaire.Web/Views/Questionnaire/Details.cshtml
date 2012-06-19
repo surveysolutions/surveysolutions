@@ -112,8 +112,7 @@
     </div>
     <div>        
         @{ Html.RenderPartial("~/Views/Shared/_RenderChildren.cshtml", Model.Children); }             
-    </div>
-      @{Html.RenderPartial("~/Views/Question/_MoveItem.cshtml", new MoveItemModel { questionnaireId = Model.Id });}
+    </div>      
     <div id="addNewQuestion">
     </div>
     <div class="navbar  navbar-fixed-bottom">

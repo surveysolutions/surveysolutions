@@ -1008,6 +1008,7 @@
     <Content Include="Views\Shared\_RenderChildren.cshtml" />
     <Content Include="Views\Status\Index.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\QStatuses.cshtml" />
+    <Content Include="Views\Question\MoveQuestion.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

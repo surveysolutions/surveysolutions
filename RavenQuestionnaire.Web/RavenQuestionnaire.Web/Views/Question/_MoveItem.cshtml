@@ -2,7 +2,7 @@
 @using RavenQuestionnaire.Web.Utils
 @using RavenQuestionnaire.Web.Models
 @model MoveItemModel
-<div id="divMoveForm" class="modal  form-horizontal" style="display: none">
+<div id="divMoveForm" class="form-horizontal">
     @using (Html.BeginForm("Move", "Question", FormMethod.Post))
     {
 
@@ -35,10 +35,3 @@
   
     }
 </div>
-<script>
-    function OpenMoveDialog(text, itemKey, groupKey) {
-        $('#divMoveForm #itemText').html(text);
-        $('#divMoveForm #publicKey').val(itemKey);
-        $('#divMoveForm').modal('show');
-    }
-</script>

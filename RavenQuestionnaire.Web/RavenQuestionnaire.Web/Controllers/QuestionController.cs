@@ -20,6 +20,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 
+
 namespace RavenQuestionnaire.Web.Controllers
 {
     [Authorize]
@@ -68,6 +69,16 @@ namespace RavenQuestionnaire.Web.Controllers
             });
         }
 
+        [HttpGet]
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ActionResult Move(Guid PublicKeyQuestion,string QuestionnaireId)
+        {
+            MoveItemModel model = new MoveItemModel() {publicKey = PublicKeyQuestion, questionnaireId = QuestionnaireId};
+            return View("MoveQuestion", model);
+        }
+
+
+        [HttpPost]
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Move(MoveItemModel model)
         {
