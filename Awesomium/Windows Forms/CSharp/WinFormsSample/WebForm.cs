@@ -182,20 +182,11 @@ namespace WinFormsSample
 
             if ( !webView.IsLive )
                 return;
-            isDown = true;
-            previousPosition = e.Y;
            webView.InjectMouseDown( MouseButton.Left );
         }
-
-        private bool isDown=false;
-        private int previousPosition = 0;
         protected override void OnMouseUp( MouseEventArgs e )
         {
             base.OnMouseUp( e );
-            if (isDown)
-            {
-                isDown = false;
-            }
            
             if ( !webView.IsLive )
                 return;
@@ -211,26 +202,10 @@ namespace WinFormsSample
                 return;
           //
         //
-            if (isDown)
-            {
-                previousPosition = Scroll(previousPosition, e.Y);
-            }
+           
             webView.InjectMouseMove(e.X, e.Y);
         }
-        private int Scroll(int previous, int newPos)
-        {
-            if (newPos != previous)
-            {
-                int delta;
-                if (newPos < previous)
-                    delta=-(previous - newPos+5);
-                else
-                    delta = newPos - previous+5;
-                webView.InjectMouseWheel(delta);
-                return newPos;
-            }
-            return newPos;
-        }
+        
 
         protected override void OnMouseWheel( MouseEventArgs e )
         {
