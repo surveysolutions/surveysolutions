@@ -551,6 +551,7 @@
     <Compile Include="Views\User\UserViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Views\Event\ExportCommands.xml" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
