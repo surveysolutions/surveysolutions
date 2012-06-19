@@ -219,11 +219,12 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             return View("_Create", model);
         }
+
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public string Delete(Guid publicKey, string questionnaireId)
+        public ActionResult Delete(Guid publicKey, string questionnaireId)
         {
             commandInvoker.Execute(new DeleteQuestionCommand(publicKey, questionnaireId, GlobalInfo.GetCurrentUser()));
-            return "";
+            return RedirectToAction("Details", "Questionnaire", new { id = questionnaireId }); ;
         }
 
         #endregion
