@@ -63,7 +63,7 @@
             <h3></h3>
         </div>
         <!-- /header -->
-        <div data-role="content" class="with-footer">
+        <div data-role="content" class="with-footer dummy-scroll">
             <ul data-role="listview" data-theme="c" data-dividertheme="d" data-counttheme="e">
                 @foreach (var gh in Model.Groups)
                 {
@@ -110,7 +110,7 @@
     <div data-role="page" id="main" class="page">
         @RenderNavigation(Model.CurrentScreen.Navigation)
         <!-- /header -->
-        <div data-role="content" class="@(Model.Status.Name == "Completed" ? "ui-disabled" : "") ">
+        <div data-role="content" class="@(Model.Status.Name == "Completed" ? "ui-disabled" : "") dummy-scroll">
             @Html.Partial("~/Views/Group/_ScreenHtml5.cshtml", Model.CurrentScreen)
             <div style="width: 100%; height: 50px;">
                 &nbsp;</div>
