@@ -55,7 +55,7 @@ namespace WinFormsSample
 
             InitializeComponent();
 
-            webView = WebCore.CreateWebView( this.ClientSize.Width, this.ClientSize.Height );
+            webView = WebCore.CreateWebView(this.ClientSize.Width, this.ClientSize.Height);
             webView.ResizeComplete += OnResizeComplete;
             webView.IsDirtyChanged += OnIsDirtyChanged;
             webView.SelectLocalFiles += OnSelectLocalFiles;
@@ -64,6 +64,7 @@ namespace WinFormsSample
             //webView.DomReady += OnDOMReady;
             //webView.KeyboardFocusChanged += OnKeyboardFocus;
             webView.LoadURL(Settings.Default.DefaultUrl);
+
             webView.Focus();
         }
         #endregion
@@ -72,47 +73,47 @@ namespace WinFormsSample
         #region Methods
         private void ResizeView()
         {
-            if ( ( webView == null ) || !webView.IsLive )
+            if ((webView == null) || !webView.IsLive)
                 return;
 
-            if ( needsResize && !webView.IsResizing )
+            if (needsResize && !webView.IsResizing)
             {
                 // Queue an asynchronous resize.
-                webView.Resize( this.ClientSize.Width, this.ClientSize.Height );
+                webView.Resize(this.ClientSize.Width, this.ClientSize.Height);
                 needsResize = false;
             }
         }
 
-        protected override void OnActivated( EventArgs e )
+        protected override void OnActivated(EventArgs e)
         {
-            base.OnActivated( e );
+            base.OnActivated(e);
 
-            if ( !webView.IsLive )
+            if (!webView.IsLive)
                 return;
 
             webView.Focus();
         }
 
-        protected override void OnDeactivate( EventArgs e )
+        protected override void OnDeactivate(EventArgs e)
         {
-            base.OnDeactivate( e );
+            base.OnDeactivate(e);
 
-            if ( !webView.IsLive )
+            if (!webView.IsLive)
                 return;
 
             webView.Unfocus();
         }
 
-        protected override void OnFormClosed( FormClosedEventArgs e )
+        protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            if ( webView != null )
+            if (webView != null)
             {
                 webView.IsDirtyChanged -= OnIsDirtyChanged;
                 webView.SelectLocalFiles -= OnSelectLocalFiles;
                 webView.Close();
             }
 
-            base.OnFormClosed( e );
+            base.OnFormClosed(e);
 
 #if USING_MONO
 			// TODO: Mac OS X: Sends a SIGSEGV to Mono.
@@ -121,110 +122,109 @@ namespace WinFormsSample
             WebCore.Shutdown();
         }
 
-        protected override void OnPaint( PaintEventArgs e )
+        protected override void OnPaint(PaintEventArgs e)
         {
-            if ( ( webView != null ) && webView.IsLive && webView.IsDirty )
+            if ((webView != null) && webView.IsLive && webView.IsDirty)
                 rBuffer = webView.Render();
 
-            if ( rBuffer != null )
-                Utilities.DrawBuffer( rBuffer, e.Graphics, this.BackColor, ref frameBuffer );
+            if (rBuffer != null)
+                Utilities.DrawBuffer(rBuffer, e.Graphics, this.BackColor, ref frameBuffer);
             else
-                base.OnPaint( e );
+                base.OnPaint(e);
         }
 
-        protected override void OnResize( EventArgs e )
+        protected override void OnResize(EventArgs e)
         {
-            base.OnResize( e );
+            base.OnResize(e);
 
-            if ( ( webView == null ) || !webView.IsLive )
+            if ((webView == null) || !webView.IsLive)
                 return;
 
-            if ( this.ClientSize.Width > 0 && this.ClientSize.Height > 0 )
+            if (this.ClientSize.Width > 0 && this.ClientSize.Height > 0)
                 needsResize = true;
 
             // Request resize, if needed.
             this.ResizeView();
         }
 
-        protected override void OnKeyPress( KeyPressEventArgs e )
+        protected override void OnKeyPress(KeyPressEventArgs e)
         {
-            base.OnKeyPress( e );
+            base.OnKeyPress(e);
 
-            if ( !webView.IsLive )
+            if (!webView.IsLive)
                 return;
 
-            webView.InjectKeyboardEvent( e.GetKeyboardEvent() );
+            webView.InjectKeyboardEvent(e.GetKeyboardEvent());
         }
 
-        protected override void OnKeyDown( KeyEventArgs e )
+        protected override void OnKeyDown(KeyEventArgs e)
         {
-            base.OnKeyDown( e );
+            base.OnKeyDown(e);
 
-            if ( !webView.IsLive )
+            if (!webView.IsLive)
                 return;
 
-            webView.InjectKeyboardEvent( e.GetKeyboardEvent( WebKeyType.KeyDown ) );
+            webView.InjectKeyboardEvent(e.GetKeyboardEvent(WebKeyType.KeyDown));
         }
 
-        protected override void OnKeyUp( KeyEventArgs e )
+        protected override void OnKeyUp(KeyEventArgs e)
         {
-            base.OnKeyUp( e );
+            base.OnKeyUp(e);
 
-            if ( !webView.IsLive )
+            if (!webView.IsLive)
                 return;
 
-            webView.InjectKeyboardEvent( e.GetKeyboardEvent( WebKeyType.KeyUp ) );
-        }
-        
-        protected override void OnMouseDown( MouseEventArgs e )
-        {
-            base.OnMouseDown( e );
-
-            if ( !webView.IsLive )
-                return;
-           webView.InjectMouseDown( MouseButton.Left );
-        }
-        protected override void OnMouseUp( MouseEventArgs e )
-        {
-            base.OnMouseUp( e );
-           
-            if ( !webView.IsLive )
-                return;
-
-            webView.InjectMouseUp( MouseButton.Left );
+            webView.InjectKeyboardEvent(e.GetKeyboardEvent(WebKeyType.KeyUp));
         }
 
-        protected override void OnMouseMove( MouseEventArgs e )
+        protected override void OnMouseDown(MouseEventArgs e)
         {
-            base.OnMouseMove( e );
+            base.OnMouseDown(e);
 
-            if ( !webView.IsLive)
+            if (!webView.IsLive)
                 return;
-          //
-        //
-           
+
+            webView.InjectMouseDown(MouseButton.Left);
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+
+            if (!webView.IsLive)
+                return;
+
+            webView.InjectMouseUp(MouseButton.Left);
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            if (!webView.IsLive)
+                return;
+
             webView.InjectMouseMove(e.X, e.Y);
         }
-        
 
-        protected override void OnMouseWheel( MouseEventArgs e )
+        protected override void OnMouseWheel(MouseEventArgs e)
         {
-            base.OnMouseWheel( e );
+            base.OnMouseWheel(e);
 
-            if ( !webView.IsLive )
+            if (!webView.IsLive)
                 return;
 
-            webView.InjectMouseWheel( e.Delta );
+            webView.InjectMouseWheel(e.Delta);
         }
         #endregion
 
         #region Event Handlers
-        private void OnResizeComplete( object sender, ResizeEventArgs e )
+        private void OnResizeComplete(object sender, ResizeEventArgs e)
         {
-            if ( !webView.IsLive )
+            if (!webView.IsLive)
                 return;
 
-            if ( needsResize )
+            if (needsResize)
                 this.ResizeView(); // Process pending resizing.
 
             // An IsDirtyChanged will normally be called
@@ -232,15 +232,15 @@ namespace WinFormsSample
             repaint = true;
         }
 
-        private void OnIsDirtyChanged( object sender, EventArgs e )
+        private void OnIsDirtyChanged(object sender, EventArgs e)
         {
-            if ( !webView.IsLive )
+            if (!webView.IsLive)
                 return;
 
-            if ( webView.IsDirty )
+            if (webView.IsDirty)
             {
                 // Force repaint.
-                if ( repaint )
+                if (repaint)
                 {
                     // Invalidate the whole surface.
                     this.Invalidate();
@@ -250,41 +250,41 @@ namespace WinFormsSample
                 {
                     // Invalidate the dirty region only.
                     // This significantly improves performance.
-                    this.Invalidate( webView.DirtyBounds.GetRectangle(), false );
+                    this.Invalidate(webView.DirtyBounds.GetRectangle(), false);
                 }
             }
         }
 
-        private void OnCursorChanged( object sender, ChangeCursorEventArgs e )
+        private void OnCursorChanged(object sender, ChangeCursorEventArgs e)
         {
-            this.Cursor = Utilities.GetCursor( e.CursorType );
+            this.Cursor = Utilities.GetCursor(e.CursorType);
         }
 
-        private void OnSelectLocalFiles( object sender, SelectLocalFilesEventArgs e )
+        private void OnSelectLocalFiles(object sender, SelectLocalFilesEventArgs e)
         {
-            using ( OpenFileDialog dialog = new OpenFileDialog()
+            using (OpenFileDialog dialog = new OpenFileDialog()
             {
                 Title = e.Title,
-                InitialDirectory = Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ),
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 CheckFileExists = true,
                 Multiselect = e.SelectMultipleFiles
-            } )
+            })
             {
-                if ( ( dialog.ShowDialog( this ) == DialogResult.OK ) || dialog.FileNames.Length > 0 )
+                if ((dialog.ShowDialog(this) == DialogResult.OK) || dialog.FileNames.Length > 0)
                     e.SelectedFiles = dialog.FileNames;
                 else
                     e.Cancel = true;
             }
         }
 
-        private void OnOpenLink( object sender, OpenExternalLinkEventArgs e )
+        private void OnOpenLink(object sender, OpenExternalLinkEventArgs e)
         {
-            if ( !webView.IsLive )
+            if (!webView.IsLive)
                 return;
 
             // For this sample, we load external links
             // in the same view.
-            webView.LoadURL( e.Url );
+            webView.LoadURL(e.Url);
         }
         #endregion
     }
