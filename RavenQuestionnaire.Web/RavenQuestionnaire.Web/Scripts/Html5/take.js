@@ -211,7 +211,7 @@ function PropagatedGroup(data, status, xhr) {
         newScreen.createKeyBoard();
         newScreen.numericSubmit();
         newScreen.hideInputsWithVirtualKeyboard();
-
+        
         updateCounter();
 
         $(parent).find('.propagated-list-item').each(function (i, el) {
@@ -447,7 +447,7 @@ function updateCounter() {
     };
 
 })(jQuery);
-
+var scrolls = new Array();
 $(document).ready(function () {
 
     var doc = $(document);
@@ -460,9 +460,18 @@ $(document).ready(function () {
         //data-type="horizontal"
         $("input[type='checkbox'][checked]").checkboxradio("refresh");
 
-       
-    });
 
+    });
+    var i = 0;
+    $('.dummy-scroll').each(function () {
+        scrolls[i] = new iScroll(this);
+        i++;
+    });
+    $(document).ajaxComplete(function () {
+        for (var j = 0; j < scrolls.length; j++) {
+            scrolls[j].refresh();
+        }
+    });
     $('.propagated-list-item').each(function () {
         var index = $(this).find('h3 span').html();
         var screenId = $(this).attr('id').replace("propagatedGroup", "#screen-");
