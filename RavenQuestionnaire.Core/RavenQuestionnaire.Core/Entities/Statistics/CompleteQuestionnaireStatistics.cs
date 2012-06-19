@@ -24,6 +24,7 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
             this.innerDocument = new CompleteQuestionnaireStatisticDocument();
             this.innerDocument.Id = IdUtil.CreateStatisticId(IdUtil.ParseId(target.Id));
             this.innerDocument.Creator = target.Creator;
+            this.innerDocument.LastEntryDate = target.LastEntryDate;
             UpdateStatistic(target);
         }
 
@@ -38,6 +39,8 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
             this.innerDocument.Title = target.Title;
             this.innerDocument.Status = target.Status;
             this.innerDocument.Creator = target.Creator;
+            this.innerDocument.Responsible = target.Responsible;
+            this.innerDocument.LastEntryDate = target.LastEntryDate;
 
             HandleQuestionTree(target);
          /*   CollectFeturedQuestions(target);

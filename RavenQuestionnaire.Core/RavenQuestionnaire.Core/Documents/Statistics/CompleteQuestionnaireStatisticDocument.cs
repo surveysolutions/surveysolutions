@@ -12,12 +12,12 @@ namespace RavenQuestionnaire.Core.Documents.Statistics
             this.InvalidQuestions = new List<QuestionStatisticDocument>();
             this.FeturedQuestions = new List<QuestionStatisticDocument>();
         }
-
         public string Id { get; set; }
         public string Title { get; set; }
         public string CompleteQuestionnaireId { get; set; }
         public string TemplateId { get; set; }
         public DateTime StartDate { get; set; }
+        public DateTime LastEntryDate { get; set; }
         public DateTime? EndDate { get; set; }
         public IList<QuestionStatisticDocument> AnsweredQuestions { get; set; }
         public IList<QuestionStatisticDocument> InvalidQuestions { get; set; }
@@ -25,5 +25,6 @@ namespace RavenQuestionnaire.Core.Documents.Statistics
         public SurveyStatus Status { set; get; }
         public int TotalQuestionCount { get; set; }
         public UserLight Creator { get; set; }
+        public UserLight Responsible { get; set; }
     }
 }
