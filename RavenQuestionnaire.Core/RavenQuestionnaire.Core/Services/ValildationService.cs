@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RavenQuestionnaire.Core.Commands.Statistics;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.ExpressionExecutors;
@@ -11,13 +10,11 @@ namespace RavenQuestionnaire.Core.Services
 {
     public class ValildationService : IValildationService
     {
-        public ValildationService(ICommandInvokerAsync asyncInvocker)
+        public ValildationService()
         {
-            this._asyncInvocker = asyncInvocker;
         }
 
         #region Implementation of IValildationService
-        private ICommandInvokerAsync _asyncInvocker;
         public bool Validate(CompleteQuestionnaire entity, Guid? groupKey, Guid? propagationKey)
         {
             bool result = true;
@@ -42,8 +39,6 @@ namespace RavenQuestionnaire.Core.Services
                 result = validator.Execute();
             }
 
-            var command = new GenerateQuestionnaireStatisticCommand(entity, null);
-            _asyncInvocker.Execute(command);
 
             return result;
         }

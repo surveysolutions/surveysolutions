@@ -37,7 +37,6 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         {
             Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             Mock<IStatisticRepository> statisticMock = new Mock<IStatisticRepository>();
-            Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
             CompleteQuestionnaireDocument qDoqument= new CompleteQuestionnaireDocument();
             var question = new SingleCompleteQuestion("q");
             
@@ -47,7 +46,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteQuestionnaire questionanire = new CompleteQuestionnaire(qDoqument);
             repositoryMock.Setup(x => x.Load("cqId")).Returns(questionanire);
             Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
-            CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object, subscriberMock.Object);
+            CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object,  subscriberMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId", question.PublicKey, null, answer.PublicKey, null,null);
 
             service.AddCompleteAnswer(command.CompleteQuestionnaireId, command.QuestionPublickey,command.Propagationkey,command.CompleteAnswer);
@@ -69,7 +68,6 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             qDoqument.Children.Add(group);
             questionanire.Add(group, null);
             Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
-            Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
             repositoryMock.Setup(x => x.Load("cqId")).Returns(questionanire);
 
             Mock<IStatisticRepository> statisticMock = new Mock<IStatisticRepository>();
@@ -77,7 +75,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CompleteAnswer completeAnswer = new CompleteAnswer(answer);
             completeAnswer.Selected = true;
             Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
-            CompleteQuestionnaireUploaderService handler = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object, subscriberMock.Object);
+            CompleteQuestionnaireUploaderService handler = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, subscriberMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId", question.PublicKey, ((CompleteGroup)qDoqument.Children[1]).PropogationPublicKey, completeAnswer.PublicKey,null, null);
             handler.AddCompleteAnswer(command.CompleteQuestionnaireId, command.QuestionPublickey, command.Propagationkey, command.CompleteAnswer);
 
@@ -100,12 +98,11 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             questionanire.Add(group, null);
             Mock<ICompleteQuestionnaireRepository> repositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             Mock<IStatisticRepository> statisticMock = new Mock<IStatisticRepository>();
-            Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
             repositoryMock.Setup(x => x.Load("cqId")).Returns(questionanire);
 
             CompleteAnswer completeAnswer = new CompleteAnswer(answer){ Selected = true };
             Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
-            CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object, asyncMock.Object, subscriberMock.Object);
+            CompleteQuestionnaireUploaderService service = new CompleteQuestionnaireUploaderService(repositoryMock.Object, statisticMock.Object,  subscriberMock.Object);
             UpdateAnswerInCompleteQuestionnaireCommand command = new UpdateAnswerInCompleteQuestionnaireCommand("cqId", Guid.NewGuid(), Guid.NewGuid(), completeAnswer.PublicKey,null,null);
 
 

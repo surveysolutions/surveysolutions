@@ -81,7 +81,7 @@ namespace RavenQuestionnaire.Web.App_Start
         {
             kernel.Bind<IDocumentSession>().ToMethod(
                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
-                   b => HttpContext.Current != null).InScope(o => HttpContext.Current.Cache);
+                   b => OperationContext.Current == null).InSingletonScope();
 
 
             kernel.Bind<IDocumentSession>().ToMethod(
@@ -97,10 +97,10 @@ namespace RavenQuestionnaire.Web.App_Start
              context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
                  b => OperationContext.Current != null).InScope(o => OperationContext.Current);*/
 
-            kernel.Bind<IDocumentSession>().ToMethod(
+        /*    kernel.Bind<IDocumentSession>().ToMethod(
                 context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
                     b => OperationContext.Current == null && HttpContext.Current == null).InScope(
-                        o => Thread.CurrentThread);
+                        o => Thread.CurrentThread);*/
 
             kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
             kernel.Bind<IBagManager>().To<ViewBagManager>();

@@ -31,10 +31,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             Mock<ICompleteQuestionnaireRepository> coompleteQuestionnaireRepositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             Mock<IStatisticRepository> statisticsRepositoryMock = new Mock<IStatisticRepository>();
-            Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
             Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
             ICompleteQuestionnaireUploaderService completeQuestionnaireService =
-             new CompleteQuestionnaireUploaderService(coompleteQuestionnaireRepositoryMock.Object, statisticsRepositoryMock.Object, asyncMock.Object, subscriberMock.Object);
+             new CompleteQuestionnaireUploaderService(coompleteQuestionnaireRepositoryMock.Object, statisticsRepositoryMock.Object, subscriberMock.Object);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
         
             CreateNewCompleteQuestionnaireHandler handler = new CreateNewCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object, 
@@ -54,11 +53,10 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             Mock<ICompleteQuestionnaireRepository> coompleteQuestionnaireRepositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             Mock<IStatisticRepository> statisticsRepositoryMock = new Mock<IStatisticRepository>();
-            Mock<ICommandInvokerAsync> asyncMock = new Mock<ICommandInvokerAsync>();
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
             ICompleteQuestionnaireUploaderService completeQuestionnaireService =
-                new CompleteQuestionnaireUploaderService(coompleteQuestionnaireRepositoryMock.Object, statisticsRepositoryMock.Object, asyncMock.Object, subscriberMock.Object);
+                new CompleteQuestionnaireUploaderService(coompleteQuestionnaireRepositoryMock.Object, statisticsRepositoryMock.Object, subscriberMock.Object);
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(questionnaireDocument);
 
 

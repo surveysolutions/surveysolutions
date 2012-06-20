@@ -177,7 +177,7 @@
     <Compile Include="CommandHandlers\Questionnaire\Group\CreateNewGroupHandler.cs" />
     <Compile Include="CommandHandlers\Location\CreateNewLocationHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\CreateNewQuestionnaireHandler.cs" />
-    <Compile Include="CommandHandlers\Statistics\GenerateQuestionnaireStatisticHandler.cs" />
+    <Compile Include="EventSubscribers\GenerateQuestionnaireStatisticEventHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateNewStatusHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateStatusFlowHandler.cs" />
     <Compile Include="CommandHandlers\Synchronization\ChangeEventStatusHandler.cs" />
@@ -202,7 +202,6 @@
     <Compile Include="CommandHandlers\User\UpdateUserHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UploadImageCommandHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
-    <Compile Include="CommandInvokerAsync.cs" />
     <Compile Include="Commands\Collection\CreateNewCollectionCommand.cs" />
     <Compile Include="Commands\Collection\DeleteCollectionCommand.cs" />
     <Compile Include="Commands\Collection\DeleteCollectionItemCommand.cs" />
@@ -214,7 +213,6 @@
     <Compile Include="Commands\Questionnaire\Group\ValidateGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\MoveQuestionnaireItemCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateConditionsCommand.cs" />
-    <Compile Include="Commands\Statistics\GenerateQuestionnaireStatisticCommand.cs" />
     <Compile Include="Commands\Status\AddNewStatusFlowItem.cs" />
     <Compile Include="Commands\Questionnaire\UpdateImageCommand.cs" />
     <Compile Include="Commands\Questionnaire\DeleteImageCommand.cs" />
@@ -248,7 +246,6 @@
     <Compile Include="Commands\Questionnaire\UploadImageCommand.cs" />
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="Conventions\RegisterGenericTypesOfInterface.cs" />
-    <Compile Include="CachableDocumentSessionAcync.cs" />
     <Compile Include="CoreRegistry.cs" />
     <Compile Include="Documents\AbstractDocument.cs" />
     <Compile Include="Documents\ClientSettingsDocument.cs" />
@@ -350,6 +347,7 @@
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="IEntityRepository.cs" />
+    <Compile Include="IEventSubscriber.cs" />
     <Compile Include="IMemoryCommandInvoker.cs" />
     <Compile Include="Indexes\CompleteQuestionnaireByStatus.cs" />
     <Compile Include="Indexes\QuestionnaireGroupedByTemplateIndex.cs" />
@@ -567,7 +565,10 @@
       <Name>NCalc</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="CommandHandlers\Statistics\" />
+    <Folder Include="Commands\Statistics\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

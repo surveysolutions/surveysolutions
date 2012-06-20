@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Commands.Statistics;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Repositories;
@@ -11,18 +10,15 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
     {
         private ICompleteQuestionnaireRepository _questionnaireRepository;
         private IStatusRepository _statusRepository;
-        private ICommandInvokerAsync _asyncInvocker;
         private IUserRepository _userRepository;
 
         public UpdateCompleteQuestionnaireHandler(ICompleteQuestionnaireRepository questionnaireRepository, 
             IStatusRepository statusRepository,
-            IUserRepository userRepository,
-            ICommandInvokerAsync asyncInvocker)
+            IUserRepository userRepository)
         {
             this._questionnaireRepository = questionnaireRepository;
             this._statusRepository = statusRepository;
             this._userRepository = userRepository;
-            this._asyncInvocker = asyncInvocker;
         }
 
         public void Handle(UpdateCompleteQuestionnaireCommand command)
@@ -50,9 +46,6 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed
                     //what to do if user is not present?
                 }
 
-                var commandAsync = new GenerateQuestionnaireStatisticCommand(entity, null);
-
-                _asyncInvocker.Execute(commandAsync);
             }
         }
     }
