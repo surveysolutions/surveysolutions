@@ -17,7 +17,7 @@
     <li id="@groupKey" class="propagated-list-item">
         <fieldset  class="ui-grid-a">
             <div class="ui-block-a">
-                <a class="propagated-screen-link-@(Model.PublicKey)" href="#screen-@(Model.PropogationKey)">
+                <a id="screen-ref-@(Model.PropogationKey)" class="propagated-screen-link-@(Model.PublicKey)" href="#screen-@(Model.PropogationKey)">
                     <h3><span>@ViewBag.GroupIndex)</span> @Model.Title</h3>
 					<p  id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
                 </a>
@@ -30,13 +30,25 @@
                 }
             </div>
         </fieldset >
+         <script type="text/javascript">
+             $('#screen-ref-@(Model.PropogationKey)').click(function () {
+                 $('.scrollHere').removeClass('scrollHere');
+                 $(this).parents('.propagated-list-item').addClass("scrollHere");
+             });
+        </script>
     </li>
 }
 else
 {
-    <li data-role="fieldcontain" id="@groupKey" ><a class="propagated-screen-link" href="#screen-@(Model.PropogationKey)">
+    <li data-role="fieldcontain" id="@groupKey" ><a  id="screen-ref-@(Model.PropogationKey)" class="propagated-screen-link" href="#screen-@(Model.PropogationKey)">
         <h3><span>@ViewBag.GroupIndex)</span> @Model.Title</h3>
 	    <p id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
     </a>
+     <script type="text/javascript">
+         $('#screen-ref-@(Model.PropogationKey)').click(function () {
+             $('.scrollHere').removeClass('scrollHere');
+             $(this).parents('.propagated-screen-link').addClass("scrollHere");
+         });
+        </script>
     </li>
 }
