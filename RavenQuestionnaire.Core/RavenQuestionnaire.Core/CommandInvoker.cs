@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using Ninject;
 using Raven.Client;
 using RavenQuestionnaire.Core.ClientSettingsProvider;
@@ -53,7 +54,22 @@ namespace RavenQuestionnaire.Core
             handler.Handle(command);
             SaveEvent(handler.GetType(), command);
             documentSession.SaveChanges();
+            InvokeSubscribers(command);
         }
+        protected void InvokeSubscribers<T>(T command) where T : ICommand
+        {
+            WaitCallback callback = (state) =>
+                                        {
+                                            var subscribers = container.GetAll<IEventSubscriber<T>>();
+                                            foreach (IEventSubscriber<T> eventSubscriber in subscribers)
+                                            {
+                                                eventSubscriber.Invoke(command);
+                                            }
+                                        };
+            ThreadPool.QueueUserWorkItem(callback, command);
+
+        }
+
         //TODO remove that spike after event soursing implementation
         protected void SaveEvent<T>(Type handlerType, T command) where T : ICommand
         {
@@ -87,7 +103,7 @@ namespace RavenQuestionnaire.Core
             //store the command in the store
             SaveEvent(handler.GetType(), command);
             documentSession.SaveChanges();
-
+            InvokeSubscribers(command);
         }
     }
 }

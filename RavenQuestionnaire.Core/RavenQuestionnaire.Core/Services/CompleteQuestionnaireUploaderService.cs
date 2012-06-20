@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Commands.Statistics;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.Statistics;
@@ -20,13 +19,11 @@ namespace RavenQuestionnaire.Core.Services
     {
         private ICompleteQuestionnaireRepository _questionRepository;
         private IStatisticRepository _statisticsRepository;
-        private ICommandInvokerAsync _asyncInvocker;
         private ISubscriber subscriber;
-        public CompleteQuestionnaireUploaderService(ICompleteQuestionnaireRepository questionRepository, IStatisticRepository statisticsRepository, ICommandInvokerAsync asyncInvocker, ISubscriber subscriber)
+        public CompleteQuestionnaireUploaderService(ICompleteQuestionnaireRepository questionRepository, IStatisticRepository statisticsRepository, ISubscriber subscriber)
         {
             this._questionRepository = questionRepository;
             this._statisticsRepository = statisticsRepository;
-            this._asyncInvocker = asyncInvocker;
             this.subscriber = subscriber;
         }
         public CompleteQuestionnaire AddCompleteAnswer(string id, Guid questionKey, Guid? propagationKey, object answers)
@@ -38,45 +35,10 @@ namespace RavenQuestionnaire.Core.Services
             ICompleteQuestion question = FindQuestion(questionKey, propagationKey, general);
             question.SetAnswer(answers);
          //   entity.GetInnerDocument().QuestionHash[question].SetAnswer(answers);
-            ExecuteConditions(question, entity.GetInnerDocument().QuestionHash);
-            var command = new GenerateQuestionnaireStatisticCommand(entity, null);
-            _asyncInvocker.Execute(command);
             return entity;
         }
 
         #region update utilitie
-        protected void ExecuteConditions(ICompleteQuestion question, GroupHash entity)
-        {
-       //     PropagatableCompleteQuestion propagated = question as PropagatableCompleteQuestion;
-          //  IEnumerable<ICompleteQuestion> triggeres;
-           /* if (propagated == null)
-            {*/
-        /*        triggeres =
-               entity.Find<ICompleteQuestion>(
-                   g => g.Triggers.Count(gp => gp==question.PublicKey) > 0).ToList();*/
-         /*   }
-            else
-            {
-                triggeres =
-                    entity.GetPropagatedGroupsByKey(propagated.PropogationPublicKey).SelectMany(g => g.Find<ICompleteQuestion>(
-                        q => q.Triggers.Count(gp => gp.Equals(question.PublicKey)) > 0)).ToList();
-            }*/
-          //  var hash = new GroupHash(entity, question);
-          /*  var executor = new CompleteQuestionnaireConditionExecutor(entity);
-            executor.Execute();*/
-       
-          /*  foreach (ICompleteQuestion completeQuestion in triggeres)
-            {
-                bool previousState = completeQuestion.Enabled;
-                completeQuestion.Enabled = executor.Execute(completeQuestion);*/
-                /*if (!completeQuestion.Enabled)
-                    entity.Remove(completeQuestion);*/
-                /*if (previousState != completeQuestion.Enabled)
-                {
-                    ExecuteConditions(completeQuestion, entity);
-                }*/
-           // }
-        }
         protected ICompleteQuestion FindQuestion(Guid questionKey, Guid? propagationKey, ICompleteGroup entity)
         {
             //PropagatableCompleteAnswer propagated = answer as PropagatableCompleteAnswer;
@@ -95,9 +57,7 @@ namespace RavenQuestionnaire.Core.Services
             CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire,completeQuestionnaireGuid, user, status, this.subscriber);
            
             _questionRepository.Add(entity);
-            var command = new GenerateQuestionnaireStatisticCommand(entity, null);
-
-            _asyncInvocker.Execute(command);
+           
        //     this._statisticsRepository.Add(new CompleteQuestionnaireStatistics(entity.GetInnerDocument()));
             return entity;
         }
@@ -116,28 +76,11 @@ namespace RavenQuestionnaire.Core.Services
         {
             CompleteQuestionnaire entity = _questionRepository.Load(id);
             var template = entity.Find<CompleteGroup>(groupPublicKey);
-        //    bool isCondition = false;
        
-          /*  foreach (ICompleteQuestion completeQuestion in template.GetAllQuestions<ICompleteQuestion>())
-            {
-                if (executor.Execute(completeQuestion))
-                {
-                    isCondition = true;
-                    completeQuestion.Enabled = true;
-                }
-                else
-                {
-                    completeQuestion.Enabled = false;
-                }
-            }*/
-           /* if (isCondition)
-            {*/
                 var newGroup = new CompleteGroup(template, publicKey);
                 entity.Add(newGroup, null);
 
-                var command = new GenerateQuestionnaireStatisticCommand(entity, null);
-
-                _asyncInvocker.Execute(command);
+              
              /*   return;
           }
             throw new InvalidOperationException("Group can't be added");*/
@@ -151,9 +94,7 @@ namespace RavenQuestionnaire.Core.Services
             entity.Remove(new CompleteGroup(entity.Find<CompleteGroup>(publicKey),
                                                         propagationKey));
 
-            var command = new GenerateQuestionnaireStatisticCommand(entity, null);
-
-            _asyncInvocker.Execute(command);
+           
         }
     }
 }
