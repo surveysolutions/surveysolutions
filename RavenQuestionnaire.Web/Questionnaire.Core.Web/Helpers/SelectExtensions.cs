@@ -37,7 +37,8 @@ namespace Questionnaire.Core.Web.Helpers
             where TProperty : struct, IConvertible
         {
             var value = GetValue(htmlHelper, expression);
-            return htmlHelper.DropDownListFor(expression, ToSelectList(typeof(TProperty), value.ToInt32(CultureInfo.InvariantCulture).ToString()));
+            return htmlHelper.DropDownListFor(expression, ToSelectList(typeof(TProperty), value.ToString()));
+            //return htmlHelper.DropDownListFor(expression, ToSelectList(typeof(TProperty), value.ToInt32(CultureInfo.InvariantCulture).ToString()));
         }
 
         public static MvcHtmlString EnumDropDownListFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, IDictionary<string, object> htmlAttributes)
@@ -45,7 +46,8 @@ namespace Questionnaire.Core.Web.Helpers
             where TProperty : struct, IConvertible
         {
             var value = GetValue(htmlHelper, expression);
-            return htmlHelper.DropDownListFor(expression, ToSelectList(typeof(TProperty), value.ToInt32(CultureInfo.InvariantCulture).ToString()), htmlAttributes);
+            //return htmlHelper.DropDownListFor(expression, ToSelectList(typeof(TProperty), value.ToInt32(CultureInfo.InvariantCulture).ToString()), htmlAttributes);
+            return htmlHelper.DropDownListFor(expression, ToSelectList(typeof(TProperty), value.ToString()), htmlAttributes);
         }
 
         public static List<SelectListItem> ToSelectList(Type enumType, string selectedItem)
