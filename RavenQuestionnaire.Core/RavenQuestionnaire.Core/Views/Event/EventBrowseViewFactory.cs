@@ -40,30 +40,45 @@ namespace RavenQuestionnaire.Core.Views.Event
 
             return exportableCommands.Contains(e.Command.GetType().FullName);
         }
+        protected IList<EventDocument> AccumulateWithPaging(Func<EventDocument,bool> predicate)
+        {
+            List<EventDocument> retval = new List<EventDocument>();
+            int count;
+            Raven.Client.Linq.RavenQueryStatistics stats;
+            documentSession.Query<EventDocument>()
+                .Statistics(out stats).Where(predicate).ToList();
+
+            count = stats.TotalResults;
+            if (count == 0)
+                return retval;
+            int queryLimit = 128;
+            int step = 0;
+            while (step < count)
+            {
+                retval.AddRange(
+                    documentSession.Query<EventDocument>().Skip(step).Take(queryLimit).Where(predicate).ToList());
+                step += queryLimit;
+            }
+            return retval;
+        }
 
         public EventBrowseView Load(EventBrowseInputModel input)
         {
             IList<EventDocument> query;
-            int count;
+          //  int count;
             if (!input.PublickKey.HasValue)
             {
-                count = documentSession.Query<EventDocument>().Count(IsEventImportable);
-                if (count == 0)
-                    return new EventBrowseView(0, count, count, new EventBrowseItem[0]);
                 // Perform the paged query
-                query = documentSession.Query<EventDocument>().Where(IsEventImportable)
-                    .Take(count).ToList();
+                query = AccumulateWithPaging(IsEventImportable);
             }
             else
             {
                 var last =
                     documentSession.Query<EventDocument>().FirstOrDefault(e => e.PublicKey == input.PublickKey.Value);
-                count = documentSession.Query<EventDocument>().Count(e => e.CreationDate > last.CreationDate && IsEventImportable(e));
-                if (count == 0)
-                    return new EventBrowseView(0, count, count, new EventBrowseItem[0]);
-                // Perform the paged query
-                query = documentSession.Query<EventDocument>().Where(e => e.CreationDate > last.CreationDate && IsEventImportable(e))
-                    .Take(count).ToList();
+                if (last == null)
+                    query = AccumulateWithPaging(IsEventImportable);
+                else
+                    query = AccumulateWithPaging(e => e.CreationDate > last.CreationDate && IsEventImportable(e));
             }
 
             // And enact this query
@@ -75,7 +90,7 @@ namespace RavenQuestionnaire.Core.Views.Event
 
             return new EventBrowseView(
                 0,
-                count, count,
+                query.Count, query.Count,
                 items.ToArray());
 
         }

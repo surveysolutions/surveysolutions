@@ -260,7 +260,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         protected void OnAdded(CompositeAddedEventArgs e)
         {
-            foreach (IObserver<CompositeEventArgs> observer in observers)
+            foreach (IObserver<CompositeEventArgs> observer in observers.ToList())
             {
                 e.AddedComposite.Subscribe(observer);
                 observer.OnNext(e);
@@ -268,7 +268,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
         protected void OnRemoved(CompositeRemovedEventArgs e)
         {
-            foreach (IObserver<CompositeEventArgs> observer in observers)
+            foreach (IObserver<CompositeEventArgs> observer in observers.ToList())
             {
                 observer.OnNext(e);
             }

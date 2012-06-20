@@ -28,14 +28,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         protected void OnAdded(CompositeAddedEventArgs e)
         {
-            foreach (IObserver<CompositeEventArgs> observer in observers)
+            foreach (IObserver<CompositeEventArgs> observer in observers.ToList())
             {
                 observer.OnNext(e);
             }
         }
         protected void OnRemoved(CompositeRemovedEventArgs e)
         {
-            foreach (IObserver<CompositeEventArgs> observer in observers)
+            foreach (IObserver<CompositeEventArgs> observer in observers.ToList())
             {
                 observer.OnNext(e);
             }
