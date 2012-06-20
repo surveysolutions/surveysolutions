@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Answer;
@@ -48,26 +49,29 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public UserLight Executor { get; set; }
 
         public Answer[] Answers { get; set; }
-        public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text,
-            string stataExport, QuestionType type, string condition, string validation, bool featured, string instructions, Order answerOrder, UserLight executor)
+        public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string questionText,
+          string stataExportCaption, QuestionType questionType, string conditionExpression,
+           string validationExpression, bool featured, string instructions, Answer[] answers, Order answerOrder, UserLight executor)
         {
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.AnswerOrder = answerOrder;
             this.QuestionPublicKey = questionPublicKey;
-            this.QuestionText = text;
-            this.StataExportCaption = stataExport;
-            this.QuestionType = type;
+            this.QuestionText = questionText;
+            this.StataExportCaption = stataExportCaption;
+            this.QuestionType = questionType;
             this.Answers = new Answer[0];
-            this.ConditionExpression = condition;
-            this.ValidationExpression = validation;
+            this.ConditionExpression = conditionExpression;
+            this.ValidationExpression = validationExpression;
             this.Executor = executor;
             this.Featured = featured;
             this.Instructions = instructions;
+            this.Answers = answers;
         }
-
-        public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string text,
-           string stataExport, QuestionType type, string condition, string validation, bool featured, string instructions, AnswerView[] answers, Order answerOrder, UserLight executor) :
-            this(questionnaireId, questionPublicKey, text, stataExport, type, condition, validation,featured, instructions, answerOrder, executor)
+        [JsonConstructor]
+        public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string questionText,
+           string stataExportCaption, QuestionType questionType, string conditionExpression, 
+            string validationExpression, bool featured, string instructions, AnswerView[] answers, Order answerOrder, UserLight executor):
+            this(questionnaireId,questionPublicKey,questionText,stataExportCaption,questionType,conditionExpression,validationExpression,featured,instructions,new Answer[0],answerOrder,executor)
         {
             if (answers != null)
                 this.Answers =
@@ -80,7 +84,8 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
                                 AnswerType = a.AnswerType,
                                 Mandatory = a.Mandatory,
                                 PublicKey = a.PublicKey,
-                                AnswerImage = string.IsNullOrEmpty(a.AnswerImage)? "": IdUtil.CreateFileId(a.AnswerImage)
+                                AnswerImage =
+                                    string.IsNullOrEmpty(a.AnswerImage) ? "" : IdUtil.CreateFileId(a.AnswerImage)
                             }).ToArray();
         }
     }
