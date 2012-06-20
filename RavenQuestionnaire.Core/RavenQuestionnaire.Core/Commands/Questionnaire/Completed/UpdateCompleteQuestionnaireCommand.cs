@@ -14,13 +14,13 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
         public UserLight Executor { get; set; }
         public string StatusHolderId { get; set; }
 
-        public UpdateCompleteQuestionnaireCommand(string completeQuestionanireId, 
+        public UpdateCompleteQuestionnaireCommand(string completeQuestionnaireId,
             Guid status,
             string statusHolderId,
             string responsible,
             UserLight executor)
         {
-            this.CompleteQuestionnaireId = completeQuestionanireId;
+            this.CompleteQuestionnaireId = completeQuestionnaireId;
             this.Status = status;
             this.Responsible = responsible;
             this.Executor = executor;

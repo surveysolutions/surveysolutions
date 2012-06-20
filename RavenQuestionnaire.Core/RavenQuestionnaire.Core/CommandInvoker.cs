@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core
                                        var documentSession = this.container.Get<IDocumentSession>();
                                        var handler = container.Get<ICommandHandler<T>>();
                                        handler.Handle(command);
-                                       SaveEvent(handler.GetType(), command);
+                                       SaveEvent(handler.GetType(), command, clientSettingsProvider.ClientSettings.PublicKey);
                                        documentSession.SaveChanges();
                                    };
             bool areWeThere = false;
@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Core
                 return;
             }*/
             handler.Handle(command);
-            SaveEvent(handler.GetType(), command);
+            SaveEvent(handler.GetType(), command, clientSettingsProvider.ClientSettings.PublicKey);
             documentSession.SaveChanges();
             InvokeSubscribers(command);
         }
@@ -65,13 +65,14 @@ namespace RavenQuestionnaire.Core
                                             {
                                                 eventSubscriber.Invoke(command);
                                             }
+                                            documentSession.SaveChanges();
                                         };
             ThreadPool.QueueUserWorkItem(callback, command);
 
         }
 
         //TODO remove that spike after event soursing implementation
-        protected void SaveEvent<T>(Type handlerType, T command) where T : ICommand
+        protected void SaveEvent<T>(Type handlerType, T command, Guid clientPublicKey) where T : ICommand
         {
             System.Attribute[] attrs = System.Attribute.GetCustomAttributes(handlerType); // Reflection.
 
@@ -88,7 +89,7 @@ namespace RavenQuestionnaire.Core
                 }
             }
             documentSession.Store(new EventDocument(command, Guid.NewGuid(),
-                                                    clientSettingsProvider.ClientSettings.PublicKey));
+                                                    clientPublicKey));
         }
 
         public void Execute(ICommand command, Guid eventPublicKey, Guid clientPublicKey) 
@@ -101,7 +102,7 @@ namespace RavenQuestionnaire.Core
             reflectionGeneric.GetMethod("Handle").Invoke(handler, new object[] {command});
             //handler.Handle(command);
             //store the command in the store
-            SaveEvent(handler.GetType(), command);
+            SaveEvent(handler.GetType(), command, clientPublicKey);
             documentSession.SaveChanges();
             InvokeSubscribers(command);
         }
