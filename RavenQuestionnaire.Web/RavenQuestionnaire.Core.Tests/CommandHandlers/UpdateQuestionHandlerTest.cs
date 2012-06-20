@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Question;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
+using RavenQuestionnaire.Core.Views.Answer;
 
 namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 {
@@ -38,8 +39,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                                       validator.Object, 
                                                                       fileRepositoryMock.Object);
             handler.Handle(new UpdateQuestionCommand(entity.QuestionnaireId, question.PublicKey,
-                                                              "question after update", "export title",  QuestionType.MultyOption,
-                                                              string.Empty, string.Empty, false, string.Empty, Order.AsIs, null));
+                                                     "question after update", "export title", QuestionType.MultyOption,
+                                                     string.Empty, string.Empty, false, string.Empty, new Answer[0], 
+                                                     Order.AsIs, null));
 
             Assert.True(
                 ((IQuestion)innerDocument.Children[0]).QuestionText == "question after update" &&
