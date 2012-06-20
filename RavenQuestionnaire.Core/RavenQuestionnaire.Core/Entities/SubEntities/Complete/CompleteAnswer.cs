@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
@@ -173,14 +174,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         #endregion
         protected void OnAdded(CompositeAddedEventArgs e)
         {
-            foreach (IObserver<CompositeEventArgs> observer in observers)
+            foreach (IObserver<CompositeEventArgs> observer in observers.ToList())
             {
                 observer.OnNext(e);
             }
         }
         protected void OnRemoved(CompositeRemovedEventArgs e)
         {
-            foreach (IObserver<CompositeEventArgs> observer in observers)
+            foreach (IObserver<CompositeEventArgs> observer in observers.ToList())
             {
                 observer.OnNext(e);
             }
