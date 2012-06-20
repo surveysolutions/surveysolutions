@@ -8,10 +8,14 @@
 }
 <script charset="utf-8" type="text/javascript" language="javascript">
     $(function () {
-        if ($("[customName=questionName] option:selected").text() == "ExtendedDropDownList")
+        var questionType = $("[customName=questionName] option:selected").text();
+        if (questionType == "SingleOption" || questionType == "DropDownList" || questionType == "MultyOption") {
             $("#fromDB").removeAttr('style');
+        }
         $('[customName=questionName]').change(function () {
-            if ($("[customName=questionName] option:selected").text() == "ExtendedDropDownList") {
+            var questionType = $("[customName=questionName] option:selected").text();
+            //            if ($("[customName=questionName] option:selected").text() == "ExtendedDropDownList") {
+            if (questionType == "SingleOption" || questionType == "DropDownList" || questionType == "MultyOption") {
                 $("#fromDB").removeAttr('style');
             }
             else

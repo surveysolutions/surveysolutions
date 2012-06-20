@@ -48,8 +48,8 @@ namespace RavenQuestionnaire.Core.AbstractFactories
                     return new GpsCoordinateQuestion();
            /*     case QuestionType.Percentage:
                     return new PercentageQuestion();*/
-                case QuestionType.ExtendedDropDownList:
-                    return new SingleQuestion();
+                /*case QuestionType.ExtendedDropDownList:
+                    return new SingleQuestion();*/
             }
             return new TextQuestion();
         }

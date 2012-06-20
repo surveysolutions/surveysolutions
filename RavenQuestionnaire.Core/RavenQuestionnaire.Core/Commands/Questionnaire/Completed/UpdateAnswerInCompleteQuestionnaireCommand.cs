@@ -41,7 +41,9 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
             Executor = executer;
             this.QuestionPublickey = question.PublicKey;
             this.Propagationkey = propogationPublicKey;
-            if (question.QuestionType == QuestionType.ExtendedDropDownList || question.QuestionType == QuestionType.DropDownList ||
+            //if (question.QuestionType == QuestionType.ExtendedDropDownList || question.QuestionType == QuestionType.DropDownList ||
+            //    question.QuestionType == QuestionType.SingleOption || question.QuestionType == QuestionType.YesNo)
+            if (question.QuestionType == QuestionType.DropDownList ||
                 question.QuestionType == QuestionType.SingleOption || question.QuestionType == QuestionType.YesNo)
             {
                 if (question.Answers != null)

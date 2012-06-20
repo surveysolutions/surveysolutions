@@ -5,7 +5,7 @@
         SingleOption,
         YesNo,
         DropDownList,
-        ExtendedDropDownList,
+        //ExtendedDropDownList,
         MultyOption,
         Numeric,
         DateTime,
