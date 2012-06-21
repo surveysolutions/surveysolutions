@@ -12,7 +12,6 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
         public UserLight Creator { get; private set; }
         public Guid CompleteQuestionnaireGuid { get;private set; }
         public SurveyStatus Status { private set; get; }
-
         public UserLight Executor { get; set; }
 
         public CreateNewCompleteQuestionnaireCommand(string questionnaireId, Guid completeQuestionnaireGuid,

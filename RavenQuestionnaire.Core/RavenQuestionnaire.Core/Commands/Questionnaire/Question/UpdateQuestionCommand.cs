@@ -1,54 +1,34 @@
 ﻿using System;
 using System.Linq;
 using Newtonsoft.Json;
-using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Answer;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
 {
     public class UpdateQuestionCommand : ICommand
     {
+        #region Properties
+
         public string QuestionnaireId { get; set; }
         public Guid QuestionPublicKey { get; set; }
-
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
-        public string ConditionExpression
-        {
-            get;
-            private set;
-        }
-        public string ValidationExpression
-        {
-            get;
-            private set;
-        }
-        public string StataExportCaption
-        {
-            get;
-            private set;
-        }
-
-        public string Instructions
-        {
-            get;
-            private set;
-        }
-
-        public Order AnswerOrder
-        {
-            get;
-            private set;
-        }
-        public bool Featured
-        {
-            get;
-            private set;
-        }
+        public string ConditionExpression { get; private set; }
+        public string ValidationExpression { get; private set; }
+        public string StataExportCaption { get; private set; }
+        public string Instructions { get; private set; }
+        public Order AnswerOrder { get; private set; }
+        public bool Featured { get; private set; }
         public UserLight Executor { get; set; }
-
         public Answer[] Answers { get; set; }
+
+        #endregion
+
+        #region Constructor
+
+        [JsonConstructor]
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string questionText,
           string stataExportCaption, QuestionType questionType, string conditionExpression,
            string validationExpression, bool featured, string instructions, Answer[] answers, Order answerOrder, UserLight executor)
@@ -88,5 +68,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
                                     string.IsNullOrEmpty(a.AnswerImage) ? "" : IdUtil.CreateFileId(a.AnswerImage)
                             }).ToArray();
         }
+
+        #endregion
     }
 }
