@@ -47,7 +47,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.Instructions = instructions;
             this.Answers = answers;
         }
-        [JsonConstructor]
+
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string questionText,
            string stataExportCaption, QuestionType questionType, string conditionExpression, 
             string validationExpression, bool featured, string instructions, AnswerView[] answers, Order answerOrder, UserLight executor):
