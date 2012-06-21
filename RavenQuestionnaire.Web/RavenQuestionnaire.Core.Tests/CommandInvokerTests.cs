@@ -53,7 +53,8 @@ namespace RavenQuestionnaire.Core.Tests
             Mock<ICommand> someCommand = new Mock<ICommand>();
 
             invoker.Execute(someCommand.Object);
-            documentSessionMock.Verify(x => x.SaveChanges(), Times.Once());
+            //2 times becouse it flushs main handler data ent event subscribers data
+            documentSessionMock.Verify(x => x.SaveChanges(), Times.Exactly(2));
         }
 
         [Test]

@@ -24,7 +24,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
             this.Status = status;
             this.Responsible = responsible;
             this.Executor = executor;
-            StatusHolderId = IdUtil.CreateStatusId(statusHolderId);
+            StatusHolderId = IdUtil.CreateStatusId(IdUtil.ParseId(statusHolderId));
         }
     }
 }
