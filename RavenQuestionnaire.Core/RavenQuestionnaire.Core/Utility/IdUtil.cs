@@ -30,7 +30,7 @@
         {
             if (string.IsNullOrEmpty(ravenId))
                 return ravenId;
-            return ravenId.Substring(ravenId.IndexOf('/') + 1);
+            return ravenId.Substring(ravenId.LastIndexOf('/') + 1);
 
         }
         public static string CreateUserId(string id)
