@@ -74,6 +74,9 @@ namespace RavenQuestionnaire.Web.Utils
 
         public byte[] Export()
         {
+
+            var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(
+                new EventBrowseInputModel(null));
             var data = new ZipFileData
                            {
                                ClientGuid = clientSettingsProvider.ClientSettings.PublicKey,
