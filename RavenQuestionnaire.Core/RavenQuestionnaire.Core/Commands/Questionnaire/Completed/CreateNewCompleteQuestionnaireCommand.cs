@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Web;
+using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 
@@ -14,6 +15,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
         public SurveyStatus Status { private set; get; }
         public UserLight Executor { get; set; }
 
+        [JsonConstructor]
         public CreateNewCompleteQuestionnaireCommand(string questionnaireId, Guid completeQuestionnaireGuid,
             UserLight creator, 
             SurveyStatus status,
