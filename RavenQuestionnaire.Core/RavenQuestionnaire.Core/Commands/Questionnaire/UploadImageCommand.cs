@@ -6,20 +6,22 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire
 {
     public class UploadImageCommand : ICommand
     {
-        public UploadImageCommand(Guid publicKey, string questionnaireId, string title, string desc, Stream thumbData, int thumbWidth, int thumbHeight, Stream origData, int origWidth, int origHeight, UserLight executor)
+        public UploadImageCommand(Guid publicKey, string questionnaireId, string title, string description, Stream thumbData, int thumbWidth, int thumbHeight, Stream originalImage, int originalWidth, int originalHeight, UserLight executor)
         {
             PublicKey = publicKey;
             QuestionnaireId = questionnaireId;
             Executor = executor;
-            Description = desc;
+            Description = description;
             Title = title;
-            OriginalImage = origData;
+            OriginalImage = originalImage;
             ThumbnailImage = thumbData;
-            OriginalWidth = origWidth;
-            OriginalHeight = origHeight;
+            OriginalWidth = originalWidth;
+            OriginalHeight = originalHeight;
             ThumbHeight = thumbHeight;
             ThumbWidth = thumbWidth;
         }
+
+        #region Properties
 
         public Guid PublicKey { get; set; }
 
@@ -40,8 +42,6 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire
         public int ThumbHeight { get; private set; }
 
         public Stream ThumbnailImage { get; private set; }
-
-        #region ICommand Members
 
         public UserLight Executor { get; set; }
 
