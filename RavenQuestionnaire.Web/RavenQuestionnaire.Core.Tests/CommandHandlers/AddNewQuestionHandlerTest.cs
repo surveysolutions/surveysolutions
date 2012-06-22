@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question;
@@ -16,7 +17,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
     public class AddNewQuestionHandlerTest
     {
         [Test]
-        public void WhenCommandIsReceived_NewQuestionnIsAddedToRepository()
+        public void WhenCommandIsReceived_NewQuestionIsAddedToRepository()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
@@ -28,14 +29,15 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { Title = "answer", AnswerType = AnswerType.Select } };
-            handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId, null, string.Empty, string.Empty,
-                                                              null, false, Order.AsIs, answers, null));
+            handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId,
+                                                        null, Guid.NewGuid(), string.Empty, string.Empty,
+                                                        null, false, Order.AsIs, answers.Select(a => ConvertAnswer(a)).ToArray(), null));
 
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
 
         }
         [Test]
-        public void WhenCommandIsReceived_ToGroup_NewQuestionnIsAddedToRepository()
+        public void WhenCommandIsReceived_ToGroup_NewQuestionIsAddedToRepository()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
@@ -49,15 +51,15 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { Title = "answer", AnswerType = AnswerType.Select } };
             handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId,
-                topGroup.PublicKey, string.Empty, string.Empty,
-                null, false, Order.AsIs, answers, null));
+                topGroup.PublicKey, Guid.NewGuid(), string.Empty, string.Empty,
+                null, false, Order.AsIs, answers.Select(a => ConvertAnswer(a)).ToArray(), null));
 
             questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
             Assert.AreEqual((innerDocument.Children[0] as Group).Children.Count, 1);
             Assert.AreEqual(((IQuestion)(innerDocument.Children[0] as Group).Children[0]).QuestionText, "test");
         }
         [Test]
-        public void WhenCommandIsReceived_ToNotExistingGroup_NewQuestionnIsAddedToRepository()
+        public void WhenCommandIsReceived_ToNotExistingGroup_NewQuestionIsAddedToRepository()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
@@ -71,9 +73,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Assert.Throws<ArgumentException>(
                 () =>
                 handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption,
-                                                                  entity.QuestionnaireId, Guid.NewGuid(), string.Empty,
+                                                                  entity.QuestionnaireId, Guid.NewGuid(), Guid.NewGuid(), string.Empty,
                                                                   string.Empty, string.Empty, false, Order.AsIs,
-                                                                  answers, null)));
+                                                                  answers.Select(a => ConvertAnswer(a)).ToArray(), null)));
         }
 
         [Test]
@@ -89,8 +91,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { Title = "answer", AnswerType = AnswerType.Select } };
             handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId,
-               null, string.Empty, string.Empty, string.Empty, false, Order.AsIs,
-                answers, null));
+               null, Guid.NewGuid(), string.Empty, string.Empty, string.Empty, false, Order.AsIs,
+                answers.Select(a => ConvertAnswer(a)).ToArray(), null));
 
             Assert.AreEqual(innerDocument.Children.Count, 0);
         }
@@ -103,5 +105,18 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Assert.Throws<EvaluationException>(
                 () => questionnaire.AddQuestion("question", QuestionType.SingleOption, "totaly invalid condition", null));
         }*/
+
+
+        private static Answer ConvertAnswer(AnswerView a)
+        {
+            var answer = new Answer();
+            answer.AnswerValue = a.AnswerValue;
+            answer.AnswerType = a.AnswerType;
+            answer.AnswerText = a.Title;
+            answer.Mandatory = a.Mandatory;
+            answer.PublicKey = a.PublicKey;
+            return answer;
+        }
+
     }
 }

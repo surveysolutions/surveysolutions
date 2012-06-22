@@ -1,0 +1,10 @@
+C:\Temp\NCQRS_1\ncqrs-ncqrs-ed26668\lib\Debug\Ncqrs.Tests\CodeContracts\Ncqrs.Tests.noReferenceAssembly
+C:\Temp\NCQRS_1\ncqrs-ncqrs-ed26668\lib\Debug\Ncqrs.Tests\Ncqrs.Tests.dll.config
+C:\Temp\NCQRS_1\ncqrs-ncqrs-ed26668\lib\Debug\Ncqrs.Tests\Ncqrs.Tests.dll
+C:\Temp\NCQRS_1\ncqrs-ncqrs-ed26668\lib\Debug\Ncqrs.Tests\Ncqrs.Tests.pdb
+C:\Temp\NCQRS_1\ncqrs-ncqrs-ed26668\Framework\src\Ncqrs.Tests\obj\Debug\Ncqrs.Tests.csprojResolveAssemblyReference.cache
+C:\Temp\NCQRS_1\ncqrs-ncqrs-ed26668\Framework\src\Ncqrs.Tests\obj\Debug\Ncqrs.Tests.rewritten
+C:\Temp\NCQRS_1\ncqrs-ncqrs-ed26668\Framework\src\Ncqrs.Tests\obj\Debug\Ncqrs.Tests.dll
+C:\Temp\NCQRS_1\ncqrs-ncqrs-ed26668\Framework\src\Ncqrs.Tests\obj\Debug\Ncqrs.Tests.pdb
+C:\Work\WB\MIS-DEV-clone\Externals\Framework\src\Ncqrs.Tests\obj\Debug\Ncqrs.Tests.csprojResolveAssemblyReference.cache
+C:\Work\WB\MIS-DEV-clone\Externals\Framework\src\Ncqrs.Tests\obj\Debug\Ncqrs.Tests.dll

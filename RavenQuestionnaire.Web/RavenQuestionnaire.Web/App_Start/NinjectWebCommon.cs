@@ -34,6 +34,9 @@ namespace RavenQuestionnaire.Web.App_Start
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
             DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
             bootstrapper.Initialize(CreateKernel);
+
+            NCQRSInit.Init(System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"]);
+
         }
         
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
@@ -21,7 +22,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Questionnaire entity = new Questionnaire(innerDocument);
-            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null,null);
+            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null,null, Guid.NewGuid());
             FileDocument innerFileDocument = new FileDocument();
             innerFileDocument.Id = "fID";
             File fEntity = new File(innerFileDocument);
@@ -38,9 +39,10 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             UpdateQuestionHandler handler = new UpdateQuestionHandler(questionnaireRepositoryMock.Object,
                                                                       validator.Object, 
                                                                       fileRepositoryMock.Object);
+
             handler.Handle(new UpdateQuestionCommand(entity.QuestionnaireId, question.PublicKey,
-                                                     "question after update", "export title", QuestionType.MultyOption,
-                                                     string.Empty, string.Empty, false, string.Empty, new Answer[0], 
+                                                              "question after update", "export title", QuestionType.MultyOption,
+                                                              string.Empty, string.Empty, false, string.Empty, null , Order.AsIs, null));
                                                      Order.AsIs, null));
 
             Assert.True(

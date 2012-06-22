@@ -99,6 +99,12 @@ RavenQuestionnaire.Web/RavenQuestionnaire.Web/App_Data/Tenants/*
 Awesomium/Awesomium.NET Samples.1.1.dotCover
 Awesomium/Awesomium.NET Samples.6.0.ReSharper.user
 
+Externals/Extentions/Ncqrs.Eventing.Sourcing.Snapshotting.DynamicSnapshot.Tests/bin/
+Externals/Extentions/Ncqrs.Messaging.Tests/obj/
+Externals/Extentions/Ncqrs.Messaging/obj/
+Externals/Extentions/Ncqrs.Eventing.Sourcing.Snapshotting.DynamicSnapshot/obj/
+Externals/Extentions/Ncqrs.Eventing.Sourcing.Snapshotting.DynamicSnapshot.Tests/obj/
+
 
 Synchronization/SynchronizationMessages/SynchronizationMessages.csproj.user
 RavenQuestionnaire.Web/Questionnaire.Core.Web.Tests/Questionnaire.Core.Web.Tests.csproj.user

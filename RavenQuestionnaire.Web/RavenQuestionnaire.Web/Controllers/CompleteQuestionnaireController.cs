@@ -10,13 +10,17 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Ionic.Zip;
 using Newtonsoft.Json;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
+using RavenQuestionnaire.Core.Commands.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Core.Utility;
@@ -237,18 +241,29 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public ActionResult Participate(string id, string mode)
         {
+            Guid key;
+            if (!Guid.TryParse(id, out key))
+                return RedirectToAction("Index", "Dashboard");
+
+
             SurveyStatus status = GetStatus(id);
-            var questionnairePublicKey = Guid.NewGuid();
-            var command = new CreateNewCompleteQuestionnaireCommand(id, questionnairePublicKey,
+            var newQuestionnairePublicKey = Guid.NewGuid();
+            var command = new CreateNewCompleteQuestionnaireCommand(id,
+                                                                    newQuestionnairePublicKey,
                                                                     _globalProvider.GetCurrentUser(),
-                                                                   status,
+                                                                    status,
                                                                     _globalProvider.GetCurrentUser());
             commandInvoker.Execute(command);
+
+            //new handling
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
+
 
             return RedirectToAction("Question" + mode,
                                     new
                                         {
-                                            id = questionnairePublicKey
+                                            id = newQuestionnairePublicKey
                                         });
         }
 
@@ -338,6 +353,13 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                       question,
                                                                                       settings[0].PropogationPublicKey,
                                                                                       _globalProvider.GetCurrentUser()));
+
+
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(new SetAnswerCommand(Guid.Parse(settings[0].QuestionnaireId), question, 
+                    settings[0].PropogationPublicKey));
+                
+
             }
             catch (Exception e)
             {

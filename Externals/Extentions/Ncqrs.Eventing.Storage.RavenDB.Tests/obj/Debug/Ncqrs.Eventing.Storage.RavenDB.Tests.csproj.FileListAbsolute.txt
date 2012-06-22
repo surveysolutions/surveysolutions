@@ -1,0 +1,6 @@
+C:\Work\WB\MIS-DEV-clone\lib\Debug\Ncqrs.Eventing.Storage.RavenDB.Tests\Ncqrs.Eventing.Storage.RavenDB.Tests.dll.config
+C:\Work\WB\MIS-DEV-clone\lib\Debug\Ncqrs.Eventing.Storage.RavenDB.Tests\Ncqrs.Eventing.Storage.RavenDB.Tests.dll
+C:\Work\WB\MIS-DEV-clone\lib\Debug\Ncqrs.Eventing.Storage.RavenDB.Tests\Ncqrs.Eventing.Storage.RavenDB.Tests.pdb
+C:\Work\WB\MIS-DEV-clone\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB.Tests\obj\Debug\Ncqrs.Eventing.Storage.RavenDB.Tests.csprojResolveAssemblyReference.cache
+C:\Work\WB\MIS-DEV-clone\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB.Tests\obj\Debug\Ncqrs.Eventing.Storage.RavenDB.Tests.dll
+C:\Work\WB\MIS-DEV-clone\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB.Tests\obj\Debug\Ncqrs.Eventing.Storage.RavenDB.Tests.pdb
