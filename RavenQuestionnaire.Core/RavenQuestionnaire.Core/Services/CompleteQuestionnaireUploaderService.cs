@@ -47,12 +47,12 @@ namespace RavenQuestionnaire.Core.Services
         protected void ExecuteConditions(ICompleteQuestion question, ICompleteGroup entity)
         {
        //     PropagatableCompleteQuestion propagated = question as PropagatableCompleteQuestion;
-            IEnumerable<ICompleteQuestion> triggeres;
+          //  IEnumerable<ICompleteQuestion> triggeres;
            /* if (propagated == null)
             {*/
-                triggeres =
+        /*        triggeres =
                entity.Find<ICompleteQuestion>(
-                   g => g.Triggers.Count(gp => gp==question.PublicKey) > 0).ToList();
+                   g => g.Triggers.Count(gp => gp==question.PublicKey) > 0).ToList();*/
          /*   }
             else
             {
@@ -60,18 +60,21 @@ namespace RavenQuestionnaire.Core.Services
                     entity.GetPropagatedGroupsByKey(propagated.PropogationPublicKey).SelectMany(g => g.Find<ICompleteQuestion>(
                         q => q.Triggers.Count(gp => gp.Equals(question.PublicKey)) > 0)).ToList();
             }*/
-            var executor = new CompleteQuestionnaireConditionExecutor(entity);
-            foreach (ICompleteQuestion completeQuestion in triggeres)
+            var hash = new GroupHash(entity, question);
+            var executor = new CompleteQuestionnaireConditionExecutor(hash);
+            executor.Execute();
+       
+          /*  foreach (ICompleteQuestion completeQuestion in triggeres)
             {
                 bool previousState = completeQuestion.Enabled;
-                completeQuestion.Enabled = executor.Execute(completeQuestion);
+                completeQuestion.Enabled = executor.Execute(completeQuestion);*/
                 /*if (!completeQuestion.Enabled)
                     entity.Remove(completeQuestion);*/
-                if (previousState != completeQuestion.Enabled)
+                /*if (previousState != completeQuestion.Enabled)
                 {
                     ExecuteConditions(completeQuestion, entity);
-                }
-            }
+                }*/
+           // }
         }
         protected ICompleteQuestion FindQuestion(Guid questionKey, Guid? propagationKey, ICompleteGroup entity)
         {
@@ -113,8 +116,9 @@ namespace RavenQuestionnaire.Core.Services
             CompleteQuestionnaire entity = _questionRepository.Load(id);
             var template = entity.Find<CompleteGroup>(groupPublicKey);
             bool isCondition = false;
-            var executor = new CompleteQuestionnaireConditionExecutor(entity.GetInnerDocument());
-            foreach (ICompleteQuestion completeQuestion in template.GetAllQuestions<ICompleteQuestion>())
+            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(entity.GetInnerDocument()));
+            executor.Execute();
+          /*  foreach (ICompleteQuestion completeQuestion in template.GetAllQuestions<ICompleteQuestion>())
             {
                 if (executor.Execute(completeQuestion))
                 {
@@ -125,18 +129,18 @@ namespace RavenQuestionnaire.Core.Services
                 {
                     completeQuestion.Enabled = false;
                 }
-            }
-            if (isCondition)
-            {
+            }*/
+           /* if (isCondition)
+            {*/
                 var newGroup = new CompleteGroup(template, publicKey);
                 entity.Add(newGroup, null);
 
                 var command = new GenerateQuestionnaireStatisticCommand(entity, null);
 
                 _asyncInvocker.Execute(command);
-                return;
-            }
-            throw new InvalidOperationException("Group can't be added");
+             /*   return;
+          }
+            throw new InvalidOperationException("Group can't be added");*/
         }
 
         public void RemovePropagatedGroup(string id, Guid publicKey, Guid propagationKey)

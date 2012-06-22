@@ -178,10 +178,12 @@
     <Compile Include="Commands\File\UploadFileCommand.cs" />
     <Compile Include="Commands\Location\CreateLocationCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\CreateCompleteQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\CreateFlowGraphCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\CreateNewFlowGraphCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\AddPropagatableGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\ValidateGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\MoveQuestionnaireItemCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
@@ -248,6 +250,7 @@
     <Compile Include="Entities\CompleteQuestionnaire.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
+    <Compile Include="Entities\Extensions\GroupHash.cs" />
     <Compile Include="Entities\File.cs" />
     <Compile Include="Entities\Event.cs" />
     <Compile Include="Entities\FlowGraph.cs" />
@@ -314,7 +317,9 @@
     <Compile Include="Events\Collection\NewCollectionCreated.cs" />
     <Compile Include="Events\Location\LocationDeleted.cs" />
     <Compile Include="Events\Location\NewLocationCreated.cs" />
+    <Compile Include="Events\Questionnaire\Completed\AnswerSet.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewCompleteQuestionnaireCreated.cs" />
+    <Compile Include="Events\Questionnaire\Completed\PropagatableGroupAdded.cs" />
     <Compile Include="Events\Questionnaire\QuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\NewGroupAdded.cs" />
     <Compile Include="Events\Questionnaire\NewQuestionAdded.cs" />
@@ -416,6 +421,9 @@
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteGroupHeaders.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Json\CompleteQuestionnaireJsonViewFactory.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Json\CompleteQuestionnaireJsonView.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Json\CompleteQuestionView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupedBrowseFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupedBrowseInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupedBrowseView.cs" />
@@ -423,6 +431,7 @@
     <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteQuestionnaireMabileViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteGroupMobileView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteQuestionnaireMobileView.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Mobile\PropagatedGroupMobileView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Mobile\ScreenNavigation.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Vertical\CompleteQuestionnaireEnumerableViewVFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportInputModel.cs" />

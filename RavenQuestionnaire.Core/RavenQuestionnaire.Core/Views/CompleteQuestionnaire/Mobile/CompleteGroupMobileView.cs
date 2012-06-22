@@ -13,17 +13,31 @@ using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
-    public class CompleteGroupMobileView
+    public abstract class AbstractGroupMobileView : ICompositeView
+    {
+        public AbstractGroupMobileView()
+        {
+            Children = new List<ICompositeView>();
+        }
+        public Guid PublicKey { get; set; }
+
+        public string Title { get; set; }
+
+        public Guid? Parent { get; set; }
+
+        public List<ICompositeView> Children { get; set; }
+
+        public Propagate Propagated { get; set; }
+
+        public ScreenNavigation Navigation { get; set; }
+    }
+
+    public class CompleteGroupMobileView : AbstractGroupMobileView
     {
         public CompleteGroupMobileView()
+            : base()
         {
-            Questions = new List<CompleteQuestionView>();
-            Groups = new List<CompleteGroupMobileView>();
             Propagated = Propagate.None;
-            //PropagatedQuestions = new List<PropagatedQuestion>();
-            PropagatedGroups = new List<PropagatedGroup>();
-            PropogationPublicKeys = new List<Guid>();
-            AutoPropagate = new List<bool>();
             Navigation = new ScreenNavigation();
         }
 
@@ -33,17 +47,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         {
             InitNavigation(currentGroup, navigations);
 
-            List<ICompleteQuestion> questions = currentGroup.Children.OfType<ICompleteQuestion>().ToList();
             List<ICompleteGroup> groups = currentGroup.Children.OfType<ICompleteGroup>().ToList();
 
             PublicKey = currentGroup.PublicKey;
             Title = currentGroup.Title;
             Propagated = currentGroup.Propagated;
-            if (questions.Count > 0)
-            {
-                Questions =
-                    questions.Select(q => new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q)).ToList();
-            }
 
             // grouping by group's PublicKey
             var propGroups = new Dictionary<Guid, List<CompleteGroup>>();
@@ -55,16 +63,34 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                 }
                 propGroups[@group.PublicKey].Add(@group as CompleteGroup);
             }
-            foreach (var k in propGroups)
+
+            var addedGroupsPK = new List<Guid>();
+
+            foreach (var composite in currentGroup.Children)
             {
-                Propagate prop = Propagate.Propagated;
-                if (k.Value.Count == 1 && k.Value[0].PropogationPublicKey.HasValue)
+                if ((composite as ICompleteQuestion) != null)
                 {
-                    prop = Propagate.None;
+                    var q = composite as ICompleteQuestion;
+                    var question = new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q);
+                    Children.Add(question);
                 }
-                Groups.Add(prop != Propagate.Propagated
-                               ? new CompleteGroupMobileView(doc, k.Value[0], navigations)
-                               : new CompleteGroupMobileView(doc, k.Value, navigations));
+                else
+                {
+                    var g = composite as ICompleteGroup;
+                    if (!addedGroupsPK.Contains(g.PublicKey))
+                    {
+                        var pgroups = propGroups[g.PublicKey];
+                        var prop = Propagate.Propagated;
+                        if (pgroups.Count == 1 && pgroups[0].Propagated == Propagate.None)
+                        {
+                            prop = Propagate.None;
+                        }
+                        Children.Add(prop != Propagate.None
+                              ? new CompleteGroupMobileView(doc, pgroups, navigations)
+                              : new CompleteGroupMobileView(doc, pgroups[0], navigations));
+                        addedGroupsPK.Add(g.PublicKey);
+                    }
+                }
             }
         }
 
@@ -77,34 +103,29 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
             InitNavigation(propagatable, navigations);
 
-            var qf = new CompleteQuestionFactory();
             PublicKey = propagatable.PublicKey;
             Title = propagatable.Title;
             Propagated = propagatable.Propagated;
-            Questions = propagatable.Children.OfType<ICompleteQuestion>().Select(
-                q => new CompleteQuestionFactory().CreateQuestion(doc, propagatable, q)).ToList();
+            var questions = propagatable.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionFactory().CreateQuestion(doc, propagatable, q)).ToList();
 
-            PropagateTemplate = new PropagatedGroup(propagatable.PublicKey, propagatable.Title, false, Guid.Empty,
-                                                    Questions);
+            PropagateTemplate = new PropagatedGroupMobileView(propagatable.PublicKey, propagatable.Title, false, Guid.Empty, questions);
             PropagateTemplate.Navigation.CurrentScreenTitle = propagatable.Title;
             PropagateTemplate.Navigation.BreadCumbs.AddRange(Navigation.BreadCumbs);
-            //PropagateTemplate.Navigation.BreadCumbs.Add(new CompleteGroupHeaders() { Title = this.Title, PublicKey = this.PublicKey });
 
 
-            List<CompleteGroup> propagated =
-                propGroups.Where(g => g != propagatable && g.PropogationPublicKey.HasValue).ToList();
+            List<CompleteGroup> propagated = propGroups.Where(g => g != propagatable && g.PropogationPublicKey.HasValue).ToList();
 
+            var propagetedGroups = new List<ICompositeView>();
             if (propagated.Count > 0)
             {
-                PropogationPublicKeys = propagated.Select(g => g.PropogationPublicKey.Value).ToList();
-                PropagatedGroup lastGroup = null;
-                for (int i = 0; i < propagated.Count; i++)
+                PropagatedGroupMobileView lastGroup = null;
+                foreach (CompleteGroup @group in propagated)
                 {
-                    CompleteGroup @group = propagated[i];
                     string groupTitle = @group.Title;
-                    var pgroup = new PropagatedGroup(@group.PublicKey, groupTitle,
-                                                     @group.Propagated == Propagate.AutoPropagated,
-                                                     @group.PropogationPublicKey.Value, new List<CompleteQuestionView>());
+                    var pgroup = new PropagatedGroupMobileView(@group.PublicKey, groupTitle,
+                                                               @group.Propagated == Propagate.AutoPropagated,
+                                                               @group.PropogationPublicKey.Value,
+                                                               @group.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionFactory().CreateQuestion(doc, propagatable, q)).ToList());
 
                     if (lastGroup != null)
                     {
@@ -122,74 +143,25 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                     pgroup.Navigation.CurrentScreenTitle = groupTitle;
                     pgroup.Navigation.BreadCumbs.AddRange(Navigation.BreadCumbs);
 
-                    PropagatedGroups.Add(pgroup);
-                    AutoPropagate.Add(@group.Propagated == Propagate.AutoPropagated);
+                    propagetedGroups.Add(pgroup);
                     lastGroup = pgroup;
                 }
             }
-            List<ICompleteQuestion> questions = propagatable.Children.OfType<ICompleteQuestion>().ToList();
-            for (int i = 0; i < questions.Count; i++)
-            {
-                ICompleteQuestion question = questions[i];
-                var pq = new PropagatedQuestion
-                             {
-                                 PublicKey = question.PublicKey,
-                                 QuestionText = question.QuestionText,
-                                 Instructions = question.Instructions,
-                                 Questions = new List<CompleteQuestionView>()
-                             };
 
-                for (int index = 0; index < propagated.Count; index++)
-                {
-                    CompleteGroup p = propagated[index];
-                    CompleteQuestionView cq = qf.CreateQuestion(doc, p, p.Children[i] as ICompleteQuestion);
-                    pq.Questions.Add(cq);
-                    PropagatedGroups[index].Questions.Add(cq);
-                }
-                //PropagatedQuestions.Add(pq);
-            }
-            foreach (PropagatedGroup group in PropagatedGroups)
+            foreach (PropagatedGroupMobileView group in propagetedGroups)
             {
-                List<string> featuredList = group.Questions.Where(q => q.Featured)
+                List<string> featuredList = group.Children.OfType<CompleteQuestionView>().Where(q => q.Featured)
                     .Select(questionView => string.Join(",", questionView.Answers.Where(a => a.Selected)
-                                                                 .Select(
-                                                                     answer =>
-                                                                     !string.IsNullOrEmpty(answer.Title)
+                                                                 .Select(answer => !string.IsNullOrEmpty(answer.Title)
                                                                          ? answer.Title
                                                                          : answer.AnswerValue)
-                                                                 .Where(a => !string.IsNullOrEmpty(a)).ToArray())).
-                    ToList();
+                                                                 .Where(a => !string.IsNullOrEmpty(a)).ToArray())).ToList();
                 group.FeaturedTitle = string.Join(",", featuredList.Where(f => !string.IsNullOrEmpty(f)));
             }
+
+            this.Children.AddRange(propagetedGroups);
         }
-
-
-        public Guid PublicKey { get; set; }
-
-        public string Title { get; set; }
-
-        public Propagate Propagated { get; set; }
-
-        public ScreenNavigation Navigation { get; set; }
-
-        public List<Guid> PropogationPublicKeys { get; set; }
-
-        public List<CompleteQuestionView> Questions { get; set; }
-
-        public List<CompleteGroupMobileView> Groups { get; set; }
-
-        //public List<PropagatedQuestion> PropagatedQuestions { get; set; }
-
-        public List<bool> AutoPropagate { get; set; }
-
-        public PropagatedGroup PropagateTemplate { get; set; }
-
-        public List<PropagatedGroup> PropagatedGroups { get; set; }
-
-       /* public int PropagatedGroupsCount
-        {
-            get { return PropagatedQuestions.Count > 0 ? PropagatedQuestions[0].Questions.Count : 0; }
-        }*/
+        public PropagatedGroupMobileView PropagateTemplate { get; set; }
 
         public Counter Totals { get; set; }
 

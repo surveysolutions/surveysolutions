@@ -93,3 +93,8 @@ Synchronization/Synchronization.1.2.dotCover
 Synchronization/Synchronization.6.0.ReSharper.user
 Awesomium/_ReSharper.Awesomium.NET Samples/*
 Awesomium/Core/C/Awesomium/Debug/*
+Externals/Extentions/Ncqrs.Eventing.Sourcing.Snapshotting.DynamicSnapshot.Tests/bin/
+Externals/Extentions/Ncqrs.Messaging.Tests/obj/
+Externals/Extentions/Ncqrs.Messaging/obj/
+Externals/Extentions/Ncqrs.Eventing.Sourcing.Snapshotting.DynamicSnapshot/obj/
+Externals/Extentions/Ncqrs.Eventing.Sourcing.Snapshotting.DynamicSnapshot.Tests/obj/

@@ -13,26 +13,27 @@ namespace RavenQuestionnaire.Core
     public class MemoryCommandInvoker : IMemoryCommandInvoker
     {
         private IKernel container;
-        private IDocumentSession documentSession;
+     //   private IDocumentSession documentSession;
         private IClientSettingsProvider clientSettingsProvider;
 
         public MemoryCommandInvoker(IKernel container,
                                     IClientSettingsProvider clientSettingsProvider)
         {
             this.container = container;
-            this.documentSession = container.Get<IDocumentSession>();
+         //   this.documentSession = container.Get<IDocumentSession>();
             this.clientSettingsProvider = clientSettingsProvider;
         }
 
         public void Execute<T>(T command) where T : ICommand
         {
+          //  var documentSession = container.Get<IDocumentSession>();
             var handler = container.Get<ICommandHandler<T>>();
             handler.Handle(command);
-            SaveEvent(handler.GetType(), command);
+            SaveEvent(handler.GetType(), command, container.Get<IDocumentSession>());
         }
 
         //TODO remove that spike after event soursing implementation
-        protected void SaveEvent<T>(Type handlerType, T command) where T : ICommand
+        protected void SaveEvent<T>(Type handlerType, T command, IDocumentSession documentSession) where T : ICommand
         {
             System.Attribute[] attrs = System.Attribute.GetCustomAttributes(handlerType); // Reflection.
 
@@ -54,6 +55,7 @@ namespace RavenQuestionnaire.Core
 
         public void Execute(ICommand command, Guid eventPublicKey, Guid clientPublicKey)
         {
+           // var documentSession = container.Get<IDocumentSession>();
             var commandHandler = typeof (ICommandHandler<>);
             Type[] typeArgs = {command.GetType()};
             var reflectionGeneric = commandHandler.MakeGenericType(typeArgs);
@@ -62,13 +64,13 @@ namespace RavenQuestionnaire.Core
             reflectionGeneric.GetMethod("Handle").Invoke(handler, new object[] {command});
             //handler.Handle(command);
             //store the command in the store
-            SaveEvent(handler.GetType(), command);
+            SaveEvent(handler.GetType(), command, container.Get<IDocumentSession>());
 
         }
 
         public void Flush()
         {
-            documentSession.SaveChanges();
+            container.Get<IDocumentSession>().SaveChanges();
         }
     }
 }

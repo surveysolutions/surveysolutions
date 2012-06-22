@@ -37,17 +37,19 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Children.RemoveAll(a=>a is IQuestion);
         }
 
-        public AbstractQuestion AddQuestion(string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, Order answerOrder, Guid? groupPublicKey,
-            IEnumerable<Answer> answers)
+        public AbstractQuestion AddQuestion(string text, string stataExportCaption, QuestionType type, string condition, 
+            string validation, bool featured, Order answerOrder, Guid? groupPublicKey,IEnumerable<Answer> answers, Guid publicKey)
         {
 
             var result = new CompleteQuestionFactory().Create(type);
+            result.QuestionType = type;
             result.QuestionText = text;
             result.StataExportCaption = stataExportCaption;
             result.ConditionExpression = condition;
             result.ValidationExpression = validation;
             result.AnswerOrder = answerOrder;
             result.Featured = featured;
+            result.PublicKey = publicKey;
             UpdateAnswerList(answers, result);
           
 
@@ -126,11 +128,13 @@ namespace RavenQuestionnaire.Core.Entities
             }
             throw new ArgumentException(string.Format("target item doesn't exists -{0}", after));
         }
-        public void AddGroup(string groupText,Propagate propageted, Guid? parent)
+        public void AddGroup(string groupText, Guid publicKey, Propagate propageted, Guid? parent)
         {
             Group group = new Group();
             group.Title = groupText;
             group.Propagated = propageted;
+            group.PublicKey = publicKey;
+
             try
             {
                 Add(group, parent);
