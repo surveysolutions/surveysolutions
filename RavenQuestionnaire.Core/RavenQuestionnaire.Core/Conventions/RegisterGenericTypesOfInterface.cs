@@ -41,32 +41,34 @@ namespace RavenQuestionnaire.Core.Conventions
 
         public IEnumerable<IBindingWhenInNamedWithOrOnSyntax<object>> CreateBindings(Type targetType, IBindingRoot bindingRoot)
         {
-           //  Assembly containingAssembly = type.Assembly;
-            
+            //  Assembly containingAssembly = type.Assembly;
+
             if (!baseInterface.IsGenericType)
                 return Enumerable.Empty<IBindingWhenInNamedWithOrOnSyntax<object>>();
-            var matchedType =
-                targetType.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == baseInterface);
-         //   var result = new List<IBindingWhenInNamedWithOrOnSyntax<object>>();
-            if(matchedType!=null)
+            var matchedTypes =
+                targetType.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == baseInterface);
+            //   var result = new List<IBindingWhenInNamedWithOrOnSyntax<object>>();
+            var retval = new List<IBindingWhenInNamedWithOrOnSyntax<object>>();
+            foreach (Type matchedType in matchedTypes)
             {
+
+
                 Type[] wrappedTypes = matchedType.GetGenericArguments();
 
                 // Create the created type
                 var genericInterface = baseInterface.MakeGenericType(wrappedTypes);
-            //    yield return bindingRoot.Bind(genericInterface).To(targetType).InScope(scope);
-                   return new IBindingWhenInNamedWithOrOnSyntax<object>[1]
-                           {bindingRoot.Bind(genericInterface).To(targetType)};
+                retval.Add(bindingRoot.Bind(genericInterface).To(targetType));
 
-                
+
+
                 /*  var factoryInterface = type.MakeGenericType(originalInterface);
               //  var factory = typeof(RepositoryFactory<,>).MakeGenericType(type, originalInterface);
 
                 // Bind the factory interface to the implementation
                 result.Add(bindingRoot.Bind(factoryInterface).To(matchedGenericType));*/
             }
-            return  Enumerable.Empty<IBindingWhenInNamedWithOrOnSyntax<object>>();
-         
+            return retval;
+
 
         }
     }

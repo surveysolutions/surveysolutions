@@ -131,8 +131,17 @@ namespace RavenQuestionnaire.Core
         {
             lock (syncObj)
             {
-                _session.SaveChanges();
+                try
+                {
 
+                _session.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+                    logger.Fatal(e);
+                }
+              
                 if (_session.Advanced.NumberOfRequests >= SaveLimitCount - 30)
                 {
                     _session = GetNewSession();
