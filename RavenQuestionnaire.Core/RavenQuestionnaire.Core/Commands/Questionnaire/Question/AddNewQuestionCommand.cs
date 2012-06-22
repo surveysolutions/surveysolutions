@@ -60,12 +60,19 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             get;
             private set;
         }
+
+        public Guid PublicKey
+        {
+            get;
+            private set;
+        }
+
         public Answer[] Answers { get; set; }
 
         public UserLight Executor { get; set; }
 
         public AddNewQuestionCommand(string text, string stataExportCaption, QuestionType type, string questionnaireId,
-            Guid? groupPublicKey, string condition, string validation, string instructions, bool featured, Order answerOrder, 
+            Guid? groupPublicKey, Guid publicKey, string condition, string validation, string instructions, bool featured, Order answerOrder, 
             Answer[] answers, UserLight executor)
         {
             QuestionText = text;
@@ -74,6 +81,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             QuestionType = type;
             QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             GroupPublicKey = groupPublicKey;
+            PublicKey = publicKey;
             ConditionExpression = condition;
             Instructions = instructions;
             Answers = new Answer[0];

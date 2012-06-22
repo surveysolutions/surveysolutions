@@ -169,11 +169,14 @@ namespace RavenQuestionnaire.Web.Controllers
 
                     if (model.PublicKey == Guid.Empty)
                     {
+                        Guid newItemKey = Guid.NewGuid(); 
+
                         AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.Title,
                                                                                         model.StataExportCaption,
                                                                                         model.QuestionType,
                                                                                         model.QuestionnaireId,
                                                                                         model.Parent,
+                                                                                        newItemKey,
                                                                                         model.ConditionExpression,
                                                                                         model.ValidationExpression,
                                                                                         model.Instructions,
@@ -186,7 +189,6 @@ namespace RavenQuestionnaire.Web.Controllers
 
                         //new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
-                        Guid newItemKey = Guid.NewGuid(); 
                         commandService.Execute(new AddQuestionCommand(Guid.Parse(model.QuestionnaireId),
                                                                                         newItemKey,
                                                                                         model.Title,

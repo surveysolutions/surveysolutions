@@ -1,42 +1,47 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@using RavenQuestionnaire.Core.Views.Question
 @model CompleteGroupMobileView
-@foreach (var question in Model.Questions)
+@foreach (var item in Model.Children)
 {
-    <div class="ui-body ui-body-c">
-        @using (Ajax.BeginFormHtml5("SaveSingleResultJson", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions))
-        {
-            //  using (Ajax.BeginFormHtml5("Index", "CompleteQuestionnaireAsync1", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions)){
-            using (Html.BeginCollectionItem("questions", true, question.PublicKey))
-            {
-                Html.RenderPartial("~/Views/Question/_TakeRowHtml5.cshtml", question);
-            }
-            using (Html.BeginCollectionItem("settings", true, question.PublicKey))
-            {
-            @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
-            @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
-            }
-        }
-    </div>
-    <div class="ui-body">
-        &nbsp;</div>
-}
-@foreach (var @group in Model.Groups)
-{
-    if (@group.PublicKey != Guid.Empty)
+    if ((item as CompleteQuestionView) != null)
     {
-        if (@group.Propagated != Propagate.None)
-        {
-            @Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", @group)
-        }
-        else
-        {
-            <a href="#screen-@(@group.PublicKey)" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
-        }
+        var question = item as CompleteQuestionView;
+        <div class="ui-body ui-body-c">
+            @using (Ajax.BeginFormHtml5("SaveSingleResultJson", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions))
+            {
+                //  using (Ajax.BeginFormHtml5("Index", "CompleteQuestionnaireAsync1", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions)){
+                using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+                {
+                    Html.RenderPartial("~/Views/Question/_TakeRowHtml5.cshtml", question);
+                }
+                using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+                {
+                    @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+                    @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
+                }
+            }
+        </div>
+        <div class="ui-body">&nbsp;</div>
     }
     else
     {
+        var @group = item as CompleteGroupMobileView;
+        if (@group.PublicKey != Guid.Empty)
+        {
+            if (@group.Propagated != Propagate.None)
+            {
+            @Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", @group)
+            }
+            else
+            {
+            <a class="nav-link" href="#screen-@(@group.PublicKey)" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
+            }
+        }
+        else
+        {
     @Html.Partial("~/Views/Group/Mobile/_CompleteGroup.cshtml", @group)
+        }
     }
 }

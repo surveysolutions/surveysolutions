@@ -24,7 +24,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Questionnaire questionnaire= new Questionnaire("some questionanire", Guid.NewGuid());
             questionaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qId")).Returns(questionnaire);
             CreateNewGroupHandler handler = new CreateNewGroupHandler(questionaireRepositoryMock.Object);
-            handler.Handle(new CreateNewGroupCommand("some text", Propagate.None, "qId", null, null));
+            handler.Handle(new CreateNewGroupCommand("some text", Guid.NewGuid(), Propagate.None, "qId", null, null));
             var innerDocument = ((IEntity<QuestionnaireDocument>) questionnaire).GetInnerDocument();
             Assert.AreEqual(innerDocument.Children.Count, 1);
             Assert.AreEqual(((IGroup)innerDocument.Children[0]).Title, "some text");
@@ -39,7 +39,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             innerDocument.Children.Add(topGroup);
             questionaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qId")).Returns(questionnaire);
             CreateNewGroupHandler handler = new CreateNewGroupHandler(questionaireRepositoryMock.Object);
-            handler.Handle(new CreateNewGroupCommand("some text", Propagate.None, "qId", topGroup.PublicKey, null));
+            handler.Handle(new CreateNewGroupCommand("some text", Guid.NewGuid(), Propagate.None, "qId", topGroup.PublicKey, null));
 
             Assert.AreEqual((innerDocument.Children[0] as Group).Children.Count, 1);
             Assert.AreEqual(((IGroup)(innerDocument.Children[0] as Group).Children[0]).Title, "some text");
@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CreateNewGroupHandler handler = new CreateNewGroupHandler(questionaireRepositoryMock.Object);
 
             Assert.Throws<ArgumentException>(
-                () => handler.Handle(new CreateNewGroupCommand("some text", Propagate.None, "qId", Guid.NewGuid(), null)));
+                () => handler.Handle(new CreateNewGroupCommand("some text", Guid.NewGuid(), Propagate.None, "qId", Guid.NewGuid(), null)));
         }
     }
 }

@@ -21,12 +21,13 @@ namespace RavenQuestionnaire.Core.Services
         public bool Validate(CompleteQuestionnaire entity, Guid? groupKey, Guid? propagationKey)
         {
             bool result = true;
-            CompleteQuestionnaireValidationExecutor validator =
-                new CompleteQuestionnaireValidationExecutor(entity.GetInnerDocument());
-
+          
             if (!groupKey.HasValue)
             {
-                result = validator.Execute(entity.GetInnerDocument());
+                CompleteQuestionnaireValidationExecutor validator =
+              new CompleteQuestionnaireValidationExecutor(new GroupHash(entity.GetInnerDocument()));
+
+                result = validator.Execute();
 
             
             }
@@ -35,7 +36,10 @@ namespace RavenQuestionnaire.Core.Services
                 var group = entity.GetInnerDocument().FindGroupByKey(groupKey.Value, propagationKey);
                 if (group == null)
                     throw new ArgumentException(string.Format("group with publick key {0} doesn't exist", groupKey));
-                result = validator.Execute(group);
+                CompleteQuestionnaireValidationExecutor validator =
+              new CompleteQuestionnaireValidationExecutor(new GroupHash(group));
+
+                result = validator.Execute();
             }
 
             var command = new GenerateQuestionnaireStatisticCommand(entity, null);

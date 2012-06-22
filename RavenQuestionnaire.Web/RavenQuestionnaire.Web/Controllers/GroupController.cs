@@ -48,16 +48,19 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     if (model.PublicKey == Guid.Empty)
                     {
-                        var createCommand = new CreateNewGroupCommand(model.Title, model.Propagated,
+
+                        Guid newItemKey = Guid.NewGuid();
+                        var createCommand = new CreateNewGroupCommand(model.Title, newItemKey, model.Propagated,
                                                                       model.QuestionnaireId, model.Parent,
                                                                       GlobalInfo.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
 
                         //new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
-                        Guid newItemKey = Guid.NewGuid(); 
-                        commandService.Execute(new AddGroupCommand(Guid.Parse(model.QuestionnaireId), newItemKey,model.Title, model.Propagated, 
-                             model.Parent));
+                        
+                        
+                        commandService.Execute(new AddGroupCommand(Guid.Parse(model.QuestionnaireId), newItemKey, 
+                            model.Title, model.Propagated, model.Parent));
                     }
                     else
                     {
@@ -217,6 +220,11 @@ namespace RavenQuestionnaire.Web.Controllers
                 var propagationKey = Guid.NewGuid();
                 var command = new PropagateGroupCommand(questionnaireId, propagationKey, publicKey, GlobalInfo.GetCurrentUser());
                 commandInvoker.Execute(command);
+                
+                //new handling
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(new AddPropagatableGroupCommand(Guid.Parse(questionnaireId), propagationKey, publicKey));
+
                 return Json(new { propagationKey = propagationKey, parentGroupPublicKey = publicKey });
             }
             catch (Exception e)

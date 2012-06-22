@@ -38,6 +38,10 @@ namespace RavenQuestionnaire.Web.App_Start
 
             service.RegisterExecutor(typeof(AddGroupCommand), new UoWMappedCommandExecutor(mapper));
             service.RegisterExecutor(typeof(AddQuestionCommand), new UoWMappedCommandExecutor(mapper));
+            service.RegisterExecutor(typeof(SetAnswerCommand), new UoWMappedCommandExecutor(mapper));
+
+            service.RegisterExecutor(typeof(AddPropagatableGroupCommand), new UoWMappedCommandExecutor(mapper));
+            
 
             return service;
         }

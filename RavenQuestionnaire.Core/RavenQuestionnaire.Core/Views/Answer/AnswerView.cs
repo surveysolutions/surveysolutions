@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using RavenQuestionnaire.Core.Views.Card;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -11,6 +12,8 @@ namespace RavenQuestionnaire.Core.Views.Answer
         public Guid PublicKey { get; set; }
         public string Title { get; set; }
         public Guid? Parent { get; set; }
+
+        public List<ICompositeView> Children { get; set; }
 
         public int Index { get; set; }
         public string AnswerValue { get; set; }

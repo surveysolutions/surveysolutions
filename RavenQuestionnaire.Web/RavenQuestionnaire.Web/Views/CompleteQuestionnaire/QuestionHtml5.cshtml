@@ -58,12 +58,12 @@
     <!-- Start of first page -->
     <div data-role="page" id="sidebar">
         <div data-role="header" data-theme="c">
-            <a data-corners="false"  data-icon="arrow-l" href="@Url.Action("Index", "Dashboard")" rel = "external">
+            <a class="nav-link" data-corners="false"  data-icon="arrow-l" href="@Url.Action("Index", "Dashboard")" rel = "external">
                 Dashboard</a>
             <h3></h3>
         </div>
         <!-- /header -->
-        <div data-role="content">
+        <div data-role="content" class="with-footer">
             <ul data-role="listview" data-theme="c" data-dividertheme="d" data-counttheme="e">
                 @foreach (var gh in Model.Groups)
                 {
@@ -110,7 +110,7 @@
     <div data-role="page" id="main" class="page">
         @RenderNavigation(Model.CurrentScreen.Navigation)
         <!-- /header -->
-        <div data-role="content" class="@(Model.Status.Name == "Completed" ? "ui-disabled" : "")">
+        <div data-role="content" class="@(Model.Status.Name == "Completed" ? "ui-disabled" : "") ">
             @Html.Partial("~/Views/Group/_ScreenHtml5.cshtml", Model.CurrentScreen)
             <div style="width: 100%; height: 50px;">
                 &nbsp;</div>
@@ -193,13 +193,13 @@
         {
             var breadCumb = crumbs[i];
             if (i == 0)
-            { <a href="#main" class="breadcrumb" data-inline="true" data-role="button" data-corners="false"
+            { <a href="#main" class="breadcrumb nav-link" data-inline="true" data-role="button" data-corners="false"
                 data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a> }
             else
-            { <a href="#screen-@breadCumb.PublicKey"  class="breadcrumb" data-inline="true" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
+            { <a href="#screen-@breadCumb.PublicKey"  class="breadcrumb nav-link" data-inline="true" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
             }
         }
-        <a class="breadcrumb ui-disabled" aria-disabled="true" data-role="button" data-inline="true"
+        <a class="breadcrumb ui-disabled nav-link" aria-disabled="true" data-role="button" data-inline="true"
             data-corners="false" data-icon="arrow-r" data-iconpos="right">@screen.CurrentScreenTitle</a>
     </div>
 }
@@ -210,18 +210,18 @@
         {
             if (!screen.PrevScreen.IsExternal)
             {
-            <a class="previous-screen" href="#screen-@(screen.PrevScreen.PublicKey)" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >
+            <a class="previous-screen nav-link" href="#screen-@(screen.PrevScreen.PublicKey)" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >
                 Prev Group</a>
             }
             else
             {
-            <a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = screen.PrevScreen.PublicKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" rel="external" data-ajax="false">
+            <a class="nav-link" href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = screen.PrevScreen.PublicKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" rel="external" data-ajax="false">
                 Next Group</a>
             }
         }
         else
         {
-            <a class="previous-screen ui-disabled" href="#" data-icon="arrow-l" data-theme="b"
+            <a class="previous-screen ui-disabled nav-link" href="#" data-icon="arrow-l" data-theme="b"
                 iconpos="notext" data-corners="false">Prev Group</a>
         }
         <h1><span></span> @screen.CurrentScreenTitle</h1>
@@ -229,18 +229,18 @@
         {
             if (!screen.NextScreen.IsExternal)
             {
-            <a class="next-screen" href="#screen-@screen.NextScreen.PublicKey" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">
+            <a class="next-screen nav-link" href="#screen-@screen.NextScreen.PublicKey" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">
                 Next Group</a>
             }
             else
             {
-            <a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = screen.NextScreen.PublicKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false"  rel="external" data-ajax="false">
+            <a class="nav-link" href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = screen.NextScreen.PublicKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false"  rel="external" data-ajax="false">
                 Next Group</a>
             }
         }
         else
         { 
-            <a class="next-screen ui-disabled" href="#" data-icon="arrow-r" data-iconpos="right"
+            <a class="next-screen ui-disabled nav-link" href="#" data-icon="arrow-r" data-iconpos="right"
                 data-theme="b" data-corners="false">Next Group</a> 
         }
     </div>

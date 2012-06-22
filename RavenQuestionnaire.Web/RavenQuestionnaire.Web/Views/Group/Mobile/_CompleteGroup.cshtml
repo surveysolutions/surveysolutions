@@ -6,7 +6,6 @@
 @if (Model.Propagated != Propagate.None)
 {
     <div>
-        
         @Html.Partial("~/Views/Group/Mobile/_PropagatebleGroup.cshtml", Model)
         
         @if (Model.Propagated != Propagate.AutoPropagated)

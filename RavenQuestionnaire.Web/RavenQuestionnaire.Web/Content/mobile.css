@@ -188,3 +188,8 @@
 #main > .ui-content {
     margin-bottom: 40px;
 }
+#sidebar .ui-content.with-footer
+{
+	margin-bottom: 40px;
+}
+

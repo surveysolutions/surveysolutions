@@ -24,7 +24,7 @@ namespace RavenQuestionnaire.Core.Documents
         {
             CreationDate = DateTime.Now;
             LastEntryDate = DateTime.Now;
-           // PublicKey = Guid.NewGuid();
+            PublicKey = Guid.NewGuid();
             Children = new List<IComposite>();
             this.observers=new List<IObserver<CompositeEventArgs>>();
         }
@@ -114,7 +114,7 @@ namespace RavenQuestionnaire.Core.Documents
                 return;
             }
 
-            foreach (IGroup child in this.Children)
+            foreach (IComposite child in this.Children)
             {
                 try
                 {

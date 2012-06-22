@@ -17,8 +17,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             QuestionsWithCards = new List<CompleteQuestionView>();
             QuestionsWithInstructions = new List<CompleteQuestionView>();
             Screens = new List<CompleteGroupMobileView>();
-            PropagatedScreens = new List<PropagatedGroup>();
-            Templates = new List<PropagatedGroup>();
+            PropagatedScreens = new List<PropagatedGroupMobileView>();
+            Templates = new List<PropagatedGroupMobileView>();
         }
         public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc, ICompleteGroup currentGroup)
             : this()
@@ -101,15 +101,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             CollectGalleries(currentGroup);
             CollectInstructions(currentGroup);
             CollectScreens(currentGroup);
-            CurrentScreen = new CompleteGroupMobileView()
-                                {
-                                    Navigation = currentGroup.Navigation,
-                                    Questions = currentGroup.Questions,
-                                    Groups = currentGroup.Groups,
-                                    Title = currentGroup.Title,
-                                    PublicKey = currentGroup.PublicKey,
-                                    Propagated = currentGroup.Propagated
-                                };
+            CurrentScreen = currentGroup;
         }
 
         public string Id { get; set; }
@@ -124,8 +116,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
         public CompleteGroupMobileView CurrentScreen { get; set; }
         public List<CompleteGroupMobileView> Screens { get; set; }
-        public List<PropagatedGroup> Templates { get; set; }
-        public List<PropagatedGroup> PropagatedScreens { get; set; }
+        public List<PropagatedGroupMobileView> Templates { get; set; }
+        public List<PropagatedGroupMobileView> PropagatedScreens { get; set; }
 
         public UserLight Responsible { set; get; }
 
@@ -179,18 +171,18 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
         private void CollectScreens(CompleteGroupMobileView @group)
         {
-            if (@group.Propagated == Propagate.None)
+            if (@group.PropagateTemplate != null)
+                Templates.Add(@group.PropagateTemplate);
+
+            foreach (var g in @group.Children.OfType<CompleteGroupMobileView>())
             {
-                foreach (var g in @group.Groups)
+                if (@group.Propagated == Propagate.None)
                 {
                     Screens.Add(g);
                     CollectScreens(g);
                 }
             }
-
-            if (@group.PropagateTemplate != null)
-                Templates.Add(@group.PropagateTemplate);
-            foreach (var g in @group.PropagatedGroups)
+            foreach (var g in @group.Children.OfType<PropagatedGroupMobileView>())
             {
                 PropagatedScreens.Add(g);
             }
@@ -198,18 +190,20 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
         private void CollectGalleries(CompleteGroupMobileView @group)
         {
-            if (@group.Questions.Count > 0)
+            var qs = @group.Children.OfType<CompleteQuestionView>().ToList();
+            if (qs.Count() > 0)
             {
-                var enabled = @group.Questions.Where(q => q.Enabled).ToList();
+                var enabled = qs.Where(q => q.Enabled).ToList();
                 QuestionsWithCards.AddRange(enabled.Where(question => (question.Cards.Length > 0)).ToList());
             }
             if (@group.Propagated != Propagate.None)
             {
-                var questions = @group.PropagateTemplate.Questions;
+                var questions = @group.PropagateTemplate.Children.OfType<CompleteQuestionView>().ToList();
                 var hasCards = questions.Where(question => question.Cards.Length > 0);
                 QuestionsWithCards.AddRange(hasCards.ToList());
             }
-            foreach (var g in @group.Groups)
+            var groups = @group.Children.OfType<CompleteGroupMobileView>().ToList();
+            foreach (var g in groups)
             {
                 CollectGalleries(g);
             }
@@ -217,18 +211,20 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
         private void CollectInstructions(CompleteGroupMobileView @group)
         {
-            if (@group.Questions.Count > 0)
+            var qs = @group.Children.OfType<CompleteQuestionView>().ToList();
+            if (qs.Count > 0)
             {
-                var enabled = @group.Questions.Where(q => q.Enabled).ToList();
+                var enabled = qs.Where(q => q.Enabled).ToList();
                 QuestionsWithInstructions.AddRange(enabled.Where(question => !string.IsNullOrWhiteSpace(question.Instructions)).ToList());
             }
             if (@group.Propagated != Propagate.None)
             {
-                var questions = @group.PropagateTemplate.Questions;
+                var questions = @group.PropagateTemplate.Children.OfType<CompleteQuestionView>().ToList();
                 var hasInstructions = questions.Where(q => (!string.IsNullOrWhiteSpace(q.Instructions)));
                 QuestionsWithInstructions.AddRange(hasInstructions.ToList());
             }
-            foreach (var g in @group.Groups)
+            var groups = @group.Children.OfType<CompleteGroupMobileView>().ToList();
+            foreach (var g in groups)
             {
                 CollectInstructions(g);
             }
@@ -238,7 +234,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         {
             var total = new Counter();
 
-      //      var propagated = @group as PropagatableCompleteGroup;
+            //      var propagated = @group as PropagatableCompleteGroup;
             if (@group.PropogationPublicKey.HasValue)
             {
                 total = total + CountQuestions(@group.Children.Select(q => q as ICompleteQuestion).ToList());
@@ -269,7 +265,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                             {
                                 Total = questions.Count,
                                 Enablad = enabled.Count(),
-                                Answered = enabled.Count(question => question.Answer!=null)
+                                Answered = enabled.Count(question => question.Answer != null)
                             };
             return total;
         }

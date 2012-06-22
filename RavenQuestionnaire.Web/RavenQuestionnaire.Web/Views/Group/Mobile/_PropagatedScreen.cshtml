@@ -1,11 +1,13 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
-@model PropagatedGroup
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@using RavenQuestionnaire.Core.Views.Question
+@model PropagatedGroupMobileView
 @{ var groupKey = "propagatedGroup" + Model.PropogationKey; }
 <ul data-role="listview" data-inset="true" id="@groupKey">
-    @foreach (var pquestion in Model.Questions)
+    @foreach (var pquestion in Model.Children.OfType<CompleteQuestionView>())
     {
-        <li data-role="fieldcontain">@* @RenderQuestion(pquestion, !Model.PublicKey, Model.PropogationKey)*@
+        <li class="nav-link" data-role="fieldcontain">@* @RenderQuestion(pquestion, !Model.PublicKey, Model.PropogationKey)*@
             @using (Ajax.BeginFormHtml5("SaveSingleResultJson", "CompleteQuestionnaire", ViewBag.AjaxOptions as AjaxOptions, new { autocomplete = "off" }))
             {
                 using (Html.BeginCollectionItem("questions", true, pquestion.PublicKey + "_" + Model.PropogationKey))

@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -26,7 +27,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         [Test]
         public void EvaluateCondition_ConditionIsEmpty_ReturnsTrue()
         {
-            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new GroupHash());
             bool result = executor.Execute(
                                            new SingleCompleteQuestion());
             Assert.AreEqual(result, true);
@@ -34,7 +35,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         [Test]
         public void EvaluateCondition_ConditionIsInvalid_ReturnsFalse()
         {
-            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new GroupHash());
             bool result = executor.Execute(
                                            new SingleCompleteQuestion() { ConditionExpression = "invalid condition" });
             Assert.AreEqual(result, false);
@@ -42,7 +43,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         [Test]
         public void EvaluateCondition_ConditionIsValidParamsAreEmpty_ReturnsTrue()
         {
-            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new GroupHash());
 
             bool result = executor.Execute(
                                            new SingleCompleteQuestion() { ConditionExpression = "5>3" });
@@ -54,7 +55,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             
             CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire entity = new CompleteQuestionnaire(doc);
-            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(doc);
+           
             var question = new SingleCompleteQuestion("");
             question.ConditionExpression = "[" + question.PublicKey + "]==3";
             doc.Children.Add(question);
@@ -64,6 +65,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             completeAnswer.AnswerValue = "3";
             completeAnswer.Selected = true;
             question.Children.Add(completeAnswer);
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
             bool result = executor.Execute(question);
             Assert.AreEqual(result, true);
         }
@@ -76,11 +78,12 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             
             CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
             CompleteQuestionnaire entity = new CompleteQuestionnaire(doc);
-            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(doc);
+           
             var question = new SingleCompleteQuestion("");
             question.ConditionExpression = "[" + question.PublicKey + "]==3";
             doc.Children.Add(question);
             question.Children.Add(answer);
+            CompleteQuestionnaireConditionExecutor executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
             bool result = executor.Execute(question);
             Assert.AreEqual(result, false);
         }

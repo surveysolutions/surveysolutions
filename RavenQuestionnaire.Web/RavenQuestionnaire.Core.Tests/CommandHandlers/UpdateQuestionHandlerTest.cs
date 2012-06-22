@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
@@ -20,7 +21,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Questionnaire entity = new Questionnaire(innerDocument);
-            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null,null);
+            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null,null, Guid.NewGuid());
             FileDocument innerFileDocument = new FileDocument();
             innerFileDocument.Id = "fID";
             File fEntity = new File(innerFileDocument);
