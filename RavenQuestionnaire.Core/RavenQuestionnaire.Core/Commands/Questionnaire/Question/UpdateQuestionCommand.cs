@@ -32,6 +32,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string questionText,
           string stataExportCaption, QuestionType questionType, string conditionExpression,
            string validationExpression, bool featured, string instructions, Answer[] answers, Order answerOrder, UserLight executor)
+            string instructions, Answer[] answers, Order answerOrder, UserLight executor)
         {
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.AnswerOrder = answerOrder;
@@ -47,11 +48,12 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.Instructions = instructions;
             this.Answers = answers;
         }
-
+        /*
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string questionText,
            string stataExportCaption, QuestionType questionType, string conditionExpression, 
             string validationExpression, bool featured, string instructions, AnswerView[] answers, Order answerOrder, UserLight executor):
             this(questionnaireId,questionPublicKey,questionText,stataExportCaption,questionType,conditionExpression,validationExpression,featured,instructions,new Answer[0],answerOrder,executor)
+                featured, instructions, answerOrder, executor)
         {
             if (answers != null)
                 this.Answers =
@@ -67,7 +69,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
                                 AnswerImage =
                                     string.IsNullOrEmpty(a.AnswerImage) ? "" : IdUtil.CreateFileId(a.AnswerImage)
                             }).ToArray();
-        }
+        }*/
 
         #endregion
     }

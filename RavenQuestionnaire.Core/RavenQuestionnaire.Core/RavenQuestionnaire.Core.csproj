@@ -201,6 +201,8 @@
     <Compile Include="CommandHandlers\User\UpdateUserHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UploadImageCommandHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
+    <Compile Include="Commands\Collection\Copy of DeleteCollectionItemCommand.cs" />
+    <Compile Include="Commands\Collection\CreateCollectionCommand.cs" />
     <Compile Include="Commands\Collection\CreateNewCollectionCommand.cs" />
     <Compile Include="Commands\Collection\DeleteCollectionCommand.cs" />
     <Compile Include="Commands\Collection\DeleteCollectionItemCommand.cs" />
@@ -208,9 +210,18 @@
     <Compile Include="Commands\File\DeleteFileCommand.cs" />
     <Compile Include="Commands\File\UpdateFileMetaCommand.cs" />
     <Compile Include="Commands\File\UploadFileCommand.cs" />
+    <Compile Include="Commands\Location\CreateLocationCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\CreateCompleteQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs" />
+    <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Flow\CreateFlowGraphCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\CreateNewFlowGraphCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\AddPropagatableGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\ValidateGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\MoveQuestionnaireItemCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\ChangeQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateConditionsCommand.cs" />
     <Compile Include="Commands\Status\AddNewStatusFlowItem.cs" />
     <Compile Include="Commands\Questionnaire\UpdateImageCommand.cs" />
@@ -262,6 +273,11 @@
     <Compile Include="Documents\StatusDocument.cs" />
     <Compile Include="Documents\SyncProcessDocument.cs" />
     <Compile Include="Documents\UserDocument.cs" />
+    <Compile Include="Domain\CollectionAR.cs" />
+    <Compile Include="Domain\CompleteQuestionnaireAR.cs" />
+    <Compile Include="Domain\CompleteQuestionnaireStatisticsAR.cs" />
+    <Compile Include="Domain\LocationAR.cs" />
+    <Compile Include="Domain\QuestionnaireAR.cs" />
     <Compile Include="Entities\ClientSettings.cs" />
     <Compile Include="Entities\Collection.cs" />
     <Compile Include="Entities\CompleteQuestionnaire.cs" />
@@ -334,6 +350,16 @@
     <Compile Include="Entities\Subscribers\Subscriber.cs" />
     <Compile Include="Entities\SyncProcess.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Events\Collection\NewCollectionCreated.cs" />
+    <Compile Include="Events\Location\LocationDeleted.cs" />
+    <Compile Include="Events\Location\NewLocationCreated.cs" />
+    <Compile Include="Events\Questionnaire\Completed\AnswerSet.cs" />
+    <Compile Include="Events\Questionnaire\Completed\NewCompleteQuestionnaireCreated.cs" />
+    <Compile Include="Events\Questionnaire\Completed\PropagatableGroupAdded.cs" />
+    <Compile Include="Events\Questionnaire\QuestionChanged.cs" />
+    <Compile Include="Events\Questionnaire\NewGroupAdded.cs" />
+    <Compile Include="Events\Questionnaire\NewQuestionAdded.cs" />
+    <Compile Include="Events\Questionnaire\NewQuestionnaireCreated.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
@@ -351,6 +377,7 @@
     <Compile Include="Indexes\CompleteQuestionnaireByStatus.cs" />
     <Compile Include="Indexes\QuestionnaireGroupedByTemplateIndex.cs" />
     <Compile Include="Indexes\UsersInLocationIndex.cs" />
+    <Compile Include="NCQRSInit.cs" />
     <Compile Include="MemoryCommandInvoker.cs" />
     <Compile Include="Repositories\CollectionRepository.cs" />
     <Compile Include="Repositories\ICollectionRepository.cs" />
@@ -563,6 +590,17 @@
       <Project>{5F014003-50D8-49E0-8AFE-91D38DCCC97C}</Project>
       <Name>NCalc</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
+      <Project>{EA93A91D-7BC9-4EC0-8A22-8A772AFD76C3}</Project>
+      <Name>Ncqrs.Eventing.Storage.RavenDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
+      <Name>Ncqrs</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commands\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CommandHandlers\Statistics\" />

@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Core.Services
         #endregion
         public CompleteQuestionnaire CreateCompleteQuestionnaire(Questionnaire questionnaire, Guid completeQuestionnaireGuid, UserLight user, SurveyStatus status)
         {
-            CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire,completeQuestionnaireGuid, user, status, this.subscriber);
+            CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire, completeQuestionnaireGuid, user, status, this.subscriber);
            
             _questionRepository.Add(entity);
            
