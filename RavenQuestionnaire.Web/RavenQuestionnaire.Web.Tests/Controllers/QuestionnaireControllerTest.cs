@@ -7,8 +7,6 @@ using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Repositories;
-using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Web.Controllers;
 
@@ -46,11 +44,12 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void WhenExistingQuestionnaireIsSubmittedWIthValidModel_CommandIsSent()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
 
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
 
             Controller.Save(new QuestionnaireView(innerDocument));
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateQuestionnaireCommand>()), Times.Once());

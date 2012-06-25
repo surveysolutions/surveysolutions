@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
             PropogationPublicKey = propogationPublicKey;
             this.QuestionPublickey = question.PublicKey;
 
-            if (question.QuestionType == QuestionType.ExtendedDropDownList || question.QuestionType == QuestionType.DropDownList ||
+            if (/*question.QuestionType == QuestionType.ExtendedDropDownList ||*/ question.QuestionType == QuestionType.DropDownList ||
                 question.QuestionType == QuestionType.SingleOption || question.QuestionType == QuestionType.YesNo)
             {
                 if (question.Answers != null)

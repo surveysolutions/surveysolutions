@@ -117,7 +117,7 @@
             <param name="key">The key.</param>
             <param name="etag">The etag.</param>
         </member>
-        <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.PutAttachment(System.String,System.Nullable{System.Guid},System.Byte[],Raven.Json.Linq.RavenJObject)">
+        <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.PutAttachment(System.String,System.Nullable{System.Guid},System.IO.Stream,Raven.Json.Linq.RavenJObject)">
             <summary>
             Puts the attachment with the specified key
             </summary>
@@ -133,12 +133,25 @@
             <param name="key">The key.</param>
             <returns></returns>
         </member>
+        <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.HeadAttachment(System.String)">
+            <summary>
+            Retrieves the attachment metadata with the specified key, not the actual attachmet
+            </summary>
+            <param name="key">The key.</param>
+            <returns></returns>
+        </member>
         <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.DeleteAttachment(System.String,System.Nullable{System.Guid})">
             <summary>
             Deletes the attachment with the specified key
             </summary>
             <param name="key">The key.</param>
             <param name="etag">The etag.</param>
+        </member>
+        <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.GetDatabaseNames(System.Int32)">
+            <summary>
+            Get tenant database names (Server/Client mode only)
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.GetIndexNames(System.Int32,System.Int32)">
             <summary>
@@ -257,6 +270,11 @@
             <param name="credentialsForSession">The credentials for session.</param>
             <returns></returns>
         </member>
+        <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.ForceReadFromMaster">
+            <summary>
+            Force the database commands to read directly from the master, unless there has been a failover.
+            </summary>
+        </member>
         <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.UpdateByIndex(System.String,Raven.Abstractions.Data.IndexQuery,Raven.Abstractions.Data.PatchRequest[])">
             <summary>
             Perform a set based update using the specified index, not allowing the operation
@@ -297,7 +315,7 @@
             with the specified database
             </summary>
         </member>
-        <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.GetRootDatabase">
+        <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.ForDefaultDatabase">
             <summary>
             Create a new instance of <see cref="T:Raven.Client.Connection.IDatabaseCommands"/> that will interact
             with the root database. Useful if the database has works against a tenant database.
@@ -346,6 +364,25 @@
             <summary>
             Disable all caching within the given scope
             </summary>
+        </member>
+        <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.GetStatistics">
+            <summary>
+            Retrieve the statistics for the database
+            </summary>
+        </member>
+        <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.UrlFor(System.String)">
+            <summary>
+            Get the full URL for the given document key. This is not supported for embedded database.
+            </summary>
+        </member>
+        <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.Head(System.String)">
+            <summary>
+            Retrieves the document metadata for the specified document key.
+            </summary>
+            <param name="key">The key.</param>
+            <returns>
+            The document metadata for the specifed document, or null if the document does not exist
+            </returns>
         </member>
         <member name="M:Raven.Client.Embedded.EmbeddedDatabaseCommands.MultiGet(Raven.Abstractions.Data.GetRequest[])">
             <summary>

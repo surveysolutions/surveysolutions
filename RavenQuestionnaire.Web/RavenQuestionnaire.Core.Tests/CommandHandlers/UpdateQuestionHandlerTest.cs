@@ -20,7 +20,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_QuestionIsUpdatedToRepository()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
             Questionnaire entity = new Questionnaire(innerDocument);
             var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null,null, Guid.NewGuid());
             FileDocument innerFileDocument = new FileDocument();
@@ -29,7 +30,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
 
             Mock<IFileRepository> fileRepositoryMock = new Mock<IFileRepository>();
             fileRepositoryMock.Setup(x => x.Load("filedocuments/fID")).Returns(fEntity);
@@ -43,7 +44,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             handler.Handle(new UpdateQuestionCommand(entity.QuestionnaireId, question.PublicKey,
                                                               "question after update", "export title", QuestionType.MultyOption,
                                                               string.Empty, string.Empty, false, string.Empty, null , Order.AsIs, null));
-                                                     Order.AsIs, null));
+                                                     
 
             Assert.True(
                 ((IQuestion)innerDocument.Children[0]).QuestionText == "question after update" &&

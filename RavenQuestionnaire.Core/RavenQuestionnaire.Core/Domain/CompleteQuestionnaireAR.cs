@@ -142,7 +142,7 @@ namespace RavenQuestionnaire.Core.Domain
             var template = _doc.Find<CompleteGroup>(e.PublicKey);
             bool isCondition = false;
             var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(_doc));
-            executor.Execute();
+            executor.Execute(template);
             
             var newGroup = new CompleteGroup(template, e.PropagationKey);
             _doc.Add(newGroup, null);

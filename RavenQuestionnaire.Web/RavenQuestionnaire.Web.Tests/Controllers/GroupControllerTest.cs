@@ -36,9 +36,11 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void WhenNewGroupIsSubmittedWIthValidModel_CommandIsSent()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey= key;
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
+            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, 
+                Order.AsIs, null, null, Guid.NewGuid());
             var questionView = new QuestionView(innerDocument, question);
 
 
@@ -46,7 +48,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 x =>
                 x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                     It.Is<QuestionnaireViewInputModel>(
-                        v => v.QuestionnaireId.Equals("questionnairedocuments/qID"))))
+                        v => v.QuestionnaireId.Equals(key.ToString()))))
                 .Returns(new QuestionnaireView(innerDocument));
             Controller.Save(new GroupView() { Title = "test", QuestionnaireId = innerDocument.Id });
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewGroupCommand>()), Times.Once());
@@ -56,18 +58,19 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void WhenExistingGroupIsSubmittedWIthValidModel_CommandIsSent()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
             Group group = new Group("test");
             innerDocument.Children.Add(group);
 
             var groupView = new GroupView(innerDocument, group);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(new Core.Entities.Questionnaire(innerDocument));
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(new Core.Entities.Questionnaire(innerDocument));
             ViewRepositoryMock.Setup(
               x =>
               x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                   It.Is<QuestionnaireViewInputModel>(
-                      v => v.QuestionnaireId.Equals("questionnairedocuments/qID"))))
+                      v => v.QuestionnaireId.Equals(key.ToString()))))
               .Returns(new QuestionnaireView(innerDocument));
 
 
@@ -78,13 +81,14 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void When_DeleteGroupIsExecuted()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
             Group group = new Group("test");
             innerDocument.Children.Add(group);
 
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
 
             Controller.Delete(group.PublicKey, entity.QuestionnaireId);
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<DeleteGroupCommand>()), Times.Once());
@@ -96,7 +100,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             // var output = new QuestionnaireView("questionnairedocuments/qId", "test", DateTime.Now, DateTime.Now, new QuestionView[0]);
 
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
             Group group = new Group("test");
             innerDocument.Children.Add(group);

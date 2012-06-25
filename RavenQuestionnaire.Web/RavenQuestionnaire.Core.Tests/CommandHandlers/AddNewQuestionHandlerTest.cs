@@ -20,10 +20,11 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_NewQuestionIsAddedToRepository()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
             Questionnaire entity = new Questionnaire(innerDocument);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
 
             Mock<IExpressionExecutor<Questionnaire, bool>> validator = new Mock<IExpressionExecutor<Questionnaire, bool>>();
             validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
@@ -33,28 +34,31 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                                         null, Guid.NewGuid(), string.Empty, string.Empty,
                                                         null, false, Order.AsIs, answers.Select(a => ConvertAnswer(a)).ToArray(), null));
 
-            questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
+            questionnaireRepositoryMock.Verify(x => x.Load(key.ToString()), Times.Once());
 
         }
         [Test]
         public void WhenCommandIsReceived_ToGroup_NewQuestionIsAddedToRepository()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            Guid key = Guid.NewGuid();
+            
+            innerDocument.PublicKey = key;
             Group topGroup = new Group("top group");
             innerDocument.Children.Add(topGroup);
             Questionnaire entity = new Questionnaire(innerDocument);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
             Mock<IExpressionExecutor<Questionnaire, bool>> validator = new Mock<IExpressionExecutor<Questionnaire, bool>>();
             validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
+
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { Title = "answer", AnswerType = AnswerType.Select } };
             handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId,
                 topGroup.PublicKey, Guid.NewGuid(), string.Empty, string.Empty,
-                null, false, Order.AsIs, answers.Select(a => ConvertAnswer(a)).ToArray(), null));
+                null, false, Order.AsIs, answers.Select(ConvertAnswer).ToArray(), null));
 
-            questionnaireRepositoryMock.Verify(x => x.Load("questionnairedocuments/qID"), Times.Once());
+            questionnaireRepositoryMock.Verify(x => x.Load(key.ToString()), Times.Once());
             Assert.AreEqual((innerDocument.Children[0] as Group).Children.Count, 1);
             Assert.AreEqual(((IQuestion)(innerDocument.Children[0] as Group).Children[0]).QuestionText, "test");
         }
@@ -62,12 +66,13 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_ToNotExistingGroup_NewQuestionIsAddedToRepository()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
             Questionnaire entity = new Questionnaire(innerDocument);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
             Mock<IExpressionExecutor<Questionnaire, bool>> validator = new Mock<IExpressionExecutor<Questionnaire, bool>>();
-            validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
+            validator.Setup(x => x.Execute(entity, It.Is<string>(s=>string.IsNullOrEmpty(s)))).Returns(true);
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { Title = "answer", AnswerType = AnswerType.Select } };
             Assert.Throws<ArgumentException>(
@@ -75,24 +80,26 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                 handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption,
                                                                   entity.QuestionnaireId, Guid.NewGuid(), Guid.NewGuid(), string.Empty,
                                                                   string.Empty, string.Empty, false, Order.AsIs,
-                                                                  answers.Select(a => ConvertAnswer(a)).ToArray(), null)));
+                                                                  answers.Select(ConvertAnswer).ToArray(), null)));
         }
 
         [Test]
         public void WhenCommandIsReceived_NotValidExpression_QuestionIsNotAdded()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
             Questionnaire entity = new Questionnaire(innerDocument);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
             Mock<IExpressionExecutor<Questionnaire, bool>> validator = new Mock<IExpressionExecutor<Questionnaire, bool>>();
-            validator.Setup(x => x.Execute(entity, string.Empty)).Returns(false);
+            validator.Setup(x => x.Execute(entity, "invalid condition")).Returns(false); 
+            
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
-            AnswerView[] answers = new AnswerView[] { new AnswerView() { Title = "answer", AnswerType = AnswerType.Select } };
+            AnswerView[] answers = new AnswerView[] { new AnswerView() { Title = "answer", AnswerType = AnswerType.Select,  } };
             handler.Handle(new AddNewQuestionCommand("test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId,
-               null, Guid.NewGuid(), string.Empty, string.Empty, string.Empty, false, Order.AsIs,
-                answers.Select(a => ConvertAnswer(a)).ToArray(), null));
+               null, Guid.NewGuid(), "invalid condition", string.Empty, string.Empty, false, Order.AsIs,
+                answers.Select(ConvertAnswer).ToArray(), null));
 
             Assert.AreEqual(innerDocument.Children.Count, 0);
         }

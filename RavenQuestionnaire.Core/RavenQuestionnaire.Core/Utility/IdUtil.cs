@@ -1,5 +1,10 @@
 ﻿namespace RavenQuestionnaire.Core.Utility
 {
+
+    //TODO: delete all references to this class changing id to guid
+    /// <summary>
+    /// Util class to create id
+    /// </summary>
     public static class IdUtil
     {
         public static string CreateImageId(string id)

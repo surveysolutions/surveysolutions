@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NCalc;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
