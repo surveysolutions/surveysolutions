@@ -32,7 +32,6 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string questionText,
           string stataExportCaption, QuestionType questionType, string conditionExpression,
            string validationExpression, bool featured, string instructions, Answer[] answers, Order answerOrder, UserLight executor)
-            string instructions, Answer[] answers, Order answerOrder, UserLight executor)
         {
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.AnswerOrder = answerOrder;

@@ -33,11 +33,9 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
 
         #endregion
         # region Constructor
-        public AddNewQuestionCommand(string text, string stataExportCaption, QuestionType type, string questionnaireId,
-            Guid? groupPublicKey, Guid publicKey, string condition, string validation, string instructions, bool featured, Order answerOrder, 
-            Answer[] answers, UserLight executor)
-
-PublicKey, string conditionExpression, string validationExpression, string instructions, bool featured, Order answerOrder, AnswerView[] answers, UserLight executor)
+        public AddNewQuestionCommand(string questionText, string stataExportCaption, QuestionType questionType, string questionnaireId,
+            Guid? groupPublicKey, Guid publicKey, string conditionExpression, string validationExpression, string instructions, 
+            bool featured, Order answerOrder, Answer[] answers, UserLight executor)
         {
             this.QuestionText = questionText;
             this.AnswerOrder = answerOrder;
@@ -49,6 +47,7 @@ PublicKey, string conditionExpression, string validationExpression, string instr
             this.Instructions = instructions;
             this.Answers = new Answer[0];
             this.ValidationExpression = validationExpression;
+            ConditionExpression = conditionExpression;
             this.Featured = featured;
             Answers = answers;
             Executor = executor;
