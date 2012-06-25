@@ -110,3 +110,4 @@ Synchronization/SynchronizationMessages/SynchronizationMessages.csproj.user
 RavenQuestionnaire.Web/Questionnaire.Core.Web.Tests/Questionnaire.Core.Web.Tests.csproj.user
 ExpressionEvaluator/Evaluant.Calculator/NCalc.csproj.user
 lib/
+Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB.Tests/obj
