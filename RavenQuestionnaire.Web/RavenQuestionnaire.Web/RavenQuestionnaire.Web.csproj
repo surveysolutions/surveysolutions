@@ -603,7 +603,6 @@
     <Content Include="Scripts\Html5\iscroll-wrapper.js" />
     <Content Include="Scripts\Html5\iscroll.js" />
     <Content Include="Scripts\Html5\jqm-docs.js" />
-    <Content Include="Scripts\Html5\jquery.keyboard.extension-mobile.js" />
     <Content Include="Scripts\Html5\jquery.keyboard.js" />
     <Content Include="Scripts\Html5\jquery.mobile.docs.js" />
     <Content Include="Scripts\Html5\jquery.mobile.js" />

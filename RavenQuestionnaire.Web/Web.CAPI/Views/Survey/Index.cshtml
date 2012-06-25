@@ -1,0 +1,245 @@
+﻿@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@model CompleteQuestionnaireMobileView
+@{
+    var questionKey = (Guid)ViewBag.CurrentQuestion;
+    this.ViewBag.CurrentQuestion = questionKey;
+}
+@{
+    ViewBag.AjaxOptions = new AjaxOptions
+    {
+        OnComplete = "JsonResults"
+    };
+    ViewBag.CurrentGroupPublicKey = Model.CurrentScreen.PublicKey;
+    ViewBag.QuestionnaireId = Model.Id;
+}
+<script type="text/javascript">
+
+    jQuery(document).bind("pageshow", function () {
+        var scrollHere = $('.scrollHere').length > 0 ? $('.scrollHere').get(0) : null;
+        if (scrollHere != null) {
+            $(scrollHere).find('input').focus();
+            $(scrollHere).parents('.ui-body.ui-body-c').effect("highlight", { color: "#5393C5" }, 2000);
+        }
+    });
+
+
+    (function (window, $, PhotoSwipe) {
+        $(document).ready(function () {
+            $('div.gallery-page')
+                    .live('pageshow', function (e) {
+                        var currentPage = $(e.target);
+                        var options = {};
+                        var photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+                        if (!(typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null)) {
+                            photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options, currentPage.attr('id'));
+                        }
+                        return true;
+                    })
+
+                    .live('pagehide', function (e) {
+                        var currentPage = $(e.target),
+                            photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+
+                        if (typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null) {
+                            PhotoSwipe.detatch(photoSwipeInstance);
+                        }
+
+                        return true;
+                    });
+        });
+    } (window, window.jQuery, window.Code.PhotoSwipe));
+
+</script>
+<div data-role="panel" data-id="menu">
+    <!-- Start of first page -->
+    <div data-role="page" id="sidebar">
+        <div data-role="header" data-theme="c">
+            <a class="nav-link" data-corners="false"  data-icon="arrow-l" href="@Url.Action("Index", "Dashboard")" rel = "external">
+                Dashboard</a>
+            <h3></h3>
+        </div>
+        <!-- /header -->
+        <div data-role="content" class="with-footer dummy-scroll">
+            <ul data-role="listview" data-theme="c" data-dividertheme="d" data-counttheme="e">
+                @foreach (var gh in Model.Groups)
+                {
+                    if (!gh.IsCurrent)
+                    {
+                    <li data-icon="false"><a href="@Url.Action("Index", new { id = Model.Id, group = gh.PublicKey })" rel="external" data-ajax="false">@gh.GroupText
+                        <span  id="counter-@(gh.PublicKey)" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
+                    }
+                    else
+                    {
+                    <li data-theme="b"><a data-panel="main" href="#main">@gh.GroupText <span id="counter-@(gh.PublicKey)" data-theme="a" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
+                    }
+                }
+            </ul>
+        </div>
+        <!-- /content -->
+        <div data-role="footer" data-position="fixed" data-id="ew-footer">
+            <div data-role="navbar">
+                <ul>
+                    <li><a data-role="button" data-corners="false" href="@Url.Action("Index", "Statistic", new { id = Model.Id })" 
+                   rel="external" data-ajax="false">Statistic</a></li>
+                    <li>
+                        @if (Model.Status.Name == "Completed")
+                        {
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("ReInit", "Survey", new { id = Model.Id })">
+                                ReInit</a>
+                        }
+                        else
+                        {
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("Complete", "Survey", new { id = Model.Id })">
+                                Complete</a>
+                        }</li>
+                </ul>
+            </div>
+            <!-- /navbar -->
+        </div>
+        <!-- /footer -->
+    </div>
+    <!-- /page -->
+    <!-- other side panel pages here -->
+</div>
+<div data-role="panel" data-id="main">
+    <!-- Start of second page -->
+    <div data-role="page" id="main" class="page">
+        @RenderNavigation(Model.CurrentScreen.Navigation)
+        <!-- /header -->
+        <div data-role="content" class="@(Model.Status.Name == "Completed" ? "ui-disabled" : "") dummy-scroll">
+            <div id="scroller">
+                @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model.CurrentScreen)
+            </div>
+            <div style="width: 100%; height: 50px;">
+                &nbsp;</div>
+        </div>
+        @RenderFooter(Model.CurrentScreen.Navigation)
+        <!-- /content -->
+    </div>
+    <!-- /page -->
+    <!-- other main panel pages here -->
+    @foreach (var question in Model.QuestionsWithCards)
+    {
+        <div data-role="page" data-add-back-btn="true" id="gallery-@(question.PublicKey)" class="gallery-page">
+            <div data-role="header">
+                <h1>Question cards</h1>
+            </div>
+            <div data-role="content">
+                <ul class="gallery">
+                    @foreach (var card in question.Cards)
+                    {
+                        <li><a href="@Url.Action("Images", "Resource", new { id = card.Original })" rel="external">
+                            <img src="@Url.Action("Images", "Resource", new { id = card.Thumb })" alt="@card.Title" /></a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+    @foreach (var question in Model.QuestionsWithInstructions)
+    {
+        <div data-role="page" data-add-back-btn="true" id="inctruction-@(question.PublicKey)">
+            <div data-role="header" data-theme="b">
+                <h1>Instructions</h1>
+            </div>
+            <div data-role="content">
+                <h3>@Html.Raw(question.Instructions)</h3>
+            </div>
+        </div>
+    }
+    @foreach (var screen in Model.Screens)
+    {
+        <div data-role="page" id="screen-@(screen.PublicKey)"  class="page">
+            @RenderNavigation(screen.Navigation)
+            <div data-role="content">
+                @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", screen)
+            </div>
+            @RenderFooter(screen.Navigation)
+        </div>
+    }
+    @foreach (var screen in Model.PropagatedScreens)
+    {
+        <div data-role="page" id="screen-@(screen.PropogationKey)" data-refresh="true"  class="page">
+            @RenderNavigation(screen.Navigation)
+            <div data-role="content">
+                @Html.Partial("~/Views/Survey/Group/_PropagatedScreen.cshtml", screen)
+            </div>
+            @RenderFooter(screen.Navigation)
+        </div>
+    }
+    @foreach (var screen in Model.Templates)
+    {
+        <script id="template-@(screen.PublicKey)" type="text/x-jsrender">
+        <div data-role="page" id="screen-00000000-0000-0000-0000-000000000000"  class="page">
+            @RenderNavigation(screen.Navigation)
+            <div data-role="content">
+                 @Html.Partial("~/Views/Survey/Group/_PropagatedScreen.cshtml", screen)
+            </div>
+             <div data-role="footer" data-theme="b">
+                <a class="previous-screen" href="${PrevScreen}" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >Prev Group</a>
+                <h1><span></span>@screen.Navigation.CurrentScreenTitle</h1>
+                <a href="#" class="next-screen ui-disabled" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">Next Group</a> 
+            </div>
+        </div>
+        </script>
+    }
+</div>
+@helper RenderNavigation(ScreenNavigation screen)
+    {
+        var crumbs = screen.BreadCumbs.Skip(1).ToList();
+    <div data-role="header" data-theme="b" class="navigation">
+        @for (int i = 0; i < crumbs.Count; i++)
+        {
+            var breadCumb = crumbs[i];
+            if (i == 0)
+            { <a href="#main" class="breadcrumb nav-link" data-inline="true" data-role="button"
+                data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a> }
+            else
+            { <a href="#screen-@breadCumb.PublicKey"  class="breadcrumb nav-link" data-inline="true" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
+            }
+        }
+        <a class="breadcrumb ui-disabled nav-link" aria-disabled="true" data-role="button"
+            data-inline="true" data-corners="false" data-icon="arrow-r" data-iconpos="right">@screen.CurrentScreenTitle</a>
+    </div>
+}
+@helper  RenderFooter(ScreenNavigation screen)
+    {
+    <div data-role="footer" data-theme="b">
+        @if (screen.PrevScreen != null)
+        {
+            if (!screen.PrevScreen.IsExternal)
+            {
+            <a class="previous-screen nav-link" href="#screen-@(screen.PrevScreen.PublicKey)" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >
+                Prev Group</a>
+            }
+            else
+            {
+            <a class="nav-link" href="@Url.Action("Index", new { id = Model.Id, group = screen.PrevScreen.PublicKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" rel="external" data-ajax="false">
+                Next Group</a>
+            }
+        }
+        else
+        {
+            <a class="previous-screen ui-disabled nav-link" href="#" data-icon="arrow-l" data-theme="b"
+                iconpos="notext" data-corners="false">Prev Group</a>
+        }
+        <h1><span></span>@screen.CurrentScreenTitle</h1>
+        @if (screen.NextScreen != null)
+        {
+            if (!screen.NextScreen.IsExternal)
+            {
+            <a class="next-screen nav-link" href="#screen-@screen.NextScreen.PublicKey" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">
+                Next Group</a>
+            }
+            else
+            {
+            <a class="nav-link" href="@Url.Action("Index", new { id = Model.Id, group = screen.NextScreen.PublicKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false"  rel="external" data-ajax="false">
+                Next Group</a>
+            }
+        }
+        else
+        { 
+            <a class="next-screen ui-disabled nav-link" href="#" data-icon="arrow-r" data-iconpos="right"
+                data-theme="b" data-corners="false">Next Group</a> 
+        }
+    </div>
+}
