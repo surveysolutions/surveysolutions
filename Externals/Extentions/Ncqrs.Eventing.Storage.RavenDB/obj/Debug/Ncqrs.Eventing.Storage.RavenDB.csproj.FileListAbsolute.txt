@@ -1,5 +1,0 @@
-C:\Work\WB\MIS-DEV-clone\lib\Debug\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.dll
-C:\Work\WB\MIS-DEV-clone\lib\Debug\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.pdb
-C:\Work\WB\MIS-DEV-clone\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\obj\Debug\Ncqrs.Eventing.Storage.RavenDB.csprojResolveAssemblyReference.cache
-C:\Work\WB\MIS-DEV-clone\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\obj\Debug\Ncqrs.Eventing.Storage.RavenDB.dll
-C:\Work\WB\MIS-DEV-clone\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\obj\Debug\Ncqrs.Eventing.Storage.RavenDB.pdb

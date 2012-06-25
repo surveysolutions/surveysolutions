@@ -1,7 +1,0 @@
-C:\Work\WB\MIS-DEV-clone\Externals\lib\Debug\Ncqrs\CodeContracts\Ncqrs.noReferenceAssembly
-C:\Work\WB\MIS-DEV-clone\Externals\lib\Debug\Ncqrs\Ncqrs.dll
-C:\Work\WB\MIS-DEV-clone\Externals\lib\Debug\Ncqrs\Ncqrs.pdb
-C:\Work\WB\MIS-DEV-clone\Externals\Framework\src\Ncqrs\obj\Debug\Ncqrs.rewritten
-C:\Work\WB\MIS-DEV-clone\Externals\Framework\src\Ncqrs\obj\Debug\Ncqrs.dll
-C:\Work\WB\MIS-DEV-clone\Externals\Framework\src\Ncqrs\obj\Debug\Ncqrs.pdb
-C:\Work\WB\MIS-DEV-clone\Externals\Framework\src\Ncqrs\obj\Debug\Ncqrs.csprojResolveAssemblyReference.cache
