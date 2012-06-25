@@ -109,3 +109,4 @@ Externals/Extentions/Ncqrs.Eventing.Sourcing.Snapshotting.DynamicSnapshot.Tests/
 Synchronization/SynchronizationMessages/SynchronizationMessages.csproj.user
 RavenQuestionnaire.Web/Questionnaire.Core.Web.Tests/Questionnaire.Core.Web.Tests.csproj.user
 ExpressionEvaluator/Evaluant.Calculator/NCalc.csproj.user
+lib/
