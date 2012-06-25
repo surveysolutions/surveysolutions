@@ -107,3 +107,5 @@ D:\Projects\MIS_Dev\RavenQuestionnaire.Web\Web.CAPI\bin
 Awesomium/Windows Forms/CSharp/WinFormsSample/WinFormsSample.csproj.user
 D:\Projects\MIS_Dev\RavenQuestionnaire.Web\Web.CAPI\bin\*
 Awesomium/Windows Forms/CSharp/WinFormsSample/WinFormsSample_TemporaryKey.pfx
+RavenQuestionnaire.Web/Web.CAPI/bin/*
+RavenQuestionnaire.Web/Web.CAPI/obj/*
