@@ -111,3 +111,6 @@ RavenQuestionnaire.Web/Questionnaire.Core.Web.Tests/Questionnaire.Core.Web.Tests
 ExpressionEvaluator/Evaluant.Calculator/NCalc.csproj.user
 lib/
 Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB.Tests/obj
+Externals/Framework/src/Ncqrs.Spec/obj/*
+Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB/obj/*
+Externals/Framework/src/Ncqrs/obj/*
