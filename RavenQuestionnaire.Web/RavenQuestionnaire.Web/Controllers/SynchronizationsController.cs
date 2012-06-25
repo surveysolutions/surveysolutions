@@ -2,20 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
-using System.Web.Services;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.WCF;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Synchronization;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
-using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Synchronization;
-using RavenQuestionnaire.Web.Models;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -27,7 +21,7 @@ namespace RavenQuestionnaire.Web.Controllers
         private readonly IViewRepository viewRepository;
 
         public SynchronizationsController(ICommandInvoker commandInvoker, IViewRepository viewRepository,
-                                                    IBagManager bagManager, IGlobalInfoProvider globalProvider)
+                                          IBagManager bagManager, IGlobalInfoProvider globalProvider)
         {
             this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
@@ -37,34 +31,33 @@ namespace RavenQuestionnaire.Web.Controllers
 
         public ActionResult Index(string url)
         {
-        //    AsyncManager.OutstandingOperations.Increment();
-            var user = _globalProvider.GetCurrentUser();
-            
-                                                     Guid syncProcess = Guid.NewGuid();
-                                                     commandInvoker.Execute(
-                                                         new CreateNewSynchronizationProcessCommand(syncProcess, user));
-                                                     Process p = new Process();
-                                                     p.StartInfo.UseShellExecute = false;
-                                                     p.StartInfo.Arguments = url + " " + syncProcess;
-                                                     p.StartInfo.RedirectStandardOutput = true;
-                                                     p.StartInfo.FileName = System.Web.Configuration.WebConfigurationManager.AppSettings["SynchronizerPath"];
-                                                     p.Start();
-            return RedirectToAction("Progress", new {id = syncProcess});
+            //    AsyncManager.OutstandingOperations.Increment();
+            UserLight user = _globalProvider.GetCurrentUser();
 
+            Guid syncProcess = Guid.NewGuid();
+            commandInvoker.Execute(
+                new CreateNewSynchronizationProcessCommand(syncProcess, user));
+            var p = new Process();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.Arguments = url + " " + syncProcess;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.FileName = WebConfigurationManager.AppSettings["SynchronizerPath"];
+            p.Start();
+            return RedirectToAction("Progress", new {id = syncProcess});
         }
+
         public ActionResult Progress(Guid id)
         {
             return View(viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
         }
+
         public ActionResult ProgressPartial(Guid id)
         {
-            return PartialView("_ProgressContent",viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+            return PartialView("_ProgressContent",
+                               viewRepository.Load<SyncProgressInputModel, SyncProgressView>(
+                                   new SyncProgressInputModel(id)));
         }
-        /*   public bool IndexCompleted(bool result)
-        {
-           
-            return result;
-        }*/
+
         public ActionResult DiscoverPage()
         {
             return View("Scaning");
@@ -73,27 +66,25 @@ namespace RavenQuestionnaire.Web.Controllers
         public void DiscoverAsync()
         {
             AsyncManager.OutstandingOperations.Increment();
-            var user = _globalProvider.GetCurrentUser();
+            UserLight user = _globalProvider.GetCurrentUser();
             AsyncQuestionnaireUpdater.Update(() =>
-            {
-                try
-                {
-                    AsyncManager.Parameters["result"] = new ServiceDiscover().DiscoverChannels();
-
-                }
-                catch
-                {
-                    AsyncManager.Parameters["result"] = null;
-                }
-                AsyncManager.OutstandingOperations.Decrement();
-            });
+                                                 {
+                                                     try
+                                                     {
+                                                         AsyncManager.Parameters["result"] =
+                                                             new ServiceDiscover().DiscoverChannels();
+                                                     }
+                                                     catch
+                                                     {
+                                                         AsyncManager.Parameters["result"] = null;
+                                                     }
+                                                     AsyncManager.OutstandingOperations.Decrement();
+                                                 });
         }
+
         public ActionResult DiscoverCompleted(IEnumerable<ServiceDiscover.SyncSpot> result)
         {
-
-            return PartialView("Spots",result.ToArray());
+            return PartialView("Spots", result.ToArray());
         }
-
-
     }
 }

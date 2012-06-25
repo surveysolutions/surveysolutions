@@ -1,0 +1,30 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@using RavenQuestionnaire.Core.Views.Question
+@model PropagatedGroupMobileView
+@{ var groupKey = "propagatedGroup" + Model.PropogationKey; }
+<ul data-role="listview" data-inset="true" id="@groupKey">
+    @foreach (var pquestion in Model.Children.OfType<CompleteQuestionView>())
+    {
+        <li class="nav-link" data-role="fieldcontain">
+            @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions, new { autocomplete = "off" }))
+            {
+                using (Html.BeginCollectionItem("questions", true, pquestion.PublicKey + "_" + Model.PropogationKey))
+                {
+                    ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+                    if (!pquestion.Enabled)
+                    {
+                        ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+                    }
+                    Html.RenderPartial("~/Views/Survey/Question/_Question.cshtml", pquestion);
+                }
+                using (Html.BeginCollectionItem("settings", true, groupKey + "_" + Model.PropogationKey))
+                {
+                @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+                @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
+                @Html.Hidden("PropogationPublicKey", Model.PropogationKey)
+                }
+            }
+        </li>
+    }
+</ul>
