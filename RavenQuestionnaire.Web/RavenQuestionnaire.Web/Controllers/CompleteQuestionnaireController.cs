@@ -231,7 +231,8 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             Guid key;
             if (!Guid.TryParse(id, out key))
-                return RedirectToAction("Index", "Dashboard");
+              //  return RedirectToAction("Index", "Dashboard");
+                throw  new HttpException("404");
 
 
             SurveyStatus status = GetStatus(id);

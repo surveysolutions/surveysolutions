@@ -2,6 +2,8 @@ using System;
 using System.Web;
 using Moq;
 using NUnit.Framework;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire;
@@ -24,12 +26,16 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public QuestionnaireController Controller { get; set; }
-
+        public Mock<ICommandService> CommandServiceMock { get; set; }
         [SetUp]
         public void CreateObjects()
         {
             CommandInvokerMock = new Mock<ICommandInvoker>();
             ViewRepositoryMock = new Mock<IViewRepository>();
+
+
+            CommandServiceMock = new Mock<ICommandService>();
+            NcqrsEnvironment.SetDefault<ICommandService>(CommandServiceMock.Object);
             Controller = new QuestionnaireController(CommandInvokerMock.Object, ViewRepositoryMock.Object);
         }
 
@@ -38,7 +44,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void WhenNewQuestionnaireIsSubmittedWithValidModel_CommandIsSent()
         {
             Controller.Save(new QuestionnaireView() {Title = "test"});
-            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewQuestionnaireCommand>()), Times.Once());
+            CommandServiceMock.Verify(x => x.Execute(It.IsAny<CreateQuestionnaireCommand>()), Times.Once());
         }
         [Test]
         public void WhenExistingQuestionnaireIsSubmittedWIthValidModel_CommandIsSent()
