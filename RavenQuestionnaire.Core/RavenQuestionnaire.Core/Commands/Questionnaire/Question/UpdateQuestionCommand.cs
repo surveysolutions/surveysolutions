@@ -45,8 +45,14 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.Executor = executor;
             this.Featured = featured;
             this.Instructions = instructions;
-            this.Answers = answers;
+            if (answers != null)
+                this.Answers = answers;
+            else
+            {
+                this.Answers = new Answer[0];
+            }
         }
+
         /*
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string questionText,
            string stataExportCaption, QuestionType questionType, string conditionExpression, 
