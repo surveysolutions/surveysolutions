@@ -130,6 +130,7 @@ namespace RavenQuestionnaire.Core.Domain
         protected void OnNewQuestionAdded(NewQuestionAdded e)
         {
             var result = new CompleteQuestionFactory().Create(e.QuestionType);
+            result.QuestionType = e.QuestionType;
             result.QuestionText = e.QuestionText;
             result.StataExportCaption = e.StataExportCaption;
             result.ConditionExpression = e.ConditionExpression;

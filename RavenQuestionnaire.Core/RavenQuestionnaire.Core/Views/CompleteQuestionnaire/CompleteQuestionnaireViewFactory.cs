@@ -19,11 +19,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
                 return new CompleteQuestionnaireView(doc);
             }
-            if (!string.IsNullOrEmpty(input.TemplateQuestionanireId))
-            {
-                var doc = documentSession.Load<QuestionnaireDocument>(input.TemplateQuestionanireId);
-                return new CompleteQuestionnaireView(doc);
-            }
+         
             return null;
         }
 

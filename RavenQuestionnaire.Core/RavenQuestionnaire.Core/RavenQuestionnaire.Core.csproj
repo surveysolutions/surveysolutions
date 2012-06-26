@@ -429,6 +429,7 @@
     <Compile Include="Utility\LINQExtensions.cs" />
     <Compile Include="Utility\SimpleHash.cs" />
     <Compile Include="ViewRepository.cs" />
+    <Compile Include="ViewSnapshot\IViewSnapshot.cs" />
     <Compile Include="Views\Answer\AnswerView.cs" />
     <Compile Include="Views\Answer\CompleteAnswerView.cs" />
     <Compile Include="Views\Card\CardView.cs" />

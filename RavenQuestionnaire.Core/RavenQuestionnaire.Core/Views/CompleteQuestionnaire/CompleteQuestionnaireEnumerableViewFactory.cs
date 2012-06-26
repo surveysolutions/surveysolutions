@@ -58,11 +58,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 }
                 return new CompleteQuestionnaireViewEnumerable(doc, group, this.groupFactory);
             }
-            if (!string.IsNullOrEmpty(input.TemplateQuestionanireId))
-            {
-                var doc = documentSession.Load<QuestionnaireDocument>(input.TemplateQuestionanireId);
-                return new CompleteQuestionnaireViewEnumerable((CompleteQuestionnaireDocument)doc, this.groupFactory);
-            }
+         
             return null;
 
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Ncqrs;
 using Ncqrs.Domain;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -17,7 +18,7 @@ namespace RavenQuestionnaire.Core.Domain
     /// CompleteQuestionnaire Aggregate Root.
     /// </summary>
     //[DynamicSnapshot]
-    public class CompleteQuestionnaireAR : AggregateRootMappedByConvention
+    public class CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireDocument>
     {
         public CompleteQuestionnaireAR ()
         {
@@ -163,5 +164,18 @@ namespace RavenQuestionnaire.Core.Domain
             _doc.Add(newGroup, null);
         }
 
+        #region Implementation of ISnapshotable<CompleteQuestionnaireDocument>
+
+        public CompleteQuestionnaireDocument CreateSnapshot()
+        {
+            return this._doc;
+        }
+
+        public void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
+        {
+            this._doc = snapshot;
+        }
+
+        #endregion
     }
 }
