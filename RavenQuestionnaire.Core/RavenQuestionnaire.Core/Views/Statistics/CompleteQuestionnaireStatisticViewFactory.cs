@@ -5,24 +5,25 @@ using System.Text;
 using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Documents.Statistics;
+using RavenQuestionnaire.Core.ViewSnapshot;
 
 namespace RavenQuestionnaire.Core.Views.Statistics
 {
     public class CompleteQuestionnaireStatisticViewFactory : IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>
     {
-        private IDocumentSession documentSession;
+        private readonly IViewSnapshot store;
 
-        public CompleteQuestionnaireStatisticViewFactory(IDocumentSession documentSession)
+        public CompleteQuestionnaireStatisticViewFactory(IViewSnapshot store)
         {
-            this.documentSession = documentSession;
+            this.store = store;
         }
 
         #region Implementation of IViewFactory<UserViewInputModel,UserView>
 
         public CompleteQuestionnaireStatisticView Load(CompleteQuestionnaireStatisticViewInputModel input)
         {
-            CompleteQuestionnaireStatisticDocument doc =
-                documentSession.Load<CompleteQuestionnaireStatisticDocument>(input.Id);
+            CompleteQuestionnaireDocument doc =
+                store.ReadByGuid<CompleteQuestionnaireDocument>(Guid.Parse(input.Id));
             return new CompleteQuestionnaireStatisticView(doc);
         }
 

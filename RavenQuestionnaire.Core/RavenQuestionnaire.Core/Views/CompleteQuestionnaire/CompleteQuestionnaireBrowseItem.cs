@@ -48,7 +48,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.TotalQuestionCouont = doc.TotalQuestionCount;
             this.AnsweredQuestionCouont = doc.AnsweredQuestions.Count;
             this.Creator = doc.Creator;
-            this.FeaturedQuestions = doc.FeturedQuestions.Select(q => new QuestionStatisticView(q)).ToArray();
+         //   this.FeaturedQuestions = doc.FeturedQuestions.Select(q => new QuestionStatisticView(q)).ToArray();
             //this.Responsible = doc.r;
         }
     }
