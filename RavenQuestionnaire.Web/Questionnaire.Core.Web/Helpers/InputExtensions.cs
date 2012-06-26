@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Web.Mvc;
-using System.Web.Mvc.Ajax;
-using System.Web.Routing;
-using System.Web.Mvc.Html;
+using System.Globalization;
+using System.Collections.Generic;
+
 namespace Questionnaire.Core.Web.Helpers
 {
     public static class InputExtensions
@@ -52,6 +48,37 @@ namespace Questionnaire.Core.Web.Helpers
                              HtmlHelper.AnonymousObjectToHtmlAttributes(buttonAttributes),
                              HtmlHelper.AnonymousObjectToHtmlAttributes(labelAttributes));
         }
+
+        public static MvcHtmlString IconInputComments(this HtmlHelper htmlHelper, string name, object value, string labelText, object inputHtmlAttributes, object buttonAttributes, object labelAttributes)
+        {
+            string fullId = htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId(name);
+            if (String.IsNullOrEmpty(fullId))
+            {
+                throw new ArgumentException("Name is empty");
+            }
+            TagBuilder spanTagBuilder = new TagBuilder("span");
+            spanTagBuilder.MergeAttributes(HtmlHelper.AnonymousObjectToHtmlAttributes(labelAttributes));
+            spanTagBuilder.MergeAttribute("from", fullId, true);
+            spanTagBuilder.SetInnerText(value.ToString());
+
+            TagBuilder aTagBuilder = new TagBuilder("a");
+            aTagBuilder.MergeAttributes(HtmlHelper.AnonymousObjectToHtmlAttributes(buttonAttributes));
+            aTagBuilder.MergeAttribute("open-virtual-keyboar", "true", true);
+            aTagBuilder.MergeAttribute("href", "#", true);
+            aTagBuilder.MergeAttribute("target-input", fullId, true);
+            aTagBuilder.SetInnerText(string.Empty);
+            var attr = HtmlHelper.AnonymousObjectToHtmlAttributes(inputHtmlAttributes);
+            if (!attr.ContainsKey("type"))
+                attr.Add("type", "text");
+            var additionTags =
+                new MvcHtmlString(
+                    string.Format(
+                        "<div style=\"position:absolute;bottom:7px;\">{0}{1}<div style=\"clear: both;\"></div></div>",
+                        aTagBuilder.ToString(TagRenderMode.Normal),
+                        InputHelper(htmlHelper, name, value, true, true, attr)));
+            return additionTags;
+        }
+
         public static MvcHtmlString IconInput(this HtmlHelper htmlHelper, string name, string labelText, object value)
         {
             return IconInput(htmlHelper, name, value, labelText, (object)null, (object)null, (object)null);

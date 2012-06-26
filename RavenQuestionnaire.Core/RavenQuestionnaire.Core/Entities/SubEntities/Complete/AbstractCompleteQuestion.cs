@@ -1,9 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Utility.OrderStrategy;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
@@ -50,6 +48,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public abstract string GetAnswerString();
         public abstract object GetAnswerObject();
+
+        public string Comments { get; set; }
+        public void SetComments(string comments)
+        {
+            this.Comments = comments;
+            OnAdded(new CompositeAddedEventArgs(this));
+        }
 
         public List<IObserver<CompositeEventArgs>> Observers
         {

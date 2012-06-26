@@ -1,4 +1,5 @@
-﻿@using RavenQuestionnaire.Web.Utils
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Web.Utils
 @using RavenQuestionnaire.Core.Views.Question
 @model CompleteQuestionView
 @{
@@ -11,6 +12,10 @@
 
 }
 <div class="@bodyClass question" id="@questionId"><a href="#" class="error"></a>
+   @* @if (!string.IsNullOrWhiteSpace(Model.Comments))
+    {        
+        <a href="#comments-@(Model.PublicKey)"  data-icon="info" data-role="button" data-inline="true" data-rel="page" data-transition="flip">Read comments</a>
+    }*@
     @if (!string.IsNullOrWhiteSpace(Model.Instructions))
     {
         <a href="#inctruction-@(Model.PublicKey)"  data-icon="info" data-role="button" data-inline="true" data-rel="page" data-transition="flip">Read instructions</a>
@@ -19,9 +24,9 @@
     {
         <a data-role="button" rel="external" data-icon="grid" data-inline="true" href="#gallery-@(Model.PublicKey)">
             Cards</a>
-    }
-     @Html.Hidden("QuestionType", Model.QuestionType)
-    @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListViewHtml5/_{0}.cshtml", Model.QuestionType), Model);}
+    }      
+    @Html.Hidden("QuestionType", Model.QuestionType)
+    @{Html.RenderPartial(string.Format("~/Views/Answer/AnswerListViewHtml5/_{0}.cshtml", Model.QuestionType), Model);}    
     @Html.ValidationMessage("AnswerValue")
     @Html.Hidden("PublicKey", Model.PublicKey)
 </div>

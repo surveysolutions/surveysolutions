@@ -8,8 +8,8 @@
     if ((item as CompleteQuestionView) != null)
     {
         var question = item as CompleteQuestionView;
-        <div class="ui-body ui-body-c">
-            @using (Ajax.BeginFormHtml5("SaveSingleResultJson", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions))
+        <div class="ui-body ui-body-c">                    
+            @using (Ajax.BeginFormHtml5("SaveSingleResultJson", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions, new { style = "float: left; width: 95%;"}))            
             {
                 //  using (Ajax.BeginFormHtml5("Index", "CompleteQuestionnaireAsync1", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions)){
                 using (Html.BeginCollectionItem("questions", true, question.PublicKey))
@@ -21,6 +21,19 @@
                     @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
                     @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
                 }
+            }
+            @using (Ajax.BeginFormHtml5("SaveCommentsJson", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions, new { style = "float: right; width: 5%;" }))
+            {
+                using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+                {        
+                    @Html.IconInputComments("Comments", question.Comments ?? string.Empty, string.Empty, new { draw_key_board = "true" }, new { @class = "comments" }, new { @class = "bold" }) 
+                }
+                using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+                {
+                    @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+                    @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
+                }
+                @Html.Hidden("PublicKey", question.PublicKey)
             }
         </div>
         <div class="ui-body">&nbsp;</div>

@@ -10,8 +10,8 @@
 {
     @Html.Hidden("Parent", Model.PublicKey)
     @Html.Hidden("PublicKey", answerGuid)
-        @Html.Hidden("Selected", true)
-var id = ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
+    @Html.Hidden("Selected", true)
+    var id = ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
   @*@Html.Label("AnswerValue",  Model.Title)*@
    
 @*    <span for="@id">
