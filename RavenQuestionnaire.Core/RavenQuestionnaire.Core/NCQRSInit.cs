@@ -21,7 +21,6 @@ namespace RavenQuestionnaire.Web.App_Start
             NcqrsEnvironment.SetDefault(InitializeEventStore(repositoryPath));
             NcqrsEnvironment.SetDefault(InitializeCommandService());
             NcqrsEnvironment.SetDefault(new InMemoryEventStore());
-            NcqrsEnvironment.SetDefault(new InMemoryEventStore());
             NcqrsEnvironment.SetDefault(new SimpleSnapshottingPolicy(1));
 
         }
@@ -41,6 +40,7 @@ namespace RavenQuestionnaire.Web.App_Start
             service.RegisterExecutor(typeof(SetAnswerCommand), new UoWMappedCommandExecutor(mapper));
 
             service.RegisterExecutor(typeof(AddPropagatableGroupCommand), new UoWMappedCommandExecutor(mapper));
+            service.RegisterExecutor(typeof(DeletePropagatableGroupCommand), new UoWMappedCommandExecutor(mapper));
             
 
             return service;

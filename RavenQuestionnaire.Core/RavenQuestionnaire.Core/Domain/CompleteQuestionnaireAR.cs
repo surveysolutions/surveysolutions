@@ -117,7 +117,22 @@ namespace RavenQuestionnaire.Core.Domain
             return entity.GetPropagatedQuestion(question.PublicKey, propagationKey.Value);
         }
 
+        public void DeletePropagatableGroup(Guid propagationKey, Guid publicKey)
+        {
+            ApplyEvent(new PropagatableGroupDeleted
+                           {
+                               PublicKey = publicKey,
+                               PropagationKey = propagationKey
+                           });
+        }
 
+        // Event handler for the PropagatableGroupAdded event. This method
+        // is automaticly wired as event handler based on convension.
+        protected void OnPropagatableGroupDeleted(PropagatableGroupDeleted e)
+        {
+            _doc.Remove(new CompleteGroup(_doc.Find<CompleteGroup>(e.PublicKey),
+                                                   e.PropagationKey));
+        }
         public void AddPropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             //performe checka before event raising

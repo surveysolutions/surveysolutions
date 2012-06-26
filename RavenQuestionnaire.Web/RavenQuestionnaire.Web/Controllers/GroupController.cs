@@ -245,6 +245,10 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
                                                                     GlobalInfo.GetCurrentUser()));
+            //new handling
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(new DeletePropagatableGroupCommand(Guid.Parse(questionnaireId), propagationKey, publicKey));
+
             return Json(new {propagationKey = propagationKey});
             /*     var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
 
