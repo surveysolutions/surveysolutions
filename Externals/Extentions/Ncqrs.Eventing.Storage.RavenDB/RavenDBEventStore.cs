@@ -106,5 +106,56 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                            EventSourceId = uncommittedEvent.EventSourceId,
                        };
         }
+
+
+        /*/// <summary>
+        /// Get some events after specified event.
+        /// </summary>
+        /// <param name="eventId">The id of last event not to be included in result set.</param>
+        /// <param name="maxCount">Maximum number of returned events</param>
+        /// <returns>A collection events starting right after <paramref name="eventId"/>.</returns>
+        public IEnumerable<CommittedEvent> GetEventsAfter(Guid? eventId, int maxCount)
+        {
+            var result = new List<CommittedEvent>();
+
+            using (var session = _documentStore.OpenSession())
+            {
+                var storedEvents = session.Query<StoredEvent>()
+                    .Customize(x => x.WaitForNonStaleResults())
+                    .Where(x => x.EventSequence >= minVersion)
+                    .Where(x => x.EventSequence <= maxVersion)
+                    .ToList().OrderBy(x => x.);
+                return new CommittedEventStream(id, storedEvents.Select(ToComittedEvent));
+            }
+
+            return result;
+        }*/
+
+
+
+        /// <summary>
+        /// Get some events after specified event.
+        /// </summary>
+        /// <param name="eventId">The id of last event not to be included in result set.</param>
+        /// <param name="maxCount">Maximum number of returned events</param>
+        /// <returns>A collection events starting right after <paramref name="eventId"/>.</returns>
+        public IEnumerable<CommittedEvent> ReadFrom(DateTime start)
+        {
+            var result = new List<CommittedEvent>();
+
+            using (var session = _documentStore.OpenSession())
+            {
+                var storedEvents = session.Query<StoredEvent>()
+                    .Customize(x => x.WaitForNonStaleResults())
+                    .Where(x => x.EventTimeStamp >= start)
+                    .ToList().OrderBy(x => x.EventTimeStamp);
+                result = storedEvents.Select(ToComittedEvent).ToList();
+            }
+
+            return result;
+        }
+
+
+
     }
 }

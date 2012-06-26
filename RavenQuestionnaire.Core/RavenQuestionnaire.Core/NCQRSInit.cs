@@ -88,5 +88,20 @@ namespace RavenQuestionnaire.Web.App_Start
             var eventStore = new RavenDBEventStore(storePath);
             return eventStore;
         }
+        
+        public static void RebuildReadLayer()
+        {
+            var myEventBus = NcqrsEnvironment.Get<IEventBus>();
+            if (myEventBus == null) 
+                throw new Exception("IEventBus is not properly initialized.");
+            var myEventStore = NcqrsEnvironment.Get<IEventStore>() as RavenDBEventStore;// as MsSqlServerEventStore;
+
+            if (myEventStore == null)
+                throw new Exception("IEventStore is not correct.");
+
+            var myEvents = myEventStore.ReadFrom(DateTime.MinValue);
+            myEventBus.Publish(myEvents);
+        }
+
     }
 }
