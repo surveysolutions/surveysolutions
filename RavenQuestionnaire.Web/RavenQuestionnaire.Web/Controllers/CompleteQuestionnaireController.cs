@@ -328,6 +328,28 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
+
+        public JsonResult SaveCommentsJson(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
+        {
+            var question = questions[0];
+            question.PublicKey = new Guid(Request.Form["PublicKey"]);
+            try
+            {
+                commandInvoker.Execute(new UpdateCommentsInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
+                                                                                      question,
+                                                                                      settings[0].PropogationPublicKey,
+                                                                                      _globalProvider.GetCurrentUser()));
+            }
+            catch (Exception e)
+            {
+                return Json(new { question = questions[0], settings = settings[0], error = e.Message });
+            }
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
+                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
+            return Json(model);
+        }
+
+
         public JsonResult SaveSingleResultJson(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
         {
 
