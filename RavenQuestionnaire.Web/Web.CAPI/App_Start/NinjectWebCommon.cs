@@ -80,18 +80,13 @@ namespace Web.CAPI.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IDocumentSession>().ToMethod(
-               context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
-                   b => HttpContext.Current != null).InScope(o => HttpContext.Current.Cache);
+              context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
+                  b => OperationContext.Current == null).InSingletonScope();
 
 
             kernel.Bind<IDocumentSession>().ToMethod(
                 context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
                  b => OperationContext.Current != null).InScope(o => OperationContext.Current);
-
-            kernel.Bind<IDocumentSession>().ToMethod(
-                context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
-                    b => OperationContext.Current == null && HttpContext.Current == null).InScope(
-                        o => Thread.CurrentThread);
 
             kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
             kernel.Bind<IBagManager>().To<ViewBagManager>();
