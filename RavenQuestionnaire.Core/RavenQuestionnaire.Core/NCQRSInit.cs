@@ -1,7 +1,9 @@
-﻿using Ncqrs;
+﻿using System;
+using Ncqrs;
 using Ncqrs.Commanding.CommandExecution.Mapping;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.RavenDB;
@@ -20,9 +22,8 @@ namespace RavenQuestionnaire.Web.App_Start
         {
             NcqrsEnvironment.SetDefault(InitializeEventStore(repositoryPath));
             NcqrsEnvironment.SetDefault(InitializeCommandService());
-            NcqrsEnvironment.SetDefault(new InMemoryEventStore());
-            NcqrsEnvironment.SetDefault(new InMemoryEventStore());
-            NcqrsEnvironment.SetDefault(new SimpleSnapshottingPolicy(1));
+            //NcqrsEnvironment.SetDefault(new InMemoryEventStore());
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
         }
 
@@ -50,6 +51,20 @@ namespace RavenQuestionnaire.Web.App_Start
         {
             var eventStore = new RavenDBEventStore(storePath);
             return eventStore;
+        }
+
+        public static void RebuildReadLayer()
+        {
+            var myEventBus = NcqrsEnvironment.Get<IEventBus>();
+            if (myEventBus == null) 
+                throw new Exception("IEventBus is not properly initialized.");
+            var myEventStore = NcqrsEnvironment.Get<IEventStore>() as RavenDBEventStore;// as MsSqlServerEventStore;
+
+            if (myEventStore == null)
+                throw new Exception("IEventStore is not correct.");
+
+            var myEvents = myEventStore.ReadFrom(DateTime.MinValue);
+            myEventBus.Publish(myEvents);
         }
     }
 }
