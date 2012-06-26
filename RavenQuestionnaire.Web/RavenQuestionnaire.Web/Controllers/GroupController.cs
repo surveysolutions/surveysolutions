@@ -219,8 +219,8 @@ namespace RavenQuestionnaire.Web.Controllers
             try
             {
                 var propagationKey = Guid.NewGuid();
-                var command = new PropagateGroupCommand(questionnaireId, propagationKey, publicKey, GlobalInfo.GetCurrentUser());
-                commandInvoker.Execute(command);
+             /*   var command = new PropagateGroupCommand(questionnaireId, propagationKey, publicKey, GlobalInfo.GetCurrentUser());
+                commandInvoker.Execute(command);*/
 
                 //new handling
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
@@ -243,8 +243,8 @@ namespace RavenQuestionnaire.Web.Controllers
         public JsonResult DeletePropagatedGroupHtml5(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey,
                                                   string questionnaireId)
         {
-            commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
-                                                                    GlobalInfo.GetCurrentUser()));
+         /*   commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
+                                                                    GlobalInfo.GetCurrentUser()));*/
             //new handling
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new DeletePropagatableGroupCommand(Guid.Parse(questionnaireId), propagationKey, publicKey));

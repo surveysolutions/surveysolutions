@@ -237,12 +237,12 @@ namespace RavenQuestionnaire.Web.Controllers
 
             SurveyStatus status = GetStatus(id);
             var newQuestionnairePublicKey = Guid.NewGuid();
-            var command = new CreateNewCompleteQuestionnaireCommand(id,
+     /*       var command = new CreateNewCompleteQuestionnaireCommand(id,
                                                                     newQuestionnairePublicKey,
                                                                     _globalProvider.GetCurrentUser(),
                                                                     status,
                                                                     _globalProvider.GetCurrentUser());
-            commandInvoker.Execute(command);
+            commandInvoker.Execute(command);*/
 
             //new handling
             var commandService = NcqrsEnvironment.Get<ICommandService>();
@@ -338,11 +338,11 @@ namespace RavenQuestionnaire.Web.Controllers
             var question = questions[0];
             try
             {
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
+             /*   commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
                                                                                       question,
                                                                                       settings[0].PropogationPublicKey,
                                                                                       _globalProvider.GetCurrentUser()));
-
+                */
 
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
                 commandService.Execute(new SetAnswerCommand(Guid.Parse(settings[0].QuestionnaireId), question, 

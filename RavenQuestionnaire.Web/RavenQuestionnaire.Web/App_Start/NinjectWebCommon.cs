@@ -35,7 +35,7 @@ namespace RavenQuestionnaire.Web.App_Start
             DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
             bootstrapper.Initialize(CreateKernel);
 
-            NCQRSInit.Init(System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"]);
+           
 
         }
         
@@ -71,8 +71,8 @@ namespace RavenQuestionnaire.Web.App_Start
             KernelLocator.SetKernel(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            
             RegisterServices(kernel);
+            NCQRSInit.Init(System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"], kernel);
             return kernel;
         }
 

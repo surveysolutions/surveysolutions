@@ -27,6 +27,8 @@ namespace Ncqrs.Eventing.Storage
         /// </summary>
         public Snapshot GetSnapshot(Guid eventSourceId, long maxVersion)
         {
+            if (!_snapshots.ContainsKey(eventSourceId))
+                return null;
             var result = _snapshots[eventSourceId];
             return result.Version > maxVersion 
                 ? null 
