@@ -64,7 +64,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public AnswerType AnswerType { get; set; }
         public string NameCollection { get; set; }
         public Image Image { get; set; }
-
+        
         public object AnswerValue { get; set; }
         public bool Selected { get; set; }
 

@@ -113,6 +113,11 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             return Answer;
         }
 
+        public string Comments{ get; set; }
+        public void SetComments(string comments)
+        {
+        }
+
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
 
