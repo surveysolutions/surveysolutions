@@ -42,8 +42,8 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\RavenQuestionnaire.Web\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Lucene.Net">
-      <HintPath>..\..\..\RavenQuestionnaire.Web\packages\RavenDB.1.0.499\server\Lucene.Net.dll</HintPath>
+    <Reference Include="Lucene.Net, Version=2.9.4.1, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
+      <HintPath>..\..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ncqrs, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
