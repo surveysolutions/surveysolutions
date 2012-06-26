@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ncqrs;
+using Ncqrs.Domain;
 using Ncqrs.Eventing.Storage;
 
 namespace RavenQuestionnaire.Core.ViewSnapshot
@@ -15,9 +17,10 @@ namespace RavenQuestionnaire.Core.ViewSnapshot
     public class DefaultViewSnapshot : IViewSnapshot
     {
         private readonly ISnapshotStore store;
-        public DefaultViewSnapshot( ISnapshotStore store)
+        public DefaultViewSnapshot()
         {
-            this.store = store;
+            this.store = NcqrsEnvironment.Get<ISnapshotStore>();
+            //NcqrsEnvironment.Get<IUnitOfWorkFactory>().CreateUnitOfWork(Guid.NewGuid()).GetById<>()
         }
 
         #region Implementation of IViewSnapshot

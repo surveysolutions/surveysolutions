@@ -25,7 +25,6 @@ namespace RavenQuestionnaire.Web.App_Start
         //    NcqrsEnvironment.SetDefault<IEventStore>(new InMemoryEventStore());
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
-            kernel.Bind<ISnapshotStore>().ToMethod(m => NcqrsEnvironment.Get<ISnapshotStore>());
             /*
               Kernel.Register(
                 Component
