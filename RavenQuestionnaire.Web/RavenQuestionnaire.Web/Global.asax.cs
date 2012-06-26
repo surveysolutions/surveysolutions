@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Net;
-using System.ServiceModel;
-using System.ServiceModel.Discovery;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
-using RavenQuestionnaire.Web.WCF;
-using SynchronizationMessages.Discover;
+using RavenQuestionnaire.Web.App_Start;
 
 namespace RavenQuestionnaire.Web
 {
@@ -39,6 +35,9 @@ namespace RavenQuestionnaire.Web
             
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            //maybe better to move outside this class
+            NCQRSInit.RebuildReadLayer();
            
         }
         protected void HostServices()
