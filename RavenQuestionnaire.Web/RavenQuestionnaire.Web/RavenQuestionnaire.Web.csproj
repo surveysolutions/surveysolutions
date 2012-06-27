@@ -268,7 +268,7 @@
     <Content Include="Content\themes\jquerymobile\images\1336075535_calculator.png" />
     <Content Include="Content\themes\jquerymobile\images\1336075556_calendar.png" />
     <Content Include="Content\themes\jquerymobile\images\ajax-loader.gif" />
-     <Content Include="Content\themes\jquerymobile\images\comment.gif" />
+    <Content Include="Content\themes\jquerymobile\images\comment.gif" />
     <Content Include="Raven.Studio.xap" />
     <Content Include="Scripts\Html5\jquery.mobile.simpledialog2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
@@ -652,6 +652,7 @@
     <Content Include="Scripts\Plugins\wijmo\jquery.wijmo-open.1.5.0.css" />
     <Content Include="Scripts\Plugins\wijmo\jquery.wijmo-open.1.5.0.min.js" />
     <Content Include="Scripts\screen\screeniv.js" />
+    <Content Include="Scripts\Scroll_tab.js" />
     <Content Include="Scripts\sorter.js" />
     <Content Include="Scripts\take.js" />
     <Content Include="Views\CompleteQuestionnaire\Index.cshtml" />
