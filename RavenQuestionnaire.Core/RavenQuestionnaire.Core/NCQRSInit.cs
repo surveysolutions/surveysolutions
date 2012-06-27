@@ -43,7 +43,10 @@ namespace RavenQuestionnaire.Web.App_Start
                 foreach (var handlerInterfaceType in type.GetInterfaces().Where(IsIEventHandlerInterface))
                 {
                     var eventDataType = handlerInterfaceType.GetGenericArguments().First();
-                    var handlers = kernel.GetAll(typeof(IEventHandler<>).MakeGenericType(eventDataType));
+                    Type type1 = type;
+                    var handlers =
+                        kernel.GetAll(typeof (IEventHandler<>).MakeGenericType(eventDataType)).Where(
+                            i => i.GetType() == type1);
                     foreach (object handler in handlers)
                     {
                         bus.RegisterHandler(handler, eventDataType);

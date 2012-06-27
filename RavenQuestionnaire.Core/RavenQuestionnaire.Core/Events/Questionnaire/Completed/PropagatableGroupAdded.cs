@@ -12,7 +12,8 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire.Completed
     public class PropagatableGroupAdded
     {
         public Guid CompletedQuestionnaireId { get; set; }
-        public ICompleteGroup Group { get; set; }
+        public Guid PublicKey { get; set; }
+        public Guid PropagationKey { get; set; }
 
     }
 }
