@@ -1,10 +1,11 @@
-﻿@model RavenQuestionnaire.Core.Views.Synchronization.SyncProgressView
+﻿@using RavenQuestionnaire.Core.Views.Synchronization
+@model SyncProgressView
 <h1>
     Synchronization progress</h1>
 <p>@Model.StateDescription</p>
 @if (Model.EndDate.HasValue)
 {
-    @Html.ActionLink("Back to Dashboard", "Index", "Dashboard", new { }, new { rel = "external", data_role = "button", data_theme = "e", id = "btnSync", @class = "ui-state-persist", data_inline = "true" })
+    @Html.ActionLink("Back to Dashboard", "Index", "Dashboard", new {}, new {rel = "external", data_role = "button", data_theme = "e", id = "btnSync", @class = "ui-state-persist", data_inline = "true"})
 }
 @if (Model.ProgressPercentage.HasValue)
 {

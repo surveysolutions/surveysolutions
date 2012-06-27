@@ -1,5 +1,4 @@
-﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
+﻿@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 @model CQGroupedBrowseView
 
@@ -10,11 +9,7 @@
             <h1>
                 Dashboard
             </h1>
-            @*        @Ajax.ActionLinkHtml5("Synchronize", "Discover", "Synchronizations", new { },
-                                    new AjaxOptions() { OnBegin = "sichronizationStarted", OnComplete = "spotScanCompleted" },
-                                    new { data_inline = "true", data_role = "button", data_mini = "true", data_corners = "false", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
-                                    
-*@ @Html.ActionLink("Synchronize", "DiscoverPage", "Synchronizations", new { }, new { rel = "external", data_inline = "true", data_role = "button", data_mini = "true", data_corners = "false", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
+            @Html.ActionLink("Synchronize", "DiscoverPage", "Synchronizations", new {}, new {rel = "external", data_inline = "true", data_role = "button", data_mini = "true", data_corners = "false", data_theme = "e", id = "btnSync", @class = "ui-state-persist"})
             <a href="@Url.Action("LogOff", "Account")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">
                 Log off</a>
         </div>
@@ -26,20 +21,20 @@
                     {
                         <li data-role="list-divider" data-theme="b" role="heading" class="divider"><a>
                                                                                                        @group.SurveyTitle <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
-                            @Html.ActionLink("New", "Participate", "Survey", new { id = group.Id, mode = "Html5" }, new
-                                                                                                                                                                   {
-                                                                                                                                                                       @class = "splited-button",
-                                                                                                                                                                       data_inline = "true",
-                                                                                                                                                                       data_icon = "plus",
-                                                                                                                                                                       data_iconpos = "left",
-                                                                                                                                                                       data_role = "button",
-                                                                                                                                                                       data_theme = "b",
-                                                                                                                                                                       rel = "external",
-                                                                                                                                                                       disable_after_click = "true"
-                                                                                                                                                                   })
+                            @Html.ActionLink("New", "Participate", "Survey", new {id = group.Id, mode = "Html5"}, new
+                                                                                                                        {
+                                                                                                                            @class = "splited-button",
+                                                                                                                            data_inline = "true",
+                                                                                                                            data_icon = "plus",
+                                                                                                                            data_iconpos = "left",
+                                                                                                                            data_role = "button",
+                                                                                                                            data_theme = "b",
+                                                                                                                            rel = "external",
+                                                                                                                            disable_after_click = "true"
+                                                                                                                        })
                             @*  <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>*@
                         </li>
-               
+
                         if (@group.Items.Any())
                         {
                             <li data-theme="c" class="grid-header">
@@ -74,43 +69,40 @@
                                         <div class="ui-block-b">
                                             @for (int i = 0; i < Math.Min(4, survey.FeaturedQuestions.Count()); i++)
                                             {
-
                                                 @(survey.FeaturedQuestions[i].AnswerValue ?? survey.FeaturedQuestions[i].AnswerText)<b>&nbsp;</b>
-                                            
                                             }
                                         </div>
                                         <div class="ui-block-c">
                                             <div data-role="controlgroup" data-type="horizontal">
-                                                @Html.ActionLink("edit", "Index", "Survey", new { id = survey.Id }, new
-                                                                                                                                                                                                                                                                                                                                                                                           {
-                                                                                                                                                                                                                                                                                                                                                                                               data_inline = "true",
-                                                                                                                                                                                                                                                                                                                                                                                               data_role = "button",
-                                                                                                                                                                                                                                                                                                                                                                                               data_theme = "b",
-                                                                                                                                                                                                                                                                                                                                                                                               data_mini = "true",
-                                                                                                                                                                                                                                                                                                                                                                                               rel = "external"
-                                                                                                                                                                                                                                                                                                                                                                                           })
-                                                @Html.ActionLink("stat", "Statistic", "Survey", new { id = survey.Id }, new
-                                                                                   {
-                                                                                       data_inline = "true",
-                                                                                       data_role = "button",
-                                                                                       data_mini = "true",
-                                                                                       rel = "external"
-                                                                                   })
-                                                @Html.ActionLink("del", "Delete", "Survey", new { id = survey.Id }, new
-                                                                                                                                                        {
-                                                                                                                                                            data_inline = "true",
-                                                                                                                                                            data_role = "button",
-                                                                                                                                                            data_theme = "e",
-                                                                                                                                                            data_mini = "true",
-                                                                                                                                                            rel = "external"
-                                                                                                                                                        })
+                                                @Html.ActionLink("edit", "Index", "Survey", new {id = survey.Id}, new
+                                                                                                            {
+                                                                                                                data_inline = "true",
+                                                                                                                data_role = "button",
+                                                                                                                data_theme = "b",
+                                                                                                                data_mini = "true",
+                                                                                                                rel = "external"
+                                                                                                            })
+                                                @Html.ActionLink("stat", "Statistic", "Survey", new {id = survey.Id}, new
+                                                                                                                {
+                                                                                                                    data_inline = "true",
+                                                                                                                    data_role = "button",
+                                                                                                                    data_mini = "true",
+                                                                                                                    rel = "external"
+                                                                                                                })
+                                                @Html.ActionLink("del", "Delete", "Survey", new {id = survey.Id}, new
+                                                                                                            {
+                                                                                                                data_inline = "true",
+                                                                                                                data_role = "button",
+                                                                                                                data_theme = "e",
+                                                                                                                data_mini = "true",
+                                                                                                                rel = "external"
+                                                                                                            })
                                             </div>
                                         </div>
                                     </div>
                                     <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@survey.AnsweredQuestionCouont
                                         / @survey.TotalQuestionCouont</span> </li>
                             }
-
                         }
                     }
                 </ul>

@@ -1,15 +1,16 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model PropagatedGroupMobileView
-@{ var groupKey = "propagatedGroup" + Model.PropogationKey;
-   var rparams = new
-          {
-              propagationKey = Model.PropogationKey,
-              publicKey = Model.PublicKey,
-              questionnaireId = ViewBag.QuestionnaireId,
-              parentGroupPublicKey = ViewBag.CurrentGroupPublicKey,
-              salt = (new Random()).NextDouble()
-          }; 
+@{
+    string groupKey = "propagatedGroup" + Model.PropogationKey;
+    var rparams = new
+                      {
+                          propagationKey = Model.PropogationKey,
+                          publicKey = Model.PublicKey,
+                          questionnaireId = ViewBag.QuestionnaireId,
+                          parentGroupPublicKey = ViewBag.CurrentGroupPublicKey,
+                          salt = (new Random()).NextDouble()
+                      };
 }
 @if (!Model.AutoPropagate)
 {
@@ -18,19 +19,19 @@
             <div class="ui-block-a">
                 <a id="screen-ref-@(Model.PropogationKey)" class="propagated-screen-link-@(Model.PublicKey)" href="#screen-@(Model.PropogationKey)">
                     <h3><span>@ViewBag.GroupIndex)</span> @Model.Title</h3>
-					<p  id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
+                    <p  id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
                 </a>
             </div>
             <div class="ui-block-b">
-                @using (Ajax.BeginFormHtml5("DeletePropagatedGroup", "Survey", rparams, new AjaxOptions { OnComplete = "RemovePropagatedGroup", HttpMethod = "POST" }, new { style = "float:right;" }))
+                @using (Ajax.BeginFormHtml5("DeletePropagatedGroup", "Survey", rparams, new AjaxOptions {OnComplete = "RemovePropagatedGroup", HttpMethod = "POST"}, new {style = "float:right;"}))
                 {
                     <input value="Delete" type="submit" data-role="button" data-icon="delete" data-iconpos="notext"
-                        data-inline="true" data-mini="true" data-theme="b" />
+                           data-inline="true" data-mini="true" data-theme="b" />
                 }
             </div>
         </fieldset >
-         <script type="text/javascript">
-             $('#screen-ref-@(Model.PropogationKey)').click(function () {
+        <script type="text/javascript">
+             $('#screen-ref-@(Model.PropogationKey)').click(function() {
                  $('.scrollHere').removeClass('scrollHere');
                  $(this).parents('.propagated-list-item').addClass("scrollHere");
              });
@@ -40,11 +41,11 @@
 else
 {
     <li data-role="fieldcontain" id="@groupKey" ><a  id="screen-ref-@(Model.PropogationKey)" class="propagated-screen-link" href="#screen-@(Model.PropogationKey)">
-        <h3><span>@ViewBag.GroupIndex)</span> @Model.Title</h3>
-	    <p id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
-    </a>
-     <script type="text/javascript">
-         $('#screen-ref-@(Model.PropogationKey)').click(function () {
+                                                     <h3><span>@ViewBag.GroupIndex)</span> @Model.Title</h3>
+                                                     <p id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
+                                                 </a>
+        <script type="text/javascript">
+         $('#screen-ref-@(Model.PropogationKey)').click(function() {
              $('.scrollHere').removeClass('scrollHere');
              $(this).parents('.propagated-screen-link').addClass("scrollHere");
          });

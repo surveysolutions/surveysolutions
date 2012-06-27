@@ -2,6 +2,5 @@ D:\Projects\MIS_Dev\RavenQuestionnaire.Web\Web.Supervisor\bin\Web.Supervisor.dll
 D:\Projects\MIS_Dev\RavenQuestionnaire.Web\Web.Supervisor\bin\Web.Supervisor.pdb
 D:\Projects\MIS_Dev\RavenQuestionnaire.Web\Web.Supervisor\bin\EntityFramework.dll
 D:\Projects\MIS_Dev\RavenQuestionnaire.Web\Web.Supervisor\bin\EntityFramework.xml
-D:\Projects\MIS_Dev\RavenQuestionnaire.Web\Web.Supervisor\obj\Release\Web.Supervisor.csprojResolveAssemblyReference.cache
 D:\Projects\MIS_Dev\RavenQuestionnaire.Web\Web.Supervisor\obj\Release\Web.Supervisor.dll
 D:\Projects\MIS_Dev\RavenQuestionnaire.Web\Web.Supervisor\obj\Release\Web.Supervisor.pdb

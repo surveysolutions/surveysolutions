@@ -21,17 +21,17 @@
         <div data-role="footer" data-position="fixed" data-id="ew-footer">
             <div data-role="navbar">
                 <ul>
-                    <li><a data-role="button" data-corners="false" href="@Url.Action("Index", "Survey", new { id = Model.CompleteQuestionnaireId })" rel="external" data-ajax="false">
-                        Survey</a></li>
+                    <li><a data-role="button" data-corners="false" href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId})" rel="external" data-ajax="false">
+                            Survey</a></li>
                     <li>
                         @if (Model.Status.Name == "Completed")
                         {
-                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("ReInit", "Survey", new { id = Model.CompleteQuestionnaireId })">
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("ReInit", "Survey", new {id = Model.CompleteQuestionnaireId})">
                                 ReInit</a>
                         }
                         else
                         {
-                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("Complete", "Survey", new { id = Model.CompleteQuestionnaireId })">
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("Complete", "Survey", new {id = Model.CompleteQuestionnaireId})">
                                 Complete</a>
                         }</li>
                 </ul>
@@ -65,16 +65,17 @@
                     <p>
                         @if (question.GroupPublicKey == question.ScreenPublicKey)
                         {
-                            <a href="@Url.Action("Index", "Survey", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@Html.Raw(question.QuestionText)</a>
+                            <a href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey})" rel = "external">@Html.Raw(question.QuestionText)</a>
                         }
                         else
                         {
-                            <a href="@Url.Action("Index", "Survey", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a>
+                            <a href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey})#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a>
                         }
                         - @question.AnswerValue
                         @if (question.ApproximateTime.HasValue)
-                        {<b> , Timing : @question.ApproximateTime.Value.Minutes
-                        minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                        {
+                            <b> , Timing : @question.ApproximateTime.Value.Minutes
+                                minutes @question.ApproximateTime.Value.Seconds seconds</b>
                         }
                     </p>
                 }
@@ -106,11 +107,11 @@
                                 <div class="ui-block-a">
                                     @if (question.GroupPublicKey == question.ScreenPublicKey)
                                     {
-                                        <a href="@Url.Action("Index", "Survey", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@Html.Raw(question.QuestionText)</a>
+                                        <a href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey})" rel = "external">@Html.Raw(question.QuestionText)</a>
                                     }
                                     else
                                     {
-                                        <a href="@Url.Action("Index", "Survey", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a>
+                                        <a href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey})#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a>
                                     }
                                 </div>
                                 <div class="ui-block-b">
@@ -118,8 +119,9 @@
                                 </div>
                                 <div class="ui-block-c">
                                     @if (question.ApproximateTime.HasValue)
-                                    {<b>@question.ApproximateTime.Value.Minutes
-                                        minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                                    {
+                                        <b>@question.ApproximateTime.Value.Minutes
+                                            minutes @question.ApproximateTime.Value.Seconds seconds</b>
                                     }</div>
                             </div>
                         </li>
@@ -140,16 +142,17 @@
                     <p>
                         @if (question.GroupPublicKey == question.ScreenPublicKey)
                         {
-                            <a href="@Url.Action("Index", "Survey", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })" rel = "external">@Html.Raw(question.QuestionText)</a>
+                            <a href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey})" rel = "external">@Html.Raw(question.QuestionText)</a>
                         }
                         else
                         {
-                            <a href="@Url.Action("Index", "Survey", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey })#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a>
+                            <a href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey})#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a>
                         }
                         - @question.AnswerValue
                         @if (question.ApproximateTime.HasValue)
-                        {<b> , Timing : @question.ApproximateTime.Value.Minutes
-                            minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                        {
+                            <b> , Timing : @question.ApproximateTime.Value.Minutes
+                                minutes @question.ApproximateTime.Value.Seconds seconds</b>
                         }
                     </p>
                 }
@@ -158,7 +161,7 @@
     </div>
 </div>
 @helper RenderNavBar()
-    {
+{
     <div data-role="header" data-theme="b" class="navigation">
         <h1>@Model.Title</h1>
     </div>

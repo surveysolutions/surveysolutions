@@ -2,11 +2,11 @@
 @model CompleteQuestionView
 @{
     ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
-    var questionKey = (Guid)ViewBag.CurrentQuestion;
-    var bodyClass = Model.Valid ? Model.Enabled ? "" : "ui-disabled" : "ui-body error_block";
+    var questionKey = (Guid) ViewBag.CurrentQuestion;
+    string bodyClass = Model.Valid ? Model.Enabled ? "" : "ui-disabled" : "ui-body error_block";
     bodyClass += " " + (questionKey == Model.PublicKey ? "scrollHere" : "");
     bodyClass += " " + (Model.Answered ? "answered" : "");
-    var questionId = "question" + Model.PublicKey;
+    string questionId = "question" + Model.PublicKey;
 }
 <div class="@bodyClass question" id="@questionId">
     <a href="#" class="error"></a>
@@ -15,7 +15,7 @@
         <a id="inctruction-ref-@(Model.PublicKey)" href="#inctruction-@(Model.PublicKey)"  data-icon="info" data-role="button" data-inline="true" data-rel="page" data-transition="flip">
             Read instructions</a>
         <script type="text/javascript">
-            $('#inctruction-ref-@(Model.PublicKey)').click(function () {
+            $('#inctruction-ref-@(Model.PublicKey)').click(function() {
                 $('.scrollHere').removeClass('scrollHere');
                 $(this).parents('.question').addClass("scrollHere");
             });
@@ -26,14 +26,14 @@
         <a id="gallery-ref-@(Model.PublicKey)" data-role="button" rel="external" data-icon="grid" data-inline="true" href="#gallery-@(Model.PublicKey)">
             Cards</a>
         <script type="text/javascript">
-            $('#gallery-ref-@(Model.PublicKey)').click(function () {
+            $('#gallery-ref-@(Model.PublicKey)').click(function() {
                 $('.scrollHere').removeClass('scrollHere');
                 $(this).parent('.question').addClass("scrollHere");
             });
         </script>
     }
     @Html.Hidden("QuestionType", Model.QuestionType)
-    @{Html.RenderPartial(string.Format("~/Views/Survey/Answer/AnswerList/_{0}.cshtml", Model.QuestionType), Model);}
+    @{ Html.RenderPartial(string.Format("~/Views/Survey/Answer/AnswerList/_{0}.cshtml", Model.QuestionType), Model); }
     @Html.ValidationMessage("AnswerValue")
     @Html.Hidden("PublicKey", Model.PublicKey)
 </div>

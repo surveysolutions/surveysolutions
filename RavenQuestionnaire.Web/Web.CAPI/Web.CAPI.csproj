@@ -233,6 +233,7 @@
     <Content Include="Content\themes\jquerymobile\images\1336075535_calculator.png" />
     <Content Include="Content\themes\jquerymobile\images\1336075556_calendar.png" />
     <Content Include="Content\themes\jquerymobile\images\ajax-loader.png" />
+    <Content Include="Content\themes\jquerymobile\images\comment.gif" />
     <Content Include="Content\themes\jquerymobile\images\icons-18-black.png" />
     <Content Include="Content\themes\jquerymobile\images\icons-18-white.png" />
     <Content Include="Content\themes\jquerymobile\images\icons-36-black.png" />
