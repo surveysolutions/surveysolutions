@@ -28,7 +28,7 @@
                     {
                         <li data-role="list-divider" data-theme="b" role="heading" class="divider"><a>
                                                                                                        @group.SurveyTitle <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
-                            @Html.ActionLink("New", "Participate", "CompleteQuestionnaire", new { id = group.Id, mode = "Html5" }, new
+                            @Html.ActionLink("New", "Participate", "CompleteQuestionnaire", new { id = group.SurveyId, mode = "Html5" }, new
                                                                                                                  {
                                                                                                                      @class = "splited-button",
                                                                                                                      data_inline = "true",
@@ -70,8 +70,8 @@
                                         <div class="ui-block-a">
                                             @*   <div>@survey.Id
                             </div> *@
-                                            <div>@survey.Status.Name, Created by @survey.Creator.Name
-                                            </div>
+                                         @*   <div>@survey.Status.Name, Created by @survey.Creator.Name
+                                            </div>*@
                                         </div>
                                         <div class="ui-block-b">
                                             @for (int i = 0; i < Math.Min(4, survey.FeaturedQuestions.Count()); i++)
@@ -83,7 +83,7 @@
                                         </div>
                                         <div class="ui-block-c">
                                             <div data-role="controlgroup" data-type="horizontal">
-                                                @Html.ActionLink("edit", "QuestionHtml5", "CompleteQuestionnaire", new { id = survey.Id }, new
+                                                @Html.ActionLink("edit", "QuestionHtml5", "CompleteQuestionnaire", new { id = survey.CompleteQuestionnaireId }, new
                                                                                                      {
                                                                                                          data_inline = "true",
                                                                                                          data_role = "button",
@@ -91,14 +91,14 @@
                                                                                                          data_mini = "true",
                                                                                                          rel = "external"
                                                                                                      })
-                                                @Html.ActionLink("stat", "Details", "Statistic", new { id = survey.Id }, new
+                                                @Html.ActionLink("stat", "Details", "Statistic", new { id = survey.CompleteQuestionnaireId }, new
                                                                                    {
                                                                                        data_inline = "true",
                                                                                        data_role = "button",
                                                                                        data_mini = "true",
                                                                                        rel = "external"
                                                                                    })
-                                                @Html.ActionLink("del", "Delete", "CompleteQuestionnaire", new { id = survey.Id }, new
+                                                @Html.ActionLink("del", "Delete", "CompleteQuestionnaire", new { id = survey.CompleteQuestionnaireId }, new
                                                                                              {
                                                                                                  data_inline = "true",
                                                                                                  data_role = "button",

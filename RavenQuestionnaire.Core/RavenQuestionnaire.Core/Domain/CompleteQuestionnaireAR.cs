@@ -63,6 +63,7 @@ namespace RavenQuestionnaire.Core.Domain
             ApplyEvent(new NewCompleteQuestionnaireCreated
             {
                 CompletedQuestionnaireId = completeQuestionnaireId,
+                QuestionnaireId = questionnaire.Id,
                 Questionnaire = doc,
                 CreationDate = clock.UtcNow()
             });
@@ -91,6 +92,7 @@ namespace RavenQuestionnaire.Core.Domain
             // this event (the OnAnswerSet method).
             ApplyEvent(new AnswerSet
             {
+                CompletedQuestionnaireId = this._doc.PublicKey,
                 QuestionPublicKey = questionPublicKey,
                 PropogationPublicKey = propogationPublicKey,
                 Answer = completeAnswer ?? completeAnswers

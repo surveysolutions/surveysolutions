@@ -2,6 +2,7 @@
 using Ncqrs.Commanding.CommandExecution.Mapping;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.RavenDB;
@@ -13,6 +14,7 @@ using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 using RavenQuestionnaire.Core.Domain;
 using RavenQuestionnaire.Core.Events;
+using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
 
 namespace RavenQuestionnaire.Web.App_Start
 {
@@ -25,41 +27,17 @@ namespace RavenQuestionnaire.Web.App_Start
         //    NcqrsEnvironment.SetDefault<IEventStore>(new InMemoryEventStore());
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
-            /*
-              Kernel.Register(
-                Component
-                    .For<IAggregateRootCreationStrategy>()
-                    .ImplementedBy<DynamicSnapshotAggregateRootCreationStrategy>(),
-                Component
-                    .For<IAggregateSupportsSnapshotValidator>()
-                    .ImplementedBy<AggregateSupportsDynamicSnapshotValidator>(),
-                Component
-                    .For<IAggregateSnapshotter>()
-                    .ImplementedBy<AggregateDynamicSnapshotter>(),
-                Component
-                    .For<IDynamicSnapshotAssembly>()
-                    .ImplementedBy<DynamicSnapshotAssembly>()
-                    .OnCreate((kernel, instance) =>
-                        {
-                            if (_generateDynamicSnapshotAssembly)
-                                instance.CreateAssemblyFrom(_assemblyWithAggreagateRoots);
-                        }),
-                Component.For<SnapshotableAggregateRootFactory>(),
-                Component.For<DynamicSnapshotAssemblyBuilder>(),
-                Component.For<DynamicSnapshotTypeBuilder>(),
-                Component.For<SnapshotableImplementerFactory>());
-             */
-            /*    IWindsorContainer container = new WindsorContainer();
-                container.AddFacility("ncqrs.ds", new DynamicSnapshotFacility(asm));
-                container.Register(
-                    Component.For<ISnapshottingPolicy>().ImplementedBy<SimpleSnapshottingPolicy>(),
-                    Component.For<IEventStore>().Forward<ISnapshotStore>().Instance(dsa),
-                    Component.For<CompleteQuestionnaireAR>().AsSnapshotable()
-                    );
 
+            var bus = new InProcessEventBus(true);
+            //bus.RegisterAllHandlersInAssembly(typeof(NCQRSInit).Assembly);
+            bus.RegisterHandler(kernel.Get<IEventHandler<NewQuestionnaireCreated>>());
+            bus.RegisterHandler(kernel.Get<IEventHandler<NewCompleteQuestionnaireCreated>>());
 
-                WindsorConfiguration config = new WindsorConfiguration(container);
-             */
+            bus.RegisterHandler(kernel.Get<IEventHandler<AnswerSet>>());
+            bus.RegisterHandler(kernel.Get<IEventHandler<PropagatableGroupAdded>>());
+            bus.RegisterHandler(kernel.Get<IEventHandler<PropagatableGroupDeleted>>());
+           
+            NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
 
         private static ICommandService InitializeCommandService()
