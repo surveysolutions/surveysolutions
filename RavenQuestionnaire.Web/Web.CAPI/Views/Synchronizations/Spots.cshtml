@@ -1,11 +1,12 @@
-﻿@model IEnumerable<Questionnaire.Core.Web.WCF.ServiceDiscover.SyncSpot>
+﻿@using Questionnaire.Core.Web.WCF
+@model IEnumerable<ServiceDiscover.SyncSpot>
 @if (Model.Any())
 {
-    foreach (var spot in Model)
+    foreach (ServiceDiscover.SyncSpot spot in Model)
     {
-    <p>
-        @Html.ActionLink(spot.SpotName, "Index", "Synchronizations", new { url = spot.SpotUri.AbsoluteUri }, new { rel = "external", data_role = "button", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
-    </p>
+        <p>
+            @Html.ActionLink(spot.SpotName, "Index", "Synchronizations", new {url = spot.SpotUri.AbsoluteUri}, new {rel = "external", data_role = "button", data_theme = "e", id = "btnSync", @class = "ui-state-persist"})
+        </p>
     }
 }
 else

@@ -191,4 +191,21 @@
 {
 	margin-bottom: 40px;
 }
-
+.question-comment {
+	font-size: 0.75em;
+	font-style: italic;
+	margin: 5px 0;
+}
+.ui-grid-a.question-content .ui-block-a{
+	width: 100%;
+	margin-right: -55px;
+}
+.ui-grid-a.question-content .ui-block-b {
+	width: 55px;
+}
+.question {
+	margin-right: 55px;
+}
+.text-question {
+	margin-top: 0;
+}

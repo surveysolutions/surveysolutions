@@ -1,11 +1,12 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Answer
-@model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
+@using RavenQuestionnaire.Core.Views.Question
+@model CompleteQuestionView
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
 {
-    var settings = ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings);
+    var settings = ((IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings);
     Guid selected = Guid.Empty;
-    var answer = Model.Answers.FirstOrDefault(a => ((CompleteAnswerView)a).Selected);
+    CompleteAnswerView answer = Model.Answers.FirstOrDefault(a => (a).Selected);
     if (answer != null)
     {
         selected = answer.PublicKey;
@@ -15,6 +16,6 @@
     @Html.Hidden("Selected", true)
     @Html.Hidden("Parent", Model.Answers.FirstOrDefault().Parent)
  @*   @Html.Label("PublicKey", Model.Title)*@
-    <label for="@ViewData.TemplateInfo.GetFullHtmlFieldId("PublicKey")">@Html.Raw( Model.Title)</label>
+    <label for="@ViewData.TemplateInfo.GetFullHtmlFieldId("PublicKey")">@Html.Raw(Model.Title)</label>
     @Html.DropDownList("PublicKey", new SelectList(Model.Answers, "PublicKey", "Title", selected), "Select answer", settings)
 }

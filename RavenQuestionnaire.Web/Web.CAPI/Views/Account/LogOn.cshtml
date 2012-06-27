@@ -10,25 +10,25 @@
             <h1>Log in</h1>
         </div>
         <div data-role="content">
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="ui-body ui-body-e">
-                <h4>
-                    @Html.ValidationSummary("Login was unsuccessful. Please correct the errors and try again.")
-                </h4>
-            </div>
-        }
-            @using (Html.BeginForm("LogOn", "Account", FormMethod.Post, new { data_ajax = "false" }))
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="ui-body ui-body-e">
+                    <h4>
+                        @Html.ValidationSummary("Login was unsuccessful. Please correct the errors and try again.")
+                    </h4>
+                </div>
+            }
+            @using (Html.BeginForm("LogOn", "Account", FormMethod.Post, new {data_ajax = "false"}))
             {
                 <ul data-role="listview" data-inset="true">
                     <li data-role="fieldcontain">
                         @Html.LabelFor(m => m.UserName)
-                        @Html.TextBoxFor(m => m.UserName, new { })
+                        @Html.TextBoxFor(m => m.UserName, new {})
                         @Html.ValidationMessageFor(m => m.UserName)
                     </li>
                     <li data-role="fieldcontain">
                         @Html.LabelFor(m => m.Password)
-                        @Html.PasswordFor(m => m.Password, new { })
+                        @Html.PasswordFor(m => m.Password, new {})
                         @Html.ValidationMessageFor(m => m.Password)
                     </li>
                     <li>
