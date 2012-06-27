@@ -9,7 +9,7 @@
     {
         var question = item as CompleteQuestionView;
         <div class="ui-body ui-body-c">
-        @using (Ajax.BeginFormHtml5("SaveSingleResultJson", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions))
+        @using (Ajax.BeginFormHtml5("SaveSingleResultJson", "CompleteQuestionnaire", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions, new { style = "width: 95%;" }))
         {
             //  using (Ajax.BeginFormHtml5("Index", "CompleteQuestionnaireAsync1", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions)){
             using (Html.BeginCollectionItem("questions", true, question.PublicKey))
