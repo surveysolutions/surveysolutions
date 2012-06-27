@@ -23,7 +23,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
                 foreach(var handlerInterfaceType in type.GetInterfaces().Where(IsIEventHandlerInterface))
                 {
                     var eventDataType = handlerInterfaceType.GetGenericArguments().First();
-                    RegisterHandler(handler, eventDataType, target);
+                    target.RegisterHandler(handler, eventDataType);
                 }
             }
         }
@@ -34,7 +34,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             return Activator.CreateInstance(type);
         }
 
-        private static void RegisterHandler(object handler, Type eventDataType, InProcessEventBus target)
+        public static void RegisterHandler(this InProcessEventBus target,object handler, Type eventDataType)
         {
             var registerHandlerMethod = target.GetType().GetMethods().Single
             (

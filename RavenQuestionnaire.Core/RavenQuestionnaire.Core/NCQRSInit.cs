@@ -1,4 +1,6 @@
-﻿using Ncqrs;
+﻿using System;
+using System.Linq;
+using Ncqrs;
 using Ncqrs.Commanding.CommandExecution.Mapping;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using Ncqrs.Commanding.ServiceModel;
@@ -29,17 +31,39 @@ namespace RavenQuestionnaire.Web.App_Start
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
 
             var bus = new InProcessEventBus(true);
-            //bus.RegisterAllHandlersInAssembly(typeof(NCQRSInit).Assembly);
-            bus.RegisterHandler(kernel.Get<IEventHandler<NewQuestionnaireCreated>>());
-            bus.RegisterHandler(kernel.Get<IEventHandler<NewCompleteQuestionnaireCreated>>());
-
-            bus.RegisterHandler(kernel.Get<IEventHandler<AnswerSet>>());
-            bus.RegisterHandler(kernel.Get<IEventHandler<PropagatableGroupAdded>>());
-            bus.RegisterHandler(kernel.Get<IEventHandler<PropagatableGroupDeleted>>());
+            RegisterEventHandlers(bus, kernel);
            
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
+        static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
+        {
 
+            foreach (var type in typeof(NCQRSInit).Assembly.GetTypes().Where(ImplementsAtLeastOneIEventHandlerInterface))
+            {
+                foreach (var handlerInterfaceType in type.GetInterfaces().Where(IsIEventHandlerInterface))
+                {
+                    var eventDataType = handlerInterfaceType.GetGenericArguments().First();
+                    var handlers = kernel.GetAll(typeof(IEventHandler<>).MakeGenericType(eventDataType));
+                    foreach (object handler in handlers)
+                    {
+                        bus.RegisterHandler(handler, eventDataType);
+                    }
+                }
+            }
+           
+        }
+        private static bool ImplementsAtLeastOneIEventHandlerInterface(Type type)
+        {
+            return type.IsClass && !type.IsAbstract &&
+                   type.GetInterfaces().Any(IsIEventHandlerInterface);
+        }
+
+        private static bool IsIEventHandlerInterface(Type type)
+        {
+            return type.IsInterface &&
+                   type.IsGenericType &&
+                   type.GetGenericTypeDefinition() == typeof(IEventHandler<>);
+        }
         private static ICommandService InitializeCommandService()
         {
             var mapper = new AttributeBasedCommandMapper();
