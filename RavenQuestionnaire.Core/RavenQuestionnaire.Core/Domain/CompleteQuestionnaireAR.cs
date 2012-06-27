@@ -65,7 +65,10 @@ namespace RavenQuestionnaire.Core.Domain
                 CompletedQuestionnaireId = completeQuestionnaireId,
                 QuestionnaireId = questionnaire.Id,
                 Questionnaire = doc,
-                CreationDate = clock.UtcNow()
+                CreationDate = clock.UtcNow(),
+                Status = doc.Status,
+                Responsible = doc.Responsible,
+                TotalQuestionCount = doc.Find<ICompleteQuestion>(q=>!(q is IBinded)).Count()
             });
         }
 
@@ -83,29 +86,28 @@ namespace RavenQuestionnaire.Core.Domain
         public void SetAnswer(Guid questionPublicKey, Guid? propogationPublicKey, object completeAnswer, List<object> completeAnswers)
         {
             //performe checka before event raising
-            
 
 
+            ICompleteQuestion question = FindQuestion(questionPublicKey, propogationPublicKey, _doc);
             // Apply a NewGroupAdded event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
             // this event (the OnAnswerSet method).
             ApplyEvent(new AnswerSet
-            {
-                CompletedQuestionnaireId = this._doc.PublicKey,
-                QuestionPublicKey = questionPublicKey,
-                PropogationPublicKey = propogationPublicKey,
-                Answer = completeAnswer ?? completeAnswers
-            });
+                           {
+                               CompletedQuestionnaireId = this._doc.PublicKey,
+                               Question = question,
+                               Answer = completeAnswer ?? completeAnswers
+                           });
         }
 
         // Event handler for the AnswerSet event. This method
         // is automaticly wired as event handler based on convension.
         protected void OnAnswerSet(AnswerSet e)
         {
-            ICompleteGroup general = _doc;
-            ICompleteQuestion question = FindQuestion(e.QuestionPublicKey, e.PropogationPublicKey, general);
-            question.SetAnswer(e.Answer);
+          
+            
+            e.Question.SetAnswer(e.Answer);
         }
 
         private static ICompleteQuestion FindQuestion(Guid questionKey, Guid? propagationKey, ICompleteGroup entity)
@@ -122,10 +124,11 @@ namespace RavenQuestionnaire.Core.Domain
 
         public void DeletePropagatableGroup(Guid propagationKey, Guid publicKey)
         {
+            var group = new CompleteGroup(_doc.Find<CompleteGroup>(publicKey), propagationKey);
             ApplyEvent(new PropagatableGroupDeleted
                            {
-                               PublicKey = publicKey,
-                               PropagationKey = propagationKey
+                               CompletedQuestionnaireId = this._doc.PublicKey,
+                               Group = group
                            });
         }
 
@@ -133,37 +136,35 @@ namespace RavenQuestionnaire.Core.Domain
         // is automaticly wired as event handler based on convension.
         protected void OnPropagatableGroupDeleted(PropagatableGroupDeleted e)
         {
-            _doc.Remove(new CompleteGroup(_doc.Find<CompleteGroup>(e.PublicKey),
-                                                   e.PropagationKey));
+            _doc.Remove(e.Group);
         }
         public void AddPropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             //performe checka before event raising
 
+            var template = _doc.Find<CompleteGroup>(publicKey);
+            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(_doc));
+            executor.Execute(template);
 
+            var newGroup = new CompleteGroup(template, propagationKey);
 
             // Apply a NewGroupAdded event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
             // this event (the OnPropagatableGroupAdded method).
             ApplyEvent(new PropagatableGroupAdded
-            {
-                PublicKey =  publicKey,
-                PropagationKey = propagationKey
-            });
+                           {
+                               CompletedQuestionnaireId = this._doc.PublicKey,
+                               Group = newGroup
+                           });
         }
 
         // Event handler for the PropagatableGroupAdded event. This method
         // is automaticly wired as event handler based on convension.
         protected void OnPropagatableGroupAdded(PropagatableGroupAdded e)
         {
-            var template = _doc.Find<CompleteGroup>(e.PublicKey);
-            bool isCondition = false;
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(_doc));
-            executor.Execute(template);
-            
-            var newGroup = new CompleteGroup(template, e.PropagationKey);
-            _doc.Add(newGroup, null);
+           
+            _doc.Add(e.Group, null);
         }
 
         #region Implementation of ISnapshotable<CompleteQuestionnaireDocument>
