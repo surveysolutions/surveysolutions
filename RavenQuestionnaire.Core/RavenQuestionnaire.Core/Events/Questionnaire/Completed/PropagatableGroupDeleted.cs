@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Ncqrs.Eventing.Storage;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Events.Questionnaire.Completed
 {
@@ -12,8 +13,7 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire.Completed
     {
         public Guid CompletedQuestionnaireId { get; set; }
 
-        public Guid PublicKey { get; set; }
-        public Guid PropagationKey { get; set; }
+        public ICompleteGroup Group { get; set; }
 
     }
 }

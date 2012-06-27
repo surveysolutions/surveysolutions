@@ -1,6 +1,7 @@
 ﻿using System;
 using Ncqrs.Eventing.Storage;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Events
 {
@@ -15,6 +16,12 @@ namespace RavenQuestionnaire.Core.Events
         public CompleteQuestionnaireDocument Questionnaire { set; get; }
 
         public DateTime CreationDate { get; set; }
-        
+
+        public SurveyStatus Status { get; set; }
+
+        public int TotalQuestionCount { get; set; }
+
+        public UserLight Responsible { get; set; }
+
     }
 }
