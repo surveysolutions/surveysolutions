@@ -17,7 +17,11 @@
     jQuery(document).bind("pageshow", function () {
         var scrollHere = $('.scrollHere').length > 0 ? $('.scrollHere').get(0) : null;
         if (scrollHere != null) {
-            $(scrollHere).find('input').focus();
+            var element = $(scrollHere).find('select:first');
+            if (element == null) {
+                element = $(scrollHere).find('input:first');
+            }
+            element.focus();
             $(scrollHere).parents('.ui-body.ui-body-c').effect("highlight", { color: "#5393C5" }, 2000);
         }
     });
@@ -54,7 +58,7 @@
     <!-- Start of first page -->
     <div data-role="page" id="sidebar">
         <div data-role="header" data-theme="c">
-            <a class="nav-link" data-corners="false"  data-icon="arrow-l" href="@Url.Action("Index", "Dashboard")" rel = "external">
+            <a class="nav-link" data-corners="false"  data-icon="arrow-l" href="@Url.Action("Dashboard", "Survey")" rel = "external">
                 Dashboard</a>
             <h3></h3>
         </div>
@@ -79,7 +83,7 @@
         <div data-role="footer" data-position="fixed" data-id="ew-footer">
             <div data-role="navbar">
                 <ul>
-                    <li><a data-role="button" data-corners="false" href="@Url.Action("Index", "Statistic", new { id = Model.Id })" 
+                    <li><a data-role="button" data-corners="false" href="@Url.Action("Statistic", "Survey", new { id = Model.Id })" 
                    rel="external" data-ajax="false">Statistic</a></li>
                     <li>
                         @if (Model.Status.Name == "Completed")
