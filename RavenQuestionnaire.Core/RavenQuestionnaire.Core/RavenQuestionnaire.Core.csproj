@@ -358,6 +358,7 @@
     <Compile Include="Events\Location\LocationDeleted.cs" />
     <Compile Include="Events\Location\NewLocationCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\AnswerSet.cs" />
+    <Compile Include="Events\Questionnaire\Completed\FeaturedQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewCompleteQuestionnaireCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\PropagatableGroupAdded.cs" />
     <Compile Include="Events\Questionnaire\Completed\PropagatableGroupDeleted.cs" />

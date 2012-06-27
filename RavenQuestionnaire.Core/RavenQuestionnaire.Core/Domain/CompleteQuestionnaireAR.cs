@@ -88,7 +88,7 @@ namespace RavenQuestionnaire.Core.Domain
             //performe checka before event raising
 
 
-            ICompleteQuestion question = FindQuestion(questionPublicKey, propogationPublicKey, _doc);
+            
             // Apply a NewGroupAdded event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
@@ -96,7 +96,8 @@ namespace RavenQuestionnaire.Core.Domain
             ApplyEvent(new AnswerSet
                            {
                                CompletedQuestionnaireId = this._doc.PublicKey,
-                               Question = question,
+                               QuestionPublicKey = questionPublicKey,
+                               PropogationPublicKey = propogationPublicKey,
                                Answer = completeAnswer ?? completeAnswers
                            });
         }
@@ -105,9 +106,20 @@ namespace RavenQuestionnaire.Core.Domain
         // is automaticly wired as event handler based on convension.
         protected void OnAnswerSet(AnswerSet e)
         {
-          
-            
-            e.Question.SetAnswer(e.Answer);
+
+            ICompleteQuestion question = FindQuestion(e.QuestionPublicKey, e.PropogationPublicKey, _doc);
+            question.SetAnswer(e.Answer);
+            if (question.Featured)
+                ApplyEvent(new FeaturedQuestionUpdated
+                               {
+                                   CompletedQuestionnaireId = this._doc.PublicKey,
+                                   Answer = e.Answer,
+                                   QuestionPublicKey = e.QuestionPublicKey,
+                                   QuestionText = question.QuestionText
+                               });
+        }
+        protected void OnFeaturedQuestionUpdated(FeaturedQuestionUpdated e)
+        {
         }
 
         private static ICompleteQuestion FindQuestion(Guid questionKey, Guid? propagationKey, ICompleteGroup entity)
@@ -124,11 +136,12 @@ namespace RavenQuestionnaire.Core.Domain
 
         public void DeletePropagatableGroup(Guid propagationKey, Guid publicKey)
         {
-            var group = new CompleteGroup(_doc.Find<CompleteGroup>(publicKey), propagationKey);
+        
             ApplyEvent(new PropagatableGroupDeleted
                            {
                                CompletedQuestionnaireId = this._doc.PublicKey,
-                               Group = group
+                               PublicKey = publicKey,
+                               PropagationKey = propagationKey
                            });
         }
 
@@ -136,17 +149,16 @@ namespace RavenQuestionnaire.Core.Domain
         // is automaticly wired as event handler based on convension.
         protected void OnPropagatableGroupDeleted(PropagatableGroupDeleted e)
         {
-            _doc.Remove(e.Group);
+            var group = new CompleteGroup(_doc.Find<CompleteGroup>(e.PublicKey), e.PropagationKey);
+            _doc.Remove(group);
         }
         public void AddPropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             //performe checka before event raising
 
-            var template = _doc.Find<CompleteGroup>(publicKey);
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(_doc));
-            executor.Execute(template);
+          
 
-            var newGroup = new CompleteGroup(template, propagationKey);
+          
 
             // Apply a NewGroupAdded event that reflects the
             // creation of this instance. The state of this
@@ -155,7 +167,8 @@ namespace RavenQuestionnaire.Core.Domain
             ApplyEvent(new PropagatableGroupAdded
                            {
                                CompletedQuestionnaireId = this._doc.PublicKey,
-                               Group = newGroup
+                               PublicKey =publicKey,
+                               PropagationKey = propagationKey
                            });
         }
 
@@ -163,8 +176,11 @@ namespace RavenQuestionnaire.Core.Domain
         // is automaticly wired as event handler based on convension.
         protected void OnPropagatableGroupAdded(PropagatableGroupAdded e)
         {
-           
-            _doc.Add(e.Group, null);
+            var template = _doc.Find<CompleteGroup>(e.PublicKey);
+            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(_doc));
+            executor.Execute(template);
+            var newGroup = new CompleteGroup(template, e.PropagationKey);
+            _doc.Add(newGroup, null);
         }
 
         #region Implementation of ISnapshotable<CompleteQuestionnaireDocument>
