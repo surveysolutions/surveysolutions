@@ -18,7 +18,7 @@ namespace RavenQuestionnaire.Web
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             //filters.Add(new HandleErrorAttribute());
-            
+
         }
 
         public static void RegisterRoutes(RouteCollection routes)
@@ -28,7 +28,7 @@ namespace RavenQuestionnaire.Web
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Dashboard", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+                new { controller = "Status", action = "Index", id = UrlParameter.Optional } // Parameter defaults
                 );
 
         }
@@ -36,10 +36,10 @@ namespace RavenQuestionnaire.Web
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            
+
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
-           
+
         }
         protected void HostServices()
         {
@@ -48,7 +48,7 @@ namespace RavenQuestionnaire.Web
                 return;
             if (!isDiscovereble)
                 return;
-           // i need to ping wcf server to make it visible or install app fabric
+            // i need to ping wcf server to make it visible or install app fabric
         }
 
         protected void Application_Error()
