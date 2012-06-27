@@ -195,8 +195,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             var qs = @group.Children.OfType<CompleteQuestionView>().ToList();
             if (qs.Count() > 0)
             {
-                var enabled = qs.Where(q => q.Enabled).ToList();
-                QuestionsWithCards.AddRange(enabled.Where(question => (question.Cards.Length > 0)).ToList());
+                QuestionsWithCards.AddRange(qs.Where(question => (question.Cards.Length > 0)).ToList());
             }
             if (@group.Propagated != Propagate.None)
             {
@@ -216,8 +215,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             var qs = @group.Children.OfType<CompleteQuestionView>().ToList();
             if (qs.Count > 0)
             {
-                var enabled = qs.Where(q => q.Enabled).ToList();
-                QuestionsWithInstructions.AddRange(enabled.Where(question => !string.IsNullOrWhiteSpace(question.Instructions)).ToList());
+                QuestionsWithInstructions.AddRange(qs.Where(question => !string.IsNullOrWhiteSpace(question.Instructions)).ToList());
             }
             if (@group.Propagated != Propagate.None)
             {
