@@ -178,7 +178,8 @@
     <Compile Include="CommandHandlers\Questionnaire\CreateNewQuestionnaireHandler.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
     <Compile Include="Denormalizers\IDenormalizerStorage.cs" />
-    <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
+    <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
+    <Compile Include="EventHandlers\CQGroupItemDenormalizer.cs" />
     <Compile Include="EventSubscribers\GenerateQuestionnaireStatisticEventHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateNewStatusHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateStatusFlowHandler.cs" />

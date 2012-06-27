@@ -78,7 +78,16 @@ namespace RavenQuestionnaire.Core
                                                     i.GetGenericTypeDefinition() == typeof(IDenormalizerStorage<>)) !=
                                                 null).BindAllInterfaces()
                                             .Configure(binding => binding.InSingletonScope()));
-            this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IEventHandler<>))));
+
+
+            this.Kernel.Bind(scanner => scanner.FromAssembliesMatching("RavenQuestionnaire.*")
+                                            .Select(
+                                                t =>
+                                                t.GetInterfaces().FirstOrDefault(
+                                                    i =>
+                                                    i.IsGenericType &&
+                                                    i.GetGenericTypeDefinition() == typeof(IEventHandler<>)) !=
+                                                null).BindAllInterfaces());
            
           /*  this.Kernel.Bind(scanner => scanner.FromAssembliesMatching("RavenQuestionnaire.*")
                                            .Select(
