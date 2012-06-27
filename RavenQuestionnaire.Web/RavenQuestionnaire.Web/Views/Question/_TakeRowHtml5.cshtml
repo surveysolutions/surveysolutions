@@ -1,6 +1,4 @@
-﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Web.Utils
-@using RavenQuestionnaire.Core.Views.Question
+﻿@using RavenQuestionnaire.Core.Views.Question
 @model CompleteQuestionView
 @{
     ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
@@ -9,13 +7,9 @@
     bodyClass += " " + (questionKey == Model.PublicKey ? "scrollHere" : "");
     bodyClass += " " + (Model.Answered ? "answered" : "");
     var questionId = "question" + Model.PublicKey;
-
 }
-<div class="@bodyClass question" id="@questionId"><a href="#" class="error"></a>
-   @* @if (!string.IsNullOrWhiteSpace(Model.Comments))
-    {        
-        <a href="#comments-@(Model.PublicKey)"  data-icon="info" data-role="button" data-inline="true" data-rel="page" data-transition="flip">Read comments</a>
-    }*@
+<div class="@bodyClass question" id="@questionId">
+    <a href="#" class="error"></a>
     @if (!string.IsNullOrWhiteSpace(Model.Instructions))
     {
         <a id="inctruction-ref-@(Model.PublicKey)" href="#inctruction-@(Model.PublicKey)"  data-icon="info" data-role="button" data-inline="true" data-rel="page" data-transition="flip">Read instructions</a>

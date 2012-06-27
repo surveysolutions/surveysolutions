@@ -155,6 +155,8 @@ namespace Questionnaire.Core.Web.Helpers
         {
             // get target URL 
             string formAction = UrlHelper.GenerateUrl(null, actionName, controllerName, routeValues ?? new RouteValueDictionary(), ajaxHelper.RouteCollection, ajaxHelper.ViewContext.RequestContext, true /* includeImplicitMvcValues */);
+            if(htmlAttributes==null)
+                htmlAttributes=new Dictionary<string, object>();
             htmlAttributes.Add("data-ajax-url", formAction);
            
             return FormHelper(ajaxHelper, formAction, ajaxOptions, htmlAttributes);

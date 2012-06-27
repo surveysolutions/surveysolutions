@@ -1057,7 +1057,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>28185</DevelopmentServerPort>
+          <DevelopmentServerPort>9596</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/RavenWeb</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
