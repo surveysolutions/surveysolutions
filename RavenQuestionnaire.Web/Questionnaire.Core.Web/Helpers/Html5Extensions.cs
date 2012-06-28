@@ -198,6 +198,7 @@ namespace Questionnaire.Core.Web.Helpers
             builder.MergeAttribute("data-ajax-url", formAction);
             builder.MergeAttribute("method", "post");
 
+          //  builder.MergeAttribute("data-ajax", "true");
             ajaxOptions = GetAjaxOptions(ajaxOptions);
 
             if (ajaxHelper.ViewContext.UnobtrusiveJavaScriptEnabled)
