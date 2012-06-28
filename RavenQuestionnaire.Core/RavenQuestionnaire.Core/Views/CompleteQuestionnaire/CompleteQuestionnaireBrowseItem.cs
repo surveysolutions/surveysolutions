@@ -10,26 +10,34 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     public class CompleteQuestionnaireBrowseItem
     {
-        public string Id
+        public string CompleteQuestionnaireId
         {
             get { return IdUtil.ParseId(_id); }
-            private set { _id = value; }
+             set { _id = value; }
         }
 
         private string _id;
-        public string QuestionnaireTitle { get; private set; }
-        public DateTime CreationDate { get; private set; }
-        public DateTime LastEntryDate { get; private set; }
-        public int TotalQuestionCouont { get; private set; }
-        public int AnsweredQuestionCouont { get; private set; }
-        public UserLight Responsible { get; private set; }
-        public QuestionStatisticView[] FeaturedQuestions { get; private set; }
-        public SurveyStatus Status { get; private set; }
+        public string QuestionnaireTitle { get;  set; }
+        public string TemplateId { get;  set; }
+        public DateTime CreationDate { get;  set; }
+        public DateTime LastEntryDate { get;  set; }
+        public int TotalQuestionCouont { get;  set; }
+        public int AnsweredQuestionCouont { get;  set; }
+        public UserLight Responsible { get;  set; }
+        public QuestionStatisticView[] FeaturedQuestions { get;  set; }
+        public SurveyStatus Status { get;  set; }
         public UserLight Creator { get; set; }
-        public CompleteQuestionnaireBrowseItem(string id, string questionnaireTitle, DateTime creationDate,
-                                               DateTime lastEntryDate, SurveyStatus status,int totalQuestionCount, int answeredQuestionCount, UserLight responsible)
+
+        protected CompleteQuestionnaireBrowseItem()
         {
-            this.Id = id;
+            this.FeaturedQuestions = new QuestionStatisticView[0];
+        }
+
+        public CompleteQuestionnaireBrowseItem(string completeQuestionnaireId, string templateId, string questionnaireTitle, DateTime creationDate,
+                                               DateTime lastEntryDate, SurveyStatus status,int totalQuestionCount, int answeredQuestionCount, UserLight responsible):this()
+        {
+            this.CompleteQuestionnaireId = completeQuestionnaireId;
+            this.TemplateId = templateId;
             this.QuestionnaireTitle = questionnaireTitle;
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
@@ -37,10 +45,13 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.TotalQuestionCouont = totalQuestionCount;
             this.AnsweredQuestionCouont = answeredQuestionCount;
             this.Responsible = responsible;
+           
+            
         }
         public CompleteQuestionnaireBrowseItem(CompleteQuestionnaireStatisticDocument doc)
+            : this()
         {
-            this.Id = doc.CompleteQuestionnaireId;
+            this.CompleteQuestionnaireId = doc.CompleteQuestionnaireId;
             this.QuestionnaireTitle = doc.Title;
             this.CreationDate = doc.StartDate;
             this.LastEntryDate = doc.EndDate ?? DateTime.Now;
@@ -48,7 +59,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.TotalQuestionCouont = doc.TotalQuestionCount;
             this.AnsweredQuestionCouont = doc.AnsweredQuestions.Count;
             this.Creator = doc.Creator;
-            this.FeaturedQuestions = doc.FeturedQuestions.Select(q => new QuestionStatisticView(q)).ToArray();
+         //   this.FeaturedQuestions = doc.FeturedQuestions.Select(q => new QuestionStatisticView(q)).ToArray();
             //this.Responsible = doc.r;
         }
     }

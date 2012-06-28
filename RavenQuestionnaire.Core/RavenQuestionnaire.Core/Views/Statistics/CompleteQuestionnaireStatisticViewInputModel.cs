@@ -11,7 +11,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
 
         public CompleteQuestionnaireStatisticViewInputModel(string id)
         {
-            Id = IdUtil.CreateStatisticId(id);
+            Id = id;
         }
 
         public string Id { get; private set; }

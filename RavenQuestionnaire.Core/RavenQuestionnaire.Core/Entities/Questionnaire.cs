@@ -6,7 +6,6 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities
 {
@@ -16,9 +15,13 @@ namespace RavenQuestionnaire.Core.Entities
 
         public string QuestionnaireId { get { return innerDocument.Id; } }
 
-        public Questionnaire(string title)
+        public Questionnaire(string title, Guid publicKey)
         {
-            innerDocument = new QuestionnaireDocument() {Title = title};
+            innerDocument = new QuestionnaireDocument()
+                                {
+                                    Title = title, 
+                                    PublicKey = publicKey
+                                };
         }
         public Questionnaire(QuestionnaireDocument innerDocument)
         {
@@ -35,7 +38,7 @@ namespace RavenQuestionnaire.Core.Entities
         }
 
         public AbstractQuestion AddQuestion(Guid qid, string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, Order answerOrder, Guid? groupPublicKey,
-            IEnumerable<Answer> answers)
+            string validation, bool featured, Order answerOrder, Guid? groupPublicKey,IEnumerable<Answer> answers, Guid publicKey)
         {
 
             var result = new CompleteQuestionFactory().Create(type);
@@ -47,6 +50,7 @@ namespace RavenQuestionnaire.Core.Entities
             result.ValidationExpression = validation;
             result.AnswerOrder = answerOrder;
             result.Featured = featured;
+            result.PublicKey = publicKey;
             UpdateAnswerList(answers, result);
           
 
@@ -133,11 +137,13 @@ namespace RavenQuestionnaire.Core.Entities
             }
             throw new ArgumentException(string.Format("target item doesn't exists -{0}", after));
         }
-        public void AddGroup(string groupText,Propagate propageted, Guid? parent)
+        public void AddGroup(string groupText, Guid publicKey, Propagate propageted, Guid? parent)
         {
             Group group = new Group();
             group.Title = groupText;
             group.Propagated = propageted;
+            group.PublicKey = publicKey;
+
             try
             {
                 Add(group, parent);

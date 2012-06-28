@@ -25,14 +25,21 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
             get; private set;
         }
 
+        public Guid PublicKey
+        {
+            get;
+            private set;
+        }
+
         public UserLight Executor { get; set; }
 
-        public CreateNewGroupCommand(string groupText, Propagate propagateble, string questionnaireId, Guid? parentGroup, UserLight executor)
+        public CreateNewGroupCommand(string groupText, Guid publicKey, Propagate propagateble, string questionnaireId, Guid? parentGroup, UserLight executor)
         {
             this.GroupText = groupText;
             this.Paropagateble = propagateble;
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.ParentGroupPublicKey = parentGroup;
+            this.PublicKey = publicKey;
             Executor = executor;
         }
     }
