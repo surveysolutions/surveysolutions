@@ -216,12 +216,12 @@ namespace Web.CAPI.Controllers
 
 
             var newQuestionnairePublicKey = Guid.NewGuid();
-            var questionnairePublicKey = Guid.NewGuid();
+           // var questionnairePublicKey = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
 
 
-            return RedirectToAction("Index", new { id = questionnairePublicKey });
+            return RedirectToAction("Index", new { id = newQuestionnairePublicKey });
         }
 
 

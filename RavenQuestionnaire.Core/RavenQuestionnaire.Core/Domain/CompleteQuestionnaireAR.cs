@@ -82,7 +82,7 @@ namespace RavenQuestionnaire.Core.Domain
             _doc = e.Questionnaire;
         }
 
-        public void SetCommentCommand(Guid questionPublickey, string comments, Guid? propogationPublicKey)
+        public void SetComment(Guid questionPublickey, string comments, Guid? propogationPublicKey)
         {
             ApplyEvent(new CommentSeted()
                            {
