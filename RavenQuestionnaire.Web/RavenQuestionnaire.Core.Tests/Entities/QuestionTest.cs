@@ -32,7 +32,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             List<IComposite> answers = new List<IComposite>() { new Answer(), new Answer(), new Answer() };
 
             List<Guid> triggers = new List<Guid>() { Guid.NewGuid() };
-            SingleQuestion question = new SingleQuestion("test")
+            SingleQuestion question = new SingleQuestion(Guid.NewGuid(), "test")
                                     {
                                         ConditionExpression = "expr",
                                         Instructions = "instructions",
