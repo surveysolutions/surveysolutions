@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Question;
 using RavenQuestionnaire.Core.Repositories;
-using RavenQuestionnaire.Core.Views.Answer;
 
 namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 {
@@ -22,7 +17,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_QuestionnIsDeletedFromRepository()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
 
             Questionnaire entity = new Questionnaire(innerDocument);
             var question = new SingleQuestion(Guid.NewGuid(),"question");
@@ -30,7 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Assert.True(
                 innerDocument.Children.Count == 1);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
 
             DeleteQuestionHandler handler = new DeleteQuestionHandler(questionnaireRepositoryMock.Object);
             handler.Handle(new DeleteQuestionCommand(question.PublicKey, entity.QuestionnaireId, null));

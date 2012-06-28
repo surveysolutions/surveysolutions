@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Documents;
@@ -15,8 +16,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_NewFlowGraphIsAddedToRepository()
         {
             Mock<IFlowGraphRepository> flowGraphRepositoryMock = new Mock<IFlowGraphRepository>();
+            Guid key = Guid.NewGuid();
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            innerDocument.PublicKey = key;
             Questionnaire entity = new Questionnaire(innerDocument);
             CreateNewFlowGraphHandler handler = new CreateNewFlowGraphHandler(flowGraphRepositoryMock.Object);
             handler.Handle(new CreateNewFlowGraphCommand(entity, null));

@@ -24,9 +24,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question
             if (!this._expressionValidator.Execute(questionnaire, command.ValidationExpression))
                 return;
             var question = questionnaire.AddQuestion(command.qid, command.QuestionText, command.StataExportCaption,
-                                                     command.QuestionType,
-                                                     command.ConditionExpression, command.ValidationExpression, command.Featured,command.AnswerOrder,
-                                                     command.GroupPublicKey, command.Answers);
+                                      command.QuestionType,command.ConditionExpression, 
+                                      command.ValidationExpression, command.Featured,command.AnswerOrder,
+                                      command.GroupPublicKey, command.Answers, command.PublicKey);
         }
     }
 }

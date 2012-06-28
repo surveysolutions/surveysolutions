@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{01F84441-80D3-49B4-AB18-96894ACB2F90}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ncqrs</RootNamespace>
+    <AssemblyName>Ncqrs</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+    <TargetFrameworkProfile />
+    <OutputPath>..\..\..\lib\$(Configuration)\$(AssemblyName)\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>False</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>False</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsPlatformPath />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
+    <DocumentationFile>
+    </DocumentationFile>
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
+    <CodeContractsContainerAnalysis>False</CodeContractsContainerAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\lib\$(Configuration)\Ncqrs\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>False</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsPlatformPath />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
+    <CodeContractsContainerAnalysis>False</CodeContractsContainerAnalysis>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\..\RavenQuestionnaire.Web\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\RavenQuestionnaire.Web\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commanding\AllCommandsInAppDomainEnumerator.cs" />
+    <Compile Include="Commanding\CommandExecution\DefaultTransactionService.cs" />
+    <Compile Include="Commanding\CommandExecution\ITransactionService.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootConstructorAttributeHandler.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\IMappingAttributeHandler.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodAttributeHandler.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodOrConstructorAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodOrConstructorAttributeHandler.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootStaticCreateAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootStaticCreateAttributeHandler.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootMethodOrConstructor.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\ICommandMapper.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\UoWMappedCommandExecutor.cs" />
+    <Compile Include="Commanding\IKnownCommandsEnumerator.cs" />
+    <Compile Include="Domain\AggregateExtensions.cs" />
+    <Compile Include="Domain\Entity.cs" />
+    <Compile Include="Domain\EntityMappedByConvention.cs" />
+    <Compile Include="Domain\Storage\AggregateRootCreationStrategy.cs" />
+    <Compile Include="Domain\Storage\DefaultAggregateSnapshotter.cs" />
+    <Compile Include="Domain\Storage\DelegateAggregateRootCreationStrategy.cs" />
+    <Compile Include="Domain\Storage\IAggregateRootCreationStrategy.cs" />
+    <Compile Include="Domain\Storage\IAggregateSnapshotter.cs" />
+    <Compile Include="Domain\Storage\SimpleAggregateRootCreationStrategy.cs" />
+    <Compile Include="Domain\UnitOfWorkBase.cs" />
+    <Compile Include="Domain\UnitOfWorkContext.cs" />
+    <Compile Include="Eventing\CommittedEvent.cs" />
+    <Compile Include="Eventing\CommittedEventStream.cs" />
+    <Compile Include="Eventing\EventSourceInformation.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\IPublishableEvent.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\PublishedEvent.cs" />
+    <Compile Include="Eventing\Sourcing\EntityThresholdedDomainEventHandlerWrapper.cs" />
+    <Compile Include="Eventing\Sourcing\EventAppliedEventArgs.cs" />
+    <Compile Include="Eventing\Sourcing\IEntitySourcedEvent.cs" />
+    <Compile Include="Eventing\Sourcing\EntitySourcedEventBase.cs" />
+    <Compile Include="Domain\Storage\AggregateSupportsSnapshotValidator.cs" />
+    <Compile Include="Domain\Storage\IAggregateSupportsSnapshotValidator.cs" />
+    <Compile Include="Eventing\Sourcing\Snapshotting\ISnapshottingPolicy.cs" />
+    <Compile Include="Eventing\Sourcing\Snapshotting\NoSnapshottingPolicy.cs" />
+    <Compile Include="Eventing\Sourcing\Snapshotting\SimpleSnapshottingPolicy.cs" />
+    <Compile Include="Eventing\Storage\DuplicateCommitException.cs" />
+    <Compile Include="Eventing\Storage\NoDB\NoDBEventStore.cs" />
+    <Compile Include="Eventing\Storage\NoDB\NoDBSnapshotStore.cs" />
+    <Compile Include="Eventing\Storage\NoDB\StoredEventExtensions.cs" />
+    <Compile Include="Eventing\Sourcing\UndefinedValues.cs" />
+    <Compile Include="Eventing\Storage\NullSnapshotStore.cs" />
+    <Compile Include="Eventing\UncommittedEvent.cs" />
+    <Compile Include="Eventing\UncommittedEventStream.cs" />
+    <Compile Include="GuidCombGenerator.cs" />
+    <Compile Include="Commanding\CommandBase.cs" />
+    <Compile Include="Commanding\CommandExecution\CommandExecutorWrapper.cs" />
+    <Compile Include="Commanding\CommandExecution\ICommandExecutorExtensions.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AttributeBasedCommandMapper.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AttributePropertyMappingStrategy.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\CommandServiceExtensions.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\Map.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\PropertiesToMethodMapper.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\ParameterAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommand.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRoot.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootConstructor.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootMethod.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\CommandMappingException.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\PropertyToParameterMappingInfo.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\MappingNotFoundException.cs" />
+    <Compile Include="Commanding\CommandExecution\CommandExecutorBase.cs" />
+    <Compile Include="Commanding\CommandExecution\ExecutorForCommandNotFoundException.cs" />
+    <Compile Include="Commanding\CommandExecution\ICommandExecutor.cs" />
+    <Compile Include="Commanding\ServiceModel\CommandService.cs" />
+    <Compile Include="Commanding\ServiceModel\CommandContext.cs" />
+    <Compile Include="Commanding\ServiceModel\ICommandService.cs" />
+    <Compile Include="Commanding\ServiceModel\ICommandServiceInterceptor.cs" />
+    <Compile Include="Commanding\CommandExecution\TransactionalCommandExecutorWrapper.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AggregateRootIdAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\ExcludeInMappingAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootConstructorAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\TransactionalAttribute.cs" />
+    <Compile Include="Commanding\ICommand.cs" />
+    <Compile Include="Config\InstanceNotFoundInEnvironment.cs" />
+    <Compile Include="DateTimeBasedClock.cs" />
+    <Compile Include="Domain\AggregateRootMappedWithExpressions.cs" />
+    <Compile Include="Domain\Storage\AggregateRootNotFoundException.cs" />
+    <Compile Include="Eventing\EventNotHandledException.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\ExpressionHandler.cs" />
+    <Compile Include="Domain\IUnitOfWorkContext.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\ExpressionBasedEventHandlerMappingStrategy.cs" />
+    <Compile Include="Domain\NoUnitOfWorkAvailableInThisContextException.cs" />
+    <Compile Include="Eventing\Sourcing\EventSource.cs" />
+    <Compile Include="Eventing\Sourcing\TypeThresholdedActionBasedSourcedEventHandler.cs" />
+    <Compile Include="Eventing\Event.cs" />
+    <Compile Include="Eventing\Sourcing\IEventSource.cs" />
+    <Compile Include="Eventing\Sourcing\ISourcedEvent.cs" />
+    <Compile Include="Eventing\Sourcing\ISourcedEventHandler.cs" />
+    <Compile Include="Eventing\Sourcing\Snapshotting\ISnapshotable.cs" />
+    <Compile Include="Eventing\Sourcing\Snapshotting\ISnapshot.cs" />
+    <EmbeddedResource Include="Eventing\Storage\SQL\TableCreationScript.sql">
+      <CustomToolNamespace>Ncqrs.Eventing.Storage.SQL.SimpleMicrosoftSqlServerEventStore</CustomToolNamespace>
+    </EmbeddedResource>
+    <Compile Include="Eventing\ServiceModel\Bus\CompositeEventBus.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\IEventHandler.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\RegisterAllHandlersInAssemblyExtension.cs" />
+    <Compile Include="Eventing\Sourcing\Snapshotting\Snapshot.cs" />
+    <Compile Include="Eventing\Sourcing\SourcedEvent.cs" />
+    <Compile Include="Eventing\Sourcing\SourcedEventHandler.cs" />
+    <Compile Include="Eventing\Storage\AttributeEventTypeResolver.cs" />
+    <Compile Include="Eventing\Storage\IEventTypeResolver.cs" />
+    <Compile Include="Eventing\Storage\IPropertyBagConverter.cs" />
+    <Compile Include="Eventing\Storage\IPropertyBagPostConverter.cs" />
+    <Compile Include="Eventing\Storage\ISnapshotStore.cs" />
+    <Compile Include="Eventing\Storage\Serialization\EventConverter.cs" />
+    <Compile Include="Eventing\Storage\Serialization\IEventConverter.cs" />
+    <Compile Include="Eventing\Storage\Serialization\JsonEventFormatter.cs" />
+    <Compile Include="Eventing\Storage\PropertyBag.cs" />
+    <Compile Include="Eventing\Storage\PropertyBagConverter.cs" />
+    <Compile Include="Eventing\Storage\PropertyBagConvertionException.cs" />
+    <Compile Include="Eventing\Storage\Serialization\NullEventConverter.cs" />
+    <Compile Include="Eventing\Storage\SimpleEventTypeResolver.cs" />
+    <Compile Include="Eventing\Storage\Serialization\IEventTranslator.cs" />
+    <Compile Include="Eventing\Storage\Serialization\IEventFormatter.cs" />
+    <Compile Include="Eventing\Storage\Serialization\StringEventTranslator.cs" />
+    <Compile Include="Eventing\Storage\SQL\Queries.cs" />
+    <Compile Include="Eventing\Storage\StoredEvent.cs" />
+    <Compile Include="IClock.cs" />
+    <Compile Include="ILog.cs" />
+    <Compile Include="InternalExtensions.cs" />
+    <Compile Include="Log4NetLogger.cs" />
+    <Compile Include="LogManager.cs" />
+    <Compile Include="NamespaceDoc.cs" />
+    <Compile Include="NcqrsEnvironment.cs" />
+    <Compile Include="Config\IEnvironmentConfiguration.cs" />
+    <Compile Include="NcqrsEnvironmentException.cs" />
+    <Compile Include="Domain\AggregateRoot.cs" />
+    <Compile Include="Domain\AggregateRootMappedByConvention.cs" />
+    <Compile Include="Domain\AggregateRootMappedWithAttributes.cs" />
+    <Compile Include="Domain\IUnitOfWorkFactory.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\AttributeBasedEventHandlerMappingStrategy.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\ConventionBasedEventHandlerMappingStrategy.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\EventHandlerAttribute.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\IEventHandlerMappingStrategy.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\InvalidEventHandlerMappingException.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\MappedAggregateRoot.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\NoEventHandlerAttribute.cs" />
+    <Compile Include="Domain\Storage\AggregateRootCreationException.cs" />
+    <Compile Include="Domain\Storage\DomainRepository.cs" />
+    <Compile Include="Domain\Storage\IDomainRepository.cs" />
+    <Compile Include="Domain\UnitOfWorkFactory.cs" />
+    <Compile Include="Domain\UnitOfWork.cs" />
+    <Compile Include="BasicGuidGenerator.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\IEventBus.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\InProcessEventBus.cs" />
+    <Compile Include="Eventing\IEvent.cs" />
+    <Compile Include="IUniqueIdentifierGenerator.cs" />
+    <Compile Include="Eventing\Storage\ConcurrencyException.cs" />
+    <Compile Include="Eventing\Storage\IEventStore.cs" />
+    <Compile Include="Eventing\Storage\InMemoryEventStore.cs" />
+    <Compile Include="Eventing\Storage\SQL\MsSqlServerEventStore.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TraceLogger.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties DocumentXCommentEditorState="&lt;HtmlEditState&gt;&#xA;  &lt;Attributes&gt;&#xA;    &lt;Attribute key=&quot;dtscrollpos&quot; valuetype=&quot;integer&quot;&gt;0&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;lang_VB&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;lang_VBUsage&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;lang_CS&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;lang_CPP2005&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;inheritedMembers&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;protectedMembers&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;  &lt;/Attributes&gt;&#xA;&lt;/HtmlEditState&gt;" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

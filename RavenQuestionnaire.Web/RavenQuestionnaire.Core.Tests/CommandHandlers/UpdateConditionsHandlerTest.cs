@@ -23,7 +23,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         [Test]
         public void WhenCommandIsReceived_AllConditionsShouldBeUpdated()
         {
-            var innerDocument = new QuestionnaireDocument { Id = "qID" };
+            var innerDocument = new QuestionnaireDocument();
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
             var entity = new Questionnaire(innerDocument);
             var question1 = entity.AddQuestion(Guid.NewGuid(), "The First Question", "", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null);
             var question2 = entity.AddQuestion(Guid.NewGuid(), "The Second Question", "", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null);
@@ -36,7 +38,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                  };
 
             var questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
 
             var validator = new Mock<IExpressionExecutor<Questionnaire, bool>>();
             validator.Setup(x => x.Execute(entity, It.IsAny<string>())).Returns(true);
@@ -53,7 +55,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         [Test]
         public void WhenCommandIsReceived_ConditionsAreInvalid_NoUpdates()
         {
-            var innerDocument = new QuestionnaireDocument { Id = "qID" };
+            var innerDocument = new QuestionnaireDocument()  ;
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
             var entity = new Questionnaire(innerDocument);
             var question1 = entity.AddQuestion(Guid.NewGuid(), "The First Question", "", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null);
             var question2 = entity.AddQuestion(Guid.NewGuid(), "The Second Question", "", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null);
@@ -66,7 +70,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                                  };
 
             var questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
 
             var validator = new Mock<IExpressionExecutor<Questionnaire, bool>>();
             validator.Setup(x => x.Execute(entity, It.IsAny<string>())).Returns(false);

@@ -23,14 +23,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 
         public int TotalCount { get; set; }
 
-        public IEnumerable<CompleteQuestionnaireBrowseItem> Items
+        public IList<CompleteQuestionnaireBrowseItem> Items
         {
             get;
             set;
         }
 
         public string SurveyTitle { get; set; }
-        public string Id
+        public string SurveyId
         {
             get { return IdUtil.ParseId(_id); }
             set { _id = value; }
@@ -51,7 +51,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
           
      //       this.Items = items.Select(x => new CompleteQuestionnaireBrowseItem(x));
             this.SurveyTitle = title;
-            this.Id = id;
+            this.SurveyId = id;
         }
     }
 }

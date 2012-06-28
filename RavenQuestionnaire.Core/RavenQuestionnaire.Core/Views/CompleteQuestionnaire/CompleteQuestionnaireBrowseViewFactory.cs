@@ -60,7 +60,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             var items = page
                     .Select(
                         x =>
-                        new CompleteQuestionnaireBrowseItem(x.Id, x.Title, x.CreationDate, x.LastEntryDate,
+                        new CompleteQuestionnaireBrowseItem(x.Id, x.Title, x.TemplateId, x.CreationDate, x.LastEntryDate,
                                                             x.Status,0,0, x.Responsible));
 
             return new CompleteQuestionnaireBrowseView(

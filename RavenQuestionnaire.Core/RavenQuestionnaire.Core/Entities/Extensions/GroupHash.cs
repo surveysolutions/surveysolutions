@@ -23,10 +23,12 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
 
         public GroupHash(ICompleteGroup root):this()
         {
+            this.PublicKey = root.PublicKey;
             ProcessTree(root);
         }
         public GroupHash(ICompleteGroup root, ICompleteQuestion trigger):this()
         {
+            this.PublicKey = root.PublicKey;
             this.trigger = trigger;
             triggered.Add(GetQuestionKey(trigger), trigger);
             ProcessTree(root);
@@ -110,5 +112,7 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
                 return this.hash[GetQuestionKey(index.PublicKey, index.PropogationPublicKey)];
             }
         }
+
+        public Guid PublicKey { get; private set; }
     }
 }

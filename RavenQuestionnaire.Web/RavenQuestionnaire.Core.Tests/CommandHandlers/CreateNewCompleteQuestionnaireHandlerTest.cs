@@ -2,13 +2,10 @@
 using Moq;
 using NUnit.Framework;
 using Ninject;
-using RavenQuestionnaire.Core.CommandHandlers;
 using RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Services;
@@ -49,7 +46,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_NewCompleteQuestionnIsAddedToRepository()
         {
             CompleteQuestionnaire entity = CompleteQuestionnaireFactory.CreateCompleteQuestionnaireWithAnswersInBaseQuestionnaire();
-            Questionnaire questionnaireDocument =new Questionnaire("some");
+            Guid key = Guid.NewGuid();
+
+            Questionnaire questionnaireDocument =new Questionnaire("some", Guid.NewGuid());
 
             Mock<ICompleteQuestionnaireRepository> coompleteQuestionnaireRepositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             Mock<IStatisticRepository> statisticsRepositoryMock = new Mock<IStatisticRepository>();
@@ -57,13 +56,13 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
             ICompleteQuestionnaireUploaderService completeQuestionnaireService =
                 new CompleteQuestionnaireUploaderService(coompleteQuestionnaireRepositoryMock.Object, statisticsRepositoryMock.Object, subscriberMock.Object);
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(questionnaireDocument);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(questionnaireDocument);
 
 
             CreateNewCompleteQuestionnaireHandler handler = 
                 new CreateNewCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object, completeQuestionnaireService);
 
-            handler.Handle(new CreateNewCompleteQuestionnaireCommand("qID", Guid.NewGuid(),
+            handler.Handle(new CreateNewCompleteQuestionnaireCommand(key.ToString(), Guid.NewGuid(),
                                                                      new UserLight("-2", "dummy-2"),
                                                                      new SurveyStatus(Guid.NewGuid(), "dummyStatus100"), 
                                                                      null));

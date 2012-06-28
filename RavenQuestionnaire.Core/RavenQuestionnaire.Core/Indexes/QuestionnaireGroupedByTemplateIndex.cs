@@ -68,7 +68,7 @@ namespace RavenQuestionnaire.Core.Indexes
 
 
             Reduce = results => from result in results
-                                 group result by result.Id
+                                 group result by result.SurveyId
                                 into g
                                 select new
                                            {
