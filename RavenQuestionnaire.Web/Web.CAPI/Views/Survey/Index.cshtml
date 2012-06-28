@@ -44,31 +44,47 @@
         });
     } (window, window.jQuery, window.Code.PhotoSwipe));
     function load(qId, groupId) {
+        $('#sidebar li').removeClass('ui-btn-active');
+        
         $.ajax({
             type: "POST",
             cache: false,
             data: { id: qId, group: groupId },
             url: "@Url.Action("_SurveyContent", "Survey")"
         }).success(function (data) {
-            $('#content_container').html(data);
-
-            $('#content_container div[data-role="page"]').each(function() {
-                 $(this).find('[data-role="listview"]').listview('refresh');
-                //$(this).trigger('pagecreate');
-               
+            var container = $('#content_container #ref-' + groupId);
+           // var parent = container.parent();
+            container.html(data);
+           
+          /*  container.page();*/
+            $('#content_container #ref-'+groupId).each(function() {
+                 //$(this).find('[data-role="listview"]').listview('refresh');
+               // $(this).trigger('page');
+                $(this).page();
                 //$(this).listview('refresh');
             });
-
+            
+             container.find('#ref-' + groupId).each(function() {
+                var attributes = $.map(this.attributes, function(item) {
+                    return item.name;
+                });
+                var img = $(this);
+                $.each(attributes, function(i, item) {
+                    img.removeAttr(item);
+                });
+            });
+           /* var slider = $('#sidebar');
+             slider.attr('class', slider.attr('class') + ' ui-page-active');
             var beforeMenuItem = $('#sidebar a[href="#main"]');
             var beforeId = $(beforeMenuItem).attr('id').replace('ref-', '');
             beforeMenuItem.attr('onclick', 'load(' + "1" + ', ' + beforeId + ')');
-            
-            var menuItem = $('a#ref-' + groupId);
+            */
+            /*var menuItem = $('a#ref-' + groupId);
             menuItem.attr('href', '#main');
             menuItem.attr('onclick', '');
            // menuItem.click();
             
-            $.mobile.changePage( $('#main'), { transition: "slideup"} );
+            $.mobile.changePage( $('#main'), { transition: "slideup"} );*/
         });
         return false;
     }
@@ -88,12 +104,12 @@
                 {
                     if (!gh.IsCurrent)
                     {
-                    <li data-icon="false"><a id="ref-@(gh.PublicKey)" data-panel="main" onclick="load('@Model.Id', '@gh.PublicKey')" href="#">@gh.GroupText
+                    <li data-icon="false"><a data-panel="main" onclick="load('@Model.Id', '@gh.PublicKey')" href="#ref-@(gh.PublicKey)">@gh.GroupText
                         <span  id="counter-@(gh.PublicKey)" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                     else
                     {
-                    <li data-theme="b"><a  id="ref-@(gh.PublicKey)" data-panel="main" href="#main">@gh.GroupText <span id="counter-@(gh.PublicKey)" data-theme="a" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
+                    <li><a  data-panel="main" href="#ref-@(gh.PublicKey)">@gh.GroupText <span id="counter-@(gh.PublicKey)" data-theme="a" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                 }
             </ul>
@@ -125,5 +141,10 @@
     <!-- other side panel pages here -->
 </div>
 <div data-role="panel" data-id="main" id="content_container">
-    @Html.Partial("_SurveyContent", Model)
+   @Html.Partial("_SurveyContent", Model)
+   
+   @for(int i=1;i<Model.Groups.Count();i++)
+   {
+   <div data-role="page" id="ref-@(Model.Groups[i].PublicKey)" class="page">hello @i</div>
+   }
 </div>

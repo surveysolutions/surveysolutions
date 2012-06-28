@@ -16,7 +16,7 @@
     ViewBag.QuestionnaireId = Model.Id;
 }
 <!-- Start of second page -->
-<div data-role="page" id="main" class="page">
+<div data-role="page" id="ref-@(Model.CurrentScreen.PublicKey)" class="page">
     @RenderNavigation(Model.CurrentScreen.Navigation)
     <!-- /header -->
     <div data-role="content" class="@(Model.Status.Name == "Completed" ? "ui-disabled" : "") dummy-scroll">
