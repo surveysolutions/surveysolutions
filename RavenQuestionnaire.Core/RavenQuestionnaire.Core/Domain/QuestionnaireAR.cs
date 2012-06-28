@@ -21,7 +21,15 @@ namespace RavenQuestionnaire.Core.Domain
         private QuestionnaireDocument _innerDocument = new QuestionnaireDocument();
 
         public QuestionnaireAR(){}
-        
+        public QuestionnaireAR(QuestionnaireDocument template)
+            : base(template.PublicKey)
+        {
+            ApplyEvent(new QuestionnaireTemplateLocaded
+            {
+                Template = template
+            });
+        }
+
         public QuestionnaireAR(Guid questionnaireId, String text) : base(questionnaireId)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
@@ -47,7 +55,13 @@ namespace RavenQuestionnaire.Core.Domain
             _creationDate = e.CreationDate;
         }
 
-
+        // Event handler for the NewQuestionnaireCreated event. This method
+        // is automaticly wired as event handler based on convension.
+        protected void OnQuestionnaireTemplateLocaded(QuestionnaireTemplateLocaded e)
+        {
+            _innerDocument = e.Template;
+            _creationDate = e.Template.CreationDate;
+        }
         public void CreateCompletedQ(Guid completeQuestionnaireId)
         {
             CompleteQuestionnaireAR cq = new CompleteQuestionnaireAR(completeQuestionnaireId, _innerDocument);
