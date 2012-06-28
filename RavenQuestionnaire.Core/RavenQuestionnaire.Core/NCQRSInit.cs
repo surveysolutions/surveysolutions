@@ -1,7 +1,9 @@
-﻿using Ncqrs;
+﻿using System;
+using Ncqrs;
 using Ncqrs.Commanding.CommandExecution.Mapping;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.RavenDB;
@@ -25,41 +27,6 @@ namespace RavenQuestionnaire.Web.App_Start
         //    NcqrsEnvironment.SetDefault<IEventStore>(new InMemoryEventStore());
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
-            /*
-              Kernel.Register(
-                Component
-                    .For<IAggregateRootCreationStrategy>()
-                    .ImplementedBy<DynamicSnapshotAggregateRootCreationStrategy>(),
-                Component
-                    .For<IAggregateSupportsSnapshotValidator>()
-                    .ImplementedBy<AggregateSupportsDynamicSnapshotValidator>(),
-                Component
-                    .For<IAggregateSnapshotter>()
-                    .ImplementedBy<AggregateDynamicSnapshotter>(),
-                Component
-                    .For<IDynamicSnapshotAssembly>()
-                    .ImplementedBy<DynamicSnapshotAssembly>()
-                    .OnCreate((kernel, instance) =>
-                        {
-                            if (_generateDynamicSnapshotAssembly)
-                                instance.CreateAssemblyFrom(_assemblyWithAggreagateRoots);
-                        }),
-                Component.For<SnapshotableAggregateRootFactory>(),
-                Component.For<DynamicSnapshotAssemblyBuilder>(),
-                Component.For<DynamicSnapshotTypeBuilder>(),
-                Component.For<SnapshotableImplementerFactory>());
-             */
-            /*    IWindsorContainer container = new WindsorContainer();
-                container.AddFacility("ncqrs.ds", new DynamicSnapshotFacility(asm));
-                container.Register(
-                    Component.For<ISnapshottingPolicy>().ImplementedBy<SimpleSnapshottingPolicy>(),
-                    Component.For<IEventStore>().Forward<ISnapshotStore>().Instance(dsa),
-                    Component.For<CompleteQuestionnaireAR>().AsSnapshotable()
-                    );
-
-
-                WindsorConfiguration config = new WindsorConfiguration(container);
-             */
         }
 
         private static ICommandService InitializeCommandService()
