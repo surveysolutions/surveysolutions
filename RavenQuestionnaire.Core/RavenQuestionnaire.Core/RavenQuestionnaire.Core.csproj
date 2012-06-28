@@ -366,6 +366,7 @@
     <Compile Include="Events\Questionnaire\NewGroupAdded.cs" />
     <Compile Include="Events\Questionnaire\NewQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\NewQuestionnaireCreated.cs" />
+    <Compile Include="Events\Questionnaire\QuestionnaireTemplateLocaded.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
