@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.Entities
         }
 
         public AbstractQuestion AddQuestion(Guid qid, string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, Order answerOrder, Guid? groupPublicKey,
-            string validation, bool featured, Order answerOrder, Guid? groupPublicKey,IEnumerable<Answer> answers, Guid publicKey)
+            IEnumerable<Answer> answers, Guid publicKey)
         {
 
             var result = new CompleteQuestionFactory().Create(type);
