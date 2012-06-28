@@ -12,7 +12,7 @@
     <div class="ui-body ui-body-c">
         <div class="ui-grid-a question-content">
             <div class="ui-block-a">
-                @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions))
+                @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions))
                 {
                     //  using (Ajax.BeginFormHtml5("Index", "CompleteQuestionnaireAsync1", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions)){
                     using (Html.BeginCollectionItem("questions", true, question.PublicKey))
