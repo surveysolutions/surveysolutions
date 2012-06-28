@@ -279,68 +279,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Bootstrap\accordion.css" />
-    <Content Include="bin\Antlr3.Runtime.dll" />
-    <Content Include="bin\CsvHelper.dll" />
-    <Content Include="bin\dotless.Core.dll" />
-    <Content Include="bin\Esent.Interop.dll" />
-    <Content Include="bin\Esent.Interop.pdb" />
-    <Content Include="bin\Esent.Interop.xml" />
-    <Content Include="bin\ICSharpCode.NRefactory.dll" />
-    <Content Include="bin\Kaliko.ImageLibrary.dll" />
-    <Content Include="bin\Lucene.Net.Contrib.Spatial.dll" />
-    <Content Include="bin\Lucene.Net.Contrib.Spatial.pdb" />
-    <Content Include="bin\Lucene.Net.Contrib.Spatial.xml" />
-    <Content Include="bin\Lucene.Net.Contrib.SpellChecker.dll" />
-    <Content Include="bin\Lucene.Net.Contrib.SpellChecker.pdb" />
-    <Content Include="bin\Lucene.Net.Contrib.SpellChecker.xml" />
-    <Content Include="bin\Lucene.Net.dll" />
-    <Content Include="bin\Lucene.Net.pdb" />
-    <Content Include="bin\Lucene.Net.xml" />
-    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
-    <Content Include="bin\MvcPaging.dll" />
-    <Content Include="bin\NCalc.dll" />
-    <Content Include="bin\NCalc.pdb" />
-    <Content Include="bin\Newtonsoft.Json.dll" />
-    <Content Include="bin\Newtonsoft.Json.pdb" />
-    <Content Include="bin\Newtonsoft.Json.xml" />
-    <Content Include="bin\Ninject.dll" />
-    <Content Include="bin\Ninject.Extensions.Conventions.dll" />
-    <Content Include="bin\Ninject.Extensions.Conventions.pdb" />
-    <Content Include="bin\Ninject.Extensions.Conventions.xml" />
-    <Content Include="bin\Ninject.pdb" />
-    <Content Include="bin\Ninject.Web.Mvc.dll" />
-    <Content Include="bin\Ninject.Web.Mvc.pdb" />
-    <Content Include="bin\Ninject.Web.Mvc.xml" />
-    <Content Include="bin\Ninject.xml" />
-    <Content Include="bin\NLog.dll" />
-    <Content Include="bin\NLog.xml" />
-    <Content Include="bin\Questionnaire.Core.Web.dll" />
-    <Content Include="bin\Questionnaire.Core.Web.pdb" />
-    <Content Include="bin\Raven.Abstractions.dll" />
-    <Content Include="bin\Raven.Abstractions.pdb" />
-    <Content Include="bin\Raven.Client.Lightweight.dll" />
-    <Content Include="bin\Raven.Client.Lightweight.pdb" />
-    <Content Include="bin\Raven.Client.Lightweight.xml" />
-    <Content Include="bin\Raven.Database.dll" />
-    <Content Include="bin\Raven.Database.pdb" />
-    <Content Include="bin\Raven.Munin.dll" />
-    <Content Include="bin\Raven.Munin.pdb" />
-    <Content Include="bin\Raven.Storage.Esent.dll" />
-    <Content Include="bin\Raven.Storage.Esent.pdb" />
-    <Content Include="bin\Raven.Storage.Managed.dll" />
-    <Content Include="bin\Raven.Storage.Managed.pdb" />
-    <Content Include="bin\RavenQuestionnaire.Core.dll" />
-    <Content Include="bin\RavenQuestionnaire.Core.pdb" />
-    <Content Include="bin\RavenQuestionnaire.Web.dll" />
-    <Content Include="bin\RavenQuestionnaire.Web.pdb" />
-    <Content Include="bin\System.Reactive.dll" />
-    <Content Include="bin\System.Reactive.xml" />
-    <Content Include="bin\System.Web.Mvc.Html5.dll" />
-    <Content Include="bin\WebActivator.dll">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>accordion.less</DependentUpon>
-    </Content>
     <Content Include="Content\Bootstrap\alerts.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

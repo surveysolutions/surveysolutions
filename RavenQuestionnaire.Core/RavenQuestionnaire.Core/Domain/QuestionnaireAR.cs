@@ -44,6 +44,12 @@ namespace RavenQuestionnaire.Core.Domain
                 Title= text,
                 CreationDate = clock.UtcNow()
             });
+
+
+          /*  ApplyEvent(new QuestionnaireTemplateLocaded
+            {
+                Template = _innerDocument
+            });*/
         }
 
         // Event handler for the NewQuestionnaireCreated event. This method

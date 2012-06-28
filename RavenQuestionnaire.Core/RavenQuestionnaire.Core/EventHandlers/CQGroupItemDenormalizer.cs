@@ -18,7 +18,7 @@ using RavenQuestionnaire.Core.Views.Statistics;
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     public class CQGroupItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
-        IEventHandler<NewQuestionnaireCreated>
+        IEventHandler<NewQuestionnaireCreated>, IEventHandler<QuestionnaireTemplateLocaded>
     {
         
         private IDenormalizerStorage<CQGroupItem> documentGroupSession;
@@ -56,6 +56,22 @@ namespace RavenQuestionnaire.Core.EventHandlers
            /* }
             grid.Groups.Add(new CQGroupItem(0, 100, 100, evnt.Payload.Title, evnt.Payload.PublicKey.ToString()));*/
         //    this.storage.Commit();
+        }
+
+        #endregion
+
+        #region Implementation of IEventHandler<in QuestionnaireTemplateLocaded>
+
+        public void Handle(IPublishedEvent<QuestionnaireTemplateLocaded> evnt)
+        {
+            /* var questionnaire = this.storage.GetByGuid<CQGroupItem>(evnt.Payload.PublicKey);
+             if (questionnaire == null)
+             {*/
+            var questionnaire = new CQGroupItem(0, 100, 0, evnt.Payload.Template.Title, evnt.Payload.Template.PublicKey.ToString());
+            this.documentGroupSession.Store(questionnaire, evnt.Payload.Template.PublicKey);
+            /* }
+             grid.Groups.Add(new CQGroupItem(0, 100, 100, evnt.Payload.Title, evnt.Payload.PublicKey.ToString()));*/
+            //    this.storage.Commit();
         }
 
         #endregion

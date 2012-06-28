@@ -105,6 +105,7 @@ namespace RavenQuestionnaire.Web.App_Start
 
             var myEvents = myEventStore.ReadFrom(DateTime.MinValue);
             myEventBus.Publish(myEvents);
+
         }
 
     }
