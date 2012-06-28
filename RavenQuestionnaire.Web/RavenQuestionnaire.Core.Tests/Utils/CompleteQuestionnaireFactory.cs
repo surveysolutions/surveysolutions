@@ -15,7 +15,7 @@ namespace RavenQuestionnaire.Core.Tests.Utils
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "completequestionnairedocuments/cqID";
-            innerDocument.Children.Add(new SingleQuestion("test question"));
+            innerDocument.Children.Add(new SingleQuestion(Guid.NewGuid(), "test question"));
             Answer answer = new Answer() { AnswerText = "answer", AnswerType = AnswerType.Select };
             innerDocument.Children[0].Add(answer, null);
             Answer answer2 = new Answer() { AnswerText = "answer2", AnswerType = AnswerType.Select };

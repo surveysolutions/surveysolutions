@@ -202,7 +202,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             QuestionnaireDocument questionnaireInnerDocument = new QuestionnaireDocument();
             //queston without group
             questionnaireInnerDocument.Id = "completequestionnairedocuments/cqID";
-            var testQuestion1 = new SingleQuestion("test question");
+            var testQuestion1 = new SingleQuestion(Guid.NewGuid(), "test question");
             questionnaireInnerDocument.Children.Add(testQuestion1);
             Answer answer = new Answer() {AnswerText = "answer", AnswerType = AnswerType.Select};
             testQuestion1.Add(answer, null);
@@ -210,7 +210,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             testQuestion1.Add(answer2, null);
             //group
             Group group = new Group("group");
-            var testQuestion2 = new SingleQuestion("test question");
+            var testQuestion2 = new SingleQuestion(Guid.NewGuid(), "test question");
             group.Children.Add(testQuestion2);
             testQuestion2.Add(new Answer() { AnswerText = "answer", AnswerType = AnswerType.Select }, null);
             testQuestion2.Add(new Answer() { AnswerText = "answer2", AnswerType = AnswerType.Select }, null);
@@ -218,7 +218,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
             //group for propagation
             Group groupPropogated = new Group("group") {Propagated = Propagate.Propagated};
-            var testQuestion3 = new SingleQuestion("test question");
+            var testQuestion3 = new SingleQuestion(Guid.NewGuid(), "test question");
             groupPropogated.Children.Add(testQuestion3);
             testQuestion3.Add(new Answer() { AnswerText = "answer", AnswerType = AnswerType.Select }, null);
             testQuestion3.Add(new Answer() { AnswerText = "answer2", AnswerType = AnswerType.Select }, null);
@@ -244,7 +244,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         [Test]
         public void ExplicitConversion_ValidQuestionneir_AllFieldAreConverted()
         {
-            List<IComposite> children = new List<IComposite>() { new Group("test"), new SingleQuestion("question") };
+            List<IComposite> children = new List<IComposite>() { new Group("test"), new SingleQuestion(Guid.NewGuid(), "question") };
           
 
             List<Guid> triggers = new List<Guid>() { Guid.NewGuid() };

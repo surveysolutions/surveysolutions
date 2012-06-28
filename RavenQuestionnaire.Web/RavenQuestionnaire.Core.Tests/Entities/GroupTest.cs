@@ -26,11 +26,11 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                         (a) => { Assert.AreEqual(((AbstractQuestion)a.AddedComposite).QuestionText, "se");
                                    test = true;
                         }));
-            target.Add(new SingleQuestion("se"), null);
+            target.Add(new SingleQuestion(Guid.NewGuid(), "se"), null);
             Assert.IsTrue(test);
             target.Add(new Group("test"), null);
             observer.Dispose();
-            target.Add(new SingleQuestion("sea"), null);
+            target.Add(new SingleQuestion(Guid.NewGuid(), "sea"), null);
             test = false;
             var observerRemove =
                 target.Where(e => e is CompositeRemovedEventArgs).Select(e => e as CompositeRemovedEventArgs).Subscribe(
@@ -58,7 +58,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                             test = true;
                         }));
             target.Add(new Group("test"), null);
-            target.Add(new SingleQuestion("se"), target.Children[0].PublicKey);
+            target.Add(new SingleQuestion(Guid.NewGuid(), "se"), target.Children[0].PublicKey);
             Assert.IsTrue(test);
         }
        
