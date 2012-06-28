@@ -8,6 +8,7 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using Raven.Client;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Web.App_Start;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(Web.CAPI.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(Web.CAPI.App_Start.NinjectWebCommon), "Stop")]
@@ -70,6 +71,7 @@ namespace Web.CAPI.App_Start
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
             RegisterServices(kernel);
+            NCQRSInit.Init(System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"], kernel);
             return kernel;
         }
 
@@ -80,12 +82,16 @@ namespace Web.CAPI.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IDocumentSession>().ToMethod(
-              context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
-                  b => OperationContext.Current == null).InSingletonScope();
-
+               context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
+                   b => HttpContext.Current != null).InScope(
+                       o => HttpContext.Current);
 
             kernel.Bind<IDocumentSession>().ToMethod(
                 context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
+                    b => HttpContext.Current == null).InScope(o => Thread.CurrentThread);
+
+            kernel.Bind<IDocumentSession>().ToMethod(
+             context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
                  b => OperationContext.Current != null).InScope(o => OperationContext.Current);
 
             kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();

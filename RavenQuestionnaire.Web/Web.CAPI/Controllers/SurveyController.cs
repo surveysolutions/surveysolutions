@@ -6,6 +6,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
@@ -31,13 +33,13 @@ namespace Web.CAPI.Controllers
     public class SurveyController : Controller
     {
         private readonly IGlobalInfoProvider _globalProvider;
-        private readonly ICommandInvoker commandInvoker;
+       // private readonly ICommandInvoker commandInvoker;
         private readonly IViewRepository viewRepository;
 
         public SurveyController(ICommandInvoker commandInvoker, IViewRepository viewRepository,
                                                IGlobalInfoProvider globalProvider)
         {
-            this.commandInvoker = commandInvoker;
+         //   this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
             _globalProvider = globalProvider;
         }
@@ -78,7 +80,7 @@ namespace Web.CAPI.Controllers
 
         public ActionResult ReInit(string id)
         {
-            if (string.IsNullOrEmpty(id))
+           /* if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
 
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel,
@@ -101,7 +103,7 @@ namespace Web.CAPI.Controllers
                     }
                 }
 
-            }
+            }*/
             return RedirectToAction("Index", "Survey", new { id = id });
         }
 
@@ -111,10 +113,13 @@ namespace Web.CAPI.Controllers
             question.PublicKey = new Guid(Request.Form["PublicKey"]);
             try
             {
-                commandInvoker.Execute(new UpdateCommentsInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                Guid questionnaireKey = Guid.Parse(settings[0].QuestionnaireId);
+                commandService.Execute(new SetCommentCommand(questionnaireKey, question, settings[0].PropogationPublicKey));
+           /*     commandInvoker.Execute(new UpdateCommentsInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
                                                                                       question,
                                                                                       settings[0].PropogationPublicKey,
-                                                                                      _globalProvider.GetCurrentUser()));
+                                                                                      _globalProvider.GetCurrentUser()));*/
             }
             catch (Exception e)
             {
@@ -131,7 +136,7 @@ namespace Web.CAPI.Controllers
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
 
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel,
+            /*var model = viewRepository.Load<CompleteQuestionnaireViewInputModel,
                 CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
 
             if (model != null)
@@ -174,7 +179,7 @@ namespace Web.CAPI.Controllers
                         }
                     }
                 }
-            }
+            }*/
 
             return RedirectToAction("Dashboard", "Survey");
 
@@ -204,20 +209,24 @@ namespace Web.CAPI.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public ActionResult Participate(string id, string mode)
         {
-            SurveyStatus status = GetStatus(id);
+            Guid key;
+            if (!Guid.TryParse(id, out key))
+                //  return RedirectToAction("Index", "Dashboard");
+                throw new HttpException("404");
+
+
+            var newQuestionnairePublicKey = Guid.NewGuid();
             var questionnairePublicKey = Guid.NewGuid();
-            var command = new CreateNewCompleteQuestionnaireCommand(id, questionnairePublicKey,
-                                                                    _globalProvider.GetCurrentUser(),
-                                                                   status,
-                                                                    _globalProvider.GetCurrentUser());
-            commandInvoker.Execute(command);
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
+
 
             return RedirectToAction("Index", new { id = questionnairePublicKey });
         }
 
 
 
-        [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
+     /*   [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public JsonResult Validate(string id, Guid? group, Guid? propagationKey)
         {
             commandInvoker.Execute(new ValidateGroupCommand(id, group, propagationKey, _globalProvider.GetCurrentUser()));
@@ -225,7 +234,7 @@ namespace Web.CAPI.Controllers
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                 new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
             return Json(model);
-        }
+        }*/
 
         public JsonResult SaveAnswer(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
         {
@@ -233,10 +242,9 @@ namespace Web.CAPI.Controllers
             var question = questions[0];
             try
             {
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
-                                                                                      question,
-                                                                                      settings[0].PropogationPublicKey,
-                                                                                      _globalProvider.GetCurrentUser()));
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(new SetAnswerCommand(Guid.Parse(settings[0].QuestionnaireId), question,
+                    settings[0].PropogationPublicKey));
             }
             catch (Exception e)
             {
@@ -256,8 +264,9 @@ namespace Web.CAPI.Controllers
             try
             {
                 var propagationKey = Guid.NewGuid();
-                var command = new PropagateGroupCommand(questionnaireId, propagationKey, publicKey, GlobalInfo.GetCurrentUser());
-                commandInvoker.Execute(command);
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(new AddPropagatableGroupCommand(Guid.Parse(questionnaireId), propagationKey, publicKey));
+
 
                 var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
                 new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
@@ -273,14 +282,15 @@ namespace Web.CAPI.Controllers
         public JsonResult DeletePropagatedGroup(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey,
                                                   string questionnaireId)
         {
-            commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
-                                                                    GlobalInfo.GetCurrentUser()));
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(new DeletePropagatableGroupCommand(Guid.Parse(questionnaireId), propagationKey, publicKey));
+
             return Json(new { propagationKey = propagationKey });
         }
 
         public ActionResult Delete(string id)
         {
-            commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id, _globalProvider.GetCurrentUser()));
+          /*  commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id, _globalProvider.GetCurrentUser()));*/
             return RedirectToAction("Dashboard", "Survey");
         }
     }

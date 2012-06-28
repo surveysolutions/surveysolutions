@@ -21,7 +21,7 @@
                     {
                         <li data-role="list-divider" data-theme="b" role="heading" class="divider"><a>
                                                                                                        @group.SurveyTitle <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
-                            @Html.ActionLink("New", "Participate", "Survey", new {id = group.Id, mode = "Html5"}, new
+                            @Html.ActionLink("New", "Participate", "Survey", new {id = group.SurveyId, mode = "Html5"}, new
                                                                                                                         {
                                                                                                                             @class = "splited-button",
                                                                                                                             data_inline = "true",
@@ -63,7 +63,7 @@
                                         <div class="ui-block-a">
                                             @*   <div>@survey.Id
                             </div> *@
-                                            <div>@survey.Status.Name, Created by @survey.Creator.Name
+                                            <div>@survey.Status.Name@*, Created by @survey.Creator.Name*@
                                             </div>
                                         </div>
                                         <div class="ui-block-b">
@@ -74,7 +74,7 @@
                                         </div>
                                         <div class="ui-block-c">
                                             <div data-role="controlgroup" data-type="horizontal">
-                                                @Html.ActionLink("edit", "Index", "Survey", new {id = survey.Id}, new
+                                                @Html.ActionLink("edit", "Index", "Survey", new {id = survey.CompleteQuestionnaireId}, new
                                                                                                             {
                                                                                                                 data_inline = "true",
                                                                                                                 data_role = "button",
@@ -82,21 +82,21 @@
                                                                                                                 data_mini = "true",
                                                                                                                 rel = "external"
                                                                                                             })
-                                                @Html.ActionLink("stat", "Statistic", "Survey", new {id = survey.Id}, new
+                                                @Html.ActionLink("stat", "Statistic", "Survey", new { id = survey.CompleteQuestionnaireId }, new
                                                                                                                 {
                                                                                                                     data_inline = "true",
                                                                                                                     data_role = "button",
                                                                                                                     data_mini = "true",
                                                                                                                     rel = "external"
                                                                                                                 })
-                                                @Html.ActionLink("del", "Delete", "Survey", new {id = survey.Id}, new
+                                            @*    @Html.ActionLink("del", "Delete", "Survey", new {id = survey.Id}, new
                                                                                                             {
                                                                                                                 data_inline = "true",
                                                                                                                 data_role = "button",
                                                                                                                 data_theme = "e",
                                                                                                                 data_mini = "true",
                                                                                                                 rel = "external"
-                                                                                                            })
+                                                                                                            })*@
                                             </div>
                                         </div>
                                     </div>

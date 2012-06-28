@@ -2,6 +2,7 @@
 using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
+using RavenQuestionnaire.Web.App_Start;
 
 namespace Web.CAPI
 {
@@ -32,7 +33,7 @@ namespace Web.CAPI
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
-
+            NCQRSInit.RebuildReadLayer();
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
         }
