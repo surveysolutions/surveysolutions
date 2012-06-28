@@ -2,36 +2,28 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using Ionic.Zip;
-using Newtonsoft.Json;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
-using RavenQuestionnaire.Core.Views.Event;
-using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Core.Views.Status.StatusElement;
 using RavenQuestionnaire.Core.Views.StatusReport;
 using RavenQuestionnaire.Web.Models;
-using Formatting = System.Xml.Formatting;
 
 #endregion
 
@@ -237,18 +229,29 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public ActionResult Participate(string id, string mode)
         {
-            SurveyStatus status = GetStatus(id);
-            var questionnairePublicKey = Guid.NewGuid();
-            var command = new CreateNewCompleteQuestionnaireCommand(id, questionnairePublicKey,
+            Guid key;
+            if (!Guid.TryParse(id, out key))
+              //  return RedirectToAction("Index", "Dashboard");
+                throw  new HttpException("404");
+
+
+            var newQuestionnairePublicKey = Guid.NewGuid();
+     /*       var command = new CreateNewCompleteQuestionnaireCommand(id,
+                                                                    newQuestionnairePublicKey,
                                                                     _globalProvider.GetCurrentUser(),
-                                                                   status,
+                                                                    status,
                                                                     _globalProvider.GetCurrentUser());
-            commandInvoker.Execute(command);
+            commandInvoker.Execute(command);*/
+
+            //new handling
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
+
 
             return RedirectToAction("Question" + mode,
                                     new
                                         {
-                                            id = questionnairePublicKey
+                                            id = newQuestionnairePublicKey
                                         });
         }
 
@@ -356,10 +359,17 @@ namespace RavenQuestionnaire.Web.Controllers
             var question = questions[0];
             try
             {
-                commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
+             /*   commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
                                                                                       question,
                                                                                       settings[0].PropogationPublicKey,
                                                                                       _globalProvider.GetCurrentUser()));
+                */
+
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(new SetAnswerCommand(Guid.Parse(settings[0].QuestionnaireId), question, 
+                    settings[0].PropogationPublicKey));
+                
+
             }
             catch (Exception e)
             {

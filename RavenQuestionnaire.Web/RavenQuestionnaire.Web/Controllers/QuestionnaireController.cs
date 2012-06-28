@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
@@ -103,8 +105,17 @@ namespace RavenQuestionnaire.Web.Controllers
                     //maybe better move loading defaults to the handler?
                     var statusDefault =
                         viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel("0"));
+                    Guid key = Guid.NewGuid();
 
-                    commandInvoker.Execute(new CreateNewQuestionnaireCommand(model.Title, statusDefault != null ? statusDefault.Id : null, GlobalInfo.GetCurrentUser()));
+                    commandInvoker.Execute(new CreateNewQuestionnaireCommand(model.Title, 
+                        statusDefault != null ? statusDefault.Id : null,
+                        key,
+                        GlobalInfo.GetCurrentUser()));
+
+                    //new fw
+                    var commandService = NcqrsEnvironment.Get<ICommandService>();
+                    commandService.Execute(new CreateQuestionnaireCommand(key, model.Title));
+                
                 }
                 else
                 {

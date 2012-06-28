@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Moq;
 using NUnit.Framework;
-using RavenQuestionnaire.Core.CommandHandlers;
 using RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Group;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Documents;
@@ -21,13 +17,15 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_GroupIsDeletedFromRepository()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
 
             Questionnaire entity = new Questionnaire(innerDocument);
             var group = new Group("group");
             innerDocument.Children.Add(group);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
 
             DeleteGroupHandler handler = new DeleteGroupHandler(questionnaireRepositoryMock.Object);
             handler.Handle(new DeleteGroupCommand(group.PublicKey, entity.QuestionnaireId, null));

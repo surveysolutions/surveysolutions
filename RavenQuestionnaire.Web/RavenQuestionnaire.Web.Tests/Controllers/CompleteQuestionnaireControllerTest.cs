@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web;
 using Moq;
 using NUnit.Framework;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.ExpressionExecutors;
-using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Web.Controllers;
 using RavenQuestionnaire.Web.Models;
@@ -33,7 +29,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public Mock<IFormsAuthentication> Authentication { get; set; }
         public Mock<IBagManager> BagManager { get; set; }
         public Mock<IGlobalInfoProvider> InfoProvider { get; set; }
-
+        public Mock<ICommandService> CommandServiceMock { get; set; }
         public CompleteQuestionnaireController Controller { get; set; }
 
         [SetUp]
@@ -46,7 +42,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
             InfoProvider = new Mock<IGlobalInfoProvider>();
 
-
+            CommandServiceMock = new Mock<ICommandService>();
+            NcqrsEnvironment.SetDefault<ICommandService>(CommandServiceMock.Object);
             Controller = new CompleteQuestionnaireController(CommandInvokerMock.Object, ViewRepositoryMock.Object, 
                 BagManager.Object, InfoProvider.Object);
         }
@@ -149,17 +146,16 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 x.Load<StatusViewInputModel, StatusView>(
                     It.IsAny<StatusViewInputModel>()))
                 .Returns(new StatusView());
-            CompleteQuestionView question = new CompleteQuestionView("cId",Guid.NewGuid());
+            CompleteQuestionView question = new CompleteQuestionView(Guid.NewGuid().ToString(), Guid.NewGuid());
             question.Answers = new CompleteAnswerView[] {new CompleteAnswerView(question.PublicKey,new CompleteAnswer())};
             Controller.SaveSingleResultJson(
-                new CompleteQuestionSettings[]
-                    {new CompleteQuestionSettings() {QuestionnaireId = "cId", PropogationPublicKey = Guid.NewGuid()}},
+                new CompleteQuestionSettings[] { new CompleteQuestionSettings() { QuestionnaireId = question.QuestionnaireId, PropogationPublicKey = Guid.NewGuid() } },
                 new CompleteQuestionView[]
                     {
                         question
                     }
                 );
-            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateAnswerInCompleteQuestionnaireCommand>()),
+            CommandServiceMock.Verify(x => x.Execute(It.IsAny<SetAnswerCommand>()),
                                       Times.Once());
         }
     }

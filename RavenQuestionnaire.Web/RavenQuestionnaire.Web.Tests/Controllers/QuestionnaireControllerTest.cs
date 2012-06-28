@@ -2,13 +2,13 @@ using System;
 using System.Web;
 using Moq;
 using NUnit.Framework;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Repositories;
-using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Web.Controllers;
 
@@ -26,12 +26,16 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public QuestionnaireController Controller { get; set; }
-
+        public Mock<ICommandService> CommandServiceMock { get; set; }
         [SetUp]
         public void CreateObjects()
         {
             CommandInvokerMock = new Mock<ICommandInvoker>();
             ViewRepositoryMock = new Mock<IViewRepository>();
+
+
+            CommandServiceMock = new Mock<ICommandService>();
+            NcqrsEnvironment.SetDefault<ICommandService>(CommandServiceMock.Object);
             Controller = new QuestionnaireController(CommandInvokerMock.Object, ViewRepositoryMock.Object);
         }
 
@@ -40,17 +44,18 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void WhenNewQuestionnaireIsSubmittedWithValidModel_CommandIsSent()
         {
             Controller.Save(new QuestionnaireView() {Title = "test"});
-            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewQuestionnaireCommand>()), Times.Once());
+            CommandServiceMock.Verify(x => x.Execute(It.IsAny<CreateQuestionnaireCommand>()), Times.Once());
         }
         [Test]
         public void WhenExistingQuestionnaireIsSubmittedWIthValidModel_CommandIsSent()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
 
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
 
             Controller.Save(new QuestionnaireView(innerDocument));
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateQuestionnaireCommand>()), Times.Once());

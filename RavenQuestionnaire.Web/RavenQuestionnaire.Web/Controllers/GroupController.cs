@@ -3,10 +3,13 @@
 using System;
 using System.Web;
 using System.Web.Mvc;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
@@ -46,10 +49,19 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     if (model.PublicKey == Guid.Empty)
                     {
-                        var createCommand = new CreateNewGroupCommand(model.Title, model.Propagated,
+
+                        Guid newItemKey = Guid.NewGuid();
+                        var createCommand = new CreateNewGroupCommand(model.Title, newItemKey, model.Propagated,
                                                                       model.QuestionnaireId, model.Parent,
                                                                       GlobalInfo.GetCurrentUser());
                         commandInvoker.Execute(createCommand);
+
+                        //new fw
+                        var commandService = NcqrsEnvironment.Get<ICommandService>();
+                        
+                        
+                        commandService.Execute(new AddGroupCommand(Guid.Parse(model.QuestionnaireId), newItemKey, 
+                            model.Title, model.Propagated, model.Parent));
                     }
                     else
                     {
@@ -207,12 +219,19 @@ namespace RavenQuestionnaire.Web.Controllers
             try
             {
                 var propagationKey = Guid.NewGuid();
-                var command = new PropagateGroupCommand(questionnaireId, propagationKey, publicKey, GlobalInfo.GetCurrentUser());
-                commandInvoker.Execute(command);
+             /*   var command = new PropagateGroupCommand(questionnaireId, propagationKey, publicKey, GlobalInfo.GetCurrentUser());
+                commandInvoker.Execute(command);*/
 
+                //new handling
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(new AddPropagatableGroupCommand(Guid.Parse(questionnaireId), propagationKey, publicKey));
+
+
+                
                 var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
                 new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
                 return Json(new { propagationKey = propagationKey, parentGroupPublicKey = publicKey, group = model });
+
             }
             catch (Exception e)
             {
@@ -224,8 +243,12 @@ namespace RavenQuestionnaire.Web.Controllers
         public JsonResult DeletePropagatedGroupHtml5(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey,
                                                   string questionnaireId)
         {
-            commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
-                                                                    GlobalInfo.GetCurrentUser()));
+         /*   commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
+                                                                    GlobalInfo.GetCurrentUser()));*/
+            //new handling
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(new DeletePropagatableGroupCommand(Guid.Parse(questionnaireId), propagationKey, publicKey));
+
             return Json(new {propagationKey = propagationKey});
             /*     var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
 

@@ -1,6 +1,8 @@
 ﻿using Moq;
 using System;
 using NUnit.Framework;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
 using System.Collections.Generic;
 using RavenQuestionnaire.Core.Entities;
@@ -19,13 +21,16 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     {
         public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
+        public Mock<ICommandService> CommandServiceMock { get; set; }
         public CollectionController Controller { get; set; }
 
         [SetUp]
         public void CreateObjects()
         {
             CommandInvokerMock = new Mock<ICommandInvoker>();
+            CommandServiceMock=new Mock<ICommandService>();
             ViewRepositoryMock = new Mock<IViewRepository>();
+            NcqrsEnvironment.SetDefault<ICommandService>(CommandServiceMock.Object);
             Controller = new CollectionController(CommandInvokerMock.Object, ViewRepositoryMock.Object);
         }
 

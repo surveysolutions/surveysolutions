@@ -19,10 +19,11 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void WhenCommandIsReceived_QuestionIsUpdatedToRepository()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            Guid key = Guid.NewGuid();
+            innerDocument.PublicKey = key;
             Questionnaire entity = new Questionnaire(innerDocument);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
             UpdateQuestionnaireHandler handler = new UpdateQuestionnaireHandler(questionnaireRepositoryMock.Object);
             handler.Handle(new Commands.UpdateQuestionnaireCommand(entity.QuestionnaireId, "title", null));
 

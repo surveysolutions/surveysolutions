@@ -45,13 +45,20 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.Executor = executor;
             this.Featured = featured;
             this.Instructions = instructions;
-            this.Answers = answers;
+            if (answers != null)
+                this.Answers = answers;
+            else
+            {
+                this.Answers = new Answer[0];
+            }
         }
 
+        /*
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string questionText,
            string stataExportCaption, QuestionType questionType, string conditionExpression, 
             string validationExpression, bool featured, string instructions, AnswerView[] answers, Order answerOrder, UserLight executor):
             this(questionnaireId,questionPublicKey,questionText,stataExportCaption,questionType,conditionExpression,validationExpression,featured,instructions,new Answer[0],answerOrder,executor)
+                featured, instructions, answerOrder, executor)
         {
             if (answers != null)
                 this.Answers =
@@ -67,7 +74,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
                                 AnswerImage =
                                     string.IsNullOrEmpty(a.AnswerImage) ? "" : IdUtil.CreateFileId(a.AnswerImage)
                             }).ToArray();
-        }
+        }*/
 
         #endregion
     }

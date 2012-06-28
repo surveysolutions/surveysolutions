@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
 using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core.Views.Collection;
@@ -55,7 +57,15 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult Edit(CollectionView collection)
         {
             if (string.IsNullOrEmpty(collection.CollectionId))
-                commandInvoker.Execute(new CreateNewCollectionCommand(collection.Name, collection.Items.Select(item => new CollectionItem(item.PublicKey, item.Key, item.Value)).ToList()));
+            {
+                var items = collection.Items.Select(item => new CollectionItem(item.PublicKey, item.Key, item.Value)).ToList();
+
+                commandInvoker.Execute(new CreateNewCollectionCommand(collection.Name, items ));
+
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(new CreateCollectionCommand(Guid.NewGuid(), collection.Name, items));
+            }
+            
             else
                 commandInvoker.Execute(new UpdateCollectionCommand(collection.CollectionId, collection.Name, collection.Items.Select(item=>new CollectionItem(item.PublicKey, item.Key, item.Value)).ToList()));
             return RedirectToAction("Index");

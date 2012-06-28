@@ -20,10 +20,12 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire
 
         public void Handle(CreateNewQuestionnaireCommand command)
         {
-            var newQuestionnaire = new Entities.Questionnaire(command.Title);
+            var newQuestionnaire = new Entities.Questionnaire(command.Title, command.QuestionnaireGuid);
             _questionnaireRepository.Add(newQuestionnaire);
-            _flowGraphRepository.Add(new FlowGraph(newQuestionnaire.QuestionnaireId));
 
+
+
+            _flowGraphRepository.Add(new FlowGraph(newQuestionnaire.QuestionnaireId));
             var status = new Entities.Status(newQuestionnaire.QuestionnaireId);
 
             //copy default statuses
