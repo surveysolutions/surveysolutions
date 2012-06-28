@@ -73,7 +73,7 @@ namespace Questionnaire.Core.Web.Helpers
             var additionTags =
                 new MvcHtmlString(
                     string.Format(
-                        "<div style=\"position:absolute;bottom:7px;\">{0}{1}<div style=\"clear: both;\"></div></div>",
+                        "<div style=\"position:absolute;bottom:7px;margin: 0 -55px;\">{0}{1}<div style=\"clear: both;\"></div></div>",
                         aTagBuilder.ToString(TagRenderMode.Normal),
                         InputHelper(htmlHelper, name, value, true, true, attr)));
             return additionTags;
@@ -121,8 +121,6 @@ namespace Questionnaire.Core.Web.Helpers
                     tagBuilder.AddCssClass(HtmlHelper.ValidationInputCssClassName);
                 }
             }
-
-
             return /*System.Web.HttpUtility.HtmlDecode(*/tagBuilder.ToString(TagRenderMode.SelfClosing)/*)*/;
         }
         #endregion
