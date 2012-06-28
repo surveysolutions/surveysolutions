@@ -10,7 +10,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
     public class AddNewQuestionCommand : ICommand
     {
         #region Properties
-
+        public Guid qid { get; private set; }
         public string QuestionText { get; private set; }
         public string StataExportCaption { get; private set; }
         public string Instructions { get; private set; }
@@ -29,9 +29,10 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         #region Constructor
 
         [JsonConstructor]
-        public AddNewQuestionCommand(string questionText, string stataExportCaption, QuestionType questionType, string questionnaireId,
+        public AddNewQuestionCommand(Guid qid, string questionText, string stataExportCaption, QuestionType questionType, string questionnaireId,
             Guid? groupPublicKey, string conditionExpression, string validationExpression, string instructions, bool featured, Order answerOrder, AnswerView[] answers, UserLight executor)
         {
+            this.qid = qid;
             this.QuestionText = questionText;
             this.AnswerOrder = answerOrder;
             this.StataExportCaption = stataExportCaption;

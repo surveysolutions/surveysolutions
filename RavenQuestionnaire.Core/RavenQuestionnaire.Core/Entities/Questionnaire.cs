@@ -34,11 +34,12 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Children.RemoveAll(a=>a is IQuestion);
         }
 
-        public AbstractQuestion AddQuestion(string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, Order answerOrder, Guid? groupPublicKey,
+        public AbstractQuestion AddQuestion(Guid qid, string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, Order answerOrder, Guid? groupPublicKey,
             IEnumerable<Answer> answers)
         {
 
             var result = new CompleteQuestionFactory().Create(type);
+            result.PublicKey = qid;
             result.QuestionType = type;
             result.QuestionText = text;
             result.StataExportCaption = stataExportCaption;
