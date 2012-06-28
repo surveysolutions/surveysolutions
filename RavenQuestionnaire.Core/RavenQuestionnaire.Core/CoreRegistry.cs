@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
@@ -8,6 +9,7 @@ using Raven.Client.Embedded;
 using Raven.Client.Indexes;
 using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.Conventions;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.ExpressionExecutors;
@@ -67,6 +69,35 @@ namespace RavenQuestionnaire.Core
                                                     i.GetGenericTypeDefinition() == typeof (IEntitySubscriber<>)) !=
                                                 null).BindAllInterfaces()
                                             .Configure(binding => binding.InSingletonScope()));
+            this.Kernel.Bind(scanner => scanner.FromAssembliesMatching("RavenQuestionnaire.*")
+                                            .Select(
+                                                t =>
+                                                t.GetInterfaces().FirstOrDefault(
+                                                    i =>
+                                                    i.IsGenericType &&
+                                                    i.GetGenericTypeDefinition() == typeof(IDenormalizerStorage<>)) !=
+                                                null).BindAllInterfaces()
+                                            .Configure(binding => binding.InSingletonScope()));
+
+
+            this.Kernel.Bind(scanner => scanner.FromAssembliesMatching("RavenQuestionnaire.*")
+                                            .Select(
+                                                t =>
+                                                t.GetInterfaces().FirstOrDefault(
+                                                    i =>
+                                                    i.IsGenericType &&
+                                                    i.GetGenericTypeDefinition() == typeof(IEventHandler<>)) !=
+                                                null).BindAllInterfaces());
+           
+          /*  this.Kernel.Bind(scanner => scanner.FromAssembliesMatching("RavenQuestionnaire.*")
+                                           .Select(
+                                               t =>
+                                               t.GetInterfaces().FirstOrDefault(
+                                                   i =>
+                                                   i.IsGenericType &&
+                                                   i.GetGenericTypeDefinition() == typeof(IEventHandler<>)) !=
+                                               null).BindAllInterfaces()
+                                           .Configure(binding => binding.InSingletonScope()));*/
   
             this.Kernel.Bind(
                 x =>

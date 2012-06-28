@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
-using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
@@ -18,7 +13,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
         public Guid? Propagationkey { get; private set; }
         public object CompleteAnswer { get; private set; }
         public List<object> CompleteAnswers { get; private set; }
-		public UserLight Executor { get; set; }
+        public UserLight Executor { get; set; }
 
         [JsonConstructor]
         public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionnaireId,Guid questionPublickey,Guid? propagationkey,

@@ -1,10 +1,13 @@
 ﻿#region
 
+using System;
 using System.Linq;
+using Ncqrs.Eventing.Storage;
 using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.ViewSnapshot;
 
 #endregion
 
@@ -12,11 +15,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
 {
     public class CompleteQuestionnaireJsonViewFactory : IViewFactory<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>
     {
-        private readonly IDocumentSession documentSession;
+        private readonly IViewSnapshot store;
 
-        public CompleteQuestionnaireJsonViewFactory(IDocumentSession documentSession)
+        public CompleteQuestionnaireJsonViewFactory(IViewSnapshot store)
         {
-            this.documentSession = documentSession;
+            this.store = store;
         }
 
         #region IViewFactory<CompleteQuestionnaireViewInputModel,CompleteQuestionnaireViewV> Members
@@ -25,7 +28,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         {
             if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
             {
-                var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
+                var doc =
+                    this.store.ReadByGuid<CompleteQuestionnaireDocument>(Guid.Parse(input.CompleteQuestionnaireId));
+                //var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
              //   var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
                 ICompleteGroup group = null;
                 
@@ -45,11 +50,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                 }
                 return new CompleteQuestionnaireJsonView(doc, group);
             }
-            if (!string.IsNullOrEmpty(input.TemplateQuestionanireId))
+          /*  if (!string.IsNullOrEmpty(input.TemplateQuestionanireId))
             {
                 var doc = documentSession.Load<QuestionnaireDocument>(input.TemplateQuestionanireId);
                 return new CompleteQuestionnaireJsonView((CompleteQuestionnaireDocument)doc);
-            }
+            }*/
             return null;
         }
 

@@ -22,13 +22,13 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 
         public int TotalCount { get; private set; }
 
-        public IEnumerable<CQGroupItem> Groups
+        public IList<CQGroupItem> Groups
         {
             get;
             private set;
         }
 
-        public CQGroupedBrowseView(int page, int pageSize, int totalCount, IEnumerable<CQGroupItem> groups)
+        public CQGroupedBrowseView(int page, int pageSize, int totalCount, IList<CQGroupItem> groups)
         {
             this.Page = page;
             this.TotalCount = totalCount;

@@ -37,11 +37,5 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         private Guid? currentGroupPublicKey;
 
         public bool IsReverse { get; private set; }
-        public string TemplateQuestionanireId
-        {
-            get { return _templateQuestionanireId; }
-            set { _templateQuestionanireId = IdUtil.CreateQuestionnaireId(value); }
-        }
-        private string _templateQuestionanireId;
     }
 }

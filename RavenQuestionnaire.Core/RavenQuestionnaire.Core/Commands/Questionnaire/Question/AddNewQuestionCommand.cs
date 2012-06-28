@@ -21,16 +21,21 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public string ValidationExpression { get; private set; }
         public bool Featured { get; private set; }
         public Order AnswerOrder { get; private set; }
+
+        public Guid PublicKey
+        {
+            get;
+            private set;
+        }
+
         public Answer[] Answers { get; set; }
         public UserLight Executor { get; set; }
 
         #endregion
-
-        #region Constructor
-
-        [JsonConstructor]
+        # region Constructor
         public AddNewQuestionCommand(Guid qid, string questionText, string stataExportCaption, QuestionType questionType, string questionnaireId,
-            Guid? groupPublicKey, string conditionExpression, string validationExpression, string instructions, bool featured, Order answerOrder, AnswerView[] answers, UserLight executor)
+            Guid? groupPublicKey, Guid publicKey, string conditionExpression, string validationExpression, string instructions, 
+            bool featured, Order answerOrder, Answer[] answers, UserLight executor)
         {
             this.qid = qid;
             this.QuestionText = questionText;
@@ -39,32 +44,19 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.QuestionType = questionType;
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.GroupPublicKey = groupPublicKey;
-            this.ConditionExpression = conditionExpression;
+            PublicKey = publicKey;
             this.Instructions = instructions;
             this.Answers = new Answer[0];
             this.ValidationExpression = validationExpression;
+            ConditionExpression = conditionExpression;
             this.Featured = featured;
-            if (answers != null)
-                Answers = answers.Select(a => ConvertAnswer(a)).ToArray();
-
+            Answers = answers;
             Executor = executor;
         }
-
         #endregion
 
         #region PrivateMetod
 
-        private static Answer ConvertAnswer(AnswerView a)
-        {
-            var answer =  new Answer();
-            answer.AnswerValue = a.AnswerValue;
-
-            answer.AnswerType = a.AnswerType;
-            answer.AnswerText = a.Title;
-            answer.Mandatory = a.Mandatory;
-            answer.PublicKey = a.PublicKey;
-            return answer;
-        }
 
         #endregion
     }

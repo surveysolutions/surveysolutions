@@ -99,6 +99,12 @@ RavenQuestionnaire.Web/RavenQuestionnaire.Web/App_Data/Tenants/*
 Awesomium/Awesomium.NET Samples.1.1.dotCover
 Awesomium/Awesomium.NET Samples.6.0.ReSharper.user
 
+Externals/Extentions/Ncqrs.Eventing.Sourcing.Snapshotting.DynamicSnapshot.Tests/bin/
+Externals/Extentions/Ncqrs.Messaging.Tests/obj/
+Externals/Extentions/Ncqrs.Messaging/obj/
+Externals/Extentions/Ncqrs.Eventing.Sourcing.Snapshotting.DynamicSnapshot/obj/
+Externals/Extentions/Ncqrs.Eventing.Sourcing.Snapshotting.DynamicSnapshot.Tests/obj/
+
 
 Synchronization/SynchronizationMessages/SynchronizationMessages.csproj.user
 RavenQuestionnaire.Web/Questionnaire.Core.Web.Tests/Questionnaire.Core.Web.Tests.csproj.user
@@ -108,6 +114,11 @@ Awesomium/Windows Forms/CSharp/WinFormsSample/WinFormsSample.csproj.user
 D:\Projects\MIS_Dev\RavenQuestionnaire.Web\Web.CAPI\bin\*
 Awesomium/Windows Forms/CSharp/WinFormsSample/WinFormsSample_TemporaryKey.pfx
 RavenQuestionnaire.Web/Web.CAPI/bin/*
+lib/
+Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB.Tests/obj
+Externals/Framework/src/Ncqrs.Spec/obj/*
+Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB/obj/*
+Externals/Framework/src/Ncqrs/obj/*
 RavenQuestionnaire.Web/Web.CAPI/obj/*
 RavenQuestionnaire.Web/Web.Supervisor/obj/*
 RavenQuestionnaire.Web/Web.Supervisor/bin/*
