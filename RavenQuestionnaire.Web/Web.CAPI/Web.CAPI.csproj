@@ -331,6 +331,7 @@
     <Content Include="Views\Survey\Index.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Synchronizations\ViewTestUploadFile.cshtml" />
+    <Content Include="Views\Survey\_SurveyContent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
