@@ -13,7 +13,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     {
         protected AbstractQuestion()
         {
-            PublicKey = Guid.NewGuid();
+            //PublicKey = Guid.NewGuid();
             Cards = new List<Image>();
             this.Triggers = new List<Guid>();
             this.observers = new List<IObserver<CompositeEventArgs>>();

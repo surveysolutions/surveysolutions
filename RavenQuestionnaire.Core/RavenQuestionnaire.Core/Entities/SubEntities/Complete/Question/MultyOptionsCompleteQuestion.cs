@@ -63,7 +63,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             var answers = this.Find<ICompleteAnswer>(a => a.Selected);
             if (!answers.Any())
                 return string.Empty;
-            else return string.Join(",", answers.Select(a => a.AnswerText));
+            else return string.Join(", ", answers.Select(a => a.AnswerText));
         }
 
         public override object GetAnswerObject()

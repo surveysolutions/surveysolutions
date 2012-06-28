@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using RavenQuestionnaire.Core.AbstractFactories;
+using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Entities.Extensions;
-using RavenQuestionnaire.Core.Entities.Statistics;
+using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.Entities.Subscribers;
-using RavenQuestionnaire.Core.ExpressionExecutors;
-using RavenQuestionnaire.Core.Repositories;
-using RavenQuestionnaire.Core.Utility;
+
 
 namespace RavenQuestionnaire.Core.Services
 {
@@ -95,6 +90,14 @@ namespace RavenQuestionnaire.Core.Services
                                                         propagationKey));
 
            
+        }
+
+        public void AddComments(string id, Guid publicKey, Guid? propagationKey, string comments)
+        {
+            CompleteQuestionnaire entity = _questionRepository.Load(id);
+            ICompleteGroup general = entity.GetInnerDocument();
+            ICompleteQuestion question = FindQuestion(publicKey, propagationKey, general);
+            question.SetComments(comments);
         }
     }
 }
