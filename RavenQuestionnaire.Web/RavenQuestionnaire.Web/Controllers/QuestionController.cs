@@ -172,6 +172,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     if (model.PublicKey == Guid.Empty)
                     {
+                        //Guid.NewGuid();
                         AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.Title,
                                                                                         model.StataExportCaption,
                                                                                         model.QuestionType,
@@ -204,7 +205,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                              e.Message);
                     return PartialView("_Create", model);
                 }
-                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
+                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId, qid=model.PublicKey});
                 //     var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
                 if (model.Parent.HasValue)
                 {
