@@ -235,7 +235,6 @@ namespace RavenQuestionnaire.Web.Controllers
                 throw  new HttpException("404");
 
 
-            SurveyStatus status = GetStatus(id);
             var newQuestionnairePublicKey = Guid.NewGuid();
      /*       var command = new CreateNewCompleteQuestionnaireCommand(id,
                                                                     newQuestionnairePublicKey,
