@@ -27,9 +27,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Guid key = Guid.NewGuid();
             innerDocument.PublicKey = key;
             var entity = new Questionnaire(innerDocument);
-            var question1 = entity.AddQuestion(Guid.NewGuid(), "The First Question", "", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null);
-            var question2 = entity.AddQuestion(Guid.NewGuid(), "The Second Question", "", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null);
-            var question3 = entity.AddQuestion(Guid.NewGuid(), "The Third Question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null);
+            var question1 = entity.AddQuestion(Guid.NewGuid(), "The First Question", "", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
+            var question2 = entity.AddQuestion(Guid.NewGuid(), "The Second Question", "", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
+            var question3 = entity.AddQuestion(Guid.NewGuid(), "The Third Question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
             var conditions = new Dictionary<Guid, string>
                                  {
                                      {question1.PublicKey, ""},
@@ -59,9 +59,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Guid key = Guid.NewGuid();
             innerDocument.PublicKey = key;
             var entity = new Questionnaire(innerDocument);
-            var question1 = entity.AddQuestion(Guid.NewGuid(), "The First Question", "", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null);
-            var question2 = entity.AddQuestion(Guid.NewGuid(), "The Second Question", "", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null);
-            var question3 = entity.AddQuestion(Guid.NewGuid(), "The Third Question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null);
+            var question1 = entity.AddQuestion(Guid.NewGuid(), "The First Question", "", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
+            var question2 = entity.AddQuestion(Guid.NewGuid(), "The Second Question", "", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
+            var question3 = entity.AddQuestion(Guid.NewGuid(), "The Third Question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
 
             var conditions = new Dictionary<Guid, string>
                                  {

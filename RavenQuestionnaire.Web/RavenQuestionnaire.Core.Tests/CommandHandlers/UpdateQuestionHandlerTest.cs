@@ -24,7 +24,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Guid key = Guid.NewGuid();
             innerDocument.PublicKey = key;
             Questionnaire entity = new Questionnaire(innerDocument);
-            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null);
+            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
             FileDocument innerFileDocument = new FileDocument();
             innerFileDocument.Id = "fID";
             File fEntity = new File(innerFileDocument);

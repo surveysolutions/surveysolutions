@@ -180,7 +180,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
                     if (model.PublicKey == Guid.Empty)
                     {
-                        model.PublicKey = Guid.NewGuid();
+                        Guid newItemKey = Guid.NewGuid();
                         AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.PublicKey, model.Title,
                                                                                         model.StataExportCaption,
                                                                                         model.QuestionType,

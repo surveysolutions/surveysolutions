@@ -30,8 +30,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             validator.Setup(x => x.Execute(entity, string.Empty)).Returns(true);
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { Title = "answer", AnswerType = AnswerType.Select } };
-            handler.Handle(new AddNewQuestionCommand(Guid.NewGuid(),"test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId, null, string.Empty, string.Empty,
-                                                        null, Guid.NewGuid(), string.Empty, string.Empty,
+            handler.Handle(new AddNewQuestionCommand(Guid.NewGuid(),"test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId, null, Guid.NewGuid(), string.Empty, string.Empty,
                                                         null, false, Order.AsIs, answers.Select(a => ConvertAnswer(a)).ToArray(), null));
 
             questionnaireRepositoryMock.Verify(x => x.Load(key.ToString()), Times.Once());
