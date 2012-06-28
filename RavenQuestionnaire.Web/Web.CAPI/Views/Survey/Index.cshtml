@@ -74,6 +74,18 @@
                     img.removeAttr(item);
                 });
             });
+            var isfirst = true;
+            var parent = container.parent();
+            container.children().each(function() {
+                if (isfirst) {
+
+                    isfirst = false;
+                    return;
+                }
+                $(this)
+                    .appendTo(parent);
+                $(this).initPage();
+            });
             container.initPage();
            /* var slider = $('#sidebar');
              slider.attr('class', slider.attr('class') + ' ui-page-active');
