@@ -64,8 +64,9 @@ namespace DataEntryClient.CompleteQuestionnaire
                 (client)=>
                     {
                         var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(new EventBrowseInputModel(lastSyncEvent));
-
-                        invoker.ExecuteInSingleScope(new PushEventsCommand(processGuid, events.Items.Select(i => new EventDocument(i.Command, i.PublicKey, clientKey)), null));
+                        var eventList =
+                            events.Items.Select(i => new EventDocument(i.Command, i.PublicKey, clientKey)).ToList();
+                        invoker.ExecuteInSingleScope(new PushEventsCommand(processGuid, eventList, null));
                         foreach (var eventItem in events.Items)
                         {
 
