@@ -82,6 +82,22 @@ namespace RavenQuestionnaire.Core.Domain
             _doc = e.Questionnaire;
         }
 
+        public void SetCommentCommand(Guid questionPublickey, string comments, Guid? propogationPublicKey)
+        {
+            ApplyEvent(new CommentSeted()
+                           {
+                               Comments = comments,
+                               CompleteQuestionnaireId = this._doc.PublicKey,
+                               PropogationPublicKey = propogationPublicKey,
+                               QuestionPublickey = questionPublickey
+                           });
+        }
+        public void OnSetCommentCommand(CommentSeted e)
+        {
+            ICompleteQuestion question = FindQuestion(e.QuestionPublickey, e.PropogationPublicKey, this._doc);
+            question.SetComments(e.Comments);
+            
+        }
 
         public void SetAnswer(Guid questionPublicKey, Guid? propogationPublicKey, object completeAnswer, List<object> completeAnswers)
         {
