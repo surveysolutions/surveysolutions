@@ -121,8 +121,6 @@ namespace Questionnaire.Core.Web.Helpers
                     tagBuilder.AddCssClass(HtmlHelper.ValidationInputCssClassName);
                 }
             }
-
-
             return /*System.Web.HttpUtility.HtmlDecode(*/tagBuilder.ToString(TagRenderMode.SelfClosing)/*)*/;
         }
         #endregion

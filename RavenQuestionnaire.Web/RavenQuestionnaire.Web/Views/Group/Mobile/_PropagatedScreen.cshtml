@@ -1,5 +1,4 @@
 ﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @using RavenQuestionnaire.Core.Views.Question
 @model PropagatedGroupMobileView
@@ -27,6 +26,9 @@
                 @Html.Hidden("PropogationPublicKey", Model.PropogationKey)
                 }
             }
+            <div style="padding-top: 50px;margin:5px;">
+                @Html.Partial("~/Views/Group/Mobile/_CommentsBlock.cshtml", pquestion)
+            </div>
         </li>
     }
 </ul>
