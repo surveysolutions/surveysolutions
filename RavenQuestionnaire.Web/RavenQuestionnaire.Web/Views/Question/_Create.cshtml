@@ -30,7 +30,7 @@
       this.ViewBag.Images = images;
   }
 }
-<h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId })" class="btn">
+<h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId, qid=Model.PublicKey})" class="btn">
     <i class="icon-arrow-left"></i></a>Edit Question</h3>
 @using (Html.BeginForm("Save", "Question"))
 {
@@ -122,7 +122,7 @@
     }
     <div class="form-actions">
         <input type="submit" value="Save" class="btn btn-primary btn-large" />
-        <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId })" class="btn btn-large">
+        <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId, qid = Model.PublicKey })" class="btn btn-large">
             <i class="icon-arrow-left"></i>Back to Questionnaire</a>
     </div>
 }
