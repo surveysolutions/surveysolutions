@@ -82,7 +82,7 @@ namespace RavenQuestionnaire.Web.App_Start
 
             service.RegisterExecutor(typeof(AddPropagatableGroupCommand), new UoWMappedCommandExecutor(mapper));
             service.RegisterExecutor(typeof(DeletePropagatableGroupCommand), new UoWMappedCommandExecutor(mapper));
-            
+            service.RegisterExecutor(typeof(SetCommentCommand), new UoWMappedCommandExecutor(mapper));
 
             return service;
         }

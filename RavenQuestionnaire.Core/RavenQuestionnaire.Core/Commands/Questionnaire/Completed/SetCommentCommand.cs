@@ -15,7 +15,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
     {
         [AggregateRootId]
         public Guid CompleteQuestionnaireId { get; set; }
-        public Guid QuestionPublickey { get; private set; }
+        public Guid QuestionPublickey { get; set; }
         public string Comments { get; set; }
         public Guid? PropogationPublicKey { get; set; }
         public SetCommentCommand(Guid completeQuestionnaireId, CompleteQuestionView question,
