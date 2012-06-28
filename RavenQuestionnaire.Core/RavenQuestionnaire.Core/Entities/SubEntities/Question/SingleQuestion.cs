@@ -14,9 +14,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Question
         {
             this.Children=new List<IComposite>();
         }
-        public SingleQuestion(string text)
+        public SingleQuestion(Guid qid, string text)
             : base(text)
         {
+            this.PublicKey = qid;
             this.Children = new List<IComposite>();
         }
         public override void Add(IComposite c, Guid? parent)

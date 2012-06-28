@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         public void ParseCondition_ConditionWithSilgleParameter_ParameterIsReturned()
         {
             QuestionnaireDocument doc = new QuestionnaireDocument();
-            var question = new SingleQuestion("some");
+            var question = new SingleQuestion(Guid.NewGuid(), "some");
             doc.Children.Add(question);
             QuestionnaireParametersParser executor = new QuestionnaireParametersParser();
             var result = executor.Execute(new Questionnaire(doc), string.Format("[{0}]==1", question.PublicKey));
@@ -37,9 +37,9 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         public void ParseCondition_ConditionWith2Parameter_ParametersareReturned()
         {
             QuestionnaireDocument doc = new QuestionnaireDocument();
-            var question1 = new SingleQuestion("some1");
+            var question1 = new SingleQuestion(Guid.NewGuid(), "some1");
             doc.Children.Add(question1);
-            var question2 = new SingleQuestion("some2");
+            var question2 = new SingleQuestion(Guid.NewGuid(), "some2");
             doc.Children.Add(question2);
             QuestionnaireParametersParser executor = new QuestionnaireParametersParser();
             var result = executor.Execute(new Questionnaire(doc), string.Format("[{0}]==1 and [{1}]>3", question1.PublicKey, question2.PublicKey));

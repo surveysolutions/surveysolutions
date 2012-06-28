@@ -155,6 +155,8 @@ namespace Questionnaire.Core.Web.Helpers
         {
             // get target URL 
             string formAction = UrlHelper.GenerateUrl(null, actionName, controllerName, routeValues ?? new RouteValueDictionary(), ajaxHelper.RouteCollection, ajaxHelper.ViewContext.RequestContext, true /* includeImplicitMvcValues */);
+            if(htmlAttributes==null)
+                htmlAttributes=new Dictionary<string, object>();
             htmlAttributes.Add("data-ajax-url", formAction);
            
             return FormHelper(ajaxHelper, formAction, ajaxOptions, htmlAttributes);
@@ -196,6 +198,7 @@ namespace Questionnaire.Core.Web.Helpers
             builder.MergeAttribute("data-ajax-url", formAction);
             builder.MergeAttribute("method", "post");
 
+          //  builder.MergeAttribute("data-ajax", "true");
             ajaxOptions = GetAjaxOptions(ajaxOptions);
 
             if (ajaxHelper.ViewContext.UnobtrusiveJavaScriptEnabled)

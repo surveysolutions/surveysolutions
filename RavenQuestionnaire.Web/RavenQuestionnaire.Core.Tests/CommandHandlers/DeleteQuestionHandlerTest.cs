@@ -21,7 +21,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             innerDocument.PublicKey = key;
 
             Questionnaire entity = new Questionnaire(innerDocument);
-            var question = new SingleQuestion("question");
+            var question = new SingleQuestion(Guid.NewGuid(),"question");
             innerDocument.Children.Add(question);
             Assert.True(
                 innerDocument.Children.Count == 1);

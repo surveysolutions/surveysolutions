@@ -5,6 +5,7 @@
 @model QuestionView
 @{ var currentRowId = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, Model.PublicKey.ToString()); }
 <div id="@currentRowId" class="display-question">
+<input type="checkbox" id="@Model.PublicKey.ToString()" style="position: absolute; z-index: -999; right: 50px;"/>
     <div class="question-header">
         <h3>@Model.Index) @Html.Raw(Model.Title) @(Model.Featured? " - Featured":"")</h3>
         <div class="btn-group">

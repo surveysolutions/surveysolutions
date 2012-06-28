@@ -29,11 +29,18 @@ namespace SynchronizationMessages.CompleteQuestionnaire
         {
             this.SynchronizationKey = FormatHelper.ReadGuid(stream);
             this.CommandKey = FormatHelper.ReadGuid(stream);
+            try
+            {
+                this.CreationDate = DateTime.Parse(FormatHelper.ReadString(stream));
+            }
+            catch (Exception)
+            {
+            }
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
             var commandString = FormatHelper.ReadString(stream);
             var command = JsonConvert.DeserializeObject<ICommand>(commandString, settings);
-          
+
             this.Command = command;
         }
     }

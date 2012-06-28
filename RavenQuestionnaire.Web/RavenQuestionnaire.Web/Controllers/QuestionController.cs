@@ -180,9 +180,8 @@ namespace RavenQuestionnaire.Web.Controllers
 
                     if (model.PublicKey == Guid.Empty)
                     {
-                        Guid newItemKey = Guid.NewGuid(); 
-
-                        AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.Title,
+                        model.PublicKey = Guid.NewGuid();
+                        AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.PublicKey, model.Title,
                                                                                         model.StataExportCaption,
                                                                                         model.QuestionType,
                                                                                         model.QuestionnaireId,
@@ -253,8 +252,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                              e.Message);
                     return PartialView("_Create", model);
                 }
-
-                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
+                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId, qid=model.PublicKey});
                 
                 //     var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
                 if (model.Parent.HasValue)

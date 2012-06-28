@@ -39,7 +39,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Guid key = Guid.NewGuid();
             innerDocument.PublicKey= key;
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion("question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, 
+            var question = entity.AddQuestion(Guid.NewGuid(),"question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null,null);
                 Order.AsIs, null, null, Guid.NewGuid());
             var questionView = new QuestionView(innerDocument, question);
 

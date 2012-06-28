@@ -16,7 +16,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         AnswerType AnswerType { get; set; }
         string NameCollection { get; set; }
         Image Image { get; set; }
-
     }
 
     public class Answer :IAnswer

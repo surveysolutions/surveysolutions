@@ -109,8 +109,18 @@ Externals/Extentions/Ncqrs.Eventing.Sourcing.Snapshotting.DynamicSnapshot.Tests/
 Synchronization/SynchronizationMessages/SynchronizationMessages.csproj.user
 RavenQuestionnaire.Web/Questionnaire.Core.Web.Tests/Questionnaire.Core.Web.Tests.csproj.user
 ExpressionEvaluator/Evaluant.Calculator/NCalc.csproj.user
+D:\Projects\MIS_Dev\RavenQuestionnaire.Web\Web.CAPI\bin
+Awesomium/Windows Forms/CSharp/WinFormsSample/WinFormsSample.csproj.user
+D:\Projects\MIS_Dev\RavenQuestionnaire.Web\Web.CAPI\bin\*
+Awesomium/Windows Forms/CSharp/WinFormsSample/WinFormsSample_TemporaryKey.pfx
+RavenQuestionnaire.Web/Web.CAPI/bin/*
 lib/
 Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB.Tests/obj
 Externals/Framework/src/Ncqrs.Spec/obj/*
 Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB/obj/*
 Externals/Framework/src/Ncqrs/obj/*
+RavenQuestionnaire.Web/Web.CAPI/obj/*
+RavenQuestionnaire.Web/Web.Supervisor/obj/*
+RavenQuestionnaire.Web/Web.Supervisor/bin/*
+RavenQuestionnaire.Web/Web.CAPI/App_Data/ClientDependency/V-PC-4600494b14abd51c8350a8277a682450-map.xml
+RavenQuestionnaire.Web/Web.CAPI/App_Data/ClientDependency/*

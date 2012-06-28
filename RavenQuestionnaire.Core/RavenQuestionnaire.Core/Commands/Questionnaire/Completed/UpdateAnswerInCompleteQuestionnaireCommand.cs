@@ -14,7 +14,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
         public object CompleteAnswer { get; private set; }
         public List<object> CompleteAnswers { get; private set; }
         public UserLight Executor { get; set; }
-       
+
         [JsonConstructor]
         public UpdateAnswerInCompleteQuestionnaireCommand(string completeQuestionnaireId,Guid questionPublickey,Guid? propagationkey,
                                                  object completeAnswer, List<object> completeAnswers, UserLight executor)

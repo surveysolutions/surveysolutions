@@ -1,0 +1,82 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Views
+@using RavenQuestionnaire.Core.Views.Question
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@model CompleteGroupMobileView
+@foreach (ICompositeView item in Model.Children)
+{
+    if ((item as CompleteQuestionView) != null)
+    {
+        var question = item as CompleteQuestionView;
+    <div class="ui-body ui-body-c">
+        <div class="ui-grid-a question-content">
+            <div class="ui-block-a">
+                @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions))
+                {
+                    //  using (Ajax.BeginFormHtml5("Index", "CompleteQuestionnaireAsync1", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions)){
+                    using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+                    {
+                        Html.RenderPartial("~/Views/Survey/Question/_Question.cshtml", question);
+                    }
+                    using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+                    {
+                    @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+                    @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
+                    }
+                }
+                <p class="question-comment">Comment: comment is here</p>
+            </div>
+            <div class="ui-block-b">
+                @using (Ajax.BeginFormHtml5("SaveComments", "Survey", new { }, ViewBag.AjaxOptions as AjaxOptions, new { }))
+                {
+                    using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+                    {
+                    @Html.IconInputComments("Comments", question.Comments ?? string.Empty, string.Empty, new { draw_key_board = "true" }, new { @class = "comments" }, new { @class = "bold" })
+                    }
+                    using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+                    {
+                    @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+                    @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
+                    }
+                    @Html.Hidden("PublicKey", question.PublicKey)
+                }
+            </div>
+        </div>
+    </div>
+    <div class="ui-body">
+        &nbsp;</div>
+    }
+    else
+    {
+        var @group = item as CompleteGroupMobileView;
+        if (@group.PublicKey != Guid.Empty)
+        {
+            if (@group.Propagated != Propagate.None)
+            {
+    @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", @group)
+            }
+            else
+            {
+    <div class="ui-body ui-body-c">
+        <div class="group-anchor">
+            <a id="screen-ref-@(@group.PublicKey)" class="nav-link" href="#screen-@(@group.PublicKey)" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
+            <script type="text/javascript">
+                $('#screen-ref-@(@group.PublicKey)').click(function () {
+                    $('.scrollHere').removeClass('scrollHere');
+                    $(this).parents('.group-anchor').addClass("scrollHere");
+                });
+            </script>
+            <input type="checkbox" disabled="disabled" style="display: none;" />
+        </div>
+    </div>
+    <div class="ui-body">
+        &nbsp;</div>
+            }
+        }
+        else
+        {
+    @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", @group)
+        }
+    }
+}

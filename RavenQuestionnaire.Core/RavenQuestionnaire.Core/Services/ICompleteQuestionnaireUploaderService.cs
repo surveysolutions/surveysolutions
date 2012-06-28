@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Services
 {
@@ -15,5 +11,6 @@ namespace RavenQuestionnaire.Core.Services
         void DeleteCompleteQuestionnaire(string id);
         void PropagateGroup(string id, Guid publicKey, Guid groupPublicKey);
         void RemovePropagatedGroup(string id, Guid publicKey, Guid propagationKey);
+        void AddComments(string id, Guid publicKey, Guid? propagationKey, string comments);
     }
 }

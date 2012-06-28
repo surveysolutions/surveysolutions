@@ -1,6 +1,13 @@
 ================================================================
 
 To make dump file
+d:\soft\Raven_960\Smuggler\Raven.Smuggler out http://user-pc:8080/  d:\Projects\MIS_Dev\testdata\init.raven.dump
+
+To import from dump file
+d:\soft\Raven_960\Smuggler\Raven.Smuggler in http://user-pc:8080/  d:\Projects\MIS_Dev\testdata\init.raven.dump
+================================================================
+
+To make dump file
 C:\Users\Slava\Desktop\RavenDB-888\Smuggler\Raven.Smuggler out http://localhost:8080/  D:\Projects\MIS_Dev\testdata\init.raven.dump
 
 To import from dump file

@@ -32,6 +32,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PublishDatabases>false</PublishDatabases>
+    <PackageAsSingleFile>false</PackageAsSingleFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -65,11 +67,13 @@
     <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
-    <Reference Include="ClientDependency.Core">
-      <HintPath>..\packages\ClientDependency.1.4.0.0\lib\ClientDependency.Core.dll</HintPath>
+    <Reference Include="ClientDependency.Core, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ClientDependency.1.5.1.0\lib\ClientDependency.Core.dll</HintPath>
     </Reference>
-    <Reference Include="ClientDependency.Core.Mvc">
-      <HintPath>..\packages\ClientDependency-Mvc.1.4.0.0\lib\ClientDependency.Core.Mvc.dll</HintPath>
+    <Reference Include="ClientDependency.Core.Mvc, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ClientDependency-Mvc.1.5.1.0\lib\ClientDependency.Core.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="CsvHelper">
       <HintPath>..\packages\CsvHelper.1.1.0\lib\CsvHelper.dll</HintPath>
@@ -111,6 +115,7 @@
     <Reference Include="MvcPaging, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MvcPaging.1.0.2\lib\net40\MvcPaging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -244,6 +249,7 @@
       <DependentUpon>SpotSyncService.svc</DependentUpon>
     </Compile>
     <Content Include="Content\img\bar-chart.png" />
+    <Content Include="Content\img\bill.jpg" />
     <Content Include="Content\img\lock.png" />
     <Content Include="Content\jquery.mobile.simpledialog.min.css" />
     <Content Include="Content\mobile.css" />
@@ -267,6 +273,8 @@
     <Content Include="Content\themes\jquerymobile\images\1336075488_keyboard.png" />
     <Content Include="Content\themes\jquerymobile\images\1336075535_calculator.png" />
     <Content Include="Content\themes\jquerymobile\images\1336075556_calendar.png" />
+    <Content Include="Content\themes\jquerymobile\images\ajax-loader.gif" />
+    <Content Include="Content\themes\jquerymobile\images\comment.gif" />
     <Content Include="Scripts\Html5\jquery.mobile.simpledialog2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.caret.js" />
@@ -542,7 +550,6 @@
     <Content Include="Scripts\Html5\iscroll-wrapper.js" />
     <Content Include="Scripts\Html5\iscroll.js" />
     <Content Include="Scripts\Html5\jqm-docs.js" />
-    <Content Include="Scripts\Html5\jquery.keyboard.extension-mobile.js" />
     <Content Include="Scripts\Html5\jquery.keyboard.js" />
     <Content Include="Scripts\Html5\jquery.mobile.docs.js" />
     <Content Include="Scripts\Html5\jquery.mobile.js" />
@@ -569,6 +576,7 @@
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\Question_focus.js" />
     <Content Include="Scripts\modal.js" />
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
@@ -588,6 +596,7 @@
     <Content Include="Scripts\Plugins\wijmo\jquery.wijmo-open.1.5.0.css" />
     <Content Include="Scripts\Plugins\wijmo\jquery.wijmo-open.1.5.0.min.js" />
     <Content Include="Scripts\screen\screeniv.js" />
+    <Content Include="Scripts\Scroll_tab.js" />
     <Content Include="Scripts\sorter.js" />
     <Content Include="Scripts\take.js" />
     <Content Include="Views\CompleteQuestionnaire\Index.cshtml" />
@@ -998,7 +1007,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>28185</DevelopmentServerPort>
+          <DevelopmentServerPort>9596</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

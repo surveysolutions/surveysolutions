@@ -163,6 +163,7 @@
     <Compile Include="CommandHandlers\File\DeleteFileCommandHandler.cs" />
     <Compile Include="CommandHandlers\File\UpdateFileMetaCommandHandler.cs" />
     <Compile Include="CommandHandlers\File\UploadFileCommandHandler.cs" />
+    <Compile Include="CommandHandlers\Questionnaire\Completed\UpdateCommentsQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\ValidateGroupCommandHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\MoveQuestionnaireItemHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Question\AddNewQuestionHandler.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="CommandHandlers\Questionnaire\Group\CreateNewGroupHandler.cs" />
     <Compile Include="CommandHandlers\Location\CreateNewLocationHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\CreateNewQuestionnaireHandler.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\UpdateCommentsInCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
     <Compile Include="Denormalizers\IDenormalizerStorage.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />

@@ -28,18 +28,27 @@
     }
     #content
     {
+        bottom: 50px;
         position: absolute;
         top: 0;
-        bottom: 0;
         right: 300px;
         left: 0;
-          background-color: white;
+        background-color: white;
     }
     .scroll-y
     {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
+    /*gluk*/
+    .group-header subnav-fixed
+     {
+         position: fixed;
+         top: 40px;
+         left: 0;
+         right: 0;
+         z-index: 1020;
+     }
 </style>
 <script>
     $('#dialog').dialog({
@@ -75,6 +84,8 @@
         }
     }
 </script>
+<script src="../../Scripts/Scroll_tab.js" type="text/javascript"></script>
+<script src="../../Scripts/Question_focus.js" type="text/javascript"></script>
 <div id="sidebar" class="scroll-y">
     <ul class="nav nav-list">
         @{ var index = 1;}

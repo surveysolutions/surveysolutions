@@ -1,0 +1,164 @@
+﻿@using RavenQuestionnaire.Core.Views.Card
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
+@using RavenQuestionnaire.Core.Views.Question
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@model CompleteQuestionnaireMobileView
+
+<script type="text/javascript">
+
+    jQuery(document).bind("pageshow", function () {
+        var scrollHere = $('.scrollHere').length > 0 ? $('.scrollHere').get(0) : null;
+        if (scrollHere != null) {
+            var element = $(scrollHere).find('select:first');
+            if (element == null) {
+                element = $(scrollHere).find('input:first');
+            }
+            element.focus();
+            $(scrollHere).parents('.ui-body.ui-body-c').effect("highlight", { color: "#5393C5" }, 2000);
+        }
+    });
+
+
+    (function (window, $, PhotoSwipe) {
+        $(document).ready(function () {
+            $('div.gallery-page')
+                .live('pageshow', function (e) {
+                    var currentPage = $(e.target);
+                    var options = {};
+                    var photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+                    if (!(typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null)) {
+                        photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options, currentPage.attr('id'));
+                    }
+                    return true;
+                })
+                .live('pagehide', function (e) {
+                    var currentPage = $(e.target),
+                        photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+
+                    if (typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null) {
+                        PhotoSwipe.detatch(photoSwipeInstance);
+                    }
+
+                    return true;
+                });
+        });
+    } (window, window.jQuery, window.Code.PhotoSwipe));
+    function load(qId, groupId) {
+        $('#sidebar li').removeClass('ui-btn-active');
+         
+        $.ajax({
+            type: "POST",
+            cache: false,
+            data: { id: qId, group: groupId },
+            url: "@Url.Action("_SurveyContent", "Survey")"
+        }).success(function (data) {
+           var container = $('#content_container #ref-' + groupId);
+        container.destroyPage();
+           // var parent = container.parent();
+            container.html(data);
+           
+          /*  container.page();*/
+            $('#content_container #ref-'+groupId).each(function() {
+                 //$(this).find('[data-role="listview"]').listview('refresh');
+               // $(this).trigger('page');
+                $(this).page();
+                //$(this).listview('refresh');
+            });
+            
+             container.find('#ref-' + groupId).each(function() {
+                var attributes = $.map(this.attributes, function(item) {
+                    return item.name;
+                });
+                var img = $(this);
+                $.each(attributes, function(i, item) {
+                    img.removeAttr(item);
+                });
+            });
+            var isfirst = true;
+            var parent = container.parent();
+            container.children().each(function() {
+                if (isfirst) {
+
+                    isfirst = false;
+                    return;
+                }
+                $(this)
+                    .appendTo(parent);
+                $(this).initPage();
+            });
+            container.initPage();
+           /* var slider = $('#sidebar');
+             slider.attr('class', slider.attr('class') + ' ui-page-active');
+            var beforeMenuItem = $('#sidebar a[href="#main"]');
+            var beforeId = $(beforeMenuItem).attr('id').replace('ref-', '');
+            beforeMenuItem.attr('onclick', 'load(' + "1" + ', ' + beforeId + ')');
+            */
+            /*var menuItem = $('a#ref-' + groupId);
+            menuItem.attr('href', '#main');
+            menuItem.attr('onclick', '');
+           // menuItem.click();
+            
+            $.mobile.changePage( $('#main'), { transition: "slideup"} );*/
+        });
+        return false;
+    }
+</script>
+<div data-role="panel" data-id="menu">
+    <!-- Start of first page -->
+    <div data-role="page" id="sidebar">
+        <div data-role="header" data-theme="c">
+            <a class="nav-link" data-corners="false"  data-icon="arrow-l" href="@Url.Action("Dashboard", "Survey")" rel = "external">
+                Dashboard</a>
+            <h3></h3>
+        </div>
+        <!-- /header -->
+        <div data-role="content" class="with-footer dummy-scroll">
+            <ul data-role="listview" data-theme="c" data-dividertheme="d" data-counttheme="e">
+                @foreach (CompleteGroupHeaders gh in Model.Groups)
+                {
+                    if (!gh.IsCurrent)
+                    {
+                    <li data-icon="false"><a data-panel="main" onclick="load('@Model.Id', '@gh.PublicKey')" href="#ref-@(gh.PublicKey)">@gh.GroupText
+                        <span  id="counter-@(gh.PublicKey)" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
+                    }
+                    else
+                    {
+                    <li><a  data-panel="main" href="#ref-@(gh.PublicKey)">@gh.GroupText <span id="counter-@(gh.PublicKey)" data-theme="a" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
+                    }
+                }
+            </ul>
+        </div>
+        <!-- /content -->
+        <div data-role="footer" data-position="fixed" data-id="ew-footer">
+            <div data-role="navbar">
+                <ul>
+                    <li><a data-role="button" data-corners="false" href="@Url.Action("Statistic", "Survey", new { id = Model.Id })" 
+                           rel="external" data-ajax="false">Statistic</a></li>
+                    <li>
+                        @if (Model.Status.Name == "Completed")
+                        {
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("ReInit", "Survey", new { id = Model.Id })">
+                                ReInit</a>
+                        }
+                        else
+                        {
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("Complete", "Survey", new { id = Model.Id })">
+                                Complete</a>
+                        }</li>
+                </ul>
+            </div>
+            <!-- /navbar -->
+        </div>
+        <!-- /footer -->
+    </div>
+    <!-- /page -->
+    <!-- other side panel pages here -->
+</div>
+<div data-role="panel" data-id="main" id="content_container">
+   @Html.Partial("_SurveyContent", Model)
+   
+   @for(int i=1;i<Model.Groups.Count();i++)
+   {
+   <div data-role="page" id="ref-@(Model.Groups[i].PublicKey)" class="page"></div>
+   }
+</div>
