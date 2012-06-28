@@ -399,41 +399,48 @@ function updateCounter() {
             keyboard.$preview.caretToEnd();
         });
     };
+    $.fn.initPage = function() {
+         
+    this.createKeyBoard();
+    this.numericSubmit();
+    this.hideInputsWithVirtualKeyboard();
+    this.disableAfterSubmit();
 
-})(jQuery);
-var scrolls = new Array();
-$(document).ready(function () {
-
-    var doc = $(document);
-    doc.createKeyBoard();
-    doc.numericSubmit();
-    doc.hideInputsWithVirtualKeyboard();
-    doc.disableAfterSubmit();
-
-    $('[data-role=page]').live('pageshow', function (event) {
+    this.find('[data-role=page]').live('pageshow', function (event) {
         //data-type="horizontal"
         $("input[type='checkbox'][checked]").checkboxradio("refresh");
-
-
     });
    
-    $('.propagated-list-item').each(function () {
+    this.find('.propagated-list-item').each(function () {
         var index = $(this).find('h3 span').html();
         var screenId = $(this).attr('id').replace("propagatedGroup", "#screen-");
         $(screenId + ' .ui-footer h1 span').html(index);
     });
 
-    $('.splited-button.ui-li-link-alt').each(function () {
+    this.find('.splited-button.ui-li-link-alt').each(function () {
         var text = $(this).attr('title');
         $(this).find('.ui-btn-text').html(text);
     });
 
-    var i = 0;
-    $('.dummy-scroll').each(function () {
-        scrolls[i] = new iScroll(this);
-        i++;
+    this.find('.dummy-scroll').each(function () {
+        scrolls.push( new iScroll(this));
     });
-    $(document).ajaxComplete(function () {
+    };
+    $.fn.destroyPage = function() {
+        this.find('.dummy-scroll #scroller').each(function() {
+              for (var j = 0; j < scrolls.length; j++) {
+                  if(scrolls[j].scroller==this)
+                  scrolls.splice(j, 1);
+              }
+        });
+    };
+})(jQuery);
+var scrolls = new Array();
+$(document).ready(function () {
+
+    var doc = $(document);
+    doc.initPage();
+    doc.ajaxComplete(function () {
         for (var j = 0; j < scrolls.length; j++) {
             scrolls[j].refresh();
         }

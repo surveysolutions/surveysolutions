@@ -45,14 +45,15 @@
     } (window, window.jQuery, window.Code.PhotoSwipe));
     function load(qId, groupId) {
         $('#sidebar li').removeClass('ui-btn-active');
-        
+         
         $.ajax({
             type: "POST",
             cache: false,
             data: { id: qId, group: groupId },
             url: "@Url.Action("_SurveyContent", "Survey")"
         }).success(function (data) {
-            var container = $('#content_container #ref-' + groupId);
+           var container = $('#content_container #ref-' + groupId);
+        container.destroyPage();
            // var parent = container.parent();
             container.html(data);
            
@@ -73,6 +74,7 @@
                     img.removeAttr(item);
                 });
             });
+            container.initPage();
            /* var slider = $('#sidebar');
              slider.attr('class', slider.attr('class') + ' ui-page-active');
             var beforeMenuItem = $('#sidebar a[href="#main"]');
@@ -145,6 +147,6 @@
    
    @for(int i=1;i<Model.Groups.Count();i++)
    {
-   <div data-role="page" id="ref-@(Model.Groups[i].PublicKey)" class="page">hello @i</div>
+   <div data-role="page" id="ref-@(Model.Groups[i].PublicKey)" class="page"></div>
    }
 </div>
