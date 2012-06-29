@@ -446,6 +446,14 @@ $(document).ready(function () {
         }
     });
 });
+$(document).bind('pageshow', function () {
+    var doc = $('#content_container');
+    doc.initPage();
+});
+$(document).bind('pagehide', function () {
+    var doc = $('#content_container');
+    doc.destroyPage();
+});
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }

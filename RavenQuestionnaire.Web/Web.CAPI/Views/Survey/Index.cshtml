@@ -5,28 +5,7 @@
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteQuestionnaireMobileView
 <script type="text/javascript">
-    var loaded = false;
     $(document).ready(function () {
-        if(loaded)
-            return;
-        var parent = $('#content_container');
-     //   parent.parent().addClass('ui-disabled');
-        @{
-            StringBuilder sb = new StringBuilder();
-            StringBuilder endSb = new StringBuilder();
-            foreach (var group in Model.Groups)
-            {
-                sb.AppendFormat("setTimeout(function(){{loadGroup(parent,'{0}','{1}');", Model.Id, group.PublicKey);
-                endSb.Append("},500);");
-            }
-        }
-        
-         
-      //  $.mobile.showPageLoadingMsg();
-        @Html.Raw(sb.ToString()+endSb.ToString())
-     //   parent.parent().removeClass('ui-disabled');
-     //   $.mobile.hidePageLoadingMsg();
-        loaded = true;
         highlight();
     });
     function highlight() {
@@ -133,7 +112,7 @@
                 {
                     if (!gh.IsCurrent)
                     {
-                    <li data-icon="false"><a id="ref-link-@(gh.PublicKey)" data-panel="main" onclick="ClearItems()"  href="#ref-@(gh.PublicKey)">@gh.GroupText
+                    <li data-icon="false"><a id="ref-link-@(gh.PublicKey)" data-panel="main" onclick="ClearItems()"  href='@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })'>@gh.GroupText
                         <span  id="counter-@(gh.PublicKey)" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                     else

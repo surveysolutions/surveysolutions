@@ -54,7 +54,16 @@ namespace Web.CAPI.Controllers
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             return View(model);
         }
-
+        public PartialViewResult Screen(string id, Guid? group)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+            var model =
+                viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+                    new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
+            ViewBag.CurrentQuestion =  new Guid();
+            return PartialView("_SurveyContent",model);
+        }
         [HttpPost]
         public PartialViewResult _SurveyContent(string id, Guid? group, Guid? question)
         {
