@@ -9,6 +9,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 {
     public class RavenDBEventStore : IEventStore
     {
+        private bool useAsyncSave = true;//research
+
         private readonly IDocumentStore _documentStore;
 
         public RavenDBEventStore(string ravenUrl)
@@ -69,14 +71,29 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         {
             try
             {
-                using (var session = _documentStore.OpenSession())
+                if (useAsyncSave)
                 {
-                    session.Advanced.UseOptimisticConcurrency = true;
-                    foreach (var uncommittedEvent in eventStream)
+                    using (var session = _documentStore.OpenAsyncSession())
                     {
-                        session.Store(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
+                        session.Advanced.UseOptimisticConcurrency = true;
+                        foreach (var uncommittedEvent in eventStream)
+                        {
+                            session.Store(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
+                        }
+                        session.SaveChangesAsync();
                     }
-                    session.SaveChanges();
+                }
+                else
+                {
+                    using (var session = _documentStore.OpenSession())
+                    {
+                        session.Advanced.UseOptimisticConcurrency = true;
+                        foreach (var uncommittedEvent in eventStream)
+                        {
+                            session.Store(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
+                        }
+                        session.SaveChanges();
+                    }
                 }
             }
             catch (Raven.Abstractions.Exceptions.ConcurrencyException)

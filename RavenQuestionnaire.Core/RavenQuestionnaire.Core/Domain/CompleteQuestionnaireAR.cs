@@ -212,5 +212,20 @@ namespace RavenQuestionnaire.Core.Domain
         }
 
         #endregion
+
+
+        public void PreLoad()
+        {
+            ApplyEvent(new CompletedQuestionnaireLoaded());
+        }
+
+
+        // Event handler for the PropagatableGroupAdded event. This method
+        // is automaticly wired as event handler based on convension.
+        protected void OnApplyEvent(CompletedQuestionnaireLoaded e)
+        {
+            //loads into the cache
+            //no logic
+        }
     }
 }

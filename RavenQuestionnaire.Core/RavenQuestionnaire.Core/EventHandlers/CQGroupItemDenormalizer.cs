@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using RavenQuestionnaire.Core.Commands.Questionnaire;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Documents.Statistics;
 using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Core.Events.Questionnaire;
-using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
-using RavenQuestionnaire.Core.Views.Statistics;
 
 namespace RavenQuestionnaire.Core.EventHandlers
 {
@@ -38,7 +28,6 @@ namespace RavenQuestionnaire.Core.EventHandlers
             {
                 cqGroupItem.TotalCount++;
             }
-            //  this.storage.Commit();
         }
 
         #endregion
@@ -48,14 +37,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
-           /* var questionnaire = this.storage.GetByGuid<CQGroupItem>(evnt.Payload.PublicKey);
-            if (questionnaire == null)
-            {*/
-                var questionnaire = new CQGroupItem(0, 100, 0, evnt.Payload.Title, evnt.Payload.PublicKey.ToString());
-                this.documentGroupSession.Store(questionnaire, evnt.Payload.PublicKey);
-           /* }
-            grid.Groups.Add(new CQGroupItem(0, 100, 100, evnt.Payload.Title, evnt.Payload.PublicKey.ToString()));*/
-        //    this.storage.Commit();
+            var questionnaire = new CQGroupItem(0, 100, 0, evnt.Payload.Title, evnt.Payload.PublicKey.ToString());
+            this.documentGroupSession.Store(questionnaire, evnt.Payload.PublicKey);
         }
 
         #endregion
@@ -64,14 +47,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireTemplateLocaded> evnt)
         {
-            /* var questionnaire = this.storage.GetByGuid<CQGroupItem>(evnt.Payload.PublicKey);
-             if (questionnaire == null)
-             {*/
             var questionnaire = new CQGroupItem(0, 100, 0, evnt.Payload.Template.Title, evnt.Payload.Template.PublicKey.ToString());
             this.documentGroupSession.Store(questionnaire, evnt.Payload.Template.PublicKey);
-            /* }
-             grid.Groups.Add(new CQGroupItem(0, 100, 100, evnt.Payload.Title, evnt.Payload.PublicKey.ToString()));*/
-            //    this.storage.Commit();
         }
 
         #endregion
