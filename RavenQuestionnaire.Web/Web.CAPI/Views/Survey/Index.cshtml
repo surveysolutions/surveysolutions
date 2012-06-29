@@ -5,7 +5,10 @@
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteQuestionnaireMobileView
 <script type="text/javascript">
-    $(document).ready(function() {
+    var loaded = false;
+    $(document).ready(function () {
+        if(loaded)
+            return;
         var parent = $('#content_container');
         parent.parent().addClass('ui-disabled');
         @{
@@ -19,8 +22,10 @@
         @Html.Raw(sb.ToString())
         parent.parent().removeClass('ui-disabled');
         $.mobile.hidePageLoadingMsg();
+        loaded = true;
+        highlight();
     });
-    jQuery(document).bind("pageshow", function () {
+    function highlight() {
        
         var scrollHere = $('.scrollHere').length > 0 ? $('.scrollHere').get(0) : null;
         if (scrollHere != null) {
@@ -30,10 +35,10 @@
             }
             element.focus();
             var parents = $(scrollHere).parents('.ui-body.ui-body-c');
-            if (parent != null && parent.length>0)
+            if (parents != null && parents.length>0)
                 parents.effect("highlight", { color: "#5393C5" }, 2000);
         }
-    });
+    };
 
 
     (function (window, $, PhotoSwipe) {
@@ -72,7 +77,7 @@
         });
         
         existingGroup.attr('class', existingGroup.attr('class') + ' ui-page-active');
-     //   $.mobile.hidePageLoadingMsg();     
+        //   $.mobile.hidePageLoadingMsg();     
         document.location.hash = '#ref-' + groupId;
     }
 
