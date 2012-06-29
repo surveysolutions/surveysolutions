@@ -10,18 +10,22 @@
         if(loaded)
             return;
         var parent = $('#content_container');
-        parent.parent().addClass('ui-disabled');
+     //   parent.parent().addClass('ui-disabled');
         @{
             StringBuilder sb = new StringBuilder();
+            StringBuilder endSb = new StringBuilder();
             foreach (var group in Model.Groups)
             {
-                sb.AppendFormat("loadGroup(parent,'{0}','{1}');", Model.Id, group.PublicKey);
+                sb.AppendFormat("setTimeout(function(){{loadGroup(parent,'{0}','{1}');", Model.Id, group.PublicKey);
+                endSb.Append("},500);");
             }
         }
-        $.mobile.showPageLoadingMsg();
-        @Html.Raw(sb.ToString())
-        parent.parent().removeClass('ui-disabled');
-        $.mobile.hidePageLoadingMsg();
+        
+         
+      //  $.mobile.showPageLoadingMsg();
+        @Html.Raw(sb.ToString()+endSb.ToString())
+     //   parent.parent().removeClass('ui-disabled');
+     //   $.mobile.hidePageLoadingMsg();
         loaded = true;
         highlight();
     });
@@ -98,7 +102,9 @@
                 container.initPage();
 
             });
+            
         });
+       
     }
     function load(qId, groupId) {
         ClearItems();
