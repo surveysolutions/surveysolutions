@@ -63,18 +63,23 @@
 {
     <div data-role="page" id="screen-@(screen.PublicKey)"  class="page">
         @RenderNavigation(screen.Navigation)
-        <div data-role="content">
-            @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", screen)
+        <div data-role="content" class="dummy-scroll">
+            <div id="scroller">
+                @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", screen)
+            </div>
         </div>
         @RenderFooter(screen.Navigation)
     </div>
 }
+
 @foreach (PropagatedGroupMobileView screen in Model.PropagatedScreens)
 {
-    <div data-role="page" id="screen-@(screen.PropogationKey)" data-refresh="true"  class="page">
+    <div data-role="page" id="screen-@(screen.PropogationKey)"  class="page">
         @RenderNavigation(screen.Navigation)
-        <div data-role="content">
+        <div data-role="content"class="dummy-scroll">
+            <div id="scroller">
             @Html.Partial("~/Views/Survey/Group/_PropagatedScreen.cshtml", screen)
+            </div>
         </div>
         @RenderFooter(screen.Navigation)
     </div>

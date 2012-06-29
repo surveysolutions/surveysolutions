@@ -14,7 +14,9 @@
                 element = $(scrollHere).find('input:first');
             }
             element.focus();
-            $(scrollHere).parents('.ui-body.ui-body-c').effect("highlight", { color: "#5393C5" }, 2000);
+            var parents = $(scrollHere).parents('.ui-body.ui-body-c');
+            if (parent != null && parent.length>0)
+                parents.effect("highlight", { color: "#5393C5" }, 2000);
         }
     });
 
@@ -45,61 +47,40 @@
     } (window, window.jQuery, window.Code.PhotoSwipe));
     function load(qId, groupId) {
         $('#sidebar li').removeClass('ui-btn-active');
-         
-        $.ajax({
-            type: "POST",
-            cache: false,
-            data: { id: qId, group: groupId },
-            url: "@Url.Action("_SurveyContent", "Survey")"
-        }).success(function (data) {
-           var container = $('#content_container #ref-' + groupId);
-        container.destroyPage();
-           // var parent = container.parent();
-            container.html(data);
-           
-          /*  container.page();*/
-            $('#content_container #ref-'+groupId).each(function() {
-                 //$(this).find('[data-role="listview"]').listview('refresh');
-               // $(this).trigger('page');
-                $(this).page();
-                //$(this).listview('refresh');
-            });
-            
-             container.find('#ref-' + groupId).each(function() {
-                var attributes = $.map(this.attributes, function(item) {
-                    return item.name;
-                });
-                var img = $(this);
-                $.each(attributes, function(i, item) {
-                    img.removeAttr(item);
-                });
-            });
-            var isfirst = true;
-            var parent = container.parent();
-            container.children().each(function() {
-                if (isfirst) {
+        var parent = $('#content_container');
+        //  var container;
+        var existingGroup = $('#content_container #ref-' + groupId);
+        
+        if (existingGroup.length == 0) {
 
-                    isfirst = false;
-                    return;
-                }
-                $(this)
-                    .appendTo(parent);
-                $(this).initPage();
+            $.ajax({
+                type: "POST",
+                cache: false,
+                async:   false,
+                data: { id: qId, group: groupId },
+                url: "@Url.Action("_SurveyContent", "Survey")"
+            }).success(function(data) {
+                // parent.append(data);
+                var newPages = $(data);
+                newPages.appendTo(parent);
+                newPages.each(function() {
+                    var container = $(this);
+                    container.page();
+                    container.trigger('pagecreate');
+                    container.initPage();
+                    container.attr('proceed', '1');
+                });
+                existingGroup = $('#content_container #ref-' + groupId);
             });
-            container.initPage();
-           /* var slider = $('#sidebar');
-             slider.attr('class', slider.attr('class') + ' ui-page-active');
-            var beforeMenuItem = $('#sidebar a[href="#main"]');
-            var beforeId = $(beforeMenuItem).attr('id').replace('ref-', '');
-            beforeMenuItem.attr('onclick', 'load(' + "1" + ', ' + beforeId + ')');
-            */
-            /*var menuItem = $('a#ref-' + groupId);
-            menuItem.attr('href', '#main');
-            menuItem.attr('onclick', '');
-           // menuItem.click();
-            
-            $.mobile.changePage( $('#main'), { transition: "slideup"} );*/
+
+
+        }
+        parent.find('[data-role="page"]').each(function() {
+            $(this).removeClass('ui-page-active');
         });
+        $.mobile.activePage = existingGroup;
+        existingGroup.attr('class', existingGroup.attr('class') + ' ui-page-active');
+        document.location.hash = '#ref-' + groupId;
         return false;
     }
 </script>
@@ -118,7 +99,7 @@
                 {
                     if (!gh.IsCurrent)
                     {
-                    <li data-icon="false"><a data-panel="main" onclick="load('@Model.Id', '@gh.PublicKey')" href="#ref-@(gh.PublicKey)">@gh.GroupText
+                    <li data-icon="false"><a data-panel="main" onclick="load('@Model.Id', '@gh.PublicKey')" href="javascript:void(0)">@gh.GroupText
                         <span  id="counter-@(gh.PublicKey)" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                     else
@@ -156,9 +137,4 @@
 </div>
 <div data-role="panel" data-id="main" id="content_container">
    @Html.Partial("_SurveyContent", Model)
-   
-   @for(int i=1;i<Model.Groups.Count();i++)
-   {
-   <div data-role="page" id="ref-@(Model.Groups[i].PublicKey)" class="page"></div>
-   }
 </div>
