@@ -82,6 +82,11 @@ namespace RavenQuestionnaire.Web.App_Start
 
             service.RegisterExecutor(typeof(AddPropagatableGroupCommand), new UoWMappedCommandExecutor(mapper));
             service.RegisterExecutor(typeof(DeletePropagatableGroupCommand), new UoWMappedCommandExecutor(mapper));
+
+
+
+            //does it need UoW?
+            service.RegisterExecutor(typeof(PreLoadCompleteQuestionnaireCommand), new UoWMappedCommandExecutor(mapper));
             
 
             return service;

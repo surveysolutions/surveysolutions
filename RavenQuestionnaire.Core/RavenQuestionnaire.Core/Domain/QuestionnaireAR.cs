@@ -92,6 +92,13 @@ namespace RavenQuestionnaire.Core.Domain
             });
         }
 
+        public void PreLoad()
+        {
+            //loads into the cache
+            //no logic
+        }
+
+
         // Event handler for the NewGroupAdded event. This method
         // is automaticly wired as event handler based on convension.
         protected void OnNewGroupAdded(NewGroupAdded e)
