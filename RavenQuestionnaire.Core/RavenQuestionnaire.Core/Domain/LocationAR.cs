@@ -38,5 +38,11 @@ namespace RavenQuestionnaire.Core.Domain
             _title = e.Title;
             _creationDate = e.CreationDate;
         }
+
+        public void PreLoad()
+        {
+            //loads into the cache
+            //no logic
+        }
     }
 }

@@ -16,5 +16,11 @@ namespace RavenQuestionnaire.Core.Domain
         }
 
 
+        public void PreLoad()
+        {
+            //loads into the cache
+            //no logic
+        }
+
     }
 }
