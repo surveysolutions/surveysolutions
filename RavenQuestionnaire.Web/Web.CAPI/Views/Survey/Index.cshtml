@@ -5,8 +5,9 @@
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteQuestionnaireMobileView
 <script type="text/javascript">
-     $(document).ready(function () {
-         var parent = $('#content_container');
+    $(document).ready(function() {
+        var parent = $('#content_container');
+        parent.parent().addClass('ui-disabled');
         @{
             StringBuilder sb = new StringBuilder();
             foreach (var group in Model.Groups)
@@ -14,7 +15,10 @@
                 sb.AppendFormat("loadGroup(parent,'{0}','{1}');", Model.Id, group.PublicKey);
             }
         }
+        $.mobile.showPageLoadingMsg();
         @Html.Raw(sb.ToString())
+        parent.parent().removeClass('ui-disabled');
+        $.mobile.hidePageLoadingMsg();
     });
     jQuery(document).bind("pageshow", function () {
        
