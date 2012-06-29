@@ -20,6 +20,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             Screens = new List<CompleteGroupMobileView>();
             PropagatedScreens = new List<PropagatedGroupMobileView>();
             Templates = new List<PropagatedGroupMobileView>();
+            this.OtherScreens=new List<CompleteGroupMobileView>();
         }
         public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc, ICompleteGroup currentGroup)
             : this()
@@ -117,6 +118,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         public List<CompleteQuestionView> QuestionsWithInstructions { get; set; }
 
         public CompleteGroupMobileView CurrentScreen { get; set; }
+        public List<CompleteGroupMobileView> OtherScreens { get; set; }
         public List<CompleteGroupMobileView> Screens { get; set; }
         public List<PropagatedGroupMobileView> Templates { get; set; }
         public List<PropagatedGroupMobileView> PropagatedScreens { get; set; }

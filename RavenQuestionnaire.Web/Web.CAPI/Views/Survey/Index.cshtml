@@ -1,12 +1,32 @@
-﻿@using RavenQuestionnaire.Core.Views.Card
+﻿@using System.Text
+@using RavenQuestionnaire.Core.Views.Card
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 @using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteQuestionnaireMobileView
-
 <script type="text/javascript">
-
-    jQuery(document).bind("pageshow", function () {
+    var loaded = false;
+    $(document).ready(function () {
+        if(loaded)
+            return;
+        var parent = $('#content_container');
+        parent.parent().addClass('ui-disabled');
+        @{
+            StringBuilder sb = new StringBuilder();
+            foreach (var group in Model.Groups)
+            {
+                sb.AppendFormat("loadGroup(parent,'{0}','{1}');", Model.Id, group.PublicKey);
+            }
+        }
+        $.mobile.showPageLoadingMsg();
+        @Html.Raw(sb.ToString())
+        parent.parent().removeClass('ui-disabled');
+        $.mobile.hidePageLoadingMsg();
+        loaded = true;
+        highlight();
+    });
+    function highlight() {
+       
         var scrollHere = $('.scrollHere').length > 0 ? $('.scrollHere').get(0) : null;
         if (scrollHere != null) {
             var element = $(scrollHere).find('select:first');
@@ -15,10 +35,10 @@
             }
             element.focus();
             var parents = $(scrollHere).parents('.ui-body.ui-body-c');
-            if (parent != null && parent.length>0)
+            if (parents != null && parents.length>0)
                 parents.effect("highlight", { color: "#5393C5" }, 2000);
         }
-    });
+    };
 
 
     (function (window, $, PhotoSwipe) {
@@ -45,43 +65,50 @@
                 });
         });
     } (window, window.jQuery, window.Code.PhotoSwipe));
-    function load(qId, groupId) {
+
+    function ClearItems() {
         $('#sidebar li').removeClass('ui-btn-active');
-        var parent = $('#content_container');
-        //  var container;
-        var existingGroup = $('#content_container #ref-' + groupId);
+    }
+
+    function ChangeScreen(groupId, existingGroup,parent) {
         
-        if (existingGroup.length == 0) {
-
-            $.ajax({
-                type: "POST",
-                cache: false,
-                async:   false,
-                data: { id: qId, group: groupId },
-                url: "@Url.Action("_SurveyContent", "Survey")"
-            }).success(function(data) {
-                // parent.append(data);
-                var newPages = $(data);
-                newPages.appendTo(parent);
-                newPages.each(function() {
-                    var container = $(this);
-                    container.page();
-                    container.trigger('pagecreate');
-                    container.initPage();
-                    container.attr('proceed', '1');
-                });
-                existingGroup = $('#content_container #ref-' + groupId);
-            });
-
-
-        }
         parent.find('[data-role="page"]').each(function() {
             $(this).removeClass('ui-page-active');
         });
-        $.mobile.activePage = existingGroup;
+        
         existingGroup.attr('class', existingGroup.attr('class') + ' ui-page-active');
+        //   $.mobile.hidePageLoadingMsg();     
         document.location.hash = '#ref-' + groupId;
-        return false;
+    }
+
+    function loadGroup(parent,qId, groupId) {
+        
+        $.ajax({
+            type: "POST",
+            cache: false,
+            async: false,
+            data: { id: qId, group: groupId },
+            url: "@Url.Action("_SurveyContent", "Survey")"
+        }).success(function(data) {
+            // parent.append(data);
+            var newPages = $(data);
+            newPages.appendTo(parent);
+            newPages.each(function() {
+                var container = $(this);
+                container.initPage();
+
+            });
+        });
+    }
+    function load(qId, groupId) {
+        ClearItems();
+        //  $.mobile.showPageLoadingMsg();     
+        // $('#ref-link-' + groupId).addClass('ui-btn-active');
+        var parent = $('#content_container');
+        //  var container;
+        var existingGroup = $('#content_container #ref-' + groupId);
+
+        ChangeScreen(groupId, existingGroup, parent);
     }
 </script>
 <div data-role="panel" data-id="menu">
@@ -90,7 +117,8 @@
         <div data-role="header" data-theme="c">
             <a class="nav-link" data-corners="false"  data-icon="arrow-l" href="@Url.Action("Dashboard", "Survey")" rel = "external">
                 Dashboard</a>
-            <h3></h3>
+            <h3>
+            </h3>
         </div>
         <!-- /header -->
         <div data-role="content" class="with-footer dummy-scroll">
@@ -99,12 +127,13 @@
                 {
                     if (!gh.IsCurrent)
                     {
-                    <li data-icon="false"><a data-panel="main" onclick="load('@Model.Id', '@gh.PublicKey')" href="javascript:void(0)">@gh.GroupText
+                    <li data-icon="false"><a id="ref-link-@(gh.PublicKey)" data-panel="main" onclick="ClearItems()"  href="#ref-@(gh.PublicKey)">@gh.GroupText
                         <span  id="counter-@(gh.PublicKey)" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                     else
                     {
-                    <li><a  data-panel="main" href="#ref-@(gh.PublicKey)">@gh.GroupText <span id="counter-@(gh.PublicKey)" data-theme="a" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
+                    <li><a  data-panel="main" href="#ref-@(gh.PublicKey)" onclick="ClearItems()">@gh.GroupText
+                        <span id="counter-@(gh.PublicKey)" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                 }
             </ul>
@@ -136,5 +165,5 @@
     <!-- other side panel pages here -->
 </div>
 <div data-role="panel" data-id="main" id="content_container">
-   @Html.Partial("_SurveyContent", Model)
+    @Html.Partial("_SurveyContent", Model)
 </div>
