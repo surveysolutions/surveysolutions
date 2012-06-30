@@ -127,17 +127,11 @@ foreach (CompleteGroupMobileView screen in Model.Screens)
     <div data-role="footer" data-theme="b">
         @if (screen.PrevScreen != null)
         {
-            if (!screen.PrevScreen.IsExternal)
-            {
-            <a class="previous-screen nav-link" href="#screen-@(screen.PrevScreen.PublicKey)" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >
-                Prev Group</a>
-            }
-            else
-            {
+           
             
-            <a class="nav-link" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.PrevScreen.PublicKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext">
-                Next Group</a>
-            }
+            <a class="nav-link" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.PrevScreen.PublicKey, propagationKey = screen.PrevScreen.PropagationKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext">
+                Prev Group</a>
+            
         }
         else
         {
@@ -147,16 +141,10 @@ foreach (CompleteGroupMobileView screen in Model.Screens)
         <h1><span></span>@screen.CurrentScreenTitle</h1>
         @if (screen.NextScreen != null)
         {
-            if (!screen.NextScreen.IsExternal)
-            {
-            <a class="next-screen nav-link" href="#screen-@screen.NextScreen.PublicKey" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">
+           
+            <a class="nav-link" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.NextScreen.PublicKey, propagationKey=screen.NextScreen.PropagationKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false" >
                 Next Group</a>
-            }
-            else
-            {
-            <a class="nav-link" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.NextScreen.PublicKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false" >
-                Next Group</a>
-            }
+            
         }
         else
         {

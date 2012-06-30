@@ -10,6 +10,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
             PublicKey = group.PublicKey;
             GroupText = group.Title;
+            PropagationKey = group.PropogationPublicKey;
         }
 
         public CompleteGroupHeaders()
@@ -22,7 +23,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
         public bool IsCurrent { get; set; }
 
-        public bool IsExternal { get; set; }
+        public Guid? PropagationKey { get; set; }
 
         public Counter Totals { get; set; }
 

@@ -99,8 +99,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                 Menu[i] = new CompleteGroupHeaders
                                 {
                                     PublicKey = groups[i].PublicKey,
-                                    GroupText = groups[i].Title,
-                                    IsExternal = true
+                                    GroupText = groups[i].Title
                                 };
                 Menu[i].Totals = CalcProgress(groups[i]);
             }

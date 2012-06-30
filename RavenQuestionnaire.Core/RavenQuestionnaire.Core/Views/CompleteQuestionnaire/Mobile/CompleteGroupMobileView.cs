@@ -54,8 +54,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         {
             this.QuestionnairePublicKey = doc.PublicKey;
             this.Navigation = navigation;
-            navigation.PublicKey = currentGroup.PublicKey;
-            navigation.CurrentScreenTitle = currentGroup.Title;
+           
 //            List<ICompleteGroup> groups = currentGroup.Children.OfType<ICompleteGroup>().ToList();
 
             PublicKey = currentGroup.PublicKey;
