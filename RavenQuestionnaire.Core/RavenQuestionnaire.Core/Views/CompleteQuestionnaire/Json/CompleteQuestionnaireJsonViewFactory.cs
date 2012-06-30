@@ -111,11 +111,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                     return new PropagatedGroupMobileView(doc, group, CompileNavigation(rout,group));
                 return new CompleteGroupMobileView(doc, (CompleteGroup)group, CompileNavigation(rout, group));
             }
-            /*  if (!string.IsNullOrEmpty(input.TemplateQuestionanireId))
-              {
-                  var doc = documentSession.Load<QuestionnaireDocument>(input.TemplateQuestionanireId);
-                  return new CompleteQuestionnaireJsonView((CompleteQuestionnaireDocument)doc);
-              }*/
             return null;
         }
         protected class NodeWithLevel
