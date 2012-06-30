@@ -9,7 +9,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 {
     public class RavenDBEventStore : IEventStore
     {
-        private bool useAsyncSave = true;//research
+        private bool useAsyncSave = false;//research
 
         private readonly IDocumentStore _documentStore;
 
@@ -47,6 +47,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             }
             return null;
         }
+       
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
@@ -125,13 +126,13 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         }
 
 
-        /*/// <summary>
+        /// <summary>
         /// Get some events after specified event.
         /// </summary>
         /// <param name="eventId">The id of last event not to be included in result set.</param>
         /// <param name="maxCount">Maximum number of returned events</param>
         /// <returns>A collection events starting right after <paramref name="eventId"/>.</returns>
-        public IEnumerable<CommittedEvent> GetEventsAfter(Guid? eventId, int maxCount)
+        /*public IEnumerable<CommittedEvent> GetEventsAfter(Guid? eventId, int maxCount)
         {
             var result = new List<CommittedEvent>();
 
@@ -147,7 +148,31 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
             return result;
         }*/
+        protected IList<StoredEvent> AccumulateWithPaging(Func<StoredEvent, bool> predicate)
+        {
+            List<StoredEvent> retval = new List<StoredEvent>();
+            using (var session = _documentStore.OpenSession())
+            {
 
+                int count;
+                Raven.Client.Linq.RavenQueryStatistics stats;
+                session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults())
+                    .Statistics(out stats).Where(predicate).ToList();
+
+                count = stats.TotalResults;
+                if (count == 0)
+                    return retval;
+                int queryLimit = 128;
+                int step = 0;
+                while (step < count)
+                {
+                    retval.AddRange(
+                        session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(step).Take(queryLimit).Where(predicate).ToList());
+                    step += queryLimit;
+                }
+            }
+            return retval;
+        }
 
 
         /// <summary>
@@ -162,10 +187,11 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
             using (var session = _documentStore.OpenSession())
             {
-                var storedEvents = session.Query<StoredEvent>()
+               /* var storedEvents = session.Query<StoredEvent>()
                     .Customize(x => x.WaitForNonStaleResults())
                     .Where(x => x.EventTimeStamp >= start)
-                    .ToList().OrderBy(x => x.EventTimeStamp);
+                    .ToList().OrderBy(x => x.EventTimeStamp);*/
+                var storedEvents = AccumulateWithPaging(x => x.EventTimeStamp >= start).OrderBy(x=>x.EventTimeStamp);
                 result = storedEvents.Select(ToComittedEvent).ToList();
             }
 

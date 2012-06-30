@@ -41,7 +41,7 @@
 }
 else
 {
-    <li data-role="fieldcontain" id="@groupKey" ><a  id="screen-ref-@(Model.PropogationKey)" class="propagated-screen-link" href="#screen-@(Model.PropogationKey)">
+    <li data-role="fieldcontain" id="@groupKey" ><a  id="screen-ref-@(Model.PropogationKey)" class="propagated-screen-link" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = Model.PublicKey, propagationKey=Model.PropogationKey })">
                                                      <h3><span>@ViewBag.GroupIndex)</span> @Model.Title</h3>
                                                      <p id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
                                                  </a>
