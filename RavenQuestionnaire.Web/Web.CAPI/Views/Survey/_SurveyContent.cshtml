@@ -2,7 +2,7 @@
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 @using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
-@model CompleteQuestionnaireMobileView
+@model CompleteGroupMobileView
 @{
     var questionKey = (Guid)ViewBag.CurrentQuestion;
     ViewBag.CurrentQuestion = questionKey;
@@ -12,21 +12,21 @@
     {
         OnComplete = "JsonResults"
     };
-    ViewBag.CurrentGroupPublicKey = Model.CurrentScreen.PublicKey;
-    ViewBag.QuestionnaireId = Model.Id;
+    ViewBag.CurrentGroupPublicKey = Model.PublicKey;
+    ViewBag.QuestionnaireId = Model.QuestionnairePublicKey;
 }
 <!-- Start of second page -->
-<div data-role="page" id="ref-@(Model.CurrentScreen.PublicKey)" class="page">
-    @RenderNavigation(Model.CurrentScreen.Navigation)
+<div data-role="page" id="ref-@(Model.PublicKey)" class="page">
+    @RenderNavigation(Model.Navigation)
     <!-- /header -->
-    <div data-role="content" class="@(Model.Status.Name == "Completed" ? "ui-disabled" : "") dummy-scroll">
+    <div data-role="content" class="dummy-scroll">
         <div id="scroller">
-            @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model.CurrentScreen)
+            @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model)
         </div>
         <div style="width: 100%; height: 50px;">
             &nbsp;</div>
     </div>
-    @RenderFooter(Model.CurrentScreen.Navigation)
+    @RenderFooter(Model.Navigation)
     <!-- /content -->
 </div>
 <!-- /page -->
@@ -59,7 +59,23 @@
         </div>
     </div>
 }
-@foreach (CompleteGroupMobileView screen in Model.Screens)
+@*@@foreach (PropagatedGroupMobileView screen in Model.Templates)
+{
+    <script id="template-@(screen.PublicKey)" type="text/x-jsrender">
+        <div data-role="page" id="screen-00000000-0000-0000-0000-000000000000"  class="page">
+            @RenderNavigation(screen.Navigation)
+            <div data-role="content">
+                 @Html.Partial("~/Views/Survey/Group/_PropagatedScreen.cshtml", screen)
+            </div>
+             <div data-role="footer" data-theme="b">
+                <a class="previous-screen" href="${PrevScreen}" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >Prev Group</a>
+                <h1><span></span>@screen.Navigation.CurrentScreenTitle</h1>
+                <a href="#" class="next-screen ui-disabled" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">Next Group</a> 
+            </div>
+        </div>
+    </script>
+}
+foreach (CompleteGroupMobileView screen in Model.Screens)
 {
     <div data-role="page" id="screen-@(screen.PublicKey)"  class="page">
         @RenderNavigation(screen.Navigation)
@@ -83,23 +99,8 @@
         </div>
         @RenderFooter(screen.Navigation)
     </div>
-}
-@foreach (PropagatedGroupMobileView screen in Model.Templates)
-{
-    <script id="template-@(screen.PublicKey)" type="text/x-jsrender">
-        <div data-role="page" id="screen-00000000-0000-0000-0000-000000000000"  class="page">
-            @RenderNavigation(screen.Navigation)
-            <div data-role="content">
-                 @Html.Partial("~/Views/Survey/Group/_PropagatedScreen.cshtml", screen)
-            </div>
-             <div data-role="footer" data-theme="b">
-                <a class="previous-screen" href="${PrevScreen}" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >Prev Group</a>
-                <h1><span></span>@screen.Navigation.CurrentScreenTitle</h1>
-                <a href="#" class="next-screen ui-disabled" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">Next Group</a> 
-            </div>
-        </div>
-    </script>
-}
+}*@
+
 @helper RenderNavigation(ScreenNavigation screen)
     {
         List<CompleteGroupHeaders> crumbs = screen.BreadCumbs.Skip(1).ToList();
@@ -109,7 +110,7 @@
             CompleteGroupHeaders breadCumb = crumbs[i];
             if (i == 0)
             {
-            <a href="#ref-@(Model.CurrentScreen.PublicKey)" class="breadcrumb nav-link" data-inline="true" data-role="button"
+            <a href="#ref-@(Model.PublicKey)" class="breadcrumb nav-link" data-inline="true" data-role="button"
                 data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
             }
             else
@@ -134,7 +135,7 @@
             else
             {
             
-            <a class="nav-link" href="@Url.Action("Screen", new { Id = Model.Id, group = screen.PrevScreen.PublicKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext">
+            <a class="nav-link" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.PrevScreen.PublicKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext">
                 Next Group</a>
             }
         }
@@ -153,7 +154,7 @@
             }
             else
             {
-            <a class="nav-link" href="@Url.Action("Screen", new { Id = Model.Id, group = screen.NextScreen.PublicKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false" >
+            <a class="nav-link" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.NextScreen.PublicKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false" >
                 Next Group</a>
             }
         }
