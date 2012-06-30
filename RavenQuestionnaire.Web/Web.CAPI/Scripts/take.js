@@ -193,9 +193,9 @@ function PropagatedGroup(data, status, xhr) {
             newGroup.insertAfter(container);
         }
 
-      /*  newGroup.listview();
+      /*  newGroup.listview();*/
         newGroup.trigger('pagecreate');
-        $(parent).listview('refresh');*/
+        $(parent).listview('refresh');
 
 
         /*newScreen.page();
