@@ -92,7 +92,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
 
                         if (group != null)
                         {
-                            rout.RemoveAt(rout.Count-1);
                             break;
                         }
                         
@@ -105,6 +104,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                     }
                    
                 }
+                if (group == null)
+                    group = doc.Children.OfType<ICompleteGroup>().First();
+          
                 if (input.PropagationKey.HasValue)
                     return new PropagatedGroupMobileView(doc, group, CompileNavigation(rout,group));
                 return new CompleteGroupMobileView(doc, (CompleteGroup)group, CompileNavigation(rout, group));
@@ -131,10 +133,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         protected ScreenNavigation CompileNavigation(List<NodeWithLevel> rout, ICompleteGroup group)
         {
             ScreenNavigation navigation=new ScreenNavigation();
-            if (group == null)
-                return navigation;
             navigation.PublicKey = group.PublicKey;
             navigation.CurrentScreenTitle = group.Title;
+            rout = rout.Take(rout.Count - 1).ToList();
             navigation.BreadCumbs = rout.Select(n => new CompleteGroupHeaders(n.Group)).ToList();
             var parent = rout.Last();
             List<ICompleteGroup> groupNeighbors;
