@@ -167,6 +167,16 @@ namespace RavenQuestionnaire.Core.Domain
         {
             var group = new CompleteGroup(_doc.Find<CompleteGroup>(e.PublicKey), e.PropagationKey);
             _doc.Remove(group);
+            if (group.Triggers.Count > 0)
+                foreach (Guid trigger in group.Triggers)
+                {
+                    ApplyEvent(new PropagatableGroupDeleted
+                    {
+                        CompletedQuestionnaireId = this._doc.PublicKey,
+                        PublicKey = trigger,
+                        PropagationKey = e.PropagationKey
+                    });
+                }
         }
         public void AddPropagatableGroup(Guid publicKey, Guid propagationKey)
         {
@@ -197,6 +207,16 @@ namespace RavenQuestionnaire.Core.Domain
             executor.Execute(template);
             var newGroup = new CompleteGroup(template, e.PropagationKey);
             _doc.Add(newGroup, null);
+            if (template.Triggers.Count > 0)
+                foreach (Guid trigger in template.Triggers)
+                {
+                    ApplyEvent(new PropagatableGroupAdded
+                                   {
+                                       CompletedQuestionnaireId = this._doc.PublicKey,
+                                       PublicKey = trigger,
+                                       PropagationKey = e.PropagationKey
+                                   });
+                }
         }
 
         #region Implementation of ISnapshotable<CompleteQuestionnaireDocument>

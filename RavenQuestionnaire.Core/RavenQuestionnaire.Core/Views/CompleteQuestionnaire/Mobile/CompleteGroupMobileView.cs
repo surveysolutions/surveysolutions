@@ -60,7 +60,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             PublicKey = currentGroup.PublicKey;
             Title = currentGroup.Title;
             Propagated = currentGroup.Propagated;
-            if (currentGroup.Propagated == Propagate.Propagated)
+            if (currentGroup.Propagated != Propagate.None)
             {
                 PropagateTemplate = new PropagatedGroupMobileView(doc, currentGroup);
 
