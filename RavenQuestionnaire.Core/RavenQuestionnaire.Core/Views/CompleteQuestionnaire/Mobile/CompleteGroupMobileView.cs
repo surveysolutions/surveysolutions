@@ -18,6 +18,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         public AbstractGroupMobileView()
         {
             Children = new List<ICompositeView>();
+            this.QuestionsWithCards=new List<CompleteQuestionView>();
+            this.QuestionsWithInstructions=new List<CompleteQuestionView>();
+          //  this.Templates=new List<PropagatedGroupMobileView>();
         }
         public Guid PublicKey { get; set; }
 
@@ -30,6 +33,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         public Propagate Propagated { get; set; }
 
         public ScreenNavigation Navigation { get; set; }
+        public Guid QuestionnairePublicKey { get; set; }
+        public List<CompleteQuestionView> QuestionsWithCards { get; set; }
+        public List<CompleteQuestionView> QuestionsWithInstructions { get; set; }
+        //public List<PropagatedGroupMobileView> Templates { get; set; }
     }
 
     public class CompleteGroupMobileView : AbstractGroupMobileView
@@ -45,6 +52,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                                        IList<ScreenNavigation> navigations)
             : this()
         {
+            this.QuestionnairePublicKey = doc.PublicKey;
             InitNavigation(currentGroup, navigations);
 
             List<ICompleteGroup> groups = currentGroup.Children.OfType<ICompleteGroup>().ToList();
@@ -92,6 +100,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                     }
                 }
             }
+            CollectGalleries(this);
+            CollectInstructions(this);
+          //  CollectScreens(this);
         }
 
 
@@ -99,6 +110,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                                        IList<ScreenNavigation> navigations)
             : this()
         {
+            this.QuestionnairePublicKey = doc.PublicKey;
             CompleteGroup propagatable = propGroups.Single(g => !g.PropogationPublicKey.HasValue);
 
             InitNavigation(propagatable, navigations);
@@ -106,12 +118,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             PublicKey = propagatable.PublicKey;
             Title = propagatable.Title;
             Propagated = propagatable.Propagated;
-            var questions = propagatable.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionFactory().CreateQuestion(doc, propagatable, q)).ToList();
+           // var questions = propagatable.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionFactory().CreateQuestion(doc, propagatable, q)).ToList();
 
-            PropagateTemplate = new PropagatedGroupMobileView(propagatable.PublicKey, propagatable.Title, false, Guid.Empty, questions);
+            PropagateTemplate = new PropagatedGroupMobileView(doc, propagatable);
             PropagateTemplate.Navigation.CurrentScreenTitle = propagatable.Title;
             PropagateTemplate.Navigation.BreadCumbs.AddRange(Navigation.BreadCumbs);
-
+            
 
             List<CompleteGroup> propagated = propGroups.Where(g => g != propagatable && g.PropogationPublicKey.HasValue).ToList();
 
@@ -122,10 +134,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                 foreach (CompleteGroup @group in propagated)
                 {
                     string groupTitle = @group.Title;
-                    var pgroup = new PropagatedGroupMobileView(@group.PublicKey, groupTitle,
-                                                               @group.Propagated == Propagate.AutoPropagated,
-                                                               @group.PropogationPublicKey.Value,
-                                                               @group.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionFactory().CreateQuestion(doc, propagatable, q)).ToList());
+                    var pgroup = new PropagatedGroupMobileView(doc, @group);
 
                     if (lastGroup != null)
                     {
@@ -210,6 +219,64 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         public virtual string GetClientId(string prefix)
         {
             return string.Format("{0}_{1}", prefix, PublicKey);
+        }
+    /*    private void CollectScreens(CompleteGroupMobileView @group)
+        {
+            if (@group.PropagateTemplate != null)
+                Templates.Add(@group.PropagateTemplate);
+
+            foreach (var g in @group.Children.OfType<CompleteGroupMobileView>())
+            {
+                if (@group.Propagated == Propagate.None)
+                {
+                //    Screens.Add(g);
+                    CollectScreens(g);
+                }
+            }
+            foreach (var g in @group.Children.OfType<PropagatedGroupMobileView>())
+            {
+                PropagatedScreens.Add(g);
+            }
+        }*/
+
+        private void CollectGalleries(CompleteGroupMobileView @group)
+        {
+            var qs = @group.Children.OfType<CompleteQuestionView>().ToList();
+            if (qs.Count() > 0)
+            {
+                QuestionsWithCards.AddRange(qs.Where(question => (question.Cards.Length > 0)).ToList());
+            }
+    /*        if (@group.Propagated != Propagate.None)
+            {
+                var questions = @group.PropagateTemplate.Children.OfType<CompleteQuestionView>().ToList();
+                var hasCards = questions.Where(question => question.Cards.Length > 0);
+                QuestionsWithCards.AddRange(hasCards.ToList());
+            }
+            var groups = @group.Children.OfType<CompleteGroupMobileView>().ToList();
+            foreach (var g in groups)
+            {
+                CollectGalleries(g);
+            }*/
+        }
+
+        private void CollectInstructions(CompleteGroupMobileView @group)
+        {
+            var qs = @group.Children.OfType<CompleteQuestionView>().ToList();
+            if (qs.Count > 0)
+            {
+                QuestionsWithInstructions.AddRange(qs.Where(question => !string.IsNullOrWhiteSpace(question.Instructions)).ToList());
+            }
+           /* if (@group.Propagated != Propagate.None)
+            {
+                var questions = @group.PropagateTemplate.Children.OfType<CompleteQuestionView>().ToList();
+                var hasInstructions = questions.Where(q => (!string.IsNullOrWhiteSpace(q.Instructions)));
+                QuestionsWithInstructions.AddRange(hasInstructions.ToList());
+            }
+            var groups = @group.Children.OfType<CompleteGroupMobileView>().ToList();
+            foreach (var g in groups)
+            {
+                CollectInstructions(g);
+            }*/
         }
     }
 }

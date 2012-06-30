@@ -36,17 +36,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                 {
                     group = doc.Find<CompleteGroup>(input.CurrentGroupPublicKey.Value);
                 }
-                else if (input.PreviousGroupPublicKey.HasValue)
-                {
-                    iterator.SetCurrent(doc.Find<CompleteGroup>(input.PreviousGroupPublicKey.Value));
-                    group = input.IsReverse
-                                ? iterator.Previous
-                                : iterator.Next;
-                }
-                else
-                {
-                    group = input.IsReverse ? iterator.Last() : iterator.First();
-                }
                 return new CompleteQuestionnaireViewV(doc, group);
             }
          

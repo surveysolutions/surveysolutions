@@ -1,19 +1,28 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using RavenQuestionnaire.Core.AbstractFactories;
+using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
     public class PropagatedGroupMobileView : CompleteGroupMobileView
     {
-        public PropagatedGroupMobileView(Guid key, string text, bool isAutoPropagate, Guid propagationKey, List<CompleteQuestionView> questions)
+        public PropagatedGroupMobileView(CompleteQuestionnaireDocument doc, ICompleteGroup group)
         {
-            this.PublicKey = key;
-            this.Title = text;
-            this.AutoPropagate = isAutoPropagate;
-            this.PropogationKey = propagationKey;
-            Children.AddRange(questions);
-            Navigation = new ScreenNavigation();
+           /* if (!group.PropogationPublicKey.HasValue)
+                throw new ArgumentException("Group is not propagated");*/
+            this.PublicKey = group.PublicKey;
+            this.QuestionnairePublicKey = doc.PublicKey;
+            this.Title = group.Title;
+            this.AutoPropagate = group.Propagated == Propagate.AutoPropagated;
+            this.PropogationKey = group.PropogationPublicKey?? Guid.Empty;
+            this.Children =
+                group.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionFactory().CreateQuestion(doc, group, q) as ICompositeView).ToList();
+            Navigation=new ScreenNavigation();
         }
 
         public string FeaturedTitle { get; set; }
