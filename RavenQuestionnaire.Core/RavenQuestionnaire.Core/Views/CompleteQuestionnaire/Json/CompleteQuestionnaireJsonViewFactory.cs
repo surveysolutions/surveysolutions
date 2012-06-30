@@ -107,7 +107,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                     navigation.BreadCumbs = rout.Select(n => new CompleteGroupHeaders(n.Group)).ToList();
                 }
                 if (input.PropagationKey.HasValue)
-                    return new PropagatedGroupMobileView(doc, group);
+                    return new PropagatedGroupMobileView(doc, group, navigation);
                 return new CompleteGroupMobileView(doc, (CompleteGroup)group, navigation);
             }
             /*  if (!string.IsNullOrEmpty(input.TemplateQuestionanireId))
