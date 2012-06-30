@@ -25,6 +25,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             Navigation=new ScreenNavigation();
          
         }
+        public PropagatedGroupMobileView(CompleteQuestionnaireDocument doc, ICompleteGroup group, ScreenNavigation navigation):this(doc,group)
+        {
+            this.Navigation = navigation;
+            navigation.PublicKey = group.PublicKey;
+            navigation.CurrentScreenTitle = group.Title;
+        }
 
         public string FeaturedTitle { get; set; }
         public bool AutoPropagate { get; private set; }
