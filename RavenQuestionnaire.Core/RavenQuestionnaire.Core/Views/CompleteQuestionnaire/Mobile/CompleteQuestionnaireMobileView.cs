@@ -52,7 +52,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
            // IList<ScreenNavigation> navigations = new List<ScreenNavigation>();
             var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
             executor.Execute(group);
-            var currentGroup = new CompleteGroupMobileView(doc, group, new ScreenNavigation());
+            var navigation = new ScreenNavigation();
+            navigation.CurrentScreenTitle = group.Title;
+            navigation.PublicKey = group.PublicKey;
+            var currentGroup = new CompleteGroupMobileView(doc, group, navigation);
             InitGroups(doc, currentGroup.PublicKey);
             Totals = CalcProgress(doc);
             CurrentScreen = currentGroup;
@@ -89,16 +92,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                                 {
                                     PublicKey = Guid.Empty,
                                     GroupText = "Main",
-                                    Totals = CountQuestions(questions),
-                                    IsExternal = true
+                                    Totals = CountQuestions(questions)
                                 };
                 for (var i = 1; i <= groups.Count; i++)
                 {
                     Groups[i] = new CompleteGroupHeaders
                                     {
                                         PublicKey = groups[i - 1].PublicKey,
-                                        GroupText = groups[i - 1].Title,
-                                        IsExternal = true
+                                        GroupText = groups[i - 1].Title
                                     };
                     Groups[i].Totals = CalcProgress(groups[i - 1]);
                 }
@@ -111,8 +112,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                     Groups[i] = new CompleteGroupHeaders
                                     {
                                         PublicKey = groups[i].PublicKey,
-                                        GroupText = groups[i].Title,
-                                        IsExternal = true
+                                        GroupText = groups[i].Title
                                     };
                     Groups[i].Totals = CalcProgress(groups[i]);
                 }

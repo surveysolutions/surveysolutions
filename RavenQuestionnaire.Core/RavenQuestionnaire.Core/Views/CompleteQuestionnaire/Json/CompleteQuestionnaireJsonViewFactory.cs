@@ -77,13 +77,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                 //   var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
                 ICompleteGroup group = null;
 
-                var navigation = new ScreenNavigation();
-                
+                var rout = new List<NodeWithLevel>();
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
                    // group = doc.FindGroupByKey(input.CurrentGroupPublicKey.Value, input.PropagationKey);
                     Stack<NodeWithLevel> treeStack = new Stack<NodeWithLevel>();
-                    var rout = new List<NodeWithLevel>();
+                    
                     treeStack.Push(new NodeWithLevel(doc, 0));
                     while (treeStack.Count>0)
                     {
@@ -104,11 +103,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                             treeStack.Push(new NodeWithLevel(subGroups[i], node.Level + 1));
                         }
                     }
-                    navigation.BreadCumbs = rout.Select(n => new CompleteGroupHeaders(n.Group)).ToList();
+                   
                 }
                 if (input.PropagationKey.HasValue)
-                    return new PropagatedGroupMobileView(doc, group, navigation);
-                return new CompleteGroupMobileView(doc, (CompleteGroup)group, navigation);
+                    return new PropagatedGroupMobileView(doc, group, CompileNavigation(rout,group));
+                return new CompleteGroupMobileView(doc, (CompleteGroup)group, CompileNavigation(rout, group));
             }
             /*  if (!string.IsNullOrEmpty(input.TemplateQuestionanireId))
               {
@@ -129,6 +128,39 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             public int Level { get; private set; }
         }
         #endregion
+        protected ScreenNavigation CompileNavigation(List<NodeWithLevel> rout, ICompleteGroup group)
+        {
+            ScreenNavigation navigation=new ScreenNavigation();
+            if (group == null)
+                return navigation;
+            navigation.PublicKey = group.PublicKey;
+            navigation.CurrentScreenTitle = group.Title;
+            navigation.BreadCumbs = rout.Select(n => new CompleteGroupHeaders(n.Group)).ToList();
+            var parent = rout.Last();
+            List<ICompleteGroup> groupNeighbors;
+            int indexOfTarget;
+            if(group.PropogationPublicKey.HasValue)
+            {
+                groupNeighbors = parent.Group.Children.OfType<ICompleteGroup>().Where(g=>g.PublicKey==group.PublicKey && g.PropogationPublicKey.HasValue).ToList();
+                indexOfTarget = groupNeighbors.FindIndex(0,
+                                                         g =>
+                                                         g.PropogationPublicKey == group.PropogationPublicKey);
+            }
+            else
+            {
+                groupNeighbors = parent.Group.Children.OfType<ICompleteGroup>().Where(g =>  !g.PropogationPublicKey.HasValue).ToList();
+                indexOfTarget = groupNeighbors.FindIndex(0,
+                                                         g =>
+                                                         g.PublicKey == group.PublicKey);
+            }
+            
+            if (indexOfTarget > 0)
+                navigation.PrevScreen = new CompleteGroupHeaders(groupNeighbors[indexOfTarget - 1]);
+            if (indexOfTarget < groupNeighbors.Count - 1)
+                navigation.NextScreen = new CompleteGroupHeaders(groupNeighbors[indexOfTarget + 1]);
+            return navigation;
+        }
+
         protected void UpdateNavigation(List<NodeWithLevel> navigations, NodeWithLevel node)
         {
             navigations.RemoveAll(n => n.Level >= node.Level);

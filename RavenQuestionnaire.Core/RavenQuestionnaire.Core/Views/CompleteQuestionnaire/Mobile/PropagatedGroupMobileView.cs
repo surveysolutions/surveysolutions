@@ -22,14 +22,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             this.PropogationKey = group.PropogationPublicKey?? Guid.Empty;
             this.Children =
                 group.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionFactory().CreateQuestion(doc, group, q) as ICompositeView).ToList();
-            Navigation=new ScreenNavigation();
          
         }
         public PropagatedGroupMobileView(CompleteQuestionnaireDocument doc, ICompleteGroup group, ScreenNavigation navigation):this(doc,group)
         {
             this.Navigation = navigation;
-            navigation.PublicKey = group.PublicKey;
-            navigation.CurrentScreenTitle = group.Title;
         }
 
         public string FeaturedTitle { get; set; }
