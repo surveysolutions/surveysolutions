@@ -6,6 +6,7 @@ using System.Linq;
 using Ncqrs.Eventing.Storage;
 using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ViewSnapshot;
@@ -76,14 +77,38 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                 //   var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
                 ICompleteGroup group = null;
 
-                Iterator<ICompleteGroup> iterator = new QuestionnaireScreenIterator(doc);
+                var navigation = new ScreenNavigation();
+                
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
-                    group = doc.FindGroupByKey(input.CurrentGroupPublicKey.Value, input.PropagationKey);
+                   // group = doc.FindGroupByKey(input.CurrentGroupPublicKey.Value, input.PropagationKey);
+                    Stack<NodeWithLevel> treeStack = new Stack<NodeWithLevel>();
+                    var rout = new List<NodeWithLevel>();
+                    treeStack.Push(new NodeWithLevel(doc, 0));
+                    while (treeStack.Count>0)
+                    {
+                        var node = treeStack.Pop();
+                        group = ProceedGroup(node.Group, input.CurrentGroupPublicKey.Value, input.PropagationKey);
+                        UpdateNavigation(rout, node);
+
+                        if (group != null)
+                        {
+                            rout.RemoveAt(rout.Count-1);
+                            break;
+                        }
+                        
+                        var subGroups = node.Group.Children.OfType<ICompleteGroup>().ToArray();
+                        
+                        for (int i = subGroups.Length - 1; i >= 0; i--)
+                        {
+                            treeStack.Push(new NodeWithLevel(subGroups[i], node.Level + 1));
+                        }
+                    }
+                    navigation.BreadCumbs = rout.Select(n => new CompleteGroupHeaders(n.Group)).ToList();
                 }
                 if (input.PropagationKey.HasValue)
                     return new PropagatedGroupMobileView(doc, group);
-                return new CompleteGroupMobileView(doc, (CompleteGroup) group, new List<ScreenNavigation>(0));
+                return new CompleteGroupMobileView(doc, (CompleteGroup)group, navigation);
             }
             /*  if (!string.IsNullOrEmpty(input.TemplateQuestionanireId))
               {
@@ -92,7 +117,31 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
               }*/
             return null;
         }
+        protected class NodeWithLevel
+        {
+            public NodeWithLevel(ICompleteGroup group, int level)
+            {
+                this.Group = group;
+                this.Level = level;
+            }
 
+            public ICompleteGroup Group { get;private set; }
+            public int Level { get; private set; }
+        }
         #endregion
+        protected void UpdateNavigation(List<NodeWithLevel> navigations, NodeWithLevel node)
+        {
+            navigations.RemoveAll(n => n.Level >= node.Level);
+            navigations.Add(node);
+        }
+
+        protected ICompleteGroup ProceedGroup(ICompleteGroup node, Guid publicKey, Guid? propagationKey)
+        {
+            if (node.PublicKey != publicKey)
+                return null;
+            if (propagationKey.HasValue && node.PropogationPublicKey != propagationKey.Value)
+                return null;
+            return node;
+        }
     }
 }

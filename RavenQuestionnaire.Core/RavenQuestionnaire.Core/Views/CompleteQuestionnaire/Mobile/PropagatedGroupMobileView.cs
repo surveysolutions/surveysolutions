@@ -23,6 +23,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             this.Children =
                 group.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionFactory().CreateQuestion(doc, group, q) as ICompositeView).ToList();
             Navigation=new ScreenNavigation();
+         
         }
 
         public string FeaturedTitle { get; set; }

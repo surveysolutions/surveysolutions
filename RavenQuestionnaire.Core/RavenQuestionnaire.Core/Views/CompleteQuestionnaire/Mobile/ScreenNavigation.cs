@@ -16,12 +16,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
         public CompleteGroupHeaders PrevScreen { get; set; }
 
-        public CompleteGroupHeaders Parent { get; set; }
+        
 
         public string CurrentScreenTitle { get; set; }
 
         public Guid PublicKey { get; set; }
-
-        public Guid PropagateKey { get; set; }
     }
 }
