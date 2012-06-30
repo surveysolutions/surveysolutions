@@ -160,35 +160,30 @@ function PropagatedGroup(data, status, xhr) {
     var group = jQuery.parseJSON(data.responseText);
     if (!group.error) {
         var templateDivPath = '#groupTemplate' + group.parentGroupPublicKey;
-        var screenTemplateDiv = '#template-' + group.parentGroupPublicKey;
+      //  var screenTemplateDiv = '#template-' + group.parentGroupPublicKey;
         var parent = $('#propagate-list-' + group.parentGroupPublicKey);
-
         var validator = parent.find('[data-valmsg-replace=true]');
-        if (group.error) {
-            validator.text(group.error);
-            return;
-        }
         validator.text('');
         var template = $(templateDivPath).html();
-        var screenTemplate = $(screenTemplateDiv).html();
+       // var screenTemplate = $(screenTemplateDiv).html();
         var str = template.replace(/00000000-0000-0000-0000-000000000000/gi, group.propagationKey);
         str = str.replace("${Number}", 50);
+        
+      //  var screenLinks = $('.propagated-screen-link-' + group.parentGroupPublicKey);
+    //    var lastScreen = screenLinks.last().length == 0 ? '' : screenLinks.last().attr('href');
 
-        var screenLinks = $('.propagated-screen-link-' + group.parentGroupPublicKey);
-        var lastScreen = screenLinks.last().length == 0 ? '' : screenLinks.last().attr('href');
-
-        var screenStr = screenTemplate.replace(/00000000-0000-0000-0000-000000000000/gi, group.propagationKey);
+    /*    var screenStr = screenTemplate.replace(/00000000-0000-0000-0000-000000000000/gi, group.propagationKey);
         screenStr = screenStr.replace("${PrevScreen}", lastScreen);
         screenStr = screenStr.replace("${NextScreen}", "#");
         screenStr = screenStr.replace("${Key}", group.propagationKey);
         screenStr = screenStr.replace("${Number}", 50);
-
+        */
         var newGroup = $(str);
-        var newScreen = $(screenStr).appendTo($(screenTemplateDiv).parent());
-
+        //var newScreen = $(screenStr).appendTo($(screenTemplateDiv).parent());
+/*
         var prevScreenNextLink = $(lastScreen + ' .next-screen');
         $(prevScreenNextLink).attr('href', '#screen-' + group.propagationKey);
-        $(prevScreenNextLink).removeClass('ui-disabled');
+        $(prevScreenNextLink).removeClass('ui-disabled');*/
 
         var container = parent.find(" > li:last");
 
@@ -198,16 +193,16 @@ function PropagatedGroup(data, status, xhr) {
             newGroup.insertAfter(container);
         }
 
-        //newGroup.listview();
+      /*  newGroup.listview();
         newGroup.trigger('pagecreate');
-        $(parent).listview('refresh');
+        $(parent).listview('refresh');*/
 
 
-        newScreen.page();
+        /*newScreen.page();
         newScreen.trigger('pagecreate');
         newScreen.createKeyBoard();
         newScreen.numericSubmit();
-        newScreen.hideInputsWithVirtualKeyboard();
+        newScreen.hideInputsWithVirtualKeyboard();*/
         
         updateCounter();
 
@@ -446,7 +441,7 @@ $(document).ready(function () {
         }
     });
 });
-$(document).bind('pageshow', function () {
+$(document).bind('pagebeforeshow', function () {
     var doc = $('#content_container');
     doc.initPage();
 });

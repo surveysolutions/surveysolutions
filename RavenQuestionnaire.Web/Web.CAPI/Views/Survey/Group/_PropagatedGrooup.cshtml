@@ -16,8 +16,9 @@
 {
     <li id="@groupKey" class="propagated-list-item">
         <fieldset  class="ui-grid-a">
-            <div class="ui-block-a">
-                <a id="screen-ref-@(Model.PropogationKey)"  data-panel="main" class="propagated-screen-link-@(Model.PublicKey)" href="#screen-@(Model.PropogationKey)">
+            <div class="ui-block-a"> 
+                <a id="screen-ref-@(Model.PropogationKey)"  data-panel="main" class="propagated-screen-link-@(Model.PublicKey)" 
+                href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = Model.PublicKey, propagationKey=Model.PropogationKey })">
                     <h3><span>@ViewBag.GroupIndex)</span> @Model.Title</h3>
                     <p  id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
                 </a>

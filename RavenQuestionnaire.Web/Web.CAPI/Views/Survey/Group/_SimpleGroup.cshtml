@@ -21,8 +21,15 @@
                     }
                     using (Html.BeginCollectionItem("settings", true, question.PublicKey))
                     {
-                    @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
-                    @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
+                        @Html.Hidden("ParentGroupPublicKey", (Guid) ViewBag.CurrentGroupPublicKey)
+                        @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
+
+                        if (Model is PropagatedGroupMobileView)
+                        {
+                            
+                            @Html.Hidden("PropogationPublicKey", ((PropagatedGroupMobileView) Model).PropogationKey)
+                            
+                        }
                     }
                 }
                 <p class="question-comment">Comment: comment is here</p>
@@ -60,7 +67,7 @@
             {
     <div class="ui-body ui-body-c">
         <div class="group-anchor">
-            <a id="screen-ref-@(@group.PublicKey)" class="nav-link" href="#screen-@(@group.PublicKey)" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
+            <a id="screen-ref-@(@group.PublicKey)" class="nav-link" href="@Url.Action("Screen", new { Id = @group.QuestionnairePublicKey, group = @group.PublicKey })" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
             <script type="text/javascript">
                 $('#screen-ref-@(@group.PublicKey)').click(function () {
                     $('.scrollHere').removeClass('scrollHere');

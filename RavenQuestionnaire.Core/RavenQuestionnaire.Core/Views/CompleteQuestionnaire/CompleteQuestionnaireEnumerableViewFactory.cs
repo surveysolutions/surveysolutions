@@ -42,20 +42,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                             <RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup>(
                                 input.CurrentGroupPublicKey.Value);
                 }
-                else if (input.PreviousGroupPublicKey.HasValue)
-                {
-
-                    iterator.SetCurrent(doc.Find
-                                            <RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup>(
-                                                input.PreviousGroupPublicKey.Value));
-                    group = input.IsReverse
-                                ? iterator.Previous
-                                : iterator.Next;
-                }
-                else
-                {
-                    group = input.IsReverse ? iterator.Last() : iterator.First();
-                }
+               
                 return new CompleteQuestionnaireViewEnumerable(doc, group, this.groupFactory);
             }
          

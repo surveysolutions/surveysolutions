@@ -15,14 +15,13 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
             CompleteQuestionnaireId =id;
         }
-        public CompleteQuestionnaireViewInputModel(string id, Guid? previousGroup, bool isReverse)
+        public CompleteQuestionnaireViewInputModel(string id, Guid groupKey, Guid? propagationKey)
         {
             CompleteQuestionnaireId = id;
-            PreviousGroupPublicKey = previousGroup;
-            IsReverse = isReverse;
+            CurrentGroupPublicKey = groupKey;
+            PropagationKey = propagationKey;
         }
         public string CompleteQuestionnaireId { get; private set; }
-        public Guid? PreviousGroupPublicKey { get; private set; }
         public Guid? CurrentGroupPublicKey
         {
             get { return this.currentGroupPublicKey; }
@@ -34,6 +33,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                     this.currentGroupPublicKey = value;
             }
         }
+
+        public Guid? PropagationKey { get; set; }
         private Guid? currentGroupPublicKey;
 
         public bool IsReverse { get; private set; }
