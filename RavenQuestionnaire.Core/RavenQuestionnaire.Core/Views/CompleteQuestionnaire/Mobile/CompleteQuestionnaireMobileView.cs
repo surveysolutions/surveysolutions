@@ -17,7 +17,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         {
           
         }
-        public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc, ICompleteGroup currentGroup)
+        public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc, ICompleteGroup currentGroup, ScreenNavigation navigation)
             : this()
         {
             Id = IdUtil.ParseId(doc.Id);
@@ -26,35 +26,16 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             LastEntryDate = doc.LastEntryDate;
             Status = doc.Status;
             Responsible = doc.Responsible;
-            if (currentGroup == null)
-                currentGroup = doc.Children.OfType<ICompleteGroup>().First();
-            CollectAll(doc, currentGroup as CompleteGroup);
+            CollectAll(doc, currentGroup as CompleteGroup, navigation);
         }
 
-        public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc)
-            : this()
+        private void CollectAll(CompleteQuestionnaireDocument doc, CompleteGroup group, ScreenNavigation navigation)
         {
-
-            Id = IdUtil.ParseId(doc.Id);
-            Title = doc.Title;
-            CreationDate = doc.CreationDate;
-            LastEntryDate = doc.LastEntryDate;
-            Status = doc.Status;
-            Responsible = doc.Responsible;
-
-            var group = new CompleteGroup { Children = doc.Children.Where(c => c is ICompleteQuestion).ToList() };
-
-            CollectAll(doc, group);
-        }
-
-        private void CollectAll(CompleteQuestionnaireDocument doc, CompleteGroup group)
-        {
-           // IList<ScreenNavigation> navigations = new List<ScreenNavigation>();
+            // IList<ScreenNavigation> navigations = new List<ScreenNavigation>();
             var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
             executor.Execute(group);
-            var navigation = new ScreenNavigation();
-            navigation.CurrentScreenTitle = group.Title;
-            navigation.PublicKey = group.PublicKey;
+
+
             var currentGroup = new CompleteGroupMobileView(doc, group, navigation);
             InitGroups(doc, currentGroup.PublicKey);
             Totals = CalcProgress(doc);
