@@ -110,12 +110,12 @@ foreach (CompleteGroupMobileView screen in Model.Screens)
             CompleteGroupHeaders breadCumb = crumbs[i];
             if (i == 0)
             {
-            <a href="#ref-@(Model.PublicKey)" class="breadcrumb nav-link" data-inline="true" data-role="button"
+            <a href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = breadCumb.PublicKey })" class="breadcrumb nav-link" data-inline="true" data-role="button"
                 data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
             }
             else
             {
-            <a href="#screen-@breadCumb.PublicKey"  class="breadcrumb nav-link" data-inline="true" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
+            <a href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = breadCumb.PublicKey })"  class="breadcrumb nav-link" data-inline="true" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
             }
         }
         <a class="breadcrumb ui-disabled nav-link" aria-disabled="true" data-role="button"

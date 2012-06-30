@@ -49,53 +49,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
         private void CollectAll(CompleteQuestionnaireDocument doc, CompleteGroup group)
         {
-            IList<ScreenNavigation> navigations = new List<ScreenNavigation>();
+           // IList<ScreenNavigation> navigations = new List<ScreenNavigation>();
             var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
             executor.Execute(group);
-            var queue = new Queue<ICompleteGroup>();
-            queue.Enqueue(doc);
-            while (queue.Count != 0)
-            {
-                ICompleteGroup item = queue.Dequeue();
-                List<IComposite> innerGroups = item.Children.Where(c => c is ICompleteGroup).ToList();
-                ScreenNavigation prevScreen = null;
-                ICompleteGroup prevGroup = null;
-                foreach (CompleteGroup g in innerGroups)
-                {
-                    var ng = new ScreenNavigation
-                                 {
-                                     CurrentScreenTitle = g.Title,
-                                     PublicKey = g.PublicKey,
-                                     PrevScreen = prevGroup == null ? null : new CompleteGroupHeaders(prevGroup),
-                                     Parent = new CompleteGroupHeaders(item)
-                                 };
-                    if (g.PropogationPublicKey.HasValue)
-                        ng.PropagateKey = g.PropogationPublicKey.Value;
-
-                    if (prevGroup != null)
-                        prevScreen.NextScreen = new CompleteGroupHeaders(g);
-
-                    if (item.PublicKey == doc.PublicKey)
-                    {
-                        if (ng.NextScreen != null)
-                            ng.NextScreen.IsExternal = true;
-                        if (ng.PrevScreen != null)
-                            ng.PrevScreen.IsExternal = true;
-                        if (prevScreen != null && prevScreen.NextScreen != null)
-                            prevScreen.NextScreen.IsExternal = true;
-                    }
-                    queue.Enqueue(g);
-                    prevGroup = g;
-                    prevScreen = ng;
-                    navigations.Add(ng);
-                }
-            }
-
-            var currentGroup = new CompleteGroupMobileView(doc, group, navigations);
-
+            var currentGroup = new CompleteGroupMobileView(doc, group, new ScreenNavigation());
             InitGroups(doc, currentGroup.PublicKey);
             Totals = CalcProgress(doc);
-           
             CurrentScreen = currentGroup;
         }
 
