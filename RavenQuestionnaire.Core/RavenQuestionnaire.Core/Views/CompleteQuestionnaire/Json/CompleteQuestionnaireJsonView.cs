@@ -44,6 +44,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         {
             var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
             executor.Execute(group);
+
+            var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
+            validator.Execute(group);
             var queue = new Queue<ICompleteGroup>();
             queue.Enqueue(group);
             while (queue.Count != 0)
