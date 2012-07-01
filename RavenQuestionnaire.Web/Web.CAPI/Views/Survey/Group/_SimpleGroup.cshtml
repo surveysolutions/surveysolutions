@@ -44,7 +44,13 @@
                     using (Html.BeginCollectionItem("settings", true, question.PublicKey))
                     {
                     @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
-                    @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
+                    @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
+                      if (Model is PropagatedGroupMobileView)
+                        {
+                            
+                            @Html.Hidden("PropogationPublicKey", ((PropagatedGroupMobileView)Model).PropogationKey)
+                            
+                        }
                     }
                     @Html.Hidden("PublicKey", question.PublicKey)
                 }
