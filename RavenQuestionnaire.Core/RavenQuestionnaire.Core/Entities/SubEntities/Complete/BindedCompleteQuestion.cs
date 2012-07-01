@@ -82,10 +82,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             set { }
         }
 
-        public List<IObserver<CompositeEventArgs>> Observers
-        {
-            get { return new List<IObserver<CompositeEventArgs>>(0);}
-        }
 
         [JsonIgnore]
         public IComposite Parent
@@ -180,13 +176,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         #endregion
 
-        #region Implementation of IObservable<out CompositeEventArgs>
-
-        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
-        {
-            return null;
-        }
-        #endregion
 
         #region Implementation of ITriggerable
         [JsonIgnore]

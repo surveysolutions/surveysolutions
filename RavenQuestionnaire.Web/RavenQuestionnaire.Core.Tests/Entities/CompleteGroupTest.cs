@@ -11,7 +11,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Observers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.Entities.Subscribers;
+
 
 namespace RavenQuestionnaire.Core.Tests.Entities
 {
@@ -22,38 +22,10 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         public void CreateObjects()
         {
             IKernel kernel = new StandardKernel();
-            subscriber = new Subscriber(kernel);
-            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<PropagationAddedSubscriber>();
-            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<PropagationRemovedSubscriber>();
-            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<ScopePropagationSubscriber>();
-            kernel.Bind<IEntitySubscriber<ICompleteGroup>>().To<BindedQuestionSubscriber>();
+         
 
         }
-        protected  ISubscriber subscriber;
-        [Test]
-        public void SubscribeOnGroupAdd_CorrectData_GroupIsAdded()
-        {
-            CompleteQuestionnaireDocument document = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire questionnaire = new CompleteQuestionnaire(document, subscriber);
-
-            //add group 1
-            CompleteGroup baseGroup = new CompleteGroup("target");
-            document.Children.Add(baseGroup);
-            // add group 2
-            CompleteGroup targetGroup = new CompleteGroup("some group") { Propagated = Propagate.Propagated };
-            // group 2 is triggered by group 1
-            targetGroup.Triggers.Add(baseGroup.PublicKey);
-            document.Children.Add(targetGroup);
-            
-            //clone group 1
-            var target = new CompleteGroup(baseGroup, Guid.NewGuid());
-            // add clone
-            questionnaire.Add(target, null);
-            //group 2 have to be triggered also, so insed of 3 groups we will have 4
-            Assert.AreEqual(document.Children.Count, 4);
-            questionnaire.Remove(target);
-            Assert.AreEqual(document.Children.Count, 2);
-        }
+       
       /*  [Test]
         public void SubscribeOnGroupRemove_ForcingKeyIsIncorrect_GroupIsRemoved()
         {

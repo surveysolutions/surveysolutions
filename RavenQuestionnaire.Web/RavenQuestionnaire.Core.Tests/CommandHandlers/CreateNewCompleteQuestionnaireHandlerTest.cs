@@ -6,7 +6,6 @@ using RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Core.Tests.Utils;
@@ -20,7 +19,6 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         public void CreateObjects()
         {
             IKernel kernel = new StandardKernel();
-            kernel.Bind<ISubscriber>().ToConstant(new Subscriber(kernel));
         }
         [Test]
         public void WhenCommandIsReceivedWithInvalidQuestionnaireid_NullRefferenceException()
@@ -28,9 +26,8 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             Mock<ICompleteQuestionnaireRepository> coompleteQuestionnaireRepositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             Mock<IStatisticRepository> statisticsRepositoryMock = new Mock<IStatisticRepository>();
-            Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
             ICompleteQuestionnaireUploaderService completeQuestionnaireService =
-             new CompleteQuestionnaireUploaderService(coompleteQuestionnaireRepositoryMock.Object, statisticsRepositoryMock.Object, subscriberMock.Object);
+             new CompleteQuestionnaireUploaderService(coompleteQuestionnaireRepositoryMock.Object, statisticsRepositoryMock.Object);
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
         
             CreateNewCompleteQuestionnaireHandler handler = new CreateNewCompleteQuestionnaireHandler(questionnaireRepositoryMock.Object, 
@@ -53,9 +50,9 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Mock<ICompleteQuestionnaireRepository> coompleteQuestionnaireRepositoryMock = new Mock<ICompleteQuestionnaireRepository>();
             Mock<IStatisticRepository> statisticsRepositoryMock = new Mock<IStatisticRepository>();
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            Mock<ISubscriber> subscriberMock = new Mock<ISubscriber>();
+            
             ICompleteQuestionnaireUploaderService completeQuestionnaireService =
-                new CompleteQuestionnaireUploaderService(coompleteQuestionnaireRepositoryMock.Object, statisticsRepositoryMock.Object, subscriberMock.Object);
+                new CompleteQuestionnaireUploaderService(coompleteQuestionnaireRepositoryMock.Object, statisticsRepositoryMock.Object);
             questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(questionnaireDocument);
 
 

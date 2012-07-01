@@ -3,7 +3,6 @@ using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Entities.Extensions;
-using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
@@ -14,12 +13,10 @@ namespace RavenQuestionnaire.Core.Services
     {
         private ICompleteQuestionnaireRepository _questionRepository;
         private IStatisticRepository _statisticsRepository;
-        private ISubscriber subscriber;
-        public CompleteQuestionnaireUploaderService(ICompleteQuestionnaireRepository questionRepository, IStatisticRepository statisticsRepository, ISubscriber subscriber)
+        public CompleteQuestionnaireUploaderService(ICompleteQuestionnaireRepository questionRepository, IStatisticRepository statisticsRepository)
         {
             this._questionRepository = questionRepository;
             this._statisticsRepository = statisticsRepository;
-            this.subscriber = subscriber;
         }
         public CompleteQuestionnaire AddCompleteAnswer(string id, Guid questionKey, Guid? propagationKey, object answers)
         {
@@ -49,7 +46,7 @@ namespace RavenQuestionnaire.Core.Services
         #endregion
         public CompleteQuestionnaire CreateCompleteQuestionnaire(Questionnaire questionnaire, Guid completeQuestionnaireGuid, UserLight user, SurveyStatus status)
         {
-            CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire, completeQuestionnaireGuid, user, status, this.subscriber);
+            CompleteQuestionnaire entity = new CompleteQuestionnaire(questionnaire, completeQuestionnaireGuid, user, status);
            
             _questionRepository.Add(entity);
            

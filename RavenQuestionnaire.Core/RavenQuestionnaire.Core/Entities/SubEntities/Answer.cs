@@ -23,7 +23,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Answer(/*Question owner*/)
         {
             PublicKey = Guid.NewGuid();
-            this.observers=new List<IObserver<CompositeEventArgs>>();
        //     QuestionId = owner.QuestionId;
         }
 
@@ -73,27 +72,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             set { }
         }
 
-        public List<IObserver<CompositeEventArgs>> Observers
-        {
-            get { return observers; }
-        }
-
         [JsonIgnore]
         public IComposite Parent
         {
             get { throw new NotImplementedException(); }
         }
 
-        #region Implementation of IObservable<out CompositeEventArgs>
-
-        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
-        {
-            if (observers.Contains(observer))
-                return null;
-            return new Unsubscriber(this, observer);
-        }
-        private List<IObserver<CompositeEventArgs>> observers;
-        #endregion
 
     }
 }

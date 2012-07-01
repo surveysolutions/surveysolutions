@@ -43,7 +43,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         {
             this.Answer = answer;
             this.AnswerDate = DateTime.Now;
-            OnAdded(new CompositeAddedEventArgs(this));
         }
 
         public abstract string GetAnswerString();
@@ -53,14 +52,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public void SetComments(string comments)
         {
             this.Comments = comments;
-            OnAdded(new CompositeAddedEventArgs(this));
         }
-
-        public List<IObserver<CompositeEventArgs>> Observers
-        {
-            get { return observers; }
-        }
-
         [JsonIgnore]
         public IComposite Parent
         {
@@ -81,7 +73,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.Cards = new List<Image>();
             this.Triggers = new List<Guid>();
             //this.Answers.GetObservablePropertyChanges().Subscribe(e=>e.EventArgs)
-            this.observers = new List<IObserver<CompositeEventArgs>>();
         }
 
         protected AbstractCompleteQuestion(string text)
@@ -93,19 +84,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         #endregion
 
-        #region Implementation of IObservable<out CompositeEventArgs>
-
-        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
-        {
-            if (observers.Contains(observer))
-                return null;
-            return new Unsubscriber(this, observer);
-        }
-
-        private List<IObserver<CompositeEventArgs>> observers;
-
-        #endregion
-
+        
         #region Implementation of ITriggerable
 
         public List<Guid> Triggers { get; set; }
@@ -126,23 +105,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public abstract T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
 
-        protected void OnAdded(CompositeAddedEventArgs e)
-        {
-            foreach (IObserver<CompositeEventArgs> observer in observers)
-            {
-                e.AddedComposite.Subscribe(observer);
-                observer.OnNext(e);
-            }
-        }
-
-        protected void OnRemoved(CompositeRemovedEventArgs e)
-        {
-            foreach (IObserver<CompositeEventArgs> observer in observers)
-            {
-                observer.OnNext(e);
-            }
-        }
-        
         #endregion
     }
 }

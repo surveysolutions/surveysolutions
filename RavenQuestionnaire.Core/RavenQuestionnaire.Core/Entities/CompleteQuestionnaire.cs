@@ -4,7 +4,6 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.Entities.Subscribers;
 
 namespace RavenQuestionnaire.Core.Entities
 {
@@ -30,18 +29,9 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Status = status;
             innerDocument.Responsible = user;
         }
-        public CompleteQuestionnaire(Questionnaire template, Guid completeQuestionnaireGuid, UserLight user, SurveyStatus status, ISubscriber subscriber)
-            : this(template, completeQuestionnaireGuid, user, status)
-        {
-            subscriber.Subscribe(this.innerDocument);
-        }
+      
 
-        public CompleteQuestionnaire(CompleteQuestionnaireDocument document, ISubscriber subscriber)
-            : this(document)
-        {
-
-            subscriber.Subscribe(this.innerDocument);
-        }
+       
         public string CompleteQuestinnaireId
         {
             get { return innerDocument.Id; }
@@ -111,13 +101,6 @@ namespace RavenQuestionnaire.Core.Entities
 
         #endregion
 
-        #region Implementation of IObservable<out CompositeEventArgs>
-
-        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
-        {
-            return innerDocument.Subscribe(observer);
-        }
-
-        #endregion
+    
     }
 }

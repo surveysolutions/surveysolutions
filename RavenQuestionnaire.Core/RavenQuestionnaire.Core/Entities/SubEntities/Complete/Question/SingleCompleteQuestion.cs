@@ -39,7 +39,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                     this.Children.ForEach(c => ((ICompleteAnswer)c).Selected = false);
                     answerObject.Add(answerObject, null);
                     this.AnswerDate = DateTime.Now;
-                    OnAdded(new CompositeAddedEventArgs(this));
                     return;
                 }
                 throw new CompositeException("answer wasn't found");
@@ -110,7 +109,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             {
                 foreach (CompleteAnswer answer in this.Children)
                     answer.Remove(answer);
-                OnRemoved(new CompositeRemovedEventArgs(this));
+                
                 return;
             }
             foreach (CompleteAnswer completeAnswer in this.Children)
@@ -118,7 +117,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 try
                 {
                     completeAnswer.Remove(publicKey);
-                    OnRemoved(new CompositeRemovedEventArgs(new CompositeRemovedEventArgs(this), completeAnswer));
+                  
                     return;
                 }
                 catch (CompositeException)

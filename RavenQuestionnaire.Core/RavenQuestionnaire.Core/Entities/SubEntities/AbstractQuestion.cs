@@ -16,7 +16,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             //PublicKey = Guid.NewGuid();
             Cards = new List<Image>();
             this.Triggers = new List<Guid>();
-            this.observers = new List<IObserver<CompositeEventArgs>>();
 
         }
 
@@ -24,21 +23,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             : this()
         {
             QuestionText = text;
-        }
-
-        protected void OnAdded(CompositeAddedEventArgs e)
-        {
-            foreach (IObserver<CompositeEventArgs> observer in observers.ToList())
-            {
-                observer.OnNext(e);
-            }
-        }
-        protected void OnRemoved(CompositeRemovedEventArgs e)
-        {
-            foreach (IObserver<CompositeEventArgs> observer in observers.ToList())
-            {
-                observer.OnNext(e);
-            }
         }
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
@@ -106,28 +90,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public abstract List<IComposite> Children { get; set; }
 
-        public List<IObserver<CompositeEventArgs>> Observers
-        {
-            get { return observers; }
-        }
 
         [JsonIgnore]
         public IComposite Parent
         {
             get { throw new NotImplementedException(); }
         }
-
-        #region Implementation of IObservable<out CompositeEventArgs>
-
-        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
-        {
-            if (observers.Contains(observer))
-                return null;
-            return new Unsubscriber(this, observer);
-        }
-        private List<IObserver<CompositeEventArgs>> observers;
-
-        #endregion
 
         #region Implementation of ITriggerable
 

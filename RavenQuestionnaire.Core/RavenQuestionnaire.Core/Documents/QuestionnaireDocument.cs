@@ -26,7 +26,6 @@ namespace RavenQuestionnaire.Core.Documents
             LastEntryDate = DateTime.Now;
             PublicKey = Guid.NewGuid();
             Children = new List<IComposite>();
-            this.observers=new List<IObserver<CompositeEventArgs>>();
         }
 
         public string Id { get; set; }
@@ -79,7 +78,6 @@ namespace RavenQuestionnaire.Core.Documents
             {
 
                 this.Children.Add(c);
-                OnAdded(new CompositeAddedEventArgs(c));
                 return;
 
             }
@@ -110,7 +108,6 @@ namespace RavenQuestionnaire.Core.Documents
             if (group != null)
             {
                 this.Children.Remove(group);
-                OnRemoved(new CompositeRemovedEventArgs(group));
                 return;
             }
 
@@ -174,43 +171,12 @@ namespace RavenQuestionnaire.Core.Documents
 
         public List<IComposite> Children { get; set; }
 
-        public List<IObserver<CompositeEventArgs>> Observers
-        {
-            get { return observers; }
-        }
 
         [JsonIgnore]
         public IComposite Parent
         {
             get { throw new NotImplementedException(); }
         }
-
-        protected void OnAdded(CompositeAddedEventArgs e)
-        {
-            foreach (IObserver<CompositeEventArgs> observer in observers)
-            {
-                e.AddedComposite.Subscribe(observer);
-                observer.OnNext(e);
-            }
-        }
-        protected void OnRemoved(CompositeRemovedEventArgs e)
-        {
-            foreach (IObserver<CompositeEventArgs> observer in observers)
-            {
-                observer.OnNext(e);
-            }
-        }
-
-        #region Implementation of IObservable<out CompositeEventArgs>
-
-        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
-        {
-            if (observers.Contains(observer))
-                return null;
-            return new Unsubscriber(this, observer);
-        }
-        private List<IObserver<CompositeEventArgs>> observers;
-        #endregion
         #endregion
     }
 }

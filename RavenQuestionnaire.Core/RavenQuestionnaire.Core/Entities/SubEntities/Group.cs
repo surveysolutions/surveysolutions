@@ -25,7 +25,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Group()
         {
             this.PublicKey = Guid.NewGuid();
-            this.Observers = new List<IObserver<CompositeEventArgs>>();
             this.Children = new List<IComposite>();
             this.Triggers = new List<Guid>();
           
@@ -55,7 +54,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             {
 
                 Children.Add(c);
-                OnAdded(new CompositeAddedEventArgs(c));
                 return;
 
             }
@@ -107,7 +105,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             if (group != null)
             {
                 this.Children.Remove(group);
-                OnRemoved(new CompositeRemovedEventArgs(group));
                 return;
             }
             foreach (IComposite child in this.Children)
@@ -161,36 +158,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         [JsonIgnore]
         public IComposite ParentGroup { get; set; }
-
-        protected void OnAdded(CompositeAddedEventArgs e)
-        {
-            
-            foreach (IObserver<CompositeEventArgs> observer in Observers)
-            {
-                e.AddedComposite.Subscribe(observer);
-                observer.OnNext(e);
-            }
-        }
-        protected void OnRemoved(CompositeRemovedEventArgs e)
-        {
-            foreach (IObserver<CompositeEventArgs> observer in Observers)
-            {
-                observer.OnNext(e);
-            }
-        }
-
-        #region Implementation of IObservable<out CompositeEventArgs>
-
-        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
-        {
-            if (Observers.Contains(observer))
-                return null;
-            return new Unsubscriber(this, observer);
-        }
-
-        public List<IObserver<CompositeEventArgs>> Observers { get; set; }
-
-        #endregion
 
     }
 }

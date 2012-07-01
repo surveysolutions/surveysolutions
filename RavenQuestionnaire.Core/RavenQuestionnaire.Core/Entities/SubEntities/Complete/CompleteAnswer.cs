@@ -18,7 +18,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public CompleteAnswer()
         {
             this.PublicKey = Guid.NewGuid();
-            this.observers=new List<IObserver<CompositeEventArgs>>();
         }
 
         public CompleteAnswer(IAnswer answer):this()
@@ -160,10 +159,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             set { }
         }
 
-        public List<IObserver<CompositeEventArgs>> Observers
-        {
-            get { return observers; }
-        }
 
         [JsonIgnore]
         public IComposite Parent
@@ -171,31 +166,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             get { throw new NotImplementedException(); }
         }
 
-        #endregion
-        protected void OnAdded(CompositeAddedEventArgs e)
-        {
-            foreach (IObserver<CompositeEventArgs> observer in observers.ToList())
-            {
-                observer.OnNext(e);
-            }
-        }
-        protected void OnRemoved(CompositeRemovedEventArgs e)
-        {
-            foreach (IObserver<CompositeEventArgs> observer in observers.ToList())
-            {
-                observer.OnNext(e);
-            }
-        }
-
-        #region Implementation of IObservable<out CompositeEventArgs>
-
-        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
-        {
-            if (observers.Contains(observer))
-                return null;
-            return new Unsubscriber(this, observer);
-        }
-        private List<IObserver<CompositeEventArgs>> observers;
         #endregion
     }
 }

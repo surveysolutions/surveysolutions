@@ -11,7 +11,6 @@ using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.Conventions;
 using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Entities.Iterators;
-using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Indexes;
 
@@ -49,8 +48,6 @@ namespace RavenQuestionnaire.Core
                     request => request.ParentRequest.ParentRequest.Service == typeof (ICommandHandler<>));*/
             Bind<IClientSettingsProvider>().To<RavenQuestionnaire.Core.ClientSettingsProvider.ClientSettingsProvider>().
                 InSingletonScope();
-            Bind<ISubscriber>().To<Subscriber>().
-                InSingletonScope();
            // this.Kernel.BindInterfaceToBinding<ICommandInvoker, IDocumentSession>();
 
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IViewFactory<,>))));
@@ -60,15 +57,7 @@ namespace RavenQuestionnaire.Core
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(Iterator<>))));
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IEventSubscriber<>))));
             //this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IEntitySubscriber<>))));
-            this.Kernel.Bind(scanner => scanner.FromAssembliesMatching("RavenQuestionnaire.*")
-                                            .Select(
-                                                t =>
-                                                t.GetInterfaces().FirstOrDefault(
-                                                    i =>
-                                                    i.IsGenericType &&
-                                                    i.GetGenericTypeDefinition() == typeof (IEntitySubscriber<>)) !=
-                                                null).BindAllInterfaces()
-                                            .Configure(binding => binding.InSingletonScope()));
+       
             this.Kernel.Bind(scanner => scanner.FromAssembliesMatching("RavenQuestionnaire.*")
                                             .Select(
                                                 t =>
@@ -101,8 +90,7 @@ namespace RavenQuestionnaire.Core
   
             this.Kernel.Bind(
                 x =>
-                x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().Excluding
-                    <IClientSettingsProvider>().Excluding<ISubscriber>().BindWith(new RegisterFirstInstanceOfInterface()));
+                x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().BindWith(new RegisterFirstInstanceOfInterface()));
 
 
         }

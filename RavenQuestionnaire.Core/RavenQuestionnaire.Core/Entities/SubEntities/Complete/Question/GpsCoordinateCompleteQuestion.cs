@@ -60,7 +60,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 throw new CompositeException();
             this.Answer = question.Answer;
             this.AnswerDate = DateTime.Now;
-            OnAdded(new CompositeAddedEventArgs(this));
         }
 
         public override void Remove(IComposite c)
@@ -73,7 +72,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             if (publicKey != this.PublicKey)
                 throw new CompositeException();
             this._answer = null;
-            OnRemoved(new CompositeRemovedEventArgs(this));
         }
 
         public override T Find<T>(Guid publicKey)

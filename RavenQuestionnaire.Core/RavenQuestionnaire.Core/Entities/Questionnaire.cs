@@ -236,13 +236,5 @@ namespace RavenQuestionnaire.Core.Entities
         }
 
 
-        #region Implementation of IObservable<out CompositeEventArgs>
-
-        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
-        {
-            return innerDocument.Subscribe(observer);
-        }
-
-        #endregion
     }
 }
