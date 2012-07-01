@@ -31,7 +31,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Question
                     if (Children.Any(a => a.PublicKey.Equals(answer.PublicKey)))
                         throw new DuplicateNameException("answer with current publick key already exist");
                     Children.Add(answer);
-                    OnAdded(new CompositeAddedEventArgs(answer));
                     return;
                 }
             }

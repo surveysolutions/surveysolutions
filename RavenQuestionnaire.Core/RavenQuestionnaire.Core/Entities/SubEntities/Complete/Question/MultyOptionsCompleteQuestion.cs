@@ -43,7 +43,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                         completeAnswer.Add(completeAnswer, null);
                     }
                     this.AnswerDate = DateTime.Now;
-                    OnAdded(new CompositeAddedEventArgs(this));
                     return;
                 }
                 throw new CompositeException("answer wasn't found");
@@ -121,7 +120,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 {
                     composite.Remove(composite.PublicKey);
                 }
-                OnRemoved(new CompositeRemovedEventArgs(this));
+                
                 return;
 
             }
@@ -131,7 +130,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 {
 
                     composite.Remove(publicKey);
-                    OnRemoved(new CompositeRemovedEventArgs(this));
+                    
                     return;
                 }
                 catch (CompositeException)

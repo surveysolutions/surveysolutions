@@ -6,7 +6,7 @@ using System.Text;
 
 namespace RavenQuestionnaire.Core.Entities.Composite
 {
-    public interface IComposite : IObservable<CompositeEventArgs>
+    public interface IComposite 
     {
         Guid PublicKey { get; }
         void Add(IComposite c, Guid? parent);
@@ -18,100 +18,9 @@ namespace RavenQuestionnaire.Core.Entities.Composite
 
 
         List<IComposite> Children { get; set; }
-        List<IObserver<CompositeEventArgs>> Observers { get; }
+        
         IComposite Parent { get;}
     }
 
-    public class Unsubscriber : IDisposable
-    {
-        private IComposite composite;
-        private IObserver<CompositeEventArgs> _observer;
-   //     private List<IObserver<CompositeEventArgs>> _observers;
-        public Unsubscriber(IComposite composite, IObserver<CompositeEventArgs> observer)
-        {
-            this.composite = composite;
-            if (composite.Observers.Contains(observer))
-                throw new ArgumentException("observer dublicate");
-            composite.Observers.Add(observer);
-            this._observer = observer;
-            foreach (IComposite child in this.composite.Children)
-            {
-                child.Subscribe(observer);
-            }
-        }
-
-        public void Dispose()
-        {
-            if (_observer != null && composite.Observers.Contains(_observer))
-            {
-                composite.Observers.Remove(_observer);
-                foreach (IComposite child in this.composite.Children)
-                {
-                    child.Observers.Remove(_observer);
-                }
-            }
-        }
-    }
-    /* public static class EventsProcessor
-    {
-       // private readonly List<Func<IObservable<object>, IObservable<object>>> actions = new List<Func<IObservable<object>, IObservable<object>>>();
-
-        public static void On<T>(this IComposite composite, Func<IObservable<T>, IObservable<object>> action)
-        {
-            actions.Add(observable => action(observable.OfType<T>()));
-        }
-
-        public static void Execute(this IComposite composite, IObservable<object> observable)
-        {
-            foreach (var action in actions)
-            {
-                action(observable).Subscribe();
-            }
-        }
-    }*/
-    public abstract class CompositeEventArgs : EventArgs
-    {
-        protected CompositeEventArgs()
-        {
-        }
-
-        protected CompositeEventArgs(CompositeEventArgs parent)
-        {
-            this.ParentEvent = parent;
-        }
-
-        public CompositeEventArgs ParentEvent { get; private set; }
-    }
-
-    public class CompositeAddedEventArgs : CompositeEventArgs
-    {
-         public CompositeAddedEventArgs(IComposite added)
-         {
-             this.AddedComposite = added;
-         }
-
-        public CompositeAddedEventArgs(CompositeEventArgs parent, IComposite added)
-            : base(parent)
-        {
-            this.AddedComposite = added;
-        }
-
-        public IComposite AddedComposite { get; private set; }
-    }
-
-    public class CompositeRemovedEventArgs : CompositeEventArgs
-    {
-        public CompositeRemovedEventArgs(IComposite removed)
-        {
-            this.RemovedComposite = removed;
-        }
-
-        public CompositeRemovedEventArgs(CompositeEventArgs parent, IComposite removed)
-            : base(parent)
-
-        {
-            this.RemovedComposite = removed;
-        }
-        public IComposite RemovedComposite { get; private set; }
-    }
+    
 }

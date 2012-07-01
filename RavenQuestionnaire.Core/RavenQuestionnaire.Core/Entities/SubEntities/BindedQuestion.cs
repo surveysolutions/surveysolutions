@@ -94,10 +94,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         [JsonIgnore]
         public List<IComposite> Children { get; set; }
 
-        public List<IObserver<CompositeEventArgs>> Observers
-        {
-            get { return new List<IObserver<CompositeEventArgs>>(0);}
-        }
 
         [JsonIgnore]
         public IComposite Parent
@@ -105,14 +101,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             get { throw new NotImplementedException(); }
         }
 
-        #region Implementation of IObservable<out CompositeEventArgs>
-
-        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
-        {
-            return null;
-        }
-
-        #endregion
 
         #region Implementation of ITriggerable
         [JsonIgnore]

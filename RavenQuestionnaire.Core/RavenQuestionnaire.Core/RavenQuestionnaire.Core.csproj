@@ -295,7 +295,6 @@
     <Compile Include="Entities\File.cs" />
     <Compile Include="Entities\Event.cs" />
     <Compile Include="Entities\FlowGraph.cs" />
-    <Compile Include="Entities\Extensions\CompositeObservebleExtensions.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
@@ -348,14 +347,6 @@
     <Compile Include="Entities\SubEntities\UserLight.cs" />
     <Compile Include="Entities\SubEntities\SurveyStatus.cs" />
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
-    <Compile Include="Entities\Subscribers\BindedQuestionSubscriber.cs" />
-    <Compile Include="Entities\Subscribers\EntitySubscriber.cs" />
-    <Compile Include="Entities\Subscribers\IEntitySubscriber.cs" />
-    <Compile Include="Entities\Subscribers\ISubscriber.cs" />
-    <Compile Include="Entities\Subscribers\PropagationRemovedSubscriber.cs" />
-    <Compile Include="Entities\Subscribers\PropagationSubscriber.cs" />
-    <Compile Include="Entities\Subscribers\ScopePropagationSubscriber.cs" />
-    <Compile Include="Entities\Subscribers\Subscriber.cs" />
     <Compile Include="Entities\SyncProcess.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Events\Collection\NewCollectionCreated.cs" />

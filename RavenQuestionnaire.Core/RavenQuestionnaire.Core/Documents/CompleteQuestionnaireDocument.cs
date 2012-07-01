@@ -28,7 +28,6 @@ namespace RavenQuestionnaire.Core.Documents
             this.CreationDate = DateTime.Now;
             this.LastEntryDate = DateTime.Now;
            // this.PublicKey = Guid.NewGuid();
-            this.compositeobservers = new List<IObserver<CompositeEventArgs>>();
             this.Children = new List<IComposite>();
           
         }
@@ -151,7 +150,6 @@ namespace RavenQuestionnaire.Core.Documents
                 if (this.Children.Count(g => g.PublicKey.Equals(c.PublicKey)) > 0)
                 {
                     this.Children.Add(c);
-                    OnAdded(new CompositeAddedEventArgs(c));
                     return;
                 }
             }
@@ -183,7 +181,6 @@ namespace RavenQuestionnaire.Core.Documents
                 foreach (ICompleteGroup propagatableCompleteGroup in propagatedGroups)
                 {
                     Children.Remove(propagatableCompleteGroup);
-                    OnRemoved(new CompositeRemovedEventArgs(propagatableCompleteGroup));
                     isremoved = true;
                 }
                 if (isremoved)
@@ -211,7 +208,6 @@ namespace RavenQuestionnaire.Core.Documents
                 if (forRemove!=null && forRemove is ICompleteGroup &&((ICompleteGroup)forRemove).PropogationPublicKey.HasValue)
                 {
                     this.Children.Remove(forRemove);
-                    OnRemoved(new CompositeRemovedEventArgs(forRemove));
                     return;
                 }
             
@@ -253,44 +249,12 @@ namespace RavenQuestionnaire.Core.Documents
 
         public List<IComposite> Children { get; set; }
 
-        public List<IObserver<CompositeEventArgs>> Observers
-        {
-            get { return compositeobservers; }
-        }
 
         [JsonIgnore]
         public IComposite Parent
         {
             get; set;
         }
-
-        protected void OnAdded(CompositeAddedEventArgs e)
-        {
-            foreach (IObserver<CompositeEventArgs> observer in compositeobservers.ToList())
-            {
-                e.AddedComposite.Subscribe(observer);
-                observer.OnNext(e);
-            }
-        }
-        protected void OnRemoved(CompositeRemovedEventArgs e)
-        {
-            foreach (IObserver<CompositeEventArgs> observer in compositeobservers.ToList())
-            {
-                observer.OnNext(e);
-            }
-        }
-
-        #region Implementation of IObservable<out CompositeEventArgs>
-
-        public IDisposable Subscribe(IObserver<CompositeEventArgs> observer)
-        {
-            if (compositeobservers.Contains(observer))
-                return null;
-            return new Unsubscriber(this, observer);
-        }
-
-        private List<IObserver<CompositeEventArgs>> compositeobservers;
-        #endregion
         #endregion
 
         public Guid? PropogationPublicKey
