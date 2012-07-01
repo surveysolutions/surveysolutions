@@ -179,7 +179,8 @@ namespace RavenQuestionnaire.Core.Domain
         {
             var group = new CompleteGroup(_doc.Find<CompleteGroup>(e.PublicKey), e.PropagationKey);
             _doc.Remove(group);
-            
+            _doc.QuestionHash.AddGroup(group);
+
         }
         public void AddPropagatableGroup(Guid publicKey, Guid propagationKey)
         {
@@ -219,7 +220,7 @@ namespace RavenQuestionnaire.Core.Domain
          
             var newGroup = new CompleteGroup(template, e.PropagationKey);
             _doc.Add(newGroup, null);
-            
+            _doc.QuestionHash.AddGroup(newGroup);
         }
 
         #region Implementation of ISnapshotable<CompleteQuestionnaireDocument>

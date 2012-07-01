@@ -90,7 +90,8 @@ namespace RavenQuestionnaire.Core
   
             this.Kernel.Bind(
                 x =>
-                x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().BindWith(new RegisterFirstInstanceOfInterface()));
+                x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().Excluding
+                    <IClientSettingsProvider>().BindWith(new RegisterFirstInstanceOfInterface()));
 
 
         }
