@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NCalc;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -11,6 +12,15 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         public CompleteQuestionnaireValidationExecutor(GroupHash hash)
         {
             this.hash = hash;
+        }
+
+        public void Execute(ICompleteGroup group)
+        {
+            foreach (ICompleteQuestion completeQuestion in group.Children.Where(c => c is ICompleteQuestion))
+            {
+                //  bool previousState = completeQuestion.Enabled;
+                completeQuestion.Valid = Execute(completeQuestion);
+            }
         }
         public bool Execute()
         {
