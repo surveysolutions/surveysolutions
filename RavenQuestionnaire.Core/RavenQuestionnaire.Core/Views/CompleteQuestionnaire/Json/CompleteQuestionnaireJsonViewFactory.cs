@@ -9,6 +9,7 @@ using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.ViewSnapshot;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Entities.Extensions;
@@ -106,7 +107,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                 }
                 if (group == null)
                     group = doc.Children.OfType<ICompleteGroup>().First();
-          
+                var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
+                executor.Execute(group);
+                var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
+                validator.Execute(group);
                 if (input.PropagationKey.HasValue)
                     return new PropagatedGroupMobileView(doc, group, CompileNavigation(rout,group));
                 return new CompleteGroupMobileView(doc, (CompleteGroup)group, CompileNavigation(rout, group));
