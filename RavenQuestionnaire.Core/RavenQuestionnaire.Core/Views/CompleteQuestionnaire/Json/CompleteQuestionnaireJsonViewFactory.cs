@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                 
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
-                    group = doc.Find<CompleteGroup>(input.CurrentGroupPublicKey.Value);
+                    group = doc.FindGroupByKey(input.CurrentGroupPublicKey.Value, input.PropagationKey);
                 }
                
                 return new CompleteQuestionnaireJsonView(doc, group);

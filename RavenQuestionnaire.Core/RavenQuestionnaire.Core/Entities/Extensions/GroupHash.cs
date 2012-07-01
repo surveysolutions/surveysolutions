@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Entities.Extensions
@@ -13,12 +14,9 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
         //     private ICompleteGroup root;
       //  private IList<ICompleteQuestion> triggers;
         private IDictionary<string, ICompleteQuestion> hash;
-        private IDictionary<string, ICompleteQuestion> triggered;
-        private ICompleteQuestion trigger;
         public GroupHash()
         {
             this.hash = new Dictionary<string, ICompleteQuestion>();
-            this.triggered = new Dictionary<string, ICompleteQuestion>();
         }
 
         public GroupHash(ICompleteGroup root):this()
@@ -26,13 +24,23 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
             this.PublicKey = root.PublicKey;
             ProcessTree(root);
         }
-        public GroupHash(ICompleteGroup root, ICompleteQuestion trigger):this()
+        public void AddGroup(ICompleteGroup group)
         {
-            this.PublicKey = root.PublicKey;
-            this.trigger = trigger;
-            triggered.Add(GetQuestionKey(trigger), trigger);
-            ProcessTree(root);
+            if (!group.PropogationPublicKey.HasValue)
+                throw new ArgumentException("only propagated group can uppdate hash");
+            ProcessTree(group);
         }
+        public void RemoveGroup(ICompleteGroup group)
+        {
+            if (!group.PropogationPublicKey.HasValue)
+                throw new ArgumentException("only propagated group can uppdate hash");
+            foreach (string key in hash.Keys.ToArray())
+            {
+                if (key.EndsWith(group.PropogationPublicKey.ToString()))
+                    hash.Remove(key);
+            }
+        }
+
         private void ProcessTree(ICompleteGroup root)
         {
             Queue<IComposite> nodes = new Queue<IComposite>(new IComposite[1] { root });
@@ -45,13 +53,17 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
             }
         }
 
-        private void ProcessIComposite(IComposite node,  Queue<IComposite> nodes)
+        private void ProcessIComposite(IComposite node, Queue<IComposite> nodes)
         {
             ICompleteQuestion question = node as ICompleteQuestion;
             if (node is IBinded)
                 return;
+
             if (question == null)
             {
+                var group = node as ICompleteGroup;
+                if (group.Propagated != Propagate.None && !group.PropogationPublicKey.HasValue)
+                    return;
                 foreach (IComposite child in node.Children)
                 {
                     nodes.Enqueue(child);
@@ -62,16 +74,6 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
             if (!hash.ContainsKey(questionKey))
                 hash.Add(questionKey, question);
 
-            if (trigger != null)
-            {
-                if (!question.Triggers.Contains(trigger.PublicKey))
-                    return;
-                if (trigger.PropogationPublicKey.HasValue &&
-                    trigger.PropogationPublicKey.Value != question.PropogationPublicKey)
-                    return;
-                if (!triggered.ContainsKey(questionKey))
-                    triggered.Add(questionKey, question);
-            }
         }
 
         private string GetQuestionKey(ICompleteQuestion question)
@@ -86,12 +88,7 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
         }
         public IEnumerable<ICompleteQuestion> Questions
         {
-            get
-            {
-                if (this.trigger == null)
-                    return this.hash.Values;
-                return this.triggered.Values;
-            }
+            get { return this.hash.Values; }
         }
 
         public ICompleteQuestion this[Guid publicKey, Guid? propagationKey]

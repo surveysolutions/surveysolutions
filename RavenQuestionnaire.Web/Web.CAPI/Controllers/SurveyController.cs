@@ -261,7 +261,7 @@ namespace Web.CAPI.Controllers
 
 
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
-                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId) { CurrentGroupPublicKey = settings[0].ParentGroupPublicKey });
+                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId, settings[0].ParentGroupPublicKey.Value,settings[0].PropogationPublicKey));
 
             return Json(model);
         }
