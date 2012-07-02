@@ -49,8 +49,10 @@
         });
     } (window, window.jQuery, window.Code.PhotoSwipe));
 
-    function ClearItems() {
+    function ClearItems(isClear) {
         $('#sidebar li').removeClass('ui-btn-active');
+        if (isClear)
+            $('#content_container').html('');
     }
 
     function ChangeScreen(groupId, existingGroup,parent) {
@@ -112,12 +114,12 @@
                 {
                     if (!gh.IsCurrent)
                     {
-                    <li data-icon="false"><a id="ref-link-@(gh.PublicKey)" data-panel="main" onclick="ClearItems()"  href='@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })'>@gh.GroupText
+                    <li data-icon="false"><a id="ref-link-@(gh.PublicKey)" data-panel="main" onclick="ClearItems(false)"  href='@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })'>@gh.GroupText
                         <span  id="counter-@(gh.PublicKey)" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                     else
                     {
-                    <li class="ui-btn-active"><a  data-panel="main" href="@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })" onclick="ClearItems()">@gh.GroupText
+                    <li class="ui-btn-active"><a  id="ref-link-@(gh.PublicKey)" onclick="ClearItems(true)"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })" onclick="ClearItems()">@gh.GroupText
                         <span id="counter-@(gh.PublicKey)" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                 }
