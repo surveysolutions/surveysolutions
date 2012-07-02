@@ -1,6 +1,7 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@using RavenQuestionnaire.Core.Views.Question
 @model PropagatedGroupMobileView
 @{ var groupKey = "propagatedGroup" + Model.PropogationKey;
    var rparams = new
@@ -40,10 +41,11 @@
 }
 else
 {
-    <li data-role="fieldcontain" id="@groupKey" ><a  id="screen-ref-@(Model.PropogationKey)" class="propagated-screen-link" href="#screen-@(Model.PropogationKey)">
+    <li data-role="fieldcontain" id="@groupKey" >
+    <a  id="screen-ref-@(Model.PropogationKey)" class="propagated-screen-link" href="#screen-@(Model.PropogationKey)">
         <h3><span>@ViewBag.GroupIndex)</span> @Model.Title</h3>
 	    <p id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
-    </a>
+    </a>    
      <script type="text/javascript">
          $('#screen-ref-@(Model.PropogationKey)').click(function () {
              $('.scrollHere').removeClass('scrollHere');
