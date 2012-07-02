@@ -2461,14 +2461,25 @@ $.widget( "mobile.page", $.mobile.widget, {
 
 		if( fromPage ) {
 			//trigger before show/hide events
-			fromPage.data( "page" )._trigger( "beforehide", null, { nextPage: toPage } );
+		      fromPage.each(function() {
+			        var data = $(this).data("page");
+			        if (data && data._trigger)
+			            data._trigger( "beforehide", null, { nextPage: toPage } );
+
+			    });
+			//fromPage.data( "page" )._trigger( "beforehide", null, { nextPage: toPage } );
 		}
 
 		if( !touchOverflow){
 			toPage.height( screenHeight + toScroll );
 		}
+         toPage.each(function() {
+			        var data = $(this).data("page");
+			        if (data && data._trigger)
+			            data._trigger( "beforeshow", null, { prevPage: fromPage || $( "" ) } );
 
-		toPage.data( "page" )._trigger( "beforeshow", null, { prevPage: fromPage || $( "" ) } );
+			    });
+	//	toPage.data( "page" )._trigger( "beforeshow", null, { prevPage: fromPage || $( "" ) } );
 
 		//clear page loader
 		$.mobile.hidePageLoadingMsg();
@@ -2512,12 +2523,22 @@ $.widget( "mobile.page", $.mobile.widget, {
 				if( !touchOverflow ){
 					fromPage.height( "" );
 				}
+			    fromPage.each(function() {
+			        var data = $(this).data("page");
+			        if (data && data._trigger)
+			            data._trigger("hide", null, { nextPage: toPage });
 
-				fromPage.data( "page" )._trigger( "hide", null, { nextPage: toPage } );
+			    });
+				//fromPage.data( "page" )._trigger( "hide", null, { nextPage: toPage } );
 			}
+             toPage.each(function() {
+			        var data = $(this).data("page");
+			        if (data && data._trigger)
+			            data._trigger( "show", null, { prevPage: fromPage || $( "" ) } );
 
-			//trigger pageshow, define prevPage as either fromPage or empty jQuery obj
-			toPage.data( "page" )._trigger( "show", null, { prevPage: fromPage || $( "" ) } );
+			    });
+			/*//trigger pageshow, define prevPage as either fromPage or empty jQuery obj
+			toPage.data( "page" )._trigger( "show", null, { prevPage: fromPage || $( "" ) } );*/
 		});
 
 		return promise;
