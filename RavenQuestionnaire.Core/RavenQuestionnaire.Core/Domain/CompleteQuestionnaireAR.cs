@@ -25,8 +25,7 @@ namespace RavenQuestionnaire.Core.Domain
         }
 
         private CompleteQuestionnaireDocument _doc = new CompleteQuestionnaireDocument();
-        private string _questionnaireId;
-        private DateTime _creationDate;
+   
 
         public CompleteQuestionnaireAR(Guid completeQuestionnaireId, QuestionnaireDocument questionnaire)
             : base(completeQuestionnaireId)
@@ -77,8 +76,6 @@ namespace RavenQuestionnaire.Core.Domain
         // is automaticly wired as event handler based on convension.
         protected void OnNewQuestionnaireCreated(NewCompleteQuestionnaireCreated e)
         {
-            _questionnaireId = e.QuestionnaireId;
-            _creationDate = e.CreationDate;
             _doc = e.Questionnaire;
         }
 
@@ -92,11 +89,19 @@ namespace RavenQuestionnaire.Core.Domain
                                QuestionPublickey = questionPublickey
                            });
         }
-        public void OnSetCommentCommand(CommentSeted e)
+        protected void OnSetCommentCommand(CommentSeted e)
         {
             ICompleteQuestion question = _doc.QuestionHash[e.QuestionPublickey, e.PropogationPublicKey];
             question.SetComments(e.Comments);
             
+        }
+        public void Delete()
+        {
+            ApplyEvent(new CompleteQuestionnaireDeleted() {CompletedQuestionnaireId = _doc.PublicKey, TemplateId = Guid.Parse(_doc.TemplateId)});
+        }
+        protected void OnCompleteQuestionnaireDeleted(CompleteQuestionnaireDeleted e)
+        {
+            _doc = null;
         }
 
         public void SetAnswer(Guid questionPublicKey, Guid? propogationPublicKey, object completeAnswer, List<object> completeAnswers)
@@ -185,7 +190,7 @@ namespace RavenQuestionnaire.Core.Domain
         public void AddPropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             //performe checka before event raising
-
+            
 
             var template = _doc.Find<CompleteGroup>(publicKey);
 

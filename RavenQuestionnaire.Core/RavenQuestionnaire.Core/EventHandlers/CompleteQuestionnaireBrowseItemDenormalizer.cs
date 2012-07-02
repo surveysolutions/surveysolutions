@@ -15,7 +15,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
     public class CompleteQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
         IEventHandler<FeaturedQuestionUpdated>,
         IEventHandler<PropagatableGroupAdded>,
-        IEventHandler<PropagatableGroupDeleted>
+        IEventHandler<PropagatableGroupDeleted>,
+        IEventHandler<CompleteQuestionnaireDeleted>
     {
         private IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore;
         public CompleteQuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore)
@@ -110,6 +111,15 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 item.FeaturedQuestions = featuredQuestions.ToArray();
 
             }
+        }
+
+        #endregion
+
+        #region Implementation of IEventHandler<in CompleteQuestionnaireDeleted>
+
+        public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
+        {
+            this.documentItemStore.Remove(evnt.Payload.CompletedQuestionnaireId);
         }
 
         #endregion

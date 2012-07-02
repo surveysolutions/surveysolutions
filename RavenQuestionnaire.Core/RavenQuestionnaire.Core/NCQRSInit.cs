@@ -84,7 +84,7 @@ namespace RavenQuestionnaire.Web.App_Start
             service.RegisterExecutor(typeof(DeletePropagatableGroupCommand), new UoWMappedCommandExecutor(mapper));
             service.RegisterExecutor(typeof(SetCommentCommand), new UoWMappedCommandExecutor(mapper));
 
-
+            service.RegisterExecutor(typeof(DeleteCompleteQuestionnaireCommand), new UoWMappedCommandExecutor(mapper));
             //does it need UoW?
             service.RegisterExecutor(typeof(PreLoadCompleteQuestionnaireCommand), new UoWMappedCommandExecutor(mapper));
             
