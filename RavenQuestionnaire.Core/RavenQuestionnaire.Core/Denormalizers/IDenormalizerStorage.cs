@@ -8,8 +8,9 @@ namespace RavenQuestionnaire.Core.Denormalizers
     {
         T GetByGuid(Guid key);
         IQueryable<T> Query();
-        void Store(T denormalizer, Guid key) ;
-      /*  void Commit();*/
+        void Store(T denormalizer, Guid key);
+        void Remove(Guid key);
+        /*  void Commit();*/
     }
 
     public class RavenSessionDenormalizer<T> : IDenormalizerStorage<T> where T : class
@@ -49,6 +50,14 @@ namespace RavenQuestionnaire.Core.Denormalizers
             hash.TryAdd(key, denormalizer);
             //  this.documentSession.Store(denormalizer);
         }
+
+
+        public void Remove(Guid key)
+        {
+            T val;
+            hash.TryRemove(key, out val);
+        }
+
 /*
         public void Commit()
         {

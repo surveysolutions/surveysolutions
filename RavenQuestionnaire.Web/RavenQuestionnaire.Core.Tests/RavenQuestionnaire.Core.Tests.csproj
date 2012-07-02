@@ -182,7 +182,6 @@
     <Compile Include="CommandHandlers\CreateNewLocationHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewUserHandlerTest.cs" />
-    <Compile Include="CommandHandlers\DeleteCompleteQuestionnaireComHandlerTest.cs" />
     <Compile Include="CommandHandlers\DeleteGroupHandlerTest.cs" />
     <Compile Include="CommandHandlers\DeleteQuestionHandlerTest.cs" />
     <Compile Include="CommandHandlers\DeleteQuestionnaireHandlerTest.cs" />

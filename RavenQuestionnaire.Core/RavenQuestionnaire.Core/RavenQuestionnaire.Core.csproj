@@ -192,7 +192,6 @@
     <Compile Include="CommandHandlers\Synchronization\EndProcessHandler.cs" />
     <Compile Include="CommandHandlers\Synchronization\PushEventsHandler.cs" />
     <Compile Include="CommandHandlers\User\CreateNewUserHandler.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\Completed\DeleteCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Group\DeleteGroupHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Question\DeleteQuestionHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\DeleteQuestionnaireHandler.cs" />
@@ -355,6 +354,7 @@
     <Compile Include="Events\Questionnaire\Completed\AnswerSet.cs" />
     <Compile Include="Events\Questionnaire\Completed\CommentSeted.cs" />
     <Compile Include="Events\Questionnaire\Completed\CompletedQuestionnaireLoaded.cs" />
+    <Compile Include="Events\Questionnaire\Completed\CompleteQuestionnaireDeleted.cs" />
     <Compile Include="Events\Questionnaire\Completed\FeaturedQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewCompleteQuestionnaireCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\PropagatableGroupAdded.cs" />

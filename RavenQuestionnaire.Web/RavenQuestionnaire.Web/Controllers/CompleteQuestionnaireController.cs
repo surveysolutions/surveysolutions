@@ -387,7 +387,9 @@ namespace RavenQuestionnaire.Web.Controllers
 
         public ActionResult Delete(string id)
         {
-            commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id, _globalProvider.GetCurrentUser()));
+        //    commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id, _globalProvider.GetCurrentUser()));
+            var service = NcqrsEnvironment.Get<ICommandService>();
+            service.Execute(new DeleteCompleteQuestionnaireCommand(Guid.Parse(id)));
             return RedirectToAction("Index", "Dashboard");
         }
 

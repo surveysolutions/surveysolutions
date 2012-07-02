@@ -298,7 +298,8 @@ namespace Web.CAPI.Controllers
 
         public ActionResult Delete(string id)
         {
-          /*  commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id, _globalProvider.GetCurrentUser()));*/
+            var service = NcqrsEnvironment.Get<ICommandService>();
+            service.Execute(new DeleteCompleteQuestionnaireCommand(Guid.Parse(id)));
             return RedirectToAction("Dashboard", "Survey");
         }
     }
