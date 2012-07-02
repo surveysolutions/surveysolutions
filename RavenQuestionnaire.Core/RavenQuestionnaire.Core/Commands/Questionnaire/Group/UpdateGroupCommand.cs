@@ -1,6 +1,7 @@
 ﻿using System;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
+using System.Collections.Generic;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
 {
@@ -26,9 +27,17 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
             get;
             private set;
         }
-
+        public List<Guid> Triggers { get; private set; }
         public UserLight Executor { get; set; }
-
+        public UpdateGroupCommand(string groupText, Propagate propagateble, string questionnaireId, List<Guid> triggers, Guid parentGroup, UserLight executor)
+        {
+            this.GroupText = groupText;
+            this.Paropagateble = propagateble;
+            this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            this.GroupPublicKey = parentGroup;
+            this.Triggers = triggers;
+            Executor = executor;
+        }
         public UpdateGroupCommand(string groupText, Propagate propagateble, string questionnaireId, Guid parentGroup, UserLight executor)
         {
             this.GroupText = groupText;
