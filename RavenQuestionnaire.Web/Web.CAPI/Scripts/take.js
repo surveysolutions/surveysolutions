@@ -444,6 +444,7 @@ $(document).ready(function () {
 $(document).bind('pagebeforeshow', function () {
     var doc = $('#content_container');
     doc.initPage();
+    doc.focus();
 });
 $(document).bind('pagehide', function () {
     var doc = $('#content_container');
