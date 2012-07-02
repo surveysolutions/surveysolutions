@@ -117,7 +117,7 @@
                     }
                     else
                     {
-                    <li class="ui-btn-active"><a  data-panel="main" href="#ref-@(gh.PublicKey)" onclick="ClearItems()">@gh.GroupText
+                    <li class="ui-btn-active"><a  data-panel="main" href="@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })" onclick="ClearItems()">@gh.GroupText
                         <span id="counter-@(gh.PublicKey)" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                 }

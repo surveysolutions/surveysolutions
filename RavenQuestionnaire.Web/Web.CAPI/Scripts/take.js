@@ -417,15 +417,21 @@ function updateCounter() {
         $(this).find('.ui-btn-text').html(text);
     });
 
-    this.find('.dummy-scroll').each(function () {
-        scrolls.push( new iScroll(this));
-    });
+        this.find('.dummy-scroll').each(function() {
+            var scroll = new iScroll(this);
+            scrolls.push(scroll);
+            /* this.focus();
+        scroll.refresh();*/
+
+        });
     };
     $.fn.destroyPage = function() {
         this.find('.dummy-scroll #scroller').each(function() {
               for (var j = 0; j < scrolls.length; j++) {
-                  if(scrolls[j].scroller==this)
-                  scrolls.splice(j, 1);
+                  if(scrolls[j].scroller==this) {
+                      scrolls.splice(j, 1);
+                  }
+
               }
         });
     };
@@ -434,16 +440,24 @@ var scrolls = new Array();
 $(document).ready(function () {
 
     var doc = $(document);
-    doc.initPage();
+    doc.find('#sidebar .dummy-scroll').each(function() {
+        var scroll =new iScroll(this);
+        scroll.refresh();
+    });
+   /* doc.initPage();*/
     doc.ajaxComplete(function () {
-        for (var j = 0; j < scrolls.length; j++) {
-            scrolls[j].refresh();
+        for (var i = 0; i < scrolls.length; i++) {
+            scrolls[i].refresh();
         }
     });
+    for (var j = 0; j < scrolls.length; j++) {
+            scrolls[j].refresh();
+        }
 });
 $(document).bind('pagebeforeshow', function () {
     var doc = $('#content_container');
     doc.initPage();
+    
     doc.focus();
 });
 $(document).bind('pagehide', function () {
