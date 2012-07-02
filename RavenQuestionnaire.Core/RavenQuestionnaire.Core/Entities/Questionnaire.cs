@@ -133,7 +133,22 @@ namespace RavenQuestionnaire.Core.Entities
             }
             throw new ArgumentException(string.Format("target item doesn't exists -{0}", after));
         }
-        public void AddGroup(string groupText,Propagate propageted, Guid? parent)
+        public void AddGroup(string groupText,Propagate propageted,List<Guid> triggers,Guid? parent)
+        {
+            Group group = new Group();
+            group.Title = groupText;
+            group.Propagated = propageted;
+            group.Triggers = triggers;
+            try
+            {
+                Add(group, parent);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
+            }
+        }
+        public void AddGroup(string groupText, Propagate propageted, Guid? parent)
         {
             Group group = new Group();
             group.Title = groupText;
@@ -147,7 +162,18 @@ namespace RavenQuestionnaire.Core.Entities
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
             }
         }
-
+        public void UpdateGroup(string groupText, Propagate propageted,List<Guid> triggers, Guid publicKey)
+        {
+            Group group = Find<Group>(publicKey);
+            if (group != null)
+            {
+                group.Propagated = propageted;
+                group.Triggers = triggers;
+                group.Update(groupText);
+                return;
+            }
+            throw new ArgumentException(string.Format("group with  publick key {0} can't be found", publicKey));
+        }
         public void UpdateGroup(string groupText, Propagate propageted, Guid publicKey)
         {
             Group group = Find<Group>(publicKey);

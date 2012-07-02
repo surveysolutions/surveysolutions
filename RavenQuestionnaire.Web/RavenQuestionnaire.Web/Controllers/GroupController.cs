@@ -15,6 +15,7 @@ using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Questionnaire;
+using System.Collections.Generic;
 
 #endregion
 
@@ -44,18 +45,49 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 try
                 {
+                    
                     if (model.PublicKey == Guid.Empty)
                     {
-                        var createCommand = new CreateNewGroupCommand(model.Title, model.Propagated,
-                                                                      model.QuestionnaireId, model.Parent,
-                                                                      GlobalInfo.GetCurrentUser());
-                        commandInvoker.Execute(createCommand);
+                        
+                        if (model.Trigger != null)
+                        {
+                            Guid g = new Guid(model.Trigger);
+                            List<Guid> triggers = new List<Guid>();
+                            triggers.Add(g);
+                            var createCommand = new CreateNewGroupCommand(model.Title, model.Propagated,
+                                                                         model.QuestionnaireId, triggers, model.Parent,
+                                                                         GlobalInfo.GetCurrentUser());
+                            commandInvoker.Execute(createCommand);
+                        }
+                        else
+                        {
+                            var createCommand = new CreateNewGroupCommand(model.Title, model.Propagated,
+                                                                          model.QuestionnaireId, model.Parent,
+                                                                          GlobalInfo.GetCurrentUser());
+                            commandInvoker.Execute(createCommand);
+                        }
+                        
                     }
                     else
                     {
-                        commandInvoker.Execute(new UpdateGroupCommand(model.Title, model.Propagated,
+                        if (model.Trigger != null)
+                        {
+                            Guid g = new Guid(model.Trigger);
+                            List<Guid> triggers = new List<Guid>();
+                            triggers.Add(g);
+                            var updateCommand = new UpdateGroupCommand(model.Title, model.Propagated,
+                                                                      model.QuestionnaireId, triggers,
+                                                                      model.PublicKey, GlobalInfo.GetCurrentUser());
+                            commandInvoker.Execute(updateCommand);
+                        }
+                        else
+                        {
+                            var updateCommand = new UpdateGroupCommand(model.Title, model.Propagated,
                                                                       model.QuestionnaireId,
-                                                                      model.PublicKey, GlobalInfo.GetCurrentUser()));
+                                                                      model.PublicKey, GlobalInfo.GetCurrentUser());
+                            commandInvoker.Execute(updateCommand);
+                        }
+                        
                     }
                 }
                 catch (Exception e)
