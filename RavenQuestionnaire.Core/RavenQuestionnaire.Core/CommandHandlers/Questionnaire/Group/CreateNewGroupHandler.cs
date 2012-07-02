@@ -15,8 +15,10 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Group
         public void Handle(CreateNewGroupCommand command)
         {
             var questionnaire = this._questionnaireRepository.Load(command.QuestionnaireId);
-
-            questionnaire.AddGroup(command.GroupText,command.Paropagateble, command.ParentGroupPublicKey);
+            if (command.Triggers!=null)
+            questionnaire.AddGroup(command.GroupText,command.Paropagateble, command.Triggers, command.ParentGroupPublicKey);
+            else
+            questionnaire.AddGroup(command.GroupText, command.Paropagateble,command.ParentGroupPublicKey);
         }
     }
 }
