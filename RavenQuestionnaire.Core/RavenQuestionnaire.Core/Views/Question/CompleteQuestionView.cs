@@ -15,7 +15,6 @@ namespace RavenQuestionnaire.Core.Views.Question
         public bool Valid { get; set; }
         public bool Answered { get; set; }
         public object Answer { get; set; }
-        public string Comments { get; set; }
 
         public CompleteQuestionView()
         {

@@ -114,6 +114,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
 
         public string Comments{ get; set; }
+
         public void SetComments(string comments)
         {
         }

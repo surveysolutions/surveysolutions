@@ -37,6 +37,8 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public string Instructions { get; set; }
 
+        public string Comments { get; set; }
+
         public string QuestionnaireId
         {
             get { return IdUtil.ParseId(_questionnaireId); }
@@ -72,6 +74,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.ValidationExpression = doc.ValidationExpression;
             this.StataExportCaption = doc.StataExportCaption;
             this.Instructions = doc.Instructions;
+            this.Comments = doc.Comments;
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
           
