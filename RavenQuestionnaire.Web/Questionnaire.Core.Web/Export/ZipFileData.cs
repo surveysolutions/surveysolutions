@@ -1,14 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using Ncqrs.Eventing;
 using RavenQuestionnaire.Core.Views.Event;
 
-namespace Web.CAPI.Models
+namespace Questionnaire.Core.Web.Export
 {
     public class ZipFileData
     {
         public Guid ClientGuid { get; set; }
 
-        public List<EventBrowseItem> Events { get; set; }
+        public IEnumerable<CommittedEvent> Events { get; set; }
 
         public DateTime ImportDate { get; set; }
 

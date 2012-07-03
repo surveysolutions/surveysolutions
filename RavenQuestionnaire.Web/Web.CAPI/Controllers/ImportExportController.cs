@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Questionnaire.Core.Web.Export;
-using RavenQuestionnaire.Web.Utils;
 
-
-namespace RavenQuestionnaire.Web.Controllers
+namespace Web.CAPI.Controllers
 {
-   public class ImportExportController : AsyncController
-   {
-   
+    public class ImportExportController : AsyncController
+    {
+
         private readonly IExportImport exportimportEvents;
 
         public ImportExportController(IExportImport exportImport)
@@ -19,12 +19,8 @@ namespace RavenQuestionnaire.Web.Controllers
 
         #region PublicMethod
 
-        [AcceptVerbs(HttpVerbs.Get)]
-        public ActionResult Import()
-        {
-            return View("ViewTestUploadFile");
-        }
        
+
         [AcceptVerbs(HttpVerbs.Post)]
         public void ImportAsync(HttpPostedFileBase myfile)
         {
@@ -32,18 +28,18 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 AsyncManager.OutstandingOperations.Increment();
                 AsyncQuestionnaireUpdater.Update(() =>
-                                                     {
-                                                         exportimportEvents.Import(myfile);
-                                                         AsyncManager.OutstandingOperations.Decrement();
-                                                     });
+                {
+                    exportimportEvents.Import(myfile);
+                    AsyncManager.OutstandingOperations.Decrement();
+                });
             }
         }
-       
+
         public ActionResult ImportCompleted()
         {
-            return RedirectToAction("Index", "Dashboard");
+            return RedirectToAction("Dashboard", "Survey");
         }
-       
+
         public void ExportAsync()
         {
             AsyncManager.OutstandingOperations.Increment();
@@ -60,12 +56,13 @@ namespace RavenQuestionnaire.Web.Controllers
                 AsyncManager.OutstandingOperations.Decrement();
             });
         }
-       
+
         public ActionResult ExportCompleted(byte[] result)
         {
             return File(result, "application/zip", string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
         }
 
         #endregion
+
     }
 }

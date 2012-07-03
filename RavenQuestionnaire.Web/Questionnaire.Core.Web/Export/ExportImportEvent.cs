@@ -1,17 +1,21 @@
-﻿using System;
-using Ionic.Zip;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Web;
 using System.Linq;
 using System.Text;
+using System.Web;
+using Ionic.Zip;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core;
-using System.Collections.Generic;
-using RavenQuestionnaire.Web.Models;
-using RavenQuestionnaire.Core.Views.Event;
 using RavenQuestionnaire.Core.ClientSettingsProvider;
+using RavenQuestionnaire.Core.Views.Event;
 
-namespace RavenQuestionnaire.Web.Utils
+namespace Questionnaire.Core.Web.Export
 {
     public interface IExportImport
     {
@@ -24,18 +28,14 @@ namespace RavenQuestionnaire.Web.Utils
 
         #region FieldsProperties
 
-        private readonly IMemoryCommandInvoker commandInvoker;
-        private readonly IViewRepository viewRepository;
         private IClientSettingsProvider clientSettingsProvider;
 
         #endregion
 
         #region Constructor
 
-        public ExportImportEvent(IMemoryCommandInvoker memoryCommandInvoker, IViewRepository viewRepository, IClientSettingsProvider clientSettingsProvider)
+        public ExportImportEvent(IClientSettingsProvider clientSettingsProvider)
         {
-            this.commandInvoker = memoryCommandInvoker;
-            this.viewRepository = viewRepository;
             this.clientSettingsProvider = clientSettingsProvider;
         }
 
@@ -56,7 +56,19 @@ namespace RavenQuestionnaire.Web.Utils
                     var settings = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects};
                     var result = JsonConvert.DeserializeObject<ZipFileData>
                         (Encoding.Default.GetString(stream.ToArray()), settings);
-                    var lastEventItem = viewRepository.Load<EventViewInputModel, EventView>(new EventViewInputModel(result.ClientGuid));
+                    var myEventBus = NcqrsEnvironment.Get<IEventBus>();
+                    if (myEventBus == null)
+                        throw new Exception("IEventBus is not properly initialized.");
+                    foreach (CommittedEvent commitedEvent in result.Events)
+                    {
+                        try
+                        {
+                            myEventBus.Publish(commitedEvent);
+                        }catch(Exception)
+                        {
+                        }
+                    }
+                    /*  var lastEventItem = viewRepository.Load<EventViewInputModel, EventView>(new EventViewInputModel(result.ClientGuid));
                     if (lastEventItem == null)
                         ExecuteCommand(result.Events, result.ClientGuid);
                     else
@@ -67,23 +79,23 @@ namespace RavenQuestionnaire.Web.Utils
                             result.Events.RemoveRange(0, ndx+1);
                             ExecuteCommand(result.Events, result.ClientGuid);
                         }
-                    }
+                    }*/
                 }
             }
         }
 
         public byte[] Export()
         {
+            var myEventStore = NcqrsEnvironment.Get<IEventStore>();
 
-            var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(
-                new EventBrowseInputModel(null));
+            if (myEventStore == null)
+                throw new Exception("IEventStore is not correct.");
+
             var data = new ZipFileData
                            {
-                               ClientGuid = clientSettingsProvider.ClientSettings.PublicKey,
-                               Events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(
-                                                        new EventBrowseInputModel(null)).Items.OrderBy(x => x.CreationDate)
-                                                        .ToList<EventBrowseItem>()
+                               ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
                            };
+            data.Events = myEventStore.ReadFrom(DateTime.MinValue);
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {
@@ -100,11 +112,11 @@ namespace RavenQuestionnaire.Web.Utils
 
         #region PrivateMethod
 
-        private void ExecuteCommand(IEnumerable<EventBrowseItem> items, Guid clientGuid)
+        private void ExecuteCommand(IEnumerable<CommittedEvent> items, Guid clientGuid)
         {
-            foreach (EventBrowseItem item in items)
-                commandInvoker.Execute(item.Command, item.PublicKey, clientGuid);
-            commandInvoker.Flush();
+            /*foreach (CommittedEvent item in items)
+                commandInvoker.Execute(item.Payload);
+            commandInvoker.Flush();*/
         }
 
         #endregion

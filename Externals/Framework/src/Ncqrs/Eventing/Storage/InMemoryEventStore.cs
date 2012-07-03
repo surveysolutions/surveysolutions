@@ -66,5 +66,10 @@ namespace Ncqrs.Eventing.Storage
                 }
             }
         }
+
+        public IEnumerable<CommittedEvent> ReadFrom(DateTime start)
+        {
+            return _events.Values.SelectMany(e => e.ToList()).Where(e => e.EventTimeStamp >= start);
+        }
     }
 }

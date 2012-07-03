@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Questionnaire.Core.Web;
+using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.WCF;
 using RavenQuestionnaire.Core;
@@ -16,22 +18,21 @@ namespace Web.CAPI.Controllers
     public class SynchronizationsController : AsyncController
     {
         private readonly IGlobalInfoProvider _globalProvider;
-        private readonly ICommandInvoker commandInvoker;
         private readonly IViewRepository viewRepository;
         private readonly IExportImport exportimportEvents ;
 
-        public SynchronizationsController(ICommandInvoker commandInvoker, IViewRepository viewRepository,
+        public SynchronizationsController( IViewRepository viewRepository,
                                           IGlobalInfoProvider globalProvider,IExportImport exportImport)
         {
             this.exportimportEvents = exportImport;
-            this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
             _globalProvider = globalProvider;
         }
+       
 
         public ActionResult Index(string url)
         {
-            var user = _globalProvider.GetCurrentUser();
+         /*   var user = _globalProvider.GetCurrentUser();
             
                                                      Guid syncProcess = Guid.NewGuid();
                                                      commandInvoker.Execute(
@@ -41,8 +42,8 @@ namespace Web.CAPI.Controllers
                                                      p.StartInfo.Arguments = url + " " + syncProcess;
                                                      p.StartInfo.RedirectStandardOutput = true;
                                                      p.StartInfo.FileName = System.Web.Configuration.WebConfigurationManager.AppSettings["SynchronizerPath"];
-                                                     p.Start();
-            return RedirectToAction("Progress", new {id = syncProcess});
+                                                     p.Start();*/
+            return RedirectToAction("Progress", new {id = ""});
 
         }
         public ActionResult Progress(Guid id)

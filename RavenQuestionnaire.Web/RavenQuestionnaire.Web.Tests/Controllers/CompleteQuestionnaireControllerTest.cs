@@ -90,7 +90,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void When_DeleteQuestionnaireIsExecuted()
         {
-            Controller.Delete("some_id");
+            Controller.Delete(Guid.NewGuid().ToString());
 
             CommandServiceMock.Verify(x => x.Execute(It.IsAny<DeleteCompleteQuestionnaireCommand>()), Times.Once());
         }

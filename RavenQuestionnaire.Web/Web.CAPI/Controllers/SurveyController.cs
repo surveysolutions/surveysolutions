@@ -36,7 +36,7 @@ namespace Web.CAPI.Controllers
        // private readonly ICommandInvoker commandInvoker;
         private readonly IViewRepository viewRepository;
 
-        public SurveyController(ICommandInvoker commandInvoker, IViewRepository viewRepository,
+        public SurveyController(IViewRepository viewRepository,
                                                IGlobalInfoProvider globalProvider)
         {
          //   this.commandInvoker = commandInvoker;

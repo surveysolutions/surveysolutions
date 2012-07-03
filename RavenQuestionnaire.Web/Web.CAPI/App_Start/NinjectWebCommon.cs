@@ -4,6 +4,7 @@ using System.Threading;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Questionnaire.Core.Web.Binding;
+using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using Raven.Client;
@@ -69,7 +70,7 @@ namespace Web.CAPI.App_Start
             KernelLocator.SetKernel(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-
+            kernel.Bind<IExportImport>().To<ExportImportEvent>();
             RegisterServices(kernel);
             NCQRSInit.Init(System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"], kernel);
             return kernel;

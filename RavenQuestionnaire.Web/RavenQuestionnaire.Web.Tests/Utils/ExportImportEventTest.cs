@@ -3,6 +3,7 @@ using System;
 using Ninject;
 using System.IO;
 using System.Web;
+using Questionnaire.Core.Web.Export;
 using Raven.Client;
 using NUnit.Framework;
 using RavenQuestionnaire.Core;
@@ -46,7 +47,7 @@ namespace RavenQuestionnaire.Web.Tests.Utils
             postedfile.Setup(f => f.ContentType).Returns("application/zip").Verifiable();
             postedfile.Setup(f => f.FileName).Returns("event.zip").Verifiable();
             postedfile.Setup(f => f.InputStream).Returns(new MemoryStream(8192)).Verifiable();
-            var events = new ExportImportEvent(invoker.Object, viewRepositoryMock.Object, clientProvider.Object);
+            var events = new ExportImportEvent(clientProvider.Object);
             events.Import(postedfile.Object);
             Assert.AreEqual(request.Object.Files[0], postedfile.Object);
             Assert.AreEqual(request.Object.Files[0].ContentLength, 8192);
@@ -66,7 +67,7 @@ namespace RavenQuestionnaire.Web.Tests.Utils
             MemoryCommandInvoker invokerMemory = new MemoryCommandInvoker(kernel, clientProvider.Object);
             var output = new EventBrowseView(0, 20, 0, new List<EventBrowseItem>());
             viewRepositoryMock.Setup(x => x.Load<EventBrowseInputModel, EventBrowseView>(It.Is<EventBrowseInputModel>(input => input.PublickKey==null))).Returns(output);
-            var events = new ExportImportEvent(invokerMemory, viewRepositoryMock.Object, clientProvider.Object);
+            var events = new ExportImportEvent(clientProvider.Object);
             var result = events.Export();
             Assert.AreEqual(result.GetType(), typeof(byte[]));
         }

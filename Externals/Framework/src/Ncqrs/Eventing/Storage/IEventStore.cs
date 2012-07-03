@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Ncqrs.Eventing.Sourcing;
 
@@ -28,6 +29,15 @@ namespace Ncqrs.Eventing.Storage
         /// <exception cref="ConcurrencyException">Occurs when there is already a newer version of the event provider stored in the event store.</exception>
         /// <param name="eventStream">The <see cref="UncommittedEventStream"/> to commit.</param>
         void Store(UncommittedEventStream eventStream);
+        /// <summary>
+        /// Reads from the stream from the <paramref name="start"/>
+        /// </summary>
+        /// <remarks>
+        /// Returned event stream of all events created after <paramref name="start"/>
+        /// </remarks>
+        /// <param name="start">Start date</param>
+        /// <returns>All the events from the event source created after <paramref name="start"/></returns>
+        IEnumerable<CommittedEvent> ReadFrom(DateTime start);
     }
 
     [ContractClassFor(typeof(IEventStore))]
@@ -43,6 +53,11 @@ namespace Ncqrs.Eventing.Storage
         public void Store(UncommittedEventStream eventStream)
         {
             Contract.Requires<ArgumentNullException>(eventStream != null, "The stream cannot be null.");
+        }
+
+        public IEnumerable<CommittedEvent> ReadFrom(DateTime start)
+        {
+            return default(CommittedEventStream);
         }
     }
 }

@@ -384,6 +384,11 @@ namespace Ncqrs.Eventing.Storage.SQL
             }
         }
 
+        public IEnumerable<CommittedEvent> ReadFrom(DateTime start)
+        {
+            throw new NotImplementedException("please implement some body");
+        }
+
         /// <summary>
         /// Adds a new <see cref="EventSource"/> to the store.
         /// </summary>
