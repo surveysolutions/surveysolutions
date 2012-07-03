@@ -94,6 +94,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
             completeQuestion.QuestionType = question.QuestionType;
             completeQuestion.StataExportCaption = question.StataExportCaption;
             completeQuestion.Instructions = question.Instructions;
+            completeQuestion.Comments = question.Comments;
             completeQuestion.Triggers = question.Triggers;
             completeQuestion.ValidationExpression = question.ValidationExpression;
             completeQuestion.AnswerOrder = question.AnswerOrder;

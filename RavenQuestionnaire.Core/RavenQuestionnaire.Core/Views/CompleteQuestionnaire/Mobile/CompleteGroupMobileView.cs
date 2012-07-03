@@ -114,7 +114,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
 
             List<CompleteGroup> propagated = propGroups.Where(g => g != propagatable && g.PropogationPublicKey.HasValue).ToList();
-
             var propagetedGroups = new List<ICompositeView>();
             if (propagated.Count > 0)
             {
@@ -122,6 +121,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                 foreach (CompleteGroup @group in propagated)
                 {
                     string groupTitle = @group.Title;
+                    List<ICompleteQuestion> questionas = @group.Children.OfType<ICompleteQuestion>().ToList();
                     var pgroup = new PropagatedGroupMobileView(@group.PublicKey, groupTitle,
                                                                @group.Propagated == Propagate.AutoPropagated,
                                                                @group.PropogationPublicKey.Value,

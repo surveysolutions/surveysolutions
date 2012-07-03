@@ -25,19 +25,25 @@
                     @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
                     }
                 }
-                <p class="question-comment">Comment: comment is here</p>
+                <p class="question-comment">
+                    @if (!string.IsNullOrEmpty(question.Comments))
+                    {
+                        <span>Comments : </span>
+                        @question.Comments;
+                    }
+                </p>
             </div>
             <div class="ui-block-b">
                 @using (Ajax.BeginFormHtml5("SaveComments", "Survey", new { }, ViewBag.AjaxOptions as AjaxOptions, new { }))
                 {
                     using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                     {
-                    @Html.IconInputComments("Comments", question.Comments ?? string.Empty, string.Empty, new { draw_key_board = "true" }, new { @class = "comments" }, new { @class = "bold" })
+                        @Html.IconInputComments("Comments", question.Comments ?? string.Empty, string.Empty, new { draw_key_board = "true" }, new { @class = "comments" }, new { @class = "bold" })
                     }
                     using (Html.BeginCollectionItem("settings", true, question.PublicKey))
                     {
-                    @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
-                    @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
+                        @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+                        @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
                     }
                     @Html.Hidden("PublicKey", question.PublicKey)
                 }
