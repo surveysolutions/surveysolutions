@@ -162,6 +162,37 @@ namespace RavenQuestionnaire.Core.Entities
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
             }
         }
+        public void AddGroup(Guid publicKey, string groupText, Propagate propageted, List<Guid> triggers, Guid? parent)
+        {
+            Group group = new Group();
+            group.Title = groupText;
+            group.PublicKey = publicKey;
+            group.Propagated = propageted;
+            group.Triggers = triggers;
+            try
+            {
+                Add(group, parent);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
+            }
+        }
+        public void AddGroup(Guid publicKey,string groupText, Propagate propageted, Guid? parent)
+        {
+            Group group = new Group();
+            group.PublicKey = publicKey;
+            group.Title = groupText;
+            group.Propagated = propageted;
+            try
+            {
+                Add(group, parent);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
+            }
+        }
         public void UpdateGroup(string groupText, Propagate propageted,List<Guid> triggers, Guid publicKey)
         {
             Group group = Find<Group>(publicKey);

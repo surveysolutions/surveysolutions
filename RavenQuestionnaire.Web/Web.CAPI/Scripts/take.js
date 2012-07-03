@@ -69,8 +69,12 @@ function UpdateQuestion(question) {
     }
 
     questionElement.removeClass("ui-disabled");
-    if (!question.Enabled)
+    if (!question.Enabled) {
         questionElement.addClass("ui-disabled");
+        questionElement.children('fieldset').children('.ui-controlgroup-controls').hide();
+    }
+    else questionElement.children('fieldset').children('.ui-controlgroup-controls').show();
+
 
     questionElement.removeClass("ui-body");
     questionElement.removeClass("error_block");
@@ -87,6 +91,8 @@ function UpdateQuestion(question) {
         questionElement.closest("form").clear_form_elements();*/
     SetErrorToQuestion(question, question.QuestionType == 0 ? null : question.GroupPublicKey, '');
 }
+
+
 
 function SetErrorToQuestion(question, key, error) {
     var questionElement = key ? $('#propagatedGroup' + key + ' #question' + question.PublicKey) : $('#question' + question.PublicKey);

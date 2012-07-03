@@ -20,6 +20,7 @@
 
 
     (function (window, $, PhotoSwipe) {
+
         $(document).ready(function () {
             $('div.gallery-page')
                 .live('pageshow', function (e) {
@@ -162,3 +163,11 @@
    <div data-role="page" id="ref-@(Model.Groups[i].PublicKey)" class="page"></div>
    }
 </div>
+<script type="text/javascript">
+    $("div.ui-block-a").click(function () {
+        if ($("div.ui-block-a div.ui-disabled div.ui-controlgroup-controls:visible").length>0)
+            $("div.ui-block-a div.ui-disabled div.ui-controlgroup-controls:visible").hide();
+        else
+            $("div.ui-block-a div.ui-disabled div.ui-controlgroup-controls:hidden").show();
+    });
+</script>
