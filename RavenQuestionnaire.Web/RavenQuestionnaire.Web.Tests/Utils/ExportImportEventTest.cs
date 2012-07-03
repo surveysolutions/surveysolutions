@@ -1,5 +1,7 @@
 ﻿using Moq;
 using System;
+using Ncqrs;
+using Ncqrs.Eventing.Storage;
 using Ninject;
 using System.IO;
 using System.Web;
@@ -58,18 +60,20 @@ namespace RavenQuestionnaire.Web.Tests.Utils
         [Test]
         public void When_EventsExport()
         {
-            Mock<ICommandHandler<ICommand>> mockHandler = new Mock<ICommandHandler<ICommand>>();
-            Mock<IDocumentSession> documentSessionMock = new Mock<IDocumentSession>();
-            var kernel = new StandardKernel();
-            kernel.Bind<ICommandHandler<ICommand>>().ToConstant(mockHandler.Object);
+         //   Mock<ICommandHandler<ICommand>> mockHandler = new Mock<ICommandHandler<ICommand>>();
+    //        Mock<IDocumentSession> documentSessionMock = new Mock<IDocumentSession>();
+            Mock<IEventStore> eventStoreMock=new Mock<IEventStore>();
+            NcqrsEnvironment.SetDefault<IEventStore>(eventStoreMock.Object);
+         /*   var kernel = new StandardKernel();
+            kernel.Bind<ICommandHandler<ICommand>>().ToConstant(mockHandler.Object);*/
             clientProvider.Setup(x => x.ClientSettings).Returns(new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
-            kernel.Bind<IDocumentSession>().ToConstant(documentSessionMock.Object);
-            MemoryCommandInvoker invokerMemory = new MemoryCommandInvoker(kernel, clientProvider.Object);
+          //  kernel.Bind<IDocumentSession>().ToConstant(documentSessionMock.Object);
             var output = new EventBrowseView(0, 20, 0, new List<EventBrowseItem>());
             viewRepositoryMock.Setup(x => x.Load<EventBrowseInputModel, EventBrowseView>(It.Is<EventBrowseInputModel>(input => input.PublickKey==null))).Returns(output);
             var events = new ExportImportEvent(clientProvider.Object);
             var result = events.Export();
-            Assert.AreEqual(result.GetType(), typeof(byte[]));
+            eventStoreMock.Verify(x => x.ReadByAggregateRoot(), Times.Once());
+            //   Assert.AreEqual(result.GetType(), typeof(byte[]));
         }
     }
 }
