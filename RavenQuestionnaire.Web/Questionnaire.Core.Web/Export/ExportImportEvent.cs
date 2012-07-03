@@ -56,18 +56,30 @@ namespace Questionnaire.Core.Web.Export
                     var settings = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects};
                     var result = JsonConvert.DeserializeObject<ZipFileData>
                         (Encoding.Default.GetString(stream.ToArray()), settings);
-                    var myEventBus = NcqrsEnvironment.Get<IEventBus>();
-                    if (myEventBus == null)
-                        throw new Exception("IEventBus is not properly initialized.");
-                    foreach (CommittedEvent commitedEvent in result.Events)
+                    var eventStore = NcqrsEnvironment.Get<IEventStore>();
+                    if (eventStore == null)
+                        throw new Exception("IEventStore is not properly initialized.");
+                    //((InProcessEventBus)myEventBus).RegisterHandler();
+                    foreach (AggregateRootEventStream commitedEventStream in result.Events)
                     {
-                        try
+                        Guid commitId = Guid.NewGuid();
+                        var currentEventStore = eventStore.ReadFrom(commitedEventStream.SourceId, commitedEventStream.FromVersion,
+                                                                    commitedEventStream.ToVersion);
+                        var uncommitedStream = new UncommittedEventStream(commitId);
+                        foreach (CommittedEvent committedEvent in commitedEventStream.Events)
                         {
-                            myEventBus.Publish(commitedEvent);
-                        }catch(Exception)
-                        {
+                            if(currentEventStore.Count(ce=>ce.EventIdentifier==committedEvent.EventIdentifier)>0)
+                                continue;
+
+                            uncommitedStream.Append(new UncommittedEvent(committedEvent.EventIdentifier,
+                                                                         committedEvent.EventSourceId,committedEvent.EventSequence, 0,
+                                                                         committedEvent.EventTimeStamp,
+                                                                         committedEvent.Payload,
+                                                                         committedEvent.EventVersion));
                         }
+                        eventStore.Store(uncommitedStream);
                     }
+                  
                     /*  var lastEventItem = viewRepository.Load<EventViewInputModel, EventView>(new EventViewInputModel(result.ClientGuid));
                     if (lastEventItem == null)
                         ExecuteCommand(result.Events, result.ClientGuid);
@@ -95,7 +107,7 @@ namespace Questionnaire.Core.Web.Export
                            {
                                ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
                            };
-            data.Events = myEventStore.ReadFrom(DateTime.MinValue);
+            data.Events = myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c));
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {

@@ -108,6 +108,11 @@ namespace Ncqrs.Eventing.Storage.NoDB
             throw new NotImplementedException("please implement some body");
         }
 
+        public IEnumerable<CommittedEventStream> ReadByAggregateRoot()
+        {
+            throw new NotImplementedException();
+        }
+
         public byte[] GetBytes(UncommittedEvent evnt)
         {
             string eventName;

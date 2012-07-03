@@ -126,13 +126,13 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         }
 
 
-        /// <summary>
+     /*   /// <summary>
         /// Get some events after specified event.
         /// </summary>
         /// <param name="eventId">The id of last event not to be included in result set.</param>
         /// <param name="maxCount">Maximum number of returned events</param>
         /// <returns>A collection events starting right after <paramref name="eventId"/>.</returns>
-        /*public IEnumerable<CommittedEvent> GetEventsAfter(Guid? eventId, int maxCount)
+        public IEnumerable<CommittedEvent> GetEventsAfter(Guid? eventId, int maxCount)
         {
             var result = new List<CommittedEvent>();
 
@@ -198,7 +198,20 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             return result;
         }
 
+        public IEnumerable<CommittedEventStream> ReadByAggregateRoot()
+        {
+            List<CommittedEventStream> retval = new List<CommittedEventStream>();
+            List<Guid> aggreagates;
 
+            aggreagates =
+                AccumulateWithPaging(x => x.EventTimeStamp >= DateTime.MinValue).Select(e => e.EventSourceId).Distinct
+                    ().ToList();
 
+            foreach (Guid aggreagateId in aggreagates)
+            {
+                retval.Add(ReadFrom(aggreagateId, int.MinValue, int.MaxValue));
+            }
+            return retval;
+        }
     }
 }

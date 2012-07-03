@@ -9,7 +9,7 @@ namespace Questionnaire.Core.Web.Export
     {
         public Guid ClientGuid { get; set; }
 
-        public IEnumerable<CommittedEvent> Events { get; set; }
+        public IEnumerable<AggregateRootEventStream> Events { get; set; }
 
         public DateTime ImportDate { get; set; }
 

@@ -38,6 +38,8 @@ namespace Ncqrs.Eventing.Storage
         /// <param name="start">Start date</param>
         /// <returns>All the events from the event source created after <paramref name="start"/></returns>
         IEnumerable<CommittedEvent> ReadFrom(DateTime start);
+
+        IEnumerable<CommittedEventStream> ReadByAggregateRoot();
     }
 
     [ContractClassFor(typeof(IEventStore))]
@@ -58,6 +60,11 @@ namespace Ncqrs.Eventing.Storage
         public IEnumerable<CommittedEvent> ReadFrom(DateTime start)
         {
             return default(CommittedEventStream);
+        }
+
+        public IEnumerable<CommittedEventStream> ReadByAggregateRoot()
+        {
+            return default(IEnumerable<CommittedEventStream>);
         }
     }
 }
