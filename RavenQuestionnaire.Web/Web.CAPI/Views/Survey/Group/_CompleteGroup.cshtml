@@ -27,7 +27,7 @@ else
                             };
     string templateId = "groupTemplate" + currentGroupPublicKey;
 
-    using (Ajax.BeginFormHtml5("PropagateGroup", "Survey", requestParams, new AjaxOptions {HttpMethod = "POST", OnComplete = "PropagatedGroup"}))
+    using (Ajax.BeginFormHtml5("PropagateGroup", "Survey", requestParams, new AjaxOptions { HttpMethod = "POST", OnComplete = "PropagatedGroup" }))
     {
         <input value="@Model.Title" type="submit" data-role = "button" data-icon = "plus" data-theme = "a"/>
 

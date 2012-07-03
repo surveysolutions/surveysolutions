@@ -48,20 +48,21 @@ namespace RavenQuestionnaire.Web.Controllers
                     
                     if (model.PublicKey == Guid.Empty)
                     {
-                        
+                        model.PublicKey = Guid.NewGuid();
                         if (model.Trigger != null)
                         {
+                            
                             Guid g = new Guid(model.Trigger);
                             List<Guid> triggers = new List<Guid>();
                             triggers.Add(g);
-                            var createCommand = new CreateNewGroupCommand(model.Title, model.Propagated,
+                            var createCommand = new CreateNewGroupCommand(model.PublicKey, model.Title, model.Propagated,
                                                                          model.QuestionnaireId, triggers, model.Parent,
                                                                          GlobalInfo.GetCurrentUser());
                             commandInvoker.Execute(createCommand);
                         }
                         else
                         {
-                            var createCommand = new CreateNewGroupCommand(model.Title, model.Propagated,
+                            var createCommand = new CreateNewGroupCommand(model.PublicKey, model.Title, model.Propagated,
                                                                           model.QuestionnaireId, model.Parent,
                                                                           GlobalInfo.GetCurrentUser());
                             commandInvoker.Execute(createCommand);
@@ -99,7 +100,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                         new QuestionnaireViewInputModel(model.QuestionnaireId));
                 */
-                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
+                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId, qid = model.PublicKey });
             }
             return View("_Create", model);
         }

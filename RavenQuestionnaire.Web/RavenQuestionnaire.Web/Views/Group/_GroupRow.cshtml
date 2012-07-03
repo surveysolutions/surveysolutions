@@ -17,6 +17,7 @@
     }
 </script>
 <div id="@currentRowId" class="display-group">
+<input type="checkbox" id="@Model.PublicKey.ToString()" style="position: absolute; z-index: -999; right: 50px;"/>
     <div class="group-header">
         <h3>@Html.DisplayFor(modelItem => Model.Title) - @Model.PublicKey</h3>
         <div class="btn-group">
