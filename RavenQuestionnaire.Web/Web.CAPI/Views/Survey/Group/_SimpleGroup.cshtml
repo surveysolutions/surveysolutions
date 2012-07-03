@@ -25,16 +25,21 @@
                     @Html.Hidden("QuestionnaireId", ViewBag.QuestionnaireId as string)
                     }
                 }
-                <p class="question-comment">
+                <p class="question-comment">                    
                     @if (!string.IsNullOrEmpty(question.Comments))
                     {
-                        <span>Comments : </span>
-                        @question.Comments;
+                        string idComment = "comments" + @question.PublicKey;
+                       <span id="@idComment">Comments : @question.Comments</span>
+                    }
+                    else
+                    {
+                        string idComment = "comments" + @question.PublicKey;
+                       <span id="@idComment"></span>
                     }
                 </p>
             </div>
             <div class="ui-block-b">
-                @using (Ajax.BeginFormHtml5("SaveComments", "Survey", new { }, ViewBag.AjaxOptions as AjaxOptions, new { }))
+                @using (Ajax.BeginFormHtml5("SaveComments", "Survey", new { }, new AjaxOptions { OnComplete = "UpdateComments" }, new { }))
                 {
                     using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                     {

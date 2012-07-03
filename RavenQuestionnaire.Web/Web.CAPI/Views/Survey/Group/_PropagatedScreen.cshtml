@@ -25,7 +25,7 @@
                          @Html.Hidden("PropogationPublicKey", Model.PropogationKey)
                      }
                  }                 
-                @using (Ajax.BeginFormHtml5("SaveComments", "Survey", new { }, ViewBag.AjaxOptions as AjaxOptions, new { style="float: right;margin-top: -50px;" }))
+                @using (Ajax.BeginFormHtml5("SaveComments", "Survey", new { }, new AjaxOptions { OnComplete = "UpdateComments" }, new { style="float: right;margin-top: -50px;" }))
                 {
                     using (Html.BeginCollectionItem("questions", true, pquestion.PublicKey))
                     {
@@ -40,11 +40,16 @@
                     @Html.Hidden("PublicKey", pquestion.PublicKey)
                 } 
                 <p class="question-comment">
-                         @if (!string.IsNullOrEmpty(pquestion.Comments))
-                         {
-                             <span>Comments : </span>
-                             @pquestion.Comments;
-                         }
+                    @if (!string.IsNullOrEmpty(pquestion.Comments))
+                    {
+                        string idComment = "comments" + @pquestion.PublicKey;
+                       <span id="@idComment">Comments : @pquestion.Comments</span>
+                    }
+                    else
+                    {
+                        string idComment = "comments" + @pquestion.PublicKey;
+                       <span id="@idComment"></span>
+                    }
                  </p>           
         </li>
     }
