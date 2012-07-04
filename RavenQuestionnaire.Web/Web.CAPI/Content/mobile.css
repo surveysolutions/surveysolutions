@@ -209,3 +209,8 @@
 .text-question {
 	margin-top: 0;
 }
+
+.hidden-checkbox {
+	position: absolute;
+	left: -500px;
+}
