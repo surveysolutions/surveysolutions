@@ -114,8 +114,8 @@ function UpdateQuestion(question) {
         questionElement.addClass("answered");
     }
 
-   /* if (!question.Enabled)
-        questionElement.closest("form").clear_form_elements();*/
+    /* if (!question.Enabled)
+    questionElement.closest("form").clear_form_elements();*/
     SetErrorToQuestion(question, question.QuestionType == 0 ? null : question.GroupPublicKey, '');
 }
 
@@ -186,7 +186,7 @@ function RemovePropagatedGroup(data, status, xhr) {
     $(deleteScreen).remove();
     $(parent).listview('refresh');
     updateCounter();
-    
+
 }
 
 function PropagatedGroup(data, status, xhr) {
@@ -241,7 +241,7 @@ function PropagatedGroup(data, status, xhr) {
         newScreen.createKeyBoard();
         newScreen.numericSubmit();
         newScreen.hideInputsWithVirtualKeyboard();
-        
+
         updateCounter();
 
         $(parent).find('.propagated-list-item').each(function (i, el) {
@@ -432,39 +432,39 @@ function updateCounter() {
             keyboard.$preview.caretToEnd();
         });
     };
-    $.fn.initPage = function() {
-         
-    this.createKeyBoard();
-    this.numericSubmit();
-    this.hideInputsWithVirtualKeyboard();
-    this.disableAfterSubmit();
+    $.fn.initPage = function () {
 
-    this.find('[data-role=page]').live('pageshow', function (event) {
-        //data-type="horizontal"
-        $("input[type='checkbox'][checked]").checkboxradio("refresh");
-    });
-   
-    this.find('.propagated-list-item').each(function () {
-        var index = $(this).find('h3 span').html();
-        var screenId = $(this).attr('id').replace("propagatedGroup", "#screen-");
-        $(screenId + ' .ui-footer h1 span').html(index);
-    });
+        this.createKeyBoard();
+        this.numericSubmit();
+        this.hideInputsWithVirtualKeyboard();
+        this.disableAfterSubmit();
 
-    this.find('.splited-button.ui-li-link-alt').each(function () {
-        var text = $(this).attr('title');
-        $(this).find('.ui-btn-text').html(text);
-    });
+        this.find('[data-role=page]').live('pageshow', function (event) {
+            $("input[type='checkbox'][checked]").checkboxradio("refresh");
+        });
 
-    this.find('.dummy-scroll').each(function () {
-        scrolls.push( new iScroll(this));
-    });
+        this.find('.propagated-list-item').each(function () {
+            var index = $(this).find('h3 span').html();
+            var screenId = $(this).attr('id').replace("propagatedGroup", "#screen-");
+            $(screenId + ' .ui-footer h1 span').html(index);
+        });
+
+        this.find('.splited-button.ui-li-link-alt').each(function () {
+            var text = $(this).attr('title');
+            $(this).find('.ui-btn-text').html(text);
+        });
+
+        this.find('.dummy-scroll').each(function () {
+            var scroll = new iScroll(this);
+            scrolls.push(scroll);
+        });
     };
-    $.fn.destroyPage = function() {
-        this.find('.dummy-scroll #scroller').each(function() {
-              for (var j = 0; j < scrolls.length; j++) {
-                  if(scrolls[j].scroller==this)
-                  scrolls.splice(j, 1);
-              }
+    $.fn.destroyPage = function () {
+        this.find('.dummy-scroll #scroller').each(function () {
+            for (var j = 0; j < scrolls.length; j++) {
+                if (scrolls[j].scroller == this)
+                    scrolls.splice(j, 1);
+            }
         });
     };
 })(jQuery);
@@ -478,7 +478,17 @@ $(document).ready(function () {
             scrolls[j].refresh();
         }
     });
+
+    $('.nav-link').click(function() {
+        switchPage(this);
+        return true;
+    });
+    
 });
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function switchPage() {
+    alert('click');
 }

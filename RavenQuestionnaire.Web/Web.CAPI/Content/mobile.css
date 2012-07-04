@@ -213,3 +213,8 @@ div.ui-disabled fieldset div.ui-controlgroup-controls
 .text-question {
 	margin-top: 0;
 }
+
+.hidden-checkbox {
+	position: absolute;
+	left: -500px;
+}
