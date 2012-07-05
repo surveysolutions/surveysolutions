@@ -6,8 +6,7 @@
     xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
     xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" 
-    mc:Ignorable="d"
-    d:DesignHeight="800" d:DesignWidth="1000">
+    mc:Ignorable="d"  d:DesignHeight="800" d:DesignWidth="1000">
 
     <View:ModuleView.Resources>
         <ResourceDictionary>
