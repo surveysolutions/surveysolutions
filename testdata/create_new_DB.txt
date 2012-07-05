@@ -8,10 +8,10 @@ d:\soft\Raven_960\Smuggler\Raven.Smuggler in http://user-pc:8080/  d:\Projects\M
 ================================================================
 
 To make dump file
-C:\Users\Slava\Desktop\RavenDB-888\Smuggler\Raven.Smuggler out http://localhost:8080/  D:\Projects\MIS_Dev\testdata\init.raven.dump
+C:\Users\Slava\Desktop\RavenDB-960ES\Smuggler\Raven.Smuggler out http://slava-pc:8080/  D:\Projects\MIS_Dev-event-sourcing\init.raven.dump
 
 To import from dump file
-C:\Users\Slava\Desktop\RavenDB-888\Smuggler\Raven.Smuggler in http://localhost:8080/  D:\Projects\MIS_Dev\testdata\init.raven.dump
+C:\Users\Slava\Desktop\RavenDB-960ES\Smuggler\Raven.Smuggler in http://slava-pc:8080/  D:\Projects\MIS_Dev-event-sourcing\testdata\init.raven.dump
 
 ================================================================
 

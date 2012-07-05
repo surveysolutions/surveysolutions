@@ -63,6 +63,7 @@ namespace Web.CAPI.Controllers
             ViewBag.CurrentQuestion =  new Guid();
             return PartialView("_SurveyContent",model);
         }
+
         [HttpPost]
         public PartialViewResult _SurveyContent(string id, Guid? group, Guid? question)
         {
