@@ -9,7 +9,7 @@
     if ((item as CompleteQuestionView) != null)
     {
         var question = item as CompleteQuestionView;
-    <div class="ui-body ui-body-c">
+    <div class="ui-body ui-body-c" id="elem-@(question.PublicKey)">
         <div class="ui-grid-a question-content">
             <div class="ui-block-a">
                 @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions))
@@ -54,6 +54,9 @@
                     }
                     @Html.Hidden("PublicKey", question.PublicKey)
                 }
+                <a class="next-question" id="iam-@(question.PublicKey)">
+                    &darr;
+                </a>
             </div>
         </div>
     </div>

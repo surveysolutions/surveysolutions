@@ -457,8 +457,17 @@ $(document).ready(function () {
 $(document).bind('pagebeforeshow', function () {
     var doc = $('#content_container');
     doc.initPage();
-    
+
     doc.focus();
+
+    var groupId = window.location.search.substr(window.location.search.indexOf("group") + 6, 36);
+
+    $('#sidebar .ui-li').each(function () {
+        $(this).removeClass('ui-btn-active');
+    });
+    
+    $('#ref-link-' + groupId).parents('li').addClass('ui-btn-active');
+    
 });
 $(document).bind('pagehide', function () {
     var doc = $('#content_container');
@@ -467,3 +476,17 @@ $(document).bind('pagehide', function () {
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
+$('.next-question').live('click', function () {
+    var id = $(this).attr('id').substr(4);
+    var parent = $('#question' + id).parents('.ui-body.ui-body-c');
+    var nextqs = parent.nextAll('.ui-body.ui-body-c');
+    var next = null;
+    for (var i = 0; i < nextqs.length; i++) {
+        if ($(nextqs[i]).find('.ui-disabled.question').length == 0) {
+            next = nextqs[i];
+        }
+    }
+    if (next!=null) {
+        
+    }
+})
