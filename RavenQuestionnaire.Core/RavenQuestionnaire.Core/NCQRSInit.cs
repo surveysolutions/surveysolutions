@@ -14,9 +14,6 @@ using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
-using RavenQuestionnaire.Core.Domain;
-using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
 
 namespace RavenQuestionnaire.Web.App_Start
 {
@@ -26,7 +23,7 @@ namespace RavenQuestionnaire.Web.App_Start
         {
             NcqrsEnvironment.SetDefault<IEventStore>(InitializeEventStore(repositoryPath));
             NcqrsEnvironment.SetDefault<ICommandService>(InitializeCommandService());
-        //    NcqrsEnvironment.SetDefault<IEventStore>(new InMemoryEventStore());
+        
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
 
