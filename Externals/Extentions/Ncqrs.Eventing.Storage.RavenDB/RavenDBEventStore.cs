@@ -9,7 +9,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 {
     public class RavenDBEventStore : IEventStore
     {
-        private bool useAsyncSave = false;//research
+        private bool useAsyncSave = true;//research
 
         private readonly IDocumentStore _documentStore;
 
