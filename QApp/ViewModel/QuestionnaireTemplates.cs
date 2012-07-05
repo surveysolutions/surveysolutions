@@ -1,8 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using RavenQuestionnaire.Core;
+using System.Collections.ObjectModel;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
-using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 
 namespace QApp.ViewModel {
@@ -42,6 +42,7 @@ namespace QApp.ViewModel {
         }
 
         #region Commands
+
         protected override void InitializeCommands()
         {
             base.InitializeCommands();
@@ -52,8 +53,7 @@ namespace QApp.ViewModel {
             //Parent.ShowCompletedItemCommand();
         }
         public ICommand CreateQuestionnaireCommand { get; private set; }
+
         #endregion
-  
-        
     }
 }

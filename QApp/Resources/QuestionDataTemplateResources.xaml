@@ -121,8 +121,8 @@
                             <Border BorderThickness="1" BorderBrush="White">
                                 <dxe:TextEdit Name="txtTextBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerValue}" 
                                               Width="100" Height="30" Canvas.Top="50" Canvas.Left="20" />
-                            </Border>                            
-                            <Button FontSize="20" Margin="5" Content="Save" Padding="10"
+                            </Border>
+                    <Button FontSize="20" Margin="5" Content="Save" Padding="10"/>
                 </StackPanel>
             </ContentControl.Content>
         </ContentControl>
