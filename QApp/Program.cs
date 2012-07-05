@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Globalization;
-using System.Threading;
+using QApp.ViewModel;
 using System.Windows;
-using System.Windows.Media.Animation;
-using System.Windows.Threading;
-using DevExpress.RealtorWorld.Xpf;
-using DevExpress.RealtorWorld.Xpf.Helpers;
-using DevExpress.RealtorWorld.Xpf.View;
-using DevExpress.RealtorWorld.Xpf.ViewModel;
+using System.Threading;
 using DevExpress.Utils;
 using DevExpress.Xpf.Core;
-using QApp.ViewModel;
+using System.Globalization;
+using System.Windows.Threading;
+using DevExpress.RealtorWorld.Xpf;
 using MainPage = QApp.View.MainPage;
+using System.Windows.Media.Animation;
+using DevExpress.RealtorWorld.Xpf.View;
+using DevExpress.RealtorWorld.Xpf.Helpers;
+using DevExpress.RealtorWorld.Xpf.ViewModel;
 using ViewsRegistration = QApp.View.ViewsRegistration;
 using ModulesRegistration = QApp.ViewModel.ModulesRegistration;
 
@@ -23,9 +23,6 @@ namespace QApp
         static void Main(string[] args)
         {
             Initializer.Init();
-
-            //Application.
-
             StartupBase.Run<QStartup>(null);
         }
     }
@@ -72,9 +69,10 @@ namespace QApp
 
             protected override UIElement CreateMainElement()
             {
-#if CLICKONCE&&DEBUG
-            MessageBox.Show("Is's Time To Debug!!!");
-#endif
+                #if CLICKONCE&&DEBUG
+                MessageBox.Show("Is's Time To Debug!!!");
+                #endif
+
                 MainPage mainPage = new MainPage();
 
                 MainScreenData data = new MainScreenData();
