@@ -3,7 +3,6 @@ using System.ServiceModel;
 using System.Threading;
 using System.Web.Configuration;
 using System.Web.Mvc;
-using Ncqrs.Eventing.Storage.RavenDB;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;

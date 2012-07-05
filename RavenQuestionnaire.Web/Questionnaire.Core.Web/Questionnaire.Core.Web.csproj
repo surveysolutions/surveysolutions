@@ -112,10 +112,6 @@
     <Compile Include="WCF\ServiceDiscover.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
-      <Project>{EA93A91D-7BC9-4EC0-8A22-8A772AFD76C3}</Project>
-      <Name>Ncqrs.Eventing.Storage.RavenDB</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>

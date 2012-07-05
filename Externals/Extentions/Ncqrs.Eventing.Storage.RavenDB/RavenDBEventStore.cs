@@ -173,14 +173,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             }
             return retval;
         }
-
-
-        /// <summary>
-        /// Get some events after specified event.
-        /// </summary>
-        /// <param name="eventId">The id of last event not to be included in result set.</param>
-        /// <param name="maxCount">Maximum number of returned events</param>
-        /// <returns>A collection events starting right after <paramref name="eventId"/>.</returns>
+       
         public IEnumerable<CommittedEvent> ReadFrom(DateTime start)
         {
             var result = new List<CommittedEvent>();
