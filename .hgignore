@@ -114,3 +114,5 @@ RavenQuestionnaire.Web/Web.Supervisor/bin/*
 RavenQuestionnaire.Web/Web.CAPI/App_Data/ClientDependency/V-PC-4600494b14abd51c8350a8277a682450-map.xml
 RavenQuestionnaire.Web/Web.CAPI/App_Data/ClientDependency/*
 Installation/CapiInstallProj/_ReSharper.Setup/
+QApp/packages/*
+
