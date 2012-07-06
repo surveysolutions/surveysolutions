@@ -234,3 +234,6 @@
 	vertical-align: middle;
 	text-align: center;
 }
+.ui-body.ui-body-c{
+min-height: 90px;
+}
