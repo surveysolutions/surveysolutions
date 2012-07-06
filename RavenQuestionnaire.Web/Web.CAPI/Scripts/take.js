@@ -419,10 +419,7 @@ function updateCounter() {
 
         this.find('.dummy-scroll').each(function () {
             var scroll = new iScroll(this);
-            scrolls.push(scroll);
-            /* this.focus();
-            scroll.refresh();*/
-
+            newScrolls.push(scroll);
         });
     };
     $.fn.destroyPage = function () {
@@ -478,6 +475,7 @@ $(document).ready(function () {
             scrolls.push(scroll);*/
             for (var j = 0; j < scrolls.length; j++) {
                 if ($(scrolls[j].scroller).attr('class') == $(scrollContainer.find('#scroller')).attr('class')) {
+                    scrolls[j].refresh();
                     scrolls[j].scrollTo(0, position, 100, false);
                 }
             }
@@ -486,8 +484,11 @@ $(document).ready(function () {
 });
 $(document).bind('pagebeforeshow', function () {
     var doc = $('#content_container');
+    newScrolls = [];
     doc.initPage();
-
+    for (var j = 0; j < newScrolls.length; j++) {
+        scrolls.push(newScrolls[j]);
+    }
     doc.focus();
 });
 $(document).bind('pagechange', function () {
@@ -502,6 +503,9 @@ $(document).bind('pagechange', function () {
 $(document).bind('pagehide', function () {
     var doc = $('#content_container');
     doc.destroyPage();
+    for (var j = 0; j < newScrolls.length; j++) {
+        scrolls.push(newScrolls[j]);
+    }
 });
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
