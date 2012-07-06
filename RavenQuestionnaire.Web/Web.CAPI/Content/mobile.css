@@ -212,6 +212,10 @@
 .question {
 	margin-right: 60px;
 }
+div.ui-disabled fieldset div.ui-controlgroup-controls
+{
+    display: none;   
+}
 .text-question {
 	margin-top: 0;
 }

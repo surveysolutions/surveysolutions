@@ -30,10 +30,11 @@ namespace RavenQuestionnaire.Core.Views.Group
 
         protected AbstractGroupView(IQuestionnaireDocument doc, IGroup group)
         {
-            this.QuestionnaireId = doc.Id;
-            this.PublicKey = group.PublicKey;
-            this.Title = group.Title;
-            this.Propagated = group.Propagated;
+            if (group.Triggers != null)
+            {
+                this.Trigger = group.Triggers.Count > 0 ? group.Triggers[0].ToString() : null;
+            }
+            else this.Trigger = null;
         }
         public Guid PublicKey { get; set; }
 
@@ -44,6 +45,8 @@ namespace RavenQuestionnaire.Core.Views.Group
         public List<ICompositeView> Children { get; set; }
 
         public Propagate Propagated { get; set; }
+
+        public string Trigger { get; set; } 
 
         public string QuestionnaireId
         {
@@ -78,6 +81,11 @@ namespace RavenQuestionnaire.Core.Views.Group
             this.PublicKey = group.PublicKey;
             this.Title = group.Title;
             this.Propagated = group.Propagated;
+            if (group.Triggers != null)
+            {
+                this.Trigger = group.Triggers.Count>0 ? group.Triggers[0].ToString() : null;
+            }
+            else this.Trigger = null;
         }
 
         public TQuestion[] Questions

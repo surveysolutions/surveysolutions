@@ -332,7 +332,7 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
 
-        public JsonResult SaveCommentsJson(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
+        public JsonResult SaveCommentsJson(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions, string PublicKey)
         {
             var question = questions[0];
             question.PublicKey = new Guid(Request.Form["PublicKey"]);

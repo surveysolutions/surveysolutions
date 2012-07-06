@@ -51,6 +51,33 @@ function JsonResults(data, status, xhr) {
         SetErrorToQuestion(group.question, group.settings.PropogationPublicKey, group.error);
 
 }
+
+function UpdateComments(data) {
+
+    var group = jQuery.parseJSON(data.responseText);
+    if (!group.error) {
+        UpdateCommentInGroup(group);
+    }
+    else
+        SetErrorToQuestion(group.question, group.settings.PropogationPublicKey, group.error);
+}
+
+function UpdateCommentInGroup(group) {
+    for (var j = 0; j < group.Questions.length; j++) {
+        /*UpdateQuestion(group.Questions[j], group.Questions[j].GroupPublicKey);*/
+        var key = group.Questions[j].PublicKey;
+        var id = "#comments" + key;
+        var commentscontent = group.Questions[j].Comments;
+        if (commentscontent != null)
+        {
+            $(id).html('Comments: ' + commentscontent);
+        }
+        else {
+            $(id).html('');
+        }
+    }
+}
+
 function UpdateCurrentGroup(group) {
     for (var j = 0; j < group.Menu.length; j++) {
         var total = group.Menu[j].Totals;
@@ -69,8 +96,12 @@ function UpdateQuestion(question) {
     }
 
     questionElement.removeClass("ui-disabled");
-    if (!question.Enabled)
+    if (!question.Enabled) {
         questionElement.addClass("ui-disabled");
+        questionElement.children('fieldset').children('.ui-controlgroup-controls').hide();
+    }
+    else questionElement.children('fieldset').children('.ui-controlgroup-controls').show();
+
 
     questionElement.removeClass("ui-body");
     questionElement.removeClass("error_block");
@@ -87,6 +118,8 @@ function UpdateQuestion(question) {
     questionElement.closest("form").clear_form_elements();*/
     SetErrorToQuestion(question, question.QuestionType == 0 ? null : question.GroupPublicKey, '');
 }
+
+
 
 function SetErrorToQuestion(question, key, error) {
     var questionElement = key ? $('#propagatedGroup' + key + ' #question' + question.PublicKey) : $('#question' + question.PublicKey);

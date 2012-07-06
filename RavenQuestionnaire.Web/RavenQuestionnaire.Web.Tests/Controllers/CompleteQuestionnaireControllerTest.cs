@@ -159,5 +159,22 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             CommandServiceMock.Verify(x => x.Execute(It.IsAny<SetAnswerCommand>()),
                                       Times.Once());
         }
+
+        //[Test]
+        //public void SaveCommentsResult_Valid_FormIsReturned()
+        //{
+        //    ViewRepositoryMock.Setup(
+        //        x =>
+        //        x.Load<StatusViewInputModel, StatusView>(
+        //            It.IsAny<StatusViewInputModel>()))
+        //        .Returns(new StatusView());
+        //    CompleteQuestionView question = new CompleteQuestionView("cId", Guid.NewGuid());
+        //    question.Comments = "Everything will be ok";
+        //    Controller.SaveCommentsJson(
+        //        new CompleteQuestionSettings[] { new CompleteQuestionSettings() { QuestionnaireId = "cId", PropogationPublicKey = Guid.NewGuid() } },
+        //        new CompleteQuestionView[] { question });
+        //    CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateCommentsInCompleteQuestionnaireCommand>()),
+        //                              Times.Once());
+        //}
     }
 }

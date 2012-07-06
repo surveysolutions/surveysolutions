@@ -33,7 +33,9 @@
         </script>
     }*@
     @Html.Hidden("QuestionType", Model.QuestionType)
+  
     @{ Html.RenderPartial(string.Format("~/Views/Survey/Answer/AnswerList/_{0}.cshtml", Model.QuestionType), Model); }
+
     @Html.ValidationMessage("AnswerValue")
     @Html.Hidden("PublicKey", Model.PublicKey)
 </div>

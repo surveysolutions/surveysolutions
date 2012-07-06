@@ -18,6 +18,7 @@ using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Questionnaire;
+using System.Collections.Generic;
 
 #endregion
 
@@ -47,14 +48,27 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 try
                 {
+                    
                     if (model.PublicKey == Guid.Empty)
                     {
 
                         Guid newItemKey = Guid.NewGuid();
                         var createCommand = new CreateNewGroupCommand(model.Title, newItemKey, model.Propagated,
-                                                                      model.QuestionnaireId, model.Parent,
-                                                                      GlobalInfo.GetCurrentUser());
-                        commandInvoker.Execute(createCommand);
+                            
+                            Guid g = new Guid(model.Trigger);
+                            List<Guid> triggers = new List<Guid>();
+                            triggers.Add(g);
+                            var createCommand = new CreateNewGroupCommand(model.PublicKey, model.Title, model.Propagated,
+                                                                         model.QuestionnaireId, triggers, model.Parent,
+                                                                         GlobalInfo.GetCurrentUser());
+                            commandInvoker.Execute(createCommand);
+                        }
+                        else
+                        {
+                            var createCommand = new CreateNewGroupCommand(model.PublicKey, model.Title, model.Propagated,
+                                                                          model.QuestionnaireId, model.Parent,
+                                                                          GlobalInfo.GetCurrentUser());
+                            commandInvoker.Execute(createCommand);
 
                         //new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
@@ -62,12 +76,29 @@ namespace RavenQuestionnaire.Web.Controllers
                         
                         commandService.Execute(new AddGroupCommand(Guid.Parse(model.QuestionnaireId), newItemKey, 
                             model.Title, model.Propagated, model.Parent));
+                        }
+                        
                     }
                     else
                     {
-                        commandInvoker.Execute(new UpdateGroupCommand(model.Title, model.Propagated,
+                        if (model.Trigger != null)
+                        {
+                            Guid g = new Guid(model.Trigger);
+                            List<Guid> triggers = new List<Guid>();
+                            triggers.Add(g);
+                            var updateCommand = new UpdateGroupCommand(model.Title, model.Propagated,
+                                                                      model.QuestionnaireId, triggers,
+                                                                      model.PublicKey, GlobalInfo.GetCurrentUser());
+                            commandInvoker.Execute(updateCommand);
+                        }
+                        else
+                        {
+                            var updateCommand = new UpdateGroupCommand(model.Title, model.Propagated,
                                                                       model.QuestionnaireId,
-                                                                      model.PublicKey, GlobalInfo.GetCurrentUser()));
+                                                                      model.PublicKey, GlobalInfo.GetCurrentUser());
+                            commandInvoker.Execute(updateCommand);
+                        }
+                        
                     }
                 }
                 catch (Exception e)
@@ -79,7 +110,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                         new QuestionnaireViewInputModel(model.QuestionnaireId));
                 */
-                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
+                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId, qid = model.PublicKey });
             }
             return View("_Create", model);
         }

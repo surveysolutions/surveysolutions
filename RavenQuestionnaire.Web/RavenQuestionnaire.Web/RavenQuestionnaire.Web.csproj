@@ -979,6 +979,7 @@
     <Content Include="Web.Deploy-Main.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <Content Include="Views\Group\Mobile\_CommentsBlock.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
