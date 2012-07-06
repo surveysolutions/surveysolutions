@@ -21,10 +21,11 @@
     <!-- /header -->
     <div data-role="content" class="dummy-scroll">
         <div class="scroller-@(Model.PublicKey)" id="scroller">
-            @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model)
+            <hr>
+                @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model)
+            <hr>
         </div>
-        <div style="width: 100%; height: 50px;">
-            &nbsp;</div>
+        <div style="width: 100%; height: 50px;">&nbsp;</div>
     </div>
     @RenderFooter(Model.Navigation)
     <!-- /content -->
