@@ -86,36 +86,7 @@ namespace Web.CAPI.Controllers
             var model = viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(new CQGroupedBrowseInputModel());
             return View(model);
         }
-
-        public ActionResult ReInit(string id)
-        {
-           /* if (string.IsNullOrEmpty(id))
-                throw new HttpException(404, "Invalid query string parameters");
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel,
-                CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
-
-            if (model != null)
-            {
-                var status = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(IdUtil.ParseId(model.TemplateId)));
-                if (status != null)
-                {
-                    var statusItem = status.StatusElements.FirstOrDefault(x => x.IsInitial == true);//temporary hardcoded
-                    if (statusItem != null)
-                    {
-                        commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
-                                                                                          statusItem.PublicKey,
-                                                                                          status.Id,
-                                                                                          null,
-                                                                                          _globalProvider.GetCurrentUser()));
-
-                    }
-                }
-
-            }*/
-            return RedirectToAction("Index", "Survey", new { id = id });
-        }
-
+        
         public JsonResult SaveComments(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
         {
             var question = questions[0];
@@ -144,6 +115,13 @@ namespace Web.CAPI.Controllers
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
+
+            Guid key = new Guid();
+            if (!Guid.TryParse(id, out key))
+                throw new HttpException(404, "Invalid query string parameters");
+
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = key, Status = SurveyStatus.Complete});
 
             /*var model = viewRepository.Load<CompleteQuestionnaireViewInputModel,
                 CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
@@ -194,6 +172,38 @@ namespace Web.CAPI.Controllers
 
         }
 
+        public ActionResult ReInit(string id)
+        {
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(new ChangeStatusCommand(){CompleteQuestionnaireId = Guid.Parse(id), Status = SurveyStatus.Initial});
+
+            /* if (string.IsNullOrEmpty(id))
+                 throw new HttpException(404, "Invalid query string parameters");
+
+             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel,
+                 CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
+
+             if (model != null)
+             {
+                 var status = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(IdUtil.ParseId(model.TemplateId)));
+                 if (status != null)
+                 {
+                     var statusItem = status.StatusElements.FirstOrDefault(x => x.IsInitial == true);//temporary hardcoded
+                     if (statusItem != null)
+                     {
+                         commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
+                                                                                           statusItem.PublicKey,
+                                                                                           status.Id,
+                                                                                           null,
+                                                                                           _globalProvider.GetCurrentUser()));
+
+                     }
+                 }
+
+             }*/
+            return RedirectToAction("Index", "Survey", new { id = id });
+        }
+
         // move out of there!!
         private SurveyStatus GetStatus(string id)
         {
@@ -225,7 +235,7 @@ namespace Web.CAPI.Controllers
 
 
             var newQuestionnairePublicKey = Guid.NewGuid();
-           // var questionnairePublicKey = Guid.NewGuid();
+          
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
 
