@@ -83,8 +83,8 @@ function UpdateQuestion(question) {
         questionElement.addClass("answered");
     }
 
-   /* if (!question.Enabled)
-        questionElement.closest("form").clear_form_elements();*/
+    /* if (!question.Enabled)
+    questionElement.closest("form").clear_form_elements();*/
     SetErrorToQuestion(question, question.QuestionType == 0 ? null : question.GroupPublicKey, '');
 }
 
@@ -153,26 +153,26 @@ function RemovePropagatedGroup(data, status, xhr) {
     $(deleteScreen).remove();
     $(parent).listview('refresh');
     updateCounter();
-    
+
 }
 
 function PropagatedGroup(data, status, xhr) {
     var group = jQuery.parseJSON(data.responseText);
     if (!group.error) {
         var templateDivPath = '#groupTemplate' + group.parentGroupPublicKey;
-      //  var screenTemplateDiv = '#template-' + group.parentGroupPublicKey;
+        //  var screenTemplateDiv = '#template-' + group.parentGroupPublicKey;
         var parent = $('#propagate-list-' + group.parentGroupPublicKey);
         var validator = parent.find('[data-valmsg-replace=true]');
         validator.text('');
         var template = $(templateDivPath).html();
-       // var screenTemplate = $(screenTemplateDiv).html();
+        // var screenTemplate = $(screenTemplateDiv).html();
         var str = template.replace(/00000000-0000-0000-0000-000000000000/gi, group.propagationKey);
         str = str.replace("${Number}", 50);
-        
-      //  var screenLinks = $('.propagated-screen-link-' + group.parentGroupPublicKey);
-    //    var lastScreen = screenLinks.last().length == 0 ? '' : screenLinks.last().attr('href');
 
-    /*    var screenStr = screenTemplate.replace(/00000000-0000-0000-0000-000000000000/gi, group.propagationKey);
+        //  var screenLinks = $('.propagated-screen-link-' + group.parentGroupPublicKey);
+        //    var lastScreen = screenLinks.last().length == 0 ? '' : screenLinks.last().attr('href');
+
+        /*    var screenStr = screenTemplate.replace(/00000000-0000-0000-0000-000000000000/gi, group.propagationKey);
         screenStr = screenStr.replace("${PrevScreen}", lastScreen);
         screenStr = screenStr.replace("${NextScreen}", "#");
         screenStr = screenStr.replace("${Key}", group.propagationKey);
@@ -180,7 +180,7 @@ function PropagatedGroup(data, status, xhr) {
         */
         var newGroup = $(str);
         //var newScreen = $(screenStr).appendTo($(screenTemplateDiv).parent());
-/*
+        /*
         var prevScreenNextLink = $(lastScreen + ' .next-screen');
         $(prevScreenNextLink).attr('href', '#screen-' + group.propagationKey);
         $(prevScreenNextLink).removeClass('ui-disabled');*/
@@ -193,7 +193,7 @@ function PropagatedGroup(data, status, xhr) {
             newGroup.insertAfter(container);
         }
 
-      /*  newGroup.listview();*/
+        /*  newGroup.listview();*/
         newGroup.trigger('pagecreate');
         $(parent).listview('refresh');
 
@@ -203,7 +203,7 @@ function PropagatedGroup(data, status, xhr) {
         newScreen.createKeyBoard();
         newScreen.numericSubmit();
         newScreen.hideInputsWithVirtualKeyboard();*/
-        
+
         updateCounter();
 
         $(parent).find('.propagated-list-item').each(function (i, el) {
@@ -394,48 +394,49 @@ function updateCounter() {
             keyboard.$preview.caretToEnd();
         });
     };
-    $.fn.initPage = function() {
-         
-    this.createKeyBoard();
-    this.numericSubmit();
-    this.hideInputsWithVirtualKeyboard();
-    this.disableAfterSubmit();
+    $.fn.initPage = function () {
 
-    this.find('[data-role=page]').live('pageshow', function (event) {
-        //data-type="horizontal"
-        $("input[type='checkbox'][checked]").checkboxradio("refresh");
-    });
-   
-    this.find('.propagated-list-item').each(function () {
-        var index = $(this).find('h3 span').html();
-        var screenId = $(this).attr('id').replace("propagatedGroup", "#screen-");
-        $(screenId + ' .ui-footer h1 span').html(index);
-    });
+        this.createKeyBoard();
+        this.numericSubmit();
+        this.hideInputsWithVirtualKeyboard();
+        this.disableAfterSubmit();
 
-    this.find('.splited-button.ui-li-link-alt').each(function () {
-        var text = $(this).attr('title');
-        $(this).find('.ui-btn-text').html(text);
-    });
+        this.find('[data-role=page]').live('pageshow', function (event) {
+            //data-type="horizontal"
+            $("input[type='checkbox'][checked]").checkboxradio("refresh");
+        });
 
-        this.find('.dummy-scroll').each(function() {
+        this.find('.propagated-list-item').each(function () {
+            var index = $(this).find('h3 span').html();
+            var screenId = $(this).attr('id').replace("propagatedGroup", "#screen-");
+            $(screenId + ' .ui-footer h1 span').html(index);
+        });
+
+        this.find('.splited-button.ui-li-link-alt').each(function () {
+            var text = $(this).attr('title');
+            $(this).find('.ui-btn-text').html(text);
+        });
+
+        this.find('.dummy-scroll').each(function () {
             var scroll = new iScroll(this);
             scrolls.push(scroll);
             /* this.focus();
-        scroll.refresh();*/
+            scroll.refresh();*/
 
         });
     };
-    $.fn.destroyPage = function() {
-        this.find('.dummy-scroll #scroller').each(function() {
-              for (var j = 0; j < scrolls.length; j++) {
-                  if(scrolls[j].scroller==this) {
-                      scrolls.splice(j, 1);
-                  }
-
-              }
+    $.fn.destroyPage = function () {
+        this.find('.dummy-scroll #scroller').each(function () {
+            for (var j = 0; j < scrolls.length; j++) {
+                if ($(scrolls[j].scroller).attr('class') == $(this).attr('class')) 
+                {
+                    scrolls.splice(j, 1);
+                }
+            }
         });
     };
 })(jQuery);
+var newScrolls = new Array();
 var scrolls = new Array();
 $(document).ready(function () {
 
@@ -453,21 +454,32 @@ $(document).ready(function () {
     for (var j = 0; j < scrolls.length; j++) {
         scrolls[j].refresh();
     }
-    $('.next-question').live('click', function() {
+    $('.next-question').live('click', function () {
         var id = $(this).attr('id').substr(4);
-        var parent = $('#question' + id).parents('.ui-body.ui-body-c');
+        var parent = $('#elem-' + id);
         var nextqs = parent.nextAll('.ui-body.ui-body-c');
         var next = null;
         for (var i = 0; i < nextqs.length; i++) {
             if ($(nextqs[i]).find('.ui-disabled.question').length == 0) {
                 next = nextqs[i];
+                break;
             }
         }
         if (next != null) {
+            var scrollContainer = $(next).offsetParent();
+            var position = scrollContainer.find('#scroller').offset().top - $(next).offset().top;
+            /*
             for (var j = 0; j < scrolls.length; j++) {
-                try {
-                    scrolls[j].scrollToElement('#' + $(next).attr('id'));
-                } catch(e) { }
+                if (scrolls[j].scroller == scrollContainer.find('#scroller')) {
+                    scrolls.splice(j, 1);
+                }
+            }
+            var scroll = new iScroll(scrollContainer);
+            scrolls.push(scroll);*/
+            for (var j = 0; j < scrolls.length; j++) {
+                if ($(scrolls[j].scroller).attr('class') == $(scrollContainer.find('#scroller')).attr('class')) {
+                    scrolls[j].scrollTo(0, position, 100, false);
+                }
             }
         }
     });
@@ -477,16 +489,16 @@ $(document).bind('pagebeforeshow', function () {
     doc.initPage();
 
     doc.focus();
-
+});
+$(document).bind('pagechange', function () {
     var groupId = window.location.search.substr(window.location.search.indexOf("group") + 6, 36);
 
     $('#sidebar .ui-li').each(function () {
         $(this).removeClass('ui-btn-active');
     });
-    
     $('#ref-link-' + groupId).parents('li').addClass('ui-btn-active');
-    
 });
+
 $(document).bind('pagehide', function () {
     var doc = $('#content_container');
     doc.destroyPage();

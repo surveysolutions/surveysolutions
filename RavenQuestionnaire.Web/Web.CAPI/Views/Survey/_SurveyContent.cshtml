@@ -20,7 +20,7 @@
     @RenderNavigation(Model.Navigation)
     <!-- /header -->
     <div data-role="content" class="dummy-scroll">
-        <div id="scroller">
+        <div class="scroller-@(Model.PublicKey)" id="scroller">
             @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model)
         </div>
         <div style="width: 100%; height: 50px;">

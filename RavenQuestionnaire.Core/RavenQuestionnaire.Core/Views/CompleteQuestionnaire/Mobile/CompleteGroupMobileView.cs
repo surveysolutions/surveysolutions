@@ -24,6 +24,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         }
         public Guid PublicKey { get; set; }
 
+        public Guid UniqueKey { get; set; }
+
         public string Title { get; set; }
 
         public Guid? Parent { get; set; }
