@@ -58,9 +58,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public string StataExportCaption { get; set; }
 
         [JsonIgnore]
-        public string Instructions
-        {
-            get; set; }
+        public string Instructions { get; set; }
+
+        [JsonIgnore]
+        public string Comments { get; set; }
 
         public void Add(IComposite c, Guid? parent)
         {

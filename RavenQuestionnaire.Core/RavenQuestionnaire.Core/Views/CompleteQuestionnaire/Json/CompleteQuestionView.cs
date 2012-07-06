@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.Views.Answer;
+
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
 {
@@ -11,7 +11,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
     {
         public Guid PublicKey { get; set; }
         public Guid GroupPublicKey { get; set; }
-
         public string Title { get; set; }
         public QuestionType QuestionType { get; set; }
         public bool Featured { get; set; }
@@ -20,6 +19,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         public bool Answered { get; set; }
         public object Answer { get; set; }
         public bool IsInPropagatebleGroup { get; set; }
+        public string Comments { get; set; }
 
         public CompleteQuestionsJsonView()
         {
@@ -34,6 +34,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             this.PublicKey = doc.PublicKey;
             this.Featured = doc.Featured;
             this.Valid = doc.Valid;
+            this.Comments = doc.Comments;
             this.Enabled = doc.Enabled;
             var answers = doc.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(doc.PublicKey, a)).ToArray();
             this.Answer = doc.GetAnswerString();

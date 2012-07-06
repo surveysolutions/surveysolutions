@@ -53,6 +53,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public string Instructions { get; set; }
 
+        public string Comments { get; set; }
+
         public void AddCard(Image card)
         {
             if (Cards == null)

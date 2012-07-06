@@ -1,6 +1,7 @@
 ﻿using System;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
+using System.Collections.Generic;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
 {
@@ -24,16 +25,33 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
         {
             get; private set;
         }
-
         public Guid PublicKey
         {
             get;
             private set;
         }
+        public List<Guid> Triggers { get; private set; }
 
         public UserLight Executor { get; set; }
-
-        public CreateNewGroupCommand(string groupText, Guid publicKey, Propagate propagateble, string questionnaireId, Guid? parentGroup, UserLight executor)
+        public CreateNewGroupCommand(Guid publicKey, string groupText, Propagate propagateble, string questionnaireId, Guid? parentGroup, UserLight executor)
+        {
+            this.PublicKey = publicKey;
+            this.GroupText = groupText;
+            this.Paropagateble = propagateble;
+            this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            this.ParentGroupPublicKey = parentGroup;
+            Executor = executor;
+        }
+        public CreateNewGroupCommand(Guid publicKey, string groupText, Propagate propagateble, string questionnaireId, List<Guid> triggers, Guid? parentGroup, UserLight executor)
+        {
+            this.PublicKey = publicKey;
+            this.GroupText = groupText;
+            this.Paropagateble = propagateble;
+            this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            this.Triggers = triggers;
+            this.ParentGroupPublicKey = parentGroup;
+            Executor = executor;
+        }
         {
             this.GroupText = groupText;
             this.Paropagateble = propagateble;
@@ -42,5 +60,16 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
             this.PublicKey = publicKey;
             Executor = executor;
         }
+        public CreateNewGroupCommand(string groupText, Propagate propagateble, string questionnaireId, List<Guid> triggers, Guid? parentGroup, UserLight executor)
+        {
+            this.GroupText = groupText;
+            this.Paropagateble = propagateble;
+            this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            this.Triggers = triggers;
+            this.ParentGroupPublicKey = parentGroup;
+            Executor = executor;
+        }
+
+        
     }
 }
