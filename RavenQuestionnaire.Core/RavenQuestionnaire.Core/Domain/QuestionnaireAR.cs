@@ -68,8 +68,10 @@ namespace RavenQuestionnaire.Core.Domain
             _innerDocument = e.Template;
             _creationDate = e.Template.CreationDate;
         }
+
         public void CreateCompletedQ(Guid completeQuestionnaireId)
         {
+            //TODO: check is it good to create new AR form another?
             CompleteQuestionnaireAR cq = new CompleteQuestionnaireAR(completeQuestionnaireId, _innerDocument);
         }
 

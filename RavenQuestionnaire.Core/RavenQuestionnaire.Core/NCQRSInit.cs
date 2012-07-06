@@ -85,6 +85,7 @@ namespace RavenQuestionnaire.Web.App_Start
             //does it need UoW?
             service.RegisterExecutor(typeof(PreLoadCompleteQuestionnaireCommand), new UoWMappedCommandExecutor(mapper));
             
+            service.RegisterExecutor(typeof(ChangeStatusCommand), new UoWMappedCommandExecutor(mapper));
 
             return service;
         }

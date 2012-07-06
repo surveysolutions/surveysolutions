@@ -11,13 +11,13 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
 using RavenQuestionnaire.Core.ExpressionExecutors;
+using RavenQuestionnaire.Core.Services;
 
 namespace RavenQuestionnaire.Core.Domain
 {
     /// <summary>
     /// CompleteQuestionnaire Aggregate Root.
     /// </summary>
-    //[DynamicSnapshot]
     public class CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireDocument>
     {
         public CompleteQuestionnaireAR ()
@@ -32,18 +32,18 @@ namespace RavenQuestionnaire.Core.Domain
         {
             var clock = NcqrsEnvironment.Get<IClock>();
 
-            //check
-            
+            //all checks using read layer.
+
+            //TODO: is it good to use explicit type cast?
             CompleteQuestionnaireDocument doc = (CompleteQuestionnaireDocument)questionnaire;
 
             doc.PublicKey = completeQuestionnaireId;
             
             ////Fix this with read model??
-            doc.Creator = null; 
-            doc.Status = new SurveyStatus();
+            doc.Creator = null;
+            doc.Status = SurveyStatus.Initial;
             doc.Responsible = null;
             
-
             var questions = doc.GetAllQuestions<ICompleteQuestion>().ToList();
             var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
             foreach (ICompleteQuestion completeQuestion in questions)
@@ -189,7 +189,7 @@ namespace RavenQuestionnaire.Core.Domain
         }
         public void AddPropagatableGroup(Guid publicKey, Guid propagationKey)
         {
-            //performe checka before event raising
+            //performe check before event raising
             
 
             var template = _doc.Find<CompleteGroup>(publicKey);
@@ -256,5 +256,30 @@ namespace RavenQuestionnaire.Core.Domain
             //loads into the cache
             //no logic
         }
+
+
+        protected void ChangeStatus(SurveyStatus status)
+        {
+            //put check logic !!!
+
+            CompleteQuestionnaireValidationExecutor validator =
+              new CompleteQuestionnaireValidationExecutor(_doc.QuestionHash);
+
+            var result = validator.Execute();
+            _doc.IsValid = result;
+
+            ApplyEvent(new QuestionnaireStatusChanged()
+            { CompletedQuestionnaireId = this._doc.PublicKey, 
+                Status = result ? status : SurveyStatus.Error});
+        }
+
+        // Event handler for the PropagatableGroupAdded event. This method
+        // is automaticly wired as event handler based on convension.
+        protected void OnChangeStatus(QuestionnaireStatusChanged e)
+        {
+            _doc.Status = e.Status;
+        }
+
+
     }
 }
