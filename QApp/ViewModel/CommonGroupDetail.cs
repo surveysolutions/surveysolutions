@@ -1,21 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Windows;
+using DevExpress.Xpf.Core;
 using System.Windows.Input;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
-using DevExpress.Xpf.Core;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Question;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 
 namespace QApp.ViewModel
 {
     public class CommonGroupDetailData : ModuleData
     {
         private CompleteGroupMobileView group;
-
-
+        
         public CommonGroupDetailData(CompleteGroupMobileView group)
         {
             Group = group;
@@ -26,7 +22,6 @@ namespace QApp.ViewModel
             get { return group; }
             private set { SetValue<CompleteGroupMobileView>("Group", ref group, value); }
         }
-
     }
 
     public class CommonGroupDetail : Module
@@ -85,11 +80,8 @@ namespace QApp.ViewModel
                 window.ShowDialog();
             }
         }
-
-
+        
         public ICommand ShowQuestionCommand { get; private set; }
-
-
         
         #endregion
 

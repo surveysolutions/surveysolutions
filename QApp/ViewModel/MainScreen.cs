@@ -1,18 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using Ninject;
+using DevExpress.Xpf.Core;
 using System.Windows.Input;
+using RavenQuestionnaire.Core;
+using System.Collections.Generic;
 using DevExpress.RealtorWorld.Xpf.Helpers;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
-using DevExpress.Xpf.Bars;
-using DevExpress.Xpf.Core;
-using Ninject;
-using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Views.Questionnaire;
-using RavenQuestionnaire.Core.Views.Status;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
+
 
 namespace QApp.ViewModel {
   
@@ -50,7 +47,8 @@ namespace QApp.ViewModel {
                     if (typeof(T) == typeof(QuestionnaireDetailData))
                     {
                         var question = parameter as CompleteQuestionView;
-                        CurrentModule = question != null ? ModulesManager.CreateModule(null, new QuestionnaireDetailData(question.QuestionnaireId, question.GroupPublicKey), this, parameter) : ModulesManager.CreateModule(null, new T(), this, parameter);
+                        //CurrentModule = question != null ? ModulesManager.CreateModule(null, new QuestionnaireDetailData(question.QuestionnaireId, question.GroupPublicKey), this, parameter) : ModulesManager.CreateModule(null, new T(), this, parameter);
+                        CurrentModule = question != null ? ModulesManager.CreateModule(null, new QuestionnaireDetailData(question.QuestionnaireId, question.PublicKey), this, parameter) : ModulesManager.CreateModule(null, new T(), this, parameter);
                     }
                     else
                         CurrentModule = ModulesManager.CreateModule(null, new T(), this, parameter);

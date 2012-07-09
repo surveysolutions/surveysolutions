@@ -30,7 +30,9 @@ namespace QApp.Helpers.DataTemplateSelectors
                 var question = item as CompleteQuestionView;
                 switch (question.QuestionType)
                 {
-                    case QuestionType.ExtendedDropDownList:
+                    //case QuestionType.ExtendedDropDownList:
+                    //    return DropDownTemplate;
+                    case QuestionType.DropDownList:
                         return DropDownTemplate;
                     case QuestionType.DateTime:
                         return DateTimeTemplate;

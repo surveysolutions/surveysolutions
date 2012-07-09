@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using System.Globalization;
 using System.Windows.Media.Imaging;
@@ -9,7 +10,6 @@ using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using System.Windows;
 
 namespace QApp.Helpers.Extensions
 {
@@ -104,7 +104,8 @@ namespace QApp.Helpers.Extensions
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var myObject = value as CompleteQuestionView;
-            if (myObject.QuestionType == QuestionType.ExtendedDropDownList || myObject.QuestionType == QuestionType.MultyOption || myObject.QuestionType == QuestionType.SingleOption)
+            //if (myObject.QuestionType == QuestionType.ExtendedDropDownList || myObject.QuestionType == QuestionType.MultyOption || myObject.QuestionType == QuestionType.SingleOption)
+            if (myObject!=null && (myObject.QuestionType == QuestionType.DropDownList || myObject.QuestionType == QuestionType.MultyOption || myObject.QuestionType == QuestionType.SingleOption))
                 return Visibility.Collapsed;
             return Visibility.Visible;
         }
