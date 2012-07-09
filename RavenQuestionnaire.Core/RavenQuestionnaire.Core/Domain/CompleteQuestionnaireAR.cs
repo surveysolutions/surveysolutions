@@ -129,7 +129,60 @@ namespace RavenQuestionnaire.Core.Domain
                                    QuestionPublicKey = questionPublicKey,
                                    QuestionText = question.QuestionText
                                });
+            AddRemovePRopagatedGroup(question);
             
+        }
+        protected void AddRemovePRopagatedGroup(ICompleteQuestion question)
+        {
+            if (!(question is IAutoPropagate))
+                return;
+            var countObj = question.GetAnswerObject();
+
+            int count = Convert.ToInt32(countObj);
+            if (count < 0)
+                throw new InvalidOperationException("count can't be bellow zero");
+
+            foreach (Guid trigger in question.Triggers)
+            {
+                MultylyGroup(trigger, count);
+            }
+        }
+
+        protected void MultylyGroup(Guid groupKey, int count)
+        {
+            var groups =
+               this._doc.Find<ICompleteGroup>(
+                   g => g.PublicKey == groupKey && g.PropogationPublicKey.HasValue).ToList();
+
+            if (groups.Count == count)
+                return;
+            if (groups.Count < count)
+            {
+                for (int i = 0; i < count - groups.Count; i++)
+                {
+                    ApplyEvent(new PropagatableGroupAdded
+                    {
+                        CompletedQuestionnaireId = this._doc.PublicKey,
+                        PublicKey = groupKey,
+                        PropagationKey = Guid.NewGuid()
+                    });
+                }
+            }
+            else
+            {
+                for (int i = count; i < groups.Count; i++)
+                {
+                    if (!groups[i].PropogationPublicKey.HasValue)
+                        continue;
+
+                    ApplyEvent(new PropagatableGroupDeleted
+                    {
+                        CompletedQuestionnaireId = this._doc.PublicKey,
+                        PublicKey = groupKey,
+                        PropagationKey = groups[i].PropogationPublicKey.Value
+                    });
+                }
+            }
         }
 
         // Event handler for the AnswerSet event. This method
