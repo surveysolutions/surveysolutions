@@ -59,6 +59,7 @@ namespace QApp.ViewModel {
             private set { SetValue<CompleteQuestionnaireMobileView>("CompleteQuestionnaireItem", ref completeQuestionnaireItem, value); }
         }
     }
+
     #region research
 
     public class ModelBase : DependencyObject
@@ -194,7 +195,6 @@ namespace QApp.ViewModel {
 
                 Data = new QuestionnaireDetailData(_completedQuestionnaireId, null);
                 (Data as QuestionnaireDetailData).Load();
-
             }
             else
                 _completedQuestionnaireId = (parameter as CompleteQuestionView).QuestionnaireId;

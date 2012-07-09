@@ -1,17 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
-using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Navigation;
-using System.Windows.Threading;
-
 using DevExpress.Utils;
+using System.Windows.Data;
+using System.Windows.Media;
+using System.ComponentModel;
+using System.Windows.Interop;
+using System.Windows.Controls;
+using System.Windows.Threading;
+using System.Windows.Navigation;
 
 #if DEBUGTEST && !REALTORWORLDDEMO
 using DevExpress.DemoData.Helpers;

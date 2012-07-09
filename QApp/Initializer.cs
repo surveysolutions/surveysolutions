@@ -1,75 +1,75 @@
 ﻿using Ninject;
-using Ninject.Extensions.Conventions;
+using Raven.Client;
+using System.ServiceModel;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Conventions;
-using RavenQuestionnaire.Core.Entities.Iterators;
-using RavenQuestionnaire.Core.ExpressionExecutors;
-
+using System.Collections.Concurrent;
 
 namespace QApp
 {
     public static class Initializer
     {
+
+        #region Properties
+
+        public static IKernel Kernel { get; private set; }
+        private static ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>();
+
+        #endregion
+
+        #region Method
+
         public static void Init()
         {
             Kernel = CreateKernel();
         }
 
-        public static IKernel Kernel { get; private set; }
-   
-
-        /// <summary>
-        /// Creates the kernel that will manage your application.
-        /// </summary>
-        /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new CoreRegistry("http://localhost:8080"));//add settings reading or embedded mode
-
+            var kernel = new StandardKernel(new CoreRegistry("http://localhost:8080", false));
             RegisterServices(kernel);
-
-            //KernelLocator.SetKernel(kernel);
             return kernel;
         }
 
-
-
-        /// <summary>
-        /// Load your modules or register your services here!
-        /// </summary>
-        /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(ICommandHandler<>)));
-            });
+            kernel.Bind<IDocumentSession>().ToMethod(
+              context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
+                  b => OperationContext.Current == null).InSingletonScope();
+            kernel.Bind<IDocumentSession>().ToMethod(
+                context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
+                 b => OperationContext.Current != null).InScope(o => OperationContext.Current);
+        }
 
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(IViewFactory<,>)));
-            });
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(IExpressionExecutor<,>)));
-            });
+        #endregion
 
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new RegisterFirstInstanceOfInterface());
-            });
-            kernel.Scan(s =>
-            {
-                s.FromAssembliesMatching("RavenQuestionnaire.*");
-                s.BindWith(new GenericBindingGenerator(typeof(Iterator<>)));
-            });
-
-            
-            //kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
-        }   
+        //private static void RegisterServices(IKernel kernel)
+        //{
+        //    kernel.Scan(s =>
+        //    {
+        //        s.FromAssembliesMatching("RavenQuestionnaire.*");
+        //        s.BindWith(new GenericBindingGenerator(typeof(ICommandHandler<>)));
+        //    });
+        //    kernel.Scan(s =>
+        //    {
+        //        s.FromAssembliesMatching("RavenQuestionnaire.*");
+        //        s.BindWith(new GenericBindingGenerator(typeof(IViewFactory<,>)));
+        //    });
+        //    kernel.Scan(s =>
+        //    {
+        //        s.FromAssembliesMatching("RavenQuestionnaire.*");
+        //        s.BindWith(new GenericBindingGenerator(typeof(IExpressionExecutor<,>)));
+        //    });
+        //    kernel.Scan(s =>
+        //    {
+        //        s.FromAssembliesMatching("RavenQuestionnaire.*");
+        //        s.BindWith(new RegisterFirstInstanceOfInterface());
+        //    });
+        //    kernel.Scan(s =>
+        //    {
+        //        s.FromAssembliesMatching("RavenQuestionnaire.*");
+        //        s.BindWith(new GenericBindingGenerator(typeof(Iterator<>)));
+        //    });
+        //    //kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
+        //}   
     }
 }
