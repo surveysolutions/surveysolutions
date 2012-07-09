@@ -10,6 +10,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core.ClientSettingsProvider;
+using RavenQuestionnaire.Web.App_Start;
 
 namespace Questionnaire.Core.Web.Export
 {
@@ -75,6 +76,7 @@ namespace Questionnaire.Core.Web.Export
                         }
                         eventStore.Store(uncommitedStream);
                     }
+                    NCQRSInit.RebuildReadLayer();
                   
                     /*  var lastEventItem = viewRepository.Load<EventViewInputModel, EventView>(new EventViewInputModel(result.ClientGuid));
                     if (lastEventItem == null)
