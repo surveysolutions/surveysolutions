@@ -140,7 +140,7 @@ namespace QApp.ViewModel
                      commandInvoker.Execute(command);
                  }
              }
-            UpdateCurrentDataQuestion();
+            //UpdateCurrentDataQuestion();
         }
 
         public ICommand SetCurrentAnswerCommand { get; private set; }
