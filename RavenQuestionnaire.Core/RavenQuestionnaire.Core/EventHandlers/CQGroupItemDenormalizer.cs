@@ -10,7 +10,9 @@ using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     public class CQGroupItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
-        IEventHandler<NewQuestionnaireCreated>, IEventHandler<QuestionnaireTemplateLocaded>, IEventHandler<CompleteQuestionnaireDeleted>
+                                           IEventHandler<NewQuestionnaireCreated>, 
+                                           IEventHandler<QuestionnaireTemplateLocaded>, 
+                                           IEventHandler<CompleteQuestionnaireDeleted>
     {
         
         private IDenormalizerStorage<CQGroupItem> documentGroupSession;
@@ -68,5 +70,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
         }
 
         #endregion
+
+        
     }
 }

@@ -21,8 +21,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public string TemplateId { get;  set; }
         public DateTime CreationDate { get;  set; }
         public DateTime LastEntryDate { get;  set; }
-        public int TotalQuestionCouont { get;  set; }
-        public int AnsweredQuestionCouont { get;  set; }
+        public int TotalQuestionCount { get;  set; }
+        public int AnsweredQuestionCount { get;  set; }
         public UserLight Responsible { get;  set; }
         public QuestionStatisticView[] FeaturedQuestions { get;  set; }
         public SurveyStatus Status { get;  set; }
@@ -42,8 +42,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
             this.Status = status;
-            this.TotalQuestionCouont = totalQuestionCount;
-            this.AnsweredQuestionCouont = answeredQuestionCount;
+            this.TotalQuestionCount = totalQuestionCount;
+            this.AnsweredQuestionCount = answeredQuestionCount;
             this.Responsible = responsible;
            
             
@@ -56,8 +56,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.CreationDate = doc.StartDate;
             this.LastEntryDate = doc.EndDate ?? DateTime.Now;
             this.Status = doc.Status;
-            this.TotalQuestionCouont = doc.TotalQuestionCount;
-            this.AnsweredQuestionCouont = doc.AnsweredQuestions.Count;
+            this.TotalQuestionCount = doc.TotalQuestionCount;
+            this.AnsweredQuestionCount = doc.AnsweredQuestions.Count;
             this.Creator = doc.Creator;
          //   this.FeaturedQuestions = doc.FeturedQuestions.Select(q => new QuestionStatisticView(q)).ToArray();
             //this.Responsible = doc.r;
