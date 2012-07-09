@@ -51,7 +51,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                     q => q.CompleteQuestionnaireId == evnt.Payload.CompletedQuestionnaireId.ToString());
             foreach (CompleteQuestionnaireBrowseItem item in items)
             {
-                item.AnsweredQuestionCouont++;
+                item.AnsweredQuestionCount++;
 
                 if (evnt.Payload.Question.Featured)
                 {
