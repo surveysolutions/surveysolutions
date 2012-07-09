@@ -88,12 +88,8 @@ function UpdateCurrentGroup(group) {
     }
 }
 function UpdateQuestion(question) {
-    var questionElement = null;
-    if (question.IsInPropagatebleGroup)
-        questionElement = $('#screen-' + question.GroupPublicKey + ' #question' + question.PublicKey);
-    else {
-        questionElement = $('#question' + question.PublicKey);
-    }
+    var questionElement = $('#question' + question.PublicKey) ;
+    
 
     questionElement.removeClass("ui-disabled");
     if (!question.Enabled) {
@@ -158,32 +154,10 @@ function UpdateGroup(group) {
 
 function RemovePropagatedGroup(data, status, xhr) {
     var group = jQuery.parseJSON(data.responseText);
-
-    var deleteScreen = '#screen-' + group.propagationKey;
-
-    var prevScreen = $(deleteScreen + ' .previous-screen').attr('href');
-    var nextScreen = $(deleteScreen + ' .next-screen').attr('href');
-
-    if (!(nextScreen == undefined || nextScreen == '' || nextScreen == '#')) {
-        var nextScreenPrevLink = $(nextScreen + ' .previous-screen');
-        if (nextScreenPrevLink.length > 0) {
-            nextScreenPrevLink.attr('href', prevScreen);
-            if (prevScreen == '#')
-                $(nextScreenPrevLink).addClass('ui-disabled');
-        }
-    }
-    if (!(prevScreen == undefined || prevScreen == '' || prevScreen == '#')) {
-        var prevScreenNextLink = $(prevScreen + ' .next-screen');
-        if (prevScreenNextLink.length > 0) {
-            prevScreenNextLink.attr('href', nextScreen);
-            if (nextScreen == '#')
-                $(prevScreenNextLink).addClass('ui-disabled');
-        }
-    }
+    
     var li = $('#propagatedGroup' + group.propagationKey);
     var parent = li.parent();
     $(li).remove();
-    $(deleteScreen).remove();
     $(parent).listview('refresh');
     updateCounter();
 

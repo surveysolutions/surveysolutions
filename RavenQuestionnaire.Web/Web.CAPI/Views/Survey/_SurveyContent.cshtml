@@ -14,9 +14,10 @@
     };
     ViewBag.CurrentGroupPublicKey = Model.PublicKey;
     ViewBag.QuestionnaireId = Model.QuestionnairePublicKey;
+    var propagatedGroup = Model as PropagatedGroupMobileView;
 }
 <!-- Start of second page -->
-<div data-role="page" id="ref-@(Model.PublicKey)" class="page">
+<div data-role="page" id="ref-@(Model.PublicKey + (propagatedGroup==null?"":"-"+propagatedGroup.PropogationKey))" class="page">
     @RenderNavigation(Model.Navigation)
     <!-- /header -->
     <div data-role="content" class="dummy-scroll">
