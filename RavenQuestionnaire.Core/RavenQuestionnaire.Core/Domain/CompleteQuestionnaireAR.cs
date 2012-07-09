@@ -279,7 +279,5 @@ namespace RavenQuestionnaire.Core.Domain
         {
             _doc.Status = e.Status;
         }
-
-
     }
 }

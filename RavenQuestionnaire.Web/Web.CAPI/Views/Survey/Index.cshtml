@@ -153,7 +153,7 @@
     <!-- /page -->
     <!-- other side panel pages here -->
 </div>
-<div data-role="panel" data-id="main" id="content_container">
+<div data-role="panel" data-id="main" id="content_container" class='@((Model.Status.PublicId == SurveyStatus.Complete.PublicId) ? "ui-disabled" : "")'>
     @Html.Partial("_SurveyContent", Model.CurrentScreen)
 </div>
 <script type="text/javascript">
