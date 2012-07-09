@@ -436,7 +436,6 @@ function updateCounter() {
 var newScrolls = new Array();
 var scrolls = new Array();
 $(document).ready(function () {
-
     var doc = $(document);
     doc.find('#sidebar .dummy-scroll').each(function () {
         var scroll = new iScroll(this);
@@ -463,25 +462,21 @@ $(document).ready(function () {
             }
         }
         if (next != null) {
-            var scrollContainer = $(next).offsetParent();
-            var position = scrollContainer.find('#scroller').offset().top - $(next).offset().top;
-            /*
-            for (var j = 0; j < scrolls.length; j++) {
-                if (scrolls[j].scroller == scrollContainer.find('#scroller')) {
-                    scrolls.splice(j, 1);
-                }
-            }
-            var scroll = new iScroll(scrollContainer);
-            scrolls.push(scroll);*/
-            for (var j = 0; j < scrolls.length; j++) {
-                if ($(scrolls[j].scroller).attr('class') == $(scrollContainer.find('#scroller')).attr('class')) {
-                    scrolls[j].refresh();
-                    scrolls[j].scrollTo(0, position, 100, false);
-                }
-            }
+            scrollToQuestion(next);
         }
     });
 });
+function scrollToQuestion(question) {
+    var scrollContainer = $(question).offsetParent();
+    var position = scrollContainer.find('#scroller').offset().top - $(question).offset().top;
+
+    for (var j = 0; j < scrolls.length; j++) {
+        if ($(scrolls[j].scroller).attr('class') == $(scrollContainer.find('#scroller')).attr('class')) {
+            scrolls[j].refresh();
+            scrolls[j].scrollTo(0, position, 100, false);
+        }
+    }
+}
 $(document).bind('pagebeforeshow', function () {
     var doc = $('#content_container');
     newScrolls = [];
@@ -492,12 +487,19 @@ $(document).bind('pagebeforeshow', function () {
     doc.focus();
 });
 $(document).bind('pagechange', function () {
-    var groupId = window.location.search.substr(window.location.search.indexOf("group") + 6, 36);
+    var groupId = document.location.search.substr(document.location.search.indexOf("group") + 6, 36);
 
-    $('#sidebar .ui-li').each(function () {
-        $(this).removeClass('ui-btn-active');
-    });
-    $('#ref-link-' + groupId).parents('li').addClass('ui-btn-active');
+    if ($('#sidebar #ref-link-' + groupId).length > 0) {
+        $('#sidebar .ui-li').each(function () {
+            $(this).removeClass('ui-btn-active');
+        });
+        $('#ref-link-' + groupId).parents('li').addClass('ui-btn-active');
+    }
+    if ($('.scrollHere').length > 0) {
+        var q = $($('.scrollHere')[0]).attr('id');
+        scrollToQuestion($(q.replace('question', '#elem-')));
+        $('.scrollHere').removeClass('scrollHere');
+    }
 });
 
 $(document).bind('pagehide', function () {
