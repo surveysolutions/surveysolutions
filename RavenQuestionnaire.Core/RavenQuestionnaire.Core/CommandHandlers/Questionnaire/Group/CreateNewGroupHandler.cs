@@ -1,4 +1,5 @@
-﻿using RavenQuestionnaire.Core.Commands;
+﻿using System;
+using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Repositories;
 
@@ -23,13 +24,15 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Group
                     questionnaire.AddGroup(command.PublicKey,command.GroupText, command.Paropagateble, command.ParentGroupPublicKey);
             }
             else
-            {
+                throw new ArgumentException("Wrong behaviour"); //rewrite this!!
+
+            /*{
                 if (command.Triggers != null)
                     questionnaire.AddGroup(command.GroupText, command.Paropagateble, command.Triggers,
                                            command.ParentGroupPublicKey);
                 else
                     questionnaire.AddGroup(command.GroupText, command.Paropagateble, command.ParentGroupPublicKey);
-            }
+            }*/
         }
     }
 }
