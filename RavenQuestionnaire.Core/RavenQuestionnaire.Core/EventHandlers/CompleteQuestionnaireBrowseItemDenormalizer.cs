@@ -13,10 +13,11 @@ using RavenQuestionnaire.Core.Views.Statistics;
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     public class CompleteQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
-        IEventHandler<FeaturedQuestionUpdated>,
-        IEventHandler<PropagatableGroupAdded>,
-        IEventHandler<PropagatableGroupDeleted>,
-        IEventHandler<CompleteQuestionnaireDeleted>
+                                                               IEventHandler<FeaturedQuestionUpdated>,
+                                                               IEventHandler<PropagatableGroupAdded>,
+                                                               IEventHandler<PropagatableGroupDeleted>,
+                                                               IEventHandler<CompleteQuestionnaireDeleted>,
+                                                               IEventHandler<QuestionnaireStatusChanged>
     {
         private IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore;
         public CompleteQuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore)
@@ -28,9 +29,15 @@ namespace RavenQuestionnaire.Core.EventHandlers
            public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
             this.documentItemStore.Store(new CompleteQuestionnaireBrowseItem(
-                                   evnt.Payload.CompletedQuestionnaireId.ToString(),evnt.Payload.QuestionnaireId.ToString(),
-                                   "", evnt.Payload.CreationDate,
-                                   DateTime.Now,evnt.Payload.Status, evnt.Payload.TotalQuestionCount, 0, evnt.Payload.Responsible), evnt.Payload.CompletedQuestionnaireId);
+                                            evnt.Payload.CompletedQuestionnaireId.ToString(),
+                                            evnt.Payload.QuestionnaireId.ToString(),
+                                            "", evnt.Payload.CreationDate,
+                                            DateTime.Now,
+                                            evnt.Payload.Status, 
+                                            evnt.Payload.TotalQuestionCount, 
+                                            0, 
+                                            evnt.Payload.Responsible), 
+                                    evnt.Payload.CompletedQuestionnaireId);
          
         }
 
@@ -92,7 +99,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                      q => q.CompleteQuestionnaireId == evnt.Payload.CompletedQuestionnaireId.ToString());
             foreach (CompleteQuestionnaireBrowseItem item in items)
             {
-                item.AnsweredQuestionCouont++;
+                item.AnsweredQuestionCount++;
 
                 var featuredQuestions = new List<QuestionStatisticView>();
                 featuredQuestions.AddRange(item.FeaturedQuestions);
@@ -120,6 +127,21 @@ namespace RavenQuestionnaire.Core.EventHandlers
         public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
         {
             this.documentItemStore.Remove(evnt.Payload.CompletedQuestionnaireId);
+        }
+
+        #endregion
+
+        #region Implementation of IEventHandler<in QuestionnaireStatusChanged>
+
+        public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
+        {
+            var items =
+                 this.documentItemStore.Query().Where(
+                     q => q.CompleteQuestionnaireId == evnt.Payload.CompletedQuestionnaireId.ToString());
+            foreach (CompleteQuestionnaireBrowseItem item in items)
+            {
+                item.Status = evnt.Payload.Status;
+            }
         }
 
         #endregion
