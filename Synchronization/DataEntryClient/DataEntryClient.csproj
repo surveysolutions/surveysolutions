@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{03626966-3597-42FA-A394-A13941B558EB}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DataEntryClient</RootNamespace>
     <AssemblyName>DataEntryClient</AssemblyName>
@@ -114,17 +114,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompleteQuestionnaire\CompleteQuestionnaireSync.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="WcfInfrastructure\IChanelFactoryWrapper.cs" />
     <Compile Include="WcfInfrastructure\ServiceDiscover.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
+      <Name>Ncqrs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
       <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
       <Name>RavenQuestionnaire.Core</Name>
@@ -136,9 +136,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Raven.Studio.xap" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

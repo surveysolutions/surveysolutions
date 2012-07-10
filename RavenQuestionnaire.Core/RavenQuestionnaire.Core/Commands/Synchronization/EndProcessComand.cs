@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using RavenQuestionnaire.Core.Domain;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Commands.Synchronization
 {
-    public class EndProcessComand:ICommand
+    [Serializable]
+    [MapsToAggregateRootMethod(typeof(SyncProcessAR), "EndProcess")]
+    public class EndProcessComand : CommandBase
     {
-        public UserLight Executor { get; set; }
+        [AggregateRootId]
         public Guid ProcessGuid { get; set; }
-        public EndProcessComand(Guid processGuid, UserLight executor)
+        public EndProcessComand(Guid processGuid)
         {
-            this.Executor = executor;
             this.ProcessGuid = processGuid;
         }
     }

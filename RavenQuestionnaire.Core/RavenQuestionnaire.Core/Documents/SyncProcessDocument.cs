@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RavenQuestionnaire.Core.Events;
 
 namespace RavenQuestionnaire.Core.Documents
 {
@@ -9,7 +10,7 @@ namespace RavenQuestionnaire.Core.Documents
     {
         public SyncProcessDocument()
         {
-            this.Events = new List<ProcessedEvent>();
+            this.AggregateRoots = new List<ProcessedAggregateRoot>();
         }
 
         public string Id { get; set; }
@@ -20,27 +21,31 @@ namespace RavenQuestionnaire.Core.Documents
             set
             {
                 publicKey = value;
-                this.Id = publicKey.ToString();
+                Id = publicKey.ToString();
             }
         }
 
         private Guid publicKey;
-        public List<ProcessedEvent> Events { get; set; }
+        public List<ProcessedAggregateRoot> AggregateRoots { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }
 
-    public class ProcessedEvent
+    public class ProcessedAggregateRoot
     {
-        public ProcessedEvent()
+        public ProcessedAggregateRoot()
         {
+            this.EventKeys=new List<Guid>();
         }
-        public ProcessedEvent(EventDocument eventDoc)
+        public ProcessedAggregateRoot(AggregateRootEventStream eventDoc)
         {
-            this.Event = eventDoc;
-            this.Handled=EventState.Initial;
+            this.AggregateRootPublicKey = eventDoc.SourceId;
+            this.EventKeys = eventDoc.Events.Select(e => e.EventIdentifier).ToList();
+            this.Handled = EventState.Initial;
         }
-        public EventDocument Event { get; set; }
+
+        public Guid AggregateRootPublicKey { get; set; }
+        public List<Guid> EventKeys { get; set; }
         public EventState Handled { get; set; }
     }
 

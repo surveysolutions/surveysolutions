@@ -16,13 +16,13 @@ namespace DataEntryClientTests.Stubs
             this.mock = mock;
         }
 
-        public void Execute<T>(Action<T> handler) where T : class
+        public void Execute<T>(string baseAdress, Action<T> handler) where T : class
         {
-            T client = GetChanel<T>();
+            T client = GetChanel<T>(baseAdress);
             handler(client);
         }
 
-        public T GetChanel<T>() where T : class
+        public T GetChanel<T>(string baseAdress) where T : class
         {
             var result = mock.Object as T;
             if (result == null)

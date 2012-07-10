@@ -1,0 +1,84 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Ncqrs.Domain;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Events.Synchronization;
+
+namespace RavenQuestionnaire.Core.Domain
+{
+    public class SyncProcessAR : AggregateRootMappedByConvention, ISnapshotable<SyncProcessDocument>
+    {
+        private SyncProcessDocument _innerDocument = new SyncProcessDocument();
+        public SyncProcessAR()
+        {
+        }
+
+        public SyncProcessAR(Guid publicKey)
+            : base(publicKey)
+        {
+            ApplyEvent(new NewSynchronizationProcessCreated
+                           {
+                               ProcessGuid = publicKey
+                           });
+        }
+
+        protected void OnNewSynchronizationProcessCreated(NewSynchronizationProcessCreated e)
+        {
+            this._innerDocument = new SyncProcessDocument {PublicKey = e.ProcessGuid, StartDate = DateTime.UtcNow};
+        }
+        public void PushAggregateRootEventStream(IEnumerable<ProcessedAggregateRoot> aggregateRoots)
+        {
+            if (this._innerDocument.EndDate.HasValue)
+                throw new InvalidOperationException("process is finished, events can't be added");
+            ApplyEvent(new AggregateRootEventStreamPushed() {AggregateRoots = aggregateRoots});
+        }
+        protected void OnPushAggregateRootEventStream(AggregateRootEventStreamPushed e)
+        {
+            this._innerDocument.AggregateRoots = e.AggregateRoots.ToList();
+        }
+        public void ChangeAggregateRootStatus(Guid aggregateRootPublicKey, EventState status)
+        {
+            if (this._innerDocument.EndDate.HasValue)
+                throw new InvalidOperationException("process is finished, events can't be modifyed");
+            ApplyEvent(new AggregateRootStatusChanged()
+                           {AggregateRootPublicKey = aggregateRootPublicKey, Status = status});
+        }
+        protected void OnChangeAggregateRootStatus(AggregateRootStatusChanged e)
+        {
+
+            var aggregateRoot =
+                this._innerDocument.AggregateRoots.FirstOrDefault(d => d.AggregateRootPublicKey == e.AggregateRootPublicKey);
+            if (aggregateRoot == null)
+                throw new ArgumentException("Event wasn't find");
+            aggregateRoot.Handled = e.Status;
+        }
+        public void EndProcess()
+        {
+            if (this._innerDocument.EndDate.HasValue)
+                throw new InvalidOperationException("process is already finished");
+           
+            ApplyEvent(new ProcessEnded());
+        }
+        protected void OnProcessEnded(ProcessEnded e)
+        {
+            this._innerDocument.EndDate = DateTime.UtcNow;
+        }
+
+        #region Implementation of ISnapshotable<SyncProcessDocument>
+
+        public SyncProcessDocument CreateSnapshot()
+        {
+            return this._innerDocument;
+        }
+
+        public void RestoreFromSnapshot(SyncProcessDocument snapshot)
+        {
+            this._innerDocument = snapshot;
+        }
+
+        #endregion
+    }
+}
