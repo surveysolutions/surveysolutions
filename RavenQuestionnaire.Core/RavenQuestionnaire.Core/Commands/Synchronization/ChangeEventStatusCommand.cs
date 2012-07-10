@@ -2,21 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Domain;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Commands.Synchronization
 {
-    public class ChangeEventStatusCommand:ICommand
+    [Serializable]
+    [MapsToAggregateRootMethod(typeof(SyncProcessAR), "ChangeAggregateRootStatus")]
+    public class ChangeEventStatusCommand : CommandBase
     {
-        public UserLight Executor { get; set; }
         public EventState Status { get; set; }
-        public Guid EventGuid { get; set; }
+        public Guid AggregateRootPublicKey { get; set; }
+        [AggregateRootId]
         public Guid ProcessGuid { get; set; }
-        public ChangeEventStatusCommand(Guid processGuid,Guid eventGuid, EventState status, UserLight executor)
+
+        public ChangeEventStatusCommand(Guid processGuid, Guid aggregateRootPublicKey, EventState status)
         {
-            this.Executor = executor;
-            this.EventGuid = eventGuid;
+            this.AggregateRootPublicKey = aggregateRootPublicKey;
             this.Status = status;
             this.ProcessGuid = processGuid;
         }

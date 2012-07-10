@@ -5,6 +5,8 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
 using DataEntryClient.WcfInfrastructure;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using Raven.Client;
 using Raven.Client.Document;
@@ -28,11 +30,11 @@ namespace DataEntryClient.CompleteQuestionnaire
         private IChanelFactoryWrapper chanelFactoryWrapper;
         private IClientSettingsProvider clientSettingsProvider;
         private IEventSync eventStore;
-     //   private Guid processGuid;
-     
-       // private ICommandInvoker invoker;
+        private Guid processGuid;
+        private string baseAdress;
+        private ICommandService invoker;
       //  private ICommandInvokerAsync invokerAsync;
-        public CompleteQuestionnaireSync(IKernel kernel, Guid processGuid)
+        public CompleteQuestionnaireSync(IKernel kernel, Guid processGuid, string baseAdress)
         {
           //  this.invoker = kernel.Get<ICommandInvoker>();
        //     this.invokerAsync = kernel.Get<ICommandInvokerAsync>();
@@ -40,7 +42,9 @@ namespace DataEntryClient.CompleteQuestionnaire
             this.chanelFactoryWrapper = kernel.Get<IChanelFactoryWrapper>();
             this.clientSettingsProvider = kernel.Get<IClientSettingsProvider>();
             this.eventStore = kernel.Get<IEventSync>();
-            //   this.processGuid = processGuid;
+            this.invoker = NcqrsEnvironment.Get<ICommandService>();
+               this.processGuid = processGuid;
+            this.baseAdress = baseAdress;
         }
 
         public void Execute()
@@ -53,7 +57,7 @@ namespace DataEntryClient.CompleteQuestionnaire
         public Guid? GetLastSyncEventGuid(Guid clientKey)
         {
             Guid? result = null;
-            this.chanelFactoryWrapper.Execute<IGetLastSyncEvent>(
+            this.chanelFactoryWrapper.Execute<IGetLastSyncEvent>(this.baseAdress,
                 (client) =>
                     {
                         result = client.Process(clientKey);
@@ -63,12 +67,16 @@ namespace DataEntryClient.CompleteQuestionnaire
 
         public void UploadEvents(Guid clientKey, Guid? lastSyncEvent)
         {
-            this.chanelFactoryWrapper.Execute<IEventPipe>(
+            this.chanelFactoryWrapper.Execute<IEventPipe>(this.baseAdress,
                 (client)=>
                     {
                         var events = this.eventStore.ReadEvents();
+                        invoker.Execute(new PushEventsCommand(this.processGuid, events));
                         foreach (AggregateRootEventStream aggregateRootEventStream in events)
                         {
+                            invoker.Execute(new ChangeEventStatusCommand(this.processGuid,
+                                                                         aggregateRootEventStream.SourceId,
+                                                                         EventState.InProgress));
                             var message = new EventSyncMessage
                                               {
                                                   Command = aggregateRootEventStream,
@@ -76,9 +84,14 @@ namespace DataEntryClient.CompleteQuestionnaire
                                                   CommandKey = aggregateRootEventStream.SourceId
                                               };
                             ErrorCodes returnCode = client.Process(message);
-
+                            invoker.Execute(new ChangeEventStatusCommand(this.processGuid,
+                                                                       aggregateRootEventStream.SourceId,
+                                                                       returnCode == ErrorCodes.None
+                                                                             ? EventState.Completed
+                                                                             : EventState.Error));
 
                         }
+                        invoker.Execute(new EndProcessComand(this.processGuid));
                         /*  var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(new EventBrowseInputModel(lastSyncEvent));
                         var eventList =
                             events.Items.Select(i => new EventDocument(i.Command, i.PublicKey, clientKey)).ToList();

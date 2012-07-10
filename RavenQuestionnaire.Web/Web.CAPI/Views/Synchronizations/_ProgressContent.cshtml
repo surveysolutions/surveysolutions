@@ -5,7 +5,7 @@
 <p>@Model.StateDescription</p>
 @if (Model.EndDate.HasValue)
 {
-    @Html.ActionLink("Back to Dashboard", "Index", "Dashboard", new {}, new {rel = "external", data_role = "button", data_theme = "e", id = "btnSync", @class = "ui-state-persist", data_inline = "true"})
+    @Html.ActionLink("Back to Dashboard", "Dashboard", "Survey", new {}, new {rel = "external", data_role = "button", data_theme = "e", id = "btnSync", @class = "ui-state-persist", data_inline = "true"})
 }
 @if (Model.ProgressPercentage.HasValue)
 {

@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using DataEntryClient.CompleteQuestionnaire;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web;
 using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;
@@ -29,31 +33,52 @@ namespace Web.CAPI.Controllers
             this.viewRepository = viewRepository;
             _globalProvider = globalProvider;
         }
-       
+
 
         public ActionResult Index(string url)
         {
-         /*   var user = _globalProvider.GetCurrentUser();
-            
-                                                     Guid syncProcess = Guid.NewGuid();
-                                                     commandInvoker.Execute(
-                                                         new CreateNewSynchronizationProcessCommand(syncProcess, user));
-                                                     Process p = new Process();
-                                                     p.StartInfo.UseShellExecute = false;
-                                                     p.StartInfo.Arguments = url + " " + syncProcess;
-                                                     p.StartInfo.RedirectStandardOutput = true;
-                                                     p.StartInfo.FileName = System.Web.Configuration.WebConfigurationManager.AppSettings["SynchronizerPath"];
-                                                     p.Start();*/
-            return RedirectToAction("Progress", new { id = Guid.NewGuid() });
+            /*   var user = _globalProvider.GetCurrentUser();*/
+
+            Guid syncProcess = Guid.NewGuid();
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(
+                new CreateNewSynchronizationProcessCommand(syncProcess));
+
+            WaitCallback callback = (state) =>
+                                        {
+                                            try
+                                            {
+
+                                                var process = new CompleteQuestionnaireSync(KernelLocator.Kernel,
+                                                                                            syncProcess, url);
+                                                process.Execute();
+
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+                                                logger.Fatal(e);
+                                            }
+                                        };
+            ThreadPool.QueueUserWorkItem(callback, syncProcess);
+           
+            /*     Process p = new Process();
+                 p.StartInfo.UseShellExecute = false;
+                 p.StartInfo.Arguments = url + " " + syncProcess;
+                 p.StartInfo.RedirectStandardOutput = true;
+                 p.StartInfo.FileName = System.Web.Configuration.WebConfigurationManager.AppSettings["SynchronizerPath"];
+                 p.Start();*/
+            return RedirectToAction("Progress", new { id = syncProcess });
 
         }
+
         public ActionResult Progress(Guid id)
         {
-         //   return View(viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
-            return
+            return View(viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+           /* return
                 View(
                     new SyncProgressView(new SyncProcessDocument()
-                                             {Id = id.ToString(), PublicKey = id, StartDate = DateTime.Now}));
+                                             {PublicKey = id, StartDate = DateTime.Now}));*/
         }
         public ActionResult ProgressPartial(Guid id)
         {

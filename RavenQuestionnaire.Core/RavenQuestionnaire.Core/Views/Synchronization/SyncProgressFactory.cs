@@ -4,21 +4,22 @@ using System.Linq;
 using System.Text;
 using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.ViewSnapshot;
 
 namespace RavenQuestionnaire.Core.Views.Synchronization
 {
     public class SyncProgressFactory: IViewFactory<SyncProgressInputModel, SyncProgressView>
     {
-        private IDocumentSession documentSession;
+        private readonly IViewSnapshot store;
 
-        public SyncProgressFactory(IDocumentSession documentSession)
+        public SyncProgressFactory(IViewSnapshot store)
         {
-            this.documentSession = documentSession;
+            this.store = store;
         }
 
         public SyncProgressView Load(SyncProgressInputModel input)
         {
-            var process = this.documentSession.Load<SyncProcessDocument>(input.ProcessKey.ToString());
+            var process = this.store.ReadByGuid<SyncProcessDocument>(input.ProcessKey);
             return new SyncProgressView(process);
         }
     }
