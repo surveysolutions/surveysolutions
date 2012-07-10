@@ -69,7 +69,7 @@
                         }
                         else
                         {
-                            <a href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey})#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a>
+                            <a href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey, screen = question.GroupPublicKey })" rel = "external">@Html.Raw(question.QuestionText)</a>
                         }
                         - @question.AnswerValue
                         @if (question.ApproximateTime.HasValue)
@@ -111,7 +111,7 @@
                                     }
                                     else
                                     {
-                                        <a href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey})#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a>
+                                        <a href="@Url.Action("Index", "Survey", new { id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey, screen = question.GroupPublicKey })" rel = "external">@Html.Raw(question.QuestionText)</a>
                                     }
                                 </div>
                                 <div class="ui-block-b">
@@ -146,7 +146,7 @@
                         }
                         else
                         {
-                            <a href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey})#screen-@(question.GroupPublicKey)" rel = "external">@Html.Raw(question.QuestionText)</a>
+                            <a href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId, group = question.ScreenPublicKey, question = question.PublicKey, screen = question.GroupPublicKey })" rel = "external">@Html.Raw(question.QuestionText)</a>
                         }
                         - @question.AnswerValue
                         @if (question.ApproximateTime.HasValue)

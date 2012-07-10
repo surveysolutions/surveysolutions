@@ -1,5 +1,4 @@
-﻿
-function sichronizationStarted(data, status, xhr) {
+﻿function sichronizationStarted(data, status, xhr) {
     $('a#btnSync span span').html('Processing');
 
     $('[data-id=main]').addClass('ui-disabled');
@@ -68,8 +67,7 @@ function UpdateCommentInGroup(group) {
         var key = group.Questions[j].PublicKey;
         var id = "#comments" + key;
         var commentscontent = group.Questions[j].Comments;
-        if (commentscontent != null)
-        {
+        if (commentscontent != null) {
             $(id).html('Comments: ' + commentscontent);
         }
         else {
@@ -88,14 +86,8 @@ function UpdateCurrentGroup(group) {
     }
 }
 function UpdateQuestion(question) {
-    var questionElement = $('#question' + question.PublicKey) ;
-    
-    var questionElement = null;
-    if (question.IsInPropagatebleGroup)
-        questionElement = $('#screen-' + question.GroupPublicKey + ' #question' + question.PublicKey);
-    else {
-        questionElement = $('#question' + question.PublicKey);
-    }
+    var questionElement = $('#question' + question.PublicKey);
+
 
     questionElement.removeClass("ui-disabled");
     if (!question.Enabled) {
@@ -160,33 +152,10 @@ function UpdateGroup(group) {
 
 function RemovePropagatedGroup(data, status, xhr) {
     var group = jQuery.parseJSON(data.responseText);
-    
 
-    var deleteScreen = '#screen-' + group.propagationKey;
-
-    var prevScreen = $(deleteScreen + ' .previous-screen').attr('href');
-    var nextScreen = $(deleteScreen + ' .next-screen').attr('href');
-
-    if (!(nextScreen == undefined || nextScreen == '' || nextScreen == '#')) {
-        var nextScreenPrevLink = $(nextScreen + ' .previous-screen');
-        if (nextScreenPrevLink.length > 0) {
-            nextScreenPrevLink.attr('href', prevScreen);
-            if (prevScreen == '#')
-                $(nextScreenPrevLink).addClass('ui-disabled');
-        }
-    }
-    if (!(prevScreen == undefined || prevScreen == '' || prevScreen == '#')) {
-        var prevScreenNextLink = $(prevScreen + ' .next-screen');
-        if (prevScreenNextLink.length > 0) {
-            prevScreenNextLink.attr('href', nextScreen);
-            if (nextScreen == '#')
-                $(prevScreenNextLink).addClass('ui-disabled');
-        }
-    }
     var li = $('#propagatedGroup' + group.propagationKey);
     var parent = li.parent();
     $(li).remove();
-    $(deleteScreen).remove();
     $(parent).listview('refresh');
     updateCounter();
 
@@ -198,12 +167,7 @@ function PropagatedGroup(data, status, xhr) {
         var templateDivPath = '#groupTemplate' + group.parentGroupPublicKey;
         //  var screenTemplateDiv = '#template-' + group.parentGroupPublicKey;
         var parent = $('#propagate-list-' + group.parentGroupPublicKey);
-
         var validator = parent.find('[data-valmsg-replace=true]');
-        if (group.error) {
-            validator.text(group.error);
-            return;
-        }
         validator.text('');
         var template = $(templateDivPath).html();
         // var screenTemplate = $(screenTemplateDiv).html();
@@ -443,6 +407,7 @@ function updateCounter() {
         this.disableAfterSubmit();
 
         this.find('[data-role=page]').live('pageshow', function (event) {
+            //data-type="horizontal"
             $("input[type='checkbox'][checked]").checkboxradio("refresh");
         });
 
@@ -459,16 +424,15 @@ function updateCounter() {
 
         this.find('.dummy-scroll').each(function () {
             var scroll = new iScroll(this);
-            scrolls.push(scroll);
+            newScrolls.push(scroll);
         });
     };
     $.fn.destroyPage = function () {
         this.find('.dummy-scroll #scroller').each(function () {
             for (var j = 0; j < scrolls.length; j++) {
-                if (scrolls[j].scroller == this)
-                {
+                if ($(scrolls[j].scroller).attr('class') == $(this).attr('class')) {
                     scrolls.splice(j, 1);
-            }
+                }
             }
         });
     };
@@ -476,7 +440,6 @@ function updateCounter() {
 var newScrolls = new Array();
 var scrolls = new Array();
 $(document).ready(function () {
-
     var doc = $(document);
     doc.find('#sidebar .dummy-scroll').each(function () {
         var scroll = new iScroll(this);
@@ -506,12 +469,12 @@ $(document).ready(function () {
             scrollToQuestion(next);
         }
     });
+});
+function scrollToQuestion(question) {
+    var scrollContainer = $(question).offsetParent();
+    var position = scrollContainer.find('#scroller').offset().top - $(question).offset().top;
 
-    $('.nav-link').click(function() {
-        switchPage(this);
-        return true;
-    });
-    
+    for (var j = 0; j < scrolls.length; j++) {
         if ($(scrolls[j].scroller).attr('class') == $(scrollContainer.find('#scroller')).attr('class')) {
             scrolls[j].refresh();
             scrolls[j].scrollTo(0, position, 100, false);
@@ -538,7 +501,9 @@ $(document).bind('pagechange', function () {
     }
     if ($('.scrollHere').length > 0) {
         var q = $($('.scrollHere')[0]).attr('id');
-        scrollToQuestion($(q.replace('question', '#elem-')));
+        var target = $(q.replace('question', '#elem-'));
+        scrollToQuestion(target);
+        $(target).faderEffect();
         $('.scrollHere').removeClass('scrollHere');
     }
 });
@@ -554,6 +519,28 @@ function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-function switchPage() {
-    alert('click');
-}
+$.fn.faderEffect = function(options) {
+    options = jQuery.extend({
+            count: 3, // how many times to fadein
+            speed: 500, // spped of fadein
+            callback: false // call when done
+        }, options);
+
+    return this.each(function() {
+
+        // if we're done, do the callback
+        if (0 == options.count) {
+            if ($.isFunction(options.callback)) options.callback.call(this);
+            return;
+        }
+
+        // hide so we can fade in
+        if ($(this).is(':visible')) $(this).hide();
+
+        // fade in, and call again
+        $(this).fadeIn(options.speed, function() {
+            options.count = options.count - 1; // countdown
+            $(this).faderEffect(options);
+        });
+    });
+};
