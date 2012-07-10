@@ -94,14 +94,15 @@ namespace RavenQuestionnaire.Web.App_Start
                context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
                    b => HttpContext.Current != null).InScope(
                        o => HttpContext.Current);
+            kernel.Bind<IDocumentSession>().ToMethod(
+            context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
+                b => OperationContext.Current != null).InScope(o => OperationContext.Current);
 
             kernel.Bind<IDocumentSession>().ToMethod(
                 context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
-                    b => HttpContext.Current == null).InScope(o => Thread.CurrentThread);
+                    b => HttpContext.Current == null && OperationContext.Current == null).InScope(o => Thread.CurrentThread);
 
-            kernel.Bind<IDocumentSession>().ToMethod(
-             context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
-                 b => OperationContext.Current != null).InScope(o => OperationContext.Current);
+           
 
            
 
