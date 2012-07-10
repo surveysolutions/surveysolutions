@@ -17,7 +17,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         {
           
         }
-        public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc, ICompleteGroup currentGroup, ScreenNavigation navigation)
+        public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc, Guid screenPublicKey, ICompleteGroup currentGroup, ScreenNavigation navigation)
             : this()
         {
             Id = IdUtil.ParseId(doc.Id);
@@ -26,10 +26,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             LastEntryDate = doc.LastEntryDate;
             Status = doc.Status;
             Responsible = doc.Responsible;
-            CollectAll(doc, currentGroup as CompleteGroup, navigation);
+            CollectAll(doc, screenPublicKey, currentGroup as CompleteGroup, navigation);
         }
 
-        private void CollectAll(CompleteQuestionnaireDocument doc, CompleteGroup group, ScreenNavigation navigation)
+        private void CollectAll(CompleteQuestionnaireDocument doc, Guid screenPublicKey, CompleteGroup group, ScreenNavigation navigation)
         {
             // IList<ScreenNavigation> navigations = new List<ScreenNavigation>();
             var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
@@ -37,7 +37,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
 
             var currentGroup = new CompleteGroupMobileView(doc, group, navigation);
-            InitGroups(doc, currentGroup.PublicKey);
+            InitGroups(doc, screenPublicKey);
             Totals = CalcProgress(doc);
             CurrentScreen = currentGroup;
         }

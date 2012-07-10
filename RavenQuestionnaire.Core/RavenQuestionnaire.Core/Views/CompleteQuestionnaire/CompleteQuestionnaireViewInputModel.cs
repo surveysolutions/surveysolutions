@@ -35,8 +35,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         }
 
         public Guid? PropagationKey { get; set; }
+
         private Guid? currentGroupPublicKey;
 
         public bool IsReverse { get; private set; }
+
+        public Guid? CurrentScreenPublicKey { get; set; }
     }
 }
