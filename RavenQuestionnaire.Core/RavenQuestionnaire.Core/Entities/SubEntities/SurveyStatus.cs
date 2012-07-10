@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
@@ -23,6 +24,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public string Name { get; set; }
         public string ChangeComment { get; set; }
 
+        public static IEnumerable<SurveyStatus> GetAllStatuses()
+        {
+            return new[] {Initial, Error, Complete};
+        }
 
         public static SurveyStatus Initial 
         {

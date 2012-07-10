@@ -4,6 +4,7 @@ using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Documents.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.Statistics;
 using RavenQuestionnaire.Core.Views.Status.StatusElement;
 
@@ -16,7 +17,7 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
         public List<CQStatusReportItemView> Items { get; set; }
         public string StatusName { get; set; }
 
-        public CQStatusReportView(StatusItem status, IEnumerable<CompleteQuestionnaireStatisticDocument> statisticDocuments)
+        public CQStatusReportView(StatusItem status, IEnumerable<CompleteQuestionnaireBrowseItem> statisticDocuments)
         {
             StatusName = status.Title;
             
@@ -28,7 +29,7 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
                                    AssignToUser = statisticDocument.Responsible,
                                    LastChangeDate = statisticDocument.LastEntryDate,
                                    LastSyncDate = DateTime.Now,
-                                   Description = string.Join(", ", statisticDocument.FeturedQuestions.Select(f => f.QuestionText + ": " + f.AnswerText))
+                                   Description = string.Join(", ", statisticDocument.FeaturedQuestions.Select(f => f.QuestionText + ": " + f.AnswerText))
                                };
                 Items.Add(view);
             }
