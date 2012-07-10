@@ -128,3 +128,4 @@ Installation/CapiInstallProj/_ReSharper.Setup/
 RavenQuestionnaire.Web/Web.Supervisor/Web.Supervisor.csproj.user
 RavenQuestionnaire.Web/Web.CAPI/Web.CAPI.csproj.user
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/RavenQuestionnaire.Web.csproj.user
+RavenQuestionnaire.Web/Web.CAPI/Web.CAPI.Publish.xml
