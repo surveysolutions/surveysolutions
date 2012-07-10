@@ -22,9 +22,10 @@
     <!-- /header -->
     <div data-role="content" class="dummy-scroll">
         <div class="scroller-@(Model.PublicKey)" id="scroller">
-            <hr>
+            <div>
                 @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model)
-            <hr>
+                 <div style="width: 100%; height: 50px;text-align: center"><strong>End of Section</strong></div>
+            </div>
         </div>
         <div style="width: 100%; height: 50px;">&nbsp;</div>
     </div>

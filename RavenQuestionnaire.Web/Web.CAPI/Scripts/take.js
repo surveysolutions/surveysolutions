@@ -477,7 +477,7 @@ function scrollToQuestion(question) {
     for (var j = 0; j < scrolls.length; j++) {
         if ($(scrolls[j].scroller).attr('class') == $(scrollContainer.find('#scroller')).attr('class')) {
             scrolls[j].refresh();
-            scrolls[j].scrollTo(0, position, 100, false);
+            scrolls[j].scrollTo(0, position, 1500, false);
         }
     }
 }

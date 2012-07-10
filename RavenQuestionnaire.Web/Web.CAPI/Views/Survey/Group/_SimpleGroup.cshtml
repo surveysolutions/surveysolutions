@@ -1,14 +1,22 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Entities.SubEntities
-@using RavenQuestionnaire.Core.Views
 @using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteGroupMobileView
-@foreach (ICompositeView item in Model.Children)
+@using (var enumerator = Model.Children.GetEnumerator())
 {
-    if ((item as CompleteQuestionView) != null)
+    if (enumerator.MoveNext())
     {
-        var question = item as CompleteQuestionView;
+        bool isLast;
+        do
+        {
+            var item = enumerator.Current;
+            isLast = !enumerator.MoveNext();
+
+            {
+                if ((item as CompleteQuestionView) != null)
+                {
+                    var question = item as CompleteQuestionView;
     <div class="ui-body ui-body-c" id="elem-@(question.PublicKey)">
         <div class="ui-grid-a question-content">
             <div class="ui-block-a">
@@ -21,25 +29,25 @@
                     }
                     using (Html.BeginCollectionItem("settings", true, question.PublicKey))
                     {
-                        @Html.Hidden("ParentGroupPublicKey", (Guid) ViewBag.CurrentGroupPublicKey)
-                        @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
+                    @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+                    @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
 
                         if (Model is PropagatedGroupMobileView)
                         {
-                            @Html.Hidden("PropogationPublicKey", ((PropagatedGroupMobileView) Model).PropogationKey)
+                            @Html.Hidden("PropogationPublicKey", ((PropagatedGroupMobileView)Model).PropogationKey)
                         }
                     }
                 }
-                <p class="question-comment">                    
+                <p class="question-comment">
                     @if (!string.IsNullOrEmpty(question.Comments))
                     {
                         string idComment = "comments" + @question.PublicKey;
-                       <span id="@idComment">Comments : @question.Comments</span>
+                        <span id="@idComment">Comments : @question.Comments</span>
                     }
                     else
                     {
                         string idComment = "comments" + @question.PublicKey;
-                       <span id="@idComment"></span>
+                        <span id="@idComment"></span>
                     }
                 </p>
             </div>
@@ -48,41 +56,42 @@
                 {
                     using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                     {
-                        @Html.IconInputComments("Comments", question.Comments ?? string.Empty, string.Empty, new { draw_key_board = "true" }, new { @class = "comments" }, new { @class = "bold" })
+                    @Html.IconInputComments("Comments", question.Comments ?? string.Empty, string.Empty, new { draw_key_board = "true" }, new { @class = "comments" }, new { @class = "bold" })
                     }
                     using (Html.BeginCollectionItem("settings", true, question.PublicKey))
                     {
-                        @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+                    @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
                     @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
-                      if (Model is PropagatedGroupMobileView)
+                        if (Model is PropagatedGroupMobileView)
                         {
                             
-                            @Html.Hidden("PropogationPublicKey", ((PropagatedGroupMobileView)Model).PropogationKey)
+                    @Html.Hidden("PropogationPublicKey", ((PropagatedGroupMobileView)Model).PropogationKey)
                             
                         }
                     }
                     @Html.Hidden("PublicKey", question.PublicKey)
                 }
-                <a class="next-question" id="iam-@(question.PublicKey)">
-                    &darr;
-                </a>
+                @if (!isLast)
+                {
+                    <a class="next-question" id="iam-@(question.PublicKey)">&darr;</a>
+                }
             </div>
         </div>
     </div>
     <div class="ui-body">
         &nbsp;</div>
-    }
-    else
-    {
-        var @group = item as CompleteGroupMobileView;
-        if (@group.PublicKey != Guid.Empty)
-        {
-            if (@group.Propagated != Propagate.None)
-            {
+                }
+                else
+                {
+                    var @group = item as CompleteGroupMobileView;
+                    if (@group.PublicKey != Guid.Empty)
+                    {
+                        if (@group.Propagated != Propagate.None)
+                        {
     @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", @group)
-            }
-            else
-            {
+                        }
+                        else
+                        {
     <div class="ui-body ui-body-c">
         <div class="group-anchor">
             <a id="screen-ref-@(@group.PublicKey)" class="nav-link" href="@Url.Action("Screen", new { Id = @group.QuestionnairePublicKey, group = @group.PublicKey })" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
@@ -95,12 +104,16 @@
             <input type="checkbox" disabled="disabled" style="display: none;" />
         </div>
     </div>
-    <div class="ui-body">&nbsp;</div>
+    <div class="ui-body">
+        &nbsp;</div>
+                        }
+                    }
+                    else
+                    {
+                        @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", @group)
+                    }
+                }
             }
-        }
-        else
-        {
-    @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", @group)
-        }
+        }while (!isLast);
     }
 }
