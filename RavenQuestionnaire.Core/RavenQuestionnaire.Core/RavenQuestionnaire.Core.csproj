@@ -349,7 +349,9 @@
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
     <Compile Include="Entities\SyncProcess.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Events\AggregateRootEventStream.cs" />
     <Compile Include="Events\Collection\NewCollectionCreated.cs" />
+    <Compile Include="Events\IEventSync.cs" />
     <Compile Include="Events\Location\LocationDeleted.cs" />
     <Compile Include="Events\Location\NewLocationCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\AnswerSet.cs" />
