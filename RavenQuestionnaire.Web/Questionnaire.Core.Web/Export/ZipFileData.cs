@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Ncqrs.Eventing;
+using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Core.Views.Event;
 
 namespace Questionnaire.Core.Web.Export

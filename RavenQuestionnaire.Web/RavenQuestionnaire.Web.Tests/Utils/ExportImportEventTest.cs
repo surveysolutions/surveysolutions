@@ -1,7 +1,9 @@
-﻿using Moq;
+﻿using Ionic.Zip;
+using Moq;
 using System;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
+using Newtonsoft.Json;
 using Ninject;
 using System.IO;
 using System.Web;
@@ -10,6 +12,7 @@ using Raven.Client;
 using NUnit.Framework;
 using RavenQuestionnaire.Core;
 using System.Collections.Generic;
+using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Web.Utils;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
@@ -40,21 +43,31 @@ namespace RavenQuestionnaire.Web.Tests.Utils
         [Test]
         public void When_FileImport()
         {
-            var request = new Mock<HttpRequestBase>();
-            var context = new Mock<HttpContextBase>();
+            var synchronizer = new Mock<IEventSync>();
             var postedfile = new Mock<HttpPostedFileBase>();
-            context.Setup(ctx => ctx.Request).Returns(request.Object);
-            request.Setup(req => req.Files[0]).Returns(postedfile.Object);
+            var outputStream = new MemoryStream();
+            var data = new ZipFileData
+            {
+                ClientGuid = Guid.NewGuid()
+            };
+            using (var zip = new ZipFile())
+            {
+                var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+                zip.AddEntry(string.Format("backup-{0}.txt", DateTime.Now.ToString().Replace(" ", "_")),
+                                            JsonConvert.SerializeObject(data, Formatting.Indented, settings));
+                zip.Save(outputStream);
+            }
+            outputStream.Seek(0, SeekOrigin.Begin);
             postedfile.Setup(f => f.ContentLength).Returns(8192).Verifiable();
             postedfile.Setup(f => f.ContentType).Returns("application/zip").Verifiable();
             postedfile.Setup(f => f.FileName).Returns("event.zip").Verifiable();
-            postedfile.Setup(f => f.InputStream).Returns(new MemoryStream(8192)).Verifiable();
-            var events = new ExportImportEvent(clientProvider.Object);
+            postedfile.Setup(f => f.InputStream).Returns(outputStream);
+
+            var events = new ExportImportEvent(clientProvider.Object, synchronizer.Object);
             events.Import(postedfile.Object);
-            Assert.AreEqual(request.Object.Files[0], postedfile.Object);
-            Assert.AreEqual(request.Object.Files[0].ContentLength, 8192);
-            Assert.AreEqual(request.Object.Files[0].ContentType, "application/zip");
-            Assert.AreEqual(request.Object.Files[0].FileName, "event.zip");
+
+            synchronizer.Verify(x => x.WriteEvents(It.IsAny<IEnumerable<AggregateRootEventStream>>()), Times.Once());
+
         }
 
         [Test]
@@ -62,17 +75,19 @@ namespace RavenQuestionnaire.Web.Tests.Utils
         {
          //   Mock<ICommandHandler<ICommand>> mockHandler = new Mock<ICommandHandler<ICommand>>();
     //        Mock<IDocumentSession> documentSessionMock = new Mock<IDocumentSession>();
-            Mock<IEventStore> eventStoreMock=new Mock<IEventStore>();
-            NcqrsEnvironment.SetDefault<IEventStore>(eventStoreMock.Object);
+          //  Mock<IEventStore> eventStoreMock=new Mock<IEventStore>();
+            var synchronizer = new Mock<IEventSync>();
+          //  NcqrsEnvironment.SetDefault<IEventStore>(eventStoreMock.Object);
          /*   var kernel = new StandardKernel();
             kernel.Bind<ICommandHandler<ICommand>>().ToConstant(mockHandler.Object);*/
             clientProvider.Setup(x => x.ClientSettings).Returns(new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
           //  kernel.Bind<IDocumentSession>().ToConstant(documentSessionMock.Object);
             var output = new EventBrowseView(0, 20, 0, new List<EventBrowseItem>());
             viewRepositoryMock.Setup(x => x.Load<EventBrowseInputModel, EventBrowseView>(It.Is<EventBrowseInputModel>(input => input.PublickKey==null))).Returns(output);
-            var events = new ExportImportEvent(clientProvider.Object);
+            var events = new ExportImportEvent(clientProvider.Object, synchronizer.Object);
             var result = events.Export();
-            eventStoreMock.Verify(x => x.ReadByAggregateRoot(), Times.Once());
+            synchronizer.Verify(x => x.ReadEvents(), Times.Once());
+         //   eventStoreMock.Verify(x => x.ReadByAggregateRoot(), Times.Once());
             //   Assert.AreEqual(result.GetType(), typeof(byte[]));
         }
     }
