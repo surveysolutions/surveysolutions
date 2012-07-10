@@ -491,7 +491,7 @@ $(document).bind('pagebeforeshow', function () {
     doc.focus();
 });
 $(document).bind('pagechange', function () {
-    var groupId = document.location.search.substr(document.location.search.indexOf("group") + 6, 36);
+    var groupId = location.href.substr(location.href.indexOf("group") + 6, 36);
 
     if ($('#sidebar #ref-link-' + groupId).length > 0) {
         $('#sidebar .ui-li').each(function () {
