@@ -241,3 +241,8 @@ div.ui-disabled fieldset div.ui-controlgroup-controls
 .ui-body.ui-body-c{
 min-height: 90px;
 }
+
+.hidden-checkbox {
+	position: absolute;
+	left: -500px;
+}

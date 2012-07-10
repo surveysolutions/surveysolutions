@@ -90,6 +90,12 @@ function UpdateCurrentGroup(group) {
 function UpdateQuestion(question) {
     var questionElement = $('#question' + question.PublicKey) ;
     
+    var questionElement = null;
+    if (question.IsInPropagatebleGroup)
+        questionElement = $('#screen-' + question.GroupPublicKey + ' #question' + question.PublicKey);
+    else {
+        questionElement = $('#question' + question.PublicKey);
+    }
 
     questionElement.removeClass("ui-disabled");
     if (!question.Enabled) {
@@ -155,9 +161,32 @@ function UpdateGroup(group) {
 function RemovePropagatedGroup(data, status, xhr) {
     var group = jQuery.parseJSON(data.responseText);
     
+
+    var deleteScreen = '#screen-' + group.propagationKey;
+
+    var prevScreen = $(deleteScreen + ' .previous-screen').attr('href');
+    var nextScreen = $(deleteScreen + ' .next-screen').attr('href');
+
+    if (!(nextScreen == undefined || nextScreen == '' || nextScreen == '#')) {
+        var nextScreenPrevLink = $(nextScreen + ' .previous-screen');
+        if (nextScreenPrevLink.length > 0) {
+            nextScreenPrevLink.attr('href', prevScreen);
+            if (prevScreen == '#')
+                $(nextScreenPrevLink).addClass('ui-disabled');
+        }
+    }
+    if (!(prevScreen == undefined || prevScreen == '' || prevScreen == '#')) {
+        var prevScreenNextLink = $(prevScreen + ' .next-screen');
+        if (prevScreenNextLink.length > 0) {
+            prevScreenNextLink.attr('href', nextScreen);
+            if (nextScreen == '#')
+                $(prevScreenNextLink).addClass('ui-disabled');
+        }
+    }
     var li = $('#propagatedGroup' + group.propagationKey);
     var parent = li.parent();
     $(li).remove();
+    $(deleteScreen).remove();
     $(parent).listview('refresh');
     updateCounter();
 
@@ -169,7 +198,12 @@ function PropagatedGroup(data, status, xhr) {
         var templateDivPath = '#groupTemplate' + group.parentGroupPublicKey;
         //  var screenTemplateDiv = '#template-' + group.parentGroupPublicKey;
         var parent = $('#propagate-list-' + group.parentGroupPublicKey);
+
         var validator = parent.find('[data-valmsg-replace=true]');
+        if (group.error) {
+            validator.text(group.error);
+            return;
+        }
         validator.text('');
         var template = $(templateDivPath).html();
         // var screenTemplate = $(screenTemplateDiv).html();
@@ -409,7 +443,6 @@ function updateCounter() {
         this.disableAfterSubmit();
 
         this.find('[data-role=page]').live('pageshow', function (event) {
-            //data-type="horizontal"
             $("input[type='checkbox'][checked]").checkboxradio("refresh");
         });
 
@@ -426,16 +459,16 @@ function updateCounter() {
 
         this.find('.dummy-scroll').each(function () {
             var scroll = new iScroll(this);
-            newScrolls.push(scroll);
+            scrolls.push(scroll);
         });
     };
     $.fn.destroyPage = function () {
         this.find('.dummy-scroll #scroller').each(function () {
             for (var j = 0; j < scrolls.length; j++) {
-                if ($(scrolls[j].scroller).attr('class') == $(this).attr('class')) 
+                if (scrolls[j].scroller == this)
                 {
                     scrolls.splice(j, 1);
-                }
+            }
             }
         });
     };
@@ -443,6 +476,7 @@ function updateCounter() {
 var newScrolls = new Array();
 var scrolls = new Array();
 $(document).ready(function () {
+
     var doc = $(document);
     doc.find('#sidebar .dummy-scroll').each(function () {
         var scroll = new iScroll(this);
@@ -472,12 +506,12 @@ $(document).ready(function () {
             scrollToQuestion(next);
         }
     });
-});
-function scrollToQuestion(question) {
-    var scrollContainer = $(question).offsetParent();
-    var position = scrollContainer.find('#scroller').offset().top - $(question).offset().top;
 
-    for (var j = 0; j < scrolls.length; j++) {
+    $('.nav-link').click(function() {
+        switchPage(this);
+        return true;
+    });
+    
         if ($(scrolls[j].scroller).attr('class') == $(scrollContainer.find('#scroller')).attr('class')) {
             scrolls[j].refresh();
             scrolls[j].scrollTo(0, position, 100, false);
@@ -518,4 +552,8 @@ $(document).bind('pagehide', function () {
 });
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function switchPage() {
+    alert('click');
 }

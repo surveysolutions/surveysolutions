@@ -27,6 +27,8 @@
             <hr>
         </div>
         <div style="width: 100%; height: 50px;">&nbsp;</div>
+        <div style="width: 100%; height: 50px;">
+            &nbsp;</div>
     </div>
     @RenderFooter(Model.Navigation)
     <!-- /content -->
@@ -97,12 +99,25 @@ foreach (CompleteGroupMobileView screen in Model.Screens)
         <div data-role="content"class="dummy-scroll">
             <div id="scroller">
             @Html.Partial("~/Views/Survey/Group/_PropagatedScreen.cshtml", screen)
+    <script id="template-@(screen.PublicKey)" type="text/x-jsrender">
+        <div data-role="page" id="screen-00000000-0000-0000-0000-000000000000"  class="page">
+            @RenderNavigation(screen.Navigation)
+            <div data-role="content">
+                 @Html.Partial("~/Views/Survey/Group/_PropagatedScreen.cshtml", screen)
             </div>
         </div>
         @RenderFooter(screen.Navigation)
     </div>
 }*@
 
+             <div data-role="footer" data-theme="b">
+                <a class="previous-screen" href="${PrevScreen}" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >Prev Group</a>
+                <h1><span></span>@screen.Navigation.CurrentScreenTitle</h1>
+                <a href="#" class="next-screen ui-disabled" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">Next Group</a> 
+            </div>
+        </div>
+    </script>
+}
 @helper RenderNavigation(ScreenNavigation screen)
     {
         List<CompleteGroupHeaders> crumbs = screen.BreadCumbs.Skip(1).ToList();
@@ -134,6 +149,12 @@ foreach (CompleteGroupMobileView screen in Model.Screens)
             <a class="nav-link" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.PrevScreen.PublicKey, propagationKey = screen.PrevScreen.PropagationKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext">
                 Prev Group</a>
             
+            }
+            else
+            {
+            <a class="nav-link" href="@Url.Action("Index", new { id = Model.Id, group = screen.PrevScreen.PublicKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext">
+                Next Group</a>
+            }
         }
         else
         {
@@ -145,6 +166,14 @@ foreach (CompleteGroupMobileView screen in Model.Screens)
         {
            
             <a class="nav-link" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.NextScreen.PublicKey, propagationKey=screen.NextScreen.PropagationKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false" >
+            if (!screen.NextScreen.IsExternal)
+            {
+            <a class="next-screen nav-link" href="#screen-@screen.NextScreen.PublicKey" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">
+                Next Group</a>
+            }
+            else
+            {
+            <a class="nav-link" href="@Url.Action("Index", new { id = Model.Id, group = screen.NextScreen.PublicKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false">
                 Next Group</a>
             
         }

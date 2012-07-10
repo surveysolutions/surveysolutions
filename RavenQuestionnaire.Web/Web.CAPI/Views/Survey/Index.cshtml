@@ -5,13 +5,16 @@
 @using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteQuestionnaireMobileView
+
 <script type="text/javascript">
     $(document).ready(function () {
         highlight();
     });
     function highlight() {
        
-        var scrollHere = $('.scrollHere').length > 0 ? $('.scrollHere').get(0) : null;
+
+    jQuery(document).bind("pageshow", function () {
+        var scrollHere = $('.ui-page-active .scrollHere').length > 0 ? $('.scrollHere').get(0) : null;
         if (scrollHere != null) {
             var element = $(scrollHere).find('select:first');
             if (element == null) {
@@ -76,14 +79,16 @@
             async: false,
             data: { id: qId, group: groupId },
             url: "@Url.Action("_SurveyContent", "Survey")"
+            
         }).success(function(data) {
             // parent.append(data);
             var newPages = $(data);
-            newPages.appendTo(parent);
             newPages.each(function() {
                 var container = $(this);
                 container.initPage();
 
+            $('#content_container #ref-'+groupId).each(function() {
+                $(this).page();
             });
             
         });
@@ -94,10 +99,30 @@
         //  $.mobile.showPageLoadingMsg();     
         // $('#ref-link-' + groupId).addClass('ui-btn-active');
         var parent = $('#content_container');
-        //  var container;
-        var existingGroup = $('#content_container #ref-' + groupId);
+             container.find('#ref-' + groupId).each(function() {
+                var attributes = $.map(this.attributes, function(item) {
+                    return item.name;
+                });
+                var img = $(this);
+                $.each(attributes, function(i, item) {
+                    img.removeAttr(item);
+                });
+            });
+            var isfirst = true;
+            var parent = container.parent();
+            container.children().each(function() {
+                if (isfirst) {
 
-        ChangeScreen(groupId, existingGroup, parent);
+                    isfirst = false;
+                    return;
+                }
+                $(this)
+                    .appendTo(parent);
+                $(this).initPage();
+            });
+            container.initPage();
+        });
+        return false;
     }
 </script>
 <div data-role="panel" data-id="menu">
@@ -155,6 +180,13 @@
 </div>
 <div data-role="panel" data-id="main" id="content_container" class='@((Model.Status.PublicId == SurveyStatus.Complete.PublicId) ? "ui-disabled" : "")'>
     @Html.Partial("_SurveyContent", Model.CurrentScreen)
+<div data-role="panel" data-id="main" id="content_container">
+   @Html.Partial("_SurveyContent", Model)
+   
+   @for(int i=1;i<Model.Groups.Count();i++)
+   {
+   <div data-role="page" id="ref-@(Model.Groups[i].PublicKey)" class="page"></div>
+   }
 </div>
 <script type="text/javascript">
     $("div.ui-block-a").click(function () {
