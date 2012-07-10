@@ -13,7 +13,7 @@ namespace RavenQuestionnaire.Core.Views.Synchronization
             this.ProcessPublicKey = doc.PublicKey;
             this.StartDate = doc.StartDate;
             this.EndDate = doc.EndDate;
-            if(doc.Events.Count==0)
+            if(doc.AggregateRoots.Count==0)
             {
                 this.StateDescription = "Handshake";
                 return;
@@ -24,8 +24,8 @@ namespace RavenQuestionnaire.Core.Views.Synchronization
                 return;
             }
             this.StateDescription = "Retrieving documents";
-            var initialStateEventsCount = doc.Events.Count(e => e.Handled == EventState.Initial);
-            this.ProgressPercentage = (int)(((decimal)(doc.Events.Count - initialStateEventsCount) / doc.Events.Count) * 100);
+            var initialStateEventsCount = doc.AggregateRoots.Count(e => e.Handled == EventState.Initial);
+            this.ProgressPercentage = (int)(((decimal)(doc.AggregateRoots.Count - initialStateEventsCount) / doc.AggregateRoots.Count) * 100);
         }
 
         public string StateDescription { get; set; }

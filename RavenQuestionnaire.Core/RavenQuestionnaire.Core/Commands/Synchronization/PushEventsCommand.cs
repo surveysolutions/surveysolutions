@@ -2,20 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Domain;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Events;
 
 namespace RavenQuestionnaire.Core.Commands.Synchronization
 {
-    public class PushEventsCommand:ICommand
+    [Serializable]
+    [MapsToAggregateRootMethod(typeof(SyncProcessAR), "PushAggregateRootEventStream")]
+    public class PushEventsCommand : CommandBase
     {
-        public UserLight Executor { get; set; }
-        public IEnumerable<EventDocument> Events { get; set; }
+        public IEnumerable<ProcessedAggregateRoot> AggregateRoots { get; set; }
+        [AggregateRootId]
         public Guid ProcessGuid { get; set; }
-        public PushEventsCommand(Guid processGuid, IEnumerable<EventDocument> events, UserLight executor)
+        public PushEventsCommand(Guid processGuid, IEnumerable<ProcessedAggregateRoot> aggregateRoots)
         {
-            this.Executor = executor;
-            this.Events = events;
+            this.AggregateRoots = aggregateRoots;
+            this.ProcessGuid = processGuid;
+        }
+        public PushEventsCommand(Guid processGuid, IEnumerable<AggregateRootEventStream> aggregateRoots)
+        {
+            this.AggregateRoots = aggregateRoots.Select(a => new ProcessedAggregateRoot(a)).ToList();
             this.ProcessGuid = processGuid;
         }
     }
