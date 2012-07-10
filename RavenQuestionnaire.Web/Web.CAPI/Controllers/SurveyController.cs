@@ -103,6 +103,8 @@ namespace Web.CAPI.Controllers
             }
             catch (Exception e)
             {
+                NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+                logger.Fatal(e);
                 return Json(new { question = questions[0], settings = settings[0], error = e.Message });
             }
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
@@ -267,6 +269,8 @@ namespace Web.CAPI.Controllers
             }
             catch (Exception e)
             {
+                NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+                logger.Fatal(e);
                 return Json(new { question = questions[0], settings = settings[0], error = e.Message });
             }
 

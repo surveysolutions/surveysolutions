@@ -10,6 +10,7 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.WCF;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Synchronization;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Views.Synchronization;
 using Web.CAPI.Utils;
 
@@ -43,12 +44,16 @@ namespace Web.CAPI.Controllers
                                                      p.StartInfo.RedirectStandardOutput = true;
                                                      p.StartInfo.FileName = System.Web.Configuration.WebConfigurationManager.AppSettings["SynchronizerPath"];
                                                      p.Start();*/
-            return RedirectToAction("Progress", new {id = ""});
+            return RedirectToAction("Progress", new { id = Guid.NewGuid() });
 
         }
         public ActionResult Progress(Guid id)
         {
-            return View(viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+         //   return View(viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+            return
+                View(
+                    new SyncProgressView(new SyncProcessDocument()
+                                             {Id = id.ToString(), PublicKey = id, StartDate = DateTime.Now}));
         }
         public ActionResult ProgressPartial(Guid id)
         {

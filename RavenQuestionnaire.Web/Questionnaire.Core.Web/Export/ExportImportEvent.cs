@@ -5,11 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using Ionic.Zip;
-using Ncqrs;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core.ClientSettingsProvider;
+using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Web.App_Start;
 
 namespace Questionnaire.Core.Web.Export
@@ -26,14 +24,16 @@ namespace Questionnaire.Core.Web.Export
         #region FieldsProperties
 
         private IClientSettingsProvider clientSettingsProvider;
+        private IEventSync synchronizer;
 
         #endregion
 
         #region Constructor
 
-        public ExportImportEvent(IClientSettingsProvider clientSettingsProvider)
+        public ExportImportEvent(IClientSettingsProvider clientSettingsProvider, IEventSync synchronizer)
         {
             this.clientSettingsProvider = clientSettingsProvider;
+            this.synchronizer = synchronizer;
         }
 
         #endregion
@@ -53,59 +53,19 @@ namespace Questionnaire.Core.Web.Export
                     var settings = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects};
                     var result = JsonConvert.DeserializeObject<ZipFileData>
                         (Encoding.Default.GetString(stream.ToArray()), settings);
-                    var eventStore = NcqrsEnvironment.Get<IEventStore>();
-                    if (eventStore == null)
-                        throw new Exception("IEventStore is not properly initialized.");
-                    //((InProcessEventBus)myEventBus).RegisterHandler();
-                    foreach (AggregateRootEventStream commitedEventStream in result.Events)
-                    {
-                        Guid commitId = Guid.NewGuid();
-                        var currentEventStore = eventStore.ReadFrom(commitedEventStream.SourceId, commitedEventStream.FromVersion,
-                                                                    commitedEventStream.ToVersion);
-                        var uncommitedStream = new UncommittedEventStream(commitId);
-                        foreach (CommittedEvent committedEvent in commitedEventStream.Events)
-                        {
-                            if(currentEventStore.Count(ce=>ce.EventIdentifier==committedEvent.EventIdentifier)>0)
-                                continue;
-
-                            uncommitedStream.Append(new UncommittedEvent(committedEvent.EventIdentifier,
-                                                                         committedEvent.EventSourceId,committedEvent.EventSequence, 0,
-                                                                         committedEvent.EventTimeStamp,
-                                                                         committedEvent.Payload,
-                                                                         committedEvent.EventVersion));
-                        }
-                        eventStore.Store(uncommitedStream);
-                    }
-                    NCQRSInit.RebuildReadLayer();
-                  
-                    /*  var lastEventItem = viewRepository.Load<EventViewInputModel, EventView>(new EventViewInputModel(result.ClientGuid));
-                    if (lastEventItem == null)
-                        ExecuteCommand(result.Events, result.ClientGuid);
-                    else
-                    {
-                        var ndx = result.Events.FindIndex(f => f.PublicKey == lastEventItem.PublicKey);
-                        if (ndx > -1)
-                        {
-                            result.Events.RemoveRange(0, ndx+1);
-                            ExecuteCommand(result.Events, result.ClientGuid);
-                        }
-                    }*/
+                    synchronizer.WriteEvents(result.Events);
                 }
             }
         }
 
         public byte[] Export()
         {
-            var myEventStore = NcqrsEnvironment.Get<IEventStore>();
-
-            if (myEventStore == null)
-                throw new Exception("IEventStore is not correct.");
 
             var data = new ZipFileData
                            {
                                ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
                            };
-            data.Events = myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c));
+            data.Events = this.synchronizer.ReadEvents();
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {
@@ -120,16 +80,6 @@ namespace Questionnaire.Core.Web.Export
 
         #endregion
 
-        #region PrivateMethod
-
-        private void ExecuteCommand(IEnumerable<CommittedEvent> items, Guid clientGuid)
-        {
-            /*foreach (CommittedEvent item in items)
-                commandInvoker.Execute(item.Payload);
-            commandInvoker.Flush();*/
-        }
-
-        #endregion
 
     }
 }
