@@ -3,6 +3,7 @@ using System.ServiceModel;
 using System.Threading;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using DataEntryClient.WcfInfrastructure;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;
@@ -71,6 +72,7 @@ namespace Web.CAPI.App_Start
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             kernel.Bind<IExportImport>().To<ExportImportEvent>();
+            kernel.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
             RegisterServices(kernel);
             NCQRSInit.Init(System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"], kernel);
             return kernel;

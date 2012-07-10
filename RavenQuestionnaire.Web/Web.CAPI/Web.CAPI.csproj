@@ -335,6 +335,10 @@
       <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
       <Name>RavenQuestionnaire.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Synchronization\DataEntryClient\DataEntryClient.csproj">
+      <Project>{03626966-3597-42FA-A394-A13941B558EB}</Project>
+      <Name>DataEntryClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>
@@ -361,7 +365,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4963</DevelopmentServerPort>
+          <DevelopmentServerPort>11555</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

@@ -9,21 +9,16 @@ namespace DataEntryClient.WcfInfrastructure
 {
     public interface IChanelFactoryWrapper
     {
-        void Execute<T>(Action<T> handler) where T:class ;
-        T GetChanel<T>() where T : class;
+        void Execute<T>(string baseAdress,Action<T> handler) where T:class ;
+        T GetChanel<T>(string baseAdress) where T : class;
     }
 
     public class ChanelFactoryWrapper : IChanelFactoryWrapper
     {
-        public ChanelFactoryWrapper(string baseAdress)
-        {
-            this.baseAdress = baseAdress;
-        }
 
-        private string baseAdress;
-        public void Execute<T>(Action<T> handler) where T : class
+        public void Execute<T>(string baseAdress,Action<T> handler) where T : class
         {
-            T client = GetChanel<T>();
+            T client = GetChanel<T>(baseAdress);
             try
             {
 
@@ -42,7 +37,7 @@ namespace DataEntryClient.WcfInfrastructure
             }
         }
 
-        public T GetChanel<T>() where T : class
+        public T GetChanel<T>(string baseAdress) where T : class
         {
             ChannelFactory<T> channelFactory = new ChannelFactory<T>(new BasicHttpBinding(),
                                                                      string.Format("{0}/WCF/{1}Service.svc", baseAdress,

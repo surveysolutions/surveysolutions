@@ -207,7 +207,6 @@
     <Compile Include="Entities\SubEntities\DateTimeCompleteQuestionTest.cs" />
     <Compile Include="Entities\SubEntities\NumericCompleteQuestionTest.cs" />
     <Compile Include="Entities\SubEntities\SingleCompleteQuestionTest.cs" />
-    <Compile Include="Entities\SyncprocessTests.cs" />
     <Compile Include="Entities\UserEntityTest.cs" />
     <Compile Include="ExpressionEvaluatorTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs" />

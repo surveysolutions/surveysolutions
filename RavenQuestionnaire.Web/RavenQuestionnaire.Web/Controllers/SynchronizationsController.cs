@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.WCF;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Synchronization;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Synchronization;
 
@@ -35,14 +34,14 @@ namespace RavenQuestionnaire.Web.Controllers
             UserLight user = _globalProvider.GetCurrentUser();
 
             Guid syncProcess = Guid.NewGuid();
-            commandInvoker.Execute(
+         /*   commandInvoker.Execute(
                 new CreateNewSynchronizationProcessCommand(syncProcess, user));
             var p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.Arguments = url + " " + syncProcess;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.FileName = WebConfigurationManager.AppSettings["SynchronizerPath"];
-            p.Start();
+            p.Start();*/
             return RedirectToAction("Progress", new {id = syncProcess});
         }
 

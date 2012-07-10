@@ -14,6 +14,7 @@ using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
+using RavenQuestionnaire.Core.Commands.Synchronization;
 
 namespace RavenQuestionnaire.Web.App_Start
 {
@@ -86,6 +87,11 @@ namespace RavenQuestionnaire.Web.App_Start
             service.RegisterExecutor(typeof(PreLoadCompleteQuestionnaireCommand), new UoWMappedCommandExecutor(mapper));
             
             service.RegisterExecutor(typeof(ChangeStatusCommand), new UoWMappedCommandExecutor(mapper));
+
+            service.RegisterExecutor(typeof(PushEventsCommand), new UoWMappedCommandExecutor(mapper));
+            service.RegisterExecutor(typeof(CreateNewSynchronizationProcessCommand), new UoWMappedCommandExecutor(mapper));
+            service.RegisterExecutor(typeof(ChangeEventStatusCommand), new UoWMappedCommandExecutor(mapper));
+            service.RegisterExecutor(typeof(EndProcessComand), new UoWMappedCommandExecutor(mapper));
 
             return service;
         }
