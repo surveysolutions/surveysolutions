@@ -4,7 +4,7 @@
             <h1>
                 Available local centers
             </h1>
-            @Html.ActionLink("Dashboard", "Index", "Dashboard", new {}, new {rel = "external", data_inline = "true", data_role = "button", data_mini = "true", data_corners = "false", data_theme = "e", id = "btnSync", @class = "ui-state-persist"})
+            @Html.ActionLink("Dashboard", "Dashboard", "Survey", new { }, new { rel = "external", data_inline = "true", data_role = "button", data_mini = "true", data_corners = "false", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
             <a href="@Url.Action("LogOff", "Account")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Log off</a> 
         </div>
         <div data-role="content" id="content">
@@ -14,10 +14,10 @@
         <div data-role="footer" data-position="fixed" data-fullscreen="true">        
             <div data-role="navbar">
                 <ul>
-                    <li><a href="@Url.Action("Import", "ImportExport")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Import</a></li>
+                    <li><a href="@Url.Action("Import", "Synchronizations")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Import</a></li>
                     <li></li>
                     <li></li>
-                    <li><a href="@Url.Action("Export", "ImportExport")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Export</a></li>              
+                    <li><a href="@Url.Action("Export", "Synchronizations")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Export</a></li>              
                 </ul>
             </div>            
         </div>

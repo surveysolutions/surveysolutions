@@ -6,7 +6,7 @@
             <h1>
                 Spots
             </h1>
-            @Html.ActionLink("Dashboard", "Index", "Dashboard", new {}, new {rel = "external", data_inline = "true", data_role = "button", data_mini = "true", data_corners = "false", data_theme = "e", id = "btnSync", @class = "ui-state-persist"})
+            @Html.ActionLink("Dashboard", "Dashboard", "Survey", new { }, new { rel = "external", data_inline = "true", data_role = "button", data_mini = "true", data_corners = "false", data_theme = "e", id = "btnSync", @class = "ui-state-persist" })
             <a href="@Url.Action("LogOff", "Account")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">Log off</a> 
         </div>
         <div data-role="content" id="content">
