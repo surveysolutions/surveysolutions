@@ -41,17 +41,12 @@ namespace RavenQuestionnaire.Core.Events
                                                             commitedEventStream.FromVersion,
                                                             commitedEventStream.ToVersion);
                 var uncommitedStream = new UncommittedEventStream(commitId);
-                foreach (CommittedEvent committedEvent in commitedEventStream.Events)
+                foreach (AggregateRootEvent committedEvent in commitedEventStream.Events)
                 {
                     if (currentEventStore.Count(ce => ce.EventIdentifier == committedEvent.EventIdentifier) > 0)
                         continue;
 
-                    uncommitedStream.Append(new UncommittedEvent(committedEvent.EventIdentifier,
-                                                                 committedEvent.EventSourceId,
-                                                                 committedEvent.EventSequence, 0,
-                                                                 committedEvent.EventTimeStamp,
-                                                                 committedEvent.Payload,
-                                                                 committedEvent.EventVersion));
+                    uncommitedStream.Append(committedEvent.CreateUncommitedEvent());
                 }
                 eventStore.Store(uncommitedStream);
             }
