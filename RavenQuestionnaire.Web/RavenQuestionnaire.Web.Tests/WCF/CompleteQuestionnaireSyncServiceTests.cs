@@ -18,7 +18,7 @@ namespace RavenQuestionnaire.Web.Tests.WCF
             IKernel kernel=new StandardKernel();
             Mock<ICommandInvoker> invokerMock = new Mock<ICommandInvoker>();
             kernel.Bind<ICommandInvoker>().ToConstant(invokerMock.Object);
-            EventDocumentSyncService target = new EventDocumentSyncService(kernel);
+            EventPipeService target = new EventPipeService(kernel);
 
             for (int i = 0; i < 10; i++)
             {

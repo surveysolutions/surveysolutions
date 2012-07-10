@@ -19,8 +19,8 @@ using RavenQuestionnaire.Core.Conventions;
 using DataEntryClient.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.ExpressionExecutors;
-using RavenQuestionnaire.Core.Entities.Subscribers;
 using RavenQuestionnaire.Core.ClientSettingsProvider;
+using RavenQuestionnaire.Web.App_Start;
 
 namespace DataEntryClient
 {
@@ -41,6 +41,7 @@ namespace DataEntryClient
                 kernel.Bind<IChanelFactoryWrapper>().ToMethod((c) => new ChanelFactoryWrapper(args[0]));
                 kernel.Bind<IDocumentSession>().ToMethod(
                     context => context.Kernel.Get<IDocumentStore>().OpenSession()).InThreadScope();
+                NCQRSInit.Init(ConfigurationManager.AppSettings["Raven.DocumentStore"], kernel);
                 new CompleteQuestionnaireSync(kernel,
                                               Guid.Parse(args[1]))
                     .

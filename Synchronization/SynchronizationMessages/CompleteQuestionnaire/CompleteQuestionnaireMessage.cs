@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using Newtonsoft.Json;
-using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Events;
 using SynchronizationMessages.Synchronization;
 
 namespace SynchronizationMessages.CompleteQuestionnaire
@@ -10,14 +10,12 @@ namespace SynchronizationMessages.CompleteQuestionnaire
     {
         public Guid SynchronizationKey { get; set; }
         public Guid CommandKey { get; set; }
-        public ICommand Command { get; set; }
-        public DateTime CreationDate { get; set; }
+        public AggregateRootEventStream Command { get; set; }
 
         public void WriteTo(Stream stream)
         {
             FormatHelper.WriteGuid(stream, this.SynchronizationKey);
             FormatHelper.WriteGuid(stream, this.CommandKey);
-            FormatHelper.WriteString(stream, this.CreationDate.ToString());
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
 
@@ -29,17 +27,10 @@ namespace SynchronizationMessages.CompleteQuestionnaire
         {
             this.SynchronizationKey = FormatHelper.ReadGuid(stream);
             this.CommandKey = FormatHelper.ReadGuid(stream);
-            try
-            {
-                this.CreationDate = DateTime.Parse(FormatHelper.ReadString(stream));
-            }
-            catch (Exception)
-            {
-            }
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
             var commandString = FormatHelper.ReadString(stream);
-            var command = JsonConvert.DeserializeObject<ICommand>(commandString, settings);
+            var command = JsonConvert.DeserializeObject<AggregateRootEventStream>(commandString, settings);
 
             this.Command = command;
         }

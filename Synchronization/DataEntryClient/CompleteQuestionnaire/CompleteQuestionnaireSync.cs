@@ -13,6 +13,7 @@ using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Synchronization;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Core.Views.ClientSettings;
 using RavenQuestionnaire.Core.Views.Event;
 using SynchronizationMessages.CompleteQuestionnaire;
@@ -23,21 +24,23 @@ namespace DataEntryClient.CompleteQuestionnaire
     public class CompleteQuestionnaireSync
     {
       //  private IKernel kernel;
-        private IViewRepository viewRepository;
+      //  private IViewRepository viewRepository;
         private IChanelFactoryWrapper chanelFactoryWrapper;
         private IClientSettingsProvider clientSettingsProvider;
-        private Guid processGuid;
+        private IEventSync eventStore;
+     //   private Guid processGuid;
      
-        private ICommandInvoker invoker;
+       // private ICommandInvoker invoker;
       //  private ICommandInvokerAsync invokerAsync;
         public CompleteQuestionnaireSync(IKernel kernel, Guid processGuid)
         {
-            this.invoker = kernel.Get<ICommandInvoker>();
+          //  this.invoker = kernel.Get<ICommandInvoker>();
        //     this.invokerAsync = kernel.Get<ICommandInvokerAsync>();
-            this.viewRepository = kernel.Get<IViewRepository>();
+        //    this.viewRepository = kernel.Get<IViewRepository>();
             this.chanelFactoryWrapper = kernel.Get<IChanelFactoryWrapper>();
             this.clientSettingsProvider = kernel.Get<IClientSettingsProvider>();
-            this.processGuid = processGuid;
+            this.eventStore = kernel.Get<IEventSync>();
+            //   this.processGuid = processGuid;
         }
 
         public void Execute()
@@ -60,14 +63,27 @@ namespace DataEntryClient.CompleteQuestionnaire
 
         public void UploadEvents(Guid clientKey, Guid? lastSyncEvent)
         {
-            this.chanelFactoryWrapper.Execute<IEventDocumentSync>(
+            this.chanelFactoryWrapper.Execute<IEventPipe>(
                 (client)=>
                     {
-                        var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(new EventBrowseInputModel(lastSyncEvent));
+                        var events = this.eventStore.ReadEvents();
+                        foreach (AggregateRootEventStream aggregateRootEventStream in events)
+                        {
+                            var message = new EventSyncMessage
+                                              {
+                                                  Command = aggregateRootEventStream,
+                                                  SynchronizationKey = clientKey,
+                                                  CommandKey = aggregateRootEventStream.SourceId
+                                              };
+                            ErrorCodes returnCode = client.Process(message);
+
+
+                        }
+                        /*  var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(new EventBrowseInputModel(lastSyncEvent));
                         var eventList =
                             events.Items.Select(i => new EventDocument(i.Command, i.PublicKey, clientKey)).ToList();
-                        invoker.ExecuteInSingleScope(new PushEventsCommand(processGuid, eventList, null));
-                        foreach (var eventItem in events.Items)
+                        invoker.ExecuteInSingleScope(new PushEventsCommand(processGuid, eventList, null));*/
+                        /*   foreach (var eventItem in events.Items)
                         {
 
                             invoker.ExecuteInSingleScope(new ChangeEventStatusCommand(processGuid, eventItem.PublicKey, EventState.InProgress, null));
@@ -83,10 +99,10 @@ namespace DataEntryClient.CompleteQuestionnaire
                                                                          returnCode == ErrorCodes.None
                                                                              ? EventState.Completed
                                                                              : EventState.Error, null));
-                        }
+                        }*/
                     }
                 );
-            invoker.ExecuteInSingleScope(new EndProcessComand(processGuid, null));
+         //   invoker.ExecuteInSingleScope(new EndProcessComand(processGuid, null));
         }
 
     }

@@ -235,8 +235,8 @@
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuestionConditionModel.cs" />
     <Compile Include="Models\SwitcherModel.cs" />
-    <Compile Include="WCF\EventDocumentSyncService.svc.cs">
-      <DependentUpon>EventDocumentSyncService.svc</DependentUpon>
+    <Compile Include="WCF\EventPipeService.svc.cs">
+      <DependentUpon>EventPipeService.svc</DependentUpon>
     </Compile>
     <Compile Include="WCF\GETLASTSYNCEVENTSERVICE.SVC.CS">
       <DependentUpon>GETLASTSYNCEVENTSERVICE.SVC</DependentUpon>
@@ -596,7 +596,7 @@
     <Content Include="Views\CompleteQuestionnaire\Index.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Result.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Take.cshtml" />
-    <Content Include="WCF\EventDocumentSyncService.svc" />
+    <Content Include="WCF\EventPipeService.svc" />
     <Content Include="WCF\GETLASTSYNCEVENTSERVICE.SVC" />
     <Content Include="WCF\SpotSyncService.svc" />
     <Content Include="Web.config">
