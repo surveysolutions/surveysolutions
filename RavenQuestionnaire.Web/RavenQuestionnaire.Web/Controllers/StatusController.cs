@@ -17,7 +17,7 @@ using RavenQuestionnaire.Core.Views.StatusReport;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
-    [QuestionnaireAuthorize(UserRoles.Administrator)]
+
     public class StatusController : Controller
     {
         private ICommandInvoker commandInvoker;
@@ -34,16 +34,16 @@ namespace RavenQuestionnaire.Web.Controllers
             var model = viewRepository.Load<StatusReportViewInputModel, StatusReportView>(new StatusReportViewInputModel());
             return View(model);
         }
-
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ViewResult Details(string Qid)
         {
-            if ( string.IsNullOrEmpty(Qid))
+            if (string.IsNullOrEmpty(Qid))
                 throw new HttpException(404, "Invalid query string parameters.");
 
             var model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(Qid));
             return View(model);
         }
-
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ViewResult Create(string qId, string Id)
         {
             return View(new StatusItemView()
@@ -53,7 +53,7 @@ namespace RavenQuestionnaire.Web.Controllers
                             }
         );
         }
-
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
         [HttpPost]
         public ActionResult Save(StatusItemView model)
         {
@@ -102,7 +102,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
             AddRolesListToViewBag();
             return View("Edit", model);
-            
+
         }
 
         protected void AddStatusListToViewBag(string Qid)
@@ -110,7 +110,7 @@ namespace RavenQuestionnaire.Web.Controllers
             var statuses = viewRepository.Load<StatusBrowseInputModel, StatusBrowseView>
                 (new StatusBrowseInputModel()
                      {
-                         PageSize = 300, 
+                         PageSize = 300,
                          QId = Qid
                      }).Items;
 
@@ -126,7 +126,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ViewResult Edit(string Qid, Guid PublicKey)
         {
-            if (string.IsNullOrEmpty(Qid) || PublicKey == null )
+            if (string.IsNullOrEmpty(Qid) || PublicKey == null)
                 throw new HttpException(404, "Invalid query string parameters.");
 
             StatusView model = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(Qid));
@@ -138,7 +138,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
                 foreach (var status in model.StatusElements)
                 {
-                    var statusByRole = new StatusByRole {Status = status};
+                    var statusByRole = new StatusByRole { Status = status };
 
                     foreach (var role in Roles.GetAllRoles())
                     {
@@ -184,7 +184,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
         [HttpPost]
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult SaveRoute(string StatusId, SurveyStatus TargetStatus, string changeComment, Guid PublicKey,  string ConditionExpression)
+        public ActionResult SaveRoute(string StatusId, SurveyStatus TargetStatus, string changeComment, Guid PublicKey, string ConditionExpression)
         {
             if (ModelState.IsValid)
             {
@@ -200,7 +200,7 @@ namespace RavenQuestionnaire.Web.Controllers
             return View("AddRoute");
         }
 
-       
+
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult EditRoute(Guid publicId, string Qid, string statusId)
         {
@@ -224,7 +224,7 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult AddRoute(string id, string qid)
         {
             AddStatusListToViewBag(qid);
-            return PartialView("AddRoute", new FlowRule() { StatusId = id });            
+            return PartialView("AddRoute", new FlowRule() { StatusId = id });
         }
     }
 }
