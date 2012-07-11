@@ -108,13 +108,14 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 if (currentFetured == null)
                 {
                     currentFetured = new QuestionStatisticView(
-                        new TextCompleteQuestion(evnt.Payload.QuestionText){PublicKey = evnt.Payload.QuestionPublicKey}, Guid.Empty,
+                        new TextCompleteQuestion(evnt.Payload.QuestionText) { PublicKey = evnt.Payload.QuestionPublicKey }, Guid.Empty,
                         Guid.Empty);
                     featuredQuestions.Add(currentFetured);
                 }
-
-                currentFetured.AnswerValue = currentFetured.AnswerText = evnt.Payload.Answer.ToString();
-
+                else
+                {
+                    currentFetured.AnswerValue = currentFetured.AnswerText = evnt.Payload.Answer.ToString();
+                }
                 item.FeaturedQuestions = featuredQuestions.ToArray();
 
             }
