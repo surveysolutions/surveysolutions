@@ -57,11 +57,16 @@
     <Reference Include="DevExpress.Xpf.Core.v11.2, Version=11.2.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpf.Grid.v11.2, Version=11.2.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpf.LayoutControl.v11.2, Version=11.2.11.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="Ncqrs, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="Ncqrs.Eventing.Storage.RavenDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Ninject">
       <HintPath>..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\bin\Debug\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="Ninject.Extensions.Conventions">
       <HintPath>..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\bin\Debug\Ninject.Extensions.Conventions.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common">
+      <HintPath>..\RavenQuestionnaire.Web\RavenQuestionnaire.Web\bin\Ninject.Web.Common.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
