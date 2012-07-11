@@ -42,7 +42,7 @@
                         <Extensions:ComboBoxDropDownCommand.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">                                    
-                                    <TextBlock Text="{Binding AnswerText}" Margin="4,0"/>                                    
+                                    <TextBlock Text="{Binding Title}" Margin="4,0"/>                                    
                                 </StackPanel>
                             </DataTemplate>
                         </Extensions:ComboBoxDropDownCommand.ItemTemplate>
@@ -51,13 +51,13 @@
     </DataTemplate>    
     <DataTemplate x:Key="DateTimeDataTemplate">
                 <StackPanel  Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
-                    <DatePicker CalendarStyle="{StaticResource calendarCustom}" SelectedDate="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerValue}" Name="MonthlyCalendar" FirstDayOfWeek="Monday" IsTodayHighlighted="True" Foreground="White"/>                                                                                       
+                    <DatePicker CalendarStyle="{StaticResource calendarCustom}" SelectedDate="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.Answer}" Name="MonthlyCalendar" FirstDayOfWeek="Monday" IsTodayHighlighted="True" Foreground="White"/>                                                                                       
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="GpsCoordinatesDataTemplate">
                 <StackPanel  Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
                     <Border BorderThickness="1" BorderBrush="White">
-                        <dxe:TextEdit Name="GpsCoordinateText" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerValue}" 
+                        <dxe:TextEdit Name="GpsCoordinateText" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.Answer}" 
                                  Width="100" Height="30" Canvas.Top="50" Canvas.Left="20" MaskType="Simple" Mask="00.000000;00.000000" />
                     </Border>
                     <ContentControl x:Name="ContentButton" Content="{Binding}" ContentTemplateSelector="{StaticResource ButtonTemplateSelector}"  />
@@ -79,7 +79,7 @@
                                 <DataTemplate>
                                     <Grid>
                                         <Grid>
-                                            <TextBlock Text="{Binding AnswerText}" Margin="5,5,5,5" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding Title}" Margin="5,5,5,5" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
                                             <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False" Visibility="{Binding Selected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         </Grid>
                                     </Grid>
@@ -95,10 +95,10 @@
             <ContentControl.Content>               
                      <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
                          <Border BorderThickness="1" BorderBrush="White">                                
-                             <dxe:TextEdit Name="txtBox" EditValue="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                             <dxe:TextEdit Name="txtBox" EditValue="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.Answer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                            Width="100" Height="30" Canvas.Top="50" Canvas.Left="20" MaskType="Numeric" MaskUseAsDisplayFormat="True" />                                
                          </Border>
-                         <Button FontSize="20" Margin="5" Content="Save" Padding="10"
+                         <!--<Button FontSize="20" Margin="5" Content="Save" Padding="10"
                              Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}">
                              <Button.Resources>
                                  <Extensions:ChangeObjectMultiConverter x:Key="ChangeObjectMultiConverter"/>
@@ -109,7 +109,7 @@
                                      <Binding ElementName="txtBox" Path="Text"/>
                                  </MultiBinding>
                              </Button.CommandParameter>
-                         </Button>
+                         </Button>-->
                      </StackPanel>                    
             </ContentControl.Content>
         </ContentControl>
@@ -119,10 +119,10 @@
             <ContentControl.Content>
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0">
                             <Border BorderThickness="1" BorderBrush="White">
-                                <dxe:TextEdit Name="txtTextBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SelectedAnswer.AnswerValue}" 
+                                <dxe:TextEdit Name="txtTextBox" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.Answer}" 
                                               Width="100" Height="30" Canvas.Top="50" Canvas.Left="20" />
-                            </Border>                            
-                            <Button FontSize="20" Margin="5" Content="Save" Padding="10"
+                            </Border>
+                    <!--<Button FontSize="20" Margin="5" Content="Save" Padding="10"/>-->
                 </StackPanel>
             </ContentControl.Content>
         </ContentControl>

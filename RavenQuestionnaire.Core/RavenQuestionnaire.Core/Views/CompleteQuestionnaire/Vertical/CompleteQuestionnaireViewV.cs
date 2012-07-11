@@ -18,9 +18,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             LastEntryDate = doc.LastEntryDate;
             Status = doc.Status;
             Responsible = doc.Responsible;
-
             CurrentGroup = new CompleteGroupViewV(doc, currentGroup as CompleteGroup);
-
             InitGroups(doc, CurrentGroup.PublicKey);
             Totals = CalcProgress(doc);
         }
@@ -116,7 +114,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             if (questions == null || questions.Count == 0)
                 return new Counter();
 
-            var enabled = questions.Where(q => q.Enabled).ToList();
+            var enabled = questions.Where(q =>q!=null && q.Enabled).ToList();
 
             var total = new Counter
                             {

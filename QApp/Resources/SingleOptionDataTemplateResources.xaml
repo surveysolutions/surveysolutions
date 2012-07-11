@@ -22,7 +22,7 @@
                                 <ColumnDefinition Width="0.7*" />
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
-                                <TextBlock Text="{Binding AnswerText}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding Title}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
                             </StackPanel>                            
                         </Grid>
                         <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False"                                                
