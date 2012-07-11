@@ -120,7 +120,7 @@
     </div>
     <!-- /page -->
     <!-- other main panel pages here -->
-    @foreach (var question in Model.QuestionsWithCards)
+   @* @foreach (var question in Model.QuestionsWithCards)
     {
         <div data-role="page" data-add-back-btn="true" id="gallery-@(question.PublicKey)" class="gallery-page">
             <div data-role="header">
@@ -183,7 +183,7 @@
             </div>
         </div>
         </script>
-    }     
+    }     *@
 </div>
 @helper RenderNavigation(ScreenNavigation screen)
     {
@@ -208,16 +208,16 @@
     <div data-role="footer" data-theme="b">
         @if (screen.PrevScreen != null)
         {
-            if (!screen.PrevScreen.IsExternal)
+           @* if (!screen.PrevScreen.IsExternal)
             {
             <a class="previous-screen nav-link" href="#screen-@(screen.PrevScreen.PublicKey)" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >
                 Prev Group</a>
             }
             else
-            {
+            {*@
             <a class="nav-link" href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = screen.PrevScreen.PublicKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" rel="external" data-ajax="false">
                 Next Group</a>
-            }
+            //}
         }
         else
         {
@@ -227,16 +227,16 @@
         <h1><span></span> @screen.CurrentScreenTitle</h1>
         @if (screen.NextScreen != null)
         {
-            if (!screen.NextScreen.IsExternal)
-            {
+            //if (!screen.NextScreen.IsExternal)
+            //{
             <a class="next-screen nav-link" href="#screen-@screen.NextScreen.PublicKey" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">
                 Next Group</a>
-            }
+           @* }
             else
             {
             <a class="nav-link" href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = screen.NextScreen.PublicKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false"  rel="external" data-ajax="false">
                 Next Group</a>
-            }
+            }*@
         }
         else
         { 

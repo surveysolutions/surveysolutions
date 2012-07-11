@@ -48,7 +48,7 @@ namespace QApp.ViewModel {
             var viewRepository = new ViewRepository(Initializer.Kernel);
             CompleteQuestionnaireItem =
                viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
-                   new CompleteQuestionnaireViewInputModel(QuestionnaireId) { CurrentGroupPublicKey = group });
+                   new CompleteQuestionnaireViewInputModel(QuestionnaireId));
             
         }
 
@@ -59,6 +59,7 @@ namespace QApp.ViewModel {
             private set { SetValue<CompleteQuestionnaireMobileView>("CompleteQuestionnaireItem", ref completeQuestionnaireItem, value); }
         }
     }
+
     #region research
 
     public class ModelBase : DependencyObject
@@ -187,14 +188,8 @@ namespace QApp.ViewModel {
             if (!String.IsNullOrEmpty(questionnaireId))
             {
                 _completedQuestionnaireId = questionnaireId;
-
-                //bad approach!!!
-                //due to init manager doesn't support parameter passing
-                //TODO: rewrite!!!
-
                 Data = new QuestionnaireDetailData(_completedQuestionnaireId, null);
                 (Data as QuestionnaireDetailData).Load();
-
             }
             else
                 _completedQuestionnaireId = (parameter as CompleteQuestionView).QuestionnaireId;

@@ -10,7 +10,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
 {
     [Serializable]
     [MapsToAggregateRootMethod(typeof(CompleteQuestionnaireAR), "PreLoad")]
-    class PreLoadCompleteQuestionnaireCommand : CommandBase
+    public class PreLoadCompleteQuestionnaireCommand : CommandBase
     {
         [AggregateRootId]
         public Guid CompleteQuestionnaireId { get; set; }

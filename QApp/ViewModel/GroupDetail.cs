@@ -34,10 +34,8 @@ namespace QApp.ViewModel
             base.InitData(parameter);
             var item = parameter as CompleteGroupViewV;
             ObservableCollection<GroupDetail> groupDetailsLoc = new ObservableCollection<GroupDetail>();
-
             if (item != null)
             {
-
                 foreach (var completeGroupViewV in item.Groups)
                 {
                     groupDetailsLoc.Add((GroupDetail)ModulesManager.CreateModule(null, new GroupDetailData(completeGroupViewV), this, completeGroupViewV));
