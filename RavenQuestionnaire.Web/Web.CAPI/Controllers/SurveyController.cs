@@ -124,6 +124,13 @@ namespace Web.CAPI.Controllers
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = key, Status = SurveyStatus.Complete});
+            var stat = viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>
+                (new CompleteQuestionnaireStatisticViewInputModel(id));
+
+            if (stat != null && stat.InvalidQuestions.Count > 0)
+            {
+                return Redirect(Url.RouteUrl(new { controller = "Survey", action = "Statistic", id = id }) + "#" + "invalid");
+            }
 
             /*var model = viewRepository.Load<CompleteQuestionnaireViewInputModel,
                 CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
