@@ -23,9 +23,9 @@ namespace QApp
         static void Main(string[] args)
         {
             Initializer.Init();
-            NCQRSInit.RebuildReadLayer();
-            StartupBase.Run<QStartup>(null);
             //NCQRSInit.RebuildReadLayer();
+            StartupBase.Run<QStartup>(null);
+            NCQRSInit.RebuildReadLayer();
         }
     }
 
