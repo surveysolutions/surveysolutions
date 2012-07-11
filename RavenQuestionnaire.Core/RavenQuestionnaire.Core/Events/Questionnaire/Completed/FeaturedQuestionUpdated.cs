@@ -13,6 +13,6 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire.Completed
         public Guid CompletedQuestionnaireId { get; set; }
         public Guid QuestionPublicKey { set; get; }
         public string QuestionText { get; set; }
-        public object Answer { set; get; }
+        public string Answer { set; get; }
     }
 }
