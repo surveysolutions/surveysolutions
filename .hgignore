@@ -129,3 +129,5 @@ RavenQuestionnaire.Web/Web.Supervisor/Web.Supervisor.csproj.user
 RavenQuestionnaire.Web/Web.CAPI/Web.CAPI.csproj.user
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/RavenQuestionnaire.Web.csproj.user
 RavenQuestionnaire.Web/Web.CAPI/Web.CAPI.Publish.xml
+QApp/packages/ninject.extensions.conventions.3.0.0.11/ninject.extensions.conventions.3.0.0.11.nupkg
+QApp/packages/Ninject.3.0.1.10/Ninject.3.0.1.10.nupkg

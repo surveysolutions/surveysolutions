@@ -34,7 +34,7 @@
                 <DataTemplate>
                     <dxlc:Tile Background="#4f4f4f" Width="270" Height="90" Content="{Binding}" 
                                Command="{Binding Path=DataContext.Parent.ShowCompletedItemCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"                                                             
-                               CommandParameter="{Binding Id}"
+                               CommandParameter="{Binding CompleteQuestionnaireId}"
                                Padding="0">
                         <dxlc:Tile.ContentTemplate>
                             <DataTemplate>
@@ -46,7 +46,7 @@
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
                                             <StackPanel Orientation="Horizontal" Helpers:ZoomHelper.ChangeOrientationZoomFactor="105">
-                                                <TextBlock Text="{Binding Id}" FontSize="14" Foreground="#FFFFFFFF" />               
+                                                <TextBlock Text="{Binding CompleteQuestionnaireId}" FontSize="14" Foreground="#FFFFFFFF" />               
                                             </StackPanel>
                                             <TextBlock Text="{Binding CreationDate}" FontSize="14" Foreground="#FFFFFFFF" />
                                             <TextBlock Text="{Binding QuestionnaireTitle}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap"/>
