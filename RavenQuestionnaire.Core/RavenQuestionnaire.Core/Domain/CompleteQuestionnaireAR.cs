@@ -125,7 +125,7 @@ namespace RavenQuestionnaire.Core.Domain
                 ApplyEvent(new FeaturedQuestionUpdated
                                {
                                    CompletedQuestionnaireId = this._doc.PublicKey,
-                                   Answer = completeAnswer ?? completeAnswers,
+                                   Answer = question.GetAnswerString(),
                                    QuestionPublicKey = questionPublicKey,
                                    QuestionText = question.QuestionText
                                });
