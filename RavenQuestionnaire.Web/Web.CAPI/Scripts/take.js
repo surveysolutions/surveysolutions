@@ -92,9 +92,10 @@ function UpdateQuestion(question) {
     questionElement.removeClass("ui-disabled");
     if (!question.Enabled) {
         questionElement.addClass("ui-disabled");
-        questionElement.children('fieldset').children('.ui-controlgroup-controls').hide();
+        if (questionElement.children('fieldset').children('.ui-controlgroup-controls').css("display")!="none") questionElement.children('fieldset').children('.ui-controlgroup-controls').hide();
     }
-    else questionElement.children('fieldset').children('.ui-controlgroup-controls').show();
+    else
+        if (questionElement.children('fieldset').children('.ui-controlgroup-controls').css("display") == "none") questionElement.children('fieldset').children('.ui-controlgroup-controls').show();
 
 
     questionElement.removeClass("ui-body");
@@ -492,7 +493,13 @@ $(document).bind('pagebeforeshow', function () {
 });
 $(document).bind('pagechange', function () {
     var groupId = location.href.substr(location.href.indexOf("group") + 6, 36);
-
+    $("div.ui-block-a").click(function () {
+        if (jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:visible").length > 0)
+            jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:visible").hide();
+        else
+            if (jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:hidden").length > 0)
+                jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:hidden").show();
+    });
     if ($('#sidebar #ref-link-' + groupId).length > 0) {
         $('#sidebar .ui-li').each(function () {
             $(this).removeClass('ui-btn-active');
