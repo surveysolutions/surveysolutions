@@ -32,10 +32,13 @@ namespace Questionnaire.Core.Web.WCF
              //   T client = GetChanel<T>();
                 try
                 {
-                    Uri uri = endpointDiscoveryMetadata.Address.Uri;
-                    var hostUri =new Uri( uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port);
-             
-                    result.Add(new SyncSpot() { SpotName = client.Process(), SpotUri = hostUri });
+                 /*   Uri uri = endpointDiscoveryMetadata.Address.Uri;
+                    var hostUri =new Uri( uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port);*/
+                    var url = client.Process();
+                    if(string.IsNullOrEmpty(url))
+                        continue;
+                    var hostUri = new Uri(url);
+                    result.Add(new SyncSpot() { SpotName = hostUri.Host, SpotUri = hostUri });
                     //  handler(client);
                 }
                 finally
