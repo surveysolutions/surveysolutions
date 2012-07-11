@@ -25,16 +25,31 @@
             <RowDefinition Height="*" />            
         </Grid.RowDefinitions>
 
-
-        <TextBlock
-            Text="{Binding Data.Group.GroupText}"
-            FontSize="16"
-            Margin="10"
-            Foreground="#FFFFFFFF"
-            TextWrapping="Wrap"
-             />
-
-        <dxlc:TileLayoutControl Padding="5" Orientation="Horizontal" ItemsSource="{Binding Data.Group.Groups}" AllowItemMoving="False" Grid.Row="1">
+        <TextBlock Text="{Binding Data.Group.GroupText}" FontSize="16" Margin="10" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+        <dxlc:TileLayoutControl Grid.Row="2" Orientation="Horizontal" ItemsSource="{Binding Data.Group.Children}" AllowItemMoving="False" Padding="5" Margin="5">
+            <dxlc:TileLayoutControl.ItemTemplate>
+                <DataTemplate>
+                    <DataTemplate.Resources>
+                        <Extensions:FromBoolToColorConverter x:Key="FromBoolToColorConverter" />
+                    </DataTemplate.Resources>
+                    <dxlc:Tile Background="#FF00ABBB" Width="240" Height="80" Content="{Binding}"
+                               Command="{Binding Path=DataContext.Parent.Parent.ShowModalQuestionCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"
+                               CommandParameter="{Binding}" Opacity ="{Binding Enabled, Converter={StaticResource FromBoolToColorConverter}}" Padding="0">
+                        <dxlc:Tile.ContentTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid>
+                                        <TextBlock Text="{Binding Title}" FontSize="16" Foreground="#FFFFFFFF" TextWrapping="Wrap" />
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </dxlc:Tile.ContentTemplate>
+                    </dxlc:Tile>
+                </DataTemplate>
+            </dxlc:TileLayoutControl.ItemTemplate>
+        </dxlc:TileLayoutControl>
+        
+        <!--<dxlc:TileLayoutControl Padding="5" Orientation="Horizontal" ItemsSource="{Binding Data.Group.Groups}" AllowItemMoving="False" Grid.Row="1">
             <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
                     <dxlc:Tile Background="#FF54AF0E" Width="240" Height="70" Content="{Binding}"
@@ -89,6 +104,6 @@
                     </dxlc:Tile>
                 </DataTemplate>
             </dxlc:TileLayoutControl.ItemTemplate>
-        </dxlc:TileLayoutControl>
+        </dxlc:TileLayoutControl>-->
     </Grid>
 </View:ModuleView>

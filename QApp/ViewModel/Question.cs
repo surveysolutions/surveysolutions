@@ -10,6 +10,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 
 namespace QApp.ViewModel
 {
@@ -50,25 +51,16 @@ namespace QApp.ViewModel
              SetSelectedAnswer(currentQuestion);
              //bad approach!!!
              //get from current data
-            var viewRepository = new ViewRepository(Initializer.Kernel);
-            _Questionnaire = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
-                    new CompleteQuestionnaireViewInputModel(currentQuestion.QuestionnaireId) { CurrentGroupPublicKey = currentQuestion.GroupPublicKey });
-            var viewRepository = new ViewRepository(Initializer.Kernel);
-            var test = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
-                    new CompleteQuestionnaireViewInputModel(currentQuestion.QuestionnaireId) { CurrentGroupPublicKey = currentQuestion.GroupPublicKey });
-            for (int i = 0; i < test.CurrentGroup.Groups[0].Questions.Count(); i++)
-                if (test.CurrentGroup.Groups[0].Questions[i].PublicKey == currentQuestion.PublicKey)
-                    NextQuestion = test.CurrentGroup.Groups[0].Questions.Count()>i+1 ? test.CurrentGroup.Groups[0].Questions[i+1] : null;
-
-            for (int i = 0; i < _Questionnaire.CurrentScreen.Questions.Count(); i++)
-            {
-                if (_Questionnaire.CurrentScreen.Questions[i].PublicKey == currentQuestion.PublicKey)
-                {
-                    NextQuestion = _Questionnaire.CurrentScreen.Questions.Count() > i + 1 ? _Questionnaire.CurrentScreen.Questions[i + 1] : null;
-                    PrevQuestion =  i - 1 >= 0  ? _Questionnaire.CurrentScreen.Questions[i - 1] : null;
-                    break; // minimize iterations
-                }
-            }
+             var viewRepository = new ViewRepository(Initializer.Kernel);
+             _Questionnaire = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+                     new CompleteQuestionnaireViewInputModel(currentQuestion.QuestionnaireId) { CurrentGroupPublicKey = currentQuestion.Parent.Value });
+             for (int i = 0; i < _Questionnaire.CurrentScreen.Children.Count(); i++)
+                 if (_Questionnaire.CurrentScreen.Children[i].PublicKey == currentQuestion.PublicKey)
+                 {
+                     NextQuestion = _Questionnaire.CurrentScreen.Children.Count() > i + 1 ? _Questionnaire.CurrentScreen.Children[i + 1] as CompleteQuestionView : null;
+                     PrevQuestion = i - 1 >= 0 ? _Questionnaire.CurrentScreen.Children[i - 1] as CompleteQuestionView : null;
+                     break; // minimize iterations
+                 }
          }
 
          private CompleteQuestionnaireMobileView _Questionnaire { get; set; }
@@ -80,6 +72,13 @@ namespace QApp.ViewModel
              get { return selectedAnswer; }
              set { SetValue<CompleteAnswerView>("SelectedAnswer", ref selectedAnswer, value); }
          }
+
+        private string _answer ;
+        public string Answer
+        {
+            get { return _answer; }
+            set { SetValue<string>("Answer", ref _answer, value); }
+        }
 
         private CompleteQuestionView nextQuestion;
         public CompleteQuestionView NextQuestion
@@ -127,10 +126,7 @@ namespace QApp.ViewModel
                             else
                                 completeAnswerView.Selected = completeAnswerView.PublicKey == answer.PublicKey;
                  SelectedAnswer = answer;
-                 var command = new UpdateAnswerInCompleteQuestionnaireCommand(QuestionData.Question.QuestionnaireId,
-                                                                              new CompleteAnswerView[] { answer },
-                                                                              null /*add propogation later*/,
-                                                                              new UserLight("0", "system"));
+                 var command = new UpdateAnswerInCompleteQuestionnaireCommand(QuestionData.Question.QuestionnaireId, QuestionData.Question, null, new UserLight("0", "system"));
                  var commandInvoker = Initializer.Kernel.Get<ICommandInvoker>();
                  commandInvoker.Execute(command);
              }
@@ -139,14 +135,12 @@ namespace QApp.ViewModel
                  var question = p as CompleteQuestionView;
                  if (question!=null)
                  {
-                     var command = new UpdateAnswerInCompleteQuestionnaireCommand(question.QuestionnaireId,
-                                                                                  question.Answers, null,
-                                                                                  new UserLight("0", "system"));
+                     var command = new UpdateAnswerInCompleteQuestionnaireCommand(question.QuestionnaireId, question, null, new UserLight("0","system"));
                      var commandInvoker = Initializer.Kernel.Get<ICommandInvoker>();
                      commandInvoker.Execute(command);
                  }
              }
-            UpdateCurrentDataQuestion();
+            //UpdateCurrentDataQuestion();
         }
 
         public ICommand SetCurrentAnswerCommand { get; private set; }
@@ -166,11 +160,15 @@ namespace QApp.ViewModel
             var viewRepository = new ViewRepository(Initializer.Kernel);
             var test =
                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
-                    new CompleteQuestionnaireViewInputModel(QuestionData.Question.QuestionnaireId) { CurrentGroupPublicKey = QuestionData.Question.GroupPublicKey });
+                    //new CompleteQuestionnaireViewInputModel(QuestionData.Question.QuestionnaireId) { CurrentGroupPublicKey = QuestionData.Question.GroupPublicKey });
+                    new CompleteQuestionnaireViewInputModel(QuestionData.Question.QuestionnaireId) { CurrentGroupPublicKey = QuestionData.Question.PublicKey });
             var item = new CompleteQuestionView();
- for (int i = 0; i < test.CurrentGroup.Groups[0].Questions.Count(); i++)
-                if (test.CurrentGroup.Groups[0].Questions[i].PublicKey == QuestionData.Question.PublicKey)
-                    item = test.CurrentGroup.Groups[0].Questions[i];
+            //for (int i = 0; i < test.CurrentGroup.Groups[0].Questions.Count(); i++)
+            //    if (test.CurrentGroup.Groups[0].Questions[i].PublicKey == QuestionData.Question.PublicKey)
+            //        item = test.CurrentGroup.Groups[0].Questions[i];
+            for (int i = 0; i < test.CurrentScreen.Children.Count(); i++)
+                if (test.CurrentScreen.Children[i].PublicKey == QuestionData.Question.PublicKey)
+                    item = test.CurrentScreen.Children[i] as CompleteQuestionView;
             SetSelectedAnswer(item);
         }
 
@@ -179,9 +177,14 @@ namespace QApp.ViewModel
             if (questionView != null)
             {
                 Data = new QuestionData(questionView);
-                foreach (var completeAnswerView in QuestionData.Question.Answers)
-                    if (completeAnswerView.Selected || QuestionData.Question.Answers.Count()==1)
+                if (QuestionData.Question.Answers.Count() > 0)
+                {
+                    foreach (var completeAnswerView in QuestionData.Question.Answers)
+                    if (completeAnswerView.PublicKey == questionView.PublicKey)
                         SelectedAnswer = completeAnswerView;
+                }
+                else
+                    Answer = QuestionData.Question.Answer == null ? string.Empty : QuestionData.Question.Answer.ToString();
             }
         }
 
