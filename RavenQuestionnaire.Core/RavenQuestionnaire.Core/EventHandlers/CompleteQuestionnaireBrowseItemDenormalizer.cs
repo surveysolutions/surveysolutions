@@ -94,31 +94,30 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<FeaturedQuestionUpdated> evnt)
         {
-            var items =
-                 this.documentItemStore.Query().Where(
-                     q => q.CompleteQuestionnaireId == evnt.Payload.CompletedQuestionnaireId.ToString());
-            foreach (CompleteQuestionnaireBrowseItem item in items)
+            var item =
+                this.documentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+            /* foreach (CompleteQuestionnaireBrowseItem item in items)
+             {*/
+            //    item.AnsweredQuestionCount++;
+
+            var featuredQuestions = new List<QuestionStatisticView>();
+            featuredQuestions.AddRange(item.FeaturedQuestions);
+            var currentFetured =
+                featuredQuestions.FirstOrDefault(q => q.PublicKey == evnt.Payload.QuestionPublicKey);
+            if (currentFetured == null)
             {
-                item.AnsweredQuestionCount++;
-
-                var featuredQuestions = new List<QuestionStatisticView>();
-                featuredQuestions.AddRange(item.FeaturedQuestions);
-                var currentFetured =
-                    featuredQuestions.FirstOrDefault(q => q.PublicKey == evnt.Payload.QuestionPublicKey);
-                if (currentFetured == null)
-                {
-                    currentFetured = new QuestionStatisticView(
-                        new TextCompleteQuestion(evnt.Payload.QuestionText) { PublicKey = evnt.Payload.QuestionPublicKey }, Guid.Empty,
-                        Guid.Empty);
-                    featuredQuestions.Add(currentFetured);
-                }
-                else
-                {
-                    currentFetured.AnswerValue = currentFetured.AnswerText = evnt.Payload.Answer.ToString();
-                }
-                item.FeaturedQuestions = featuredQuestions.ToArray();
-
+                currentFetured = new QuestionStatisticView(
+                    new TextCompleteQuestion(evnt.Payload.QuestionText) {PublicKey = evnt.Payload.QuestionPublicKey},
+                    Guid.Empty,
+                    Guid.Empty);
+                featuredQuestions.Add(currentFetured);
             }
+            
+            currentFetured.AnswerValue = currentFetured.AnswerText = evnt.Payload.Answer;
+
+            item.FeaturedQuestions = featuredQuestions.ToArray();
+
+            // }
         }
 
         #endregion
@@ -136,13 +135,11 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            var items =
-                 this.documentItemStore.Query().Where(
-                     q => q.CompleteQuestionnaireId == evnt.Payload.CompletedQuestionnaireId.ToString());
-            foreach (CompleteQuestionnaireBrowseItem item in items)
-            {
-                item.Status = evnt.Payload.Status;
-            }
+            var item =
+                this.documentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+
+            item.Status = evnt.Payload.Status;
+
         }
 
         #endregion
