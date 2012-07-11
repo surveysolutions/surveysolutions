@@ -158,9 +158,17 @@
 </div>
 <script type="text/javascript">
     $("div.ui-block-a").click(function () {
-        if ($("div.ui-block-a div.ui-disabled div.ui-controlgroup-controls:visible").length>0)
+        if (jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:visible").length > 0)
+            jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:visible").hide();
+        else
+            if (jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:hidden").length > 0)
+                jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:hidden").show();
+        //alert(jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:hidden"));
+        //alert(jQuery(this).children("div.ui-disabled div.ui-controlgroup-controls").length);
+        /*if ($("div.ui-block-a div.ui-disabled div.ui-controlgroup-controls:visible").length > 0)
             $("div.ui-block-a div.ui-disabled div.ui-controlgroup-controls:visible").hide();
         else
-            $("div.ui-block-a div.ui-disabled div.ui-controlgroup-controls:hidden").show();
+            if ($("div.ui-block-a div.ui-disabled div.ui-controlgroup-controls:hidden").length > 0)
+                $("div.ui-block-a div.ui-disabled div.ui-controlgroup-controls:hidden").show();*/
     });
 </script>
