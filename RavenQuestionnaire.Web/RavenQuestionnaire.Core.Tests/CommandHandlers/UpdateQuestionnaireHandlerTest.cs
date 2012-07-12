@@ -5,6 +5,7 @@ using System.Text;
 using Moq;
 using NUnit.Framework;
 using RavenQuestionnaire.Core.CommandHandlers;
+using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -25,7 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
             UpdateQuestionnaireHandler handler = new UpdateQuestionnaireHandler(questionnaireRepositoryMock.Object);
-            handler.Handle(new Commands.UpdateQuestionnaireCommand(entity.QuestionnaireId, "title", null));
+            handler.Handle(new UpdateQuestionnaireCommand(entity.QuestionnaireId, "title", null));
 
             Assert.True(
                 innerDocument.Title == "title");

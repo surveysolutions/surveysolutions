@@ -165,7 +165,6 @@
     <Compile Include="CommandHandlers\File\UploadFileCommandHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\UpdateCommentsQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\ValidateGroupCommandHandler.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\MoveQuestionnaireItemHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Question\AddNewQuestionHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UpdateConditionsHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UpdateImageCommandHandler.cs" />
@@ -182,6 +181,7 @@
     <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\UpdateCommentsInCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\PreLoadQuestionnaireCommand.cs" />
     <Compile Include="Commands\Synchronization\ChangeEventStatusCommand.cs" />
     <Compile Include="Commands\Synchronization\CreateNewSynchronizationProcessCommand.cs" />
     <Compile Include="Commands\Synchronization\EndProcessComand.cs" />
@@ -195,7 +195,6 @@
     <Compile Include="CommandHandlers\Status\CreateStatusFlowHandler.cs" />
     <Compile Include="CommandHandlers\User\CreateNewUserHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Group\DeleteGroupHandler.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\Question\DeleteQuestionHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\DeleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\User\DeleteUserHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Group\PropagateGroupHandler.cs" />
@@ -205,7 +204,6 @@
     <Compile Include="CommandHandlers\Questionnaire\Question\UpdateQuestionHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CommandHandlers\Questionnaire\UpdateQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\Status\UpdateStatusRestrictionHandler.cs" />
     <Compile Include="CommandHandlers\User\UpdateUserHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UploadImageCommandHandler.cs" />
@@ -350,6 +348,8 @@
     <Compile Include="Events\IEventSync.cs" />
     <Compile Include="Events\Location\LocationDeleted.cs" />
     <Compile Include="Events\Location\NewLocationCreated.cs" />
+    <Compile Include="Events\Questionnaire\QuestionDeleted.cs" />
+    <Compile Include="Events\Questionnaire\QuestionnaireLoaded.cs" />
     <Compile Include="Events\Questionnaire\Completed\AnswerSet.cs" />
     <Compile Include="Events\Questionnaire\Completed\CommentSeted.cs" />
     <Compile Include="Events\Questionnaire\Completed\CompletedQuestionnaireLoaded.cs" />

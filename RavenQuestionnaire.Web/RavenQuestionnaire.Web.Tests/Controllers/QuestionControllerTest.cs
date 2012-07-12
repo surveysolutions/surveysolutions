@@ -2,6 +2,8 @@
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 using RavenQuestionnaire.Core.Documents;
@@ -18,59 +20,55 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     [TestFixture]
     public class QuestionControllerTest
     {
-        public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
+        public Mock<ICommandService> CommandServiceMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public QuestionController Controller { get; set; }
 
         [SetUp]
         public void CreateObjects()
         {
-            CommandInvokerMock = new Mock<ICommandInvoker>();
+            CommandServiceMock = new Mock<ICommandService>();
             ViewRepositoryMock = new Mock<IViewRepository>();
-            Controller = new QuestionController(CommandInvokerMock.Object, ViewRepositoryMock.Object);
+            NcqrsEnvironment.SetDefault<ICommandService>(CommandServiceMock.Object);
+            Controller = new QuestionController(ViewRepositoryMock.Object);
         }
         [Test]
         public void WhenNewQuestioneIsSubmittedWIthValidModel_CommandIsSent()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
-            Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
-            var questionView = new QuestionView(innerDocument, question);
-
+            innerDocument.Id = Guid.NewGuid().ToString();
+          
 
             ViewRepositoryMock.Setup(
                 x =>
                 x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                     It.Is<QuestionnaireViewInputModel>(
-                        v => v.QuestionnaireId.Equals("questionnairedocuments/qID"))))
+                        v => v.QuestionnaireId.Equals("questionnairedocuments/" + innerDocument.Id))))
                 .Returns(new QuestionnaireView(innerDocument));
             Controller.Save(new QuestionView[]
                                 {new QuestionView() {Title = "test", QuestionnaireId = innerDocument.Id}}, new AnswerView[0]);
-            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<AddNewQuestionCommand>()), Times.Once());
+            CommandServiceMock.Verify(x => x.Execute(It.IsAny<AddQuestionCommand>()), Times.Once());
         }
 
         [Test]
         public void WhenExistingQuestionIsSubmittedWIthValidModel_CommandIsSent()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            innerDocument.Id = Guid.NewGuid().ToString();
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
             var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
 
             var questionView = new QuestionView(innerDocument, question);
-            Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
             ViewRepositoryMock.Setup(
               x =>
               x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                   It.Is<QuestionnaireViewInputModel>(
-                      v => v.QuestionnaireId.Equals("questionnairedocuments/qID"))))
+                      v => v.QuestionnaireId.Equals("questionnairedocuments/" + innerDocument.Id))))
               .Returns(new QuestionnaireView(innerDocument));
 
 
             Controller.Save(new QuestionView[] {questionView}, questionView.Answers);
-            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateQuestionCommand>()), Times.Once());
+            CommandServiceMock.Verify(x => x.Execute(It.IsAny<ChangeQuestionCommand>()), Times.Once());
         }
         [Test]
         public void When_DeleteQuestionIsExecuted()
@@ -84,7 +82,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
 
             Controller.Delete(question.PublicKey, entity.QuestionnaireId);
-            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<DeleteQuestionCommand>()), Times.Once());
+            CommandServiceMock.Verify(x => x.Execute(It.IsAny<DeleteQuestionCommand>()), Times.Once());
         }
 
         [Test]

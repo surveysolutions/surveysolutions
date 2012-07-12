@@ -32,16 +32,16 @@ namespace RavenQuestionnaire.Web.Controllers
 
         #region Properties
 
-        private ICommandInvoker commandInvoker;
+        private ICommandService commandService;
         private IViewRepository viewRepository;
 
         #endregion
 
         #region Constructor
 
-        public QuestionController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public QuestionController(IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
+            this.commandService = NcqrsEnvironment.Get<ICommandService>();
             this.viewRepository = viewRepository;
         }
 
@@ -53,7 +53,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public string DeleteCard(Guid publicKey, string questionnaireId, Guid imageKey)
         {
-            commandInvoker.Execute(new DeleteImageCommand(questionnaireId, publicKey, imageKey, GlobalInfo.GetCurrentUser()));
+      //      commandInvoker.Execute(new DeleteImageCommand(questionnaireId, publicKey, imageKey, GlobalInfo.GetCurrentUser()));
             return string.Empty;
         }
 
@@ -84,7 +84,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Move(MoveItemModel model)
         {
-            commandInvoker.Execute(new MoveQuestionnaireItemCommand(model.questionnaireId, model.publicKey, model.groupGuid, model.afterGuid, GlobalInfo.GetCurrentUser()));
+            commandService.Execute(new MoveQuestionnaireItemCommand(model.questionnaireId, model.publicKey, model.groupGuid, model.afterGuid));
             return RedirectToAction("Details", "Questionnaire", new { id = model.questionnaireId, qid = model.publicKey });
         }
 
@@ -92,9 +92,9 @@ namespace RavenQuestionnaire.Web.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult EditCard(ImageNewViewModel model)
         {
-            if (ModelState.IsValid)
+        /*    if (ModelState.IsValid)
                 commandInvoker.Execute(new UpdateImageCommand(model.QuestionnaireId, model.PublicKey, model.ImageKey,
-                                                              model.Title, model.Desc, GlobalInfo.GetCurrentUser()));
+                                                              model.Title, model.Desc, GlobalInfo.GetCurrentUser()));*/
             return View("_EditCard", model);
         }
 
@@ -111,11 +111,11 @@ namespace RavenQuestionnaire.Web.Controllers
                     var thumbData = ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
                     var origData = ResizeImage(image, 1024, 768, out origWidth, out origHeight);
 
-                    commandInvoker.Execute(new UploadImageCommand(model.PublicKey, model.QuestionnaireId,
+                /*    commandInvoker.Execute(new UploadImageCommand(model.PublicKey, model.QuestionnaireId,
                                                                   model.Title, model.Desc,
                                                                   thumbData, thumbWidth, thumbHeight,
                                                                   origData, origWidth, origHeight,
-                                                                  GlobalInfo.GetCurrentUser()));
+                                                                  GlobalInfo.GetCurrentUser()));*/
 
                     return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
                 }
@@ -181,21 +181,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     if (model.PublicKey == Guid.Empty)
                     {
                         Guid newItemKey = Guid.NewGuid();
-                        AddNewQuestionCommand createCommand = new AddNewQuestionCommand(model.PublicKey, model.Title,
-                                                                                        model.StataExportCaption,
-                                                                                        model.QuestionType,
-                                                                                        model.QuestionnaireId,
-                                                                                        model.Parent,
-                                                                                        newItemKey,
-                                                                                        model.ConditionExpression,
-                                                                                        model.ValidationExpression,
-                                                                                        model.Instructions,
-                                                                                        model.Featured,
-                                                                                        model.AnswerOrder,
-                                                                                        ansverItems,
-                                                                                        GlobalInfo.GetCurrentUser());
-                        commandInvoker.Execute(createCommand);
-
+                    
 
                         //new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
@@ -216,19 +202,6 @@ namespace RavenQuestionnaire.Web.Controllers
                     }
                     else
                     {
-
-                        commandInvoker.Execute(new UpdateQuestionCommand(model.QuestionnaireId,
-                                                                         model.PublicKey,
-                                                                         model.Title,
-                                                                         model.StataExportCaption,
-                                                                         model.QuestionType,
-                                                                         model.ConditionExpression,
-                                                                         model.ValidationExpression,
-                                                                         model.Featured,
-                                                                         model.Instructions,
-                                                                         ansverItems,
-                                                                         model.AnswerOrder,
-                                                                         GlobalInfo.GetCurrentUser()));
                         //new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
                         commandService.Execute(new ChangeQuestionCommand(Guid.Parse(model.QuestionnaireId),
@@ -254,17 +227,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 }
                 return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId, qid=model.PublicKey});
                 
-                //     var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
-                if (model.Parent.HasValue)
-                {
-                    var updatedGroup =
-                        viewRepository.Load<GroupViewInputModel, GroupView>(
-                            new GroupViewInputModel(model.Parent.Value, model.QuestionnaireId));
-
-                    return PartialView("_Index", updatedGroup.Questions);
-                }
-                var questionnaire = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(model.QuestionnaireId));
-                return PartialView("_Index", questionnaire.Questions);
+               
             }
             return View("_Create", model);
         }
@@ -273,7 +236,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Delete(Guid publicKey, string questionnaireId)
         {
-            commandInvoker.Execute(new DeleteQuestionCommand(publicKey, questionnaireId, GlobalInfo.GetCurrentUser()));
+            commandService.Execute(new DeleteQuestionCommand(publicKey, Guid.Parse(questionnaireId)));
             return RedirectToAction("Details", "Questionnaire", new { id = questionnaireId }); ;
         }
 

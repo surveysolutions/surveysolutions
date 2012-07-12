@@ -183,7 +183,6 @@
     <Compile Include="CommandHandlers\CreateNewQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\CreateNewUserHandlerTest.cs" />
     <Compile Include="CommandHandlers\DeleteGroupHandlerTest.cs" />
-    <Compile Include="CommandHandlers\DeleteQuestionHandlerTest.cs" />
     <Compile Include="CommandHandlers\DeleteQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\DeleteUserHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateAnswerInCompleteQuestionnaireHandlerTest.cs" />
@@ -191,7 +190,6 @@
     <Compile Include="CommandHandlers\UpdateGroupHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateQuestionHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateQuestionnaireFlowHandlerTest.cs" />
-    <Compile Include="CommandHandlers\UpdateQuestionnaireHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateStatusRestrictionsHandlerTest.cs" />
     <Compile Include="CommandHandlers\UpdateUserHandlerTest.cs" />
     <Compile Include="Entities\CollectionEntityTest.cs" />
