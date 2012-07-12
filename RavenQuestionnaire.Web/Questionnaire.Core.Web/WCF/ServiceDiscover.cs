@@ -32,24 +32,30 @@ namespace Questionnaire.Core.Web.WCF
              //   T client = GetChanel<T>();
                 try
                 {
-                 /*   Uri uri = endpointDiscoveryMetadata.Address.Uri;
-                    var hostUri =new Uri( uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port);*/
+                    /*   Uri uri = endpointDiscoveryMetadata.Address.Uri;
+                       var hostUri =new Uri( uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port);*/
                     var url = client.Process();
-                    if(string.IsNullOrEmpty(url))
+                    if (string.IsNullOrEmpty(url))
                         continue;
                     var hostUri = new Uri(url);
                     result.Add(new SyncSpot() { SpotName = hostUri.Host, SpotUri = hostUri });
                     //  handler(client);
                 }
+                catch (Exception e)
+                {
+                    NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+                    logger.Fatal(e);
+                
+                }
                 finally
                 {
                     try
                     {
-                        ((IChannel)client).Close();
+                        ((IChannel) client).Close();
                     }
                     catch
                     {
-                        ((IChannel)client).Abort();
+                        ((IChannel) client).Abort();
                     }
                 }
             }
