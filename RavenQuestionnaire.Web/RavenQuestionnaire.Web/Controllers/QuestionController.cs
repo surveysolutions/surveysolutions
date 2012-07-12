@@ -53,7 +53,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public string DeleteCard(Guid publicKey, string questionnaireId, Guid imageKey)
         {
-      //      commandInvoker.Execute(new DeleteImageCommand(questionnaireId, publicKey, imageKey, GlobalInfo.GetCurrentUser()));
+            commandService.Execute(new DeleteImageCommand(questionnaireId, publicKey, imageKey));
             return string.Empty;
         }
 
@@ -92,9 +92,9 @@ namespace RavenQuestionnaire.Web.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult EditCard(ImageNewViewModel model)
         {
-        /*    if (ModelState.IsValid)
-                commandInvoker.Execute(new UpdateImageCommand(model.QuestionnaireId, model.PublicKey, model.ImageKey,
-                                                              model.Title, model.Desc, GlobalInfo.GetCurrentUser()));*/
+            if (ModelState.IsValid)
+                commandService.Execute(new UpdateImageCommand(model.QuestionnaireId, model.PublicKey, model.ImageKey,
+                                                              model.Title, model.Desc));
             return View("_EditCard", model);
         }
 

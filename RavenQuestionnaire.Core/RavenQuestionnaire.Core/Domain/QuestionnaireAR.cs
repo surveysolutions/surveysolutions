@@ -239,6 +239,60 @@ namespace RavenQuestionnaire.Core.Domain
                 }
             }
         }
+        public void UpdateImage(Guid questionKey, Guid imageKey, string title, string description)
+        {
+            ApplyEvent(new ImageUploaded(){ Description = description,ImageKey = imageKey,QuestionKey = questionKey,Title = title});
+        }
+        protected void OnImageUploaded(ImageUploaded e)
+        {
+            var question = this._innerDocument.Find<AbstractQuestion>(e.QuestionKey);
+
+            question.UpdateCard(e.ImageKey, e.Title, e.Description);
+        }
+        public void DeleteImage(Guid questionKey, Guid imageKey)
+        {
+            ApplyEvent(new ImageDeleted() {ImageKey = imageKey, QuestionKey = questionKey});
+        }
+        protected void OnImageDeleted(ImageDeleted e)
+        {
+            var question = this._innerDocument.Find<AbstractQuestion>(e.QuestionKey);
+
+            question.RemoveCard(e.ImageKey);
+        }
+
+        public void DeleteGroup(Guid groupPublicKey)
+        {
+            ApplyEvent(new GroupDeleted(){ GroupPublicKey = groupPublicKey});
+        }
+        protected void OnGroupDeleted(GroupDeleted e)
+        {
+            this._innerDocument.Remove(e.GroupPublicKey);
+        }
+        public void UpdateGroup(string groupText, Propagate paropagateble, Guid groupPublicKey, List<Guid> triggers)
+        {
+            Group group = this._innerDocument.Find<Group>(groupPublicKey);
+            if (group == null)
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+            ApplyEvent(new GroupUpdated()
+                           {
+                               GroupPublicKey = groupPublicKey,
+                               GroupText = groupText,
+                               Paropagateble = paropagateble,
+                               Triggers = triggers
+                           });
+        }
+        protected void OnGroupUpdated(GroupUpdated e)
+        {
+            Group group = this._innerDocument.Find<Group>(e.GroupPublicKey);
+            if (group != null)
+            {
+                group.Propagated = e.Paropagateble;
+                if(e.Triggers!=null)
+                    group.Triggers = e.Triggers;
+                group.Update(e.GroupText);
+                return;
+            }
+        }
 
         #region Implementation of ISnapshotable<QuestionnaireDocument>
 
