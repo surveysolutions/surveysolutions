@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Repositories;
 
 namespace RavenQuestionnaire.Core.CommandHandlers
