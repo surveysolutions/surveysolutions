@@ -18,7 +18,9 @@ namespace RavenQuestionnaire.Core.Services
         }
         public void StoreFile(string filename, Stream bytes)
         {
-            documentStore.DatabaseCommands.PutAttachment(filename, null, bytes, new RavenJObject{});
+            Attachment a = documentStore.DatabaseCommands.GetAttachment(filename);
+            if (a == null)
+                documentStore.DatabaseCommands.PutAttachment(filename, null, bytes, new RavenJObject {});
         }
 
         public byte[] RetrieveFile(string filename)

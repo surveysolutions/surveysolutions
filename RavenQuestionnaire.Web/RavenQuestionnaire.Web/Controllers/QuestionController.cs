@@ -53,7 +53,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public string DeleteCard(Guid publicKey, string questionnaireId, Guid imageKey)
         {
-            commandService.Execute(new DeleteImageCommand(questionnaireId, publicKey, imageKey));
+            commandService.Execute(new DeleteImageCommand(Guid.Parse(questionnaireId), publicKey, imageKey));
             return string.Empty;
         }
 
@@ -111,11 +111,10 @@ namespace RavenQuestionnaire.Web.Controllers
                     var thumbData = ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
                     var origData = ResizeImage(image, 1024, 768, out origWidth, out origHeight);
 
-                /*    commandInvoker.Execute(new UploadImageCommand(model.PublicKey, model.QuestionnaireId,
+                    commandService.Execute(new UploadImageCommand(model.PublicKey, Guid.Parse(model.QuestionnaireId),
                                                                   model.Title, model.Desc,
                                                                   thumbData, thumbWidth, thumbHeight,
-                                                                  origData, origWidth, origHeight,
-                                                                  GlobalInfo.GetCurrentUser()));*/
+                                                                  origData, origWidth, origHeight));
 
                     return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
                 }
