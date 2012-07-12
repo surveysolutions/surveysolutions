@@ -188,6 +188,7 @@
     <Compile Include="Domain\SyncProcessAR.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\CQGroupItemDenormalizer.cs" />
+    <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
     <Compile Include="EventSubscribers\GenerateQuestionnaireStatisticEventHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateNewStatusHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateStatusFlowHandler.cs" />
@@ -202,7 +203,6 @@
     </Compile>
     <Compile Include="CommandHandlers\Status\UpdateStatusRestrictionHandler.cs" />
     <Compile Include="CommandHandlers\User\UpdateUserHandler.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\UploadImageCommandHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
     <Compile Include="Commands\Collection\Copy of DeleteCollectionItemCommand.cs" />
     <Compile Include="Commands\Collection\CreateCollectionCommand.cs" />
@@ -347,6 +347,7 @@
     <Compile Include="Events\Questionnaire\GroupDeleted.cs" />
     <Compile Include="Events\Questionnaire\GroupUpdated.cs" />
     <Compile Include="Events\Questionnaire\ImageDeleted.cs" />
+    <Compile Include="Events\Questionnaire\ImageUpdated.cs" />
     <Compile Include="Events\Questionnaire\ImageUploaded.cs" />
     <Compile Include="Events\Questionnaire\QuestionDeleted.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireLoaded.cs" />

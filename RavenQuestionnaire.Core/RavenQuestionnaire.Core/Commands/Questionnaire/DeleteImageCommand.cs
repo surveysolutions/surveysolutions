@@ -10,7 +10,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "DeleteImage")]
     public class DeleteImageCommand : CommandBase
     {
-        public DeleteImageCommand(string questionnaireId, Guid questionKey, Guid imageKey)
+        public DeleteImageCommand(Guid questionnaireId, Guid questionKey, Guid imageKey)
         {
             QuestionKey = questionKey;
             ImageKey = imageKey;
@@ -21,7 +21,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire
 
         public Guid ImageKey { get; set; }
         [AggregateRootId]
-        public string QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; set; }
        
     }
 }
