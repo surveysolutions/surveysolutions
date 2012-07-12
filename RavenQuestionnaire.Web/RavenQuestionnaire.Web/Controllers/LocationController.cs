@@ -18,11 +18,9 @@ namespace RavenQuestionnaire.Web.Controllers
     [QuestionnaireAuthorize(UserRoles.Administrator)]
     public class LocationController : Controller
     {
-        private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
-        public LocationController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public LocationController(IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
         }
 
@@ -54,8 +52,6 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (string.IsNullOrEmpty(model.Id))
                 {
-                    commandInvoker.Execute(new CreateNewLocationCommand(model.Location, GlobalInfo.GetCurrentUser()));
-
                     var commandService = NcqrsEnvironment.Get<ICommandService>();
                     commandService.Execute(new CreateQuestionnaireCommand(Guid.NewGuid(), model.Location));
                 }

@@ -16,13 +16,11 @@ namespace RavenQuestionnaire.Web.Controllers
     {
         private readonly IBagManager _bagManager;
         private readonly IGlobalInfoProvider _globalProvider;
-        private readonly ICommandInvoker commandInvoker;
         private readonly IViewRepository viewRepository;
 
-        public DashboardController(ICommandInvoker commandInvoker, IViewRepository viewRepository,
+        public DashboardController(IViewRepository viewRepository,
                                                IBagManager bagManager, IGlobalInfoProvider globalProvider)
         {
-            this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
             _bagManager = bagManager;
             _globalProvider = globalProvider;

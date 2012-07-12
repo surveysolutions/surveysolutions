@@ -23,7 +23,6 @@ namespace DataEntryWCFServerTests
                 eventGuid);
 
             GetLastSyncEventService target = new GetLastSyncEventService();
-            target.invoker = invokerMock.Object;
             target.viewRepository = repositoryMock.Object;
             var result = target.Process(Guid.NewGuid());
             Assert.IsNull(result);
@@ -39,7 +38,6 @@ namespace DataEntryWCFServerTests
                 eventGuid);
 
             GetLastSyncEventService target = new GetLastSyncEventService();
-            target.invoker = invokerMock.Object;
             target.viewRepository = repositoryMock.Object;
             var result = target.Process(Guid.NewGuid());
             Assert.AreEqual(result, eventGuid.PublicKey);

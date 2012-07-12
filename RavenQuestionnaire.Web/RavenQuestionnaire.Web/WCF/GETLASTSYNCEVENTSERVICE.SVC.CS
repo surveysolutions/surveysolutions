@@ -12,8 +12,6 @@ namespace RavenQuestionnaire.Web.WCF
     {
         //ninject wcf bug https://groups.google.com/forum/#!msg/ninject/Q8uGKIjBnyM/U3iM0EWp4_EJ
         [Inject]
-        public ICommandInvoker invoker { get; set; }
-        [Inject]
         public IViewRepository viewRepository { get; set; }
     
         /*public GetLastSyncEventService()

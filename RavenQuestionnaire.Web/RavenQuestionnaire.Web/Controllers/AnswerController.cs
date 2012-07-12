@@ -21,11 +21,9 @@ namespace RavenQuestionnaire.Web.Controllers
     public class AnswerController : Controller
     {
         private readonly IViewRepository viewRepository;
-        private ICommandInvoker commandInvoker;
 
-        public AnswerController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public AnswerController(IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
         }
 

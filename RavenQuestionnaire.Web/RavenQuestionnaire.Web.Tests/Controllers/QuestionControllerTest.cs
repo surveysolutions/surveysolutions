@@ -74,12 +74,12 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void When_DeleteQuestionIsExecuted()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.Id = "qID";
+            innerDocument.Id = Guid.NewGuid().ToString();
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
             var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
 
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/qID")).Returns(entity);
+            questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/" + innerDocument.Id)).Returns(entity);
 
             Controller.Delete(question.PublicKey, entity.QuestionnaireId);
             CommandServiceMock.Verify(x => x.Execute(It.IsAny<DeleteQuestionCommand>()), Times.Once());
