@@ -109,6 +109,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 currentFetured = new QuestionStatisticView(
                     new TextCompleteQuestion(evnt.Payload.QuestionText) {PublicKey = evnt.Payload.QuestionPublicKey},
                     Guid.Empty,
+                    null,
                     Guid.Empty);
                 featuredQuestions.Add(currentFetured);
             }
