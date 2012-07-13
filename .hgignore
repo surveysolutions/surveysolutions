@@ -135,3 +135,4 @@ ExpressionEvaluator/Evaluant.Calculator.Tests/NCalc.Tests.csproj.user
 Synchronization/DataEntryClientTests/DataEntryClientTests.csproj.user
 RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/RavenQuestionnaire.Web.Tests.csproj.user
 RavenQuestionnaire.Web/Questionnaire.Core.Web/Questionnaire.Core.Web.csproj.user
+Externals/Framework/src/Ncqrs.Spec/Ncqrs.Spec.csproj.user
