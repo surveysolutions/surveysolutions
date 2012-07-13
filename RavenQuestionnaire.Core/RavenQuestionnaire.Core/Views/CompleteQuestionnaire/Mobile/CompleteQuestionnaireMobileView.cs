@@ -39,7 +39,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             var currentGroup = new CompleteGroupMobileView(doc, group, navigation);
             InitGroups(doc, screenPublicKey);
             Totals = CalcProgress(doc);
-            CurrentScreen = currentGroup;
+            if (currentGroup.Propagated != Propagate.None)
+            {
+                CurrentScreen = currentGroup.PropagateTemplate;
+            }
+            else
+            {
+                CurrentScreen = currentGroup;
+            }
         }
 
         public string Id { get; set; }
