@@ -65,9 +65,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             if (currentGroup.Propagated != Propagate.None)
             {
                 PropagateTemplate = new PropagatedGroupMobileView(doc, currentGroup);
-
             }
-
             else foreach (var composite in currentGroup.Children)
             {
                 if ((composite as ICompleteQuestion) != null)

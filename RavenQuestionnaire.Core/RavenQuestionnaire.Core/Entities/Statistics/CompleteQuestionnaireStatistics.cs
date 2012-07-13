@@ -67,12 +67,8 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
             {
                 ICompleteGroup group = nodes.Dequeue();
                 var key = keys.Dequeue();
-                var groupKey = group.PublicKey;
-                if (group.PropogationPublicKey.HasValue)
-                {
-                    groupKey = group.PropogationPublicKey.Value;
-                }
-                ProccessQuestions(@group.Children.OfType<ICompleteQuestion>(), groupKey, key);
+
+                ProccessQuestions(@group.Children.OfType<ICompleteQuestion>(), group.PublicKey, group.PropogationPublicKey, key);
                 foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
                 {
                     nodes.Enqueue(subGroup);
@@ -84,12 +80,7 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
             {
                 ICompleteGroup group = nodes.Dequeue();
                 var key = keys.Dequeue();
-                var groupKey = group.PublicKey;
-                if (group.PropogationPublicKey.HasValue)
-                {
-                    groupKey = group.PropogationPublicKey.Value;
-                }
-                ProccessQuestions(group.Children.OfType<ICompleteQuestion>(), groupKey, key);
+                ProccessQuestions(group.Children.OfType<ICompleteQuestion>(), group.PublicKey, group.PropogationPublicKey, key);
                 foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
                 {
                     nodes.Enqueue(subGroup);
@@ -99,11 +90,11 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
             }
             CalculateApproximateAnswerTime(this.innerDocument.AnsweredQuestions);
         }
-        protected void ProccessQuestions(IEnumerable<ICompleteQuestion> questions, Guid gropPublicKey, Guid screenPublicKey)
+        protected void ProccessQuestions(IEnumerable<ICompleteQuestion> questions, Guid gropPublicKey, Guid? gropPropagationPublicKey, Guid screenPublicKey)
         {
             foreach (ICompleteQuestion completeQuestion in questions)
             {
-                var statItem = new QuestionStatisticDocument(completeQuestion, gropPublicKey, screenPublicKey);
+                var statItem = new QuestionStatisticDocument(completeQuestion, gropPublicKey, gropPropagationPublicKey, screenPublicKey);
                 if(completeQuestion.Featured)
                     this.innerDocument.FeturedQuestions.Add(statItem);
                 if (!completeQuestion.Valid)

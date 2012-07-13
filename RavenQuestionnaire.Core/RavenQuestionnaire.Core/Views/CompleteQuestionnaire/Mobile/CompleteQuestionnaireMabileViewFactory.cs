@@ -34,9 +34,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
                 var rout = new List<NodeWithLevel>();
 
-                var groupToLoad = input.CurrentScreenPublicKey.HasValue ? input.CurrentScreenPublicKey.Value : input.CurrentGroupPublicKey;
-
-                if (groupToLoad.HasValue)
+                if (input.CurrentGroupPublicKey.HasValue)
                 {
                     // group = doc.FindGroupByKey(input.CurrentGroupPublicKey.Value, input.PropagationKey);
                     Stack<NodeWithLevel> treeStack = new Stack<NodeWithLevel>();
@@ -45,7 +43,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                     while (treeStack.Count > 0)
                     {
                         var node = treeStack.Pop();
-                        group = ProceedGroup(node.Group, groupToLoad.Value, input.PropagationKey);
+                        group = ProceedGroup(node.Group, input.CurrentGroupPublicKey.Value, input.PropagationKey);
                         UpdateNavigation(rout, node);
 
                         if (group != null)
@@ -60,19 +58,15 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                             treeStack.Push(new NodeWithLevel(subGroups[i], node.Level + 1));
                         }
                     }
-
                 }
                 if (group == null)
                 {
-
                     group = doc.Children.OfType<ICompleteGroup>().First();
                     UpdateNavigation(rout,new NodeWithLevel(doc,0));
                     UpdateNavigation(rout, new NodeWithLevel(group, 1));
                 }
 
-
-
-                return new CompleteQuestionnaireMobileView(doc, input.CurrentGroupPublicKey?? group.PublicKey, group, CompileNavigation(rout, group));
+                return new CompleteQuestionnaireMobileView(doc, input.CurrentScreenPublicKey ?? group.PublicKey, group, CompileNavigation(rout, group));
             }
             return null;
         }
