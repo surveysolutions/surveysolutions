@@ -43,12 +43,12 @@ namespace Web.CAPI.Controllers
             _globalProvider = globalProvider;
         }
 
-        public ViewResult Index(string id, Guid? group, Guid? question, Guid? screen)
+        public ViewResult Index(string id, Guid? group, Guid? question, Guid? screen, Guid? propagationKey)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
-                    new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group, CurrentScreenPublicKey = screen });
+                    new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group, CurrentScreenPublicKey = screen ,PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             return View(model);
         }

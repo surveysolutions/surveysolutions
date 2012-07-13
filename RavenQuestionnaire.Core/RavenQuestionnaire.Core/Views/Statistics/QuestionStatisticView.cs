@@ -1,35 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Documents.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
 namespace RavenQuestionnaire.Core.Views.Statistics
 {
     public class QuestionStatisticView
     {
-        public QuestionStatisticView(ICompleteQuestion doc, Guid gropPublicKey, Guid screenPublicKey)
+        public QuestionStatisticView(ICompleteQuestion doc, Guid gropPublicKey, Guid? gropPropagationPublicKey,
+                                     Guid screenPublicKey)
         {
-            this.PublicKey = doc.PublicKey;
-            this.QuestionText = doc.QuestionText;
-        //    this.AnswerValue = doc.GetAnswerString();
-         //   this.ApproximateTime = doc.ApproximateTime;
-            this.GroupPublicKey = gropPublicKey;
-            this.ScreenPublicKey = screenPublicKey;
+            PublicKey = doc.PublicKey;
+            QuestionText = doc.QuestionText;
+            //    this.AnswerValue = doc.GetAnswerString();
+            //   this.ApproximateTime = doc.ApproximateTime;
+            GroupPublicKey = gropPublicKey;
+            ScreenPublicKey = screenPublicKey;
+            GroupPropagationPublicKey = gropPropagationPublicKey;
+            if (gropPropagationPublicKey.HasValue)
+                IsQuestionFromPropGroup = true;
             if (doc.Answer != null)
             {
                 //     AnswerValue = answer.AnswerText?? answer.AnswerValue;
                 AnswerDate = doc.AnswerDate;
-                this.AnswerValue = AnswerText = doc.GetAnswerString();
+                AnswerValue = AnswerText = doc.GetAnswerString();
             }
         }
 
         public Guid PublicKey { get; set; }
         public Guid GroupPublicKey { get; set; }
+        public Guid? GroupPropagationPublicKey { get; set; }
         public Guid ScreenPublicKey { get; set; }
 
+        public bool IsQuestionFromPropGroup { get; set; }
         public DateTime? AnswerDate { get; set; }
         public TimeSpan? ApproximateTime { get; set; }
         public string QuestionText { get; set; }
