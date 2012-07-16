@@ -86,6 +86,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -96,6 +97,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="adept_part\Configuration.cs" />
+    <Compile Include="adept_part\FileSizeFormatProvider.cs" />
+    <Compile Include="adept_part\UFormat.cs" />
+    <Compile Include="choose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="choose.Designer.cs">
+      <DependentUpon>choose.cs</DependentUpon>
+    </Compile>
     <Compile Include="WebForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +162,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\C\Awesomium\Awesomium.vcxproj">
+      <Project>{844AF18A-53EA-4038-A240-F4BC3CCEFC95}</Project>
+      <Name>Awesomium</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(SolutionName)'=='Awesomium.NET'">

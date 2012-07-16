@@ -1,4 +1,6 @@
-﻿namespace WinFormsSample
+﻿using System.Windows.Forms;
+
+namespace WinFormsSample
 {
     partial class WebForm
     {
@@ -40,12 +42,20 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WebForm";
             this.Text = "CAPI";
+            this.Menu = new MainMenu();
+                MenuItem sinh = new MenuItem("Export");
+                sinh.Click += new System.EventHandler(this.sinh_click);
+            this.Menu.MenuItems.Add(sinh);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
+        private void sinh_click(object sender, System.EventArgs e)
+        {
+            // Create a new OpenFileDialog and display it.
+            choose.CreatePortable();
+        }
     }
 }
 
