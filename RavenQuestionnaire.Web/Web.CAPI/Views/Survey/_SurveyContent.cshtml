@@ -107,27 +107,27 @@ foreach (CompleteGroupMobileView screen in Model.Screens)
 @helper RenderNavigation(ScreenNavigation screen)
     {
         List<CompleteGroupHeaders> crumbs = screen.BreadCumbs.Skip(1).ToList();
-    <div data-role="header" data-theme="b" class="navigation">
+    <div data-role="footer" data-theme="b" class="ui-bar" >
         @for (int i = 0; i < crumbs.Count; i++)
         {
             CompleteGroupHeaders breadCumb = crumbs[i];
             if (i == 0)
             {
-            <a href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = breadCumb.PublicKey })" class="breadcrumb nav-link" data-inline="true" data-role="button"
+            <a href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = breadCumb.PublicKey })" class=" nav-link" data-inline="true" data-role="button"
                 data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
             }
             else
             {
-            <a href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = breadCumb.PublicKey })"  class="breadcrumb nav-link" data-inline="true" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
+            <a href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = breadCumb.PublicKey })"  class=" nav-link" data-inline="true" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
             }
         }
-        <a class="breadcrumb ui-disabled nav-link" aria-disabled="true" data-role="button"
+        <a class=" ui-disabled nav-link" aria-disabled="true" data-role="button"
             data-inline="true" data-corners="false" data-icon="arrow-r" data-iconpos="right">@screen.CurrentScreenTitle</a>
     </div>
 }
 @helper RenderFooter(ScreenNavigation screen)
     {
-    <div data-role="footer" data-theme="b">
+    <div data-role="header" data-theme="b">
         @if (screen.PrevScreen != null)
         {
            
@@ -141,7 +141,7 @@ foreach (CompleteGroupMobileView screen in Model.Screens)
             <a class="previous-screen ui-disabled nav-link" href="#" data-icon="arrow-l" data-theme="b"
                 iconpos="notext" data-corners="false">Prev Group</a>
         }
-        <h1><span></span>@screen.CurrentScreenTitle</h1>
+        <h4><span></span>@screen.CurrentScreenTitle</h4>
         @if (screen.NextScreen != null)
         {
            
