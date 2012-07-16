@@ -235,6 +235,7 @@
     <Content Include="Content\themes\jquerymobile\images\keyboard.jpg" />
     <Content Include="Content\themes\jquerymobile\images\keyboard.png" />
     <Content Include="Content\themes\jquerymobile\jqm-docs.css" />
+    <Content Include="Content\themes\jquerymobile\jquery.mobile.1.2.min.css" />
     <Content Include="Content\themes\jquerymobile\jquery.mobile.css" />
     <Content Include="Content\themes\jquerymobile\jquery.mobile.datebox.min.css" />
     <Content Include="Content\themes\jquerymobile\jquery.ui.datepicker.mobile.css" />
@@ -244,6 +245,7 @@
     <Content Include="Scripts\code.photoswipe.jquery-3.0.4.min.js" />
     <Content Include="Scripts\iscroll-wrapper.js" />
     <Content Include="Scripts\iscroll.js" />
+    <Content Include="Scripts\jqm-docs.1.2.js" />
     <Content Include="Scripts\jqm-docs.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
@@ -251,6 +253,7 @@
     <Content Include="Scripts\jquery-1.7.2.min.js" />
     <Content Include="Scripts\jquery.client.js" />
     <Content Include="Scripts\jquery.keyboard.js" />
+    <Content Include="Scripts\jquery.mobile.1.2.min.js" />
     <Content Include="Scripts\jquery.mobile.datebox.min.js" />
     <Content Include="Scripts\jquery.mobile.docs.js" />
     <Content Include="Scripts\jquery.mobile.js" />
@@ -279,7 +282,9 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -12,14 +12,12 @@ namespace RavenQuestionnaire.Web.Controllers
 {
     public class StatisticController : Controller
     {
-        private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
      //   private IBagManager _bagManager;
         private IGlobalInfoProvider _globalProvider;
 
-        public StatisticController(ICommandInvoker commandInvoker, IViewRepository viewRepository,IGlobalInfoProvider globalProvider)
+        public StatisticController(IViewRepository viewRepository,IGlobalInfoProvider globalProvider)
         {
-            this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
           //  this._bagManager = bagManager;
             this._globalProvider = globalProvider;

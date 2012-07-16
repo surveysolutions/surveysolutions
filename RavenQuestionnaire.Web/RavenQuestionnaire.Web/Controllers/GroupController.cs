@@ -26,12 +26,12 @@ namespace RavenQuestionnaire.Web.Controllers
 {
     public class GroupController : Controller
     {
-        private readonly ICommandInvoker commandInvoker;
+        private readonly ICommandService commandService;
         private readonly IViewRepository viewRepository;
 
-        public GroupController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public GroupController(IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
+            this.commandService = NcqrsEnvironment.Get<ICommandService>();
             this.viewRepository = viewRepository;
         }
 
@@ -51,24 +51,16 @@ namespace RavenQuestionnaire.Web.Controllers
                     if (model.PublicKey == Guid.Empty)
                     {
 
-                        Guid newItemKey = Guid.NewGuid();
-                        var createCommand = new CreateNewGroupCommand(model.Title, newItemKey, model.Propagated,
-                                                                      model.QuestionnaireId, model.Parent,
-                                                                      GlobalInfo.GetCurrentUser());
-                        commandInvoker.Execute(createCommand);
-
-                        //new fw
-                        var commandService = NcqrsEnvironment.Get<ICommandService>();
-
+                        var newItemKey = Guid.NewGuid();
 
                         commandService.Execute(new AddGroupCommand(Guid.Parse(model.QuestionnaireId), newItemKey,
                             model.Title, model.Propagated, model.Parent));
                     }
                     else
                     {
-                        commandInvoker.Execute(new UpdateGroupCommand(model.Title, model.Propagated,
-                                                                      model.QuestionnaireId,
-                                                                      model.PublicKey, GlobalInfo.GetCurrentUser()));
+                        commandService.Execute(new UpdateGroupCommand(model.Title, model.Propagated,
+                                                                      Guid.Parse(model.QuestionnaireId),
+                                                                      model.PublicKey));
                     }
                 }
                 catch (Exception e)
@@ -99,162 +91,10 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public string Delete(Guid publicKey, string questionnaireId)
         {
-            commandInvoker.Execute(new DeleteGroupCommand(publicKey, questionnaireId, GlobalInfo.GetCurrentUser()));
+            commandService.Execute(new DeleteGroupCommand(publicKey, Guid.Parse(questionnaireId)));
             return "";
         }
 
-        public ActionResult PropagateGroup(Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
-        {
-            try
-            {
-                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, Guid.NewGuid(), publicKey, GlobalInfo.GetCurrentUser()));
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("PropagationError", e.Message);
-            }
-            var model =
-                viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
-                    new CompleteGroupViewInputModel(null, parentGroupPublicKey, questionnaireId));
-            ViewBag.CurrentGroup = model;
-            return PartialView("~/Views/Group/_Screen.cshtml", model);
-            //   return RedirectToAction("Question", "CompleteQuestionnaire", new {id = questionnaireId});
-        }
-
-        public ActionResult DeletePropagatedGroup(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey,
-                                                  string questionnaireId)
-        {
-            commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
-                                                                    GlobalInfo.GetCurrentUser()));
-
-            var model =
-                viewRepository.Load<CompleteGroupViewInputModel, CompleteGroupView>(
-                    new CompleteGroupViewInputModel(null, parentGroupPublicKey, questionnaireId));
-            ViewBag.CurrentGroup = model;
-            return PartialView("~/Views/Group/_Screen.cshtml", model);
-        }
-
-        public ActionResult PropagateGroupV(Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
-        {
-            try
-            {
-                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, Guid.NewGuid(), publicKey, GlobalInfo.GetCurrentUser()));
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("PropagationError", e.Message);
-            }
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
-
-            return PartialView("~/Views/Group/_ScreenV.cshtml", model);
-        }
-
-        public ActionResult DeletePropagatedGroupV(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey,
-                                                  string questionnaireId)
-        {
-            commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
-                                                                    GlobalInfo.GetCurrentUser()));
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
-
-            return PartialView("~/Views/Group/_ScreenV.cshtml", model);
-        }
-
-        public ActionResult PropagateGroupC(Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
-        {
-            try
-            {
-                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, Guid.NewGuid(), publicKey, GlobalInfo.GetCurrentUser()));
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("PropagationError", e.Message);
-            }
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
-
-            return PartialView("~/Views/Group/_ScreenC.cshtml", model);
-        }
-
-        public ActionResult DeletePropagatedGroupC(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey,
-                                                  string questionnaireId)
-        {
-            commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
-                                                                    GlobalInfo.GetCurrentUser()));
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
-
-            return PartialView("~/Views/Group/_ScreenC.cshtml", model);
-        }
-
-        public ActionResult PropagateGroupI(Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
-        {
-            try
-            {
-                commandInvoker.Execute(new PropagateGroupCommand(questionnaireId, Guid.NewGuid(), publicKey, GlobalInfo.GetCurrentUser()));
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("PropagationError", e.Message);
-            }
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
-
-            return PartialView("~/Views/Group/_ScreenI.cshtml", model);
-        }
-
-        public ActionResult DeletePropagatedGroupI(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey,
-                                                  string questionnaireId)
-        {
-            commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
-                                                                    GlobalInfo.GetCurrentUser()));
-
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
-
-            return PartialView("~/Views/Group/_ScreenI.cshtml", model);
-        }
-
-        public JsonResult PropagateGroupHtml5(Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
-        {
-            try
-            {
-                var propagationKey = Guid.NewGuid();
-             /*   var command = new PropagateGroupCommand(questionnaireId, propagationKey, publicKey, GlobalInfo.GetCurrentUser());
-                commandInvoker.Execute(command);*/
-
-                //new handling
-                var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new AddPropagatableGroupCommand(Guid.Parse(questionnaireId), propagationKey, publicKey));
-
-
-                
-                var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
-                new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
-                return Json(new { propagationKey = propagationKey, parentGroupPublicKey = publicKey, group = model });
-
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("PropagationError", e.Message);
-                return Json(new { error = e.Message, parentGroupPublicKey = publicKey });
-            }
-        }
-
-        public JsonResult DeletePropagatedGroupHtml5(Guid propagationKey, Guid publicKey, Guid parentGroupPublicKey,
-                                                  string questionnaireId)
-        {
-         /*   commandInvoker.Execute(new DeletePropagatedGroupCommand(questionnaireId, publicKey, propagationKey,
-                                                                    GlobalInfo.GetCurrentUser()));*/
-            //new handling
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(new DeletePropagatableGroupCommand(Guid.Parse(questionnaireId), propagationKey, publicKey));
-
-            return Json(new {propagationKey = propagationKey});
-            /*     var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(new CompleteQuestionnaireViewInputModel(questionnaireId) { CurrentGroupPublicKey = parentGroupPublicKey });
-
-            return PartialView("~/Views/Group/_ScreenHtml5.cshtml", model);*/
-        }
 
     }
 }

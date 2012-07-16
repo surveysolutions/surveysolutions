@@ -36,19 +36,19 @@ namespace Web.CAPI.Controllers
        // private readonly ICommandInvoker commandInvoker;
         private readonly IViewRepository viewRepository;
 
-        public SurveyController(ICommandInvoker commandInvoker, IViewRepository viewRepository, IGlobalInfoProvider globalProvider)
+        public SurveyController(IViewRepository viewRepository, IGlobalInfoProvider globalProvider)
         {
          //   this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
             _globalProvider = globalProvider;
         }
 
-        public ViewResult Index(string id, Guid? group, Guid? question, Guid? screen)
+        public ViewResult Index(string id, Guid? group, Guid? question, Guid? screen, Guid? propagationKey)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
-                    new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group, CurrentScreenPublicKey = screen });
+                    new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group, CurrentScreenPublicKey = screen ,PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             return View(model);
         }

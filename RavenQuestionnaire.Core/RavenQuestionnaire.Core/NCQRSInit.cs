@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Ncqrs;
+using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using Ncqrs.Commanding.ServiceModel;
@@ -57,6 +58,16 @@ namespace RavenQuestionnaire.Web.App_Start
             return type.IsClass && !type.IsAbstract &&
                    type.GetInterfaces().Any(IsIEventHandlerInterface);
         }
+        private static bool ImplementsAtLeastOneICommand(Type type)
+        {
+            return type.IsClass && !type.IsAbstract &&
+                      type.GetInterfaces().Any(IsICommandInterface);
+        }
+        private static bool IsICommandInterface(Type type)
+        {
+            return type.IsInterface &&
+                   typeof (ICommand).IsAssignableFrom(type);
+        }
 
         private static bool IsIEventHandlerInterface(Type type)
         {
@@ -68,31 +79,10 @@ namespace RavenQuestionnaire.Web.App_Start
         {
             var mapper = new AttributeBasedCommandMapper();
             var service = new CommandService();
-
-            //add assembly scan to register executors 
-            service.RegisterExecutor(typeof(CreateQuestionnaireCommand), new UoWMappedCommandExecutor(mapper));
-            service.RegisterExecutor(typeof(CreateLocationCommand), new UoWMappedCommandExecutor(mapper));
-            service.RegisterExecutor(typeof(CreateCompleteQuestionnaireCommand), new UoWMappedCommandExecutor(mapper));
-
-            service.RegisterExecutor(typeof(AddGroupCommand), new UoWMappedCommandExecutor(mapper));
-            service.RegisterExecutor(typeof(AddQuestionCommand), new UoWMappedCommandExecutor(mapper));
-            service.RegisterExecutor(typeof(SetAnswerCommand), new UoWMappedCommandExecutor(mapper));
-
-            service.RegisterExecutor(typeof(AddPropagatableGroupCommand), new UoWMappedCommandExecutor(mapper));
-            service.RegisterExecutor(typeof(DeletePropagatableGroupCommand), new UoWMappedCommandExecutor(mapper));
-            service.RegisterExecutor(typeof(SetCommentCommand), new UoWMappedCommandExecutor(mapper));
-
-            service.RegisterExecutor(typeof(DeleteCompleteQuestionnaireCommand), new UoWMappedCommandExecutor(mapper));
-            //does it need UoW?
-            service.RegisterExecutor(typeof(PreLoadCompleteQuestionnaireCommand), new UoWMappedCommandExecutor(mapper));
-            
-            service.RegisterExecutor(typeof(ChangeStatusCommand), new UoWMappedCommandExecutor(mapper));
-
-            service.RegisterExecutor(typeof(PushEventsCommand), new UoWMappedCommandExecutor(mapper));
-            service.RegisterExecutor(typeof(CreateNewSynchronizationProcessCommand), new UoWMappedCommandExecutor(mapper));
-            service.RegisterExecutor(typeof(ChangeEventStatusCommand), new UoWMappedCommandExecutor(mapper));
-            service.RegisterExecutor(typeof(EndProcessComand), new UoWMappedCommandExecutor(mapper));
-
+            foreach (var type in typeof(NCQRSInit).Assembly.GetTypes().Where(ImplementsAtLeastOneICommand))
+            {
+                service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
+            }
             return service;
         }
 

@@ -1,26 +1,29 @@
-﻿using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿using System;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using RavenQuestionnaire.Core.Domain;
 using RavenQuestionnaire.Core.Utility;
 
-namespace RavenQuestionnaire.Core.Commands
+namespace RavenQuestionnaire.Core.Commands.Questionnaire
 {
-    public class UpdateQuestionnaireCommand : ICommand
+    [Serializable]
+    [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "UpdateQuestionnaire")]
+    public class UpdateQuestionnaireCommand : CommandBase
     {
+        [AggregateRootId]
         public string QuestionnaireId { get; set; }
 
         public string Title{get; set;}
-        public UserLight Executor { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="questionnaireId"></param>
         /// <param name="title"></param>
-        /// <param name="executor"></param>
-        public UpdateQuestionnaireCommand(string questionnaireId, string title, UserLight executor)
+        public UpdateQuestionnaireCommand(string questionnaireId, string title)
         {
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.Title = title;
-            this.Executor = executor;
         }
 
         

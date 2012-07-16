@@ -28,12 +28,10 @@ namespace RavenQuestionnaire.Web.Controllers
     [Authorize]
     public class QuestionnaireController : Controller
     {
-        private readonly ICommandInvoker commandInvoker;
         private readonly IViewRepository viewRepository;
 
-        public QuestionnaireController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public QuestionnaireController( IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
         }
 
@@ -100,34 +98,30 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
                 if (string.IsNullOrEmpty(model.Id))
                 {
                     //maybe better move loading defaults to the handler?
-                    var statusDefault =
-                        viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel("0"));
+                   
                     Guid key = Guid.NewGuid();
 
-                    commandInvoker.Execute(new CreateNewQuestionnaireCommand(model.Title, 
-                        statusDefault != null ? statusDefault.Id : null,
-                        key,
-                        GlobalInfo.GetCurrentUser()));
-
+                   
                     //new fw
-                    var commandService = NcqrsEnvironment.Get<ICommandService>();
+                    
                     commandService.Execute(new CreateQuestionnaireCommand(key, model.Title));
                 
                 }
                 else
                 {
-                    commandInvoker.Execute(new UpdateQuestionnaireCommand(model.Id, model.Title,
-                                                                          GlobalInfo.GetCurrentUser()));
+
+                    commandService.Execute(new UpdateQuestionnaireCommand(model.Id, model.Title));
                 }
                 return RedirectToAction("Index");
             }
             return View("Create", model);
         }
 
-
+        /*
         //
         // GET: /Questionnaire/Delete/5
         [QuestionnaireAuthorize(UserRoles.Administrator)]
@@ -135,7 +129,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             commandInvoker.Execute(new DeleteQuestionnaireCommand(id, GlobalInfo.GetCurrentUser()));
             return RedirectToAction("Index");
-        }
+        }*/
 
         #region export
 

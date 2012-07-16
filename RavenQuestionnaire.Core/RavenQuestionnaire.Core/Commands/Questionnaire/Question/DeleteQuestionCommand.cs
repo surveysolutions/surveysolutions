@@ -1,20 +1,25 @@
 ﻿using System;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using RavenQuestionnaire.Core.Domain;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
 {
-    public class DeleteQuestionCommand : ICommand
+    [Serializable]
+    [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "DeleteQuestion")]
+    public class DeleteQuestionCommand : CommandBase
     {
+       
         public Guid QuestionId { get; set; }
-        public string QuestionnaireId { get; set; }
-        public UserLight Executor { get; set; }
+        [AggregateRootId]
+        public Guid QuestionnaireId { get; set; }
 
-        public DeleteQuestionCommand(Guid questionId, string questionnaireId, UserLight executor)
+        public DeleteQuestionCommand(Guid questionId, Guid questionnaireId)
         {
             this.QuestionId = questionId;
-            this.Executor = executor;
-            this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            this.QuestionnaireId = questionnaireId;
         }
     }
 }

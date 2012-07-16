@@ -5,6 +5,8 @@ using System.Text;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
@@ -21,16 +23,17 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     [TestFixture]
     public class GroupControllerTest
     {
-        public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
+        public Mock<ICommandService> CommandServiceMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public GroupController Controller { get; set; }
 
         [SetUp]
         public void CreateObjects()
         {
-            CommandInvokerMock = new Mock<ICommandInvoker>();
+            CommandServiceMock = new Mock<ICommandService>();
             ViewRepositoryMock = new Mock<IViewRepository>();
-            Controller = new GroupController(CommandInvokerMock.Object, ViewRepositoryMock.Object);
+            NcqrsEnvironment.SetDefault<ICommandService>(CommandServiceMock.Object);
+            Controller = new GroupController(ViewRepositoryMock.Object);
         }
         [Test]
         public void WhenNewGroupIsSubmittedWIthValidModel_CommandIsSent()
@@ -51,7 +54,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                         v => v.QuestionnaireId.Equals(key.ToString()))))
                 .Returns(new QuestionnaireView(innerDocument));
             Controller.Save(new GroupView() { Title = "test", QuestionnaireId = innerDocument.Id });
-            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewGroupCommand>()), Times.Once());
+            CommandServiceMock.Verify(x => x.Execute(It.IsAny<AddGroupCommand>()), Times.Once());
         }
 
         [Test]
@@ -75,7 +78,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
 
             Controller.Save(groupView);
-            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateGroupCommand>()), Times.Once());
+            CommandServiceMock.Verify(x => x.Execute(It.IsAny<UpdateGroupCommand>()), Times.Once());
         }
         [Test]
         public void When_DeleteGroupIsExecuted()
@@ -91,7 +94,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
 
             Controller.Delete(group.PublicKey, entity.QuestionnaireId);
-            CommandInvokerMock.Verify(x => x.Execute(It.IsAny<DeleteGroupCommand>()), Times.Once());
+            CommandServiceMock.Verify(x => x.Execute(It.IsAny<DeleteGroupCommand>()), Times.Once());
         }
 
         [Test]
