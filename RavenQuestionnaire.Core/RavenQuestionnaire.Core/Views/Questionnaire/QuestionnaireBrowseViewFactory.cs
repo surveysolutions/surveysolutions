@@ -1,30 +1,34 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Raven.Client;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Utility;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 
 namespace RavenQuestionnaire.Core.Views.Questionnaire
 {
     public class QuestionnaireBrowseViewFactory : IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>
     {
-        private IDocumentSession documentSession;
+        private IDenormalizerStorage<CQGroupItem> documentGroupSession;
 
-        public QuestionnaireBrowseViewFactory(IDocumentSession documentSession)
+        public QuestionnaireBrowseViewFactory(IDenormalizerStorage<CQGroupItem> documentGroupSession)
         {
-            this.documentSession = documentSession;
+            this.documentGroupSession = documentGroupSession;
         }
 
         public QuestionnaireBrowseView Load(QuestionnaireBrowseInputModel input)
         {
+            var query = documentGroupSession.Query();
             // Adjust the model appropriately
-            var count = documentSession.Query<QuestionnaireDocument>().Count();
+            var count = query.Count();
             if (count == 0)
                 return new QuestionnaireBrowseView(input.Page, input.PageSize, count, new QuestionnaireBrowseItem[0], "");
             // Perform the paged query
-            IOrderedQueryable<QuestionnaireDocument> query = documentSession.Query<QuestionnaireDocument>();
+         
 
-            if (input.Orders.Count > 0)
+         /*   if (input.Orders.Count > 0)
             {
                 query = input.Orders[0].Direction == OrderDirection.Asc
                             ? query.OrderBy(input.Orders[0].Field)
@@ -37,7 +41,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
                     query = order.Direction == OrderDirection.Asc
                                 ? query.ThenBy(order.Field)
                                 : query.ThenByDescending(order.Field);
-                }
+                }*/
 
             var page = query.Skip((input.Page - 1)*input.PageSize)
                 .Take(input.PageSize)
@@ -45,7 +49,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
 
             // And enact this query
             var items = page
-                .Select(x => new QuestionnaireBrowseItem(x.Id, x.Title, x.CreationDate, x.LastEntryDate))
+                .Select(x => new QuestionnaireBrowseItem(x.SurveyId, x.SurveyTitle, DateTime.Now, DateTime.Now))
                 .ToArray();
 
             return new QuestionnaireBrowseView(

@@ -2,6 +2,7 @@
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.Storage;
+using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Documents;
 
@@ -29,9 +30,17 @@ namespace RavenQuestionnaire.Core.ViewSnapshot
         public T ReadByGuid<T>(Guid key) where T : class
         {
             var snapshot = this.store.GetSnapshot(key, int.MaxValue);
-            if (snapshot == null && typeof(T)== typeof(CompleteQuestionnaireDocument))//very bad...
+            if (snapshot == null )//very bad...
             {
-                commandService.Execute(new PreLoadCompleteQuestionnaireCommand() { CompleteQuestionnaireId = key});
+                if(typeof(T) == typeof(CompleteQuestionnaireDocument) )
+                {
+                    commandService.Execute(new PreLoadCompleteQuestionnaireCommand() { CompleteQuestionnaireId = key});
+                }
+                else if (typeof(T) == typeof(QuestionnaireDocument))
+                {
+                    commandService.Execute(new PreLoadQuestionnaireCommand() { QuestionnaireId = key });
+                }
+                
                 snapshot = this.store.GetSnapshot(key, int.MaxValue);
                 if(snapshot == null)
                     return null;

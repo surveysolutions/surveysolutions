@@ -1,28 +1,27 @@
 ﻿using System;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using RavenQuestionnaire.Core.Domain;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire
 {
-    public class DeleteImageCommand : ICommand
+    [Serializable]
+    [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "DeleteImage")]
+    public class DeleteImageCommand : CommandBase
     {
-        public DeleteImageCommand(string questionnaireId, Guid questionKey, Guid imageKey, UserLight executor)
+        public DeleteImageCommand(Guid questionnaireId, Guid questionKey, Guid imageKey)
         {
             QuestionKey = questionKey;
             ImageKey = imageKey;
             QuestionnaireId = questionnaireId;
-            Executor = executor;
         }
 
         public Guid QuestionKey { get; set; }
 
         public Guid ImageKey { get; set; }
-
-        public string QuestionnaireId { get; set; }
-
-        #region ICommand Members
-
-        public UserLight Executor { get; set; }
-
-        #endregion
+        [AggregateRootId]
+        public Guid QuestionnaireId { get; set; }
+       
     }
 }

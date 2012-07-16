@@ -131,3 +131,8 @@ RavenQuestionnaire.Web/RavenQuestionnaire.Web/RavenQuestionnaire.Web.csproj.user
 RavenQuestionnaire.Web/Web.CAPI/Web.CAPI.Publish.xml
 QApp/packages/ninject.extensions.conventions.3.0.0.11/ninject.extensions.conventions.3.0.0.11.nupkg
 QApp/packages/Ninject.3.0.1.10/Ninject.3.0.1.10.nupkg
+ExpressionEvaluator/Evaluant.Calculator.Tests/NCalc.Tests.csproj.user
+Synchronization/DataEntryClientTests/DataEntryClientTests.csproj.user
+RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/RavenQuestionnaire.Web.Tests.csproj.user
+RavenQuestionnaire.Web/Questionnaire.Core.Web/Questionnaire.Core.Web.csproj.user
+Externals/Framework/src/Ncqrs.Spec/Ncqrs.Spec.csproj.user

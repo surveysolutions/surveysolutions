@@ -165,11 +165,8 @@
     <Compile Include="CommandHandlers\File\UploadFileCommandHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\UpdateCommentsQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\ValidateGroupCommandHandler.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\MoveQuestionnaireItemHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Question\AddNewQuestionHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UpdateConditionsHandler.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\UpdateImageCommandHandler.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\DeleteImageCommandHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Flow\CreateNewFlowGraphHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Group\DeletePropagatedGroupHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Flow\UpdateQuestionnaireFlowHandler.cs" />
@@ -177,11 +174,13 @@
     <Compile Include="CommandHandlers\Questionnaire\Group\CreateNewGroupHandler.cs" />
     <Compile Include="CommandHandlers\Location\CreateNewLocationHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\CreateNewQuestionnaireHandler.cs" />
+    <Compile Include="Commands\Collection\RemoveCollectionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\PreLoadCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\UpdateCommentsInCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\PreLoadQuestionnaireCommand.cs" />
     <Compile Include="Commands\Synchronization\ChangeEventStatusCommand.cs" />
     <Compile Include="Commands\Synchronization\CreateNewSynchronizationProcessCommand.cs" />
     <Compile Include="Commands\Synchronization\EndProcessComand.cs" />
@@ -194,23 +193,18 @@
     <Compile Include="CommandHandlers\Status\CreateNewStatusHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateStatusFlowHandler.cs" />
     <Compile Include="CommandHandlers\User\CreateNewUserHandler.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\Group\DeleteGroupHandler.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\Question\DeleteQuestionHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\DeleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\User\DeleteUserHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Group\PropagateGroupHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\UpdateAnswerInCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\UpdateCompleteQuestionnaireHandler.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\Group\UpdateGroupHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Question\UpdateQuestionHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CommandHandlers\Questionnaire\UpdateQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\Status\UpdateStatusRestrictionHandler.cs" />
     <Compile Include="CommandHandlers\User\UpdateUserHandler.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\UploadImageCommandHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
-    <Compile Include="Commands\Collection\Copy of DeleteCollectionItemCommand.cs" />
+    <Compile Include="Commands\Collection\RemoveCollectionItemCommand.cs" />
     <Compile Include="Commands\Collection\CreateCollectionCommand.cs" />
     <Compile Include="Commands\Collection\CreateNewCollectionCommand.cs" />
     <Compile Include="Commands\Collection\DeleteCollectionCommand.cs" />
@@ -346,6 +340,8 @@
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Events\AggregateRootEventStream.cs" />
+    <Compile Include="Events\Collection\CollectionItemRemoved.cs" />
+    <Compile Include="Events\Collection\CollectionRemoved.cs" />
     <Compile Include="Events\Collection\NewCollectionCreated.cs" />
     <Compile Include="Events\IEventSync.cs" />
     <Compile Include="Events\Location\LocationDeleted.cs" />
@@ -359,10 +355,17 @@
     <Compile Include="Events\Questionnaire\Completed\PropagatableGroupAdded.cs" />
     <Compile Include="Events\Questionnaire\Completed\PropagatableGroupDeleted.cs" />
     <Compile Include="Events\Questionnaire\Completed\QuestionnaireStatusChanged.cs" />
+    <Compile Include="Events\Questionnaire\GroupDeleted.cs" />
+    <Compile Include="Events\Questionnaire\GroupUpdated.cs" />
+    <Compile Include="Events\Questionnaire\ImageDeleted.cs" />
+    <Compile Include="Events\Questionnaire\ImageUpdated.cs" />
+    <Compile Include="Events\Questionnaire\ImageUploaded.cs" />
     <Compile Include="Events\Questionnaire\QuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\NewGroupAdded.cs" />
     <Compile Include="Events\Questionnaire\NewQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\NewQuestionnaireCreated.cs" />
+    <Compile Include="Events\Questionnaire\QuestionDeleted.cs" />
+    <Compile Include="Events\Questionnaire\QuestionnaireLoaded.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireTemplateLocaded.cs" />
     <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs" />
     <Compile Include="Events\Synchronization\AggregateRootChanged.cs" />

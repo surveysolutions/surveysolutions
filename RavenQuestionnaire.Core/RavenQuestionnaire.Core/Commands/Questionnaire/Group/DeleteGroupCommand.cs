@@ -1,20 +1,24 @@
 ﻿using System;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using RavenQuestionnaire.Core.Domain;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
 {
-    public class DeleteGroupCommand : ICommand
+    [Serializable]
+    [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "DeleteGroup")]
+    public class DeleteGroupCommand : CommandBase
     {
         public Guid GroupPublicKey { get; set; }
-        public string QuestionnaireId { get; set; }
-        public UserLight Executor { get; set; }
+        [AggregateRootId]
+        public Guid QuestionnaireId { get; set; }
 
-        public DeleteGroupCommand(Guid groupPublicKey, string questionnaireId, UserLight executor)
+        public DeleteGroupCommand(Guid groupPublicKey, Guid questionnaireId)
         {
             this.GroupPublicKey = groupPublicKey;
-            this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
-            Executor = executor;
+            this.QuestionnaireId = questionnaireId;
         }
     }
 }
