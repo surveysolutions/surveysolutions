@@ -7,6 +7,8 @@ using System.IO;
 using System.Diagnostics;
 
 using WinFormsSample.adept_part;
+using WinFormsSample.Properties;
+using System.Net;
 
 namespace WinFormsSample
 {
@@ -141,17 +143,32 @@ namespace WinFormsSample
             return Result;
         }
 
-        private void CopyFolder(string SourcePath,
-            string DestinationPath)
-        {
-          
-          
-        }
 
-        private bool isCopying = false;
+
 
         private void CopyBtn_Click(object sender, EventArgs e)
         {
+            Cursor currentCursor = Cursor.Current;
+            this.Cursor = Cursors.WaitCursor;
+            try
+            {
+                int driveIndex = drivesLister.SelectedIndex;
+                string driveLetter = Drives[driveIndex];
+                string destination = driveLetter;
+                ShootFiles(destination);
+                
+            }
+            catch
+            {
+                AddLine("Error");
+            }
+            finally
+            {
+                AddLine("Export complite");
+            }
+
+
+            this.Cursor = currentCursor;
             //temp;
         }
 
@@ -189,7 +206,23 @@ namespace WinFormsSample
             return false;
         }
 
-        
+
+        private void ShootFiles(string destination)
+        {
+            
+
+            string exportURL = Settings.Default.DefaultUrl;
+            exportURL += "/Synchronizations/Export";
+            string filename = string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace("/", "_"));
+            filename=filename.Replace(" ", "_");
+            filename=filename.Replace(":", "_");
+            WebClient myWebClient = new WebClient();
+            //byte[] myDataBuffer = myWebClient.DownloadFile(exportURL,de)
+            destination += filename;
+            myWebClient.DownloadFile(exportURL, destination);
+
+            AddLine("Done! filename: " + filename);
+        }
 
     }
 

@@ -31,6 +31,7 @@ using Awesomium.Mono.Forms;
 using Awesomium.Core;
 using Awesomium.Windows.Forms;
 using WinFormsSample.Properties;
+using System.Net;
 
 #endif
 #endregion
@@ -48,6 +49,8 @@ namespace WinFormsSample
 
 
         #region Ctors
+
+
         public WebForm()
         {
             // Notice that Control.DoubleBuffered has been set to true
