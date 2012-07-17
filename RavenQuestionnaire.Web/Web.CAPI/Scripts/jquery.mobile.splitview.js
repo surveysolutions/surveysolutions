@@ -9,15 +9,53 @@
         $.support.splitview = ($query || ($.mobile.browser.ie && $(this).width() >= 480)) && $.mobile.ajaxEnabled;
         if ($.support.splitview) {
             $('html').addClass('splitview');
+
+
+            
             //on window.ready() execution:
             $(function () {
-                $(document).unbind('.toolbar');
-                $('.ui-page').die('.toolbar');
+
                 $('div:jqmData(role="panel")').addClass('ui-mobile-viewport ui-panel');
+                
+                var $pages = $(":jqmData(role='page'), :jqmData(role='dialog')");
+
+                // if no pages are found, create one with body's inner html
+                if (!$pages.length) {
+                    $pages = $("body").wrapInner("<div data-" + $.mobile.ns + "role='page'></div>").children(0);
+                }
+
+                // add dialogs, set data-url attrs
+                $pages.each(function () {
+                    var $this = $(this);
+
+                    // unless the data url is already set set it to the pathname
+                    if (!$this.jqmData("url")) {
+                        $this.attr("data-" + $.mobile.ns + "url", $this.attr("id") || location.pathname + location.search);
+                    }
+                });
+
+                // define first page in dom case one backs out to the directory root (not always the first page visited, but defined as fallback)
+                $.mobile.firstPage = $pages.first();
+
+                // define page container
+                $.mobile.pageContainer = $pages.first().parent().addClass("ui-mobile-viewport");
+
+                // alert listeners that the pagecontainer has been determined for binding
+                // to events triggered on it
+                $window.trigger("pagecontainercreate");
+
+                // cue page loading message
+                $.mobile.showPageLoadingMsg();
+                
+                
+                //$(document).unbind('.toolbar');
+                //$('.ui-page').die('.toolbar');
+                
                 var firstPageMain = $('div:jqmData(id="main") > div:jqmData(role="page"):first');
                 if (!$.mobile.hashListeningEnabled || !$.mobile.path.stripHash(location.hash)) {
                     var $container = $('div:jqmData(id="main")');
                     $.mobile.firstPage = firstPageMain;
+                    $.mobile.pageContainer = firstPageMain.parents('.ui-mobile-viewport');
                     $.mobile.changePage(firstPageMain, { transition: 'none', changeHash: false, pageContainer: $container });
                     $.mobile.activePage = undefined;
                 } //no need to trigger a hashchange here cause the other page is handled by core.
