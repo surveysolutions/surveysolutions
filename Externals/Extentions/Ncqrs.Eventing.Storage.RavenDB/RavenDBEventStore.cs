@@ -151,42 +151,47 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         protected IList<StoredEvent> AccumulateWithPaging(Func<StoredEvent, bool> predicate)
         {
             List<StoredEvent> retval = new List<StoredEvent>();
+            int count;
             using (var session = _documentStore.OpenSession())
             {
 
-                int count;
+
                 Raven.Client.Linq.RavenQueryStatistics stats;
                 session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults())
                     .Statistics(out stats).Where(predicate).ToList();
 
                 count = stats.TotalResults;
-                if (count == 0)
-                    return retval;
-                int queryLimit = 128;
-                int step = 0;
-                while (step < count)
+            }
+            if (count == 0)
+                return retval;
+            int queryLimit = 128;
+            int step = 0;
+            while (step < count)
+            {
+                using (var session = _documentStore.OpenSession())
                 {
                     retval.AddRange(
-                        session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(step).Take(queryLimit).Where(predicate).ToList());
-                    step += queryLimit;
+                        session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(step).Take(
+                            queryLimit).Where(predicate).ToList());
                 }
+                step += queryLimit;
             }
+
             return retval;
         }
-       
+
         public IEnumerable<CommittedEvent> ReadFrom(DateTime start)
         {
             var result = new List<CommittedEvent>();
 
-            using (var session = _documentStore.OpenSession())
-            {
+            
                /* var storedEvents = session.Query<StoredEvent>()
                     .Customize(x => x.WaitForNonStaleResults())
                     .Where(x => x.EventTimeStamp >= start)
                     .ToList().OrderBy(x => x.EventTimeStamp);*/
                 var storedEvents = AccumulateWithPaging(x => x.EventTimeStamp >= start).OrderBy(x=>x.EventTimeStamp);
                 result = storedEvents.Select(ToComittedEvent).ToList();
-            }
+            
 
             return result;
         }
