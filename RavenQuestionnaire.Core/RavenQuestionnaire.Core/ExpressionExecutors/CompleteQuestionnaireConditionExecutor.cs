@@ -1,6 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NCalc;
+using System;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
@@ -13,12 +14,60 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         {
             this.hash = hash;
         }
-        public void Execute(ICompleteGroup group)
+        //public void Execute(ICompleteGroup group)
+        //{
+        //    foreach (ICompleteQuestion completeQuestion in group.Children.Where(c => c is ICompleteQuestion))
+        //    {
+        //      //  bool previousState = completeQuestion.Enabled;
+        //        completeQuestion.Enabled = Execute(completeQuestion);
+        //    }
+        //}
+
+        public bool Execute(ICompleteGroup group)
         {
-            foreach (ICompleteQuestion completeQuestion in group.Children.Where(c => c is ICompleteQuestion))
+            if (string.IsNullOrEmpty(group.ConditionExpression))
+                return true;
+            var e = new Expression(group.ConditionExpression);
+            e.EvaluateParameter += (name, args) =>
+                                       {
+                                           Guid nameGuid = Guid.Parse(name);
+                                           Guid? propagationKey = group.PropogationPublicKey;
+                                           var value = hash[nameGuid, propagationKey].GetAnswerObject();
+                                           args.Result = value ?? string.Empty;
+
+                                       };
+            bool result = false;
+            try
             {
-              //  bool previousState = completeQuestion.Enabled;
-                completeQuestion.Enabled = Execute(completeQuestion);
+                result = (bool)e.Evaluate();
+            }
+            catch (Exception)
+            {
+            }
+            UpdateAllQuestionInGroup(group, result);
+            return result;
+        }
+
+        private void UpdateAllQuestionInGroup(ICompleteGroup group, bool result)
+        {
+            foreach (IComposite child in group.Children)
+            {
+                if (!result)
+                {
+                    var question = child as ICompleteQuestion;
+                    if (question != null)
+                        question.Enabled = result;
+                    else
+                    {
+                        var gr = child as ICompleteGroup;
+                        if (gr != null)
+                            UpdateAllQuestionInGroup(gr, result);
+                    }
+                }
+                else if (child as ICompleteQuestion == null)
+                    (child as ICompleteGroup).Enabled = Execute(child as ICompleteGroup);
+                else
+                    (child as ICompleteQuestion).Enabled = Execute(child as ICompleteQuestion);
             }
         }
 

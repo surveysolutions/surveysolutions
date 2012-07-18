@@ -29,11 +29,15 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <ContentControl Content="{Binding Navigator.View}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Top" />
-        <dxlc:TileLayoutControl Grid.Row="1" Margin="30,0,0,0" Padding="32,0,30,10" ItemsSource="{Binding Data.CompleteQuestionnaires.Items}" AllowItemMoving="False">
+        <Button Width="70" Height="50" Content="Select" 
+                Command="{Binding Path=DataContext.Parent.ShowCompletedItemCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}}" 
+                CommandParameter="fab96db5-d55c-4d95-9850-65bffe2b3a67">
+        </Button>
+      <dxlc:TileLayoutControl Grid.Row="1" Margin="30,0,0,0" Padding="32,0,30,10" ItemsSource="{Binding Data.CompleteQuestionnaires.Items}" AllowItemMoving="False">
             <dxlc:TileLayoutControl.ItemTemplate>
                 <DataTemplate>
                     <dxlc:Tile Background="#4f4f4f" Width="270" Height="90" Content="{Binding}" 
-                               Command="{Binding Path=DataContext.Parent.ShowCompletedItemCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"                                                             
+                               Command="{Binding Path=DataContext.ShowCompletedItemCommand, RelativeSource={RelativeSource AncestorType=dxlc:TileLayoutControl}}"                                                             
                                CommandParameter="{Binding CompleteQuestionnaireId}"
                                Padding="0">
                         <dxlc:Tile.ContentTemplate>
@@ -58,6 +62,6 @@
                     </dxlc:Tile>
                 </DataTemplate>
             </dxlc:TileLayoutControl.ItemTemplate>
-        </dxlc:TileLayoutControl>
+        </dxlc:TileLayoutControl>        
     </Grid>
 </View:ModuleView>

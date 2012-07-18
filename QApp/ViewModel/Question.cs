@@ -10,7 +10,6 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 
 namespace QApp.ViewModel
 {
@@ -45,8 +44,9 @@ namespace QApp.ViewModel
     }
     public class Question : ModuleWithNavigator
     {
-         public override void InitData(object parameter) {
-            base.InitData(parameter);
+         public override void InitData(object parameter) 
+         {
+             base.InitData(parameter);
              var currentQuestion = parameter as CompleteQuestionView;
              SetSelectedAnswer(currentQuestion);
              //bad approach!!!
@@ -63,9 +63,16 @@ namespace QApp.ViewModel
                  }
          }
 
-         private CompleteQuestionnaireMobileView _Questionnaire { get; set; }
 
-         public QuestionData QuestionData { get { return (QuestionData)Data; } }
+        #region FieldAndProperties
+
+        private CompleteQuestionnaireMobileView _Questionnaire { get; set; }
+
+        public QuestionData QuestionData
+        {
+            get { return (QuestionData)Data; }
+        }
+
          private CompleteAnswerView selectedAnswer;
          public CompleteAnswerView SelectedAnswer
          {
@@ -94,9 +101,11 @@ namespace QApp.ViewModel
             set { SetValue<CompleteQuestionView>("PrevQuestion", ref prevQuestion, value); }
         }
 
+        #endregion
+
         #region Commands
 
-         protected override void InitializeCommands()
+        protected override void InitializeCommands()
          {
              base.InitializeCommands();
              SetCurrentAnswerCommand = new SimpleActionCommand(DoSetCurrentAnswer);
@@ -140,7 +149,7 @@ namespace QApp.ViewModel
                      commandInvoker.Execute(command);
                  }
              }
-            //UpdateCurrentDataQuestion();
+            UpdateCurrentDataQuestion();
         }
 
         public ICommand SetCurrentAnswerCommand { get; private set; }
@@ -169,7 +178,7 @@ namespace QApp.ViewModel
             for (int i = 0; i < test.CurrentScreen.Children.Count(); i++)
                 if (test.CurrentScreen.Children[i].PublicKey == QuestionData.Question.PublicKey)
                     item = test.CurrentScreen.Children[i] as CompleteQuestionView;
-            SetSelectedAnswer(item);
+            //SetSelectedAnswer(item);
         }
 
         private void SetSelectedAnswer(CompleteQuestionView questionView)
@@ -179,9 +188,13 @@ namespace QApp.ViewModel
                 Data = new QuestionData(questionView);
                 if (QuestionData.Question.Answers.Count() > 0)
                 {
-                    foreach (var completeAnswerView in QuestionData.Question.Answers)
-                    if (completeAnswerView.PublicKey == questionView.PublicKey)
-                        SelectedAnswer = completeAnswerView;
+                    CompleteAnswerView[] answers = QuestionData.Question.Answers;
+                    SelectedAnswer = answers.Where(t => t.Selected == true).SingleOrDefault();
+                    //foreach (var completeAnswerView in answers)
+                    //{
+                    //    if (completeAnswerView.Title == questionView.Answer)
+                    //        SelectedAnswer = completeAnswerView;
+                    //}
                 }
                 else
                     Answer = QuestionData.Question.Answer == null ? string.Empty : QuestionData.Question.Answer.ToString();

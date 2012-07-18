@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Question;
+using RavenQuestionnaire.Core.Entities.Extensions;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
@@ -72,6 +73,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         {
             var questions = doc.Children.OfType<ICompleteQuestion>().ToList();
             var groups = doc.Children.OfType<ICompleteGroup>().ToList();
+            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
             if (questions.Count > 0)
             {
                 Groups = new CompleteGroupHeaders[groups.Count + 1];
@@ -87,7 +89,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                     Groups[i] = new CompleteGroupHeaders
                                     {
                                         PublicKey = groups[i - 1].PublicKey,
-                                        GroupText = groups[i - 1].Title
+                                        GroupText = groups[i - 1].Title,
+                                        Enabled = executor.Execute(groups[i-1])
                                     };
                     Groups[i].Totals = CalcProgress(groups[i - 1]);
                 }
@@ -100,7 +103,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                     Groups[i] = new CompleteGroupHeaders
                                     {
                                         PublicKey = groups[i].PublicKey,
-                                        GroupText = groups[i].Title
+                                        GroupText = groups[i].Title,
+                                        Enabled = executor.Execute(groups[i])
                                     };
                     Groups[i].Totals = CalcProgress(groups[i]);
                 }

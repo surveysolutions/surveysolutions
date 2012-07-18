@@ -78,7 +78,7 @@ namespace RavenQuestionnaire.Core.Domain
         }
 
 
-        public void AddGroup(Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey)
+        public void AddGroup(Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression)
         {
             //performe checka before event raising
 
@@ -92,7 +92,8 @@ namespace RavenQuestionnaire.Core.Domain
                 PublicKey = publicKey,
                 GroupText = text,
                 ParentGroupPublicKey = parentGroupKey,
-                Paropagateble = propagateble
+                Paropagateble = propagateble,
+                ConditionExpression = conditionExpression
             });
         }
 
@@ -106,7 +107,7 @@ namespace RavenQuestionnaire.Core.Domain
             group.Title = e.GroupText;
             group.Propagated = e.Paropagateble;
             group.PublicKey = e.PublicKey;
-
+            group.ConditionExpression = e.ConditionExpression;
             _innerDocument.Add(group, e.ParentGroupPublicKey);
         }
         public void PreLoad()
