@@ -10,13 +10,11 @@
         if ($.support.splitview) {
             $('html').addClass('splitview');
 
-
-            
             //on window.ready() execution:
             $(function () {
 
                 $('div:jqmData(role="panel")').addClass('ui-mobile-viewport ui-panel');
-                
+
                 var $pages = $(":jqmData(role='page'), :jqmData(role='dialog')");
 
                 // if no pages are found, create one with body's inner html
@@ -46,11 +44,11 @@
 
                 // cue page loading message
                 $.mobile.showPageLoadingMsg();
-                
-                
+
+
                 //$(document).unbind('.toolbar');
                 //$('.ui-page').die('.toolbar');
-                
+
                 var firstPageMain = $('div:jqmData(id="main") > div:jqmData(role="page"):first');
                 if (!$.mobile.hashListeningEnabled || !$.mobile.path.stripHash(location.hash)) {
                     var $container = $('div:jqmData(id="main")');
@@ -62,9 +60,9 @@
 
                 // setup the layout for splitview and jquerymobile will handle first page init
                 $(window).trigger('orientationchange');
-                setTimeout(function () {
+                setTimeout(function() {
                     $.mobile.firstPage = firstPageMain;
-                }, 100)
+                }, 100);
             }); //end window.ready()
 
             //----------------------------------------------------------------------------------
@@ -121,7 +119,7 @@
                 var page = $("." + $.mobile.activePageClass);
                 page.each(function () {
                     if ($(this).closest(".panel-popover").length != 1) {
-                        $(this).css("min-height", getScreenHeight());
+                        //$(this).css("min-height", getScreenHeight());
                     }
                     else {
                         $(this).css("min-height", "100%")
@@ -130,19 +128,26 @@
 
             }
 
-            //override _registerInternalEvents to bind to new methods below
-            $.mobile._registerInternalEvents = function () {
-                //DONE: bind form submit with this plugin
-                $("form").live('submit', function (event) {
+            //The following event bindings should be bound after mobileinit has been triggered
+            //the following deferred is resolved in the init file
+            $.mobile.navreadyDeferred = $.Deferred();
+            $.mobile.navreadyDeferred.done(function () {
+                //bind to form submit events, handle with Ajax
+                $(document).delegate("form", "submit", function (event) {
                     var $this = $(this);
+
                     if (!$.mobile.ajaxEnabled ||
-              $this.is(":jqmData(ajax='false')")) { return; }
+                    // test that the form is, itself, ajax false
+					$this.is(":jqmData(ajax='false')") ||
+                    // test that $.mobile.ignoreContentEnabled is set and
+                    // the form or one of it's parents is ajax=false
+					!$this.jqmHijackable().length) {
+                        return;
+                    }
 
                     var type = $this.attr("method"),
-              target = $this.attr("target"),
-              url = $this.attr("action"),
-              $currPanel = $this.parents('div:jqmData(role="panel")'),
-              $currPanelActivePage = $currPanel.children('div.' + $.mobile.activePageClass);
+				    target = $this.attr("target"),
+				    url = $this.attr("action");
 
                     // If no action is specified, browsers default to using the
                     // URL of the document containing the form. Since we dynamically
@@ -163,52 +168,72 @@
 
                     url = $.mobile.path.makeUrlAbsolute(url, getClosestBaseUrl($this));
 
-                    //external submits use regular HTTP
-                    if ($.mobile.path.isExternal(url) || target) {
+                    if (($.mobile.path.isExternal(url) && !$.mobile.path.isPermittedCrossDomainRequest(documentUrl, url)) || target) {
                         return;
                     }
 
-                    //temporarily put this here- eventually shud just set it immediately instead of an interim var.
-                    $.mobile.activePage = $currPanelActivePage;
-                    // $.mobile.pageContainer=$currPanel;
                     $.mobile.changePage(
-              url,
-              {
-                  type: type && type.length && type.toLowerCase() || "get",
-                  data: $this.serialize(),
-                  transition: $this.jqmData("transition"),
-                  direction: $this.jqmData("direction"),
-                  reloadPage: true,
-                  pageContainer: $currPanel
-              }
-          );
+				url,
+				{
+				    type: type && type.length && type.toLowerCase() || "get",
+				    data: $this.serialize(),
+				    transition: $this.jqmData("transition"),
+				    reverse: $this.jqmData("direction") === "reverse",
+				    reloadPage: true
+				}
+			);
                     event.preventDefault();
                 });
 
                 //add active state on vclick
                 $(document).bind("vclick", function (event) {
+                    // if this isn't a left click we don't care. Its important to note
+                    // that when the virtual event is generated it will create the which attr
+                    if (event.which > 1 || !$.mobile.linkBindingEnabled) {
+                        return;
+                    }
+
                     var link = findClosestLink(event.target);
+
+                    // split from the previous return logic to avoid find closest where possible
+                    // TODO teach $.mobile.hijackable to operate on raw dom elements so the link wrapping
+                    // can be avoided
+                    if (!$(link).jqmHijackable().length) {
+                        return;
+                    }
+
                     if (link) {
                         if ($.mobile.path.parseUrl(link.getAttribute("href") || "#").hash !== "#") {
+                            //removeActiveLinkClass(true);
+                            //$activeClickedLink = $(link).closest(".ui-btn").not(".ui-disabled");
+                            //$activeClickedLink.addClass($.mobile.activeBtnClass);
+                            
                             $(link).closest(".ui-btn").not(".ui-disabled").addClass($.mobile.activeBtnClass);
                             $("." + $.mobile.activePageClass + " .ui-btn").not(link).blur();
                         }
                     }
                 });
 
-                //DONE: link click event binding for changePage
-                //click routing - direct to HTTP or Ajax, accordingly
+                // click routing - direct to HTTP or Ajax, accordingly
                 $(document).bind("click", function (event) {
-                    var link = findClosestLink(event.target);
-                    if (!link) {
+                    if (!$.mobile.linkBindingEnabled) {
                         return;
                     }
 
-                    var $link = $(link),
+                    var link = findClosestLink(event.target), $link = $(link), httpCleanup;
+
+                    // If there is no link associated with the click or its not a left
+                    // click we want to ignore the click
+                    // TODO teach $.mobile.hijackable to operate on raw dom elements so the link wrapping
+                    // can be avoided
+                    if (!link || event.which > 1 || !$link.jqmHijackable().length) {
+                        return;
+                    }
+
                     //remove active link class if external (then it won't be there if you come back)
-              httpCleanup = function () {
-                  window.setTimeout(function () { /*removeActiveLinkClass(true);*/ }, 200);
-              };
+                    httpCleanup = function () {
+                        window.setTimeout(function () { /*removeActiveLinkClass(true);*/ }, 200);
+                    };
 
                     //if there's a data-rel=back attr, go back in history
                     if ($link.is(":jqmData(rel='back')")) {
@@ -216,17 +241,17 @@
                         return false;
                     }
 
+                    var baseUrl = getClosestBaseUrl($link),
+
+                    //get href, if defined, otherwise default to empty hash
+				href = $.mobile.path.makeUrlAbsolute($link.attr("href") || "#", baseUrl);
+
                     //if ajax is disabled, exit early
-                    if (!$.mobile.ajaxEnabled) {
+                    if (!$.mobile.ajaxEnabled && !$.mobile.path.isEmbeddedPage(href)) {
                         httpCleanup();
                         //use default click handling
                         return;
                     }
-
-                    var baseUrl = getClosestBaseUrl($link),
-
-                    //get href, if defined, otherwise fall to null #
-              href = $.mobile.path.makeUrlAbsolute($link.attr("href") || "#", baseUrl);
 
                     // XXX_jblas: Ideally links to application pages should be specified as
                     //            an url to the application document with a hash that is either
@@ -237,7 +262,7 @@
                     //            the current value of the base tag is at the time this code
                     //            is called. For now we are just assuming that any url with a
                     //            hash in it is an application page reference.
-                    if (href.search("#") != -1) {
+                    if (href.search("#") !== -1) {
                         href = href.replace(/[^#]*#/, "");
                         if (!href) {
                             //link was an empty hash meant purely
@@ -255,125 +280,138 @@
 
                     // Should we handle this link, or let the browser deal with it?
                     var useDefaultUrlHandling = $link.is("[rel='external']") || $link.is(":jqmData(ajax='false')") || $link.is("[target]"),
+
                     // Some embedded browsers, like the web view in Phone Gap, allow cross-domain XHR
                     // requests if the document doing the request was loaded via the file:// protocol.
                     // This is usually to allow the application to "phone home" and fetch app specific
                     // data. We normally let the browser handle external/cross-domain urls, but if the
                     // allowCrossDomainPages option is true, we will allow cross-domain http/https
                     // requests to go through our page loading logic.
-              isCrossDomainPageLoad = ($.mobile.allowCrossDomainPages && documentUrl.protocol === "file:" && href.search(/^https?:/) != -1),
 
                     //check for protocol or rel and its not an embedded page
                     //TODO overlap in logic from isExternal, rel=external check should be
                     //     moved into more comprehensive isExternalLink
-              isExternal = useDefaultUrlHandling || ($.mobile.path.isExternal(href) && !isCrossDomainPageLoad),
+				isExternal = useDefaultUrlHandling || ($.mobile.path.isExternal(href) && !$.mobile.path.isPermittedCrossDomainRequest(documentUrl, href));
 
-              isRefresh = $link.jqmData('refresh'),
-              $targetPanel = $link.jqmData('panel'),
-              $targetContainer = $('div:jqmData(id="' + $targetPanel + '")'),
-              $targetPanelActivePage = $targetContainer.children('div.' + $.mobile.activePageClass),
-              $currPanel = $link.parents('div:jqmData(role="panel")'),
-                    //not sure we need this. if you want the container of the element that triggered this event, $currPanel 
-              $currContainer = $.mobile.pageContainer,
-              $currPanelActivePage = $currPanel.children('div.' + $.mobile.activePageClass),
-              url = $.mobile.path.stripHash($link.attr("href")),
-              from = null;
+                var isRefresh = $link.jqmData('refresh'),
+                  $targetPanel = $link.jqmData('panel'),
+                  $targetContainer = $('div:jqmData(id="' + $targetPanel + '")'),
+                  $targetPanelActivePage = $targetContainer.children('div.' + $.mobile.activePageClass),
+                  $currPanel = $link.parents('div:jqmData(role="panel")'),
+                                    //not sure we need this. if you want the container of the element that triggered this event, $currPanel 
+                  $currContainer = $.mobile.pageContainer,
+                  $currPanelActivePage = $currPanel.children('div.' + $.mobile.activePageClass),
+                  url = $.mobile.path.stripHash($link.attr("href")),
+                  from = null;
 
                     //still need this hack apparently:
                     $('a.nav-link.ui-btn.' + $.mobile.activeBtnClass).removeClass($.mobile.activeBtnClass);
                     $('a.nav-link').parents('li').removeClass($.mobile.activeBtnClass);
                     $activeClickedLink = $link.closest(".ui-btn").addClass($.mobile.activeBtnClass);
-
+                    
+                    
                     if (isExternal) {
                         httpCleanup();
                         //use default click handling
                         return;
                     }
-
+   
                     //use ajax
-                    var transitionVal = $link.jqmData("transition"),
-              direction = $link.jqmData("direction"),
-              reverseVal = (direction && direction === "reverse") ||
+                    var transition = $link.jqmData("transition"),
+                         direction = $link.jqmData("direction"),
+				           reverse = $link.jqmData("direction") === "reverse" ||
                     // deprecated - remove by 1.0
-                        $link.jqmData("back"),
-                    //this may need to be more specific as we use data-rel more
-              role = $link.attr("data-" + $.mobile.ns + "rel") || undefined,
-              hash = $currPanel.jqmData('hash');
+							$link.jqmData("back"),
 
-                    //if link refers to an already active panel, stop default action and return
-                    if ($targetPanelActivePage.attr('data-url') == url || $currPanelActivePage.attr('data-url') == url) {
-                        if (isRefresh) { //then changePage below because it's a pageRefresh request
-                            $.mobile.changePage(href, { fromPage: from, transition: 'fade', reverse: reverseVal, changeHash: false, pageContainer: $targetContainer, reloadPage: isRefresh });
-                        }
-                        else { //else preventDefault and return
-                            event.preventDefault();
-                            return;
-                        }
+                    //this may need to be more specific as we use data-rel more
+				role = $link.attr("data-" + $.mobile.ns + "rel") || undefined;
+                    var hash = $currPanel.jqmData('hash');
+                    
+                    if (role === "popup") {
+                        $.mobile.popup.handleLink($link);
                     }
-                    //if link refers to a page on another panel, changePage on that panel
-                    else if ($targetPanel && $targetPanel != $link.parents('div:jqmData(role="panel")')) {
-                        var from = $targetPanelActivePage;
-                        $.mobile.pageContainer = $targetContainer;
-                        $.mobile.changePage(href, { fromPage: from, transition: transitionVal, reverse: reverseVal, pageContainer: $targetContainer });
-                    }
-                    //if link refers to a page inside the same panel, changePage on that panel 
                     else {
-                        var from = $currPanelActivePage;
-                        $.mobile.pageContainer = $currPanel;
-                        var hashChange = (hash == 'false' || hash == 'crumbs') ? false : true;
-                        $.mobile.changePage(href, { fromPage: from, transition: transitionVal, reverse: reverseVal, changeHash: hashChange, pageContainer: $currPanel });
-                        //active page must always point to the active page in main - for history purposes.
-                        $.mobile.activePage = $('div:jqmData(id="main") > div.' + $.mobile.activePageClass);
+                        if ($targetPanelActivePage.attr('data-url') == url || $currPanelActivePage.attr('data-url') == url) {
+                            if (isRefresh) { //then changePage below because it's a pageRefresh request
+                                $.mobile.changePage(href, { role: role, fromPage: from, transition: 'fade', reverse: reverse, changeHash: false, pageContainer: $targetContainer, reloadPage: isRefresh });
+                            }
+                            else { //else preventDefault and return
+                                event.preventDefault();
+                                return;
+                            }
+                        }
+                        else if ($targetPanel && $targetPanel != $link.parents('div:jqmData(role="panel")')) {
+                            var from = $targetPanelActivePage;
+                            $.mobile.pageContainer = $targetContainer;
+                            $.mobile.changePage(href, { role: role, fromPage: from, transition: transition, reverse: reverse, pageContainer: $targetContainer });
+                        }
+                        else {
+                            var from = $currPanelActivePage;
+                            $.mobile.pageContainer = $currPanel;
+                            var hashChange = (hash == 'false' || hash == 'crumbs') ? false : true;
+                            $.mobile.changePage(href, { role: role, fromPage: from, transition: transition, reverse: reverse, changeHash: hashChange, pageContainer: $currPanel });
+                            //active page must always point to the active page in main - for history purposes.
+                            $.mobile.activePage = $('div:jqmData(id="main") > div.' + $.mobile.activePageClass);
+                        }
+                        //$.mobile.changePage(href, { transition: transition, reverse: reverse, role: role });
                     }
                     event.preventDefault();
                 });
 
                 //prefetch pages when anchors with data-prefetch are encountered
-                //TODO: insert pageContainer in here!
-                $(".ui-page").live("pageshow.prefetch", function () {
-                    var urls = [],
-              $thisPageContainer = $(this).parents('div:jqmData(role="panel")');
+                $(document).delegate(".ui-page", "pageshow.prefetch", function () {
+                    var urls = [];
+                    var $thisPageContainer = $(this).parents('div:jqmData(role="panel")');
                     $(this).find("a:jqmData(prefetch)").each(function () {
-                        var url = $(this).attr("href"),
-                panel = $(this).jqmData('panel'),
-                container = panel.length ? $('div:jqmData(id="' + panel + '")') : $thisPageContainer;
+                        var $link = $(this),
+                            panel = $(this).jqmData('panel'),
+                            container = panel.length ? $('div:jqmData(id="' + panel + '")') : $thisPageContainer,
+					        url = $link.attr("href");
+
                         if (url && $.inArray(url, urls) === -1) {
                             urls.push(url);
-                            $.mobile.loadPage(url, { pageContainer: container });
+
+                            $.mobile.loadPage(url, { role: $link.attr("data-" + $.mobile.ns + "rel"), pageContainer: container });
                         }
                     });
                 });
 
-                //DONE: bind hashchange with this plugin
-                //hashchanges are defined only for the main panel - other panels should not support hashchanges to avoid ambiguity
                 $.mobile._handleHashChange = function (hash) {
+                    //find first page via hash
                     var to = $.mobile.path.stripHash(hash),
-              transition = $.mobile.urlHistory.stack.length === 0 ? "none" : undefined,
-              $mainPanel = $('div:jqmData(id="main")'),
-              $mainPanelFirstPage = $mainPanel.children('div:jqmData(role="page"):first'),
-              $mainPanelActivePage = $mainPanel.children('div.ui-page-active'),
-              $menuPanel = $('div:jqmData(id="menu")'),
-              $menuPanelFirstPage = $menuPanel.children('div:jqmData(role="page"):first'),
-              $menuPanelActivePage = $menuPanel.children('div.ui-page-active'),
-                    //FIX: temp var for dialogHashKey
-              dialogHashKey = "&ui-state=dialog",
+                    //transition is false if it's the first page, undefined otherwise (and may be overridden by default)
+				transition = $.mobile.urlHistory.stack.length === 0 ? "none" : undefined,
+
+                    // "navigate" event fired to allow others to take advantage of the more robust hashchange handling
+				navEvent = new $.Event("navigate"),
 
                     // default options for the changPage calls made after examining the current state
                     // of the page and the hash
-              changePageOptions = {
-                  transition: transition,
-                  changeHash: false,
-                  fromHashChange: true,
-                  pageContainer: $mainPanel
-              };
+				changePageOptions = {
+				    transition: transition,
+				    changeHash: false,
+				    fromHashChange: true
+				};
 
+				if (0 === $.mobile.urlHistory.stack.length) {
+				    $.mobile.urlHistory.initialDst = to;
+                    }
+
+                    // We should probably fire the "navigate" event from those places that make calls to _handleHashChange,
+                    // and have _handleHashChange hook into the "navigate" event instead of triggering it here
+                    $.mobile.pageContainer.trigger(navEvent);
+                    if (navEvent.isDefaultPrevented()) {
+                        return;
+                    }
+
+                    //if listening is disabled (either globally or temporarily), or it's a dialog hash
                     if (!$.mobile.hashListeningEnabled || $.mobile.urlHistory.ignoreNextHashChange) {
                         $.mobile.urlHistory.ignoreNextHashChange = false;
                         return;
                     }
 
                     // special case for dialogs
-                    if ($.mobile.urlHistory.stack.length > 1 && to.indexOf(dialogHashKey) > -1) {
+                    if ($.mobile.urlHistory.stack.length > 1 && to.indexOf(dialogHashKey) > -1 && $.mobile.urlHistory.initialDst !== to) {
 
                         // If current active page is not a dialog skip the dialog and continue
                         // in the same direction
@@ -386,14 +424,12 @@
                                 isForward: function () { window.history.forward(); }
                             });
 
-                            // prevent changepage
+                            // prevent changePage()
                             return;
                         } else {
-                            // var setTo = function() { to = $.mobile.urlHistory.getActive().pageUrl; };
                             // if the current active page is a dialog and we're navigating
                             // to a dialog use the dialog objected saved in the stack
-                            // urlHistory.directHashChange({ currentUrl: to, isBack: setTo, isForward: setTo });
-                            urlHistory.directHashChange({
+                            $.mobile.urlHistory.directHashChange({
                                 currentUrl: to,
 
                                 // regardless of the direction of the history change
@@ -417,32 +453,29 @@
 
                     //if to is defined, load it
                     if (to) {
-                        to = (typeof to === "string" && !$.mobile.path.isPath(to)) ? ($.mobile.path.makeUrlAbsolute('#' + to, documentBase)) : to;
-                        //if this is initial deep-linked page setup, then changePage sidemenu as well
-                        if (!$('div.ui-page-active').length) {
-                            $menuPanelFirstPage = '#' + $menuPanelFirstPage.attr('id');
-                            $.mobile.changePage($menuPanelFirstPage, { transition: 'none', reverse: true, changeHash: false, fromHashChange: false, pageContainer: $menuPanel });
-                            $.mobile.activePage = undefined;
-                        }
-                        $.mobile.activePage = $mainPanelActivePage.length ? $mainPanelActivePage : undefined;
+                        // At this point, 'to' can be one of 3 things, a cached page element from
+                        // a history stack entry, an id, or site-relative/absolute URL. If 'to' is
+                        // an id, we need to resolve it against the documentBase, not the location.href,
+                        // since the hashchange could've been the result of a forward/backward navigation
+                        // that crosses from an external page/dialog to an internal page/dialog.
+                        to = (typeof to === "string" && !path.isPath(to)) ? (path.makeUrlAbsolute('#' + to, documentBase)) : to;
                         $.mobile.changePage(to, changePageOptions);
                     } else {
-                        //there's no hash, go to the first page in the main panel.
-                        $.mobile.activePage = $mainPanelActivePage ? $mainPanelActivePage : undefined;
-                        $.mobile.changePage($mainPanelFirstPage, changePageOptions);
+                        //there's no hash, go to the first page in the dom
+                        $.mobile.changePage($.mobile.firstPage, changePageOptions);
                     }
                 };
 
                 //hashchange event handler
-                $(window).bind("hashchange", function (e, triggered) {
+                $window.bind("hashchange", function (e, triggered) {
                     $.mobile._handleHashChange(location.hash);
                 });
 
                 //set page min-heights to be device specific
-                $(document).bind("pageshow.resetPageHeight", newResetActivePageHeight);
-                $(window).bind("throttledresize.resetPageHeight", newResetActivePageHeight);
+                $(document).bind("pageshow", newResetActivePageHeight);
+                $(window).bind("throttledresize", newResetActivePageHeight);
 
-            }; //end _registerInternalEvents
+            }); //navreadyDeferred done callback
 
             //DONE: bind orientationchange and resize - the popover
             _orientationHandler = function (event) {
