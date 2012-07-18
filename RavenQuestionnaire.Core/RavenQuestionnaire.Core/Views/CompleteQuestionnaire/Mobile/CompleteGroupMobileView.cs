@@ -18,10 +18,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         public AbstractGroupMobileView()
         {
             Children = new List<ICompositeView>();
-            this.QuestionsWithCards=new List<CompleteQuestionView>();
-            this.QuestionsWithInstructions=new List<CompleteQuestionView>();
-          //  this.Templates=new List<PropagatedGroupMobileView>();
+            this.QuestionsWithCards = new List<CompleteQuestionView>();
+            this.QuestionsWithInstructions = new List<CompleteQuestionView>();
+            //  this.Templates=new List<PropagatedGroupMobileView>();
         }
+
         public Guid PublicKey { get; set; }
 
         public Guid UniqueKey { get; set; }
@@ -33,6 +34,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         public List<ICompositeView> Children { get; set; }
 
         public Propagate Propagated { get; set; }
+
+        public bool Enabled { get; set; }
 
         public ScreenNavigation Navigation { get; set; }
         public Guid QuestionnairePublicKey { get; set; }

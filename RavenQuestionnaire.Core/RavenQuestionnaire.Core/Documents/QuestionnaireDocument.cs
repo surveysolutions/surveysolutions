@@ -25,6 +25,7 @@ namespace RavenQuestionnaire.Core.Documents
             LastEntryDate = DateTime.Now;
             PublicKey = Guid.NewGuid();
             Children = new List<IComposite>();
+            ConditionExpression = string.Empty;
         }
 
         public string Id { get; set; }
@@ -49,6 +50,8 @@ namespace RavenQuestionnaire.Core.Documents
         }
         [JsonIgnore]
         public bool IsValid { get; set; }
+
+        public string ConditionExpression{ get; set; }
 
         public List<Guid> Triggers
         {

@@ -46,6 +46,11 @@ function JsonResults(data, status, xhr) {
     var group = jQuery.parseJSON(data.responseText);
     if (!group.error) {
         UpdateCurrentGroup(group);
+
+        alert('1111');
+        var r = group.Menu;
+        var parent = $('#listview');
+        var validator = parent.find('[data-valmsg-replace=true]');
     }
     else
         SetErrorToQuestion(group.question, group.settings.PropogationPublicKey, group.error);

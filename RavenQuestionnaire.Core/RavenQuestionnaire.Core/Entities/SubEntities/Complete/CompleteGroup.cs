@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Xml.Serialization;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.Extensions;
-using RavenQuestionnaire.Core.Entities.Iterators;
-using RavenQuestionnaire.Core.Entities.Observers;
-using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
@@ -36,6 +28,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.Title = group.Title;
             this.Propagated = group.Propagated;
             this.PublicKey = group.PublicKey;
+            this.ConditionExpression = group.ConditionExpression;
 
             for (int i = 0; i < group.Children.Count; i++)
             {
@@ -81,7 +74,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                                            PublicKey = doc.PublicKey,
                                            Title = doc.Title,
                                            Propagated = doc.Propagated,
-                                           Triggers = doc.Triggers
+                                           Triggers = doc.Triggers,
+                                           ConditionExpression = doc.ConditionExpression
                                        };
 
            /* foreach (IComposite question in doc.Children)
@@ -123,7 +117,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public List<Guid> Triggers { get; set; }
 
-       
+        public string ConditionExpression { get; set; }
+
+        public bool Enabled { get; set; }
+
         // private IIteratorContainer iteratorContainer;
 
         public virtual void Add(IComposite c, Guid? parent)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.ExpressionExecutors;
@@ -97,12 +98,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             var groups = doc.Children.OfType<ICompleteGroup>().ToList();
 
             Menu = new CompleteGroupHeaders[groups.Count];
+            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
             for (var i = 0; i < groups.Count; i++)
             {
                 Menu[i] = new CompleteGroupHeaders
                                 {
                                     PublicKey = groups[i].PublicKey,
-                                    GroupText = groups[i].Title
+                                    GroupText = groups[i].Title,
+                                    Enabled = executor.Execute(groups[i])
                                 };
                 Menu[i].Totals = CalcProgress(groups[i]);
             }

@@ -1,6 +1,6 @@
-﻿using RavenQuestionnaire.Core.Commands;
+﻿using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
-using RavenQuestionnaire.Core.Repositories;
+
 
 namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Group
 {
@@ -17,9 +17,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Group
             var questionnaire = this._questionnaireRepository.Load(command.QuestionnaireId);
 
             if (command.Triggers!=null)
-                questionnaire.UpdateGroup(command.GroupText, command.Paropagateble,command.Triggers, command.GroupPublicKey);
+                questionnaire.UpdateGroup(command.GroupText, command.Paropagateble,command.Triggers, command.GroupPublicKey, command.ConditionExpression);
             else 
-                questionnaire.UpdateGroup(command.GroupText, command.Paropagateble,command.GroupPublicKey);
+                questionnaire.UpdateGroup(command.GroupText, command.Paropagateble,command.GroupPublicKey, command.ConditionExpression);
         }
     }
 }

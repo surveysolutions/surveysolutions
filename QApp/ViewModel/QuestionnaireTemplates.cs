@@ -5,8 +5,10 @@ using DevExpress.RealtorWorld.Xpf.Helpers;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 
-namespace QApp.ViewModel {
-    public class QuestionnaireTemplatesData : ModuleData {
+namespace QApp.ViewModel 
+{
+    public class QuestionnaireTemplatesData : ModuleData 
+    {
         public override void Load()
         {
             base.Load();
@@ -15,7 +17,6 @@ namespace QApp.ViewModel {
             ViewRepository vr = new ViewRepository(Initializer.Kernel);
             var AllQuestionnaires = vr.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(new QuestionnaireBrowseInputModel());
             Items = new ObservableCollection<QuestionnaireBrowseItem>();
-
             foreach (var questionnaireBrowseItem in AllQuestionnaires.Items)
             {
                 Items.Add(questionnaireBrowseItem);
@@ -25,6 +26,7 @@ namespace QApp.ViewModel {
         public ObservableCollection<QuestionnaireBrowseItem> Items { private set; get; }
         
     }
+
     public class QuestionnaireTemplates : ModuleWithNavigator {
 
 

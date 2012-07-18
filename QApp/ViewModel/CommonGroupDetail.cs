@@ -59,7 +59,6 @@ namespace QApp.ViewModel
         {
             base.InitializeCommands();
             //ShowModalQuestionCommand = new SimpleActionCommand(DoShowModalQuestionCommand);
-
             ShowQuestionCommand = new SimpleActionCommand(DoShowQuestion);
         }
 

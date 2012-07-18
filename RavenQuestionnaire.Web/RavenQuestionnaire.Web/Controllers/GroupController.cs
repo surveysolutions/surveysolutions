@@ -50,17 +50,15 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     if (model.PublicKey == Guid.Empty)
                     {
-
                         var newItemKey = Guid.NewGuid();
-
                         commandService.Execute(new AddGroupCommand(Guid.Parse(model.QuestionnaireId), newItemKey,
-                            model.Title, model.Propagated, model.Parent));
+                            model.Title, model.Propagated, model.Parent, model.ConditionExpression));
                     }
                     else
                     {
                         commandService.Execute(new UpdateGroupCommand(model.Title, model.Propagated,
-                                                                      Guid.Parse(model.QuestionnaireId),
-                                                                      model.PublicKey));
+                                                                      model.QuestionnaireId,
+                                                                      model.PublicKey, GlobalInfo.GetCurrentUser(), model.ConditionExpression));
                     }
                 }
                 catch (Exception e)

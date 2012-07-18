@@ -34,7 +34,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             Guid newItemKey = Guid.NewGuid();
-            questionnaire.AddGroup("group", newItemKey, Propagate.None, null);
+            questionnaire.AddGroup("group", newItemKey, Propagate.None, null, string.Empty);
 
             Assert.AreEqual(((IGroup)innerDocument.Children[0]).Title, "group");
         }
@@ -45,7 +45,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             Group parent= new Group();
             innerDocument.Children.Add(parent);
-            questionnaire.AddGroup("group", Guid.NewGuid(), Propagate.None, parent.PublicKey);
+            questionnaire.AddGroup("group", Guid.NewGuid(), Propagate.None, parent.PublicKey, string.Empty);
 
             Assert.AreEqual(((Group)(innerDocument.Children[0] as Group).Children[0]).Title, "group");
             Assert.AreEqual(innerDocument.Children[0], parent);
@@ -59,7 +59,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             innerDocument.Children.Add(topParent);
             Group subParent = new Group();
             topParent.Children.Add(subParent);
-            questionnaire.AddGroup("group", Guid.NewGuid(), Propagate.None, subParent.PublicKey);
+            questionnaire.AddGroup("group", Guid.NewGuid(), Propagate.None, subParent.PublicKey, string.Empty);
 
             Assert.AreEqual(((Group)((innerDocument.Children[0] as Group).Children[0] as Group).Children[0]).Title, "group");
             Assert.AreEqual((innerDocument.Children[0] as Group).Children[0], subParent);
@@ -69,7 +69,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            Assert.Throws<ArgumentException>(() => questionnaire.AddGroup("group", Guid.NewGuid(), Propagate.None, Guid.NewGuid()));
+            Assert.Throws<ArgumentException>(() => questionnaire.AddGroup("group", Guid.NewGuid(), Propagate.None, Guid.NewGuid(), string.Empty));
         }
         [Test]
         public void UpdateGroup_GroupIsUpdated()
@@ -78,7 +78,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             Questionnaire questionnaire = new Questionnaire(innerDocument);
             Group group = new Group();
             innerDocument.Children.Add(group);
-            questionnaire.UpdateGroup("group", Propagate.None, group.PublicKey);
+            questionnaire.UpdateGroup("group", Propagate.None, group.PublicKey, string.Empty);
             Assert.AreEqual(group.Title, "group");
         }
         [Test]
@@ -86,7 +86,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Questionnaire questionnaire = new Questionnaire(innerDocument);
-            Assert.Throws<ArgumentException>(() => questionnaire.UpdateGroup("group", Propagate.None, Guid.NewGuid()));
+            Assert.Throws<ArgumentException>(() => questionnaire.UpdateGroup("group", Propagate.None, Guid.NewGuid(), string.Empty));
         }
         [Test]
         public void UpdateText_UpdatesTextToDocument()
