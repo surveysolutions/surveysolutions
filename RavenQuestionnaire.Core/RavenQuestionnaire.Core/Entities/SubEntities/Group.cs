@@ -19,6 +19,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         string Title { get; set; }
         Propagate Propagated { get; set; }
         bool IsValid { get; set; }
+        string ConditionExpression { get; set; }
+        //bool Enabled { get; set; }
     }
     public class Group : IGroup
     {
@@ -27,9 +29,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             this.PublicKey = Guid.NewGuid();
             this.Children = new List<IComposite>();
             this.Triggers = new List<Guid>();
-          
+            this.ConditionExpression = string.Empty;
         }
-
+        
         public Group(string text)
             : this()
         {
@@ -39,6 +41,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Guid PublicKey { get; set; }
         public string Title { get; set; }
         public bool IsValid { get; set; }
+        public string ConditionExpression { get; set; }
+        public bool Enabled { get; set; }
 
         public Propagate Propagated { get; set; }
 

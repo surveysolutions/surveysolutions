@@ -5,6 +5,7 @@ using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -43,15 +44,32 @@ namespace RavenQuestionnaire.Core.Domain
             doc.Creator = null;
             doc.Status = SurveyStatus.Initial;
             doc.Responsible = null;
-            
-            var questions = doc.GetAllQuestions<ICompleteQuestion>().ToList();
+
             var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
-            foreach (ICompleteQuestion completeQuestion in questions)
+            foreach (IComposite child in doc.Children)
             {
-                if (completeQuestion is IBinded)
+                if (child is IBinded)
                     continue;
-                completeQuestion.Enabled = executor.Execute(completeQuestion);
+                if (child is ICompleteGroup)
+                {
+                    var group = child as ICompleteGroup;
+                    group.Enabled = executor.Execute(group);
+                }
+                else
+                {
+                    var question = child as ICompleteQuestion;
+                    question.Enabled = executor.Execute(question);
+                }
             }
+            
+            ////var questions = doc.GetAllQuestions<ICompleteQuestion>().ToList();
+            ////var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
+            ////foreach (ICompleteQuestion completeQuestion in questions)
+            ////{
+            ////    if (completeQuestion is IBinded)
+            ////        continue;
+            ////    completeQuestion.Enabled = executor.Execute(completeQuestion);
+            ////}
 
             //ISubscriber ????
 

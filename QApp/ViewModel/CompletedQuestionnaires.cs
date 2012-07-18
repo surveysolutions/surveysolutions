@@ -4,7 +4,6 @@ using DevExpress.RealtorWorld.Xpf.Helpers;
 using DevExpress.RealtorWorld.Xpf.ViewModel;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 
 namespace QApp.ViewModel
 {
@@ -15,12 +14,7 @@ namespace QApp.ViewModel
             base.Load();
             //replace with injections
             var viewRepository = new ViewRepository(Initializer.Kernel);
-            //CompleteQuestionnaires = viewRepository.Load
-            //    <CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>
-            //    (new CompleteQuestionnaireBrowseInputModel() {PageSize = 100});
             CompleteQuestionnaires = viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(new CQGroupedBrowseInputModel());
-            var str = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
-                    new CompleteQuestionnaireViewInputModel("0dedde4e-02a0-41aa-90b8-4e65ff4bd93d"));
         }
 
 
@@ -54,6 +48,8 @@ namespace QApp.ViewModel
         {
             base.InitializeCommands();
             OpenQuestionnaireCommand = new SimpleActionCommand(DoOpenQuestionnaire);
+            //delete///
+            ShowCompletedItemCommand=new SimpleActionCommand(DoShowCompletedItemCommand);
         }
 
         private void DoOpenQuestionnaire(object p)
@@ -64,6 +60,17 @@ namespace QApp.ViewModel
         }
 
         public ICommand OpenQuestionnaireCommand { get; private set; }
+
+        //*need to delete//
+
+        public ICommand ShowCompletedItemCommand { get; private set; }
+
+        private void DoShowCompletedItemCommand(object p)
+        {
+            CompleteQuestionnaireBrowseItem item = p as CompleteQuestionnaireBrowseItem;
+            //Parent.
+            //CurrentAgent = p as Agent;
+        }
 
         #endregion
 

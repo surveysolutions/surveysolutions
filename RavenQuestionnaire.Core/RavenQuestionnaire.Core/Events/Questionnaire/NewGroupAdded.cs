@@ -13,5 +13,6 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire
         public string GroupText { get;set;}
         public Propagate Paropagateble {get; set;}
         public Guid? ParentGroupPublicKey {get; set;}
+        public string ConditionExpression { get; set; }
     }
 }

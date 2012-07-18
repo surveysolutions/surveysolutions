@@ -42,6 +42,7 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
                 q => q.PublicKey.Equals(target) && !q.PropogationPublicKey.HasValue);
             return dependency;
         }
+
         public static IEnumerable<T> GetAllQuestions<T>(this IGroup entity) where T: class, IComposite 
         {
             List<T> result = new List<T>();
@@ -65,6 +66,7 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
             }
             return result;
         }
+
         public static ICompleteQuestion GetQuestionByKey(this ICompleteGroup entity, Guid key, Guid? propagationKey)
         {
             if (!propagationKey.HasValue)

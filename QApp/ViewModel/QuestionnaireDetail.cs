@@ -26,7 +26,6 @@ namespace QApp.ViewModel {
         {
             QuestionnaireId = questionnaireId;
             GroupId = group;
-
         }
 
         public string QuestionnaireId
@@ -175,40 +174,14 @@ namespace QApp.ViewModel {
 
     public class QuestionnaireDetail : ModuleWithNavigator
     {
+        #region FieldsAndProperties
+
         private string _completedQuestionnaireId ;
-
-        public QuestionnaireDetail()
-        {
-           Navigation = new ObservableCollection<List<NavigationItem>>();
-        }
-
-        public override void InitData(object parameter) {
-            base.InitData(parameter);
-            string questionnaireId =  parameter as string;
-            if (!String.IsNullOrEmpty(questionnaireId))
-            {
-                _completedQuestionnaireId = questionnaireId;
-                Data = new QuestionnaireDetailData(_completedQuestionnaireId, null);
-                (Data as QuestionnaireDetailData).Load();
-            }
-            else
-                _completedQuestionnaireId = (parameter as CompleteQuestionView).QuestionnaireId;
-            CurrentGroup = CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentScreen;
-            BuildMenu();
-        }
-
         ObservableCollection<List<NavigationItem>> navigation;
         public ObservableCollection<List<NavigationItem>> Navigation
         {
             get { return navigation; }
             set { SetValue<ObservableCollection<List<NavigationItem>>>("Navigation", ref navigation, value); }
-        }
-
-        public override List<Module> GetSubmodules()
-        {
-            List<Module> submodules = base.GetSubmodules();
-            submodules.Add(GroupDetail);
-            return submodules;
         }
 
         private CompleteGroupMobileView currentGroup;
@@ -225,9 +198,6 @@ namespace QApp.ViewModel {
             private set { SetValue<Module>("GroupDetail", ref groupDetail, value); }
         }
 
-
-        public QuestionnaireDetailData CompletedQuestionnaireData { get { return (QuestionnaireDetailData)Data; } }
-
         private Question _detail;
         public Question Detail
         {
@@ -235,16 +205,53 @@ namespace QApp.ViewModel {
             private set { SetValue<Question>("Detail", ref _detail, value); }
         }
 
+        public QuestionnaireDetailData CompletedQuestionnaireData
+        {
+            get { return (QuestionnaireDetailData)Data; }
+        }
+
+        #endregion
+
+        #region Constructor
+
+        public QuestionnaireDetail()
+        {
+           Navigation = new ObservableCollection<List<NavigationItem>>();
+        }
+
+        #endregion
+
+        public override void InitData(object parameter) {
+            base.InitData(parameter);
+            string questionnaireId =  parameter as string;
+            if (!String.IsNullOrEmpty(questionnaireId))
+            {
+                _completedQuestionnaireId = questionnaireId;
+                Data = new QuestionnaireDetailData(_completedQuestionnaireId, null);
+                (Data as QuestionnaireDetailData).Load();
+            }
+            else
+                _completedQuestionnaireId = (parameter as CompleteQuestionView).QuestionnaireId;
+            CurrentGroup = CompletedQuestionnaireData.CompleteQuestionnaireItem.CurrentScreen;
+            BuildMenu();
+        }
+        
+        public override List<Module> GetSubmodules()
+        {
+            List<Module> submodules = base.GetSubmodules();
+            submodules.Add(GroupDetail);
+            return submodules;
+        }
 
         #region Commands
-        protected override void InitializeCommands() {
-            base.InitializeCommands();
 
+        protected override void InitializeCommands() 
+        {
+            base.InitializeCommands();
             SetCurrentGroupCommand = new SimpleActionCommand(DoSetCurrentGroup);
             SetCurrentSubGroupCommand = new SimpleActionCommand(DoSetCurrentSubGroup);
             ShowQuestionCommand = new SimpleActionCommand(DoShowQuestion);
             SelectMenuItemCommand = new SimpleActionCommand(DoSelectMenuItem);
-
         }
 
         private void DoSelectMenuItem(object obj)
@@ -265,9 +272,6 @@ namespace QApp.ViewModel {
             var subgroups = (from g in item.Groups select new NavigationItem() {Text = g.GroupText, Command = SetCurrentGroupCommand, Item = g}).ToList();
             Navigation.Add(subgroups);
         }
-
-
-
 
         void RaiseCurrentGroupChanged(CompleteGroupMobileView oldValue, CompleteGroupMobileView newValue)
         {
