@@ -45,6 +45,25 @@ function JsonResults(data, status, xhr) {
     var group = jQuery.parseJSON(data.responseText);
     if (!group.error) {
         UpdateCurrentGroup(group);
+        var allListElements = $('ul.ui-listview').find('li');
+        allListElements.each(function () {
+            var el = null;
+            for (var i = 0; i < group.Menu.length; i++) {
+                if (group.Menu[i].PublicKey == this.id) {
+                    el = group.Menu[i];
+                    break;
+                }
+            }
+            if (el != null) {
+                if (el.Enabled && $(this).is('.ui-disabled')) {
+                    $(this).removeClass('ui-disabled');
+                }
+                else {
+                    if (!el.Enabled && !($(this).is('.ui-disabled')))
+                    $(this).addClass('ui-disabled');
+                }
+            }
+        });
     }
     else
         SetErrorToQuestion(group.question, group.settings.PropogationPublicKey, group.error);

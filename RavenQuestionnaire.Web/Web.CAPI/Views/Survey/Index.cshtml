@@ -114,14 +114,15 @@
             <ul data-role="listview" data-theme="c" data-dividertheme="d" data-counttheme="e">
                 @foreach (CompleteGroupHeaders gh in Model.Groups)
                 {
+                    var activ = @gh.Enabled ? "" : "ui-disabled";
                     if (!gh.IsCurrent)
                     {
-                    <li data-icon="false"><a id="ref-link-@(gh.PublicKey)" data-panel="main" onclick="ClearItems(false)"  href='@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })'>@gh.GroupText
+                    <li data-icon="false" class="@activ" id="@gh.PublicKey"><a id="ref-link-@(gh.PublicKey)" data-panel="main" onclick="ClearItems(false)"  href='@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })'>@gh.GroupText
                         <span  id="counter-@(gh.PublicKey)" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                     else
                     {
-                    <li class="ui-btn-active"><a  id="ref-link-@(gh.PublicKey)" onclick="ClearItems(true)"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })" onclick="ClearItems()">@gh.GroupText
+                    <li class="@activ" id="@gh.PublicKey"><a  id="ref-link-@(gh.PublicKey)" onclick="ClearItems(true)"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })" onclick="ClearItems()">@gh.GroupText
                         <span id="counter-@(gh.PublicKey)" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                 }

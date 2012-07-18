@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.ExpressionExecutors;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.Group
@@ -21,8 +14,8 @@ namespace RavenQuestionnaire.Core.Views.Group
         public CompleteGroupView(CompleteQuestionnaireDocument doc, ICompleteGroup group, ICompleteGroupFactory groupFactory)
             : base(doc, group)
         {
-            
 
+                this.ConditionExpression = doc.ConditionExpression;
                 this.Questions =
                     group.Children.OfType<ICompleteQuestion>().Select(
                         q => new CompleteQuestionFactory().CreateQuestion(doc,group, q)).ToArray();

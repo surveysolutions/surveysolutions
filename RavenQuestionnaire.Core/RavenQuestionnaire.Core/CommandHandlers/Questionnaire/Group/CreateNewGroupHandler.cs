@@ -19,9 +19,9 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Group
             if (command.PublicKey != null)
             {
                 if (command.Triggers != null)
-                    questionnaire.AddGroup(command.PublicKey,command.GroupText, command.Paropagateble, command.Triggers, command.ParentGroupPublicKey);
+                    questionnaire.AddGroup(command.PublicKey,command.GroupText, command.Paropagateble, command.Triggers, command.ParentGroupPublicKey, command.Condition);
                 else
-                    questionnaire.AddGroup(command.PublicKey,command.GroupText, command.Paropagateble, command.ParentGroupPublicKey);
+                    questionnaire.AddGroup(command.PublicKey,command.GroupText, command.Paropagateble, command.ParentGroupPublicKey, command.Condition);
             }
             else
                 throw new ArgumentException("Wrong behaviour"); //rewrite this!!

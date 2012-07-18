@@ -42,6 +42,8 @@ namespace RavenQuestionnaire.Core.Views.Group
 
         public Guid? Parent { get; set; }
 
+        public string ConditionExpression { get; set; }
+
         public List<ICompositeView> Children { get; set; }
 
         public Propagate Propagated { get; set; }
@@ -188,6 +190,7 @@ namespace RavenQuestionnaire.Core.Views.Group
                     q =>
                     new QuestionView(doc, q)).ToArray();
             this.Groups = group.Children.OfType<IGroup>().Select(g => new GroupView(doc, g)).ToArray();
+            this.ConditionExpression = group.ConditionExpression;
         }
 
     }

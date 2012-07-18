@@ -17,6 +17,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
         }
 
+        public bool Enabled { get; set; }
+
         public Guid PublicKey { get; set; }
 
         public string GroupText { get; set; }

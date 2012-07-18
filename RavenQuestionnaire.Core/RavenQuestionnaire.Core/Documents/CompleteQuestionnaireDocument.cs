@@ -37,7 +37,8 @@ namespace RavenQuestionnaire.Core.Documents
             {
                 TemplateId = doc.Id,
                 Title = doc.Title,
-                Triggers = doc.Triggers
+                Triggers = doc.Triggers,
+                ConditionExpression = doc.ConditionExpression
             };
             foreach (IComposite child in doc.Children)
             {
@@ -99,6 +100,8 @@ namespace RavenQuestionnaire.Core.Documents
         public string Title { get; set; }
 
         public bool IsValid { get; set; }
+
+        public string ConditionExpression { get; set; }
 
         public DateTime CreationDate { get; set; }
 
@@ -262,5 +265,7 @@ namespace RavenQuestionnaire.Core.Documents
             get { return null; }
             set {}
         }
+
+        public bool Enabled { get; set; }
     }
 }

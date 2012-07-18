@@ -137,12 +137,13 @@ namespace RavenQuestionnaire.Core.Entities
             }
             throw new ArgumentException(string.Format("target item doesn't exists -{0}", after));
         }
-        public void AddGroup(string groupText,Propagate propageted,List<Guid> triggers,Guid? parent)
+        public void AddGroup(string groupText,Propagate propageted,List<Guid> triggers,Guid? parent, string conditionExpression)
         {
             Group group = new Group();
             group.Title = groupText;
             group.Propagated = propageted;
             group.Triggers = triggers;
+            group.ConditionExpression = conditionExpression;
             try
             {
                 Add(group, parent);
@@ -152,13 +153,13 @@ namespace RavenQuestionnaire.Core.Entities
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
             }
         }
-         public void AddGroup(string groupText, Guid publicKey, Propagate propageted, Guid? parent)
+         public void AddGroup(string groupText, Guid publicKey, Propagate propageted, Guid? parent, string conditionExpression)
         {
             Group group = new Group();
             group.Title = groupText;
             group.Propagated = propageted;
             group.PublicKey = publicKey;
-
+             group.ConditionExpression = conditionExpression;
             try
             {
                 Add(group, parent);
@@ -168,13 +169,14 @@ namespace RavenQuestionnaire.Core.Entities
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
             }
         }
-        public void AddGroup(Guid publicKey, string groupText, Propagate propageted, List<Guid> triggers, Guid? parent)
+        public void AddGroup(Guid publicKey, string groupText, Propagate propageted, List<Guid> triggers, Guid? parent, string conditionExpression)
         {
             Group group = new Group();
             group.Title = groupText;
             group.PublicKey = publicKey;
             group.Propagated = propageted;
             group.Triggers = triggers;
+            group.ConditionExpression = conditionExpression;
             try
             {
                 Add(group, parent);
@@ -184,12 +186,13 @@ namespace RavenQuestionnaire.Core.Entities
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
             }
         }
-        public void AddGroup(Guid publicKey,string groupText, Propagate propageted, Guid? parent)
+        public void AddGroup(Guid publicKey,string groupText, Propagate propageted, Guid? parent, string conditionExpression)
         {
             Group group = new Group();
             group.PublicKey = publicKey;
             group.Title = groupText;
             group.Propagated = propageted;
+            group.ConditionExpression = conditionExpression;
             try
             {
                 Add(group, parent);
@@ -199,24 +202,26 @@ namespace RavenQuestionnaire.Core.Entities
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
             }
         }
-        public void UpdateGroup(string groupText, Propagate propageted,List<Guid> triggers, Guid publicKey)
+        public void UpdateGroup(string groupText, Propagate propageted,List<Guid> triggers, Guid publicKey, string conditionExpression)
         {
             Group group = Find<Group>(publicKey);
             if (group != null)
             {
                 group.Propagated = propageted;
                 group.Triggers = triggers;
+                group.ConditionExpression = conditionExpression;
                 group.Update(groupText);
                 return;
             }
             throw new ArgumentException(string.Format("group with  publick key {0} can't be found", publicKey));
         }
-        public void UpdateGroup(string groupText, Propagate propageted, Guid publicKey)
+        public void UpdateGroup(string groupText, Propagate propageted, Guid publicKey, string conditionExpression)
         {
             Group group = Find<Group>(publicKey);
             if (group != null)
             {
                 group.Propagated = propageted;
+                group.ConditionExpression = conditionExpression;
                 group.Update(groupText);
                 return;
             }

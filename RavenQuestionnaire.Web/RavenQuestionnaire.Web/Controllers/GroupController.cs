@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Web.Controllers
                         Guid newItemKey = Guid.NewGuid();
                         var createCommand = new CreateNewGroupCommand(model.Title, newItemKey, model.Propagated,
                                                                       model.QuestionnaireId, model.Parent,
-                                                                      GlobalInfo.GetCurrentUser());
+                                                                      GlobalInfo.GetCurrentUser(), model.ConditionExpression);
                         commandInvoker.Execute(createCommand);
 
                         //new fw
@@ -62,13 +62,13 @@ namespace RavenQuestionnaire.Web.Controllers
 
 
                         commandService.Execute(new AddGroupCommand(Guid.Parse(model.QuestionnaireId), newItemKey,
-                            model.Title, model.Propagated, model.Parent));
+                            model.Title, model.Propagated, model.Parent, model.ConditionExpression));
                     }
                     else
                     {
                         commandInvoker.Execute(new UpdateGroupCommand(model.Title, model.Propagated,
                                                                       model.QuestionnaireId,
-                                                                      model.PublicKey, GlobalInfo.GetCurrentUser()));
+                                                                      model.PublicKey, GlobalInfo.GetCurrentUser(), model.ConditionExpression));
                     }
                 }
                 catch (Exception e)

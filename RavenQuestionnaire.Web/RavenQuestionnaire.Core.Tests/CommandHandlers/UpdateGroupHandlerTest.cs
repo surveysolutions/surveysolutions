@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
             UpdateGroupHandler handler = new UpdateGroupHandler(questionnaireRepositoryMock.Object);
       /*      AnswerView[] answers = new AnswerView[] { new AnswerView() { Title = "answer", AnswerType = AnswerType.Text } };*/
-            handler.Handle(new UpdateGroupCommand("test", Propagate.None, entity.QuestionnaireId, groupForUpdate.PublicKey, null));
+            handler.Handle(new UpdateGroupCommand("test", Propagate.None, entity.QuestionnaireId, groupForUpdate.PublicKey, null, string.Empty));
             Assert.AreEqual(((IGroup)innerDocument.Children[0]).Title, "test");
             questionnaireRepositoryMock.Verify(x => x.Load(key.ToString()), Times.Once());
 
