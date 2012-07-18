@@ -32,6 +32,8 @@ using Awesomium.Core;
 using Awesomium.Windows.Forms;
 using WinFormsSample.Properties;
 using System.Net;
+using System.IO;
+using System.Collections.Generic;
 
 #endif
 #endregion
@@ -86,7 +88,68 @@ namespace WinFormsSample
                 needsResize = false;
             }
         }
+        const int WM_DEVICECHANGE = 0x219;
 
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
+                case WM_DEVICECHANGE:
+                   
+
+                    int n = (int)m.WParam;
+                    if (n == 0x8000 || n == 0x8004)
+                    {
+                        //Thread.Sleep(1000);
+                        string drive = getDrive();
+                        if (drive!=null)Export(drive);
+                    }
+
+                   
+                    break;
+            }
+            base.WndProc(ref m);
+        }
+        private string getDrive()
+        {
+            int number = 2;
+            List<string> drives = new List<string>();
+            string current = "";
+            DriveInfo[] ListDrives = DriveInfo.GetDrives();
+
+            foreach (DriveInfo Drive in ListDrives)
+            {
+                if (Drive.DriveType == DriveType.Removable)
+                {
+                    drives.Add(Drive.ToString());
+                    
+                }
+            }
+
+            if (drives.Count > 0)
+            {
+                current = drives[number - 1];
+            }
+            else current=null;
+            return current;
+        }
+
+        private void Export(string destination)
+        {
+
+
+            string exportURL = Settings.Default.DefaultUrl;
+            exportURL += "/Synchronizations/Export";
+            string filename = string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace("/", "_"));
+            filename = filename.Replace(" ", "_");
+            filename = filename.Replace(":", "_");
+            WebClient myWebClient = new WebClient();
+            //byte[] myDataBuffer = myWebClient.DownloadFile(exportURL,de)
+            destination += filename;
+            myWebClient.DownloadFile(exportURL, destination);
+            MessageBox.Show(filename, "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            
+        }
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
