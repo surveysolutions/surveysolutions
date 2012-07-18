@@ -98,14 +98,21 @@ namespace WinFormsSample
                    
 
                     int n = (int)m.WParam;
-                    if (n == 0x8000 || n == 0x8004)
+                    if (n == 0x8000)
                     {
                         //Thread.Sleep(1000);
                         string drive = getDrive();
                         if (drive!=null)Export(drive);
+                        MenuItem sinh = this.Menu.MenuItems[0];
+                        sinh.Enabled = true;
+                    }
+                    if (n == 0x8004)
+                    {
+                        MenuItem sinh = this.Menu.MenuItems[0];
+                        sinh.Enabled = false;
                     }
 
-                   
+
                     break;
             }
             base.WndProc(ref m);
@@ -126,7 +133,7 @@ namespace WinFormsSample
                 }
             }
 
-            if (drives.Count > 0)
+            if (drives.Count > 1)
             {
                 current = drives[number - 1];
             }
