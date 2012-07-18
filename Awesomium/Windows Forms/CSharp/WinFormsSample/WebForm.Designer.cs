@@ -44,6 +44,7 @@ namespace WinFormsSample
             this.Text = "CAPI";
             this.Menu = new MainMenu();
                 MenuItem sinh = new MenuItem("Export");
+            sinh.Enabled = false;
                 sinh.Click += new System.EventHandler(this.sinh_click);
             this.Menu.MenuItems.Add(sinh);
             this.ResumeLayout(false);
@@ -54,7 +55,9 @@ namespace WinFormsSample
         private void sinh_click(object sender, System.EventArgs e)
         {
             // Create a new OpenFileDialog and display it.
-            choose.CreatePortable();
+            //choose.CreatePortable();
+            string drive = getDrive();
+            if (drive != null) Export(drive);
         }
     }
 }
