@@ -243,6 +243,7 @@
     <Content Include="Global.asax" />
     <Content Include="README.jQuery.vsdoc.txt" />
     <Content Include="Scripts\code.photoswipe.jquery-3.0.4.min.js" />
+    <Content Include="Scripts\jquery.mobile.splitview.1.2.js" />
     <Content Include="Scripts\iscroll-wrapper.js" />
     <Content Include="Scripts\iscroll.js" />
     <Content Include="Scripts\jqm-docs.1.2.js" />
@@ -253,7 +254,7 @@
     <Content Include="Scripts\jquery-1.7.2.min.js" />
     <Content Include="Scripts\jquery.client.js" />
     <Content Include="Scripts\jquery.keyboard.js" />
-    <Content Include="Scripts\jquery.mobile.1.2.min.js" />
+    <Content Include="Scripts\jquery.mobile.1.2.js" />
     <Content Include="Scripts\jquery.mobile.datebox.min.js" />
     <Content Include="Scripts\jquery.mobile.docs.js" />
     <Content Include="Scripts\jquery.mobile.js" />
