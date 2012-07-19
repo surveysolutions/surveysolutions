@@ -5,6 +5,7 @@ using System.Text;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 using RavenQuestionnaire.Web.App_Start;
 
 namespace RavenQuestionnaire.Core.Events
@@ -13,6 +14,8 @@ namespace RavenQuestionnaire.Core.Events
     {
         IEnumerable<AggregateRootEventStream> ReadEvents();
         void WriteEvents(IEnumerable<AggregateRootEventStream> stream);
+
+        IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare();
     }
 
     public class RavenEventSync : IEventSync
@@ -27,7 +30,17 @@ namespace RavenQuestionnaire.Core.Events
                 throw new Exception("IEventStore is not correct.");
             return myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c));
         }
+        public IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare()
+        {
+            //IViewRepository viewRepository = new ViewRepository();
+            //var model = viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(new CQGroupedBrowseInputModel());
+            var myEventStore = NcqrsEnvironment.Get<IEventStore>();
+            //var myEventStore = NcqrsEnvironment.Get<IEventStore>();
 
+            if (myEventStore == null)
+                throw new Exception("IEventStore is not correct.");
+            return myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c));
+        }
         public void WriteEvents(IEnumerable<AggregateRootEventStream> stream)
         {
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
