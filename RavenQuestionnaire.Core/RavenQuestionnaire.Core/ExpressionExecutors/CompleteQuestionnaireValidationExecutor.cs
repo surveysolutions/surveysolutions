@@ -1,6 +1,6 @@
-﻿using System;
+﻿using NCalc;
+using System;
 using System.Linq;
-using NCalc;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
@@ -18,10 +18,10 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         {
             foreach (ICompleteQuestion completeQuestion in group.Children.Where(c => c is ICompleteQuestion))
             {
-                //  bool previousState = completeQuestion.Enabled;
                 completeQuestion.Valid = Execute(completeQuestion);
             }
         }
+
         public bool Execute()
         {
             bool isValid = true;
@@ -38,19 +38,17 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         {
             if (string.IsNullOrEmpty(question.ValidationExpression))
                 return true;
-            var e = new Expression(question.ValidationExpression);
+            string expression = question.ValidationExpression.ToLower();
+            if (expression.Contains("this"))
+                expression = expression.Replace("this", question.PublicKey.ToString());
+            var e = new Expression(expression);
             e.EvaluateParameter += (name, args) =>
                                        {
                                            Guid nameGuid = Guid.Parse(name);
                                            Guid? propagationKey = question.PropogationPublicKey;
-
                                            var value = hash[nameGuid, propagationKey].GetAnswerObject();
-                                           if (value != null)
-                                               args.Result = value;
-                                           else
-                                               args.Result = string.Empty;
+                                           args.Result = value ?? string.Empty;
                                        };
-                
             bool result = false;
             try
             {
