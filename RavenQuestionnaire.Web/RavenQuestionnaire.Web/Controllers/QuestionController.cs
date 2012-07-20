@@ -171,17 +171,12 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 try
                 {
-
                     Answer[] ansverItems = new Answer[0];
                     if (answers != null)
                         ansverItems = answers.Select(a => ConvertAnswer(a)).ToArray();
-
-
                     if (model.PublicKey == Guid.Empty)
                     {
                         Guid newItemKey = Guid.NewGuid();
-                    
-
                         //new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
                         commandService.Execute(new AddQuestionCommand(Guid.Parse(model.QuestionnaireId),
@@ -197,7 +192,6 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                         model.AnswerOrder,
                                                                                         ansverItems)
                                                    );
-
                     }
                     else
                     {
@@ -220,8 +214,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 catch (Exception e)
                 {
 
-                    ModelState.AddModelError(string.Format("question[{0}].ConditionExpression", model.PublicKey),
-                                             e.Message);
+                    ModelState.AddModelError(string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
                     return PartialView("_Create", model);
                 }
                 return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId, qid=model.PublicKey});

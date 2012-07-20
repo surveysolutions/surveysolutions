@@ -92,7 +92,5 @@ namespace RavenQuestionnaire.Web.Controllers
             commandService.Execute(new DeleteGroupCommand(publicKey, Guid.Parse(questionnaireId)));
             return "";
         }
-
-
     }
 }
