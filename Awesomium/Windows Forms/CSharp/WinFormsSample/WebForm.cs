@@ -34,6 +34,7 @@ using WinFormsSample.Properties;
 using System.Net;
 using System.IO;
 using System.Collections.Generic;
+using System.Threading;
 
 #endif
 #endregion
@@ -47,6 +48,7 @@ namespace WinFormsSample
         RenderBuffer rBuffer;
         Bitmap frameBuffer;
         bool needsResize, repaint;
+        private Export export = new Export();
         #endregion
 
 
@@ -102,7 +104,21 @@ namespace WinFormsSample
                     {
                         //Thread.Sleep(1000);
                         string drive = getDrive();
-                        if (drive!=null)Export(drive);
+                        
+                        if (drive!=null)
+
+                            try
+                            {
+                                //if (export.isActive()) export.Stop();
+                                export.Start(drive);
+                            }
+                            catch (Exception ex)
+                            {
+                               // MessageBox.Show("Export error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                throw ex;
+                            }
+                        
+
                         MenuItem sinh = this.Menu.MenuItems[0];
                         sinh.Enabled = true;
                     }
@@ -117,6 +133,7 @@ namespace WinFormsSample
             }
             base.WndProc(ref m);
         }
+
         private string getDrive()
         {
             int number = 2;
@@ -129,7 +146,7 @@ namespace WinFormsSample
                 if (Drive.DriveType == DriveType.Removable)
                 {
                     drives.Add(Drive.ToString());
-                    
+
                 }
             }
 
@@ -137,26 +154,10 @@ namespace WinFormsSample
             {
                 current = drives[number - 1];
             }
-            else current=null;
+            else current = null;
             return current;
         }
-
-        private void Export(string destination)
-        {
-
-
-            string exportURL = Settings.Default.DefaultUrl;
-            exportURL += "/Synchronizations/Export";
-            string filename = string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace("/", "_"));
-            filename = filename.Replace(" ", "_");
-            filename = filename.Replace(":", "_");
-            WebClient myWebClient = new WebClient();
-            //byte[] myDataBuffer = myWebClient.DownloadFile(exportURL,de)
-            destination += filename;
-            myWebClient.DownloadFile(exportURL, destination);
-            MessageBox.Show(filename, "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            
-        }
+        
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
