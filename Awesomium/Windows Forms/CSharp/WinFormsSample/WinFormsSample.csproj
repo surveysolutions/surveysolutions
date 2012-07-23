@@ -97,14 +97,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="adept_part\Configuration.cs" />
-    <Compile Include="adept_part\FileSizeFormatProvider.cs" />
-    <Compile Include="adept_part\UFormat.cs" />
-    <Compile Include="choose.cs">
+    <Compile Include="Export.cs" />
+    <Compile Include="PleaseWaitForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="choose.Designer.cs">
-      <DependentUpon>choose.cs</DependentUpon>
+    <Compile Include="PleaseWaitForm.Designer.cs">
+      <DependentUpon>PleaseWaitForm.cs</DependentUpon>
     </Compile>
     <Compile Include="WebForm.cs">
       <SubType>Form</SubType>
@@ -114,6 +112,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="PleaseWaitForm.resx">
+      <DependentUpon>PleaseWaitForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="WebForm.resx">
       <DependentUpon>WebForm.cs</DependentUpon>
     </EmbeddedResource>

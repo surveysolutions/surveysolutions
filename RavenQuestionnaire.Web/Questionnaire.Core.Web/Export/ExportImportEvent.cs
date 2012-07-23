@@ -9,6 +9,11 @@ using Newtonsoft.Json;
 using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Web.App_Start;
+using RavenQuestionnaire.Core;
+using Ncqrs;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace Questionnaire.Core.Web.Export
 {
@@ -16,6 +21,7 @@ namespace Questionnaire.Core.Web.Export
     {
         void Import(HttpPostedFileBase uploadFile);
         byte[] Export();
+        byte[] Export(IViewRepository viewRepository);
     }
     
     public class ExportImportEvent:IExportImport
@@ -57,15 +63,39 @@ namespace Questionnaire.Core.Web.Export
                 }
             }
         }
-
         public byte[] Export()
+        {
+
+            var data = new ZipFileData
+            {
+                ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
+            };
+            data.Events = this.synchronizer.ReadEvents();
+
+
+
+            var outputStream = new MemoryStream();
+            using (var zip = new ZipFile())
+            {
+                var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+                zip.AddEntry(string.Format("backup-{0}.txt", DateTime.Now.ToString().Replace(" ", "_")),
+                                            JsonConvert.SerializeObject(data, Formatting.Indented, settings));
+                zip.Save(outputStream);
+            }
+            outputStream.Seek(0, SeekOrigin.Begin);
+            return outputStream.ToArray();
+        }
+        public byte[] Export(IViewRepository viewRepository)
         {
 
             var data = new ZipFileData
                            {
                                ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
                            };
-            data.Events = this.synchronizer.ReadEvents();
+            data.Events = this.synchronizer.ReadCompleteQuestionare(viewRepository);
+            
+            
+            
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {

@@ -149,7 +149,7 @@ namespace Web.CAPI.Controllers
             {
                 try
                 {
-                    AsyncManager.Parameters["result"] = exportimportEvents.Export();
+                    AsyncManager.Parameters["result"] = exportimportEvents.Export(this.viewRepository);
                 }
                 catch
                 {

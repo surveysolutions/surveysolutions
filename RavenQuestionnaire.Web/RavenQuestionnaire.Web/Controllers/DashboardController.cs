@@ -21,6 +21,7 @@ namespace RavenQuestionnaire.Web.Controllers
         public DashboardController(IViewRepository viewRepository,
                                                IBagManager bagManager, IGlobalInfoProvider globalProvider)
         {
+            
             this.viewRepository = viewRepository;
             _bagManager = bagManager;
             _globalProvider = globalProvider;

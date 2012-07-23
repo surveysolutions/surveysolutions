@@ -7,6 +7,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 using RavenQuestionnaire.Web.App_Start;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
 namespace RavenQuestionnaire.Core.Events
 {
@@ -15,7 +16,7 @@ namespace RavenQuestionnaire.Core.Events
         IEnumerable<AggregateRootEventStream> ReadEvents();
         void WriteEvents(IEnumerable<AggregateRootEventStream> stream);
 
-        IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare();
+        IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare(IViewRepository viewRepository);
     }
 
     public class RavenEventSync : IEventSync
@@ -30,16 +31,26 @@ namespace RavenQuestionnaire.Core.Events
                 throw new Exception("IEventStore is not correct.");
             return myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c));
         }
-        public IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare()
+        public IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare(IViewRepository viewRepository)
         {
-            //IViewRepository viewRepository = new ViewRepository();
-            //var model = viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(new CQGroupedBrowseInputModel());
+            
             var myEventStore = NcqrsEnvironment.Get<IEventStore>();
-            //var myEventStore = NcqrsEnvironment.Get<IEventStore>();
-
             if (myEventStore == null)
                 throw new Exception("IEventStore is not correct.");
-            return myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c));
+            
+            var model =
+                viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(new CQGroupedBrowseInputModel());
+            List<Guid> completeIds = new List<Guid>();
+
+            //var myEventStore = NcqrsEnvironment.Get<IEventStore>();
+            foreach (CQGroupItem group in model.Groups)
+            {
+                foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
+                {
+                    completeIds.Add(new Guid(survey.CompleteQuestionnaireId));
+                }
+            }
+            return myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c, completeIds));
         }
         public void WriteEvents(IEnumerable<AggregateRootEventStream> stream)
         {

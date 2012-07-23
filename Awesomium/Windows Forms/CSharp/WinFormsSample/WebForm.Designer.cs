@@ -1,4 +1,6 @@
 ﻿using System.Windows.Forms;
+using System.Threading;
+using System;
 
 namespace WinFormsSample
 {
@@ -57,7 +59,24 @@ namespace WinFormsSample
             // Create a new OpenFileDialog and display it.
             //choose.CreatePortable();
             string drive = getDrive();
-            if (drive != null) Export(drive);
+            if (drive != null)
+            {
+                PleaseWaitForm pleaseWait = new PleaseWaitForm();
+
+                // Display form modelessly
+
+                try
+                {
+                    if (export.isActive()) export.Stop();
+                    export.Start(drive);
+                }
+                catch (Exception ex)
+                {
+                    // MessageBox.Show("Export error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    throw ex;
+                }
+                
+            }
         }
     }
 }
