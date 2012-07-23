@@ -14,8 +14,8 @@ namespace WinFormsSample
 
             InitializeComponent();
 
-           
-            
+
+
         }
 
 
@@ -50,18 +50,18 @@ namespace WinFormsSample
         //        drivesLister.Enabled = false;
         //    }
         //}
-       
+
 
 
     }
 
-    
-    
+
+
 
     class CopyJobSize
     {
         public int nFiles = 0;
         public long nBytes = 0;
     }
-    
+
 }

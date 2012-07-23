@@ -13,7 +13,7 @@ namespace WinFormsSample
 {
     internal class Export
     {
-        
+
         private PleaseWaitForm pleaseWait;
         private string localFilename;
         private WebClient myWebClient;
@@ -28,8 +28,8 @@ namespace WinFormsSample
             pleaseWait = new PleaseWaitForm();
             pleaseWait.Show();
             IAsyncResult result;
-            Uri exportURL = new Uri(Settings.Default.DefaultUrl+"/Synchronizations/Export");
-            
+            Uri exportURL = new Uri(Settings.Default.DefaultUrl + "/Synchronizations/Export");
+
             string filename = string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace("/", "_"));
             filename = filename.Replace(" ", "_");
             filename = filename.Replace(":", "_");
@@ -44,27 +44,27 @@ namespace WinFormsSample
                 Thread.Sleep(10000);
                 End();
             };
-            
+
             localFilename = drive + filename;
             myWebClient.DownloadFileAsync(exportURL, localFilename);
-            
 
-            
+
+
 
 
         }
 
-        
+
 
         public void End()
         {
             pleaseWait.Close();
-  
+
         }
 
-        
 
-  
+
+
 
         internal void Stop()
         {
@@ -75,7 +75,7 @@ namespace WinFormsSample
                     File.Delete(localFilename);
             }
 
-            
+
         }
     }
 }
