@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Antlr.Runtime.Tree;
 using NCalc.Domain;
 using Antlr.Runtime;
-using System.Diagnostics;
 using System.Threading;
+using System.Collections;
+using System.Diagnostics;
+using Antlr.Runtime.Tree;
+using System.Collections.Generic;
 
 namespace NCalc
 {
