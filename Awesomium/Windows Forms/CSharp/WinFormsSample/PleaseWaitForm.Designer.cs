@@ -41,7 +41,7 @@ namespace WinFormsSample
             this.statusLabel.Size = new System.Drawing.Size(135, 13);
             this.statusLabel.TabIndex = 0;
             this.statusLabel.Text = "Export started. Plase wait...";
-            
+
             // 
             // progressBar
             // 
@@ -67,8 +67,8 @@ namespace WinFormsSample
         public ProgressBar progressBar;
         public Label statusLabel;
 
-  
-        
+
+
     }
 
 }
