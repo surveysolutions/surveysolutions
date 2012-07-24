@@ -25,7 +25,6 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         public bool Execute()
         {
             bool isValid = true;
-
             foreach (ICompleteQuestion completeQuestion in hash.Questions)
             {
                 completeQuestion.Valid = Execute(completeQuestion);
