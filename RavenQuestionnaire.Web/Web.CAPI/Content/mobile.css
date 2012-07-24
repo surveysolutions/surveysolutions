@@ -113,20 +113,19 @@
 	margin-top: 9px;
 	margin-left: 5px;
 }
-.splited-button.ui-li-link-alt {
-	width: 80px;
+#dashboard-page .ui-li.divider {
+	min-height: 24px;
 }
-.splited-button.ui-li-link-alt .ui-btn-inner {
-	
+#dashboard-page .ui-li.divider .ui-li-count {
+	right: 90px;
 }
-.splited-button.ui-li-link-alt .ui-btn{
-	left: 5px;
-	right: auto;
-	 margin-top: -14px;
-}
-.splited-button.ui-li-link-alt .ui-btn-text{
+.splited-button {
+	position: absolute;
+	top: 50%;
+	margin: 0;
+	margin-top: -16px;
 	display: block;
-    padding: 10px 10px 10px 30px;
+	right: 10px;
 }
 
 #sidebar .ui-listview .ui-btn-text
@@ -190,9 +189,7 @@
 	background-image:      -o-linear-gradient(#ededed /*{c-bhover-background-start}*/, #dadada /*{c-bhover-background-end}*/); /* Opera 11.10+ */
 	background-image:         linear-gradient(#ededed /*{c-bhover-background-start}*/, #dadada /*{c-bhover-background-end}*/);
 }
-#dashboard-page .ui-li.divider .ui-li-count {
-	right: 90px;
-}
+
 #sidebar .ui-content.with-footer
 {
 	margin-bottom: 40px;
@@ -245,4 +242,11 @@ min-height: 90px;
 .hidden-checkbox {
 	position: absolute;
 	left: -500px;
+}
+body.ui-mobile-viewport, div.ui-mobile-viewport {
+	overflow-x: visible;
+}
+
+.instructions {
+	max-width: 500px;
 }
