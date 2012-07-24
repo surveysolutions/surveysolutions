@@ -24,7 +24,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             Guid key = Guid.NewGuid();
             innerDocument.PublicKey = key;
             Questionnaire entity = new Questionnaire(innerDocument);
-            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
+            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, false, Order.AsIs, null, null, Guid.NewGuid());
             FileDocument innerFileDocument = new FileDocument();
             innerFileDocument.Id = "fID";
             File fEntity = new File(innerFileDocument);
@@ -44,7 +44,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             handler.Handle(new UpdateQuestionCommand(entity.QuestionnaireId, question.PublicKey,
                                                               "question after update", "export title", QuestionType.MultyOption,
-                                                              string.Empty, string.Empty, false, string.Empty, null , Order.AsIs, null));
+                                                              string.Empty, string.Empty, false, false, string.Empty, null , Order.AsIs, null));
                                                      
 
             Assert.True(

@@ -1,7 +1,6 @@
-﻿@using System.Collections.Concurrent
+﻿@using RavenQuestionnaire.Web.Utils
 @using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Question
-@using RavenQuestionnaire.Web.Utils
 @model QuestionView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -61,6 +60,12 @@ else
                 @Html.LabelFor(model => model.Featured, new { @class = "control-label" })
                 <div class="controls">
                     <label class="checkbox">@Html.CheckBoxFor(model => model.Featured) Yes </label>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.Mandatory, new { @class = "control-label" })
+                <div class="controls">
+                    <label class="checkbox">@Html.CheckBoxFor(model => model.Mandatory) Yes</label>
                 </div>
             </div>
             <div class="control-group">

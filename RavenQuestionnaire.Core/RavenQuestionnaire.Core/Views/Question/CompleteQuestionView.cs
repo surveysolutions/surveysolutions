@@ -39,6 +39,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.Answer = doc.GetAnswerString();
             this.Answered = this.Answers.Any(a => a.Selected == true);
             this.Featured = doc.Featured;
+            this.Mandatory = doc.Mandatory;
             this.Comments = doc.Comments;
             if (doc.Cards != null)
             {

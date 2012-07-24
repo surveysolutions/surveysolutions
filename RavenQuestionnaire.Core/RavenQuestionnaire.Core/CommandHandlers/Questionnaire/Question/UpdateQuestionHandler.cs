@@ -1,10 +1,8 @@
 ﻿using System;
-using RavenQuestionnaire.Core.Commands;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Repositories;
-using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.ExpressionExecutors;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 
 namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question
 {
@@ -52,13 +50,10 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question
                 }
             }
             questionnaire.UpdateQuestion(command.QuestionPublicKey, command.QuestionText, command.StataExportCaption,
-                                        command.QuestionType,
+                                         command.QuestionType,
                                          command.ConditionExpression,command.ValidationExpression,
-                                         command.Instructions, command.Featured,command.AnswerOrder,
+                                         command.Instructions, command.Featured, command.Mandatory, command.AnswerOrder,
                                          command.Answers);
-
-            /*   if(command.Answers!=null)
-                questionnaire.UpdateAnswerList(command.Answers);*/
         }
     }
 }

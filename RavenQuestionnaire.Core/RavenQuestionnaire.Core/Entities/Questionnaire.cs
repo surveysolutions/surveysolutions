@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -11,36 +11,48 @@ namespace RavenQuestionnaire.Core.Entities
 {
     public class Questionnaire : IEntity<QuestionnaireDocument>
     {
+        #region Properties
+
         private QuestionnaireDocument innerDocument;
 
         public string QuestionnaireId { get { return innerDocument.Id; } }
 
+        #endregion
+
+        #region Constructor
+
         public Questionnaire(string title, Guid publicKey)
         {
             innerDocument = new QuestionnaireDocument()
-                                {
-                                    Title = title, 
-                                    PublicKey = publicKey
-                                };
+            {
+                Title = title,
+                PublicKey = publicKey
+            };
         }
+
         public Questionnaire(QuestionnaireDocument innerDocument)
         {
             this.innerDocument = innerDocument;
         }
+
+        #endregion
+
+        #region PublicMethod
+        
         public void UpdateText(string text)
         {
             innerDocument.Title = text;
             innerDocument.LastEntryDate = DateTime.Now;
         }
+
         public void ClearQuestions()
         {
             innerDocument.Children.RemoveAll(a=>a is IQuestion);
         }
 
-        public AbstractQuestion AddQuestion(Guid qid, string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, Order answerOrder, Guid? groupPublicKey,
+        public AbstractQuestion AddQuestion(Guid qid, string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, bool mandatory, Order answerOrder, Guid? groupPublicKey,
             IEnumerable<Answer> answers, Guid publicKey)
         {
-
             var result = new CompleteQuestionFactory().Create(type);
             result.PublicKey = qid;
             result.QuestionType = type;
@@ -50,10 +62,9 @@ namespace RavenQuestionnaire.Core.Entities
             result.ValidationExpression = validation;
             result.AnswerOrder = answerOrder;
             result.Featured = featured;
+            result.Mandatory = mandatory;
             result.PublicKey = publicKey;
             UpdateAnswerList(answers, result);
-          
-
             try
             {
                 Add(result, groupPublicKey);
@@ -65,6 +76,7 @@ namespace RavenQuestionnaire.Core.Entities
                                                           groupPublicKey.Value));
             }
         }
+
         protected void UpdateAnswerList( IEnumerable<Answer> answers, AbstractQuestion question)
         {
             if (answers != null && answers.Any())
@@ -83,6 +95,7 @@ namespace RavenQuestionnaire.Core.Entities
             if(!result)
                 throw new ArgumentException(string.Format("item doesn't exists -{0}", itemPublicKey));
         }
+
         protected bool MoveItem(IComposite root, Guid itemPublicKey, Guid? groupKey,  Guid? after)
         {
             if (Move(root.Children, itemPublicKey, groupKey, after))
@@ -121,22 +134,17 @@ namespace RavenQuestionnaire.Core.Entities
             {
                 if (groups[i].PublicKey == after.Value)
                 {
-                  /*  int movableIndex = groups.IndexOf(moveble);
-                    var temp = groups[i];
-                    groups[i] = moveble;
-                    groups[movableIndex] = temp;*/
-                       groups.Remove(moveble);
-                    
+                    groups.Remove(moveble);
                     if (i < groups.Count)
                         groups.Insert(i + 1, moveble);
                     else
                         groups.Add(moveble);
-                 //   groups.RemoveAt(movableIndex);
                     return true;
                 }
             }
             throw new ArgumentException(string.Format("target item doesn't exists -{0}", after));
         }
+
         public void AddGroup(string groupText,Propagate propageted,List<Guid> triggers,Guid? parent, string conditionExpression)
         {
             Group group = new Group();
@@ -153,7 +161,8 @@ namespace RavenQuestionnaire.Core.Entities
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
             }
         }
-         public void AddGroup(string groupText, Guid publicKey, Propagate propageted, Guid? parent, string conditionExpression)
+
+        public void AddGroup(string groupText, Guid publicKey, Propagate propageted, Guid? parent, string conditionExpression)
         {
             Group group = new Group();
             group.Title = groupText;
@@ -169,6 +178,7 @@ namespace RavenQuestionnaire.Core.Entities
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
             }
         }
+
         public void AddGroup(Guid publicKey, string groupText, Propagate propageted, List<Guid> triggers, Guid? parent, string conditionExpression)
         {
             Group group = new Group();
@@ -186,6 +196,7 @@ namespace RavenQuestionnaire.Core.Entities
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
             }
         }
+
         public void AddGroup(Guid publicKey,string groupText, Propagate propageted, Guid? parent, string conditionExpression)
         {
             Group group = new Group();
@@ -202,6 +213,7 @@ namespace RavenQuestionnaire.Core.Entities
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
             }
         }
+
         public void UpdateGroup(string groupText, Propagate propageted,List<Guid> triggers, Guid publicKey, string conditionExpression)
         {
             Group group = Find<Group>(publicKey);
@@ -215,6 +227,7 @@ namespace RavenQuestionnaire.Core.Entities
             }
             throw new ArgumentException(string.Format("group with  publick key {0} can't be found", publicKey));
         }
+
         public void UpdateGroup(string groupText, Propagate propageted, Guid publicKey, string conditionExpression)
         {
             Group group = Find<Group>(publicKey);
@@ -227,12 +240,14 @@ namespace RavenQuestionnaire.Core.Entities
             }
             throw new ArgumentException(string.Format("group with  publick key {0} can't be found", publicKey));
         }
+
         QuestionnaireDocument IEntity<QuestionnaireDocument>.GetInnerDocument()
         {
             return this.innerDocument;
         }
+
         public void UpdateQuestion(Guid publicKey, string text, string stataExportCaption, QuestionType type,
-            string condition, string validation, string instructions, bool featured, Order answerOrder, IEnumerable<Answer> answers)
+            string condition, string validation, string instructions, bool featured, bool mandatory, Order answerOrder, IEnumerable<Answer> answers)
         {
             var question = Find<AbstractQuestion>(publicKey);
             if (question == null)
@@ -240,15 +255,15 @@ namespace RavenQuestionnaire.Core.Entities
             question.QuestionText = text;
             question.StataExportCaption = stataExportCaption;
             question.QuestionType = type;
-
             UpdateAnswerList(answers, question);
-
             question.ConditionExpression = condition;
             question.ValidationExpression = validation;
             question.Instructions = instructions;
             question.Featured = featured;
+            question.Mandatory = mandatory;
             question.AnswerOrder = answerOrder;
         }
+
         public void UpdateConditionExpression(Guid publicKey, string condition)
         {
             var question = Find<AbstractQuestion>(publicKey);
@@ -271,14 +286,17 @@ namespace RavenQuestionnaire.Core.Entities
         {
            innerDocument.Remove(c);
         }
+
         public void Remove(Guid publicKey)
         {
             innerDocument.Remove(publicKey);
         }
+
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
             return innerDocument.Find<T>(publicKey);
         }
+
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
@@ -297,6 +315,6 @@ namespace RavenQuestionnaire.Core.Entities
             return this.innerDocument.GetAllQuestions<IQuestion>().ToList();
         }
 
-
+        #endregion
     }
 }

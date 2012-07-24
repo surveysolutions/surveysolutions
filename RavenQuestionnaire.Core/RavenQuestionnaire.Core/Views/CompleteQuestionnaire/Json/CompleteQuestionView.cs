@@ -14,6 +14,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         public string Title { get; set; }
         public QuestionType QuestionType { get; set; }
         public bool Featured { get; set; }
+        public bool Mandatory { get; set; }
         public bool Enabled { get; set; }
         public bool Valid { get; set; }
         public bool Answered { get; set; }
@@ -36,6 +37,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             this.Valid = doc.Valid;
             this.Comments = doc.Comments;
             this.Enabled = doc.Enabled;
+            this.Mandatory = doc.Mandatory;
             var answers = doc.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(doc.PublicKey, a)).ToArray();
             this.Answer = doc.GetAnswerString();
             this.Answered = answers.Any(a => a.Selected == true);

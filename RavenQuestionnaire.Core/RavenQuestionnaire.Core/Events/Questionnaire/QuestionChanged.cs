@@ -24,8 +24,9 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire
 
         public bool Featured { get; set; }
 
-        public Answer[] Answers { get; set; }
+        public bool Mandatory { get; set; }
 
+        public Answer[] Answers { get; set; }
 
         public string Instructions { get; set; }
     }
