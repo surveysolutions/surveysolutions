@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
@@ -21,6 +19,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public string Instructions { get; private set; }
         public Order AnswerOrder { get; private set; }
         public bool Featured { get; private set; }
+        public bool Mandatory { get; private set; }
         public UserLight Executor { get; set; }
         public Answer[] Answers { get; set; }
 
@@ -31,7 +30,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         [JsonConstructor]
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string questionText,
           string stataExportCaption, QuestionType questionType, string conditionExpression,
-           string validationExpression, bool featured, string instructions, Answer[] answers, Order answerOrder, UserLight executor)
+           string validationExpression, bool featured, bool mandatory, string instructions, Answer[] answers, Order answerOrder, UserLight executor)
         {
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.AnswerOrder = answerOrder;
@@ -44,6 +43,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.ValidationExpression = validationExpression;
             this.Executor = executor;
             this.Featured = featured;
+            this.Mandatory = mandatory;
             this.Instructions = instructions;
             if (answers != null)
                 this.Answers = answers;
@@ -52,29 +52,6 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
                 this.Answers = new Answer[0];
             }
         }
-
-        /*
-        public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string questionText,
-           string stataExportCaption, QuestionType questionType, string conditionExpression, 
-            string validationExpression, bool featured, string instructions, AnswerView[] answers, Order answerOrder, UserLight executor):
-            this(questionnaireId,questionPublicKey,questionText,stataExportCaption,questionType,conditionExpression,validationExpression,featured,instructions,new Answer[0],answerOrder,executor)
-                featured, instructions, answerOrder, executor)
-        {
-            if (answers != null)
-                this.Answers =
-                    answers.Select(
-                        a =>
-                        new Answer()
-                            {
-                                AnswerValue = a.AnswerValue,
-                                AnswerText = a.Title,
-                                AnswerType = a.AnswerType,
-                                Mandatory = a.Mandatory,
-                                PublicKey = a.PublicKey,
-                                AnswerImage =
-                                    string.IsNullOrEmpty(a.AnswerImage) ? "" : IdUtil.CreateFileId(a.AnswerImage)
-                            }).ToArray();
-        }*/
 
         #endregion
     }

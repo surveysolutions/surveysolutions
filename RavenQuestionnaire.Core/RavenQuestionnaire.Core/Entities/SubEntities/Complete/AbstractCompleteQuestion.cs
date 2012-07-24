@@ -29,6 +29,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public bool Featured { get; set; }
 
+        public bool Mandatory { get; set; }
 
         public Guid? PropogationPublicKey { get; set; }
 
@@ -83,7 +84,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
 
         #endregion
-
         
         #region Implementation of ITriggerable
 

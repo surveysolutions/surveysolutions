@@ -1,23 +1,20 @@
-﻿using System;
+﻿using Ncqrs;
+using System;
 using System.IO;
 using System.Web;
 using System.Linq;
 using System.Web.Mvc;
 using Kaliko.ImageLibrary;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
 using Kaliko.ImageLibrary.Filters;
+using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Web.Models;
-using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Views.Card;
 using RavenQuestionnaire.Core.Views.File;
-using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
@@ -190,6 +187,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                         model.ValidationExpression,
                                                                                         model.Instructions,
                                                                                         model.Featured,
+                                                                                        model.Mandatory,
                                                                                         model.AnswerOrder,
                                                                                         ansverItems)
                                                    );
@@ -207,6 +205,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                       model.ValidationExpression,
                                                                       model.Instructions,
                                                                       model.Featured,
+                                                                      model.Mandatory,
                                                                       model.AnswerOrder,
                                                                       ansverItems));
 

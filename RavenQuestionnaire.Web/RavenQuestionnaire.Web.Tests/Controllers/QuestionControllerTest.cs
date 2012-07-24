@@ -56,7 +56,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = Guid.NewGuid().ToString();
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
+            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, false, Order.AsIs, null, null, Guid.NewGuid());
 
             var questionView = new QuestionView(innerDocument, question);
             ViewRepositoryMock.Setup(
@@ -76,7 +76,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = Guid.NewGuid().ToString();
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
+            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, false, Order.AsIs, null, null, Guid.NewGuid());
 
             Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.Load("questionnairedocuments/" + innerDocument.Id)).Returns(entity);
@@ -93,7 +93,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.Id = "qID";
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, Order.AsIs, null, null, Guid.NewGuid());
+            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, false, Order.AsIs, null, null, Guid.NewGuid());
             var questionView = new QuestionView(innerDocument, question);
 
             var input = new QuestionViewInputModel(question.PublicKey, entity.QuestionnaireId);
