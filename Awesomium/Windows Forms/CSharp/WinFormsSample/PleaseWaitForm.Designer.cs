@@ -49,6 +49,7 @@ namespace WinFormsSample
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(132, 15);
             this.progressBar.TabIndex = 1;
+            
             // 
             // PleaseWaitForm
             // 
@@ -57,6 +58,11 @@ namespace WinFormsSample
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.statusLabel);
             this.Name = "PleaseWaitForm";
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.StartPosition = FormStartPosition.CenterScreen;
             this.ResumeLayout(false);
             this.PerformLayout();
 

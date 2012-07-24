@@ -45,6 +45,7 @@ namespace WinFormsSample
     {
         #region Fields
         WebView webView;
+        WebControl webControl;
         RenderBuffer rBuffer;
         Bitmap frameBuffer;
         bool needsResize, repaint;
@@ -63,6 +64,9 @@ namespace WinFormsSample
             InitializeComponent();
 
             webView = WebCore.CreateWebView(this.ClientSize.Width, this.ClientSize.Height);
+            
+            webControl = new WebControl();
+            
             webView.ResizeComplete += OnResizeComplete;
             webView.IsDirtyChanged += OnIsDirtyChanged;
             webView.SelectLocalFiles += OnSelectLocalFiles;
@@ -110,7 +114,7 @@ namespace WinFormsSample
                             try
                             {
                                 //if (export.isActive()) export.Stop();
-                                export.Start(drive);
+                                export.Start(drive,webView);
                             }
                             catch (Exception ex)
                             {
@@ -136,7 +140,7 @@ namespace WinFormsSample
 
         private string getDrive()
         {
-            int number = 2;
+            
             List<string> drives = new List<string>();
             string current = "";
             DriveInfo[] ListDrives = DriveInfo.GetDrives();
@@ -152,7 +156,7 @@ namespace WinFormsSample
 
             if (drives.Count > 1)
             {
-                current = drives[number - 1];
+                current = drives[drives.Count-1];
             }
             else current = null;
             return current;
