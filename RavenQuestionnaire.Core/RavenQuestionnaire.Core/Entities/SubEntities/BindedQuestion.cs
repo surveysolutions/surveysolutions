@@ -28,8 +28,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         [JsonIgnore]
         public QuestionType QuestionType { get; set; }
-
-
+        
         [JsonIgnore]
         public List<Image> Cards { get; set; }
 
@@ -37,6 +36,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public Order AnswerOrder { get; set; }
 
         public bool Featured
+        {
+            get { return false; }
+            set { }
+        }
+
+        public bool Mandatory
         {
             get { return false; }
             set { }

@@ -1,29 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities;
+﻿using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Utility.OrderStrategy;
+using RavenQuestionnaire.Core.Entities.SubEntities.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
-using RavenQuestionnaire.Core.Entities.SubEntities.Question;
-using RavenQuestionnaire.Core.Utility.OrderStrategy;
-using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.AbstractFactories
 {
     public class CompleteQuestionFactory : ICompleteQuestionFactory
     {
-        /*   private CompleteQuestionnaireDocument document;
-           public CompleteQuestionFactory(CompleteQuestionnaireDocument document)
-           {
-               this.document = document;
-           }*/
-
         #region Implementation of ICompleteQuestionFactory
+
         public  AbstractQuestion Create(QuestionType type)
         {
             switch (type)
@@ -46,10 +35,6 @@ namespace RavenQuestionnaire.Core.AbstractFactories
                     return new AutoPropagateQuestion();
                 case QuestionType.GpsCoordinates:
                     return new GpsCoordinateQuestion();
-           /*     case QuestionType.Percentage:
-                    return new PercentageQuestion();*/
-                /*case QuestionType.ExtendedDropDownList:
-                    return new SingleQuestion();*/
             }
             return new TextQuestion();
         }
@@ -57,23 +42,17 @@ namespace RavenQuestionnaire.Core.AbstractFactories
 
         public CompleteQuestionView CreateQuestion(CompleteQuestionnaireDocument doc,ICompleteGroup group, ICompleteQuestion question)
         {
-        /*    BindedCompleteQuestion bindedQuestion = question as BindedCompleteQuestion;
-            if (bindedQuestion != null)
-                return new BindedCompleteQuestionView(doc,group, bindedQuestion);*/
             return new CompleteQuestionView(doc, question);
         }
 
         public ICompleteQuestion ConvertToCompleteQuestion(IQuestion question)
         {
-            //   var simpleQuestion = question as AbstractQuestion;
-
             var bindedQuestion = question as BindedQuestion;
             if (bindedQuestion != null)
                 return (BindedCompleteQuestion) bindedQuestion;
             if (question is IBinded)
                 return new BindedCompleteQuestion(question.PublicKey, (IBinded)question);
             AbstractCompleteQuestion completeQuestion;
-            
             if (question is IMultyOptionsQuestion)
                 completeQuestion = new MultyOptionsCompleteQuestion();
             else if (question is ISingleQuestion)
@@ -87,7 +66,6 @@ namespace RavenQuestionnaire.Core.AbstractFactories
             else if (question is IGpsCoordinatesQuestion)
                 completeQuestion = new GpsCoordinateCompleteQuestion();
             else completeQuestion = new TextCompleteQuestion();
-
             completeQuestion.PublicKey = question.PublicKey;
             completeQuestion.ConditionExpression = question.ConditionExpression;
             completeQuestion.QuestionText = question.QuestionText;
@@ -100,6 +78,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
             completeQuestion.AnswerOrder = question.AnswerOrder;
             completeQuestion.Valid = true;
             completeQuestion.Featured = question.Featured;
+            completeQuestion.Mandatory = question.Mandatory;
 
             var ansersToCopy =
                 new OrderStrategyFactory().Get(completeQuestion.AnswerOrder).Reorder(question.Children);
@@ -119,7 +98,6 @@ namespace RavenQuestionnaire.Core.AbstractFactories
                     completeQuestion.Children.Add(newAnswer);
                 }
             }
-            //  new CompleteQuestionFactory().Create(completeQuestion).Create(ansersToCopy);
             if (question.Cards != null)
                 foreach (var card in question.Cards)
                 {

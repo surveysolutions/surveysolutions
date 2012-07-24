@@ -1,11 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Observers;
-using RavenQuestionnaire.Core.ExpressionExecutors;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
@@ -20,6 +15,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         List<Image> Cards { get; set; }
         Order AnswerOrder { get; set; }
         bool Featured { get; set; }
+        bool Mandatory { get; set; }
         string Comments { get; set; }
     }
 

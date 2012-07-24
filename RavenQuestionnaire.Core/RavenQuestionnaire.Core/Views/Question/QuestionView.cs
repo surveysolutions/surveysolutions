@@ -14,8 +14,9 @@ namespace RavenQuestionnaire.Core.Views.Question
 {
     public abstract class AbstractQuestionView : ICompositeView
     {
-        public int Index { get; set; }
+        #region Properties
 
+        public int Index { get; set; }
         public Guid PublicKey { get; set; }
 
         [Display(Prompt = "Type question here")]
@@ -30,6 +31,8 @@ namespace RavenQuestionnaire.Core.Views.Question
         public QuestionType QuestionType { get; set; }
 
         public bool Featured { get; set; }
+
+        public bool Mandatory { get; set; }
 
         public Order AnswerOrder { get; set; }
         //remove when exportSchema will be done 
@@ -51,9 +54,13 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public List<ICompositeView> Children { get; set; }
 
+        #endregion
+
+        #region Constructor
+
         public AbstractQuestionView()
         {
-          
+
         }
 
         public AbstractQuestionView(string questionnaireId, Guid? groupPublicKey)
@@ -77,12 +84,16 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.Comments = doc.Comments;
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
-          
+            this.Mandatory = doc.Mandatory;
         }
+
+        #endregion
     }
 
     public abstract class AbstractQuestionView<T> : AbstractQuestionView where T : AnswerView
     {
+        #region Properties
+
         public CardView[] Cards { get; set; }
 
         public T[] Answers
@@ -107,7 +118,12 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         private T[] _answers;
 
-        public AbstractQuestionView():base()
+        #endregion
+
+        #region Constructor
+
+        public AbstractQuestionView()
+            : base()
         {
             Answers = new T[0];
             Cards = new CardView[0];
@@ -121,11 +137,13 @@ namespace RavenQuestionnaire.Core.Views.Question
         }
 
         public AbstractQuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
-            : base(questionnaire,doc)
+            : base(questionnaire, doc)
         {
             Answers = new T[0];
             Cards = new CardView[0];
         }
+
+        #endregion
     }
 
     public abstract class QuestionView<T, TGroup, TQuestion> : AbstractQuestionView<T>
