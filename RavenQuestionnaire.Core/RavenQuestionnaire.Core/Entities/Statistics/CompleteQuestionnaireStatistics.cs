@@ -90,6 +90,7 @@ namespace RavenQuestionnaire.Core.Entities.Statistics
             }
             CalculateApproximateAnswerTime(this.innerDocument.AnsweredQuestions);
         }
+
         protected void ProccessQuestions(IEnumerable<ICompleteQuestion> questions, Guid gropPublicKey, Guid? gropPropagationPublicKey, Guid screenPublicKey)
         {
             foreach (ICompleteQuestion completeQuestion in questions)

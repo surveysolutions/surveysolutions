@@ -139,6 +139,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             set { }
         }
 
+        public bool Mandatory
+        {
+            get { return false; }
+            set { }
+        }
+
         public Dictionary<string, object> Attributes
         {
             get { return new Dictionary<string, object>(0); }

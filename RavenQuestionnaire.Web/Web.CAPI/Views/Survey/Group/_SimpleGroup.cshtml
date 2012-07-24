@@ -1,6 +1,6 @@
 ﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.Question
+@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteGroupMobileView
 @using (var enumerator = Model.Children.GetEnumerator())
@@ -17,7 +17,8 @@
                 if ((item as CompleteQuestionView) != null)
                 {
                     var question = item as CompleteQuestionView;
-    <div class="ui-body ui-body-c" id="elem-@(question.PublicKey)">
+                    var bordercolor = question.Mandatory ? "border-color:#FF0000;" : string.Empty;
+    <div style="@bordercolor" class="ui-body ui-body-c" id="elem-@(question.PublicKey)">
         <div class="ui-grid-a question-content">
             <div class="ui-block-a">
                 @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions))

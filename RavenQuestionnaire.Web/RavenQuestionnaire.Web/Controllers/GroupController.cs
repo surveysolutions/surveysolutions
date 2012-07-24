@@ -1,39 +1,38 @@
-﻿#region
-
+﻿using Ncqrs;
 using System;
 using System.Web;
 using System.Web.Mvc;
-using Ncqrs;
+using RavenQuestionnaire.Core;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
-using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands;
-using RavenQuestionnaire.Core.Commands.Questionnaire;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Views.Questionnaire;
-using System.Collections.Generic;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 
-#endregion
 
 namespace RavenQuestionnaire.Web.Controllers
 {
     public class GroupController : Controller
     {
+        #region Properties
+
         private readonly ICommandService commandService;
         private readonly IViewRepository viewRepository;
+
+        #endregion
+
+        #region Constructor
 
         public GroupController(IViewRepository viewRepository)
         {
             this.commandService = NcqrsEnvironment.Get<ICommandService>();
             this.viewRepository = viewRepository;
         }
+
+        #endregion
+
+        #region Actions
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Create(string id, Guid? parentGroup)
@@ -66,10 +65,6 @@ namespace RavenQuestionnaire.Web.Controllers
                     ModelState.AddModelError("ConditionExpression", e.Message);
                     return PartialView("_Create", model);
                 }
-                /* var questionnaire =
-                     viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                         new QuestionnaireViewInputModel(model.QuestionnaireId));
-                 */
                 return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
             }
             return View("_Create", model);
@@ -92,5 +87,7 @@ namespace RavenQuestionnaire.Web.Controllers
             commandService.Execute(new DeleteGroupCommand(publicKey, Guid.Parse(questionnaireId)));
             return "";
         }
+
+        #endregion
     }
 }

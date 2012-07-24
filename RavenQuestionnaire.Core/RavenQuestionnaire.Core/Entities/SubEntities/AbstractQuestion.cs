@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 
@@ -11,29 +9,16 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
     public abstract class AbstractQuestion: IQuestion
     {
-        protected AbstractQuestion()
-        {
-            //PublicKey = Guid.NewGuid();
-            Cards = new List<Image>();
-            this.Triggers = new List<Guid>();
 
-        }
+        #region FieldsProperties
 
-        protected AbstractQuestion(string text)
-            : this()
-        {
-            QuestionText = text;
-        }
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
         public List<Image> Cards { get; set; }
-
         public Order AnswerOrder { get; set; }
-
         public bool Featured { get; set; }
-
-
+        public bool Mandatory { get; set; }
         public string ConditionExpression
         {
             get { return this.conditionExpression; }
@@ -43,17 +28,28 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
                 this.Triggers = parser.Execute(value);
             }
         }
-
         public string ValidationExpression { get; set; }
-
         private string conditionExpression;
         private QuestionnaireParametersParser parser = new QuestionnaireParametersParser();
-
         public string StataExportCaption { get; set; }
-
         public string Instructions { get; set; }
-
         public string Comments { get; set; }
+
+        #endregion
+
+        protected AbstractQuestion()
+        {
+            //PublicKey = Guid.NewGuid();
+            Cards = new List<Image>();
+            this.Triggers = new List<Guid>();
+        }
+
+        protected AbstractQuestion(string text)
+            : this()
+        {
+            QuestionText = text;
+        }
+        
 
         public void AddCard(Image card)
         {

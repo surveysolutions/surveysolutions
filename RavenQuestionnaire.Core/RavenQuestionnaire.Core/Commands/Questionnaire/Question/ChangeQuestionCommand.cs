@@ -44,6 +44,11 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             get;
             set;
         }
+        public bool Mandatory
+        {
+            get;
+            set;
+        }
         public Order AnswerOrder
         {
             get;
@@ -53,7 +58,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
 
         public ChangeQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, string stataExportCaption, QuestionType questionType,
                                                      string conditionExpression, string validationExpression, 
-                                                     string instructions, bool featured, Order answerOrder, Answer[] answers)
+                                                     string instructions, bool featured, bool mandatory, Order answerOrder, Answer[] answers)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionText = questionText;
@@ -61,8 +66,9 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.QuestionType = questionType;
             this.ConditionExpression = conditionExpression;
             this.ValidationExpression = validationExpression;
-            Instructions = instructions;
+            this.Instructions = instructions;
             this.Featured = featured;
+            this.Mandatory = mandatory;
             this.AnswerOrder = answerOrder;
             this.PublicKey = publicKey;
             this.Answers = answers;

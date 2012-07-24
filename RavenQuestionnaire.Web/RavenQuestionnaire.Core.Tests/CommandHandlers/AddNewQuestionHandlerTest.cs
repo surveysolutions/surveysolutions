@@ -31,7 +31,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { Title = "answer", AnswerType = AnswerType.Select } };
             handler.Handle(new AddNewQuestionCommand(Guid.NewGuid(),"test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId, null, Guid.NewGuid(), string.Empty, string.Empty,
-                                                        null, false, Order.AsIs, answers.Select(a => ConvertAnswer(a)).ToArray(), null));
+                                                        null, false, false, Order.AsIs, answers.Select(a => ConvertAnswer(a)).ToArray(), null));
 
             questionnaireRepositoryMock.Verify(x => x.Load(key.ToString()), Times.Once());
 
@@ -55,7 +55,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AnswerView[] answers = new AnswerView[] { new AnswerView() { Title = "answer", AnswerType = AnswerType.Select } };
             handler.Handle(new AddNewQuestionCommand(Guid.NewGuid(), "test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId,
                 topGroup.PublicKey, Guid.NewGuid(), string.Empty, string.Empty,
-                null, false, Order.AsIs, answers.Select(ConvertAnswer).ToArray(), null));
+                null, false, false, Order.AsIs, answers.Select(ConvertAnswer).ToArray(), null));
 
             questionnaireRepositoryMock.Verify(x => x.Load(key.ToString()), Times.Once());
             Assert.AreEqual((innerDocument.Children[0] as Group).Children.Count, 1);
@@ -78,7 +78,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
                 () =>
                 handler.Handle(new AddNewQuestionCommand(Guid.NewGuid(), "test", "testExport", QuestionType.SingleOption,
                                                                   entity.QuestionnaireId, Guid.NewGuid(), Guid.NewGuid(), string.Empty,
-                                                                  string.Empty, string.Empty, false, Order.AsIs,
+                                                                  string.Empty, string.Empty, false, false, Order.AsIs,
                                                                   answers.Select(ConvertAnswer).ToArray(), null)));
         }
 
@@ -97,7 +97,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             AddNewQuestionHandler handler = new AddNewQuestionHandler(questionnaireRepositoryMock.Object, validator.Object);
             AnswerView[] answers = new AnswerView[] { new AnswerView() { Title = "answer", AnswerType = AnswerType.Select,  } };
             handler.Handle(new AddNewQuestionCommand(Guid.NewGuid(), "test", "testExport", QuestionType.SingleOption, entity.QuestionnaireId,
-               null, Guid.NewGuid(), "invalid condition", string.Empty, string.Empty, false, Order.AsIs,
+               null, Guid.NewGuid(), "invalid condition", string.Empty, string.Empty, false, false, Order.AsIs,
                 answers.Select(ConvertAnswer).ToArray(), null));
 
             Assert.AreEqual(innerDocument.Children.Count, 0);

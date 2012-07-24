@@ -1,29 +1,29 @@
-﻿#region
+﻿#region Assembly
 
+using Ncqrs;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using Ncqrs;
+using RavenQuestionnaire.Core;
+using System.Collections.Generic;
 using Ncqrs.Commanding.ServiceModel;
+using RavenQuestionnaire.Web.Models;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
-using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
-using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
+using RavenQuestionnaire.Core.Views.Status;
+using RavenQuestionnaire.Core.Views.Question;
+using RavenQuestionnaire.Core.Views.StatusReport;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.Status.StatusElement;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
-using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Views.Status;
-using RavenQuestionnaire.Core.Views.Status.StatusElement;
-using RavenQuestionnaire.Core.Views.StatusReport;
-using RavenQuestionnaire.Web.Models;
 
 #endregion
 
@@ -32,10 +32,16 @@ namespace RavenQuestionnaire.Web.Controllers
     [Authorize]
     public class CompleteQuestionnaireController : Controller
     {
+        #region Properties
+
         private readonly IBagManager _bagManager;
         private readonly IGlobalInfoProvider _globalProvider;
         private readonly ICommandInvoker commandInvoker;
         private readonly IViewRepository viewRepository;
+
+        #endregion
+
+        #region Constructor
 
         public CompleteQuestionnaireController(ICommandInvoker commandInvoker, IViewRepository viewRepository,
                                                IBagManager bagManager, IGlobalInfoProvider globalProvider)
@@ -45,6 +51,10 @@ namespace RavenQuestionnaire.Web.Controllers
             _bagManager = bagManager;
             _globalProvider = globalProvider;
         }
+
+        #endregion
+
+        #region Actions
 
         public ViewResult Index(CompleteQuestionnaireBrowseInputModel input)
         {
@@ -135,7 +145,6 @@ namespace RavenQuestionnaire.Web.Controllers
             if (model != null)
             {
                 commandInvoker.Execute(new ValidateGroupCommand(id, null, null, _globalProvider.GetCurrentUser()));
-
                 var modelChecked = viewRepository.Load<CompleteQuestionnaireViewInputModel,
                     CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
 
@@ -169,16 +178,11 @@ namespace RavenQuestionnaire.Web.Controllers
 
 
                             return Redirect(Url.RouteUrl(new { controller = "Statistic", action = "Details", id = id }) + "#" + "invalid");
-                            // return RedirectToAction("Details", "Statistic", new {id = id});
                         }
-
-
                     }
                 }
             }
-
             return RedirectToAction("Index", "Dashboard");
-
         }
 
         public ViewResult Result(string id)
@@ -192,15 +196,12 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 string Qid = IdUtil.ParseId(model.TemplateId); //TODO: avoid parse and then build
                 var status = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(Qid));
-
                 if (status != null)
                 {
                     ViewBag.StatusHolderId = status.Id;
                     AddAllowedStatusesToViewBag(model.Status.PublicId, model.Status.Name, Qid, status);
                 }
             }
-
-
             _bagManager.AddUsersToBag(ViewBag, viewRepository);
             return View(model);
         }
@@ -231,23 +232,10 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             Guid key;
             if (!Guid.TryParse(id, out key))
-              //  return RedirectToAction("Index", "Dashboard");
                 throw  new HttpException("404");
-
-
             var newQuestionnairePublicKey = Guid.NewGuid();
-     /*       var command = new CreateNewCompleteQuestionnaireCommand(id,
-                                                                    newQuestionnairePublicKey,
-                                                                    _globalProvider.GetCurrentUser(),
-                                                                    status,
-                                                                    _globalProvider.GetCurrentUser());
-            commandInvoker.Execute(command);*/
-
-            //new handling
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
-
-
             return RedirectToAction("Question" + mode,
                                     new
                                         {
@@ -276,7 +264,6 @@ namespace RavenQuestionnaire.Web.Controllers
                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
             ViewBag.CurrentGroup = model.CurrentGroup;
-
             return View(model);
         }
 
@@ -288,7 +275,6 @@ namespace RavenQuestionnaire.Web.Controllers
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                 new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
             return Json(model);
-            //  return PartialView("~/Views/Group/_ScreenHtml5.cshtml", model);
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
@@ -300,7 +286,6 @@ namespace RavenQuestionnaire.Web.Controllers
                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(
                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
             ViewBag.CurrentGroup = model.CurrentGroup;
-
             return View(model);
         }
 
@@ -312,7 +297,6 @@ namespace RavenQuestionnaire.Web.Controllers
             var model =
                 viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
-            //ViewBag.CurrentGroup = model.CurrentGroup;
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             return View(model);
         }
@@ -359,12 +343,6 @@ namespace RavenQuestionnaire.Web.Controllers
             var question = questions[0];
             try
             {
-             /*   commandInvoker.Execute(new UpdateAnswerInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
-                                                                                      question,
-                                                                                      settings[0].PropogationPublicKey,
-                                                                                      _globalProvider.GetCurrentUser()));
-                */
-
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
                 commandService.Execute(new SetAnswerCommand(Guid.Parse(settings[0].QuestionnaireId), question, 
                     settings[0].PropogationPublicKey));
@@ -382,18 +360,14 @@ namespace RavenQuestionnaire.Web.Controllers
 
             return Json(model);
         }
-
-
-
+        
         public ActionResult Delete(string id)
         {
-        //    commandInvoker.Execute(new DeleteCompleteQuestionnaireCommand(id, _globalProvider.GetCurrentUser()));
             var service = NcqrsEnvironment.Get<ICommandService>();
             service.Execute(new DeleteCompleteQuestionnaireCommand(Guid.Parse(id)));
             return RedirectToAction("Index", "Dashboard");
         }
-
-
+        
         protected void AddAllowedStatusesToViewBag(Guid publicKey, string statusName, string Qid, StatusView statusView)
         {
             var statuses = new List<SurveyStatus>();
@@ -430,5 +404,7 @@ namespace RavenQuestionnaire.Web.Controllers
             var model = viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(new CQStatusReportViewInputModel(questionnaireId, statusId));
             return View(model);
         }
+
+        #endregion
     }
 }
