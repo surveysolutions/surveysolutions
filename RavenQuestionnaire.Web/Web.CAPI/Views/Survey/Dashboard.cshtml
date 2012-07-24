@@ -12,12 +12,11 @@
         </div>
         <div data-role="content" class="dummy-scroll" style="bottom: 0px">
             <div id="scroll">
-
-
-                <ul class="dashboard-list" data-inset="true" data-role="listview" data-split-icon="plus" >
+                <ul class="dashboard-list" data-inset="true" data-divider-theme="d" data-theme="d"
+                    data-role="listview" data-split-icon="plus" data-split-theme="d">
                     @foreach (CQGroupItem group in Model.Groups)
                     {
-                        <li data-role="list-divider" data-theme="b" name="@group.SurveyId" class="divider"><a>
+                        <li data-role="list-divider" data-theme="b" role="heading" class="divider" name="@group.SurveyId"><a>
                             @group.SurveyTitle <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
                             @Html.ActionLink("New", "Participate", "Survey", new { id = group.SurveyId, mode = "Html5" }, new
                                                                                                                         {
@@ -27,7 +26,6 @@
                                                                                                                             data_iconpos = "left",
                                                                                                                             data_role = "button",
                                                                                                                             data_theme = "b",
-                                                                                                                            data_mini="true",
                                                                                                                             rel = "external",
                                                                                                                             disable_after_click = "true"
                                                                                                                         })
@@ -55,10 +53,12 @@
                             foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
                             {
                         <li>
-                         
                             <div class="ui-grid-b">
                                 <div class="ui-block-a">
-                                    <div>@survey.Status.Name</div>
+                                    @*   <div>@survey.Id
+                            </div> *@
+                                    <div>@survey.Status.Name@*, Created by @survey.Creator.Name*@
+                                    </div>
                                 </div>
                                 <div class="ui-block-b">
                                     @for (int i = 0; i < Math.Min(4, survey.FeaturedQuestions.Count()); i++)
@@ -67,8 +67,6 @@
                                     }
                                 </div>
                                 <div class="ui-block-c">
-                               
-
                                     <div data-role="controlgroup" data-type="horizontal">
                                         @Html.ActionLink("edit", "Index", "Survey", new { id = survey.CompleteQuestionnaireId }, new
                                                                                                             {
