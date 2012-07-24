@@ -50,7 +50,7 @@ namespace WinFormsSample
             this.Text = "CAPI";
             this.Menu = new MainMenu();
                 MenuItem sinh = new MenuItem("Export");
-            //sinh.Enabled = false;
+            sinh.Enabled = false;
                 sinh.Click += new System.EventHandler(this.sinh_click);
             this.Menu.MenuItems.Add(sinh);
             
