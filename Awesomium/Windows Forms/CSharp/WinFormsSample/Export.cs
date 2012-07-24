@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using WinFormsSample.Properties;
 using System.Threading;
 using System.Runtime.Remoting.Messaging;
+using Awesomium.Core;
 
 namespace WinFormsSample
 {
@@ -16,24 +17,26 @@ namespace WinFormsSample
 
         private PleaseWaitForm pleaseWait;
         private string localFilename;
-        private WebClient myWebClient;
+        private WebClient myWebClient = new WebClient();
         public bool isActive()
         {
             return myWebClient.IsBusy;
         }
 
-        public void Start(string drive)
+        public void Start(string drive, WebView webView)
         {
 
             pleaseWait = new PleaseWaitForm();
             pleaseWait.Show();
-            IAsyncResult result;
+            //myWebClient.Headers.Add(HttpRequestHeader.Cookie);
             Uri exportURL = new Uri(Settings.Default.DefaultUrl + "/Synchronizations/Export");
 
             string filename = string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace("/", "_"));
             filename = filename.Replace(" ", "_");
             filename = filename.Replace(":", "_");
-            myWebClient = new WebClient();
+            
+            
+            myWebClient.Credentials = new NetworkCredential("Admin", "Admin");
             myWebClient.DownloadProgressChanged += (s, e) =>
             {
                 pleaseWait.progressBar.Value = e.ProgressPercentage;
@@ -41,14 +44,24 @@ namespace WinFormsSample
             myWebClient.DownloadFileCompleted += (s, e) =>
             {
                 pleaseWait.statusLabel.Text = "Export successfully completed";
-                Thread.Sleep(10000);
+                
                 End();
             };
-
+            
             localFilename = drive + filename;
-            myWebClient.DownloadFileAsync(exportURL, localFilename);
+            
+            try
+            {
+                myWebClient.DownloadFileAsync(exportURL, localFilename);
+            }
+            catch (Exception ex)
+            {
+                
+                throw ex;
+            }
+            
 
-
+            
 
 
 
@@ -58,6 +71,7 @@ namespace WinFormsSample
 
         public void End()
         {
+            //Thread t = new Thread();
             pleaseWait.Close();
 
         }
@@ -70,12 +84,23 @@ namespace WinFormsSample
         {
             if (myWebClient.IsBusy)
             {
-                myWebClient.CancelAsync();
-                if (File.Exists(localFilename))
-                    File.Delete(localFilename);
+                try
+                {
+                    myWebClient.CancelAsync();
+
+                    if (File.Exists(localFilename))
+                        File.Delete(localFilename);
+                }
+                catch (Exception ex)
+                {
+                    
+                    throw ex;
+                }
+                
             }
 
 
         }
     }
+
 }

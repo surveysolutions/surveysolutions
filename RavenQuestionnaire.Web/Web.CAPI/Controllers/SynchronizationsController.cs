@@ -141,7 +141,7 @@ namespace Web.CAPI.Controllers
         {
             return RedirectToAction("Dashboard", "Survey");
         }
-       
+        //[Authorize]
         public void ExportAsync()
         {
             AsyncManager.OutstandingOperations.Increment();
