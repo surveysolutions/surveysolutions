@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Ncqrs;
+using System;
 using System.Linq;
-using Ncqrs;
 using Ncqrs.Domain;
+using System.Collections.Generic;
+using RavenQuestionnaire.Core.Events;
+using RavenQuestionnaire.Core.Documents;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Core.Events.Questionnaire;
 using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
 
@@ -76,8 +76,7 @@ namespace RavenQuestionnaire.Core.Domain
             //TODO: check is it good to create new AR form another?
             CompleteQuestionnaireAR cq = new CompleteQuestionnaireAR(completeQuestionnaireId, _innerDocument);
         }
-
-
+        
         public void AddGroup(Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression)
         {
             //performe checka before event raising
@@ -97,8 +96,6 @@ namespace RavenQuestionnaire.Core.Domain
             });
         }
 
-        
-
         // Event handler for the NewGroupAdded event. This method
         // is automaticly wired as event handler based on convension.
         protected void OnNewGroupAdded(NewGroupAdded e)
@@ -110,26 +107,31 @@ namespace RavenQuestionnaire.Core.Domain
             group.ConditionExpression = e.ConditionExpression;
             _innerDocument.Add(group, e.ParentGroupPublicKey);
         }
+
         public void PreLoad()
         {
             ApplyEvent(new QuestionnaireLoaded());
         }
+
         protected void OnPreLoad(QuestionnaireLoaded e)
         {
         }
+
         public void DeleteQuestion(Guid questionId)
         {
             ApplyEvent(new QuestionDeleted() { QuestionId = questionId });
         }
+
         protected void OnQuestionDeleted(QuestionDeleted e)
         {
             this._innerDocument.Remove(e.QuestionId);
         }
+
         public void ChangeQuestion(Guid publicKey, string questionText, 
             string stataExportCaption, string instructions, 
             QuestionType questionType, Guid? groupPublicKey,
             string conditionExpression, string validationExpression,
-            bool featured, Order answerOrder, Answer[] answers)
+            bool featured, bool mandatory, Order answerOrder, Answer[] answers)
         {
             ApplyEvent(new QuestionChanged
             {
@@ -139,6 +141,7 @@ namespace RavenQuestionnaire.Core.Domain
                 ConditionExpression = conditionExpression,
                 ValidationExpression = validationExpression,
                 Featured = featured,
+                Mandatory = mandatory,
                 AnswerOrder = answerOrder,
                 PublicKey = publicKey,
                 Answers = answers,
@@ -161,7 +164,7 @@ namespace RavenQuestionnaire.Core.Domain
         /// <param name="answers"></param>
         public void AddQuestion(Guid publicKey, string questionText, string stataExportCaption,QuestionType questionType,
                                                      string conditionExpression,string validationExpression, 
-                                                     bool featured, Order answerOrder, string instructions,  Guid? groupPublicKey,
+                                                     bool featured, bool mandatory, Order answerOrder, string instructions,  Guid? groupPublicKey,
                                                      Answer[] answers)
         {
             //performe checks before event raising
@@ -180,6 +183,7 @@ namespace RavenQuestionnaire.Core.Domain
                 ConditionExpression = conditionExpression,
                 ValidationExpression = validationExpression,
                 Featured = featured,
+                Mandatory = mandatory,
                 AnswerOrder = answerOrder,
                 GroupPublicKey = groupPublicKey,
                 Answers = answers,
@@ -199,14 +203,14 @@ namespace RavenQuestionnaire.Core.Domain
             result.ValidationExpression = e.ValidationExpression;
             result.AnswerOrder = e.AnswerOrder;
             result.Featured = e.Featured;
+            result.Mandatory = e.Mandatory;
             result.Instructions = e.Instructions;
             result.PublicKey = e.PublicKey;
             UpdateAnswerList(e.Answers, result);
             
             _innerDocument.Add(result, e.GroupPublicKey);
         }
-
-
+        
         // Event handler for the QuestionChanged event. This method
         // is automaticly wired as event handler based on convension.
         protected void OnQuestionChanged(QuestionChanged e)
@@ -218,17 +222,15 @@ namespace RavenQuestionnaire.Core.Domain
             question.QuestionText = e.QuestionText;
             question.StataExportCaption = e.StataExportCaption;
             question.QuestionType = e.QuestionType;
-
             UpdateAnswerList(e.Answers, question);
-
             question.ConditionExpression = e.ConditionExpression;
             question.ValidationExpression = e.ValidationExpression;
             question.Instructions = e.Instructions;
             question.Featured = e.Featured;
+            question.Mandatory = e.Mandatory;
             question.AnswerOrder = e.AnswerOrder;
         }
-
-
+        
         protected void UpdateAnswerList(IEnumerable<Answer> answers, AbstractQuestion question)
         {
             if (answers != null && answers.Any())
@@ -240,20 +242,24 @@ namespace RavenQuestionnaire.Core.Domain
                 }
             }
         }
+
         public void UpdateImage(Guid questionKey, Guid imageKey, string title, string description)
         {
             ApplyEvent(new ImageUpdated() { Description = description, ImageKey = imageKey, QuestionKey = questionKey, Title = title });
         }
+
         protected void OnImageUploaded(ImageUpdated e)
         {
             var question = this._innerDocument.Find<AbstractQuestion>(e.QuestionKey);
 
             question.UpdateCard(e.ImageKey, e.Title, e.Description);
         }
+
         public void DeleteImage(Guid questionKey, Guid imageKey)
         {
             ApplyEvent(new ImageDeleted() {ImageKey = imageKey, QuestionKey = questionKey});
         }
+
         protected void OnImageDeleted(ImageDeleted e)
         {
             var question = this._innerDocument.Find<AbstractQuestion>(e.QuestionKey);
@@ -265,10 +271,12 @@ namespace RavenQuestionnaire.Core.Domain
         {
             ApplyEvent(new GroupDeleted(){ GroupPublicKey = groupPublicKey});
         }
+
         protected void OnGroupDeleted(GroupDeleted e)
         {
             this._innerDocument.Remove(e.GroupPublicKey);
         }
+
         public void UpdateGroup(string groupText, Propagate paropagateble, Guid groupPublicKey, List<Guid> triggers)
         {
             Group group = this._innerDocument.Find<Group>(groupPublicKey);
@@ -282,6 +290,7 @@ namespace RavenQuestionnaire.Core.Domain
                                Triggers = triggers
                            });
         }
+
         protected void OnGroupUpdated(GroupUpdated e)
         {
             Group group = this._innerDocument.Find<Group>(e.GroupPublicKey);
@@ -294,6 +303,7 @@ namespace RavenQuestionnaire.Core.Domain
                 return;
             }
         }
+
         public void UploadImage(Guid publicKey, string title, string description, 
             string originalImage, int originalWidth, int originalHeight, 
             int thumbWidth, int thumbHeight, string thumbnailImage)
@@ -317,6 +327,7 @@ namespace RavenQuestionnaire.Core.Domain
                                ThumbName = thumbname
                            });
         }
+
         protected void OnImageUploaded(ImageUploaded e)
         {
            

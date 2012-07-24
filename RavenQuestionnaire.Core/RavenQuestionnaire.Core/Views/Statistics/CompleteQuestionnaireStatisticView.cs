@@ -1,28 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Documents.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Views.Statistics
 {
     public class CompleteQuestionnaireStatisticView
     {
-        public CompleteQuestionnaireStatisticView(CompleteQuestionnaireDocument doc)
-        {
-            this.Id = doc.Id;
-            this.Title = doc.Title;
-            this.StartDate = doc.CreationDate;
-            this.EndDate = doc.CloseDate;
-            this.CompleteQuestionnaireId = doc.Id;
-            
-            Creator = doc.Creator;
-            Status = doc.Status;
-            HandleQuestionTree(doc);
-        }
+        #region Properties
 
         public string Id { get; set; }
         public string Title { get; set; }
@@ -35,6 +22,24 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         public IList<QuestionStatisticView> InvalidQuestions { get; set; }
         public IList<QuestionStatisticView> FeaturedQuestions { get; set; }
         public SurveyStatus Status { get; set; }
+
+        #endregion
+
+        #region Constructor
+
+        public CompleteQuestionnaireStatisticView(CompleteQuestionnaireDocument doc)
+        {
+            this.Id = doc.Id;
+            this.Title = doc.Title;
+            this.StartDate = doc.CreationDate;
+            this.EndDate = doc.CloseDate;
+            this.CompleteQuestionnaireId = doc.Id;
+            Creator = doc.Creator;
+            Status = doc.Status;
+            HandleQuestionTree(doc);
+        }
+
+        #endregion
 
         protected void HandleQuestionTree(CompleteQuestionnaireDocument target)
         {
@@ -75,7 +80,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
                 var statItem = new QuestionStatisticView(completeQuestion, gropPublicKey, gropPropagationPublicKey, screenPublicKey);
                 if (completeQuestion.Featured)
                     this.FeaturedQuestions.Add(statItem);
-                if (!completeQuestion.Valid)
+                if ((!completeQuestion.Valid) || (completeQuestion.Answer==null && completeQuestion.Mandatory))
                     this.InvalidQuestions.Add(statItem);
                 if (completeQuestion.Answer != null)
                     this.AnsweredQuestions.Add(statItem);

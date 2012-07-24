@@ -1,7 +1,6 @@
-﻿using RavenQuestionnaire.Core.Commands;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
+﻿using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.ExpressionExecutors;
-using RavenQuestionnaire.Core.Repositories;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 
 namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question
 {
@@ -13,7 +12,6 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question
         {
             this._questionnaireRepository = questionnaireRepository;
             this._expressionValidator = validator;
-            //    this._questionUploader = questionUploader;
         }
 
         public void Handle(AddNewQuestionCommand command)
@@ -25,7 +23,7 @@ namespace RavenQuestionnaire.Core.CommandHandlers.Questionnaire.Question
                 return;
             var question = questionnaire.AddQuestion(command.qid, command.QuestionText, command.StataExportCaption,
                                       command.QuestionType,command.ConditionExpression, 
-                                      command.ValidationExpression, command.Featured,command.AnswerOrder,
+                                      command.ValidationExpression, command.Featured, command.Mandatory, command.AnswerOrder,
                                       command.GroupPublicKey, command.Answers, command.PublicKey);
         }
     }
