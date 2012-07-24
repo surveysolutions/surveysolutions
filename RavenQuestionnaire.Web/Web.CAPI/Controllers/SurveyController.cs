@@ -50,7 +50,6 @@ namespace Web.CAPI.Controllers
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group, CurrentScreenPublicKey = screen ,PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
-            ViewBag.PagePrefix = "page-";
             return View(model);
         }
 
@@ -61,7 +60,6 @@ namespace Web.CAPI.Controllers
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>(
                new CompleteQuestionnaireViewInputModel(id, group,propagationKey));
             ViewBag.CurrentQuestion =  new Guid();
-            ViewBag.PagePrefix = "";
             return PartialView("_SurveyContent",model);
         }
 

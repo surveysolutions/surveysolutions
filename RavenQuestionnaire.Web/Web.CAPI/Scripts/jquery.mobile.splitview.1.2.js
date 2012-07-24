@@ -60,7 +60,7 @@
 
                 // setup the layout for splitview and jquerymobile will handle first page init
                 $(window).trigger('orientationchange');
-                setTimeout(function () {
+                setTimeout(function() {
                     $.mobile.firstPage = firstPageMain;
                 }, 100);
             }); //end window.ready()
@@ -207,7 +207,7 @@
                             //removeActiveLinkClass(true);
                             //$activeClickedLink = $(link).closest(".ui-btn").not(".ui-disabled");
                             //$activeClickedLink.addClass($.mobile.activeBtnClass);
-
+                            
                             $(link).closest(".ui-btn").not(".ui-disabled").addClass($.mobile.activeBtnClass);
                             $("." + $.mobile.activePageClass + " .ui-btn").not(link).blur();
                         }
@@ -293,12 +293,12 @@
                     //     moved into more comprehensive isExternalLink
 				isExternal = useDefaultUrlHandling || ($.mobile.path.isExternal(href) && !$.mobile.path.isPermittedCrossDomainRequest(documentUrl, href));
 
-                    var isRefresh = $link.jqmData('refresh'),
+                var isRefresh = $link.jqmData('refresh'),
                   $targetPanel = $link.jqmData('panel'),
                   $targetContainer = $('div:jqmData(id="' + $targetPanel + '")'),
                   $targetPanelActivePage = $targetContainer.children('div.' + $.mobile.activePageClass),
                   $currPanel = $link.parents('div:jqmData(role="panel")'),
-                    //not sure we need this. if you want the container of the element that triggered this event, $currPanel 
+                                    //not sure we need this. if you want the container of the element that triggered this event, $currPanel 
                   $currContainer = $.mobile.pageContainer,
                   $currPanelActivePage = $currPanel.children('div.' + $.mobile.activePageClass),
                   url = $.mobile.path.stripHash($link.attr("href")),
@@ -308,14 +308,14 @@
                     $('a.nav-link.ui-btn.' + $.mobile.activeBtnClass).removeClass($.mobile.activeBtnClass);
                     $('a.nav-link').parents('li').removeClass($.mobile.activeBtnClass);
                     $activeClickedLink = $link.closest(".ui-btn").addClass($.mobile.activeBtnClass);
-
-
+                    
+                    
                     if (isExternal) {
                         httpCleanup();
                         //use default click handling
                         return;
                     }
-
+   
                     //use ajax
                     var transition = $link.jqmData("transition"),
                          direction = $link.jqmData("direction"),
@@ -326,10 +326,8 @@
                     //this may need to be more specific as we use data-rel more
 				role = $link.attr("data-" + $.mobile.ns + "rel") || undefined;
                     var hash = $currPanel.jqmData('hash');
-
+                    
                     if (role === "popup") {
-                        $.mobile.activePage = $currPanelActivePage;
-                        //$.mobile.pageContainer = $currPanelActivePage;
                         $.mobile.popup.handleLink($link);
                     }
                     else {
@@ -395,8 +393,8 @@
 				    fromHashChange: true
 				};
 
-                    if (0 === $.mobile.urlHistory.stack.length) {
-                        $.mobile.urlHistory.initialDst = to;
+				if (0 === $.mobile.urlHistory.stack.length) {
+				    $.mobile.urlHistory.initialDst = to;
                     }
 
                     // We should probably fire the "navigate" event from those places that make calls to _handleHashChange,
@@ -413,7 +411,7 @@
                     }
 
                     // special case for dialogs
-                    if ($.mobile.urlHistory.stack.length > 1 && to.indexOf($.mobile.dialogHashKey) > -1 && $.mobile.urlHistory.initialDst !== to) {
+                    if ($.mobile.urlHistory.stack.length > 1 && to.indexOf(dialogHashKey) > -1 && $.mobile.urlHistory.initialDst !== to) {
 
                         // If current active page is not a dialog skip the dialog and continue
                         // in the same direction
@@ -460,7 +458,7 @@
                         // an id, we need to resolve it against the documentBase, not the location.href,
                         // since the hashchange could've been the result of a forward/backward navigation
                         // that crosses from an external page/dialog to an internal page/dialog.
-                        to = (typeof to === "string" && !$.mobile.path.isPath(to)) ? ($.mobile.path.makeUrlAbsolute('#' + to, documentBase)) : to;
+                        to = (typeof to === "string" && !path.isPath(to)) ? (path.makeUrlAbsolute('#' + to, documentBase)) : to;
                         $.mobile.changePage(to, changePageOptions);
                     } else {
                         //there's no hash, go to the first page in the dom
@@ -478,8 +476,6 @@
                 $(window).bind("throttledresize", newResetActivePageHeight);
 
             }); //navreadyDeferred done callback
-
-
 
             //DONE: bind orientationchange and resize - the popover
             _orientationHandler = function (event) {
@@ -581,21 +577,118 @@
                 }
             });
 
-            if ($.fn.controlgroup) {
-                $(document).bind("pagecreate create", function (e) {
-                    $(":jqmData(role='controlgroup')", e.target)
-					.jqmEnhanceable()
-					.controlgroup({ excludeInvisible: false });
-                });
-            }
+            $('body').live('click', function (event) {
+                if (!$(event.target).closest('.panel-popover').length && !$(event.target).closest('.popover-btn').length) {
+                    $(".panel-popover").stop(true, true).hide();
+                    $('.popover-btn').removeClass($.mobile.activeBtnClass);
+                };
+            });
+
+
+            //----------------------------------------------------------------------------------
+            //Other event bindings: scrollview, crumbs, data-context and content height adjustments
+            //----------------------------------------------------------------------------------
+
+            //DONE: pageshow binding for scrollview - now using IScroll4! hell yeah!
+            $('div:jqmData(role="page")').live('pagebeforeshow.scroll', function (event, ui) {
+                if ($.support.touch && !$.support.touchOverflow) {
+
+                    var $page = $(this),
+              $scrollArea = $page.find('div:jqmData(role="content")');
+                    $scrAreaChildren = $scrollArea.children();
+
+                    if ($scrAreaChildren.length > 1) {
+                        $scrAreaChildren = $scrollArea.wrapInner("<div class='scrollable vertical'></div>").children();
+                    }
+                    $scrollArea.css({ 'width': 'auto',
+                        'height': 'auto',
+                        'overflow': 'hidden'
+                    });
+                    //TODO: if too many pages are in the DOM that have iscroll on, this might slow down the browser significantly, 
+                    //in which case we'll need to destroy() the iscroll as the page hides. 
+                    $scrollArea.iscroll();
+                }
+            });
+
+            //data-hash 'crumbs' handler
+            //now that data-backbtn is no longer defaulting to true, lets set crumbs to create itself even when backbtn is not available
+            $('div:jqmData(role="page")').live('pagebeforeshow.crumbs', function (event, data) {
+                var $this = $(this);
+                if ($this.jqmData('hash') == 'crumbs' || $this.parents('div:jqmData(role="panel")').data('hash') == 'crumbs') {
+                    if ($this.jqmData('hash') != false && $this.find('.ui-crumbs').length < 1) {
+                        var $header = $this.find('div:jqmData(role="header")');
+                        backBtn = $this.find('a:jqmData(rel="back")');
+
+                        if (data.prevPage.jqmData('url') == $this.jqmData('url')) {  //if it's a page refresh
+                            var prevCrumb = data.prevPage.find('.ui-crumbs');
+                            crumbify(backBtn, prevCrumb.attr('href'), prevCrumb.find('.ui-btn-text').html());
+                        }
+                        else if ($.mobile.urlHistory.stack.length > 0) {
+                            var text = data.prevPage.find('div:jqmData(role="header") .ui-title').html();
+                            crumbify(backBtn, '#' + data.prevPage.jqmData('url'), text);
+                        }
+                        else if (backBtn.length && $.mobile.urlHistory.stack.length <= 1) {
+                            backBtn.remove();
+                        }
+                    }
+                }
+
+                function crumbify(button, href, text) {
+                    if (!button.length) {
+                        $this.find('div:jqmData(role="header")').prepend('<a class="ui-crumbs ui-btn-left" data-icon="arrow-l"></a>');
+                        button = $header.children('.ui-crumbs').buttonMarkup();
+                    }
+                    button.removeAttr('data-rel')
+                  .jqmData('direction', 'reverse')
+                  .addClass('ui-crumbs')
+                  .attr('href', href);
+                    button.find('.ui-btn-text').html(text);
+                }
+            });
+
+            //data-context handler - a page with a link that has a data-context attribute will load that page after this page loads
+            //this still needs work - pageTransitionQueue messes everything up.
+            $('div:jqmData(role="panel")').live('pagechange.context', function () {
+                var $this = $(this),
+            $currPanelActivePage = $this.children('.' + $.mobile.activePageClass),
+            panelContextSelector = $this.jqmData('context'),
+            pageContextSelector = $currPanelActivePage.jqmData('context'),
+            contextSelector = pageContextSelector ? pageContextSelector : panelContextSelector;
+                //if you pass a hash into data-context, you need to specify panel, url and a boolean value for refresh
+                if ($.type(contextSelector) === 'object') {
+                    var $targetContainer = $('div:jqmData(id="' + contextSelector.panel + '")'),
+              $targetPanelActivePage = $targetContainer.children('div.' + $.mobile.activePageClass),
+              isRefresh = contextSelector.refresh === undefined ? false : contextSelector.refresh;
+                    if (($targetPanelActivePage.jqmData('url') == contextSelector.url && contextSelector.refresh) || (!contextSelector.refresh && $targetPanelActivePage.jqmData('url') != contextSelector.url)) {
+                        $.mobile.changePage(contextSelector.url, options = { transition: 'fade', changeHash: false, pageContainer: $targetContainer, reloadPage: isRefresh });
+                    }
+                }
+                else if (contextSelector && $currPanelActivePage.find(contextSelector).length) {
+                    $currPanelActivePage.find(contextSelector).trigger('click');
+                }
+            });
+
+            //this measures the height of header and footer and sets content to the appropriate height so 
+            // that no content is concealed behind header and footer
+            $('div:jqmData(role="page")').live('pageshow.contentHeight', function () {
+                var $this = $(this),
+            $header = $this.children(':jqmData(role="header")'),
+            $footer = $this.children(':jqmData(role="footer")'),
+            thisHeaderHeight = $header.css('display') == 'none' ? 0 : $header.outerHeight(),
+            thisFooterHeight = $footer.css('display') == 'none' ? 0 : $footer.outerHeight();
+                // $this.children(':jqmData(role="content")').css({'top':thisHeaderHeight, 'bottom':thisFooterHeight});
+            })
+
+            //this allows panels to change their widths upon changepage - useful for pages that need a different width than the ones provided. 
+            // $('div:jqmData(role="page")').live('')
         }
         else {
             //removes all panels so the page behaves like a single panel jqm
             $(function () {
-                $('div:jqmData(role="panel")').each(function() {
+                $('div:jqmData(role="panel")').each(function () {
                     var $this = $(this);
                     $this.replaceWith($this.html());
-                });
+                })
             });
         }
     });

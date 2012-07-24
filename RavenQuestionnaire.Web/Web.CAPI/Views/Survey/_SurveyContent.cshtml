@@ -17,7 +17,7 @@
     var propagatedGroup = Model as PropagatedGroupMobileView;
 }
 <!-- Start of second page -->
-<div data-role="page" id="@(ViewBag.PagePrefix)screen-@(Model.PublicKey + (propagatedGroup==null?"":"-"+propagatedGroup.PropogationKey))" class="page">
+<div data-role="page" id="ref-@(Model.PublicKey + (propagatedGroup==null?"":"-"+propagatedGroup.PropogationKey))" class="page">
     @RenderNavigation(Model.Navigation)
     <!-- /header -->
     <div data-role="content" class="dummy-scroll">
@@ -51,6 +51,58 @@
         </div>
     </div>
 }
+@foreach (CompleteQuestionView question in Model.QuestionsWithInstructions)
+{
+    <div data-role="page" data-add-back-btn="true" id="inctruction-@(question.PublicKey)">
+        <div data-role="header" data-theme="b">
+            <h1>Instructions</h1>
+        </div>
+        <div data-role="content">
+            <h3>@Html.Raw(question.Instructions)</h3>
+        </div>
+    </div>
+}
+@*@@foreach (PropagatedGroupMobileView screen in Model.Templates)
+{
+    <script id="template-@(screen.PublicKey)" type="text/x-jsrender">
+        <div data-role="page" id="screen-00000000-0000-0000-0000-000000000000"  class="page">
+            @RenderNavigation(screen.Navigation)
+            <div data-role="content">
+                 @Html.Partial("~/Views/Survey/Group/_PropagatedScreen.cshtml", screen)
+            </div>
+             <div data-role="footer" data-theme="b">
+                <a class="previous-screen" href="${PrevScreen}" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" >Prev Group</a>
+                <h1><span></span>@screen.Navigation.CurrentScreenTitle</h1>
+                <a href="#" class="next-screen ui-disabled" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-corners="false">Next Group</a> 
+            </div>
+        </div>
+    </script>
+}
+foreach (CompleteGroupMobileView screen in Model.Screens)
+{
+    <div data-role="page" id="screen-@(screen.PublicKey)"  class="page">
+        @RenderNavigation(screen.Navigation)
+        <div data-role="content" class="dummy-scroll">
+            <div id="scroller">
+                @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", screen)
+            </div>
+        </div>
+        @RenderFooter(screen.Navigation)
+    </div>
+}
+
+@foreach (PropagatedGroupMobileView screen in Model.PropagatedScreens)
+{
+    <div data-role="page" id="screen-@(screen.PropogationKey)"  class="page">
+        @RenderNavigation(screen.Navigation)
+        <div data-role="content"class="dummy-scroll">
+            <div id="scroller">
+            @Html.Partial("~/Views/Survey/Group/_PropagatedScreen.cshtml", screen)
+            </div>
+        </div>
+        @RenderFooter(screen.Navigation)
+    </div>
+}*@
 
 @helper RenderNavigation(ScreenNavigation screen)
     {
