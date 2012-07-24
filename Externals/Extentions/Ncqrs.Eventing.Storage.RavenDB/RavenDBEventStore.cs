@@ -164,7 +164,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             }
             if (count == 0)
                 return retval;
-            int queryLimit = 128;
+            int queryLimit = 1024;
             int step = 0;
             while (step < count)
             {

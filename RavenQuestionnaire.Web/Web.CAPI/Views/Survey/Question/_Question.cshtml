@@ -14,7 +14,7 @@
     {
         <a id="inctruction-ref-@(Model.PublicKey)" href="#inctruction-@(Model.PublicKey)"  data-icon="info" data-role="button" data-inline="true"  data-rel="popup">
             Read instructions</a>
-       <div data-role="popup" id="inctruction-@(Model.PublicKey)">
+       <div data-role="popup" id="inctruction-@(Model.PublicKey)" class="instructions">
            <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
 			<p>@Model.Instructions</p>
 		</div>
