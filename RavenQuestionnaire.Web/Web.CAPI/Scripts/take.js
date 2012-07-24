@@ -9,22 +9,15 @@ function spotScanCompleted(data, status, xhr) {
     $('[data-id=main]').removeClass('ui-disabled');
     var dialog = $(data.responseText);
     var dialogContainer = $('#dialogContainer');
-    //   var dialogClasses = dialogContainer.attr("class");
     dialogContainer.html(dialog);
     dialog.page();
-    //    $("#lnkDialog").click();
-    //$.mobile.changePage('#spotsDialog', 'slidedown', true, true);
     dialog.attr('class', dialog.attr('class') + ' ui-page-active');
     var main = $('#main');
-    // main.removeClass('pop out');
     main.addClass('ui-disabled');
     main.attr('class', main.attr('class') + ' ui-page-active');
-    //  main[0].className = main[0].className + ' ui-page-active';
     dialog.find('#spotsClose').click(function () {
         dialogContainer.html('');
-        //   dialogContainer.attr('class', dialogClasses);
         main.removeClass('ui-disabled');
-        // $.mobile.changePage('#main', 'slidedown', true, true);
     });
 }
 
@@ -82,7 +75,6 @@ function UpdateComments(data) {
 
 function UpdateCommentInGroup(group) {
     for (var j = 0; j < group.Questions.length; j++) {
-        /*UpdateQuestion(group.Questions[j], group.Questions[j].GroupPublicKey);*/
         var key = group.Questions[j].PublicKey;
         var id = "#comments" + key;
         var commentscontent = group.Questions[j].Comments;
@@ -128,8 +120,6 @@ function UpdateQuestion(question) {
         questionElement.addClass("answered");
     }
 
-    /* if (!question.Enabled)
-    questionElement.closest("form").clear_form_elements();*/
     SetErrorToQuestion(question, question.QuestionType == 0 ? null : question.GroupPublicKey, '');
 }
 
@@ -178,37 +168,20 @@ function RemovePropagatedGroup(data, status, xhr) {
     $(li).remove();
     $(parent).listview('refresh');
     updateCounter();
-
 }
 
 function PropagatedGroup(data, status, xhr) {
     var group = jQuery.parseJSON(data.responseText);
     if (!group.error) {
         var templateDivPath = '#groupTemplate' + group.parentGroupPublicKey;
-        //  var screenTemplateDiv = '#template-' + group.parentGroupPublicKey;
         var parent = $('#propagate-list-' + group.parentGroupPublicKey);
         var validator = parent.find('[data-valmsg-replace=true]');
         validator.text('');
         var template = $(templateDivPath).html();
-        // var screenTemplate = $(screenTemplateDiv).html();
+
         var str = template.replace(/00000000-0000-0000-0000-000000000000/gi, group.propagationKey);
         str = str.replace("${Number}", 50);
-
-        //  var screenLinks = $('.propagated-screen-link-' + group.parentGroupPublicKey);
-        //    var lastScreen = screenLinks.last().length == 0 ? '' : screenLinks.last().attr('href');
-
-        /*    var screenStr = screenTemplate.replace(/00000000-0000-0000-0000-000000000000/gi, group.propagationKey);
-        screenStr = screenStr.replace("${PrevScreen}", lastScreen);
-        screenStr = screenStr.replace("${NextScreen}", "#");
-        screenStr = screenStr.replace("${Key}", group.propagationKey);
-        screenStr = screenStr.replace("${Number}", 50);
-        */
         var newGroup = $(str);
-        //var newScreen = $(screenStr).appendTo($(screenTemplateDiv).parent());
-        /*
-        var prevScreenNextLink = $(lastScreen + ' .next-screen');
-        $(prevScreenNextLink).attr('href', '#screen-' + group.propagationKey);
-        $(prevScreenNextLink).removeClass('ui-disabled');*/
 
         var container = parent.find(" > li:last");
 
@@ -218,16 +191,8 @@ function PropagatedGroup(data, status, xhr) {
             newGroup.insertAfter(container);
         }
 
-        /*  newGroup.listview();*/
         newGroup.trigger('pagecreate');
         $(parent).listview('refresh');
-
-
-        /*newScreen.page();
-        newScreen.trigger('pagecreate');
-        newScreen.createKeyBoard();
-        newScreen.numericSubmit();
-        newScreen.hideInputsWithVirtualKeyboard();*/
 
         updateCounter();
 
@@ -348,11 +313,6 @@ function updateCounter() {
                 label.html(targetInput.val());
             });
 
-            /*  var openKeyboard = function() {
-            targetInput.focus();
-            targetInput.click();
-            };*/
-            //      button.click(openKeyboard);
             button.parent().bind('tap', function () {
                 targetInput.focus();
                 targetInput.click();
@@ -365,7 +325,6 @@ function updateCounter() {
         k.removeAttr("draw-key-board");
         var kbOptions = {
             keyBinding: 'mousedown touchstart',
-            // layout : 'num',
             position: {
                 of: null, // optional - null (attach to input/textarea) or a jQuery object (attach elsewhere)
                 my: 'center top',
@@ -426,22 +385,6 @@ function updateCounter() {
         this.hideInputsWithVirtualKeyboard();
         this.disableAfterSubmit();
 
-        this.find('[data-role=page]').live('pageshow', function (event) {
-            //data-type="horizontal"
-            $("input[type='checkbox'][checked]").checkboxradio("refresh");
-        });
-
-        this.find('.propagated-list-item').each(function () {
-            var index = $(this).find('h3 span').html();
-            var screenId = $(this).attr('id').replace("propagatedGroup", "#screen-");
-            $(screenId + ' .ui-footer h1 span').html(index);
-        });
-
-        this.find('.splited-button.ui-li-link-alt').each(function () {
-            var text = $(this).attr('title');
-            $(this).find('.ui-btn-text').html(text);
-        });
-
         this.find('.dummy-scroll').each(function () {
             var scroll = new iScroll(this);
             newScrolls.push(scroll);
@@ -465,7 +408,6 @@ $(document).ready(function () {
         var scroll = new iScroll(this);
         scroll.refresh();
     });
-    /* doc.initPage();*/
     doc.ajaxComplete(function () {
         for (var i = 0; i < scrolls.length; i++) {
             scrolls[i].refresh();
