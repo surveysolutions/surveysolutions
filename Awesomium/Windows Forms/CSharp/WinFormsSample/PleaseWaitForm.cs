@@ -1,6 +1,5 @@
 ﻿using System;
-
-
+using System.Threading;
 using System.Windows.Forms;
 
 
@@ -18,7 +17,14 @@ namespace WinFormsSample
 
         }
 
-
+        public void Before_Close()
+        {
+            System.Windows.Forms.Timer gt = new System.Windows.Forms.Timer();
+            gt.Tick += new EventHandler(CountDown);
+            gt.Interval = 3000;
+            gt.Start();
+            
+        }
 
 
         //private void PopulateDrivesUSB()
@@ -53,6 +59,12 @@ namespace WinFormsSample
 
 
 
+
+        private void CountDown(object sender, EventArgs e)
+        {
+            
+            this.Close();
+        }
     }
 
 

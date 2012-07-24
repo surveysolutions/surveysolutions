@@ -71,8 +71,8 @@ namespace WinFormsSample
 
         public void End()
         {
-            //Thread t = new Thread();
-            pleaseWait.Close();
+            
+            pleaseWait.Before_Close();
 
         }
 
