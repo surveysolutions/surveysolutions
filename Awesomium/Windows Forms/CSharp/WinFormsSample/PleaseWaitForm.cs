@@ -7,73 +7,121 @@ namespace WinFormsSample
 {
     public partial class PleaseWaitForm : Form
     {
+        #region C-tor
+
         public PleaseWaitForm()
         {
             //copyJobSize = GetJobSize(Configuration.ProgramDirectory);
-
             InitializeComponent();
 
-
-
+            // since we are going to optimize resources and keep this form in memory the calls below are neccessary 
+            // to activate the form in the main thread, while c-tor is called
+            Show();
+            Hide();
         }
 
-        public void Before_Close()
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Hide the form. Wait before hiding
+        /// </summary>
+        /// <param name="waitTime">Time in milliseconds to wait before hiding</param>
+        private void MakeInvisible(object waitTime)
         {
-            System.Windows.Forms.Timer gt = new System.Windows.Forms.Timer();
-            gt.Tick += new EventHandler(CountDown);
-            gt.Interval = 3000;
-            gt.Start();
-            
+            Thread.Sleep((int)waitTime);
+
+            if (InvokeRequired)
+                Invoke(new MethodInvoker(() => { this.Hide(); }));
+            else
+                this.Hide();
         }
 
-
-        //private void PopulateDrivesUSB()
-        //{
-        //    CopyBtn.Enabled = false;
-        //    //http://stackoverflow.com/questions/1124463/how-to-get-the-list-of-removable-disk-in-c
-        //    Drives = new List<string>();
-        //    drivesLister.Items.Clear();
-        //    DriveInfo[] ListDrives = DriveInfo.GetDrives();
-
-        //    foreach (DriveInfo Drive in ListDrives)
-        //    {
-        //        if (Drive.DriveType == DriveType.Removable)
-        //        {
-        //            Drives.Add(Drive.ToString());
-        //        }
-        //    }
-
-        //    if (drivesLister.Items.Count > 0)
-        //    {
-        //        drivesLister.Enabled = true;
-        //        drivesLister.SelectedIndex = 0;
-        //        CopyBtn.Enabled = true;
-        //    }
-        //    else
-        //    {
-        //        drivesLister.Items.Add("No compatible USB devices detected");
-        //        drivesLister.SelectedIndex = 0;
-        //        drivesLister.Enabled = false;
-        //    }
-        //}
-
-
-
-
-        private void CountDown(object sender, EventArgs e)
+        /// <summary>
+        /// Assign text content to status label
+        /// </summary>
+        /// <param name="status"></param>
+        private void SetStatus(string status)
         {
-            
-            this.Close();
+            if (this.statusLabel.InvokeRequired)
+            {
+                this.statusLabel.Invoke(new MethodInvoker(() =>
+                {
+                    this.statusLabel.Text = status;
+                    BringToFront();
+                }));
+            }
+            else
+            {
+                this.statusLabel.Text = status;
+                BringToFront();
+            }
         }
+
+        /// <summary>
+        /// Helper method to dissapear in diffrent thread if wait operation expected before hiding the form
+        /// </summary>
+        /// <param name="immediately"></param>
+        private void Dissapear(bool immediately)
+        {
+            if (immediately)
+            {
+                MakeInvisible(0);
+                return;
+            }
+
+            new Thread(MakeInvisible).Start(2000);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Reset the form content and put it foreground
+        /// </summary>
+        internal void Reset()
+        {
+            AssignProgress(0);
+            SetStatus("Export started. Plase wait...");
+
+            if (InvokeRequired)
+                Invoke(new MethodInvoker(() => { this.Show(); }));
+            else
+                this.Show();
+        }
+
+        /// <summary>
+        /// Show progress state
+        /// </summary>
+        /// <param name="progressPercentage"></param>
+        internal void AssignProgress(int progressPercentage)
+        {
+            if (this.progressBar.InvokeRequired)
+                this.progressBar.Invoke(new MethodInvoker(() => { this.progressBar.Value = progressPercentage; }));
+            else
+                this.progressBar.Value = progressPercentage;
+        }
+
+        /// <summary>
+        /// Show comleted status if ok, otherwise just hide for now
+        /// </summary>
+        /// <param name="canceled"></param>
+        /// <param name="error"></param>
+        /// <remarks>We should add error report if canceling caused by an error</remarks>
+        internal void SetCompletedStatus(bool canceled, Exception error)
+        {
+            if (canceled)
+            {
+                Dissapear(true);
+                return;
+            }
+
+            SetStatus("Data export completed successfully.");
+            Dissapear(false);
+        }
+
+        #endregion
     }
-
-
-
-
-    class CopyJobSize
-    {
-        public int nFiles = 0;
-        public long nBytes = 0;
-    }
-
 }

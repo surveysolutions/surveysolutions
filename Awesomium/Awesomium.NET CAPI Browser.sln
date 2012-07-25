@@ -5,11 +5,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{3C4BD159-B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows Forms", "Windows Forms", "{465C567D-1668-48AD-B2EC-5BEEF27DD329}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{4571C159-E6C9-4583-A18A-D8D9435E1CE0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Browsing", "Browsing", "{4571C159-E6C9-4583-A18A-D8D9435E1CE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsSample", "Windows Forms\CSharp\WinFormsSample\WinFormsSample.csproj", "{233E6FAF-9130-45A8-A199-2DFFDC76EABD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientsUsbExport", "Windows Forms\CSharp\WinFormsSample\ClientsUsbExport.csproj", "{233E6FAF-9130-45A8-A199-2DFFDC76EABD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Awesomium.NET Samples  - README", "Awesomium.NET Samples  - README", "{7CE9C960-AE9D-40EA-9FA8-A62158EDDE64}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Awesomium.NET  - README", "Awesomium.NET  - README", "{7CE9C960-AE9D-40EA-9FA8-A62158EDDE64}"
 	ProjectSection(SolutionItems) = preProject
 		README.txt = README.txt
 	EndProjectSection

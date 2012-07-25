@@ -38,23 +38,26 @@ namespace WinFormsSample
             this.statusLabel.AutoSize = true;
             this.statusLabel.Location = new System.Drawing.Point(9, 8);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(135, 13);
+            this.statusLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            //this.statusLabel.Size = new System.Drawing.Size(35, 13);
             this.statusLabel.TabIndex = 0;
-            this.statusLabel.Text = "Export started. Plase wait...";
+            this.statusLabel.Text = "hehe";//string.Empty;
 
             // 
             // progressBar
             // 
             this.progressBar.Location = new System.Drawing.Point(12, 24);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(132, 15);
+            this.progressBar.Dock = DockStyle.Fill;
+            this.progressBar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            this.progressBar.Size = new System.Drawing.Size(232, 20);
             this.progressBar.TabIndex = 1;
             
             // 
             // PleaseWaitForm
             // 
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(162, 53);
+            this.ClientSize = new System.Drawing.Size(252, 53);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.statusLabel);
             this.Name = "PleaseWaitForm";
@@ -62,7 +65,7 @@ namespace WinFormsSample
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.StartPosition = FormStartPosition.CenterScreen;
+            this.ControlBox = false;
             this.ResumeLayout(false);
             this.PerformLayout();
 
