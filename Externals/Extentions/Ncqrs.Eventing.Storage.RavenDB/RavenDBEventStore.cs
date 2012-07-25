@@ -164,7 +164,10 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             }
             if (count == 0)
                 return retval;
-            int queryLimit = 1024;
+            int maxQueryLimit = 1024;
+            int queryLimit =(int) Math.Pow(2, Math.Ceiling(Math.Log(count/29.0,2)));
+            if (queryLimit > maxQueryLimit)
+                throw new Exception("Increase maxQueryLimit in Raven.Server.exe.config in <add key=\"Raven/MaxPageSize\" value=\"1024\"/> section");
             int step = 0;
             while (step < count)
             {

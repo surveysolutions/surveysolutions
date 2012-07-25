@@ -49,7 +49,7 @@ namespace Web.CAPI.Controllers
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                     new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group, CurrentScreenPublicKey = screen ,PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
-            ViewBag.PagePrefix = "page-";
+            ViewBag.PagePrefix = "page-to-delete";
             return View(model);
         }
 
