@@ -70,7 +70,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
         [HttpGet]
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Move(Guid PublicKeyQuestion,string QuestionnaireId)
+        public ActionResult Move(Guid PublicKeyQuestion,Guid QuestionnaireId)
         {
             MoveItemModel model = new MoveItemModel() {publicKey = PublicKeyQuestion, questionnaireId = QuestionnaireId};
             return View("MoveQuestion", model);

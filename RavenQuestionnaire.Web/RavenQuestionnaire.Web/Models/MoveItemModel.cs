@@ -4,7 +4,7 @@ namespace RavenQuestionnaire.Web.Models
 {
     public class MoveItemModel
     {
-        public string questionnaireId { get; set; }
+        public Guid questionnaireId { get; set; }
 
         public Guid publicKey { get; set; }
 

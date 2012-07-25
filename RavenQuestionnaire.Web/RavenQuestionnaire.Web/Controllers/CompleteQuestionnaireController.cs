@@ -147,23 +147,18 @@ namespace RavenQuestionnaire.Web.Controllers
                 commandInvoker.Execute(new ValidateGroupCommand(id, null, null, _globalProvider.GetCurrentUser()));
                 var modelChecked = viewRepository.Load<CompleteQuestionnaireViewInputModel,
                     CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
-
                 if (modelChecked != null)
                 {
                     var status = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(IdUtil.ParseId(modelChecked.TemplateId)));
-
-                    if (status != null)
-                    {
+                    if (status != null){
                         if (modelChecked.IsValid)
                         {
                             var statusItem = status.StatusElements.FirstOrDefault(x => x.Title == "Completed");//temporary hardcoded
-
                             commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
                                                                                           statusItem.PublicKey,
                                                                                           status.Id,
                                                                                           null,
                                                                                           _globalProvider.GetCurrentUser()));
-
 
                             return RedirectToAction("Index", "Dashboard");
                         }
@@ -191,7 +186,6 @@ namespace RavenQuestionnaire.Web.Controllers
                 throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel,
                 CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
-
             if (model != null)
             {
                 string Qid = IdUtil.ParseId(model.TemplateId); //TODO: avoid parse and then build
