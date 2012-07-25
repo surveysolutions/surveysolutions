@@ -53,7 +53,7 @@
                 </p>
             </div>
             <div class="ui-block-b">
-                @using (Ajax.BeginFormHtml5("SaveComments", "Survey", new { }, new AjaxOptions { OnComplete = "UpdateComments" }, new { }))
+                @using (Ajax.BeginFormHtml5("SaveComments", "Survey", new { }, new AjaxOptions { OnComplete = "UpdateComments" }, new { @class="comment-form" }))
                 {
                     using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                     {

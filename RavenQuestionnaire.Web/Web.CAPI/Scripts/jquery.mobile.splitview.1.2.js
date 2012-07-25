@@ -352,9 +352,9 @@
                             $.mobile.pageContainer = $currPanel;
                             var hashChange = (hash == 'false' || hash == 'crumbs') ? false : true;
                             $.mobile.changePage(href, { role: role, fromPage: from, transition: transition, reverse: reverse, changeHash: hashChange, pageContainer: $currPanel });
-                            //active page must always point to the active page in main - for history purposes.
-                            $.mobile.activePage = $('div:jqmData(id="main") > div.' + $.mobile.activePageClass);
                         }
+                        //active page must always point to the active page in main - for history purposes.
+                        $.mobile.activePage = $('div:jqmData(id="main") > div.' + $.mobile.activePageClass);
                         //$.mobile.changePage(href, { transition: transition, reverse: reverse, role: role });
                     }
                     event.preventDefault();
@@ -362,7 +362,7 @@
 
                 //prefetch pages when anchors with data-prefetch are encountered
                 $(document).delegate(".ui-page", "pageshow.prefetch", function () {
-                    var activePage = $('div:jqmData(id="main") > div:jqmData(role="page"):first');
+                    var activePage = $('div:jqmData(id="main") > div:jqmData(role="page").ui-page-active');
                     if (activePage.length > 0) {
                         $.mobile.activePage = $(activePage[0]);
                     }

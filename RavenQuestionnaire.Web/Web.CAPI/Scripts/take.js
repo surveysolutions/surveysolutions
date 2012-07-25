@@ -444,7 +444,7 @@ function scrollToQuestion(question) {
     }
 }
 $(document).bind('pagebeforeshow', function () {
-    var doc = $('#content_container');
+    var doc = $('div:jqmData(id="main") > div:jqmData(role="page")');
     newScrolls = [];
     doc.initPage();
     for (var j = 0; j < newScrolls.length; j++) {
@@ -477,6 +477,7 @@ $(document).bind('pagechange', function () {
 });
 
 $(document).bind('pagehide', function () {
+    $('.page-to-delete').remove();
     var doc = $('#content_container');
     doc.destroyPage();
     for (var j = 0; j < newScrolls.length; j++) {
