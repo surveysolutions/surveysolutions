@@ -97,25 +97,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Export.cs" />
-    <Compile Include="PleaseWaitForm.cs">
+    <Compile Include="Export\Export.cs" />
+    <Compile Include="Forms\PleaseWaitForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PleaseWaitForm.Designer.cs">
+    <Compile Include="Forms\PleaseWaitForm.Designer.cs">
       <DependentUpon>PleaseWaitForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="WebForm.cs">
+    <Compile Include="Forms\WebForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WebForm.Designer.cs">
+    <Compile Include="Forms\WebForm.Designer.cs">
       <DependentUpon>WebForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="PleaseWaitForm.resx">
+    <EmbeddedResource Include="Forms\PleaseWaitForm.resx">
       <DependentUpon>PleaseWaitForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WebForm.resx">
+    <EmbeddedResource Include="Forms\WebForm.resx">
       <DependentUpon>WebForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -163,12 +163,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\C\Awesomium\Awesomium.vcxproj">
-      <Project>{844AF18A-53EA-4038-A240-F4BC3CCEFC95}</Project>
-      <Name>Awesomium</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(SolutionName)'=='Awesomium.NET'">
       <ItemGroup>
