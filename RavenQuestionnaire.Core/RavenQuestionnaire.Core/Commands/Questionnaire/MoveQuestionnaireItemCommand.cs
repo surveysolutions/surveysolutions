@@ -1,7 +1,6 @@
 ﻿using System;
 using Ncqrs.Commanding;
 using RavenQuestionnaire.Core.Domain;
-using RavenQuestionnaire.Core.Utility;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire
