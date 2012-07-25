@@ -12,8 +12,13 @@ using Awesomium.Core;
 
 namespace WinFormsSample
 {
+    /// <summary>
+    /// The class is responsible for completed questionaries export to plugged USB driver
+    /// </summary>
     internal class Export
     {
+        #region Nested Class
+
         /// <summary>
         /// Helper class to pass neccessary objects into delegate methods of parent class working with WebClient callbacks
         /// </summary>
@@ -29,12 +34,18 @@ namespace WinFormsSample
             }
         }
 
+        #endregion
+
+        #region Private Members
+
         private PleaseWaitForm pleaseWait;
         private readonly string ArchiveFileNameMask = "backup-{0}.zip";
         private WebClient webClient = new WebClient();
         private AutoResetEvent exportEnded = new AutoResetEvent(false);
         private Uri exportURL = new Uri(Settings.Default.DefaultUrl + "/Synchronizations/Export");
         private List<string> cachedDrives;
+
+        #endregion
 
         #region C-tor
 
