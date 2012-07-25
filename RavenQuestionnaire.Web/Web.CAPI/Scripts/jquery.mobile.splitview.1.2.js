@@ -362,6 +362,10 @@
 
                 //prefetch pages when anchors with data-prefetch are encountered
                 $(document).delegate(".ui-page", "pageshow.prefetch", function () {
+                    var activePage = $('div:jqmData(id="main") > div:jqmData(role="page"):first');
+                    if (activePage.length > 0) {
+                        $.mobile.activePage = $(activePage[0]);
+                    }
                     var urls = [];
                     var $thisPageContainer = $(this).parents('div:jqmData(role="panel")');
                     $(this).find("a:jqmData(prefetch)").each(function () {
@@ -376,6 +380,7 @@
                             $.mobile.loadPage(url, { role: $link.attr("data-" + $.mobile.ns + "rel"), pageContainer: container });
                         }
                     });
+                    
                 });
 
                 $.mobile._handleHashChange = function (hash) {

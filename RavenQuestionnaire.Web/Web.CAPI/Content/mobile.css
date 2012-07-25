@@ -246,3 +246,7 @@ min-height: 90px;
 body.ui-mobile-viewport, div.ui-mobile-viewport {
 	overflow-x: visible;
 }
+
+.instructions {
+	max-width: 500px;
+}

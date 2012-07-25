@@ -24,7 +24,6 @@
         }
     };
 
-
     (function (window, $, PhotoSwipe) {
 
         $(document).ready(function () {
@@ -50,55 +49,6 @@
                 });
         });
     } (window, window.jQuery, window.Code.PhotoSwipe));
-
-    function ClearItems(isClear) {
-        $('#sidebar li').removeClass('ui-btn-active');
-        /*if (isClear)
-            $('#content_container').html('');*/
-    }
-
-    function ChangeScreen(groupId, existingGroup,parent) {
-        
-        parent.find('[data-role="page"]').each(function() {
-            $(this).removeClass('ui-page-active');
-        });
-        
-        existingGroup.attr('class', existingGroup.attr('class') + ' ui-page-active');
-        //   $.mobile.hidePageLoadingMsg();     
-        document.location.hash = '#ref-' + groupId;
-    }
-
-    function loadGroup(parent,qId, groupId) {
-        
-        $.ajax({
-            type: "POST",
-            cache: false,
-            async: false,
-            data: { id: qId, group: groupId },
-            url: "@Url.Action("_SurveyContent", "Survey")"
-        }).success(function(data) {
-            // parent.append(data);
-            var newPages = $(data);
-            newPages.appendTo(parent);
-            newPages.each(function() {
-                var container = $(this);
-                container.initPage();
-
-            });
-            
-        });
-       
-    }
-    function load(qId, groupId) {
-        ClearItems();
-        //  $.mobile.showPageLoadingMsg();     
-        // $('#ref-link-' + groupId).addClass('ui-btn-active');
-        var parent = $('#content_container');
-        //  var container;
-        var existingGroup = $('#content_container #ref-' + groupId);
-
-        ChangeScreen(groupId, existingGroup, parent);
-    }
 </script>
 <div data-role="panel" data-id="menu">
     <!-- Start of first page -->
@@ -106,8 +56,7 @@
         <div data-role="header" data-theme="c">
             <a class="nav-link" data-corners="false"  data-icon="arrow-l" href="@Url.Action("Dashboard", "Survey")" rel = "external">
                 Dashboard</a>
-            <h3>
-            </h3>
+            <h3></h3>
         </div>
         <!-- /header -->
         <div data-role="content" class="with-footer dummy-scroll">
@@ -115,16 +64,16 @@
                 @foreach (CompleteGroupHeaders gh in Model.Groups)
                 {
                     var activ = @gh.Enabled ? "" : "ui-disabled";
-                    if (!gh.IsCurrent)
+@* if (!gh.IsCurrent)
                     {
                     <li data-icon="false" class="@activ" id="@gh.PublicKey"><a id="ref-link-@(gh.PublicKey)" data-panel="main" onclick="ClearItems(false)"  href='@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })'>@gh.GroupText
                         <span  id="counter-@(gh.PublicKey)" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                     else
-                    {
-                    <li class="@activ" id="@gh.PublicKey"><a  id="ref-link-@(gh.PublicKey)" onclick="ClearItems(true)"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })" onclick="ClearItems()">@gh.GroupText
+                    {*@
+                    <li class="@activ" id="@gh.PublicKey"><a  id="ref-link-@(gh.PublicKey)"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })" >@gh.GroupText
                         <span id="counter-@(gh.PublicKey)" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
-                    }
+@*                    }*@
                 }
             </ul>
         </div>
