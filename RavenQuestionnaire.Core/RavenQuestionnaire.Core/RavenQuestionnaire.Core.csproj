@@ -365,6 +365,7 @@
     <Compile Include="Events\Questionnaire\NewQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\NewQuestionnaireCreated.cs" />
     <Compile Include="Events\Questionnaire\QuestionDeleted.cs" />
+    <Compile Include="Events\Questionnaire\QuestionMoved.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireLoaded.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireTemplateLocaded.cs" />
     <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs" />
