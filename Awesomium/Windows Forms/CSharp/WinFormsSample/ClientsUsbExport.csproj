@@ -137,7 +137,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="WinFormsSample_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="1337116218_to-do-list_checked2.ico" />

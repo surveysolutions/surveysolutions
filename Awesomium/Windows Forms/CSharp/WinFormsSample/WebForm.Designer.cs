@@ -43,70 +43,36 @@ namespace WinFormsSample
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             int deskHeight = Screen.PrimaryScreen.Bounds.Height;
             int deskWidth = Screen.PrimaryScreen.Bounds.Width;
-            this.ClientSize = new System.Drawing.Size(deskWidth,deskHeight);
+            this.ClientSize = new System.Drawing.Size(deskWidth, deskHeight);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WebForm";
             this.Text = "CAPI";
             this.Menu = new MainMenu();
-                MenuItem sinh = new MenuItem("Export");
-            sinh.Enabled = false;
-                sinh.Click += new System.EventHandler(this.sinh_click);
-            this.Menu.MenuItems.Add(sinh);
-            
+            this.exportItem = new MenuItem("Export");
+            this.exportItem.Enabled = false;
+            this.exportItem.Click += new System.EventHandler(this.ExportClick);
+            this.Menu.MenuItems.Add(this.exportItem);
+
             //this.TopMost = true;
             //this.FormBorderStyle = FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
-            
-            this.ResumeLayout(false);
 
+            this.ResumeLayout(false);
         }
 
         #endregion
-        private void sinh_click(object sender, System.EventArgs e)
+
+        private void ExportClick(object sender, System.EventArgs e)
         {
-            // Create a new OpenFileDialog and display it.
-            //choose.CreatePortable();
-            string drive = getDrive();
-            if (drive != null)
+            try
             {
-                PleaseWaitForm pleaseWait = new PleaseWaitForm();
-
-                // Display form modelessly
-
-                try
-                {
-                    if (export.isActive())
-                    {
-                        try
-                        {
-                            export.Stop();
-                        }
-                        catch (Exception ex)
-                        {
-                            
-                            throw ex;
-                        }
-                        
-                    }
-                    
-                    try
-                    {
-                        export.Start(drive, webView);
-                    }
-                    catch (Exception ex)
-                    {
-                        
-                        throw ex;
-                    }
-                    
-                }
-                catch (Exception ex)
-                {
-                    // MessageBox.Show("Export error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    throw ex;
-                }
-                
+                export.ExportQuestionariesArchive();
+            }
+            catch (Exception ex)
+            {
+                // MessageBox.Show("Export error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw ex;
             }
         }
     }

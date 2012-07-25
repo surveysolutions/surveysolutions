@@ -14,93 +14,162 @@ namespace WinFormsSample
 {
     internal class Export
     {
+        /// <summary>
+        /// Helper class to pass neccessary objects into delegate methods of parent class working with WebClient callbacks
+        /// </summary>
+        private class ProgressHint
+        {
+            public PleaseWaitForm ProgressForm { get; private set; }
+            public string ArchiveFileName { get; private set; }
+
+            public ProgressHint(PleaseWaitForm form, string archiveFileName)
+            {
+                ProgressForm = form;
+                ArchiveFileName = archiveFileName;
+            }
+        }
 
         private PleaseWaitForm pleaseWait;
-        private string localFilename;
-        private WebClient myWebClient = new WebClient();
-        public bool isActive()
+        private readonly string ArchiveFileNameMask = "backup-{0}.zip";
+        private WebClient webClient = new WebClient();
+        private AutoResetEvent exportEnded = new AutoResetEvent(false);
+        private Uri exportURL = new Uri(Settings.Default.DefaultUrl + "/Synchronizations/Export");
+        private List<string> cachedDrives;
+
+        #region C-tor
+
+        internal Export()
         {
-            return myWebClient.IsBusy;
-        }
+            this.webClient.Credentials = new NetworkCredential("Admin", "Admin");
+            this.pleaseWait = new PleaseWaitForm();
 
-        public void Start(string drive, WebView webView)
-        {
-
-            pleaseWait = new PleaseWaitForm();
-            pleaseWait.Show();
-            //myWebClient.Headers.Add(HttpRequestHeader.Cookie);
-            Uri exportURL = new Uri(Settings.Default.DefaultUrl + "/Synchronizations/Export");
-
-            string filename = string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace("/", "_"));
-            filename = filename.Replace(" ", "_");
-            filename = filename.Replace(":", "_");
-            
-            
-            myWebClient.Credentials = new NetworkCredential("Admin", "Admin");
-            myWebClient.DownloadProgressChanged += (s, e) =>
+            this.webClient.DownloadProgressChanged += (s, e) =>
             {
-                pleaseWait.progressBar.Value = e.ProgressPercentage;
+                var hint = e.UserState as ProgressHint;
+                if (hint == null)
+                    return;
+
+                hint.ProgressForm.AssignProgress(e.ProgressPercentage);
             };
-            myWebClient.DownloadFileCompleted += (s, e) =>
+
+            this.webClient.DownloadFileCompleted += (s, e) =>
             {
-                pleaseWait.statusLabel.Text = "Export successfully completed";
-                
-                End();
+                var hint = e.UserState as ProgressHint;
+                if (hint == null)
+                    return;
+
+                if (e.Cancelled)
+                {
+                    if (File.Exists(hint.ArchiveFileName))
+                        File.Delete(hint.ArchiveFileName);
+                }
+
+                hint.ProgressForm.SetCompletedStatus(e.Cancelled, e.Error);
+
+                this.exportEnded.Set();
             };
-            
-            localFilename = drive + filename;
-            
-            try
-            {
-                myWebClient.DownloadFileAsync(exportURL, localFilename);
-            }
-            catch (Exception ex)
-            {
-                
-                throw ex;
-            }
-            
 
-            
-
-
-
+            FlushDriversList();
         }
 
+        #endregion
 
+        #region Helpers
 
-        public void End()
+        /// <summary>
+        /// Create list of available drivers
+        /// </summary>
+        /// <returns></returns>
+        private List<string> ReviewDriversList()
         {
-            
-            pleaseWait.Before_Close();
+            List<string> drivers = new List<string>();
+            DriveInfo[] listDrives = DriveInfo.GetDrives();
 
+            foreach (var drive in listDrives)
+            {
+                if (drive.DriveType == DriveType.Removable)
+                    drivers.Add(drive.ToString());
+            }
+
+            return drivers;
         }
 
-
-
-
-
-        internal void Stop()
+        /// <summary>
+        /// Interrupt pending loading and wait for its finalization
+        /// </summary>
+        private void Stop()
         {
-            if (myWebClient.IsBusy)
+            if (this.webClient.IsBusy)
             {
+                this.webClient.CancelAsync();
+
+                this.exportEnded.WaitOne();
+            }
+        }
+
+        /// <summary>
+        /// Compare current drivers list with cached list and 
+        /// decide what driver should be used for uploading
+        /// </summary>
+        /// <returns>Driver to put data on</returns>
+        private string GetDrive()
+        {
+            List<string> currentDrivers = ReviewDriversList();
+
+            var pluggedDrivers = currentDrivers.Except(this.cachedDrives);
+
+            return pluggedDrivers.Last();
+        }
+
+        private void DoExport()
+        {
+            lock (this) // block any extra call to this method
+            {
+                Stop(); // stop any existent activity
+
+                string drive = GetDrive(); // accept driver to flush on
+                if (drive == null)
+                    return;
+
+                this.pleaseWait.Reset();
+
+                string filename = string.Format(this.ArchiveFileNameMask, DateTime.Now.ToString().Replace("/", "_"));
+                filename = filename.Replace(" ", "_");
+                filename = filename.Replace(":", "_");
+
+                var archiveFilename = drive + filename;
+
                 try
                 {
-                    myWebClient.CancelAsync();
+                    this.exportEnded.Reset();
 
-                    if (File.Exists(localFilename))
-                        File.Delete(localFilename);
+                    this.webClient.DownloadFileAsync(exportURL, archiveFilename, new ProgressHint(this.pleaseWait, archiveFilename));
                 }
                 catch (Exception ex)
                 {
-                    
                     throw ex;
                 }
-                
             }
-
-
         }
+
+        #endregion
+
+        #region Methods
+
+        internal void ExportQuestionariesArchive()
+        {
+            new Thread(DoExport).Start(); // initialize export operation in independent thread
+        }
+
+        /// <summary>
+        /// Revisit list of all removable drivers
+        /// </summary>
+        internal void FlushDriversList()
+        {
+            this.cachedDrives = ReviewDriversList();
+        }
+
+        #endregion
     }
 
 }
