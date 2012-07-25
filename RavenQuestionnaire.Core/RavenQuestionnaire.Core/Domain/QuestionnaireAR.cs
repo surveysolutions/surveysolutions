@@ -4,6 +4,7 @@ using System.Linq;
 using Ncqrs.Domain;
 using System.Collections.Generic;
 using RavenQuestionnaire.Core.Events;
+using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Documents;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using RavenQuestionnaire.Core.AbstractFactories;
@@ -115,6 +116,22 @@ namespace RavenQuestionnaire.Core.Domain
 
         protected void OnPreLoad(QuestionnaireLoaded e)
         {
+        }
+
+        public void MoveQuestion(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
+        {
+            ApplyEvent(new QuestionMoved
+            {
+                AfterItemKey = afterItemKey,
+                GroupKey = groupKey,
+                PublicKey = publicKey
+            });
+        }
+
+        protected void OnQuestionMoved(QuestionMoved e)
+        {
+            var questionnaire = new Questionnaire(this._innerDocument);
+            questionnaire.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
         }
 
         public void DeleteQuestion(Guid questionId)

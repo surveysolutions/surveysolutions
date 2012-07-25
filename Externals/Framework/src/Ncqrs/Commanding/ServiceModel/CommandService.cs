@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Reflection;
 using Ncqrs.Commanding.CommandExecution;
 
 namespace Ncqrs.Commanding.ServiceModel
