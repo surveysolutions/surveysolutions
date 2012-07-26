@@ -106,6 +106,13 @@ else
                 </div>
             </div>
             <div class="control-group">
+                @Html.LabelFor(model => model.ValidationMessage, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => Model.ValidationMessage, new { placeholder = ViewData.ModelMetadata.Watermark })
+                    @Html.ValidationMessageFor(model => model.ValidationMessage)
+                </div>
+            </div>
+            <div class="control-group">
                 @Html.LabelFor(model => model.Instructions, new { @class = "control-label" })
                 <div class="controls">
                     @Html.TextAreaFor(model => model.Instructions, new { placeholder = ViewData.ModelMetadata.Watermark })

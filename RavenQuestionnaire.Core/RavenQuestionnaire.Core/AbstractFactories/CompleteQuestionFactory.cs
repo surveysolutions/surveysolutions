@@ -75,6 +75,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
             completeQuestion.Comments = question.Comments;
             completeQuestion.Triggers = question.Triggers;
             completeQuestion.ValidationExpression = question.ValidationExpression;
+            completeQuestion.ValidationMessage = question.ValidationMessage;
             completeQuestion.AnswerOrder = question.AnswerOrder;
             completeQuestion.Valid = true;
             completeQuestion.Featured = question.Featured;

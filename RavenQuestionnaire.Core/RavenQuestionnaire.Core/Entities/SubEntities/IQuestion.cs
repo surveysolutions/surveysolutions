@@ -10,6 +10,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         QuestionType QuestionType { get; set; }
         string ConditionExpression { get; set; }
         string ValidationExpression { get; set; }
+        string ValidationMessage { get; set; }
         string StataExportCaption { get; set; }
         string Instructions { get; set; }
         List<Image> Cards { get; set; }
