@@ -1,10 +1,9 @@
 ﻿using System;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using RavenQuestionnaire.Core.Domain;
 using System.Collections.Generic;
-using RavenQuestionnaire.Core.Utility;
+using RavenQuestionnaire.Core.Domain;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
 {
@@ -12,48 +11,34 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "UpdateGroup")]
     public class UpdateGroupCommand : CommandBase
     {
-        public string GroupText
-        {
-            get;
-            private set;
-        }
-        public Propagate Paropagateble
-        {
-            get;
-            private set;
-        }
         [AggregateRootId]
-        public Guid QuestionnaireId
-        {
-            get;
-            private set;
-        }
-        public Guid GroupPublicKey
-        {
-            get;
-            private set;
-        }
-        public List<Guid> Triggers { get; private set; }
+        public Guid QuestionnaireId { get; set; }
+        public string GroupText { get; set; }
+        public Propagate Propagateble { get; set; }
+        public Guid GroupPublicKey { get; set; }
+       // public List<Guid> Triggers { get; set; }
         public UserLight Executor { get; set; }
         public string ConditionExpression { get; set; }
 
-        public UpdateGroupCommand(string groupText, Propagate propagateble, string questionnaireId, List<Guid> triggers, Guid parentGroup, UserLight executor, string conditionExpression)
+        //public UpdateGroupCommand(string groupText, Propagate propagateble, Guid questionnaireId, List<Guid> triggers, Guid parentGroup, UserLight executor, string conditionExpression)
+        //{
+        //    this.GroupText = groupText;
+        //    this.Propagateble = propagateble;
+        //    this.QuestionnaireId = questionnaireId;
+        //    this.GroupPublicKey = parentGroup;
+        //    this.Triggers = triggers;
+        //    this.ConditionExpression = conditionExpression;
+        //    this.Executor = executor;
+        //}
+
+        public UpdateGroupCommand(string groupText, Propagate propagateble, Guid questionnaireId, Guid groupPublicKey, UserLight executor, string conditionExpression)
         {
+            this.QuestionnaireId = questionnaireId;
             this.GroupText = groupText;
-            this.Paropagateble = propagateble;
-            this.QuestionnaireId = Guid.Parse(questionnaireId);
-            this.GroupPublicKey = parentGroup;
-            this.Triggers = triggers;
+            this.Propagateble = propagateble;
+            this.GroupPublicKey = groupPublicKey;
             this.ConditionExpression = conditionExpression;
-        }
-        public UpdateGroupCommand(string groupText, Propagate propagateble, string questionnaireId, Guid parentGroup, UserLight executor, string conditionExpression)
-        {
-            this.GroupText = groupText;
-            this.Paropagateble = propagateble;
-            this.QuestionnaireId = Guid.Parse(questionnaireId);
-            this.GroupPublicKey = parentGroup;
-            this.ConditionExpression = conditionExpression;
-            Executor = executor;
+            this.Executor = executor;
         }
     }
 }
