@@ -247,7 +247,7 @@ namespace RavenQuestionnaire.Core.Entities
         }
 
         public void UpdateQuestion(Guid publicKey, string text, string stataExportCaption, QuestionType type,
-            string condition, string validation, string instructions, bool featured, bool mandatory, Order answerOrder, IEnumerable<Answer> answers)
+            string condition, string validation, string message, string instructions, bool featured, bool mandatory, Order answerOrder, IEnumerable<Answer> answers)
         {
             var question = Find<AbstractQuestion>(publicKey);
             if (question == null)
@@ -258,6 +258,7 @@ namespace RavenQuestionnaire.Core.Entities
             UpdateAnswerList(answers, question);
             question.ConditionExpression = condition;
             question.ValidationExpression = validation;
+            question.ValidationMessage = message;
             question.Instructions = instructions;
             question.Featured = featured;
             question.Mandatory = mandatory;

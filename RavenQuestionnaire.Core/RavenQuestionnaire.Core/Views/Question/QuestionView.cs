@@ -28,6 +28,8 @@ namespace RavenQuestionnaire.Core.Views.Question
         [Display(Prompt = "When this question is valid?")]
         public string ValidationExpression { get; set; }
 
+        public string ValidationMessage { get; set; }
+        
         public QuestionType QuestionType { get; set; }
 
         public bool Featured { get; set; }
@@ -79,6 +81,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.QuestionnaireId = questionnaire.Id;
             this.ConditionExpression = doc.ConditionExpression;
             this.ValidationExpression = doc.ValidationExpression;
+            this.ValidationMessage = doc.ValidationMessage;
             this.StataExportCaption = doc.StataExportCaption;
             this.Instructions = doc.Instructions;
             this.Comments = doc.Comments;

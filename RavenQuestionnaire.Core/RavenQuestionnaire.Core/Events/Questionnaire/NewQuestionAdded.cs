@@ -20,6 +20,8 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire
 
         public string ValidationExpression { get; set; }
 
+        public string ValidationMessage { get; set; }
+
         public Order AnswerOrder { get; set; }
 
         public bool Featured { get; set; }

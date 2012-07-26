@@ -15,6 +15,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public QuestionType QuestionType { get; set; }
         public string ConditionExpression { get; private set; }
         public string ValidationExpression { get; private set; }
+        public string ValidationMessage { get; private set; }
         public string StataExportCaption { get; private set; }
         public string Instructions { get; private set; }
         public Order AnswerOrder { get; private set; }
@@ -30,7 +31,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         [JsonConstructor]
         public UpdateQuestionCommand(string questionnaireId, Guid questionPublicKey, string questionText,
           string stataExportCaption, QuestionType questionType, string conditionExpression,
-           string validationExpression, bool featured, bool mandatory, string instructions, Answer[] answers, Order answerOrder, UserLight executor)
+           string validationExpression, string validationMessage, bool featured, bool mandatory, string instructions, Answer[] answers, Order answerOrder, UserLight executor)
         {
             this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
             this.AnswerOrder = answerOrder;
@@ -41,6 +42,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.Answers = new Answer[0];
             this.ConditionExpression = conditionExpression;
             this.ValidationExpression = validationExpression;
+            this.ValidationMessage = validationMessage;
             this.Executor = executor;
             this.Featured = featured;
             this.Mandatory = mandatory;
