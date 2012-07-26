@@ -1,19 +1,20 @@
-﻿using Raven.Client;
+﻿using System;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.ViewSnapshot;
 
 namespace RavenQuestionnaire.Core.Views.Group
 {
     public class GroupViewFactory : IViewFactory<GroupViewInputModel, GroupView>
     {
-        private IDocumentSession documentSession;
+        private readonly IViewSnapshot store;
 
-        public GroupViewFactory(IDocumentSession documentSession)
+        public GroupViewFactory(IViewSnapshot store)
         {
-            this.documentSession = documentSession;
+            this.store = store;
         }
         public GroupView Load(GroupViewInputModel input)
         {
-            var doc = documentSession.Load<QuestionnaireDocument>(input.QuestionnaireId);
+            var doc = store.ReadByGuid<QuestionnaireDocument>(Guid.Parse(input.QuestionnaireId));
             var group = new Entities.Questionnaire(doc).Find<Entities.SubEntities.Group>(input.PublicKey);
             if (group == null)
                 return null;

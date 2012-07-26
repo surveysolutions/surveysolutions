@@ -1,10 +1,10 @@
-﻿using System;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
+﻿using Ncqrs;
+using System;
 using Ncqrs.Eventing.Storage;
+using Ncqrs.Commanding.ServiceModel;
+using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Documents;
 
 namespace RavenQuestionnaire.Core.ViewSnapshot
 {

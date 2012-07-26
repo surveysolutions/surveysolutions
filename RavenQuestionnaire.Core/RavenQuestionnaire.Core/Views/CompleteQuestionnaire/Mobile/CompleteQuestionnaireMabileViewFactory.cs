@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                 ICompleteGroup group = null;
 
                 var rout = new List<NodeWithLevel>();
-
+                 
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
                     // group = doc.FindGroupByKey(input.CurrentGroupPublicKey.Value, input.PropagationKey);
