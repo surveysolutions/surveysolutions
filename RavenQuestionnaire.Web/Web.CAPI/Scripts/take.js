@@ -126,8 +126,10 @@ function UpdateQuestion(question) {
 function SetErrorToQuestion(question, key, error) {
     var questionElement = key ? $('#propagatedGroup' + key + ' #elem-' + question.PublicKey) : $('#elem-' + question.PublicKey);
     // questionElement.find('[data-valmsg-replace=true]').text(error);
-    //$('#error-' + question.PublicKey + ' p:first').text(error);
-   
+    if (error + "" != "") {
+        $('#error-' + question.PublicKey + ' p:first').text(error);
+    }
+
 }
 function UpdateGroup(group) {
     if (group.FeaturedTitle) {
