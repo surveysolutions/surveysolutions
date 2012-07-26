@@ -58,6 +58,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         [JsonIgnore]
         public string ValidationExpression
         { get; set; }
+        [JsonIgnore]
+
+        public string ValidationMessage
+        { get; set; }
 
         [JsonIgnore]
         public string StataExportCaption { get; set; }

@@ -29,6 +29,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             }
         }
         public string ValidationExpression { get; set; }
+        public string ValidationMessage { get; set; }
         private string conditionExpression;
         private QuestionnaireParametersParser parser = new QuestionnaireParametersParser();
         public string StataExportCaption { get; set; }
