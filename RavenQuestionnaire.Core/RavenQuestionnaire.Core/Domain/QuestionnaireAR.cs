@@ -294,28 +294,45 @@ namespace RavenQuestionnaire.Core.Domain
             this._innerDocument.Remove(e.GroupPublicKey);
         }
 
-        public void UpdateGroup(string groupText, Propagate paropagateble, Guid groupPublicKey, List<Guid> triggers)
+        //public void UpdateGroup(string groupText, Propagate propagateble, Guid groupPublicKey, List<Guid> triggers)
+        //{
+        //    Group group = this._innerDocument.Find<Group>(groupPublicKey);
+        //    if (group == null)
+        //        throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+        //    ApplyEvent(new GroupUpdated()
+        //                   {
+        //                       parentGroup = groupPublicKey,
+        //                       GroupText = groupText,
+        //                       Propagateble = propagateble,
+        //                       Triggers = triggers
+        //                   });
+        //}
+
+        public void UpdateGroup(string groupText, Propagate propagateble, Guid groupPublicKey, UserLight executor, string conditionExpression)
         {
             Group group = this._innerDocument.Find<Group>(groupPublicKey);
             if (group == null)
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
             ApplyEvent(new GroupUpdated()
-                           {
-                               GroupPublicKey = groupPublicKey,
-                               GroupText = groupText,
-                               Paropagateble = paropagateble,
-                               Triggers = triggers
-                           });
+            {
+                GroupPublicKey = groupPublicKey,
+                GroupText = groupText,
+                Propagateble = propagateble,
+                Executor = executor,
+                ConditionExpression = conditionExpression
+            });
         }
+
 
         protected void OnGroupUpdated(GroupUpdated e)
         {
             Group group = this._innerDocument.Find<Group>(e.GroupPublicKey);
             if (group != null)
             {
-                group.Propagated = e.Paropagateble;
-                if(e.Triggers!=null)
-                    group.Triggers = e.Triggers;
+                group.Propagated = e.Propagateble;
+                //if(e.Triggers!=null)
+                //    group.Triggers = e.Triggers;
+                group.ConditionExpression = e.ConditionExpression;
                 group.Update(e.GroupText);
                 return;
             }
