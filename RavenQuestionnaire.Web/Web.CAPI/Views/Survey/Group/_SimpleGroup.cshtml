@@ -16,9 +16,8 @@
             {
                 if ((item as CompleteQuestionView) != null)
                 {
-                    var question = item as CompleteQuestionView;
-                    var bordercolor = question.Mandatory ? "border-color:#FF0000;" : string.Empty;
-    <div style="@bordercolor" class="ui-body ui-body-c" id="elem-@(question.PublicKey)">
+                    var question = item as CompleteQuestionView;                    
+    <div class="ui-body ui-body-c" id="elem-@(question.PublicKey)">
         <div class="ui-grid-a question-content">
             <div class="ui-block-a">
                 @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions))
@@ -89,24 +88,24 @@
                     {
                         if (@group.Propagated != Propagate.None)
                         {
-    @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", @group)
+                            @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", @group)
                         }
                         else
                         {
-    <div class="ui-body ui-body-c">
-        <div class="group-anchor">
-            <a id="screen-ref-@(@group.PublicKey)" class="nav-link" href="@Url.Action("Screen", new { Id = @group.QuestionnairePublicKey, group = @group.PublicKey })" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
-            <script type="text/javascript">
-                $('#screen-ref-@(@group.PublicKey)').click(function () {
-                    $('.scrollHere').removeClass('scrollHere');
-                    $(this).parents('.group-anchor').addClass("scrollHere");
-                });
-            </script>
-            <input type="checkbox" disabled="disabled" style="display: none;" />
-        </div>
-    </div>
-    <div class="ui-body">
-        &nbsp;</div>
+                            <div class="ui-body ui-body-c">
+                                <div class="group-anchor">
+                                    <a id="screen-ref-@(@group.PublicKey)" class="nav-link" href="@Url.Action("Screen", new { Id = @group.QuestionnairePublicKey, group = @group.PublicKey })" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
+                                    <script type="text/javascript">
+                                        $('#screen-ref-@(@group.PublicKey)').click(function () {
+                                        $('.scrollHere').removeClass('scrollHere');
+                                        $(this).parents('.group-anchor').addClass("scrollHere");
+                                        });
+                                    </script>
+                                    <input type="checkbox" disabled="disabled" style="display: none;" />
+                                 </div>
+                            </div>
+                            <div class="ui-body">
+                        &nbsp;</div>
                         }
                     }
                     else
