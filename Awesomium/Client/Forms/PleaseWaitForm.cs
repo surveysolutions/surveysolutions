@@ -2,22 +2,28 @@
 using System.Threading;
 using System.Windows.Forms;
 
-
-namespace WinFormsSample
+namespace Client
 {
-    public partial class PleaseWaitForm : Form
+    internal interface IStatusIndicator
+    {
+        void Reset();
+        void AssignProgress(int progressPercentage);
+        void SetCompletedStatus(bool canceled, Exception error);
+    }
+
+    public partial class PleaseWaitControl : UserControl, IStatusIndicator
     {
         #region C-tor
 
-        public PleaseWaitForm()
+        public PleaseWaitControl()
         {
             //copyJobSize = GetJobSize(Configuration.ProgramDirectory);
             InitializeComponent();
 
             // since we are going to optimize resources and keep this form in memory the calls below are neccessary 
             // to activate the form in the main thread, while c-tor is called
-            Show();
-            Hide();
+            //Show();
+            //Hide();
         }
 
         #endregion
@@ -33,9 +39,9 @@ namespace WinFormsSample
             Thread.Sleep((int)waitTime);
 
             if (InvokeRequired)
-                Invoke(new MethodInvoker(() => { this.Hide(); }));
+                Invoke(new MethodInvoker(() => { this.Parent.Hide(); }));
             else
-                this.Hide();
+                this.Parent.Hide();
         }
 
         /// <summary>
@@ -81,22 +87,22 @@ namespace WinFormsSample
         /// <summary>
         /// Reset the form content and put it foreground
         /// </summary>
-        internal void Reset()
+        public void Reset()
         {
             AssignProgress(0);
             SetStatus("Export started. Plase wait...");
 
             if (InvokeRequired)
-                Invoke(new MethodInvoker(() => { this.Show(); }));
+                Invoke(new MethodInvoker(() => { this.Parent.Show(); }));
             else
-                this.Show();
+                this.Parent.Show();
         }
 
         /// <summary>
         /// Show progress state
         /// </summary>
         /// <param name="progressPercentage"></param>
-        internal void AssignProgress(int progressPercentage)
+        public void AssignProgress(int progressPercentage)
         {
             if (this.progressBar.InvokeRequired)
                 this.progressBar.Invoke(new MethodInvoker(() => { this.progressBar.Value = progressPercentage; }));
@@ -110,7 +116,7 @@ namespace WinFormsSample
         /// <param name="canceled"></param>
         /// <param name="error"></param>
         /// <remarks>We should add error report if canceling caused by an error</remarks>
-        internal void SetCompletedStatus(bool canceled, Exception error)
+        public void SetCompletedStatus(bool canceled, Exception error)
         {
             if (canceled)
             {

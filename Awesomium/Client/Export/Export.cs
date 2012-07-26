@@ -5,12 +5,12 @@ using System.Net;
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
-using WinFormsSample.Properties;
+using Client.Properties;
 using System.Threading;
 using System.Runtime.Remoting.Messaging;
 using Awesomium.Core;
 
-namespace WinFormsSample
+namespace Client
 {
     /// <summary>
     /// The class is responsible for completed questionaries export to plugged USB driver
@@ -24,12 +24,12 @@ namespace WinFormsSample
         /// </summary>
         private class ProgressHint
         {
-            public PleaseWaitForm ProgressForm { get; private set; }
+            public IStatusIndicator ProgressIndicator { get; private set; }
             public string ArchiveFileName { get; private set; }
 
-            public ProgressHint(PleaseWaitForm form, string archiveFileName)
+            public ProgressHint(IStatusIndicator indicator, string archiveFileName)
             {
-                ProgressForm = form;
+                ProgressIndicator = indicator;
                 ArchiveFileName = archiveFileName;
             }
         }
@@ -38,7 +38,7 @@ namespace WinFormsSample
 
         #region Private Members
 
-        private PleaseWaitForm pleaseWait;
+        private IStatusIndicator pleaseWait;
         private readonly string ArchiveFileNameMask = "backup-{0}.zip";
         private WebClient webClient = new WebClient();
         private AutoResetEvent exportEnded = new AutoResetEvent(false);
@@ -49,10 +49,10 @@ namespace WinFormsSample
 
         #region C-tor
 
-        internal Export()
+        internal Export(IStatusIndicator pleaseWait)
         {
             this.webClient.Credentials = new NetworkCredential("Admin", "Admin");
-            this.pleaseWait = new PleaseWaitForm();
+            this.pleaseWait = pleaseWait;
 
             this.webClient.DownloadProgressChanged += (s, e) =>
             {
@@ -60,7 +60,7 @@ namespace WinFormsSample
                 if (hint == null)
                     return;
 
-                hint.ProgressForm.AssignProgress(e.ProgressPercentage);
+                hint.ProgressIndicator.AssignProgress(e.ProgressPercentage);
             };
 
             this.webClient.DownloadFileCompleted += (s, e) =>
@@ -75,7 +75,7 @@ namespace WinFormsSample
                         File.Delete(hint.ArchiveFileName);
                 }
 
-                hint.ProgressForm.SetCompletedStatus(e.Cancelled, e.Error);
+                hint.ProgressIndicator.SetCompletedStatus(e.Cancelled, e.Error);
 
                 this.exportEnded.Set();
             };
@@ -129,7 +129,7 @@ namespace WinFormsSample
 
             var pluggedDrivers = currentDrivers.Except(this.cachedDrives);
 
-            return pluggedDrivers.Last();
+            return pluggedDrivers.Any() ? pluggedDrivers.First() : null;
         }
 
         private void DoExport()

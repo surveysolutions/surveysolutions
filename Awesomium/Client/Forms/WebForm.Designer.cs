@@ -2,9 +2,9 @@
 using System.Threading;
 using System;
 using Awesomium.Core;
-using WinFormsSample.Properties;
+using Client.Properties;
 
-namespace WinFormsSample
+namespace Client
 {
     partial class WebForm
     {
@@ -35,30 +35,40 @@ namespace WinFormsSample
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebForm));
+            this.exportItem = new System.Windows.Forms.MenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.SuspendLayout();
+            // 
+            // exportItem
+            // 
+            this.exportItem.Index = -1;
+            this.exportItem.Text = "Export";
+            this.exportItem.Click += new System.EventHandler(this.ExportClick);
+            this.exportItem.Enabled = false;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Location = new System.Drawing.Point(0, 1160);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1600, 22);
+            this.statusStrip1.TabIndex = 0;
+            this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip1.AutoSize = true;
             // 
             // WebForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            int deskHeight = Screen.PrimaryScreen.Bounds.Height;
-            int deskWidth = Screen.PrimaryScreen.Bounds.Width;
-            this.ClientSize = new System.Drawing.Size(deskWidth, deskHeight);
+            this.ClientSize = new System.Drawing.Size(1600, 1182);
+            this.Controls.Add(this.statusStrip1);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WebForm";
             this.Text = "CAPI";
-            this.Menu = new MainMenu();
-            this.exportItem = new MenuItem("Export");
-            this.exportItem.Enabled = false;
-            this.exportItem.Click += new System.EventHandler(this.ExportClick);
-            this.Menu.MenuItems.Add(this.exportItem);
-
-            //this.TopMost = true;
-            //this.FormBorderStyle = FormBorderStyle.None;
-            this.WindowState = FormWindowState.Maximized;
-
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
@@ -75,6 +85,8 @@ namespace WinFormsSample
                 throw ex;
             }
         }
+
+        private StatusStrip statusStrip1;
     }
 }
 

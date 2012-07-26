@@ -1,7 +1,8 @@
 ﻿using System.Windows.Forms;
-namespace WinFormsSample
+
+namespace Client
 {
-    partial class PleaseWaitForm
+    partial class PleaseWaitControl
     {
         /// <summary>
         /// Required designer variable.
@@ -31,41 +32,51 @@ namespace WinFormsSample
         {
             this.statusLabel = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusLabel
             // 
+            this.statusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(9, 8);
+            this.statusLabel.Location = new System.Drawing.Point(3, 6);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            //this.statusLabel.Size = new System.Drawing.Size(35, 13);
+            this.statusLabel.Size = new System.Drawing.Size(200, 13);
             this.statusLabel.TabIndex = 0;
-            this.statusLabel.Text = "hehe";//string.Empty;
-
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(12, 24);
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar.Location = new System.Drawing.Point(209, 3);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Dock = DockStyle.Fill;
-            this.progressBar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            this.progressBar.Size = new System.Drawing.Size(232, 20);
+            this.progressBar.Size = new System.Drawing.Size(477, 20);
             this.progressBar.TabIndex = 1;
-            
             // 
-            // PleaseWaitForm
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutPanel1.Controls.Add(this.statusLabel, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.progressBar, 1, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(689, 26);
+            this.tableLayoutPanel1.TabIndex = 2;
+            // 
+            // PleaseWaitControl
             // 
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(252, 53);
-            this.Controls.Add(this.progressBar);
-            this.Controls.Add(this.statusLabel);
-            this.Name = "PleaseWaitForm";
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.ControlBox = false;
+            this.Controls.Add(this.tableLayoutPanel1);
+            this.Name = "PleaseWaitControl";
+            this.Size = new System.Drawing.Size(964, 569);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -75,9 +86,7 @@ namespace WinFormsSample
 
         public ProgressBar progressBar;
         public Label statusLabel;
-
-
-
+        private TableLayoutPanel tableLayoutPanel1;
     }
 
 }
