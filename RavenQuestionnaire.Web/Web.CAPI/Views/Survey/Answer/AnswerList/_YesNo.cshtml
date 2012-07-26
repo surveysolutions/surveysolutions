@@ -6,7 +6,7 @@
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
 {
     <fieldset data-role="controlgroup" data-type="horizontal">
-        <legend @if (!String.IsNullOrEmpty(Model.Instructions))
+       <legend @if (!String.IsNullOrEmpty(Model.Instructions))
                 {
                     <text>
                         data-original-title = "Instructions"
@@ -14,15 +14,15 @@
                         rel = "popover"
                     </text>
                 } >
-            @Html.Raw(Model.Title)</legend>
+            @Html.Raw(Model.Title)
+            @if (Model.Mandatory) { <span style="color: red;font-size:25px;">*</span> }
+        </legend>            
         @Html.Hidden("Parent", Model.PublicKey)
         @foreach (CompleteAnswerView item in Model.Answers)
         {
             string radibutonname = string.Format("{0}-{1}", ViewData.TemplateInfo.GetFullHtmlFieldId("PublicKey"), item.PublicKey);
             ((IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings)["id"] = radibutonname;
             @Html.RadioButton("PublicKey", item.PublicKey, (item).Selected, (IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings)
-
-
             <label for="@radibutonname"> @{ Html.RenderPartial(string.Format("~/Views/Survey/Answer/Answer/_{0}.cshtml", item.AnswerType), item); }</label>
             @Html.Hidden("Selected", true)
         }

@@ -10,7 +10,7 @@
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
 {
     @Html.Hidden("Parent", Model.PublicKey)
-    <fieldset data-role="controlgroup"><legend>@Html.Raw(Model.Title)</legend>
+    <fieldset data-role="controlgroup"><legend>@Html.Raw(Model.Title) @if (Model.Mandatory) { <span style="color: red;font-size:25px;">*</span> }</legend>    
         @foreach (CompleteAnswerView item in Model.Answers)
         {
             @Html.Hidden("Selected", true)
