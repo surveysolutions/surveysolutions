@@ -44,7 +44,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
 
             handler.Handle(new UpdateQuestionCommand(entity.QuestionnaireId, question.PublicKey,
                                                               "question after update", "export title", QuestionType.MultyOption,
-                                                              string.Empty, string.Empty, false, false, string.Empty, null , Order.AsIs, null));
+                                                              string.Empty, string.Empty, string.Empty, false, false, string.Empty, null, Order.AsIs, null));
                                                      
 
             Assert.True(

@@ -98,7 +98,7 @@ function UpdateCurrentGroup(group) {
 }
 function UpdateQuestion(question) {
     var questionElement = $('#question' + question.PublicKey);
-
+    var element = $('#elem-' + question.PublicKey);
 
     questionElement.removeClass("ui-disabled");
     if (!question.Enabled) {
@@ -109,11 +109,9 @@ function UpdateQuestion(question) {
         if (questionElement.children('fieldset').children('.ui-controlgroup-controls').css("display") == "none") questionElement.children('fieldset').children('.ui-controlgroup-controls').show();
 
 
-    questionElement.removeClass("ui-body");
-    questionElement.removeClass("error_block");
+    element.removeClass("error_block");
     if (!question.Valid) {
-        questionElement.addClass("ui-body");
-        questionElement.addClass("error_block");
+        element.addClass("error_block");
     }
 
     if (question.Answered) {
@@ -126,8 +124,10 @@ function UpdateQuestion(question) {
 
 
 function SetErrorToQuestion(question, key, error) {
-    var questionElement = key ? $('#propagatedGroup' + key + ' #question' + question.PublicKey) : $('#question' + question.PublicKey);
-    questionElement.find('[data-valmsg-replace=true]').text(error);
+    var questionElement = key ? $('#propagatedGroup' + key + ' #elem-' + question.PublicKey) : $('#elem-' + question.PublicKey);
+    // questionElement.find('[data-valmsg-replace=true]').text(error);
+    //$('#error-' + question.PublicKey + ' p:first').text(error);
+   
 }
 function UpdateGroup(group) {
     if (group.FeaturedTitle) {
