@@ -56,7 +56,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     else
                     {
                         commandService.Execute(new UpdateGroupCommand(model.Title, model.Propagated,
-                                                                      model.QuestionnaireId,
+                                                                      Guid.Parse(model.QuestionnaireId),
                                                                       model.PublicKey, GlobalInfo.GetCurrentUser(), model.ConditionExpression));
                     }
                 }

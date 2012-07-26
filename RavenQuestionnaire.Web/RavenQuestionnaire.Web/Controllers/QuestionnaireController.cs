@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Web.Controllers
     {
         private readonly IViewRepository viewRepository;
 
-        public QuestionnaireController( IViewRepository viewRepository)
+        public QuestionnaireController(IViewRepository viewRepository)
         {
             this.viewRepository = viewRepository;
         }
