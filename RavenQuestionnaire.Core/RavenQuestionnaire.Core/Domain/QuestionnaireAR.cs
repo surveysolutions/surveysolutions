@@ -147,7 +147,7 @@ namespace RavenQuestionnaire.Core.Domain
         public void ChangeQuestion(Guid publicKey, string questionText, 
             string stataExportCaption, string instructions, 
             QuestionType questionType, Guid? groupPublicKey,
-            string conditionExpression, string validationExpression,
+            string conditionExpression, string validationExpression, string validationMessage,
             bool featured, bool mandatory, Order answerOrder, Answer[] answers)
         {
             ApplyEvent(new QuestionChanged
@@ -157,6 +157,7 @@ namespace RavenQuestionnaire.Core.Domain
                 QuestionType = questionType,
                 ConditionExpression = conditionExpression,
                 ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
                 Featured = featured,
                 Mandatory = mandatory,
                 AnswerOrder = answerOrder,
@@ -180,7 +181,7 @@ namespace RavenQuestionnaire.Core.Domain
         /// <param name="groupPublicKey"></param>
         /// <param name="answers"></param>
         public void AddQuestion(Guid publicKey, string questionText, string stataExportCaption,QuestionType questionType,
-                                                     string conditionExpression,string validationExpression, 
+                                                     string conditionExpression,string validationExpression, string validationMessage,
                                                      bool featured, bool mandatory, Order answerOrder, string instructions,  Guid? groupPublicKey,
                                                      Answer[] answers)
         {
@@ -199,6 +200,7 @@ namespace RavenQuestionnaire.Core.Domain
                 QuestionType = questionType,
                 ConditionExpression = conditionExpression,
                 ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
                 Featured = featured,
                 Mandatory = mandatory,
                 AnswerOrder = answerOrder,
@@ -218,6 +220,7 @@ namespace RavenQuestionnaire.Core.Domain
             result.StataExportCaption = e.StataExportCaption;
             result.ConditionExpression = e.ConditionExpression;
             result.ValidationExpression = e.ValidationExpression;
+            result.ValidationMessage = e.ValidationMessage;
             result.AnswerOrder = e.AnswerOrder;
             result.Featured = e.Featured;
             result.Mandatory = e.Mandatory;
@@ -242,6 +245,7 @@ namespace RavenQuestionnaire.Core.Domain
             UpdateAnswerList(e.Answers, question);
             question.ConditionExpression = e.ConditionExpression;
             question.ValidationExpression = e.ValidationExpression;
+            question.ValidationMessage = e.ValidationMessage;
             question.Instructions = e.Instructions;
             question.Featured = e.Featured;
             question.Mandatory = e.Mandatory;
