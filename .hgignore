@@ -137,3 +137,8 @@ RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/RavenQuestionnaire.Web.Tests
 RavenQuestionnaire.Web/Questionnaire.Core.Web/Questionnaire.Core.Web.csproj.user
 Externals/Framework/src/Ncqrs.Spec/Ncqrs.Spec.csproj.user
 Awesomium/Client/obj/*
+Awesomium/Assemblies/Release/*
+Awesomium/Core/C/Awesomium/Release/*
+Awesomium/Awesomium.NET CAPI Browser.suo
+Awesomium/ipch/awesomium-68c8a7cf/awesomium-c9d85fd.ipch
+Awesomium/Awesomium.NET CAPI Browser.opensdf

@@ -3,7 +3,7 @@ using Awesomium.Core;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace WinFormsSample
+namespace Client
 {
     static class Program
     {

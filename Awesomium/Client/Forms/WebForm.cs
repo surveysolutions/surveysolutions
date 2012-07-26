@@ -30,7 +30,7 @@ using Awesomium.Mono.Forms;
 #else
 using Awesomium.Core;
 using Awesomium.Windows.Forms;
-using WinFormsSample.Properties;
+using Client.Properties;
 using System.Net;
 using System.IO;
 using System.Collections.Generic;
@@ -39,7 +39,7 @@ using System.Threading;
 #endif
 #endregion
 
-namespace WinFormsSample
+namespace Client
 {
     public partial class WebForm : Form
     {
@@ -48,10 +48,10 @@ namespace WinFormsSample
         RenderBuffer rBuffer;
         Bitmap frameBuffer;
         bool needsResize, repaint;
-        private Export export = new Export();
+        private PleaseWaitControl pleaseWait;
+        private Export export;
         MenuItem exportItem;
         #endregion
-
 
         #region C-tor
 
@@ -60,7 +60,18 @@ namespace WinFormsSample
             // Notice that Control.DoubleBuffered has been set to true
             // in the designer, to prevent flickering.
 
+            this.pleaseWait = new PleaseWaitControl();
+            this.export = new Export(pleaseWait);
+
             InitializeComponent();
+
+            this.statusStrip1.Hide();
+
+            this.Menu = new MainMenu(new MenuItem[]{this.exportItem});
+
+            var host = new ToolStripControlHost(this.pleaseWait);
+            host.Size = this.statusStrip1.Size;
+            this.statusStrip1.Items.AddRange(new ToolStripItem[] { host});
 
             this.webView = WebCore.CreateWebView(this.ClientSize.Width, this.ClientSize.Height);
             this.webView.ResizeComplete += OnResizeComplete;
@@ -75,7 +86,6 @@ namespace WinFormsSample
             this.webView.Focus();
         }
         #endregion
-
 
         #region Methods
         private void ResizeView()
