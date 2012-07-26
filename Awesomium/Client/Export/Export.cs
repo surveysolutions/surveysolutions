@@ -69,7 +69,7 @@ namespace Client
                 if (hint == null)
                     return;
 
-                if (e.Cancelled)
+                if (e.Cancelled || e.Error != null)
                 {
                     if (File.Exists(hint.ArchiveFileName))
                         File.Delete(hint.ArchiveFileName);
@@ -181,6 +181,10 @@ namespace Client
         }
 
         #endregion
-    }
 
+        internal void Interrupt()
+        {
+            new Thread(Stop).Start();
+        }
+    }
 }
