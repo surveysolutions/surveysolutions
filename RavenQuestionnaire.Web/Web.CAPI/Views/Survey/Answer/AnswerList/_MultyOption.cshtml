@@ -12,18 +12,19 @@
                     rel = "popover"
                 </text>
             } >
-        @Html.Raw(Model.Title)</legend>
+        @Html.Raw(Model.Title)
+        @if (Model.Mandatory){ <span style="color: red;font-size:25px;">*</span> }
+    </legend>        
     @foreach (CompleteAnswerView item in Model.Answers)
     {
         using (Html.BeginCollectionItem("Answers", true, item.PublicKey))
         {
             @Html.Hidden("Parent", Model.PublicKey)
-            @Html.CheckBox("Selected", item.Selected, (IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings)
+            @Html.CheckBox("Selected", item.Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
             @Html.Hidden("PublicKey", item.PublicKey)
             <label for="@ViewData.TemplateInfo.GetFullHtmlFieldId("Selected")">
                 @{ Html.RenderPartial(string.Format("~/Views/Survey/Answer/Answer/_{0}.cshtml", item.AnswerType), item); }
             </label>
-
-     @*       @Html.Label("Selected", item.Title)*@        }
+        }
     }
 </fieldset>

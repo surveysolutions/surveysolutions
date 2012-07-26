@@ -15,7 +15,12 @@
     settings.Add("data-native-menu", "false");
     @Html.Hidden("Selected", true)
     @Html.Hidden("Parent", Model.PublicKey)
- @*   @Html.Label("PublicKey", Model.Title)*@
-    <label for="@ViewData.TemplateInfo.GetFullHtmlFieldId("PublicKey")">@Html.Raw(Model.Title)</label>
+    <label for="@ViewData.TemplateInfo.GetFullHtmlFieldId("PublicKey")">
+        @Html.Raw(Model.Title) 
+        @if (Model.Mandatory)
+        {
+            <span style="color: red; font-size:25px;">*</span>
+        }
+    </label>
     @Html.DropDownList("PublicKey", new SelectList(Model.Answers, "PublicKey", "Title", selected), "Select answer", settings)
 }

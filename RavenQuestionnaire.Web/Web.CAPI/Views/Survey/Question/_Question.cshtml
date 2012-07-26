@@ -24,10 +24,8 @@
         <a id="gallery-ref-@(Model.PublicKey)" data-role="button" rel="external" data-icon="grid" data-inline="true" href="#gallery-@(Model.PublicKey)">
             Cards</a>
     }
-    @Html.Hidden("QuestionType", Model.QuestionType)
-  
-    @{ Html.RenderPartial(string.Format("~/Views/Survey/Answer/AnswerList/_{0}.cshtml", Model.QuestionType), Model); }
-
+    @Html.Hidden("QuestionType", Model.QuestionType)  
+    @{ Html.RenderPartial(string.Format("~/Views/Survey/Answer/AnswerList/_{0}.cshtml", Model.QuestionType), Model); }       
     @Html.ValidationMessage("AnswerValue")
     @Html.Hidden("PublicKey", Model.PublicKey)
 </div>

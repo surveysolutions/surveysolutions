@@ -25,17 +25,23 @@ namespace Questionnaire.Core.Web.Helpers
             aTagBuilder.MergeAttribute("href", "#", true);
             aTagBuilder.MergeAttribute("target-input", fullId, true);
             aTagBuilder.SetInnerText(/*System.Web.HttpUtility.HtmlDecode("&nbsp;")*/ string.Empty);
+            string required = string.Empty;
             if(!inputHtmlAttributes.ContainsKey("type"))
             {
                 inputHtmlAttributes.Add("type", "text");
             }
+            if (inputHtmlAttributes.ContainsKey("required"))
+            {
+                required = "<span style=\"color: red;font-size:25px;\">*</span>";
+                inputHtmlAttributes.Remove("required");
+            }
             var additionTags =
                 new MvcHtmlString(
                     string.Format(
-                        "<div>{3}<p class=\"text-question\"><label for=\"{0}\" style=\"display:inline\">{1} </label>{2}</p>{4}<div style=\"clear: both;\"></div></div>",
+                        "<div>{3}<p class=\"text-question\"><label for=\"{0}\" style=\"display:inline\">{1}  {5}</label>{2}</p>{4}<div style=\"clear: both;\"></div></div>",
                         fullId, System.Web.HttpUtility.HtmlDecode(labelText), spanTagBuilder.ToString(TagRenderMode.Normal),
                         aTagBuilder.ToString(TagRenderMode.Normal),
-                        InputHelper(htmlHelper, name, value, true, true, inputHtmlAttributes)));
+                        InputHelper(htmlHelper, name, value, true, true, inputHtmlAttributes), required));
             
             return additionTags;
 
