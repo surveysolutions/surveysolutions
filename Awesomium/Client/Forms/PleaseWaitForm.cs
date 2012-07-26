@@ -118,7 +118,7 @@ namespace Client
         /// <remarks>We should add error report if canceling caused by an error</remarks>
         public void SetCompletedStatus(bool canceled, Exception error)
         {
-            if (canceled)
+            if (canceled || error != null)
             {
                 Dissapear(true);
                 return;

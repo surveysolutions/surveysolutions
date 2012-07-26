@@ -67,7 +67,7 @@ namespace Client
 
             this.statusStrip1.Hide();
 
-            this.Menu = new MainMenu(new MenuItem[]{this.exportItem});
+            //this.Menu = new MainMenu(new MenuItem[]{this.exportItem});
 
             var host = new ToolStripControlHost(this.pleaseWait);
             host.Size = this.statusStrip1.Size;
@@ -124,12 +124,16 @@ namespace Client
                             throw ex;
                         }
 
+                        this.Menu = new MainMenu(new MenuItem[]{this.exportItem});
                         this.exportItem.Enabled = true;
                     }
                     else if (n == 0x8004)
                     {
                         this.exportItem.Enabled = false;
+                        this.export.Interrupt();
                         this.export.FlushDriversList();
+
+                        this.Menu = null;
                     }
 
                     break;
