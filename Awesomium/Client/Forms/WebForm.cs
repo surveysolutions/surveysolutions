@@ -62,7 +62,7 @@ namespace Client
 
             this.pleaseWait = new PleaseWaitControl();
             this.export = new Export(pleaseWait);
-
+            export.EndOfExport+= new EndOfExport(EndOfExportMain);
             InitializeComponent();
 
             this.statusStrip1.Hide();
@@ -113,10 +113,12 @@ namespace Client
 
                     if (n == 0x8000)
                     {
+                        this.exportItem.Enabled = false;
                         //Thread.Sleep(1000);
                         try
                         {
                             this.export.ExportQuestionariesArchive();
+                            
                         }
                         catch (Exception ex)
                         {
@@ -125,7 +127,7 @@ namespace Client
                         }
 
                         this.Menu = new MainMenu(new MenuItem[]{this.exportItem});
-                        this.exportItem.Enabled = true;
+                        
                     }
                     else if (n == 0x8004)
                     {
@@ -277,6 +279,13 @@ namespace Client
         #endregion
 
         #region Event Handlers
+        public void EndOfExportMain()
+        {
+            if (this.InvokeRequired)
+                this.Invoke(new MethodInvoker(() => { this.exportItem.Enabled = true; }));
+            else
+                this.exportItem.Enabled = true;
+        }
         private void OnResizeComplete(object sender, ResizeEventArgs e)
         {
             if (!this.webView.IsLive)
