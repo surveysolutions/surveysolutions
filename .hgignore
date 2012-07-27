@@ -142,3 +142,4 @@ Awesomium/Core/C/Awesomium/Release/*
 Awesomium/Awesomium.NET CAPI Browser.suo
 Awesomium/ipch/awesomium-68c8a7cf/awesomium-c9d85fd.ipch
 Awesomium/Awesomium.NET CAPI Browser.opensdf
+Awesomium/_ReSharper*

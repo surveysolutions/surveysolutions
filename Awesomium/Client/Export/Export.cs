@@ -12,9 +12,11 @@ using Awesomium.Core;
 
 namespace Client
 {
+    public delegate void EndOfExport();
     /// <summary>
     /// The class is responsible for completed questionaries export to plugged USB driver
     /// </summary>
+    
     internal class Export
     {
         #region Nested Class
@@ -45,6 +47,7 @@ namespace Client
         private Uri exportURL = new Uri(Settings.Default.DefaultUrl + "/Synchronizations/Export");
         private List<string> cachedDrives;
 
+
         #endregion
 
         #region C-tor
@@ -74,10 +77,15 @@ namespace Client
                     if (File.Exists(hint.ArchiveFileName))
                         File.Delete(hint.ArchiveFileName);
                 }
-
+                
                 hint.ProgressIndicator.SetCompletedStatus(e.Cancelled, e.Error);
 
                 this.exportEnded.Set();
+
+                if (EndOfExport != null)
+                {
+                    EndOfExport();
+                }
             };
 
             FlushDriversList();
@@ -87,6 +95,7 @@ namespace Client
 
         #region Helpers
 
+        public event EndOfExport EndOfExport;
         /// <summary>
         /// Create list of available drivers
         /// </summary>
@@ -137,12 +146,14 @@ namespace Client
             lock (this) // block any extra call to this method
             {
                 Stop(); // stop any existent activity
-
+                
                 string drive = GetDrive(); // accept driver to flush on
                 if (drive == null)
                     return;
 
                 this.pleaseWait.Reset();
+
+                
 
                 string filename = string.Format(this.ArchiveFileNameMask, DateTime.Now.ToString().Replace("/", "_"));
                 filename = filename.Replace(" ", "_");
@@ -169,7 +180,9 @@ namespace Client
 
         internal void ExportQuestionariesArchive()
         {
+            
             new Thread(DoExport).Start(); // initialize export operation in independent thread
+
         }
 
         /// <summary>
@@ -186,5 +199,6 @@ namespace Client
         {
             new Thread(Stop).Start();
         }
+        
     }
 }
