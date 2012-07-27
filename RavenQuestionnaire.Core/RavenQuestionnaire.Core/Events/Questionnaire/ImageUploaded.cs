@@ -14,6 +14,8 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire
 
         public Guid ImagePublicKey { get; set; }
 
+        public Guid ThumbPublicKey { get; set; }
+
         public string Title { get; set; }
 
         public string Description { get; set; }
@@ -30,8 +32,8 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire
 
         public string ThumbnailImage { get; set; }
 
-        public string FileName { get; set; }
+     //   public string FileName { get; set; }
         
-        public string ThumbName { get; set; }
+     //   public string ThumbName { get; set; }
     }
 }

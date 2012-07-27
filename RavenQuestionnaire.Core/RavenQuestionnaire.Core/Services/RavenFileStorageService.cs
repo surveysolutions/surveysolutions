@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Raven.Abstractions.Data;
 using Raven.Client;
@@ -16,20 +17,44 @@ namespace RavenQuestionnaire.Core.Services
         {
             this.documentStore = documentStore;
         }
-        public void StoreFile(string filename, Stream bytes)
+        public void StoreFile( FileDescription file)
         {
-            Attachment a = documentStore.DatabaseCommands.GetAttachment(filename);
+            Attachment a = documentStore.DatabaseCommands.GetAttachment(file.PublicKey.ToString());
             if (a == null)
-                documentStore.DatabaseCommands.PutAttachment(filename, null, bytes, new RavenJObject {});
+            {
+                using (MemoryStream theMemStream = new MemoryStream())
+                {
+
+                    theMemStream.Write(file.Content, 0, file.Content.Length);
+                    documentStore.DatabaseCommands.PutAttachment(file.PublicKey.ToString(), null, theMemStream,
+                                                                 new RavenJObject
+                                                                     {
+                                                                         {"PublicKey", file.PublicKey.ToString()},
+                                                                         {"Description", file.Description},
+                                                                         {"Height", file.Height},
+                                                                         {"Title", file.Title},
+                                                                         {"Width", file.Width}
+                                                                     });
+                }
+            }
         }
 
-        public byte[] RetrieveFile(string filename)
+        public FileDescription RetrieveFile(string filename)
         {
-            Attachment a = documentStore.DatabaseCommands.GetAttachment(IdUtil.CreateImageId(filename));
+            FileDescription file = new FileDescription();
+            Attachment a = documentStore.DatabaseCommands.GetAttachment(filename);
             
             var memoryStream = new MemoryStream();
             a.Data().CopyTo(memoryStream);
-            return memoryStream.ToArray();
+
+
+            file.Content = memoryStream.ToArray();
+            file.PublicKey =Guid.Parse( a.Metadata["PublicKey"].Value<string>());
+            file.Description = a.Metadata["Description"].Value<string>();
+            file.Title = a.Metadata["Description"].Value<string>();
+            file.Height = a.Metadata["Height"].Value<int>();
+            file.Width = a.Metadata["Width"].Value<int>();
+            return file;
              
             //return a.Data;
         }

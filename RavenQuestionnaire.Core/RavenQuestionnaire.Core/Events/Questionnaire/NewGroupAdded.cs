@@ -9,7 +9,7 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire
     public class NewGroupAdded
     {
         public Guid PublicKey { set; get; }
-        
+        public Guid QuestionnairePublicKey { get; set; }
         public string GroupText { get;set;}
         public Propagate Paropagateble {get; set;}
         public Guid? ParentGroupPublicKey {get; set;}
