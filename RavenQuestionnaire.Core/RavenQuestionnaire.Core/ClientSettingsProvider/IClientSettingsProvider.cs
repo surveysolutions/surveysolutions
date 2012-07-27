@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web.Configuration;
 using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Views.ClientSettings;
@@ -13,11 +14,9 @@ namespace RavenQuestionnaire.Core.ClientSettingsProvider
 
     public class ClientSettingsProvider : IClientSettingsProvider
     {
-        private IDocumentSession session;
         private ClientSettingsView clientSettings;
-        public ClientSettingsProvider(IDocumentSession session)
+        public ClientSettingsProvider()
         {
-            this.session = session;
         }
 
         public ClientSettingsView ClientSettings
@@ -26,14 +25,15 @@ namespace RavenQuestionnaire.Core.ClientSettingsProvider
             {
                 if (clientSettings == null)
                 {
-                    var clientSettingsDoc = this.session.Query<ClientSettingsDocument>().FirstOrDefault();
+                    /*var clientSettingsDoc = this.session.Query<ClientSettingsDocument>().FirstOrDefault();
                     if (clientSettingsDoc == null)
                     {
                         clientSettingsDoc = new ClientSettingsDocument() {PublicKey = Guid.NewGuid()};
                         session.Store(clientSettingsDoc);
                         session.SaveChanges();
-                    }
-                    clientSettings = new ClientSettingsView(clientSettingsDoc);
+                    }*/
+                    clientSettings =
+                        new ClientSettingsView(Guid.Parse(WebConfigurationManager.AppSettings["ClientId"]));
                 }
                 return clientSettings;
             }
