@@ -77,6 +77,7 @@ namespace Client
         {
             try
             {
+                this.exportItem.Enabled = false;
                 export.ExportQuestionariesArchive();
             }
             catch (Exception ex)
