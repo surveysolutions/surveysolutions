@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using Raven.Abstractions.Data;
 using Raven.Json.Linq;
+using RavenQuestionnaire.Core.Documents;
 
 namespace RavenQuestionnaire.Core.Services
 {
     public interface IFileStorageService
     {
-        void StoreFile(string filename, Stream bytes);
+        void StoreFile(FileDescription file);
 
-        byte[] RetrieveFile(string filename);
+        FileDescription RetrieveFile(string filename);
 
         void DeleteFile(string filename);
     }

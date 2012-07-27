@@ -261,8 +261,8 @@ namespace RavenQuestionnaire.Web.Controllers
                 var imagesList = new SelectList(images.Items.Select(i => new SelectListItem
                                                                              {
                                                                                  Selected = false,
-                                                                                 Text = i.Id,
-                                                                                 Value = i.Id
+                                                                                 Text = i.Id.ToString(),
+                                                                                 Value = i.Id.ToString()
                                                                              }).ToList(), "Value", "Text");
                 ViewBag.Images = imagesList;
             }

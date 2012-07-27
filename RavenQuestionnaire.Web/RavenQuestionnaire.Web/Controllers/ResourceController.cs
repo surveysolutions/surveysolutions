@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using Kaliko.ImageLibrary;
 using Kaliko.ImageLibrary.Filters;
 using NLog;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.File;
@@ -13,6 +15,7 @@ using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.File;
+using LogManager = NLog.LogManager;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -36,6 +39,7 @@ namespace RavenQuestionnaire.Web.Controllers
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private ICommandInvoker commandInvoker;
+        private ICommandService commandService;
         private IViewRepository viewRepository;
         private IFileStorageService fileStorageService;
 
@@ -44,12 +48,13 @@ namespace RavenQuestionnaire.Web.Controllers
             this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
             this.fileStorageService = fileStorageService;
+            this.commandService = NcqrsEnvironment.Get<ICommandService>();
         }
 
         [HttpGet]
         public ActionResult Images(string id)
         {
-            Byte[] fileBytes = fileStorageService.RetrieveFile(id);
+            var fileBytes = fileStorageService.RetrieveFile(id).Content;
             return File(fileBytes, "image/png");
         }
 
@@ -86,6 +91,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
             try
             {
+                
                 commandInvoker.Execute(new DeleteFileCommand(id, GlobalInfo.GetCurrentUser()));
             }
             catch (Exception exception)
@@ -139,12 +145,11 @@ namespace RavenQuestionnaire.Web.Controllers
                 var thumbData = ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
                 var origData = ResizeImage(image, 1024, 768, out origWidth, out origHeight);
 
-                var command = new UploadFileCommand(title, desc,
+                var command = new UploadFileCommand(Guid.NewGuid(), title, desc,
                                                     thumbData, thumbWidth,
                                                     thumbHeight,
-                                                    origData, origWidth, origHeight,
-                                                    GlobalInfo.GetCurrentUser());
-                commandInvoker.Execute(command);
+                                                    origData, origWidth, origHeight);
+                commandService.Execute(command);
                 thumbData.Position = 0;
                 var bytes = new byte[thumbData.Length];
                 origData.Read(bytes, 0, (int)thumbData.Length);

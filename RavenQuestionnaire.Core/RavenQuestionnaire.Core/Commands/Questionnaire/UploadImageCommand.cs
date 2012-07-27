@@ -39,13 +39,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire
 
         protected string ToBase64(Stream stream)
         {
-         /*   Byte[] bytes = new Byte[stream.Length];
-            stream.Read(bytes, 0, bytes.Length);
-            return Convert.ToBase64String(bytes);*/
             string base64;
-            // first I need the data as a byte[]; I'll use
-            // MemoryStream, as a convenience; if you already
-            // have the byte[] you can skip this
             using (MemoryStream ms = new MemoryStream())
             {
                 byte[] buffer = new byte[1024];
