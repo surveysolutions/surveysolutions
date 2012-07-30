@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
+using RavenQuestionnaire.Web.App_Start;
 
-namespace Web.Supervisor
+namespace RavenQuestionnaire.Web
 {
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -14,7 +13,8 @@ namespace Web.Supervisor
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            //filters.Add(new HandleErrorAttribute());
+
         }
 
         public static void RegisterRoutes(RouteCollection routes)
@@ -24,8 +24,8 @@ namespace Web.Supervisor
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
-            );
+                new { controller = "Status", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+                );
 
         }
 
@@ -35,6 +35,18 @@ namespace Web.Supervisor
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            //maybe better to move outside this class
+            NCQRSInit.RebuildReadLayer();
+
+        }
+
+
+        protected void Application_Error()
+        {
+            Exception lastException = Server.GetLastError();
+            NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Fatal(lastException);
         }
     }
 }
