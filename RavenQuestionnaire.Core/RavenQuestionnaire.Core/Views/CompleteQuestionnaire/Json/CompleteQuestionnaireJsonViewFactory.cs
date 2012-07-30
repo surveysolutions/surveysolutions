@@ -1,19 +1,12 @@
-﻿#region
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using Ncqrs.Eventing.Storage;
-using Raven.Client;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.Iterators;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.ViewSnapshot;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Entities.Extensions;
-#endregion
+using RavenQuestionnaire.Core.ExpressionExecutors;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
 {
@@ -34,29 +27,17 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             {
                 var doc =
                     this.store.ReadByGuid<CompleteQuestionnaireDocument>(Guid.Parse(input.CompleteQuestionnaireId));
-                //var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
-             //   var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
                 ICompleteGroup group = null;
-                
                 if (input.CurrentGroupPublicKey.HasValue)
-                {
                     group = doc.FindGroupByKey(input.CurrentGroupPublicKey.Value, input.PropagationKey);
-                }
-               
                 return new CompleteQuestionnaireJsonView(doc, group);
             }
-          /*  if (!string.IsNullOrEmpty(input.TemplateQuestionanireId))
-            {
-                var doc = documentSession.Load<QuestionnaireDocument>(input.TemplateQuestionanireId);
-                return new CompleteQuestionnaireJsonView((CompleteQuestionnaireDocument)doc);
-            }*/
             return null;
         }
 
         #endregion
     }
-
-
+    
     public class CompleteQuestionnaireMobileViewFactory : IViewFactory<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>
     {
         private readonly IViewSnapshot store;
@@ -74,36 +55,23 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             {
                 var doc =
                     this.store.ReadByGuid<CompleteQuestionnaireDocument>(Guid.Parse(input.CompleteQuestionnaireId));
-                //var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
-                //   var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
                 ICompleteGroup group = null;
-
                 var rout = new List<NodeWithLevel>();
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
-                   // group = doc.FindGroupByKey(input.CurrentGroupPublicKey.Value, input.PropagationKey);
                     Stack<NodeWithLevel> treeStack = new Stack<NodeWithLevel>();
-                    
                     treeStack.Push(new NodeWithLevel(doc, 0));
                     while (treeStack.Count>0)
                     {
                         var node = treeStack.Pop();
                         group = ProceedGroup(node.Group, input.CurrentGroupPublicKey.Value, input.PropagationKey);
                         UpdateNavigation(rout, node);
-
                         if (group != null)
-                        {
                             break;
-                        }
-                        
                         var subGroups = node.Group.Children.OfType<ICompleteGroup>().ToArray();
-                        
                         for (int i = subGroups.Length - 1; i >= 0; i--)
-                        {
                             treeStack.Push(new NodeWithLevel(subGroups[i], node.Level + 1));
-                        }
                     }
-                   
                 }
                 if (group == null)
                     group = doc.Children.OfType<ICompleteGroup>().First();
