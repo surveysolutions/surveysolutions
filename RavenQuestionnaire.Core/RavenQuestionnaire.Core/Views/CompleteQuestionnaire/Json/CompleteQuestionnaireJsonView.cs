@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.ExpressionExecutors;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.Question;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
+
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
 {
@@ -17,6 +17,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         private CompleteQuestionnaireJsonView()
         {
             Questions = new List<CompleteQuestionsJsonView>();
+            InnerGroups=new List<CompleteGroupMobileView>();
         }
         public CompleteQuestionnaireJsonView(CompleteQuestionnaireDocument doc, ICompleteGroup currentGroup)
             : this()
@@ -24,20 +25,16 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             Id = IdUtil.ParseId(doc.Id);
             Status = doc.Status;
             Responsible = doc.Responsible;
-
             CollectAll(doc, currentGroup as CompleteGroup);
         }
 
         public CompleteQuestionnaireJsonView(CompleteQuestionnaireDocument doc)
             : this()
         {
-
             Id = IdUtil.ParseId(doc.Id);
             Status = doc.Status;
             Responsible = doc.Responsible;
-
             var group = new CompleteGroup { Children = doc.Children.Where(c => c is ICompleteQuestion).ToList() };
-
             CollectAll(doc, group);
         }
 
@@ -74,6 +71,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                 foreach (CompleteGroup g in innerGroups)
                 {
                     queue.Enqueue(g);
+                    InnerGroups.Add(new CompleteGroupMobileView(doc, g, null));
                 }
             }
 
@@ -86,6 +84,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         public SurveyStatus Status { get; set; }
 
         public List<CompleteQuestionsJsonView> Questions { get; set; }
+
+        public List<CompleteGroupMobileView> InnerGroups { get; set; }
 
         public UserLight Responsible { set; get; }
 
@@ -114,8 +114,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         private Counter CalcProgress(ICompleteGroup @group)
         {
             var total = new Counter();
-
-            //      var propagated = @group as PropagatableCompleteGroup;
             if (@group.PropogationPublicKey.HasValue)
             {
                 total = total + CountQuestions(@group.Children.Select(q => q as ICompleteQuestion).ToList());
@@ -127,7 +125,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             var gruoSubGroup = @group.Children.OfType<ICompleteGroup>().ToList();
             var gruoSubQuestions = @group.Children.OfType<ICompleteQuestion>().ToList();
             total = total + CountQuestions(gruoSubQuestions);
-
             foreach (var g in gruoSubGroup)
             {
                 total = total + CalcProgress(g);
@@ -139,9 +136,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         {
             if (questions == null || questions.Count == 0)
                 return new Counter();
-
             var enabled = questions.Where(q => q.Enabled).ToList();
-
             var total = new Counter
                             {
                                 Total = questions.Count,

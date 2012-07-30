@@ -12,7 +12,6 @@
         {
             var item = enumerator.Current;
             isLast = !enumerator.MoveNext();
-
             {
                 if ((item as CompleteQuestionView) != null)
                 {
@@ -23,7 +22,6 @@
             <div class="ui-block-a">
                 @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions))
                 {
-                    //  using (Ajax.BeginFormHtml5("Index", "CompleteQuestionnaireAsync1", new { type = "Html5" }, ViewBag.AjaxOptions as AjaxOptions)){
                     using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                     {
                         Html.RenderPartial("~/Views/Survey/Question/_Question.cshtml", question);
@@ -93,7 +91,8 @@
                         }
                         else
                         {
-                            <div class="ui-body ui-body-c">
+                            string enabled = !@group.Enabled ? "ui-disabled" : string.Empty;
+                            <div class="@enabled ui-body ui-body-c" id="@group.PublicKey">
                                 <div class="group-anchor">
                                     <a id="screen-ref-@(@group.PublicKey)" class="nav-link" href="@Url.Action("Screen", new { Id = @group.QuestionnairePublicKey, group = @group.PublicKey })" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
                                     <script type="text/javascript">
