@@ -14,19 +14,14 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         {
             this.hash = hash;
         }
-        //public void Execute(ICompleteGroup group)
-        //{
-        //    foreach (ICompleteQuestion completeQuestion in group.Children.Where(c => c is ICompleteQuestion))
-        //    {
-        //      //  bool previousState = completeQuestion.Enabled;
-        //        completeQuestion.Enabled = Execute(completeQuestion);
-        //    }
-        //}
 
         public bool Execute(ICompleteGroup group)
         {
             if (string.IsNullOrEmpty(group.ConditionExpression))
+            {
+                UpdateAllQuestionInGroup(group, true);
                 return true;
+            }
             var e = new Expression(group.ConditionExpression);
             e.EvaluateParameter += (name, args) =>
                                        {
