@@ -11,47 +11,16 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "UploadImage")]
     public class UploadImageCommand : CommandBase
     {
-        protected UploadImageCommand(Guid publicKey, Guid questionnaireId, string title, string description, int thumbWidth, int thumbHeight, int originalWidth, int originalHeight)
+        public UploadImageCommand(Guid publicKey, Guid questionnaireId, string title, string description, Guid imagePublicKey)
         {
             PublicKey = publicKey;
             QuestionnaireId = questionnaireId;
             Description = description;
             Title = title;
-            OriginalWidth = originalWidth;
-            OriginalHeight = originalHeight;
-            ThumbHeight = thumbHeight;
-            ThumbWidth = thumbWidth;
+            ImagePublicKey = imagePublicKey;
         }
-        public UploadImageCommand(Guid publicKey, Guid questionnaireId, string title, string description, Stream thumbData, int thumbWidth, int thumbHeight,
-            Stream originalImage, int originalWidth, int originalHeight)
-            : this(publicKey, questionnaireId, title, description, thumbWidth, thumbHeight, originalWidth, originalHeight)
-        {
-            OriginalImage = ToBase64(originalImage);
-            ThumbnailImage = ToBase64(thumbData);
-        }
-        public UploadImageCommand(Guid publicKey, Guid questionnaireId, string title, string description, string thumbData, int thumbWidth, int thumbHeight,
-           string originalImage, int originalWidth, int originalHeight)
-            : this(publicKey, questionnaireId, title, description, thumbWidth, thumbHeight, originalWidth, originalHeight)
-        {
-            OriginalImage = originalImage;
-            ThumbnailImage = thumbData;
-        }
+      
 
-        protected string ToBase64(Stream stream)
-        {
-            string base64;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    ms.Write(buffer, 0, bytesRead);
-                }
-                base64 = Convert.ToBase64String(ms.GetBuffer(), 0, (int)ms.Length);
-            }
-            return base64;
-        }
 
         #region Properties
 
@@ -63,17 +32,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire
 
         public string Description { get; private set; }
 
-        public string OriginalImage { get; private set; }
-
-        public int OriginalWidth { get; private set; }
-
-        public int OriginalHeight { get; private set; }
-
-        public int ThumbWidth { get; private set; }
-
-        public int ThumbHeight { get; private set; }
-
-        public string ThumbnailImage { get; private set; }
+        public Guid ImagePublicKey { get; private set; }
 
         #endregion
     }

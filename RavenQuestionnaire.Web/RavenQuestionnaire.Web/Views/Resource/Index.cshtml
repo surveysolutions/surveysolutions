@@ -25,11 +25,11 @@
                 @using (Ajax.BeginForm("UpdateDesc", "Resource", new AjaxOptions() { HttpMethod = "Post" }))
                 {
                     <th class="span1">
-                        @Html.DisplayFor(modelItem => item.Id)
+                        @Html.DisplayFor(modelItem => item.FileName)
                     </th>
                     <td class="span2">
                         <div class="thumbnail">
-                            <img src="@Url.Action("Images", "Resource", new { id = item.FileName })" alt="@item.Title" />
+                            <img src="@Url.Action("Thumb", "Resource", new { id = item.FileName})" alt="@item.Title" />
                         </div>
                     </td>
                     <td class="span2">
@@ -42,9 +42,9 @@
                         @Html.DisplayFor(modelItem => item.CreationDate)
                     </td>*@
                     <td class="span2">
-                        @Html.Hidden("Id", item.Id)
+                        @Html.Hidden("Id", item.FileName)
                         @* @Html.ActionLink("Edit", "Manage", new { id = item.Id }, new { @class = "btn small " })*@
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-small btn-danger " })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.FileName }, new { @class = "btn btn-small btn-danger " })
                         <button class="btn btn-primary" type="submit">Save changes</button>
                     </td>
                 }

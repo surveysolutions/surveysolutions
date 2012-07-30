@@ -337,6 +337,9 @@
     <Compile Include="Events\Collection\CollectionItemRemoved.cs" />
     <Compile Include="Events\Collection\CollectionRemoved.cs" />
     <Compile Include="Events\Collection\NewCollectionCreated.cs" />
+    <Compile Include="Events\File\FileDeleted.cs" />
+    <Compile Include="Events\File\FileMetaUpdated.cs" />
+    <Compile Include="Events\File\FileUploaded.cs" />
     <Compile Include="Events\IEventSync.cs" />
     <Compile Include="Events\Location\LocationDeleted.cs" />
     <Compile Include="Events\Location\NewLocationCreated.cs" />

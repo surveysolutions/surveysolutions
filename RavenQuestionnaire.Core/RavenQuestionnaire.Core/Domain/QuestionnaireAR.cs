@@ -284,7 +284,6 @@ namespace RavenQuestionnaire.Core.Domain
                 PublicKey = e.ImagePublicKey,
                 Title = e.Title,
                 Description = e.Description,
-                ThumbPublicKey = e.ThumbPublicKey,
                 CreationDate = DateTime.Now
             };
 
@@ -358,26 +357,15 @@ namespace RavenQuestionnaire.Core.Domain
             }
         }
 
-        public void UploadImage(Guid publicKey, string title, string description, 
-            string originalImage, int originalWidth, int originalHeight, 
-            int thumbWidth, int thumbHeight, string thumbnailImage)
+        public void UploadImage(Guid publicKey, string title, string description,
+            Guid imagePublicKey)
         {
-            var imagePublicKey = Guid.NewGuid();
             ApplyEvent(new ImageUploaded()
                            {
                                Description = description,
                                Title = title,
                                PublicKey = publicKey,
-                               OriginalHeight = originalHeight,
-                               OriginalImage = originalImage,
-                               OriginalWidth = originalWidth,
-                               ThumbHeight = thumbHeight,
-                               ThumbnailImage = thumbnailImage,
-                               ThumbWidth = thumbWidth,
-                               ImagePublicKey = imagePublicKey,
-                               ThumbPublicKey = Guid.NewGuid()/*,
-                               FileName = filename,
-                               ThumbName = thumbname*/
+                               ImagePublicKey = imagePublicKey
                            });
         }
 

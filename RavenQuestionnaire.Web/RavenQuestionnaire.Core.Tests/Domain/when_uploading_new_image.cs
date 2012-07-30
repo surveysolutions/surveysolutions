@@ -42,14 +42,13 @@ namespace RavenQuestionnaire.Core.Tests.Domain
         private const string QuestionnaireText = "Questionnaire text goes here";
         private const string ImageTitle = "Image title goes here";
         private const string ImageDescription = "Image description goes here";
-       // private readonly Guid ImageGuid = Guid.NewGuid();
+        private readonly Guid ImageGuid = Guid.NewGuid();
         private readonly Guid QuestionGuid = Guid.NewGuid();
         #region Overrides of DomainTestFixture<UploadImageCommand>
 
         protected override UploadImageCommand WhenExecuting()
         {
-            return new UploadImageCommand(QuestionGuid, EventSourceId, ImageTitle, ImageDescription, string.Empty, 0,
-                                          0, string.Empty, 0, 0);
+            return new UploadImageCommand(QuestionGuid, EventSourceId, ImageTitle, ImageDescription, ImageGuid);
         }
 
         #endregion

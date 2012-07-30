@@ -38,14 +38,14 @@ namespace RavenQuestionnaire.Web.Controllers
     public class ResourceController : Controller
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private ICommandInvoker commandInvoker;
+       // private ICommandInvoker commandInvoker;
         private ICommandService commandService;
         private IViewRepository viewRepository;
         private IFileStorageService fileStorageService;
 
-        public ResourceController(IFileStorageService fileStorageService, ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public ResourceController(IFileStorageService fileStorageService/*, ICommandInvoker commandInvoker*/, IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
+           // this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
             this.fileStorageService = fileStorageService;
             this.commandService = NcqrsEnvironment.Get<ICommandService>();
@@ -57,7 +57,12 @@ namespace RavenQuestionnaire.Web.Controllers
             var fileBytes = fileStorageService.RetrieveFile(id).Content;
             return File(fileBytes, "image/png");
         }
-
+        [HttpGet]
+        public ActionResult Thumb(string id)
+        {
+            var fileBytes = fileStorageService.RetrieveThumb(id).Content;
+            return File(fileBytes, "image/png");
+        }
         public ActionResult Index(FileBrowseInputModel input)
         {
             var model = viewRepository.Load<FileBrowseInputModel, FileBrowseView>(input);
@@ -68,8 +73,8 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             try
             {
-                var command = new UpdateFileMetaCommand(meta.Id, meta.Title, meta.Description, GlobalInfo.GetCurrentUser());
-                commandInvoker.Execute(command);
+                var command = new UpdateFileMetaCommand(Guid.Parse(meta.Id), meta.Title, meta.Description);
+                commandService.Execute(command);
                 return Json(new { message = "saved" });
             }
             catch(Exception ex)
@@ -87,12 +92,12 @@ namespace RavenQuestionnaire.Web.Controllers
         [HttpGet]
         public ActionResult Delete(string id)
         {
-            var filename = id;
+       //     var filename = id;
 
             try
             {
-                
-                commandInvoker.Execute(new DeleteFileCommand(id, GlobalInfo.GetCurrentUser()));
+
+                commandService.Execute(new DeleteFileCommand(Guid.Parse(id)));
             }
             catch (Exception exception)
             {
@@ -149,10 +154,11 @@ namespace RavenQuestionnaire.Web.Controllers
                                                     thumbData, thumbWidth,
                                                     thumbHeight,
                                                     origData, origWidth, origHeight);
+           
                 commandService.Execute(command);
                 thumbData.Position = 0;
                 var bytes = new byte[thumbData.Length];
-                origData.Read(bytes, 0, (int)thumbData.Length);
+                thumbData.Read(bytes, 0, (int)thumbData.Length);
                 statuses.Add(new ViewDataUploadFilesResult
                                  {
                                      name = file.FileName,

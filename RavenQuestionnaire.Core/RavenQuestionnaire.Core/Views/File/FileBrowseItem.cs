@@ -5,7 +5,7 @@ namespace RavenQuestionnaire.Core.Views.File
 {
     public class FileBrowseItem
     {
-        public Guid Id { get; set; }
+    //    public Guid Id { get; set; }
 
         public string Title {  get; set; }
         public string Description { get; set; }
@@ -19,13 +19,13 @@ namespace RavenQuestionnaire.Core.Views.File
         {
         }
 
-        public FileBrowseItem(Guid id, string title, string description, string fileName,
+        public FileBrowseItem(/*Guid id,*/ string title, string description, string fileName,
             int width, int height)
         {
-            Id = id;
+         //   Id = id;
             Title = title;
             Description = description;
-            FileName = IdUtil.ParseId(fileName);
+            FileName = fileName;
             Width = width;
             Height = height;
         }

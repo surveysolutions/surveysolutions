@@ -50,8 +50,8 @@ namespace RavenQuestionnaire.Web.Controllers
             var imagesList = new SelectList(images.Items.Select(i => new SelectListItem
                                                                          {
                                                                              Selected = false,
-                                                                             Text = i.Id.ToString(),
-                                                                             Value = i.Id.ToString()
+                                                                             Text = i.FileName,
+                                                                             Value = i.FileName
                                                                          }).ToList(), "Value", "Text");
             ViewBag.Images = imagesList;
         }
@@ -65,8 +65,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                      {
                                                                                          AnswerText = item.Value, 
                                                                                          AnswerType = AnswerType.Select, 
-                                                                                         AnswerValue = item.Key, 
-                                                                                         Image = new Image(), 
+                                                                                         AnswerValue = item.Key,
                                                                                          Mandatory = false, 
                                                                                          NameCollection = NameCollection
                                                                                      })).ToList();

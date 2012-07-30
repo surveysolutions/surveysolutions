@@ -9,7 +9,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
     public class Image
     {
         public Guid PublicKey { get; set; }
-        public Guid ThumbPublicKey { get; set; }
         public DateTime CreationDate { get; set; }
 
         public string Title { get; set; }
