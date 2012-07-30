@@ -3,6 +3,7 @@ using Ionic.Zip;
 using System.IO;
 using System.Web;
 using System.Text;
+using Ionic.Zlib;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Events;
@@ -66,15 +67,19 @@ namespace Questionnaire.Core.Web.Export
                 ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
             };
             data.Events = this.synchronizer.ReadEvents();
-
-
-
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {
                 var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-                zip.AddEntry(string.Format("backup-{0}.txt", DateTime.Now.ToString().Replace(" ", "_")),
-                                            JsonConvert.SerializeObject(data, Formatting.Indented, settings));
+                zip.CompressionLevel = CompressionLevel.None;
+                //foreach (var eventStream in data.Events)
+                //{
+                //    zip.AddEntry(string.Format("backup-{0}.txt", eventStream.SourceId),
+                //                            JsonConvert.SerializeObject(eventStream, Formatting.Indented, settings));
+
+                //}
+                string filename = string.Format("backup-{0}.txt", DateTime.Now.ToString().Replace(" ", "_"));
+                zip.AddEntry(filename, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
                 zip.Save(outputStream);
             }
             outputStream.Seek(0, SeekOrigin.Begin);
@@ -89,15 +94,19 @@ namespace Questionnaire.Core.Web.Export
                                ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
                            };
             data.Events = this.synchronizer.ReadCompleteQuestionare(viewRepository);
-            
-            
-            
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {
                 var settings = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects};
-                zip.AddEntry(string.Format("backup-{0}.txt", DateTime.Now.ToString().Replace(" ", "_")), 
-                                            JsonConvert.SerializeObject(data,Formatting.Indented, settings));
+                zip.CompressionLevel = CompressionLevel.None;
+                //foreach (var eventStream in data.Events)
+                //{
+                //    zip.AddEntry(string.Format("backup-{0}.txt", eventStream.SourceId),
+                //                            JsonConvert.SerializeObject(eventStream, Formatting.Indented, settings));
+
+                //}
+                string filename = string.Format("backup-{0}.txt", DateTime.Now.ToString().Replace(" ", "_").Replace("/", "_").Replace(":","_"));
+                zip.AddEntry(filename, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
                 zip.Save(outputStream);
             }
             outputStream.Seek(0, SeekOrigin.Begin);
