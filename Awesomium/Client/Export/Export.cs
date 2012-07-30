@@ -46,7 +46,7 @@ namespace Client
         private AutoResetEvent exportEnded = new AutoResetEvent(false);
         private Uri exportURL = new Uri(Settings.Default.DefaultUrl + "/Synchronizations/Export");
         private List<string> cachedDrives;
-
+        private UsbFileArchive usbArchive;
 
         #endregion
 
@@ -66,7 +66,7 @@ namespace Client
                 hint.ProgressIndicator.AssignProgress(e.ProgressPercentage);
             };
 
-            this.webClient.DownloadFileCompleted += (s, e) =>
+            this.webClient.DownloadDataCompleted += (s, e) =>
             {
                 var hint = e.UserState as ProgressHint;
                 if (hint == null)
@@ -81,6 +81,9 @@ namespace Client
                 hint.ProgressIndicator.SetCompletedStatus(e.Cancelled, e.Error);
 
                 this.exportEnded.Set();
+
+
+                //usbArchive.InsertPart(e.Result);
 
                 if (EndOfExport != null)
                 {
@@ -151,6 +154,8 @@ namespace Client
                 if (drive == null)
                     return;
 
+                usbArchive = new UsbFileArchive(drive);
+
                 this.pleaseWait.Reset();
 
                 
@@ -164,8 +169,9 @@ namespace Client
                 try
                 {
                     this.exportEnded.Reset();
-
-                    this.webClient.DownloadFileAsync(exportURL, archiveFilename, new ProgressHint(this.pleaseWait, archiveFilename));
+                    
+                    //this.webClient.DownloadFileAsync(exportURL, archiveFilename, new ProgressHint(this.pleaseWait, archiveFilename));
+                    this.webClient.DownloadDataAsync(exportURL, new ProgressHint(this.pleaseWait, archiveFilename));
                 }
                 catch (Exception ex)
                 {
