@@ -72,8 +72,9 @@ namespace Client
             var host = new ToolStripControlHost(this.pleaseWait);
             host.Size = this.statusStrip1.Size;
             this.statusStrip1.Items.AddRange(new ToolStripItem[] { host});
-
+            
             this.webView = WebCore.CreateWebView(this.ClientSize.Width, this.ClientSize.Height);
+            
             this.webView.ResizeComplete += OnResizeComplete;
             this.webView.IsDirtyChanged += OnIsDirtyChanged;
             this.webView.SelectLocalFiles += OnSelectLocalFiles;
@@ -82,7 +83,7 @@ namespace Client
             //this.webView.DomReady += OnDOMReady;
             //this.webView.KeyboardFocusChanged += OnKeyboardFocus;
             this.webView.LoadURL(Settings.Default.DefaultUrl);
-
+            
             this.webView.Focus();
         }
         #endregion
