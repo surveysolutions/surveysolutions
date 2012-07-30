@@ -14,13 +14,12 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         {
             this.hash = hash;
         }
+
         public bool Execute(ICompleteQuestion question)
         {
             if (string.IsNullOrEmpty(question.ConditionExpression))
-            {
-                UpdateAllQuestionInGroup(group, true);
                 return true;
-            }
+            var e = new Expression(question.ConditionExpression);
             e.EvaluateParameter += (name, args) =>
             {
                 Guid nameGuid = Guid.Parse(name);
@@ -38,12 +37,14 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             }
             return result;
         }
+
         public bool Execute(ICompleteGroup group)
         {
             bool result = ExecuteGroup(group);
             UpdateAllChildElementsInGroup(group, result);
             return result;
         }
+
         private bool ExecuteGroup(ICompleteGroup group)
         {
             if (string.IsNullOrEmpty(group.ConditionExpression))
@@ -85,7 +86,5 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
 
             }
         }
-
-       
     }
 }
