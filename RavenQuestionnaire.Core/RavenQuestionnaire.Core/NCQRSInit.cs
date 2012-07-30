@@ -10,12 +10,14 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.RavenDB;
 using Ninject;
+using Raven.Client;
 using RavenQuestionnaire.Core.Commands.Location;
 using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 using RavenQuestionnaire.Core.Commands.Synchronization;
+using RavenQuestionnaire.Core.Services;
 
 namespace RavenQuestionnaire.Web.App_Start
 {
@@ -28,7 +30,7 @@ namespace RavenQuestionnaire.Web.App_Start
         
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
-
+            NcqrsEnvironment.SetDefault<IFileStorageService>(new RavenFileStorageService(kernel.Get<IDocumentStore>()));
             var bus = new InProcessEventBus(true);
             RegisterEventHandlers(bus, kernel);
            

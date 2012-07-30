@@ -26,7 +26,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.AnswerType = answer.AnswerType;
             this.AnswerValue = answer.AnswerValue;
             this.AnswerImage = answer.AnswerImage;
-            this.Image = answer.Image;
             this.Mandatory = answer.Mandatory;
             this.PublicKey = answer.PublicKey;
             this.Selected = false;
@@ -50,8 +49,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 AnswerValue = doc.AnswerValue,
                 Mandatory = doc.Mandatory,
                 AnswerType = doc.AnswerType,
-                AnswerImage = doc.AnswerImage,
-                Image =  doc.Image
+                AnswerImage = doc.AnswerImage
             };
         }
         public Guid PublicKey { get; set; }
@@ -62,7 +60,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         public bool Mandatory { get; set; }
         public AnswerType AnswerType { get; set; }
         public string NameCollection { get; set; }
-        public Image Image { get; set; }
         
         public object AnswerValue { get; set; }
         public bool Selected { get; set; }

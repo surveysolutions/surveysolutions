@@ -13,6 +13,7 @@ namespace RavenQuestionnaire.Core.Commands.File
     {
         protected UploadFileCommand(Guid publicKey, string title, string desc, int thumbWidth, int thumbHeight, int origWidth, int origHeight)
         {
+            PublicKey = publicKey;
             Description = desc;
             Title = title;
             OriginalWidth = origWidth;
@@ -23,14 +24,14 @@ namespace RavenQuestionnaire.Core.Commands.File
         public UploadFileCommand(Guid publicKey, string title, string desc, Stream thumbData, int thumbWidth, int thumbHeight, Stream origData, int origWidth, int origHeight) :
             this(publicKey,title, desc, thumbWidth, thumbHeight, origWidth, origHeight)
         {
-            OriginalImage = ToBase64(origData);
-            ThumbnailImage = ToBase64(thumbData);
+            OriginalFile = ToBase64(origData);
+            ThumbFile = ToBase64(thumbData);
         }
         public UploadFileCommand(Guid publicKey, string title, string desc, string thumbData, int thumbWidth, int thumbHeight, string origData, int origWidth, int origHeight) :
             this(publicKey,title, desc, thumbWidth, thumbHeight, origWidth, origHeight)
         {
-            OriginalImage = origData;
-            ThumbnailImage = thumbData;
+            OriginalFile = origData;
+            ThumbFile = thumbData;
         }
         protected string ToBase64(Stream stream)
         {
@@ -53,8 +54,6 @@ namespace RavenQuestionnaire.Core.Commands.File
 
         public string Description { get;  set; }
 
-        public string OriginalImage { get;  set; }
-
         public int OriginalWidth { get;  set; }
 
         public int OriginalHeight { get;  set; }
@@ -66,8 +65,6 @@ namespace RavenQuestionnaire.Core.Commands.File
         public string OriginalFile { get; set; }
 
         public string ThumbFile { get; set; }
-
-        public string ThumbnailImage { get;  set; }
 
     }
 }

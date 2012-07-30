@@ -9,10 +9,9 @@ namespace RavenQuestionnaire.Core.Documents
 {
     public class FileDescription
     {
-        public Guid PublicKey { get; set; }
-        public Guid ThumbPublicKey { get; set; }
+        public string PublicKey { get; set; }
+       // public Guid ThumbPublicKey { get; set; }
         // public DateTime CreationDate { get; set; }
-
         public string Title { get; set; }
 
         public string Description { get; set; }
@@ -21,7 +20,7 @@ namespace RavenQuestionnaire.Core.Documents
 
         public int Height { get; set; }
         
-        public byte[] Content { get; set; }
+        public Stream Content { get; set; }
 
         public FileDescription()
         {

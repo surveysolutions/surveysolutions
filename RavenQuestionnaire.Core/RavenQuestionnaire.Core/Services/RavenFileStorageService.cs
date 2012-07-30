@@ -19,37 +19,42 @@ namespace RavenQuestionnaire.Core.Services
         }
         public void StoreFile( FileDescription file)
         {
-            Attachment a = documentStore.DatabaseCommands.GetAttachment(file.PublicKey.ToString());
+            Attachment a = documentStore.DatabaseCommands.GetAttachment(file.PublicKey);
             if (a == null)
             {
-                using (MemoryStream theMemStream = new MemoryStream())
+              /*  using (MemoryStream theMemStream = new MemoryStream())
                 {
 
-                    theMemStream.Write(file.Content, 0, file.Content.Length);
-                    documentStore.DatabaseCommands.PutAttachment(file.PublicKey.ToString(), null, theMemStream,
+                    theMemStream.Write(file.Content, 0, file.Content.Length);*/
+                documentStore.DatabaseCommands.PutAttachment(file.PublicKey, null, file.Content,
                                                                  new RavenJObject
                                                                      {
-                                                                         {"PublicKey", file.PublicKey.ToString()},
+                                                                         {"PublicKey", file.PublicKey},
                                                                          {"Description", file.Description},
                                                                          {"Height", file.Height},
                                                                          {"Title", file.Title},
                                                                          {"Width", file.Width}
                                                                      });
-                }
+               // }
             }
         }
+
+   /*     public void StoreImage(Stream image, string title, string description)
+        {
+            throw new NotImplementedException();
+        }*/
 
         public FileDescription RetrieveFile(string filename)
         {
             FileDescription file = new FileDescription();
             Attachment a = documentStore.DatabaseCommands.GetAttachment(filename);
             
-            var memoryStream = new MemoryStream();
-            a.Data().CopyTo(memoryStream);
+         /*   var memoryStream = new MemoryStream();
+            a.Data().CopyTo(memoryStream);*/
 
 
-            file.Content = memoryStream.ToArray();
-            file.PublicKey =Guid.Parse( a.Metadata["PublicKey"].Value<string>());
+            file.Content = a.Data();
+            file.PublicKey =a.Metadata["PublicKey"].Value<string>();
             file.Description = a.Metadata["Description"].Value<string>();
             file.Title = a.Metadata["Description"].Value<string>();
             file.Height = a.Metadata["Height"].Value<int>();
@@ -57,6 +62,11 @@ namespace RavenQuestionnaire.Core.Services
             return file;
              
             //return a.Data;
+        }
+
+        public FileDescription RetrieveThumb(string filename)
+        {
+            return RetrieveFile(string.Format("{0}_thumb", filename));
         }
 
         //public List<RavenJObject> RetrieveEventDocuments()
