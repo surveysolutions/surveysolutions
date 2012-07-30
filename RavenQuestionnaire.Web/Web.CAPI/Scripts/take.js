@@ -37,6 +37,7 @@ function JsonResults(data, status, xhr) {
 
     var group = jQuery.parseJSON(data.responseText);
     if (!group.error) {
+        UpdateInnerGroup(group);
         UpdateCurrentGroup(group);
         var allListElements = $('ul.ui-listview').find('li');
         allListElements.each(function () {
@@ -83,6 +84,16 @@ function UpdateCommentInGroup(group) {
         }
         else {
             $(id).html('');
+        }
+    }
+}
+
+function UpdateInnerGroup(group) {
+    for (var i = 0; i < group.InnerGroups.length; i++) {
+        var groupElement = $("#"+group.InnerGroups[i].PublicKey);
+        groupElement.removeClass("ui-disabled");
+        if (!group.InnerGroups[i].Enabled) {
+            groupElement.addClass("ui-disabled");
         }
     }
 }

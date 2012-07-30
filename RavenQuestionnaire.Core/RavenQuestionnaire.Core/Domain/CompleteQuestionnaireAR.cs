@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Ncqrs;
+using System;
 using System.Linq;
-using Ncqrs;
 using Ncqrs.Domain;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
+using System.Collections.Generic;
+using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Core.Documents;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.Entities.Extensions;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
-using RavenQuestionnaire.Core.ExpressionExecutors;
-using RavenQuestionnaire.Core.Services;
 
 namespace RavenQuestionnaire.Core.Domain
 {

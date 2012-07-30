@@ -1,19 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Web;
 using Ionic.Zip;
+using System.IO;
+using System.Web;
+using System.Text;
 using Newtonsoft.Json;
-using RavenQuestionnaire.Core.ClientSettingsProvider;
-using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Web.App_Start;
 using RavenQuestionnaire.Core;
-using Ncqrs;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using Ncqrs.Eventing.ServiceModel.Bus;
+using RavenQuestionnaire.Core.Events;
+using RavenQuestionnaire.Core.ClientSettingsProvider;
+
 
 namespace Questionnaire.Core.Web.Export
 {
@@ -63,6 +57,7 @@ namespace Questionnaire.Core.Web.Export
                 }
             }
         }
+
         public byte[] Export()
         {
 
@@ -85,6 +80,7 @@ namespace Questionnaire.Core.Web.Export
             outputStream.Seek(0, SeekOrigin.Begin);
             return outputStream.ToArray();
         }
+
         public byte[] Export(IViewRepository viewRepository)
         {
 

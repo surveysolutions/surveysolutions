@@ -210,7 +210,6 @@ namespace Web.CAPI.Controllers
         {
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new DeletePropagatableGroupCommand(Guid.Parse(questionnaireId), propagationKey, publicKey));
-
             return Json(new { propagationKey = propagationKey });
         }
 

@@ -1,19 +1,33 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Extensions;
+using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.ExpressionExecutors;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Entities.Extensions;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
     public class CompleteQuestionnaireMobileView
     {
+        #region Properties
+
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime LastEntryDate { get; set; }
+        public SurveyStatus Status { get; set; }
+        public CompleteGroupMobileView CurrentScreen { get; set; }
+        public UserLight Responsible { set; get; }
+        public CompleteGroupHeaders[] Groups { get; set; }
+        public Counter Totals { get; set; }
+
+        #endregion
+
+        #region Constructor
+        
         private CompleteQuestionnaireMobileView()
         {
           
@@ -30,44 +44,19 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             CollectAll(doc, screenPublicKey, currentGroup as CompleteGroup, navigation);
         }
 
+        #endregion
+
+        #region PrivateMethod
+        
         private void CollectAll(CompleteQuestionnaireDocument doc, Guid screenPublicKey, CompleteGroup group, ScreenNavigation navigation)
         {
-            // IList<ScreenNavigation> navigations = new List<ScreenNavigation>();
             var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
             executor.Execute(group);
-
-
             var currentGroup = new CompleteGroupMobileView(doc, group, navigation);
             InitGroups(doc, screenPublicKey);
             Totals = CalcProgress(doc);
-            if (currentGroup.Propagated != Propagate.None)
-            {
-                CurrentScreen = currentGroup.PropagateTemplate;
-            }
-            else
-            {
-                CurrentScreen = currentGroup;
-            }
+            CurrentScreen = currentGroup.Propagated != Propagate.None ? currentGroup.PropagateTemplate : currentGroup;
         }
-
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public DateTime CreationDate { get; set; }
-        public DateTime LastEntryDate { get; set; }
-
-        public SurveyStatus Status { get; set; }
-
-       
-        public CompleteGroupMobileView CurrentScreen { get; set; }
-       // public List<CompleteGroupMobileView> OtherScreens { get; set; }
-      //  public List<CompleteGroupMobileView> Screens { get; set; }
-       
-      //  public List<PropagatedGroupMobileView> PropagatedScreens { get; set; }
-
-        public UserLight Responsible { set; get; }
-
-        public CompleteGroupHeaders[] Groups { get; set; }
-        public Counter Totals { get; set; }
 
         protected void InitGroups(CompleteQuestionnaireDocument doc, Guid currentGroupPublicKey)
         {
@@ -113,14 +102,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             var current = Groups.FirstOrDefault(g => g.PublicKey == currentGroupPublicKey);
             current.IsCurrent = true;
         }
-
         
-
         private Counter CalcProgress(ICompleteGroup @group)
         {
             var total = new Counter();
-
-            //      var propagated = @group as PropagatableCompleteGroup;
             if (@group.PropogationPublicKey.HasValue)
             {
                 total = total + CountQuestions(@group.Children.Select(q => q as ICompleteQuestion).ToList());
@@ -155,5 +140,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                             };
             return total;
         }
+
+        #endregion
     }
 }

@@ -2,7 +2,6 @@
 using System.Web;
 using System.Web.Mvc;
 using Questionnaire.Core.Web.Export;
-using RavenQuestionnaire.Web.Utils;
 
 
 namespace RavenQuestionnaire.Web.Controllers

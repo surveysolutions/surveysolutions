@@ -6,9 +6,11 @@
 {
     ((IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings).Add("onchange", "$(this.form).submit();");
     string dateValue = Model.Answer == null ? string.Empty : Model.Answer.ToString();
+    var requiredAttribute = string.Empty;
+    if (Model.Mandatory) { requiredAttribute = "required=\"true\""; }
     @Html.Hidden("Parent", Model.PublicKey)
     <div class="answer hide-date-box">
-        @Html.Hidden("Selected", true)        
+        @Html.Hidden("Selected", true)              
         @Html.IconInput("AnswerValue", dateValue, Model.Title,
                           new
                           {
@@ -17,7 +19,7 @@
                               @class = "hidden",
                               data_role = "datebox",
                               onchange = "$(this.form).submit();",
-                              required="true"
+                              requiredAttribute
                           }, new { @class = "calendar" },
                           new { @class = "bold" })
     </div>

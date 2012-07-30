@@ -1,8 +1,5 @@
-﻿@using System.Text
-@using RavenQuestionnaire.Core.Entities.SubEntities
-@using RavenQuestionnaire.Core.Views.Card
+﻿@using RavenQuestionnaire.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
-@using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteQuestionnaireMobileView
 <script type="text/javascript">
@@ -64,16 +61,8 @@
                 @foreach (CompleteGroupHeaders gh in Model.Groups)
                 {
                     var activ = @gh.Enabled ? "" : "ui-disabled";
-@* if (!gh.IsCurrent)
-                    {
-                    <li data-icon="false" class="@activ" id="@gh.PublicKey"><a id="ref-link-@(gh.PublicKey)" data-panel="main" onclick="ClearItems(false)"  href='@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })'>@gh.GroupText
-                        <span  id="counter-@(gh.PublicKey)" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
-                    }
-                    else
-                    {*@
                     <li class="@activ" id="@gh.PublicKey"><a  id="ref-link-@(gh.PublicKey)"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })" >@gh.GroupText
                         <span id="counter-@(gh.PublicKey)" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
-@*                    }*@
                 }
             </ul>
         </div>
@@ -96,12 +85,8 @@
                         }</li>
                 </ul>
             </div>
-            <!-- /navbar -->
         </div>
-        <!-- /footer -->
     </div>
-    <!-- /page -->
-    <!-- other side panel pages here -->
 </div>
 <div data-role="panel" data-id="main" id="content_container" class='@((Model.Status.PublicId == SurveyStatus.Complete.PublicId) ? "ui-disabled" : "")'>
     @Html.Partial("_SurveyContent", Model.CurrentScreen)
@@ -113,12 +98,5 @@
         else
             if (jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:hidden").length > 0)
                 jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:hidden").show();
-        //alert(jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:hidden"));
-        //alert(jQuery(this).children("div.ui-disabled div.ui-controlgroup-controls").length);
-        /*if ($("div.ui-block-a div.ui-disabled div.ui-controlgroup-controls:visible").length > 0)
-        $("div.ui-block-a div.ui-disabled div.ui-controlgroup-controls:visible").hide();
-        else
-        if ($("div.ui-block-a div.ui-disabled div.ui-controlgroup-controls:hidden").length > 0)
-        $("div.ui-block-a div.ui-disabled div.ui-controlgroup-controls:hidden").show();*/
     });
 </script>

@@ -36,27 +36,18 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                  
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
-                    // group = doc.FindGroupByKey(input.CurrentGroupPublicKey.Value, input.PropagationKey);
                     Stack<NodeWithLevel> treeStack = new Stack<NodeWithLevel>();
-
                     treeStack.Push(new NodeWithLevel(doc, 0));
                     while (treeStack.Count > 0)
                     {
                         var node = treeStack.Pop();
                         group = ProceedGroup(node.Group, input.CurrentGroupPublicKey.Value, input.PropagationKey);
                         UpdateNavigation(rout, node);
-
                         if (group != null)
-                        {
                             break;
-                        }
-
                         var subGroups = node.Group.Children.OfType<ICompleteGroup>().ToArray();
-
                         for (int i = subGroups.Length - 1; i >= 0; i--)
-                        {
                             treeStack.Push(new NodeWithLevel(subGroups[i], node.Level + 1));
-                        }
                     }
                 }
                 if (group == null)
@@ -65,7 +56,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                     UpdateNavigation(rout,new NodeWithLevel(doc,0));
                     UpdateNavigation(rout, new NodeWithLevel(group, 1));
                 }
-
                 return new CompleteQuestionnaireMobileView(doc, input.CurrentScreenPublicKey ?? group.PublicKey, group, CompileNavigation(rout, group));
             }
             return null;
