@@ -1,3 +1,15 @@
+using System.Collections.Concurrent;
+using System.ServiceModel;
+using System.Threading;
+using System.Web.Configuration;
+using System.Web.Mvc;
+using Questionnaire.Core.Web.Binding;
+using Questionnaire.Core.Web.Helpers;
+using Questionnaire.Core.Web.Security;
+using Raven.Client;
+using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Web.App_Start;
+
 [assembly: WebActivator.PreApplicationStartMethod(typeof(Web.Supervisor.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(Web.Supervisor.App_Start.NinjectWebCommon), "Stop")]
 
@@ -39,11 +51,23 @@ namespace Web.Supervisor.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel();
+            bool isEmbeded;
+            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
+                isEmbeded = false;
+            string storePath;
+            if (isEmbeded)
+                storePath = WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"];
+            else
+                storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
+            var kernel = new StandardKernel(new CoreRegistry(storePath, isEmbeded));
+            ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
+            KernelLocator.SetKernel(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            
+
             RegisterServices(kernel);
+            NCQRSInit.Init(WebConfigurationManager.AppSettings["Raven.DocumentStore"], kernel);
+            
             return kernel;
         }
 
@@ -53,6 +77,13 @@ namespace Web.Supervisor.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).When( b => HttpContext.Current != null).InScope(o => HttpContext.Current);
+            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(b => OperationContext.Current != null).InScope(o => OperationContext.Current);
+            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(b => HttpContext.Current == null && OperationContext.Current == null).InScope(o => Thread.CurrentThread);
+
+            kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
+            kernel.Bind<IBagManager>().To<ViewBagManager>();
+            kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
         }        
     }
 }
