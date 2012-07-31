@@ -70,6 +70,9 @@
     <Reference Include="ICSharpCode.NRefactory, Version=3.0.0.3800, Culture=neutral, PublicKeyToken=efe927acf176eea2, processorArchitecture=MSIL">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
+    <Reference Include="Kaliko.ImageLibrary">
+      <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Lucene.Net, Version=2.9.4.1, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
@@ -136,6 +139,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
@@ -160,12 +164,8 @@
     <Compile Include="CommandHandlers\Collection\DeleteCollectionHandler.cs" />
     <Compile Include="CommandHandlers\Collection\DeleteCollectionItemHandler.cs" />
     <Compile Include="CommandHandlers\Collection\UpdateCollectionHandler.cs" />
-    <Compile Include="CommandHandlers\File\DeleteFileCommandHandler.cs" />
-    <Compile Include="CommandHandlers\File\UpdateFileMetaCommandHandler.cs" />
-    <Compile Include="CommandHandlers\File\UploadFileCommandHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\UpdateCommentsQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\ValidateGroupCommandHandler.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\Question\AddNewQuestionHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\UpdateConditionsHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Flow\CreateNewFlowGraphHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Group\DeletePropagatedGroupHandler.cs" />
@@ -186,9 +186,14 @@
     <Compile Include="Commands\Synchronization\EndProcessComand.cs" />
     <Compile Include="Commands\Synchronization\PushEventsCommand.cs" />
     <Compile Include="Denormalizers\IDenormalizerStorage.cs" />
+    <Compile Include="Documents\FileDocument.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Domain\SyncProcessAR.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\CQGroupItemDenormalizer.cs" />
+    <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
     <Compile Include="EventSubscribers\GenerateQuestionnaireStatisticEventHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateNewStatusHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateStatusFlowHandler.cs" />
@@ -198,9 +203,6 @@
     <Compile Include="CommandHandlers\Questionnaire\Group\PropagateGroupHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\UpdateAnswerInCompleteQuestionnaireHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\Completed\UpdateCompleteQuestionnaireHandler.cs" />
-    <Compile Include="CommandHandlers\Questionnaire\Question\UpdateQuestionHandler.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CommandHandlers\Status\UpdateStatusRestrictionHandler.cs" />
     <Compile Include="CommandHandlers\User\UpdateUserHandler.cs" />
     <Compile Include="CommandInvoker.cs" />
@@ -235,7 +237,6 @@
     <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatedGroupCommand.cs" />
     <Compile Include="Commands\IComand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\AddNewQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\CreateNewCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateNewQuestionnaireCommand.cs" />
     <Compile Include="Commands\User\CreateNewUserCommand.cs" />
@@ -247,7 +248,6 @@
     <Compile Include="Commands\Questionnaire\Completed\UpdateAnswerInCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\UpdateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\UpdateQuestionnaireFlowCommand.cs" />
     <Compile Include="Commands\Status\UpdateStatusRestrictionsCommand.cs" />
@@ -263,7 +263,6 @@
     <Compile Include="Documents\EventDocument.cs" />
     <Compile Include="Documents\ExportSchemaDocument.cs" />
     <Compile Include="Documents\FlowGraphDocument.cs" />
-    <Compile Include="Documents\FileDocument.cs" />
     <Compile Include="Documents\LocationDocument.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
     <Compile Include="Documents\ReportDocument.cs" />
@@ -283,7 +282,6 @@
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\Extensions\GroupHash.cs" />
-    <Compile Include="Entities\File.cs" />
     <Compile Include="Entities\Event.cs" />
     <Compile Include="Entities\FlowGraph.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
@@ -343,6 +341,9 @@
     <Compile Include="Events\Collection\CollectionItemRemoved.cs" />
     <Compile Include="Events\Collection\CollectionRemoved.cs" />
     <Compile Include="Events\Collection\NewCollectionCreated.cs" />
+    <Compile Include="Events\File\FileDeleted.cs" />
+    <Compile Include="Events\File\FileMetaUpdated.cs" />
+    <Compile Include="Events\File\FileUploaded.cs" />
     <Compile Include="Events\IEventSync.cs" />
     <Compile Include="Events\Location\LocationDeleted.cs" />
     <Compile Include="Events\Location\NewLocationCreated.cs" />
@@ -390,16 +391,12 @@
     <Compile Include="Indexes\QuestionnaireGroupedByTemplateIndex.cs" />
     <Compile Include="Indexes\UsersInLocationIndex.cs" />
     <Compile Include="NCQRSInit.cs" />
-    <Compile Include="MemoryCommandInvoker.cs" />
     <Compile Include="Repositories\CollectionRepository.cs" />
     <Compile Include="Repositories\ICollectionRepository.cs" />
-    <Compile Include="Repositories\IFileRepository.cs" />
-    <Compile Include="Repositories\FileRepository.cs" />
     <Compile Include="Repositories\IStatisticRepository.cs" />
     <Compile Include="Repositories\StatisticRepository.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
     <Compile Include="Services\IValildationService.cs" />
-    <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="IViewFactory.cs" />
     <Compile Include="IViewRepsoitory.cs" />
     <Compile Include="Entities\OrderRequestItem.cs" />
@@ -423,6 +420,7 @@
     <Compile Include="Services\CompleteQuestionnaireUploaderService.cs" />
     <Compile Include="Services\ICompleteQuestionnaireUploaderService.cs" />
     <Compile Include="Services\IQuestionnaireService.cs" />
+    <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="Services\ValildationService.cs" />
     <Compile Include="Utility\OrderStrategy\AsIsStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\AZStrategy.cs" />
@@ -495,10 +493,18 @@
     <Compile Include="Views\CompleteQuestionnaire\PropagatedGroup.cs" />
     <Compile Include="Views\CompleteQuestionnaire\PropagatedQuestion.cs" />
     <Compile Include="Views\Event\EventBrowseViewFactory.cs" />
-    <Compile Include="Views\File\FileBrowseInputModel.cs" />
-    <Compile Include="Views\File\FileBrowseItem.cs" />
-    <Compile Include="Views\File\FileBrowseView.cs" />
-    <Compile Include="Views\File\FileBrowseViewFactory.cs" />
+    <Compile Include="Views\File\FileBrowseInputModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\File\FileBrowseItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\File\FileBrowseView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\File\FileBrowseViewFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Views\FlowGraph\FlowBlockViewItem.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphView.cs" />
     <Compile Include="Views\FlowGraph\FlowGraphViewFactory.cs" />

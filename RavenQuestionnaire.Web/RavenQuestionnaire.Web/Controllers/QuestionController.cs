@@ -8,6 +8,7 @@ using Kaliko.ImageLibrary;
 using RavenQuestionnaire.Core;
 using Kaliko.ImageLibrary.Filters;
 using Ncqrs.Commanding.ServiceModel;
+using RavenQuestionnaire.Core.Commands.File;
 using RavenQuestionnaire.Web.Models;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Commands;
@@ -90,7 +91,7 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult EditCard(ImageNewViewModel model)
         {
             if (ModelState.IsValid)
-                commandService.Execute(new UpdateImageCommand(model.QuestionnaireId, model.PublicKey, model.ImageKey,
+                commandService.Execute(new UpdateImageCommand(Guid.Parse( model.QuestionnaireId), model.PublicKey, model.ImageKey,
                                                               model.Title, model.Desc));
             return View("_EditCard", model);
         }
@@ -103,15 +104,14 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (file != null)
                 {
-                    var image = new KalikoImage(file.InputStream);
+                  /*  var image = new KalikoImage(file.InputStream);
                     int thumbWidth, thumbHeight, origWidth, origHeight;
                     var thumbData = ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
-                    var origData = ResizeImage(image, 1024, 768, out origWidth, out origHeight);
-
+                    var origData = ResizeImage(image, 1024, 768, out origWidth, out origHeight);*/
+                    var imageKey = Guid.NewGuid();
+                    commandService.Execute(new UploadFileCommand(imageKey, model.Title, model.Desc, file.InputStream));
                     commandService.Execute(new UploadImageCommand(model.PublicKey, Guid.Parse(model.QuestionnaireId),
-                                                                  model.Title, model.Desc,
-                                                                  thumbData, thumbWidth, thumbHeight,
-                                                                  origData, origWidth, origHeight));
+                                                                  model.Title, model.Desc, imageKey));
 
                     return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
                 }
@@ -170,7 +170,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     Answer[] ansverItems = new Answer[0];
                     if (answers != null)
-                        ansverItems = answers.Select(a => ConvertAnswer(a)).ToArray();
+                        ansverItems = answers.Select(ConvertAnswer).ToArray();
                     if (    model.PublicKey == Guid.Empty)
                     {
                         Guid newItemKey = Guid.NewGuid();
@@ -261,8 +261,8 @@ namespace RavenQuestionnaire.Web.Controllers
                 var imagesList = new SelectList(images.Items.Select(i => new SelectListItem
                                                                              {
                                                                                  Selected = false,
-                                                                                 Text = i.Id,
-                                                                                 Value = i.Id
+                                                                                 Text = i.FileName,
+                                                                                 Value = i.FileName
                                                                              }).ToList(), "Value", "Text");
                 ViewBag.Images = imagesList;
             }
@@ -276,6 +276,8 @@ namespace RavenQuestionnaire.Web.Controllers
             answer.AnswerText = a.Title;
             answer.Mandatory = a.Mandatory;
             answer.PublicKey = a.PublicKey;
+            answer.AnswerImage = a.AnswerImage;
+          //  answer.Image=new Image(){};
             return answer;
         }
 
