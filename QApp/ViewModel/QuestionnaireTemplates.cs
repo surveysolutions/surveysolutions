@@ -1,8 +1,7 @@
 ﻿using System.Windows.Input;
+using QApp.Heritage;
 using RavenQuestionnaire.Core;
 using System.Collections.ObjectModel;
-using DevExpress.RealtorWorld.Xpf.Helpers;
-using DevExpress.RealtorWorld.Xpf.ViewModel;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 
 namespace QApp.ViewModel 

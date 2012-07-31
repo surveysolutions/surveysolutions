@@ -1,4 +1,4 @@
-using DevExpress.RealtorWorld.Xpf.ViewModel;
+using QApp.Heritage;
 
 namespace QApp.ViewModel
 {

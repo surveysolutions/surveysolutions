@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using DevExpress.RealtorWorld.Xpf.ViewModel;
+using QApp.Heritage;
 
 namespace QApp.ViewModel {
     public class ModuleWithNavigator : Module {

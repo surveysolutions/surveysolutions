@@ -7,11 +7,11 @@ namespace RavenQuestionnaire.Core.Commands.Collection
     {
         public string CollectionId { get; set; }
 
-        public UserLight Executor { get; set; }
-
         public string Name { get; private set; }
 
         public List<CollectionItem> Items { get; set; }
+
+        public UserLight Executor { get; set; }
 
         public UpdateCollectionCommand(string collectionId, string name, List<CollectionItem> items)
         {

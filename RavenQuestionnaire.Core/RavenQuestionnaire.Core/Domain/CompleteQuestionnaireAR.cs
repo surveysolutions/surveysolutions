@@ -114,7 +114,11 @@ namespace RavenQuestionnaire.Core.Domain
         }
         public void Delete()
         {
-            ApplyEvent(new CompleteQuestionnaireDeleted() {CompletedQuestionnaireId = _doc.PublicKey, TemplateId = Guid.Parse(_doc.TemplateId)});
+            ApplyEvent(new CompleteQuestionnaireDeleted()
+                           {
+                               CompletedQuestionnaireId = _doc.PublicKey, 
+                               TemplateId = Guid.Parse(_doc.TemplateId)
+                           });
         }
         protected void OnCompleteQuestionnaireDeleted(CompleteQuestionnaireDeleted e)
         {
@@ -134,18 +138,32 @@ namespace RavenQuestionnaire.Core.Domain
             ApplyEvent(new AnswerSet
                            {
                                CompletedQuestionnaireId = this._doc.PublicKey,
+
                                QuestionPublicKey = questionPublicKey,
+
                                PropogationPublicKey = propogationPublicKey,
-                               Answer = completeAnswer ?? completeAnswers
+
+                               Answer = completeAnswer ?? completeAnswers,
+
+                               Featured = question.Featured,
+
+                               //clean up this values
+                               QuestionText = question.QuestionText,
+                               AnswerString = question.GetAnswerString()
+
+                               
                            });
-            if (question.Featured)
+
+            /*if (question.Featured)
                 ApplyEvent(new FeaturedQuestionUpdated
                                {
                                    CompletedQuestionnaireId = this._doc.PublicKey,
                                    Answer = question.GetAnswerString(),
                                    QuestionPublicKey = questionPublicKey,
+
                                    QuestionText = question.QuestionText
-                               });
+                               });*/
+
             AddRemovePRopagatedGroup(question);
             
         }
@@ -211,21 +229,7 @@ namespace RavenQuestionnaire.Core.Domain
             question.SetAnswer(e.Answer);
            
         }
-        protected void OnFeaturedQuestionUpdated(FeaturedQuestionUpdated e)
-        {
-        }
 
-      /*  private static ICompleteQuestion FindQuestion(Guid questionKey, Guid? propagationKey, ICompleteGroup entity)
-        {
-            //PropagatableCompleteAnswer propagated = answer as PropagatableCompleteAnswer;
-
-            var question = entity.FirstOrDefault<ICompleteQuestion>(q => q.PublicKey == questionKey);
-            if (question == null)
-                throw new ArgumentException("question wasn't found");
-            if (!propagationKey.HasValue)
-                return question;
-            return entity.GetPropagatedQuestion(question.PublicKey, propagationKey.Value);
-        }*/
 
         public void DeletePropagatableGroup(Guid propagationKey, Guid publicKey)
         {

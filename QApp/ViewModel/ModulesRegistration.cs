@@ -1,5 +1,3 @@
-using DevExpress.RealtorWorld.Xpf.ViewModel;
-
 namespace QApp.ViewModel {
     public static class ModulesRegistration {
         public static void RegisterModules() {

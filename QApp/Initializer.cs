@@ -52,15 +52,20 @@ namespace QApp
 
         private static void RegisterServices(IKernel kernel)
         {
+            
+/*
             kernel.Bind<IDocumentSession>().ToMethod(
                context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
-                   b => OperationContext.Current != null).InScope(o => OperationContext.Current);
+                   b => HttpContext.Current != null).InScope(o => HttpContext.Current);
+*/
+
             kernel.Bind<IDocumentSession>().ToMethod(
-                context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
-                    b =>OperationContext.Current == null).InScope(o => Thread.CurrentThread);
+                context => context.Kernel.Get<IDocumentStore>().OpenSession()).InScope(o => Thread.CurrentThread);
+/*
+
             kernel.Bind<IDocumentSession>().ToMethod(
              context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
-                 b => OperationContext.Current != null).InScope(o => OperationContext.Current);
+                 b => OperationContext.Current != null).InScope(o => OperationContext.Current);*/
         }
 
         #endregion

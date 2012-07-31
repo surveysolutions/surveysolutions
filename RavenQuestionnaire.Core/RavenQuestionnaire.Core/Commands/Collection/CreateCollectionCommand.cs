@@ -11,17 +11,9 @@ namespace RavenQuestionnaire.Core.Commands.Collection
     [MapsToAggregateRootConstructor(typeof(CollectionAR))]
     public class CreateCollectionCommand : CommandBase
     {
-        public Guid CollectionId
-        {
-            get;
-            set;
-        }
+        public Guid CollectionId { get; set; }
 
-        public String Text
-        {
-            get;
-            set;
-        }
+        public String Text { get; set; }
 
         public List<CollectionItem> Items { get; set; }
 
