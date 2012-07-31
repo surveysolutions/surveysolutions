@@ -144,6 +144,8 @@ Awesomium/ipch/awesomium-68c8a7cf/awesomium-c9d85fd.ipch
 Awesomium/Awesomium.NET CAPI Browser.opensdf
 Awesomium/_ReSharper*
 Awesomium/Awesomium.NET CAPI Browser.6.0.ReSharper*
+RavenQuestionnaire.Web/Web.Headquarter/bin/*
+RavenQuestionnaire.Web/Web.Headquarter/obj/*
 Synchronization/DataEntryClient/DataEntryClient.csproj.user.rej
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/RavenQuestionnaire.Web.csproj.rej
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/EventHandlers/CompleteQuestionnaireBrowseItemDenormalizer.cs.rej
