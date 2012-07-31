@@ -70,6 +70,9 @@
     <Reference Include="ICSharpCode.NRefactory, Version=3.0.0.3800, Culture=neutral, PublicKeyToken=efe927acf176eea2, processorArchitecture=MSIL">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
+    <Reference Include="Kaliko.ImageLibrary">
+      <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Lucene.Net, Version=2.9.4.1, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
@@ -136,6 +139,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
@@ -393,7 +397,6 @@
     <Compile Include="Repositories\StatisticRepository.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
     <Compile Include="Services\IValildationService.cs" />
-    <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="IViewFactory.cs" />
     <Compile Include="IViewRepsoitory.cs" />
     <Compile Include="Entities\OrderRequestItem.cs" />
@@ -417,6 +420,7 @@
     <Compile Include="Services\CompleteQuestionnaireUploaderService.cs" />
     <Compile Include="Services\ICompleteQuestionnaireUploaderService.cs" />
     <Compile Include="Services\IQuestionnaireService.cs" />
+    <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="Services\ValildationService.cs" />
     <Compile Include="Utility\OrderStrategy\AsIsStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\AZStrategy.cs" />

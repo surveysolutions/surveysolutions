@@ -29,7 +29,7 @@ namespace RavenQuestionnaire.Core.Views.File
             // And enact this query
             var items = query
                 .Select(x => new FileBrowseItem(/*x.PublicKey,*/ x.Title, x.Description, 
-                   x.PublicKey, x.Width, x.Height))
+                   x.PublicKey))
                 .ToArray();
             
 

@@ -16,17 +16,9 @@ namespace RavenQuestionnaire.Core.Events.File
 
         public string Description { get; set; }
 
-        public int OriginalWidth { get; set; }
-
-        public int OriginalHeight { get; set; }
-
-        public int ThumbWidth { get; set; }
-
-        public int ThumbHeight { get; set; }
-
         public string OriginalFile { get; set; }
 
-        public string ThumbFile { get; set; }
+     //   public string ThumbFile { get; set; }
 
     }
 }
