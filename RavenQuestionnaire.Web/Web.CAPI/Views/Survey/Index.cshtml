@@ -80,8 +80,7 @@
                         }
                         else
                         {
-                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("Complete", "Survey", new { id = Model.Id })">
-                                Complete</a>
+                            <a data-corners="false" href="#transparent" data-rel="popup" data-role="button" data-inline="true" id="CompleteLink" returnlink="@Url.Action("Dashboard", "Survey")" link="@Url.Action("Complete", "Survey", new { id=@Model.Id})">Complete</a>
                         }</li>
                 </ul>
             </div>

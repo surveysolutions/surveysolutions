@@ -27,8 +27,13 @@
                  <div style="width: 100%; height: 50px;text-align: center"><strong>End of Section</strong></div>
             </div>
         </div>
-        <div style="width: 100%; height: 50px;">&nbsp;</div>
-    </div>
+        <div style="width: 100%; height: 50px;">&nbsp;</div>        
+        <a href="#transparent" style="display:none;" id="popup" data-rel="popup" data-role="button" data-inline="true" data-position-to="window">Close</a>
+		<div id="transparent" data-role="popup" data-theme="none" data-shadow="false">
+			<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+		  Please, check answers!!!
+		</div>
+    </div>    
     @RenderFooter(Model.Navigation)
     <!-- /content -->
 </div>
