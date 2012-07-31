@@ -425,13 +425,8 @@ function updateCounter() {
         this.hideInputsWithVirtualKeyboard();
         this.disableAfterSubmit();
 
-        for (var j = 0; j < scrolls.length; j++) {
-            scrolls[j].destroy();
-        }
-        scrolls = new Array();
+        
         this.find('.dummy-scroll').each(function() {
-          /*  if ($(this).is(':visible'))
-                return;*/
             var scroll = new iScroll(this);
             scrolls.push(scroll);
             // scroll.refresh();
@@ -442,16 +437,23 @@ function updateCounter() {
   
     
     $.fn.destroyPage = function () {
-        
+        var currentScroll= this.find('.dummy-scroll #scroller')[0];
+        for (var j = 0; j < scrolls.length; j++) {
+                if (scrolls[j].scroller == currentScroll) {
+                    scrolls[j].destroy();
+                    scrolls.splice(j, 1);
+                }
+        }
+      //  scrolls = new Array();
     };
 })(jQuery);
   var scrolls = new Array();
 $(document).ready(function () {
     var doc = $(document);
-    doc.find('#sidebar .dummy-scroll').each(function() {
+   /* doc.find('#sidebar .dummy-scroll').each(function() {
         var scroll = new iScroll(this);
         scroll.refresh();
-    });
+    });*/
       doc.ajaxComplete(function () {
         for (var i = 0; i < scrolls.length; i++) {
             scrolls[i].refresh();
@@ -485,8 +487,8 @@ function scrollToQuestion(question) {
         }
     }
 }
-$(document).bind('pagebeforeshow', function () {
-    var doc = $('#content_container');
+$(document).bind('pagebeforeshow', function (event, data) {
+    var doc = $(event.target);
    
     doc.initPage();
     
@@ -520,9 +522,9 @@ $(document).bind('pagechange', function () {
          }
 });
 
-$(document).bind('pagehide', function () {
+$(document).bind('pagehide', function (event, data) {
    
-    var doc = $('#content_container');
+    var doc = $(data.prevPage);
     doc.destroyPage();
  
     $('.page-to-delete').remove();
