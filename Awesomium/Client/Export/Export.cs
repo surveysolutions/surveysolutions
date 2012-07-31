@@ -81,9 +81,18 @@ namespace Client
                 hint.ProgressIndicator.SetCompletedStatus(e.Cancelled, e.Error);
 
                 this.exportEnded.Set();
+                try
+                {
+                    usbArchive.InsertPart(e.Result);
+                }
+                catch (Exception ex)
+                {
+                    
+                    throw ex;
+                }
 
-
-                //usbArchive.InsertPart(e.Result);
+                    
+ 
 
                 if (EndOfExport != null)
                 {
