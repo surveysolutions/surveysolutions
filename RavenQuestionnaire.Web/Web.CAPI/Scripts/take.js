@@ -307,12 +307,6 @@ function updateCounter() {
         });
 
     },
-    //jquery extension method to handle exceptions and log them
-    $.fn.numericSubmit = function () {
-        var input = this.find('input[type=number], input[type=range]');
-        var target = input.parent();
-        target.find('.ui-slider a').bind('vmouseup', function () { $($(this).parent().siblings('input')[0].form).submit(); });
-    },
     $.fn.hideInputsWithVirtualKeyboard = function () {
         var virtualIcons = this.find('a[open-virtual-keyboar=true]');
         virtualIcons.each(function () {
@@ -334,8 +328,7 @@ function updateCounter() {
         });
     },
     $.fn.createKeyBoard = function (layout) {
-        var k = this.find('input[draw-key-board=true]');
-        k.removeAttr("draw-key-board");
+        
         var kbOptions = {
             keyBinding: 'mousedown touchstart',
             position: {
@@ -354,21 +347,8 @@ function updateCounter() {
                 buttonDisabled: ''
             }
         };
-
-        k.each(function () {
-            var jInput = $(this);
-            var additionalOptions = {};
-            if (jInput.attr('type') == 'text') {
-                additionalOptions = { layout: 'qwertyNoEnter', min_width: '888px' };
-            }
-            else {
-                additionalOptions = { layout: 'numOnly', min_width: null };
-            }
-            var options = $.extend(kbOptions, additionalOptions);
-            jInput.keyboard(options);
-
-        }).addMobile({
-            // keyboard wrapper theme
+        var mobileOptions = {
+        // keyboard wrapper theme
             container: { theme: 'c' },
             // theme added to all regular buttons
             buttonMarkup: { theme: 'c', shadow: 'true', corners: 'false' },
@@ -380,12 +360,23 @@ function updateCounter() {
             // theme added to button when it is active (e.g. shift is down)
             // All extra parameters will be ignored
             buttonActive: { theme: 'e' }
-        });
-        k.bind('accepted.keyboard', function (event) {
+        };
+        var keyboardInputs = this.find('input[draw-key-board=true][type=text]');
+        var numericInputs = this.find('input[draw-key-board=true][type!=text]');
+        var allInputs = keyboardInputs.add(numericInputs);
+        keyboardInputs.removeAttr("draw-key-board");
+        
+        var numericOptions= $.extend({},kbOptions, { layout: 'numOnly', min_width: null });
+       var keyboardOptions= $.extend({},kbOptions, { layout: 'qwertyNoEnter', min_width: '888px' });
+        
+        numericInputs.keyboard(numericOptions);
+        keyboardInputs.keyboard(keyboardOptions);
+        allInputs.addMobile(mobileOptions);
+        allInputs.bind('accepted.keyboard', function (event) {
             $(this).change();
             $(this.form).submit();
         });
-        k.bind('visible.keyboard', function (event) {
+        allInputs.bind('visible.keyboard', function (event) {
             var input = $(this);
             var keyboard = input.getkeyboard();
             keyboard.$preview.caretToEnd();
@@ -394,7 +385,7 @@ function updateCounter() {
     $.fn.initPage = function() {
 
         this.createKeyBoard();
-        this.numericSubmit();
+     
         this.hideInputsWithVirtualKeyboard();
         this.disableAfterSubmit();
 
