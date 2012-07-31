@@ -1,0 +1,317 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Ninject.Extensions.ContextPreservation</name>
+    </assembly>
+    <members>
+        <member name="T:Ninject.Extensions.ContextPreservation.ContextPreservationExtensionMethods">
+            <summary>
+            Extension methods used for context preservation.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservationExtensionMethods.ContextPreservingGet``1(Ninject.Activation.IContext,Ninject.Parameters.IParameter[])">
+            <summary>
+            Resolves a binding using a <see cref="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot"/>.
+            </summary>
+            <typeparam name="T">The binding to resolve.</typeparam>
+            <param name="context">The context.</param>
+            <param name="parameters">The parameters to pass to the request.</param>
+            <returns>The resolved instance</returns>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservationExtensionMethods.ContextPreservingGet``1(Ninject.Activation.IContext,System.String,Ninject.Parameters.IParameter[])">
+            <summary>
+            Resolves a binding using a <see cref="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot"/>.
+            </summary>
+            <typeparam name="T">The binding to resolve.</typeparam>
+            <param name="context">The context.</param>
+            <param name="name">The name of the binding.</param>
+            <param name="parameters">The parameters to pass to the request.</param>
+            <returns>The resolved instance</returns>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservationExtensionMethods.ContextPreservingGet``1(Ninject.Activation.IContext,System.Func{Ninject.Planning.Bindings.IBindingMetadata,System.Boolean},Ninject.Parameters.IParameter[])">
+            <summary>
+            Resolves a binding using a <see cref="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot"/>.
+            </summary>
+            <typeparam name="T">The binding to resolve.</typeparam>
+            <param name="context">The context.</param>
+            <param name="constraint">The constraint to apply to the binding.</param>
+            <param name="parameters">The parameters to pass to the request</param>
+            <returns>The resolved instance</returns>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservationExtensionMethods.ContextPreservingGet(Ninject.Activation.IContext,System.Type,Ninject.Parameters.IParameter[])">
+            <summary>
+            Resolves a binding using a <see cref="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot"/>.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="service">The service to resolve.</param>
+            <param name="parameters">The parameters to pass to the request.</param>
+            <returns>The resolved instance</returns>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservationExtensionMethods.ContextPreservingGet(Ninject.Activation.IContext,System.Type,System.String,Ninject.Parameters.IParameter[])">
+            <summary>
+            Resolves a binding using a <see cref="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot"/>.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="service">The service to resolve.</param>
+            <param name="name">The name of the binding.</param>
+            <param name="parameters">The parameters to pass to the request.</param>
+            <returns>The resolved instance</returns>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservationExtensionMethods.ContextPreservingGet(Ninject.Activation.IContext,System.Type,System.Func{Ninject.Planning.Bindings.IBindingMetadata,System.Boolean},Ninject.Parameters.IParameter[])">
+            <summary>
+            Resolves a binding using a <see cref="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot"/>.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="service">The service to resolve.</param>
+            <param name="constraint">The constraint to apply to the binding.</param>
+            <param name="parameters">The parameters to pass to the request</param>
+            <returns>The resolved instance</returns>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservationExtensionMethods.GetContextPreservingResolutionRoot(Ninject.Activation.IContext)">
+            <summary>
+            Gets a <see cref="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot"/> for the given context.
+            </summary>
+            <param name="context">The context.</param>
+            <returns>The newly created <see cref="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot"/></returns>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservationExtensionMethods.GetServiceType(System.Type,Ninject.Activation.IContext)">
+            <summary>
+            Gets the type of the service. Converting open generics to the matching type.
+            </summary>
+            <param name="service">The service.</param>
+            <param name="context">The context.</param>
+            <returns>The type of the service.</returns>
+        </member>
+        <member name="T:Ninject.Extensions.ContextPreservation.ContextPreservationModule">
+            <summary>
+            This module provides a <see cref="T:Ninject.Syntax.IResolutionRoot"/> binding that preserves the context.
+            New Get requests can access the context that was used to create the resolution root.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservationModule.Load">
+            <summary>
+            Loads this instance.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservationModule.GetContextPreservingResolutionRoot(Ninject.Activation.IContext)">
+            <summary>
+            Gets the context preserving resolution root for the given context.
+            </summary>
+            <param name="context">The context.</param>
+            <returns>The context preserving resolution root for the given context.</returns>
+        </member>
+        <member name="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot">
+            <summary>
+            A resolution root that preserves the context of the factory when resolves a new request.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.context">
+            <summary>
+            The parent context.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.target">
+            <summary>
+            The parent target.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.inheritedParameters">
+            <summary>
+            A list of all inherited parameters that are passed to the new request.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot"/> class.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.#ctor(Ninject.Activation.IContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot"/> class.
+            </summary>
+            <param name="context">The parent context.</param>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.#ctor(Ninject.Activation.IContext,Ninject.Planning.Targets.ITarget)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot"/> class.
+            </summary>
+            <param name="context">The parent context.</param>
+            <param name="target">The parent target.</param>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.CanResolve(Ninject.Activation.IRequest)">
+            <summary>
+            Determines whether this instance can resolve the specified request.
+            </summary>
+            <param name="request">The request.</param>
+            <returns>
+                <c>true</c> if this instance can resolve the specified request; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.CanResolve(Ninject.Activation.IRequest,System.Boolean)">
+            <summary>
+            Determines whether the specified request can be resolved.
+            </summary>
+            <param name="request">The request.</param>
+            <param name="ignoreImplicitBindings">if set to <c>true</c> implicit bindings are ignored.</param>
+            <returns>
+                <c>True</c> if the request can be resolved; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.Resolve(Ninject.Activation.IRequest)">
+            <summary>
+            Resolves the specified request.
+            </summary>
+            <param name="request">The request.</param>
+            <returns>The object that was retrieved by resolving the request.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.CreateRequest(System.Type,System.Func{Ninject.Planning.Bindings.IBindingMetadata,System.Boolean},System.Collections.Generic.IEnumerable{Ninject.Parameters.IParameter},System.Boolean,System.Boolean)">
+            <summary>
+            Creates a request.
+            </summary>
+            <param name="service">The service.</param>
+            <param name="constraint">The constraint.</param>
+            <param name="parameters">The parameters.</param>
+            <param name="isOptional">if set to <c>true</c> the parameter is optional.</param>
+            <param name="isUnique">if set to <c>true</c> the request must return one unique binding.</param>
+            <returns>The created request.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.DefineParentContext(Ninject.Activation.IContext,Ninject.Planning.Targets.ITarget)">
+            <summary>
+            Defines the parent context.
+            </summary>
+            <param name="context">The parent context.</param>
+            <param name="target">The parent target.</param>
+        </member>
+        <member name="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest">
+            <summary>
+            <see cref="T:Ninject.Activation.IRequest"/> decorator that returns the configured parent context and target.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.parentContext">
+            <summary>
+            The parent context.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.originalRequest">
+            <summary>
+            The decorated request.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.originalTarget">
+            <summary>
+            The original target.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.#ctor(Ninject.Activation.IRequest,Ninject.Activation.IContext,Ninject.Planning.Targets.ITarget)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest"/> class.
+            </summary>
+            <param name="originalRequest">The original request.</param>
+            <param name="parentContext">The parent context.</param>
+            <param name="originalTarget">The original target.</param>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.Matches(Ninject.Planning.Bindings.IBinding)">
+            <summary>
+            Tests if the binding matched the given binding.
+            </summary>
+            <param name="binding">The binding.</param>
+            <returns>True if the bindings match.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.GetScope">
+            <summary>
+            Gets the scope.
+            </summary>
+            <returns>Returns the scope of the original request.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.CreateChild(System.Type,Ninject.Activation.IContext,Ninject.Planning.Targets.ITarget)">
+            <summary>
+            Creates a child.
+            </summary>
+            <param name="service">The service.</param>
+            <param name="parentContext">The parent context.</param>
+            <param name="target">The target.</param>
+            <returns>The created child request.</returns>
+        </member>
+        <member name="P:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.Service">
+            <summary>
+            Gets the service.
+            </summary>
+            <value>The service.</value>
+        </member>
+        <member name="P:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.ParentRequest">
+            <summary>
+            Gets the parent request.
+            </summary>
+            <value>The parent request.</value>
+        </member>
+        <member name="P:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.ParentContext">
+            <summary>
+            Gets the parent context.
+            </summary>
+            <value>The parent context.</value>
+        </member>
+        <member name="P:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.Target">
+            <summary>
+            Gets the target.
+            </summary>
+            <value>The target.</value>
+        </member>
+        <member name="P:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.Constraint">
+            <summary>
+            Gets the constraint.
+            </summary>
+            <value>The constraint.</value>
+        </member>
+        <member name="P:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.Parameters">
+            <summary>
+            Gets the parameters.
+            </summary>
+            <value>The parameters.</value>
+        </member>
+        <member name="P:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.ActiveBindings">
+            <summary>
+            Gets the active bindings.
+            </summary>
+            <value>The active bindings.</value>
+        </member>
+        <member name="P:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.Depth">
+            <summary>
+            Gets the depth.
+            </summary>
+            <value>The depth.</value>
+        </member>
+        <member name="P:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.IsOptional">
+            <summary>
+            Gets or sets a value indicating whether this instance is optional.
+            </summary>
+            <value>
+                <c>true</c> if this instance is optional; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot.ContextPreservingRequest.IsUnique">
+            <summary>
+            Gets or sets a value indicating whether this instance is unique.
+            </summary>
+            <value><c>true</c> if this instance is unique; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRootActivationStrategy">
+            <summary>
+            Strategy for defining the parent context for <see cref="T:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot"/>.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRootActivationStrategy.Activate(Ninject.Activation.IContext,Ninject.Activation.InstanceReference)">
+            <summary>
+            Activates the specified context.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="reference">The reference.</param>
+        </member>
+        <member name="M:Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRootActivationStrategy.DefineParentContext(Ninject.Activation.IContext,Ninject.Extensions.ContextPreservation.ContextPreservingResolutionRoot)">
+            <summary>
+            Defines the parent context for the specified resolution root.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="namedScopeResolutionRoot">The named scope resolution root.</param>
+        </member>
+    </members>
+</doc>

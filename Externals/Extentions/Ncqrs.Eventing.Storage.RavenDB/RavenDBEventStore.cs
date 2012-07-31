@@ -148,13 +148,13 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
             return result;
         }*/
+        [Obsolete]
         protected IList<StoredEvent> AccumulateWithPaging(Func<StoredEvent, bool> predicate)
         {
             List<StoredEvent> retval = new List<StoredEvent>();
             int count;
             using (var session = _documentStore.OpenSession())
             {
-
 
                 Raven.Client.Linq.RavenQueryStatistics stats;
                 session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults())
@@ -164,6 +164,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             }
             if (count == 0)
                 return retval;
+
+
             int maxQueryLimit = 1024;
             int queryLimit =(int) Math.Pow(2, Math.Ceiling(Math.Log(count/29.0,2)));
             if (queryLimit > maxQueryLimit)
@@ -182,19 +184,44 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
             return retval;
         }
+        /// <summary>
+        /// Reads all committed events from storage. 
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        protected IList<StoredEvent> AccumulateEvents(Func<StoredEvent, bool> predicate)
+        {
+            List<StoredEvent> retval = new List<StoredEvent>();
+
+            int chunkSize = 128; //default ravenDB 
+            int currentChunkSize = chunkSize;
+            int selectedCount = 0;
+
+            while (currentChunkSize == chunkSize)
+            {
+                using (var session = _documentStore.OpenSession())
+                {
+                    var chunk = session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(selectedCount).Take(
+                            chunkSize).Where(predicate).ToList();
+
+                    retval.AddRange(chunk);
+                    currentChunkSize = chunk.Count;
+                    selectedCount += currentChunkSize;
+                }
+            }
+            return retval;
+
+        }
 
         public IEnumerable<CommittedEvent> ReadFrom(DateTime start)
         {
             var result = new List<CommittedEvent>();
 
+            //var storedEvents = AccumulateWithPaging(x => x.EventTimeStamp >= start).OrderBy(x => x.EventTimeStamp);
+
+            var storedEvents = AccumulateEvents(x => x.EventTimeStamp >= start).OrderBy(x=>x.EventTimeStamp);
             
-               /* var storedEvents = session.Query<StoredEvent>()
-                    .Customize(x => x.WaitForNonStaleResults())
-                    .Where(x => x.EventTimeStamp >= start)
-                    .ToList().OrderBy(x => x.EventTimeStamp);*/
-                var storedEvents = AccumulateWithPaging(x => x.EventTimeStamp >= start).OrderBy(x=>x.EventTimeStamp);
-                result = storedEvents.Select(ToComittedEvent).ToList();
-            
+            result = storedEvents.Select(ToComittedEvent).ToList();
 
             return result;
         }
@@ -202,11 +229,9 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         public IEnumerable<CommittedEventStream> ReadByAggregateRoot()
         {
             List<CommittedEventStream> retval = new List<CommittedEventStream>();
-            List<Guid> aggreagates;
-
-            aggreagates =
-                AccumulateWithPaging(x => x.EventTimeStamp >= DateTime.MinValue).Select(e => e.EventSourceId).Distinct
-                    ().ToList();
+            List<Guid> aggreagates =
+                AccumulateEvents(x => x.EventTimeStamp >= DateTime.MinValue).Select(e => e.EventSourceId).Distinct().ToList();
+                //AccumulateWithPaging(x => x.EventTimeStamp >= DateTime.MinValue).Select(e => e.EventSourceId).Distinct().ToList();
 
             foreach (Guid aggreagateId in aggreagates)
             {
