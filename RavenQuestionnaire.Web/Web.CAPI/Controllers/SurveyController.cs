@@ -122,11 +122,11 @@ namespace Web.CAPI.Controllers
             if (stat != null && stat.InvalidQuestions.Count > 0)
             {
                 commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = key, Status = SurveyStatus.Error });
-                return Redirect(Url.RouteUrl(new {controller = "Survey", action = "Statistic", id = id}) + "#" + "invalid");
+                //return Redirect(Url.RouteUrl(new {controller = "Survey", action = "Statistic", id = id}) + "#" + "invalid");
+                return Json(new { message = "Error" }, JsonRequestBehavior.AllowGet);
             }
             commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = key, Status = SurveyStatus.Complete });
-            return RedirectToAction("Dashboard", "Survey");
-
+            return Json(new { message = "Complete" }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ReInit(string id)

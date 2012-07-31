@@ -25,6 +25,23 @@ function ExportStarted() {
     $('#btnExport').href = "@Url.Action('Export', 'ImportExport')";
 }
 
+function GetCheck(i, j) {
+    $.get(i,
+        function (data) {
+                        
+                        try {
+                            if (data.message != null && data.message == "Error") {
+                                $('#popup').click();
+                            }
+                            else {
+                                window.location = j;
+                            }
+                        } catch (e) {
+                            window.location = j;
+                        }
+        });
+}
+
 function sinchronizationCompleted(data, status, xhr) {
     $('a#btnSync span span').html('Synchronize');
     $('a#btnSync').removeClass('ui-btn-active');
@@ -443,6 +460,11 @@ $(document).ready(function () {
         if (next != null) {
             scrollToQuestion(next);
         }
+    });
+    $('#CompleteLink').live('click', function () {
+        var link = $(this).attr('link');
+        var returnlink = $(this).attr('returnlink');
+        GetCheck(link,returnlink);
     });
 });
 function scrollToQuestion(question) {

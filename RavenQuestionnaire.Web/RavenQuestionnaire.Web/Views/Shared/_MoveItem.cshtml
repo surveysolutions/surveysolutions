@@ -3,7 +3,7 @@
 <div id="divMoveForm" class="form-horizontal">
     <h3>
         <a href="@Url.Action("Details", "Questionnaire", new { id = Model.questionnaireId, qid = Model.publicKey})" class="btn">
-        <i class="icon-arrow-left"></i></a>Edit Question
+        <i class="icon-arrow-left"></i></a> &nbsp;Back
     </h3>
     @using (Html.BeginForm("Move", "Question", FormMethod.Post))
     {
