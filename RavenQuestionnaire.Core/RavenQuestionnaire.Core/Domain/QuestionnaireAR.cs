@@ -118,9 +118,9 @@ namespace RavenQuestionnaire.Core.Domain
         {
         }
 
-        public void MoveQuestion(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
+        public void MoveQuestionnaireItem(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
         {
-            ApplyEvent(new QuestionMoved
+            ApplyEvent(new QuestionnaireItemMoved
             {
                 AfterItemKey = afterItemKey,
                 GroupKey = groupKey,
@@ -128,7 +128,7 @@ namespace RavenQuestionnaire.Core.Domain
             });
         }
 
-        protected void OnQuestionMoved(QuestionMoved e)
+        protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
         {
             var questionnaire = new Questionnaire(this._innerDocument);
             questionnaire.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
