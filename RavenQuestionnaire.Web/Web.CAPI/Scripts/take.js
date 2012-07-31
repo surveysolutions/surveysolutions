@@ -204,7 +204,7 @@ function PropagatedGroup(data, status, xhr) {
             newGroup.insertAfter(container);
         }
 
-        newGroup.trigger('pagecreate');
+     //   newGroup.trigger('pagecreate');
         $(parent).listview('refresh');
 
         updateCounter();
@@ -391,44 +391,46 @@ function updateCounter() {
             keyboard.$preview.caretToEnd();
         });
     };
-    $.fn.initPage = function () {
+    $.fn.initPage = function() {
 
         this.createKeyBoard();
         this.numericSubmit();
         this.hideInputsWithVirtualKeyboard();
         this.disableAfterSubmit();
 
-        this.find('.dummy-scroll').each(function () {
+        for (var j = 0; j < scrolls.length; j++) {
+            scrolls[j].destroy();
+        }
+        scrolls = new Array();
+        this.find('.dummy-scroll').each(function() {
+          /*  if ($(this).is(':visible'))
+                return;*/
             var scroll = new iScroll(this);
-            newScrolls.push(scroll);
+            scrolls.push(scroll);
+            // scroll.refresh();
         });
+        // this.focus();
+
     };
+  
+    
     $.fn.destroyPage = function () {
-        this.find('.dummy-scroll #scroller').each(function () {
-            for (var j = 0; j < scrolls.length; j++) {
-                if ($(scrolls[j].scroller).attr('class') == $(this).attr('class')) {
-                    scrolls.splice(j, 1);
-                }
-            }
-        });
+        
     };
 })(jQuery);
-var newScrolls = new Array();
-var scrolls = new Array();
+  var scrolls = new Array();
 $(document).ready(function () {
     var doc = $(document);
-    doc.find('#sidebar .dummy-scroll').each(function () {
+    doc.find('#sidebar .dummy-scroll').each(function() {
         var scroll = new iScroll(this);
         scroll.refresh();
     });
-    doc.ajaxComplete(function () {
+      doc.ajaxComplete(function () {
         for (var i = 0; i < scrolls.length; i++) {
             scrolls[i].refresh();
         }
     });
-    for (var j = 0; j < scrolls.length; j++) {
-        scrolls[j].refresh();
-    }
+
     $('.next-question').live('click', function () {
         var id = $(this).attr('id').substr(4);
         var parent = $('#elem-' + id);
@@ -449,20 +451,18 @@ function scrollToQuestion(question) {
     var scrollContainer = $(question).offsetParent();
     var position = scrollContainer.find('#scroller').offset().top - $(question).offset().top;
 
-    for (var j = 0; j < scrolls.length; j++) {
+  /*  for (var j = 0; j < scrolls.length; j++) {
         if ($(scrolls[j].scroller).attr('class') == $(scrollContainer.find('#scroller')).attr('class')) {
             scrolls[j].refresh();
             scrolls[j].scrollTo(0, position, 1500, false);
         }
-    }
+    }*/
 }
 $(document).bind('pagebeforeshow', function () {
-    var doc = $('div:jqmData(id="main") > div:jqmData(role="page")');
-    newScrolls = [];
+    var doc = $('#content_container');
+   
     doc.initPage();
-    for (var j = 0; j < newScrolls.length; j++) {
-        scrolls.push(newScrolls[j]);
-    }
+    
     doc.focus();
 });
 $(document).bind('pagechange', function () {
@@ -487,15 +487,18 @@ $(document).bind('pagechange', function () {
         $(target).faderEffect();
         $('.scrollHere').removeClass('scrollHere');
     }
+    
+      for (var j = 0; j < scrolls.length; j++) {
+             scrolls[j].refresh();
+         }
 });
 
 $(document).bind('pagehide', function () {
-    $('.page-to-delete').remove();
+   
     var doc = $('#content_container');
     doc.destroyPage();
-    for (var j = 0; j < newScrolls.length; j++) {
-        scrolls.push(newScrolls[j]);
-    }
+ 
+    $('.page-to-delete').remove();
 });
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
