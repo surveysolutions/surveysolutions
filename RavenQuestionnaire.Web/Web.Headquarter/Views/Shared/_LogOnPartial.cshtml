@@ -1,7 +1,14 @@
-﻿@if(Request.IsAuthenticated) {
-    <text>Welcome <strong>@User.Identity.Name</strong>!
-    [ @Html.ActionLink("Log Off", "LogOff", "Account") ]</text>
-}
-else {
-    @:[ @Html.ActionLink("Log On", "LogOn", "Account") ]
-}
+﻿<div class="pull-right">
+    <ul id="menu" class="nav">
+        @if (Request.IsAuthenticated)
+        {
+            <li class="divider-vertical"></li>
+            <li class="navbar-text">@User.Identity.Name</li>
+            <li>@Html.ActionLink("Log Off", "LogOff", "Account")</li>
+        }
+        else
+        {
+            <li>@Html.ActionLink("Log On", "LogOn", "Account")</li>
+        }
+    </ul>
+</div>
