@@ -89,6 +89,7 @@ namespace RavenQuestionnaire.Core.Domain
             // this event (the OnNewGroupAdded method).
             ApplyEvent(new NewGroupAdded
             {
+                QuestionnairePublicKey=this._innerDocument.PublicKey,
                 PublicKey = publicKey,
                 GroupText = text,
                 ParentGroupPublicKey = parentGroupKey,
@@ -269,13 +270,27 @@ namespace RavenQuestionnaire.Core.Domain
             ApplyEvent(new ImageUpdated() { Description = description, ImageKey = imageKey, QuestionKey = questionKey, Title = title });
         }
 
-        protected void OnImageUploaded(ImageUpdated e)
+        protected void OnImageUpdated(ImageUpdated e)
         {
             var question = this._innerDocument.Find<AbstractQuestion>(e.QuestionKey);
 
             question.UpdateCard(e.ImageKey, e.Title, e.Description);
         }
+        protected void OnImageUploaded(ImageUploaded e)
+        {
 
+            var newImage = new Image
+            {
+                PublicKey = e.ImagePublicKey,
+                Title = e.Title,
+                Description = e.Description,
+                CreationDate = DateTime.Now
+            };
+
+            var question = this._innerDocument.Find<AbstractQuestion>(e.PublicKey);
+
+            question.AddCard(newImage);
+        }
         public void DeleteImage(Guid questionKey, Guid imageKey)
         {
             ApplyEvent(new ImageDeleted() {ImageKey = imageKey, QuestionKey = questionKey});
@@ -342,51 +357,19 @@ namespace RavenQuestionnaire.Core.Domain
             }
         }
 
-        public void UploadImage(Guid publicKey, string title, string description, 
-            string originalImage, int originalWidth, int originalHeight, 
-            int thumbWidth, int thumbHeight, string thumbnailImage)
+        public void UploadImage(Guid publicKey, string title, string description,
+            Guid imagePublicKey)
         {
-            var imagePublicKey = Guid.NewGuid();
-            string filename = String.Format("images/{0}.png", imagePublicKey);
-            string thumbname = String.Format("images/{0}_thumb.png", imagePublicKey);
             ApplyEvent(new ImageUploaded()
                            {
                                Description = description,
                                Title = title,
                                PublicKey = publicKey,
-                               OriginalHeight = originalHeight,
-                               OriginalImage = originalImage,
-                               OriginalWidth = originalWidth,
-                               ThumbHeight = thumbHeight,
-                               ThumbnailImage = thumbnailImage,
-                               ThumbWidth = thumbWidth,
-                               ImagePublicKey = imagePublicKey,
-                               FileName = filename,
-                               ThumbName = thumbname
+                               ImagePublicKey = imagePublicKey
                            });
         }
 
-        protected void OnImageUploaded(ImageUploaded e)
-        {
-           
-            var newImage = new Image
-            {
-                PublicKey = e.ImagePublicKey,
-                Title = e.Title,
-                Description = e.Description,
-                OriginalBase64 = e.FileName,
-                Width = e.OriginalWidth,
-                Height = e.OriginalHeight,
-                ThumbnailBase = e.ThumbName/*thumbBase64*/,
-                ThumbnailHeight = e.ThumbHeight,
-                ThumbnailWidth = e.ThumbWidth,
-                CreationDate = DateTime.Now
-            };
-
-            var question = this._innerDocument.Find<AbstractQuestion>(e.PublicKey);
-
-            question.AddCard(newImage);
-        }
+       
 
         #region Implementation of ISnapshotable<QuestionnaireDocument>
 

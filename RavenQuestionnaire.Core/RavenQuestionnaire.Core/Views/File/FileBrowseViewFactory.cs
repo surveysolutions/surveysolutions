@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Raven.Client;
 using Raven.Client.Linq;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Utility;
 
@@ -8,28 +9,27 @@ namespace RavenQuestionnaire.Core.Views.File
 {
     public class FileBrowseViewFactory : IViewFactory<FileBrowseInputModel, FileBrowseView>
     {
-        private IDocumentSession documentSession;
+        private IDenormalizerStorage<FileDescription> attachments;
 
-        public FileBrowseViewFactory(IDocumentSession documentSession)
+        public FileBrowseViewFactory(IDenormalizerStorage<FileDescription> attachments)
         {
-            this.documentSession = documentSession;
+            this.attachments = attachments;
         }
 
         public FileBrowseView Load(FileBrowseInputModel input)
         {
             // Adjust the model appropriately
-            var count = documentSession.Query<FileDocument>().Count();
+            var count = attachments.Query().Count();
             if (count == 0)
                 return new FileBrowseView(input.Page, input.PageSize, count, new FileBrowseItem[0]);
 
-            var query = documentSession.Query<FileDocument>().Skip((input.Page - 1) * input.PageSize)
+            var query = attachments.Query().Skip((input.Page - 1) * input.PageSize)
                   .Take(input.PageSize).ToList();
 
             // And enact this query
             var items = query
-                .Select(x => new FileBrowseItem(x.Id, x.Title, x.Description, x.CreationDate, 
-                   x.Filename, x.Width, x.Height,
-                   x.Thumbnail, x.ThumbnailWidth, x.ThumbnailHeight))
+                .Select(x => new FileBrowseItem(/*x.PublicKey,*/ x.Title, x.Description, 
+                   x.PublicKey))
                 .ToArray();
             
 

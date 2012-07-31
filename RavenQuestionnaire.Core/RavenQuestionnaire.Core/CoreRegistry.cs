@@ -13,6 +13,7 @@ using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Indexes;
+using RavenQuestionnaire.Core.Services;
 
 namespace RavenQuestionnaire.Core
 {
@@ -91,7 +92,7 @@ namespace RavenQuestionnaire.Core
             this.Kernel.Bind(
                 x =>
                 x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().Excluding
-                    <IClientSettingsProvider>().BindWith(new RegisterFirstInstanceOfInterface()));
+                    <IClientSettingsProvider>()/*.Excluding<IFileStorageService>()*/.BindWith(new RegisterFirstInstanceOfInterface()));
 
 
         }
