@@ -1,7 +1,6 @@
 ﻿using System.Windows.Input;
+using QApp.Heritage;
 using RavenQuestionnaire.Core;
-using DevExpress.RealtorWorld.Xpf.Helpers;
-using DevExpress.RealtorWorld.Xpf.ViewModel;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 

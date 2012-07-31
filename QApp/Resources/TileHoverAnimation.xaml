@@ -1,14 +1,14 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:Helpers="clr-namespace:QApp.Helpers.Extensions">
     
-    <Style x:Key="TileHoverAnimation" TargetType="helpers:VisualStateControl">
+    <Style x:Key="TileHoverAnimation" TargetType="Helpers:VisualStateControl">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="helpers:VisualStateControl">
+                <ControlTemplate TargetType="Helpers:VisualStateControl">
                     <ContentPresenter x:Name="PART_ContentPresenter" Opacity="0" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
                                 Cursor="{TemplateBinding Cursor}" Margin="{TemplateBinding Padding}"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">

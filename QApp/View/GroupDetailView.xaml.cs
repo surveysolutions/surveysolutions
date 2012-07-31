@@ -1,5 +1,5 @@
 
-using DevExpress.RealtorWorld.Xpf.View;
+using QApp.Heritage;
 
 namespace QApp.View {
     public partial class GroupDetailView : ModuleView {

@@ -189,6 +189,7 @@
     <Compile Include="Domain\SyncProcessAR.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\CQGroupItemDenormalizer.cs" />
+    <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
     <Compile Include="EventSubscribers\GenerateQuestionnaireStatisticEventHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateNewStatusHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateStatusFlowHandler.cs" />
@@ -614,6 +615,7 @@
     <Folder Include="CommandHandlers\Statistics\" />
     <Folder Include="Commands\NewFolder1\" />
     <Folder Include="Commands\Statistics\" />
+    <Folder Include="Events\User\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

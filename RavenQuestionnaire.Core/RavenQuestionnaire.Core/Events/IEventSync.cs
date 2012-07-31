@@ -5,6 +5,7 @@ using System.Text;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 using RavenQuestionnaire.Web.App_Start;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
@@ -47,7 +48,8 @@ namespace RavenQuestionnaire.Core.Events
             {
                 foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
                 {
-                    completeIds.Add(new Guid(survey.CompleteQuestionnaireId));
+                    if (survey.Status.PublicId == SurveyStatus.Complete.PublicId) //export only completed Q
+                        completeIds.Add(new Guid(survey.CompleteQuestionnaireId));
                 }
             }
             return myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c, completeIds));

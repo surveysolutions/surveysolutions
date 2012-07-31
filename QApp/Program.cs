@@ -9,9 +9,6 @@ using System.Windows.Threading;
 using DevExpress.RealtorWorld.Xpf;
 using MainPage = QApp.View.MainPage;
 using System.Windows.Media.Animation;
-using DevExpress.RealtorWorld.Xpf.View;
-using DevExpress.RealtorWorld.Xpf.Helpers;
-using DevExpress.RealtorWorld.Xpf.ViewModel;
 using ViewsRegistration = QApp.View.ViewsRegistration;
 using ModulesRegistration = QApp.ViewModel.ModulesRegistration;
 
