@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -60,8 +61,7 @@ namespace Client
             this.webClient.DownloadProgressChanged += (s, e) =>
             {
                 var hint = e.UserState as ProgressHint;
-                if (hint == null)
-                    return;
+                Debug.Assert(hint != null);
 
                 hint.ProgressIndicator.AssignProgress(e.ProgressPercentage);
             };
@@ -69,34 +69,25 @@ namespace Client
             this.webClient.DownloadDataCompleted += (s, e) =>
             {
                 var hint = e.UserState as ProgressHint;
-                if (hint == null)
-                    return;
+                Debug.Assert(hint != null);
 
-                if (e.Cancelled || e.Error != null)
-                {
-                    if (File.Exists(hint.ArchiveFileName))
-                        File.Delete(hint.ArchiveFileName);
-                }
-                
-                hint.ProgressIndicator.SetCompletedStatus(e.Cancelled, e.Error);
-
-                this.exportEnded.Set();
                 try
                 {
-                    usbArchive.InsertPart(e.Result);
-                }
-                catch (Exception ex)
-                {
-                    
-                    throw ex;
-                }
+                    if (!e.Cancelled && e.Error == null)
+                        usbArchive.SaveArchive(e.Result);
 
-                    
- 
+                    hint.ProgressIndicator.SetCompletedStatus(e.Cancelled, e.Error);
 
-                if (EndOfExport != null)
+                    this.exportEnded.Set();
+
+                    if (EndOfExport != null)
+                    {
+                        EndOfExport();
+                    }
+                
+                }
+                catch (Exception)
                 {
-                    EndOfExport();
                 }
             };
 
