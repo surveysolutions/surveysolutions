@@ -1,21 +1,21 @@
-﻿using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿using System;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using RavenQuestionnaire.Core.Domain;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Commands.File
 {
-    public class DeleteFileCommand : ICommand
+    [Serializable]
+    [MapsToAggregateRootMethod(typeof(FileAR), "DeleteFile")]
+    public class DeleteFileCommand : CommandBase
     {
-        public DeleteFileCommand(string id, UserLight executor)
+        public DeleteFileCommand(Guid publicKey)
         {
-            Executor = executor;
-            Id = Utility.IdUtil.CreateFileId(id);
+            PublicKey = publicKey;
         }
+        [AggregateRootId]
+        public Guid PublicKey { get; private set; }
 
-        public string Id { get; private set; }
-
-        #region ICommand Members
-
-        public UserLight Executor { get; set; }
-
-        #endregion
     }
 }

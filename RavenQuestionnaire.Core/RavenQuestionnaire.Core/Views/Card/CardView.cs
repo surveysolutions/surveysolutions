@@ -15,13 +15,15 @@ namespace RavenQuestionnaire.Core.Views.Card
             PublicKey = doc.PublicKey;
             Title = doc.Title;
             Description = doc.Description;
-            Original = IdUtil.ParseId(doc.OriginalBase64);
-            Width = doc.Width;
-            Height = doc.Height;
+          /*  Original = String.Format("{0}.png", doc.PublicKey);
+            Thumb = String.Format("{0}_thumb.png", doc.PublicKey);*/
+           // Original = IdUtil.ParseId(doc.OriginalBase64);
+         /*   Width = doc.Width;
+            Height = doc.Height;*/
 
-            Thumb = IdUtil.ParseId(doc.ThumbnailBase);
-            ThumbHeight = doc.ThumbnailHeight;
-            ThumbWidth = doc.ThumbnailWidth;
+          //  Thumb = IdUtil.ParseId(doc.ThumbnailBase);
+           /* ThumbHeight = doc.ThumbnailHeight;
+            ThumbWidth = doc.ThumbnailWidth;*/
 
             QuestionId = questionPublicKey;
         }
@@ -29,12 +31,12 @@ namespace RavenQuestionnaire.Core.Views.Card
         public Guid PublicKey { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string Original { get; set; }
-        public string Thumb { get; set; }
-        public int Width { get; set; }
+       /* public string Original { get; set; }
+        public string Thumb { get; set; }*/
+     /*   public int Width { get; set; }
         public int Height { get; set; }
         public int ThumbWidth { get; set; }
-        public int ThumbHeight { get; set; }
+        public int ThumbHeight { get; set; }*/
         public Guid QuestionId { get; set; }
     }
 }

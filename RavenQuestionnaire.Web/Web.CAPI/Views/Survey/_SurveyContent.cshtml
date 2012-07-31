@@ -49,8 +49,8 @@
             <ul class="gallery">
                 @foreach (CardView card in question.Cards)
                 {
-                    <li><a href="@Url.Action("Images", "Resource", new { id = card.Original })" rel="external">
-                        <img src="@Url.Action("Images", "Resource", new { id = card.Thumb })" alt="@card.Title" /></a></li>
+                    <li><a href="@Url.Action("Images", "Resource", new { id = card.PublicKey })" rel="external">
+                        <img src="@Url.Action("Thumb", "Resource", new { id = card.PublicKey })" alt="@card.Title" /></a></li>
                 }
             </ul>
         </div>

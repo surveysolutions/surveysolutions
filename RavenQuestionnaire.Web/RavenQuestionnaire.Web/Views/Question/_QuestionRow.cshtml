@@ -23,7 +23,7 @@
             {
                 <li class="span2" id="image@(i.PublicKey)">
                     <div class="thumbnail">
-                        <img src="@Url.Action("Images", "Resource", new { id = i.Thumb })" alt="@i.Title" />
+                        <img src="@Url.Action("Thumb", "Resource", new { id = i.PublicKey })" alt="@i.Title" />
                         <div class="caption">
                             @using (Ajax.BeginForm("DeleteCard", "Question", new AjaxOptions() { HttpMethod = "Post", OnComplete = string.Format("$('#image{0}').remove()",i.PublicKey), Confirm = "Are you sure?" }))
                             {
