@@ -19,7 +19,7 @@ namespace Web.CAPI.Controllers
         [HttpGet]
         public ActionResult Images(string id)
         {
-            Byte[] fileBytes = fileStorageService.RetrieveFile(id);
+            var fileBytes = fileStorageService.RetrieveFile(id).Content;
             return File(fileBytes, "image/png");
         }
 

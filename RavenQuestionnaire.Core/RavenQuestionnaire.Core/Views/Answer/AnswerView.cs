@@ -18,7 +18,6 @@ namespace RavenQuestionnaire.Core.Views.Answer
         public int Index { get; set; }
         public string AnswerValue { get; set; }
         public string AnswerImage { get; set; }
-        public CardView Image { get; set; }
         public bool Mandatory { get; set; }
         public AnswerType AnswerType { get; set; }
         public string NameCollection { get; set; }
@@ -32,12 +31,11 @@ namespace RavenQuestionnaire.Core.Views.Answer
             this.PublicKey = doc.PublicKey;
             this.Title = doc.AnswerText;
             this.AnswerValue = GetAnswerValue(doc.AnswerValue);
+            this.AnswerImage = doc.AnswerImage;
             this.Mandatory = doc.Mandatory;
             this.AnswerType = doc.AnswerType;
             this.Parent = questionPublicKey;
             this.NameCollection = doc.NameCollection;
-            if (doc.Image != null)
-                Image = new CardView(PublicKey, doc.Image);
         }
 
         public AnswerView(Guid questionPublicKey)

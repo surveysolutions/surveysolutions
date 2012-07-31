@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using Kaliko.ImageLibrary;
 using Kaliko.ImageLibrary.Filters;
 using NLog;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.File;
@@ -13,6 +15,7 @@ using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.File;
+using LogManager = NLog.LogManager;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -35,24 +38,31 @@ namespace RavenQuestionnaire.Web.Controllers
     public class ResourceController : Controller
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private ICommandInvoker commandInvoker;
+       // private ICommandInvoker commandInvoker;
+        private ICommandService commandService;
         private IViewRepository viewRepository;
         private IFileStorageService fileStorageService;
 
-        public ResourceController(IFileStorageService fileStorageService, ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public ResourceController(IFileStorageService fileStorageService/*, ICommandInvoker commandInvoker*/, IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
+           // this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
             this.fileStorageService = fileStorageService;
+            this.commandService = NcqrsEnvironment.Get<ICommandService>();
         }
 
         [HttpGet]
         public ActionResult Images(string id)
         {
-            Byte[] fileBytes = fileStorageService.RetrieveFile(id);
+            var fileBytes = fileStorageService.RetrieveFile(id).Content;
             return File(fileBytes, "image/png");
         }
-
+        [HttpGet]
+        public ActionResult Thumb(string id)
+        {
+            var fileBytes = fileStorageService.RetrieveThumb(id).Content;
+            return File(fileBytes, "image/png");
+        }
         public ActionResult Index(FileBrowseInputModel input)
         {
             var model = viewRepository.Load<FileBrowseInputModel, FileBrowseView>(input);
@@ -63,8 +73,8 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             try
             {
-                var command = new UpdateFileMetaCommand(meta.Id, meta.Title, meta.Description, GlobalInfo.GetCurrentUser());
-                commandInvoker.Execute(command);
+                var command = new UpdateFileMetaCommand(Guid.Parse(meta.Id), meta.Title, meta.Description);
+                commandService.Execute(command);
                 return Json(new { message = "saved" });
             }
             catch(Exception ex)
@@ -82,11 +92,12 @@ namespace RavenQuestionnaire.Web.Controllers
         [HttpGet]
         public ActionResult Delete(string id)
         {
-            var filename = id;
+       //     var filename = id;
 
             try
             {
-                commandInvoker.Execute(new DeleteFileCommand(id, GlobalInfo.GetCurrentUser()));
+
+                commandService.Execute(new DeleteFileCommand(Guid.Parse(id)));
             }
             catch (Exception exception)
             {
@@ -133,25 +144,21 @@ namespace RavenQuestionnaire.Web.Controllers
                 var title = request["title"];
                 var desc = request["desc"];
                 var file = request.Files[i];
+                var command = new UploadFileCommand(Guid.NewGuid(), title, desc,
+                                                    file.InputStream);
+           
+                commandService.Execute(command);
 
+                file.InputStream.Position = 0;
                 var image = new KalikoImage(file.InputStream);
-                int thumbWidth, thumbHeight, origWidth, origHeight;
+                int thumbWidth, thumbHeight;
                 var thumbData = ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
-                var origData = ResizeImage(image, 1024, 768, out origWidth, out origHeight);
-
-                var command = new UploadFileCommand(title, desc,
-                                                    thumbData, thumbWidth,
-                                                    thumbHeight,
-                                                    origData, origWidth, origHeight,
-                                                    GlobalInfo.GetCurrentUser());
-                commandInvoker.Execute(command);
-                thumbData.Position = 0;
                 var bytes = new byte[thumbData.Length];
-                origData.Read(bytes, 0, (int)thumbData.Length);
+                thumbData.Read(bytes, 0, (int)thumbData.Length);
                 statuses.Add(new ViewDataUploadFilesResult
                                  {
                                      name = file.FileName,
-                                     size = (int)origData.Length,
+                                     size = (int)thumbData.Length,
                                      type = file.ContentType,
                                      thumbnail_url = @"data:image/png;base64," + Convert.ToBase64String(bytes),
                                      title = title,

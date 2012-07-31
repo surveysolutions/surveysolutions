@@ -275,7 +275,6 @@
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.client.js" />
-    <Compile Include="Utils\LoadImagesAttribute.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

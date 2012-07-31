@@ -11,12 +11,12 @@
             <b>= </b>
         }
         @Html.DisplayFor(modelItem => Model.Title)
-        @if (Model.AnswerType == AnswerType.Image && Model.Image!=null)
+        @if (Model.AnswerType == AnswerType.Image )
         {
-            var i = Model.Image;
-            <div class="span2" id="image@(i.PublicKey)">
+           
+            <div class="span2" id="image@(Model.AnswerImage)">
                 <div class="thumbnail">
-                    <img src="@Url.Action("Images", "Resource", new { id = i.Thumb })" alt="@i.Title" />
+                    <img src="@Url.Action("Thumb", "Resource", new { id = Model.AnswerImage })" alt="@Model.Title" />
                 </div>
             </div>
         }

@@ -12,6 +12,10 @@ namespace RavenQuestionnaire.Core.Views.ClientSettings
         {
             this.PublicKey = doc.PublicKey;
         }
+        public ClientSettingsView(Guid key)
+        {
+            this.PublicKey = key;
+        }
 
         public Guid PublicKey { get; set; }
     }

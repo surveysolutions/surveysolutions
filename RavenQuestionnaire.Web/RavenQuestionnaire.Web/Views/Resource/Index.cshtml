@@ -14,7 +14,7 @@
             <th></th>
             <th>Title </th>
             <th>Description </th>
-            <th>CreationDate </th>
+            @*<th>CreationDate </th>*@
             <th></th>
         </tr>
     </thead>
@@ -25,11 +25,11 @@
                 @using (Ajax.BeginForm("UpdateDesc", "Resource", new AjaxOptions() { HttpMethod = "Post" }))
                 {
                     <th class="span1">
-                        @Html.DisplayFor(modelItem => item.Id)
+                        @Html.DisplayFor(modelItem => item.FileName)
                     </th>
                     <td class="span2">
                         <div class="thumbnail">
-                            <img src="@Url.Action("Images", "Resource", new { id = item.Thumbnail })" alt="@item.Title" />
+                            <img src="@Url.Action("Thumb", "Resource", new { id = item.FileName})" alt="@item.Title" />
                         </div>
                     </td>
                     <td class="span2">
@@ -38,13 +38,13 @@
                     <td class="span3">
                         @Html.TextArea("Description", item.Description, new { @class = "hidden-input", rows = "5" })
                     </td>
-                    <td class="span2">
+                   @* <td class="span2">
                         @Html.DisplayFor(modelItem => item.CreationDate)
-                    </td>
+                    </td>*@
                     <td class="span2">
-                        @Html.Hidden("Id", item.Id)
+                        @Html.Hidden("Id", item.FileName)
                         @* @Html.ActionLink("Edit", "Manage", new { id = item.Id }, new { @class = "btn small " })*@
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-small btn-danger " })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.FileName }, new { @class = "btn btn-small btn-danger " })
                         <button class="btn btn-primary" type="submit">Save changes</button>
                     </td>
                 }
