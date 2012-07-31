@@ -77,15 +77,13 @@ namespace RavenQuestionnaire.Core.Entities
             }
         }
 
-        protected void UpdateAnswerList( IEnumerable<Answer> answers, AbstractQuestion question)
+        protected void UpdateAnswerList(IEnumerable<Answer> answers, AbstractQuestion question)
         {
             if (answers != null && answers.Any())
             {
                 question.Children.Clear();
                 foreach (Answer answer in answers)
-                {
                     question.Add(answer, question.PublicKey);
-                }
             }
         }
 
@@ -100,13 +98,7 @@ namespace RavenQuestionnaire.Core.Entities
         {
             if (Move(root.Children, itemPublicKey, groupKey, after))
                 return true;
-
-            foreach (IComposite group in root.Children)
-            {
-                if (MoveItem(group, itemPublicKey, groupKey, after))
-                    return true;
-            }
-            return false;
+            return root.Children.Any(@group => MoveItem(group, itemPublicKey, groupKey, after));
         }
 
         protected bool Move(List<IComposite> groups, Guid itemPublicKey, Guid? groupKey, Guid? after)
