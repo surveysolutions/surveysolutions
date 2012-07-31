@@ -15,12 +15,11 @@ namespace RavenQuestionnaire.Core.Domain
     {
     //    private FileDescription innerDocument=new FileDescription();
         private IFileStorageService storage = NcqrsEnvironment.Get<IFileStorageService>();
-        private const string thumbFormat = "{0}_thumb";
+       
         public FileAR()
         {
         }
-        public FileAR(Guid publicKey, string title, string description,  int originalWidth, 
-            int originalHeight, int thumbWidth, int thumbHeight, string originalFile, string thumbFile)
+        public FileAR(Guid publicKey, string title, string description, string originalFile)
             : base(publicKey)
         {
             ApplyEvent(new FileUploaded
@@ -28,12 +27,7 @@ namespace RavenQuestionnaire.Core.Domain
                 PublicKey = publicKey,
                 Title = title,
                 Description = description,
-                OriginalFile = originalFile,
-                OriginalHeight = originalHeight,
-                OriginalWidth = originalWidth,
-                ThumbFile = thumbFile,
-                ThumbHeight = thumbHeight,
-                ThumbWidth = thumbWidth
+                OriginalFile = originalFile
             });
         }
         protected void OnFileUploaded(FileUploaded e)
@@ -45,14 +39,12 @@ namespace RavenQuestionnaire.Core.Domain
                     PublicKey = e.PublicKey.ToString(),
                     Content = original,
                     Description = e.Description,
-                    Height = e.OriginalHeight,
-                    Title = e.Title,
-                    Width = e.OriginalWidth
+                    Title = e.Title
                 };
                 storage.StoreFile(originalFile);
 
             }
-            using (var thumb = FromBase64(e.ThumbFile))
+        /*    using (var thumb = FromBase64(e.ThumbFile))
             {
                 var tumbFile = new FileDescription()
                 {
@@ -63,7 +55,7 @@ namespace RavenQuestionnaire.Core.Domain
                 };
                 storage.StoreFile(tumbFile);
               //  attachments.Store(tumbFile, evnt.Payload.ImagePublicKey);
-            }
+            }*/
         }
         public void UpdateFileMeta(string title, string description)
         {
@@ -80,13 +72,13 @@ namespace RavenQuestionnaire.Core.Domain
         public void OnFileDeleted(FileDeleted e)
         {
             storage.DeleteFile(e.PublicKey.ToString());
-            storage.DeleteFile(string.Format(thumbFormat, e.PublicKey));
+         //   storage.DeleteFile(string.Format(thumbFormat, e.PublicKey));
         }
-
         protected MemoryStream FromBase64(string text)
         {
             byte[] raw = Convert.FromBase64String(text);
             return new MemoryStream(raw);
         }
+       
     }
 }

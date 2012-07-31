@@ -104,14 +104,12 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (file != null)
                 {
-                    var image = new KalikoImage(file.InputStream);
+                  /*  var image = new KalikoImage(file.InputStream);
                     int thumbWidth, thumbHeight, origWidth, origHeight;
                     var thumbData = ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
-                    var origData = ResizeImage(image, 1024, 768, out origWidth, out origHeight);
+                    var origData = ResizeImage(image, 1024, 768, out origWidth, out origHeight);*/
                     var imageKey = Guid.NewGuid();
-                    commandService.Execute(new UploadFileCommand(imageKey, model.Title, model.Desc, thumbData,
-                                                                 thumbWidth, thumbHeight, origData, origWidth,
-                                                                 origHeight));
+                    commandService.Execute(new UploadFileCommand(imageKey, model.Title, model.Desc, file.InputStream));
                     commandService.Execute(new UploadImageCommand(model.PublicKey, Guid.Parse(model.QuestionnaireId),
                                                                   model.Title, model.Desc, imageKey));
 

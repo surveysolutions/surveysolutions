@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using Kaliko.ImageLibrary;
+using Kaliko.ImageLibrary.Filters;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Json.Linq;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Services
 {
@@ -22,6 +21,7 @@ namespace RavenQuestionnaire.Core.Services
             Attachment a = documentStore.DatabaseCommands.GetAttachment(file.PublicKey);
             if (a == null)
             {
+              
               /*  using (MemoryStream theMemStream = new MemoryStream())
                 {
 
@@ -31,14 +31,37 @@ namespace RavenQuestionnaire.Core.Services
                                                                      {
                                                                          {"PublicKey", file.PublicKey},
                                                                          {"Description", file.Description},
-                                                                         {"Height", file.Height},
-                                                                         {"Title", file.Title},
-                                                                         {"Width", file.Width}
+                                                                         {"Title", file.Title}
+                                                                     });
+                file.Content.Position = 0;
+                var image = new KalikoImage(file.Content);
+                int thumbWidth, thumbHeight;
+                var thumbData = ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
+                documentStore.DatabaseCommands.PutAttachment(GetThumbName(file.PublicKey), null, thumbData,
+                                                                 new RavenJObject
+                                                                     {
+                                                                         {"PublicKey", GetThumbName(file.PublicKey)}
                                                                      });
                // }
             }
         }
+        private MemoryStream ResizeImage(KalikoImage image, int width, int height, out int newWidth, out int newHeight)
+        {
+            var thumb = image.GetThumbnailImage(width, height, ThumbnailMethod.Fit);
+            thumb.ApplyFilter(new UnsharpMaskFilter(1.4, 0.32));
 
+            var ms = new MemoryStream();
+            thumb.SavePng(ms, 80);
+            ms.Position = 0;
+
+            //    var thumbData = new byte[ms.Length];
+            //    ms.Read(thumbData, 0, thumbData.Length);
+
+            newHeight = thumb.Height;
+            newWidth = thumb.Width;
+
+            return ms;
+        }
    /*     public void StoreImage(Stream image, string title, string description)
         {
             throw new NotImplementedException();
@@ -54,11 +77,9 @@ namespace RavenQuestionnaire.Core.Services
 
 
             file.Content = a.Data();
-            file.PublicKey =a.Metadata["PublicKey"].Value<string>();
+            file.PublicKey = filename;
             file.Description = a.Metadata["Description"].Value<string>();
             file.Title = a.Metadata["Description"].Value<string>();
-            file.Height = a.Metadata["Height"].Value<int>();
-            file.Width = a.Metadata["Width"].Value<int>();
             return file;
              
             //return a.Data;
@@ -66,7 +87,7 @@ namespace RavenQuestionnaire.Core.Services
 
         public FileDescription RetrieveThumb(string filename)
         {
-            return RetrieveFile(string.Format("{0}_thumb", filename));
+            return RetrieveFile(GetThumbName(filename));
         }
 
         //public List<RavenJObject> RetrieveEventDocuments()
@@ -80,6 +101,11 @@ namespace RavenQuestionnaire.Core.Services
         public void DeleteFile(string filename)
         {
             documentStore.DatabaseCommands.DeleteAttachment(filename, null);
+            documentStore.DatabaseCommands.DeleteAttachment(GetThumbName(filename), null);
+        }
+        private string GetThumbName(string fileName)
+        {
+            return string.Format("{0}_thumb", fileName);
         }
     }
 }

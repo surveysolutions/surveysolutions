@@ -11,27 +11,21 @@ namespace RavenQuestionnaire.Core.Commands.File
     [MapsToAggregateRootConstructor(typeof(FileAR))]
     public class UploadFileCommand : CommandBase
     {
-        protected UploadFileCommand(Guid publicKey, string title, string desc, int thumbWidth, int thumbHeight, int origWidth, int origHeight)
+        protected UploadFileCommand(Guid publicKey, string title, string desc)
         {
             PublicKey = publicKey;
             Description = desc;
             Title = title;
-            OriginalWidth = origWidth;
-            OriginalHeight = origHeight;
-            ThumbHeight = thumbHeight;
-            ThumbWidth = thumbWidth;
         }
-        public UploadFileCommand(Guid publicKey, string title, string desc, Stream thumbData, int thumbWidth, int thumbHeight, Stream origData, int origWidth, int origHeight) :
-            this(publicKey,title, desc, thumbWidth, thumbHeight, origWidth, origHeight)
+        public UploadFileCommand(Guid publicKey, string title, string desc,  Stream origData) :
+            this(publicKey,title, desc)
         {
             OriginalFile = ToBase64(origData);
-            ThumbFile = ToBase64(thumbData);
         }
-        public UploadFileCommand(Guid publicKey, string title, string desc, string thumbData, int thumbWidth, int thumbHeight, string origData, int origWidth, int origHeight) :
-            this(publicKey,title, desc, thumbWidth, thumbHeight, origWidth, origHeight)
+        public UploadFileCommand(Guid publicKey, string title, string desc,string origData) :
+            this(publicKey,title, desc)
         {
             OriginalFile = origData;
-            ThumbFile = thumbData;
         }
         protected string ToBase64(Stream stream)
         {
@@ -54,17 +48,7 @@ namespace RavenQuestionnaire.Core.Commands.File
 
         public string Description { get;  set; }
 
-        public int OriginalWidth { get;  set; }
-
-        public int OriginalHeight { get;  set; }
-
-        public int ThumbWidth { get;  set; }
-
-        public int ThumbHeight { get;  set; }
-
         public string OriginalFile { get; set; }
-
-        public string ThumbFile { get; set; }
 
     }
 }

@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Web.App_Start
         
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
-            NcqrsEnvironment.SetDefault<IFileStorageService>(new RavenFileStorageService(kernel.Get<IDocumentStore>()));
+            NcqrsEnvironment.SetDefault<IFileStorageService>(kernel.Get<IFileStorageService>());
             var bus = new InProcessEventBus(true);
             RegisterEventHandlers(bus, kernel);
            

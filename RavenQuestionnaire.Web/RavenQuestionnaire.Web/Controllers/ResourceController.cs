@@ -144,25 +144,21 @@ namespace RavenQuestionnaire.Web.Controllers
                 var title = request["title"];
                 var desc = request["desc"];
                 var file = request.Files[i];
-
-                var image = new KalikoImage(file.InputStream);
-                int thumbWidth, thumbHeight, origWidth, origHeight;
-                var thumbData = ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
-                var origData = ResizeImage(image, 1024, 768, out origWidth, out origHeight);
-
                 var command = new UploadFileCommand(Guid.NewGuid(), title, desc,
-                                                    thumbData, thumbWidth,
-                                                    thumbHeight,
-                                                    origData, origWidth, origHeight);
+                                                    file.InputStream);
            
                 commandService.Execute(command);
-                thumbData.Position = 0;
+
+                file.InputStream.Position = 0;
+                var image = new KalikoImage(file.InputStream);
+                int thumbWidth, thumbHeight;
+                var thumbData = ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
                 var bytes = new byte[thumbData.Length];
                 thumbData.Read(bytes, 0, (int)thumbData.Length);
                 statuses.Add(new ViewDataUploadFilesResult
                                  {
                                      name = file.FileName,
-                                     size = (int)origData.Length,
+                                     size = (int)thumbData.Length,
                                      type = file.ContentType,
                                      thumbnail_url = @"data:image/png;base64," + Convert.ToBase64String(bytes),
                                      title = title,

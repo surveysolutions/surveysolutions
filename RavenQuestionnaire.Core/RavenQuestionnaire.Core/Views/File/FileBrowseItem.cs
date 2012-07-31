@@ -11,23 +11,18 @@ namespace RavenQuestionnaire.Core.Views.File
         public string Description { get; set; }
         public string FileName { get; set; }
        
-        public int Width { get; set; }
-        public int Height { get; set; }
 
 
         public FileBrowseItem()
         {
         }
 
-        public FileBrowseItem(/*Guid id,*/ string title, string description, string fileName,
-            int width, int height)
+        public FileBrowseItem(/*Guid id,*/ string title, string description, string fileName)
         {
          //   Id = id;
             Title = title;
             Description = description;
             FileName = fileName;
-            Width = width;
-            Height = height;
         }
 
         public static FileBrowseItem New()

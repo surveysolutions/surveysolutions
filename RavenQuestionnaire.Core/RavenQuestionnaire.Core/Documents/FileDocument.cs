@@ -16,9 +16,6 @@ namespace RavenQuestionnaire.Core.Documents
 
         public string Description { get; set; }
 
-        public int Width { get; set; }
-
-        public int Height { get; set; }
         
         public Stream Content { get; set; }
 
