@@ -41,11 +41,11 @@ namespace Client
 
         #region Private Members
 
-        private IStatusIndicator pleaseWait;
+        internal IStatusIndicator pleaseWait;
         private readonly string ArchiveFileNameMask = "backup-{0}.zip";
         private WebClient webClient = new WebClient();
         private AutoResetEvent exportEnded = new AutoResetEvent(false);
-        private Uri exportURL = new Uri(Settings.Default.DefaultUrl + "/ImportExport/Export");
+        private Uri exportURL = new Uri(Settings.Default.DefaultUrl + "/Synchronizations/Export");
         private List<string> cachedDrives;
         private UsbFileArchive usbArchive;
 
@@ -72,27 +72,30 @@ namespace Client
                 Debug.Assert(hint != null);
 
                 Exception error = e.Error;
-
                 try
                 {
                     if (!e.Cancelled && error == null)
                         usbArchive.SaveArchive(e.Result);
+
                 }
                 catch (Exception ex)
                 {
                     error = ex;
+                    //hint.ProgressIndicator.SetCompletedStatus(false, ex);
+                
                 }
                 finally
                 {
-                    hint.ProgressIndicator.SetCompletedStatus(false, error);
+                    hint.ProgressIndicator.SetCompletedStatus(e.Cancelled, error); 
 
                     this.exportEnded.Set();
 
                     if (EndOfExport != null)
                     {
                         EndOfExport();
-                    }
+                    }   
                 }
+                
             };
 
             FlushDriversList();

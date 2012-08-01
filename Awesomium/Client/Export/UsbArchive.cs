@@ -80,8 +80,10 @@ namespace Client
 
         private DriveInfo usbDriver;
         private string fileName = null;
+        private string dummyFileName = null;
         private Header header = new Header();
-
+        private const long MaxSize = 504857600;
+                                    
         internal UsbFileArchive(string driver)
         {
             var drives = DriveInfo.GetDrives();
@@ -92,6 +94,7 @@ namespace Client
                 {
                     this.usbDriver = d;
                     this.fileName = this.usbDriver.Name + Path.DirectorySeparatorChar + "UsbArchive.capi";
+                    this.dummyFileName = this.usbDriver.Name + Path.DirectorySeparatorChar + "dummy";
 
                     break;
                 }
@@ -101,14 +104,28 @@ namespace Client
                 throw new Exception(string.Format("USB driver with name {0} not found", driver));
         }
 
-        private FileStream CreateFile()
+        public FileStream CreateFile()
         {
             var space = this.usbDriver.TotalFreeSpace;
+            var filespace = (space < MaxSize) ? space : MaxSize;
+            int i = 0;
+            while (space>filespace)
+            {
+                
+                i++;
+                var dummyStream = File.Create(this.dummyFileName + i + ".capi", 1024, FileOptions.WriteThrough);
+                if (space>2*MaxSize)
+                    dummyStream.SetLength(MaxSize);
+                else
+                    dummyStream.SetLength(space-MaxSize);
 
+                dummyStream.Close();
+                space = this.usbDriver.TotalFreeSpace;
+            }
             var fileStream = File.Create(this.fileName, this.header.ByteBuffer.Length * 4, FileOptions.WriteThrough);
 
             fileStream.Write(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);
-            fileStream.SetLength(space);
+            fileStream.SetLength(filespace);
 
             return fileStream;
         }
@@ -123,6 +140,7 @@ namespace Client
 
         public void SaveArchive(byte[] data)
         {
+           
             try
             {
                 var fileStream = File.Exists(this.fileName) ? ReadHeader() : CreateFile();
