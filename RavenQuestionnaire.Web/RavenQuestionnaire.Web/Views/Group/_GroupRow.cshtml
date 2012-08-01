@@ -25,7 +25,7 @@
             @Html.ActionLink("Add Group", "Create", "Group", new { id = Model.QuestionnaireId, parentGroup = Model.PublicKey }, new { @class = "btn btn-primary btn-mini" })
             @Html.ActionLink("Edit", "Edit", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new { @class = "btn btn-primary btn-mini" })
             @Html.ActionLink("Delete", "Delete", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new { @class = "btn btn-primary btn-mini" })
-            <a href="#" onclick="OpenMoveDialog('@Model.Title','@Model.PublicKey')" class="btn btn-danger btn-mini">Move</a>
+            @Html.ActionLink("Move", "Move", "Group", new { PublicKeyGroup=Model.PublicKey, Model.QuestionnaireId }, new { @class = "btn btn-danger btn-mini" })            
         </div>
     </div>
     <div>

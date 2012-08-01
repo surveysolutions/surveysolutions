@@ -25,6 +25,21 @@ function ExportStarted() {
     $('#btnExport').href = "@Url.Action('Export', 'ImportExport')";
 }
 
+function GetCheck(i, j) {
+    $.get(i, function (data) {
+             try {
+                   if (data.message != null && data.message == "Error") {
+                   $('#popup').click();
+                 }
+                 else {
+                        window.location = j;
+                 }
+            } catch (e) {
+                window.location = j;
+            }
+        });
+}
+
 function sinchronizationCompleted(data, status, xhr) {
     $('a#btnSync span span').html('Synchronize');
     $('a#btnSync').removeClass('ui-btn-active');
@@ -204,7 +219,7 @@ function PropagatedGroup(data, status, xhr) {
             newGroup.insertAfter(container);
         }
 
-        newGroup.trigger('pagecreate');
+     //   newGroup.trigger('pagecreate');
         $(parent).listview('refresh');
 
         updateCounter();
@@ -307,12 +322,6 @@ function updateCounter() {
         });
 
     },
-    //jquery extension method to handle exceptions and log them
-    $.fn.numericSubmit = function () {
-        var input = this.find('input[type=number], input[type=range]');
-        var target = input.parent();
-        target.find('.ui-slider a').bind('vmouseup', function () { $($(this).parent().siblings('input')[0].form).submit(); });
-    },
     $.fn.hideInputsWithVirtualKeyboard = function () {
         var virtualIcons = this.find('a[open-virtual-keyboar=true]');
         virtualIcons.each(function () {
@@ -327,108 +336,145 @@ function updateCounter() {
             });
 
             button.parent().bind('tap', function () {
-                targetInput.focus();
                 targetInput.click();
             });
 
         });
     },
     $.fn.createKeyBoard = function (layout) {
-        var k = this.find('input[draw-key-board=true]');
-        k.removeAttr("draw-key-board");
-        var kbOptions = {
-            keyBinding: 'mousedown touchstart',
-            position: {
-                of: null, // optional - null (attach to input/textarea) or a jQuery object (attach elsewhere)
-                my: 'center top',
-                at: 'center top',
-                at2: 'center bottom' // used when "usePreview" is false (centers the keyboard at the bottom of the input/textarea)
-            },
-            autoAccept: true,
-            css: {
-                input: '',
-                container: '',
-                buttonDefault: '',
-                buttonHover: '',
-                buttonActive: '',
-                buttonDisabled: ''
-            }
-        };
+        
+       
+        var keyboardInputs = this.find('input[draw-key-board=true][type=text]');
+        var numericInputs = this.find('input[draw-key-board=true][type!=text]');
+       
+    //    keyboardInputs.add(numericInputs).removeAttr("draw-key-board");
 
-        k.each(function () {
-            var jInput = $(this);
-            var additionalOptions = {};
-            if (jInput.attr('type') == 'text') {
-                additionalOptions = { layout: 'qwertyNoEnter', min_width: '888px' };
-            }
-            else {
-                additionalOptions = { layout: 'numOnly', min_width: null };
-            }
-            var options = $.extend(kbOptions, additionalOptions);
-            jInput.keyboard(options);
+        createKeyBoard({ layout: 'qwertyNoEnter', min_width: '888px' }, "dummyTxtKeyBoard",keyboardInputs);
+       
+        createKeyBoard({ layout: 'numOnly', min_width: null }, "dummyNumericKeyBoard", numericInputs);
+       
+        function createKeyBoard(options, name, inputs) {
 
-        }).addMobile({
+            var input = initInput(options, name);
+            input.bind('accepted.keyboard', function(event) {
+               // var jInput = $(this);
+                var target = $('#' + input.attr('target-input'));
+                target.val(input.val());
+                input.attr('target-input', '');
+                var keyboard = input.getkeyboard();
+                keyboard.$preview.val('');
+                target.change();
+                target.closest("form").submit();
+            });
+            input.bind('visible.keyboard', function(event) {
+               // var jInput = $(this);
+                var target = $('#' + input.attr('target-input'));
+                var keyboard = input.getkeyboard();
+                keyboard.$preview.val(target.val());
+        //        alert(input.val());
+                keyboard.$preview.caretToEnd();
+            });
+            inputs.click(function() {
+             /*   if(input.attr('target-input') && input.attr('target-input')!='')
+                    return;*/
+                input.attr('target-input', this.id);
+                input.focus();
+             //   input.click();
+               
+            });
+            return input;
+        }
+
+        function initInput(options, name) {
+            var keyBoardInited = $('#' + name);
+            if (keyBoardInited.length > 0)
+                return keyBoardInited;
+            var input = $('<input>').attr({
+                type: 'text',
+                style:'display:none',
+                id: name,
+                name: name
+            });
+            var kbOptions = {
+                keyBinding: 'mousedown touchstart',
+                position: {
+                    of: null, // optional - null (attach to input/textarea) or a jQuery object (attach elsewhere)
+                    my: 'center top',
+                    at: 'center top',
+                    at2: 'center bottom' // used when "usePreview" is false (centers the keyboard at the bottom of the input/textarea)
+                },
+                autoAccept: true,
+                css: {
+                    input: '',
+                    container: '',
+                    buttonDefault: '',
+                    buttonHover: '',
+                    buttonActive: '',
+                    buttonDisabled: ''
+                }
+            };
+            var extendedOptions = $.extend({ }, kbOptions, options);
+            var mobileOptions = {
             // keyboard wrapper theme
-            container: { theme: 'c' },
-            // theme added to all regular buttons
-            buttonMarkup: { theme: 'c', shadow: 'true', corners: 'false' },
-            // theme added to all buttons when they are being hovered
-            buttonHover: { theme: 'c' },
-            // theme added to action buttons (e.g. tab, shift, accept, cancel);
-            // parameters here will override the settings in the buttonMarkup
-            buttonAction: { theme: 'b' },
-            // theme added to button when it is active (e.g. shift is down)
-            // All extra parameters will be ignored
-            buttonActive: { theme: 'e' }
-        });
-        k.bind('accepted.keyboard', function (event) {
-            $(this).change();
-            $(this.form).submit();
-        });
-        k.bind('visible.keyboard', function (event) {
-            var input = $(this);
-            var keyboard = input.getkeyboard();
-            keyboard.$preview.caretToEnd();
-        });
+                container: { theme: 'c' },
+                // theme added to all regular buttons
+                buttonMarkup: { theme: 'c', shadow: 'true', corners: 'false' },
+                // theme added to all buttons when they are being hovered
+                buttonHover: { theme: 'c' },
+                // theme added to action buttons (e.g. tab, shift, accept, cancel);
+                // parameters here will override the settings in the buttonMarkup
+                buttonAction: { theme: 'b' },
+                // theme added to button when it is active (e.g. shift is down)
+                // All extra parameters will be ignored
+                buttonActive: { theme: 'e' }
+            };
+            input.appendTo('body');
+            input.keyboard(extendedOptions).addMobile(mobileOptions);
+            return input;
+        }
     };
-    $.fn.initPage = function () {
+    $.fn.initPage = function() {
 
         this.createKeyBoard();
-        this.numericSubmit();
+     
         this.hideInputsWithVirtualKeyboard();
         this.disableAfterSubmit();
 
-        this.find('.dummy-scroll').each(function () {
+        
+        this.find('.dummy-scroll').each(function() {
             var scroll = new iScroll(this);
-            newScrolls.push(scroll);
+            scrolls.push(scroll);
+            // scroll.refresh();
         });
+        // this.focus();
+
     };
+  
+    
     $.fn.destroyPage = function () {
-        this.find('.dummy-scroll #scroller').each(function () {
-            for (var j = 0; j < scrolls.length; j++) {
-                if ($(scrolls[j].scroller).attr('class') == $(this).attr('class')) {
+        var currentScroll= this.find('.dummy-scroll #scroller')[0];
+        for (var j = 0; j < scrolls.length; j++) {
+                if (scrolls[j].scroller == currentScroll) {
+                    scrolls[j].destroy();
                     scrolls.splice(j, 1);
                 }
-            }
-        });
+        }
+      //  scrolls = new Array();
     };
 })(jQuery);
-var newScrolls = new Array();
-var scrolls = new Array();
+  var scrolls = new Array();
 $(document).ready(function () {
     var doc = $(document);
-    doc.find('#sidebar .dummy-scroll').each(function () {
+   /* doc.find('#sidebar .dummy-scroll').each(function() {
         var scroll = new iScroll(this);
         scroll.refresh();
-    });
-    doc.ajaxComplete(function () {
+    });*/
+      doc.ajaxComplete(function () {
         for (var i = 0; i < scrolls.length; i++) {
             scrolls[i].refresh();
         }
     });
-    for (var j = 0; j < scrolls.length; j++) {
-        scrolls[j].refresh();
-    }
+
     $('.next-question').live('click', function () {
         var id = $(this).attr('id').substr(4);
         var parent = $('#elem-' + id);
@@ -444,6 +490,11 @@ $(document).ready(function () {
             scrollToQuestion(next);
         }
     });
+    $('#CompleteLink').live('click', function () {
+        var link = $(this).attr('link');
+        var returnlink = $(this).attr('returnlink');
+        GetCheck(link,returnlink);
+    });
 });
 function scrollToQuestion(question) {
     var scrollContainer = $(question).offsetParent();
@@ -456,13 +507,11 @@ function scrollToQuestion(question) {
         }
     }
 }
-$(document).bind('pagebeforeshow', function () {
-    var doc = $('div:jqmData(id="main") > div:jqmData(role="page")');
-    newScrolls = [];
+$(document).bind('pagebeforeshow', function (event, data) {
+    var doc = $(event.target);
+   
     doc.initPage();
-    for (var j = 0; j < newScrolls.length; j++) {
-        scrolls.push(newScrolls[j]);
-    }
+    
     doc.focus();
 });
 $(document).bind('pagechange', function () {
@@ -487,15 +536,18 @@ $(document).bind('pagechange', function () {
         $(target).faderEffect();
         $('.scrollHere').removeClass('scrollHere');
     }
+    
+      for (var j = 0; j < scrolls.length; j++) {
+             scrolls[j].refresh();
+         }
 });
 
-$(document).bind('pagehide', function () {
-    $('.page-to-delete').remove();
-    var doc = $('#content_container');
+$(document).bind('pagehide', function (event, data) {
+   
+    var doc = $(data.prevPage);
     doc.destroyPage();
-    for (var j = 0; j < newScrolls.length; j++) {
-        scrolls.push(newScrolls[j]);
-    }
+ 
+    $('.page-to-delete').remove();
 });
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);

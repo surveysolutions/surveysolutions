@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -19,7 +20,7 @@ namespace Client
         {
             //copyJobSize = GetJobSize(Configuration.ProgramDirectory);
             InitializeComponent();
-
+            
             // since we are going to optimize resources and keep this form in memory the calls below are neccessary 
             // to activate the form in the main thread, while c-tor is called
             //Show();
@@ -108,6 +109,7 @@ namespace Client
                 this.progressBar.Invoke(new MethodInvoker(() => { this.progressBar.Value = progressPercentage; }));
             else
                 this.progressBar.Value = progressPercentage;
+            
         }
 
         /// <summary>
@@ -119,8 +121,15 @@ namespace Client
         public void SetCompletedStatus(bool canceled, Exception error)
         {
             if (canceled || error != null)
+            
             {
-                Dissapear(true);
+                if (canceled)
+                    SetStatus("Data export canceled");
+
+                else
+                    SetStatus("Data export error:"+error.Message);
+               
+                Dissapear(false);
                 return;
             }
 
@@ -129,5 +138,7 @@ namespace Client
         }
 
         #endregion
+
+       
     }
 }

@@ -10,10 +10,9 @@ namespace Client
     {
         internal class Header
         {
-            private int headerSize = 1024;
-            private int placeForSize = 4;
-            private int position = 0;
-            private int lenght = 0;
+            private const int HeaderSize = 1024;
+            private const int SizeHolderWidth = sizeof(int);
+
             private Byte[] headerBuffer;
 
             internal Byte[] ByteBuffer { get { return this.headerBuffer; } }
@@ -23,55 +22,68 @@ namespace Client
                 Init();
             }
 
+            /// <summary>
+            /// Offset of archive data from end of header
+            /// </summary>
+            internal int ArchivePosition 
+            { 
+                get 
+                {
+                    return BitConverter.ToInt32(this.headerBuffer, SizeHolderWidth);
+                } 
+            }
+
+            /// <summary>
+            /// Volume of archive data consumed
+            /// </summary>
+            internal int ArchiveSize
+            {
+                get
+                {
+                    return BitConverter.ToInt32(this.headerBuffer, SizeHolderWidth + SizeHolderWidth);
+                }
+            }
+
             private void Init()
             {
-                this.headerBuffer = new byte[headerSize];
-                this.headerBuffer[0] = 0x0A;
-                this.headerBuffer[1] = 0x0A;
-                this.headerBuffer[2] = 0x0A;
-                this.headerBuffer[3] = 0x0A;
-            }
-            internal int HeaderSize()
-            {
-                return headerSize;
-            }
-            internal int PlaceForSize()
-            {
-                return this.placeForSize;
+                this.headerBuffer = new byte[HeaderSize];
+
+                FormatHeader(0, 0);
             }
 
-            internal void FormTable(long pos, int size)
+            /// <summary>
+            /// Save info about archive block in the header
+            /// </summary>
+            /// <param name="pos"></param>
+            /// <param name="size"></param>
+            internal void FormatHeader(int pos, int size)
             {
-                this.headerBuffer = new byte[headerSize];
-                //Dictionary<int,int> table = new Dictionary<int, int>();
-                //table.Add(pos,size);
-                
+                byte[] headerInfo = BitConverter.GetBytes(HeaderSize);
                 byte[] posbytes = BitConverter.GetBytes(pos);
                 byte[] sizebytes = BitConverter.GetBytes(size);
-                for (int i = 0; i < posbytes.Length; i++)
-                    this.headerBuffer[i] = posbytes[i];
-                for (int i = 0; i < sizebytes.Length; i++)
-                    this.headerBuffer[posbytes.Length + i] = sizebytes[i];
-            }
 
+                System.Diagnostics.Debug.Assert(headerInfo.Length == SizeHolderWidth && posbytes.Length == SizeHolderWidth && sizebytes.Length == SizeHolderWidth);
 
+                int pointer = 0;
 
-            internal long GetPosition()
-            {
-                return this.position;
-            }
-            internal long GetLenght()
-            {
-                return this.lenght;
+                Array.Copy(headerInfo, 0, this.headerBuffer, pointer, headerInfo.Length);
+
+                pointer += headerInfo.Length;
+
+                Array.Copy(posbytes, 0, this.headerBuffer, pointer, posbytes.Length);
+
+                pointer += posbytes.Length;
+
+                Array.Copy(sizebytes, 0, this.headerBuffer, pointer, sizebytes.Length);
             }
         }
 
         private DriveInfo usbDriver;
-
-        private string fileName = "UsbArchive.capi";
-
-        private Header header = null;
-
+        private string fileName = null;
+        private string dummyFileName = null;
+        private Header header = new Header();
+        private const long MaxSize = 504857600;
+                                    
         internal UsbFileArchive(string driver)
         {
             var drives = DriveInfo.GetDrives();
@@ -81,156 +93,94 @@ namespace Client
                 if (d.Name == driver)
                 {
                     this.usbDriver = d;
+                    this.fileName = this.usbDriver.Name + Path.DirectorySeparatorChar + "UsbArchive.capi";
+                    this.dummyFileName = this.usbDriver.Name + Path.DirectorySeparatorChar + "dummy";
+
                     break;
                 }
             }
+
+            if (this.usbDriver == null)
+                throw new Exception(string.Format("USB driver with name {0} not found", driver));
         }
-        internal void CreateFile()
+
+        public FileStream CreateFile()
         {
-            var fullName = this.usbDriver.Name + Path.DirectorySeparatorChar + fileName;
-            var exists = File.Exists(fullName);
-            if (exists) File.Delete(fullName);
-            this.header = new Header();
             var space = this.usbDriver.TotalFreeSpace;
+            var filespace = (space < MaxSize) ? space : MaxSize;
+            int i = 0;
+            while (space>filespace)
+            {
+                
+                i++;
+                var dummyStream = File.Create(this.dummyFileName + i + ".capi", 1024, FileOptions.WriteThrough);
+                if (space>2*MaxSize)
+                    dummyStream.SetLength(MaxSize);
+                else
+                    dummyStream.SetLength(space-MaxSize);
 
-            var fileStream = File.Create(fullName, this.header.PlaceForSize(), FileOptions.WriteThrough);
-            fileStream.Write(BitConverter.GetBytes(this.header.HeaderSize()), 0,this.header.PlaceForSize());
-            fileStream.SetLength(space - 1);
-            fileStream.Close();
+                dummyStream.Close();
+                space = this.usbDriver.TotalFreeSpace;
+            }
+            var fileStream = File.Create(this.fileName, this.header.ByteBuffer.Length * 4, FileOptions.WriteThrough);
 
-            //fileStream = File.Open(fullName, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-            //var lastBytePosistion = exists ? fileStream.Length - 1 : space - 1;
+            fileStream.Write(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);
+            fileStream.SetLength(filespace);
 
-            //fileStream.Position = 0;
-            //byte[] bytes = BitConverter.GetBytes(this.header.HeaderSize());
-            //fileStream.Write(bytes, 0, this.header.PlaceForSize());
-            //fileStream.Position = this.header.PlaceForSize()+1;
-            //fileStream.Write(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);
-
-            //fileStream.Position = lastBytePosistion;
-            //fileStream.WriteByte(16);
-            //fileStream.Close();
+            return fileStream;
         }
 
-        public void InsertPart(byte[] data)
+        private FileStream ReadHeader()
         {
-            var fullName = this.usbDriver.Name + Path.DirectorySeparatorChar + fileName;
-            var exists = File.Exists(fullName);
-            if (this.header == null) this.header = new Header();
+            var fileStream = File.Open(this.fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            fileStream.Read(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);
 
-            if (!exists)
-            {
-                CreateFile();
-            }
-            else
-            {
-                ReadHeader();
-            }
+            return fileStream;
+        }
+
+        public void SaveArchive(byte[] data)
+        {
+           
             try
             {
-                var fileStream = File.Open(fullName, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-                if (this.header==null)this.header = new Header();
-                var position = this.header.GetPosition();
-                var lenght = this.header.GetLenght();
-                if (position!=0&&lenght!=0)
+                var fileStream = File.Exists(this.fileName) ? ReadHeader() : CreateFile();
+
+                int newPosition = this.header.ArchivePosition;
+
+                if (newPosition >= data.Length)
                 {
-                   
-                    if ((position -this.header.PlaceForSize() + this.header.HeaderSize()+1)>data.Length)
-                    {
-                        position = this.header.PlaceForSize() + this.header.HeaderSize() + 1;
-                    }
-                    else
-                    {
-                        position = position + lenght + 1;
-                    }
+                    // put data before existing archive
+                    newPosition = 0;
                 }
                 else
                 {
-                     position = this.header.PlaceForSize() + this.header.HeaderSize()+1;
+                    // put data after exsitinge archive
+                    newPosition += this.header.ArchiveSize;
                 }
-                fileStream.Position = position;
+
+                // step 1: write archive
+                fileStream.Position = newPosition + this.header.ByteBuffer.Length;
                 fileStream.Write(data, 0, data.Length);
-                this.header.FormTable(position, data.Length);
-                fileStream.Position = this.header.PlaceForSize() + 1;
+
+                // step 2: update archive placement info
+                this.header.FormatHeader(newPosition, data.Length);
+
+                fileStream.Position = 0;
                 fileStream.Write(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);
                 fileStream.Close();
             }
             catch (Exception exception)
             {
-                
                 throw exception;
             }
-            
-
         }
 
-        private void ReadHeader()
+        /// <summary>
+        /// Load archive from driver
+        /// </summary>
+        internal byte[] LoadArchive()
         {
-            var fullName = this.usbDriver.Name + Path.DirectorySeparatorChar + fileName;
-            var fileStream = File.Open(fullName, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-
-            byte[] sizebytes = new byte[this.header.PlaceForSize()];
-            fileStream.Read(sizebytes, 0, this.header.PlaceForSize());
-            int size = BitConverter.ToInt32(sizebytes, 0);
-            fileStream.Read(sizebytes, 0, 4);
-            int pos = BitConverter.ToInt32(sizebytes, 0);
-            fileStream.Read(sizebytes, 0, 4);
-            int lenght = BitConverter.ToInt32(sizebytes, 0);
-            fileStream.Close();
-        }
-
-        internal void UploadFile(bool forceCreation = false)
-        {
-            if (this.usbDriver == null)
-                return;
-
-            var fullName = this.usbDriver.Name + Path.DirectorySeparatorChar + fileName;
-            var exists = File.Exists(fullName);
-
-            if (exists)
-            {
-                if (forceCreation)
-                {
-                    File.Delete(fullName);
-                    exists = false;
-                }
-                else
-                {
-                }
-            }
-
-            this.header = new Header();
-            var space = this.usbDriver.TotalFreeSpace;
-
-            var fileStream = exists ?
-                File.Open(fullName, FileMode.Open, FileAccess.ReadWrite, FileShare.None) :
-                File.Create(fullName, 1024, FileOptions.WriteThrough);
-
-            if (!exists)
-            {
-                fileStream.SetLength(space - 1);
-                fileStream.Close();
-                return;
-            }
-
-
-            var lastBytePosistion = exists ? fileStream.Length - 1 : space - 1;
-
-            fileStream.Position = 0;
-            fileStream.Write(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);
-
-            fileStream.Position = lastBytePosistion;
-            fileStream.WriteByte(16);
-            fileStream.Close();
-        }
-
-
-        internal void LoadFile(string fileName)
-        {
-            var fullName = this.usbDriver.Name + Path.DirectorySeparatorChar + fileName;
-            if (!File.Exists(fullName))
-                return;
-
+            throw new Exception("Not implemented");
         }
     }
 }

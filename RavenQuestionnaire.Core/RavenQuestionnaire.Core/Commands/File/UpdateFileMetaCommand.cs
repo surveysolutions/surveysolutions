@@ -1,27 +1,27 @@
-﻿using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿using System;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using RavenQuestionnaire.Core.Domain;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Commands.File
 {
-    public class UpdateFileMetaCommand : ICommand
+    [Serializable]
+    [MapsToAggregateRootMethod(typeof (FileAR), "UpdateFileMeta")]
+    public class UpdateFileMetaCommand : CommandBase
     {
-        public UpdateFileMetaCommand(string id, string title, string desc, UserLight executor)
+        public UpdateFileMetaCommand(Guid publicKey, string title, string desc)
         {
-            Id = IdUtil.CreateFileId(id);
-            Executor = executor;
+            PublicKey = publicKey;
             Description = desc;
             Title = title;
         }
-        public string Id { get; set; }
+        [AggregateRootId]
+        public Guid PublicKey { get; set; }
 
         public string Title { get; private set; }
 
         public string Description { get; private set; }
-
-        #region ICommand Members
-
-        public UserLight Executor { get; set; }
-
-        #endregion
     }
 }

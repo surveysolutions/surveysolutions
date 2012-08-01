@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using RavenQuestionnaire.Core;
 using Ncqrs.Commanding.ServiceModel;
+using RavenQuestionnaire.Web.Models;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Views.Group;
@@ -82,10 +83,18 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public string Delete(Guid publicKey, string questionnaireId)
+        public ActionResult Delete(Guid publicKey, string questionnaireId)
         {
             commandService.Execute(new DeleteGroupCommand(publicKey, Guid.Parse(questionnaireId)));
-            return "";
+            return RedirectToAction("Details", "Questionnaire", new {id=questionnaireId});
+        }
+
+        [HttpGet]
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ActionResult Move(Guid PublicKeyGroup, Guid QuestionnaireId)
+        {
+            MoveItemModel model = new MoveItemModel() { publicKey = PublicKeyGroup, questionnaireId = QuestionnaireId };
+            return View("MoveQuestion", model);
         }
 
         #endregion

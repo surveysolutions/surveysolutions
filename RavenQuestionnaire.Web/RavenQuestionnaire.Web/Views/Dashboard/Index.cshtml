@@ -26,7 +26,7 @@
                     data-role="listview" data-split-icon="plus" data-split-theme="d">
                     @foreach (CQGroupItem group in Model.Groups)
  {
-     <li data-role="list-divider" data-theme="b" role="heading" class="divider">
+     <li data-role="list-divider" data-theme="b" role="heading" class="divider" >
         <a>@group.SurveyTitle <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
          @Html.ActionLink("New", "Participate", "CompleteQuestionnaire", new { id = group.SurveyId, mode = "Html5" }, new
                                                                                               {
