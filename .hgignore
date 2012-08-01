@@ -146,9 +146,5 @@ Awesomium/_ReSharper*
 Awesomium/Awesomium.NET CAPI Browser.6.0.ReSharper*
 RavenQuestionnaire.Web/Web.Headquarter/bin/*
 RavenQuestionnaire.Web/Web.Headquarter/obj/*
-Synchronization/DataEntryClient/DataEntryClient.csproj.user.rej
-RavenQuestionnaire.Web/RavenQuestionnaire.Web/RavenQuestionnaire.Web.csproj.rej
-RavenQuestionnaire.Core/RavenQuestionnaire.Core/EventHandlers/CompleteQuestionnaireBrowseItemDenormalizer.cs.rej
-RavenQuestionnaire.Core/RavenQuestionnaire.Core/Domain/CompleteQuestionnaireAR.cs.rej
-QApp/ViewModel/CompletedQuestionnaires.cs.rej
-Awesomium/Awesomium.NET CAPI Browser.sln.docstates.suo
+Awesomium/ipch/awesomium-68c8a7cf/awesomium-d4608383.ipch
+Awesomium/Awesomium.NET CAPI Browser.sdf
