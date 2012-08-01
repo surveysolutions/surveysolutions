@@ -25,12 +25,12 @@ namespace Client
             /// <summary>
             /// Offset of archive data from end of header
             /// </summary>
-            internal int ArchivePosition 
-            { 
-                get 
+            internal int ArchivePosition
+            {
+                get
                 {
                     return BitConverter.ToInt32(this.headerBuffer, SizeHolderWidth);
-                } 
+                }
             }
 
             /// <summary>
@@ -78,12 +78,14 @@ namespace Client
             }
         }
 
+        private const string ShortFileName = "UsbArchive";
+        private const string FileExt = ".capi";
         private DriveInfo usbDriver;
         private string fileName = null;
-        private string dummyFileName = null;
         private Header header = new Header();
-        private const long MaxSize = 504857600;
-                                    
+        //private const int MaxSize = int.MaxValue;//504857600;
+        private const int MaxSize = 504857600;
+
         internal UsbFileArchive(string driver)
         {
             var drives = DriveInfo.GetDrives();
@@ -93,8 +95,7 @@ namespace Client
                 if (d.Name == driver)
                 {
                     this.usbDriver = d;
-                    this.fileName = this.usbDriver.Name + Path.DirectorySeparatorChar + "UsbArchive.capi";
-                    this.dummyFileName = this.usbDriver.Name + Path.DirectorySeparatorChar + "dummy";
+                    this.fileName = CreateFileName(0);
 
                     break;
                 }
@@ -104,28 +105,44 @@ namespace Client
                 throw new Exception(string.Format("USB driver with name {0} not found", driver));
         }
 
+        private string CreateFileName(int chunkNumber)
+        {
+            return this.usbDriver.Name + Path.DirectorySeparatorChar + ShortFileName + (chunkNumber > 0 ? chunkNumber.ToString() : string.Empty) + FileExt;
+        }
+
+        private FileStream PutFile(int chunkNumber, int size)
+        {
+            var stream = File.Create(CreateFileName(chunkNumber), 1024, FileOptions.WriteThrough);
+            stream.Position = size - 1;
+            stream.WriteByte(0);
+
+            return stream;
+        }
+
         public FileStream CreateFile()
         {
             var space = this.usbDriver.TotalFreeSpace;
-            var filespace = (space < MaxSize) ? space : MaxSize;
-            int i = 0;
-            while (space>filespace)
+            var fileIndex = (int)(this.usbDriver.TotalFreeSpace / MaxSize);
+            var fileVolume = (int)(this.usbDriver.TotalFreeSpace % MaxSize);
+
+            FileStream fileStream = null;
+
+            if (fileVolume == 0)
             {
-                
-                i++;
-                var dummyStream = File.Create(this.dummyFileName + i + ".capi", 1024, FileOptions.WriteThrough);
-                if (space>2*MaxSize)
-                    dummyStream.SetLength(MaxSize);
-                else
-                    dummyStream.SetLength(space-MaxSize);
-
-                dummyStream.Close();
-                space = this.usbDriver.TotalFreeSpace;
+                fileIndex -= 1;
+                fileVolume = MaxSize;
             }
-            var fileStream = File.Create(this.fileName, this.header.ByteBuffer.Length * 4, FileOptions.WriteThrough);
 
-            fileStream.Write(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);
-            fileStream.SetLength(filespace);
+            for (; fileIndex >= 0; fileIndex--, fileVolume = MaxSize)
+            {
+                if (fileStream != null)
+                    fileStream.Close();
+
+                if(fileVolume >(int)this.usbDriver.TotalFreeSpace)
+                    fileVolume =(int)this.usbDriver.TotalFreeSpace;
+
+                fileStream = PutFile(fileIndex, fileVolume);
+            }
 
             return fileStream;
         }
@@ -140,7 +157,7 @@ namespace Client
 
         public void SaveArchive(byte[] data)
         {
-           
+
             try
             {
                 var fileStream = File.Exists(this.fileName) ? ReadHeader() : CreateFile();

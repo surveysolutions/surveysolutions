@@ -132,7 +132,6 @@ namespace Client
             if (this.webClient.IsBusy)
             {
                 this.webClient.CancelAsync();
-
                 this.exportEnded.WaitOne();
             }
         }
@@ -163,9 +162,7 @@ namespace Client
 
                 usbArchive = new UsbFileArchive(drive);
 
-                this.pleaseWait.Reset();
-
-                
+                this.pleaseWait.ActivateExportState();
 
                 string filename = string.Format(this.ArchiveFileNameMask, DateTime.Now.ToString().Replace("/", "_"));
                 filename = filename.Replace(" ", "_");
@@ -193,9 +190,7 @@ namespace Client
 
         internal void ExportQuestionariesArchive()
         {
-            
             new Thread(DoExport).Start(); // initialize export operation in independent thread
-
         }
 
         /// <summary>

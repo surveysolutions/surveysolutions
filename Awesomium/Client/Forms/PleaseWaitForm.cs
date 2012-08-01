@@ -7,7 +7,7 @@ namespace Client
 {
     internal interface IStatusIndicator
     {
-        void Reset();
+        void ActivateExportState();
         void AssignProgress(int progressPercentage);
         void SetCompletedStatus(bool canceled, Exception error);
     }
@@ -20,7 +20,7 @@ namespace Client
         {
             //copyJobSize = GetJobSize(Configuration.ProgramDirectory);
             InitializeComponent();
-            
+
             // since we are going to optimize resources and keep this form in memory the calls below are neccessary 
             // to activate the form in the main thread, while c-tor is called
             //Show();
@@ -29,13 +29,15 @@ namespace Client
 
         #endregion
 
+        ManualResetEvent inactiveStatus = new ManualResetEvent(true);
+
         #region Helpers
 
         /// <summary>
         /// Hide the form. Wait before hiding
         /// </summary>
         /// <param name="waitTime">Time in milliseconds to wait before hiding</param>
-        private void MakeInvisible(object waitTime)
+        private void MakeInvisibleAll(object waitTime)
         {
             Thread.Sleep((int)waitTime);
 
@@ -43,25 +45,39 @@ namespace Client
                 Invoke(new MethodInvoker(() => { this.Parent.Hide(); }));
             else
                 this.Parent.Hide();
+
+            this.inactiveStatus.Set();
+        }
+
+        private void MakeInvisibleProgressBar(object waitTime)
+        {
+            Thread.Sleep((int)waitTime);
+
+            if (this.progressBar.InvokeRequired)
+                Invoke(new MethodInvoker(() => { this.progressBar.Hide(); }));
+            else
+                this.progressBar.Hide();
         }
 
         /// <summary>
         /// Assign text content to status label
         /// </summary>
         /// <param name="status"></param>
-        private void SetStatus(string status)
+        private void SetStatusLabel(string status, bool error = false)
         {
             if (this.statusLabel.InvokeRequired)
             {
                 this.statusLabel.Invoke(new MethodInvoker(() =>
                 {
                     this.statusLabel.Text = status;
+                    this.statusLabel.ForeColor = error ? System.Drawing.Color.Red : System.Drawing.Color.Black;
                     BringToFront();
                 }));
             }
             else
             {
                 this.statusLabel.Text = status;
+                this.statusLabel.ForeColor = error ? System.Drawing.Color.Red : System.Drawing.Color.Black;
                 BringToFront();
             }
         }
@@ -70,34 +86,17 @@ namespace Client
         /// Helper method to dissapear in diffrent thread if wait operation expected before hiding the form
         /// </summary>
         /// <param name="immediately"></param>
-        private void Dissapear(bool immediately)
+        private void Deactivate(bool immediately)
         {
             if (immediately)
-            {
-                MakeInvisible(0);
-                return;
-            }
-
-            new Thread(MakeInvisible).Start(2000);
+                MakeInvisibleAll(0);
+            else
+                new Thread(MakeInvisibleAll).Start(3000);
         }
 
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Reset the form content and put it foreground
-        /// </summary>
-        public void Reset()
-        {
-            AssignProgress(0);
-            SetStatus("Export started. Plase wait...");
-
-            if (InvokeRequired)
-                Invoke(new MethodInvoker(() => { this.Parent.Show(); }));
-            else
-                this.Parent.Show();
-        }
 
         /// <summary>
         /// Show progress state
@@ -109,7 +108,28 @@ namespace Client
                 this.progressBar.Invoke(new MethodInvoker(() => { this.progressBar.Value = progressPercentage; }));
             else
                 this.progressBar.Value = progressPercentage;
-            
+
+        }
+
+        /// <summary>
+        /// Reset the form content and put it foreground
+        /// </summary>
+        public void ActivateExportState()
+        {
+            AssignProgress(0);
+            SetStatusLabel("Export started. Plase wait...");
+
+            this.inactiveStatus.WaitOne(5000);
+
+            if (InvokeRequired)
+                Invoke(new MethodInvoker(() => { this.Parent.Show(); this.progressBar.Show(); }));
+            else
+            {
+                this.Parent.Show();
+                this.progressBar.Show();
+            }
+
+            this.inactiveStatus.Reset();
         }
 
         /// <summary>
@@ -121,24 +141,24 @@ namespace Client
         public void SetCompletedStatus(bool canceled, Exception error)
         {
             if (canceled || error != null)
-            
             {
-                if (canceled)
-                    SetStatus("Data export canceled");
-
+                if (canceled || error == null)
+                    SetStatusLabel("Data export canceled", true);
                 else
-                    SetStatus("Data export error:"+error.Message);
-               
-                Dissapear(false);
+                    SetStatusLabel("Data export error:" + error.Message, true);
+
+                MakeInvisibleProgressBar(0);
+                Deactivate(false);
+
                 return;
             }
 
-            SetStatus("Data export completed successfully.");
-            Dissapear(false);
+            SetStatusLabel("Data export completed successfully.");
+            Deactivate(false);
         }
 
         #endregion
 
-       
+
     }
 }
