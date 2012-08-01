@@ -26,19 +26,17 @@ function ExportStarted() {
 }
 
 function GetCheck(i, j) {
-    $.get(i,
-        function (data) {
-                        
-                        try {
-                            if (data.message != null && data.message == "Error") {
-                                $('#popup').click();
-                            }
-                            else {
-                                window.location = j;
-                            }
-                        } catch (e) {
-                            window.location = j;
-                        }
+    $.get(i, function (data) {
+             try {
+                   if (data.message != null && data.message == "Error") {
+                   $('#popup').click();
+                 }
+                 else {
+                        window.location = j;
+                 }
+            } catch (e) {
+                window.location = j;
+            }
         });
 }
 

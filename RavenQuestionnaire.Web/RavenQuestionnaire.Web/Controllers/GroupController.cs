@@ -97,13 +97,6 @@ namespace RavenQuestionnaire.Web.Controllers
             return View("MoveQuestion", model);
         }
 
-        [HttpPost]
-        [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Move(MoveItemModel model)
-        {
-            return null;
-        }
-
         #endregion
     }
 }
