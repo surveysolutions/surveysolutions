@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
-using RavenQuestionnaire.Core.Views.Questionnaire;
-using RavenQuestionnaire.Core.Views.Statistics;
-using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Web.App_Start;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 
 namespace RavenQuestionnaire.Core.Events
 {
@@ -21,7 +14,6 @@ namespace RavenQuestionnaire.Core.Events
     {
         IEnumerable<AggregateRootEventStream> ReadEvents();
         void WriteEvents(IEnumerable<AggregateRootEventStream> stream);
-
         IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare(IViewRepository viewRepository);
     }
 
@@ -57,7 +49,6 @@ namespace RavenQuestionnaire.Core.Events
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
             if (eventStore == null)
                 throw new Exception("IEventStore is not properly initialized.");
-            //((InProcessEventBus)myEventBus).RegisterHandler();
             foreach (AggregateRootEventStream commitedEventStream in stream)
             {
                 Guid commitId = Guid.NewGuid();
