@@ -29,9 +29,12 @@
         </div>
         <div style="width: 100%; height: 50px;">&nbsp;</div>        
         <a href="#transparent" style="display:none;" id="popup" data-rel="popup" data-role="button" data-inline="true" data-position-to="window">Close</a>
-		<div id="transparent" data-role="popup" data-theme="none" data-shadow="false">
+		<div id="transparent" data-role="popup" data-theme="none" data-shadow="false" data-position-to="window" class="instructions">
 			<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
-		  Please, check answers!!!
+		    <p style="color: #FFFFFF;font-weight: normal; text-shadow: 0 1px 1px #111111;
+		        padding: 15px !important;box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+		        border-radius: 0.6em 0.6em 0.6em 0.6em;
+		        background: -moz-linear-gradient(#444444, #222222) repeat scroll 0 0 #222222;">There are unanswered questions in this questionnaire. Please, check answers!!!</p>
 		</div>
     </div>    
     @RenderFooter(Model.Navigation)
