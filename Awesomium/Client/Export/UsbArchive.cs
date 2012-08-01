@@ -141,7 +141,7 @@ namespace Client
                 }
 
                 // step 1: write archive
-                fileStream.Position = newPosition;
+                fileStream.Position = newPosition + this.header.ByteBuffer.Length;
                 fileStream.Write(data, 0, data.Length);
 
                 // step 2: update archive placement info

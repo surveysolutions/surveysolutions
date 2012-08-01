@@ -71,12 +71,20 @@ namespace Client
                 var hint = e.UserState as ProgressHint;
                 Debug.Assert(hint != null);
 
+                Exception error = e.Error;
+
                 try
                 {
-                    if (!e.Cancelled && e.Error == null)
+                    if (!e.Cancelled && error == null)
                         usbArchive.SaveArchive(e.Result);
-
-                    hint.ProgressIndicator.SetCompletedStatus(e.Cancelled, e.Error);
+                }
+                catch (Exception ex)
+                {
+                    error = ex;
+                }
+                finally
+                {
+                    hint.ProgressIndicator.SetCompletedStatus(false, error);
 
                     this.exportEnded.Set();
 
@@ -84,11 +92,6 @@ namespace Client
                     {
                         EndOfExport();
                     }
-                
-                }
-                catch (Exception ex)
-                {
-                    hint.ProgressIndicator.SetCompletedStatus(false, ex);
                 }
             };
 
