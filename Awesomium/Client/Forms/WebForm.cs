@@ -287,6 +287,8 @@ namespace Client
             else
                 this.exportItem.Enabled = true;
         }
+
+
         private void OnResizeComplete(object sender, ResizeEventArgs e)
         {
             if (!this.webView.IsLive)
