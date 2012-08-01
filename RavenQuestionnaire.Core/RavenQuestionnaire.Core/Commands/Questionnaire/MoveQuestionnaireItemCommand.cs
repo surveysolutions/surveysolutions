@@ -6,7 +6,7 @@ using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 namespace RavenQuestionnaire.Core.Commands.Questionnaire
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "MoveQuestion")]
+    [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "MoveQuestionnaireItem")]
     public class MoveQuestionnaireItemCommand : CommandBase
     {
         [AggregateRootId]

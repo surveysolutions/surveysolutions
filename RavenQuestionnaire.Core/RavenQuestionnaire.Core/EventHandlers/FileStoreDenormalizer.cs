@@ -4,38 +4,46 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using RavenQuestionnaire.Core.Denormalizers;
+using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Events.File;
 using RavenQuestionnaire.Core.Events.Questionnaire;
 using RavenQuestionnaire.Core.Services;
 
 namespace RavenQuestionnaire.Core.EventHandlers
 {
-    public class FileStoreDenormalizer : IEventHandler<ImageUploaded>
+    public class FileStoreDenormalizer : IEventHandler<FileUploaded>, IEventHandler<FileDeleted>
     {
-        private IFileStorageService service;
-        public FileStoreDenormalizer(IFileStorageService service)
+   //     private IFileStorageService service;
+        private IDenormalizerStorage<FileDescription> attachments;
+        public FileStoreDenormalizer(/*IFileStorageService service,*/ IDenormalizerStorage<FileDescription> attachments)
         {
-            this.service = service;
+        //    this.service = service;
+            this.attachments = attachments;
         }
 
         #region Implementation of IEventHandler<in ImageUpdated>
 
-        public void Handle(IPublishedEvent<ImageUploaded> evnt)
+        public void Handle(IPublishedEvent<FileUploaded> evnt)
         {
-            using (var original = FromBase64(evnt.Payload.OriginalImage))
-            {
-                service.StoreFile(evnt.Payload.FileName, original);
-            }
-            using (var thumb = FromBase64(evnt.Payload.ThumbnailImage))
-            {
-                service.StoreFile(evnt.Payload.ThumbName, thumb);
-            }
+            attachments.Store(
+                new FileDescription()
+                    {
+                        Description = evnt.Payload.Description,
+                        PublicKey = evnt.Payload.PublicKey.ToString(),
+                        Title = evnt.Payload.Title
+                    }, evnt.Payload.PublicKey);
         }
 
         #endregion
-        protected MemoryStream FromBase64(string text)
+
+        #region Implementation of IEventHandler<in FileDeleted>
+
+        public void Handle(IPublishedEvent<FileDeleted> evnt)
         {
-            byte[] raw = Convert.FromBase64String(text);
-            return new MemoryStream(raw);
+            attachments.Remove(evnt.Payload.PublicKey);
         }
+
+        #endregion
     }
 }

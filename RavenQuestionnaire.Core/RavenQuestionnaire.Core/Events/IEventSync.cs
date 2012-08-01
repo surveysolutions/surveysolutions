@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using RavenQuestionnaire.Web.App_Start;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
-using RavenQuestionnaire.Web.App_Start;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
 namespace RavenQuestionnaire.Core.Events
 {
@@ -16,7 +14,6 @@ namespace RavenQuestionnaire.Core.Events
     {
         IEnumerable<AggregateRootEventStream> ReadEvents();
         void WriteEvents(IEnumerable<AggregateRootEventStream> stream);
-
         IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare(IViewRepository viewRepository);
     }
 
@@ -32,34 +29,26 @@ namespace RavenQuestionnaire.Core.Events
                 throw new Exception("IEventStore is not correct.");
             return myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c));
         }
+
         public IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare(IViewRepository viewRepository)
         {
-            
             var myEventStore = NcqrsEnvironment.Get<IEventStore>();
             if (myEventStore == null)
                 throw new Exception("IEventStore is not correct.");
-            
-            var model =
-                viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(new CQGroupedBrowseInputModel());
-            List<Guid> completeIds = new List<Guid>();
-
-            //var myEventStore = NcqrsEnvironment.Get<IEventStore>();
-            foreach (CQGroupItem group in model.Groups)
-            {
-                foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
-                {
-                    if (survey.Status.PublicId == SurveyStatus.Complete.PublicId) //export only completed Q
-                        completeIds.Add(new Guid(survey.CompleteQuestionnaireId));
-                }
-            }
-            return myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c, completeIds));
+            var model = viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(new CQGroupedBrowseInputModel());
+            var completeIds = new List<Guid>();
+            foreach (var item in model.Groups)
+                completeIds.AddRange(from status in item.Items
+                                     where status.Status.Name == SurveyStatus.Complete.Name
+                                     select Guid.Parse(status.CompleteQuestionnaireId));
+            return myEventStore.ReadByAggregateRoot().Where(c => completeIds.Contains(c.SourceId)).Select(c => new AggregateRootEventStream(c));
         }
+
         public void WriteEvents(IEnumerable<AggregateRootEventStream> stream)
         {
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
             if (eventStore == null)
                 throw new Exception("IEventStore is not properly initialized.");
-            //((InProcessEventBus)myEventBus).RegisterHandler();
             foreach (AggregateRootEventStream commitedEventStream in stream)
             {
                 Guid commitId = Guid.NewGuid();

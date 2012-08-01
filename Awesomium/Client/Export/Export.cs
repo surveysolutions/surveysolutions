@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -40,7 +41,7 @@ namespace Client
 
         #region Private Members
 
-        private IStatusIndicator pleaseWait;
+        internal IStatusIndicator pleaseWait;
         private readonly string ArchiveFileNameMask = "backup-{0}.zip";
         private WebClient webClient = new WebClient();
         private AutoResetEvent exportEnded = new AutoResetEvent(false);
@@ -60,8 +61,7 @@ namespace Client
             this.webClient.DownloadProgressChanged += (s, e) =>
             {
                 var hint = e.UserState as ProgressHint;
-                if (hint == null)
-                    return;
+                Debug.Assert(hint != null);
 
                 hint.ProgressIndicator.AssignProgress(e.ProgressPercentage);
             };
@@ -69,35 +69,33 @@ namespace Client
             this.webClient.DownloadDataCompleted += (s, e) =>
             {
                 var hint = e.UserState as ProgressHint;
-                if (hint == null)
-                    return;
+                Debug.Assert(hint != null);
 
-                if (e.Cancelled || e.Error != null)
-                {
-                    if (File.Exists(hint.ArchiveFileName))
-                        File.Delete(hint.ArchiveFileName);
-                }
-                
-                hint.ProgressIndicator.SetCompletedStatus(e.Cancelled, e.Error);
-
-                this.exportEnded.Set();
+                Exception error = e.Error;
                 try
                 {
-                    usbArchive.InsertPart(e.Result);
+                    if (!e.Cancelled && error == null)
+                        usbArchive.SaveArchive(e.Result);
+
                 }
                 catch (Exception ex)
                 {
-                    
-                    throw ex;
+                    error = ex;
+                    //hint.ProgressIndicator.SetCompletedStatus(false, ex);
+                
                 }
-
-                    
- 
-
-                if (EndOfExport != null)
+                finally
                 {
-                    EndOfExport();
+                    hint.ProgressIndicator.SetCompletedStatus(e.Cancelled, error); 
+
+                    this.exportEnded.Set();
+
+                    if (EndOfExport != null)
+                    {
+                        EndOfExport();
+                    }   
                 }
+                
             };
 
             FlushDriversList();
@@ -179,7 +177,7 @@ namespace Client
                 {
                     this.exportEnded.Reset();
                     
-                    //this.webClient.DownloadFileAsync(exportURL, archiveFilename, new ProgressHint(this.pleaseWait, archiveFilename));
+                    //this.webClient.DownloadFileAsync(exportURL, "D://backup.zip", new ProgressHint(this.pleaseWait, archiveFilename));
                     this.webClient.DownloadDataAsync(exportURL, new ProgressHint(this.pleaseWait, archiveFilename));
                 }
                 catch (Exception ex)

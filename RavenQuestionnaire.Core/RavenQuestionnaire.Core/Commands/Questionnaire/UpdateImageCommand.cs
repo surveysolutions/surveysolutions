@@ -10,7 +10,7 @@ namespace RavenQuestionnaire.Core.Commands
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "UpdateImage")]
     public class UpdateImageCommand : CommandBase
     {
-        public UpdateImageCommand(string questionnaireId, Guid questionKey, Guid imageKey, string title, string desc)
+        public UpdateImageCommand(Guid questionnaireId, Guid questionKey, Guid imageKey, string title, string desc)
         {
             QuestionKey = questionKey;
             ImageKey = imageKey;
@@ -23,7 +23,7 @@ namespace RavenQuestionnaire.Core.Commands
 
         public Guid ImageKey { get; set; }
         [AggregateRootId]
-        public string QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; set; }
 
         public string Title { get; set; }
         public string Description { get; set; }
