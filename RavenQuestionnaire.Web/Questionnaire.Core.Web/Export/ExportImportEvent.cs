@@ -91,7 +91,7 @@ namespace Questionnaire.Core.Web.Export
 
             var data = new ZipFileData
                            {
-                               //ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
+                               ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
                            };
             data.Events = this.synchronizer.ReadCompleteQuestionare(viewRepository);
             var outputStream = new MemoryStream();
