@@ -5,7 +5,13 @@ using System.Text;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
+using RavenQuestionnaire.Core.Views.Questionnaire;
+using RavenQuestionnaire.Core.Views.Statistics;
+using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Web.App_Start;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
@@ -37,12 +43,13 @@ namespace RavenQuestionnaire.Core.Events
             var myEventStore = NcqrsEnvironment.Get<IEventStore>();
             if (myEventStore == null)
                 throw new Exception("IEventStore is not correct.");
-            var model =
-                viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(new CQGroupedBrowseInputModel());
+            var model = viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(new CQGroupedBrowseInputModel());
             var completeIds = new List<Guid>();
-            foreach (CQGroupItem group in model.Groups)
-                completeIds.AddRange(group.Items.Select(survey => new Guid(survey.CompleteQuestionnaireId)));
-            return myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c, completeIds));
+            foreach (var item in model.Groups)
+                completeIds.AddRange(from status in item.Items
+                                     where status.Status.Name == SurveyStatus.Complete.Name
+                                     select Guid.Parse(status.CompleteQuestionnaireId));
+            return myEventStore.ReadByAggregateRoot().Where(c => completeIds.Contains(c.SourceId)).Select(c => new AggregateRootEventStream(c));
         }
 
         public void WriteEvents(IEnumerable<AggregateRootEventStream> stream)

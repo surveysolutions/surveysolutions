@@ -19,22 +19,18 @@ namespace RavenQuestionnaire.Core.Events
         }
         public AggregateRootEventStream(CommittedEventStream stream)
         {
-
-
             this.Events = stream.Select(e => new AggregateRootEvent(e)).ToArray();
             this.FromVersion = stream.FromVersion;
             this.ToVersion = stream.ToVersion;
             this.SourceId = stream.SourceId;
         }
-        public AggregateRootEventStream(CommittedEventStream stream, List<Guid> completeIds)
-        {
-            
-            
-            this.Events = stream.Where(val => completeIds.Contains(val.EventSourceId)).Select(e => new AggregateRootEvent(e)).ToArray();
-            this.FromVersion = stream.FromVersion;
-            this.ToVersion = stream.ToVersion;
-            this.SourceId = stream.SourceId;
-        }
+        //public AggregateRootEventStream(CommittedEventStream stream, List<Guid> completeIds)
+        //{
+        //    this.Events = stream.Where(val => completeIds.Contains(val.EventSourceId)).Select(e => new AggregateRootEvent(e)).ToArray();
+        //    this.FromVersion = stream.FromVersion;
+        //    this.ToVersion = stream.ToVersion;
+        //    this.SourceId = stream.SourceId;
+        //}
 
         public AggregateRootEvent[] Events { get; set; }
         public long FromVersion { get; set; }
