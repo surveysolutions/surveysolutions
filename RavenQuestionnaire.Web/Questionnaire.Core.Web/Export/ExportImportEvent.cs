@@ -1,9 +1,9 @@
 using System;
 using Ionic.Zip;
 using System.IO;
+using Ionic.Zlib;
 using System.Web;
 using System.Text;
-using Ionic.Zlib;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Events;
@@ -91,7 +91,7 @@ namespace Questionnaire.Core.Web.Export
 
             var data = new ZipFileData
                            {
-                               ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
+                               //ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
                            };
             data.Events = this.synchronizer.ReadCompleteQuestionare(viewRepository);
             var outputStream = new MemoryStream();

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using RavenQuestionnaire.Core;
 using Questionnaire.Core.Web.Export;
 
 namespace Web.CAPI.Controllers
@@ -11,10 +10,12 @@ namespace Web.CAPI.Controllers
     {
 
         private readonly IExportImport exportimportEvents;
+        private readonly IViewRepository viewRepository;
 
-        public ImportExportController(IExportImport exportImport)
+        public ImportExportController(IExportImport exportImport, IViewRepository viewRepository)
         {
             this.exportimportEvents = exportImport;
+            this.viewRepository = viewRepository;
         }
 
         #region PublicMethod
@@ -47,7 +48,7 @@ namespace Web.CAPI.Controllers
             {
                 try
                 {
-                    AsyncManager.Parameters["result"] = exportimportEvents.Export();
+                    AsyncManager.Parameters["result"] = exportimportEvents.Export(this.viewRepository);
                 }
                 catch
                 {
