@@ -45,7 +45,7 @@ namespace Client
         private readonly string ArchiveFileNameMask = "backup-{0}.zip";
         private WebClient webClient = new WebClient();
         private AutoResetEvent exportEnded = new AutoResetEvent(false);
-        private Uri exportURL = new Uri(Settings.Default.DefaultUrl + "/Synchronizations/Export");
+        private Uri exportURL = new Uri(Settings.Default.DefaultUrl + "/ImportExport/Export");
         private List<string> cachedDrives;
         private UsbFileArchive usbArchive;
 
@@ -86,8 +86,9 @@ namespace Client
                     }
                 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    hint.ProgressIndicator.SetCompletedStatus(false, ex);
                 }
             };
 
@@ -170,7 +171,7 @@ namespace Client
                 {
                     this.exportEnded.Reset();
                     
-                    //this.webClient.DownloadFileAsync(exportURL, archiveFilename, new ProgressHint(this.pleaseWait, archiveFilename));
+                    //this.webClient.DownloadFileAsync(exportURL, "D://backup.zip", new ProgressHint(this.pleaseWait, archiveFilename));
                     this.webClient.DownloadDataAsync(exportURL, new ProgressHint(this.pleaseWait, archiveFilename));
                 }
                 catch (Exception ex)
