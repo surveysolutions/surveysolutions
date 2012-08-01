@@ -31,27 +31,20 @@ namespace RavenQuestionnaire.Core.Events
                 throw new Exception("IEventStore is not correct.");
             return myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c));
         }
+
         public IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare(IViewRepository viewRepository)
         {
-            
             var myEventStore = NcqrsEnvironment.Get<IEventStore>();
             if (myEventStore == null)
                 throw new Exception("IEventStore is not correct.");
-            
             var model =
                 viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(new CQGroupedBrowseInputModel());
-            List<Guid> completeIds = new List<Guid>();
-
-            //var myEventStore = NcqrsEnvironment.Get<IEventStore>();
+            var completeIds = new List<Guid>();
             foreach (CQGroupItem group in model.Groups)
-            {
-                foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
-                {
-                    completeIds.Add(new Guid(survey.CompleteQuestionnaireId));
-                }
-            }
+                completeIds.AddRange(group.Items.Select(survey => new Guid(survey.CompleteQuestionnaireId)));
             return myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c, completeIds));
         }
+
         public void WriteEvents(IEnumerable<AggregateRootEventStream> stream)
         {
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
