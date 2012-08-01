@@ -83,10 +83,10 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public string Delete(Guid publicKey, string questionnaireId)
+        public ActionResult Delete(Guid publicKey, string questionnaireId)
         {
             commandService.Execute(new DeleteGroupCommand(publicKey, Guid.Parse(questionnaireId)));
-            return "";
+            return RedirectToAction("Details", "Questionnaire", new {id=questionnaireId});
         }
 
         [HttpGet]
