@@ -30,7 +30,7 @@ namespace Questionnaire.Core.Web.Helpers
             {
                 inputHtmlAttributes.Add("type", "text");
             }
-            if (inputHtmlAttributes.ContainsKey("required"))
+            if (inputHtmlAttributes.ContainsKey("required") && !string.IsNullOrEmpty(inputHtmlAttributes["required"].ToString()))
             {
                 required = "<span style=\"color: red;font-size:25px;\">*</span>";
                 inputHtmlAttributes.Remove("required");
