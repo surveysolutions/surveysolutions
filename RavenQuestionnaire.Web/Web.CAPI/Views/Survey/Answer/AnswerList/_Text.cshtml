@@ -11,7 +11,7 @@
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
     string id = ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
-    var requiredAttribute = string.Empty;
-    if (Model.Mandatory) { requiredAttribute = "required=\"true\""; }
-    @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, Model.Title, new { draw_key_board = "true", @requiredAttribute }, new { @class = "keyboard" }, new { @class = "bold" })
+    var required = string.Empty;
+    if (Model.Mandatory) { required = "true"; }
+    @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, Model.Title, new { draw_key_board = "true", @required }, new { @class = "keyboard" }, new { @class = "bold" })
 }
