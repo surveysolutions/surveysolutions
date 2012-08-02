@@ -1,5 +1,4 @@
 using QApp.ViewModel;
-using DevExpress.RealtorWorld.Xpf.View;
 
 namespace QApp.View 
 {

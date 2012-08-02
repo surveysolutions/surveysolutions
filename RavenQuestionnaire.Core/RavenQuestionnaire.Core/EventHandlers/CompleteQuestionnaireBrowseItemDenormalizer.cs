@@ -13,7 +13,7 @@ using RavenQuestionnaire.Core.Views.Statistics;
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     public class CompleteQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
-                                                               IEventHandler<FeaturedQuestionUpdated>,
+                                                               IEventHandler<AnswerSet>,
                                                                IEventHandler<PropagatableGroupAdded>,
                                                                IEventHandler<PropagatableGroupDeleted>,
                                                                IEventHandler<CompleteQuestionnaireDeleted>,
@@ -41,37 +41,6 @@ namespace RavenQuestionnaire.Core.EventHandlers
          
         }
 
-
-        #region Implementation of IEventHandler<in SetAnswerCommand>
-
-       /* public void Handle(IPublishedEvent<AnswerSet> evnt)
-        {
-            var items =
-                this.documentItemStore.Query().Where(
-                    q => q.CompleteQuestionnaireId == evnt.Payload.CompletedQuestionnaireId.ToString());
-            foreach (CompleteQuestionnaireBrowseItem item in items)
-            {
-                item.AnsweredQuestionCount++;
-
-                if (evnt.Payload.Question.Featured)
-                {
-                    var featuredQuestions = new List<QuestionStatisticView>();
-                    featuredQuestions.AddRange(item.FeaturedQuestions);
-                    var currentFetured =
-                        featuredQuestions.FirstOrDefault(q => q.PublicKey == evnt.Payload.Question.PublicKey);
-                    if (currentFetured == null)
-                        featuredQuestions.Add(new QuestionStatisticView(evnt.Payload.Question, Guid.Empty, Guid.Empty));
-                    else
-                        currentFetured.AnswerValue = currentFetured.AnswerText = evnt.Payload.Question.GetAnswerString();
-
-                    item.FeaturedQuestions = featuredQuestions.ToArray();
-                }
-            }
-          
-        }*/
-
-        #endregion
-
         #region Implementation of IEventHandler<in AddPropagatableGroupCommand>
 
         public void Handle(IPublishedEvent<PropagatableGroupAdded> evnt)
@@ -90,36 +59,35 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         #endregion
 
-        #region Implementation of IEventHandler<in FeaturedQuestionUpdated>
+        #region Implementation of IEventHandler<in AnswerSet>
 
-        public void Handle(IPublishedEvent<FeaturedQuestionUpdated> evnt)
+        public void Handle(IPublishedEvent<AnswerSet> evnt)
         {
-            var item =
+            if (evnt.Payload.Featured)
+            {
+                var item =
                 this.documentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
-            /* foreach (CompleteQuestionnaireBrowseItem item in items)
-             {*/
-            //    item.AnsweredQuestionCount++;
-
+            
             var featuredQuestions = new List<QuestionStatisticView>();
             featuredQuestions.AddRange(item.FeaturedQuestions);
-            var currentFetured =
+            var currentFeatured =
                 featuredQuestions.FirstOrDefault(q => q.PublicKey == evnt.Payload.QuestionPublicKey);
-            if (currentFetured == null)
+            if (currentFeatured == null)
             {
-                currentFetured = new QuestionStatisticView(
-                    new TextCompleteQuestion(evnt.Payload.QuestionText) {PublicKey = evnt.Payload.QuestionPublicKey},
-                    Guid.Empty,
-                    null,
-                    Guid.Empty);
-                featuredQuestions.Add(currentFetured);
+                currentFeatured = new QuestionStatisticView(
+                        new TextCompleteQuestion(evnt.Payload.QuestionText) {PublicKey = evnt.Payload.QuestionPublicKey},
+                        Guid.Empty,
+                        null,
+                        Guid.Empty);
+                    featuredQuestions.Add(currentFeatured);
+                }
+
+                currentFeatured.AnswerValue = currentFeatured.AnswerText = evnt.Payload.AnswerString;
+
+                item.FeaturedQuestions = featuredQuestions.ToArray();
             }
-            
-            currentFetured.AnswerValue = currentFetured.AnswerText = evnt.Payload.Answer;
-
-            item.FeaturedQuestions = featuredQuestions.ToArray();
-
-            // }
         }
+    
 
         #endregion
 
