@@ -101,6 +101,12 @@
     <Compile Include="Helpers\Extensions\ComboBoxDropDownCommand.cs" />
     <Compile Include="Helpers\Extensions\Converters.cs" />
     <Compile Include="Helpers\Extensions\VisualStateControl.cs" />
+    <Compile Include="Heritage\BindingAndDisposable.cs" />
+    <Compile Include="Heritage\BindingHelpers.cs" />
+    <Compile Include="Heritage\Module.cs" />
+    <Compile Include="Heritage\ModuleView.cs" />
+    <Compile Include="Heritage\ViewPresenter.cs" />
+    <Compile Include="Heritage\ZoomHelper.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="ViewModel\CompletedQuestionnaires.cs" />
     <Compile Include="ViewModel\CommonGroupDetail.cs" />
@@ -254,10 +260,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DevExpress.RealtorWorld.Wpf\DevExpress.RealtorWorld.Wpf.csproj">
-      <Project>{5B477ABF-9D38-4033-9131-3B56DF206AD0}</Project>
-      <Name>DevExpress.RealtorWorld.Wpf</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
       <Project>{5F014003-50D8-49E0-8AFE-91D38DCCC97C}</Project>
       <Name>NCalc</Name>

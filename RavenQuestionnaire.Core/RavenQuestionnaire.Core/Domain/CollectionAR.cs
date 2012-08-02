@@ -50,5 +50,23 @@ namespace RavenQuestionnaire.Core.Domain
             //no logic
         }
 
+
+/*
+        public void RemoveCollection(Guid guid)
+        {
+            ApplyEvent(new CommentSeted()
+            {
+                     });
+        }
+
+        public void RemoveCollectionItem(Guid guid)
+        {
+            ApplyEvent(new CommentSeted()
+            {
+                     });
+        }*/
+
+        
+
     }
 }

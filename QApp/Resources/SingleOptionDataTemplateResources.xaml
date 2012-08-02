@@ -2,17 +2,19 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:QApp.Helpers.DataTemplateSelectors"
                     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-                    xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"                    
-                    xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
-                    xmlns:Extensions="clr-namespace:QApp.Helpers.Extensions">
+                    xmlns:Extensions="clr-namespace:QApp.Helpers.Extensions"
+                    xmlns:Heritage="clr-namespace:QApp.Heritage">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     
    <DataTemplate x:Key="SingleOptionWithoutImageTemplate">
         <dxlc:Tile Background="#FF00ABBA" Content="{Binding}"
-                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
-                        CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0" Margin="5,5,5,5"
-                        Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType={x:Type View:ModuleView}}}">            
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Heritage:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
+                        CommandParameter="{Binding}" Heritage:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0" Margin="5,5,5,5">
+            <Heritage:TileSelectHelper.SelectedValue>
+                <Binding Path="DataContext.SelectedAnswer.PublicKey"
+                         RelativeSource="{RelativeSource AncestorType={x:Type Heritage:ModuleView}}" />
+            </Heritage:TileSelectHelper.SelectedValue>
             <dxlc:Tile.ContentTemplate>
                 <DataTemplate>
                     <Grid>
@@ -26,7 +28,7 @@
                             </StackPanel>                            
                         </Grid>
                         <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False"                                                
-                                            Visibility="{Binding Path=(Helpers:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            Visibility="{Binding Path=(Heritage:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </Grid>
                 </DataTemplate>
             </dxlc:Tile.ContentTemplate>
@@ -34,9 +36,9 @@
     </DataTemplate>
    <DataTemplate x:Key="SingleOptionWithImageTemplate">
         <dxlc:Tile Background="#FF00ABBA" Content="{Binding}" Margin="5,5,5,5"
-                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type View:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
-                        CommandParameter="{Binding}" Helpers:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0" Width="145" Height="145"
-                        Helpers:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType={x:Type View:ModuleView}}}">                   
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Heritage:ModuleView}}, Path=DataContext.SetCurrentAnswerCommand}"
+                        CommandParameter="{Binding}" Heritage:TileSelectHelper.ComparisonPropertyPath="PublicKey" Padding="0" Width="145" Height="145"
+                        Heritage:TileSelectHelper.SelectedValue="{Binding Path=DataContext.SelectedAnswer.PublicKey, RelativeSource={RelativeSource AncestorType={x:Type Heritage:ModuleView}}}">                   
             <dxlc:Tile.ContentTemplate>
                 <DataTemplate>
                     <Grid>
@@ -49,7 +51,7 @@
                             </StackPanel>                            
                         </Grid>
                         <Border BorderBrush="#f78a09" Background="Transparent" BorderThickness="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False"                                                
-                                Visibility="{Binding Path=(Helpers:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                Visibility="{Binding Path=(Heritage:TileSelectHelper.IsSelected), RelativeSource={RelativeSource AncestorType=dxlc:Tile}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </Grid>
                 </DataTemplate>
             </dxlc:Tile.ContentTemplate>

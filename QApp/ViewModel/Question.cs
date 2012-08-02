@@ -1,10 +1,9 @@
 ﻿using Ninject;
 using System.Linq;
 using System.Windows.Input;
+using QApp.Heritage;
 using RavenQuestionnaire.Core;
-using DevExpress.RealtorWorld.Xpf.Helpers;
 using RavenQuestionnaire.Core.Views.Answer;
-using DevExpress.RealtorWorld.Xpf.ViewModel;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;

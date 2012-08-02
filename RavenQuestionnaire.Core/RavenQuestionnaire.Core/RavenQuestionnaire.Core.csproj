@@ -620,6 +620,7 @@
     <Folder Include="CommandHandlers\Statistics\" />
     <Folder Include="Commands\NewFolder1\" />
     <Folder Include="Commands\Statistics\" />
+    <Folder Include="Events\User\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

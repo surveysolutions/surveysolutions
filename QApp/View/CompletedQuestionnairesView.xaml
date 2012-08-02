@@ -1,25 +1,23 @@
-﻿<View:ModuleView x:Class="QApp.View.CompletedQuestionnairesView"
+﻿<Heritage:ModuleView x:Class="QApp.View.CompletedQuestionnairesView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-    xmlns:View="clr-namespace:DevExpress.RealtorWorld.Xpf.View;assembly=DevExpress.RealtorWorld.Xpf"
-    xmlns:Helpers="clr-namespace:DevExpress.RealtorWorld.Xpf.Helpers;assembly=DevExpress.RealtorWorld.Xpf"
-    mc:Ignorable="d"
+                 xmlns:Heritage="clr-namespace:QApp.Heritage" mc:Ignorable="d"
     d:DesignHeight="800" d:DesignWidth="1000">
 
-    <View:ModuleView.Resources>
+    <Heritage:ModuleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/DevExpress.RealtorWorld.Xpf;component/Themes/TileHoverAnimation.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <dx:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <dx:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" Invert="True"/>
-            <Helpers:ImageSourceConverter x:Key="ImageSourceConverter" />
+            <ImageSourceConverter x:Key="ImageSourceConverter" />
         </ResourceDictionary>
-    </View:ModuleView.Resources>
+    </Heritage:ModuleView.Resources>
 
 
 
@@ -49,7 +47,7 @@
                                             <ColumnDefinition Width="0.7*" />
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
-                                            <StackPanel Orientation="Horizontal" Helpers:ZoomHelper.ChangeOrientationZoomFactor="105">
+                                            <StackPanel Orientation="Horizontal" Heritage:ZoomHelper.ChangeOrientationZoomFactor="105">
                                                 <TextBlock Text="{Binding CompleteQuestionnaireId}" FontSize="14" Foreground="#FFFFFFFF" />               
                                             </StackPanel>
                                             <TextBlock Text="{Binding CreationDate}" FontSize="14" Foreground="#FFFFFFFF" />
@@ -64,4 +62,4 @@
             </dxlc:TileLayoutControl.ItemTemplate>
         </dxlc:TileLayoutControl>        
     </Grid>
-</View:ModuleView>
+</Heritage:ModuleView>

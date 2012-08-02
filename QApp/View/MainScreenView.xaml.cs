@@ -1,4 +1,4 @@
-using DevExpress.RealtorWorld.Xpf.View;
+using QApp.Heritage;
 
 namespace QApp {
     public partial class MainScreenView : ModuleView

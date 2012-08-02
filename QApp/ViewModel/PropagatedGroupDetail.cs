@@ -1,8 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using DevExpress.RealtorWorld.Xpf.Helpers;
-using DevExpress.RealtorWorld.Xpf.ViewModel;
 using DevExpress.Xpf.Core;
+using QApp.Heritage;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Question;

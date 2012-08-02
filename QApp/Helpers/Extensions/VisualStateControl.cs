@@ -1,10 +1,9 @@
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using DevExpress.Xpf.Core;
 
-namespace DevExpress.RealtorWorld.Xpf.Helpers {
+namespace QApp.Helpers.Extensions {
     [TemplateVisualState(Name = "Normal", GroupName = "CommonStates")]
     [TemplateVisualState(Name = "MouseOver", GroupName = "CommonStates")]
     [TemplateVisualState(Name = "Disabled", GroupName = "CommonStates")]
