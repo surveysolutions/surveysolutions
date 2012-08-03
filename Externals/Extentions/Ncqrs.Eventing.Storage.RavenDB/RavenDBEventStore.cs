@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Newtonsoft.Json;
 using Raven.Client;
 using Raven.Client.Document;
@@ -136,62 +137,29 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        protected IList<StoredEvent> AccumulateEvents(Func<StoredEvent, bool> predicate)
+        protected IList<StoredEvent> AccumulateEvents(Expression<Func<StoredEvent, bool>> query)
         {
             List<StoredEvent> retval = new List<StoredEvent>();
-
-
-            /*   int count;
-               using (var session = _documentStore.OpenSession())
-               {
-
-                   Raven.Client.Linq.RavenQueryStatistics stats;
-                   session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults())
-                       .Statistics(out stats).Where(predicate).Take(0).ToArray();
-
-                   count = stats.TotalResults;
-               }
-               if (count == 0)
-                   return retval;*/
-
-            int chunkSize = 128; //default ravenDB 
-            /* int skippedItemsCount = 0;
-             int selectedCount = 0;*/
-            int totalResutls = 1;
-            int skippedResults = 0;
-            int pagedResults = 0;
-          //  int page = 0;
-
-            while (pagedResults < totalResutls)
+            int maxPageSize = 1024;
+            int page = 0;
+            while (true)
             {
+
+
                 using (var session = _documentStore.OpenSession())
                 {
-
                     Raven.Client.Linq.RavenQueryStatistics stats;
-                    var chunk = session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults())
-                        .Statistics(out stats)
-                        .Skip(pagedResults + skippedResults)
-                        // retrieve results for the second page, taking into account skipped results
-                        .Take(chunkSize)
-                        .Where(predicate)
-                        .ToList();
-                    totalResutls = stats.TotalResults;
-                    skippedResults = stats.SkippedResults;
-                    pagedResults += chunkSize;
-               //     page++;
-                    retval.AddRange(chunk);
-                   
-                    /*     var chunk =
-                        session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(skippedItemsCount).Take
-                            (
-                                chunkSize).Where(predicate).ToList();
+                    var chunk =
+                        session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Statistics(out stats).Skip(page * maxPageSize).
+                        Take(maxPageSize).Where(query).OrderBy(x => x.EventTimeStamp).ToList();
+                    if (chunk.Count == 0)
+                        break;
 
                     retval.AddRange(chunk);
-                    //currentChunkSize = chunk.Count;
-                    skippedItemsCount += chunkSize;
-                    selectedCount += chunk.Count;*/
+                    page++;
                 }
             }
+
             return retval;
 
         }
@@ -202,25 +170,11 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
             //var storedEvents = AccumulateWithPaging(x => x.EventTimeStamp >= start).OrderBy(x => x.EventTimeStamp);
 
-            var storedEvents = AccumulateEvents(x => x.EventTimeStamp >= start).OrderBy(x=>x.EventTimeStamp);
+            var storedEvents = AccumulateEvents(x => x.EventTimeStamp >= start);
             
             result = storedEvents.Select(ToComittedEvent).ToList();
 
             return result;
-        }
-
-        public IEnumerable<CommittedEventStream> ReadByAggregateRoot()
-        {
-            List<CommittedEventStream> retval = new List<CommittedEventStream>();
-            List<Guid> aggreagates =
-                AccumulateEvents(x => x.EventTimeStamp >= DateTime.MinValue).Select(e => e.EventSourceId).Distinct().ToList();
-                //AccumulateWithPaging(x => x.EventTimeStamp >= DateTime.MinValue).Select(e => e.EventSourceId).Distinct().ToList();
-
-            foreach (Guid aggreagateId in aggreagates)
-            {
-                retval.Add(ReadFrom(aggreagateId, int.MinValue, int.MaxValue));
-            }
-            return retval;
         }
 
     }

@@ -86,7 +86,7 @@ namespace RavenQuestionnaire.Web.Tests.Utils
             viewRepositoryMock.Setup(x => x.Load<EventBrowseInputModel, EventBrowseView>(It.Is<EventBrowseInputModel>(input => input.PublickKey==null))).Returns(output);
             var events = new ExportImportEvent(clientProvider.Object, synchronizer.Object);
             var result = events.Export();
-            synchronizer.Verify(x => x.ReadEvents(), Times.Once());
+            synchronizer.Verify(x => x.ReadCompleteQuestionare(), Times.Once());
          //   eventStoreMock.Verify(x => x.ReadByAggregateRoot(), Times.Once());
             //   Assert.AreEqual(result.GetType(), typeof(byte[]));
         }
