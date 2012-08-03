@@ -6,6 +6,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenQuestionnaire.Web.Tests", "RavenQuestionnaire.Web.Tests\RavenQuestionnaire.Web.Tests.csproj", "{7DB184A7-D428-4700-8242-21111F4779A4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenQuestionnaire.Core", "..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj", "{7E143353-A648-4435-819F-93A748A90704}"
+	ProjectSection(ProjectDependencies) = postProject
+		{01F84441-80D3-49B4-AB18-96894ACB2F90} = {01F84441-80D3-49B4-AB18-96894ACB2F90}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Questionnaire.Core.Web", "Questionnaire.Core.Web\Questionnaire.Core.Web.csproj", "{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}"
 EndProject
