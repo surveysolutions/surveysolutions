@@ -10,7 +10,7 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire
     {
         public Guid PublicKey { set; get; }
 
-        public string QuestionText;
+        public string QuestionText { set; get; }
 
         public string ConditionExpression { get; set; }
 

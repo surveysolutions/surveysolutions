@@ -11,10 +11,10 @@
     string id = Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
     viewBag.Add("id", id);
     viewBag.Add("draw-key-board", "true");
-    var requiredAttribute = string.Empty;
-    if (Model.Mandatory) { requiredAttribute = "required=\"true\""; }
+    var required = string.Empty;
+    if (Model.Mandatory) { required = "true"; }
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
     @Html.Hidden("Parent", Model.PublicKey)
-    @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, Model.Title, new { draw_key_board = "true", type = "num", requiredAttribute }, new { @class = "calculator" }, new { @class = "bold" })
+    @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, Model.Title, new { draw_key_board = "true", type = "num", @required }, new { @class = "calculator" }, new { @class = "bold" })
 }
