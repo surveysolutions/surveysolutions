@@ -66,7 +66,7 @@ namespace Questionnaire.Core.Web.Export
             {
                 ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
             };
-            data.Events = this.synchronizer.ReadEvents();
+            data.Events = this.synchronizer.ReadCompleteQuestionare();
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {
@@ -93,7 +93,7 @@ namespace Questionnaire.Core.Web.Export
                            {
                                ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
                            };
-            data.Events = this.synchronizer.ReadCompleteQuestionare(viewRepository);
+            data.Events = this.synchronizer.ReadCompleteQuestionare();
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {

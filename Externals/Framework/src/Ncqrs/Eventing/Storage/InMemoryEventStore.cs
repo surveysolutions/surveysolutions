@@ -71,10 +71,5 @@ namespace Ncqrs.Eventing.Storage
         {
             return _events.Values.SelectMany(e => e.ToList()).Where(e => e.EventTimeStamp >= start);
         }
-
-        public IEnumerable<CommittedEventStream> ReadByAggregateRoot()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
