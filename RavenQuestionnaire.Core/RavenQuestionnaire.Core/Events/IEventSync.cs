@@ -63,6 +63,8 @@ namespace RavenQuestionnaire.Core.Events
 
                     uncommitedStream.Append(committedEvent.CreateUncommitedEvent());
                 }
+                if(!uncommitedStream.Any())
+                    continue;
                 eventStore.Store(uncommitedStream);
             }
             NCQRSInit.RebuildReadLayer();
