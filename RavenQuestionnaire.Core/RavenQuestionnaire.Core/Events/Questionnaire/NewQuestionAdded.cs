@@ -32,6 +32,8 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire
 
         public Guid? GroupPublicKey { get; set; }
 
+        public Guid TargetGroupKey { get; set; }
+
         public string Instructions { get; set; }
     }
 }

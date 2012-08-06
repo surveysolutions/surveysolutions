@@ -145,7 +145,7 @@ namespace RavenQuestionnaire.Core.Domain
             this._innerDocument.Remove(e.QuestionId);
         }
 
-        public void ChangeQuestion(Guid publicKey, string questionText, 
+        public void ChangeQuestion(Guid publicKey, string questionText, Guid TargetGroupKey,
             string stataExportCaption, string instructions, 
             QuestionType questionType, Guid? groupPublicKey,
             string conditionExpression, string validationExpression, string validationMessage,
@@ -154,6 +154,7 @@ namespace RavenQuestionnaire.Core.Domain
             ApplyEvent(new QuestionChanged
             {
                 QuestionText = questionText,
+                TargetGroupKey = TargetGroupKey,
                 StataExportCaption = stataExportCaption,
                 QuestionType = questionType,
                 ConditionExpression = conditionExpression,
@@ -183,7 +184,7 @@ namespace RavenQuestionnaire.Core.Domain
         /// <param name="answers"></param>
         public void AddQuestion(Guid publicKey, string questionText, string stataExportCaption,QuestionType questionType,
                                                      string conditionExpression,string validationExpression, string validationMessage,
-                                                     bool featured, bool mandatory, Order answerOrder, string instructions,  Guid? groupPublicKey,
+                                                     bool featured, bool mandatory, Order answerOrder, string instructions,  Guid? groupPublicKey, Guid TargetGroupKey,
                                                      Answer[] answers)
         {
             //performe checks before event raising
@@ -206,6 +207,7 @@ namespace RavenQuestionnaire.Core.Domain
                 Mandatory = mandatory,
                 AnswerOrder = answerOrder,
                 GroupPublicKey = groupPublicKey,
+                TargetGroupKey = TargetGroupKey,
                 Answers = answers,
                 Instructions = instructions
             });
@@ -227,6 +229,7 @@ namespace RavenQuestionnaire.Core.Domain
             result.Mandatory = e.Mandatory;
             result.Instructions = e.Instructions;
             result.PublicKey = e.PublicKey;
+            result.Triggers.Add(e.TargetGroupKey);
             UpdateAnswerList(e.Answers, result);
             
             _innerDocument.Add(result, e.GroupPublicKey);
@@ -250,6 +253,7 @@ namespace RavenQuestionnaire.Core.Domain
             question.Instructions = e.Instructions;
             question.Featured = e.Featured;
             question.Mandatory = e.Mandatory;
+            question.Triggers.Add(e.TargetGroupKey);
             question.AnswerOrder = e.AnswerOrder;
         }
         
