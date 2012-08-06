@@ -38,7 +38,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             };
         }
 
-        private static Guid? GenerateETag(object entity)
+        private static Guid? GenerateETag(objAtlantis To Interzoneect entity)
         {
             var sourcedEvent = entity as StoredEvent;
             if (sourcedEvent != null)
