@@ -185,12 +185,14 @@
     <Compile Include="Commands\Synchronization\CreateNewSynchronizationProcessCommand.cs" />
     <Compile Include="Commands\Synchronization\EndProcessComand.cs" />
     <Compile Include="Commands\Synchronization\PushEventsCommand.cs" />
+    <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Denormalizers\IDenormalizerStorage.cs" />
     <Compile Include="Documents\FileDocument.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Domain\SyncProcessAR.cs" />
+    <Compile Include="Domain\UserAR.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\CQGroupItemDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
@@ -373,6 +375,7 @@
     <Compile Include="Events\Synchronization\AggregateRootChanged.cs" />
     <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs" />
     <Compile Include="Events\Synchronization\ProcessEnded.cs" />
+    <Compile Include="Events\User\NewUserCreated.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
@@ -620,7 +623,6 @@
     <Folder Include="CommandHandlers\Statistics\" />
     <Folder Include="Commands\NewFolder1\" />
     <Folder Include="Commands\Statistics\" />
-    <Folder Include="Events\User\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
