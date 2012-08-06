@@ -63,7 +63,7 @@
 @helper RenderNavigation(ScreenNavigation screen)
     {
         List<CompleteGroupHeaders> crumbs = screen.BreadCumbs.Skip(1).ToList();
-    <div data-role="footer" data-theme="b" class="ui-bar" >
+    <div data-role="header" data-theme="b" class="ui-bar" >
         @for (int i = 0; i < crumbs.Count; i++)
         {
             CompleteGroupHeaders breadCumb = crumbs[i];
@@ -83,7 +83,7 @@
 }
 @helper RenderFooter(ScreenNavigation screen)
     {
-    <div data-role="header" data-theme="b">
+    <div data-role="footer" data-theme="b">
         @if (screen.PrevScreen != null)
         {
            
