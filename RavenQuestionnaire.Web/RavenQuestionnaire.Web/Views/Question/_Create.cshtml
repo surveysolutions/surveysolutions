@@ -29,19 +29,18 @@
       this.ViewBag.Images = images;
   }
 }
-
 @if (Model.PublicKey != Guid.Empty)
 {
-<h3>
-<a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId, qid = Model.PublicKey })" class="btn">
-    <i class="icon-arrow-left"></i></a>Edit Question</h3>
+    <h3>
+        <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId, qid = Model.PublicKey })" class="btn">
+            <i class="icon-arrow-left"></i></a>Edit Question</h3>
 }
 else
 {
-   <h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId})" class="btn">
-    <i class="icon-arrow-left"></i></a>Edit Question</h3> 
+    <h3>
+        <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId })" class="btn">
+            <i class="icon-arrow-left"></i></a>Edit Question</h3> 
 }
-
 @using (Html.BeginForm("Save", "Question"))
 {
     using (Html.BeginCollectionItem("question", Model.PublicKey))
@@ -56,10 +55,20 @@ else
                     @Html.ValidationMessageFor(model => model.Title)
                 </div>
             </div>
+            @if (Model.PublicKey == Guid.Empty || Model.TargetGroupKey!=Guid.Empty) 
+            {
+            <div class="control-group">
+                <label class="control-label"> Propagateble GUID</label>
+                <div class="controls">
+                    @Html.EditorFor(model => Model.TargetGroupKey)
+                </div>
+            </div>
+            }
             <div class="control-group">
                 @Html.LabelFor(model => model.Featured, new { @class = "control-label" })
                 <div class="controls">
-                    <label class="checkbox">@Html.CheckBoxFor(model => model.Featured) Yes </label>
+                    <label class="checkbox">@Html.CheckBoxFor(model => model.Featured) Yes
+                    </label>
                 </div>
             </div>
             <div class="control-group">
@@ -76,17 +85,19 @@ else
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Type</label>
+                <label class="control-label">
+                    Type</label>
                 <div class="controls">
                     @{
-               IDictionary<string, object> html = new Dictionary<string, object>();
-               html.Add("customName", "questionName");
+        IDictionary<string, object> html = new Dictionary<string, object>();
+        html.Add("customName", "questionName");
                         @Html.EnumDropDownListFor(model => Model.QuestionType, html)
                     }
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Answer order</label>
+                <label class="control-label">
+                    Answer order</label>
                 <div class="controls">
                     @Html.EnumDropDownListFor(model => Model.AnswerOrder)
                 </div>
@@ -147,14 +158,13 @@ else
         <input type="submit" value="Save" class="btn btn-primary btn-large" />
         @if (Model.PublicKey != Guid.Empty)
         {
-        <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId, qid = Model.PublicKey })" class="btn btn-large">
-            <i class="icon-arrow-left"></i>Back to Questionnaire</a>
+            <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId, qid = Model.PublicKey })" class="btn btn-large">
+                <i class="icon-arrow-left"></i>Back to Questionnaire</a>
         }
         else
         {
-            <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId})" class="btn btn-large">
-            <i class="icon-arrow-left"></i>Back to Questionnaire</a>
+            <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireId })" class="btn btn-large">
+                <i class="icon-arrow-left"></i>Back to Questionnaire</a>
         }
-        
     </div>
 }

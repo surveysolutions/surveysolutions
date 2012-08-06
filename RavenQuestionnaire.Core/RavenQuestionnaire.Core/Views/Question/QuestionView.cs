@@ -54,6 +54,8 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public Guid? Parent { get; set; }
 
+        public Guid TargetGroupKey { get; set; }
+
         public List<ICompositeView> Children { get; set; }
 
         #endregion
@@ -88,6 +90,8 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
             this.Mandatory = doc.Mandatory;
+            if (doc.Triggers.Count>0)
+                this.TargetGroupKey = doc.Triggers.First();
         }
 
         #endregion

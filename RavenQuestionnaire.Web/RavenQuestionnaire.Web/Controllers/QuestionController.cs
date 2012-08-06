@@ -163,6 +163,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Save(QuestionView[] question, AnswerView[] answers)
         {
+ 
             QuestionView model = question[0];
             if (ModelState.IsValid)
             {
@@ -177,9 +178,27 @@ namespace RavenQuestionnaire.Web.Controllers
                         model.PublicKey = newItemKey;
                         //new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
+                        if (model.TargetGroupKey==Guid.Empty)
                         commandService.Execute(new AddQuestionCommand(Guid.Parse(model.QuestionnaireId),
                                                                                         newItemKey,
                                                                                         model.Title,
+                                                                                        model.StataExportCaption,
+                                                                                        model.QuestionType,
+                                                                                        model.Parent,
+                                                                                        model.ConditionExpression,
+                                                                                        model.ValidationExpression,
+                                                                                        model.ValidationMessage,
+                                                                                        model.Instructions,
+                                                                                        model.Featured,
+                                                                                        model.Mandatory,
+                                                                                        model.AnswerOrder,
+                                                                                        ansverItems)
+                                                   );
+                        else
+                            commandService.Execute(new AddQuestionCommand(Guid.Parse(model.QuestionnaireId),
+                                                                                        newItemKey,
+                                                                                        model.Title,
+                                                                                        model.TargetGroupKey,
                                                                                         model.StataExportCaption,
                                                                                         model.QuestionType,
                                                                                         model.Parent,
@@ -197,9 +216,25 @@ namespace RavenQuestionnaire.Web.Controllers
                     {
                         //new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
+                        if (model.TargetGroupKey == Guid.Empty)
                         commandService.Execute(new ChangeQuestionCommand(Guid.Parse(model.QuestionnaireId),
                                                                         model.PublicKey,
                                                                       model.Title,
+                                                                      model.StataExportCaption,
+                                                                      model.QuestionType,
+                                                                      model.ConditionExpression,
+                                                                      model.ValidationExpression,
+                                                                      model.ValidationMessage,
+                                                                      model.Instructions,
+                                                                      model.Featured,
+                                                                      model.Mandatory,
+                                                                      model.AnswerOrder,
+                                                                      ansverItems));
+                        else
+                            commandService.Execute(new ChangeQuestionCommand(Guid.Parse(model.QuestionnaireId),
+                                                                        model.PublicKey,
+                                                                      model.Title,
+                                                                      model.TargetGroupKey,
                                                                       model.StataExportCaption,
                                                                       model.QuestionType,
                                                                       model.ConditionExpression,

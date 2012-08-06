@@ -19,13 +19,12 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
         public Propagate Propagateble { get; set; }
         public Guid? ParentGroupKey { get; set; }
 
-        public AddGroupCommand(Guid questionnaireId, Guid publicKey, string text, Propagate propagate, Guid? parentGroupKey, string conditionExpression)
+        public AddGroupCommand(Guid questionnaireId, Guid publicKey, string text,  Guid? parentGroupKey, string conditionExpression)
         {
             QuestionnaireId = questionnaireId;
             PublicKey = publicKey;
             Text = text;
             ConditionExpression = conditionExpression;
-            Propagateble = propagate;
             ParentGroupKey = parentGroupKey;
         }
     }

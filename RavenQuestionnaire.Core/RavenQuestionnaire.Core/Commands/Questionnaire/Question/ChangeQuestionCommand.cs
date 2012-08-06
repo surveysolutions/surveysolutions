@@ -57,6 +57,8 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             get;
             set;
         }
+
+        public Guid TargetGroupKey { get; set; }
         public Answer[] Answers { get; set; }
 
         public ChangeQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, string stataExportCaption, QuestionType questionType,
@@ -77,6 +79,27 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.PublicKey = publicKey;
             this.Answers = answers;
         }
+        public ChangeQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, Guid TargetGroupKey, string stataExportCaption, QuestionType questionType,
+                                                     string conditionExpression, string validationExpression, string validationMessage,
+                                                     string instructions, bool featured, bool mandatory, Order answerOrder, Answer[] answers)
+        {
+            this.QuestionnaireId = questionnaireId;
+            this.QuestionText = questionText;
+            this.TargetGroupKey = TargetGroupKey;
+            this.StataExportCaption = stataExportCaption;
+            this.QuestionType = questionType;
+            this.ConditionExpression = conditionExpression;
+            this.ValidationExpression = validationExpression;
+            this.ValidationMessage = validationMessage;
+            this.Instructions = instructions;
+            this.Featured = featured;
+            this.Mandatory = mandatory;
+            this.AnswerOrder = answerOrder;
+            this.PublicKey = publicKey;
+            this.Answers = answers;
+        }
+
+
     }
 }
 

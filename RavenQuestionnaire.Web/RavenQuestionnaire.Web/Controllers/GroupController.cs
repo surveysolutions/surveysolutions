@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     {
                         var newItemKey = Guid.NewGuid();
                         commandService.Execute(new AddGroupCommand(Guid.Parse(model.QuestionnaireId), newItemKey,
-                            model.Title, model.Propagated, model.Parent, model.ConditionExpression));
+                            model.Title, model.Parent, model.ConditionExpression));
                     }
                     else
                     {
