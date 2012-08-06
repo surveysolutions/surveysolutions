@@ -14,15 +14,19 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Web.Controllers;
 using RavenQuestionnaire.Web.Models;
+using Web.CAPI.Controllers;
+using Web.CAPI.Models;
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     [TestFixture]
-    public class CompleteQuestionnaireControllerTest
+    public class SurveyControllerTest
     {
         public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
@@ -30,12 +34,11 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public Mock<IBagManager> BagManager { get; set; }
         public Mock<IGlobalInfoProvider> InfoProvider { get; set; }
         public Mock<ICommandService> CommandServiceMock { get; set; }
-        public CompleteQuestionnaireController Controller { get; set; }
+        public SurveyController Controller { get; set; }
 
         [SetUp]
         public void CreateObjects()
         {
-            CommandInvokerMock = new Mock<ICommandInvoker>();  
             ViewRepositoryMock = new Mock<IViewRepository>();
             Authentication = new Mock<IFormsAuthentication>();
             BagManager = new Mock<IBagManager>();
@@ -44,19 +47,18 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
             CommandServiceMock = new Mock<ICommandService>();
             NcqrsEnvironment.SetDefault<ICommandService>(CommandServiceMock.Object);
-            Controller = new CompleteQuestionnaireController(CommandInvokerMock.Object, ViewRepositoryMock.Object, 
-                BagManager.Object, InfoProvider.Object);
+            Controller = new SurveyController(ViewRepositoryMock.Object,  InfoProvider.Object);
         }
 
         [Test]
         public void When_GetCompleteQuestionnaireIsExecutedModelIsReturned()
         {
-            var input = new CompleteQuestionnaireBrowseInputModel();
-            var output = new CompleteQuestionnaireBrowseView(0, 10, 0, new CompleteQuestionnaireBrowseItem[0], "");
-            ViewRepositoryMock.Setup(x => x.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(input))
+          //  var input = new CQGroupedBrowseInputModel();
+            var output = new CQGroupedBrowseView(0,10,10,new CQGroupItem[0]);
+            ViewRepositoryMock.Setup(x => x.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(It.IsAny<CQGroupedBrowseInputModel>()))
                 .Returns(output);
 
-            var result = Controller.Index(input);
+            var result = Controller.Dashboard();
             Assert.AreEqual(output, result.ViewData.Model);
         }
         [Test]
@@ -68,12 +70,12 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             innerDoc.LastEntryDate = DateTime.Now;
             innerDoc.Status = new SurveyStatus(Guid.NewGuid(), "dummyStatus");
             innerDoc.Responsible = new UserLight("-1", "dummyUser");
-            var output = new CompleteQuestionnaireView(innerDoc);
+            var output = new CompleteQuestionnaireMobileView(innerDoc);
             var input = new CompleteQuestionnaireViewInputModel("cqId");
 
             ViewRepositoryMock.Setup(
                 x =>
-                x.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireView>(
+                x.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                     It.Is<CompleteQuestionnaireViewInputModel>(v => v.CompleteQuestionnaireId.Equals(input.CompleteQuestionnaireId))))
                 .Returns(output);
 
@@ -84,7 +86,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             statusDoc.Statuses.Add( new StatusItem(){PublicKey = Guid.NewGuid(), Title = "dummy"});
 
             */
-            var result = Controller.Result(output.Id);
+            var result = Controller.Index(output.Id, null, null, null, null);
             Assert.AreEqual(output, result.ViewData.Model);
         }
         [Test]
@@ -126,15 +128,15 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             QuestionnaireDocument innerDoc = new QuestionnaireDocument();
             innerDoc.Id = "questionnairedocuments/cqId";
-            CompleteQuestionnaireViewEnumerable template = new CompleteQuestionnaireViewEnumerable((CompleteQuestionnaireDocument)innerDoc, new CompleteGroupFactory());
+            CompleteQuestionnaireMobileView template = new CompleteQuestionnaireMobileView((CompleteQuestionnaireDocument)innerDoc);
             var input = new CompleteQuestionnaireViewInputModel("cqId", Guid.NewGuid(),null);
             ViewRepositoryMock.Setup(
                x =>
-               x.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>(
+               x.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                    It.Is<CompleteQuestionnaireViewInputModel>(v => v.CompleteQuestionnaireId.Equals(input.CompleteQuestionnaireId))))
                .Returns(template);
-            var result = Controller.Question("cqId", null);
-            Assert.AreEqual(result.ViewData.Model.GetType(), typeof(CompleteQuestionnaireViewEnumerable));
+            var result = Controller.Index("cqId", null,null,null,null);
+            Assert.AreEqual(result.ViewData.Model.GetType(), typeof(CompleteQuestionnaireMobileView));
             Assert.AreEqual(result.ViewData.Model, template);
         }
 
@@ -142,15 +144,10 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void SaveSingleResult_Valid_FormIsReturned()
         {
-            ViewRepositoryMock.Setup(
-                x =>
-                x.Load<StatusViewInputModel, StatusView>(
-                    It.IsAny<StatusViewInputModel>()))
-                .Returns(new StatusView());
             CompleteQuestionView question = new CompleteQuestionView(Guid.NewGuid().ToString(), Guid.NewGuid());
             question.Answers = new CompleteAnswerView[] {new CompleteAnswerView(question.PublicKey,new CompleteAnswer())};
-            Controller.SaveSingleResultJson(
-                new CompleteQuestionSettings[] { new CompleteQuestionSettings() { QuestionnaireId = question.QuestionnaireId, PropogationPublicKey = Guid.NewGuid() } },
+            Controller.SaveAnswer(
+                new CompleteQuestionSettings[] { new CompleteQuestionSettings() { QuestionnaireId = question.QuestionnaireId, PropogationPublicKey = Guid.NewGuid(), ParentGroupPublicKey = Guid.NewGuid()} },
                 new CompleteQuestionView[]
                     {
                         question
@@ -159,22 +156,5 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             CommandServiceMock.Verify(x => x.Execute(It.IsAny<SetAnswerCommand>()),
                                       Times.Once());
         }
-
-        //[Test]
-        //public void SaveCommentsResult_Valid_FormIsReturned()
-        //{
-        //    ViewRepositoryMock.Setup(
-        //        x =>
-        //        x.Load<StatusViewInputModel, StatusView>(
-        //            It.IsAny<StatusViewInputModel>()))
-        //        .Returns(new StatusView());
-        //    CompleteQuestionView question = new CompleteQuestionView("cId", Guid.NewGuid());
-        //    question.Comments = "Everything will be ok";
-        //    Controller.SaveCommentsJson(
-        //        new CompleteQuestionSettings[] { new CompleteQuestionSettings() { QuestionnaireId = "cId", PropogationPublicKey = Guid.NewGuid() } },
-        //        new CompleteQuestionView[] { question });
-        //    CommandInvokerMock.Verify(x => x.Execute(It.IsAny<UpdateCommentsInCompleteQuestionnaireCommand>()),
-        //                              Times.Once());
-        //}
     }
 }

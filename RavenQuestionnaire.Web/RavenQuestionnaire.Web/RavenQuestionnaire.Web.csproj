@@ -206,14 +206,10 @@
     <Compile Include="Controllers\AsyncQuestionnaireUpdater.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\SynchronizationsController.cs" />
-    <Compile Include="Controllers\CompleteQuestionnaireController.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FlowGraphController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
-    <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\FlowGraph.cs" />
     <Compile Include="Models\GridDataRequest.cs" />
     <Compile Include="Controllers\GroupController.cs" />

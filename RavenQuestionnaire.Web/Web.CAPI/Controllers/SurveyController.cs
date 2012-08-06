@@ -81,7 +81,7 @@ namespace Web.CAPI.Controllers
             return View(stat);
         }
 
-        public ActionResult Dashboard()
+        public ViewResult Dashboard()
         {
             var model = viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(new CQGroupedBrowseInputModel());
             return View(model);
@@ -182,7 +182,7 @@ namespace Web.CAPI.Controllers
                 return Json(new { question = questions[0], settings = settings[0], error = e.Message });
             }
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
-                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId, settings[0].ParentGroupPublicKey.Value,settings[0].PropogationPublicKey));
+                new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId, settings[0].ParentGroupPublicKey,settings[0].PropogationPublicKey));
             return Json(model);
         }
 
