@@ -114,6 +114,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompleteQuestionnaire\CompleteQuestionnaireSync.cs" />
+    <Compile Include="CompleteQuestionnaire\ICompleteQuestionnaireSync.cs" />
+    <Compile Include="SynchronizationFlow\AbstractSynchronizer.cs" />
+    <Compile Include="SynchronizationFlow\NetworkSynchronizer.cs" />
+    <Compile Include="SynchronizationFlow\SynchronizationException.cs" />
+    <Compile Include="SynchronizationFlow\UsbSynchronizer.cs" />
     <Compile Include="WcfInfrastructure\IChanelFactoryWrapper.cs" />
     <Compile Include="WcfInfrastructure\ServiceDiscover.cs" />
   </ItemGroup>

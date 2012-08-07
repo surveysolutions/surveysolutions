@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="DefaultUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://192.168.3.113/dev-capi/</Value>
+      <Value Profile="(Default)">http://localhost:8083</Value>
     </Setting>
   </Settings>
 </SettingsFile>

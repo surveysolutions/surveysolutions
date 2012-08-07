@@ -23,31 +23,25 @@ using SynchronizationMessages.Handshake;
 
 namespace DataEntryClient.CompleteQuestionnaire
 {
-    public class CompleteQuestionnaireSync
+    public class CompleteQuestionnaireSync : ICompleteQuestionnaireSync
     {
-      //  private IKernel kernel;
-      //  private IViewRepository viewRepository;
         private IChanelFactoryWrapper chanelFactoryWrapper;
         private IClientSettingsProvider clientSettingsProvider;
         private IEventSync eventStore;
         private Guid processGuid;
         private string baseAdress;
         private ICommandService invoker;
-      //  private ICommandInvokerAsync invokerAsync;
         public CompleteQuestionnaireSync(IKernel kernel, Guid processGuid, string baseAdress)
         {
-          //  this.invoker = kernel.Get<ICommandInvoker>();
-       //     this.invokerAsync = kernel.Get<ICommandInvokerAsync>();
-        //    this.viewRepository = kernel.Get<IViewRepository>();
             this.chanelFactoryWrapper = kernel.Get<IChanelFactoryWrapper>();
             this.clientSettingsProvider = kernel.Get<IClientSettingsProvider>();
             this.eventStore = kernel.Get<IEventSync>();
             this.invoker = NcqrsEnvironment.Get<ICommandService>();
-               this.processGuid = processGuid;
+            this.processGuid = processGuid;
             this.baseAdress = baseAdress;
         }
 
-        public void Execute()
+        public void Export()
         {
             Guid syncKey = clientSettingsProvider.ClientSettings.PublicKey;
             Guid? lastSyncEventGuid = GetLastSyncEventGuid(syncKey);
@@ -80,8 +74,7 @@ namespace DataEntryClient.CompleteQuestionnaire
                             var message = new EventSyncMessage
                                               {
                                                   Command = aggregateRootEventStream,
-                                                  SynchronizationKey = clientKey,
-                                                  CommandKey = aggregateRootEventStream.SourceId
+                                                  SynchronizationKey = clientKey
                                               };
                             ErrorCodes returnCode = client.Process(message);
                             invoker.Execute(new ChangeEventStatusCommand(this.processGuid,
@@ -92,31 +85,32 @@ namespace DataEntryClient.CompleteQuestionnaire
 
                         }
                         invoker.Execute(new EndProcessComand(this.processGuid));
-                        /*  var events = viewRepository.Load<EventBrowseInputModel, EventBrowseView>(new EventBrowseInputModel(lastSyncEvent));
-                        var eventList =
-                            events.Items.Select(i => new EventDocument(i.Command, i.PublicKey, clientKey)).ToList();
-                        invoker.ExecuteInSingleScope(new PushEventsCommand(processGuid, eventList, null));*/
-                        /*   foreach (var eventItem in events.Items)
-                        {
-
-                            invoker.ExecuteInSingleScope(new ChangeEventStatusCommand(processGuid, eventItem.PublicKey, EventState.InProgress, null));
-                            var message = new EventSyncMessage
-                            {
-                                SynchronizationKey = clientKey,
-                                CommandKey = eventItem.PublicKey,
-                                Command = eventItem.Command
-                            };
-
-                            ErrorCodes returnCode = client.Process(message);
-                            invoker.ExecuteInSingleScope(new ChangeEventStatusCommand(processGuid, eventItem.PublicKey,
-                                                                         returnCode == ErrorCodes.None
-                                                                             ? EventState.Completed
-                                                                             : EventState.Error, null));
-                        }*/
                     }
                 );
-         //   invoker.ExecuteInSingleScope(new EndProcessComand(processGuid, null));
         }
 
+        public void Import()
+        {
+            ListOfAggregateRootsForImportMessage result = null;
+            this.chanelFactoryWrapper.Execute<IGetAggragateRootList>(this.baseAdress,
+                (client) =>
+                {
+                    result = client.Process();
+                });
+            if (result == null)
+                throw new Exception("aggregate roots list is empty");
+            List<AggregateRootEventStream> events=new List<AggregateRootEventStream>();
+            this.chanelFactoryWrapper.Execute<IGetEventStream>(this.baseAdress, (client) =>
+                                                                                    {
+                                                                                        foreach (
+                                                                                            Guid guid in result.Roots)
+                                                                                        {
+                                                                                            events.Add(
+                                                                                                client.Process(guid).EventStream);
+
+                                                                                        }
+                                                                                    });
+            this.eventStore.WriteEvents(events);
+        }
     }
 }

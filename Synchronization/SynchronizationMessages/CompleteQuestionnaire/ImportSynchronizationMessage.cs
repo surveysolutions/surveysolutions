@@ -1,35 +1,39 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Events;
 using SynchronizationMessages.Synchronization;
 
 namespace SynchronizationMessages.CompleteQuestionnaire
 {
-    public class EventSyncMessage : ICustomSerializable
+    public class ImportSynchronizationMessage : ICustomSerializable
     {
-        public Guid SynchronizationKey { get; set; }
-        public AggregateRootEventStream Command { get; set; }
+        public AggregateRootEventStream EventStream { get; set; }
+
+        #region Implementation of ICustomSerializable
 
         public void WriteTo(Stream stream)
         {
-            FormatHelper.WriteGuid(stream, this.SynchronizationKey);
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
 
-            var command= JsonConvert.SerializeObject(Command, Formatting.Indented, settings);
+            var command = JsonConvert.SerializeObject(EventStream, Formatting.Indented, settings);
             FormatHelper.WriteString(stream, command);
         }
 
         public void InitializeFrom(Stream stream)
         {
-            this.SynchronizationKey = FormatHelper.ReadGuid(stream);
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
             var commandString = FormatHelper.ReadString(stream);
             var command = JsonConvert.DeserializeObject<AggregateRootEventStream>(commandString, settings);
 
-            this.Command = command;
+            this.EventStream = command;
         }
+
+        #endregion
     }
 }
