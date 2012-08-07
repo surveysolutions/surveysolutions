@@ -51,7 +51,10 @@ namespace RavenQuestionnaire.Core.Domain
         }
 
 
-
+        protected void OnLockStatusChanged(UserStatusChanged e)
+        {
+            _isLocked = e.IsLocked;
+        }
 
     }
 }

@@ -250,3 +250,23 @@ body.ui-mobile-viewport, div.ui-mobile-viewport {
 .instructions {
 	max-width: 500px;
 }
+
+.ui-footer .ui-btn-left, .ui-footer .ui-btn-right {
+	top: 2px;
+}
+#content_container .ui-header .ui-btn {
+	left: 0;
+    position: relative;
+    top: 0;
+}
+.ui-footer .ui-title {
+	margin: 0.5em 0 0.5em;
+}
+.splitview .page .ui-content {
+	bottom: 37px  !important;
+	 top: 42px !important;
+}
+#content_container .ui-bar.ui-header.ui-bar-b {
+	padding-bottom: 5px;
+	padding-top: 4px;
+}
