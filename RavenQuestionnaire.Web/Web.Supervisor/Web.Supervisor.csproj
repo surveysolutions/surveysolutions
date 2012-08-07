@@ -145,6 +145,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -223,6 +224,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Dashboard\Survey.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Survey\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Survey\Assigments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\LogOn.cshtml" />

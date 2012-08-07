@@ -1,0 +1,50 @@
+﻿@using RavenQuestionnaire.Core.Views.StatusReport
+@model StatusReportView
+@{
+    ViewBag.Title = "Status Report";
+}
+<h2>Surveys</h2>
+<table>
+<tr style="width: 100%">
+<td style="width: 50%">Name</td>
+<td>StartDate</td>
+<td>EndDate</td>
+@foreach (var item in ViewBag.Status)
+{
+    <td>@item.StatusTitle</td>
+}
+</tr>
+@foreach (var collect in Model.Items)
+{
+    <tr style="width: 100%">
+        <td style="width: 50%">@Html.ActionLink(collect.Title, "Assigments", new { collect.Id })</td>
+        <td>@collect.StartDate</td>
+        <td>@collect.EndDate</td>
+            @foreach (var it in collect.Items)
+            {
+                <td>@it.QuestionnaireCount</td>
+            }
+    </tr>
+}
+</table>
+@*
+@foreach (var item in Model.CollectItem)
+{
+    <h3>@item.Title</h3>
+    <ul class="nav nav-tabs nav-stacked">
+        @foreach (var status in item.Items)
+        {
+            <li>
+                @if (status.QuestionnaireCount != 0)
+                {
+                    <a href="@Url.Action("Status", "Dashboard", new { QuestionnaireId = item.Id, StatusId = status.StatusId })">@status.StatusTitle
+                        <span class="pull-right badge badge-info">@status.QuestionnaireCount</span></a>
+                }
+                else
+                {
+                    <a>@status.StatusTitle <span class="pull-right badge badge-info">@status.QuestionnaireCount</span></a>
+                }
+            </li>
+        }
+    </ul>
+}*@

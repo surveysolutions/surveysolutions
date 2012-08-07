@@ -8,7 +8,5 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
         {
         
         }
-
-        
     }
 }
