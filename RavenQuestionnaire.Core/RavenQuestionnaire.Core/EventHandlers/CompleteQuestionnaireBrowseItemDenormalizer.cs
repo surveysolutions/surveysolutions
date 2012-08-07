@@ -17,7 +17,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
                                                                IEventHandler<PropagatableGroupAdded>,
                                                                IEventHandler<PropagatableGroupDeleted>,
                                                                IEventHandler<CompleteQuestionnaireDeleted>,
-                                                               IEventHandler<QuestionnaireStatusChanged>
+                                                               IEventHandler<QuestionnaireStatusChanged>,
+                                                               IEventHandler<QuestionnaireAssignmentChanged>
     {
         private IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore;
         public CompleteQuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore)
@@ -112,5 +113,12 @@ namespace RavenQuestionnaire.Core.EventHandlers
         }
 
         #endregion
+
+        public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
+        {
+            var item = this.documentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+
+            item.Responsible = evnt.Payload.Responsible;
+        }
     }
 }
