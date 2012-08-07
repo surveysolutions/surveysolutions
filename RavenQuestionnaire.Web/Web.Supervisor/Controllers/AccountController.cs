@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using Questionnaire.Core.Web.Security;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using Web.Supervisor.Models;
 
@@ -34,10 +35,18 @@ namespace Web.Supervisor.Controllers
             {
                 if (Membership.ValidateUser(model.UserName, SimpleHash.ComputeHash(model.Password)))
                 {
-                    authentication.SignIn(model.UserName, false);
-                    return Redirect("~/");
+                    if (Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString()) ||
+                       Roles.IsUserInRole(model.UserName, UserRoles.Administrator.ToString()))
+                    {
+                        authentication.SignIn(model.UserName, false);
+                        return Redirect("~/");
+                    }
+                    ModelState.AddModelError("", "You have no access to this site. Contact your administrator.");
                 }
-                ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                else
+                {
+                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                }
             }
             return View(model);
         }
