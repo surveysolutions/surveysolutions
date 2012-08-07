@@ -379,6 +379,7 @@
     <Compile Include="Events\Synchronization\AggregateRootChanged.cs" />
     <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs" />
     <Compile Include="Events\Synchronization\ProcessEnded.cs" />
+    <Compile Include="Events\User\UserStatusChanged.cs" />
     <Compile Include="Events\User\NewUserCreated.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
@@ -634,7 +635,6 @@
     <Folder Include="CommandHandlers\Statistics\" />
     <Folder Include="Commands\NewFolder1\" />
     <Folder Include="Commands\Statistics\" />
-    <Folder Include="Events\User\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
