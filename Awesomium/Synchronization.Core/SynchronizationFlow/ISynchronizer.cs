@@ -1,3 +1,5 @@
+using System;
+
 namespace Synchronization.Core.SynchronizationFlow
 {
     public interface ISynchronizer
@@ -5,5 +7,7 @@ namespace Synchronization.Core.SynchronizationFlow
         ISynchronizer SetNext(ISynchronizer synchronizer);
         void Push();
         void Pull();
+        event EventHandler<SynchronizationEvent> PushProgressChanged;
+        event EventHandler<SynchronizationEvent> PullProgressChanged;
     }
 }

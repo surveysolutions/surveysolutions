@@ -16,11 +16,16 @@ namespace Synchronization.Core
         public void AddSynchronizer(ISynchronizer synchronizer)
         {
             if (root == null)
-            {
                 last = root = synchronizer;
-                return;
-            }
-            last = last.SetNext(synchronizer);
+            else
+                last = last.SetNext(synchronizer);
+            SubscribeSynchronizer(synchronizer);
+        }
+
+        protected void SubscribeSynchronizer(ISynchronizer synchronizer)
+        {
+            synchronizer.PullProgressChanged += this.PullProgressChanged;
+            synchronizer.PushProgressChanged += this.PushProgressChanged;
         }
 
         public void Push()
@@ -32,6 +37,9 @@ namespace Synchronization.Core
         {
             root.Pull();
         }
+
+        public event EventHandler<SynchronizationEvent> PushProgressChanged;
+        public event EventHandler<SynchronizationEvent> PullProgressChanged;
 
         #endregion
     }

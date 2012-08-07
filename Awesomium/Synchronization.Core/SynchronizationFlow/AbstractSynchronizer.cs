@@ -1,4 +1,6 @@
-﻿namespace Synchronization.Core.SynchronizationFlow
+﻿using System;
+
+namespace Synchronization.Core.SynchronizationFlow
 {
     public abstract class AbstractSynchronizer : ISynchronizer
     {
@@ -20,7 +22,7 @@
             catch (SynchronizationException)
             {
                 if (this.Next == null)
-                    new SynchronizationException("push wasn't successefull");
+                    throw new SynchronizationException("push wasn't successefull");
                 this.Next.Push();
 
             }
@@ -40,6 +42,32 @@
             }
         }
 
+        public event EventHandler<SynchronizationEvent> PushProgressChanged;
+        public event EventHandler<SynchronizationEvent> PullProgressChanged;
+        //The event-invoking method that derived classes can override.
+        protected virtual void OnPushProgressChanged(SynchronizationEvent e)
+        {
+            // Make a temporary copy of the event to avoid possibility of
+            // a race condition if the last subscriber unsubscribes
+            // immediately after the null check and before the event is raised.
+            EventHandler<SynchronizationEvent> handler = PushProgressChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+        //The event-invoking method that derived classes can override.
+        protected virtual void OnPullProgressChanged(SynchronizationEvent e)
+        {
+            // Make a temporary copy of the event to avoid possibility of
+            // a race condition if the last subscriber unsubscribes
+            // immediately after the null check and before the event is raised.
+            EventHandler<SynchronizationEvent> handler = PullProgressChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
         #endregion
 
         protected abstract void ExecutePush();

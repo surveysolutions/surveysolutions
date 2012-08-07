@@ -75,8 +75,8 @@ namespace Synchronization.Core.SynchronizationFlow
         }
         protected void WaitForEndProcess(Guid processid)
         {
-            bool isFinished = false;
-            while (isFinished)
+            int isFinished = 0;
+            while (isFinished!=100)
             {
                 WebRequest request = WebRequest.Create(PushCheckStateAdress);
                 // Set the Method property of the request to POST.
@@ -89,12 +89,13 @@ namespace Synchronization.Core.SynchronizationFlow
                     // Open the stream using a StreamReader for easy access.
                     StreamReader reader = new StreamReader(dataStream);
 
-                    isFinished = bool.Parse(reader.ReadToEnd());
+                    isFinished = int.Parse(reader.ReadToEnd());
 
                     // Clean up the streams.
                     reader.Close();
                     dataStream.Close();
                     response.Close();
+                    OnPushProgressChanged(new SynchronizationEvent(isFinished));
                 }
             }
 
