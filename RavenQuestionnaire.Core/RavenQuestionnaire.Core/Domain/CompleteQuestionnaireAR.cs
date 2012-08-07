@@ -353,5 +353,23 @@ namespace RavenQuestionnaire.Core.Domain
         {
             _doc.Status = e.Status;
         }
+
+        protected void ChangeAssignment(UserLight user)
+        {
+            //put check logic !!!
+
+            ApplyEvent(new QuestionnaireAssignmentChanged()
+            {
+                CompletedQuestionnaireId = this._doc.PublicKey,
+                Responsible = user
+            });
+        }
+
+        // Event handler for the PropagatableGroupAdded event. This method
+        // is automaticly wired as event handler based on convension.
+        protected void OnChangeAssignment(QuestionnaireAssignmentChanged e)
+        {
+            _doc.Responsible = e.Responsible;
+        }
     }
 }
