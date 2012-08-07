@@ -35,7 +35,7 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult Details(String id)
         {
-            var input = new InterviewerInputModel{};
+            var input = new InterviewerInputModel(id){};
             var model = viewRepository.Load<InterviewerInputModel, InterviewerView>(input);
             return View(model);
         }
