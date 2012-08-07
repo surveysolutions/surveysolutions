@@ -174,7 +174,9 @@
     <Compile Include="CommandHandlers\Questionnaire\Group\CreateNewGroupHandler.cs" />
     <Compile Include="CommandHandlers\Location\CreateNewLocationHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\CreateNewQuestionnaireHandler.cs" />
+    <Compile Include="CommandHandlers\User\ChangeUserStatusHandler.cs" />
     <Compile Include="Commands\Collection\RemoveCollectionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\PreLoadCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs" />
@@ -185,6 +187,7 @@
     <Compile Include="Commands\Synchronization\CreateNewSynchronizationProcessCommand.cs" />
     <Compile Include="Commands\Synchronization\EndProcessComand.cs" />
     <Compile Include="Commands\Synchronization\PushEventsCommand.cs" />
+    <Compile Include="Commands\User\ChangeUserStatusCommand.cs" />
     <Compile Include="Denormalizers\IDenormalizerStorage.cs" />
     <Compile Include="Documents\FileDocument.cs">
       <SubType>Code</SubType>
@@ -351,6 +354,7 @@
     <Compile Include="Events\Questionnaire\Completed\CommentSeted.cs" />
     <Compile Include="Events\Questionnaire\Completed\CompletedQuestionnaireLoaded.cs" />
     <Compile Include="Events\Questionnaire\Completed\CompleteQuestionnaireDeleted.cs" />
+    <Compile Include="Events\Questionnaire\Completed\QuestionnaireAssignmentChanged.cs" />
     <Compile Include="Events\Questionnaire\Completed\FeaturedQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewCompleteQuestionnaireCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\PropagatableGroupAdded.cs" />
@@ -583,6 +587,13 @@
     <Compile Include="Views\Synchronization\SyncProgressFactory.cs" />
     <Compile Include="Views\Synchronization\SyncProgressInputModel.cs" />
     <Compile Include="Views\Synchronization\SyncProgressView.cs" />
+    <Compile Include="Views\User\InterviewerView.cs" />
+    <Compile Include="Views\User\InterviewerViewFactory.cs" />
+    <Compile Include="Views\User\InterviewerInputModel.cs" />
+    <Compile Include="Views\User\InterviewersInputModel.cs" />
+    <Compile Include="Views\User\InterviewersItem.cs" />
+    <Compile Include="Views\User\InterviewersView.cs" />
+    <Compile Include="Views\User\InterviewersViewFactory.cs" />
     <Compile Include="Views\User\UserBrowseInputModel.cs" />
     <Compile Include="Views\User\UserBrowseItem.cs" />
     <Compile Include="Views\User\UserBrowseView.cs" />
