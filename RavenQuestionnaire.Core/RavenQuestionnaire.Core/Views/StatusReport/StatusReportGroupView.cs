@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace RavenQuestionnaire.Core.Views.StatusReport
 {
@@ -6,6 +7,8 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
     {
         public string Id { get; set; }
         public string Title { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public List<StatusReportItemView> Items { get; set; }
 
         public StatusReportGroupView()
