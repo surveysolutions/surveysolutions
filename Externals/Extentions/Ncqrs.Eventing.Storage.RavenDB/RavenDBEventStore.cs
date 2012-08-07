@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using Newtonsoft.Json;
 using Raven.Client;
 using Raven.Client.Document;
 using Ncqrs.Eventing.Sourcing;
@@ -51,16 +53,21 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            using (var session = _documentStore.OpenSession())
+            /*  using (var session = _documentStore.OpenSession())
             {
                 var storedEvents = session.Query<StoredEvent>()
                     .Customize(x => x.WaitForNonStaleResults())
                     .Where(x => x.EventSourceId == id)
                     .Where(x => x.EventSequence >= minVersion)
                     .Where(x => x.EventSequence <= maxVersion)
-                    .ToList().OrderBy(x => x.EventSequence);
-                return new CommittedEventStream(id, storedEvents.Select(ToComittedEvent));
-            }
+                    .ToList().OrderBy(x => x.EventSequence);*/
+
+            var storedEvents =
+                AccumulateEvents(
+                    x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion).
+                    OrderBy(x => x.EventSequence);
+            return new CommittedEventStream(id, storedEvents.Select(ToComittedEvent));
+            // }
         }
 
         private static CommittedEvent ToComittedEvent(StoredEvent x)
@@ -125,90 +132,34 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                        };
         }
 
-
-     /*   /// <summary>
-        /// Get some events after specified event.
-        /// </summary>
-        /// <param name="eventId">The id of last event not to be included in result set.</param>
-        /// <param name="maxCount">Maximum number of returned events</param>
-        /// <returns>A collection events starting right after <paramref name="eventId"/>.</returns>
-        public IEnumerable<CommittedEvent> GetEventsAfter(Guid? eventId, int maxCount)
-        {
-            var result = new List<CommittedEvent>();
-
-            using (var session = _documentStore.OpenSession())
-            {
-                var storedEvents = session.Query<StoredEvent>()
-                    .Customize(x => x.WaitForNonStaleResults())
-                    .Where(x => x.EventSequence >= minVersion)
-                    .Where(x => x.EventSequence <= maxVersion)
-                    .ToList().OrderBy(x => x.);
-                return new CommittedEventStream(id, storedEvents.Select(ToComittedEvent));
-            }
-
-            return result;
-        }*/
-        [Obsolete]
-        protected IList<StoredEvent> AccumulateWithPaging(Func<StoredEvent, bool> predicate)
-        {
-            List<StoredEvent> retval = new List<StoredEvent>();
-            int count;
-            using (var session = _documentStore.OpenSession())
-            {
-
-                Raven.Client.Linq.RavenQueryStatistics stats;
-                session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults())
-                    .Statistics(out stats).Where(predicate).ToList();
-
-                count = stats.TotalResults;
-            }
-            if (count == 0)
-                return retval;
-
-
-            int maxQueryLimit = 1024;
-            int queryLimit =(int) Math.Pow(2, Math.Ceiling(Math.Log(count/29.0,2)));
-            if (queryLimit > maxQueryLimit)
-                throw new Exception("Increase maxQueryLimit in Raven.Server.exe.config in <add key=\"Raven/MaxPageSize\" value=\"1024\"/> section");
-            int step = 0;
-            while (step < count)
-            {
-                using (var session = _documentStore.OpenSession())
-                {
-                    retval.AddRange(
-                        session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(step).Take(
-                            queryLimit).Where(predicate).ToList());
-                }
-                step += queryLimit;
-            }
-
-            return retval;
-        }
         /// <summary>
         /// Reads all committed events from storage. 
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        protected IList<StoredEvent> AccumulateEvents(Func<StoredEvent, bool> predicate)
+        protected IList<StoredEvent> AccumulateEvents(Expression<Func<StoredEvent, bool>> query)
         {
             List<StoredEvent> retval = new List<StoredEvent>();
-
-            int chunkSize = 128; //default ravenDB 
-            int currentChunkSize = chunkSize;
-            int selectedCount = 0;
-
-            while (currentChunkSize == chunkSize)
+            int maxPageSize = 1024;
+            int page = 0;
+            while (true)
             {
+
+
                 using (var session = _documentStore.OpenSession())
                 {
-                    var chunk = session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(selectedCount).Take(
-                            chunkSize).Where(predicate).ToList();
+                    Raven.Client.Linq.RavenQueryStatistics stats;
+                    var chunk =
+                        session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Statistics(out stats).Skip(page * maxPageSize).
+                        Take(maxPageSize).Where(query).OrderBy(x => x.EventTimeStamp).ToList();
+                    if (chunk.Count == 0)
+                        break;
 
                     retval.AddRange(chunk);
-                    currentChunkSize = chunk.Count;
-                    selectedCount += currentChunkSize;
+                    page++;
                 }
             }
+
             return retval;
 
         }
@@ -219,25 +170,12 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
             //var storedEvents = AccumulateWithPaging(x => x.EventTimeStamp >= start).OrderBy(x => x.EventTimeStamp);
 
-            var storedEvents = AccumulateEvents(x => x.EventTimeStamp >= start).OrderBy(x=>x.EventTimeStamp);
+            var storedEvents = AccumulateEvents(x => x.EventTimeStamp >= start);
             
             result = storedEvents.Select(ToComittedEvent).ToList();
 
             return result;
         }
 
-        public IEnumerable<CommittedEventStream> ReadByAggregateRoot()
-        {
-            List<CommittedEventStream> retval = new List<CommittedEventStream>();
-            List<Guid> aggreagates =
-                AccumulateEvents(x => x.EventTimeStamp >= DateTime.MinValue).Select(e => e.EventSourceId).Distinct().ToList();
-                //AccumulateWithPaging(x => x.EventTimeStamp >= DateTime.MinValue).Select(e => e.EventSourceId).Distinct().ToList();
-
-            foreach (Guid aggreagateId in aggreagates)
-            {
-                retval.Add(ReadFrom(aggreagateId, int.MinValue, int.MaxValue));
-            }
-            return retval;
-        }
     }
 }

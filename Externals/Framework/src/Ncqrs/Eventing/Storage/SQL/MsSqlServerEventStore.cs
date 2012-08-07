@@ -389,10 +389,6 @@ namespace Ncqrs.Eventing.Storage.SQL
             throw new NotImplementedException("please implement some body");
         }
 
-        public IEnumerable<CommittedEventStream> ReadByAggregateRoot()
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Adds a new <see cref="EventSource"/> to the store.

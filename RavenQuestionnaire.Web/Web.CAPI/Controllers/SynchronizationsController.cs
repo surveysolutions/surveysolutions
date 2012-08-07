@@ -20,6 +20,7 @@ using Web.CAPI.Utils;
 
 namespace Web.CAPI.Controllers
 {
+    [AsyncTimeout(20000000)]
     public class SynchronizationsController : AsyncController
     {
         private readonly IGlobalInfoProvider _globalProvider;
