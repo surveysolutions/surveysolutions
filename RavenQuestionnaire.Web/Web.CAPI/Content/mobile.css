@@ -270,3 +270,6 @@ body.ui-mobile-viewport, div.ui-mobile-viewport {
 	padding-bottom: 5px;
 	padding-top: 4px;
 }
+#dashboard-page .page .ui-content {
+	bottom: 0 !important;
+}
