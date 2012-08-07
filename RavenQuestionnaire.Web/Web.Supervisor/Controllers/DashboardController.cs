@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
@@ -39,12 +40,6 @@ namespace Web.Supervisor.Controllers
             return View(model);
         }
 
-        public ActionResult Users(UserBrowseInputModel input)
-        {
-            var model = viewRepository.Load<UserBrowseInputModel, UserBrowseView>(input);
-            return View(model);
-        }
-
         public ActionResult Questionnaires(QuestionnaireBrowseInputModel input)
         {
             var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
@@ -66,7 +61,7 @@ namespace Web.Supervisor.Controllers
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
-            var input = new CompleteQuestionnaireViewInputModel(id) {};
+            var input = new CompleteQuestionnaireViewInputModel(id) { };
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(input);
 
             return View(model);
