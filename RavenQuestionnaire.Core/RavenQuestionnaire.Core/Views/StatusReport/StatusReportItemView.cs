@@ -12,5 +12,6 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
         public string StatusTitle { get; set; }
 
         public int QuestionnaireCount { get; set; }
+        
     }
 }
