@@ -149,3 +149,7 @@ RavenQuestionnaire.Web/Web.Headquarter/obj/*
 Awesomium/ipch/awesomium-68c8a7cf/awesomium-d4608383.ipch
 Awesomium/Awesomium.NET CAPI Browser.sdf
 RavenQuestionnaire.Web\RavenQuestionnaire.Web\Content\bootstrap\*
+Awesomium/Synchronization.Core.Tests/bin/*
+Awesomium/Synchronization.Core.Tests/obj/*
+Awesomium/Synchronization.Core/bin/*
+Awesomium/Synchronization.Core/obj/*

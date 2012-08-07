@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 
-namespace DataEntryClient.SynchronizationFlow
+namespace Synchronization.Core.SynchronizationFlow
 {
     public class SynchronizationException : Exception
     {

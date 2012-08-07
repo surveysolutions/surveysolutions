@@ -1,31 +1,56 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace DataEntryClient.SynchronizationFlow
+namespace Synchronization.Core.SynchronizationFlow
 {
     public class NetworkSynchronizer : AbstractSynchronizer
     {
-        private readonly string _url;
-        public NetworkSynchronizer(string url)
+        private readonly string _host;
+        private readonly string _pushAdress;
+        private readonly string _pushReciverAdress;
+        private readonly string _pushCheckStateAdress;
+        private readonly string _pullAdress;
+        public NetworkSynchronizer(string host, string pushAdress, string pushReciverAdress, string pushCheckStateAdress, string pullAdress)
         {
-            this._url = url;
+            this._host = host;
+            this._pullAdress = pullAdress;
+            this._pushReciverAdress = pushReciverAdress;
+            this._pushAdress = pushAdress;
+            this._pushCheckStateAdress = pushCheckStateAdress;
         }
 
+        protected Uri PullAdress
+        {
+            get { return new Uri(_host + _pullAdress); }
+        }
+        protected Uri PushAdress
+        {
+            get { return new Uri(_host + _pushAdress); }
+        }
+        protected Uri PushCheckStateAdress
+        {
+            get { return new Uri(_host + _pushCheckStateAdress); }
+        }
         #region Overrides of AbstractSynchronizer
 
         protected override void ExecutePush()
         {
             try
             {
-
-                WebRequest request = WebRequest.Create(this._url);
+                WebRequest request = WebRequest.Create(PushAdress);
                 // Set the Method property of the request to POST.
                 request.Method = "POST";
-
+                
+                byte[] postDataStream = Encoding.UTF8.GetBytes(string.Format("url={0}", this._pushReciverAdress));
+                request.ContentLength = postDataStream.Length;
+                using (Stream newStream = request.GetRequestStream())
+                {
+                    // Send the data.
+                    newStream.Write(postDataStream, 0, postDataStream.Length);
+                    newStream.Close();
+                }
                 // Get the response.
                 using (WebResponse response = request.GetResponse())
                 {
@@ -53,7 +78,7 @@ namespace DataEntryClient.SynchronizationFlow
             bool isFinished = false;
             while (isFinished)
             {
-                WebRequest request = WebRequest.Create(this._url);
+                WebRequest request = WebRequest.Create(PushCheckStateAdress);
                 // Set the Method property of the request to POST.
                 request.Method = "POST";
                 // Get the response.
