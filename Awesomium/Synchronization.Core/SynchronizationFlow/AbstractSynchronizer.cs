@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DataEntryClient.SynchronizationFlow
+﻿namespace Synchronization.Core.SynchronizationFlow
 {
-    public abstract class AbstractSynchronizer
+    public abstract class AbstractSynchronizer : ISynchronizer
     {
-        protected AbstractSynchronizer Next;
+        protected ISynchronizer Next;
         #region Implementation of ISynchronizer
 
-        public AbstractSynchronizer SetNext(AbstractSynchronizer synchronizer)
+        public ISynchronizer SetNext(ISynchronizer synchronizer)
         {
             Next = synchronizer;
             return synchronizer;
@@ -24,8 +19,10 @@ namespace DataEntryClient.SynchronizationFlow
             }
             catch (SynchronizationException)
             {
-                
+                if (this.Next == null)
+                    new SynchronizationException("push wasn't successefull");
                 this.Next.Push();
+
             }
         }
 
@@ -37,7 +34,8 @@ namespace DataEntryClient.SynchronizationFlow
             }
             catch (SynchronizationException)
             {
-
+                if (this.Next == null)
+                    new SynchronizationException("push wasn't successefull");
                 this.Next.Pull();
             }
         }
