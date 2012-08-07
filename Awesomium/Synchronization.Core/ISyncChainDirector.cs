@@ -11,5 +11,7 @@ namespace Synchronization.Core
         void AddSynchronizer(ISynchronizer synchronizer);
         void Push();
         void Pull();
+        event EventHandler<SynchronizationEvent> PushProgressChanged;
+        event EventHandler<SynchronizationEvent> PullProgressChanged;
     }
 }

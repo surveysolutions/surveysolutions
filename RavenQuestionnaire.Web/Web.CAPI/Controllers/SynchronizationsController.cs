@@ -73,11 +73,10 @@ namespace Web.CAPI.Controllers
             return syncProcess;
 
         }
-        public bool ProgressBool(Guid id)
+        public int ProgressInPersentage(Guid id)
         {
             return
-                viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)).EndDate.
-                    HasValue;
+                viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)).ProgressPercentage;
         }
         public void ExportAsync()
         {

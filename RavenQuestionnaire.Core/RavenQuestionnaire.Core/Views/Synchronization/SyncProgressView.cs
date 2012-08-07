@@ -21,6 +21,7 @@ namespace RavenQuestionnaire.Core.Views.Synchronization
             if(doc.EndDate.HasValue)
             {
                 this.StateDescription = "Process is finished";
+                this.ProgressPercentage = 100;
                 return;
             }
             this.StateDescription = "Retrieving documents";
@@ -32,6 +33,6 @@ namespace RavenQuestionnaire.Core.Views.Synchronization
         public Guid ProcessPublicKey { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public int? ProgressPercentage { get; set; }
+        public int ProgressPercentage { get; set; }
     }
 }

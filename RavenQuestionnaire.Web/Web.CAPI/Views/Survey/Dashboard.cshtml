@@ -5,9 +5,7 @@
     <!-- Start of second page -->
     <div data-role="page" id="main" class="page">
         <div data-role="header" data-theme="b">
-            @Html.ActionLink("Push", "Push", "Synchronizations", new { }, new { rel = "external", data_inline = "true", data_role = "button", data_mini = "true", data_corners = "false", data_theme = "e",  @class = "ui-state-persist" })
-            @Html.ActionLink("Pull", "Pull", "Synchronizations", new { }, new { rel = "external", data_inline = "true", data_role = "button", data_mini = "true", data_corners = "false", data_theme = "e",  @class = "ui-state-persist" })
-          
+           
             <h1>Dashboard </h1>
            
             <a href="@Url.Action("LogOff", "Account")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">
