@@ -25,7 +25,7 @@ namespace Client.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://192.168.3.113/dev-capi/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8083")]
         public string DefaultUrl {
             get {
                 return ((string)(this["DefaultUrl"]));
