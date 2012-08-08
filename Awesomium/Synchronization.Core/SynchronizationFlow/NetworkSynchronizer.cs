@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
@@ -19,13 +20,9 @@ namespace Synchronization.Core.SynchronizationFlow
             this._pushCheckStateAdress = pushCheckStateAdress;
         }
 
-        protected Uri PullAdress
-        {
-            get { return new Uri( _pullAdress); }
-        }
         protected Uri PushAdress
         {
-            get { return new Uri(_host + _pushAdress); }
+            get { return new Uri(string.Format("{0}{1}?url={2}",_host , _pushAdress,_pullAdress)); }
         }
         protected Uri PushCheckStateAdress
         {
@@ -38,17 +35,7 @@ namespace Synchronization.Core.SynchronizationFlow
             try
             {
                 WebRequest request = WebRequest.Create(PushAdress);
-                // Set the Method property of the request to POST.
-                request.Method = "POST";
-
-                byte[] postDataStream = Encoding.UTF8.GetBytes(string.Format("url={0}", PullAdress));
-                request.ContentLength = postDataStream.Length;
-                using (Stream newStream = request.GetRequestStream())
-                {
-                    // Send the data.
-                    newStream.Write(postDataStream, 0, postDataStream.Length);
-                    newStream.Close();
-                }
+                request.Method = "GET";
                 // Get the response.
                 using (WebResponse response = request.GetResponse())
                 {
@@ -95,6 +82,7 @@ namespace Synchronization.Core.SynchronizationFlow
                     response.Close();
                     OnPushProgressChanged(new SynchronizationEvent(isFinished));
                 }
+                Thread.Sleep(1000);
             }
 
         }
