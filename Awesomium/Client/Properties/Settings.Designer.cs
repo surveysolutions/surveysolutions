@@ -34,5 +34,53 @@ namespace Client.Properties {
                 this["DefaultUrl"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Export")]
+        public string UsbExportPath {
+            get {
+                return ((string)(this["UsbExportPath"]));
+            }
+            set {
+                this["UsbExportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Index")]
+        public string NetworkLocalExportPath {
+            get {
+                return ((string)(this["NetworkLocalExportPath"]));
+            }
+            set {
+                this["NetworkLocalExportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost")]
+        public string NetworkRemoteExportPath {
+            get {
+                return ((string)(this["NetworkRemoteExportPath"]));
+            }
+            set {
+                this["NetworkRemoteExportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/ProgressInPersentage")]
+        public string NetworkCheckStatePath {
+            get {
+                return ((string)(this["NetworkCheckStatePath"]));
+            }
+            set {
+                this["NetworkCheckStatePath"] = value;
+            }
+        }
     }
 }
