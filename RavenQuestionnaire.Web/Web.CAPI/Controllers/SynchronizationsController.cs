@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -44,10 +45,8 @@ namespace Web.CAPI.Controllers
 
         #region export implementations
 
-        public Guid Index(string url)
+        public Guid? Index(string url)
         {
-            /*   var user = _globalProvider.GetCurrentUser();*/
-
             Guid syncProcess = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(

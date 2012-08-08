@@ -55,13 +55,13 @@ namespace Synchronization.Core.SynchronizationFlow
             }
             catch (Exception e)
             {
-                new SynchronizationException("network exception", e);
+                throw new SynchronizationException("network exception", e);
             }
         }
         protected void WaitForEndProcess(Guid processid)
         {
-            int isFinished = 0;
-            while (isFinished!=100)
+            int percentage = 0;
+            while (percentage!=100)
             {
                 WebRequest request = WebRequest.Create(string.Format("{0}?id={1}",PushCheckStateAdress, processid));
                 // Set the Method property of the request to POST.
@@ -74,13 +74,15 @@ namespace Synchronization.Core.SynchronizationFlow
                     // Open the stream using a StreamReader for easy access.
                     StreamReader reader = new StreamReader(dataStream);
 
-                    isFinished = int.Parse(reader.ReadToEnd());
+                    percentage = int.Parse(reader.ReadToEnd());
 
                     // Clean up the streams.
                     reader.Close();
                     dataStream.Close();
                     response.Close();
-                    OnPushProgressChanged(new SynchronizationEvent(isFinished));
+                    if (percentage < 0)
+                        throw new SynchronizationException("network synchronization is failed");
+                    OnPushProgressChanged(new SynchronizationEvent(percentage));
                 }
                 Thread.Sleep(1000);
             }

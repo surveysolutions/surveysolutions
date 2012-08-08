@@ -43,10 +43,17 @@ namespace DataEntryClient.CompleteQuestionnaire
 
         public void Export()
         {
-            Guid syncKey = clientSettingsProvider.ClientSettings.PublicKey;
-            Guid? lastSyncEventGuid = GetLastSyncEventGuid(syncKey);
-            UploadEvents(syncKey, lastSyncEventGuid);
+            try
+            {
+                Guid syncKey = clientSettingsProvider.ClientSettings.PublicKey;
+                Guid? lastSyncEventGuid = GetLastSyncEventGuid(syncKey);
+                UploadEvents(syncKey, lastSyncEventGuid);
+            }
+            catch (Exception)
+            {
 
+                invoker.Execute(new EndProcessComand(this.processGuid, EventState.Error));
+            }
         }
         public Guid? GetLastSyncEventGuid(Guid clientKey)
         {
@@ -84,7 +91,7 @@ namespace DataEntryClient.CompleteQuestionnaire
                                                                              : EventState.Error));
 
                         }
-                        invoker.Execute(new EndProcessComand(this.processGuid));
+                        invoker.Execute(new EndProcessComand(this.processGuid, EventState.Completed));
                     }
                 );
         }
