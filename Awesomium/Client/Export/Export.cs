@@ -46,7 +46,7 @@ namespace Client
         internal IStatusIndicator pleaseWait;
        
         private AutoResetEvent exportEnded = new AutoResetEvent(false);
-        private string exportURL = Settings.Default.DefaultUrl + "/Synchronizations/Export";
+     //   private string exportURL = Settings.Default.DefaultUrl + "/Synchronizations/Export";
         private readonly SyncChainDirector synchronizer;
 
         #endregion
@@ -60,7 +60,10 @@ namespace Client
             this.synchronizer=new SyncChainDirector();
             
             this.synchronizer.PushProgressChanged += (s, e) => this.pleaseWait.AssignProgress(e.ProgressPercentage);
-            this.synchronizer.AddSynchronizer(new UsbSynchronizer(exportURL));
+
+            this.synchronizer.AddSynchronizer(new NetworkSynchronizer(Settings.Default.DefaultUrl,
+                "/Synchronizations/Index", "/Synchronizations/ProgressInPersentage", "http://localhost"));
+            this.synchronizer.AddSynchronizer(new UsbSynchronizer(Settings.Default.DefaultUrl + "/Synchronizations/Export"));
             
         }
 
