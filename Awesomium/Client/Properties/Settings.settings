@@ -5,5 +5,17 @@
     <Setting Name="DefaultUrl" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://localhost:8083</Value>
     </Setting>
+    <Setting Name="UsbExportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/Synchronizations/Export</Value>
+    </Setting>
+    <Setting Name="NetworkLocalExportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/Synchronizations/Index</Value>
+    </Setting>
+    <Setting Name="NetworkRemoteExportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://localhost</Value>
+    </Setting>
+    <Setting Name="NetworkCheckStatePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/Synchronizations/ProgressInPersentage</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

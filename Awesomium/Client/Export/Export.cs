@@ -62,8 +62,8 @@ namespace Client
             this.synchronizer.PushProgressChanged += (s, e) => this.pleaseWait.AssignProgress(e.ProgressPercentage);
 
             this.synchronizer.AddSynchronizer(new NetworkSynchronizer(Settings.Default.DefaultUrl,
-                "/Synchronizations/Index", "/Synchronizations/ProgressInPersentage", "http://localhost"));
-            this.synchronizer.AddSynchronizer(new UsbSynchronizer(Settings.Default.DefaultUrl + "/Synchronizations/Export"));
+                Settings.Default.NetworkLocalExportPath, Settings.Default.NetworkCheckStatePath, Settings.Default.NetworkRemoteExportPath));
+            this.synchronizer.AddSynchronizer(new UsbSynchronizer(Settings.Default.DefaultUrl + Settings.Default.UsbExportPath));
             
         }
 
