@@ -98,7 +98,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Export\Export.cs" />
-    <Compile Include="Export\UsbArchive.cs" />
     <Compile Include="Forms\PleaseWaitForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -167,7 +166,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Synchronization.Core\Synchronization.Core.csproj">
+      <Project>{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}</Project>
+      <Name>Synchronization.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(SolutionName)'=='Awesomium.NET'">
       <ItemGroup>

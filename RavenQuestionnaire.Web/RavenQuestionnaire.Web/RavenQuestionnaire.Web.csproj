@@ -206,14 +206,10 @@
     <Compile Include="Controllers\AsyncQuestionnaireUpdater.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\SynchronizationsController.cs" />
-    <Compile Include="Controllers\CompleteQuestionnaireController.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FlowGraphController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
-    <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\FlowGraph.cs" />
     <Compile Include="Models\GridDataRequest.cs" />
     <Compile Include="Controllers\GroupController.cs" />
@@ -979,6 +975,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Group\Mobile\_CommentsBlock.cshtml" />
+    <Content Include="WCF\Web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

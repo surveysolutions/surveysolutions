@@ -210,6 +210,10 @@
       <Project>{045B96C8-3A7C-4662-9C48-62543D7C1E74}</Project>
       <Name>RavenQuestionnaire.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Web.CAPI\Web.CAPI.csproj">
+      <Project>{2653BF3D-0762-4CA5-8A79-19EDB1DEAF71}</Project>
+      <Name>Web.CAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
