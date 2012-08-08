@@ -91,7 +91,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         protected override void ExecutePull()
         {
-            throw new NotImplementedException();
+            throw new SynchronizationException("Not implemented");
         }
 
         #endregion

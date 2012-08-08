@@ -84,7 +84,7 @@ namespace Client
             this.pullToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.pullToolStripMenuItem.Name = "pullToolStripMenuItem";
             this.pullToolStripMenuItem.Size = new System.Drawing.Size(50, 40);
-            
+            this.pullToolStripMenuItem.Click += new System.EventHandler(this.pullToolStripMenuItem_Click);
             // 
             // pullToolStripMenuItem1
             // 

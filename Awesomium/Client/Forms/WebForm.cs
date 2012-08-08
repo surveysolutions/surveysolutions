@@ -203,5 +203,17 @@ namespace Client
                 throw ex;
             }
         }
+        private void pullToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                export.ImportQuestionarie();
+            }
+            catch (Exception ex)
+            {
+                // MessageBox.Show("Export error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw ex;
+            }
+        }
     }
 }
