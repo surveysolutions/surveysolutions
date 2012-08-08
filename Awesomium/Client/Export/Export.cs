@@ -103,6 +103,34 @@ namespace Client
 
         }
 
+        private void DoImport()
+        {
+            this.pleaseWait.ActivateExportState();
+            try
+            {
+                this.exportEnded.Reset();
+                Exception error = null;
+                try
+                {
+                    this.synchronizer.Pull();
+                }
+                catch (Exception ex)
+                {
+                    error = ex;
+                }
+                this.exportEnded.Set();
+                this.pleaseWait.SetCompletedStatus(false, error);
+                if (EndOfExport != null)
+                {
+                    EndOfExport();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -111,7 +139,10 @@ namespace Client
         {
             new Thread(DoExport).Start(); // initialize export operation in independent thread
         }
-
+        internal void ImportQuestionarie()
+        {
+            new Thread(DoImport).Start(); // initialize export operation in independent thread
+        }
         #endregion
 
       /*  internal void Interrupt()

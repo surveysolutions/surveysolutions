@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
-    class UsbFileArchive
+    public class UsbFileArchive
     {
         internal class Header
         {
@@ -116,7 +116,7 @@ namespace Synchronization.Core.SynchronizationFlow
             return stream;
         }
 
-        public FileStream CreateFile()
+        protected FileStream CreateFile()
         {
           //  var space = this.usbDriver.TotalFreeSpace;
             return File.Create(this.fileName);
@@ -193,9 +193,28 @@ namespace Synchronization.Core.SynchronizationFlow
         /// <summary>
         /// Load archive from driver
         /// </summary>
-        internal byte[] LoadArchive()
+        public byte[] LoadArchive()
         {
-            throw new Exception("Not implemented");
+            byte[] result = null;
+            using (var file = File.Open(this.fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                byte[] buffer = new byte[16*1024];
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    int read;
+                    while ((read = file.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        ms.Write(buffer, 0, read);
+                    }
+                    result = ms.ToArray();
+                }
+            }
+            return result;
+        }
+
+        public string FileName
+        {
+            get { return this.fileName; }
         }
     }
 }
