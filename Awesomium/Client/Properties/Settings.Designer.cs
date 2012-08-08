@@ -82,5 +82,17 @@ namespace Client.Properties {
                 this["NetworkCheckStatePath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Import")]
+        public string UsbImportPath {
+            get {
+                return ((string)(this["UsbImportPath"]));
+            }
+            set {
+                this["UsbImportPath"] = value;
+            }
+        }
     }
 }

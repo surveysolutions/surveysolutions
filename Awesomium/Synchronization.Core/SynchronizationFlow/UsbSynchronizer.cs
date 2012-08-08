@@ -9,11 +9,14 @@ namespace Synchronization.Core.SynchronizationFlow
 {
     public class UsbSynchronizer : AbstractSynchronizer
     {
+        
         private readonly string _exportURL;
-        public UsbSynchronizer( string exportURL)
+        private readonly string _importUrl;
+        public UsbSynchronizer( string exportURL, string importUrl)
         {
             this._exportURL = exportURL;
-          //  FlushDriversList();
+            this._importUrl = importUrl;
+            //  FlushDriversList();
         }
 
         #region Overrides of AbstractSynchronizer
@@ -153,7 +156,7 @@ namespace Synchronization.Core.SynchronizationFlow
                                                 };
             client.UploadFileCompleted += (s, e) => { done.Set(); };
             
-            client.UploadFileAsync(new Uri("http://localhost:8083/Synchronizations/Import"), usbArchive.FileName);
+            client.UploadFileAsync(new Uri(this._importUrl), usbArchive.FileName);
             done.WaitOne();
         }
 

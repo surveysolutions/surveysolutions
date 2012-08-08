@@ -17,5 +17,8 @@
     <Setting Name="NetworkCheckStatePath" Type="System.String" Scope="User">
       <Value Profile="(Default)">/Synchronizations/ProgressInPersentage</Value>
     </Setting>
+    <Setting Name="UsbImportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/Synchronizations/Import</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

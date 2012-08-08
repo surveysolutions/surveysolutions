@@ -64,8 +64,10 @@ namespace Client
 
             this.synchronizer.AddSynchronizer(new NetworkSynchronizer(Settings.Default.DefaultUrl,
                 Settings.Default.NetworkLocalExportPath, Settings.Default.NetworkCheckStatePath, Settings.Default.NetworkRemoteExportPath));
-            this.synchronizer.AddSynchronizer(new UsbSynchronizer(Settings.Default.DefaultUrl + Settings.Default.UsbExportPath));
-            
+            this.synchronizer.AddSynchronizer(
+                new UsbSynchronizer(Settings.Default.DefaultUrl + Settings.Default.UsbExportPath,
+                                    Settings.Default.DefaultUrl + Settings.Default.UsbImportPath));
+
         }
 
         #endregion
