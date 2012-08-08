@@ -133,17 +133,22 @@ namespace DataEntryClientTests
 
             var clientGuid = Guid.NewGuid();
             Guid? eventGuid = Guid.NewGuid();
-            var serviceResult = new ListOfAggregateRootsForImportMessage() {Roots = new Guid[] {Guid.NewGuid()}};
+            var serviceResult = new ListOfAggregateRootsForImportMessage()
+                                    {
+                                        Roots =
+                                            new ProcessedAggregateRoot[]
+                                                {new ProcessedAggregateRoot() {AggregateRootPublicKey = Guid.NewGuid()}}
+                                    };
 
             serviceMock.Setup(x => x.Process()).Returns(serviceResult);
-            eventServiceMock.Setup(x => x.Process(serviceResult.Roots[0])).Returns(new ImportSynchronizationMessage());
+            eventServiceMock.Setup(x => x.Process(serviceResult.Roots[0].AggregateRootPublicKey)).Returns(new ImportSynchronizationMessage());
             var target = new CompleteQuestionnaireSync(Kernel, Guid.NewGuid(), string.Empty);
 
             target.Import();
 
             serviceMock.Verify(x => x.Process(),
                                Times.Exactly(1));
-            eventServiceMock.Verify(x => x.Process(serviceResult.Roots[0]), Times.Exactly(1));
+            eventServiceMock.Verify(x => x.Process(serviceResult.Roots[0].AggregateRootPublicKey), Times.Exactly(1));
 
             EventStore.Verify(x => x.WriteEvents(It.IsAny<IEnumerable<AggregateRootEventStream>>()), Times.Exactly(1));
 

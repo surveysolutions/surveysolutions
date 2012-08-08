@@ -16,12 +16,13 @@ namespace RavenQuestionnaire.Core.Domain
         {
         }
 
-        public SyncProcessAR(Guid publicKey)
+        public SyncProcessAR(Guid publicKey, SynchronizationType synckType)
             : base(publicKey)
         {
             ApplyEvent(new NewSynchronizationProcessCreated
                            {
-                               ProcessGuid = publicKey
+                               ProcessGuid = publicKey,
+                               SynckType = synckType
                            });
         }
 

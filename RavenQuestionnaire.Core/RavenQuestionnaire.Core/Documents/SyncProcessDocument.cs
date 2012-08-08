@@ -30,6 +30,7 @@ namespace RavenQuestionnaire.Core.Documents
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public EventState Handled { get; set; }
+        public SynchronizationType SynckType { get; set; }
     }
 
     public class ProcessedAggregateRoot
@@ -56,5 +57,11 @@ namespace RavenQuestionnaire.Core.Documents
         InProgress,
         Completed,
         Error
+    }
+
+    public enum SynchronizationType
+    {
+        Push,
+        Pull
     }
 }

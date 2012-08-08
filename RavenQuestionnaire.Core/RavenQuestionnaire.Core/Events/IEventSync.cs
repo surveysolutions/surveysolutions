@@ -15,6 +15,7 @@ namespace RavenQuestionnaire.Core.Events
     {
       //  IEnumerable<AggregateRootEventStream> ReadEvents();
         void WriteEvents(IEnumerable<AggregateRootEventStream> stream);
+        AggregateRootEventStream ReadEventStream(Guid eventSurceId);
         IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare();
     }
 
@@ -36,6 +37,15 @@ namespace RavenQuestionnaire.Core.Events
                 throw new Exception("IEventStore is not correct.");
             return myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c));
         }*/
+
+        public AggregateRootEventStream ReadEventStream(Guid eventSurceId)
+        {
+            var myEventStore = NcqrsEnvironment.Get<IEventStore>();
+            if (myEventStore == null)
+                throw new Exception("IEventStore is not correct.");
+            return new AggregateRootEventStream(myEventStore.ReadFrom(eventSurceId,
+                                                                      int.MinValue, int.MaxValue));
+        }
 
         public IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare()
         {
