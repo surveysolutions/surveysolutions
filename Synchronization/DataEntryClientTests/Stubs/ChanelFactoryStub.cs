@@ -7,15 +7,18 @@ using Moq;
 
 namespace DataEntryClientTests.Stubs
 {
-    public class ChanelFactoryStub<TInput> : IChanelFactoryWrapper where TInput : class
+    public class ChanelFactoryStub: IChanelFactoryWrapper
     {
-        private Mock<TInput> mock;
+        private IEnumerable<object> mocks;
 
-        public ChanelFactoryStub(Mock<TInput> mock)
+        public ChanelFactoryStub(object mock)
         {
-            this.mock = mock;
+            this.mocks = new []{mock};
         }
-
+        public ChanelFactoryStub(IEnumerable<object> mocks)
+        {
+            this.mocks = mocks;
+        }
         public void Execute<T>(string baseAdress, Action<T> handler) where T : class
         {
             T client = GetChanel<T>(baseAdress);
@@ -24,7 +27,7 @@ namespace DataEntryClientTests.Stubs
 
         public T GetChanel<T>(string baseAdress) where T : class
         {
-            var result = mock.Object as T;
+            var result = mocks.OfType<Mock<T>>().FirstOrDefault().Object;
             if (result == null)
                 throw new ArgumentException("invalid chanel type");
             return result;

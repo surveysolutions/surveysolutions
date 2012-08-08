@@ -29,6 +29,7 @@ namespace RavenQuestionnaire.Core.Documents
         public List<ProcessedAggregateRoot> AggregateRoots { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public EventState Handled { get; set; }
     }
 
     public class ProcessedAggregateRoot
