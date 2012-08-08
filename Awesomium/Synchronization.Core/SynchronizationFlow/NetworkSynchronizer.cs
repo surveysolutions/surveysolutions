@@ -9,21 +9,19 @@ namespace Synchronization.Core.SynchronizationFlow
     {
         private readonly string _host;
         private readonly string _pushAdress;
-        private readonly string _pushReciverAdress;
         private readonly string _pushCheckStateAdress;
         private readonly string _pullAdress;
-        public NetworkSynchronizer(string host, string pushAdress, string pushReciverAdress, string pushCheckStateAdress, string pullAdress)
+        public NetworkSynchronizer(string host, string pushAdress, string pushCheckStateAdress, string pullAdress)
         {
             this._host = host;
             this._pullAdress = pullAdress;
-            this._pushReciverAdress = pushReciverAdress;
             this._pushAdress = pushAdress;
             this._pushCheckStateAdress = pushCheckStateAdress;
         }
 
         protected Uri PullAdress
         {
-            get { return new Uri(_host + _pullAdress); }
+            get { return new Uri( _pullAdress); }
         }
         protected Uri PushAdress
         {
@@ -42,8 +40,8 @@ namespace Synchronization.Core.SynchronizationFlow
                 WebRequest request = WebRequest.Create(PushAdress);
                 // Set the Method property of the request to POST.
                 request.Method = "POST";
-                
-                byte[] postDataStream = Encoding.UTF8.GetBytes(string.Format("url={0}", this._pushReciverAdress));
+
+                byte[] postDataStream = Encoding.UTF8.GetBytes(string.Format("url={0}", PullAdress));
                 request.ContentLength = postDataStream.Length;
                 using (Stream newStream = request.GetRequestStream())
                 {
@@ -78,9 +76,9 @@ namespace Synchronization.Core.SynchronizationFlow
             int isFinished = 0;
             while (isFinished!=100)
             {
-                WebRequest request = WebRequest.Create(PushCheckStateAdress);
+                WebRequest request = WebRequest.Create(string.Format("{0}?id={1}",PushCheckStateAdress, processid));
                 // Set the Method property of the request to POST.
-                request.Method = "POST";
+                request.Method = "GET";
                 // Get the response.
                 using (WebResponse response = request.GetResponse())
                 {
