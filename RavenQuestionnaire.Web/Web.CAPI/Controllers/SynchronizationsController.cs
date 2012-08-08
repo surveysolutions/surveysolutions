@@ -154,6 +154,8 @@ namespace Web.CAPI.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public void ImportAsync(HttpPostedFileBase myfile)
         {
+            if (myfile == null && Request.Files.Count > 0)
+                myfile = Request.Files[0];
             if (myfile != null && myfile.ContentLength != 0)
             {
                 AsyncManager.OutstandingOperations.Increment();

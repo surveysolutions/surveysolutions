@@ -60,6 +60,7 @@ namespace Client
             this.synchronizer=new SyncChainDirector();
             
             this.synchronizer.PushProgressChanged += (s, e) => this.pleaseWait.AssignProgress(e.ProgressPercentage);
+            this.synchronizer.PullProgressChanged += (s, e) => this.pleaseWait.AssignProgress(e.ProgressPercentage);
 
             this.synchronizer.AddSynchronizer(new NetworkSynchronizer(Settings.Default.DefaultUrl,
                 Settings.Default.NetworkLocalExportPath, Settings.Default.NetworkCheckStatePath, Settings.Default.NetworkRemoteExportPath));
