@@ -38,9 +38,30 @@ namespace Web.CAPI.Controllers
             _globalProvider = globalProvider;
         }
 
-        public ActionResult Push()
+        public Guid Push(string url)
         {
-            return View("Spots");
+            Guid syncProcess = Guid.NewGuid();
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(
+                new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
+            WaitCallback callback = (state) =>
+                                        {
+                                            try
+                                            {
+
+                                                var process = new CompleteQuestionnaireSync(KernelLocator.Kernel,
+                                                                                            syncProcess, url);
+                                                process.Import();
+
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                Logger logger = LogManager.GetCurrentClassLogger();
+                                                logger.Fatal(e);
+                                            }
+                                        };
+            ThreadPool.QueueUserWorkItem(callback, syncProcess);
+            return syncProcess;
         }
 
         #region export implementations
@@ -50,7 +71,7 @@ namespace Web.CAPI.Controllers
             Guid syncProcess = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(
-                new CreateNewSynchronizationProcessCommand(syncProcess));
+                new CreateNewSynchronizationProcessCommand(syncProcess,SynchronizationType.Push));
 
             WaitCallback callback = (state) =>
                                         {

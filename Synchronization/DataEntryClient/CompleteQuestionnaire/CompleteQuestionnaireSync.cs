@@ -98,26 +98,51 @@ namespace DataEntryClient.CompleteQuestionnaire
 
         public void Import()
         {
-            ListOfAggregateRootsForImportMessage result = null;
-            this.chanelFactoryWrapper.Execute<IGetAggragateRootList>(this.baseAdress,
-                (client) =>
-                {
-                    result = client.Process();
-                });
-            if (result == null)
-                throw new Exception("aggregate roots list is empty");
-            List<AggregateRootEventStream> events=new List<AggregateRootEventStream>();
-            this.chanelFactoryWrapper.Execute<IGetEventStream>(this.baseAdress, (client) =>
-                                                                                    {
-                                                                                        foreach (
-                                                                                            Guid guid in result.Roots)
+            try
+            {
+                ListOfAggregateRootsForImportMessage result = null;
+                this.chanelFactoryWrapper.Execute<IGetAggragateRootList>(this.baseAdress,
+                                                                         (client) =>
+                                                                             {
+                                                                                 result = client.Process();
+                                                                             });
+                if (result == null)
+                    throw new Exception("aggregate roots list is empty");
+                invoker.Execute(new PushEventsCommand(this.processGuid,result.Roots));
+                List<AggregateRootEventStream> events = new List<AggregateRootEventStream>();
+                this.chanelFactoryWrapper.Execute<IGetEventStream>(this.baseAdress, (client) =>
                                                                                         {
-                                                                                            events.Add(
-                                                                                                client.Process(guid).EventStream);
+                                                                                            foreach (
+                                                                                                var  root in
+                                                                                                    result.Roots)
+                                                                                            {
+                                                                                                try
+                                                                                                {
 
-                                                                                        }
-                                                                                    });
-            this.eventStore.WriteEvents(events);
+                                                                                                
+                                                                                                var stream =client.Process(root.AggregateRootPublicKey).EventStream;
+                                                                                                events.Add(stream);
+                                                                                                invoker.Execute(
+                                                                                                    new ChangeEventStatusCommand
+                                                                                                        (this.processGuid,root.AggregateRootPublicKey,EventState.Completed));
+                                                                                                }
+                                                                                                catch (Exception)
+                                                                                                {
+
+                                                                                                    invoker.Execute(
+                                                                                                    new ChangeEventStatusCommand
+                                                                                                        (this.processGuid, root.AggregateRootPublicKey, EventState.Error));
+                                                                                                }
+                                                                                            }
+                                                                                        });
+                this.eventStore.WriteEvents(events);
+                invoker.Execute(new EndProcessComand(this.processGuid, EventState.Completed));
+            }
+            catch (Exception)
+            {
+
+                invoker.Execute(new EndProcessComand(this.processGuid, EventState.Error));
+            }
         }
     }
 }

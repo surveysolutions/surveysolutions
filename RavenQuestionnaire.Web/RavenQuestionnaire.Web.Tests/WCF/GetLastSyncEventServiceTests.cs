@@ -22,8 +22,8 @@ namespace DataEntryWCFServerTests
             repositoryMock.Setup(x => x.Load<EventViewInputModel, EventView>(It.IsAny<EventViewInputModel>())).Returns(
                 eventGuid);
 
-            GetLastSyncEventService target = new GetLastSyncEventService();
-            target.viewRepository = repositoryMock.Object;
+            GetLastSyncEventService target = new GetLastSyncEventService(repositoryMock.Object);
+            
             var result = target.Process(Guid.NewGuid());
             Assert.IsNull(result);
         }
@@ -37,8 +37,8 @@ namespace DataEntryWCFServerTests
             repositoryMock.Setup(x => x.Load<EventViewInputModel, EventView>(It.IsAny<EventViewInputModel>())).Returns(
                 eventGuid);
 
-            GetLastSyncEventService target = new GetLastSyncEventService();
-            target.viewRepository = repositoryMock.Object;
+            GetLastSyncEventService target = new GetLastSyncEventService(repositoryMock.Object);
+            
             var result = target.Process(Guid.NewGuid());
             Assert.AreEqual(result, eventGuid.PublicKey);
         }

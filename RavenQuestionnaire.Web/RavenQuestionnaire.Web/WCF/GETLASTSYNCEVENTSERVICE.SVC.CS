@@ -11,12 +11,13 @@ namespace RavenQuestionnaire.Web.WCF
     public class GetLastSyncEventService : IGetLastSyncEvent
     {
         //ninject wcf bug https://groups.google.com/forum/#!msg/ninject/Q8uGKIjBnyM/U3iM0EWp4_EJ
-        [Inject]
-        public IViewRepository viewRepository { get; set; }
-    
-        /*public GetLastSyncEventService()
+
+        private IViewRepository viewRepository;
+
+        public GetLastSyncEventService(IViewRepository viewRepository)
         {
-        }*/
+            this.viewRepository = viewRepository;
+        }
 
         public Guid? Process(Guid clientGuid)
         {
