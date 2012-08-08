@@ -8,10 +8,17 @@ namespace Synchronization.Core.SynchronizationFlow
 {
     public class NetworkSynchronizer : AbstractSynchronizer
     {
+        #region variables
+
         private readonly string _host;
         private readonly string _pushAdress;
         private readonly string _pushCheckStateAdress;
         private readonly string _pullAdress;
+        private WebClient webClient;
+        private ManualResetEvent done;
+        #endregion
+
+
         public NetworkSynchronizer(string host, string pushAdress, string pushCheckStateAdress, string pullAdress)
         {
             this._host = host;
@@ -28,6 +35,7 @@ namespace Synchronization.Core.SynchronizationFlow
         {
             get { return new Uri(_host + _pushCheckStateAdress); }
         }
+
         #region Overrides of AbstractSynchronizer
 
         protected override void ExecutePush()
@@ -58,12 +66,22 @@ namespace Synchronization.Core.SynchronizationFlow
                 throw new SynchronizationException("network exception", e);
             }
         }
+
+        protected override void ExecutePull()
+        {
+            throw new SynchronizationException("Not implemented");
+        }
+
+        #endregion
+
+        #region utility methods
+
         protected void WaitForEndProcess(Guid processid)
         {
             int percentage = 0;
-            while (percentage!=100)
+            while (percentage != 100)
             {
-                WebRequest request = WebRequest.Create(string.Format("{0}?id={1}",PushCheckStateAdress, processid));
+                WebRequest request = WebRequest.Create(string.Format("{0}?id={1}", PushCheckStateAdress, processid));
                 // Set the Method property of the request to POST.
                 request.Method = "GET";
                 // Get the response.
@@ -89,11 +107,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         }
 
-        protected override void ExecutePull()
-        {
-            throw new SynchronizationException("Not implemented");
-        }
-
         #endregion
+
     }
 }
