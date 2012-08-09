@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientSettings\ClientSettings.cs" />
+    <Compile Include="ClientSettings\IClientSettingsProvider.cs" />
     <Compile Include="ISyncChainDirector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SyncChainDirector.cs" />

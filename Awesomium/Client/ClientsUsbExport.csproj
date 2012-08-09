@@ -97,6 +97,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientSettingsProvider.cs" />
     <Compile Include="Export\Export.cs" />
     <Compile Include="Forms\PleaseWaitForm.cs">
       <SubType>UserControl</SubType>
@@ -112,9 +113,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ClientSettings\ClientSettings.cs" />
-    <Compile Include="ClientSettings\ClientSettingsProvider.cs" />
-    <Compile Include="ClientSettings\IClientSettingsProvider.cs" />
     <EmbeddedResource Include="Forms\PleaseWaitForm.resx">
       <DependentUpon>PleaseWaitForm.cs</DependentUpon>
     </EmbeddedResource>

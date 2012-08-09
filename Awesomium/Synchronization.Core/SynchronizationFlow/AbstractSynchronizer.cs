@@ -1,10 +1,17 @@
 ﻿using System;
+using Synchronization.Core.ClientSettings;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
     public abstract class AbstractSynchronizer : ISynchronizer
     {
         protected ISynchronizer Next;
+        protected readonly IClientSettingsProvider ClientSettingsProvider;
+        public AbstractSynchronizer(IClientSettingsProvider clientSettingsprovider)
+        {
+            this.ClientSettingsProvider = clientSettingsprovider;
+        }
+
         #region Implementation of ISynchronizer
 
         public ISynchronizer SetNext(ISynchronizer synchronizer)
