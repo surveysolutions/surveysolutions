@@ -1,0 +1,12 @@
+﻿@model RavenQuestionnaire.Core.Views.Assignment.AssigmentBrowseItem
+
+@{ var name = "responsible-" + Model.Id; }
+      <td>@Model.Id</td>            
+      <td>
+          @{string s = Model.Responsible == null ? string.Empty : Model.Responsible.Name;}
+          @s
+      </td>
+      <td>@Model.Status.Name</td>
+      <td>
+          @Ajax.ActionLink(Model.Responsible == null ? "Assign" : "Change", "Assign", new { questionnaireId = @Model.Id }, new AjaxOptions { UpdateTargetId = @name, InsertionMode = InsertionMode.Replace }) 
+      </td>
