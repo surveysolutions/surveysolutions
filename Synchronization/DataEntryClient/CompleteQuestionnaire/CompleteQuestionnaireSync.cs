@@ -26,7 +26,7 @@ namespace DataEntryClient.CompleteQuestionnaire
     public class CompleteQuestionnaireSync : ICompleteQuestionnaireSync
     {
         private IChanelFactoryWrapper chanelFactoryWrapper;
-        private IClientSettingsProvider clientSettingsProvider;
+      //  private IClientSettingsProvider clientSettingsProvider;
         private IEventSync eventStore;
         private Guid processGuid;
         private string baseAdress;
@@ -34,20 +34,20 @@ namespace DataEntryClient.CompleteQuestionnaire
         public CompleteQuestionnaireSync(IKernel kernel, Guid processGuid, string baseAdress)
         {
             this.chanelFactoryWrapper = kernel.Get<IChanelFactoryWrapper>();
-            this.clientSettingsProvider = kernel.Get<IClientSettingsProvider>();
+       //     this.clientSettingsProvider = kernel.Get<IClientSettingsProvider>();
             this.eventStore = kernel.Get<IEventSync>();
             this.invoker = NcqrsEnvironment.Get<ICommandService>();
             this.processGuid = processGuid;
             this.baseAdress = baseAdress;
         }
 
-        public void Export()
+        public void Export(Guid syncKey)
         {
             try
             {
-                Guid syncKey = clientSettingsProvider.ClientSettings.PublicKey;
-                Guid? lastSyncEventGuid = GetLastSyncEventGuid(syncKey);
-                UploadEvents(syncKey, lastSyncEventGuid);
+             // TODO: uncomment that string if we'll be synchronizing delta instead of everything   Guid? lastSyncEventGuid = GetLastSyncEventGuid(syncKey);
+
+                UploadEvents(syncKey, null);
             }
             catch (Exception)
             {
@@ -96,7 +96,7 @@ namespace DataEntryClient.CompleteQuestionnaire
                 );
         }
 
-        public void Import()
+        public void Import(Guid syncKey)
         {
             try
             {

@@ -42,7 +42,7 @@ namespace Web.CAPI.Controllers
 
         #region export implementations
 
-        public Guid? Index(string url)
+        public Guid? Push(string url, Guid syncKey)
         {
             Guid syncProcess = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
@@ -56,7 +56,7 @@ namespace Web.CAPI.Controllers
 
                                                 var process = new CompleteQuestionnaireSync(KernelLocator.Kernel,
                                                                                             syncProcess, url);
-                                                process.Export();
+                                                process.Export(syncKey);
 
                                             }
                                             catch (Exception e)
@@ -69,12 +69,8 @@ namespace Web.CAPI.Controllers
             return syncProcess;
 
         }
-        public int ProgressInPersentage(Guid id)
-        {
-            return
-                viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)).ProgressPercentage;
-        }
-        public void ExportAsync()
+       
+        public void ExportAsync(Guid clientGuid)
         {
             AsyncManager.OutstandingOperations.Increment();
             AsyncQuestionnaireUpdater.Update(() =>
@@ -82,7 +78,7 @@ namespace Web.CAPI.Controllers
                                                      try
                                                      {
                                                          AsyncManager.Parameters["result"] =
-                                                             exportimportEvents.Export(this.viewRepository);
+                                                             exportimportEvents.Export(clientGuid);
                                                      }
                                                      catch
                                                      {
@@ -102,6 +98,31 @@ namespace Web.CAPI.Controllers
 
         #region import
 
+        public Guid Pull(string url, Guid syncKey)
+        {
+            Guid syncProcess = Guid.NewGuid();
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(
+                new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
+            WaitCallback callback = (state) =>
+            {
+                try
+                {
+
+                    var process = new CompleteQuestionnaireSync(KernelLocator.Kernel,
+                                                                syncProcess, url);
+                    process.Import(syncKey);
+
+                }
+                catch (Exception e)
+                {
+                    Logger logger = LogManager.GetCurrentClassLogger();
+                    logger.Fatal(e);
+                }
+            };
+            ThreadPool.QueueUserWorkItem(callback, syncProcess);
+            return syncProcess;
+        }
 
         [AcceptVerbs(HttpVerbs.Post)]
         public void ImportAsync(HttpPostedFileBase myfile)
@@ -124,34 +145,15 @@ namespace Web.CAPI.Controllers
             return RedirectToAction("Dashboard", "Survey");
         }
 
-        public Guid Pull(string url)
+       #endregion
+
+        #region Progress
+
+        public int ProgressInPersentage(Guid id)
         {
-            Guid syncProcess = Guid.NewGuid();
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(
-                new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
-            WaitCallback callback = (state) =>
-            {
-                try
-                {
-
-                    var process = new CompleteQuestionnaireSync(KernelLocator.Kernel,
-                                                                syncProcess, url);
-                    process.Import();
-
-                }
-                catch (Exception e)
-                {
-                    Logger logger = LogManager.GetCurrentClassLogger();
-                    logger.Fatal(e);
-                }
-            };
-            ThreadPool.QueueUserWorkItem(callback, syncProcess);
-            return syncProcess;
+            return
+                viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)).ProgressPercentage;
         }
-        #endregion
-
-        #region discovery
 
         public ActionResult Progress(Guid id)
         {

@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
+using Client.ClientSettings;
 using Client.Properties;
 using System.Threading;
 using System.Runtime.Remoting.Messaging;
@@ -53,7 +54,7 @@ namespace Client
 
         #region C-tor
 
-        internal Export(IStatusIndicator pleaseWait)
+        internal Export(IStatusIndicator pleaseWait, IClientSettingsProvider provider)
         {
             //this.webClient.Credentials = new NetworkCredential("Admin", "Admin");
             this.pleaseWait = pleaseWait;
@@ -63,7 +64,8 @@ namespace Client
             this.synchronizer.PullProgressChanged += (s, e) => this.pleaseWait.AssignProgress(e.ProgressPercentage);
 
             this.synchronizer.AddSynchronizer(new NetworkSynchronizer(Settings.Default.DefaultUrl,
-                Settings.Default.NetworkLocalExportPath, Settings.Default.NetworkLocalImportPath, Settings.Default.NetworkCheckStatePath, Settings.Default.EndpointExportPath));
+                Settings.Default.NetworkLocalExportPath, Settings.Default.NetworkLocalImportPath, Settings.Default.NetworkCheckStatePath, Settings.Default.EndpointExportPath,
+                provider.ClientSettings.ClientId));
             this.synchronizer.AddSynchronizer(
                 new UsbSynchronizer(Settings.Default.DefaultUrl + Settings.Default.UsbExportPath,
                                     Settings.Default.DefaultUrl + Settings.Default.UsbImportPath));

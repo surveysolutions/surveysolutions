@@ -30,13 +30,13 @@ namespace RavenQuestionnaire.Web.Tests.Utils
 
         public Mock<IMemoryCommandInvoker>  invoker { get; set; }
 
-        public Mock<IClientSettingsProvider> clientProvider { get; set; }
+      //  public Mock<IClientSettingsProvider> clientProvider { get; set; }
 
         [SetUp]
         public void CreateObjects()
         {
             viewRepositoryMock = new Mock<IViewRepository>();
-            clientProvider = new Mock<IClientSettingsProvider>();
+       //     clientProvider = new Mock<IClientSettingsProvider>();
             invoker = new Mock<IMemoryCommandInvoker>();
         }
 
@@ -63,7 +63,7 @@ namespace RavenQuestionnaire.Web.Tests.Utils
             postedfile.Setup(f => f.FileName).Returns("event.zip").Verifiable();
             postedfile.Setup(f => f.InputStream).Returns(outputStream);
 
-            var events = new ExportImportEvent(clientProvider.Object, synchronizer.Object);
+            var events = new ExportImportEvent(synchronizer.Object);
             events.Import(postedfile.Object);
 
             synchronizer.Verify(x => x.WriteEvents(It.IsAny<IEnumerable<AggregateRootEventStream>>()), Times.Once());
@@ -80,12 +80,12 @@ namespace RavenQuestionnaire.Web.Tests.Utils
           //  NcqrsEnvironment.SetDefault<IEventStore>(eventStoreMock.Object);
          /*   var kernel = new StandardKernel();
             kernel.Bind<ICommandHandler<ICommand>>().ToConstant(mockHandler.Object);*/
-            clientProvider.Setup(x => x.ClientSettings).Returns(new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
+       //     clientProvider.Setup(x => x.ClientSettings).Returns(new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
           //  kernel.Bind<IDocumentSession>().ToConstant(documentSessionMock.Object);
             var output = new EventBrowseView(0, 20, 0, new List<EventBrowseItem>());
             viewRepositoryMock.Setup(x => x.Load<EventBrowseInputModel, EventBrowseView>(It.Is<EventBrowseInputModel>(input => input.PublickKey==null))).Returns(output);
-            var events = new ExportImportEvent(clientProvider.Object, synchronizer.Object);
-            var result = events.Export();
+            var events = new ExportImportEvent(synchronizer.Object);
+            var result = events.Export(Guid.NewGuid());
             synchronizer.Verify(x => x.ReadCompleteQuestionare(), Times.Once());
          //   eventStoreMock.Verify(x => x.ReadByAggregateRoot(), Times.Once());
             //   Assert.AreEqual(result.GetType(), typeof(byte[]));
