@@ -61,7 +61,7 @@ namespace Client.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhostrrrr")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost")]
         public string EndpointExportPath {
             get {
                 return ((string)(this["EndpointExportPath"]));

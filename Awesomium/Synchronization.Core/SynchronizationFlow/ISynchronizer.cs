@@ -7,6 +7,7 @@ namespace Synchronization.Core.SynchronizationFlow
      //   ISynchronizer SetNext(ISynchronizer synchronizer);
         void Push();
         void Pull();
+        void Stop();
         event EventHandler<SynchronizationEvent> PushProgressChanged;
         event EventHandler<SynchronizationEvent> PullProgressChanged;
     }

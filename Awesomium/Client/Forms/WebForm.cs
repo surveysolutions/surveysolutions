@@ -78,7 +78,7 @@ namespace Client
         #region Methods
         const int WM_DEVICECHANGE = 0x219;
 
-       /* protected override void WndProc(ref Message m)
+        protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
@@ -86,7 +86,7 @@ namespace Client
 
                     int n = (int)m.WParam;
 
-                    if (n == 0x8000)
+                   /* if (n == 0x8000)
                     {
                          //Thread.Sleep(1000);
                         try
@@ -99,20 +99,20 @@ namespace Client
                             throw ex;
                         }
                     }
-                    else if (n == 0x8004)
+                    else*/ if (n == 0x8004)
                     {
                         
                         this.export.Interrupt();
-                        this.export.FlushDriversList();
+                      //  this.export.FlushDriversList();
 
-                        this.Menu = null;
+                      //  this.Menu = null;
                     }
 
                     break;
             }
 
             base.WndProc(ref m);
-        }*/
+        }
 
         protected override void OnActivated(EventArgs e)
         {
