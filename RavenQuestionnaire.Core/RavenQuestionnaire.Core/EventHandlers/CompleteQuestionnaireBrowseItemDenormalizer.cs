@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
         }
 
 
-           public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
+        public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
             this.documentItemStore.Store(new CompleteQuestionnaireBrowseItem(
                                             evnt.Payload.CompletedQuestionnaireId.ToString(),

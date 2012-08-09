@@ -199,6 +199,7 @@
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\CQGroupItemDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
+    <Compile Include="EventHandlers\StatisticQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventSubscribers\GenerateQuestionnaireStatisticEventHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateNewStatusHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateStatusFlowHandler.cs" />
@@ -506,16 +507,16 @@
     <Compile Include="Views\CompleteQuestionnaire\PropagatedGroup.cs" />
     <Compile Include="Views\CompleteQuestionnaire\PropagatedQuestion.cs" />
     <Compile Include="Views\Event\EventBrowseViewFactory.cs" />
-    <Compile Include="Views\File\FileBrowseInputModel.cs">
+    <Compile Include="Views\Event\File\FileBrowseInputModel.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\File\FileBrowseItem.cs">
+    <Compile Include="Views\Event\File\FileBrowseItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\File\FileBrowseView.cs">
+    <Compile Include="Views\Event\File\FileBrowseView.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\File\FileBrowseViewFactory.cs">
+    <Compile Include="Views\Event\File\FileBrowseViewFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\FlowGraph\FlowBlockViewItem.cs" />
