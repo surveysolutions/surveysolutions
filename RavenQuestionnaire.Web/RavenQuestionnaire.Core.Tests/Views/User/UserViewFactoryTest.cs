@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using Raven.Client;
@@ -18,48 +19,59 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
             var docMock = new Mock<IDenormalizerStorage<UserDocument>>();
 
             UserViewInputModel input = new UserViewInputModel("user_id");
-            UserDocument expected = new UserDocument() { Id = "userdocuments/user_id", Email = "email@test.com", Password = "1234", UserName = "test" };
+            UserDocument expected = new UserDocument()
+            {
+                Id = "userdocuments/user_id",
+                Email = "email@test.com",
+                Password = "1234",
+                UserName = "test"
+            };
 
-            docMock.Setup(x => x.Load<UserDocument>("userdocuments/user_id")).Returns(expected);
-            UserViewFactory factory = new UserViewFactory(docMock);
+            docMock.Setup(x => x.Query().FirstOrDefault(u => u.Id == input.UserId)).Returns(expected);
+            UserViewFactory factory = new UserViewFactory(docMock.Object);
 
             UserView result = factory.Load(input);
 
-            docMock.Verify(x => x.Load<UserDocument>("userdocuments/user_id"));
+            docMock.Verify(x => x.Query().FirstOrDefault(u => u.Id == input.UserId));
+
             Assert.True(result.UserId == "user_id" && result.Email == "email@test.com" && result.Password == "1234" &&
                         result.UserName == "test");
         }
+
         [Test]
         public void LoadByExistingUserIdButUserMarketAsDeleted_NullIsReturned()
         {
             var docMock = new Mock<IDenormalizerStorage<UserDocument>>();
             UserViewInputModel input = new UserViewInputModel("user_id");
             UserDocument expected = new UserDocument()
-                                        {
-                                            Id = "userdocuments/user_id",
-                                            Email = "email@test.com",
-                                            Password = "1234",
-                                            UserName = "test",
-                                            IsDeleted = true
-                                        };
-            docMock.Setup(x => x.Load<UserDocument>("userdocuments/user_id")).Returns(expected);
-            UserViewFactory factory = new UserViewFactory(documentSesionMock.Object);
+            {
+                Id = "userdocuments/user_id",
+                Email = "email@test.com",
+                Password = "1234",
+                UserName = "test",
+                IsDeleted = true
+            };
+
+            docMock.Setup(x => x.Query().FirstOrDefault(u => u.Id == input.UserId)).Returns(expected);
+            UserViewFactory factory = new UserViewFactory(docMock.Object);
 
             UserView result = factory.Load(input);
 
-            docMock.Verify(x => x.Load<UserDocument>("userdocuments/user_id"));
+            docMock.Verify(x => x.Query().FirstOrDefault(u => u.Id == input.UserId));
+
             Assert.True(result == null);
         }
+
         [Test]
         public void LoadByNotExistingUserId_NullIsReturned()
         {
-            Mock<IDocumentSession> documentSesionMock = new Mock<IDocumentSession>();
+            var docMock = new Mock<IDenormalizerStorage<UserDocument>>();
             UserViewInputModel input = new UserViewInputModel("user_id");
-            UserViewFactory factory = new UserViewFactory(documentSesionMock.Object);
+            UserViewFactory factory = new UserViewFactory(docMock.Object);
 
             UserView result = factory.Load(input);
 
-            docMock.Verify(x => x.Load<UserDocument>("userdocuments/user_id"));
+            docMock.Verify(x => x.Query().FirstOrDefault(u => u.Id == input.UserId));
             Assert.True(result == null);
         }
 
@@ -67,34 +79,31 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
         [Test]
         public void LoadByExistingUserName_UserViewIsReturned()
         {
+            var docMock = new Mock<IDenormalizerStorage<UserDocument>>();
             UserViewInputModel input = new UserViewInputModel("user_name", null);
             UserDocument expected = new UserDocument()
-                                        {
-                                            Id = "userdocuments/user_id",
-                                            Email = "email@test.com",
-                                            Password = "1234",
-                                            UserName = "user_name"
-                                        };
-            
-            IEnumerable<UserDocument> expectedCollection = new[] {expected};
-          /*  var ravenQueryableMock = new Mock<IRavenQueryable<UserDocument>>();
-            ravenQueryableMock.Setup(x => x.GetEnumerator()).Returns(() => expectedCollection.GetEnumerator());
-            ravenQueryableMock.Setup(x => x.Customize(It.IsAny<Action<Object>>()).GetEnumerator()).Returns(
-                () => expectedCollection.GetEnumerator());
+            {
+                Id = "userdocuments/user_id",
+                Email = "email@test.com",
+                Password = "1234",
+                UserName = "user_name"
+            };
 
-            
-            
-            documentSesionMock.Setup(x => x.Query<UserDocument>()).Returns(ravenQueryableMock.Object);*/
-            IDocumentStore store = new EmbeddableDocumentStore() {RunInMemory = true};
+            /*IDocumentStore store = new EmbeddableDocumentStore() 
+            { 
+                RunInMemory = true 
+            };
             store.Initialize();
+            
             IDocumentSession session = store.OpenSession();
             session.Store(expected);
-            session.SaveChanges();
-            UserViewFactory factory = new UserViewFactory(session);
+            session.SaveChanges();*/
 
+            UserViewFactory factory = new UserViewFactory(docMock.Object);
             UserView result = factory.Load(input);
 
-        //    documentSesionMock.Verify(x => x.Query<UserDocument>());
+            docMock.Verify(x => x.Query().FirstOrDefault(u => u.UserName == input.UserName));
+            
             Assert.True(result.UserId == "user_id" && result.Email == "email@test.com" && result.Password == "1234" &&
                         result.UserName == "user_name");
         }
