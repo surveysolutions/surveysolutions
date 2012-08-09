@@ -73,15 +73,6 @@
     <Reference Include="Kaliko.ImageLibrary">
       <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="Lucene.Net, Version=2.9.4.1, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Lucene.Net.Contrib.Spatial, Version=2.9.1.2, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.Contrib.Spatial.dll</HintPath>
-    </Reference>
-    <Reference Include="Lucene.Net.Contrib.SpellChecker, Version=2.9.2.1, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.Contrib.SpellChecker.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -103,34 +94,17 @@
       <HintPath>..\..\RavenQuestionnaire.Web\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="Raven.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Abstractions">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Client.1.0.960\lib\net40\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Backup, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <ExecutableExtension>.exe</ExecutableExtension>
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Backup.exe</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Embedded, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Client.Embedded">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Embedded.1.0.960\lib\net40\Raven.Client.Embedded.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Client.1.0.960\lib\net40\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Database, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Database">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Database.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Munin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=974fec519e29970d, processorArchitecture=MSIL">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Munin.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Smuggler, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <ExecutableExtension>.exe</ExecutableExtension>
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Smuggler.exe</HintPath>
-    </Reference>
-    <Reference Include="Raven.Storage.Esent, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Storage.Esent.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Storage.Managed, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Storage.Managed.dll</HintPath>
     </Reference>
     <Reference Include="Spatial4n.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9f9456e1ca16d45e, processorArchitecture=MSIL">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Spatial4n.Core.dll</HintPath>
@@ -140,9 +114,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Reactive">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -157,7 +128,6 @@
     <Compile Include="AbstractFactories\ICompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
-    <Compile Include="CachableDocumentSession.cs" />
     <Compile Include="CommandHandlerAttribute.cs" />
     <Compile Include="Commands\Collection\RemoveCollectionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs" />
@@ -180,6 +150,7 @@
     <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Domain\SyncProcessAR.cs" />
     <Compile Include="Domain\UserAR.cs" />
+    <Compile Include="Entities\Observers\ITriggerable.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\CQGroupItemDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
@@ -241,12 +212,8 @@
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
-    <Compile Include="Entities\Observers\ITriggerable.cs" />
-    <Compile Include="Entities\Observers\ObservableCollectionExtensions.cs" />
-    <Compile Include="Entities\Observers\ObservableCollectionS.cs" />
     <Compile Include="Entities\SubEntities\AnswerOrder.cs" />
     <Compile Include="Entities\SubEntities\CollectionItem.cs" />
-    <Compile Include="Entities\Statistics\CompleteQuestionnaireStatistics.cs" />
     <Compile Include="Entities\SubEntities\Complete\AbstractCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\AbstractQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\Question\AutoPropagateCompleteQuestion.cs" />
@@ -341,34 +308,13 @@
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />
     <Compile Include="ExpressionExecutors\StatusProcessorExecutor.cs" />
     <Compile Include="IEntityRepository.cs" />
-    <Compile Include="Indexes\CompleteQuestionnaireByStatus.cs" />
-    <Compile Include="Indexes\QuestionnaireGroupedByTemplateIndex.cs" />
-    <Compile Include="Indexes\UsersInLocationIndex.cs" />
     <Compile Include="NCQRSInit.cs" />
-    <Compile Include="Repositories\CollectionRepository.cs" />
-    <Compile Include="Repositories\ICollectionRepository.cs" />
-    <Compile Include="Repositories\IStatisticRepository.cs" />
-    <Compile Include="Repositories\StatisticRepository.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
     <Compile Include="Services\IValildationService.cs" />
     <Compile Include="IViewFactory.cs" />
     <Compile Include="IViewRepsoitory.cs" />
     <Compile Include="Entities\OrderRequestItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\CompleteQuestionnaireRepository.cs" />
-    <Compile Include="Repositories\IFlowGraphRepository.cs" />
-    <Compile Include="Repositories\FlowGraphRepository.cs" />
-    <Compile Include="Repositories\EntityRepository.cs" />
-    <Compile Include="Repositories\ICompleteQuestionnaireRepository.cs" />
-    <Compile Include="Repositories\ILocationRepository.cs" />
-    <Compile Include="Repositories\IQuestionnaireRepository.cs" />
-    <Compile Include="Repositories\IStatusRepository.cs" />
-    <Compile Include="Repositories\IUserRepository.cs" />
-    <Compile Include="Repositories\LocationRepository.cs" />
-    <Compile Include="Repositories\QuestionnaireRepository.cs" />
-    <Compile Include="Repositories\StatusRepository.cs" />
-    <Compile Include="Repositories\UserRepository.cs" />
-    <Compile Include="Services\CompleteQuestionnaireUploaderService.cs" />
     <Compile Include="Services\ICompleteQuestionnaireUploaderService.cs" />
     <Compile Include="Services\IQuestionnaireService.cs" />
     <Compile Include="Services\RavenFileStorageService.cs" />
@@ -394,9 +340,9 @@
     <Compile Include="Views\Assignment\AssigmentBrowseView.cs" />
     <Compile Include="Views\Assignment\AssigmentBrowseViewFactory.cs" />
     <Compile Include="Views\Assignment\AssigmentViewInputModel.cs" />
-    <Compile Include="Views\ClientSettings\Card\CardView.cs" />
-    <Compile Include="Views\ClientSettings\Card\CardViewFactory.cs" />
-    <Compile Include="Views\ClientSettings\Card\CardViewInputModel.cs" />
+    <Compile Include="Views\Card\CardView.cs" />
+    <Compile Include="Views\Card\CardViewFactory.cs" />
+    <Compile Include="Views\Card\CardViewInputModel.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseInputModel.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseItem.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseView.cs" />
@@ -457,14 +403,6 @@
     <Compile Include="Views\Event\File\FileBrowseViewFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\FlowGraph\FlowBlockViewItem.cs" />
-    <Compile Include="Views\FlowGraph\FlowGraphView.cs" />
-    <Compile Include="Views\FlowGraph\FlowGraphViewFactory.cs" />
-    <Compile Include="Views\FlowGraph\FlowGraphViewInputModel.cs" />
-    <Compile Include="Views\FlowGraph\FlowGraphBrowseInputModel.cs" />
-    <Compile Include="Views\FlowGraph\FlowGraphBrowseView.cs" />
-    <Compile Include="Views\FlowGraph\FlowGraphBrowseItem.cs" />
-    <Compile Include="Views\FlowGraph\FlowGraphBrowseViewFactory.cs" />
     <Compile Include="Views\Group\CompleteGroupView.cs" />
     <Compile Include="Views\Group\CompleteGroupViewFactory.cs" />
     <Compile Include="Views\Group\CompleteGroupViewInputModel.cs" />
@@ -473,10 +411,6 @@
     <Compile Include="Views\Group\GroupViewInputModel.cs" />
     <Compile Include="Views\ICompositeView.cs" />
     <Compile Include="Views\Group\PropagatedCompleteGroupView.cs" />
-    <Compile Include="Views\Location\LocationBrowseInputModel.cs" />
-    <Compile Include="Views\Location\LocationBrowseItem.cs" />
-    <Compile Include="Views\Location\LocationBrowseView.cs" />
-    <Compile Include="Views\Location\LocationBrowseViewFactory.cs" />
     <Compile Include="Views\Event\EventBrowseInputModel.cs" />
     <Compile Include="Views\Event\EventViewInputModel.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseInputModel.cs" />
@@ -493,13 +427,6 @@
     </Compile>
     <Compile Include="Views\Question\QuestionViewFactory.cs" />
     <Compile Include="Views\Question\QuestionViewInputModel.cs" />
-    <Compile Include="Views\Report\ReportBrowseInputModel.cs" />
-    <Compile Include="Views\Report\ReportBrowseItem.cs" />
-    <Compile Include="Views\Report\ReportBrowseView.cs" />
-    <Compile Include="Views\Report\ReportBrowseViewFactory.cs" />
-    <Compile Include="Views\Report\ReportView.cs" />
-    <Compile Include="Views\Report\ReportViewFactory.cs" />
-    <Compile Include="Views\Report\ReportViewInputModel.cs" />
     <Compile Include="Views\Statistics\CompleteQuestionnaireStatisticView.cs" />
     <Compile Include="Views\Statistics\CompleteQuestionnaireStatisticViewFactory.cs" />
     <Compile Include="Views\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />
@@ -513,21 +440,6 @@
     <Compile Include="Views\StatusReport\StatusReportView.cs" />
     <Compile Include="Views\StatusReport\StatusReportViewFactory.cs" />
     <Compile Include="Views\StatusReport\StatusReportViewInputModel.cs" />
-    <Compile Include="Views\Status\Browse\StatusBrowseInputModel.cs" />
-    <Compile Include="Views\Status\Browse\StatusBrowseItem.cs" />
-    <Compile Include="Views\Status\Browse\StatusBrowseView.cs" />
-    <Compile Include="Views\Status\Browse\StatusBrowseViewFactory.cs" />
-    <Compile Include="Views\Status\Processing\StatusProcessView.cs" />
-    <Compile Include="Views\Status\Processing\StatusProcessViewFactory.cs" />
-    <Compile Include="Views\Status\Processing\StatusProcessViewInputModel.cs" />
-    <Compile Include="Views\Status\StatusElement\StatusItemView.cs" />
-    <Compile Include="Views\Status\StatusElement\StatusItemViewFactory.cs" />
-    <Compile Include="Views\Status\StatusElement\StatusItemViewInputModel.cs" />
-    <Compile Include="Views\Status\StatusView.cs" />
-    <Compile Include="Views\Status\StatusViewFactory.cs" />
-    <Compile Include="Views\Status\StatusViewInputModel.cs" />
-    <Compile Include="Views\Status\SubView\RolePermission.cs" />
-    <Compile Include="Views\Status\SubView\StatusByRole.cs" />
     <Compile Include="Views\Synchronization\SyncProgressFactory.cs" />
     <Compile Include="Views\Synchronization\SyncProgressInputModel.cs" />
     <Compile Include="Views\Synchronization\SyncProgressView.cs" />

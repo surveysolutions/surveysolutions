@@ -10,7 +10,6 @@ using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Views.Status.StatusElement;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json;
@@ -137,7 +136,7 @@ namespace Web.CAPI.Controllers
         }
 
         // move out of there!!
-        private SurveyStatus GetStatus(string id)
+        /*private SurveyStatus GetStatus(string id)
         {
             var statusView = viewRepository.Load<StatusItemViewInputModel, StatusItemView>(new StatusItemViewInputModel(id, true));
             SurveyStatus status = new SurveyStatus();
@@ -152,7 +151,7 @@ namespace Web.CAPI.Controllers
                 status.Name = statusView.Title;
             }
             return status;
-        }
+        }*/
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public ActionResult Participate(string id, string mode)

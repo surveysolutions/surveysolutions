@@ -8,12 +8,10 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Repositories;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Web.Controllers;
-using System;
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
@@ -70,7 +68,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Controller.Save(new QuestionView[] {questionView}, questionView.Answers);
             CommandServiceMock.Verify(x => x.Execute(It.IsAny<ChangeQuestionCommand>()), Times.Once());
         }
-        [Test]
+        /*[Test]
         public void When_DeleteQuestionIsExecuted()
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
@@ -83,7 +81,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
             Controller.Delete(question.PublicKey, entity.QuestionnaireId);
             CommandServiceMock.Verify(x => x.Execute(It.IsAny<DeleteQuestionCommand>()), Times.Once());
-        }
+        }*/
 
         [Test]
         public void When_EditQuestionDetailsIsReturned()

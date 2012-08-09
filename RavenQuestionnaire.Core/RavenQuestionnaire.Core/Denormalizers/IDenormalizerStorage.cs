@@ -10,6 +10,7 @@ namespace RavenQuestionnaire.Core.Denormalizers
         IQueryable<T> Query();
         void Store(T denormalizer, Guid key);
         void Remove(Guid key);
+        int Count();
     }
 
     public class InMemoryDenormalizer<T> : IDenormalizerStorage<T> where T : class
@@ -54,6 +55,11 @@ namespace RavenQuestionnaire.Core.Denormalizers
         {
             T val;
             hash.TryRemove(key, out val);
+        }
+
+        public int Count()
+        {
+            return hash.Count;
         }
 
         #endregion
