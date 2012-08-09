@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Ncqrs;
 using Ncqrs.Spec;
 using Ncqrs.Spec.Fakes;
 using RavenQuestionnaire.Core.Commands.Questionnaire;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
-using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Core.Events.Questionnaire;
 
 namespace RavenQuestionnaire.Core.Tests.Domain
 {

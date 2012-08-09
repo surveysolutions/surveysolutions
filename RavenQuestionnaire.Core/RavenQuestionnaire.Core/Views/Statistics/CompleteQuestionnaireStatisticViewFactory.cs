@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Documents.Statistics;
 using RavenQuestionnaire.Core.ViewSnapshot;
 
 namespace RavenQuestionnaire.Core.Views.Statistics

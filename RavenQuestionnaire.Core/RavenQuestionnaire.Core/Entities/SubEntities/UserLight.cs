@@ -1,4 +1,6 @@
-﻿namespace RavenQuestionnaire.Core.Entities.SubEntities
+﻿using System;
+
+namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
     public class UserLight
     {
@@ -11,6 +13,8 @@
         }
 
         public string Id { get; set; }
+
+        public Guid PublicId { get; set; }
         public string Name { get; set; }
     }
 }

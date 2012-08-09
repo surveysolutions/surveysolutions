@@ -8,8 +8,10 @@ namespace RavenQuestionnaire.Core.EventSubscribers
 {
     public class GenerateQuestionnaireStatisticEventHandler :
         IEventSubscriber<UpdateAnswerInCompleteQuestionnaireCommand>,
-        IEventSubscriber<UpdateCompleteQuestionnaireCommand>, IEventSubscriber<CreateNewCompleteQuestionnaireCommand>,
-        IEventSubscriber<PropagateGroupCommand>, IEventSubscriber<DeletePropagatedGroupCommand>,
+        IEventSubscriber<UpdateCompleteQuestionnaireCommand>, 
+        IEventSubscriber<CreateNewCompleteQuestionnaireCommand>,
+        IEventSubscriber<PropagateGroupCommand>, 
+        IEventSubscriber<DeletePropagatedGroupCommand>,
         IEventSubscriber<ValidateGroupCommand>
     {
         private IStatisticRepository statisticRepository;

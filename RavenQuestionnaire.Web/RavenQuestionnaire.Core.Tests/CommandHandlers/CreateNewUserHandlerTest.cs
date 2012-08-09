@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
         
             CreateNewUserHandler handler = new CreateNewUserHandler(userRepositoryMock.Object,
                                                                     locationRepositoryMock.Object);
-            handler.Handle(new Commands.CreateNewUserCommand("test_user","email@test.com","pass",UserRoles.User, false, null, "some_id", null));
+            handler.Handle(new Commands.CreateNewUserCommand("test_user","email@test.com","pass",UserRoles.User, false, null, "some_id", Guid.NewGuid(),null));
             userRepositoryMock.Verify(x => x.Add(It.IsAny<User>()), Times.Once());
         }
 
@@ -49,7 +49,7 @@ namespace RavenQuestionnaire.Core.Tests.CommandHandlers
             CreateNewUserHandler handler = new CreateNewUserHandler(userRepositoryMock.Object,
                                                                     locationRepositoryMock.Object);
             handler.Handle(new Commands.CreateNewUserCommand("test_user", "email@test.com", "pass", UserRoles.User,
-                                                             false, "supervisor_id", "some_id", null));
+                                                             false, "supervisor_id", "some_id", Guid.NewGuid(),null));
             userRepositoryMock.Verify(
                 x =>
                 x.Add(

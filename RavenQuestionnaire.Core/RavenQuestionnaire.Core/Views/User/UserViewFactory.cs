@@ -1,33 +1,43 @@
 ﻿using System.Linq;
 using Raven.Client;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
 
 namespace RavenQuestionnaire.Core.Views.User
 {
     public class UserViewFactory : IViewFactory<UserViewInputModel, UserView>
     {
-        private IDocumentSession documentSession;
-
+        //remove when done
+      /*  private IDocumentSession documentSession;
         public UserViewFactory(IDocumentSession documentSession)
         {
             this.documentSession = documentSession;
+        }*/
+
+        private IDenormalizerStorage<UserDocument> users;
+        public UserViewFactory(IDenormalizerStorage<UserDocument> users)
+        {
+            this.users = users;
         }
+
 
         #region Implementation of IViewFactory<UserViewInputModel,UserView>
 
         public UserView Load(UserViewInputModel input)
         {
             UserDocument doc = null;
+
             if (!string.IsNullOrEmpty(input.UserId))
-                doc = this.documentSession.Load<UserDocument>(input.UserId);
+                doc = this.users.Query().FirstOrDefault(u => u.Id == input.UserId);
+
             else if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))
             {
-                doc = documentSession.Query<UserDocument>().FirstOrDefault(u => u.UserName == input.UserName);
+                doc = users.Query().FirstOrDefault(u => u.UserName == input.UserName);
 
             }
             if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
             {
-                doc = this.documentSession.Query<UserDocument>().FirstOrDefault(u => u.UserName ==input.UserName);
+                doc = this.users.Query().FirstOrDefault(u => u.UserName ==input.UserName);
 
                 if (doc!=null && doc.Password != input.Password)
                     return null;

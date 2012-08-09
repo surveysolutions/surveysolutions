@@ -10,13 +10,6 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.RavenDB;
 using Ninject;
-using Raven.Client;
-using RavenQuestionnaire.Core.Commands.Location;
-using RavenQuestionnaire.Core.Commands.Questionnaire;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
-using RavenQuestionnaire.Core.Commands.Synchronization;
 using RavenQuestionnaire.Core.Services;
 
 namespace RavenQuestionnaire.Web.App_Start
@@ -25,12 +18,12 @@ namespace RavenQuestionnaire.Web.App_Start
     {
         public static void Init(string repositoryPath, IKernel kernel)
         {
-            NcqrsEnvironment.SetDefault<IEventStore>(InitializeEventStore(repositoryPath));
-            NcqrsEnvironment.SetDefault<ICommandService>(InitializeCommandService());
+            NcqrsEnvironment.SetDefault(InitializeEventStore(repositoryPath));
+            NcqrsEnvironment.SetDefault(InitializeCommandService());
         
-            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1)); //key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
-            NcqrsEnvironment.SetDefault<IFileStorageService>(kernel.Get<IFileStorageService>());
+            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
             var bus = new InProcessEventBus(true);
             RegisterEventHandlers(bus, kernel);
            

@@ -64,9 +64,9 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    @Html.LabelFor(model => model.SupervisorId, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.Supervisor.Id,  new { @class = "control-label" })
                     <div class="controls">
-                        @Html.DropDownListFor(model => model.SupervisorId, new SelectList(ViewBag.Supervisors, "Id", "UserName"))
+                        @Html.DropDownListFor(model => model.Supervisor.Id, new SelectList(ViewBag.Supervisors, "Id", "UserName"))
                     </div>
                 </div>
                 @Html.HiddenFor(model => model.UserId)

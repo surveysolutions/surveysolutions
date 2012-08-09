@@ -3,8 +3,8 @@ using Moq;
 using NUnit.Framework;
 using Raven.Client;
 using Raven.Client.Embedded;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Tests.Utils;
 using RavenQuestionnaire.Core.Views.User;
 
 namespace RavenQuestionnaire.Core.Tests.Views.User
@@ -15,22 +15,24 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
         [Test]
         public void LoadByExistingUserId_UserViewIsReturned()
         {
-            Mock<IDocumentSession> documentSesionMock = new Mock<IDocumentSession>();
+            var docMock = new Mock<IDenormalizerStorage<UserDocument>>();
+
             UserViewInputModel input = new UserViewInputModel("user_id");
             UserDocument expected = new UserDocument() { Id = "userdocuments/user_id", Email = "email@test.com", Password = "1234", UserName = "test" };
-            documentSesionMock.Setup(x => x.Load<UserDocument>("userdocuments/user_id")).Returns(expected);
-            UserViewFactory factory = new UserViewFactory(documentSesionMock.Object);
+
+            docMock.Setup(x => x.Load<UserDocument>("userdocuments/user_id")).Returns(expected);
+            UserViewFactory factory = new UserViewFactory(docMock);
 
             UserView result = factory.Load(input);
 
-            documentSesionMock.Verify(x => x.Load<UserDocument>("userdocuments/user_id"));
+            docMock.Verify(x => x.Load<UserDocument>("userdocuments/user_id"));
             Assert.True(result.UserId == "user_id" && result.Email == "email@test.com" && result.Password == "1234" &&
                         result.UserName == "test");
         }
         [Test]
         public void LoadByExistingUserIdButUserMarketAsDeleted_NullIsReturned()
         {
-            Mock<IDocumentSession> documentSesionMock = new Mock<IDocumentSession>();
+            var docMock = new Mock<IDenormalizerStorage<UserDocument>>();
             UserViewInputModel input = new UserViewInputModel("user_id");
             UserDocument expected = new UserDocument()
                                         {
@@ -40,12 +42,12 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
                                             UserName = "test",
                                             IsDeleted = true
                                         };
-            documentSesionMock.Setup(x => x.Load<UserDocument>("userdocuments/user_id")).Returns(expected);
+            docMock.Setup(x => x.Load<UserDocument>("userdocuments/user_id")).Returns(expected);
             UserViewFactory factory = new UserViewFactory(documentSesionMock.Object);
 
             UserView result = factory.Load(input);
 
-            documentSesionMock.Verify(x => x.Load<UserDocument>("userdocuments/user_id"));
+            docMock.Verify(x => x.Load<UserDocument>("userdocuments/user_id"));
             Assert.True(result == null);
         }
         [Test]
@@ -57,7 +59,7 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
 
             UserView result = factory.Load(input);
 
-            documentSesionMock.Verify(x => x.Load<UserDocument>("userdocuments/user_id"));
+            docMock.Verify(x => x.Load<UserDocument>("userdocuments/user_id"));
             Assert.True(result == null);
         }
 

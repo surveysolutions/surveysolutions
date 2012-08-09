@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Ncqrs.Eventing.ServiceModel.Bus;
+﻿using Ncqrs.Eventing.ServiceModel.Bus;
 using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Events.File;
-using RavenQuestionnaire.Core.Events.Questionnaire;
-using RavenQuestionnaire.Core.Services;
 
 namespace RavenQuestionnaire.Core.EventHandlers
 {
+    /// <summary>
+    /// Class handles file changes events.
+    /// </summary>
     public class FileStoreDenormalizer : IEventHandler<FileUploaded>, IEventHandler<FileDeleted>
     {
-   //     private IFileStorageService service;
         private IDenormalizerStorage<FileDescription> attachments;
-        public FileStoreDenormalizer(/*IFileStorageService service,*/ IDenormalizerStorage<FileDescription> attachments)
+        public FileStoreDenormalizer(IDenormalizerStorage<FileDescription> attachments)
         {
-        //    this.service = service;
             this.attachments = attachments;
         }
 

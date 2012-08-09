@@ -40,7 +40,7 @@
         }
         public static string CreateUserId(string id)
         {
-            return string.Format("userdocuments/{0}", id);
+            return id;
         }
         public static string CreateLocationId(string id)
         {

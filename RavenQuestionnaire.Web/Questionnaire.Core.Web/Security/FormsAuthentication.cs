@@ -30,7 +30,7 @@ namespace Questionnaire.Core.Web.Security
             MembershipUser u;
             try
             {
-                u = System.Web.Security.Membership.GetUser();
+                u = Membership.GetUser();
             }
             catch (Exception)
             {

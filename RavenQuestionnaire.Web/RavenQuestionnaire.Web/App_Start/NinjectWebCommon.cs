@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.ServiceModel;
 using System.Threading;
 using System.Web.Configuration;
@@ -8,7 +7,6 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using Raven.Client;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Services;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(RavenQuestionnaire.Web.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(RavenQuestionnaire.Web.App_Start.NinjectWebCommon), "Stop")]
@@ -64,17 +62,14 @@ namespace RavenQuestionnaire.Web.App_Start
                 storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
             var kernel = new StandardKernel(new CoreRegistry(storePath, isEmbeded));
 
-         //   RegisterServices(kernel);
-
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
             //   kernel.Bind<MembershipProvider>().ToConstant(Membership.Provider);
             //  kernel.Inject(Membership.Provider);
             KernelLocator.SetKernel(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-           // kernel.Bind<IFileStorageService>().To<FileSystemStorageService>();
             RegisterServices(kernel);
-            NCQRSInit.Init(System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"], kernel);
+            NCQRSInit.Init(WebConfigurationManager.AppSettings["Raven.DocumentStore"], kernel);
             return kernel;
         }
 
@@ -84,14 +79,7 @@ namespace RavenQuestionnaire.Web.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-          /*  kernel.Bind<IDocumentSession>().ToMethod(
-               context => new CachableDocumentSession(context.Kernel.Get<IDocumentStore>(), cache)).When(
-                   b => OperationContext.Current == null).InSingletonScope();
 
-
-            kernel.Bind<IDocumentSession>().ToMethod(
-                context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
-                 b => OperationContext.Current != null).InScope(o => OperationContext.Current);*/
             kernel.Bind<IDocumentSession>().ToMethod(
                context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(
                    b => HttpContext.Current != null).InScope(
@@ -112,7 +100,6 @@ namespace RavenQuestionnaire.Web.App_Start
             kernel.Bind<IBagManager>().To<ViewBagManager>();
             kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
         }
-
-      //  private static ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>();
+      
     }
 }

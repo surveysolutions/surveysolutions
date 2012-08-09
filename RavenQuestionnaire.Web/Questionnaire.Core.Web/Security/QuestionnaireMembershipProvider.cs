@@ -2,6 +2,8 @@
 using System.Data;
 using System.Web;
 using System.Web.Security;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
@@ -11,33 +13,23 @@ namespace Questionnaire.Core.Web.Security
 {
     public class QuestionnaireMembershipProvider : MembershipProvider
     {
-        public ICommandInvoker CommandInvoker
+        public ICommandService CommandInvoker
         {
-            get { return KernelLocator.Kernel.Get<ICommandInvoker>(); }
+            get { return NcqrsEnvironment.Get<ICommandService>();/*KernelLocator.Kernel.Get<ICommandInvoker>()*/; }
         }
+
         public IViewRepository ViewRepository
         {
             get { return KernelLocator.Kernel.Get<IViewRepository>(); }
         }
+
+
 
         public override MembershipUser CreateUser(string username, string password, string email,
                                                   string passwordQuestion, string passwordAnswer, bool isApproved,
                                                   object providerUserKey, out MembershipCreateStatus status)
         {
             throw new NotImplementedException();
-           /* try
-            {
-                CommandInvoker.Execute(new CreateNewUserCommand(username, email, password, UserRoles.User.ToString()));
-                status = MembershipCreateStatus.Success;
-                return
-                    MembershipInstance(new UserView("id", username, password, email, DateTime.Now,
-                                                    new[] {UserRoles.User}));
-            }
-            catch (Exception e)
-            {
-                status = MembershipCreateStatus.UserRejected;
-                return null;
-            }*/
         }
 
         public override bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer)

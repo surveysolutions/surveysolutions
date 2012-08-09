@@ -15,17 +15,16 @@ namespace RavenQuestionnaire.Core.Domain
         private string _password;
         private bool _isLocked;
         private UserRoles[] _roles;
-        
+        private UserLight _supervisor;
 
-        public UserAR()
-        {
-        }
+        public UserAR(){}
 
-        public UserAR(Guid publicKey, string userName, string password, string email, UserRoles[] roles, bool isLocked)
-            : base(publicKey)
+        public UserAR(Guid publicKey, string userName, string password, string email, UserRoles[] roles, 
+            bool isLocked, UserLight supervisor) : base(publicKey)
         {
 
-            //Check for unique of person
+            //Check for uniqueness of person name and email!
+
 
 
             ApplyEvent(new NewUserCreated()
@@ -34,7 +33,8 @@ namespace RavenQuestionnaire.Core.Domain
                                Password = password,
                                Email = email,
                                IsLocked = isLocked,
-                               Roles = roles
+                               Roles = roles,
+                               Supervisor = supervisor
                            });
         }
 
@@ -47,14 +47,26 @@ namespace RavenQuestionnaire.Core.Domain
             _password = e.Password;
             _isLocked = e.IsLocked;
             _roles = e.Roles;
-
+            _supervisor = e.Supervisor;
         }
 
+        public void ChangeUser(string email, bool isLocked, UserRoles[] roles)
+        {
+            ApplyEvent(new UserChanged (){
+                Email = email, 
+                IsLocked = isLocked, 
+                Roles = roles});
+        }
 
         protected void OnLockStatusChanged(UserStatusChanged e)
         {
             _isLocked = e.IsLocked;
         }
-
+        protected void OnUserChange(UserChanged e)
+        {
+            _email = e.Email;
+            _isLocked = e.IsLocked;
+            _roles = e.Roles;
+        }
     }
 }

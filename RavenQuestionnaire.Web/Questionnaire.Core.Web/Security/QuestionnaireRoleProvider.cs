@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Web;
 using System.Web.Security;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
@@ -12,14 +14,17 @@ namespace Questionnaire.Core.Web.Security
 {
     public class QuestionnaireRoleProvider : RoleProvider
     {
-        public ICommandInvoker CommandInvoker
+        public ICommandService CommandInvoker
         {
-            get { return KernelLocator.Kernel.Get<ICommandInvoker>(); }
+            get { return NcqrsEnvironment.Get<ICommandService>();/*KernelLocator.Kernel.Get<ICommandInvoker>()*/; }
         }
+
         public IViewRepository ViewRepository
         {
             get { return KernelLocator.Kernel.Get<IViewRepository>(); }
         }
+
+
         /// <summary>
         /// Gets a value indicating whether the specified user is in the specified role.
         /// </summary>

@@ -18,11 +18,11 @@ namespace RavenQuestionnaire.Core.CommandHandlers.User
         public void Handle(CreateNewUserCommand command)
         {
             Entities.User newUser = new Entities.User(command.UserName, command.Password, command.Email, command.Role,
-                                         command.IsLocked);
+                                         command.IsLocked, command.PublicKey);
             if (!string.IsNullOrEmpty(command.SupervisorId))
             {
                 Entities.User supervisor = _repository.Load(command.SupervisorId);
-                newUser.SetSupervisor(supervisor.CreateSupervisor());
+                newUser.SetSupervisor(supervisor == null? null : supervisor.CreateSupervisor());
             }
             var location = _locationalRepository.Load(command.LocationId);
             newUser.SetLocaton(location);

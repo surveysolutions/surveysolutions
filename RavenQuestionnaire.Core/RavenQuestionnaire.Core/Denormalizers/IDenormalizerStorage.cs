@@ -10,16 +10,14 @@ namespace RavenQuestionnaire.Core.Denormalizers
         IQueryable<T> Query();
         void Store(T denormalizer, Guid key);
         void Remove(Guid key);
-        /*  void Commit();*/
     }
 
-    public class RavenSessionDenormalizer<T> : IDenormalizerStorage<T> where T : class
+    public class InMemoryDenormalizer<T> : IDenormalizerStorage<T> where T : class
     {
-      //  private IDocumentSession documentSession;
         private ConcurrentDictionary<Guid, T> hash;
-        public RavenSessionDenormalizer(/*IDocumentSession documentSession*/)
+
+        public InMemoryDenormalizer()
         {
-            //this.documentSession = documentSession;
             this.hash=new ConcurrentDictionary<Guid, T>();
         }
 
@@ -30,13 +28,13 @@ namespace RavenQuestionnaire.Core.Denormalizers
             if (!this.hash.ContainsKey(key))
                 return null;
             return this.hash[key];
-            //  return this.documentSession.Load<T>(key.ToString());
+            
         }
 
         public IQueryable<T> Query()
         {
             return this.hash.Values.AsQueryable();
-            // return this.documentSession.Query<T>();
+            
         }
 
         public void Store(T denormalizer, Guid key)
@@ -48,7 +46,7 @@ namespace RavenQuestionnaire.Core.Denormalizers
                 return;
             }
             hash.TryAdd(key, denormalizer);
-            //  this.documentSession.Store(denormalizer);
+            
         }
 
 
@@ -57,12 +55,6 @@ namespace RavenQuestionnaire.Core.Denormalizers
             T val;
             hash.TryRemove(key, out val);
         }
-
-/*
-        public void Commit()
-        {
-            this.documentSession.SaveChanges();
-        }*/
 
         #endregion
     }

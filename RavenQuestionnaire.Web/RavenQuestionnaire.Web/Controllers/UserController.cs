@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
+using RavenQuestionnaire.Core.Commands.User;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Location;
@@ -36,7 +39,8 @@ namespace RavenQuestionnaire.Web.Controllers
         protected void AddLocationsListToViewBag()
         {
             var locations =
-              viewRepository.Load<LocationBrowseInputModel, LocationBrowseView>(new LocationBrowseInputModel() { PageSize = 100 }).Items;
+              viewRepository.Load<LocationBrowseInputModel, LocationBrowseView>(new LocationBrowseInputModel() 
+                            { PageSize = 100 }).Items;
 
             ViewBag.AllLocations = locations;
         }
@@ -68,18 +72,35 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (string.IsNullOrEmpty(model.UserId))
                 {
+
+                    var publicKey = Guid.NewGuid();
+
+                    //delete when done with ncqrs
                     commandInvoker.Execute(new CreateNewUserCommand(model.UserName, model.Email,SimpleHash.ComputeHash(model.Password),
-                                                                    model.PrimaryRole, model.IsLocked, model.SupervisorId, model.LocationId,
-                                                                    GlobalInfo.GetCurrentUser()));
+                                                                    model.PrimaryRole, model.IsLocked, model.Supervisor.Id, model.LocationId,
+                                                                    publicKey, GlobalInfo.GetCurrentUser()));
+
+                    
+                    var commandService = NcqrsEnvironment.Get<ICommandService>();
+                    commandService.Execute(new CreateUserCommand(publicKey, model.UserName, SimpleHash.ComputeHash(model.Password), model.Email,
+                        new UserRoles[] { model.PrimaryRole }, model.IsLocked, model.Supervisor));
                 }
                 else
                 {
+                    //delete when done with ncqrs
                     commandInvoker.Execute(new UpdateUserCommand(model.UserId, model.Email, model.IsLocked,
                                                                  new UserRoles[]
                                                                      {
                                                                          model.PrimaryRole
-                                                                     }, model.SupervisorId, model.LocationId,
+                                                                     }, model.Supervisor.Id, model.LocationId,
                                                                      GlobalInfo.GetCurrentUser()));
+
+                    
+                    var commandService = NcqrsEnvironment.Get<ICommandService>();
+                    commandService.Execute(new ChangeUserCommand(Guid.Parse(model.UserId), model.Email,
+                        new UserRoles[] { model.PrimaryRole }, model.IsLocked));
+
+
                 }
                 return RedirectToAction("Index");
 

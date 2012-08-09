@@ -14,19 +14,19 @@ namespace RavenQuestionnaire.Core.Entities
 
         public string UserId { get { return innerDocument.Id; } }
 
-        public User(string userName, string password, string email, UserRoles firstRole, bool isLocked)
+        public User(string userName, string password, string email, UserRoles firstRole, bool isLocked, Guid publicKey)
         {
-            innerDocument = new UserDocument() { UserName = userName };
+            innerDocument = new UserDocument() { UserName = userName, PublicKey = publicKey};
             ChangeEmail(email);
             ChangePassword(password);
             innerDocument.Roles.Add(firstRole);
             ChangeLockStatus(isLocked);
         }
-        public User(string userName, string password, string email, UserRoles firstRole, bool isLocked, UserLight supervisor)
-            : this(userName, password, email, firstRole, isLocked)
+        public User(string userName, string password, string email, UserRoles firstRole, bool isLocked, UserLight supervisor, Guid publicKey)
+            : this(userName, password, email, firstRole, isLocked, publicKey)
         {
             if (supervisor == null)
-                throw new ArgumentNullException("supervisor can't be null");
+                throw new ArgumentNullException("Supervisor can't be null!");
             SetSupervisor(supervisor);
         }
 
@@ -37,7 +37,7 @@ namespace RavenQuestionnaire.Core.Entities
 
         public void SetLocaton(Location location)
         {
-            this.innerDocument.Location=((IEntity<LocationDocument>)location).GetInnerDocument();
+            //this.innerDocument.Location=((IEntity<LocationDocument>)location).GetInnerDocument();
         }
 
         public UserLight CreateSupervisor()

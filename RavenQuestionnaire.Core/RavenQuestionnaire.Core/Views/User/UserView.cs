@@ -31,22 +31,16 @@ namespace RavenQuestionnaire.Core.Views.User
             this.CreationDate = creationDate;
             this.Roles = roles;
             this.IsLocked = isLocked;
-            if (supervisor != null)
-                this.SupervisorId = IdUtil.ParseId(supervisor.Id);
+            this.Supervisor = supervisor;
             this.LocationId = IdUtil.ParseId(locationId);
         }
 
         public string UserId { get; set; }
-
         public string UserName { get; set; }
-
         public string Password { get; set; }
-
         public string Email { get; set; }
-
         public bool IsLocked { get; set; }
-
-        public string SupervisorId { get; set; }
+        public UserLight Supervisor { get; set; }
 
         public UserRoles PrimaryRole
         {
@@ -60,6 +54,7 @@ namespace RavenQuestionnaire.Core.Views.User
             }
             set { _primaryRole = value; }
         }
+
         private UserRoles? _primaryRole;
 
         public DateTime CreationDate { get; set; }
