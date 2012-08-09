@@ -392,8 +392,6 @@
     <Compile Include="Views\Answer\CompleteAnswerView.cs" />
     <Compile Include="Views\Assignment\AssigmentBrowseInputModel.cs" />
     <Compile Include="Views\Assignment\AssigmentBrowseItem.cs" />
-    <Compile Include="Views\Assignment\AssigmentBrowseView.cs" />
-    <Compile Include="Views\Assignment\AssigmentBrowseViewFactory.cs" />
     <Compile Include="Views\Assignment\AssigmentViewInputModel.cs" />
     <Compile Include="Views\ClientSettings\Card\CardView.cs" />
     <Compile Include="Views\ClientSettings\Card\CardViewFactory.cs" />
@@ -532,6 +530,9 @@
     <Compile Include="Views\Status\StatusViewInputModel.cs" />
     <Compile Include="Views\Status\SubView\RolePermission.cs" />
     <Compile Include="Views\Status\SubView\StatusByRole.cs" />
+    <Compile Include="Views\Survey\SurveyBrowseItem.cs" />
+    <Compile Include="Views\Survey\SurveyBrowseView.cs" />
+    <Compile Include="Views\Survey\SurveysBrowseItem.cs" />
     <Compile Include="Views\Synchronization\SyncProgressFactory.cs" />
     <Compile Include="Views\Synchronization\SyncProgressInputModel.cs" />
     <Compile Include="Views\Synchronization\SyncProgressView.cs" />

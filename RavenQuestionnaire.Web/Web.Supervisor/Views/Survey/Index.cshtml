@@ -1,5 +1,5 @@
-﻿@using RavenQuestionnaire.Core.Views.StatusReport
-@model StatusReportView
+﻿@using RavenQuestionnaire.Core.Views.Survey
+@model SurveyBrowseView
 @{
     ViewBag.Title = "Surveys";
 }
@@ -12,19 +12,19 @@
         <th>EndDate</th>
         @foreach (var item in ViewBag.Status)
         {
-            <th>@item.StatusTitle</th>
+            <th>@item</th>
         }
     </tr>
 </thead>
 @foreach (var collect in Model.Items)
 {
     <tr>
-        <td>@Html.ActionLink(collect.Title, "Assigments", new { collect.Id })</td>
+        <td>@Html.ActionLink(collect.Title, "Assigments", new { id=collect.TemplateId })</td>
         <td>@collect.StartDate</td>
         <td>@collect.EndDate</td>
-            @foreach (var it in collect.Items)
+            @foreach (var it in collect.Statistics)
             {
-                <td>@it.QuestionnaireCount</td>
+                <td>@it.Value</td>
             }
     </tr>
 }
