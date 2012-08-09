@@ -158,7 +158,9 @@ namespace Synchronization.Core.SynchronizationFlow
 
             try
             {
-                var fileStream = File.Exists(this.fileName) ? ReadHeader() : CreateFile();
+                if(File.Exists(this.fileName))
+                    File.Delete(this.fileName);
+                var fileStream = CreateFile();
 
          /*       int newPosition = this.header.ArchivePosition;
 

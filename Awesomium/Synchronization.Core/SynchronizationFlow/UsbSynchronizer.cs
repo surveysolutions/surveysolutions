@@ -112,6 +112,7 @@ namespace Synchronization.Core.SynchronizationFlow
                         webClient.UploadFileCompleted += (s, e) => { done.Set(); };
 
                         webClient.UploadFileAsync(PullAdress, usbArchive.FileName);
+                        done.WaitOne();
                     }
                 }
 
