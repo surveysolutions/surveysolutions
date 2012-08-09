@@ -174,7 +174,6 @@
     <Compile Include="CommandHandlers\Questionnaire\Group\CreateNewGroupHandler.cs" />
     <Compile Include="CommandHandlers\Location\CreateNewLocationHandler.cs" />
     <Compile Include="CommandHandlers\Questionnaire\CreateNewQuestionnaireHandler.cs" />
-    <Compile Include="CommandHandlers\User\ChangeUserStatusHandler.cs" />
     <Compile Include="Commands\Collection\RemoveCollectionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs" />
