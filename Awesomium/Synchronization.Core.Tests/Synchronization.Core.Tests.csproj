@@ -6,11 +6,11 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{206B6F47-D790-4105-BD26-41583C7D04B3}</ProjectGuid>
+    <ProjectGuid>{E236D683-1934-4AEC-AC01-6F4026AB6BC3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DataEntryClientTests</RootNamespace>
-    <AssemblyName>DataEntryClientTests</AssemblyName>
+    <RootNamespace>Synchronization.Core.Tests</RootNamespace>
+    <AssemblyName>Synchronization.Core.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -36,11 +36,8 @@
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.1\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -54,29 +51,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CompleteQuestionnaireSyncTest.cs" />
-    <Compile Include="Stubs\ChanelFactoryStub.cs" />
+    <Compile Include="SyncChainDirectorTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
-      <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
-      <Name>RavenQuestionnaire.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DataEntryClient\DataEntryClient.csproj">
-      <Project>{03626966-3597-42FA-A394-A13941B558EB}</Project>
-      <Name>DataEntryClient</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SynchronizationMessages\SynchronizationMessages.csproj">
-      <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
-      <Name>SynchronizationMessages</Name>
+    <ProjectReference Include="..\Synchronization.Core\Synchronization.Core.csproj">
+      <Project>{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}</Project>
+      <Name>Synchronization.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

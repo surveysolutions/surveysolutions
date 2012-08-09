@@ -30,6 +30,7 @@ using Awesomium.Mono.Forms;
 #else
 using Awesomium.Core;
 using Awesomium.Windows.Forms;
+using Client.ClientSettings;
 using Client.Properties;
 using System.Net;
 using System.IO;
@@ -44,13 +45,10 @@ namespace Client
     public partial class WebForm : Form
     {
         #region Fields
-        WebView webView;
-        RenderBuffer rBuffer;
-        Bitmap frameBuffer;
-        bool needsResize, repaint;
+        bool repaint;
         private PleaseWaitControl pleaseWait;
         private Export export;
-        MenuItem exportItem;
+        private IClientSettingsProvider clientSettings;
         #endregion
 
         #region C-tor
@@ -61,50 +59,26 @@ namespace Client
             // in the designer, to prevent flickering.
 
             this.pleaseWait = new PleaseWaitControl();
-            this.export = new Export(pleaseWait);
+            this.clientSettings=new ClientSettingsProvider();
+            this.export = new Export(this.pleaseWait, this.clientSettings);
             export.EndOfExport+= new EndOfExport(EndOfExportMain);
             InitializeComponent();
 
             this.statusStrip1.Hide();
 
-            //this.Menu = new MainMenu(new MenuItem[]{this.exportItem});
-
             var host = new ToolStripControlHost(this.pleaseWait);
             host.Size = this.statusStrip1.Size;
             this.statusStrip1.Items.AddRange(new ToolStripItem[] { host});
-            
-            this.webView = WebCore.CreateWebView(this.ClientSize.Width, this.ClientSize.Height);
-            
-            this.webView.ResizeComplete += OnResizeComplete;
-            this.webView.IsDirtyChanged += OnIsDirtyChanged;
-            this.webView.SelectLocalFiles += OnSelectLocalFiles;
-            this.webView.CursorChanged += OnCursorChanged;
-            this.webView.OpenExternalLink += OnOpenLink;
-            //this.webView.DomReady += OnDOMReady;
-            //this.webView.KeyboardFocusChanged += OnKeyboardFocus;
-            this.webView.LoadURL(Settings.Default.DefaultUrl);
-            
+           
+            webView.Source = new Uri(Settings.Default.DefaultUrl);
             this.webView.Focus();
         }
         #endregion
 
         #region Methods
-        private void ResizeView()
-        {
-            if ((this.webView == null) || !this.webView.IsLive)
-                return;
-
-            if (this.needsResize && !this.webView.IsResizing)
-            {
-                // Queue an asynchronous resize.
-                this.webView.Resize(this.ClientSize.Width, this.ClientSize.Height);
-                this.needsResize = false;
-            }
-        }
-
         const int WM_DEVICECHANGE = 0x219;
 
-        protected override void WndProc(ref Message m)
+       /* protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
@@ -114,25 +88,20 @@ namespace Client
 
                     if (n == 0x8000)
                     {
-                        this.exportItem.Enabled = false;
-                        //Thread.Sleep(1000);
+                         //Thread.Sleep(1000);
                         try
                         {
                             this.export.ExportQuestionariesArchive();
-                            
                         }
                         catch (Exception ex)
                         {
                             // MessageBox.Show("Export error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             throw ex;
                         }
-
-                        this.Menu = new MainMenu(new MenuItem[]{this.exportItem});
-                        
                     }
                     else if (n == 0x8004)
                     {
-                        this.exportItem.Enabled = false;
+                        
                         this.export.Interrupt();
                         this.export.FlushDriversList();
 
@@ -143,7 +112,7 @@ namespace Client
             }
 
             base.WndProc(ref m);
-        }
+        }*/
 
         protected override void OnActivated(EventArgs e)
         {
@@ -154,17 +123,6 @@ namespace Client
 
             this.webView.Focus();
         }
-
-        protected override void OnDeactivate(EventArgs e)
-        {
-            base.OnDeactivate(e);
-
-            if (!this.webView.IsLive)
-                return;
-
-            this.webView.Unfocus();
-        }
-
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             if (this.webView != null)
@@ -183,123 +141,16 @@ namespace Client
             WebCore.Shutdown();
         }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            if ((this.webView != null) && this.webView.IsLive && this.webView.IsDirty)
-                this.rBuffer = this.webView.Render();
-
-            if (this.rBuffer != null)
-                Utilities.DrawBuffer(this.rBuffer, e.Graphics, this.BackColor, ref this.frameBuffer);
-            else
-                base.OnPaint(e);
-        }
-
-        protected override void OnResize(EventArgs e)
-        {
-            base.OnResize(e);
-
-            if ((this.webView == null) || !this.webView.IsLive)
-                return;
-
-            if (this.ClientSize.Width > 0 && this.ClientSize.Height > 0)
-                this.needsResize = true;
-
-            // Request resize, if needed.
-            this.ResizeView();
-        }
-
-        protected override void OnKeyPress(KeyPressEventArgs e)
-        {
-            base.OnKeyPress(e);
-
-            if (!this.webView.IsLive)
-                return;
-
-            this.webView.InjectKeyboardEvent(e.GetKeyboardEvent());
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-
-            if (!this.webView.IsLive)
-                return;
-
-            this.webView.InjectKeyboardEvent(e.GetKeyboardEvent(WebKeyType.KeyDown));
-        }
-
-        protected override void OnKeyUp(KeyEventArgs e)
-        {
-            base.OnKeyUp(e);
-
-            if (!this.webView.IsLive)
-                return;
-
-            this.webView.InjectKeyboardEvent(e.GetKeyboardEvent(WebKeyType.KeyUp));
-        }
-
-        protected override void OnMouseDown(MouseEventArgs e)
-        {
-            base.OnMouseDown(e);
-
-            if (!this.webView.IsLive)
-                return;
-
-            this.webView.InjectMouseDown(MouseButton.Left);
-        }
-
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            base.OnMouseUp(e);
-
-            if (!this.webView.IsLive)
-                return;
-
-            this.webView.InjectMouseUp(MouseButton.Left);
-        }
-
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            base.OnMouseMove(e);
-
-            if (!this.webView.IsLive)
-                return;
-
-            this.webView.InjectMouseMove(e.X, e.Y);
-        }
-
-        protected override void OnMouseWheel(MouseEventArgs e)
-        {
-            base.OnMouseWheel(e);
-
-            if (!this.webView.IsLive)
-                return;
-
-            this.webView.InjectMouseWheel(e.Delta);
-        }
         #endregion
 
         #region Event Handlers
+       
         public void EndOfExportMain()
         {
             if (this.InvokeRequired)
-                this.Invoke(new MethodInvoker(() => { this.exportItem.Enabled = true; }));
-            else
-                this.exportItem.Enabled = true;
-        }
-
-
-        private void OnResizeComplete(object sender, ResizeEventArgs e)
-        {
-            if (!this.webView.IsLive)
-                return;
-
-            if (this.needsResize)
-                this.ResizeView(); // Process pending resizing.
-
-            // An IsDirtyChanged will normally be called
-            // after resizing. Ask for a full invalidation.
-            this.repaint = true;
+                this.Invoke(new MethodInvoker(() => { this.pullToolStripMenuItem.Enabled = true; }));
+            /*else
+                this.exportItem.Enabled = true;*/
         }
 
         private void OnIsDirtyChanged(object sender, EventArgs e)
@@ -324,12 +175,6 @@ namespace Client
                 }
             }
         }
-
-        private void OnCursorChanged(object sender, ChangeCursorEventArgs e)
-        {
-            this.Cursor = Utilities.GetCursor(e.CursorType);
-        }
-
         private void OnSelectLocalFiles(object sender, SelectLocalFilesEventArgs e)
         {
             using (OpenFileDialog dialog = new OpenFileDialog()
@@ -346,16 +191,31 @@ namespace Client
                     e.Cancel = true;
             }
         }
-
-        private void OnOpenLink(object sender, OpenExternalLinkEventArgs e)
-        {
-            if (!this.webView.IsLive)
-                return;
-
-            // For this sample, we load external links
-            // in the same view.
-            this.webView.LoadURL(e.Url);
-        }
         #endregion
+
+        private void pushToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                export.ExportQuestionariesArchive();
+            }
+            catch (Exception ex)
+            {
+                // MessageBox.Show("Export error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw ex;
+            }
+        }
+        private void pullToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                export.ImportQuestionarie();
+            }
+            catch (Exception ex)
+            {
+                // MessageBox.Show("Export error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw ex;
+            }
+        }
     }
 }
