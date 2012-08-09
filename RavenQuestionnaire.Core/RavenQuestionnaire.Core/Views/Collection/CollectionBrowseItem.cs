@@ -1,13 +1,10 @@
-﻿using System;
-using RavenQuestionnaire.Core.Utility;
-
-namespace RavenQuestionnaire.Core.Views.Collection
+﻿namespace RavenQuestionnaire.Core.Views.Collection
 {
     public class CollectionBrowseItem
     {
         public string Id
         {
-            get { return IdUtil.ParseId(_id); }
+            get { return _id; }
             private set { _id = value; }
         }
         private string _id;
