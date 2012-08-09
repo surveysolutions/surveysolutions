@@ -2,7 +2,6 @@
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using RavenQuestionnaire.Core.Domain;
-using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire
 {
@@ -22,7 +21,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire
         /// <param name="title"></param>
         public UpdateQuestionnaireCommand(string questionnaireId, string title)
         {
-            this.QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            this.QuestionnaireId = questionnaireId;
             this.Title = title;
         }
 

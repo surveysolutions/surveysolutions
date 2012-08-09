@@ -1,5 +1,4 @@
 ﻿using System;
-using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Views.CollectionItem
 {
@@ -11,7 +10,7 @@ namespace RavenQuestionnaire.Core.Views.CollectionItem
 
         public CollectionItemBrowseInputModel(string collectionId, Guid QuestionId)
         {
-            this.CollectionId = IdUtil.CreateCollectionId(collectionId);
+            this.CollectionId = collectionId;
 
             this.QuestionId = QuestionId;
         }

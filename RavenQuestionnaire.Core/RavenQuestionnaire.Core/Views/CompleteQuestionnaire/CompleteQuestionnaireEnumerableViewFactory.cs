@@ -1,27 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Raven.Client;
+﻿using System.Linq;
 using RavenQuestionnaire.Core.AbstractFactories;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.Iterators;
-using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.ExpressionExecutors;
-using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     public class CompleteQuestionnaireEnumerableViewFactory :
         IViewFactory<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>
     {
-        private IDocumentSession documentSession;
+        private readonly IDenormalizerStorage<CompleteQuestionnaireDocument> documentItemSession;
         private ICompleteGroupFactory groupFactory;
-        public CompleteQuestionnaireEnumerableViewFactory(IDocumentSession documentSession, ICompleteGroupFactory groupFactory)
+        public CompleteQuestionnaireEnumerableViewFactory(IDenormalizerStorage<CompleteQuestionnaireDocument> documentItemSession, ICompleteGroupFactory groupFactory)
         {
-            this.documentSession = documentSession;
+            this.documentItemSession = documentItemSession;
             this.groupFactory = groupFactory;
         }
 
@@ -29,18 +22,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
             if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
             {
-                var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
-              //  var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
+                var doc = documentItemSession.Query().FirstOrDefault(i => i.Id == input.CompleteQuestionnaireId);
                 ICompleteGroup group = null;
 
                 Iterator<ICompleteGroup> iterator =
                     new QuestionnaireScreenIterator(doc);
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
-                    group =
-                        doc.Find
-                            <RavenQuestionnaire.Core.Entities.SubEntities.Complete.CompleteGroup>(
-                                input.CurrentGroupPublicKey.Value);
+                    group =doc.Find<CompleteGroup>(input.CurrentGroupPublicKey.Value);
                 }
                
                 return new CompleteQuestionnaireViewEnumerable(doc, group, this.groupFactory);

@@ -46,7 +46,7 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public string QuestionnaireId
         {
-            get { return IdUtil.ParseId(_questionnaireId); }
+            get { return _questionnaireId; }
             set { _questionnaireId = value; }
         }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
-using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Views.Question
 {
@@ -10,7 +8,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         {
             QuestionKey = publicKey;
             ImageKey = imageKey;
-            QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            QuestionnaireId = questionnaireId;
         }
 
         public string QuestionnaireId { get; set; }

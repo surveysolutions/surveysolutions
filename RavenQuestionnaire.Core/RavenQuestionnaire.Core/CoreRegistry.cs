@@ -11,7 +11,7 @@ using RavenQuestionnaire.Core.Conventions;
 using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.ExpressionExecutors;
-using RavenQuestionnaire.Core.Indexes;
+
 
 namespace RavenQuestionnaire.Core
 {
@@ -95,9 +95,9 @@ namespace RavenQuestionnaire.Core
             store.Initialize();
             
             //  IndexCreation.CreateIndexes(typeof(QuestionnaireContainingQuestions).Assembly, store);
-            IndexCreation.CreateIndexes(typeof(CompleteQuestionnaireByStatus).Assembly, store);
-            IndexCreation.CreateIndexes(typeof(UsersInLocationIndex).Assembly, store);
-            IndexCreation.CreateIndexes(typeof(QuestionnaireGroupedByTemplateIndex).Assembly, store);
+//            IndexCreation.CreateIndexes(typeof(CompleteQuestionnaireByStatus).Assembly, store);
+//            IndexCreation.CreateIndexes(typeof(UsersInLocationIndex).Assembly, store);
+//            IndexCreation.CreateIndexes(typeof(QuestionnaireGroupedByTemplateIndex).Assembly, store);
             return store;
         }
     }
