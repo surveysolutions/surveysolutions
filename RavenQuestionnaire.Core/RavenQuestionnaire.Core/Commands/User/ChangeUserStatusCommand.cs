@@ -1,23 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Utility;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using RavenQuestionnaire.Core.Domain;
 
 namespace RavenQuestionnaire.Core.Commands.User
 {
-    public class ChangeUserStatusCommand : ICommand
+    [Serializable]
+    [MapsToAggregateRootMethod(typeof(UserAR), "SetUserLockState")]
+    public class ChangeUserStatusCommand : CommandBase
     {
-        public string UserId { get; private set; }
-        public bool IsLocked { get; private set; }
-        public UserLight Executor { get; set; }
+        [AggregateRootId]
+        public Guid PublicKey { get; set; }
 
-        public ChangeUserStatusCommand(string userId, bool isLocked, UserLight executor)
+        public bool IsLocked { get; set; }
+
+        public ChangeUserStatusCommand (){}
+
+        public ChangeUserStatusCommand(Guid publicKey,  bool isLocked)
+            : base(publicKey)
         {
-            this.UserId = IdUtil.CreateUserId(userId);
-            this.IsLocked = isLocked;
-            Executor = executor;
+            PublicKey = publicKey;
+            IsLocked = isLocked;
         }
     }
 }
