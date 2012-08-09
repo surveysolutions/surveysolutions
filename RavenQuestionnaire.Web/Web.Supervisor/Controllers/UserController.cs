@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.User;
 using RavenQuestionnaire.Core.Views.User;
 
@@ -12,24 +15,25 @@ namespace Web.Supervisor.Controllers
 {
     public class UserController : Controller
     {
-        private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
 
-        public UserController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public UserController(IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
         }
         //
         // GET: /User/
         public ActionResult UnlockUser(String id)
         {
-            commandInvoker.Execute(new ChangeUserStatusCommand(id, false, GlobalInfo.GetCurrentUser()));
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(new ChangeUserStatusCommand(id, false));
             return RedirectToAction("Index");
         }
         public ActionResult LockUser(String id)
         {
-            commandInvoker.Execute(new ChangeUserStatusCommand(id, true, GlobalInfo.GetCurrentUser()));
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(new ChangeUserStatusCommand(id, true));
+
             return RedirectToAction("Index");
         }
 
