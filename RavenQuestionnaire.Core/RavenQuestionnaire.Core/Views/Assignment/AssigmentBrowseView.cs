@@ -12,18 +12,19 @@ namespace RavenQuestionnaire.Core.Views.Assignment
 
         public List<AssigmentBrowseItem> Items { get; set; }
 
-        public string TemplateId { set; get; }
+        //public string TemplateId { set; get; }
 
         public AssigmentBrowseView()
         {
+            this.Items=new List<AssigmentBrowseItem>();
         }
 
-        public AssigmentBrowseView(int page, int pageSize, int totalCount, string templateId)
+        public AssigmentBrowseView(int page, int pageSize, int totalCount):this()
         {
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
-            this.TemplateId = templateId;
+          //  this.TemplateId = templateId;
         }
     }
 }

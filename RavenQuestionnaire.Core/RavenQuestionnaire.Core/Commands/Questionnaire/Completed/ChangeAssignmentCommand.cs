@@ -20,5 +20,11 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
         public Guid CompleteQuestionnaireId { get; set; }
 
         public UserLight UserPublicKey { get; set; }
+
+        public ChangeAssignmentCommand(Guid completeQuestionnaireId, UserLight userPublicKey)
+        {
+            this.CompleteQuestionnaireId = completeQuestionnaireId;
+            this.UserPublicKey = userPublicKey;
+        }
     }
 }
