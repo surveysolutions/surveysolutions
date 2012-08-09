@@ -171,7 +171,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 
              Assert.AreEqual(innerDocument.IsDeleted, true);
          }
-         [Test]
+         /*[Test]
          public void SetLocaton_SetLocatonIsChanged()
          {
              UserDocument innerDocument = new UserDocument();
@@ -179,6 +179,6 @@ namespace RavenQuestionnaire.Core.Tests.Entities
              user.SetLocaton(new Location("some location"));
 
              Assert.AreEqual(innerDocument.Location.Location, "some location");
-         }
+         }*/
     }
 }

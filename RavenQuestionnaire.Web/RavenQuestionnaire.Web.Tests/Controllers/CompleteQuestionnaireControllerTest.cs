@@ -24,7 +24,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     [TestFixture]
     public class CompleteQuestionnaireControllerTest
     {
-        public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
+        //public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public Mock<IFormsAuthentication> Authentication { get; set; }
         public Mock<IBagManager> BagManager { get; set; }
@@ -35,7 +35,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [SetUp]
         public void CreateObjects()
         {
-            CommandInvokerMock = new Mock<ICommandInvoker>();  
+            //CommandInvokerMock = new Mock<ICommandInvoker>();  
             ViewRepositoryMock = new Mock<IViewRepository>();
             Authentication = new Mock<IFormsAuthentication>();
             BagManager = new Mock<IBagManager>();
@@ -44,7 +44,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
             CommandServiceMock = new Mock<ICommandService>();
             NcqrsEnvironment.SetDefault<ICommandService>(CommandServiceMock.Object);
-            Controller = new CompleteQuestionnaireController(CommandInvokerMock.Object, ViewRepositoryMock.Object, 
+            Controller = new CompleteQuestionnaireController(/*CommandInvokerMock.Object,*/ ViewRepositoryMock.Object, 
                 BagManager.Object, InfoProvider.Object);
         }
 

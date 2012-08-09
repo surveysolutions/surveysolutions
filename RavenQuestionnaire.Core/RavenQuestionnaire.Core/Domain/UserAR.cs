@@ -10,6 +10,8 @@ namespace RavenQuestionnaire.Core.Domain
     /// </summary>
     public class UserAR :  AggregateRootMappedByConvention
     {
+        private Guid _publicKey;
+
         private string _userName;
         private string _email;
         private string _password;
@@ -34,7 +36,8 @@ namespace RavenQuestionnaire.Core.Domain
                                Email = email,
                                IsLocked = isLocked,
                                Roles = roles,
-                               Supervisor = supervisor
+                               Supervisor = supervisor,
+                               PublicKey = publicKey
                            });
         }
 
@@ -55,18 +58,32 @@ namespace RavenQuestionnaire.Core.Domain
             ApplyEvent(new UserChanged (){
                 Email = email, 
                 IsLocked = isLocked, 
-                Roles = roles});
+                Roles = roles,
+                PublicKey = _publicKey
+            });
         }
 
-        protected void OnLockStatusChanged(UserStatusChanged e)
+
+        public void SetUserLockState(bool isLocked)
+        {
+            ApplyEvent(new UserStatusChanged()
+            {
+                IsLocked = isLocked,
+                PublicKey = _publicKey
+            });
+        }
+
+        protected void OnSetUserLockState(UserStatusChanged e)
         {
             _isLocked = e.IsLocked;
         }
+
         protected void OnUserChange(UserChanged e)
         {
             _email = e.Email;
             _isLocked = e.IsLocked;
             _roles = e.Roles;
+            
         }
     }
 }

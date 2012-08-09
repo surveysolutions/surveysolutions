@@ -15,17 +15,17 @@ namespace RavenQuestionnaire.Web.Tests.Membership
     [TestFixture]
     public class QuestionnaireMembershipProviderTests
     {
-        public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
+        //public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public QuestionnaireMembershipProvider Provider { get; set; }
 
         [SetUp]
         public void CreateObjects()
         {
-            CommandInvokerMock = new Mock<ICommandInvoker>();
+            //CommandInvokerMock = new Mock<ICommandInvoker>();
             ViewRepositoryMock = new Mock<IViewRepository>();
             IKernel kernel = new StandardKernel();
-            kernel.Bind<ICommandInvoker>().ToConstant(CommandInvokerMock.Object);
+            //kernel.Bind<ICommandInvoker>().ToConstant(CommandInvokerMock.Object);
             kernel.Bind<IViewRepository>().ToConstant(ViewRepositoryMock.Object);
             KernelLocator.SetKernel(kernel);
         

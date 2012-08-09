@@ -19,7 +19,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     [TestFixture]
     public class CollectionControllerTest
     {
-        public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
+        /*public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public Mock<ICommandService> CommandServiceMock { get; set; }
         public CollectionController Controller { get; set; }
@@ -98,7 +98,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             collectionRepositoryMock.Setup(x => x.Load("collectiondocuments/collectionId")).Returns(entity);
             Controller.Delete(entity.CollectionId);
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<DeleteCollectionCommand>()), Times.Once());
-        }
+        }*/
 
     }
 }

@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Flow;
 using RavenQuestionnaire.Core.Views.FlowGraph;
-using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Web.Models;
 
@@ -18,12 +13,10 @@ namespace RavenQuestionnaire.Web.Controllers
     [Authorize]
     public class FlowGraphController : Controller
     {
-        private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
 
-        public FlowGraphController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public FlowGraphController( IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
         }
 
@@ -49,7 +42,7 @@ namespace RavenQuestionnaire.Web.Controllers
             var connections = graphs.SelectMany(graph => graph.Connections).Select(c => c.Convert()).ToList();
             try
             {
-                commandInvoker.Execute(new UpdateQuestionnaireFlowCommand(questionnaireId, blocks, connections, GlobalInfo.GetCurrentUser()));
+                //commandInvoker.Execute(new UpdateQuestionnaireFlowCommand(questionnaireId, blocks, connections, GlobalInfo.GetCurrentUser()));
             }
             catch (Exception e)
             {
@@ -60,7 +53,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
             if (conditions.Count > 0)
             {
-                commandInvoker.Execute(new UpdateConditionsCommand(questionnaireId, conditions, GlobalInfo.GetCurrentUser()));
+                //commandInvoker.Execute(new UpdateConditionsCommand(questionnaireId, conditions, GlobalInfo.GetCurrentUser()));
             }
 
             return Json(new { status = "flow saved" });

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using Ncqrs.Commanding;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Flow
 {
-    public class UpdateQuestionnaireFlowCommand : ICommand
+    //check and rewrite
+    public class UpdateQuestionnaireFlowCommand : CommandBase
     {
         public UpdateQuestionnaireFlowCommand(string questionnaireId, List<FlowBlock> blocks,
                                               List<FlowConnection> connections, UserLight executor)

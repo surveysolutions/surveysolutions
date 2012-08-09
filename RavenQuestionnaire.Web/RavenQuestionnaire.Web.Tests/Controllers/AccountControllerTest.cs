@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     public class AccountControllerTest
     {
-        public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
+        //public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public Mock<IFormsAuthentication> Authentication { get; set; }
         public AccountController Controller { get; set; }
@@ -28,11 +28,11 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [SetUp]
         public void CreateObjects()
         {
-            CommandInvokerMock = new Mock<ICommandInvoker>();
+            //CommandInvokerMock = new Mock<ICommandInvoker>();
             ViewRepositoryMock = new Mock<IViewRepository>();
             Authentication= new Mock<IFormsAuthentication>();
             IKernel kernel = new StandardKernel();
-            kernel.Bind<ICommandInvoker>().ToConstant(CommandInvokerMock.Object);
+            //kernel.Bind<ICommandInvoker>().ToConstant(CommandInvokerMock.Object);
             kernel.Bind<IViewRepository>().ToConstant(ViewRepositoryMock.Object);
             KernelLocator.SetKernel(kernel);
             Controller = new AccountController(Authentication.Object);
