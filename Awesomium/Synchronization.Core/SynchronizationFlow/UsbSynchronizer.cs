@@ -4,22 +4,34 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using Synchronization.Core.ClientSettings;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
     public class UsbSynchronizer : AbstractSynchronizer
     {
-        public UsbSynchronizer( string exportURL, string importUrl)
+        public UsbSynchronizer(IClientSettingsProvider clientSettingsprovider, string host, string pushAdress, string pullAdress)
+            : base(clientSettingsprovider)
         {
-            this._exportURL = exportURL;
-            this._importUrl = importUrl;
+            this._pushAdress = pushAdress;
+            this._pullAdress = pullAdress;
+            this._host = host;
             //  FlushDriversList();
         }
 
         #region variables
 
-        private readonly string _exportURL;
-        private readonly string _importUrl;
+        protected Uri PushAdress
+        {
+            get { return new Uri(string.Format("{0}{1}?syncKey={2}", _host, _pushAdress, this.ClientSettingsProvider.ClientSettings.ClientId)); }
+        }
+        protected Uri PullAdress
+        {
+            get { return new Uri(string.Format("{0}{1}", _host, _pullAdress)); }
+        }
+        private readonly string _pushAdress;
+        private readonly string _pullAdress;
+        private readonly string _host;
         private WebClient webClient;
         private ManualResetEvent done;
         private readonly string ArchiveFileNameMask = "backup-{0}.zip";
@@ -63,7 +75,7 @@ namespace Synchronization.Core.SynchronizationFlow
                                                                    OnPushProgressChanged(new SynchronizationEvent(100));
                                                                    done.Set();
                                                                };
-                        webClient.DownloadDataAsync(new Uri(_exportURL));
+                        webClient.DownloadDataAsync(PushAdress);
                         done.WaitOne();
                     }
                 }
@@ -99,7 +111,7 @@ namespace Synchronization.Core.SynchronizationFlow
                                                                };
                         webClient.UploadFileCompleted += (s, e) => { done.Set(); };
 
-                        webClient.UploadFileAsync(new Uri(this._importUrl), usbArchive.FileName);
+                        webClient.UploadFileAsync(PullAdress, usbArchive.FileName);
                     }
                 }
 

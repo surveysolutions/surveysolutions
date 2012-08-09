@@ -6,12 +6,12 @@ using System.Net;
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
-using Client.ClientSettings;
 using Client.Properties;
 using System.Threading;
 using System.Runtime.Remoting.Messaging;
 using Awesomium.Core;
 using Synchronization.Core;
+using Synchronization.Core.ClientSettings;
 using Synchronization.Core.SynchronizationFlow;
 
 namespace Client
@@ -63,12 +63,14 @@ namespace Client
             this.synchronizer.PushProgressChanged += (s, e) => this.pleaseWait.AssignProgress(e.ProgressPercentage);
             this.synchronizer.PullProgressChanged += (s, e) => this.pleaseWait.AssignProgress(e.ProgressPercentage);
 
-            this.synchronizer.AddSynchronizer(new NetworkSynchronizer(Settings.Default.DefaultUrl,
-                Settings.Default.NetworkLocalExportPath, Settings.Default.NetworkLocalImportPath, Settings.Default.NetworkCheckStatePath, Settings.Default.EndpointExportPath,
-                provider.ClientSettings.ClientId));
-            this.synchronizer.AddSynchronizer(
-                new UsbSynchronizer(Settings.Default.DefaultUrl + Settings.Default.UsbExportPath,
-                                    Settings.Default.DefaultUrl + Settings.Default.UsbImportPath));
+            this.synchronizer.AddSynchronizer(new NetworkSynchronizer(provider, Settings.Default.DefaultUrl,
+                                                                      Settings.Default.NetworkLocalExportPath,
+                                                                      Settings.Default.NetworkLocalImportPath,
+                                                                      Settings.Default.NetworkCheckStatePath,
+                                                                      Settings.Default.EndpointExportPath));
+            this.synchronizer.AddSynchronizer(new UsbSynchronizer(provider, Settings.Default.DefaultUrl,
+                                                                  Settings.Default.UsbExportPath,
+                                                                  Settings.Default.UsbImportPath));
 
         }
 

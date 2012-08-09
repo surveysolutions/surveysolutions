@@ -69,8 +69,8 @@ namespace Web.CAPI.Controllers
             return syncProcess;
 
         }
-       
-        public void ExportAsync(Guid clientGuid)
+
+        public void ExportAsync(Guid syncKey)
         {
             AsyncManager.OutstandingOperations.Increment();
             AsyncQuestionnaireUpdater.Update(() =>
@@ -78,7 +78,7 @@ namespace Web.CAPI.Controllers
                                                      try
                                                      {
                                                          AsyncManager.Parameters["result"] =
-                                                             exportimportEvents.Export(clientGuid);
+                                                             exportimportEvents.Export(syncKey);
                                                      }
                                                      catch
                                                      {

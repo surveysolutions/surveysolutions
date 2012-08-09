@@ -30,12 +30,12 @@ using Awesomium.Mono.Forms;
 #else
 using Awesomium.Core;
 using Awesomium.Windows.Forms;
-using Client.ClientSettings;
 using Client.Properties;
 using System.Net;
 using System.IO;
 using System.Collections.Generic;
 using System.Threading;
+using Synchronization.Core.ClientSettings;
 
 #endif
 #endregion

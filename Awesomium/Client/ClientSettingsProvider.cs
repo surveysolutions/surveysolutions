@@ -1,28 +1,29 @@
 ﻿using Client.Properties;
+using Synchronization.Core.ClientSettings;
 
-namespace Client.ClientSettings
+namespace Client
 {
     public class ClientSettingsProvider : IClientSettingsProvider
     {
-        private ClientSettings clientSettings;
+        private Synchronization.Core.ClientSettings.ClientSettings clientSettings;
 
         public ClientSettingsProvider()
         {
         }
 
-        public ClientSettingsProvider(ClientSettings clientSettings)
+        public ClientSettingsProvider(Synchronization.Core.ClientSettings.ClientSettings clientSettings)
         {
             this.clientSettings = clientSettings;
         }
 
-        public ClientSettings ClientSettings
+        public Synchronization.Core.ClientSettings.ClientSettings ClientSettings
         {
             get
             {
                 if (clientSettings == null)
                 {
                     clientSettings =
-                        new ClientSettings(Settings.Default.ClientId, Settings.Default.ParentId);
+                        new Synchronization.Core.ClientSettings.ClientSettings(Settings.Default.ClientId, Settings.Default.ParentId);
                 }
                 return clientSettings;
             }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Client.ClientSettings
+namespace Synchronization.Core.ClientSettings
 {
     public class ClientSettings
     {

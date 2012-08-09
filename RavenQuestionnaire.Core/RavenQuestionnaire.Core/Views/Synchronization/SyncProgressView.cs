@@ -33,6 +33,9 @@ namespace RavenQuestionnaire.Core.Views.Synchronization
                     this.ProgressPercentage =
                         (int)
                         (((decimal) (doc.AggregateRoots.Count - initialStateEventsCount)/doc.AggregateRoots.Count)*100);
+                    // process can't display 100% when it's not marked as completed
+                    if (this.ProgressPercentage == 100)
+                        this.ProgressPercentage = 99;
                     break;
             }
         }

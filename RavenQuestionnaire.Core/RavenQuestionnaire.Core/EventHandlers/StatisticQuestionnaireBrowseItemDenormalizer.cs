@@ -28,6 +28,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
+            if(AllQuestionnaire.ContainsKey(evnt.Payload.CompletedQuestionnaireId))
+                return;
             AllQuestionnaire.Add(evnt.Payload.CompletedQuestionnaireId, evnt.Payload.Status);
             if (evnt.Payload.Responsible == null)
                 UnAssignment++;
@@ -45,6 +47,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
         {
+            if (!AllQuestionnaire.ContainsKey(evnt.Payload.CompletedQuestionnaireId))
+                return;
             AllQuestionnaire.Remove(evnt.Payload.CompletedQuestionnaireId);
         }
     }
