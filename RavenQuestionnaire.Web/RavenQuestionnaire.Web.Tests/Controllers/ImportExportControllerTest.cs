@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using System.Web;
 using System.Web.Mvc;
 using NUnit.Framework;
@@ -29,9 +30,10 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             var trigger = new AutoResetEvent(false);
             Controller.AsyncManager.Finished += (sender, ev) => trigger.Set();
-            Controller.ExportAsync();
+            var clientGuid = Guid.NewGuid();
+            Controller.ExportAsync(clientGuid);
             trigger.WaitOne();
-            ExportImportMock.Verify(x=>x.Export(), Times.Once());
+            ExportImportMock.Verify(x => x.Export(clientGuid), Times.Once());
             var response = Controller.AsyncManager.Parameters["result"];
             var r = Controller.ExportCompleted(response as byte[]);
             Assert.AreEqual(r.GetType(), typeof(FileContentResult));

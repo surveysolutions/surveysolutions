@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using DataEntryClient.CompleteQuestionnaire;
+using NLog;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web;
@@ -17,6 +19,7 @@ using RavenQuestionnaire.Core.Commands.Synchronization;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Views.Synchronization;
 using Web.CAPI.Utils;
+using LogManager = NLog.LogManager;
 
 namespace Web.CAPI.Controllers
 {
@@ -35,15 +38,16 @@ namespace Web.CAPI.Controllers
             _globalProvider = globalProvider;
         }
 
+       
 
-        public ActionResult Index(string url)
+        #region export implementations
+
+        public Guid? Push(string url, Guid syncKey)
         {
-            /*   var user = _globalProvider.GetCurrentUser();*/
-
             Guid syncProcess = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(
-                new CreateNewSynchronizationProcessCommand(syncProcess));
+                new CreateNewSynchronizationProcessCommand(syncProcess,SynchronizationType.Push));
 
             WaitCallback callback = (state) =>
                                         {
@@ -52,39 +56,121 @@ namespace Web.CAPI.Controllers
 
                                                 var process = new CompleteQuestionnaireSync(KernelLocator.Kernel,
                                                                                             syncProcess, url);
-                                                process.Execute();
+                                                process.Export(syncKey);
 
                                             }
                                             catch (Exception e)
                                             {
-                                                NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+                                                Logger logger = LogManager.GetCurrentClassLogger();
                                                 logger.Fatal(e);
                                             }
                                         };
             ThreadPool.QueueUserWorkItem(callback, syncProcess);
-           
-            /*     Process p = new Process();
-                 p.StartInfo.UseShellExecute = false;
-                 p.StartInfo.Arguments = url + " " + syncProcess;
-                 p.StartInfo.RedirectStandardOutput = true;
-                 p.StartInfo.FileName = System.Web.Configuration.WebConfigurationManager.AppSettings["SynchronizerPath"];
-                 p.Start();*/
-            return RedirectToAction("Progress", new { id = syncProcess });
+            return syncProcess;
 
+        }
+       
+        public void ExportAsync(Guid clientGuid)
+        {
+            AsyncManager.OutstandingOperations.Increment();
+            AsyncQuestionnaireUpdater.Update(() =>
+                                                 {
+                                                     try
+                                                     {
+                                                         AsyncManager.Parameters["result"] =
+                                                             exportimportEvents.Export(clientGuid);
+                                                     }
+                                                     catch
+                                                     {
+                                                         AsyncManager.Parameters["result"] = null;
+                                                     }
+                                                     AsyncManager.OutstandingOperations.Decrement();
+                                                 });
+        }
+
+        public FileResult ExportCompleted(byte[] result)
+        {
+            return File(result, "application/zip",
+                        string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
+        }
+
+        #endregion
+
+        #region import
+
+        public Guid Pull(string url, Guid syncKey)
+        {
+            Guid syncProcess = Guid.NewGuid();
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(
+                new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
+            WaitCallback callback = (state) =>
+            {
+                try
+                {
+
+                    var process = new CompleteQuestionnaireSync(KernelLocator.Kernel,
+                                                                syncProcess, url);
+                    process.Import(syncKey);
+
+                }
+                catch (Exception e)
+                {
+                    Logger logger = LogManager.GetCurrentClassLogger();
+                    logger.Fatal(e);
+                }
+            };
+            ThreadPool.QueueUserWorkItem(callback, syncProcess);
+            return syncProcess;
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public void ImportAsync(HttpPostedFileBase myfile)
+        {
+            if (myfile == null && Request.Files.Count > 0)
+                myfile = Request.Files[0];
+            if (myfile != null && myfile.ContentLength != 0)
+            {
+                AsyncManager.OutstandingOperations.Increment();
+                AsyncQuestionnaireUpdater.Update(() =>
+                {
+                    exportimportEvents.Import(myfile);
+                    AsyncManager.OutstandingOperations.Decrement();
+                });
+            }
+        }
+
+        public ActionResult ImportCompleted()
+        {
+            return RedirectToAction("Dashboard", "Survey");
+        }
+
+       #endregion
+
+        #region Progress
+
+        public int ProgressInPersentage(Guid id)
+        {
+            return
+                viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)).ProgressPercentage;
         }
 
         public ActionResult Progress(Guid id)
         {
             return View(viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
-           /* return
-                View(
-                    new SyncProgressView(new SyncProcessDocument()
-                                             {PublicKey = id, StartDate = DateTime.Now}));*/
         }
+
         public ActionResult ProgressPartial(Guid id)
         {
-            return PartialView("_ProgressContent",viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+            return PartialView("_ProgressContent",
+                               viewRepository.Load<SyncProgressInputModel, SyncProgressView>(
+                                   new SyncProgressInputModel(id)));
         }
+
+        #endregion
+
+
+        #region discovery
 
         public ActionResult DiscoverPage()
         {
@@ -96,74 +182,33 @@ namespace Web.CAPI.Controllers
             AsyncManager.OutstandingOperations.Increment();
             var user = _globalProvider.GetCurrentUser();
             AsyncQuestionnaireUpdater.Update(() =>
-            {
-                try
-                {
-                    AsyncManager.Parameters["result"] = new ServiceDiscover().DiscoverChannels();
+                                                 {
+                                                     try
+                                                     {
+                                                         AsyncManager.Parameters["result"] =
+                                                             new ServiceDiscover().DiscoverChannels();
 
-                }
-                catch
-                {
-                    AsyncManager.Parameters["result"] = null;
-                }
-                AsyncManager.OutstandingOperations.Decrement();
-            });
+                                                     }
+                                                     catch
+                                                     {
+                                                         AsyncManager.Parameters["result"] = null;
+                                                     }
+                                                     AsyncManager.OutstandingOperations.Decrement();
+                                                 });
         }
+
         public ActionResult DiscoverCompleted(IEnumerable<ServiceDiscover.SyncSpot> result)
         {
 
-            return PartialView("Spots",result.ToArray());
+            return PartialView("Spots", result.ToArray());
         }
 
-
-
+        #endregion
 
         [AcceptVerbs(HttpVerbs.Get)]
         public ActionResult Import()
         {
             return View("ViewTestUploadFile");
         }
-       
-        [AcceptVerbs(HttpVerbs.Post)]
-        public void ImportAsync(HttpPostedFileBase myfile)
-        {
-            if (myfile != null && myfile.ContentLength != 0)
-            {
-                AsyncManager.OutstandingOperations.Increment();
-                AsyncQuestionnaireUpdater.Update(() =>
-                                                     {
-                                                         exportimportEvents.Import(myfile);
-                                                         AsyncManager.OutstandingOperations.Decrement();
-                                                     });
-            }
-        }
-       
-        public ActionResult ImportCompleted()
-        {
-            return RedirectToAction("Dashboard", "Survey");
-        }
-        //[Authorize]
-        public void ExportAsync()
-        {
-            AsyncManager.OutstandingOperations.Increment();
-            AsyncQuestionnaireUpdater.Update(() =>
-            {
-                try
-                {
-                    AsyncManager.Parameters["result"] = exportimportEvents.Export(this.viewRepository);
-                }
-                catch
-                {
-                    AsyncManager.Parameters["result"] = null;
-                }
-                AsyncManager.OutstandingOperations.Decrement();
-            });
-        }
-       
-        public ActionResult ExportCompleted(byte[] result)
-        {
-            return File(result, "application/zip", string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
-        }
-
     }
 }

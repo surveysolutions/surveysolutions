@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Xml;
 using System.Runtime.Serialization;
 using SynchronizationMessages.Synchronization;
@@ -36,8 +37,20 @@ namespace SynchronizationMessages.CompleteQuestionnaire
             if (this.isCustomSerialization)
             {
                 object result = Activator.CreateInstance(this.type);
-                MemoryStream ms = new MemoryStream(reader.ReadElementContentAsBase64());
-                ((ICustomSerializable)result).InitializeFrom(ms);
+
+                using (MemoryStream memory = new MemoryStream())
+                {
+                    var compressedData = reader.ReadElementContentAsBase64();
+                    memory.Write(compressedData, 0, compressedData.Length);
+                    memory.Position = 0L;
+
+                    using (GZipStream zip = new GZipStream(memory, CompressionMode.Decompress, true))
+                    {
+                        zip.Flush();
+                        ((ICustomSerializable)result).InitializeFrom(zip);
+                    }
+                }
+
                 return result;
             }
             else
@@ -62,10 +75,17 @@ namespace SynchronizationMessages.CompleteQuestionnaire
         {
             if (this.isCustomSerialization)
             {
-                MemoryStream ms = new MemoryStream();
-                ((ICustomSerializable)graph).WriteTo(ms);
-                byte[] bytes = ms.ToArray();
-                writer.WriteBase64(bytes, 0, bytes.Length);
+                byte[] result = null;
+                using (MemoryStream memory = new MemoryStream())
+                {
+                    using (GZipStream zip = new GZipStream(memory, CompressionMode.Compress, true))
+                    {
+                        ((ICustomSerializable)graph).WriteTo(zip);
+                    }
+
+                    result = memory.ToArray();
+                }
+                writer.WriteBase64(result, 0, result.Length);
             }
             else
             {

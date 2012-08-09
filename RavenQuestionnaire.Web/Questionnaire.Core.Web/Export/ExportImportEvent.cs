@@ -15,8 +15,7 @@ namespace Questionnaire.Core.Web.Export
     public interface IExportImport
     {
         void Import(HttpPostedFileBase uploadFile);
-        byte[] Export();
-        byte[] Export(IViewRepository viewRepository);
+        byte[] Export(Guid clientGuid);
     }
     
     public class ExportImportEvent:IExportImport
@@ -24,16 +23,14 @@ namespace Questionnaire.Core.Web.Export
 
         #region FieldsProperties
 
-        private IClientSettingsProvider clientSettingsProvider;
         private IEventSync synchronizer;
 
         #endregion
 
         #region Constructor
 
-        public ExportImportEvent(IClientSettingsProvider clientSettingsProvider, IEventSync synchronizer)
+        public ExportImportEvent(IEventSync synchronizer)
         {
-            this.clientSettingsProvider = clientSettingsProvider;
             this.synchronizer = synchronizer;
         }
 
@@ -59,12 +56,11 @@ namespace Questionnaire.Core.Web.Export
             }
         }
 
-        public byte[] Export()
+        public byte[] Export(Guid clientGuid)
         {
-
             var data = new ZipFileData
             {
-                ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
+                ClientGuid = clientGuid
             };
             data.Events = this.synchronizer.ReadCompleteQuestionare();
             var outputStream = new MemoryStream();
@@ -72,12 +68,6 @@ namespace Questionnaire.Core.Web.Export
             {
                 var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
                 zip.CompressionLevel = CompressionLevel.None;
-                //foreach (var eventStream in data.Events)
-                //{
-                //    zip.AddEntry(string.Format("backup-{0}.txt", eventStream.SourceId),
-                //                            JsonConvert.SerializeObject(eventStream, Formatting.Indented, settings));
-
-                //}
                 string filename = string.Format("backup-{0}.txt", DateTime.Now.ToString().Replace(" ", "_"));
                 zip.AddEntry(filename, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
                 zip.Save(outputStream);
@@ -85,34 +75,6 @@ namespace Questionnaire.Core.Web.Export
             outputStream.Seek(0, SeekOrigin.Begin);
             return outputStream.ToArray();
         }
-
-        public byte[] Export(IViewRepository viewRepository)
-        {
-
-            var data = new ZipFileData
-                           {
-                               ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
-                           };
-            data.Events = this.synchronizer.ReadCompleteQuestionare();
-            var outputStream = new MemoryStream();
-            using (var zip = new ZipFile())
-            {
-                var settings = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects};
-                zip.CompressionLevel = CompressionLevel.None;
-                //foreach (var eventStream in data.Events)
-                //{
-                //    zip.AddEntry(string.Format("backup-{0}.txt", eventStream.SourceId),
-                //                            JsonConvert.SerializeObject(eventStream, Formatting.Indented, settings));
-
-                //}
-                string filename = string.Format("backup-{0}.txt", DateTime.Now.ToString().Replace(" ", "_").Replace("/", "_").Replace(":","_"));
-                zip.AddEntry(filename, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
-                zip.Save(outputStream);
-            }
-            outputStream.Seek(0, SeekOrigin.Begin);
-            return outputStream.ToArray();
-        }
-
         #endregion
 
 
