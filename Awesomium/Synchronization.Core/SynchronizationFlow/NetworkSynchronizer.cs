@@ -15,27 +15,27 @@ namespace Synchronization.Core.SynchronizationFlow
         private readonly string _pullAdress;
         private readonly string _pushCheckStateAdress;
         private readonly string _endPointAdressAdress;
-        private WebClient webClient;
-        private ManualResetEvent done;
+        private readonly Guid _clientGuid;
         #endregion
 
 
-        public NetworkSynchronizer(string host, string pushAdress, string pullAdress, string pushCheckStateAdress, string endPointAdressAdress)
+        public NetworkSynchronizer(string host, string pushAdress, string pullAdress, string pushCheckStateAdress, string endPointAdressAdress, Guid clientGuid)
         {
             this._host = host;
             this._endPointAdressAdress = endPointAdressAdress;
             this._pushAdress = pushAdress;
             this._pullAdress = pullAdress;
             this._pushCheckStateAdress = pushCheckStateAdress;
+            this._clientGuid = clientGuid;
         }
 
         protected Uri PushAdress
         {
-            get { return new Uri(string.Format("{0}{1}?url={2}", _host, _pushAdress, _endPointAdressAdress)); }
+            get { return new Uri(string.Format("{0}{1}?url={2}&clientGuid={3}", _host, _pushAdress, _endPointAdressAdress, this._clientGuid)); }
         }
         protected Uri PullAdress
         {
-            get { return new Uri(string.Format("{0}{1}?url={2}", _host, _pullAdress, _endPointAdressAdress)); }
+            get { return new Uri(string.Format("{0}{1}?url={2}&clientGuid={3}", _host, _pullAdress, _endPointAdressAdress, this._clientGuid)); }
         }
         protected Uri PushCheckStateAdress
         {

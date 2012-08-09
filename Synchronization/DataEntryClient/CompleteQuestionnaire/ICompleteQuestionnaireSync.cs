@@ -4,10 +4,10 @@ namespace DataEntryClient.CompleteQuestionnaire
 {
     public interface ICompleteQuestionnaireSync
     {
-        void Export();
+        void Export(Guid syncKey);
         Guid? GetLastSyncEventGuid(Guid clientKey);
         void UploadEvents(Guid clientKey, Guid? lastSyncEvent);
 
-        void Import();
+        void Import(Guid syncKey);
     }
 }

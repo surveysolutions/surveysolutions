@@ -29,7 +29,7 @@ namespace DataEntryClientTests
         protected IKernel Kernel;
         protected Mock<ICommandService> CommandService;
         protected Mock<IEventSync> EventStore;
-        protected Mock<IClientSettingsProvider> clientSettingsMock;
+    //    protected Mock<IClientSettingsProvider> clientSettingsMock;
         [SetUp]
         public void CreateObjects()
         {
@@ -39,10 +39,10 @@ namespace DataEntryClientTests
             EventStore=new Mock<IEventSync>();
             Kernel.Bind<IEventSync>().ToConstant(EventStore.Object);
 
-            clientSettingsMock = new Mock<IClientSettingsProvider>();
+          /*  clientSettingsMock = new Mock<IClientSettingsProvider>();
             clientSettingsMock.Setup(x => x.ClientSettings).Returns(
                 new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
-            Kernel.Bind<IClientSettingsProvider>().ToConstant(clientSettingsMock.Object);
+            Kernel.Bind<IClientSettingsProvider>().ToConstant(clientSettingsMock.Object);*/
             NcqrsEnvironment.SetDefault<ICommandService>(CommandService.Object);
         }
 
@@ -58,10 +58,7 @@ namespace DataEntryClientTests
             var eventGuid = Guid.NewGuid();
 
             serviceMock.Setup(x => x.Process(clientGuid)).Returns(eventGuid);
-            Mock<IClientSettingsProvider> clientSettingsMock = new Mock<IClientSettingsProvider>();
-            clientSettingsMock.Setup(x => x.ClientSettings).Returns(
-                new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
-            var target = new CompleteQuestionnaireSync(Kernel, Guid.NewGuid(), string.Empty);
+                 var target = new CompleteQuestionnaireSync(Kernel, Guid.NewGuid(), string.Empty);
 
             var result =target.GetLastSyncEventGuid(clientGuid);
             Assert.AreEqual(result, eventGuid);
@@ -76,10 +73,7 @@ namespace DataEntryClientTests
             Guid? eventGuid = null;
 
             serviceMock.Setup(x => x.Process(clientGuid)).Returns(eventGuid);
-            Mock<IClientSettingsProvider> clientSettingsMock = new Mock<IClientSettingsProvider>();
-            clientSettingsMock.Setup(x => x.ClientSettings).Returns(
-                new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
-            var target = new CompleteQuestionnaireSync(Kernel, Guid.NewGuid(), string.Empty);
+              var target = new CompleteQuestionnaireSync(Kernel, Guid.NewGuid(), string.Empty);
 
             var result = target.GetLastSyncEventGuid(clientGuid);
             Assert.AreEqual(result, null);
@@ -144,7 +138,7 @@ namespace DataEntryClientTests
             eventServiceMock.Setup(x => x.Process(serviceResult.Roots[0].AggregateRootPublicKey)).Returns(new ImportSynchronizationMessage());
             var target = new CompleteQuestionnaireSync(Kernel, Guid.NewGuid(), string.Empty);
 
-            target.Import();
+            target.Import(Guid.NewGuid());
 
             serviceMock.Verify(x => x.Process(),
                                Times.Exactly(1));

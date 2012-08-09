@@ -158,7 +158,6 @@
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
     <Compile Include="CachableDocumentSession.cs" />
-    <Compile Include="ClientSettingsProvider\IClientSettingsProvider.cs" />
     <Compile Include="CommandHandlerAttribute.cs" />
     <Compile Include="CommandHandlers\Collection\CreateNewCollectionHandler.cs" />
     <Compile Include="CommandHandlers\Collection\DeleteCollectionHandler.cs" />
@@ -449,9 +448,6 @@
     <Compile Include="Views\Card\CardView.cs" />
     <Compile Include="Views\Card\CardViewFactory.cs" />
     <Compile Include="Views\Card\CardViewInputModel.cs" />
-    <Compile Include="Views\ClientSettings\ClientSettingsInputModel.cs" />
-    <Compile Include="Views\ClientSettings\ClientSettingsView.cs" />
-    <Compile Include="Views\ClientSettings\ClientSettingsViewFactory.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseInputModel.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseItem.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseView.cs" />

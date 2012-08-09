@@ -9,7 +9,7 @@
       <Value Profile="(Default)">/Synchronizations/Export</Value>
     </Setting>
     <Setting Name="NetworkLocalExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">/Synchronizations/Index</Value>
+      <Value Profile="(Default)">/Synchronizations/Push</Value>
     </Setting>
     <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://localhost</Value>
@@ -22,6 +22,12 @@
     </Setting>
     <Setting Name="NetworkLocalImportPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">/Synchronizations/Pull</Value>
+    </Setting>
+    <Setting Name="ClientId" Type="System.Guid" Scope="User">
+      <Value Profile="(Default)">00000000-0000-0000-0000-000000000000</Value>
+    </Setting>
+    <Setting Name="ParentId" Type="System.Guid" Scope="User">
+      <Value Profile="(Default)">00000000-0000-0000-0000-000000000000</Value>
     </Setting>
   </Settings>
 </SettingsFile>

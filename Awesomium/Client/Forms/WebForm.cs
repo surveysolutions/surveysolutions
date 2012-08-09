@@ -30,6 +30,7 @@ using Awesomium.Mono.Forms;
 #else
 using Awesomium.Core;
 using Awesomium.Windows.Forms;
+using Client.ClientSettings;
 using Client.Properties;
 using System.Net;
 using System.IO;
@@ -47,7 +48,7 @@ namespace Client
         bool repaint;
         private PleaseWaitControl pleaseWait;
         private Export export;
-       
+        private IClientSettingsProvider clientSettings;
         #endregion
 
         #region C-tor
@@ -58,7 +59,8 @@ namespace Client
             // in the designer, to prevent flickering.
 
             this.pleaseWait = new PleaseWaitControl();
-            this.export = new Export(pleaseWait);
+            this.clientSettings=new ClientSettingsProvider();
+            this.export = new Export(this.pleaseWait, this.clientSettings);
             export.EndOfExport+= new EndOfExport(EndOfExportMain);
             InitializeComponent();
 

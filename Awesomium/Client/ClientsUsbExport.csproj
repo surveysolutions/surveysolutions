@@ -112,6 +112,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ClientSettings\ClientSettings.cs" />
+    <Compile Include="ClientSettings\ClientSettingsProvider.cs" />
+    <Compile Include="ClientSettings\IClientSettingsProvider.cs" />
     <EmbeddedResource Include="Forms\PleaseWaitForm.resx">
       <DependentUpon>PleaseWaitForm.cs</DependentUpon>
     </EmbeddedResource>

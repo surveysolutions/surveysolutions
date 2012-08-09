@@ -49,7 +49,7 @@ namespace Client.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Index")]
+        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Push")]
         public string NetworkLocalExportPath {
             get {
                 return ((string)(this["NetworkLocalExportPath"]));
@@ -104,6 +104,30 @@ namespace Client.Properties {
             }
             set {
                 this["NetworkLocalImportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00000000-0000-0000-0000-000000000000")]
+        public global::System.Guid ClientId {
+            get {
+                return ((global::System.Guid)(this["ClientId"]));
+            }
+            set {
+                this["ClientId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00000000-0000-0000-0000-000000000000")]
+        public global::System.Guid ParentId {
+            get {
+                return ((global::System.Guid)(this["ParentId"]));
+            }
+            set {
+                this["ParentId"] = value;
             }
         }
     }
