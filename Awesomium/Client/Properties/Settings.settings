@@ -11,7 +11,7 @@
     <Setting Name="NetworkLocalExportPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">/Synchronizations/Index</Value>
     </Setting>
-    <Setting Name="NetworkRemoteExportPath" Type="System.String" Scope="User">
+    <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://localhost</Value>
     </Setting>
     <Setting Name="NetworkCheckStatePath" Type="System.String" Scope="User">
@@ -19,6 +19,9 @@
     </Setting>
     <Setting Name="UsbImportPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">/Synchronizations/Import</Value>
+    </Setting>
+    <Setting Name="NetworkLocalImportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/Synchronizations/Pull</Value>
     </Setting>
   </Settings>
 </SettingsFile>
