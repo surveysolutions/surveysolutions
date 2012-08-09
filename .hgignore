@@ -152,3 +152,7 @@ RavenQuestionnaire.Web\RavenQuestionnaire.Web\Content\bootstrap\*
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/*
 RavenQuestionnaire.Web/CAPI/obj/
 RavenQuestionnaire.Web/CAPI/bin/
+Awesomium/Synchronization.Core.Tests/bin/*
+Awesomium/Synchronization.Core.Tests/obj/*
+Awesomium/Synchronization.Core/bin/*
+Awesomium/Synchronization.Core/obj/*
