@@ -38,31 +38,7 @@ namespace Web.CAPI.Controllers
             _globalProvider = globalProvider;
         }
 
-        public Guid Pull(string url)
-        {
-            Guid syncProcess = Guid.NewGuid();
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(
-                new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
-            WaitCallback callback = (state) =>
-                                        {
-                                            try
-                                            {
-
-                                                var process = new CompleteQuestionnaireSync(KernelLocator.Kernel,
-                                                                                            syncProcess, url);
-                                                process.Import();
-
-                                            }
-                                            catch (Exception e)
-                                            {
-                                                Logger logger = LogManager.GetCurrentClassLogger();
-                                                logger.Fatal(e);
-                                            }
-                                        };
-            ThreadPool.QueueUserWorkItem(callback, syncProcess);
-            return syncProcess;
-        }
+       
 
         #region export implementations
 
@@ -124,14 +100,75 @@ namespace Web.CAPI.Controllers
 
         #endregion
 
+        #region import
+
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public void ImportAsync(HttpPostedFileBase myfile)
+        {
+            if (myfile == null && Request.Files.Count > 0)
+                myfile = Request.Files[0];
+            if (myfile != null && myfile.ContentLength != 0)
+            {
+                AsyncManager.OutstandingOperations.Increment();
+                AsyncQuestionnaireUpdater.Update(() =>
+                {
+                    exportimportEvents.Import(myfile);
+                    AsyncManager.OutstandingOperations.Decrement();
+                });
+            }
+        }
+
+        public ActionResult ImportCompleted()
+        {
+            return RedirectToAction("Dashboard", "Survey");
+        }
+
+        public Guid Pull(string url)
+        {
+            Guid syncProcess = Guid.NewGuid();
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(
+                new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
+            WaitCallback callback = (state) =>
+            {
+                try
+                {
+
+                    var process = new CompleteQuestionnaireSync(KernelLocator.Kernel,
+                                                                syncProcess, url);
+                    process.Import();
+
+                }
+                catch (Exception e)
+                {
+                    Logger logger = LogManager.GetCurrentClassLogger();
+                    logger.Fatal(e);
+                }
+            };
+            ThreadPool.QueueUserWorkItem(callback, syncProcess);
+            return syncProcess;
+        }
+        #endregion
+
+        #region discovery
+
         public ActionResult Progress(Guid id)
         {
             return View(viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
         }
+
         public ActionResult ProgressPartial(Guid id)
         {
-            return PartialView("_ProgressContent",viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+            return PartialView("_ProgressContent",
+                               viewRepository.Load<SyncProgressInputModel, SyncProgressView>(
+                                   new SyncProgressInputModel(id)));
         }
+
+        #endregion
+
+
+        #region discovery
 
         public ActionResult DiscoverPage()
         {
@@ -143,60 +180,33 @@ namespace Web.CAPI.Controllers
             AsyncManager.OutstandingOperations.Increment();
             var user = _globalProvider.GetCurrentUser();
             AsyncQuestionnaireUpdater.Update(() =>
-            {
-                try
-                {
-                    AsyncManager.Parameters["result"] = new ServiceDiscover().DiscoverChannels();
+                                                 {
+                                                     try
+                                                     {
+                                                         AsyncManager.Parameters["result"] =
+                                                             new ServiceDiscover().DiscoverChannels();
 
-                }
-                catch
-                {
-                    AsyncManager.Parameters["result"] = null;
-                }
-                AsyncManager.OutstandingOperations.Decrement();
-            });
+                                                     }
+                                                     catch
+                                                     {
+                                                         AsyncManager.Parameters["result"] = null;
+                                                     }
+                                                     AsyncManager.OutstandingOperations.Decrement();
+                                                 });
         }
 
         public ActionResult DiscoverCompleted(IEnumerable<ServiceDiscover.SyncSpot> result)
         {
 
-            return PartialView("Spots",result.ToArray());
+            return PartialView("Spots", result.ToArray());
         }
+
+        #endregion
 
         [AcceptVerbs(HttpVerbs.Get)]
         public ActionResult Import()
         {
             return View("ViewTestUploadFile");
         }
-
-        #region import
-
-       
-        [AcceptVerbs(HttpVerbs.Post)]
-        public void ImportAsync(HttpPostedFileBase myfile)
-        {
-            if (myfile == null && Request.Files.Count > 0)
-                myfile = Request.Files[0];
-            if (myfile != null && myfile.ContentLength != 0)
-            {
-                AsyncManager.OutstandingOperations.Increment();
-                AsyncQuestionnaireUpdater.Update(() =>
-                                                     {
-                                                         exportimportEvents.Import(myfile);
-                                                         AsyncManager.OutstandingOperations.Decrement();
-                                                     });
-            }
-        }
-
-        public ActionResult ImportCompleted()
-        {
-            return RedirectToAction("Dashboard", "Survey");
-        }
-
-        #endregion
-
-        //[Authorize]
-       
-
     }
 }
