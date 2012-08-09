@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Raven.Client;
 using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 
 namespace RavenQuestionnaire.Core.Views.Questionnaire

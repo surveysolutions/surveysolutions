@@ -3,15 +3,15 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
-using Raven.Client;
-using Raven.Client.Document;
-using Raven.Client.Embedded;
-using Raven.Client.Indexes;
+//using Raven.Client;
+//using Raven.Client.Document;
+//using Raven.Client.Embedded;
+//using Raven.Client.Indexes;
 using RavenQuestionnaire.Core.Conventions;
 using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.ExpressionExecutors;
-using RavenQuestionnaire.Core.Indexes;
+//using RavenQuestionnaire.Core.Indexes;
 
 namespace RavenQuestionnaire.Core
 {
@@ -30,9 +30,9 @@ namespace RavenQuestionnaire.Core
 
         public override void Load()
         {
-            DocumentStoreProvider storeProvider=new DocumentStoreProvider(_repositoryPath,_isEmbeded);
+            /*DocumentStoreProvider storeProvider=new DocumentStoreProvider(_repositoryPath,_isEmbeded);
             Bind<DocumentStoreProvider>().ToConstant(storeProvider);
-            Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
+            Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();*/
           
           
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IViewFactory<,>))));
@@ -68,7 +68,7 @@ namespace RavenQuestionnaire.Core
    
     }
 
-    public class DocumentStoreProvider : Provider<IDocumentStore>
+    /*public class DocumentStoreProvider : Provider<IDocumentStore>
     {
         public DocumentStoreProvider(string storage, bool isEmbeded)
         {
@@ -100,5 +100,5 @@ namespace RavenQuestionnaire.Core
             IndexCreation.CreateIndexes(typeof(QuestionnaireGroupedByTemplateIndex).Assembly, store);
             return store;
         }
-    }
+    }*/
 }
