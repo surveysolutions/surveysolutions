@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Ncqrs.Commanding;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Flow
 {
@@ -11,8 +10,8 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Flow
         public UpdateQuestionnaireFlowCommand(string questionnaireId, List<FlowBlock> blocks,
                                               List<FlowConnection> connections, UserLight executor)
         {
-            QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
-            FlowGraphId = IdUtil.CreateFlowGraphId(questionnaireId);
+            QuestionnaireId = questionnaireId;
+            FlowGraphId = questionnaireId;
             Blocks = blocks;
             Connections = connections;
             Executor = executor;

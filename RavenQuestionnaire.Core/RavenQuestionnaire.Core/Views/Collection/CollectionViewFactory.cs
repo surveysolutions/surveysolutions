@@ -1,20 +1,21 @@
-﻿using Raven.Client;
+﻿using System.Linq;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
 
 namespace RavenQuestionnaire.Core.Views.Collection
 {
     public class CollectionViewFactory:IViewFactory<CollectionViewInputModel, CollectionView>
     {
-        private IDocumentSession documentSession;
+        private readonly IDenormalizerStorage<CollectionDocument> documentItemSession;
 
-        public CollectionViewFactory(IDocumentSession documentSession)
+        public CollectionViewFactory(IDenormalizerStorage<CollectionDocument> documentItemSession)
         {
-            this.documentSession = documentSession;
+            this.documentItemSession = documentItemSession;
         }
 
         public CollectionView Load(CollectionViewInputModel input)
         {
-            var doc = documentSession.Load<CollectionDocument>(input.CollectionId);
+            var doc = documentItemSession.Query().FirstOrDefault(u => u.Id == input.CollectionId);
             return new CollectionView(doc);
         }
     }

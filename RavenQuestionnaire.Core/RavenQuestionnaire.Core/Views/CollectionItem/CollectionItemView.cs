@@ -1,5 +1,4 @@
 ﻿using System;
-using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Views.CollectionItem
@@ -12,7 +11,7 @@ namespace RavenQuestionnaire.Core.Views.CollectionItem
 
         public string CollectionId
         {
-            get { return IdUtil.ParseId(_collectionId); }
+            get { return _collectionId; }
             set { _collectionId = value; }
         }
 
