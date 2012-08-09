@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Synchronization.Core.SynchronizationFlow;
 
 namespace Client
 {
@@ -9,7 +12,7 @@ namespace Client
     {
         void ActivateExportState();
         void AssignProgress(int progressPercentage);
-        void SetCompletedStatus(bool canceled, Exception error);
+        void SetCompletedStatus(bool canceled ,bool withErrors);
     }
 
     public partial class PleaseWaitControl : UserControl, IStatusIndicator
@@ -136,17 +139,19 @@ namespace Client
         /// Show comleted status if ok, otherwise just hide for now
         /// </summary>
         /// <param name="canceled"></param>
-        /// <param name="error"></param>
+        /// <param name="errors"></param>
         /// <remarks>We should add error report if canceling caused by an error</remarks>
-        public void SetCompletedStatus(bool canceled, Exception error)
+        public void SetCompletedStatus(bool canceled,bool withErrors)
         {
-            if (canceled || error != null)
+            if (canceled || withErrors)
             {
-                if (canceled || error == null)
+                if (canceled && !withErrors)
                     SetStatusLabel("Data export canceled", true);
                 else
-                    SetStatusLabel("Data export error:" + error.Message, true);
+                {
+                    SetStatusLabel("Data export error", true);
 
+                }
                 MakeInvisibleProgressBar(0);
                 Deactivate(false);
 
@@ -154,6 +159,7 @@ namespace Client
             }
 
             SetStatusLabel("Data export completed successfully.");
+           
             Deactivate(false);
         }
 

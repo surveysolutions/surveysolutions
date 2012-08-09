@@ -5,7 +5,7 @@ namespace Synchronization.Core.SynchronizationFlow
 {
     public abstract class AbstractSynchronizer : ISynchronizer
     {
-        protected ISynchronizer Next;
+       // protected ISynchronizer Next;
         protected readonly IClientSettingsProvider ClientSettingsProvider;
         public AbstractSynchronizer(IClientSettingsProvider clientSettingsprovider)
         {
@@ -14,40 +14,15 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #region Implementation of ISynchronizer
 
-        public ISynchronizer SetNext(ISynchronizer synchronizer)
+       /* public ISynchronizer SetNext(ISynchronizer synchronizer)
         {
             Next = synchronizer;
             return synchronizer;
-        }
+        }*/
 
-        public void Push()
-        {
-            try
-            {
-                ExecutePush();
-            }
-            catch (SynchronizationException)
-            {
-                if (this.Next == null)
-                    throw new SynchronizationException("push wasn't successefull");
-                this.Next.Push();
+        public abstract void Push();
 
-            }
-        }
-
-        public void Pull()
-        {
-            try
-            {
-                ExecutePull();
-            }
-            catch (SynchronizationException)
-            {
-                if (this.Next == null)
-                    new SynchronizationException("push wasn't successefull");
-                this.Next.Pull();
-            }
-        }
+        public abstract void Pull();
 
         public event EventHandler<SynchronizationEvent> PushProgressChanged;
         public event EventHandler<SynchronizationEvent> PullProgressChanged;
@@ -77,7 +52,5 @@ namespace Synchronization.Core.SynchronizationFlow
         }
         #endregion
 
-        protected abstract void ExecutePush();
-        protected abstract void ExecutePull();
     }
 }

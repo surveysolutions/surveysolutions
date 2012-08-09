@@ -44,7 +44,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #region Overrides of AbstractSynchronizer
 
-        protected override void ExecutePush()
+        public override void Push()
         {
             try
             {
@@ -69,11 +69,12 @@ namespace Synchronization.Core.SynchronizationFlow
             }
             catch (Exception e)
             {
-                throw new SynchronizationException("network exception", e);
+                throw new SynchronizationException(
+                    string.Format("Push to local center {0} is failed ", this._host), e);
             }
         }
 
-        protected override void ExecutePull()
+        public override void Pull()
         {
             try
             {
@@ -98,7 +99,8 @@ namespace Synchronization.Core.SynchronizationFlow
             }
             catch (Exception e)
             {
-                throw new SynchronizationException("network exception", e);
+                throw new SynchronizationException(
+                   string.Format("Pull to local center {0} is failed ", this._host), e);
             }
         }
 

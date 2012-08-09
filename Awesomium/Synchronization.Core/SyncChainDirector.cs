@@ -8,17 +8,20 @@ namespace Synchronization.Core
 {
     public class SyncChainDirector : ISyncChainDirector
     {
-        private ISynchronizer root;
-        private ISynchronizer last;
-
+        public SyncChainDirector()
+        {
+            synchronizerChain = new List<ISynchronizer>();
+        }
+        public SyncChainDirector(List<ISynchronizer> subStructure)
+        {
+            synchronizerChain = subStructure;
+        }
+        private List<ISynchronizer> synchronizerChain;
         #region Implementation of ISyncChainDirector
 
         public void AddSynchronizer(ISynchronizer synchronizer)
         {
-            if (root == null)
-                last = root = synchronizer;
-            else
-                last = last.SetNext(synchronizer);
+            synchronizerChain.Add(synchronizer);
             SubscribeSynchronizer(synchronizer);
         }
 
@@ -28,14 +31,22 @@ namespace Synchronization.Core
             synchronizer.PushProgressChanged += this.PushProgressChanged;
         }
 
-        public void Push()
-        {
-            root.Push();
-        }
 
-        public void Pull()
+        public ISynchronizer ExecuteAction(Action<ISynchronizer> action, IList<Exception> errorList)
         {
-            root.Pull();
+            foreach (var synchronizer in synchronizerChain)
+            {
+                try
+                {
+                    action(synchronizer);
+                    return synchronizer;
+                }
+                catch (SynchronizationException e)
+                {
+                    errorList.Add(e);
+                }
+            }
+            return null;
         }
 
         public event EventHandler<SynchronizationEvent> PushProgressChanged;
