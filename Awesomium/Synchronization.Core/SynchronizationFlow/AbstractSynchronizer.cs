@@ -23,6 +23,7 @@ namespace Synchronization.Core.SynchronizationFlow
         public abstract void Push();
 
         public abstract void Pull();
+        public abstract void Stop();
 
         public event EventHandler<SynchronizationEvent> PushProgressChanged;
         public event EventHandler<SynchronizationEvent> PullProgressChanged;

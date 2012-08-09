@@ -39,12 +39,20 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #endregion
 
+        public string FilePath
+        {
+            get
+            {
+                if (usbArchive == null)
+                    return string.Empty;
+                return usbArchive.FileName;
+            }
+        }
+
         #region Overrides of AbstractSynchronizer
 
         public override void Push()
         {
-            Stop();
-
             string drive = GetDrive(); // accept driver to flush on
             if (drive == null)
                 throw new SynchronizationException("Usb drivers are absend");
@@ -98,7 +106,6 @@ namespace Synchronization.Core.SynchronizationFlow
         }
         public override void Pull()
         {
-            Stop();
             string drive = GetDrive(); // accept driver to flush on
             if (drive == null)
                 throw new SynchronizationException("Usb drivers are absend");
@@ -144,14 +151,11 @@ namespace Synchronization.Core.SynchronizationFlow
                 throw new SynchronizationException("Pull to usb is failed", e);
             }
         }
-        #endregion
-
-        #region utility methods
 
         /// <summary>
         /// Interrupt pending loading and wait for its finalization
         /// </summary>
-        private void Stop()
+        public override void Stop()
         {
             if (webClient == null)
                 return;
@@ -163,6 +167,11 @@ namespace Synchronization.Core.SynchronizationFlow
                 // this.exportEnded.WaitOne();
             }
         }
+        #endregion
+
+        #region utility methods
+
+        
 
         /// <summary>
         /// Compare current drivers list with cached list and 

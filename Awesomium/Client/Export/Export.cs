@@ -106,8 +106,7 @@ namespace Client
                     result.AppendLine(synchronizationException.Message);
                 }
                 if (succesSynchronizer != null)
-                    result.AppendLine(string.Format("Synchronization is successful with {0}",
-                                                    succesSynchronizer.GetType().Name));
+                    result.AppendLine(BuildSuccessSyncMessage(succesSynchronizer));
                 MessageBox.Show(result.ToString());
                 if (EndOfExport != null)
                 {
@@ -118,6 +117,21 @@ namespace Client
             {
                 throw ex;
             }
+        }
+        private string BuildSuccessSyncMessage(ISynchronizer synchronizerAgent)
+        {
+            var usb = synchronizerAgent as UsbSynchronizer;
+            if(usb!=null)
+            {
+                return  string.Format("Usb synchronization is successful with file {0}", usb.FilePath);
+            }
+            var lan = synchronizerAgent as NetworkSynchronizer;
+            if(lan!=null)
+            {
+                return string.Format("Network synchronization is successful with local center {0}", lan.Host);
+            }
+            return string.Format("Synchronization is successful with {0}",
+                                 synchronizerAgent.GetType().Name);
         }
 
         #endregion
@@ -134,10 +148,10 @@ namespace Client
         }
         #endregion
 
-      /*  internal void Interrupt()
+        internal void Interrupt()
         {
-            new Thread(Stop).Start();
-        }*/
+            this.synchronizer.StopAllActions();
+        }
         
     }
 }

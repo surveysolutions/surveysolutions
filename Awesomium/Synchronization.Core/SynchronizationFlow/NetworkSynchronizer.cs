@@ -29,6 +29,11 @@ namespace Synchronization.Core.SynchronizationFlow
             this._pushCheckStateAdress = pushCheckStateAdress;
         }
 
+        public string Host
+        {
+            get { return _host; }
+        }
+
         protected Uri PushAdress
         {
             get { return new Uri(string.Format("{0}{1}?url={2}&syncKey={3}", _host, _pushAdress, _endPointAdressAdress, this.ClientSettingsProvider.ClientSettings.ClientId)); }
@@ -102,6 +107,11 @@ namespace Synchronization.Core.SynchronizationFlow
                 throw new SynchronizationException(
                    string.Format("Pull to local center {0} is failed ", this._host), e);
             }
+        }
+
+        public override void Stop()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

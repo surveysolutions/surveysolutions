@@ -34,11 +34,18 @@ namespace Synchronization.Core
 
         public ISynchronizer ExecuteAction(Action<ISynchronizer> action, IList<Exception> errorList)
         {
+            if (isInProcess)
+            {
+                errorList.Add(new SynchronizationException("Synchronizer is bisy"));
+                return null;
+            }
+            isInProcess = true;
             foreach (var synchronizer in synchronizerChain)
             {
                 try
                 {
                     action(synchronizer);
+                    isInProcess = false;
                     return synchronizer;
                 }
                 catch (SynchronizationException e)
@@ -46,9 +53,22 @@ namespace Synchronization.Core
                     errorList.Add(e);
                 }
             }
+            isInProcess = false;
             return null;
         }
 
+        public void StopAllActions()
+        {
+            if(!isInProcess)
+                return;
+            foreach (var synchronizer in synchronizerChain)
+            {
+                synchronizer.Stop();
+            }
+            isInProcess = false;
+        }
+
+        private bool isInProcess = false;
         public event EventHandler<SynchronizationEvent> PushProgressChanged;
         public event EventHandler<SynchronizationEvent> PullProgressChanged;
 

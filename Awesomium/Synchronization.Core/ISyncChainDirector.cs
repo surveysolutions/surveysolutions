@@ -10,6 +10,7 @@ namespace Synchronization.Core
     {
         void AddSynchronizer(ISynchronizer synchronizer);
         ISynchronizer ExecuteAction(Action<ISynchronizer> action, IList<Exception> errorList);
+        void StopAllActions();
         event EventHandler<SynchronizationEvent> PushProgressChanged;
         event EventHandler<SynchronizationEvent> PullProgressChanged;
     }
