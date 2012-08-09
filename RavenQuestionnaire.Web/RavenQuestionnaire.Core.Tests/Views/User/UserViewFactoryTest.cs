@@ -37,7 +37,7 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
             Assert.True(result.UserId == "user_id" && result.Email == "email@test.com" && result.Password == "1234" &&
                         result.UserName == "test");
         }*/
-
+        /*[Test]
         public void LoadByExistingUserIdButUserMarketAsDeleted_NullIsReturned()
         {
             var docMock = new Mock<IDenormalizerStorage<UserDocument>>();
@@ -60,7 +60,7 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
 
             Assert.True(result == null);
         }*/
-
+        /*[Test]
         public void LoadByNotExistingUserId_NullIsReturned()
         {
             var docMock = new Mock<IDenormalizerStorage<UserDocument>>();
@@ -74,7 +74,7 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
         }*/
 
 
-/*        [Test]
+/*      [Test]
         public void LoadByExistingUserName_UserViewIsReturned()
         {
             var docMock = new Mock<IDenormalizerStorage<UserDocument>>();
@@ -86,16 +86,9 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
                 Password = "1234",
                 UserName = "user_name"
             };
-
-            /*IDocumentStore store = new EmbeddableDocumentStore() 
-            { 
-                RunInMemory = true 
-            };
-            store.Initialize();
             
-            IDocumentSession session = store.OpenSession();
-            session.Store(expected);
-            session.SaveChanges();*/
+            
+           
 
             UserViewFactory factory = new UserViewFactory(docMock.Object);
             UserView result = factory.Load(input);

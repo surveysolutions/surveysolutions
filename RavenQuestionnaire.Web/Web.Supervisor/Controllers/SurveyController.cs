@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-using RavenQuestionnaire.Core.EventHandlers;
 using RavenQuestionnaire.Core.Views.Assignment;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.StatusReport;
@@ -18,13 +17,13 @@ namespace Web.Supervisor.Controllers
 {
     public class SurveyController : Controller
     {
-        private ICommandInvoker commandInvoker;
+        //private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
         private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
 
-        public SurveyController(ICommandInvoker commandInvoker, IViewRepository viewRepository, IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
+        public SurveyController(/*ICommandInvoker commandInvoker,*/ IViewRepository viewRepository, IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
         {
-            this.commandInvoker = commandInvoker;
+            //this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
             this.documentItemSession = documentItemSession;
         }
