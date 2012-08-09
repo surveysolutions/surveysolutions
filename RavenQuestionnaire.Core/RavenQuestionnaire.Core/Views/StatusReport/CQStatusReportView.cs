@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Documents.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.Statistics;
-using RavenQuestionnaire.Core.Views.Status.StatusElement;
 
 namespace RavenQuestionnaire.Core.Views.StatusReport
 {
