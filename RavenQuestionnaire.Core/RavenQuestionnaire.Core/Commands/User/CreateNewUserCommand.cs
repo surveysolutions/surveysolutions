@@ -9,6 +9,9 @@ namespace RavenQuestionnaire.Core.Commands
 {
     public class CreateNewUserCommand : ICommand
     {
+
+        public Guid PublicKey { get; private set; }
+
         public string UserName { get; private set; }
 
         public string Password { get; private set; }
@@ -26,8 +29,10 @@ namespace RavenQuestionnaire.Core.Commands
         public UserLight Executor { get; set; }
 
         public CreateNewUserCommand(string userName, string email, string password, UserRoles role, 
-            bool isLocked, string supervisorId, string locationId, UserLight executer)
+            bool isLocked, string supervisorId, string locationId, Guid publicKey,UserLight executer)
         {
+
+            this.PublicKey = publicKey;
             this.UserName = userName;
             this.Email = email;
             this.Password = password;

@@ -187,6 +187,7 @@
     <Compile Include="Commands\Synchronization\CreateNewSynchronizationProcessCommand.cs" />
     <Compile Include="Commands\Synchronization\EndProcessComand.cs" />
     <Compile Include="Commands\Synchronization\PushEventsCommand.cs" />
+    <Compile Include="Commands\User\ChangeUserCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Commands\User\ChangeUserStatusCommand.cs" />
     <Compile Include="Denormalizers\IDenormalizerStorage.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\CQGroupItemDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
+    <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="EventSubscribers\GenerateQuestionnaireStatisticEventHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateNewStatusHandler.cs" />
     <Compile Include="CommandHandlers\Status\CreateStatusFlowHandler.cs" />
@@ -381,6 +383,7 @@
     <Compile Include="Events\Synchronization\ProcessEnded.cs" />
     <Compile Include="Events\User\UserStatusChanged.cs" />
     <Compile Include="Events\User\NewUserCreated.cs" />
+    <Compile Include="Events\User\UserChanged.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />

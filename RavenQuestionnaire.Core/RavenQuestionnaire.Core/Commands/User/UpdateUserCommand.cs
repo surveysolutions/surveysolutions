@@ -7,8 +7,6 @@ namespace RavenQuestionnaire.Core.Commands
     {
         public string UserId { get; private set; }
 
-    //    public string Password { get; private set; }
-
         public string Email { get; private set; }
 
         public bool IsLocked { get; private set; }

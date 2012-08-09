@@ -1,9 +1,6 @@
 ﻿using System.Linq;
-using Raven.Client;
-using Raven.Client.Linq;
 using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Views.File
 {

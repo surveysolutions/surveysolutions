@@ -9,11 +9,24 @@ namespace RavenQuestionnaire.Core.Documents
         public UserDocument()
         {
             CreationDate = DateTime.Now;
+            PublicKey = Guid.NewGuid();
             Roles= new List<UserRoles>();
             Location= new LocationDocument();
         }
 
         public string Id { get; set; }
+
+        public Guid PublicKey
+        {
+            get { return publicKey; }
+            set
+            {
+                publicKey = value;
+                this.Id = value.ToString();
+            }
+        }
+
+        private Guid publicKey;
 
         public string UserName { get; set; }
 
