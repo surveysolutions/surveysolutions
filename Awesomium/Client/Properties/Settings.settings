@@ -12,7 +12,7 @@
       <Value Profile="(Default)">/Synchronizations/Push</Value>
     </Setting>
     <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost</Value>
+      <Value Profile="(Default)">http://localhostrrrr</Value>
     </Setting>
     <Setting Name="NetworkCheckStatePath" Type="System.String" Scope="User">
       <Value Profile="(Default)">/Synchronizations/ProgressInPersentage</Value>

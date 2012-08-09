@@ -82,51 +82,33 @@ namespace Client
 
         private void DoExport()
         {
-            //  Stop(); // stop any existent activity
-            this.pleaseWait.ActivateExportState();
-            try
-            {
-                this.exportEnded.Reset();
-                Exception error = null;
-                try
-                {
-                    this.synchronizer.Push();
-                }
-                catch (Exception ex)
-                {
-                    error = ex;
-                }
-                this.exportEnded.Set();
-                this.pleaseWait.SetCompletedStatus(false, error);
-                if (EndOfExport != null)
-                {
-                    EndOfExport();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
+            DoSyncronizationAction((s) => s.Push());
         }
 
         private void DoImport()
         {
+            DoSyncronizationAction((s)=>s.Pull());
+        }
+        private void DoSyncronizationAction(Action<ISynchronizer> action)
+        {
             this.pleaseWait.ActivateExportState();
             try
             {
+                IList<Exception> errorList = new List<Exception>();
                 this.exportEnded.Reset();
-                Exception error = null;
-                try
-                {
-                    this.synchronizer.Pull();
-                }
-                catch (Exception ex)
-                {
-                    error = ex;
-                }
+                var succesSynchronizer = this.synchronizer.ExecuteAction(action, errorList);
                 this.exportEnded.Set();
-                this.pleaseWait.SetCompletedStatus(false, error);
+                this.pleaseWait.SetCompletedStatus(false, errorList.Count > 0 && succesSynchronizer == null);
+
+                StringBuilder result = new StringBuilder();
+                foreach (SynchronizationException synchronizationException in errorList)
+                {
+                    result.AppendLine(synchronizationException.Message);
+                }
+                if (succesSynchronizer != null)
+                    result.AppendLine(string.Format("Synchronization is successful with {0}",
+                                                    succesSynchronizer.GetType().Name));
+                MessageBox.Show(result.ToString());
                 if (EndOfExport != null)
                 {
                     EndOfExport();

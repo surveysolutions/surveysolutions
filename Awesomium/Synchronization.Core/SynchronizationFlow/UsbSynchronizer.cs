@@ -41,13 +41,13 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #region Overrides of AbstractSynchronizer
 
-        protected override void ExecutePush()
+        public override void Push()
         {
             Stop();
 
             string drive = GetDrive(); // accept driver to flush on
             if (drive == null)
-                throw new SynchronizationException("Driavers are absend");
+                throw new SynchronizationException("Usb drivers are absend");
             try
             {
                 usbArchive = new UsbFileArchive(drive);
@@ -61,6 +61,7 @@ namespace Synchronization.Core.SynchronizationFlow
                 {
                     using (webClient = new WebClient())
                     {
+                        SynchronizationException error=null;
                         webClient.DownloadProgressChanged +=
                             (s, e) =>
                             OnPushProgressChanged(
@@ -69,30 +70,38 @@ namespace Synchronization.Core.SynchronizationFlow
                                     (((decimal) (e.TotalBytesToReceive - e.BytesReceived)/e.TotalBytesToReceive)*100)));
                         webClient.DownloadDataCompleted += (s, e) =>
                                                                {
-                                                                   Exception error = e.Error;
-                                                                   if (!e.Cancelled && error == null)
+                                                                  // Exception error = e.Error;
+
+                                                                   if (e.Error != null)
+                                                                       error = new SynchronizationException("Pull to usb is failed", e.Error);
+                                                                   else if (!e.Cancelled)
+                                                                   {
                                                                        usbArchive.SaveArchive(e.Result);
-                                                                   OnPushProgressChanged(new SynchronizationEvent(100));
+                                                                       OnPushProgressChanged(
+                                                                           new SynchronizationEvent(100));
+                                                                   }
                                                                    done.Set();
                                                                };
                         webClient.DownloadDataAsync(PushAdress);
                         done.WaitOne();
+                        if (error != null)
+                            throw error;
                     }
                 }
             }
             catch (Exception e)
             {
 
-                throw new SynchronizationException("usb exception", e);
+                throw new SynchronizationException("Push to usb is failed", e);
             }
 
         }
-        protected override void ExecutePull()
+        public override void Pull()
         {
             Stop();
             string drive = GetDrive(); // accept driver to flush on
             if (drive == null)
-                throw new SynchronizationException("Drivers are absend");
+                throw new SynchronizationException("Usb drivers are absend");
             try
             {
                 usbArchive = new UsbFileArchive(drive);
@@ -100,6 +109,7 @@ namespace Synchronization.Core.SynchronizationFlow
                 {
                     using (webClient = new WebClient())
                     {
+                        SynchronizationException error = null;
                         webClient.UploadProgressChanged += (s, e) =>
                                                                {
                                                                    OnPullProgressChanged(
@@ -109,10 +119,19 @@ namespace Synchronization.Core.SynchronizationFlow
                                                                              (e.TotalBytesToSend - e.BytesSent)/
                                                                              e.TotalBytesToSend)*100)));
                                                                };
-                        webClient.UploadFileCompleted += (s, e) => { done.Set(); };
+                        webClient.UploadFileCompleted += (s, e) =>
+                                                             {
+                                                                 if(e.Error!=null)
+                                                                 error =
+                                                                     new SynchronizationException(
+                                                                         "Pull to usb is failed", e.Error);
+                                                                 done.Set();
+                                                             };
 
                         webClient.UploadFileAsync(PullAdress, usbArchive.FileName);
                         done.WaitOne();
+                        if (error != null)
+                            throw error;
                     }
                 }
 
@@ -122,7 +141,7 @@ namespace Synchronization.Core.SynchronizationFlow
             catch (Exception e)
             {
 
-                throw new SynchronizationException("usb exception", e);
+                throw new SynchronizationException("Pull to usb is failed", e);
             }
         }
         #endregion

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,21 +15,28 @@ namespace Synchronization.Core.Tests
         [Test]
         public void AddSynchronizer_RootIsEmpty_SynchronizerAddedAsRoot()
         {
-            SyncChainDirector target = new SyncChainDirector();
+            
+            List<ISynchronizer>  synchronizerChain = new List<ISynchronizer>();
+
+            SyncChainDirector target = new SyncChainDirector(synchronizerChain);
 
             Mock<ISynchronizer> synchronizer1=new Mock<ISynchronizer>();
 
             target.AddSynchronizer(synchronizer1.Object);
 
+            Assert.AreEqual(synchronizerChain[0], synchronizer1.Object);
+
             Mock<ISynchronizer> synchronizer2 = new Mock<ISynchronizer>();
 
             target.AddSynchronizer(synchronizer2.Object);
 
-            synchronizer1.Verify(x => x.SetNext(synchronizer2.Object), Times.Once());
+            Assert.AreEqual(synchronizerChain[0], synchronizer1.Object);
+            Assert.AreEqual(synchronizerChain[1], synchronizer2.Object);
         }
         [Test]
         public void Push_2SynchronizersFirstIsSuccess_SecondWasntCalled_()
         {
+            IList<Exception> errorList = new List<Exception>();
             SyncChainDirector target = new SyncChainDirector();
 
             Mock<ISynchronizer> synchronizer1 = new Mock<ISynchronizer>();
@@ -39,17 +47,21 @@ namespace Synchronization.Core.Tests
 
             target.AddSynchronizer(synchronizer2.Object);
 
-            target.Push();
+            target.ExecuteAction((s) => s.Push(), errorList);
 
             synchronizer1.Verify(x=>x.Push(), Times.Once());
             synchronizer2.Verify(x => x.Push(), Times.Exactly(0));
         }
         [Test]
-        public void Pull_2SynchronizersFirstIsSuccess_SecondWasntCalled_()
+        public void Push_2SynchronizersFirstIThrowException_SecondWasCalled_()
         {
+            IList<Exception> errorList = new List<Exception>();
             SyncChainDirector target = new SyncChainDirector();
 
             Mock<ISynchronizer> synchronizer1 = new Mock<ISynchronizer>();
+
+            SynchronizationException exception = new SynchronizationException();
+            synchronizer1.Setup(x => x.Push()).Throws(exception);
 
             target.AddSynchronizer(synchronizer1.Object);
 
@@ -57,10 +69,11 @@ namespace Synchronization.Core.Tests
 
             target.AddSynchronizer(synchronizer2.Object);
 
-            target.Pull();
+            target.ExecuteAction((s)=> s.Push(),errorList);
 
-            synchronizer1.Verify(x => x.Pull(), Times.Once());
-            synchronizer2.Verify(x => x.Pull(), Times.Exactly(0));
+            synchronizer1.Verify(x => x.Push(), Times.Once());
+            synchronizer2.Verify(x => x.Push(), Times.Exactly(1));
+            Assert.AreEqual(errorList[0], exception);
         }
     }
 }
