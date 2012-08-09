@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Observers;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
-    public interface IQuestion : IComposite
+    public interface IQuestion : IComposite, ITriggerable
     {
         string QuestionText { get; set; }
         QuestionType QuestionType { get; set; }

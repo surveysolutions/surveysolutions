@@ -1,12 +1,10 @@
-﻿using RavenQuestionnaire.Core.Utility;
-
-namespace RavenQuestionnaire.Core.Views.User
+﻿namespace RavenQuestionnaire.Core.Views.User
 {
     public class UserViewInputModel
     {
         public UserViewInputModel(string id)
         {
-            UserId = IdUtil.CreateUserId(id);
+            UserId = id;
         }
 
         public UserViewInputModel(string username, string password)
