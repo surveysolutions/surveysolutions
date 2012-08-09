@@ -7,7 +7,6 @@ using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
 using Raven.Client.Indexes;
-using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.Conventions;
 using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Entities.Iterators;
@@ -34,9 +33,7 @@ namespace RavenQuestionnaire.Core
             DocumentStoreProvider storeProvider=new DocumentStoreProvider(_repositoryPath,_isEmbeded);
             Bind<DocumentStoreProvider>().ToConstant(storeProvider);
             Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
-
-            Bind<IClientSettingsProvider>().To<RavenQuestionnaire.Core.ClientSettingsProvider.ClientSettingsProvider>().
-                InSingletonScope();
+          
           
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IViewFactory<,>))));
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IExpressionExecutor<,>))));
@@ -63,8 +60,7 @@ namespace RavenQuestionnaire.Core
   
             this.Kernel.Bind(
                 x =>
-                x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces().Excluding
-                    <IClientSettingsProvider>()/*.Excluding<IFileStorageService>()*/.BindWith(new RegisterFirstInstanceOfInterface()));
+                x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces()/*.Excluding<IFileStorageService>()*/.BindWith(new RegisterFirstInstanceOfInterface()));
 
 
         }

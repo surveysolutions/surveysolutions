@@ -9,7 +9,6 @@ using NUnit.Framework;
 using RavenQuestionnaire.Core;
 using System.Collections.Generic;
 using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Core.ClientSettingsProvider;
 
 
 namespace RavenQuestionnaire.Web.Tests.Utils

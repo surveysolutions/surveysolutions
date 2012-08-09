@@ -7,7 +7,6 @@ using System.Text;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Core.ClientSettingsProvider;
 
 
 namespace Questionnaire.Core.Web.Export
