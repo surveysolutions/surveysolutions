@@ -13,7 +13,11 @@ namespace RavenQuestionnaire.Core.Events
 {
     public interface IEventSync
     {
-      //  IEnumerable<AggregateRootEventStream> ReadEvents();
+        /// <summary>
+        /// return list of ALL events grouped by aggregate root, please use very carefully
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<AggregateRootEventStream> ReadEvents();
         void WriteEvents(IEnumerable<AggregateRootEventStream> stream);
         AggregateRootEventStream ReadEventStream(Guid eventSurceId);
         IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare();
@@ -28,15 +32,23 @@ namespace RavenQuestionnaire.Core.Events
         }
 
         #region Implementation of IEventSync
-
-       /* public IEnumerable<AggregateRootEventStream> ReadEvents()
+       
+        public IEnumerable<AggregateRootEventStream> ReadEvents()
         {
             var myEventStore = NcqrsEnvironment.Get<IEventStore>();
 
             if (myEventStore == null)
                 throw new Exception("IEventStore is not correct.");
-            return myEventStore.ReadByAggregateRoot().Select(c => new AggregateRootEventStream(c));
-        }*/
+            var allEvents = myEventStore.ReadFrom(DateTime.MinValue);
+            List<Guid> aggregateRootIds = allEvents.GroupBy(x=>x.EventSourceId).Select(x=>x.Key).ToList();
+            List<AggregateRootEventStream> retval=new List<AggregateRootEventStream>(aggregateRootIds.Count);
+            foreach (Guid aggregateRootId in aggregateRootIds)
+            {
+                Guid id = aggregateRootId;
+                retval.Add(new AggregateRootEventStream(new CommittedEventStream(aggregateRootId, allEvents.Where(e => e.EventSourceId == id))));
+            }
+            return retval;
+        }
 
         public AggregateRootEventStream ReadEventStream(Guid eventSurceId)
         {

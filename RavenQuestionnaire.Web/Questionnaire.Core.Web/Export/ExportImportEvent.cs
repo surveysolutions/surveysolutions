@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Ionic.Zip;
 using System.IO;
 using Ionic.Zlib;
@@ -15,6 +16,11 @@ namespace Questionnaire.Core.Web.Export
     {
         void Import(HttpPostedFileBase uploadFile);
         byte[] Export(Guid clientGuid);
+        /// <summary>
+        /// return list of ALL events grouped by aggregate root, please use very carefully
+        /// </summary>
+        /// <returns></returns>
+        byte[] ExportAllEvents(Guid clientGuid);
     }
     
     public class ExportImportEvent:IExportImport
@@ -54,14 +60,13 @@ namespace Questionnaire.Core.Web.Export
                 }
             }
         }
-
-        public byte[] Export(Guid clientGuid)
+        protected byte[] ExportInternal(Guid clientGuid, Func<IEnumerable<AggregateRootEventStream>> action)
         {
             var data = new ZipFileData
             {
                 ClientGuid = clientGuid
             };
-            data.Events = this.synchronizer.ReadCompleteQuestionare();
+            data.Events = action();
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {
@@ -74,6 +79,17 @@ namespace Questionnaire.Core.Web.Export
             outputStream.Seek(0, SeekOrigin.Begin);
             return outputStream.ToArray();
         }
+
+        public byte[] Export(Guid clientGuid)
+        {
+            return ExportInternal(clientGuid, this.synchronizer.ReadCompleteQuestionare);
+        }
+
+        public byte[] ExportAllEvents(Guid clientGuid)
+        {
+            return ExportInternal(clientGuid, this.synchronizer.ReadEvents);
+        }
+
         #endregion
 
 
