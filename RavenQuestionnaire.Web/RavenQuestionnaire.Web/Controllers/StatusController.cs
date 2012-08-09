@@ -4,10 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Status;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Status;
 using RavenQuestionnaire.Core.Views.Status.Browse;
@@ -20,12 +18,10 @@ namespace RavenQuestionnaire.Web.Controllers
 
     public class StatusController : Controller
     {
-        private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
 
-        public StatusController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public StatusController( IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
         }
 
@@ -61,7 +57,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (model.PublicKey == null || model.PublicKey == Guid.Empty)
                 {
-                    commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial, model.StatusId, model.QuestionnaireId, GlobalInfo.GetCurrentUser()));
+                    //commandInvoker.Execute(new CreateNewStatusCommand(model.Title, model.IsInitial, model.StatusId, model.QuestionnaireId, GlobalInfo.GetCurrentUser()));
                 }
                 return RedirectToAction("Details", new
                 {
@@ -92,7 +88,7 @@ namespace RavenQuestionnaire.Web.Controllers
                             }
                     }
 
-                    commandInvoker.Execute(new UpdateStatusRestrictionsCommand(model.QuestionnaireId, model.StatusId, model.PublicKey, roles, GlobalInfo.GetCurrentUser()));
+                    //commandInvoker.Execute(new UpdateStatusRestrictionsCommand(model.QuestionnaireId, model.StatusId, model.PublicKey, roles, GlobalInfo.GetCurrentUser()));
                     return RedirectToAction("Details", new
                     {
                         Qid = model.QuestionnaireId
@@ -190,8 +186,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (!string.IsNullOrEmpty(StatusId))
                 {
-                    commandInvoker.Execute(new AddNewStatusFlowItem(StatusId, ConditionExpression,
-                        changeComment, TargetStatus, PublicKey, GlobalInfo.GetCurrentUser()));
+                    //commandInvoker.Execute(new AddNewStatusFlowItem(StatusId, ConditionExpression,changeComment, TargetStatus, PublicKey, GlobalInfo.GetCurrentUser()));
                 }
 
                 StatusView m = viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel(StatusId));

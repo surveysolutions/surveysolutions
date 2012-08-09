@@ -14,11 +14,10 @@ namespace RavenQuestionnaire.Web.Tests.Membership
     [TestFixture]
     public class QuestionnaireRoleProviderTest
     {
-        public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public QuestionnaireRoleProvider Provider { get; set; }
 
-        [SetUp]
+        /*[SetUp]
         public void CreateObjects()
         {
             CommandInvokerMock = new Mock<ICommandInvoker>();
@@ -30,6 +29,6 @@ namespace RavenQuestionnaire.Web.Tests.Membership
 
             Provider = new QuestionnaireRoleProvider();
             Provider.Initialize(Provider.GetType().Name, null);
-        }
+        }*/
     }
 }

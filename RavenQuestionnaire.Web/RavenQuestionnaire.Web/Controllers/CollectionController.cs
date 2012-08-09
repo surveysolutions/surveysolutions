@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
-using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core.Views.Collection;
 using RavenQuestionnaire.Core.Commands.Collection;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -16,12 +15,10 @@ namespace RavenQuestionnaire.Web.Controllers
     public class CollectionController : Controller
     {
 
-        private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
 
-        public CollectionController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public CollectionController(IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
         }
 
@@ -41,7 +38,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [HttpPost]
         public ActionResult Delete(string collectionId)
         {
-            commandInvoker.Execute(new DeleteCollectionCommand(collectionId, GlobalInfo.GetCurrentUser()));
+            //commandInvoker.Execute(new DeleteCollectionCommand(collectionId, GlobalInfo.GetCurrentUser()));
             return RedirectToAction("Index");
         }
         
@@ -60,14 +57,17 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 var items = collection.Items.Select(item => new CollectionItem(item.PublicKey, item.Key, item.Value)).ToList();
 
-                commandInvoker.Execute(new CreateNewCollectionCommand(collection.Name, items ));
+                //commandInvoker.Execute(new CreateNewCollectionCommand(collection.Name, items ));
 
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
                 commandService.Execute(new CreateCollectionCommand(Guid.NewGuid(), collection.Name, items));
             }
-            
+
             else
-                commandInvoker.Execute(new UpdateCollectionCommand(collection.CollectionId, collection.Name, collection.Items.Select(item=>new CollectionItem(item.PublicKey, item.Key, item.Value)).ToList()));
+            {
+                //commandInvoker.Execute(new UpdateCollectionCommand(collection.CollectionId, collection.Name, collection.Items.Select(item=>new CollectionItem(item.PublicKey, item.Key, item.Value)).ToList()));
+
+            }
             return RedirectToAction("Index");
         }
 
@@ -79,7 +79,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
         public ActionResult DeleteItem(string collectionId, Guid id)
         {
-            commandInvoker.Execute(new DeleteCollectionItemCommand(collectionId, GlobalInfo.GetCurrentUser(), id));
+            //commandInvoker.Execute(new DeleteCollectionItemCommand(collectionId, GlobalInfo.GetCurrentUser(), id));
             return RedirectToAction("Edit", new { collectionId = collectionId});
         }
     }

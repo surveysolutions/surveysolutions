@@ -36,17 +36,15 @@ namespace RavenQuestionnaire.Web.Controllers
 
         private readonly IBagManager _bagManager;
         private readonly IGlobalInfoProvider _globalProvider;
-        private readonly ICommandInvoker commandInvoker;
         private readonly IViewRepository viewRepository;
 
         #endregion
 
         #region Constructor
 
-        public CompleteQuestionnaireController(ICommandInvoker commandInvoker, IViewRepository viewRepository,
+        public CompleteQuestionnaireController( IViewRepository viewRepository,
                                                IBagManager bagManager, IGlobalInfoProvider globalProvider)
         {
-            this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
             _bagManager = bagManager;
             _globalProvider = globalProvider;
@@ -92,11 +90,11 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
+               /* commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
                                                                               Status.PublicId,
                                                                               StatusHolderId,
                                                                               IdUtil.CreateUserId(responsible.Id),
-                                                                              _globalProvider.GetCurrentUser()));
+                                                                              _globalProvider.GetCurrentUser()));*/
             }
             return RedirectToAction("Index");
         }
@@ -119,11 +117,11 @@ namespace RavenQuestionnaire.Web.Controllers
                     var statusItem = status.StatusElements.FirstOrDefault(x => x.IsInitial == true);//temporary hardcoded
                     if (statusItem != null)
                     {
-                        commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
+                        /*commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
                                                                                           statusItem.PublicKey,
                                                                                           status.Id,
                                                                                           null,
-                                                                                          _globalProvider.GetCurrentUser()));
+                                                                                          _globalProvider.GetCurrentUser()));*/
 
                     }
                 }
@@ -144,7 +142,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
             if (model != null)
             {
-                commandInvoker.Execute(new ValidateGroupCommand(id, null, null, _globalProvider.GetCurrentUser()));
+                //commandInvoker.Execute(new ValidateGroupCommand(id, null, null, _globalProvider.GetCurrentUser()));
                 var modelChecked = viewRepository.Load<CompleteQuestionnaireViewInputModel,
                     CompleteQuestionnaireView>(new CompleteQuestionnaireViewInputModel(id));
                 if (modelChecked != null)
@@ -154,22 +152,22 @@ namespace RavenQuestionnaire.Web.Controllers
                         if (modelChecked.IsValid)
                         {
                             var statusItem = status.StatusElements.FirstOrDefault(x => x.Title == "Completed");//temporary hardcoded
-                            commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
+                           /* commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
                                                                                           statusItem.PublicKey,
                                                                                           status.Id,
                                                                                           null,
-                                                                                          _globalProvider.GetCurrentUser()));
+                                                                                          _globalProvider.GetCurrentUser()));*/
 
                             return RedirectToAction("Index", "Dashboard");
                         }
                         else
                         {
                             var statusItem = status.StatusElements.FirstOrDefault(x => x.Title == "Error");//temporary hardcoded
-                            commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
+                            /*commandInvoker.Execute(new UpdateCompleteQuestionnaireCommand(id,
                                                                                           statusItem.PublicKey,
                                                                                           status.Id,
                                                                                           null,
-                                                                                          _globalProvider.GetCurrentUser()));
+                                                                                          _globalProvider.GetCurrentUser()));*/
 
 
                             return Redirect(Url.RouteUrl(new { controller = "Statistic", action = "Details", id = id }) + "#" + "invalid");
@@ -264,7 +262,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
         public JsonResult Validate(string id, Guid? group, Guid? propagationKey)
         {
-            commandInvoker.Execute(new ValidateGroupCommand(id, group, propagationKey, _globalProvider.GetCurrentUser()));
+            //commandInvoker.Execute(new ValidateGroupCommand(id, group, propagationKey, _globalProvider.GetCurrentUser()));
 
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                 new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
@@ -316,10 +314,10 @@ namespace RavenQuestionnaire.Web.Controllers
             question.PublicKey = new Guid(Request.Form["PublicKey"]);
             try
             {
-                commandInvoker.Execute(new UpdateCommentsInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
+                /*commandInvoker.Execute(new UpdateCommentsInCompleteQuestionnaireCommand(settings[0].QuestionnaireId,
                                                                                       question,
                                                                                       settings[0].PropogationPublicKey,
-                                                                                      _globalProvider.GetCurrentUser()));
+                                                                                      _globalProvider.GetCurrentUser()));*/
             }
             catch (Exception e)
             {

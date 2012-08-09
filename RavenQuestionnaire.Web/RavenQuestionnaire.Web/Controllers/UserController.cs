@@ -20,11 +20,10 @@ namespace RavenQuestionnaire.Web.Controllers
     [QuestionnaireAuthorize(UserRoles.Administrator)]
     public class UserController : Controller
     {
-        private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
-        public UserController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public UserController(IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
+            
             this.viewRepository = viewRepository;
         }
         protected void AddSupervisorListToViewBag()
@@ -61,7 +60,7 @@ namespace RavenQuestionnaire.Web.Controllers
         }
         public ActionResult Delete(string id)
         {
-            commandInvoker.Execute(new DeleteUserCommand(id, GlobalInfo.GetCurrentUser()));
+            //commandInvoker.Execute(new DeleteUserCommand(id, GlobalInfo.GetCurrentUser()));
             return RedirectToAction("Index");
         }
 
@@ -72,14 +71,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (string.IsNullOrEmpty(model.UserId))
                 {
-
                     var publicKey = Guid.NewGuid();
-
-                    //delete when done with ncqrs
-                    commandInvoker.Execute(new CreateNewUserCommand(model.UserName, model.Email,SimpleHash.ComputeHash(model.Password),
-                                                                    model.PrimaryRole, model.IsLocked, model.Supervisor.Id, model.LocationId,
-                                                                    publicKey, GlobalInfo.GetCurrentUser()));
-
                     
                     var commandService = NcqrsEnvironment.Get<ICommandService>();
                     commandService.Execute(new CreateUserCommand(publicKey, model.UserName, SimpleHash.ComputeHash(model.Password), model.Email,
@@ -87,15 +79,6 @@ namespace RavenQuestionnaire.Web.Controllers
                 }
                 else
                 {
-                    //delete when done with ncqrs
-                    commandInvoker.Execute(new UpdateUserCommand(model.UserId, model.Email, model.IsLocked,
-                                                                 new UserRoles[]
-                                                                     {
-                                                                         model.PrimaryRole
-                                                                     }, model.Supervisor.Id, model.LocationId,
-                                                                     GlobalInfo.GetCurrentUser()));
-
-                    
                     var commandService = NcqrsEnvironment.Get<ICommandService>();
                     commandService.Execute(new ChangeUserCommand(Guid.Parse(model.UserId), model.Email,
                         new UserRoles[] { model.PrimaryRole }, model.IsLocked));

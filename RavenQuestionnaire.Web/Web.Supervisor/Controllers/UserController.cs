@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.User;
@@ -12,24 +12,31 @@ namespace Web.Supervisor.Controllers
 {
     public class UserController : Controller
     {
-        private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
 
-        public UserController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public UserController(IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
         }
         //
         // GET: /User/
         public ActionResult UnlockUser(String id)
         {
-            commandInvoker.Execute(new ChangeUserStatusCommand(id, false, GlobalInfo.GetCurrentUser()));
-            return RedirectToAction("Index");
+            return SetUserLock(id, false);
         }
         public ActionResult LockUser(String id)
         {
-            commandInvoker.Execute(new ChangeUserStatusCommand(id, true, GlobalInfo.GetCurrentUser()));
+            return SetUserLock(id, true);
+        }
+
+        private ActionResult SetUserLock(string id, bool status)
+        {
+            Guid key;
+            if (!Guid.TryParse(id, out key))
+                throw new HttpException("404");
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(new ChangeUserStatusCommand(key, status));
+
             return RedirectToAction("Index");
         }
 

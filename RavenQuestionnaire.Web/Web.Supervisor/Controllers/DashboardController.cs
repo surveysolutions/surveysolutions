@@ -18,12 +18,10 @@ namespace Web.Supervisor.Controllers
 {
     public class DashboardController : Controller
     {
-        private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
 
-        public DashboardController(ICommandInvoker commandInvoker, IViewRepository viewRepository)
+        public DashboardController(IViewRepository viewRepository)
         {
-            this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
         }
 

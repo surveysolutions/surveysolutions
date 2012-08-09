@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Moq;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Status;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Status;
@@ -15,27 +14,25 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     [TestFixture]
     public class StatusControllerTest
     {
-        public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public StatusController Controller { get; set; }
 
         [SetUp]
         public void CreateObjects()
         {
-            CommandInvokerMock = new Mock<ICommandInvoker>();
             ViewRepositoryMock = new Mock<IViewRepository>();
-            Controller = new StatusController(CommandInvokerMock.Object, ViewRepositoryMock.Object);
+            Controller = new StatusController(ViewRepositoryMock.Object);
         }
 
 
 
-        [Test]
+        /*[Test]
         public void WhenNewStatusIsSubmittedWIthValidModel_CommandIsSent()
         {
             Controller.Save(new StatusItemView() { Title = "testStatus" , StatusId = "1", QuestionnaireId = "1"});
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<CreateNewStatusCommand>()), Times.Once());
 
-        }
+        }*/
 
 
         [Test]

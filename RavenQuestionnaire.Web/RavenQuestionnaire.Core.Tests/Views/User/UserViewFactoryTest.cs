@@ -13,7 +13,7 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
     [TestFixture]
     public class UserViewFactoryTest
     {
-        [Test]
+        /*[Test]
         public void LoadByExistingUserId_UserViewIsReturned()
         {
             var docMock = new Mock<IDenormalizerStorage<UserDocument>>();
@@ -36,9 +36,8 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
 
             Assert.True(result.UserId == "user_id" && result.Email == "email@test.com" && result.Password == "1234" &&
                         result.UserName == "test");
-        }
+        }*/
 
-        [Test]
         public void LoadByExistingUserIdButUserMarketAsDeleted_NullIsReturned()
         {
             var docMock = new Mock<IDenormalizerStorage<UserDocument>>();
@@ -60,9 +59,8 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
             docMock.Verify(x => x.Query().FirstOrDefault(u => u.Id == input.UserId));
 
             Assert.True(result == null);
-        }
+        }*/
 
-        [Test]
         public void LoadByNotExistingUserId_NullIsReturned()
         {
             var docMock = new Mock<IDenormalizerStorage<UserDocument>>();
@@ -73,10 +71,10 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
 
             docMock.Verify(x => x.Query().FirstOrDefault(u => u.Id == input.UserId));
             Assert.True(result == null);
-        }
+        }*/
 
 
-        [Test]
+/*        [Test]
         public void LoadByExistingUserName_UserViewIsReturned()
         {
             var docMock = new Mock<IDenormalizerStorage<UserDocument>>();
@@ -106,7 +104,7 @@ namespace RavenQuestionnaire.Core.Tests.Views.User
             
             Assert.True(result.UserId == "user_id" && result.Email == "email@test.com" && result.Password == "1234" &&
                         result.UserName == "user_name");
-        }
+        }*/
 
         /*    [Test]
         public void LoadByExistingUserNameButUserMarketAsDEleted_NullIsReturned()

@@ -1,6 +1,5 @@
 ﻿using System;
 using Ncqrs.Eventing.Storage;
-using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Events.User
 {

@@ -181,7 +181,6 @@
     <Compile Include="Stubs\TestRoleProvider.cs" />
     <Compile Include="Utils\ExportImportEventTest.cs" />
     <Compile Include="WCF\CompleteQuestionnaireSyncServiceTests.cs" />
-    <Compile Include="WCF\GetLastSyncEventServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config">
