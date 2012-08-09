@@ -62,12 +62,12 @@ namespace Client.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://localhost")]
-        public string NetworkRemoteExportPath {
+        public string EndpointExportPath {
             get {
-                return ((string)(this["NetworkRemoteExportPath"]));
+                return ((string)(this["EndpointExportPath"]));
             }
             set {
-                this["NetworkRemoteExportPath"] = value;
+                this["EndpointExportPath"] = value;
             }
         }
         
@@ -92,6 +92,18 @@ namespace Client.Properties {
             }
             set {
                 this["UsbImportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Pull")]
+        public string NetworkLocalImportPath {
+            get {
+                return ((string)(this["NetworkLocalImportPath"]));
+            }
+            set {
+                this["NetworkLocalImportPath"] = value;
             }
         }
     }

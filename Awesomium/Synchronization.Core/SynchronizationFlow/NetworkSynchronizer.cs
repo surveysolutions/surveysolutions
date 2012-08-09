@@ -12,24 +12,30 @@ namespace Synchronization.Core.SynchronizationFlow
 
         private readonly string _host;
         private readonly string _pushAdress;
-        private readonly string _pushCheckStateAdress;
         private readonly string _pullAdress;
+        private readonly string _pushCheckStateAdress;
+        private readonly string _endPointAdressAdress;
         private WebClient webClient;
         private ManualResetEvent done;
         #endregion
 
 
-        public NetworkSynchronizer(string host, string pushAdress, string pushCheckStateAdress, string pullAdress)
+        public NetworkSynchronizer(string host, string pushAdress, string pullAdress, string pushCheckStateAdress, string endPointAdressAdress)
         {
             this._host = host;
-            this._pullAdress = pullAdress;
+            this._endPointAdressAdress = endPointAdressAdress;
             this._pushAdress = pushAdress;
+            this._pullAdress = pullAdress;
             this._pushCheckStateAdress = pushCheckStateAdress;
         }
 
         protected Uri PushAdress
         {
-            get { return new Uri(string.Format("{0}{1}?url={2}",_host , _pushAdress,_pullAdress)); }
+            get { return new Uri(string.Format("{0}{1}?url={2}", _host, _pushAdress, _endPointAdressAdress)); }
+        }
+        protected Uri PullAdress
+        {
+            get { return new Uri(string.Format("{0}{1}?url={2}", _host, _pullAdress, _endPointAdressAdress)); }
         }
         protected Uri PushCheckStateAdress
         {
@@ -54,7 +60,7 @@ namespace Synchronization.Core.SynchronizationFlow
                     // Read the content.
                     string responseFromServer = reader.ReadToEnd();
 
-                    WaitForEndProcess(Guid.Parse(responseFromServer));
+                    WaitForEndProcess(Guid.Parse(responseFromServer),OnPushProgressChanged);
                     // Clean up the streams.
                     reader.Close();
                     dataStream.Close();
@@ -69,14 +75,38 @@ namespace Synchronization.Core.SynchronizationFlow
 
         protected override void ExecutePull()
         {
-            throw new SynchronizationException("Not implemented");
+            try
+            {
+                WebRequest request = WebRequest.Create(PullAdress);
+                request.Method = "GET";
+                // Get the response.
+                using (WebResponse response = request.GetResponse())
+                {
+                    // Get the stream containing content returned by the server.
+                    var dataStream = response.GetResponseStream();
+                    // Open the stream using a StreamReader for easy access.
+                    StreamReader reader = new StreamReader(dataStream);
+                    // Read the content.
+                    string responseFromServer = reader.ReadToEnd();
+
+                    WaitForEndProcess(Guid.Parse(responseFromServer), OnPullProgressChanged);
+                    // Clean up the streams.
+                    reader.Close();
+                    dataStream.Close();
+                    response.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new SynchronizationException("network exception", e);
+            }
         }
 
         #endregion
 
         #region utility methods
 
-        protected void WaitForEndProcess(Guid processid)
+        protected void WaitForEndProcess(Guid processid, Action<SynchronizationEvent> eventRiser)
         {
             int percentage = 0;
             while (percentage != 100)
@@ -100,7 +130,7 @@ namespace Synchronization.Core.SynchronizationFlow
                     response.Close();
                     if (percentage < 0)
                         throw new SynchronizationException("network synchronization is failed");
-                    OnPushProgressChanged(new SynchronizationEvent(percentage));
+                    eventRiser(new SynchronizationEvent(percentage));
                 }
                 Thread.Sleep(1000);
             }

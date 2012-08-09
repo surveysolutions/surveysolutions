@@ -38,7 +38,7 @@ namespace Web.CAPI.Controllers
             _globalProvider = globalProvider;
         }
 
-        public Guid Push(string url)
+        public Guid Pull(string url)
         {
             Guid syncProcess = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();

@@ -63,7 +63,7 @@ namespace Client
             this.synchronizer.PullProgressChanged += (s, e) => this.pleaseWait.AssignProgress(e.ProgressPercentage);
 
             this.synchronizer.AddSynchronizer(new NetworkSynchronizer(Settings.Default.DefaultUrl,
-                Settings.Default.NetworkLocalExportPath, Settings.Default.NetworkCheckStatePath, Settings.Default.NetworkRemoteExportPath));
+                Settings.Default.NetworkLocalExportPath, Settings.Default.NetworkLocalImportPath, Settings.Default.NetworkCheckStatePath, Settings.Default.EndpointExportPath));
             this.synchronizer.AddSynchronizer(
                 new UsbSynchronizer(Settings.Default.DefaultUrl + Settings.Default.UsbExportPath,
                                     Settings.Default.DefaultUrl + Settings.Default.UsbImportPath));
