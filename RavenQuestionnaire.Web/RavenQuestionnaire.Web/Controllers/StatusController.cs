@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
-using Questionnaire.Core.Web.Security;
+﻿using System.Web.Mvc;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Views.Status;
-using RavenQuestionnaire.Core.Views.Status.Browse;
-using RavenQuestionnaire.Core.Views.Status.StatusElement;
-using RavenQuestionnaire.Core.Views.Status.SubView;
 using RavenQuestionnaire.Core.Views.StatusReport;
 
 namespace RavenQuestionnaire.Web.Controllers
@@ -30,7 +19,8 @@ namespace RavenQuestionnaire.Web.Controllers
             var model = viewRepository.Load<StatusReportViewInputModel, StatusReportView>(new StatusReportViewInputModel());
             return View(model);
         }
-        [QuestionnaireAuthorize(UserRoles.Administrator)]
+
+        /*[QuestionnaireAuthorize(UserRoles.Administrator)]
         public ViewResult Details(string Qid)
         {
             if (string.IsNullOrEmpty(Qid))
@@ -220,6 +210,6 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             AddStatusListToViewBag(qid);
             return PartialView("AddRoute", new FlowRule() { StatusId = id });
-        }
+        }*/
     }
 }

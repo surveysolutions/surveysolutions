@@ -5,14 +5,11 @@ using System.Web;
 using System.Web.Mvc;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Commands.User;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.Location;
 using RavenQuestionnaire.Core.Views.User;
 
 namespace RavenQuestionnaire.Web.Controllers
@@ -37,11 +34,11 @@ namespace RavenQuestionnaire.Web.Controllers
         }
         protected void AddLocationsListToViewBag()
         {
-            var locations =
+            /*var locations =
               viewRepository.Load<LocationBrowseInputModel, LocationBrowseView>(new LocationBrowseInputModel() 
                             { PageSize = 100 }).Items;
 
-            ViewBag.AllLocations = locations;
+            ViewBag.AllLocations = locations;*/
         }
 
         public ActionResult Index(UserBrowseInputModel input)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.Observers;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
@@ -13,7 +14,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         AutoPropagated
     }
 
-    public interface IGroup : IComposite
+    public interface IGroup : IComposite, ITriggerable
     {
         string Title { get; set; }
         Propagate Propagated { get; set; }
