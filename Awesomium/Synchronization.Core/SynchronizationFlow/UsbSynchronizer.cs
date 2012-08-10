@@ -39,16 +39,24 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #endregion
 
-        public string FilePath
+        public string OutFilePath
         {
             get
             {
                 if (usbArchive == null)
                     return string.Empty;
-                return usbArchive.FileName;
+                return usbArchive.OutFile;
             }
         }
-
+        public string InFilePath
+        {
+            get
+            {
+                if (usbArchive == null)
+                    return string.Empty;
+                return usbArchive.InFile;
+            }
+        }
         #region Overrides of AbstractSynchronizer
 
         public override void Push()
@@ -135,7 +143,7 @@ namespace Synchronization.Core.SynchronizationFlow
                                                                  done.Set();
                                                              };
 
-                        webClient.UploadFileAsync(PullAdress, usbArchive.FileName);
+                        webClient.UploadFileAsync(PullAdress, usbArchive.InFile);
                         done.WaitOne();
                         if (error != null)
                             throw error;
