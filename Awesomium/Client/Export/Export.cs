@@ -82,21 +82,26 @@ namespace Client
 
         private void DoExport()
         {
-            DoSyncronizationAction((s) => s.Push());
+            DoSyncronizationAction(false);
         }
 
         private void DoImport()
         {
-            DoSyncronizationAction((s)=>s.Pull());
+            DoSyncronizationAction(true);
         }
-        private void DoSyncronizationAction(Action<ISynchronizer> action)
+        private void DoSyncronizationAction(bool isPull)
         {
             this.pleaseWait.ActivateExportState();
             try
             {
                 IList<Exception> errorList = new List<Exception>();
                 this.exportEnded.Reset();
-                var succesSynchronizer = this.synchronizer.ExecuteAction(action, errorList);
+                var succesSynchronizer = this.synchronizer.ExecuteAction((s) =>
+                                                                             {
+                                                                                 if (isPull) s.Pull();
+                                                                                 else
+                                                                                     s.Push();
+                                                                             }, errorList);
                 this.exportEnded.Set();
                 this.pleaseWait.SetCompletedStatus(false, errorList.Count > 0 && succesSynchronizer == null);
 
@@ -106,7 +111,7 @@ namespace Client
                     result.AppendLine(synchronizationException.Message);
                 }
                 if (succesSynchronizer != null)
-                    result.AppendLine(BuildSuccessSyncMessage(succesSynchronizer));
+                    result.AppendLine(BuildSuccessSyncMessage(succesSynchronizer,isPull));
                 MessageBox.Show(result.ToString());
                 if (EndOfExport != null)
                 {
@@ -118,17 +123,19 @@ namespace Client
                 throw ex;
             }
         }
-        private string BuildSuccessSyncMessage(ISynchronizer synchronizerAgent)
+        private string BuildSuccessSyncMessage(ISynchronizer synchronizerAgent, bool isPull)
         {
+            var action = isPull ? "Pull" : "Push";
             var usb = synchronizerAgent as UsbSynchronizer;
             if(usb!=null)
             {
-                return  string.Format("Usb synchronization is successful with file {0}", usb.FilePath);
+                return string.Format("Usb {0} is successful with file {1}", action,
+                                     isPull ? usb.InFilePath : usb.OutFilePath);
             }
             var lan = synchronizerAgent as NetworkSynchronizer;
             if(lan!=null)
             {
-                return string.Format("Network synchronization is successful with local center {0}", lan.Host);
+                return string.Format("Network {0} is successful with local center {1}",action, lan.Host);
             }
             return string.Format("Synchronization is successful with {0}",
                                  synchronizerAgent.GetType().Name);
