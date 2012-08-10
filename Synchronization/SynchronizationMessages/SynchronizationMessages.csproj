@@ -69,8 +69,12 @@
     <Compile Include="CompleteQuestionnaire\CompleteQuestionnaireMessage.cs" />
     <Compile Include="CompleteQuestionnaire\ErrorCodes.cs" />
     <Compile Include="CompleteQuestionnaire\IEventDocumentSync.cs" />
+    <Compile Include="CompleteQuestionnaire\IGetAggragateRootList.cs" />
+    <Compile Include="CompleteQuestionnaire\IGetEventStream.cs" />
+    <Compile Include="CompleteQuestionnaire\ImportSynchronizationMessage.cs" />
     <Compile Include="CompleteQuestionnaire\JsonNewSerializerContractBehaviorAttribute.cs" />
     <Compile Include="CompleteQuestionnaire\JsonSerrializer.cs" />
+    <Compile Include="CompleteQuestionnaire\ListOfAggregateRootsForImportMessage.cs" />
     <Compile Include="Discover\ISpotSync.cs" />
     <Compile Include="Handshake\IGetLastSyncEvent.cs" />
     <Compile Include="Synchronization\FormatHelper.cs" />

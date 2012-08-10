@@ -25,13 +25,109 @@ namespace Client.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://192.168.3.113/dev-capi/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8083")]
         public string DefaultUrl {
             get {
                 return ((string)(this["DefaultUrl"]));
             }
             set {
                 this["DefaultUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Export")]
+        public string UsbExportPath {
+            get {
+                return ((string)(this["UsbExportPath"]));
+            }
+            set {
+                this["UsbExportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Push")]
+        public string NetworkLocalExportPath {
+            get {
+                return ((string)(this["NetworkLocalExportPath"]));
+            }
+            set {
+                this["NetworkLocalExportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhostgg")]
+        public string EndpointExportPath {
+            get {
+                return ((string)(this["EndpointExportPath"]));
+            }
+            set {
+                this["EndpointExportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/ProgressInPersentage")]
+        public string NetworkCheckStatePath {
+            get {
+                return ((string)(this["NetworkCheckStatePath"]));
+            }
+            set {
+                this["NetworkCheckStatePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Import")]
+        public string UsbImportPath {
+            get {
+                return ((string)(this["UsbImportPath"]));
+            }
+            set {
+                this["UsbImportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Pull")]
+        public string NetworkLocalImportPath {
+            get {
+                return ((string)(this["NetworkLocalImportPath"]));
+            }
+            set {
+                this["NetworkLocalImportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00000000-0000-0000-0000-000000000000")]
+        public global::System.Guid ClientId {
+            get {
+                return ((global::System.Guid)(this["ClientId"]));
+            }
+            set {
+                this["ClientId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00000000-0000-0000-0000-000000000000")]
+        public global::System.Guid ParentId {
+            get {
+                return ((global::System.Guid)(this["ParentId"]));
+            }
+            set {
+                this["ParentId"] = value;
             }
         }
     }

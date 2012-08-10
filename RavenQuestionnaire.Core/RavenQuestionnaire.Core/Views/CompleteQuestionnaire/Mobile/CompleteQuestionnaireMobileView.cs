@@ -32,7 +32,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         {
           
         }
-        public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc, Guid screenPublicKey, ICompleteGroup currentGroup, ScreenNavigation navigation)
+        public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc)
             : this()
         {
             Id = IdUtil.ParseId(doc.Id);
@@ -41,6 +41,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             LastEntryDate = doc.LastEntryDate;
             Status = doc.Status;
             Responsible = doc.Responsible;
+       //     CollectAll(doc, screenPublicKey, currentGroup as CompleteGroup, navigation);
+        }
+
+        public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc, Guid screenPublicKey, ICompleteGroup currentGroup, ScreenNavigation navigation)
+            : this(doc)
+        {
             CollectAll(doc, screenPublicKey, currentGroup as CompleteGroup, navigation);
         }
 

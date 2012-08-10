@@ -10,6 +10,9 @@ using Client.Properties;
 using System.Threading;
 using System.Runtime.Remoting.Messaging;
 using Awesomium.Core;
+using Synchronization.Core;
+using Synchronization.Core.ClientSettings;
+using Synchronization.Core.SynchronizationFlow;
 
 namespace Client
 {
@@ -42,63 +45,33 @@ namespace Client
         #region Private Members
 
         internal IStatusIndicator pleaseWait;
-        private readonly string ArchiveFileNameMask = "backup-{0}.zip";
-        private WebClient webClient = new WebClient();
+       
         private AutoResetEvent exportEnded = new AutoResetEvent(false);
-        private Uri exportURL = new Uri(Settings.Default.DefaultUrl + "/Synchronizations/Export");
-        private List<string> cachedDrives;
-        private UsbFileArchive usbArchive;
+     //   private string exportURL = Settings.Default.DefaultUrl + "/Synchronizations/Export";
+        private readonly SyncChainDirector synchronizer;
 
         #endregion
 
         #region C-tor
 
-        internal Export(IStatusIndicator pleaseWait)
+        internal Export(IStatusIndicator pleaseWait, IClientSettingsProvider provider)
         {
-            this.webClient.Credentials = new NetworkCredential("Admin", "Admin");
+            //this.webClient.Credentials = new NetworkCredential("Admin", "Admin");
             this.pleaseWait = pleaseWait;
+            this.synchronizer=new SyncChainDirector();
+            
+            this.synchronizer.PushProgressChanged += (s, e) => this.pleaseWait.AssignProgress(e.ProgressPercentage);
+            this.synchronizer.PullProgressChanged += (s, e) => this.pleaseWait.AssignProgress(e.ProgressPercentage);
 
-            this.webClient.DownloadProgressChanged += (s, e) =>
-            {
-                var hint = e.UserState as ProgressHint;
-                Debug.Assert(hint != null);
+            this.synchronizer.AddSynchronizer(new NetworkSynchronizer(provider, Settings.Default.DefaultUrl,
+                                                                      Settings.Default.NetworkLocalExportPath,
+                                                                      Settings.Default.NetworkLocalImportPath,
+                                                                      Settings.Default.NetworkCheckStatePath,
+                                                                      Settings.Default.EndpointExportPath));
+            this.synchronizer.AddSynchronizer(new UsbSynchronizer(provider, Settings.Default.DefaultUrl,
+                                                                  Settings.Default.UsbExportPath,
+                                                                  Settings.Default.UsbImportPath));
 
-                hint.ProgressIndicator.AssignProgress(e.ProgressPercentage);
-            };
-
-            this.webClient.DownloadDataCompleted += (s, e) =>
-            {
-                var hint = e.UserState as ProgressHint;
-                Debug.Assert(hint != null);
-
-                Exception error = e.Error;
-                try
-                {
-                    if (!e.Cancelled && error == null)
-                        usbArchive.SaveArchive(e.Result);
-
-                }
-                catch (Exception ex)
-                {
-                    error = ex;
-                    //hint.ProgressIndicator.SetCompletedStatus(false, ex);
-                
-                }
-                finally
-                {
-                    hint.ProgressIndicator.SetCompletedStatus(e.Cancelled, error); 
-
-                    this.exportEnded.Set();
-
-                    if (EndOfExport != null)
-                    {
-                        EndOfExport();
-                    }   
-                }
-                
-            };
-
-            FlushDriversList();
         }
 
         #endregion
@@ -106,82 +79,59 @@ namespace Client
         #region Helpers
 
         public event EndOfExport EndOfExport;
-        /// <summary>
-        /// Create list of available drivers
-        /// </summary>
-        /// <returns></returns>
-        private List<string> ReviewDriversList()
-        {
-            List<string> drivers = new List<string>();
-            DriveInfo[] listDrives = DriveInfo.GetDrives();
-
-            foreach (var drive in listDrives)
-            {
-                if (drive.DriveType == DriveType.Removable)
-                    drivers.Add(drive.ToString());
-            }
-
-            return drivers;
-        }
-
-        /// <summary>
-        /// Interrupt pending loading and wait for its finalization
-        /// </summary>
-        private void Stop()
-        {
-            if (this.webClient.IsBusy)
-            {
-                this.webClient.CancelAsync();
-                this.exportEnded.WaitOne();
-            }
-        }
-
-        /// <summary>
-        /// Compare current drivers list with cached list and 
-        /// decide what driver should be used for uploading
-        /// </summary>
-        /// <returns>Driver to put data on</returns>
-        private string GetDrive()
-        {
-            List<string> currentDrivers = ReviewDriversList();
-
-            var pluggedDrivers = currentDrivers.Except(this.cachedDrives);
-
-            return pluggedDrivers.Any() ? pluggedDrivers.First() : null;
-        }
 
         private void DoExport()
         {
-            lock (this) // block any extra call to this method
+            DoSyncronizationAction((s) => s.Push());
+        }
+
+        private void DoImport()
+        {
+            DoSyncronizationAction((s)=>s.Pull());
+        }
+        private void DoSyncronizationAction(Action<ISynchronizer> action)
+        {
+            this.pleaseWait.ActivateExportState();
+            try
             {
-                Stop(); // stop any existent activity
-                
-                string drive = GetDrive(); // accept driver to flush on
-                if (drive == null)
-                    return;
+                IList<Exception> errorList = new List<Exception>();
+                this.exportEnded.Reset();
+                var succesSynchronizer = this.synchronizer.ExecuteAction(action, errorList);
+                this.exportEnded.Set();
+                this.pleaseWait.SetCompletedStatus(false, errorList.Count > 0 && succesSynchronizer == null);
 
-                usbArchive = new UsbFileArchive(drive);
-
-                this.pleaseWait.ActivateExportState();
-
-                string filename = string.Format(this.ArchiveFileNameMask, DateTime.Now.ToString().Replace("/", "_"));
-                filename = filename.Replace(" ", "_");
-                filename = filename.Replace(":", "_");
-
-                var archiveFilename = drive + filename;
-
-                try
+                StringBuilder result = new StringBuilder();
+                foreach (SynchronizationException synchronizationException in errorList)
                 {
-                    this.exportEnded.Reset();
-                    
-                    //this.webClient.DownloadFileAsync(exportURL, "D://backup.zip", new ProgressHint(this.pleaseWait, archiveFilename));
-                    this.webClient.DownloadDataAsync(exportURL, new ProgressHint(this.pleaseWait, archiveFilename));
+                    result.AppendLine(synchronizationException.Message);
                 }
-                catch (Exception ex)
+                if (succesSynchronizer != null)
+                    result.AppendLine(BuildSuccessSyncMessage(succesSynchronizer));
+                MessageBox.Show(result.ToString());
+                if (EndOfExport != null)
                 {
-                    throw ex;
+                    EndOfExport();
                 }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        private string BuildSuccessSyncMessage(ISynchronizer synchronizerAgent)
+        {
+            var usb = synchronizerAgent as UsbSynchronizer;
+            if(usb!=null)
+            {
+                return  string.Format("Usb synchronization is successful with file {0}", usb.FilePath);
+            }
+            var lan = synchronizerAgent as NetworkSynchronizer;
+            if(lan!=null)
+            {
+                return string.Format("Network synchronization is successful with local center {0}", lan.Host);
+            }
+            return string.Format("Synchronization is successful with {0}",
+                                 synchronizerAgent.GetType().Name);
         }
 
         #endregion
@@ -192,20 +142,15 @@ namespace Client
         {
             new Thread(DoExport).Start(); // initialize export operation in independent thread
         }
-
-        /// <summary>
-        /// Revisit list of all removable drivers
-        /// </summary>
-        internal void FlushDriversList()
+        internal void ImportQuestionarie()
         {
-            this.cachedDrives = ReviewDriversList();
+            new Thread(DoImport).Start(); // initialize export operation in independent thread
         }
-
         #endregion
 
         internal void Interrupt()
         {
-            new Thread(Stop).Start();
+            this.synchronizer.StopAllActions();
         }
         
     }

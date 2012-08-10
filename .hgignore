@@ -114,7 +114,7 @@ Awesomium/Windows Forms/CSharp/WinFormsSample/WinFormsSample.csproj.user
 D:\Projects\MIS_Dev\RavenQuestionnaire.Web\Web.CAPI\bin\*
 Awesomium/Windows Forms/CSharp/WinFormsSample/WinFormsSample_TemporaryKey.pfx
 RavenQuestionnaire.Web/Web.CAPI/bin/*
-lib/
+
 Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB.Tests/obj
 Externals/Framework/src/Ncqrs.Spec/obj/*
 Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB/obj/*
@@ -152,3 +152,9 @@ RavenQuestionnaire.Web\RavenQuestionnaire.Web\Content\bootstrap\*
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/*
 RavenQuestionnaire.Web/CAPI/obj/
 RavenQuestionnaire.Web/CAPI/bin/
+Awesomium/Synchronization.Core.Tests/bin/*
+Awesomium/Synchronization.Core.Tests/obj/*
+Awesomium/Synchronization.Core/bin/*
+Awesomium/Synchronization.Core/obj/*
+Externals/lib/*
+lib/Debug/Ncqrs.Eventing.Storage.RavenDB/*

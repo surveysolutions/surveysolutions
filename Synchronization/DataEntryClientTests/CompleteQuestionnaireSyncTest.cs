@@ -7,11 +7,14 @@ using DataEntryClient.WcfInfrastructure;
 using DataEntryClientTests.Stubs;
 using Moq;
 using NUnit.Framework;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
+using Ninject;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.ClientSettingsProvider;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
+using RavenQuestionnaire.Core.Commands.Synchronization;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Views.ClientSettings;
+using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Core.Views.Event;
 using SynchronizationMessages.CompleteQuestionnaire;
 using SynchronizationMessages.Handshake;
@@ -21,33 +24,39 @@ namespace DataEntryClientTests
     [TestFixture]
     public class CompleteQuestionnaireSyncTest
     {
-/*
+        protected IKernel Kernel;
+        protected Mock<ICommandService> CommandService;
+        protected Mock<IEventSync> EventStore;
+    //    protected Mock<IClientSettingsProvider> clientSettingsMock;
         [SetUp]
         public void CreateObjects()
         {
+            
+            CommandService=new Mock<ICommandService>();
+            Kernel = new StandardKernel();
+            EventStore=new Mock<IEventSync>();
+            Kernel.Bind<IEventSync>().ToConstant(EventStore.Object);
 
+          /*  clientSettingsMock = new Mock<IClientSettingsProvider>();
+            clientSettingsMock.Setup(x => x.ClientSettings).Returns(
+                new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
+            Kernel.Bind<IClientSettingsProvider>().ToConstant(clientSettingsMock.Object);*/
+            NcqrsEnvironment.SetDefault<ICommandService>(CommandService.Object);
         }
 
         [Test]
         public void GetLastEventGuid_ResultNotNull_GuidIsReturned()
         {
-            Mock<ICommandInvoker> invokerMock=new Mock<ICommandInvoker>();
-            Mock<IViewRepository> repositoryMock=new Mock<IViewRepository>();
-
             Mock<IGetLastSyncEvent> serviceMock = new Mock<IGetLastSyncEvent>();
-            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub<IGetLastSyncEvent>(serviceMock);
-          
+            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub(serviceMock);
+            Kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
             
 
             var clientGuid = Guid.NewGuid();
             var eventGuid = Guid.NewGuid();
 
             serviceMock.Setup(x => x.Process(clientGuid)).Returns(eventGuid);
-            Mock<IClientSettingsProvider> clientSettingsMock = new Mock<IClientSettingsProvider>();
-            clientSettingsMock.Setup(x => x.ClientSettings).Returns(
-                new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
-            var target = new CompleteQuestionnaireSync(invokerMock.Object, repositoryMock.Object,
-                                                       chanelFactoryStub, clientSettingsMock.Object,Guid.NewGuid());
+                 var target = new CompleteQuestionnaireSync(Kernel, Guid.NewGuid(), string.Empty);
 
             var result =target.GetLastSyncEventGuid(clientGuid);
             Assert.AreEqual(result, eventGuid);
@@ -55,23 +64,14 @@ namespace DataEntryClientTests
         [Test]
         public void GetLastEventGuid_ResultNotNull_GuidIsNotReturned()
         {
-            Mock<ICommandInvoker> invokerMock = new Mock<ICommandInvoker>();
-            Mock<IViewRepository> repositoryMock = new Mock<IViewRepository>();
-
             Mock<IGetLastSyncEvent> serviceMock = new Mock<IGetLastSyncEvent>();
-            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub<IGetLastSyncEvent>(serviceMock);
-
-
-
+            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub(serviceMock);
+            Kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
             var clientGuid = Guid.NewGuid();
             Guid? eventGuid = null;
 
             serviceMock.Setup(x => x.Process(clientGuid)).Returns(eventGuid);
-            Mock<IClientSettingsProvider> clientSettingsMock = new Mock<IClientSettingsProvider>();
-            clientSettingsMock.Setup(x => x.ClientSettings).Returns(
-                new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
-            var target = new CompleteQuestionnaireSync(invokerMock.Object, repositoryMock.Object,
-                                                       chanelFactoryStub, clientSettingsMock.Object, Guid.NewGuid());
+              var target = new CompleteQuestionnaireSync(Kernel, Guid.NewGuid(), string.Empty);
 
             var result = target.GetLastSyncEventGuid(clientGuid);
             Assert.AreEqual(result, null);
@@ -79,35 +79,72 @@ namespace DataEntryClientTests
         [Test]
         public void UploadEvents_2Events_AllEventsAreDelivered()
         {
-            Mock<ICommandInvoker> invokerMock = new Mock<ICommandInvoker>();
-            Mock<IViewRepository> repositoryMock = new Mock<IViewRepository>();
-
-            Mock<ICompleteQuestionnaireSync> serviceMock = new Mock<ICompleteQuestionnaireSync>();
-            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub<ICompleteQuestionnaireSync>(serviceMock);
-
-
+           
+            Mock<IEventPipe> serviceMock = new Mock<IEventPipe>();
+            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub(serviceMock);
+            Kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
 
             var clientGuid = Guid.NewGuid();
             Guid? eventGuid = Guid.NewGuid();
-
+            
             serviceMock.Setup(x => x.Process(It.IsAny<EventSyncMessage>())).Returns(ErrorCodes.None);
-            repositoryMock.Setup(x => x.Load<EventBrowseInputModel, EventBrowseView>(It.IsAny<EventBrowseInputModel>()))
-                .Returns(new EventBrowseView(2, 2, 2,
-                                             new List<EventBrowseItem>()
-                                                 {
-                                                     new EventBrowseItem(Guid.NewGuid(), DateTime.Now, null),
-                                                     new EventBrowseItem(Guid.NewGuid(), DateTime.Now, null)
-                                                 }));
-            Mock<IClientSettingsProvider> clientSettingsMock = new Mock<IClientSettingsProvider>();
-            clientSettingsMock.Setup(x => x.ClientSettings).Returns(
-                new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
-            var target = new CompleteQuestionnaireSync(invokerMock.Object, repositoryMock.Object,
-                                                       chanelFactoryStub, clientSettingsMock.Object, Guid.NewGuid());
+            EventStore.Setup(x => x.ReadCompleteQuestionare()).Returns(new List<AggregateRootEventStream>()
+                                                                           {
+
+                                                                               new AggregateRootEventStream(
+                                                                                   new []
+                                                                                       {
+                                                                                           new AggregateRootEvent(){EventIdentifier = Guid.NewGuid()},
+                                                                                           new AggregateRootEvent(){EventIdentifier = Guid.NewGuid()}
+                                                                                       }, long.MinValue, long.MaxValue,
+                                                                                   Guid.NewGuid())
+                                                                           });
+            var target = new CompleteQuestionnaireSync(Kernel, Guid.NewGuid(), string.Empty);
 
             target.UploadEvents(clientGuid,eventGuid);
 
-            serviceMock.Verify(x => x.Process(It.IsAny<EventSyncMessage>()), Times.Exactly(2));
+            serviceMock.Verify(x => x.Process(It.Is<EventSyncMessage>(e => e.Command.Events.Count() == 2)),
+                               Times.Exactly(1));
+            //events were pushed
+            CommandService.Verify(x => x.Execute(It.IsAny<PushEventsCommand>()),Times.Once());
+            //events were marked as started and later as completes
+            CommandService.Verify(x => x.Execute(It.IsAny<ChangeEventStatusCommand>()), Times.Exactly(2));
+            //process is finisheed
+            CommandService.Verify(x => x.Execute(It.IsAny<EndProcessComand>()), Times.Once());
 
-        }*/
+        }
+        [Test]
+        public void ImportEvents_2Events_AllEventsAreDeliveredToClient()
+        {
+
+            Mock<IGetAggragateRootList> serviceMock = new Mock<IGetAggragateRootList>();
+            Mock<IGetEventStream> eventServiceMock = new Mock<IGetEventStream>();
+            IChanelFactoryWrapper chanelFactoryStub =
+                new ChanelFactoryStub(new object[] {serviceMock, eventServiceMock});
+            Kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
+
+            var clientGuid = Guid.NewGuid();
+            Guid? eventGuid = Guid.NewGuid();
+            var serviceResult = new ListOfAggregateRootsForImportMessage()
+                                    {
+                                        Roots =
+                                            new ProcessedAggregateRoot[]
+                                                {new ProcessedAggregateRoot() {AggregateRootPublicKey = Guid.NewGuid()}}
+                                    };
+
+            serviceMock.Setup(x => x.Process()).Returns(serviceResult);
+            eventServiceMock.Setup(x => x.Process(serviceResult.Roots[0].AggregateRootPublicKey)).Returns(new ImportSynchronizationMessage());
+            var target = new CompleteQuestionnaireSync(Kernel, Guid.NewGuid(), string.Empty);
+
+            target.Import(Guid.NewGuid());
+
+            serviceMock.Verify(x => x.Process(),
+                               Times.Exactly(1));
+            eventServiceMock.Verify(x => x.Process(serviceResult.Roots[0].AggregateRootPublicKey), Times.Exactly(1));
+
+            EventStore.Verify(x => x.WriteEvents(It.IsAny<IEnumerable<AggregateRootEventStream>>()), Times.Exactly(1));
+
+
+        }
     }
 }
