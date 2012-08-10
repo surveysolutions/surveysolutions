@@ -18,6 +18,9 @@ namespace RavenQuestionnaire.Core.AbstractFactories
 
         public ICompleteGroup ConvertToCompleteGroup(IGroup group)
         {
+            var result = group as ICompleteGroup;
+            if (result != null)
+                return result;
             var simpleGroup = group as Group;
             if (simpleGroup != null)
                 return (CompleteGroup) simpleGroup;

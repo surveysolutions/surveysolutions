@@ -1,30 +1,38 @@
-﻿using RavenQuestionnaire.Core.Events;
+﻿using System;
+using System.Collections.Generic;
+using RavenQuestionnaire.Core.Events;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using RavenQuestionnaire.Core.Denormalizers;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Views.Survey;
 
 namespace RavenQuestionnaire.Core.EventHandlers
 {
-    public class SurveyBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
-                                                              IEventHandler<CompleteQuestionnaireDeleted>,
-                                                              IEventHandler<QuestionnaireStatusChanged>,
-                                                              IEventHandler<QuestionnaireAssignmentChanged>
+    public class StatisticQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
+                                                                IEventHandler<CompleteQuestionnaireDeleted>,
+                                                                IEventHandler<QuestionnaireStatusChanged>,
+                                                                IEventHandler<QuestionnaireAssignmentChanged>
     {
-        private IDenormalizerStorage<SurveyBrowseItem> documentItemStore;
 
-        public SurveyBrowseItemDenormalizer(IDenormalizerStorage<SurveyBrowseItem> documentItemStore)
+        private IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore;
+        public Dictionary<Guid, SurveyStatus> AllQuestionnaire { get; set; }
+        public int UnAssignment { get; set; }
+
+
+        public StatisticQuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore, Dictionary<Guid, SurveyStatus> AllQuestionnaire)
         {
             this.documentItemStore = documentItemStore;
+            this.AllQuestionnaire = AllQuestionnaire;
         }
 
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
-            var storage = new SurveyBrowseItem(evnt.Payload.CompletedQuestionnaireId, evnt.Payload.Questionnaire.Title, evnt.Payload.QuestionnaireId, evnt.Payload.Status, evnt.Payload.Responsible);
-            storage.AllQuestionnaire.Add(evnt.Payload.CompletedQuestionnaireId, evnt.Payload.Status);
+            if(AllQuestionnaire.ContainsKey(evnt.Payload.CompletedQuestionnaireId))
+                return;
+            AllQuestionnaire.Add(evnt.Payload.CompletedQuestionnaireId, evnt.Payload.Status);
             if (evnt.Payload.Responsible == null)
-                storage.UnAssignment++;
-            this.documentItemStore.Store(storage, evnt.Payload.CompletedQuestionnaireId);
+                UnAssignment++;
         }
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
@@ -34,19 +42,14 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            var storage = this.documentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
-            if (storage.Responsible == null && storage.UnAssignment != 0)
-                storage.UnAssignment--;
-            else
-                if (storage.Responsible != null && storage.UnAssignment == 0)
-                    storage.UnAssignment++;
-            this.documentItemStore.Store(storage, evnt.Payload.CompletedQuestionnaireId);
+            UnAssignment--;
         }
 
         public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
         {
-            var storage = this.documentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
-            storage.AllQuestionnaire.Remove(evnt.Payload.CompletedQuestionnaireId);
+            if (!AllQuestionnaire.ContainsKey(evnt.Payload.CompletedQuestionnaireId))
+                return;
+            AllQuestionnaire.Remove(evnt.Payload.CompletedQuestionnaireId);
         }
     }
 }

@@ -43,14 +43,14 @@ namespace RavenQuestionnaire.Web.Controllers
             return RedirectToAction("Index", "Dashboard");
         }
        
-        public void ExportAsync()
+        public void ExportAsync(Guid clientGuid)
         {
             AsyncManager.OutstandingOperations.Increment();
             AsyncQuestionnaireUpdater.Update(() =>
             {
                 try
                 {
-                    AsyncManager.Parameters["result"] = exportimportEvents.Export();
+                    AsyncManager.Parameters["result"] = exportimportEvents.Export(clientGuid);
                 }
                 catch
                 {

@@ -3,7 +3,31 @@
   <Profiles />
   <Settings>
     <Setting Name="DefaultUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://192.168.3.113/dev-capi/</Value>
+      <Value Profile="(Default)">http://localhost:8083</Value>
+    </Setting>
+    <Setting Name="UsbExportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/Synchronizations/Export</Value>
+    </Setting>
+    <Setting Name="NetworkLocalExportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/Synchronizations/Push</Value>
+    </Setting>
+    <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://localhostgg</Value>
+    </Setting>
+    <Setting Name="NetworkCheckStatePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/Synchronizations/ProgressInPersentage</Value>
+    </Setting>
+    <Setting Name="UsbImportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/Synchronizations/Import</Value>
+    </Setting>
+    <Setting Name="NetworkLocalImportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/Synchronizations/Pull</Value>
+    </Setting>
+    <Setting Name="ClientId" Type="System.Guid" Scope="User">
+      <Value Profile="(Default)">00000000-0000-0000-0000-000000000000</Value>
+    </Setting>
+    <Setting Name="ParentId" Type="System.Guid" Scope="User">
+      <Value Profile="(Default)">00000000-0000-0000-0000-000000000000</Value>
     </Setting>
   </Settings>
 </SettingsFile>

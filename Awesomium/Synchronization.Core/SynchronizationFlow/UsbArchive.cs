@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
 
-namespace Client
+namespace Synchronization.Core.SynchronizationFlow
 {
-    class UsbFileArchive
+    public class UsbFileArchive
     {
         internal class Header
         {
@@ -82,7 +79,7 @@ namespace Client
         private const string FileExt = ".capi";
         private DriveInfo usbDriver;
         private string fileName = null;
-        private Header header = new Header();
+   //     private Header header = new Header();
         //private const int MaxSize = int.MaxValue;//504857600;
         private const int MaxSize = 504857600;
 
@@ -119,10 +116,11 @@ namespace Client
             return stream;
         }
 
-        public FileStream CreateFile()
+        protected FileStream CreateFile()
         {
-            var space = this.usbDriver.TotalFreeSpace;
-            var fileIndex = (int)(this.usbDriver.TotalFreeSpace / MaxSize);
+          //  var space = this.usbDriver.TotalFreeSpace;
+            return File.Create(this.fileName);
+            /*  var fileIndex = (int)(this.usbDriver.TotalFreeSpace / MaxSize);
             var fileVolume = (int)(this.usbDriver.TotalFreeSpace % MaxSize);
 
             FileStream fileStream = null;
@@ -143,14 +141,14 @@ namespace Client
 
                 fileStream = PutFile(fileIndex, fileVolume);
             }
-
-            return fileStream;
+            
+            return fileStream;*/
         }
 
         private FileStream ReadHeader()
         {
             var fileStream = File.Open(this.fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-            fileStream.Read(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);
+           // fileStream.Read(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);
 
             return fileStream;
         }
@@ -160,9 +158,11 @@ namespace Client
 
             try
             {
-                var fileStream = File.Exists(this.fileName) ? ReadHeader() : CreateFile();
+                if(File.Exists(this.fileName))
+                    File.Delete(this.fileName);
+                var fileStream = CreateFile();
 
-                int newPosition = this.header.ArchivePosition;
+         /*       int newPosition = this.header.ArchivePosition;
 
                 if (newPosition >= data.Length)
                 {
@@ -173,17 +173,17 @@ namespace Client
                 {
                     // put data after exsitinge archive
                     newPosition += this.header.ArchiveSize;
-                }
-
+                }*/
+                
                 // step 1: write archive
-                fileStream.Position = newPosition + this.header.ByteBuffer.Length;
+                fileStream.Position = 0;
                 fileStream.Write(data, 0, data.Length);
 
                 // step 2: update archive placement info
-                this.header.FormatHeader(newPosition, data.Length);
+               // this.header.FormatHeader(newPosition, data.Length);
 
-                fileStream.Position = 0;
-                fileStream.Write(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);
+              /*  fileStream.Position = 0;
+                fileStream.Write(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);*/
                 fileStream.Close();
             }
             catch (Exception exception)
@@ -195,9 +195,28 @@ namespace Client
         /// <summary>
         /// Load archive from driver
         /// </summary>
-        internal byte[] LoadArchive()
+        public byte[] LoadArchive()
         {
-            throw new Exception("Not implemented");
+            byte[] result = null;
+            using (var file = File.Open(this.fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                byte[] buffer = new byte[16*1024];
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    int read;
+                    while ((read = file.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        ms.Write(buffer, 0, read);
+                    }
+                    result = ms.ToArray();
+                }
+            }
+            return result;
+        }
+
+        public string FileName
+        {
+            get { return this.fileName; }
         }
     }
 }

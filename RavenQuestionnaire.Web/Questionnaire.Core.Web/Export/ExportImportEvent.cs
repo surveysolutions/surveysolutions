@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Ionic.Zip;
 using System.IO;
 using Ionic.Zlib;
@@ -7,7 +8,6 @@ using System.Text;
 using Newtonsoft.Json;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Core.ClientSettingsProvider;
 
 
 namespace Questionnaire.Core.Web.Export
@@ -15,8 +15,12 @@ namespace Questionnaire.Core.Web.Export
     public interface IExportImport
     {
         void Import(HttpPostedFileBase uploadFile);
-        byte[] Export();
-        byte[] Export(IViewRepository viewRepository);
+        byte[] Export(Guid clientGuid);
+        /// <summary>
+        /// return list of ALL events grouped by aggregate root, please use very carefully
+        /// </summary>
+        /// <returns></returns>
+        byte[] ExportAllEvents(Guid clientGuid);
     }
     
     public class ExportImportEvent:IExportImport
@@ -24,16 +28,14 @@ namespace Questionnaire.Core.Web.Export
 
         #region FieldsProperties
 
-        private IClientSettingsProvider clientSettingsProvider;
         private IEventSync synchronizer;
 
         #endregion
 
         #region Constructor
 
-        public ExportImportEvent(IClientSettingsProvider clientSettingsProvider, IEventSync synchronizer)
+        public ExportImportEvent(IEventSync synchronizer)
         {
-            this.clientSettingsProvider = clientSettingsProvider;
             this.synchronizer = synchronizer;
         }
 
@@ -58,26 +60,18 @@ namespace Questionnaire.Core.Web.Export
                 }
             }
         }
-
-        public byte[] Export()
+        protected byte[] ExportInternal(Guid clientGuid, Func<IEnumerable<AggregateRootEventStream>> action)
         {
-
             var data = new ZipFileData
             {
-                ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
+                ClientGuid = clientGuid
             };
-            data.Events = this.synchronizer.ReadCompleteQuestionare();
+            data.Events = action();
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {
                 var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
                 zip.CompressionLevel = CompressionLevel.None;
-                //foreach (var eventStream in data.Events)
-                //{
-                //    zip.AddEntry(string.Format("backup-{0}.txt", eventStream.SourceId),
-                //                            JsonConvert.SerializeObject(eventStream, Formatting.Indented, settings));
-
-                //}
                 string filename = string.Format("backup-{0}.txt", DateTime.Now.ToString().Replace(" ", "_"));
                 zip.AddEntry(filename, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
                 zip.Save(outputStream);
@@ -86,31 +80,14 @@ namespace Questionnaire.Core.Web.Export
             return outputStream.ToArray();
         }
 
-        public byte[] Export(IViewRepository viewRepository)
+        public byte[] Export(Guid clientGuid)
         {
+            return ExportInternal(clientGuid, this.synchronizer.ReadCompleteQuestionare);
+        }
 
-            var data = new ZipFileData
-                           {
-                               ClientGuid = clientSettingsProvider.ClientSettings.PublicKey
-                           };
-            data.Events = this.synchronizer.ReadCompleteQuestionare();
-            var outputStream = new MemoryStream();
-            using (var zip = new ZipFile())
-            {
-                var settings = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects};
-                zip.CompressionLevel = CompressionLevel.None;
-                //foreach (var eventStream in data.Events)
-                //{
-                //    zip.AddEntry(string.Format("backup-{0}.txt", eventStream.SourceId),
-                //                            JsonConvert.SerializeObject(eventStream, Formatting.Indented, settings));
-
-                //}
-                string filename = string.Format("backup-{0}.txt", DateTime.Now.ToString().Replace(" ", "_").Replace("/", "_").Replace(":","_"));
-                zip.AddEntry(filename, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
-                zip.Save(outputStream);
-            }
-            outputStream.Seek(0, SeekOrigin.Begin);
-            return outputStream.ToArray();
+        public byte[] ExportAllEvents(Guid clientGuid)
+        {
+            return ExportInternal(clientGuid, this.synchronizer.ReadEvents);
         }
 
         #endregion

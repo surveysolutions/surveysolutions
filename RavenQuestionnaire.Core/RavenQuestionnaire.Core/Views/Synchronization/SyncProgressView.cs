@@ -13,25 +13,37 @@ namespace RavenQuestionnaire.Core.Views.Synchronization
             this.ProcessPublicKey = doc.PublicKey;
             this.StartDate = doc.StartDate;
             this.EndDate = doc.EndDate;
-            if(doc.AggregateRoots.Count==0)
+            switch (doc.Handled)
             {
-                this.StateDescription = "Handshake";
-                return;
+                case EventState.Initial:
+                    this.StateDescription = "Handshake";
+                    this.ProgressPercentage = 0;
+                    break;
+                case EventState.Error:
+                    this.StateDescription = "Process is finished with errors";
+                    this.ProgressPercentage = -1;
+                    break;
+                case EventState.Completed:
+                    this.StateDescription = "Process is finished";
+                    this.ProgressPercentage = 100;
+                    break;
+                case EventState.InProgress:
+                    this.StateDescription = "Retrieving documents";
+                    var initialStateEventsCount = doc.AggregateRoots.Count(e => e.Handled == EventState.Initial);
+                    this.ProgressPercentage =
+                        (int)
+                        (((decimal) (doc.AggregateRoots.Count - initialStateEventsCount)/doc.AggregateRoots.Count)*100);
+                    // process can't display 100% when it's not marked as completed
+                    if (this.ProgressPercentage == 100)
+                        this.ProgressPercentage = 99;
+                    break;
             }
-            if(doc.EndDate.HasValue)
-            {
-                this.StateDescription = "Process is finished";
-                return;
-            }
-            this.StateDescription = "Retrieving documents";
-            var initialStateEventsCount = doc.AggregateRoots.Count(e => e.Handled == EventState.Initial);
-            this.ProgressPercentage = (int)(((decimal)(doc.AggregateRoots.Count - initialStateEventsCount) / doc.AggregateRoots.Count) * 100);
         }
 
         public string StateDescription { get; set; }
         public Guid ProcessPublicKey { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public int? ProgressPercentage { get; set; }
+        public int ProgressPercentage { get; set; }
     }
 }

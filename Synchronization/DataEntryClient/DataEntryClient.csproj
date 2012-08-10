@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompleteQuestionnaire\CompleteQuestionnaireSync.cs" />
+    <Compile Include="CompleteQuestionnaire\ICompleteQuestionnaireSync.cs" />
     <Compile Include="WcfInfrastructure\IChanelFactoryWrapper.cs" />
     <Compile Include="WcfInfrastructure\ServiceDiscover.cs" />
   </ItemGroup>
