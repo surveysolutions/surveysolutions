@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Web.WCF
 
         public ListOfAggregateRootsForImportMessage Process()
         {
-            var events = this.eventStore.ReadCompleteQuestionare();
+            var events = this.eventStore.ReadEvents();
             return new ListOfAggregateRootsForImportMessage()
                        {Roots = events.Select(e => new ProcessedAggregateRoot(e)).ToList()};
         }
