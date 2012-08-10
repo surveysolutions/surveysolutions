@@ -22,8 +22,8 @@ namespace Questionnaire.Core.Web.Export
         /// <returns></returns>
         byte[] ExportAllEvents(Guid clientGuid);
     }
-    
-    public class ExportImportEvent:IExportImport
+
+    public class ExportImportEvent : IExportImport
     {
 
         #region FieldsProperties
@@ -48,35 +48,44 @@ namespace Questionnaire.Core.Web.Export
             if (ZipFile.IsZipFile(uploadFile.InputStream, false))
             {
                 uploadFile.InputStream.Position = 0;
+
                 ZipFile zip = ZipFile.Read(uploadFile.InputStream);
                 using (var stream = new MemoryStream())
                 {
-                    foreach (ZipEntry e in zip) 
+                    foreach (ZipEntry e in zip)
                         e.Extract(stream);
-                    var settings = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects};
+
+                    var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
                     var result = JsonConvert.DeserializeObject<ZipFileData>
                         (Encoding.Default.GetString(stream.ToArray()), settings);
+
                     synchronizer.WriteEvents(result.Events);
                 }
             }
         }
+
         protected byte[] ExportInternal(Guid clientGuid, Func<IEnumerable<AggregateRootEventStream>> action)
         {
             var data = new ZipFileData
             {
-                ClientGuid = clientGuid
+                ClientGuid = clientGuid,
+                Events = action()
             };
-            data.Events = action();
+
             var outputStream = new MemoryStream();
+
             using (var zip = new ZipFile())
             {
                 var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
                 zip.CompressionLevel = CompressionLevel.None;
                 string filename = string.Format("backup-{0}.txt", DateTime.Now.ToString().Replace(" ", "_"));
+
                 zip.AddEntry(filename, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
                 zip.Save(outputStream);
             }
+
             outputStream.Seek(0, SeekOrigin.Begin);
+
             return outputStream.ToArray();
         }
 
