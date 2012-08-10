@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using RavenQuestionnaire.Core.Domain;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
 {
@@ -19,12 +16,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
         [AggregateRootId]
         public Guid CompleteQuestionnaireId { get; set; }
 
-        public UserLight UserPublicKey { get; set; }
+        public UserLight Responsible { get; set; }
 
-        public ChangeAssignmentCommand(Guid completeQuestionnaireId, UserLight userPublicKey)
-        {
-            this.CompleteQuestionnaireId = completeQuestionnaireId;
-            this.UserPublicKey = userPublicKey;
-        }
     }
 }
