@@ -619,7 +619,6 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Raven.Studio.xap" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
