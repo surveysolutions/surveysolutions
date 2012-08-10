@@ -75,7 +75,7 @@ namespace Synchronization.Core.SynchronizationFlow
             catch (Exception e)
             {
                 throw new SynchronizationException(
-                    string.Format("Push to local center {0} is failed ", this._host), e);
+                    string.Format("Push to local center {0} is failed ", this._endPointAdressAdress), e);
             }
         }
 
@@ -105,7 +105,7 @@ namespace Synchronization.Core.SynchronizationFlow
             catch (Exception e)
             {
                 throw new SynchronizationException(
-                   string.Format("Pull to local center {0} is failed ", this._host), e);
+                   string.Format("Pull to local center {0} is failed ", this._endPointAdressAdress), e);
             }
         }
 
