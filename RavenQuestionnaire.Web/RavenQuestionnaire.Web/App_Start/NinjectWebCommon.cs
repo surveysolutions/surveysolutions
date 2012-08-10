@@ -8,6 +8,7 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using Raven.Client;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Core.Services;
 using RavenQuestionnaire.Web.Synchronization;
 
