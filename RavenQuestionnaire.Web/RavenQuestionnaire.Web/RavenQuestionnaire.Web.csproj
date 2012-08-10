@@ -230,6 +230,7 @@
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuestionConditionModel.cs" />
     <Compile Include="Models\SwitcherModel.cs" />
+    <Compile Include="Synchronization\HQEventSync.cs" />
     <Compile Include="WCF\EventPipeService.svc.cs">
       <DependentUpon>EventPipeService.svc</DependentUpon>
     </Compile>

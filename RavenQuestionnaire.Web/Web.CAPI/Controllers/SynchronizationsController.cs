@@ -93,12 +93,6 @@ namespace Web.CAPI.Controllers
             return File(result, "application/zip",
                         string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
         }
-        public FileResult ExportAllEvents()
-        {
-            byte[] result =exportimportEvents.ExportAllEvents(Guid.Empty);
-            return File(result, "application/zip",
-                      string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
-        }
         #endregion
 
         #region import
