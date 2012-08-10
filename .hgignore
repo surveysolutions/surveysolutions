@@ -158,3 +158,5 @@ Awesomium/Synchronization.Core/bin/*
 Awesomium/Synchronization.Core/obj/*
 Externals/lib/*
 lib/Debug/Ncqrs.Eventing.Storage.RavenDB/*
+lib/Debug/*
+lib/Release/*
