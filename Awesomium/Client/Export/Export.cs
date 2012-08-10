@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
+using Client.ExportEvent;
 using Client.Properties;
 using System.Threading;
 using System.Runtime.Remoting.Messaging;
@@ -13,10 +14,11 @@ using Awesomium.Core;
 using Synchronization.Core;
 using Synchronization.Core.ClientSettings;
 using Synchronization.Core.SynchronizationFlow;
+using SynchronizationEvent = Synchronization.Core.SynchronizationEvent;
 
 namespace Client
 {
-    public delegate void EndOfExport();
+  //  public delegate void EndOfExport();
     /// <summary>
     /// The class is responsible for completed questionaries export to plugged USB driver
     /// </summary>
@@ -78,18 +80,18 @@ namespace Client
 
         #region Helpers
 
-        public event EndOfExport EndOfExport;
+        public event EventHandler<SynchronizationCompletedEvent> EndOfExport;
 
         private void DoExport()
         {
-            DoSyncronizationAction(false);
+            DoSyncronizationAction(SyncType.Push);
         }
 
         private void DoImport()
         {
-            DoSyncronizationAction(true);
+            DoSyncronizationAction(SyncType.Pull);
         }
-        private void DoSyncronizationAction(bool isPull)
+        private void DoSyncronizationAction(SyncType action)
         {
             this.pleaseWait.ActivateExportState();
             try
@@ -98,7 +100,7 @@ namespace Client
                 this.exportEnded.Reset();
                 var succesSynchronizer = this.synchronizer.ExecuteAction((s) =>
                                                                              {
-                                                                                 if (isPull) s.Pull();
+                                                                                 if (action== SyncType.Pull) s.Pull();
                                                                                  else
                                                                                      s.Push();
                                                                              }, errorList);
@@ -111,11 +113,11 @@ namespace Client
                     result.AppendLine(synchronizationException.Message);
                 }
                 if (succesSynchronizer != null)
-                    result.AppendLine(BuildSuccessSyncMessage(succesSynchronizer,isPull));
+                    result.AppendLine(BuildSuccessSyncMessage(succesSynchronizer,action));
                 MessageBox.Show(result.ToString());
                 if (EndOfExport != null)
                 {
-                    EndOfExport();
+                    EndOfExport(this,new SynchronizationCompletedEvent(action));
                 }
             }
             catch (Exception ex)
@@ -123,14 +125,13 @@ namespace Client
                 throw ex;
             }
         }
-        private string BuildSuccessSyncMessage(ISynchronizer synchronizerAgent, bool isPull)
+        private string BuildSuccessSyncMessage(ISynchronizer synchronizerAgent, SyncType action)
         {
-            var action = isPull ? "Pull" : "Push";
             var usb = synchronizerAgent as UsbSynchronizer;
             if(usb!=null)
             {
                 return string.Format("Usb {0} is successful with file {1}", action,
-                                     isPull ? usb.InFilePath : usb.OutFilePath);
+                                     action == SyncType.Pull ? usb.InFilePath : usb.OutFilePath);
             }
             var lan = synchronizerAgent as NetworkSynchronizer;
             if(lan!=null)
