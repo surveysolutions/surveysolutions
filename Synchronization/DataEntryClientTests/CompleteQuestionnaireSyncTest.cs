@@ -88,7 +88,7 @@ namespace DataEntryClientTests
             Guid? eventGuid = Guid.NewGuid();
             
             serviceMock.Setup(x => x.Process(It.IsAny<EventSyncMessage>())).Returns(ErrorCodes.None);
-            EventStore.Setup(x => x.ReadCompleteQuestionare()).Returns(new List<AggregateRootEventStream>()
+            EventStore.Setup(x => x.ReadEvents()).Returns(new List<AggregateRootEventStream>()
                                                                            {
 
                                                                                new AggregateRootEventStream(

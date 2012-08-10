@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="ClientSettingsProvider.cs" />
     <Compile Include="Export\Export.cs" />
+    <Compile Include="Export\SynchronizationEvent.cs" />
     <Compile Include="Forms\PleaseWaitForm.cs">
       <SubType>UserControl</SubType>
     </Compile>

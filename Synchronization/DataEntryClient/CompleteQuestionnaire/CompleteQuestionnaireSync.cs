@@ -69,7 +69,7 @@ namespace DataEntryClient.CompleteQuestionnaire
             this.chanelFactoryWrapper.Execute<IEventPipe>(this.baseAdress,
                 (client)=>
                     {
-                        var events = this.eventStore.ReadCompleteQuestionare();
+                        var events = this.eventStore.ReadEvents();
                         invoker.Execute(new PushEventsCommand(this.processGuid, events));
                         foreach (AggregateRootEventStream aggregateRootEventStream in events)
                         {
