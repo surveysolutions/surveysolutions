@@ -1,7 +1,7 @@
 ﻿@model RavenQuestionnaire.Core.Views.Survey.SurveysBrowseItem
 
 @{ var name = "responsible-" + Model.Id; }
-      <td>@Model.Id</td>            
+      <td>@Model.Title</td>            
       <td>
           @{string s = Model.Responsible == null ? string.Empty : Model.Responsible.Name;}
           @s

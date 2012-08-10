@@ -354,14 +354,14 @@ namespace RavenQuestionnaire.Core.Domain
             _doc.Status = e.Status;
         }
 
-        protected void ChangeAssignment(UserLight user)
+        protected void ChangeAssignment(UserLight responsible)
         {
             //put check logic !!!
 
             ApplyEvent(new QuestionnaireAssignmentChanged()
             {
                 CompletedQuestionnaireId = this._doc.PublicKey,
-                Responsible = user
+                Responsible = responsible
             });
         }
 

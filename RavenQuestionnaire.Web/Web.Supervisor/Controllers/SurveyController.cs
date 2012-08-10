@@ -1,17 +1,15 @@
 ﻿using System;
+using Ncqrs;
 using System.Linq;
 using System.Web.Mvc;
-using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Views.Assignment;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.StatusReport;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Views.Survey;
+using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core.Views.User;
-using Ncqrs;
+using RavenQuestionnaire.Core.Views.Survey;
+using RavenQuestionnaire.Core.Denormalizers;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 
 
 namespace Web.Supervisor.Controllers
@@ -23,7 +21,7 @@ namespace Web.Supervisor.Controllers
         private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
         private readonly IDenormalizerStorage<SurveyBrowseItem> document;
 
-        public SurveyController(ICommandInvoker commandInvoker, IViewRepository viewRepository, 
+        public SurveyController(IViewRepository viewRepository, 
                                 IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession, 
                                 IDenormalizerStorage<SurveyBrowseItem> document)
         {
@@ -47,7 +45,10 @@ namespace Web.Supervisor.Controllers
                 foreach (var statusename in statuses)
                 {
                     int count = 0;
-                    count = statusename=="UnAssignment" ? document.Query().Where(t => t.TemplateId == template).Sum(x => x.UnAssignment) : document.Query().Where(t => t.TemplateId == template).Where(x=>x.Status.Name==statusename).Where(t=>t.Responsible!=null).Count();
+                    if (statusename == "UnAssignment")
+                        count = document.Query().Where(t => t.TemplateId == template).Sum(x => x.UnAssignment);
+                    else
+                        count += Enumerable.Count(document.Query().Where(t => t.TemplateId == template), bitem => bitem.Status.Name == statusename && bitem.UnAssignment == 0);
                     item.Statistics.Add(statusename, count);
                 }
                 model.Items.Add(item);
@@ -68,7 +69,7 @@ namespace Web.Supervisor.Controllers
         [HttpGet]
         public ActionResult Assign(UserBrowseInputModel input, string questionnaireId)
         {
-            bool c = Request.IsAjaxRequest();
+            input = new UserBrowseInputModel(UserRoles.Supervisor);
             var users = viewRepository.Load<UserBrowseInputModel, UserBrowseView>(input);
             ViewBag.Users = new SelectList(users.Items, "Id", "UserName");
             var questionnaire = documentItemSession.Query().Where(x=>x.CompleteQuestionnaireId==questionnaireId).SingleOrDefault();
@@ -83,8 +84,11 @@ namespace Web.Supervisor.Controllers
             if (!string.IsNullOrEmpty(Save))
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new ChangeAssignmentCommand(Guid.Parse(Id),
-                                                                   new UserLight(user.UserId, user.UserName)));
+                commandService.Execute(new ChangeAssignmentCommand()
+                {
+                    CompleteQuestionnaireId = Guid.Parse(Id),
+                    Responsible = new UserLight(user.UserId, user.UserName)
+                });
             }
             var row = documentItemSession.Query().Where(x=>x.CompleteQuestionnaireId==Id).SingleOrDefault();
             var model = new SurveysBrowseItem(Guid.Parse(row.CompleteQuestionnaireId), row.TemplateId, row.QuestionnaireTitle, new UserLight(user.UserId, user.UserName), row.Status);

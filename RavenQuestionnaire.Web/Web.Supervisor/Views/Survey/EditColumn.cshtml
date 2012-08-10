@@ -1,15 +1,17 @@
 ﻿@model RavenQuestionnaire.Core.Views.Survey.SurveysBrowseItem
 
-@{ var name = "responsible-" + Model.Id; }
- <div class="caption">
-    @using (Ajax.BeginForm("Assign", "Survey", new AjaxOptions() { UpdateTargetId = @name, InsertionMode=InsertionMode.Replace}))
+<table>
+<tr>
+<td>
+    @using (Ajax.BeginForm("Assign", "Survey", new AjaxOptions() { UpdateTargetId = "responsible-" + @Model.Id, InsertionMode=InsertionMode.Replace}))
     {
-        @Html.Hidden("Id", Model.Id)
-        @Html.DropDownList("userId", ViewBag.Users as SelectList)          
+        @Html.Hidden("Id", Model.Id);
+        @Html.DropDownList("userId", ViewBag.Users as SelectList) 
         @Model.Status.Name
-        
-            <input name="Save" type="submit" value="Save" />
-            <input name="Cancel" type="submit" value="Cancel"/>       
-        
-     }
-     </div>
+        <input name="Save" type="submit" value="Save" />
+        <input name="Cancel" type="submit" value="Cancel"/>      
+         
+    }
+    </td>
+    </tr>
+ </table>
