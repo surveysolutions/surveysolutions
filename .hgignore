@@ -152,3 +152,4 @@ RavenQuestionnaire.Web\RavenQuestionnaire.Web\Content\bootstrap\*
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/*
 RavenQuestionnaire.Web/CAPI/obj/
 RavenQuestionnaire.Web/CAPI/bin/
+RavenQuestionnaire.Web/Web.Headquarter/App_Data/ClientDependency/win1-a22c93cfbc83e5692ccf32c6f6e02652-map.xml
