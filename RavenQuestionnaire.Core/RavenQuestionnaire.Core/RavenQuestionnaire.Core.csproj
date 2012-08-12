@@ -528,7 +528,10 @@
     <Compile Include="Views\Status\SubView\StatusByRole.cs" />
     <Compile Include="Views\Survey\SurveyBrowseItem.cs" />
     <Compile Include="Views\Survey\SurveyBrowseView.cs" />
-    <Compile Include="Views\Survey\SurveysBrowseItem.cs" />
+    <Compile Include="Views\Survey\SurveyGroupInputModel.cs" />
+    <Compile Include="Views\Survey\SurveyGroupViewFactory.cs" />
+    <Compile Include="Views\Survey\SurveyViewFactory.cs" />
+    <Compile Include="Views\Survey\SurveyViewInputModel.cs" />
     <Compile Include="Views\Synchronization\SyncProgressFactory.cs" />
     <Compile Include="Views\Synchronization\SyncProgressInputModel.cs" />
     <Compile Include="Views\Synchronization\SyncProgressView.cs" />
