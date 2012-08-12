@@ -1,8 +1,9 @@
 ﻿using RavenQuestionnaire.Core.Events;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using RavenQuestionnaire.Core.Views.Survey;
 using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Views.Survey;
+
 
 namespace RavenQuestionnaire.Core.EventHandlers
 {
