@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using RavenQuestionnaire.Core.Events;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using RavenQuestionnaire.Core.Views.Survey;
 using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;

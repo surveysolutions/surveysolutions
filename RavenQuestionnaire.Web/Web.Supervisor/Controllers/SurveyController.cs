@@ -1,5 +1,5 @@
-﻿using System;
-using Ncqrs;
+﻿using Ncqrs;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 using RavenQuestionnaire.Core;
@@ -16,53 +16,25 @@ namespace Web.Supervisor.Controllers
 {
     public class SurveyController : Controller
     {
-        //private ICommandInvoker commandInvoker;
         private IViewRepository viewRepository;
         private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
-        private readonly IDenormalizerStorage<SurveyBrowseItem> document;
 
         public SurveyController(IViewRepository viewRepository, 
-                                IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession, 
-                                IDenormalizerStorage<SurveyBrowseItem> document)
+                                IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
         {
-            //this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
             this.documentItemSession = documentItemSession;
-            this.document = document;
         }
 
         public ActionResult Index()
         {
-            var model = new SurveyBrowseView();
-            var statuses = SurveyStatus.GetAllStatuses().Select(s =>s.Name).ToList();
-            statuses.Insert(0, "UnAssignment");
-            ViewBag.Status = statuses;
-            var alltemplate = documentItemSession.Query().Select(x => x.TemplateId).Distinct();
-            foreach (var template in alltemplate)
-            {
-                var title = document.Query().Where(t => t.TemplateId == template).FirstOrDefault().Title;
-                var item = new SurveysBrowseItem(Guid.NewGuid(), template, title, null, null);
-                foreach (var statusename in statuses)
-                {
-                    int count = 0;
-                    if (statusename == "UnAssignment")
-                        count = document.Query().Where(t => t.TemplateId == template).Sum(x => x.UnAssignment);
-                    else
-                        count += Enumerable.Count(document.Query().Where(t => t.TemplateId == template), bitem => bitem.Status.Name == statusename && bitem.UnAssignment == 0);
-                    item.Statistics.Add(statusename, count);
-                }
-                model.Items.Add(item);
-            }
+            var model = viewRepository.Load<SurveyViewInputModel, SurveyBrowseView>(new SurveyViewInputModel());
             return View(model);
         }
         
         public ActionResult Assigments(string id)
         {
-            //change it for all featured answers
-            IQueryable<CompleteQuestionnaireBrowseItem> questionnaires = documentItemSession.Query().Where(x => x.TemplateId == id);
-            var model = new SurveyBrowseView();
-            foreach (var item in questionnaires)
-                model.Items.Add(new SurveysBrowseItem(Guid.Parse(item.CompleteQuestionnaireId), item.TemplateId, item.QuestionnaireTitle, item.Responsible, item.Status));
+            var model = viewRepository.Load<SurveyGroupInputModel, SurveyBrowseView>(new SurveyGroupInputModel(id));
             return View(model);
         }
 
@@ -73,26 +45,27 @@ namespace Web.Supervisor.Controllers
             var users = viewRepository.Load<UserBrowseInputModel, UserBrowseView>(input);
             ViewBag.Users = new SelectList(users.Items, "Id", "UserName");
             var questionnaire = documentItemSession.Query().Where(x=>x.CompleteQuestionnaireId==questionnaireId).SingleOrDefault();
-            var model = new SurveysBrowseItem(Guid.Parse(questionnaire.CompleteQuestionnaireId), questionnaire.TemplateId, questionnaire.QuestionnaireTitle, questionnaire.Responsible, questionnaire.Status);
-            return PartialView("EditColumn", model);
+            var model = viewRepository.Load<SurveyGroupInputModel, SurveyBrowseView>(new SurveyGroupInputModel(questionnaire.TemplateId, questionnaireId));
+            return PartialView("EditColumn", model.Items[0]);
         }
 
         [HttpPost]
         public ActionResult Assign(string Id, string userId, string Save, string Cancel)
         {
             var user = viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(userId));
+            var responsible = (user!=null) ? new UserLight(user.UserId, user.UserName) : new UserLight();
             if (!string.IsNullOrEmpty(Save))
-            {
-                var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new ChangeAssignmentCommand()
                 {
-                    CompleteQuestionnaireId = Guid.Parse(Id),
-                    Responsible = new UserLight(user.UserId, user.UserName)
-                });
-            }
-            var row = documentItemSession.Query().Where(x=>x.CompleteQuestionnaireId==Id).SingleOrDefault();
-            var model = new SurveysBrowseItem(Guid.Parse(row.CompleteQuestionnaireId), row.TemplateId, row.QuestionnaireTitle, new UserLight(user.UserId, user.UserName), row.Status);
-            return PartialView("DisplayColumn", model);
+                    var commandService = NcqrsEnvironment.Get<ICommandService>();
+                    commandService.Execute(new ChangeAssignmentCommand()
+                                               {
+                                                   CompleteQuestionnaireId = Guid.Parse(Id),
+                                                   Responsible = responsible
+                                               });
+                }
+            var row = documentItemSession.Query().Where(x => x.CompleteQuestionnaireId == Id).SingleOrDefault();
+            var model = viewRepository.Load<SurveyGroupInputModel, SurveyBrowseView>(new SurveyGroupInputModel(row.TemplateId, Id));
+            return PartialView("DisplayColumn", model.Items[0]);
         }
 
     }

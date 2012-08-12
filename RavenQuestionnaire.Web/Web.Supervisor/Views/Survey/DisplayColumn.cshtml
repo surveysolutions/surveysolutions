@@ -1,7 +1,14 @@
-﻿@model RavenQuestionnaire.Core.Views.Survey.SurveysBrowseItem
+﻿@model RavenQuestionnaire.Core.Views.Survey.SurveyBrowseItem
 
 @{ var name = "responsible-" + Model.Id; }
-      <td>@Model.Title</td>            
+      <td>@Model.Title</td> 
+      @foreach (var item in Model.FeatureadValue)
+      {
+          <td>
+                @{ string s1 = string.IsNullOrEmpty(item.Value) ? string.Empty : item.Value; }
+                @s1
+          </td>
+      }           
       <td>
           @{string s = Model.Responsible == null ? string.Empty : Model.Responsible.Name;}
           @s

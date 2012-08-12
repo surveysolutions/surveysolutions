@@ -1,16 +1,15 @@
-﻿@model RavenQuestionnaire.Core.Views.Survey.SurveysBrowseItem
+﻿@model RavenQuestionnaire.Core.Views.Survey.SurveyBrowseItem
 
 <table>
 <tr>
-<td>
+<td colspan="@Model.FeatureadValue.Count+1">
     @using (Ajax.BeginForm("Assign", "Survey", new AjaxOptions() { UpdateTargetId = "responsible-" + @Model.Id, InsertionMode=InsertionMode.Replace}))
     {
-        @Html.Hidden("Id", Model.Id);
-        @Html.DropDownList("userId", ViewBag.Users as SelectList) 
-        @Model.Status.Name
+        @Html.Hidden("Id", Model.Id)
+        @Html.DropDownList("userId", ViewBag.Users as SelectList)
+        
         <input name="Save" type="submit" value="Save" />
-        <input name="Cancel" type="submit" value="Cancel"/>      
-         
+        <input name="Cancel" type="submit" value="Cancel"/> 
     }
     </td>
     </tr>
