@@ -19,9 +19,10 @@ namespace Web.Supervisor.WCF
         private IEventSync eventStore;
         #region Implementation of IGetEventStream
 
-        public ImportSynchronizationMessage Process(Guid aggregateRootId)
+        public ImportSynchronizationMessage Process(Guid firstEventPulicKey, int length)
         {
-            var stream = this.eventStore.ReadEventStream(aggregateRootId);
+            var stream = this.eventStore.ReadEvents().SkipWhile(e => e.EventIdentifier != firstEventPulicKey).Take(length).ToArray();
+            //var index=stream
             return new ImportSynchronizationMessage() {EventStream = stream};
         }
 

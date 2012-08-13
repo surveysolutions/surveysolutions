@@ -23,8 +23,7 @@ namespace Web.Supervisor.WCF
         public ListOfAggregateRootsForImportMessage Process()
         {
             var events = this.eventStore.ReadEvents();
-            return new ListOfAggregateRootsForImportMessage()
-                       {Roots = events.Select(e => new ProcessedAggregateRoot(e)).ToList()};
+            return new ListOfAggregateRootsForImportMessage() {Roots = new[] {new ProcessedEventChunk(events)}};
         }
 
         #endregion

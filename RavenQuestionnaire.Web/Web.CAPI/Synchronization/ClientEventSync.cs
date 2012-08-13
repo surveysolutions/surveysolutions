@@ -20,7 +20,7 @@ namespace Web.CAPI.Synchronization
         }
         #region Overrides of AbstractEventSync
 
-        public override IEnumerable<AggregateRootEventStream> ReadEvents()
+        public override IEnumerable<AggregateRootEvent> ReadEvents()
         {
             var myEventStore = NcqrsEnvironment.Get<IEventStore>();
             if (myEventStore == null)
@@ -29,14 +29,17 @@ namespace Web.CAPI.Synchronization
                 viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(
                     new CompleteQuestionnaireBrowseInputModel());
 
-            List<AggregateRootEventStream> retval = new List<AggregateRootEventStream>();
+            List<AggregateRootEvent> retval = new List<AggregateRootEvent>();
             foreach (var item in model.Items)
             {
                 if (item.Status.Name != SurveyStatus.Complete.Name)
                     continue;
-                retval.Add(
+                var events = myEventStore.ReadFrom(Guid.Parse(item.CompleteQuestionnaireId),
+                                                   int.MinValue, int.MaxValue);
+                retval.AddRange(events.Select(e => new AggregateRootEvent(e)));
+                /* retval.Add(
                     new AggregateRootEventStream(myEventStore.ReadFrom(Guid.Parse(item.CompleteQuestionnaireId),
-                                                                       int.MinValue, int.MaxValue)));
+                                                                       int.MinValue, int.MaxValue));*/
             }
             // return retval;
             return retval;

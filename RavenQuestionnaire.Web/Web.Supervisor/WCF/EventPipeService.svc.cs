@@ -22,7 +22,7 @@ namespace Web.Supervisor.WCF
             {
                // kernel.Get<ICommandInvoker>().Execute(request.Command, request.CommandKey, request.SynchronizationKey);
                 var eventStore= kernel.Get<IEventSync>();
-                eventStore.WriteEvents(new[] {request.Command});
+                eventStore.WriteEvents(request.Command);
                 return ErrorCodes.None;
             }
             catch (Exception)

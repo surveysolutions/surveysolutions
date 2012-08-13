@@ -10,7 +10,7 @@ namespace RavenQuestionnaire.Core.Documents
     {
         public SyncProcessDocument()
         {
-            this.AggregateRoots = new List<ProcessedAggregateRoot>();
+            this.Chunks = new List<ProcessedEventChunk>();
         }
 
         public string Id { get; set; }
@@ -26,27 +26,28 @@ namespace RavenQuestionnaire.Core.Documents
         }
 
         private Guid publicKey;
-        public List<ProcessedAggregateRoot> AggregateRoots { get; set; }
+        public List<ProcessedEventChunk> Chunks { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public EventState Handled { get; set; }
         public SynchronizationType SynckType { get; set; }
     }
 
-    public class ProcessedAggregateRoot
+    public class ProcessedEventChunk
     {
-        public ProcessedAggregateRoot()
+        public ProcessedEventChunk()
         {
+            this.EventChunckPublicKey = Guid.NewGuid();
             this.EventKeys=new List<Guid>();
         }
-        public ProcessedAggregateRoot(AggregateRootEventStream eventDoc)
+        public ProcessedEventChunk(IEnumerable<AggregateRootEvent> eventDoc):this()
         {
-            this.AggregateRootPublicKey = eventDoc.SourceId;
-            this.EventKeys = eventDoc.Events.Select(e => e.EventIdentifier).ToList();
+            
+            this.EventKeys = eventDoc.Select(e => e.EventIdentifier).ToList();
             this.Handled = EventState.Initial;
         }
 
-        public Guid AggregateRootPublicKey { get; set; }
+        public Guid EventChunckPublicKey { get; set; }
         public List<Guid> EventKeys { get; set; }
         public EventState Handled { get; set; }
     }
