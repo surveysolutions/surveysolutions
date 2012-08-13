@@ -8,7 +8,7 @@ namespace RavenQuestionnaire.Core.Domain
     /// <summary>
     /// 
     /// </summary>
-    public class UserAR :  AggregateRootMappedByConvention
+    public class UserAR : AggregateRootMappedByConvention
     {
         private Guid _publicKey;
 
@@ -19,10 +19,11 @@ namespace RavenQuestionnaire.Core.Domain
         private UserRoles[] _roles;
         private UserLight _supervisor;
 
-        public UserAR(){}
+        public UserAR() { }
 
-        public UserAR(Guid publicKey, string userName, string password, string email, UserRoles[] roles, 
-            bool isLocked, UserLight supervisor) : base(publicKey)
+        public UserAR(Guid publicKey, string userName, string password, string email, UserRoles[] roles,
+            bool isLocked, UserLight supervisor)
+            : base(publicKey)
         {
 
             //Check for uniqueness of person name and email!
@@ -30,15 +31,15 @@ namespace RavenQuestionnaire.Core.Domain
 
 
             ApplyEvent(new NewUserCreated()
-                           {
-                               Name = userName,
-                               Password = password,
-                               Email = email,
-                               IsLocked = isLocked,
-                               Roles = roles,
-                               Supervisor = supervisor,
-                               PublicKey = publicKey
-                           });
+            {
+                Name = userName,
+                Password = password,
+                Email = email,
+                IsLocked = isLocked,
+                Roles = roles,
+                Supervisor = supervisor,
+                PublicKey = publicKey
+            });
         }
 
         // Event handler for the NewUserCreated event. This method
@@ -55,9 +56,10 @@ namespace RavenQuestionnaire.Core.Domain
 
         public void ChangeUser(string email, bool isLocked, UserRoles[] roles)
         {
-            ApplyEvent(new UserChanged (){
-                Email = email, 
-                IsLocked = isLocked, 
+            ApplyEvent(new UserChanged()
+            {
+                Email = email,
+                IsLocked = isLocked,
                 Roles = roles,
                 PublicKey = _publicKey
             });
@@ -83,7 +85,7 @@ namespace RavenQuestionnaire.Core.Domain
             _email = e.Email;
             _isLocked = e.IsLocked;
             _roles = e.Roles;
-            
+
         }
     }
 }
