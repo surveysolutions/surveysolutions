@@ -8,11 +8,9 @@ namespace RavenQuestionnaire.Core.Views.Survey
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        public UserLight Responsible { get; set; }
         public string TemplateId { get; set; }
         public SurveyStatus Status { get; set; }
-        public UserLight Responsible { get; set; }
-        public int UnAssignment { get; set; }
-        public Dictionary<Guid, SurveyStatus> AllQuestionnaire { get; set; }
         public Dictionary<string, int> Statistics { get; set; }
         public Dictionary<string, string> FeatureadValue { get; set; }
         public DateTime StartDate { get; set; }
@@ -20,9 +18,8 @@ namespace RavenQuestionnaire.Core.Views.Survey
 
         public SurveyBrowseItem()
         {
-            this.AllQuestionnaire=new Dictionary<Guid, SurveyStatus>();
             this.Statistics = new Dictionary<string, int>();
-            this.FeatureadValue=new Dictionary<string, string>();
+            this.FeatureadValue = new Dictionary<string, string>();
         }
 
         public SurveyBrowseItem(Guid id, string title, string templateId, SurveyStatus status, UserLight responsible):this()

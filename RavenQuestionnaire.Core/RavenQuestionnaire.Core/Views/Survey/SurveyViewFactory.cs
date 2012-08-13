@@ -23,15 +23,14 @@ namespace RavenQuestionnaire.Core.Views.Survey
             var alltemplate = documentItemSession.Query().Select(x => x.TemplateId).Distinct();
             foreach (var template in alltemplate)
             {
-                var title = documentItemSession.Query().Where(t => t.TemplateId == template).FirstOrDefault().Title;
-                var item = new SurveyBrowseItem(Guid.NewGuid(), title, template, null, null);
+                var item = new SurveyBrowseItem(Guid.NewGuid(), template, template, null, null);
                 foreach (var statusename in statuses)
                 {
                     int count = 0;
                     if (statusename == "UnAssignment")
-                        count = documentItemSession.Query().Where(t => t.TemplateId == template).Sum(x => x.UnAssignment);
+                        count = documentItemSession.Query().Where(t => t.TemplateId == template).Where(t=>t.Responsible==null).Count();
                     else
-                        count += Enumerable.Count(documentItemSession.Query().Where(t => t.TemplateId == template), bitem => bitem.Status.Name == statusename && bitem.UnAssignment == 0);
+                        count += Enumerable.Count(documentItemSession.Query().Where(t => t.TemplateId == template), bitem => bitem.Status.Name == statusename && bitem.Responsible != null);
                     item.Statistics.Add(statusename, count);
                 }
                 model.Items.Add(item);

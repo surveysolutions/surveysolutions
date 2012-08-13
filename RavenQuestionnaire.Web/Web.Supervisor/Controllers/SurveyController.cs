@@ -55,14 +55,10 @@ namespace Web.Supervisor.Controllers
             var user = viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(userId));
             var responsible = (user!=null) ? new UserLight(user.UserId, user.UserName) : new UserLight();
             if (!string.IsNullOrEmpty(Save))
-                {
-                    var commandService = NcqrsEnvironment.Get<ICommandService>();
-                    commandService.Execute(new ChangeAssignmentCommand()
-                                               {
-                                                   CompleteQuestionnaireId = Guid.Parse(Id),
-                                                   Responsible = responsible
-                                               });
-                }
+            {
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(new ChangeAssignmentCommand() { CompleteQuestionnaireId = Guid.Parse(Id), Responsible = responsible });
+            }
             var row = documentItemSession.Query().Where(x => x.CompleteQuestionnaireId == Id).SingleOrDefault();
             var model = viewRepository.Load<SurveyGroupInputModel, SurveyBrowseView>(new SurveyGroupInputModel(row.TemplateId, Id));
             return PartialView("DisplayColumn", model.Items[0]);
