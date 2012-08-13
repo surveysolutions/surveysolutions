@@ -95,12 +95,8 @@ namespace RavenQuestionnaire.Core
             store.Initialize();
 
             // IndexCreation.CreateIndexes(typeof(QuestionnaireContainingQuestions).Assembly, store);
-
-//            IndexCreation.CreateIndexes(typeof(UsersInLocationIndex).Assembly, store);
-//            IndexCreation.CreateIndexes(typeof(QuestionnaireGroupedByTemplateIndex).Assembly, store);
-            IndexCreation.CreateIndexes(typeof(CompleteQuestionnaireByStatus).Assembly, store);
-            IndexCreation.CreateIndexes(typeof(UsersInLocationIndex).Assembly, store);
-            IndexCreation.CreateIndexes(typeof(QuestionnaireGroupedByTemplateIndex).Assembly, store);
+            // IndexCreation.CreateIndexes(typeof(UsersInLocationIndex).Assembly, store);
+            // IndexCreation.CreateIndexes(typeof(QuestionnaireGroupedByTemplateIndex).Assembly, store);
             return store;
         }
     }

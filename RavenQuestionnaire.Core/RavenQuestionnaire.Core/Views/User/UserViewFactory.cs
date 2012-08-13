@@ -46,7 +46,7 @@ namespace RavenQuestionnaire.Core.Views.User
             {
                 return null;
             }
-            return new UserView(doc.Id, doc.UserName, doc.Password, doc.Email, doc.CreationDate, doc.Roles, doc.IsLocked,
+            return new UserView(doc.PublicKey, doc.Id, doc.UserName, doc.Password, doc.Email, doc.CreationDate, doc.Roles, doc.IsLocked,
                                 doc.Supervisor, doc.Location.Id);
         }
 
