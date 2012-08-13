@@ -239,9 +239,6 @@
     <Content Include="Views\User\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\User\All.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\User\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -267,7 +264,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4099</DevelopmentServerPort>
+          <DevelopmentServerPort>39264</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:8084/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

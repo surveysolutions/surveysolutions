@@ -56,14 +56,5 @@ namespace Web.Supervisor.Controllers
             var model = viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
             return View(model);
         }
-
-        public ActionResult All(InterviewersInputModel input)
-        {
-            var user = globalInfo.GetCurrentUser();
-            input.Supervisor = user;
-            input.AllSubordinateUsers = true;
-            var model = viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
-            return View(model);
-        }
     }
 }

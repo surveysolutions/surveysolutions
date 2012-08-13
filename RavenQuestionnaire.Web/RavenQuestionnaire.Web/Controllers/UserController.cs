@@ -69,7 +69,14 @@ namespace RavenQuestionnaire.Web.Controllers
                 if (string.IsNullOrEmpty(model.UserId))
                 {
                     var publicKey = Guid.NewGuid();
-                    
+
+                    if (!string.IsNullOrEmpty(model.Supervisor.Id) )
+                    {
+                        var super = viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(model.Supervisor.Id));
+                        model.Supervisor.Name = super.UserName;
+                        model.Supervisor.PublicId = super.PublicKey;
+                    }
+
                     var commandService = NcqrsEnvironment.Get<ICommandService>();
                     commandService.Execute(new CreateUserCommand(publicKey, model.UserName, SimpleHash.ComputeHash(model.Password), model.Email,
                         new UserRoles[] { model.PrimaryRole }, model.IsLocked, model.Supervisor));
