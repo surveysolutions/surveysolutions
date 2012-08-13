@@ -337,8 +337,6 @@
     <Compile Include="Views\Answer\CompleteAnswerView.cs" />
     <Compile Include="Views\Assignment\AssigmentBrowseInputModel.cs" />
     <Compile Include="Views\Assignment\AssigmentBrowseItem.cs" />
-    <Compile Include="Views\Assignment\AssigmentBrowseView.cs" />
-    <Compile Include="Views\Assignment\AssigmentBrowseViewFactory.cs" />
     <Compile Include="Views\Assignment\AssigmentViewInputModel.cs" />
     <Compile Include="Views\Card\CardView.cs" />
     <Compile Include="Views\Card\CardViewFactory.cs" />
@@ -440,6 +438,12 @@
     <Compile Include="Views\StatusReport\StatusReportView.cs" />
     <Compile Include="Views\StatusReport\StatusReportViewFactory.cs" />
     <Compile Include="Views\StatusReport\StatusReportViewInputModel.cs" />
+    <Compile Include="Views\Survey\SurveyBrowseItem.cs" />
+    <Compile Include="Views\Survey\SurveyBrowseView.cs" />
+    <Compile Include="Views\Survey\SurveyGroupInputModel.cs" />
+    <Compile Include="Views\Survey\SurveyGroupViewFactory.cs" />
+    <Compile Include="Views\Survey\SurveyViewFactory.cs" />
+    <Compile Include="Views\Survey\SurveyViewInputModel.cs" />
     <Compile Include="Views\Synchronization\SyncProgressFactory.cs" />
     <Compile Include="Views\Synchronization\SyncProgressInputModel.cs" />
     <Compile Include="Views\Synchronization\SyncProgressView.cs" />

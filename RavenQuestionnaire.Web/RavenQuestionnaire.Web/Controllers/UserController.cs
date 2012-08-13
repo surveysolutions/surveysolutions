@@ -14,7 +14,7 @@ using RavenQuestionnaire.Core.Views.User;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
-    [QuestionnaireAuthorize(UserRoles.Administrator)]
+    //[QuestionnaireAuthorize(UserRoles.Administrator)]
     public class UserController : Controller
     {
         private IViewRepository viewRepository;

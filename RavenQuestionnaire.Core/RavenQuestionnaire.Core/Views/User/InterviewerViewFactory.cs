@@ -1,18 +1,20 @@
 ﻿using System.Linq;
 using Raven.Client;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.ViewSnapshot;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
 namespace RavenQuestionnaire.Core.Views.User
 {
     public class InterviewerViewFactory : IViewFactory<InterviewerInputModel, InterviewerView>
     {
-        private IDocumentSession documentSession;
+        private IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
         private readonly IViewSnapshot store;
 
-        public InterviewerViewFactory(IDocumentSession documentSession, IViewSnapshot store)
+        public InterviewerViewFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession, IViewSnapshot store)
         {
-            this.documentSession = documentSession;
+            this.documentItemSession = documentSession;
             this.store = store;
         }
 
@@ -20,7 +22,7 @@ namespace RavenQuestionnaire.Core.Views.User
 
         public InterviewerView Load(InterviewerInputModel input)
         {
-            var doc = this.documentSession.Load<UserDocument>(input.UserId);
+            var doc = this.documentItemSession.Query();
             
             return new InterviewerView();
         }
