@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Supervisor", "Web.Super
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Headquarter", "Web.Headquarter\Web.Headquarter.csproj", "{CAF95BC3-89CA-4FDA-9CE7-04B63E8FC0BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synchronization.Core", "..\Awesomium\Synchronization.Core\Synchronization.Core.csproj", "{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = RavenQuestionnaire.Web.vsmdi
@@ -404,6 +406,26 @@ Global
 		{CAF95BC3-89CA-4FDA-9CE7-04B63E8FC0BF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CAF95BC3-89CA-4FDA-9CE7-04B63E8FC0BF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CAF95BC3-89CA-4FDA-9CE7-04B63E8FC0BF}.Release|x86.ActiveCfg = Release|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Deploy-Main|Any CPU.ActiveCfg = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Deploy-Main|Any CPU.Build.0 = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Deploy-Main|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Deploy-Main|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Deploy-Main|x86.ActiveCfg = Debug|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
