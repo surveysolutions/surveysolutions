@@ -17,9 +17,9 @@ namespace RavenQuestionnaire.Core.Events
         /// return list of ALL events grouped by aggregate root, please use very carefully
         /// </summary>
         /// <returns></returns>
-        IEnumerable<AggregateRootEventStream> ReadEvents();
-        void WriteEvents(IEnumerable<AggregateRootEventStream> stream);
-        AggregateRootEventStream ReadEventStream(Guid eventSurceId);
+        IEnumerable<AggregateRootEvent> ReadEvents();
+        void WriteEvents(IEnumerable<AggregateRootEvent> stream);
+  //      AggregateRootEventStream ReadEventStream(Guid eventSurceId);
        // IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare();
     }
 
@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Events
 
         #region Implementation of IEventSync
 
-        public abstract IEnumerable<AggregateRootEventStream> ReadEvents();/*
+        public abstract IEnumerable<AggregateRootEvent> ReadEvents();/*
         {
             var myEventStore = NcqrsEnvironment.Get<IEventStore>();
 
@@ -50,14 +50,14 @@ namespace RavenQuestionnaire.Core.Events
             return retval;
         }
         */
-        public AggregateRootEventStream ReadEventStream(Guid eventSurceId)
+       /* public AggregateRootEventStream ReadEventStream(Guid eventSurceId)
         {
             var myEventStore = NcqrsEnvironment.Get<IEventStore>();
             if (myEventStore == null)
                 throw new Exception("IEventStore is not correct.");
             return new AggregateRootEventStream(myEventStore.ReadFrom(eventSurceId,
                                                                       int.MinValue, int.MaxValue));
-        }
+        }*/
 
       /*  public IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare()
         {
@@ -81,29 +81,27 @@ namespace RavenQuestionnaire.Core.Events
             return retval;
         }*/
 
-        public void WriteEvents(IEnumerable<AggregateRootEventStream> stream)
+        public void WriteEvents(IEnumerable<AggregateRootEvent> stream)
         {
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
             if (eventStore == null)
                 throw new Exception("IEventStore is not properly initialized.");
-            foreach (AggregateRootEventStream commitedEventStream in stream)
+            /*foreach (var eventItem in stream)
+            {*/
+            Guid commitId = Guid.NewGuid();
+            var currentEventStore = eventStore.ReadFrom(DateTime.MinValue).ToList();
+            var uncommitedStream = new UncommittedEventStream(commitId);
+            foreach (AggregateRootEvent committedEvent in stream)
             {
-                Guid commitId = Guid.NewGuid();
-                var currentEventStore = eventStore.ReadFrom(commitedEventStream.SourceId,
-                                                            commitedEventStream.FromVersion,
-                                                            commitedEventStream.ToVersion);
-                var uncommitedStream = new UncommittedEventStream(commitId);
-                foreach (AggregateRootEvent committedEvent in commitedEventStream.Events)
-                {
-                    if (currentEventStore.Count(ce => ce.EventIdentifier == committedEvent.EventIdentifier) > 0)
-                        continue;
-
-                    uncommitedStream.Append(committedEvent.CreateUncommitedEvent());
-                }
-                if(!uncommitedStream.Any())
+                if (currentEventStore.Count(ce => ce.EventIdentifier == committedEvent.EventIdentifier) > 0)
                     continue;
-                eventStore.Store(uncommitedStream);
+
+                uncommitedStream.Append(committedEvent.CreateUncommitedEvent());
             }
+            if (!uncommitedStream.Any())
+                return;
+            eventStore.Store(uncommitedStream);
+            /*   }*/
             NCQRSInit.RebuildReadLayer();
         }
 

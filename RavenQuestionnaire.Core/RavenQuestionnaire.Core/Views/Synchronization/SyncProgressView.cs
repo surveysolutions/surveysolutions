@@ -29,10 +29,10 @@ namespace RavenQuestionnaire.Core.Views.Synchronization
                     break;
                 case EventState.InProgress:
                     this.StateDescription = "Retrieving documents";
-                    var initialStateEventsCount = doc.AggregateRoots.Count(e => e.Handled == EventState.Initial);
+                    var initialStateEventsCount = doc.Chunks.Count(e => e.Handled == EventState.Initial);
                     this.ProgressPercentage =
                         (int)
-                        (((decimal) (doc.AggregateRoots.Count - initialStateEventsCount)/doc.AggregateRoots.Count)*100);
+                        (((decimal)(doc.Chunks.Count - initialStateEventsCount) / doc.Chunks.Count) * 100);
                     // process can't display 100% when it's not marked as completed
                     if (this.ProgressPercentage == 100)
                         this.ProgressPercentage = 99;

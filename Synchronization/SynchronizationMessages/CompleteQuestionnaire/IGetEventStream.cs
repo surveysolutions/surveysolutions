@@ -11,6 +11,6 @@ namespace SynchronizationMessages.CompleteQuestionnaire
     public interface IGetEventStream
     {
         [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IGetEventStream/Process", ReplyAction = "http://tempuri.org/IGetEventStream/ProcessResponse")]
-        ImportSynchronizationMessage Process(Guid aggregateRootId);
+        ImportSynchronizationMessage Process(Guid firstEventPulicKey,int length);
     }
 }
