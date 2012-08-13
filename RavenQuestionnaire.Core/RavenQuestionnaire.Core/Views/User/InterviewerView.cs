@@ -33,11 +33,12 @@ namespace RavenQuestionnaire.Core.Views.User
 
         public Dictionary<Guid, string> FeaturedHeaders { get; private set; }
 
-        public InterviewerView(int page, int pageSize, int totalCount, string UserName, List<CompleteQuestionnaireBrowseItem> questionnaires)
+        public InterviewerView(int page, int pageSize, int totalCount, string userName, List<CompleteQuestionnaireBrowseItem> questionnaires)
         {
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
+            this.UserName = userName;
             this.Items = new List<InterviewerItemView>();
             FeaturedHeaders = new Dictionary<Guid, string>();
 

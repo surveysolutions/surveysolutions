@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
 using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core.Views.User;
@@ -18,12 +19,15 @@ namespace Web.Supervisor.Controllers
     {
         private IViewRepository viewRepository;
         private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private IGlobalInfoProvider globalInfo;
 
         public SurveyController(IViewRepository viewRepository, 
-                                IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
+                                IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession,
+             IGlobalInfoProvider globalInfo)
         {
             this.viewRepository = viewRepository;
             this.documentItemSession = documentItemSession;
+            this.globalInfo = globalInfo;
         }
 
         public ActionResult Index()
@@ -41,9 +45,9 @@ namespace Web.Supervisor.Controllers
         [HttpGet]
         public ActionResult Assign(UserBrowseInputModel input, string questionnaireId)
         {
-            input = new UserBrowseInputModel(UserRoles.Supervisor);
-            var users = viewRepository.Load<UserBrowseInputModel, UserBrowseView>(input);
-            ViewBag.Users = new SelectList(users.Items, "Id", "UserName");
+            var user = globalInfo.GetCurrentUser();
+            var users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
+            ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             var questionnaire = documentItemSession.Query().Where(x=>x.CompleteQuestionnaireId==questionnaireId).SingleOrDefault();
             var model = viewRepository.Load<SurveyGroupInputModel, SurveyBrowseView>(new SurveyGroupInputModel(questionnaire.TemplateId, questionnaireId));
             return PartialView("EditColumn", model.Items[0]);
@@ -52,19 +56,14 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult Assign(string Id, string userId, string Save, string Cancel)
         {
+
             var user = viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(userId));
             var responsible = (user!=null) ? new UserLight(user.UserId, user.UserName) : new UserLight();
             if (!string.IsNullOrEmpty(Save))
-                {
-                    var commandService = NcqrsEnvironment.Get<ICommandService>();
-                    commandService.Executlib/Debug/*
-lib/Release/*
-e(new ChangeAssignmentCommand()
-                                               {
-                                                   CompleteQuestionnaireId = Guid.Parse(Id),
-                                                   Responsible = responsible
-                                               });
-                }
+            {
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(new ChangeAssignmentCommand() { CompleteQuestionnaireId = Guid.Parse(Id), Responsible = responsible });
+            }
             var row = documentItemSession.Query().Where(x => x.CompleteQuestionnaireId == Id).SingleOrDefault();
             var model = viewRepository.Load<SurveyGroupInputModel, SurveyBrowseView>(new SurveyGroupInputModel(row.TemplateId, Id));
             return PartialView("DisplayColumn", model.Items[0]);

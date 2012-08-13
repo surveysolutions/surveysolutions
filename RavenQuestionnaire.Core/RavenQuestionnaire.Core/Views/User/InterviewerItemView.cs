@@ -17,7 +17,7 @@ namespace RavenQuestionnaire.Core.Views.User
 
         public InterviewerItemView(CompleteQuestionnaireBrowseItem item, Dictionary<Guid, string> featuredHeaders)
         {
-            TemplateId = item.TemplateId;
+            TemplateId = item.CompleteQuestionnaireId;
             Status = item.Status;
             FeaturedQuestions = new Dictionary<Guid, string>();
 
