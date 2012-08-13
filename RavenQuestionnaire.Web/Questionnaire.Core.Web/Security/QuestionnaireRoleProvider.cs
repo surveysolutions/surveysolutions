@@ -38,9 +38,9 @@ namespace Questionnaire.Core.Web.Security
             if (!retval.HasValue)
             {
                 retval = false;
-                string[] roles = 
-                    this.ViewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(username.ToLower(), null)).Roles.Select(r=>r.ToString()).ToArray();
-               
+                string[] roles =
+                    this.ViewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(username.ToLower(), null)).Roles.Select(r => r.ToString()).ToArray();
+
                 foreach (string dr in roles)
                     if (dr.Equals(roleName))
                     {
@@ -56,9 +56,12 @@ namespace Questionnaire.Core.Web.Security
 
         public override string[] GetRolesForUser(string username)
         {
-            return this.ViewRepository.Load<UserViewInputModel, UserView>(
+            var user = this.ViewRepository.Load<UserViewInputModel, UserView>(
                 new UserViewInputModel(username.ToLower() //bad approach
-                    , null)).Roles.Select(r=>r.ToString()).ToArray();
+                                       , null));
+            if (user == null)
+                return new string[0];
+            return user.Roles.Select(r => r.ToString()).ToArray();
         }
 
         public override void CreateRole(string roleName)
@@ -92,8 +95,7 @@ namespace Questionnaire.Core.Web.Security
             UserRoles role;
             if (Enum.TryParse(roleName, out role))
                 return
-                    this.ViewRepository.Load<UserBrowseInputModel, UserBrowseView>(new UserBrowseInputModel(role)
-                                                                                       {PageSize = 100}).Items
+                    this.ViewRepository.Load<UserBrowseInputModel, UserBrowseView>(new UserBrowseInputModel(role) { PageSize = 100 }).Items
                         .Select(u => u.UserName).ToArray();
             return new string[0];
         }
@@ -104,7 +106,7 @@ namespace Questionnaire.Core.Web.Security
         /// <returns></returns>
         public override string[] GetAllRoles()
         {
-            return Enum.GetNames(typeof (UserRoles));
+            return Enum.GetNames(typeof(UserRoles));
         }
 
         public override string[] FindUsersInRole(string roleName, string usernameToMatch)

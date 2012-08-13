@@ -239,9 +239,6 @@
     <Content Include="Views\User\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\User\All.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\User\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>

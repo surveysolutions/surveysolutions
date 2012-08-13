@@ -30,11 +30,11 @@ namespace RavenQuestionnaire.Core
 
         public override void Load()
         {
-            DocumentStoreProvider storeProvider=new DocumentStoreProvider(_repositoryPath,_isEmbeded);
+            DocumentStoreProvider storeProvider = new DocumentStoreProvider(_repositoryPath, _isEmbeded);
             Bind<DocumentStoreProvider>().ToConstant(storeProvider);
             Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
-          
-          
+
+
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IViewFactory<,>))));
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IExpressionExecutor<,>))));
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(Iterator<>))));
@@ -57,15 +57,15 @@ namespace RavenQuestionnaire.Core
                                                     i.IsGenericType &&
                                                     i.GetGenericTypeDefinition() == typeof(IEventHandler<>)) !=
                                                 null).BindAllInterfaces());
-  
+
             this.Kernel.Bind(
                 x =>
                 x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces()/*.Excluding<IFileStorageService>()*/.BindWith(new RegisterFirstInstanceOfInterface()));
 
 
         }
-       
-   
+
+
     }
 
     public class DocumentStoreProvider : Provider<IDocumentStore>
@@ -84,20 +84,19 @@ namespace RavenQuestionnaire.Core
             if (_isEmbeded)
             {
 
-                store = new EmbeddableDocumentStore() {DataDirectory = _storage, UseEmbeddedHttpServer = true};
+                store = new EmbeddableDocumentStore() { DataDirectory = _storage, UseEmbeddedHttpServer = true };
                 Raven.Database.Server.NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(8080);
             }
             else
             {
-                
-                store = new DocumentStore() {Url = _storage};
+
+                store = new DocumentStore() { Url = _storage };
             }
             store.Initialize();
-            
-            //  IndexCreation.CreateIndexes(typeof(QuestionnaireContainingQuestions).Assembly, store);
-//            IndexCreation.CreateIndexes(typeof(CompleteQuestionnaireByStatus).Assembly, store);
-//            IndexCreation.CreateIndexes(typeof(UsersInLocationIndex).Assembly, store);
-//            IndexCreation.CreateIndexes(typeof(QuestionnaireGroupedByTemplateIndex).Assembly, store);
+
+            // IndexCreation.CreateIndexes(typeof(QuestionnaireContainingQuestions).Assembly, store);
+            // IndexCreation.CreateIndexes(typeof(UsersInLocationIndex).Assembly, store);
+            // IndexCreation.CreateIndexes(typeof(QuestionnaireGroupedByTemplateIndex).Assembly, store);
             return store;
         }
     }

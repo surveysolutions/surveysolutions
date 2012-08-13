@@ -13,10 +13,12 @@ namespace Web.Supervisor.Controllers
     public class UserController : Controller
     {
         private IViewRepository viewRepository;
+        private IGlobalInfoProvider globalInfo;
 
-        public UserController(IViewRepository viewRepository)
+        public UserController(IViewRepository viewRepository, IGlobalInfoProvider globalInfo)
         {
             this.viewRepository = viewRepository;
+            this.globalInfo = globalInfo;
         }
         //
         // GET: /User/
@@ -49,17 +51,8 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult Index(InterviewersInputModel input)
         {
-            var user = GlobalInfo.GetCurrentUser();
+            var user = globalInfo.GetCurrentUser();
             input.Supervisor = user;
-            var model = viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
-            return View(model);
-        }
-
-        public ActionResult All(InterviewersInputModel input)
-        {
-            var user = GlobalInfo.GetCurrentUser();
-            input.Supervisor = user;
-            input.AllSubordinateUsers = true;
             var model = viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
             return View(model);
         }

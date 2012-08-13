@@ -57,7 +57,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void WhenLogINWIthValidModel_UserIsLoggedIn()
         {
             // "mRqHIYxgUmCNXh1JIRItig==" is hash from "1234"
-            UserView userView = new UserView("1", "test", "mRqHIYxgUmCNXh1JIRItig==", "test@bank.com", DateTime.Now,
+            UserView userView = new UserView(Guid.Empty, "1", "test", "mRqHIYxgUmCNXh1JIRItig==", "test@bank.com", DateTime.Now,
                                              new[] {UserRoles.User}, false, null, null);
             Authentication.Setup(x => x.SignIn("test", false));
             Controller.LogOn(new LogOnModel()
