@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Events;
+﻿using RavenQuestionnaire.Core.Events;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using RavenQuestionnaire.Core.Views.Survey;
 using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
+
 
 namespace RavenQuestionnaire.Core.EventHandlers
 {
@@ -16,22 +13,19 @@ namespace RavenQuestionnaire.Core.EventHandlers
                                                                 IEventHandler<QuestionnaireAssignmentChanged>
     {
 
-        private IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore;
-        public Dictionary<Guid, SurveyStatus> AllQuestionnaire { get; set; }
+        private IDenormalizerStorage<SurveyBrowseItem> documentItemStore;
         public int UnAssignment { get; set; }
 
 
-        public StatisticQuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore, Dictionary<Guid, SurveyStatus> AllQuestionnaire)
+        public StatisticQuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<SurveyBrowseItem> documentItemStore)
         {
             this.documentItemStore = documentItemStore;
-            this.AllQuestionnaire = AllQuestionnaire;
+
         }
 
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
-            if(AllQuestionnaire.ContainsKey(evnt.Payload.CompletedQuestionnaireId))
-                return;
-            AllQuestionnaire.Add(evnt.Payload.CompletedQuestionnaireId, evnt.Payload.Status);
+            this.documentItemStore.Store(new SurveyBrowseItem(evnt.Payload.CompletedQuestionnaireId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireId, evnt.Payload.Status, evnt.Payload.Responsible), evnt.Payload.CompletedQuestionnaireId);
             if (evnt.Payload.Responsible == null)
                 UnAssignment++;
         }
@@ -39,6 +33,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
             
+
         }
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
@@ -48,9 +43,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
         {
-            if (!AllQuestionnaire.ContainsKey(evnt.Payload.CompletedQuestionnaireId))
-                return;
-            AllQuestionnaire.Remove(evnt.Payload.CompletedQuestionnaireId);
+            documentItemStore.Remove(evnt.Payload.CompletedQuestionnaireId);
         }
     }
 }
