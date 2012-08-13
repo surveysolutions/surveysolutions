@@ -6,8 +6,8 @@ using Ninject;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Web.WCF;
 using SynchronizationMessages.CompleteQuestionnaire;
+using Web.Supervisor.WCF;
 
 namespace RavenQuestionnaire.Web.Tests.WCF
 {
@@ -31,7 +31,7 @@ namespace RavenQuestionnaire.Web.Tests.WCF
                 var result = target.Process(new EventSyncMessage());
                 Assert.AreEqual(result, ErrorCodes.None);
             }
-            eventSync.Verify(x => x.WriteEvents(It.IsAny<IEnumerable<AggregateRootEventStream>>()),
+            eventSync.Verify(x => x.WriteEvents(It.IsAny<IEnumerable<AggregateRootEvent>>()),
                              Times.Exactly(10));
         }
     }

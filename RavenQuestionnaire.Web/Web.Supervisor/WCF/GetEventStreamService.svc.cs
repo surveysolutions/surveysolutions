@@ -7,7 +7,7 @@ using System.Text;
 using RavenQuestionnaire.Core.Events;
 using SynchronizationMessages.CompleteQuestionnaire;
 
-namespace RavenQuestionnaire.Web.WCF
+namespace Web.Supervisor.WCF
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "GetEventStreamService" in code, svc and config file together.
     public class GetEventStreamService : IGetEventStream
@@ -19,9 +19,10 @@ namespace RavenQuestionnaire.Web.WCF
         private IEventSync eventStore;
         #region Implementation of IGetEventStream
 
-        public ImportSynchronizationMessage Process(Guid aggregateRootId)
+        public ImportSynchronizationMessage Process(Guid firstEventPulicKey, int length)
         {
-            var stream = this.eventStore.ReadEventStream(aggregateRootId);
+            var stream = this.eventStore.ReadEvents().SkipWhile(e => e.EventIdentifier != firstEventPulicKey).Take(length).ToArray();
+            //var index=stream
             return new ImportSynchronizationMessage() {EventStream = stream};
         }
 

@@ -109,6 +109,7 @@
     <Compile Include="Security\QuestionnaireMembershipProvider.cs" />
     <Compile Include="Security\QuestionnaireRoleProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Threading\AsyncQuestionnaireUpdater.cs" />
     <Compile Include="WCF\ServiceDiscover.cs" />
   </ItemGroup>
   <ItemGroup>

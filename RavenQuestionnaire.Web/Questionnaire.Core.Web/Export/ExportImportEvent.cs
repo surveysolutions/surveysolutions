@@ -58,8 +58,7 @@ namespace Questionnaire.Core.Web.Export
                 }
             }
         }
-
-        protected byte[] ExportInternal(Guid clientGuid, Func<IEnumerable<AggregateRootEventStream>> action)
+        protected byte[] ExportInternal(Guid clientGuid, Func<IEnumerable<AggregateRootEvent>> action)
         {
             var data = new ZipFileData
             {

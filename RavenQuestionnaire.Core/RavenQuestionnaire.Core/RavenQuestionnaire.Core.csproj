@@ -319,6 +319,7 @@
     <Compile Include="Services\IQuestionnaireService.cs" />
     <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="Services\ValildationService.cs" />
+    <Compile Include="Utility\EnumerableExtensions.cs" />
     <Compile Include="Utility\OrderStrategy\AsIsStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\AZStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\IOrderStrategy.cs" />

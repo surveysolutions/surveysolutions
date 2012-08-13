@@ -9,7 +9,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
     public class EventSyncMessage : ICustomSerializable
     {
         public Guid SynchronizationKey { get; set; }
-        public AggregateRootEventStream Command { get; set; }
+        public AggregateRootEvent[] Command { get; set; }
 
         public void WriteTo(Stream stream)
         {
@@ -27,7 +27,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
             var commandString = FormatHelper.ReadString(stream);
-            var command = JsonConvert.DeserializeObject<AggregateRootEventStream>(commandString, settings);
+            var command = JsonConvert.DeserializeObject<AggregateRootEvent[]>(commandString, settings);
 
             this.Command = command;
         }

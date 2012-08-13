@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="RavenQuestionnaire.Web.WCF.GetAggragateRootListService" Factory="Ninject.Extensions.Wcf.NinjectServiceHostFactory" CodeBehind="GetAggragateRootListService.svc.cs" %>

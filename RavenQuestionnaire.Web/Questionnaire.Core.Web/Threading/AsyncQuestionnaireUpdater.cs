@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace Web.CAPI.Controllers
+namespace Questionnaire.Core.Web.Threading
 {
     public static class AsyncQuestionnaireUpdater
     {
