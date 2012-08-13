@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Ncqrs;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
@@ -111,7 +112,10 @@ namespace RavenQuestionnaire.Core.Events
                 return;
             eventStore.Store(uncommitedStream);
             /*   }*/
-            NCQRSInit.RebuildReadLayer();
+            var myEventBus = NcqrsEnvironment.Get<IEventBus>();
+            if (myEventBus == null)
+                throw new Exception("IEventBus is not properly initialized.");
+            myEventBus.Publish(uncommitedStream);
         }
 
         #endregion
