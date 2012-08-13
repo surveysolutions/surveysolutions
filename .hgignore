@@ -158,6 +158,8 @@ Awesomium/Synchronization.Core/bin/*
 Awesomium/Synchronization.Core/obj/*
 Externals/lib/*
 lib/Debug/Ncqrs.Eventing.Storage.RavenDB/*
+lib/Debug/*
+lib/Release/*
 QApp/packages/ninject.extensions.conventions.3.0.0.11/lib/*
 lib/Debug/Ncqrs.Eventing.Storage.RavenDB.Tests/*
 QApp/packages/Ninject.3.0.1.10/lib/*
