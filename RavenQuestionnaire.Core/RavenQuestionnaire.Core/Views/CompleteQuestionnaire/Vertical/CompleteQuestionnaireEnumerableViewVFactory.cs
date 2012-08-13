@@ -1,7 +1,7 @@
 ﻿#region
 
 using System.Linq;
-using Raven.Client;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -13,11 +13,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
     public class CompleteQuestionnaireEnumerableViewFactoryV :
         IViewFactory<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>
     {
-        private readonly IDocumentSession documentSession;
+        private readonly IDenormalizerStorage<CompleteQuestionnaireDocument> documentItemSession;
 
-        public CompleteQuestionnaireEnumerableViewFactoryV(IDocumentSession documentSession)
+        public CompleteQuestionnaireEnumerableViewFactoryV(IDenormalizerStorage<CompleteQuestionnaireDocument> documentItemSession)
         {
-            this.documentSession = documentSession;
+            this.documentItemSession = documentItemSession;
         }
 
         #region IViewFactory<CompleteQuestionnaireViewInputModel,CompleteQuestionnaireViewV> Members
@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
         {
             if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
             {
-                var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
+                var doc = documentItemSession.Query().FirstOrDefault(i => i.Id == input.CompleteQuestionnaireId);
              //   var completeQuestionnaireRoot = new Entities.CompleteQuestionnaire(doc);
                 ICompleteGroup group = null;
 

@@ -1,6 +1,4 @@
-﻿using RavenQuestionnaire.Core.Utility;
-
-namespace RavenQuestionnaire.Core.Views.Collection
+﻿namespace RavenQuestionnaire.Core.Views.Collection
 {
     public class CollectionViewInputModel
     {
@@ -8,7 +6,7 @@ namespace RavenQuestionnaire.Core.Views.Collection
 
         public CollectionViewInputModel(string collectionId)
         {
-            this.CollectionId = IdUtil.CreateCollectionId(collectionId);
+            this.CollectionId = collectionId;
         }
     }
 }

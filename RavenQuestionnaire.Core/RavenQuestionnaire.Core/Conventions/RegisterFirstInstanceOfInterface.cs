@@ -43,6 +43,7 @@ namespace RavenQuestionnaire.Core.Conventions
 
             if (!type.IsInterface)
                 return y;
+            
             Assembly containingAssembly = type.Assembly;
 
             if (type.IsGenericType)
@@ -50,7 +51,7 @@ namespace RavenQuestionnaire.Core.Conventions
 
             var matchedType =
                 containingAssembly.GetTypes().FirstOrDefault(
-                    x => x.Namespace == type.Namespace && x.GetInterface(type.FullName) != null);
+                    x => x.Namespace == type.Namespace && !x.IsAbstract && x.GetInterface(type.FullName) != null);
             if (matchedType == null)
                 return y;
             return

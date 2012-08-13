@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.ViewSnapshot;

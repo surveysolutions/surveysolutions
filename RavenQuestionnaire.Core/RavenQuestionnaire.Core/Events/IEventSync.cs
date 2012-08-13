@@ -20,20 +20,20 @@ namespace RavenQuestionnaire.Core.Events
         IEnumerable<AggregateRootEventStream> ReadEvents();
         void WriteEvents(IEnumerable<AggregateRootEventStream> stream);
         AggregateRootEventStream ReadEventStream(Guid eventSurceId);
-        IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare();
+       // IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare();
     }
 
-    public class RavenEventSync : IEventSync
+    public abstract class AbstractEventSync : IEventSync
     {
-        private readonly IViewRepository viewRepository;
+       /* private readonly IViewRepository viewRepository;
         public RavenEventSync(IViewRepository viewRepository)
         {
             this.viewRepository = viewRepository;
-        }
+        }*/
 
         #region Implementation of IEventSync
-       
-        public IEnumerable<AggregateRootEventStream> ReadEvents()
+
+        public abstract IEnumerable<AggregateRootEventStream> ReadEvents();/*
         {
             var myEventStore = NcqrsEnvironment.Get<IEventStore>();
 
@@ -49,7 +49,7 @@ namespace RavenQuestionnaire.Core.Events
             }
             return retval;
         }
-
+        */
         public AggregateRootEventStream ReadEventStream(Guid eventSurceId)
         {
             var myEventStore = NcqrsEnvironment.Get<IEventStore>();
@@ -59,7 +59,7 @@ namespace RavenQuestionnaire.Core.Events
                                                                       int.MinValue, int.MaxValue));
         }
 
-        public IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare()
+      /*  public IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare()
         {
             var myEventStore = NcqrsEnvironment.Get<IEventStore>();
             if (myEventStore == null)
@@ -79,7 +79,7 @@ namespace RavenQuestionnaire.Core.Events
             }
             // return retval;
             return retval;
-        }
+        }*/
 
         public void WriteEvents(IEnumerable<AggregateRootEventStream> stream)
         {

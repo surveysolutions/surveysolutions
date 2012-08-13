@@ -77,8 +77,10 @@ namespace Synchronization.Core.SynchronizationFlow
 
         private const string ShortFileName = "UsbArchive";
         private const string FileExt = ".capi";
+        private const string In = "In";
+        private const string Out = "Out";
         private DriveInfo usbDriver;
-        private string fileName = null;
+      //  private string fileName = null;
    //     private Header header = new Header();
         //private const int MaxSize = int.MaxValue;//504857600;
         private const int MaxSize = 504857600;
@@ -92,7 +94,7 @@ namespace Synchronization.Core.SynchronizationFlow
                 if (d.Name == driver)
                 {
                     this.usbDriver = d;
-                    this.fileName = CreateFileName(0);
+              //      this.fileName = CreateFileName(0);
 
                     break;
                 }
@@ -102,6 +104,14 @@ namespace Synchronization.Core.SynchronizationFlow
                 throw new Exception(string.Format("USB driver with name {0} not found", driver));
         }
 
+        public string InFile
+        {
+            get { return string.Format("{0}{1}{2}{3}{4}", this.usbDriver.Name, Path.DirectorySeparatorChar, In, ShortFileName, FileExt); }
+        }
+        public string OutFile
+        {
+            get { return string.Format("{0}{1}{2}{3}{4}", this.usbDriver.Name, Path.DirectorySeparatorChar, Out, ShortFileName, FileExt); }
+        }
         private string CreateFileName(int chunkNumber)
         {
             return this.usbDriver.Name + Path.DirectorySeparatorChar + ShortFileName + (chunkNumber > 0 ? chunkNumber.ToString() : string.Empty) + FileExt;
@@ -116,11 +126,11 @@ namespace Synchronization.Core.SynchronizationFlow
             return stream;
         }
 
-        protected FileStream CreateFile()
+       /* protected FileStream CreateFile()
         {
           //  var space = this.usbDriver.TotalFreeSpace;
             return File.Create(this.fileName);
-            /*  var fileIndex = (int)(this.usbDriver.TotalFreeSpace / MaxSize);
+              var fileIndex = (int)(this.usbDriver.TotalFreeSpace / MaxSize);
             var fileVolume = (int)(this.usbDriver.TotalFreeSpace % MaxSize);
 
             FileStream fileStream = null;
@@ -142,25 +152,25 @@ namespace Synchronization.Core.SynchronizationFlow
                 fileStream = PutFile(fileIndex, fileVolume);
             }
             
-            return fileStream;*/
-        }
+            return fileStream;
+        }*/
 
-        private FileStream ReadHeader()
+     /*   private FileStream ReadHeader()
         {
             var fileStream = File.Open(this.fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
            // fileStream.Read(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);
 
             return fileStream;
-        }
+        }*/
 
         public void SaveArchive(byte[] data)
         {
 
             try
             {
-                if(File.Exists(this.fileName))
-                    File.Delete(this.fileName);
-                var fileStream = CreateFile();
+                if(File.Exists(this.OutFile))
+                    File.Delete(this.OutFile);
+                var fileStream = File.Create(this.OutFile); 
 
          /*       int newPosition = this.header.ArchivePosition;
 
@@ -198,7 +208,7 @@ namespace Synchronization.Core.SynchronizationFlow
         public byte[] LoadArchive()
         {
             byte[] result = null;
-            using (var file = File.Open(this.fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            using (var file = File.Open(this.InFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             {
                 byte[] buffer = new byte[16*1024];
                 using (MemoryStream ms = new MemoryStream())
@@ -213,10 +223,10 @@ namespace Synchronization.Core.SynchronizationFlow
             }
             return result;
         }
-
+/*
         public string FileName
         {
             get { return this.fileName; }
-        }
+        }*/
     }
 }
