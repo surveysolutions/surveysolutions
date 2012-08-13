@@ -204,8 +204,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\CollectionController.cs" />
-    <Compile Include="Controllers\AsyncQuestionnaireUpdater.cs" />
-    <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\SynchronizationsController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
@@ -231,18 +229,6 @@
     <Compile Include="Models\QuestionConditionModel.cs" />
     <Compile Include="Models\SwitcherModel.cs" />
     <Compile Include="Synchronization\HQEventSync.cs" />
-    <Compile Include="WCF\EventPipeService.svc.cs">
-      <DependentUpon>EventPipeService.svc</DependentUpon>
-    </Compile>
-    <Compile Include="WCF\GetAggragateRootListService.svc.cs">
-      <DependentUpon>GetAggragateRootListService.svc</DependentUpon>
-    </Compile>
-    <Compile Include="WCF\GetEventStreamService.svc.cs">
-      <DependentUpon>GetEventStreamService.svc</DependentUpon>
-    </Compile>
-    <Compile Include="WCF\SpotSyncService.svc.cs">
-      <DependentUpon>SpotSyncService.svc</DependentUpon>
-    </Compile>
     <Content Include="Content\img\bar-chart.png" />
     <Content Include="Content\img\bill.jpg" />
     <Content Include="Content\img\lock.png" />
@@ -594,10 +580,6 @@
     <Content Include="Views\CompleteQuestionnaire\Index.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Result.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Take.cshtml" />
-    <Content Include="WCF\EventPipeService.svc" />
-    <Content Include="WCF\GetAggragateRootListService.svc" />
-    <Content Include="WCF\GetEventStreamService.svc" />
-    <Content Include="WCF\SpotSyncService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -980,7 +962,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Group\Mobile\_CommentsBlock.cshtml" />
-    <Content Include="WCF\Web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

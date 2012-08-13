@@ -1,11 +1,10 @@
 ﻿using System;
 using System.ServiceModel.Activation;
 using Ninject;
-using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Events;
 using SynchronizationMessages.CompleteQuestionnaire;
 
-namespace RavenQuestionnaire.Web.WCF
+namespace Web.Supervisor.WCF
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]

@@ -13,8 +13,8 @@ using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.User;
-using RavenQuestionnaire.Web.Controllers;
-using RavenQuestionnaire.Web.Models;
+using Web.CAPI.Controllers;
+using Web.CAPI.Models;
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {

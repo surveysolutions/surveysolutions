@@ -4,7 +4,7 @@ using System.ServiceModel.Activation;
 using System.Web;
 using SynchronizationMessages.Discover;
 
-namespace RavenQuestionnaire.Web.WCF
+namespace Web.Supervisor.WCF
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "SpotSyncService" in code, svc and config file together.
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]

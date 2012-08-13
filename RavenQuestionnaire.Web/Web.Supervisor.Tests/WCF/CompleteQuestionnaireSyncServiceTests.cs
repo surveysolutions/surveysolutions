@@ -6,8 +6,8 @@ using Ninject;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Web.WCF;
 using SynchronizationMessages.CompleteQuestionnaire;
+using Web.Supervisor.WCF;
 
 namespace RavenQuestionnaire.Web.Tests.WCF
 {

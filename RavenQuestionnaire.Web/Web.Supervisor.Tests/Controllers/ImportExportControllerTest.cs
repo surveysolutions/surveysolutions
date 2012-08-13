@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Web.Mvc;
 using Moq;
 using System.Web;
-using System.Web.Mvc;
 using NUnit.Framework;
 using System.Threading;
 using Questionnaire.Core.Web.Export;
-using RavenQuestionnaire.Web.Utils;
-using RavenQuestionnaire.Web.Controllers;
+using Web.Supervisor.Controllers;
 
 
 namespace RavenQuestionnaire.Web.Tests.Controllers

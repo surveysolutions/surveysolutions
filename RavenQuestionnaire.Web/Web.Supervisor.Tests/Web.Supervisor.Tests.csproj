@@ -6,11 +6,11 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{36EF9349-47B6-452B-8556-5952DAF19A43}</ProjectGuid>
+    <ProjectGuid>{0C236AF6-B2AF-4595-B914-FC2DE02BEC56}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RavenQuestionnaire.Web.Tests</RootNamespace>
-    <AssemblyName>RavenQuestionnaire.Web.Tests</AssemblyName>
+    <RootNamespace>Web.Supervisor.Tests</RootNamespace>
+    <AssemblyName>Web.Supervisor.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -33,14 +33,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zip">
-      <HintPath>..\..\ExternalLibs\Ionic.Zip.dll</HintPath>
-    </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
@@ -49,12 +43,10 @@
       <HintPath>..\packages\NUnit.2.6.1\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
@@ -63,38 +55,29 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\AccountControllerTest.cs" />
-    <Compile Include="Controllers\CollectionControllerTest.cs" />
-    <Compile Include="Controllers\GroupControllerTest.cs" />
-    <Compile Include="Controllers\QuestionControllerTest.cs" />
-    <Compile Include="Controllers\QuestionnaireControllerTest.cs" />
-    <Compile Include="Membership\QuestionnaireMembershipProviderTests.cs" />
-    <Compile Include="Membership\QuestionnaireRoleProviderTest.cs" />
+    <Compile Include="Controllers\ImportExportControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stubs\TestMembershipProvider.cs" />
-    <Compile Include="Stubs\TestRoleProvider.cs" />
-    <Compile Include="Utils\ExportImportEventTest.cs" />
+    <Compile Include="WCF\CompleteQuestionnaireSyncServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
       <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
       <Name>RavenQuestionnaire.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
+      <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
+      <Name>SynchronizationMessages</Name>
     </ProjectReference>
     <ProjectReference Include="..\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
       <Name>Questionnaire.Core.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RavenQuestionnaire.Web\RavenQuestionnaire.Web.csproj">
-      <Project>{045B96C8-3A7C-4662-9C48-62543D7C1E74}</Project>
-      <Name>RavenQuestionnaire.Web</Name>
+    <ProjectReference Include="..\Web.Supervisor\Web.Supervisor.csproj">
+      <Project>{41E11B34-5BEB-48E6-B9B0-2DEA05CFA7FB}</Project>
+      <Name>Web.Supervisor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
