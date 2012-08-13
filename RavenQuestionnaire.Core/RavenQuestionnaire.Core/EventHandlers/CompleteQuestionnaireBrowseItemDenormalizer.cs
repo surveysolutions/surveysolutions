@@ -32,7 +32,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
             this.documentItemStore.Store(new CompleteQuestionnaireBrowseItem(
                                             evnt.Payload.CompletedQuestionnaireId.ToString(),
                                             evnt.Payload.QuestionnaireId.ToString(),
-                                            "", evnt.Payload.CreationDate,
+                                            evnt.Payload.Questionnaire.Title, evnt.Payload.CreationDate,
                                             DateTime.Now,
                                             evnt.Payload.Status, 
                                             evnt.Payload.TotalQuestionCount, 

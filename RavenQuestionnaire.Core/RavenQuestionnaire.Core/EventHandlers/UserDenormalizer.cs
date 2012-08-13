@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<UserStatusChanged> evnt)
         {
-            var item = this.users.GetByGuid(evnt.Payload.PublicKey);
+            var item = this.users.GetByGuid(evnt.EventSourceId);
 
             item.IsLocked = evnt.Payload.IsLocked;
         }

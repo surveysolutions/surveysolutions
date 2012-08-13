@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "User assignments";
 }
-<h2>@(Model.UserName)'s </h2>
+<h2>@(Model.UserName)'s assignment</h2>
 <table class="table table-striped table-bordered table-condensed">
     <thead>
         <tr>
@@ -20,7 +20,7 @@
         {
             <tr>
                 <td>
-                    <a href="#">@item.TemplateId</a>
+                    <a href="@Url.Action("Assigments", "Survey", new { id = item.TemplateId })">@item.QuestionnaireTitle</a>
                 </td>
                 @foreach (var question in item.FeaturedQuestions)
                 {
