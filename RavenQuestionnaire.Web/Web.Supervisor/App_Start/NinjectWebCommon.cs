@@ -8,7 +8,9 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using Raven.Client;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Web.App_Start;
+using Web.Supervisor.Synchronization;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(Web.Supervisor.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(Web.Supervisor.App_Start.NinjectWebCommon), "Stop")]
@@ -64,7 +66,7 @@ namespace Web.Supervisor.App_Start
             KernelLocator.SetKernel(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-
+            kernel.Bind<IEventSync>().To<SupervisorEventSync>();
             RegisterServices(kernel);
             NCQRSInit.Init(WebConfigurationManager.AppSettings["Raven.DocumentStore"], kernel);
             

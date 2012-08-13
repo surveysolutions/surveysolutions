@@ -30,6 +30,7 @@ using Awesomium.Mono.Forms;
 #else
 using Awesomium.Core;
 using Awesomium.Windows.Forms;
+using Client.ExportEvent;
 using Client.Properties;
 using System.Net;
 using System.IO;
@@ -61,7 +62,7 @@ namespace Client
             this.pleaseWait = new PleaseWaitControl();
             this.clientSettings=new ClientSettingsProvider();
             this.export = new Export(this.pleaseWait, this.clientSettings);
-            export.EndOfExport+= new EndOfExport(EndOfExportMain);
+            export.EndOfExport += new EventHandler<ExportEvent.SynchronizationCompletedEvent>(export_EndOfExport);
             InitializeComponent();
 
             this.statusStrip1.Hide();
@@ -72,6 +73,14 @@ namespace Client
            
             webView.Source = new Uri(Settings.Default.DefaultUrl);
             this.webView.Focus();
+        }
+
+        void export_EndOfExport(object sender, ExportEvent.SynchronizationCompletedEvent e)
+        {
+            if (this.InvokeRequired)
+                this.Invoke(new MethodInvoker(() => { this.pullToolStripMenuItem.Enabled = true; }));
+            if (e.ActionType == SyncType.Pull)
+                webView.Reload();
         }
         #endregion
 
@@ -145,13 +154,6 @@ namespace Client
 
         #region Event Handlers
        
-        public void EndOfExportMain()
-        {
-            if (this.InvokeRequired)
-                this.Invoke(new MethodInvoker(() => { this.pullToolStripMenuItem.Enabled = true; }));
-            /*else
-                this.exportItem.Enabled = true;*/
-        }
 
         private void OnIsDirtyChanged(object sender, EventArgs e)
         {

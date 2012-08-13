@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 using Moq;
 using NUnit.Framework;
 using Ncqrs;
@@ -7,7 +6,6 @@ using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -17,9 +15,6 @@ using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Views.Status;
-using RavenQuestionnaire.Web.Controllers;
-using RavenQuestionnaire.Web.Models;
 using Web.CAPI.Controllers;
 using Web.CAPI.Models;
 
@@ -97,26 +92,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             CommandServiceMock.Verify(x => x.Execute(It.IsAny<DeleteCompleteQuestionnaireCommand>()), Times.Once());
         }
 
-
-        [Test]
-        public void Participate_EmptyId_404Exception()
-        {
-            StatusDocument innerDoc = new StatusDocument();
-            innerDoc.Id = "statusdocuments/cqId";
-
-            StatusView status = new StatusView();
-
-                //innerDoc.Id, innerDoc.Title, innerDoc.IsVisible, innerDoc.StatusRoles, innerDoc.QuestionnaireId, innerDoc.FlowRules); 
-            
-            
-            ViewRepositoryMock.Setup(
-               x =>
-               x.Load<StatusViewInputModel, StatusView>(
-                   It.IsAny<StatusViewInputModel>()))
-               .Returns(status);
-            Assert.Throws<HttpException>(() => Controller.Participate("",""));
-        }
-
+        
         [Test]
         public void Participate_ValidId_FormIsReturned()
         {

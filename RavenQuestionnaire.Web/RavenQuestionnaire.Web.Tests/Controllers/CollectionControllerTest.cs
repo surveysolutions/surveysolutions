@@ -1,17 +1,4 @@
-﻿using Moq;
-using System;
-using NUnit.Framework;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
-using RavenQuestionnaire.Core;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Web.Controllers;
-using RavenQuestionnaire.Core.Repositories;
-using RavenQuestionnaire.Core.Views.Collection;
-using RavenQuestionnaire.Core.Commands.Collection;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿using NUnit.Framework;
 
 
 namespace RavenQuestionnaire.Web.Tests.Controllers

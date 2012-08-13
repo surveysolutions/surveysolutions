@@ -16,11 +16,6 @@ namespace Questionnaire.Core.Web.Export
     {
         void Import(HttpPostedFileBase uploadFile);
         byte[] Export(Guid clientGuid);
-        /// <summary>
-        /// return list of ALL events grouped by aggregate root, please use very carefully
-        /// </summary>
-        /// <returns></returns>
-        byte[] ExportAllEvents(Guid clientGuid);
     }
 
     public class ExportImportEvent : IExportImport
@@ -91,13 +86,10 @@ namespace Questionnaire.Core.Web.Export
 
         public byte[] Export(Guid clientGuid)
         {
-            return ExportInternal(clientGuid, this.synchronizer.ReadCompleteQuestionare);
-        }
-
-        public byte[] ExportAllEvents(Guid clientGuid)
-        {
             return ExportInternal(clientGuid, this.synchronizer.ReadEvents);
         }
+
+        
 
         #endregion
 
