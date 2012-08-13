@@ -162,3 +162,7 @@ QApp/packages/ninject.extensions.conventions.3.0.0.11/lib/*
 lib/Debug/Ncqrs.Eventing.Storage.RavenDB.Tests/*
 QApp/packages/Ninject.3.0.1.10/lib/*
 RavenQuestionnaire.Web/Web.Headquarter/App_Data/ClientDependency/win1-a22c93cfbc83e5692ccf32c6f6e02652-map.xml
+RavenQuestionnaire.Web/Web.CAPI.Tests/bin/*
+RavenQuestionnaire.Web/Web.CAPI.Tests/obj/*
+RavenQuestionnaire.Web/Web.Supervisor.Tests/bin/*
+RavenQuestionnaire.Web/Web.Supervisor.Tests/obj/*

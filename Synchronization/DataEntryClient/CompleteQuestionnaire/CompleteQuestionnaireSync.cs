@@ -15,6 +15,7 @@ using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Synchronization;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Events;
+using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Event;
 using SynchronizationMessages.CompleteQuestionnaire;
 using SynchronizationMessages.Handshake;
@@ -69,21 +70,22 @@ namespace DataEntryClient.CompleteQuestionnaire
             this.chanelFactoryWrapper.Execute<IEventPipe>(this.baseAdress,
                 (client)=>
                     {
-                        var events = this.eventStore.ReadEvents();
-                        invoker.Execute(new PushEventsCommand(this.processGuid, events));
-                        foreach (AggregateRootEventStream aggregateRootEventStream in events)
+                        var events = this.eventStore.ReadEventsByChunks().ToList();
+                        var command = new PushEventsCommand(this.processGuid, events);
+                        invoker.Execute(command);
+                        for (int i = 0; i < events.Count;i++ )
                         {
                             invoker.Execute(new ChangeEventStatusCommand(this.processGuid,
-                                                                         aggregateRootEventStream.SourceId,
+                                                                         command.EventChuncks[i].EventChunckPublicKey,
                                                                          EventState.InProgress));
                             var message = new EventSyncMessage
                                               {
-                                                  Command = aggregateRootEventStream,
+                                                  Command = events[i].ToArray(),
                                                   SynchronizationKey = clientKey
                                               };
                             ErrorCodes returnCode = client.Process(message);
                             invoker.Execute(new ChangeEventStatusCommand(this.processGuid,
-                                                                       aggregateRootEventStream.SourceId,
+                                                                       command.EventChuncks[i].EventChunckPublicKey,
                                                                        returnCode == ErrorCodes.None
                                                                              ? EventState.Completed
                                                                              : EventState.Error));
@@ -107,29 +109,28 @@ namespace DataEntryClient.CompleteQuestionnaire
                 if (result == null)
                     throw new Exception("aggregate roots list is empty");
                 invoker.Execute(new PushEventsCommand(this.processGuid,result.Roots));
-                List<AggregateRootEventStream> events = new List<AggregateRootEventStream>();
+                List<AggregateRootEvent> events = new List<AggregateRootEvent>();
                 this.chanelFactoryWrapper.Execute<IGetEventStream>(this.baseAdress, (client) =>
                                                                                         {
-                                                                                            foreach (
-                                                                                                var  root in
-                                                                                                    result.Roots)
+                                                                                            foreach (var root in result.Roots)
                                                                                             {
                                                                                                 try
                                                                                                 {
 
-                                                                                                
-                                                                                                var stream =client.Process(root.AggregateRootPublicKey).EventStream;
-                                                                                                events.Add(stream);
+                                                                                                if(root.EventKeys.Count==0)
+                                                                                                    continue;
+                                                                                                var stream = client.Process(root.EventKeys.First(), root.EventKeys.Count).EventStream;
+                                                                                                    events.AddRange(stream);
                                                                                                 invoker.Execute(
                                                                                                     new ChangeEventStatusCommand
-                                                                                                        (this.processGuid,root.AggregateRootPublicKey,EventState.Completed));
+                                                                                                        (this.processGuid, root.EventChunckPublicKey, EventState.Completed));
                                                                                                 }
                                                                                                 catch (Exception)
                                                                                                 {
 
                                                                                                     invoker.Execute(
                                                                                                     new ChangeEventStatusCommand
-                                                                                                        (this.processGuid, root.AggregateRootPublicKey, EventState.Error));
+                                                                                                        (this.processGuid, root.EventChunckPublicKey, EventState.Error));
                                                                                                 }
                                                                                             }
                                                                                         });

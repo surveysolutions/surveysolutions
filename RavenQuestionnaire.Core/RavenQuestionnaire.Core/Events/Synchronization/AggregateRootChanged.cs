@@ -12,6 +12,6 @@ namespace RavenQuestionnaire.Core.Events.Synchronization
     public class AggregateRootStatusChanged
     {
         public EventState Status { get; set; }
-        public Guid AggregateRootPublicKey { get; set; }
+        public Guid EventChunckPublicKey { get; set; }
     }
 }
