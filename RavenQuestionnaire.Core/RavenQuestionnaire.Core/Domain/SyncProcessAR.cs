@@ -35,11 +35,11 @@ namespace RavenQuestionnaire.Core.Domain
                                           Handled = EventState.Initial
                                       };
         }
-        public void PushAggregateRootEventStream(IEnumerable<ProcessedEventChunk> aggregateRoots)
+        public void PushAggregateRootEventStream(IEnumerable<ProcessedEventChunk> eventChuncks)
         {
             if (this._innerDocument.EndDate.HasValue)
                 throw new InvalidOperationException("process is finished, events can't be added");
-            ApplyEvent(new AggregateRootEventStreamPushed() {AggregateRoots = aggregateRoots});
+            ApplyEvent(new AggregateRootEventStreamPushed() { AggregateRoots = eventChuncks });
         }
         protected void OnPushAggregateRootEventStream(AggregateRootEventStreamPushed e)
         {

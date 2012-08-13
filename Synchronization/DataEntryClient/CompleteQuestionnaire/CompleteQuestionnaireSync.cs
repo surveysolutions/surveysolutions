@@ -15,6 +15,7 @@ using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Synchronization;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Events;
+using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.Event;
 using SynchronizationMessages.CompleteQuestionnaire;
 using SynchronizationMessages.Handshake;
@@ -69,22 +70,22 @@ namespace DataEntryClient.CompleteQuestionnaire
             this.chanelFactoryWrapper.Execute<IEventPipe>(this.baseAdress,
                 (client)=>
                     {
-                        var events = this.eventStore.ReadEvents().ToList();
+                        var events = this.eventStore.ReadEventsByChunks().ToList();
                         var command = new PushEventsCommand(this.processGuid, events);
                         invoker.Execute(command);
-                        foreach (var chunk in command.AggregateRoots)
+                        for (int i = 0; i < events.Count;i++ )
                         {
                             invoker.Execute(new ChangeEventStatusCommand(this.processGuid,
-                                                                         chunk.EventChunckPublicKey,
+                                                                         command.EventChuncks[i].EventChunckPublicKey,
                                                                          EventState.InProgress));
                             var message = new EventSyncMessage
                                               {
-                                                  Command = events.SkipWhile(e=>e.EventIdentifier!= chunk.EventKeys.First()).Take(chunk.EventKeys.Count).ToArray(),
+                                                  Command = events[i].ToArray(),
                                                   SynchronizationKey = clientKey
                                               };
                             ErrorCodes returnCode = client.Process(message);
                             invoker.Execute(new ChangeEventStatusCommand(this.processGuid,
-                                                                       chunk.EventChunckPublicKey,
+                                                                       command.EventChuncks[i].EventChunckPublicKey,
                                                                        returnCode == ErrorCodes.None
                                                                              ? EventState.Completed
                                                                              : EventState.Error));
@@ -111,9 +112,7 @@ namespace DataEntryClient.CompleteQuestionnaire
                 List<AggregateRootEvent> events = new List<AggregateRootEvent>();
                 this.chanelFactoryWrapper.Execute<IGetEventStream>(this.baseAdress, (client) =>
                                                                                         {
-                                                                                            foreach (
-                                                                                                var  root in
-                                                                                                    result.Roots)
+                                                                                            foreach (var root in result.Roots)
                                                                                             {
                                                                                                 try
                                                                                                 {

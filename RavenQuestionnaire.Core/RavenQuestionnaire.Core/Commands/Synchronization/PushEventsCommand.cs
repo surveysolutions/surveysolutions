@@ -15,17 +15,20 @@ namespace RavenQuestionnaire.Core.Commands.Synchronization
     [MapsToAggregateRootMethod(typeof(SyncProcessAR), "PushAggregateRootEventStream")]
     public class PushEventsCommand : CommandBase
     {
-        public IEnumerable<ProcessedEventChunk> AggregateRoots { get; set; }
+        public IList<ProcessedEventChunk> EventChuncks { get; set; }
         [AggregateRootId]
         public Guid ProcessGuid { get; set; }
-        public PushEventsCommand(Guid processGuid, IEnumerable<ProcessedEventChunk> aggregateRoots)
+        public PushEventsCommand(Guid processGuid, IList<ProcessedEventChunk> eventChuncks)
         {
-            this.AggregateRoots = aggregateRoots;
+            this.EventChuncks = eventChuncks;
             this.ProcessGuid = processGuid;
         }
-        public PushEventsCommand(Guid processGuid, IEnumerable<AggregateRootEvent> aggregateRoots)
+        public PushEventsCommand(Guid processGuid, IList<IEnumerable<AggregateRootEvent>> eventChuncks)
         {
-            this.AggregateRoots = new[] {new ProcessedEventChunk(aggregateRoots)};
+           // this.AggregateRoots = new[] {new ProcessedEventChunk(aggregateRoots)};
+            var result = new List<ProcessedEventChunk>(eventChuncks.Count);
+            result.AddRange(eventChuncks.Select(aggregateRootEvents => new ProcessedEventChunk(aggregateRootEvents)));
+            this.EventChuncks = result;
             this.ProcessGuid = processGuid;
         }
     }

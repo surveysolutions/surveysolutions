@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Events;
+using RavenQuestionnaire.Core.Utility;
 using SynchronizationMessages.CompleteQuestionnaire;
 
 namespace Web.Supervisor.WCF
@@ -22,8 +23,10 @@ namespace Web.Supervisor.WCF
 
         public ListOfAggregateRootsForImportMessage Process()
         {
-            var events = this.eventStore.ReadEvents();
-            return new ListOfAggregateRootsForImportMessage() {Roots = new[] {new ProcessedEventChunk(events)}};
+            var events = this.eventStore.ReadEventsByChunks();
+
+            return new ListOfAggregateRootsForImportMessage()
+                       {Roots = events.Select(e => new ProcessedEventChunk(e)).ToList()};
         }
 
         #endregion
