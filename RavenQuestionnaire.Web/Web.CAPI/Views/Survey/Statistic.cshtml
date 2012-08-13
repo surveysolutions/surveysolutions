@@ -1,4 +1,5 @@
-﻿@using RavenQuestionnaire.Core.Views.Statistics
+﻿@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Views.Statistics
 @model CompleteQuestionnaireStatisticView
 <div data-role="panel" data-id="menu">
     <!-- Start of first page -->
@@ -24,14 +25,14 @@
                     <li><a data-role="button" data-corners="false" href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId})" rel="external" data-ajax="false">
                             Survey</a></li>
                     <li>
-                        @if (Model.Status.Name == "Completed")
+                        @if (Model.Status.PublicId == SurveyStatus.Complete.PublicId)
                         {
-                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("ReInit", "Survey", new {id = Model.CompleteQuestionnaireId})">
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("ReInit", "Survey", new { id = Model.Id })">
                                 ReInit</a>
                         }
                         else
                         {
-                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("Complete", "Survey", new {id = Model.CompleteQuestionnaireId})">                                Complete</a>
+                            <a data-corners="false" href="#transparent" data-rel="popup" data-role="button" data-inline="true" id="CompleteLink" returnlink="@Url.Action("Dashboard", "Survey")" link="@Url.Action("Complete", "Survey", new { id=@Model.Id})">Complete</a>
                         }</li>
                 </ul>
             </div>

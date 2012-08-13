@@ -32,8 +32,7 @@ namespace RavenQuestionnaire.Core.Views.User
 
             else if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))
             {
-                doc = users.Query().FirstOrDefault(u => u.UserName == input.UserName);
-
+                doc = users.Query().FirstOrDefault(u => string.Compare(u.UserName, input.UserName, true) == 0);
             }
             if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
             {
