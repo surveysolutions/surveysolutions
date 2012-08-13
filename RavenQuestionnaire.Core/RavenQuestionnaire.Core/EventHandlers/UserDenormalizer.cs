@@ -8,7 +8,9 @@ using RavenQuestionnaire.Core.Events.User;
 
 namespace RavenQuestionnaire.Core.EventHandlers
 {
-    public class UserDenormalizer : IEventHandler<NewUserCreated>, IEventHandler<UserChanged>
+    public class UserDenormalizer : IEventHandler<NewUserCreated>, 
+        IEventHandler<UserChanged>,
+        IEventHandler<UserStatusChanged>
     {
         private IDenormalizerStorage<UserDocument> users;
         public UserDenormalizer(IDenormalizerStorage<UserDocument> users)
@@ -49,5 +51,12 @@ namespace RavenQuestionnaire.Core.EventHandlers
         }
 
         #endregion
+
+        public void Handle(IPublishedEvent<UserStatusChanged> evnt)
+        {
+            var item = this.users.GetByGuid(evnt.Payload.PublicKey);
+
+            item.IsLocked = evnt.Payload.IsLocked;
+        }
     }
 }
