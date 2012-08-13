@@ -4,6 +4,7 @@ using System.Linq;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Web.App_Start;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -21,6 +22,14 @@ namespace RavenQuestionnaire.Core.Events
         void WriteEvents(IEnumerable<AggregateRootEvent> stream);
   //      AggregateRootEventStream ReadEventStream(Guid eventSurceId);
        // IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare();
+    }
+
+    public static class EventSyncExtensions
+    {
+        public static IEnumerable<IEnumerable<AggregateRootEvent>> ReadEventsByChunks(this IEventSync source, int chunksize =2048)
+        {
+            return source.ReadEvents().Chunk(chunksize);
+        }
     }
 
     public abstract class AbstractEventSync : IEventSync
