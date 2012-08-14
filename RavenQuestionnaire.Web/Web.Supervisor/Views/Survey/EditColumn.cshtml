@@ -1,11 +1,12 @@
-﻿@model RavenQuestionnaire.Core.Views.Survey.SurveyGroupItem
+﻿@using Web.Supervisor.Models
+@model AssigmentModel
 
 <table>
 <tr>
-<td colspan="@Model.FeatureadValue.Count+1">
-    @using (Ajax.BeginForm("Assign", "Survey", new AjaxOptions() { UpdateTargetId = "responsible-" + @Model.Id, InsertionMode=InsertionMode.Replace}))
+<td colspan="@Model.ColumnsCount">
+    @using (Ajax.BeginForm("Assign", "Survey", new AjaxOptions() { UpdateTargetId = "responsible-" + @Model.CompleteQuestionnaireId, InsertionMode=InsertionMode.Replace}))
     {
-        @Html.Hidden("Id", Model.Id)
+        @Html.Hidden("Id", Model.CompleteQuestionnaireId)
         @Html.DropDownList("userId", ViewBag.Users as SelectList)
         
         <input name="Save" type="submit" value="Save" />
