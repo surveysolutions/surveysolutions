@@ -1,3 +1,18 @@
 ﻿body {
 	padding-top: 40px;
 }
+.assignment-form {
+    display: none;    
+}
+
+.assignment-view {
+    display: block
+}
+
+.showForm .assignment-form {
+    display: block;
+}
+
+.showForm .assignment-view {
+    display: block;
+}
