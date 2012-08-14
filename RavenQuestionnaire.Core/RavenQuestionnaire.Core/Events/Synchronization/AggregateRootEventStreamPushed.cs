@@ -11,6 +11,6 @@ namespace RavenQuestionnaire.Core.Events.Synchronization
     [EventName("RavenQuestionnaire.Core:Events:AggregateRootEventStreamPushed")]
     public class AggregateRootEventStreamPushed
     {
-        public IEnumerable<ProcessedAggregateRoot> AggregateRoots { get; set; }
+        public IEnumerable<ProcessedEventChunk> AggregateRoots { get; set; }
     }
 }

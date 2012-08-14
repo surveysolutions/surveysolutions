@@ -35,29 +35,28 @@ namespace RavenQuestionnaire.Core.Domain
                                           Handled = EventState.Initial
                                       };
         }
-        public void PushAggregateRootEventStream(IEnumerable<ProcessedAggregateRoot> aggregateRoots)
+        public void PushAggregateRootEventStream(IEnumerable<ProcessedEventChunk> eventChuncks)
         {
             if (this._innerDocument.EndDate.HasValue)
                 throw new InvalidOperationException("process is finished, events can't be added");
-            ApplyEvent(new AggregateRootEventStreamPushed() {AggregateRoots = aggregateRoots});
+            ApplyEvent(new AggregateRootEventStreamPushed() { AggregateRoots = eventChuncks });
         }
         protected void OnPushAggregateRootEventStream(AggregateRootEventStreamPushed e)
         {
             this._innerDocument.Handled = EventState.InProgress;
-            this._innerDocument.AggregateRoots = e.AggregateRoots.ToList();
+            this._innerDocument.Chunks = e.AggregateRoots.ToList();
         }
-        public void ChangeAggregateRootStatus(Guid aggregateRootPublicKey, EventState status)
+        public void ChangeAggregateRootStatus(Guid eventChunckPublicKey, EventState status)
         {
             if (this._innerDocument.EndDate.HasValue)
                 throw new InvalidOperationException("process is finished, events can't be modifyed");
-            ApplyEvent(new AggregateRootStatusChanged()
-                           {AggregateRootPublicKey = aggregateRootPublicKey, Status = status});
+            ApplyEvent(new AggregateRootStatusChanged() { EventChunckPublicKey = eventChunckPublicKey, Status = status });
         }
         protected void OnChangeAggregateRootStatus(AggregateRootStatusChanged e)
         {
            
             var aggregateRoot =
-                this._innerDocument.AggregateRoots.FirstOrDefault(d => d.AggregateRootPublicKey == e.AggregateRootPublicKey);
+                this._innerDocument.Chunks.FirstOrDefault(d => d.EventChunckPublicKey == e.EventChunckPublicKey);
             if (aggregateRoot == null)
                 throw new ArgumentException("Event wasn't find");
             aggregateRoot.Handled = e.Status;

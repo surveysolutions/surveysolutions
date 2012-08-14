@@ -11,7 +11,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
 {
     public class ListOfAggregateRootsForImportMessage : ICustomSerializable
     {
-        public IList<ProcessedAggregateRoot> Roots { get; set; }
+        public IList<ProcessedEventChunk> Roots { get; set; }
 
         #region Implementation of ICustomSerializable
 
@@ -29,7 +29,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
             var rootsString = FormatHelper.ReadString(stream);
-            this.Roots = JsonConvert.DeserializeObject<IList<ProcessedAggregateRoot>>(rootsString, settings);
+            this.Roots = JsonConvert.DeserializeObject<IList<ProcessedEventChunk>>(rootsString, settings);
         }
 
         #endregion
