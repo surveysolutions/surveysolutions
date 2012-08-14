@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="CLIENTDIR">
+            <Component Id="cmp1CE8F01E2C428B8B101BB9DE6AC1DB71" Guid="*">
+                <File Id="fil8DE513EAD94248D12E9C53D5C7EC2389" KeyPath="yes" Source="$(var.SourceClientDir)\Awesomium.Core.dll" />
+            </Component>
+            <Component Id="cmp7940D4783491E6E3A6DB7FEA78CA1CDC" Guid="*">
+                <File Id="fil3792D94A8F2A0C12E89CD3C64F8FC2F7" KeyPath="yes" Source="$(var.SourceClientDir)\Awesomium.dll" />
+            </Component>
+            <Component Id="cmpCC0F07A409596C7E46A54EB4BF3465FD" Guid="*">
+                <File Id="fil9CC9F587353C0872B6CCA040298FC673" KeyPath="yes" Source="$(var.SourceClientDir)\Awesomium.Windows.Controls.Design.dll" />
+            </Component>
+            <Component Id="cmp1D3D31D8750CEE4A002B129618F4A0D6" Guid="*">
+                <File Id="fil7521C35AF64B129178250711B56F9DE0" KeyPath="yes" Source="$(var.SourceClientDir)\Awesomium.Windows.Controls.dll" />
+            </Component>
+            <Component Id="cmpFDDA7C561EDCAD5B19D1FE26A20731D1" Guid="*">
+                <File Id="fil4CAF5B1C68F617EADE5270F6EF0883DD" KeyPath="yes" Source="$(var.SourceClientDir)\Awesomium.Windows.Forms.dll" />
+            </Component>
+            <Component Id="cmp56F68F447E271564236AD2107DCEB726" Guid="*">
+                <File Id="filFE6D38AFA848ECFCA2B1B58EAD46055B" KeyPath="yes" Source="$(var.SourceClientDir)\AwesomiumProcess" />
+            </Component>
+            <Component Id="cmp6E9E2D78BF7C4A1EE99FDF909DF524A6" Guid="*">
+                <File Id="fil51652D7AD655D1675D5422957431888E" KeyPath="yes" Source="$(var.SourceClientDir)\Capi.exe" />
+            </Component>
+            <Component Id="cmp8A9337377ACA545E01B3DEF393BBEEF6" Guid="*">
+                <File Id="filB6C6540BDA632446E6C6EE1A7939A6D7" KeyPath="yes" Source="$(var.SourceClientDir)\Capi.exe.config" />
+            </Component>
+            <Component Id="cmp0A74E9DB7B80DDE95EF0BD280F1C718F" Guid="*">
+                <File Id="filA6658BFD98B15A018FAFF7CD1A208CE4" KeyPath="yes" Source="$(var.SourceClientDir)\en-US.dll" />
+            </Component>
+            <Component Id="cmp831E6A3FE37D5A7628579030F3F44395" Guid="*">
+                <File Id="filFB408E4CC3410259924106C91DFFB0EB" KeyPath="yes" Source="$(var.SourceClientDir)\icudt42.dll" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="Client_Project">
+            <ComponentRef Id="cmp1CE8F01E2C428B8B101BB9DE6AC1DB71" />
+            <ComponentRef Id="cmp7940D4783491E6E3A6DB7FEA78CA1CDC" />
+            <ComponentRef Id="cmpCC0F07A409596C7E46A54EB4BF3465FD" />
+            <ComponentRef Id="cmp1D3D31D8750CEE4A002B129618F4A0D6" />
+            <ComponentRef Id="cmpFDDA7C561EDCAD5B19D1FE26A20731D1" />
+            <ComponentRef Id="cmp56F68F447E271564236AD2107DCEB726" />
+            <ComponentRef Id="cmp6E9E2D78BF7C4A1EE99FDF909DF524A6" />
+            <ComponentRef Id="cmp8A9337377ACA545E01B3DEF393BBEEF6" />
+            <ComponentRef Id="cmp0A74E9DB7B80DDE95EF0BD280F1C718F" />
+            <ComponentRef Id="cmp831E6A3FE37D5A7628579030F3F44395" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

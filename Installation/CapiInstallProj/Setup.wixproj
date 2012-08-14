@@ -6,12 +6,13 @@
     <ProductVersion>3.5</ProductVersion>
     <ProjectGuid>{ea5a08ca-9bb6-4d11-bd81-646e0475cf92}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>Setup</OutputName>
+    <OutputName>Capi</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <PublishPath Condition=" '$(PublishPath)' == '' ">C:\Temp\publish-Capi</PublishPath>
-    <DefineConstants Condition=" '$(DefineConstants)' == '' ">SourceDir=$(PublishPath)</DefineConstants>
+    <ClientPath Condition=" '$(ClientPath)' == '' ">c:\Temp\Client</ClientPath>
+    <DefineConstants Condition=" '$(DefineConstants)' == '' ">SourceSiteDir=$(PublishPath);SourceClientDir=$(ClientPath)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -22,8 +23,10 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Client\Client.wxs" />
+    <Compile Include="Client\ClientConfig.wxs" />
     <Compile Include="Product.wxs" />
-    <Compile Include="WebSite.wxs" />
+    <Compile Include="WebSite\WebSite.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUIExtension">
@@ -31,14 +34,15 @@
       <Name>WixUIExtension</Name>
     </WixExtension>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Client" />
+    <Folder Include="WebSite" />
+  </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <Target Name="BeforeBuild">
     <!--<MSBuild Projects="%(ProjectReference.FullPath)" Targets="Package" Properties="Configuration=$(Configuration);Platform=AnyCPU" Condition="'%(ProjectReference.WebProject)'=='True'" />-->
-    <!--<PropertyGroup>
-      <PublishPath Condition=" '$(PublishPath)' == '' ">c:\tesstPublish</PublishPath>
-      <WixVariables>SourceDir='$(PublishPath)'</WixVariables>
-    </PropertyGroup>-->
-    <HeatDirectory OutputFile="WebSite.wxs" Directory="$(PublishPath)" DirectoryRefId="INSTALLLOCATION" ComponentGroupName="WebSite_Project" AutogenerateGuids="true" SuppressCom="true" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.SourceDir" />
+    <HeatDirectory OutputFile="WebSite.wxs" Directory="$(PublishPath)" DirectoryRefId="ENGINEDIR" ComponentGroupName="WebSite_Project" AutogenerateGuids="true" SuppressCom="true" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.SourceSiteDir" />
+    <HeatDirectory OutputFile="Client.wxs" Directory="$(ClientPath)" DirectoryRefId="CLIENTDIR" ComponentGroupName="Client_Project" AutogenerateGuids="true" SuppressCom="true" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.SourceClientDir" />
   </Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
