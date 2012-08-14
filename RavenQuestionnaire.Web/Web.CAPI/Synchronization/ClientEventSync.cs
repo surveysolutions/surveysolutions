@@ -42,7 +42,7 @@ namespace Web.CAPI.Synchronization
                                                                        int.MinValue, int.MaxValue));*/
             }
             // return retval;
-            return retval;
+            return retval.OrderBy(x => x.EventTimeStamp);
         }
 
         #endregion
