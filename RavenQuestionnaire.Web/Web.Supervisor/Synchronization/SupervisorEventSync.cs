@@ -14,11 +14,6 @@ using RavenQuestionnaire.Core.Views.User;
 
 namespace Web.Supervisor.Synchronization
 {
-    /// <summary>
-    /// TODO please change logic here when you will strart supervisor synchronization implementation
-    /// at this moment synchronizer will return all events from event store. it can harm perfomance.
-    /// BE CAREFLL!!!!!
-    /// </summary>
     public class SupervisorEventSync : AbstractEventSync
     {
          private readonly IViewRepository viewRepository;
