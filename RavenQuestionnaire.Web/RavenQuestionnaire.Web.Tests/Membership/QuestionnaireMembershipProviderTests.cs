@@ -57,7 +57,7 @@ namespace RavenQuestionnaire.Web.Tests.Membership
         [Test]
         public void WhenValidateExistingUser_UserIsValid()
         {
-            UserView result = new UserView("some_id", "test", "1234", "email@test.com", DateTime.Now,
+            UserView result = new UserView(Guid.Empty, "some_id", "test", "1234", "email@test.com", DateTime.Now,
                                            new[] {UserRoles.User}, false, null, null);
             ViewRepositoryMock.Setup(
                 x =>
@@ -72,7 +72,7 @@ namespace RavenQuestionnaire.Web.Tests.Membership
         [Test]
         public void WhenValidateExistingUserWithInvalidPassword_UserIsInvalid()
         {
-            UserView result = new UserView("some_id", "test", "1234", "email@test.com", DateTime.Now,
+            UserView result = new UserView(Guid.Empty, "some_id", "test", "1234", "email@test.com", DateTime.Now,
                                            new[] {UserRoles.User}, false, null, null);
             ViewRepositoryMock.Setup(
                 x =>

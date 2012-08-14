@@ -448,6 +448,7 @@
     <Compile Include="Views\Synchronization\SyncProgressFactory.cs" />
     <Compile Include="Views\Synchronization\SyncProgressInputModel.cs" />
     <Compile Include="Views\Synchronization\SyncProgressView.cs" />
+    <Compile Include="Views\User\InterviewerItemView.cs" />
     <Compile Include="Views\User\InterviewerView.cs" />
     <Compile Include="Views\User\InterviewerViewFactory.cs" />
     <Compile Include="Views\User\InterviewerInputModel.cs" />

@@ -57,12 +57,12 @@
                         @Html.DropDownListFor(model => model.PrimaryRole, new SelectList(Roles.GetAllRoles()))
                     </div>
                 </div>
-                <div class="control-group">
+@*                <div class="control-group">
                     @Html.LabelFor(model => model.LocationId, new { @class = "control-label" })
                     <div class="controls">
                         @Html.DropDownListFor(model => model.LocationId, new SelectList(ViewBag.AllLocations, "Id", "Location", Model.LocationId))
                     </div>
-                </div>
+                </div>*@
                 <div class="control-group">
                     @Html.LabelFor(model => model.Supervisor.Id,  new { @class = "control-label" })
                     <div class="controls">
