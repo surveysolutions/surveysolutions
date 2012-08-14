@@ -11,7 +11,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
 {
     public class ImportSynchronizationMessage : ICustomSerializable
     {
-        public AggregateRootEventStream EventStream { get; set; }
+        public AggregateRootEvent[] EventStream { get; set; }
 
         #region Implementation of ICustomSerializable
 
@@ -29,7 +29,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
             var commandString = FormatHelper.ReadString(stream);
-            var command = JsonConvert.DeserializeObject<AggregateRootEventStream>(commandString, settings);
+            var command = JsonConvert.DeserializeObject<AggregateRootEvent[]>(commandString, settings);
 
             this.EventStream = command;
         }

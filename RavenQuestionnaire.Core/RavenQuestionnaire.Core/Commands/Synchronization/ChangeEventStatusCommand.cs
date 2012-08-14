@@ -15,13 +15,13 @@ namespace RavenQuestionnaire.Core.Commands.Synchronization
     public class ChangeEventStatusCommand : CommandBase
     {
         public EventState Status { get; set; }
-        public Guid AggregateRootPublicKey { get; set; }
+        public Guid EventChunckPublicKey { get; set; }
         [AggregateRootId]
         public Guid ProcessGuid { get; set; }
 
-        public ChangeEventStatusCommand(Guid processGuid, Guid aggregateRootPublicKey, EventState status)
+        public ChangeEventStatusCommand(Guid processGuid, Guid eventChunckPublicKey, EventState status)
         {
-            this.AggregateRootPublicKey = aggregateRootPublicKey;
+            this.EventChunckPublicKey = eventChunckPublicKey;
             this.Status = status;
             this.ProcessGuid = processGuid;
         }

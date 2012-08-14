@@ -88,22 +88,17 @@ namespace DataEntryClientTests
             Guid? eventGuid = Guid.NewGuid();
             
             serviceMock.Setup(x => x.Process(It.IsAny<EventSyncMessage>())).Returns(ErrorCodes.None);
-            EventStore.Setup(x => x.ReadEvents()).Returns(new List<AggregateRootEventStream>()
-                                                                           {
-
-                                                                               new AggregateRootEventStream(
-                                                                                   new []
-                                                                                       {
-                                                                                           new AggregateRootEvent(){EventIdentifier = Guid.NewGuid()},
-                                                                                           new AggregateRootEvent(){EventIdentifier = Guid.NewGuid()}
-                                                                                       }, long.MinValue, long.MaxValue,
-                                                                                   Guid.NewGuid())
-                                                                           });
+            EventStore.Setup(x => x.ReadEvents()).Returns(
+                new[]
+                    {
+                        new AggregateRootEvent() {EventIdentifier = Guid.NewGuid()},
+                        new AggregateRootEvent() {EventIdentifier = Guid.NewGuid()}
+                    });
             var target = new CompleteQuestionnaireSync(Kernel, Guid.NewGuid(), string.Empty);
 
             target.UploadEvents(clientGuid,eventGuid);
 
-            serviceMock.Verify(x => x.Process(It.Is<EventSyncMessage>(e => e.Command.Events.Count() == 2)),
+            serviceMock.Verify(x => x.Process(It.Is<EventSyncMessage>(e => e.Command.Count() == 2)),
                                Times.Exactly(1));
             //events were pushed
             CommandService.Verify(x => x.Execute(It.IsAny<PushEventsCommand>()),Times.Once());
@@ -128,21 +123,20 @@ namespace DataEntryClientTests
             var serviceResult = new ListOfAggregateRootsForImportMessage()
                                     {
                                         Roots =
-                                            new ProcessedAggregateRoot[]
-                                                {new ProcessedAggregateRoot() {AggregateRootPublicKey = Guid.NewGuid()}}
+                                            new ProcessedEventChunk[] { new ProcessedEventChunk() { EventChunckPublicKey = Guid.NewGuid(), EventKeys = new List<Guid>(){Guid.NewGuid()}} }
                                     };
 
             serviceMock.Setup(x => x.Process()).Returns(serviceResult);
-            eventServiceMock.Setup(x => x.Process(serviceResult.Roots[0].AggregateRootPublicKey)).Returns(new ImportSynchronizationMessage());
+            eventServiceMock.Setup(x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count)).Returns(new ImportSynchronizationMessage());
             var target = new CompleteQuestionnaireSync(Kernel, Guid.NewGuid(), string.Empty);
 
             target.Import(Guid.NewGuid());
 
             serviceMock.Verify(x => x.Process(),
                                Times.Exactly(1));
-            eventServiceMock.Verify(x => x.Process(serviceResult.Roots[0].AggregateRootPublicKey), Times.Exactly(1));
+            eventServiceMock.Verify(x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count), Times.Exactly(1));
 
-            EventStore.Verify(x => x.WriteEvents(It.IsAny<IEnumerable<AggregateRootEventStream>>()), Times.Exactly(1));
+            EventStore.Verify(x => x.WriteEvents(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Exactly(1));
 
 
         }

@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             //CommandInvokerMock = new Mock<ICommandInvoker>();
             ViewRepositoryMock = new Mock<IViewRepository>();
-            Authentication= new Mock<IFormsAuthentication>();
+            Authentication = new Mock<IFormsAuthentication>();
             IKernel kernel = new StandardKernel();
             //kernel.Bind<ICommandInvoker>().ToConstant(CommandInvokerMock.Object);
             kernel.Bind<IViewRepository>().ToConstant(ViewRepositoryMock.Object);
@@ -43,14 +43,14 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             Authentication.Setup(x => x.SignIn("test_user", false));
             Controller.Register(new RegisterModel()
-                                    {
-                                        UserName = "test_user",
-                                        ConfirmPassword = "1234",
-                                        Password = "1234",
-                                        Email = "test@bank.com"
-                                    });
-            
-    
+            {
+                UserName = "test_user",
+                ConfirmPassword = "1234",
+                Password = "1234",
+                Email = "test@bank.com"
+            });
+
+
             Authentication.Verify(x => x.SignIn("test_user", false), Times.Once());
         }
         [Test]
@@ -58,14 +58,14 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             // "mRqHIYxgUmCNXh1JIRItig==" is hash from "1234"
             UserView userView = new UserView(Guid.Empty, "1", "test", "mRqHIYxgUmCNXh1JIRItig==", "test@bank.com", DateTime.Now,
-                                             new[] {UserRoles.User}, false, null, null);
+                                             new[] { UserRoles.User }, false, null, null);
             Authentication.Setup(x => x.SignIn("test", false));
             Controller.LogOn(new LogOnModel()
-                                 {
-                                     Password = "1234",
-                                     RememberMe = false,
-                                     UserName = "test"
-                                 }, "~/");
+            {
+                Password = "1234",
+                RememberMe = false,
+                UserName = "test"
+            }, "~/");
             Authentication.Verify(x => x.SignIn("test", false), Times.Once());
         }
     }

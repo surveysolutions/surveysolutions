@@ -6,9 +6,10 @@ using System.ServiceModel;
 using System.Text;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Events;
+using RavenQuestionnaire.Core.Utility;
 using SynchronizationMessages.CompleteQuestionnaire;
 
-namespace RavenQuestionnaire.Web.WCF
+namespace Web.Supervisor.WCF
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "GetAggragateRootListService" in code, svc and config file together.
     public class GetAggragateRootListService : IGetAggragateRootList
@@ -22,9 +23,10 @@ namespace RavenQuestionnaire.Web.WCF
 
         public ListOfAggregateRootsForImportMessage Process()
         {
-            var events = this.eventStore.ReadEvents();
+            var events = this.eventStore.ReadEventsByChunks();
+
             return new ListOfAggregateRootsForImportMessage()
-                       {Roots = events.Select(e => new ProcessedAggregateRoot(e)).ToList()};
+                       {Roots = events.Select(e => new ProcessedEventChunk(e)).ToList()};
         }
 
         #endregion
