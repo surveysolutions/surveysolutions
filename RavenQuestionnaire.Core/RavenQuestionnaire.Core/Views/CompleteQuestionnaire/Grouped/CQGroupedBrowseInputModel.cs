@@ -29,6 +29,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
             get { return _templateQuestionanireId; }
             set { _templateQuestionanireId = IdUtil.CreateQuestionnaireId(value); }
         }
+
+        public Guid? InterviewerId { get; set; }
         private string _templateQuestionanireId;
     }
 }

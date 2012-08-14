@@ -117,7 +117,7 @@
 	min-height: 24px;
 }
 #dashboard-page .ui-li.divider .ui-li-count {
-	right: 90px;
+	/*right: 90px;*/
 }
 .splited-button {
 	position: absolute;
