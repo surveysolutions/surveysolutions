@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
 namespace RavenQuestionnaire.Core.Views.Survey
@@ -12,42 +13,29 @@ namespace RavenQuestionnaire.Core.Views.Survey
 
         public int TotalCount { get; private set; }
 
-        public IEnumerable<SurveyGroupItem> Items { get; set; }
+        public List<SurveyGroupItem> Items { get; set; }
 
-        public Dictionary<string, string> Headers { get; set; }
+        public Dictionary<Guid, string> Headers { get; set; }
 
         public SurveyGroupView(int page, int pageSize, int totalCount, IEnumerable<CompleteQuestionnaireBrowseItem> items)
         {
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
-            var header = new Dictionary<string, string>();
-            foreach (var name in items
-                    .SelectMany(item => item.FeaturedQuestions
-                    .Select(l => new { PublicKey = l.PublicKey, Name = l.QuestionText })
-                    .Where(name => !header.ContainsKey(name.PublicKey.ToString()))))
-                header.Add(name);
-
-            this.Items = items;
-
-            var header = new Dictionary<string, string>();
-            foreach (var name in questionnaires.Where(x => x.TemplateId == input.Id)
-                    .SelectMany(item => item.FeaturedQuestions
-                    .Select(l => new { PublicKey = l.PublicKey, Name = l.QuestionText })
-                    .Where(name => !header.ContainsKey(name.PublicKey.ToString()))))
-                header.Add(name);
-
-            var collect = new List<SurveyGroupItem>();
-            foreach (var item in questionnaires)
+            this.Items=new List<SurveyGroupItem>();
+            this.Headers = new Dictionary<Guid, string>();
+            foreach (var question in items.SelectMany(completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions))
             {
-                var surveyItem = new SurveyGroupItem(Guid.Parse(item.CompleteQuestionnaireId), item.QuestionnaireTitle, item.TemplateId, item.Status, item.Responsible);
-                foreach (var nameField in header)
+                if (!Headers.ContainsKey(question.PublicKey))
                 {
-                    var val = item.FeaturedQuestions.Where(t => t.PublicKey == nameField) as QuestionStatisticView;
-                    surveyItem.FeatureadValue.Add(nameField.ToString(), (val != null ? val.AnswerValue : string.Empty));
+                    Headers.Add(question.PublicKey, question.QuestionText);
                 }
-                collect.Add(surveyItem);
             }
+            foreach (var it in items)
+            {
+                Items.Add(new SurveyGroupItem(it, Headers));
+            }
+
         }
     }
 }

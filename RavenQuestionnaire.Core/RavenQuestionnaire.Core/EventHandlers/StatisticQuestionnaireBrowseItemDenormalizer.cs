@@ -45,7 +45,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 if (evnt.Payload.Responsible == null)
                     item.UnAssigment++;
                 item.Statistic.Add(
-                    evnt.Payload.QuestionnaireId, 
+                    evnt.Payload.CompletedQuestionnaireId, 
                     new SurveyItem(
                         evnt.Payload.CreationDate, 
                         evnt.Payload.CreationDate, 

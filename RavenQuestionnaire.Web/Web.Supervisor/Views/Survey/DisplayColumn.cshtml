@@ -1,19 +1,40 @@
-﻿@model RavenQuestionnaire.Core.Views.Survey.SurveyBrowseItem
-
+﻿@model RavenQuestionnaire.Core.Views.Survey.SurveyGroupItem
 @{ var name = "responsible-" + Model.Id; }
-      <td>@Model.Title</td> 
-      @foreach (var item in Model.FeatureadValue)
-      {
-          <td>
-                @{ string s1 = string.IsNullOrEmpty(item.Value) ? string.Empty : item.Value; }
-                @s1
-          </td>
-      }           
-      <td>
-          @{string s = Model.Responsible == null ? string.Empty : Model.Responsible.Name;}
-          @s
-      </td>
-      <td>@Model.Status.Name</td>
-      <td>
-          @Ajax.ActionLink(Model.Responsible == null ? "Assign" : "Change", "Assign", new { questionnaireId = @Model.Id }, new AjaxOptions { UpdateTargetId = @name, InsertionMode = InsertionMode.Replace }) 
-      </td>
+<td>@Model.Title
+</td>
+@foreach (var item in Model.FeatureadValue)
+{
+    <td>
+        @{ string s1 = string.IsNullOrEmpty(item.Value) ? string.Empty : item.Value; }
+        @s1
+    </td>
+}
+<td>
+    <div id="view-@Model.Id">
+        <a href="@Url.Action("Details", "User", new { id = @Model.Responsible == null ? string.Empty : Model.Responsible.Id })">@(Model.Responsible == null ? string.Empty : Model.Responsible.Name)</a>
+    </div>
+    <div id="form-@Model.Id" style="display:none;">
+        @using (Ajax.BeginForm("Assign", "Survey", new AjaxOptions() { }))
+        {
+            @Html.Hidden("Id", Model.Id)
+            @Html.DropDownList("userId", ViewBag.Users as SelectList)
+        
+            <input name="Save" type="submit" value="Save" />
+            <input id="canc-@Model.Id" name="Cancel" type="button" value="Cancel" /> 
+        }</div>
+</td>
+<td>@Model.Status.Name
+</td>
+<td>    
+    <a id="ref-@Model.Id" href="#" >@(Model.Responsible == null ? "Assign" : "Change")</a> 
+    <script type="text/javascript">
+        $('#ref-@(Model.Id)').click(function () {
+            $('#form-@(Model.Id)').show();
+            $('#view-@(Model.Id)').hide();
+        });
+        $('#canc-@(Model.Id)').click(function () {
+            $('#form-@(Model.Id)').hide();
+            $('#view-@(Model.Id)').show();
+        });
+    </script>
+</td>

@@ -13,6 +13,12 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
     [MapsToAggregateRootMethod(typeof(CompleteQuestionnaireAR), "ChangeAssignment")]
     public class ChangeAssignmentCommand : CommandBase
     {
+        public ChangeAssignmentCommand(Guid completeQuestionnaireId, UserLight responsible)
+        {
+            Responsible = responsible;
+            CompleteQuestionnaireId = completeQuestionnaireId;
+        }
+
         [AggregateRootId]
         public Guid CompleteQuestionnaireId { get; set; }
 
