@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+    
+    <?define ProductVersion="1.0.0.0" ?>
+    <?define Manufacturer="The World Bank" ?>
+    <?define ProductName="Capi" ?>
+
+    <?define ProductCode="3a419e81-6f16-42f0-a5db-c3e62e68a3bb"?>
+    <?define UpgradeCode="cbca8aaa-e536-4c89-81b5-c7dd6577e522"?>
+    
+</Include>
