@@ -441,6 +441,8 @@
     <Compile Include="Views\Survey\SurveyBrowseItem.cs" />
     <Compile Include="Views\Survey\SurveyBrowseView.cs" />
     <Compile Include="Views\Survey\SurveyGroupInputModel.cs" />
+    <Compile Include="Views\Survey\SurveyGroupItem.cs" />
+    <Compile Include="Views\Survey\SurveyGroupView.cs" />
     <Compile Include="Views\Survey\SurveyGroupViewFactory.cs" />
     <Compile Include="Views\Survey\SurveyViewFactory.cs" />
     <Compile Include="Views\Survey\SurveyViewInputModel.cs" />
