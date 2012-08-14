@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Views.Survey
 {
@@ -6,7 +8,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
     {
         public int PageSize { get; private set; }
 
-        public int Page { get; private set;}
+        public int Page { get; private set; }
 
         public int TotalCount { get; private set; }
 
@@ -17,14 +19,18 @@ namespace RavenQuestionnaire.Core.Views.Survey
         public SurveyBrowseView()
         {
             this.Items = new List<SurveyBrowseItem>();
-            this.Headers=new List<string>();
         }
 
-        public SurveyBrowseView(int page, int pageSize, int totalCount):this()
+        public SurveyBrowseView(int page, int pageSize, int totalCount, IEnumerable<SurveyBrowseItem> items):this()
         {
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
+            var statuses = SurveyStatus.GetAllStatuses().Select(s => s.Name).ToList();
+            statuses.Insert(0, "UnAssignment");
+            this.Headers = statuses;
+            foreach (var item in items)
+                this.Items.Add(new SurveyBrowseItem(item.Id, item.Title, item.UnAssigment, item.Statistic));
         }
     }
 }

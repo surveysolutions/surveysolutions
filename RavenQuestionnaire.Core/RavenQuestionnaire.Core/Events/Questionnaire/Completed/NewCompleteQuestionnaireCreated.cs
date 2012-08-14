@@ -11,7 +11,7 @@ namespace RavenQuestionnaire.Core.Events
     {
         public Guid CompletedQuestionnaireId { get; set; }
      
-        public string QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; set; }
 
         public CompleteQuestionnaireDocument Questionnaire { set; get; }
 
