@@ -41,8 +41,8 @@
   <Import Project="$(WixTargetsPath)" />
   <Target Name="BeforeBuild">
     <!--<MSBuild Projects="%(ProjectReference.FullPath)" Targets="Package" Properties="Configuration=$(Configuration);Platform=AnyCPU" Condition="'%(ProjectReference.WebProject)'=='True'" />-->
-    <HeatDirectory OutputFile="WebSite.wxs" Directory="$(PublishPath)" DirectoryRefId="ENGINEDIR" ComponentGroupName="WebSite_Project" AutogenerateGuids="true" SuppressCom="true" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.SourceSiteDir" />
-    <HeatDirectory OutputFile="Client.wxs" Directory="$(ClientPath)" DirectoryRefId="CLIENTDIR" ComponentGroupName="Client_Project" AutogenerateGuids="true" SuppressCom="true" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.SourceClientDir" />
+    <HeatDirectory OutputFile="WebSite\WebSite.wxs" Directory="$(PublishPath)" DirectoryRefId="ENGINEDIR" ComponentGroupName="WebSite_Project" AutogenerateGuids="true" SuppressCom="true" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.SourceSiteDir" />
+    <HeatDirectory OutputFile="Client\Client.wxs" Directory="$(ClientPath)" DirectoryRefId="CLIENTDIR" ComponentGroupName="Client_Project" AutogenerateGuids="true" SuppressCom="true" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.SourceClientDir" />
   </Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
