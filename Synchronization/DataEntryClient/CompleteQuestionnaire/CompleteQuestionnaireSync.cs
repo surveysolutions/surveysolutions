@@ -128,12 +128,15 @@ namespace DataEntryClient.CompleteQuestionnaire
                                                                                                 catch (Exception)
                                                                                                 {
 
+                                                                                                    events = null;
                                                                                                     invoker.Execute(
                                                                                                     new ChangeEventStatusCommand
                                                                                                         (this.processGuid, root.EventChunckPublicKey, EventState.Error));
                                                                                                 }
                                                                                             }
                                                                                         });
+                if(events==null)
+                    return;
                 this.eventStore.WriteEvents(events);
                 invoker.Execute(new EndProcessComand(this.processGuid, EventState.Completed));
             }
