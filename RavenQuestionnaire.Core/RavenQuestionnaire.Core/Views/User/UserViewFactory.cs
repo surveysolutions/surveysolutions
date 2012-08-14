@@ -32,8 +32,7 @@ namespace RavenQuestionnaire.Core.Views.User
 
             else if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))
             {
-                doc = users.Query().FirstOrDefault(u => u.UserName == input.UserName);
-
+                doc = users.Query().FirstOrDefault(u => string.Compare(u.UserName, input.UserName, true) == 0);
             }
             if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
             {
@@ -47,7 +46,7 @@ namespace RavenQuestionnaire.Core.Views.User
             {
                 return null;
             }
-            return new UserView(doc.Id, doc.UserName, doc.Password, doc.Email, doc.CreationDate, doc.Roles, doc.IsLocked,
+            return new UserView(doc.PublicKey, doc.Id, doc.UserName, doc.Password, doc.Email, doc.CreationDate, doc.Roles, doc.IsLocked,
                                 doc.Supervisor, doc.Location.Id);
         }
 

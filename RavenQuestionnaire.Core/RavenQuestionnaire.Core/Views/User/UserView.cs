@@ -13,6 +13,7 @@ namespace RavenQuestionnaire.Core.Views.User
         }
 
         public UserView(
+            Guid publicKey,
             string id,
             string username,
             string password,
@@ -24,6 +25,7 @@ namespace RavenQuestionnaire.Core.Views.User
             string locationId
             )
         {
+            this.PublicKey = publicKey;
             this.UserId = IdUtil.ParseId(id);
             this.UserName = username;
             this.Password = password;
@@ -34,7 +36,7 @@ namespace RavenQuestionnaire.Core.Views.User
             this.Supervisor = supervisor;
             this.LocationId = IdUtil.ParseId(locationId);
         }
-
+        public Guid PublicKey { get; set; }
         public string UserId { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
@@ -65,7 +67,7 @@ namespace RavenQuestionnaire.Core.Views.User
 
         public static UserView New()
         {
-            return new UserView(null, null, null, null, DateTime.UtcNow, new UserRoles[] {UserRoles.User}, false, null,
+            return new UserView(Guid.Empty, null, null, null, null, DateTime.UtcNow, new UserRoles[] {UserRoles.User}, false, null,
                                 null);
         }
     }
