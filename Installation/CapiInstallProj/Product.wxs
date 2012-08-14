@@ -54,10 +54,10 @@
                 </Directory>
             </Directory>
             
-            <Directory Id="ProgramMenuFolder">
+            <!--<Directory Id="ProgramMenuFolder">
                 <Directory Id="ApplicationProgramsFolder" Name="$(var.ProductName)"/>
             </Directory>            
-            <Directory Id="DesktopFolder" Name="Desktop"/>
+            <Directory Id="DesktopFolder" Name="Desktop"/>-->
             
         </Directory>
 
