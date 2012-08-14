@@ -38,7 +38,7 @@ namespace Web.Supervisor.Controllers
         
         public ActionResult Assigments(string id)
         {
-            var model = viewRepository.Load<SurveyGroupInputModel, SurveyBrowseView>(new SurveyGroupInputModel(id));
+            var model = viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(new SurveyGroupInputModel(id));
             return View(model);
         }
 
@@ -50,7 +50,7 @@ namespace Web.Supervisor.Controllers
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             var questionnaire = documentItemSession.Query().Where(x=>x.CompleteQuestionnaireId==questionnaireId).SingleOrDefault();
             var model = viewRepository.Load<SurveyGroupInputModel, SurveyBrowseView>(new SurveyGroupInputModel(questionnaire.TemplateId, questionnaireId));
-            return PartialView("EditColumn", model.Items[0]);
+            return PartialView("EditColumn", model.Items);
         }
 
         [HttpPost]
@@ -66,7 +66,7 @@ namespace Web.Supervisor.Controllers
             }
             var row = documentItemSession.Query().Where(x => x.CompleteQuestionnaireId == Id).SingleOrDefault();
             var model = viewRepository.Load<SurveyGroupInputModel, SurveyBrowseView>(new SurveyGroupInputModel(row.TemplateId, Id));
-            return PartialView("DisplayColumn", model.Items[0]);
+            return PartialView("DisplayColumn", model.Items);
         }
 
     }
