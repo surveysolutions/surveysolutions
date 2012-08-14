@@ -15,6 +15,7 @@ using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 
 namespace Web.Supervisor.Controllers
 {
+    [Authorize]
     public class SurveyController : Controller
     {
         private IViewRepository viewRepository;

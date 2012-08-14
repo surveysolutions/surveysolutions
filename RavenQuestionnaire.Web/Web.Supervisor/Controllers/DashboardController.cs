@@ -16,6 +16,7 @@ using RavenQuestionnaire.Core.Views.User;
 
 namespace Web.Supervisor.Controllers
 {
+    [Authorize]
     public class DashboardController : Controller
     {
         private IViewRepository viewRepository;
