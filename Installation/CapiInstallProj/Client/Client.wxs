@@ -32,6 +32,9 @@
             <Component Id="cmp831E6A3FE37D5A7628579030F3F44395" Guid="*">
                 <File Id="filFB408E4CC3410259924106C91DFFB0EB" KeyPath="yes" Source="$(var.SourceClientDir)\icudt42.dll" />
             </Component>
+            <Component Id="cmp702F871DF0951365204679D251AEC6BF" Guid="*">
+                <File Id="filA2DC1854358CF0111DE397964DE63CC2" KeyPath="yes" Source="$(var.SourceClientDir)\Synchronization.Core.dll" />
+            </Component>
         </DirectoryRef>
     </Fragment>
     <Fragment>
@@ -46,6 +49,7 @@
             <ComponentRef Id="cmp8A9337377ACA545E01B3DEF393BBEEF6" />
             <ComponentRef Id="cmp0A74E9DB7B80DDE95EF0BD280F1C718F" />
             <ComponentRef Id="cmp831E6A3FE37D5A7628579030F3F44395" />
+            <ComponentRef Id="cmp702F871DF0951365204679D251AEC6BF" />
         </ComponentGroup>
     </Fragment>
 </Wix>
