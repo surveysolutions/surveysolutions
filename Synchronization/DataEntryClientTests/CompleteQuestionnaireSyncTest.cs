@@ -127,7 +127,9 @@ namespace DataEntryClientTests
                                     };
 
             serviceMock.Setup(x => x.Process()).Returns(serviceResult);
-            eventServiceMock.Setup(x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count)).Returns(new ImportSynchronizationMessage());
+            eventServiceMock.Setup(
+                x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count)).
+                Returns(new ImportSynchronizationMessage() {EventStream = new AggregateRootEvent[0]});
             var target = new CompleteQuestionnaireSync(Kernel, Guid.NewGuid(), string.Empty);
 
             target.Import(Guid.NewGuid());

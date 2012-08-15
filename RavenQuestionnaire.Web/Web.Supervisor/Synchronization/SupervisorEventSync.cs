@@ -36,7 +36,7 @@ namespace Web.Supervisor.Synchronization
              AddQuestionnairesTemplates(retval);
              AddUsers(retval);
              AddFiles(retval);
-             return retval.OrderBy(x => x.EventTimeStamp);
+             return retval.OrderBy(x => x.EventTimeStamp).ToList();
          }
 
         #endregion
@@ -87,7 +87,7 @@ namespace Web.Supervisor.Synchronization
         {
             var events = myEventStore.ReadFrom(aggregateRootId,
                                                      int.MinValue, int.MaxValue);
-            retval.AddRange(events.Select(e => new AggregateRootEvent(e)));
+            retval.AddRange(events.Select(e => new AggregateRootEvent(e)).ToList());
         }
     }
 }
