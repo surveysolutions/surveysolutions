@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
             var statuses = SurveyStatus.GetAllStatuses().Select(s => s.Name).ToList();
-            statuses.Insert(0, "UnAssignment");
+            statuses.Insert(0, "Unassigned");
             this.Headers = statuses;
             foreach (var item in items)
                 this.Items.Add(new SurveyBrowseItem(item.Id, item.Title, item.UnAssigment, item.Statistic));

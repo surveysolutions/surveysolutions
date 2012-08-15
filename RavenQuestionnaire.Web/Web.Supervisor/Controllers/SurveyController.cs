@@ -1,6 +1,5 @@
 ﻿using Ncqrs;
 using System;
-using System.Linq;
 using System.Web.Mvc;
 using Web.Supervisor.Models;
 using RavenQuestionnaire.Core;

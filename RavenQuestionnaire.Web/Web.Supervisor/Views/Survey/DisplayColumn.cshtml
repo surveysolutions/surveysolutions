@@ -28,12 +28,18 @@
 <td>@Model.Status.Name
 </td>
 <td>    
-    <a id="ref-@Model.Id" href="#" >@(Model.Responsible == null ? "Assign" : "Change")</a> 
+    <a id="ref-@Model.Id" href="#" >@((Model.Responsible == null || string.IsNullOrEmpty(Model.Responsible.Id)) ? "Assign" : "Change")</a> 
     <script type="text/javascript">
         function HideForm(data) {
             $('#row-@(Model.Id)').removeClass("showForm");
             var json = jQuery.parseJSON(data.responseText);
-            $('#link-'+json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Details/' + json.userId + '">' + json.userName + '</a>');
+            if (json.userId != null && json.userName != null)
+            {
+                $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Details/' + json.userId + '">' + json.userName + '</a>');
+            }
+            else {
+                $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Details/"></a>');
+            }
         }
         $('#ref-@(Model.Id)').click(function () {
             $('#row-@(Model.Id)').addClass("showForm");
