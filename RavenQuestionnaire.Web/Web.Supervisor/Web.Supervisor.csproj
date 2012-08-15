@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-dev|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\BouncyCastle.Crypto.dll</HintPath>
@@ -195,13 +198,12 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-	<Content Include="Web.Deploy-dev.config" >
+    <Content Include="Web.Deploy-dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Web.Deploy-Main.config" >
+    <Content Include="Web.Deploy-Main.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-	
     <Content Include="Content\main.css" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
@@ -276,7 +278,6 @@
   <ItemGroup>
     <Content Include="Views\Survey\DisplayColumn.cshtml" />
   </ItemGroup>
- 
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
