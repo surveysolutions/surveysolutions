@@ -5,7 +5,7 @@
         <?include ..\Variables.wxi?>
 
         <DirectoryRef Id="ApplicationProgramsFolder">
-            <Component Id="CapiApplicationShortcut" Guid="C20F8597-DA07-4165-A02B-630314484CC6">
+            <Component Id="CapiApplicationShortcut" Guid="*">
                 <RegistryValue Root="HKCU"
                     Key="Software\$(var.Manufacturer)\$(var.ProductName)"
                     Name="installed"

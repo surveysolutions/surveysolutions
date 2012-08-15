@@ -33,10 +33,13 @@
     <Property Id="NEWPRODUCTFOUND" Secure="yes" />
     <Property Id="UPGRADEFOUND" Secure="yes" />
 
+    <SetDirectory Id="WINDOWSVOLUME" Value="[WindowsVolume]"/>
+
         <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
 
         <Directory Id="TARGETDIR" Name="SourceDir">
-            <Directory Id="ProgramFilesFolder">
+            <Directory Id="CommonAppDataFolder">
+                <Directory Id="WINDOWSVOLUME">
                 <Directory Id="TheWorldBank" Name="The World Bank">
                     <Directory Id="INSTALLLOCATION" Name="Capi">
                         <Directory Id="CLIENTDIR" Name="Client">
@@ -49,7 +52,8 @@
                         <!-- TODO: Insert files, registry keys, and other resources here. -->
                     <!-- </Component> -->
                 </Directory>
-                </Directory>
+               </Directory>
+              </Directory>
             </Directory>
             
             <Directory Id="ProgramMenuFolder">
