@@ -18,7 +18,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         {
             this.Grid = new Dictionary<string, int>();
             var statuses = SurveyStatus.GetAllStatuses().Select(s => s.Name).ToList();
-            statuses.Insert(0, "Unassign");
+            statuses.Insert(0, "Unassigned");
             foreach (var statuse in statuses)
                 this.Grid.Add(statuse, 0);
         }
@@ -28,7 +28,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Id = id;
             this.Title = title;
             this.UnAssigment = unAssigment;
-            this.Grid["Unassign"] = unAssigment;
+            this.Grid["Unassigned"] = unAssigment;
             this.Statistic = statistic;
             var items = statistic.Values.Where(t=>t.Responsible!=null).GroupBy(r => r.Status).Select(g => new { Status = g.Key, Count = g.Count() }).ToList();
             foreach (var item in items)
