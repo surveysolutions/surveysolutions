@@ -22,20 +22,17 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
-            this.Items=new List<SurveyGroupItem>();
+            this.Items = new List<SurveyGroupItem>();
             this.Headers = new Dictionary<Guid, string>();
-            foreach (var question in items.SelectMany(completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions))
+            foreach (var question in items.SelectMany(completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions).
+                Where(question => !Headers.ContainsKey(question.PublicKey)))
             {
-                if (!Headers.ContainsKey(question.PublicKey))
-                {
-                    Headers.Add(question.PublicKey, question.QuestionText);
-                }
+                Headers.Add(question.PublicKey, question.QuestionText);
             }
             foreach (var it in items)
             {
                 Items.Add(new SurveyGroupItem(it, Headers));
             }
-
         }
     }
 }
