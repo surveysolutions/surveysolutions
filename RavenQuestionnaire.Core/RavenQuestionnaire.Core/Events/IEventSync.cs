@@ -27,9 +27,15 @@ namespace RavenQuestionnaire.Core.Events
 
     public static class EventSyncExtensions
     {
-        public static IEnumerable<IEnumerable<AggregateRootEvent>> ReadEventsByChunks(this IEventSync source, int chunksize =2048)
+        public static IEnumerable<IEnumerable<AggregateRootEvent>> ReadEventsByChunks(this IEventSync source, int chunksize = 2048)
         {
-            return source.ReadEvents().Chunk(chunksize);
+            var events = source.ReadEvents();
+            
+            return events.Chunk(chunksize,
+                                (e, previous) =>
+                                    {
+                                        return e.CommitId == previous.CommitId;
+                                    });
         }
     }
 
@@ -106,7 +112,7 @@ namespace RavenQuestionnaire.Core.Events
                 if (currentEventStore.Count(ce => ce.EventIdentifier == committedEvent.EventIdentifier) > 0)
                     continue;
 
-                uncommitedStream.Append(committedEvent.CreateUncommitedEvent());
+                uncommitedStream.Append(committedEvent.CreateUncommitedEvent(0));
             }
             if (!uncommitedStream.Any())
                 return;

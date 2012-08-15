@@ -183,6 +183,7 @@
     <Compile Include="Entities\SubEntities\NumericCompleteQuestionTest.cs" />
     <Compile Include="Entities\SubEntities\SingleCompleteQuestionTest.cs" />
     <Compile Include="Entities\UserEntityTest.cs" />
+    <Compile Include="Events\EventSyncExtensionsTests.cs" />
     <Compile Include="ExpressionEvaluatorTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutorTests.cs" />
