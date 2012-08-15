@@ -10,7 +10,7 @@ using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
 
 namespace RavenQuestionnaire.Core.EventHandlers
 {
-    public class StatisticQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
+    public class StatisticQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
                                                                 IEventHandler<CompleteQuestionnaireDeleted>,
                                                                 IEventHandler<QuestionnaireStatusChanged>,
                                                                 IEventHandler<QuestionnaireAssignmentChanged>
@@ -56,7 +56,14 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-
+            var list = documentItemStore.Query().ToList();
+            foreach (SurveyItem val in list.Where(i => i.Statistic.Any(
+                surveyItem => surveyItem.Key == evnt.Payload.CompletedQuestionnaireId)).
+                Select(item => item.Statistic.Where(t => t.Key == evnt.Payload.CompletedQuestionnaireId).
+                Select(t => t.Value).FirstOrDefault()).Where(val => val!=null))
+                {
+                    val.Status = evnt.Payload.Status;
+                }
         }
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
@@ -64,16 +71,31 @@ namespace RavenQuestionnaire.Core.EventHandlers
             var list = documentItemStore.Query().ToList();
             foreach (var item in list.Where(i => i.Statistic.Any(surveyItem => surveyItem.Key == evnt.Payload.CompletedQuestionnaireId)))
             {
-                SurveyItem val = item.Statistic.Where(t => t.Key == evnt.Payload.CompletedQuestionnaireId).Select(t=>t.Value).FirstOrDefault();
-                if (val.Responsible == null)
-                    item.UnAssigment--;
-                val.Responsible = evnt.Payload.Responsible;
+                var val = item.Statistic.Where(t => t.Key == evnt.Payload.CompletedQuestionnaireId).Select(t=>t.Value).FirstOrDefault();
+                if (val != null)
+                {
+                    if (val.Responsible == null && evnt.Payload.Responsible != null && !string.IsNullOrEmpty(evnt.Payload.Responsible.Id))
+                    {
+                        item.UnAssigment--;
+                        val.Responsible = evnt.Payload.Responsible;
+                    }
+                }
             }
         }
 
         public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
         {
-            documentItemStore.Remove(evnt.Payload.CompletedQuestionnaireId);
+            var list = documentItemStore.Query().ToList();
+            foreach (var item in list.Where(i => i.Statistic.Any(surveyItem => surveyItem.Key == evnt.Payload.CompletedQuestionnaireId)))
+            {
+                var val = item.Statistic.Where(t => t.Key == evnt.Payload.CompletedQuestionnaireId).Select(t=>t.Value).FirstOrDefault();
+                if (val != null)
+                {
+                    if (val.Responsible == null)
+                        item.UnAssigment--;
+                    item.Statistic.Remove(evnt.Payload.CompletedQuestionnaireId);
+                }
+            }
         }
     }
 }

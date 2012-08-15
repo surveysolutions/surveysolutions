@@ -154,7 +154,7 @@ namespace Web.CAPI.Controllers
         }*/
 
         [QuestionnaireAuthorize(UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Operator)]
-        public ActionResult Participate(string id, string mode)
+        public ActionResult Participate(string id)
         {
             Guid key;
             if (!Guid.TryParse(id, out key))
