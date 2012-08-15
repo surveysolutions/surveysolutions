@@ -54,11 +54,11 @@ namespace RavenQuestionnaire.Core.Events
             this.CommitId = cEvent.CommitId;
         }
 
-        public UncommittedEvent CreateUncommitedEvent(long initialVersionOfEventSource)
+        public UncommittedEvent CreateUncommitedEvent(long eventSequence,long initialVersionOfEventSource)
         {
             return new UncommittedEvent(this.EventIdentifier,
                                         this.EventSourceId,
-                                        this.EventSequence, initialVersionOfEventSource,
+                                        eventSequence, initialVersionOfEventSource,
                                         this.EventTimeStamp,
                                         this.Payload,
                                         this.EventVersion);
