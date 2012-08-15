@@ -86,12 +86,11 @@ namespace Web.CAPI.Controllers
         public ViewResult Dashboard()
         {
             var user = _globalProvider.GetCurrentUser();
+            var inputModel = new CQGroupedBrowseInputModel();
+            if(user!=null)
+            inputModel.InterviewerId = Guid.Parse(user.Id);
             var model =
-                viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(new CQGroupedBrowseInputModel()
-                                                                                        {
-                                                                                            InterviewerId =
-                                                                                                Guid.Parse(user.Id)
-                                                                                        });
+                viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(inputModel);
             return View(model);
         }
 
