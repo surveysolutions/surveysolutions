@@ -70,8 +70,10 @@ namespace Client
             var host = new ToolStripControlHost(this.pleaseWait);
             host.Size = this.statusStrip1.Size;
             this.statusStrip1.Items.AddRange(new ToolStripItem[] { host});
-           
-            webView.Source = new Uri(Settings.Default.DefaultUrl);
+
+            string url = Settings.Default.RunClient ? RunEngine() : Settings.Default.DefaultUrl;
+
+            webView.Source = new Uri(url);
             this.webView.Focus();
         }
 
@@ -218,6 +220,23 @@ namespace Client
                 // MessageBox.Show("Export error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw ex;
             }
+        }
+
+        private string RunEngine()
+        {
+            DirectoryInfo dir = new DirectoryInfo(Application.StartupPath);
+            string enginePath = Path.Combine(dir.Parent.FullName, Settings.Default.EnginePathName);
+
+            if(!Directory.Exists(enginePath))
+                throw new Exception("Client was not found.");
+
+            string port = Settings.Default.DefaultPort;
+
+            EngineRunner runner = new EngineRunner();
+            runner.RunEngine(enginePath, port);
+            Application.ApplicationExit += runner.StopEngine;
+
+            return String.Format("http://localhost:{0}", port);
         }
     }
 }
