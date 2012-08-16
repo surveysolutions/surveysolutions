@@ -59,7 +59,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                 if ((composite as ICompleteQuestion) != null)
                 {
                     var q = composite as ICompleteQuestion;
-                    var question = new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q);
+                    var question = new CompleteQuestionFactory().CreateQuestion(doc, q);
                     Children.Add(question);
                 }
                 else

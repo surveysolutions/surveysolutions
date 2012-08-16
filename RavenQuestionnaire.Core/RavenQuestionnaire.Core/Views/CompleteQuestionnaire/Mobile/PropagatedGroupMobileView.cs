@@ -21,7 +21,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             this.AutoPropagate = group.Propagated == Propagate.AutoPropagated;
             this.PropogationKey = group.PropogationPublicKey?? Guid.Empty;
             this.Children =
-                group.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionFactory().CreateQuestion(doc, group, q) as ICompositeView).ToList();
+                group.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionFactory().CreateQuestion(doc, q) as ICompositeView).ToList();
          
         }
         public PropagatedGroupMobileView(CompleteQuestionnaireDocument doc, ICompleteGroup group, ScreenNavigation navigation):this(doc,group)

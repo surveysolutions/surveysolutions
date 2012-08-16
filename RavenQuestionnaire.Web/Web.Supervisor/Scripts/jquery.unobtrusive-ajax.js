@@ -8,7 +8,7 @@
 /*jslint white: true, browser: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: false */
 /*global window: false, jQuery: false */
 
-(function ($) {
+(function($) {
     var data_click = "unobtrusiveAjaxClick",
         data_validation = "unobtrusiveValidation";
 
@@ -17,7 +17,7 @@
         while (fn && parts.length) {
             fn = fn[parts.shift()];
         }
-        if (typeof (fn) === "function") {
+        if (typeof(fn) === "function") {
             return fn;
         }
         argNames.push(code);
@@ -37,23 +37,23 @@
     function asyncOnSuccess(element, data, contentType) {
         var mode;
 
-        if (contentType.indexOf("application/x-javascript") !== -1) {  // jQuery already executes JavaScript for us
+        if (contentType.indexOf("application/x-javascript") !== -1) { // jQuery already executes JavaScript for us
             return;
         }
 
         mode = (element.getAttribute("data-ajax-mode") || "").toUpperCase();
-        $(element.getAttribute("data-ajax-update")).each(function (i, update) {
+        $(element.getAttribute("data-ajax-update")).each(function(i, update) {
             var top;
 
             switch (mode) {
             case "BEFORE":
                 top = update.firstChild;
-                $("<div />").html(data).contents().each(function () {
+                $("<div />").html(data).contents().each(function() {
                     update.insertBefore(this, top);
                 });
                 break;
             case "AFTER":
-                $("<div />").html(data).contents().each(function () {
+                $("<div />").html(data).contents().each(function() {
                     update.appendChild(this);
                 });
                 break;
@@ -78,7 +78,7 @@
         $.extend(options, {
             type: element.getAttribute("data-ajax-method") || undefined,
             url: element.getAttribute("data-ajax-url") || undefined,
-            beforeSend: function (xhr) {
+            beforeSend: function(xhr) {
                 var result;
                 asyncOnBeforeSend(xhr, method);
                 result = getFunction(element.getAttribute("data-ajax-begin"), ["xhr"]).apply(this, arguments);
@@ -87,11 +87,11 @@
                 }
                 return result;
             },
-            complete: function () {
+            complete: function() {
                 loading.hide(duration);
                 getFunction(element.getAttribute("data-ajax-complete"), ["xhr", "status"]).apply(this, arguments);
             },
-            success: function (data, status, xhr) {
+            success: function(data, status, xhr) {
                 asyncOnSuccess(element, data, xhr.getResponseHeader("Content-Type") || "text/html");
                 getFunction(element.getAttribute("data-ajax-success"), ["data", "status", "xhr"]).apply(this, arguments);
             },
@@ -114,7 +114,7 @@
         return !validationInfo || !validationInfo.validate || validationInfo.validate();
     }
 
-    $("a[data-ajax=true]").live("click", function (evt) {
+    $("a[data-ajax=true]").live("click", function(evt) {
         evt.preventDefault();
         asyncRequest(this, {
             url: this.href,
@@ -123,7 +123,7 @@
         });
     });
 
-    $("form[data-ajax=true] input[type=image]").live("click", function (evt) {
+    $("form[data-ajax=true] input[type=image]").live("click", function(evt) {
         var name = evt.target.name,
             $target = $(evt.target),
             form = $target.parents("form")[0],
@@ -134,23 +134,23 @@
             { name: name + ".y", value: Math.round(evt.pageY - offset.top) }
         ]);
 
-        setTimeout(function () {
+        setTimeout(function() {
             $(form).removeData(data_click);
         }, 0);
     });
 
-    $("form[data-ajax=true] :submit").live("click", function (evt) {
+    $("form[data-ajax=true] :submit").live("click", function(evt) {
         var name = evt.target.name,
             form = $(evt.target).parents("form")[0];
 
         $(form).data(data_click, name ? [{ name: name, value: evt.target.value }] : []);
 
-        setTimeout(function () {
+        setTimeout(function() {
             $(form).removeData(data_click);
         }, 0);
     });
 
-    $("form[data-ajax=true]").live("submit", function (evt) {
+    $("form[data-ajax=true]").live("submit", function(evt) {
         var clickInfo = $(this).data(data_click) || [];
         evt.preventDefault();
         if (!validate(this)) {

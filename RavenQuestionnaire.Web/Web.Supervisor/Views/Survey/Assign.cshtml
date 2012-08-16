@@ -1,0 +1,45 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Assign
+@using RavenQuestionnaire.Core.Views.Question
+@model AssignSurveyView
+@{
+    ViewBag.Title = "Assignment";
+}
+<script src="../../Scripts/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function JsonResults(data) {
+        var response = jQuery.parseJSON(data.responseText);
+        if (response.status === "ok") {
+            
+        }else {
+            alert(response.error);
+        }
+    };
+</script>
+<h2>Assignment</h2>
+@foreach (CompleteQuestionView question in Model.FeaturedQuestions)
+{
+    using (Ajax.BeginForm("SaveAnswer", "Survey", new AjaxOptions()
+                {
+                    OnComplete = "JsonResults"
+                }))
+    {
+        using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+        {
+    <div class="question">
+        @Html.Hidden("QuestionType", question.QuestionType)
+        @{ Html.RenderPartial(string.Format("AnswerListViewHtml5/_{0}", question.QuestionType), question); }
+        @Html.ValidationMessage("AnswerValue")
+        @Html.Hidden("PublicKey", question.PublicKey)
+    </div>
+
+        }
+        using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+        {
+    @Html.Hidden("ParentGroupPublicKey", question.ParentGroupPublicKey)
+    @Html.Hidden("QuestionnaireId", Model.Id)
+        }
+    }
+}
