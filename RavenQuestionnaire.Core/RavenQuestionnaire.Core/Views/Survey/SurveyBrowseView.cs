@@ -9,7 +9,14 @@ namespace RavenQuestionnaire.Core.Views.Survey
         public int PageSize { get; private set; }
 
         public int Page { get; private set; }
-
+        
+        public string Order
+        {
+            get { return _order; }
+            set { _order = value; }
+        }
+        private string _order = string.Empty;
+        
         public int TotalCount { get; private set; }
 
         public List<SurveyBrowseItem> Items { get; set; }
