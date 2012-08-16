@@ -1,25 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Views.StatusReport;
-using RavenQuestionnaire.Core.Views.User;
 
 namespace Web.Supervisor.Controllers
 {
     [Authorize]
     public class DashboardController : Controller
     {
-        private IViewRepository viewRepository;
+        private readonly IViewRepository viewRepository;
 
         public DashboardController(IViewRepository viewRepository)
         {
@@ -29,19 +25,23 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult Index()
         {
-            var model = viewRepository.Load<StatusReportViewInputModel, StatusReportView>(new StatusReportViewInputModel());
+            StatusReportView model =
+                viewRepository.Load<StatusReportViewInputModel, StatusReportView>(new StatusReportViewInputModel());
             return View(model);
         }
 
         public ActionResult Status(string questionnaireId, Guid statusId)
         {
-            var model = viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(new CQStatusReportViewInputModel(questionnaireId, statusId));
+            CQStatusReportView model =
+                viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(
+                    new CQStatusReportViewInputModel(questionnaireId, statusId));
             return View(model);
         }
 
         public ActionResult Questionnaires(QuestionnaireBrowseInputModel input)
         {
-            var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
+            QuestionnaireBrowseView model =
+                viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
             return View(model);
         }
 
@@ -50,21 +50,21 @@ namespace Web.Supervisor.Controllers
             Guid key;
             if (!Guid.TryParse(id, out key))
                 throw new HttpException("404");
-            var newSurveyPublicKey = Guid.NewGuid();
+            Guid newSurveyPublicKey = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new CreateCompleteQuestionnaireCommand(newSurveyPublicKey, key));
-            return RedirectToAction("Survey", new { id = newSurveyPublicKey });
+            return RedirectToAction("Survey", new {id = newSurveyPublicKey});
         }
 
         public ViewResult Survey(string id)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
-            var input = new CompleteQuestionnaireViewInputModel(id) { };
-            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(input);
+            var input = new CompleteQuestionnaireViewInputModel(id) {};
+            CompleteQuestionnaireViewV model =
+                viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewV>(input);
 
             return View(model);
         }
-
     }
 }

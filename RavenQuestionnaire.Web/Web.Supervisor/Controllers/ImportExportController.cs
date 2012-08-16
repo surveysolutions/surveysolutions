@@ -6,14 +6,13 @@ using Questionnaire.Core.Web.Threading;
 
 namespace Web.Supervisor.Controllers
 {
-   public class ImportExportController : AsyncController
-   {
-   
+    public class ImportExportController : AsyncController
+    {
         private readonly IExportImport exportimportEvents;
 
         public ImportExportController(IExportImport exportImport)
         {
-            this.exportimportEvents = exportImport;
+            exportimportEvents = exportImport;
         }
 
         #region PublicMethod
@@ -23,7 +22,7 @@ namespace Web.Supervisor.Controllers
         {
             return View("ViewTestUploadFile");
         }
-       
+
         [AcceptVerbs(HttpVerbs.Post)]
         public void ImportAsync(HttpPostedFileBase myfile)
         {
@@ -37,32 +36,34 @@ namespace Web.Supervisor.Controllers
                                                      });
             }
         }
-       
+
         public ActionResult ImportCompleted()
         {
             return RedirectToAction("Index", "Dashboard");
         }
-       
+
         public void ExportAsync(Guid clientGuid)
         {
             AsyncManager.OutstandingOperations.Increment();
             AsyncQuestionnaireUpdater.Update(() =>
-            {
-                try
-                {
-                    AsyncManager.Parameters["result"] = exportimportEvents.Export(clientGuid);
-                }
-                catch
-                {
-                    AsyncManager.Parameters["result"] = null;
-                }
-                AsyncManager.OutstandingOperations.Decrement();
-            });
+                                                 {
+                                                     try
+                                                     {
+                                                         AsyncManager.Parameters["result"] =
+                                                             exportimportEvents.Export(clientGuid);
+                                                     }
+                                                     catch
+                                                     {
+                                                         AsyncManager.Parameters["result"] = null;
+                                                     }
+                                                     AsyncManager.OutstandingOperations.Decrement();
+                                                 });
         }
-       
+
         public ActionResult ExportCompleted(byte[] result)
         {
-            return File(result, "application/zip", string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
+            return File(result, "application/zip",
+                        string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
         }
 
         #endregion

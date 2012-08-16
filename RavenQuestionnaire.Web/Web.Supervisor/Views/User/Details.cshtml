@@ -16,11 +16,11 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Items)
+        @foreach (InterviewerItemView item in Model.Items)
         {
             <tr>
                 <td>
-                    <a href="@Url.Action("Assigments", "Survey", new { id = item.TemplateId })">@item.QuestionnaireTitle</a>
+                    <a href="@Url.Action("Assigments", "Survey", new {id = item.TemplateId})">@item.QuestionnaireTitle</a>
                 </td>
                 @foreach (var question in item.FeaturedQuestions)
                 {

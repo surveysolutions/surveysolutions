@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
         }
 
 
-        public CompleteQuestionView CreateQuestion(CompleteQuestionnaireDocument doc,ICompleteGroup group, ICompleteQuestion question)
+        public CompleteQuestionView CreateQuestion(CompleteQuestionnaireDocument doc, ICompleteQuestion question)
         {
             return new CompleteQuestionView(doc, question);
         }

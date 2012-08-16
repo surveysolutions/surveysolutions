@@ -36,7 +36,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
             if (questions.Count > 0 && currentGroup.Propagated == Propagate.None)
             {
                 var questionQgroup = new CompleteGroupViewV();
-                questionQgroup.Questions = questions.Select(q => new CompleteQuestionFactory().CreateQuestion(doc, currentGroup, q)).ToList();
+                questionQgroup.Questions = questions.Select(q => new CompleteQuestionFactory().CreateQuestion(doc, q)).ToList();
                 questionQgroup.PublicKey = Guid.Empty;
                 questionQgroup.GroupText = "Main";
                 Groups.Add(questionQgroup);
@@ -104,7 +104,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Vertical
                 for (int index = 0; index < propagated.Count; index++)
                 {
                     var p = propagated[index];
-                    var cq = qf.CreateQuestion(doc, p, questions[i]);
+                    var cq = qf.CreateQuestion(doc, questions[i]);
                     pq.Questions.Add(cq);
                     PropagatedGroups[index].Questions.Add(cq);
                 }

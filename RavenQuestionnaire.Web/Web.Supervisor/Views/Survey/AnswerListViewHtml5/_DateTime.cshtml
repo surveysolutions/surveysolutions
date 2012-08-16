@@ -1,0 +1,26 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Question
+@model CompleteQuestionView
+
+@using (Html.BeginCollectionItem("Answers", true, Guid.NewGuid()))
+{
+    var settings = new Dictionary<string, object>();
+    settings.Add("onchange", "$(this.form).submit();");
+
+    string dateValue = Model.Answer == null ? string.Empty : Model.Answer.ToString();
+    @Html.Hidden("Parent", Model.PublicKey)
+
+    <div class="answer hide-date-box">
+        @Html.Hidden("Selected", true)        
+        @Html.IconInput("AnswerValue", dateValue, Model.Title,
+                          new
+                              {
+                                  data_options = "{\"zindex\": 9999999, \"centerWindow\": true, \"mode\": \"datebox\",\"calStartDay\": 1,\"noButtonFocusMode\": true, \"dateFormat\": \"MM/dd/YYYY\"}",
+                                  type = "hidden",
+                                  @class = "hidden",
+                                  data_role = "datebox",
+                                  onchange = "$(this.form).submit();"
+                              }, new {@class = "calendar"},
+                          new {@class = "bold"})
+    </div>
+}
