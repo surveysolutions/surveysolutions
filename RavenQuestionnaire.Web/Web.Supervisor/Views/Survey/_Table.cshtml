@@ -1,0 +1,13 @@
+﻿@model RavenQuestionnaire.Core.Views.Survey.SurveyBrowseView
+
+@foreach (var collect in Model.Items)
+{
+    <tr>
+        <td>@Html.ActionLink(collect.Title, "Assigments", new { id=collect.Id })</td>        
+        <td></td>
+            @foreach (var it in collect.Grid)
+            {
+                <td>@it.Value</td>
+            }
+    </tr>
+}

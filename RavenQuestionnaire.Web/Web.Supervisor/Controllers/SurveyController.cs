@@ -25,7 +25,8 @@ namespace Web.Supervisor.Controllers
 
 
         public SurveyController(IViewRepository viewRepository,
-                                IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession, IGlobalInfoProvider provider)
+                                IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession,
+                                IGlobalInfoProvider provider)
         {
             this.viewRepository = viewRepository;
             this.documentItemSession = documentItemSession;
@@ -41,17 +42,22 @@ namespace Web.Supervisor.Controllers
         public ActionResult Assigments(string id)
         {
             var user = globalInfo.GetCurrentUser();
-            var users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
+            var users =
+                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
+                                                                                  {Supervisor = user});
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             var model = viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(new SurveyGroupInputModel(id));
             return View(model);
         }
 
         [HttpGet]
-        public ActionResult Assign(string questionnaireId, string responsibleId, string responsibleName, int columnsCount)
+        public ActionResult Assign(string questionnaireId, string responsibleId, string responsibleName,
+                                   int columnsCount)
         {
             var user = globalInfo.GetCurrentUser();
-            var users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
+            var users =
+                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
+                                                                                  {Supervisor = user});
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             var model = new AssigmentModel()
                             {
@@ -68,8 +74,21 @@ namespace Web.Supervisor.Controllers
             var user = viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(userId));
             var responsible = (user != null) ? new UserLight(user.UserId, user.UserName) : new UserLight();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(new ChangeAssignmentCommand(Guid.Parse(CqId), responsible) );
-            return Json(new { userId = responsible.Id, userName= responsible.Name, cqId=CqId }, JsonRequestBehavior.AllowGet);
+            commandService.Execute(new ChangeAssignmentCommand(Guid.Parse(CqId), responsible));
+            return Json(new {userId = responsible.Id, userName = responsible.Name, cqId = CqId},
+                        JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult _TableData(GridDataRequestModel data)
+        {
+            var input = new SurveyViewInputModel
+            {
+                Page = data.Pager.Page,
+                PageSize = data.Pager.PageSize,
+                Orders = data.SortOrder
+            };
+            var model = viewRepository.Load<SurveyViewInputModel, SurveyBrowseView>(input);
+            return PartialView("_Table", model);
         }
     }
 }
