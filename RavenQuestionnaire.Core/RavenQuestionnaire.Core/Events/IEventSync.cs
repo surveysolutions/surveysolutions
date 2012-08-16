@@ -65,6 +65,8 @@ namespace RavenQuestionnaire.Core.Events
 
             foreach (UncommittedEventStream uncommittedEventStream in uncommitedStreams)
             {
+                if (!uncommittedEventStream.Any()) continue;
+                
                 eventStore.Store(uncommittedEventStream);
                 myEventBus.Publish(uncommittedEventStream);
             }
