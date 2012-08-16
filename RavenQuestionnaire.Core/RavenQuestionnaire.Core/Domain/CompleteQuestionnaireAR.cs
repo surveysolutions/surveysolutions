@@ -20,12 +20,12 @@ namespace RavenQuestionnaire.Core.Domain
     /// </summary>
     public class CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireDocument>
     {
-        public CompleteQuestionnaireAR ()
+        public CompleteQuestionnaireAR()
         {
         }
 
         private CompleteQuestionnaireDocument _doc = new CompleteQuestionnaireDocument();
-   
+
 
         public CompleteQuestionnaireAR(Guid completeQuestionnaireId, QuestionnaireDocument questionnaire)
             : base(completeQuestionnaireId)
@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.Domain
             CompleteQuestionnaireDocument doc = (CompleteQuestionnaireDocument)questionnaire;
 
             doc.PublicKey = completeQuestionnaireId;
-            
+
             ////Fix this with read model??
             doc.Creator = null;
             doc.Status = SurveyStatus.Initial;
@@ -60,7 +60,7 @@ namespace RavenQuestionnaire.Core.Domain
                     question.Enabled = executor.Execute(question);
                 }
             }
-            
+
             ////var questions = doc.GetAllQuestions<ICompleteQuestion>().ToList();
             ////var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
             ////foreach (ICompleteQuestion completeQuestion in questions)
@@ -84,7 +84,7 @@ namespace RavenQuestionnaire.Core.Domain
                 CreationDate = clock.UtcNow(),
                 Status = doc.Status,
                 Responsible = doc.Responsible,
-                TotalQuestionCount = doc.Find<ICompleteQuestion>(q=>!(q is IBinded)).Count()
+                TotalQuestionCount = doc.Find<ICompleteQuestion>(q => !(q is IBinded)).Count()
             });
         }
 
@@ -110,13 +110,13 @@ namespace RavenQuestionnaire.Core.Domain
         {
             ICompleteQuestion question = _doc.QuestionHash[e.QuestionPublickey, e.PropogationPublicKey];
             question.SetComments(e.Comments);
-            
+
         }
         public void Delete()
         {
             ApplyEvent(new CompleteQuestionnaireDeleted()
                            {
-                               CompletedQuestionnaireId = _doc.PublicKey, 
+                               CompletedQuestionnaireId = _doc.PublicKey,
                                TemplateId = Guid.Parse(_doc.TemplateId)
                            });
         }
@@ -130,6 +130,24 @@ namespace RavenQuestionnaire.Core.Domain
             //performe checka before event raising
             ICompleteQuestion question = _doc.QuestionHash[questionPublicKey, propogationPublicKey];
 
+            var answerString = "";
+            if (completeAnswer != null)
+            {
+                var answer = question.Find<ICompleteAnswer>((Guid)completeAnswer);
+                if (answer!=null)
+                    answerString = answer.AnswerText;
+            }
+            else
+            {
+                var answerList = new List<string>();
+                foreach (var answerGuid in completeAnswers)
+                {
+                    var answer = question.Find<ICompleteAnswer>((Guid)answerGuid);
+                    if (answer != null)
+                        answerList.Add( answer.AnswerText);
+                }
+                answerString = string.Join(", ", answerList.ToArray());
+            }
 
             // Apply a NewGroupAdded event that reflects the
             // creation of this instance. The state of this
@@ -149,9 +167,7 @@ namespace RavenQuestionnaire.Core.Domain
 
                                //clean up this values
                                QuestionText = question.QuestionText,
-                               AnswerString = question.GetAnswerString()
-
-                               
+                               AnswerString = answerString
                            });
 
             /*if (question.Featured)
@@ -165,7 +181,7 @@ namespace RavenQuestionnaire.Core.Domain
                                });*/
 
             AddRemovePRopagatedGroup(question);
-            
+
         }
         protected void AddRemovePRopagatedGroup(ICompleteQuestion question)
         {
@@ -227,7 +243,7 @@ namespace RavenQuestionnaire.Core.Domain
 
             ICompleteQuestion question = _doc.QuestionHash[e.QuestionPublicKey, e.PropogationPublicKey];
             question.SetAnswer(e.Answer);
-           
+
         }
 
 
@@ -264,7 +280,7 @@ namespace RavenQuestionnaire.Core.Domain
         public void AddPropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             //performe check before event raising
-            
+
 
             var template = _doc.Find<CompleteGroup>(publicKey);
 
@@ -296,7 +312,7 @@ namespace RavenQuestionnaire.Core.Domain
         protected void OnPropagatableGroupAdded(PropagatableGroupAdded e)
         {
             var template = _doc.Find<CompleteGroup>(e.PublicKey);
-         
+
             var newGroup = new CompleteGroup(template, e.PropagationKey);
             _doc.Add(newGroup, null);
             _doc.QuestionHash.AddGroup(newGroup);
@@ -343,8 +359,10 @@ namespace RavenQuestionnaire.Core.Domain
             _doc.IsValid = result;
 
             ApplyEvent(new QuestionnaireStatusChanged()
-            { CompletedQuestionnaireId = this._doc.PublicKey, 
-                Status = result ? status : SurveyStatus.Error});
+            {
+                CompletedQuestionnaireId = this._doc.PublicKey,
+                Status = result ? status : SurveyStatus.Error
+            });
         }
 
         // Event handler for the PropagatableGroupAdded event. This method
