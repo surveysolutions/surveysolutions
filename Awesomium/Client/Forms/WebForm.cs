@@ -78,9 +78,12 @@ namespace Client
         void export_EndOfExport(object sender, ExportEvent.SynchronizationCompletedEvent e)
         {
             if (this.InvokeRequired)
-                this.Invoke(new MethodInvoker(() => { this.pullToolStripMenuItem.Enabled = true; }));
-            if (e.ActionType == SyncType.Pull)
-                webView.Reload();
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    this.pullToolStripMenuItem.Enabled = true; if (e.ActionType == SyncType.Pull)
+                        webView.LoadURL(Settings.Default.DefaultUrl);
+                }));
+           
         }
         #endregion
 
