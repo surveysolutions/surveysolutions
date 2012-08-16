@@ -16,13 +16,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
     {
         #region CreateUncommittedEventStream
 
-        [Test]
-        public void CreateUncommittedEventStream_EventStreamIsEmpty_ExeptionisThrowed()
-        {
-            var stream = new List<AggregateRootEvent>();
-            Assert.Throws<ArgumentException>(() => stream.CreateUncommittedEventStream(0));
-        }
-
+        
         [Test]
         public void CreateUncommittedEventStream_EventStreamWith2EventsStrartPointIs0_AllEventsAreCopied()
         {

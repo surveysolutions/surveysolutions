@@ -44,9 +44,10 @@ namespace RavenQuestionnaire.Core.Utility
         }
         public static UncommittedEventStream CreateUncommittedEventStream(this IEnumerable<AggregateRootEvent> stream, long lastSequenceNumber)
         {
-            if (!stream.Any())
-                throw new ArgumentException("EventSequence is empty");
             var uncommitedStream = new UncommittedEventStream(Guid.NewGuid());
+
+            if (!stream.Any())
+                return uncommitedStream;
             long sequenceNumber = lastSequenceNumber + 1;
             foreach (AggregateRootEvent aggregateRootEvent in stream)
             {
