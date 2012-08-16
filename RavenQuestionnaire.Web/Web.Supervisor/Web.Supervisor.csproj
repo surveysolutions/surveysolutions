@@ -195,13 +195,12 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-	<Content Include="Web.Deploy-dev.config" >
+    <Content Include="Web.Deploy-dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Web.Deploy-Main.config" >
+    <Content Include="Web.Deploy-Main.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-	
     <Content Include="Content\main.css" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
@@ -276,7 +275,9 @@
   <ItemGroup>
     <Content Include="Views\Survey\DisplayColumn.cshtml" />
   </ItemGroup>
- 
+  <ItemGroup>
+    <Content Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
