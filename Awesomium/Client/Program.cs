@@ -38,6 +38,7 @@ namespace Client
             }
 
             Application.Run( new WebForm() );
+            
         }
     }
 }
