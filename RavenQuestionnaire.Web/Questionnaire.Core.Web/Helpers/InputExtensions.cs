@@ -23,6 +23,7 @@ namespace Questionnaire.Core.Web.Helpers
             aTagBuilder.MergeAttributes(buttonAttributes);
             aTagBuilder.MergeAttribute("open-virtual-keyboar", "true", true);
             aTagBuilder.MergeAttribute("href", "#", true);
+            aTagBuilder.MergeAttribute("style", "background-size:30px;height:30px;width:30px", true);
             aTagBuilder.MergeAttribute("target-input", fullId, true);
             aTagBuilder.SetInnerText(/*System.Web.HttpUtility.HtmlDecode("&nbsp;")*/ string.Empty);
             string required = string.Empty;
