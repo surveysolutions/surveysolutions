@@ -66,7 +66,7 @@ namespace Web.Headquarter.App_Start
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
             RegisterServices(kernel);
-            NCQRSInit.Init(WebConfigurationManager.AppSettings["Raven.DocumentStore"], kernel);
+            NCQRSInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"], */kernel);
           
             return kernel;
         }
