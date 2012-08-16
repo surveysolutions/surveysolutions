@@ -339,6 +339,9 @@
     <Compile Include="Views\Assignment\AssigmentBrowseInputModel.cs" />
     <Compile Include="Views\Assignment\AssigmentBrowseItem.cs" />
     <Compile Include="Views\Assignment\AssigmentViewInputModel.cs" />
+    <Compile Include="Views\Assign\AssignSurveyView.cs" />
+    <Compile Include="Views\Assign\AssignSurveyViewFactory.cs" />
+    <Compile Include="Views\Assign\AssignSurveyInputModel.cs" />
     <Compile Include="Views\Card\CardView.cs" />
     <Compile Include="Views\Card\CardViewFactory.cs" />
     <Compile Include="Views\Card\CardViewInputModel.cs" />
