@@ -44,8 +44,9 @@ namespace Web.Supervisor.Controllers
         public ActionResult Assigments(string id)
         {
             UserLight user = globalInfo.GetCurrentUser();
-            InterviewersView users =
-                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
+            var users =
+                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
+                                                                                  {Supervisor = user});
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             SurveyGroupView model =
                 viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(new SurveyGroupInputModel(id));
@@ -68,8 +69,9 @@ namespace Web.Supervisor.Controllers
                                        int columnsCount)
         {
             UserLight user = globalInfo.GetCurrentUser();
-            InterviewersView users =
-                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
+            var users =
+                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
+                                                                                  {Supervisor = user});
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             var model = new AssigmentModel
                             {
@@ -110,4 +112,15 @@ namespace Web.Supervisor.Controllers
             return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
         }
     }
+     public ActionResult _TableData(GridDataRequestModel data)
+        {
+            var input = new SurveyViewInputModel
+            {
+                Page = data.Pager.Page,
+                PageSize = data.Pager.PageSize,
+                Orders = data.SortOrder
+            };
+            var model = viewRepository.Load<SurveyViewInputModel, SurveyBrowseView>(input);
+            return PartialView("_Table", model);
+
 }
