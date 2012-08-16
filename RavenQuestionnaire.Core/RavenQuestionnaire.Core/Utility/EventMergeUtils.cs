@@ -10,12 +10,13 @@ namespace RavenQuestionnaire.Core.Utility
 {
     public static class EventMergeUtils
     {
-        public static long FindDivergentSequenceNumber(this IEnumerable<AggregateRootEvent> stream, CommittedEventStream baseStream)
+        public static long FindDivergentSequenceNumber(this IEnumerable<AggregateRootEvent> stream,
+                                                       CommittedEventStream baseStream)
         {
             if (!stream.Any())
                 throw new ArgumentException("event stream is empty");
-           // var aggregateRootId = stream.First().EventSourceId;
-           // var currentStream = eventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);
+            // var aggregateRootId = stream.First().EventSourceId;
+            // var currentStream = eventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);
             if (baseStream.IsEmpty)
                 return 0;
             var startPoint = Math.Min(baseStream.Last().EventSequence, stream.Last().EventSequence);
@@ -30,31 +31,47 @@ namespace RavenQuestionnaire.Core.Utility
 
             return startPoint;
         }
-        public static UncommittedEventStream CreateUncommittedEventStream(this IEnumerable<AggregateRootEvent> stream, CommittedEventStream baseStream)
+
+        public static UncommittedEventStream CreateUncommittedEventStream(this IEnumerable<AggregateRootEvent> stream,
+                                                                          CommittedEventStream baseStream)
         {
             if (!stream.Any())
                 throw new ArgumentException("EventSequence is empty");
-             var dvergentPoint = stream.FindDivergentSequenceNumber(baseStream);
-            long sequenceNumber = 0;
-            if(baseStream.Any())
-                sequenceNumber = baseStream.Last().EventSequence;
+            var dvergentPoint = stream.FindDivergentSequenceNumber(baseStream);
+            
             var uncommitedStream = CreateUncommittedEventStream(
-                stream.SkipWhile(e => e.EventSequence <= dvergentPoint), sequenceNumber);
+                stream,baseStream, dvergentPoint);
             return uncommitedStream;
         }
-        public static UncommittedEventStream CreateUncommittedEventStream(this IEnumerable<AggregateRootEvent> stream, long lastSequenceNumber)
+
+        public static UncommittedEventStream CreateUncommittedEventStream(this IEnumerable<AggregateRootEvent> stream,
+                                                                          CommittedEventStream baseStream, long dvergentPoint)
         {
             var uncommitedStream = new UncommittedEventStream(Guid.NewGuid());
 
             if (!stream.Any())
                 return uncommitedStream;
-            long sequenceNumber = lastSequenceNumber + 1;
-            foreach (AggregateRootEvent aggregateRootEvent in stream)
+
+            long lastSequenceNumber = 1;
+            if (baseStream.Any())
+                lastSequenceNumber = baseStream.Last().EventSequence + 1;
+
+            var mergedStream =
+                stream.SkipWhile(e => e.EventSequence <= dvergentPoint).Where(
+                    e =>
+                    !baseStream.SkipWhile(c => c.EventSequence <= dvergentPoint).Any(c => c.EventIdentifier == e.EventIdentifier));
+                /*.Join(
+                    baseStream.SkipWhile(e => e.EventSequence <= dvergentPoint),
+                    (e) => e.EventIdentifier, e => e.EventIdentifier, (e, u) => e);*/
+            // long sequenceNumber = lastSequenceNumber + 1;
+            foreach (AggregateRootEvent aggregateRootEvent in mergedStream)
             {
-                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(sequenceNumber, 0));
-                sequenceNumber++;
+                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(lastSequenceNumber, 0));
+                lastSequenceNumber++;
             }
             return uncommitedStream;
         }
+        
     }
 }
+
