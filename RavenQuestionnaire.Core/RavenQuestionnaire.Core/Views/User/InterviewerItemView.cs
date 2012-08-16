@@ -24,7 +24,7 @@ namespace RavenQuestionnaire.Core.Views.User
             foreach(var kvp in featuredHeaders)
             {
                 var featured = item.FeaturedQuestions.FirstOrDefault(q => q.PublicKey == kvp.Key);
-                FeaturedQuestions.Add(kvp.Key, featured == null ? "" : string.Format("{0} ({1})", featured.AnswerValue, featured.AnswerText));
+                FeaturedQuestions.Add(kvp.Key, featured == null ? "" : featured.AnswerText);
             }
             QuestionnaireTitle = item.QuestionnaireTitle;
         }
