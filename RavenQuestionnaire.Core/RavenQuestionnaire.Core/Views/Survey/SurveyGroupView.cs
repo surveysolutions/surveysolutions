@@ -7,6 +7,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
 {
     public class SurveyGroupView
     {
+        public string SurveyTitle { get; private set; }
         public int PageSize { get; private set; }
 
         public int Page { get; private set;}
@@ -17,7 +18,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
 
         public Dictionary<Guid, string> Headers { get; set; }
 
-        public SurveyGroupView(int page, int pageSize, int totalCount, IEnumerable<CompleteQuestionnaireBrowseItem> items)
+        public SurveyGroupView(int page, int pageSize, string surveyTitle, int totalCount, IEnumerable<CompleteQuestionnaireBrowseItem> items)
         {
             this.Page = page;
             this.TotalCount = totalCount;
@@ -33,6 +34,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             {
                 Items.Add(new SurveyGroupItem(it, Headers));
             }
+            SurveyTitle = surveyTitle;
         }
     }
 }

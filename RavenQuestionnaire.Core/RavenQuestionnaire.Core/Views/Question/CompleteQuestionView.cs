@@ -46,5 +46,7 @@ namespace RavenQuestionnaire.Core.Views.Question
                 this.Cards = doc.Cards.Select(card => new CardView(doc.PublicKey, card)).OrderBy(a => Guid.NewGuid()).ToArray();
             }
         }
+
+        public Guid ParentGroupPublicKey { get; set; }
     }
 }
