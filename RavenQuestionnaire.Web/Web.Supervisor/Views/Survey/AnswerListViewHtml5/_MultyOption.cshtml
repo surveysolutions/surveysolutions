@@ -7,26 +7,17 @@
     settings.Add("onclick", "$(this.form).submit()"); 
 }
 <fieldset data-role="controlgroup" data-type="horizontal">
-    <legend @if (!String.IsNullOrEmpty(Model.Instructions))
-            {
-                <text>
-                    data-original-title = "Instructions"
-                    data-content = "@Model.Instructions"
-                    rel = "popover"
-                </text>
-            } >
-        @Html.Raw(Model.Title)</legend>
+    <legend>@Html.Raw(Model.Title)</legend>
     @foreach (CompleteAnswerView item in Model.Answers)
     {
         using (Html.BeginCollectionItem("Answers", true, item.PublicKey))
         {
             @Html.Hidden("Parent", Model.PublicKey)
-            @Html.CheckBox("Selected", item.Selected, (IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings)
             @Html.Hidden("PublicKey", item.PublicKey)
-            <label for="@ViewData.TemplateInfo.GetFullHtmlFieldId("Selected")">
-                @{ Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item); }
+            <label class="checkbox" for="@ViewData.TemplateInfo.GetFullHtmlFieldId("Selected")">
+                @Html.CheckBox("Selected", item.Selected, settings)
+                @{ Html.RenderPartial(string.Format("~/Views/Survey/AnswerViewHtml5/_{0}.cshtml", item.AnswerType), item); }
             </label>
-
-     @*       @Html.Label("Selected", item.Title)*@        }
+        }
     }
 </fieldset>

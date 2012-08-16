@@ -5,8 +5,6 @@
 
     string id = Model.Id;
 }
-<td>@Model.Title
-</td>
 @foreach (var item in Model.FeatureadValue)
 {
     <td>
@@ -19,7 +17,7 @@
         <a id="link-@Model.Id" href="@Url.Action("Details", "User", new {id = @Model.Responsible == null ? string.Empty : Model.Responsible.Id})">@(Model.Responsible == null ? string.Empty : Model.Responsible.Name)</a>
     </div>
     <div class="assignment-form" >
-        @using (Ajax.BeginForm("Assign", "Survey", new AjaxOptions {OnComplete = "HideForm"}))
+        @using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions { OnComplete = "HideForm" }))
         {
             @Html.Hidden("CqId", id)
             @Html.DropDownList("userId", ViewBag.Users as SelectList)
@@ -31,10 +29,10 @@
 <td>@Model.Status.Name
 </td>
 <td>   
- 
+    <a href="@Url.Action("Assign", new { id = Model.Id })">Assign</a>       
     @if (Model.Responsible == null)
     {
-        <a href="@Url.Action("Assign", new { id = Model.Id })">Assign</a>       
+        
     }
     else
     {

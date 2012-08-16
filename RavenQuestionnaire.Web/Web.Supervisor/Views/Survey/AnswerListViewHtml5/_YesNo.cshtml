@@ -24,7 +24,7 @@
 
 
             <label for="@radibutonname">
-                @{ Html.RenderPartial(string.Format("~/Views/Answer/answerViewHtml5/_{0}.cshtml", item.AnswerType), item); }
+                @{ Html.RenderPartial(string.Format("~/Views/Survey/AnswerViewHtml5/_{0}.cshtml", item.AnswerType), item); }
             </label>
             @Html.Hidden("Selected", true)
         }
