@@ -8,6 +8,7 @@ using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using Raven.Client;
+using Raven.Client.Document;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Web.App_Start;
@@ -70,7 +71,7 @@ namespace Web.Supervisor.App_Start
             kernel.Bind<IExportImport>().To<ExportImportEvent>();
             kernel.Bind<IEventSync>().To<SupervisorEventSync>();
             RegisterServices(kernel);
-            NCQRSInit.Init(WebConfigurationManager.AppSettings["Raven.DocumentStore"], kernel);
+            NCQRSInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"],*/ kernel);
             
             return kernel;
         }
@@ -81,9 +82,9 @@ namespace Web.Supervisor.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).When( b => HttpContext.Current != null).InScope(o => HttpContext.Current);
-            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(b => OperationContext.Current != null).InScope(o => OperationContext.Current);
-            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(b => HttpContext.Current == null && OperationContext.Current == null).InScope(o => Thread.CurrentThread);
+            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<DocumentStore>().OpenSession()).When( b => HttpContext.Current != null).InScope(o => HttpContext.Current);
+            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<DocumentStore>().OpenSession()).When(b => OperationContext.Current != null).InScope(o => OperationContext.Current);
+            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<DocumentStore>().OpenSession()).When(b => HttpContext.Current == null && OperationContext.Current == null).InScope(o => Thread.CurrentThread);
 
             kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
             kernel.Bind<IBagManager>().To<ViewBagManager>();

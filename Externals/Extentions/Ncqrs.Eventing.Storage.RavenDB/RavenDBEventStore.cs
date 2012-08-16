@@ -11,7 +11,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 {
     public class RavenDBEventStore : IEventStore
     {
-        private bool useAsyncSave = true;//research
+        private bool useAsyncSave = false;//research. in the embedded mode true is not valid  
 
         private readonly IDocumentStore _documentStore;
 
