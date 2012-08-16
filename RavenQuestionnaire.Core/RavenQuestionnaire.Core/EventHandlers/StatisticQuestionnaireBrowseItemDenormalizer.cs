@@ -37,7 +37,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                         evnt.Payload.QuestionnaireId.ToString(),
                         evnt.Payload.Questionnaire.Title,
                         evnt.Payload.Responsible == null ? 1 : 0, 
-                        statistic), 
+                        statistic, 1), 
                     evnt.Payload.CompletedQuestionnaireId);
             }
             else

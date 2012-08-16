@@ -13,21 +13,25 @@ namespace RavenQuestionnaire.Core.Views.Survey
         public int UnAssigment { get; set; }
         public Dictionary<Guid, SurveyItem> Statistic { get; set; }
         public Dictionary<string, int> Grid { get; set; }
+        public int Total { get; set; }
 
         public SurveyBrowseItem()
         {
             this.Grid = new Dictionary<string, int>();
             var statuses = SurveyStatus.GetAllStatuses().Select(s => s.Name).ToList();
-            statuses.Insert(0, "Unassigned");
+            statuses.Insert(0, "Total");
+            statuses.Insert(1, "Unassigned");
             foreach (var statuse in statuses)
                 this.Grid.Add(statuse, 0);
         }
 
-        public SurveyBrowseItem(string id, string title, int unAssigment, Dictionary<Guid, SurveyItem> statistic):this()
+        public SurveyBrowseItem(string id, string title, int unAssigment, Dictionary<Guid, SurveyItem> statistic, int total):this()
         {
             this.Id = id;
             this.Title = title;
             this.UnAssigment = unAssigment;
+            this.Total = statistic.Count;
+            this.Grid["Total"] = this.Total;
             this.Grid["Unassigned"] = unAssigment;
             this.Statistic = statistic;
             var items = statistic.Values.Where(t=>t.Responsible!=null).GroupBy(r => r.Status).Select(g => new { Status = g.Key, Count = g.Count() }).ToList();
