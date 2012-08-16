@@ -14,12 +14,16 @@ namespace Web.Supervisor.Utils
 {
     public static class ViewHelpers
     {
-        public static MvcHtmlString ActionLinkWithIcon(this AjaxHelper helper, string linkText, string actionName, string controllerName, object routeValues, AjaxOptions ajaxOptions, object htmlAttributes, string icon)
+        public static MvcHtmlString ActionLinkWithIcon(this AjaxHelper helper, string linkText, string actionName,
+                                                       string controllerName, object routeValues,
+                                                       AjaxOptions ajaxOptions, object htmlAttributes, string icon)
         {
             var builder = new TagBuilder("i");
             builder.MergeAttribute("class", icon);
-            var link = helper.ActionLink("[replaceme]" + linkText, actionName, controllerName, routeValues, ajaxOptions, htmlAttributes);
-            return MvcHtmlString.Create(link.ToHtmlString().Replace("[replaceme]", builder.ToString(TagRenderMode.Normal)));
+            MvcHtmlString link = helper.ActionLink("[replaceme]" + linkText, actionName, controllerName, routeValues,
+                                                   ajaxOptions, htmlAttributes);
+            return
+                MvcHtmlString.Create(link.ToHtmlString().Replace("[replaceme]", builder.ToString(TagRenderMode.Normal)));
         }
 
 
@@ -42,7 +46,7 @@ namespace Web.Supervisor.Utils
                 return MvcHtmlString.Empty;
             }
 
-            TagBuilder tag = new TagBuilder("label");
+            var tag = new TagBuilder("label");
             tag.MergeAttributes(htmlAttributes);
             tag.Attributes.Add("for", html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId(htmlFieldName));
             tag.SetInnerText(labelText);
@@ -92,7 +96,7 @@ namespace Web.Supervisor.Utils
             if (htmlHelper.ViewData.ModelState.IsValid)
                 return null;
 
-            var message = GetUserErrorMessageOrDefault(htmlHelper.ViewContext.HttpContext, modelError, modelState);
+            string message = GetUserErrorMessageOrDefault(htmlHelper.ViewContext.HttpContext, modelError, modelState);
             Guid id;
             using (MD5 md5 = MD5.Create())
             {
@@ -100,7 +104,8 @@ namespace Web.Supervisor.Utils
                 id = new Guid(hash);
             }
 
-            retVal += "<div  close-marker=\"" + id.ToString() + "\" class='alert alert-error'><a  class='close'>&times;</a><span>";
+            retVal += "<div  close-marker=\"" + id.ToString() +
+                      "\" class='alert alert-error'><a  class='close'>&times;</a><span>";
             if (!String.IsNullOrEmpty(message))
                 retVal += message;
             retVal += "</span>";
@@ -108,7 +113,8 @@ namespace Web.Supervisor.Utils
             return MvcHtmlString.Create(retVal);
         }
 
-        private static string GetUserErrorMessageOrDefault(HttpContextBase httpContext, ModelError error, ModelState modelState)
+        private static string GetUserErrorMessageOrDefault(HttpContextBase httpContext, ModelError error,
+                                                           ModelState modelState)
         {
             if (!String.IsNullOrEmpty(error.ErrorMessage))
             {

@@ -1,8 +1,12 @@
-using System.Collections.Concurrent;
+using System;
 using System.ServiceModel;
 using System.Threading;
+using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Ninject;
+using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;
@@ -11,35 +15,29 @@ using Raven.Client;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Web.App_Start;
+using Web.Supervisor.App_Start;
 using Web.Supervisor.Synchronization;
+using WebActivator;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(Web.Supervisor.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(Web.Supervisor.App_Start.NinjectWebCommon), "Stop")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
+[assembly: ApplicationShutdownMethod(typeof (NinjectWebCommon), "Stop")]
 
 namespace Web.Supervisor.App_Start
 {
-    using System;
-    using System.Web;
-
-    using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-
-    using Ninject;
-    using Ninject.Web.Common;
-
-    public static class NinjectWebCommon 
+    public static class NinjectWebCommon
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
 
         /// <summary>
         /// Starts the application
         /// </summary>
-        public static void Start() 
+        public static void Start()
         {
-            DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
-            DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
+            DynamicModuleUtility.RegisterModule(typeof (OnePerRequestHttpModule));
+            DynamicModuleUtility.RegisterModule(typeof (NinjectHttpModule));
             bootstrapper.Initialize(CreateKernel);
         }
-        
+
         /// <summary>
         /// Stops the application.
         /// </summary>
@@ -47,7 +45,7 @@ namespace Web.Supervisor.App_Start
         {
             bootstrapper.ShutDown();
         }
-        
+
         /// <summary>
         /// Creates the kernel that will manage your application.
         /// </summary>
@@ -71,7 +69,7 @@ namespace Web.Supervisor.App_Start
             kernel.Bind<IEventSync>().To<SupervisorEventSync>();
             RegisterServices(kernel);
             NCQRSInit.Init(WebConfigurationManager.AppSettings["Raven.DocumentStore"], kernel);
-            
+
             return kernel;
         }
 
@@ -81,13 +79,16 @@ namespace Web.Supervisor.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).When( b => HttpContext.Current != null).InScope(o => HttpContext.Current);
-            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(b => OperationContext.Current != null).InScope(o => OperationContext.Current);
-            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(b => HttpContext.Current == null && OperationContext.Current == null).InScope(o => Thread.CurrentThread);
+            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).When
+                (b => HttpContext.Current != null).InScope(o => HttpContext.Current);
+            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).When
+                (b => OperationContext.Current != null).InScope(o => OperationContext.Current);
+            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).When
+                (b => HttpContext.Current == null && OperationContext.Current == null).InScope(o => Thread.CurrentThread);
 
             kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
             kernel.Bind<IBagManager>().To<ViewBagManager>();
             kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
-        }        
+        }
     }
 }

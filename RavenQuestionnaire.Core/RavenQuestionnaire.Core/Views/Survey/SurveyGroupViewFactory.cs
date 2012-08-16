@@ -17,9 +17,11 @@ namespace RavenQuestionnaire.Core.Views.Survey
         {
             var count = documentItemSession.Query().Where(x => x.TemplateId == input.Id).ToList().Count;
             if (count==0)
-                return new SurveyGroupView(input.Page, input.PageSize, 0, new CompleteQuestionnaireBrowseItem[0]);
-            var query = !string.IsNullOrEmpty(input.QuestionnaireId) ? documentItemSession.Query().Where(input.Expression).Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId).ToList() : documentItemSession.Query().Where(input.Expression).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
-            return new SurveyGroupView(input.Page, input.PageSize, 0, query);
+                return new SurveyGroupView(input.Page, input.PageSize, input.QuestionnaireId, 0, new CompleteQuestionnaireBrowseItem[0]);
+            var query = !string.IsNullOrEmpty(input.QuestionnaireId) 
+                ? documentItemSession.Query().Where(input.Expression).Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId).ToList() 
+                : documentItemSession.Query().Where(input.Expression).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
+            return new SurveyGroupView(input.Page, input.PageSize, query[0].QuestionnaireTitle, 0, query);
         }
     }
 }

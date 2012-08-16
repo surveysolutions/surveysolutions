@@ -10,26 +10,30 @@ namespace Web.Supervisor.WCF
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class EventPipeService : IEventPipe
     {
-        private IKernel kernel;
+        private readonly IKernel kernel;
+
         public EventPipeService(IKernel kernel)
         {
             this.kernel = kernel;
         }
 
+        #region IEventPipe Members
+
         public ErrorCodes Process(EventSyncMessage request)
         {
             try
             {
-               // kernel.Get<ICommandInvoker>().Execute(request.Command, request.CommandKey, request.SynchronizationKey);
-                var eventStore= kernel.Get<IEventSync>();
+                // kernel.Get<ICommandInvoker>().Execute(request.Command, request.CommandKey, request.SynchronizationKey);
+                var eventStore = kernel.Get<IEventSync>();
                 eventStore.WriteEvents(request.Command);
                 return ErrorCodes.None;
             }
             catch (Exception)
             {
-
                 return ErrorCodes.Fail;
             }
         }
+
+        #endregion
     }
 }

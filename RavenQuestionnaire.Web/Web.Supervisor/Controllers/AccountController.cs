@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿using System.Web.Mvc;
 using System.Web.Security;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -14,7 +9,7 @@ namespace Web.Supervisor.Controllers
 {
     public class AccountController : Controller
     {
-        private IFormsAuthentication authentication;
+        private readonly IFormsAuthentication authentication;
 
         public AccountController(IFormsAuthentication auth)
         {
@@ -36,7 +31,7 @@ namespace Web.Supervisor.Controllers
                 if (Membership.ValidateUser(model.UserName, SimpleHash.ComputeHash(model.Password)))
                 {
                     if (Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString()) ||
-                       Roles.IsUserInRole(model.UserName, UserRoles.Administrator.ToString()))
+                        Roles.IsUserInRole(model.UserName, UserRoles.Administrator.ToString()))
                     {
                         authentication.SignIn(model.UserName, false);
                         return Redirect("~/");

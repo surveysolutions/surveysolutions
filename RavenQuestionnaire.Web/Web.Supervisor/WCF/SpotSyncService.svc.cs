@@ -10,7 +10,7 @@ namespace Web.Supervisor.WCF
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class SpotSyncService : ISpotSync
     {
-        
+        #region ISpotSync Members
 
         public string Process()
         {
@@ -18,11 +18,13 @@ namespace Web.Supervisor.WCF
                 return null;
 
             Uri uri = OperationContext.Current.Host.BaseAddresses[0];
-            
-           // return uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port;
+
+            // return uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port;
             return uri.GetLeftPart(UriPartial.Authority) + HttpRuntime.AppDomainAppVirtualPath;
             //  return System.Environment.MachineName;
             //return HttpContext.Current.Server.MapPath(".");
         }
+
+        #endregion
     }
 }

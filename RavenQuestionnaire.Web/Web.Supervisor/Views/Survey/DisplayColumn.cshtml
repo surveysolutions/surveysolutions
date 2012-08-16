@@ -1,9 +1,10 @@
-﻿@model RavenQuestionnaire.Core.Views.Survey.SurveyGroupItem
-@{ var name = "responsible-" + Model.Id;
+﻿@using RavenQuestionnaire.Core.Views.Survey
+@model SurveyGroupItem
+@{
+    string name = "responsible-" + Model.Id;
 
-   var id = Model.Id;}
-<td>@Model.Title
-</td>
+    string id = Model.Id;
+}
 @foreach (var item in Model.FeatureadValue)
 {
     <td>
@@ -13,39 +14,48 @@
 }
 <td id="row-@Model.Id">
     <div class="assignment-view">
-        <a id="link-@Model.Id" href="@Url.Action("Details", "User", new { id = @Model.Responsible == null ? string.Empty : Model.Responsible.Id })">@(Model.Responsible == null ? string.Empty : Model.Responsible.Name)</a>
+        <a id="link-@Model.Id" href="@Url.Action("Details", "User", new {id = @Model.Responsible == null ? string.Empty : Model.Responsible.Id})">@(Model.Responsible == null ? string.Empty : Model.Responsible.Name)</a>
     </div>
     <div class="assignment-form" >
-        @using (Ajax.BeginForm("Assign", "Survey", new AjaxOptions() { OnComplete = "HideForm"}))
+        @using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions { OnComplete = "HideForm" }))
         {
             @Html.Hidden("CqId", id)
             @Html.DropDownList("userId", ViewBag.Users as SelectList)
             <input name="Save" type="submit" value="Save" />
-            <input id="canc-@Model.Id" name="Cancel" type="button" value="Cancel" /> 
+            <input id="canc-@Model.Id" name="Cancel" type="button" value="Cancel" />
         }
     </div>
 </td>
 <td>@Model.Status.Name
 </td>
-<td>    
-    <a id="ref-@Model.Id" href="#" >@((Model.Responsible == null || string.IsNullOrEmpty(Model.Responsible.Id)) ? "Assign" : "Change")</a> 
-    <script type="text/javascript">
+<td>   
+    <a href="@Url.Action("Assign", new { id = Model.Id })">Assign</a>       
+    @if (Model.Responsible == null)
+    {
+        
+    }
+    else
+    {
+        <a id="ref-@Model.Id" href="#" >Change</a>
+        <script type="text/javascript">
         function HideForm(data) {
             $('#row-@(Model.Id)').removeClass("showForm");
             var json = jQuery.parseJSON(data.responseText);
             if (json.userId != null && json.userName != null)
             {
-                $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Details/' + json.userId + '">' + json.userName + '</a>');
+            $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Details/' + json.userId + '">' + json.userName + '</a>');
             }
             else {
                 $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Details/"></a>');
             }
         }
-        $('#ref-@(Model.Id)').click(function () {
+
+        $('#ref-@(Model.Id)').click(function() {
             $('#row-@(Model.Id)').addClass("showForm");
         });
-        $('#canc-@(Model.Id)').click(function () {
+        $('#canc-@(Model.Id)').click(function() {
             $('#row-@(Model.Id)').removeClass("showForm");
         });
     </script>
+    }
 </td>

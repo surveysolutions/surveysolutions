@@ -1,0 +1,23 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Answer
+@using RavenQuestionnaire.Core.Views.Question
+@model CompleteQuestionView
+@{
+    var settings = new Dictionary<string, object>();
+    settings.Add("onclick", "$(this.form).submit()"); 
+}
+<fieldset data-role="controlgroup" data-type="horizontal">
+    <legend>@Html.Raw(Model.Title)</legend>
+    @foreach (CompleteAnswerView item in Model.Answers)
+    {
+        using (Html.BeginCollectionItem("Answers", true, item.PublicKey))
+        {
+            @Html.Hidden("Parent", Model.PublicKey)
+            @Html.Hidden("PublicKey", item.PublicKey)
+            <label class="checkbox" for="@ViewData.TemplateInfo.GetFullHtmlFieldId("Selected")">
+                @Html.CheckBox("Selected", item.Selected, settings)
+                @{ Html.RenderPartial(string.Format("~/Views/Survey/AnswerViewHtml5/_{0}.cshtml", item.AnswerType), item); }
+            </label>
+        }
+    }
+</fieldset>
