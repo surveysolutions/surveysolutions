@@ -240,12 +240,6 @@
                 <Component Id="cmpF0399A63A5D63CAC0473AAC979259273" Guid="*">
                     <File Id="filE422206BA62993A646F0DB97E8023736" KeyPath="yes" Source="$(var.SourceSiteDir)\bin\Raven.Munin.xml" />
                 </Component>
-                <Component Id="cmpED9A0E8FE8AE3189F8D8558921AE3110" Guid="*">
-                    <File Id="fil99200E39F13B435E8E999EFE0F5630A2" KeyPath="yes" Source="$(var.SourceSiteDir)\bin\Raven.Smuggler.exe" />
-                </Component>
-                <Component Id="cmp2DBC2FE935322E1DC242FD79370B470B" Guid="*">
-                    <File Id="filA37CF6648BAE8E93447C73D1B66C4BB2" KeyPath="yes" Source="$(var.SourceSiteDir)\bin\Raven.Smuggler.pdb" />
-                </Component>
                 <Component Id="cmpB36EB89DA546859BB2519CD4E3906718" Guid="*">
                     <File Id="filE2BF90B3A7300318E0F18E51AFE4A76E" KeyPath="yes" Source="$(var.SourceSiteDir)\bin\Raven.Storage.Esent.dll" />
                 </Component>
@@ -830,8 +824,6 @@
             <ComponentRef Id="cmp1382C4DC06140B70DE58F939D569E223" />
             <ComponentRef Id="cmp5DC11F92EAB723F76371A084AB3383EC" />
             <ComponentRef Id="cmpF0399A63A5D63CAC0473AAC979259273" />
-            <ComponentRef Id="cmpED9A0E8FE8AE3189F8D8558921AE3110" />
-            <ComponentRef Id="cmp2DBC2FE935322E1DC242FD79370B470B" />
             <ComponentRef Id="cmpB36EB89DA546859BB2519CD4E3906718" />
             <ComponentRef Id="cmpFFFFFFED695BDA4F58A03BC0117E2686" />
             <ComponentRef Id="cmp045C336A0CDC9938E2301C04E34525BA" />

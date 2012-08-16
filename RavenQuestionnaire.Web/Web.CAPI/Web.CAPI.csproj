@@ -97,12 +97,6 @@
     <Reference Include="Raven.Database">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Database.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Munin">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Munin.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Smuggler">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Smuggler.exe</HintPath>
-    </Reference>
     <Reference Include="Raven.Storage.Esent">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Storage.Esent.dll</HintPath>
     </Reference>
@@ -274,15 +268,12 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-	
-	<Content Include="Web.Deploy-dev.config">
-	      <DependentUpon>Web.config</DependentUpon>
+    <Content Include="Web.Deploy-dev.config">
+      <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Web.Deploy-Main.config" >
-	      <DependentUpon>Web.config</DependentUpon>
+    <Content Include="Web.Deploy-Main.config">
+      <DependentUpon>Web.config</DependentUpon>
     </Content>
-	
-	
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -338,7 +329,6 @@
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Synchronizations\ViewTestUploadFile.cshtml" />
     <Content Include="Views\Survey\_SurveyContent.cshtml" />
-
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">

@@ -40,7 +40,7 @@
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Directory Id="CommonAppDataFolder">
                 <Directory Id="WINDOWSVOLUME">
-                <Directory Id="TheWorldBank" Name="The World Bank">
+                <Directory Id="TheWorldBank" Name="TheWorldBank">
                     <Directory Id="INSTALLLOCATION" Name="Capi">
                         <Directory Id="CLIENTDIR" Name="Client">
                         </Directory>
