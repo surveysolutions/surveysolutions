@@ -349,9 +349,9 @@ function updateCounter() {
        
     //    keyboardInputs.add(numericInputs).removeAttr("draw-key-board");
 
-        createKeyBoard({ layout: 'qwertyNoEnter', min_width: '888px' }, "dummyTxtKeyBoard",keyboardInputs);
+        createKeyBoard({ layout: 'qwertyNoEnter', min_width: '888px',css: {container: 'text'}  }, "dummyTxtKeyBoard",keyboardInputs);
        
-        createKeyBoard({ layout: 'numOnly', min_width: null }, "dummyNumericKeyBoard", numericInputs);
+        createKeyBoard({ layout: 'numOnly', min_width: null,css: {container: 'numeric'} }, "dummyNumericKeyBoard", numericInputs);
        
         function createKeyBoard(options, name, inputs) {
 

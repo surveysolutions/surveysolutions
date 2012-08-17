@@ -18,6 +18,7 @@ using Questionnaire.Core.Web.WCF;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Synchronization;
 using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Core.Views.Synchronization;
 using Web.CAPI.Utils;
 using LogManager = NLog.LogManager;
@@ -30,18 +31,24 @@ namespace Web.CAPI.Controllers
         private readonly IGlobalInfoProvider _globalProvider;
         private readonly IViewRepository viewRepository;
         private readonly IExportImport exportimportEvents ;
-
+        private readonly IEventSync synchronizer;
         public SynchronizationsController( IViewRepository viewRepository,
-                                          IGlobalInfoProvider globalProvider,IExportImport exportImport)
+                                          IGlobalInfoProvider globalProvider, IExportImport exportImport, IEventSync synchronizer)
         {
             this.exportimportEvents = exportImport;
             this.viewRepository = viewRepository;
             _globalProvider = globalProvider;
+            this.synchronizer = synchronizer;
         }
 
        
 
         #region export implementations
+
+        public bool CheckIsThereSomethingToPush()
+        {
+            return this.synchronizer.ReadEvents().Any();
+        }
 
         public Guid? Push(string url, Guid syncKey)
         {
@@ -146,6 +153,8 @@ namespace Web.CAPI.Controllers
         }
 
        #endregion
+
+        
 
         #region Progress
 
