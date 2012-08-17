@@ -34,18 +34,44 @@
     <Property Id="UPGRADEFOUND" Secure="yes" />
 
 
+        <Property Id="ALLUSERS" Secure="yes" />
+
         <!-- Prerequisites -->
         <PropertyRef Id="NETFRAMEWORK40CLIENT"/>
 
         <Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
             <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
         </Condition>
-        
-        
 
+        
+        
+        <Property Id='ASP_NET_MVC_4_0_DLL'>
+            <DirectorySearch Id='MVC_DLL_DIR' Path='[ProgramFilesFolder]\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies'>
+                <FileSearch Id='MVC_DLL_FILE' Name='System.Web.Mvc.dll' MinVersion='4.0.20100'/>
+            </DirectorySearch>
+        </Property>
+
+        <Condition Message='ASP.NET MVC 4 is required to proceed with the installation.'>
+            <![CDATA[Installed OR ASP_NET_MVC_4_0_DLL]]>
+        </Condition>
+        
+        <Property Id="APPCMDEXE">
+            <DirectorySearch Id="IISExpressDir" Path="[ProgramFilesFolder]IIS Express">
+                <FileSearch Name="appcmd.exe" />
+            </DirectorySearch>
+        </Property>
+
+        <Condition Message="IIS Express 7.x must be installed before installation.">
+            <![CDATA[Installed or APPCMDEXE]]>
+        </Condition>
+
+        
+        
     <SetDirectory Id="WINDOWSVOLUME" Value="[WindowsVolume]"/>
 
         <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+       
 
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Directory Id="CommonAppDataFolder">
