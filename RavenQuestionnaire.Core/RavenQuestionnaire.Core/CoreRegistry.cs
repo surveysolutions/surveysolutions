@@ -3,10 +3,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
-using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
-using Raven.Client.Indexes;
 using RavenQuestionnaire.Core.Conventions;
 using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Entities.Iterators;
@@ -84,17 +82,18 @@ namespace RavenQuestionnaire.Core
             DocumentStore store;
             if (_isEmbeded)
             {
-
                 store = new EmbeddableDocumentStore()
                     {
                         DataDirectory = _storage,
+                        
 #if DEBUG                
-                        UseEmbeddedHttpServer = true
+                        //UseEmbeddedHttpServer = true
 #endif
                     };
-
-                Raven.Database.Server.NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(8089);
-
+#if DEBUG
+                //Raven.Database.Server.NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(8089);
+#endif
+                
             }
             else
             {
