@@ -170,16 +170,6 @@ namespace RavenQuestionnaire.Core.Domain
                                AnswerString = answerString
                            });
 
-            /*if (question.Featured)
-                ApplyEvent(new FeaturedQuestionUpdated
-                               {
-                                   CompletedQuestionnaireId = this._doc.PublicKey,
-                                   Answer = question.GetAnswerString(),
-                                   QuestionPublicKey = questionPublicKey,
-
-                                   QuestionText = question.QuestionText
-                               });*/
-
             AddRemovePRopagatedGroup(question);
 
         }
