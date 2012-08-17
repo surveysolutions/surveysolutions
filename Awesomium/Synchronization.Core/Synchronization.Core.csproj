@@ -40,16 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientSettings\ClientSettings.cs" />
-    <Compile Include="ClientSettings\IClientSettingsProvider.cs" />
-    <Compile Include="ISyncChainDirector.cs" />
+    <Compile Include="Events\SynchronizationCompletedEvent.cs" />
+    <Compile Include="Interface\ISettingsProvider.cs" />
+    <Compile Include="Interface\ISettings.cs" />
+    <Compile Include="Interface\ISyncManager.cs" />
+    <Compile Include="Interface\ISyncProgressObserver.cs" />
+    <Compile Include="Interface\ISyncProgressStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SyncChainDirector.cs" />
-    <Compile Include="SynchronizationEvent.cs" />
+    <Compile Include="SynchronizationFlow\SyncStatus.cs" />
+    <Compile Include="SyncManager.cs" />
+    <Compile Include="Events\SynchronizationEvent.cs" />
     <Compile Include="SynchronizationFlow\AbstractSynchronizer.cs" />
-    <Compile Include="SynchronizationFlow\ISynchronizer.cs" />
+    <Compile Include="Interface\ISynchronizer.cs" />
     <Compile Include="SynchronizationFlow\NetworkSynchronizer.cs" />
-    <Compile Include="SynchronizationFlow\SynchronizationException.cs" />
+    <Compile Include="Errors\SynchronizationException.cs" />
     <Compile Include="SynchronizationFlow\UsbArchive.cs" />
     <Compile Include="SynchronizationFlow\UsbSynchronizer.cs" />
   </ItemGroup>

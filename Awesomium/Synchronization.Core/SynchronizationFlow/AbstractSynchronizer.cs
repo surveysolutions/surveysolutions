@@ -1,57 +1,79 @@
 ﻿using System;
-using Synchronization.Core.ClientSettings;
+using Synchronization.Core.Interface;
+using Synchronization.Core.Events;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
     public abstract class AbstractSynchronizer : ISynchronizer
     {
-       // protected ISynchronizer Next;
-        protected readonly IClientSettingsProvider ClientSettingsProvider;
-        public AbstractSynchronizer(IClientSettingsProvider clientSettingsprovider)
+        protected readonly ISettingsProvider SettingsProvider;
+
+        public AbstractSynchronizer(ISettingsProvider clientSettingsprovider)
         {
-            this.ClientSettingsProvider = clientSettingsprovider;
+            this.SettingsProvider = clientSettingsprovider;
         }
+
+        #region Abstract and Virtual
+
+        protected abstract void OnPush(SyncDirection direction);
+        protected abstract void OnPull(SyncDirection direction);
+        protected abstract void OnStop();
+
+        //The event-invoking method that derived classes can override.
+        protected virtual void OnSyncProgressChanged(SynchronizationEvent e)
+        {
+            // Make a temporary copy of the event to avoid possibility of
+            // a race condition if the last subscriber unsubscribes
+            // immediately after the null check and before the event is raised.
+            EventHandler<SynchronizationEvent> handler = SyncProgressChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        #endregion
 
         #region Implementation of ISynchronizer
 
-       /* public ISynchronizer SetNext(ISynchronizer synchronizer)
+        public event EventHandler<SynchronizationEvent> SyncProgressChanged;
+
+        public void Push(SyncDirection direction)
         {
-            Next = synchronizer;
-            return synchronizer;
-        }*/
-
-        public abstract void Push();
-
-        public abstract void Pull();
-        public abstract void Stop();
-
-        public event EventHandler<SynchronizationEvent> PushProgressChanged;
-        public event EventHandler<SynchronizationEvent> PullProgressChanged;
-        //The event-invoking method that derived classes can override.
-        protected virtual void OnPushProgressChanged(SynchronizationEvent e)
-        {
-            // Make a temporary copy of the event to avoid possibility of
-            // a race condition if the last subscriber unsubscribes
-            // immediately after the null check and before the event is raised.
-            EventHandler<SynchronizationEvent> handler = PushProgressChanged;
-            if (handler != null)
+            try
             {
-                handler(this, e);
+                OnPush(direction);
+            }
+            catch
+            {
             }
         }
-        //The event-invoking method that derived classes can override.
-        protected virtual void OnPullProgressChanged(SynchronizationEvent e)
+
+        public void Pull(SyncDirection direction)
         {
-            // Make a temporary copy of the event to avoid possibility of
-            // a race condition if the last subscriber unsubscribes
-            // immediately after the null check and before the event is raised.
-            EventHandler<SynchronizationEvent> handler = PullProgressChanged;
-            if (handler != null)
+            try
             {
-                handler(this, e);
+                OnPull(direction);
+            }
+            catch
+            {
             }
         }
+
+        public void Stop()
+        {
+            try
+            {
+                OnStop();
+            }
+            catch
+            {
+            }
+        }
+
+        public abstract string BuildSuccessMessage(SyncType syncAction, SyncDirection direction);
+
+       
         #endregion
-
     }
 }

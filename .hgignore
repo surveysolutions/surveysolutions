@@ -169,3 +169,10 @@ RavenQuestionnaire.Web/Web.CAPI.Tests/obj/*
 RavenQuestionnaire.Web/Web.Supervisor.Tests/bin/*
 RavenQuestionnaire.Web/Web.Supervisor.Tests/obj/*
 Installation/CapiInstallProj/obj
+Awesomium/Awesomium.NET Browser.opensdf
+Awesomium/Awesomium.NET Browser.sdf
+Awesomium/Awesomium.NET Browser.suo
+Awesomium/CAPI/1337116218_to-do-list_checked2.ico
+Awesomium/CAPI/obj/*
+Awesomium/Supervisor/bin/*
+Awesomium/Supervisor/obj/*

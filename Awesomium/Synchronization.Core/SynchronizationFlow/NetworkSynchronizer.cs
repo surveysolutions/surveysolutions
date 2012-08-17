@@ -3,7 +3,9 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
-using Synchronization.Core.ClientSettings;
+using Synchronization.Core.Interface;
+using Synchronization.Core.Events;
+using Synchronization.Core.Errors;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
@@ -16,11 +18,11 @@ namespace Synchronization.Core.SynchronizationFlow
         private readonly string _pullAdress;
         private readonly string _pushCheckStateAdress;
         private readonly string _endPointAdressAdress;
+
         #endregion
 
-
-        public NetworkSynchronizer(IClientSettingsProvider clientSettingsprovider, string host, string pushAdress, string pullAdress, string pushCheckStateAdress, string endPointAdressAdress)
-            : base(clientSettingsprovider)
+        public NetworkSynchronizer(ISettingsProvider settingsprovider, string host, string pushAdress, string pullAdress, string pushCheckStateAdress, string endPointAdressAdress)
+            : base(settingsprovider)
         {
             this._host = host;
             this._endPointAdressAdress = endPointAdressAdress;
@@ -36,12 +38,14 @@ namespace Synchronization.Core.SynchronizationFlow
 
         protected Uri PushAdress
         {
-            get { return new Uri(string.Format("{0}{1}?url={2}&syncKey={3}", _host, _pushAdress, _endPointAdressAdress, this.ClientSettingsProvider.ClientSettings.ClientId)); }
+            get { return new Uri(string.Format("{0}{1}?url={2}&syncKey={3}", _host, _pushAdress, _endPointAdressAdress, this.SettingsProvider.Settings.ClientId)); }
         }
+
         protected Uri PullAdress
         {
-            get { return new Uri(string.Format("{0}{1}?url={2}&syncKey={3}", _host, _pullAdress, _endPointAdressAdress, this.ClientSettingsProvider.ClientSettings.ClientId)); }
+            get { return new Uri(string.Format("{0}{1}?url={2}&syncKey={3}", _host, _pullAdress, _endPointAdressAdress, this.SettingsProvider.Settings.ClientId)); }
         }
+
         protected Uri PushCheckStateAdress
         {
             get { return new Uri(_host + _pushCheckStateAdress); }
@@ -49,7 +53,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #region Overrides of AbstractSynchronizer
 
-        public override void Push()
+        protected override void OnPush(SyncDirection direction)
         {
             try
             {
@@ -65,7 +69,7 @@ namespace Synchronization.Core.SynchronizationFlow
                     // Read the content.
                     string responseFromServer = reader.ReadToEnd();
 
-                    WaitForEndProcess(Guid.Parse(responseFromServer),OnPushProgressChanged);
+                    WaitForEndProcess(Guid.Parse(responseFromServer), OnSyncProgressChanged, SyncType.Push, direction);
                     // Clean up the streams.
                     reader.Close();
                     dataStream.Close();
@@ -79,7 +83,7 @@ namespace Synchronization.Core.SynchronizationFlow
             }
         }
 
-        public override void Pull()
+        protected override void OnPull(SyncDirection direction)
         {
             try
             {
@@ -95,7 +99,7 @@ namespace Synchronization.Core.SynchronizationFlow
                     // Read the content.
                     string responseFromServer = reader.ReadToEnd();
 
-                    WaitForEndProcess(Guid.Parse(responseFromServer), OnPullProgressChanged);
+                    WaitForEndProcess(Guid.Parse(responseFromServer), OnSyncProgressChanged, SyncType.Pull, direction);
                     // Clean up the streams.
                     reader.Close();
                     dataStream.Close();
@@ -109,7 +113,7 @@ namespace Synchronization.Core.SynchronizationFlow
             }
         }
 
-        public override void Stop()
+        protected override void OnStop()
         {
             throw new NotImplementedException();
         }
@@ -118,7 +122,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #region utility methods
 
-        protected void WaitForEndProcess(Guid processid, Action<SynchronizationEvent> eventRiser)
+        protected void WaitForEndProcess(Guid processid, Action<SynchronizationEvent> eventRiser, SyncType syncType, SyncDirection direction)
         {
             int percentage = 0;
             while (percentage != 100)
@@ -140,9 +144,11 @@ namespace Synchronization.Core.SynchronizationFlow
                     reader.Close();
                     dataStream.Close();
                     response.Close();
+                    
                     if (percentage < 0)
                         throw new SynchronizationException("network synchronization is failed");
-                    eventRiser(new SynchronizationEvent(percentage));
+
+                    eventRiser(new SynchronizationEvent(syncType, direction, new SyncStatus(percentage, false, false)));
                 }
                 Thread.Sleep(1000);
             }
@@ -151,5 +157,9 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #endregion
 
+        public override string BuildSuccessMessage(SyncType syncAction, SyncDirection direction)
+        {
+            return string.Format("Network {0} is successful with local center {1}", syncAction, Host);
+        }
     }
 }
