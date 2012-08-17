@@ -33,6 +33,16 @@
     <Property Id="NEWPRODUCTFOUND" Secure="yes" />
     <Property Id="UPGRADEFOUND" Secure="yes" />
 
+
+        <!-- Prerequisites -->
+        <PropertyRef Id="NETFRAMEWORK40CLIENT"/>
+
+        <Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
+            <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
+        </Condition>
+        
+        
+
     <SetDirectory Id="WINDOWSVOLUME" Value="[WindowsVolume]"/>
 
         <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
