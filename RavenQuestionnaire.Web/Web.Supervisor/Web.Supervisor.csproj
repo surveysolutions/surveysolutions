@@ -277,9 +277,6 @@
     <Content Include="Views\User\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Survey\EditColumn.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Survey\DisplayColumn.cshtml" />
   </ItemGroup>
   <ItemGroup>
