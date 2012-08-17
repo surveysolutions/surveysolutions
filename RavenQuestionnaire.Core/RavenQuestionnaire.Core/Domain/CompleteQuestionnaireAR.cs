@@ -132,13 +132,17 @@ namespace RavenQuestionnaire.Core.Domain
         {
             //performe checka before event raising
             ICompleteQuestion question = _doc.QuestionHash[questionPublicKey, propogationPublicKey];
-
+            // ToDO clean up that crap
             var answerString = "";
             if (completeAnswer != null)
             {
-                var answer = question.Find<ICompleteAnswer>((Guid)completeAnswer);
-                if (answer!=null)
-                    answerString = answer.AnswerText;
+                if (question is ISingleQuestion && question is IMultyOptionsQuestion)
+                {
+                    var answer = question.Find<ICompleteAnswer>((Guid)completeAnswer);
+                    if (answer != null)
+                        answerString = answer.AnswerText;
+                }
+                else answerString = completeAnswer.ToString();
             }
             else
             {
