@@ -51,12 +51,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SyncChainDirectorTests.cs" />
+    <Compile Include="SyncManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CAPI\CAPI.csproj">
+      <Project>{233E6FAF-9130-45A8-A199-2DFFDC76EABD}</Project>
+      <Name>CAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Synchronization.Core\Synchronization.Core.csproj">
       <Project>{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}</Project>
       <Name>Synchronization.Core</Name>
