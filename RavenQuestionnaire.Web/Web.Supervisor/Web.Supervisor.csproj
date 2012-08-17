@@ -283,6 +283,9 @@
     <Content Include="Views\Survey\DisplayColumn.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Views\Survey\Assign.cshtml" />
   </ItemGroup>
   <ItemGroup>
