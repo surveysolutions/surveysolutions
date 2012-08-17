@@ -1,5 +1,6 @@
 using System;
 using Synchronization.Core.Events;
+using Synchronization.Core.SynchronizationFlow;
 
 namespace Synchronization.Core.Interface
 {

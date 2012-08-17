@@ -3,24 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Synchronization.Core.Interface;
+using Synchronization.Core.Errors;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
+    public enum SyncType
+    {
+        Push,
+        Pull
+    }
+
+    public enum SyncDirection
+    {
+        Up,
+        Down
+    }
+
     public struct SyncStatus : ISyncProgressStatus
     {
         int progressPercents;
-        bool isCanceled;
-        bool isError;
+        SynchronizationException error;
+        SyncType actionType;
+        SyncDirection direction;
 
-        public SyncStatus(int progress, bool error, bool cancel)
+        public SyncStatus(
+            SyncType actionType,
+            SyncDirection direction,
+            int progress, 
+            SynchronizationException error)
         {
-            this.isCanceled = cancel;
             this.progressPercents = progress;
-            this.isError = error;
+            this.error = error;
+            this.actionType = actionType;
+            this.direction = direction;
         }
 
+        public SyncType ActionType { get { return this.actionType;} }
+        public SyncDirection Direction { get { return this.direction;} }
         public int ProgressPercents { get { return this.progressPercents; } }
-        public bool IsError { get { return this.isError; } }
-        public bool IsCanceled { get { return this.isCanceled; } }
+        public SynchronizationException Error { get { return this.error; } }
     }
 }

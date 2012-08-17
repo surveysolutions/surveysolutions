@@ -39,6 +39,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading;
 using Synchronization.Core.Interface;
+using Synchronization.Core.SynchronizationFlow;
 using Browsing.CAPI.Synchronization;
 
 #endif
@@ -85,7 +86,7 @@ namespace Browsing.CAPI.Forms
                 this.Invoke(new MethodInvoker(() =>
                 {
                     this.pullToolStripMenuItem.Enabled = true;
-                    if (e.ActionType == SyncType.Pull)
+                    if (e.Status.ActionType == SyncType.Pull)
                         webView.LoadURL(Settings.Default.DefaultUrl);
                 }));
         }

@@ -151,15 +151,10 @@ namespace Browsing.CAPI.Forms
         /// <remarks>We should add error report if canceling caused by an error</remarks>
         public void SetCompleted(ISyncProgressStatus status)
         {
-            if (status.IsCanceled || status.IsError)
+            if (status.Error != null)
             {
-                if (status.IsCanceled && !status.IsError)
-                    SetStatusLabel("Data export canceled", true);
-                else
-                {
-                    SetStatusLabel("Data export error", true);
+                SetStatusLabel(status.Error.Message, true);
 
-                }
                 MakeInvisibleProgressBar(0);
                 Deactivate(false);
 

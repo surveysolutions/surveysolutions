@@ -69,11 +69,17 @@ namespace Synchronization.Core.SynchronizationFlow
                     // Read the content.
                     string responseFromServer = reader.ReadToEnd();
 
-                    WaitForEndProcess(Guid.Parse(responseFromServer), OnSyncProgressChanged, SyncType.Push, direction);
-                    // Clean up the streams.
-                    reader.Close();
-                    dataStream.Close();
-                    response.Close();
+                    try
+                    {
+                        WaitForEndProcess(Guid.Parse(responseFromServer), OnSyncProgressChanged, SyncType.Push, direction);
+                    }
+                    finally
+                    {
+                        // Clean up the streams.
+                        reader.Close();
+                        dataStream.Close();
+                        response.Close();
+                    }
                 }
             }
             catch (Exception e)
@@ -99,11 +105,17 @@ namespace Synchronization.Core.SynchronizationFlow
                     // Read the content.
                     string responseFromServer = reader.ReadToEnd();
 
-                    WaitForEndProcess(Guid.Parse(responseFromServer), OnSyncProgressChanged, SyncType.Pull, direction);
-                    // Clean up the streams.
-                    reader.Close();
-                    dataStream.Close();
-                    response.Close();
+                    try
+                    {
+                        WaitForEndProcess(Guid.Parse(responseFromServer), OnSyncProgressChanged, SyncType.Pull, direction);
+                    }
+                    finally
+                    {
+                        // Clean up the streams.
+                        reader.Close();
+                        dataStream.Close();
+                        response.Close();
+                    }
                 }
             }
             catch (Exception e)
@@ -125,6 +137,7 @@ namespace Synchronization.Core.SynchronizationFlow
         protected void WaitForEndProcess(Guid processid, Action<SynchronizationEvent> eventRiser, SyncType syncType, SyncDirection direction)
         {
             int percentage = 0;
+
             while (percentage != 100)
             {
                 WebRequest request = WebRequest.Create(string.Format("{0}?id={1}", PushCheckStateAdress, processid));
@@ -148,8 +161,9 @@ namespace Synchronization.Core.SynchronizationFlow
                     if (percentage < 0)
                         throw new SynchronizationException("network synchronization is failed");
 
-                    eventRiser(new SynchronizationEvent(syncType, direction, new SyncStatus(percentage, false, false)));
+                    eventRiser(new SynchronizationEvent(new SyncStatus(syncType, direction, percentage, null)));
                 }
+            
                 Thread.Sleep(1000);
             }
 
