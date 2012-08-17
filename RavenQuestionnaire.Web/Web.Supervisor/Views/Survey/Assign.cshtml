@@ -20,7 +20,7 @@
 </script>
 <h2>Assignment</h2>
 <p><a href="@Url.Action("Assigments", new { id = Model.TemplateId })">Back to list</a></p>
-@using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions { OnComplete = "HideForm" }, new { @class = "form-inline" }))
+@using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions {  }, new { @class = "form-inline" }))
 {
     @Html.Hidden("CqId", Model.Id)
     <label class="control-label">Responsible</label>
