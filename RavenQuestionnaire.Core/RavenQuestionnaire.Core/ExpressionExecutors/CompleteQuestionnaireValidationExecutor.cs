@@ -18,6 +18,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         {
             foreach (ICompleteQuestion completeQuestion in group.Children.Where(c => c is ICompleteQuestion))
             {
+                
                 completeQuestion.Valid = Execute(completeQuestion);
             }
         }
@@ -35,6 +36,8 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
 
         protected bool Execute(ICompleteQuestion question)
         {
+            if (!question.Enabled)
+                return true;
             if (string.IsNullOrEmpty(question.ValidationExpression))
                 return true;
             string expression = question.ValidationExpression.ToLower();
