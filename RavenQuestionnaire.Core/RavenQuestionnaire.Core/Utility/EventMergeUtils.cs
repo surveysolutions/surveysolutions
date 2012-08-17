@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Core.Utility
             var startPoint = Math.Min(baseStream.Last().EventSequence, stream.Last().EventSequence);
             var croppedBase = baseStream.TakeWhile(e => e.EventSequence <= startPoint);
             var croppedNewStream = stream.TakeWhile(e => e.EventSequence <= startPoint);
-            while ((croppedBase.Last().EventIdentifier != croppedNewStream.Last().EventIdentifier))
+            while (startPoint>0 && (croppedBase.Last().EventIdentifier != croppedNewStream.Last().EventIdentifier))
             {
                 startPoint--;
                 croppedBase = baseStream.TakeWhile(e => e.EventSequence <= startPoint);
