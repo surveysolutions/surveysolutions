@@ -11,7 +11,7 @@
             <a href="@Url.Action("LogOff", "Account")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">
                 Log off</a>
         </div>
-        <div data-role="content" class="dummy-scroll" style="bottom: 0px">
+        <div data-role="content" data-iscroll="true" style="bottom: 0px">
             <div id="scroll">
                 <ul class="dashboard-list" data-inset="true" data-role="listview" data-split-icon="plus">
                     @foreach (CQGroupItem group in Model.Groups)
