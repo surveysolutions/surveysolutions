@@ -9,16 +9,22 @@ namespace Synchronization.Core.Errors
         {
         }
 
-        public SynchronizationException(string message) : base(message)
+        public SynchronizationException(string message)
+            : base(message)
         {
         }
 
-        public SynchronizationException(string message, Exception innerException) : base(message, innerException)
+        public SynchronizationException(string mesage, Exception inner)
+            : base(mesage, inner)
         {
         }
 
-        protected SynchronizationException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+        /*      public SynchronizationException(string message, Exception innerException) : base(message, innerException)
+                {
+                }
+
+                protected SynchronizationException(SerializationInfo info, StreamingContext context) : base(info, context)
+                {
+                }*/
     }
 }

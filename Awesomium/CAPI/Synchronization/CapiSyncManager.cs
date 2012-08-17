@@ -49,8 +49,6 @@ namespace Browsing.CAPI.Synchronization
 
         #region Helpers
 
-        public event EventHandler<SynchronizationCompletedEvent> EndOfSync;
-
         private void DoExport()
         {
             Push(SyncDirection.Up);
@@ -67,15 +65,24 @@ namespace Browsing.CAPI.Synchronization
 
         protected override string OnDoSynchronizationAction(SyncType action, SyncDirection direction)
         {
-            var result =  base.OnDoSynchronizationAction(action, direction);
+            string syncResult = null;
+            try
+            {
+                syncResult = base.OnDoSynchronizationAction(action, direction);
+            }
+            catch (Exception e)
+            {
+                syncResult = e.Message;
 
-            if (!string.IsNullOrEmpty(result))
-                MessageBox.Show(result);
+                throw e;
+            }
+            finally
+            {
+                if (!string.IsNullOrEmpty(syncResult))
+                    MessageBox.Show(syncResult);
+            }
 
-            if (EndOfSync != null)
-                EndOfSync(this, new SynchronizationCompletedEvent(action, direction, false, false));
-
-            return result;
+            return syncResult;
         }
 
         #endregion

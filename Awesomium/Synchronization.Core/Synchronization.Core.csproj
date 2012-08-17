@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Errors\CancelledSynchronizationException.cs" />
     <Compile Include="Events\SynchronizationCompletedEvent.cs" />
     <Compile Include="Interface\ISettingsProvider.cs" />
     <Compile Include="Interface\ISettings.cs" />

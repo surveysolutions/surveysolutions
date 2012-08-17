@@ -46,6 +46,7 @@ namespace Synchronization.Core.SynchronizationFlow
             }
             catch
             {
+                throw;
             }
         }
 
@@ -57,6 +58,7 @@ namespace Synchronization.Core.SynchronizationFlow
             }
             catch
             {
+                throw;
             }
         }
 
@@ -68,12 +70,12 @@ namespace Synchronization.Core.SynchronizationFlow
             }
             catch
             {
+                throw;
             }
         }
 
         public abstract string BuildSuccessMessage(SyncType syncAction, SyncDirection direction);
 
-       
         #endregion
     }
 }

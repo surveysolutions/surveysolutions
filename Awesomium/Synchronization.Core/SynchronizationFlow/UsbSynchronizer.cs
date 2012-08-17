@@ -89,9 +89,9 @@ namespace Synchronization.Core.SynchronizationFlow
                                 var percents = e.TotalBytesToReceive == 0 ? 100 :
                                     e.BytesReceived * 100 / e.TotalBytesToReceive;
 
-                                var status = new SyncStatus((int)percents, false, false);
+                                var status = new SyncStatus(SyncType.Push, direction, (int)percents, null);
 
-                                OnSyncProgressChanged(new SynchronizationEvent(SyncType.Push, direction, status));
+                                OnSyncProgressChanged(new SynchronizationEvent(status));
                             };
 
                         webClient.DownloadDataCompleted +=
@@ -101,16 +101,23 @@ namespace Synchronization.Core.SynchronizationFlow
                                 bool cancelled = e.Cancelled;
                                 int percents = errornous || cancelled ? 0 : 100;
 
-                                var status = new SyncStatus(percents, errornous, cancelled);
+                                try
+                                {
+                                    if (errornous)
+                                        error = new SynchronizationException("Push to usb is failed", e.Error);
+                                    else if (cancelled)
+                                        error = new CancelledSynchronizationException("Push to usb is cancelled", error);
+                                    else
+                                        usbArchive.SaveArchive(e.Result);
 
-                                if (errornous)
-                                    error = new SynchronizationException("Push to usb is failed", e.Error);
-                                else if (!cancelled)
-                                    usbArchive.SaveArchive(e.Result);
+                                    var status = new SyncStatus(SyncType.Push, direction, percents, error);
 
-                                OnSyncProgressChanged(new SynchronizationCompletedEvent(SyncType.Push, direction, errornous, cancelled));
-
-                                done.Set();
+                                    OnSyncProgressChanged(new SynchronizationEvent(status));
+                                }
+                                finally
+                                {
+                                    done.Set();
+                                }
                             };
 
                         webClient.DownloadDataAsync(PushAdress);
@@ -125,6 +132,10 @@ namespace Synchronization.Core.SynchronizationFlow
                             throw error;
                     }
                 }
+            }
+            catch (CancelledSynchronizationException ex)
+            {
+                throw;
             }
             catch (Exception e)
             {
@@ -156,9 +167,9 @@ namespace Synchronization.Core.SynchronizationFlow
                                 var percents = e.TotalBytesToSend == 0 ? 100 :
                                     e.BytesSent * 100 /  e.TotalBytesToSend;
 
-                                var status = new SyncStatus((int)percents, false, false);
+                                var status = new SyncStatus(SyncType.Pull, direction, (int)percents, null);
 
-                                OnSyncProgressChanged(new SynchronizationEvent(SyncType.Pull, direction, status));
+                                OnSyncProgressChanged(new SynchronizationEvent(status));
                             };
 
                         webClient.UploadFileCompleted +=
@@ -168,14 +179,21 @@ namespace Synchronization.Core.SynchronizationFlow
                                 bool cancelled = e.Cancelled;
                                 int percents = errornous || cancelled ? 0 : 100;
 
-                                var status = new SyncStatus(percents, errornous, cancelled);
+                                try
+                                {
+                                    if (errornous)
+                                        error = new SynchronizationException("Pull from usb is failed", e.Error);
+                                    else if (cancelled)
+                                        error = new CancelledSynchronizationException("Pull from usb is cancelled",  error);
 
-                                if (errornous)
-                                    error = new SynchronizationException("Pull from usb is failed", e.Error);
+                                    var status = new SyncStatus(SyncType.Push, direction, percents, error);
 
-                                OnSyncProgressChanged(new SynchronizationCompletedEvent(SyncType.Push, direction, errornous, cancelled));
-
-                                done.Set();
+                                    OnSyncProgressChanged(new SynchronizationEvent(status));
+                                }
+                                finally
+                                {
+                                    done.Set();
+                                }
                             };
 
 
@@ -192,6 +210,10 @@ namespace Synchronization.Core.SynchronizationFlow
                     }
                 }
 
+            }
+            catch (CancelledSynchronizationException ex)
+            {
+                throw;
             }
             catch (Exception e)
             {

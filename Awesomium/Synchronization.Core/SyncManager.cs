@@ -15,7 +15,6 @@ namespace Synchronization.Core
     {
         #region Members
 
-        private ISyncProgressObserver progressStatus;
         private List<ISynchronizer> synchronizerChain;
         private AutoResetEvent syncIsAvailable = new AutoResetEvent(true);
 
@@ -28,12 +27,13 @@ namespace Synchronization.Core
         {
         }
 
-        private SyncManager(ISyncProgressObserver progressStatus, ISettingsProvider settingsProvider, List<ISynchronizer> subStructure)
+        private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider, List<ISynchronizer> subStructure)
         {
             this.synchronizerChain = subStructure;
-            this.progressStatus = progressStatus;
 
-            SyncProgressChanged += (s, e) => this.progressStatus.SetProgress(e.Status);
+            SyncProgressChanged += (s, e) => progressObserver.SetProgress(e.Status);
+            StartOfSync += (s, e) => progressObserver.SetBeginning();
+            EndOfSync += (s, e) => progressObserver.SetCompleted(e.Status);
 
             AddSynchronizers(settingsProvider);
         }
@@ -67,6 +67,9 @@ namespace Synchronization.Core
                     action(synchronizer);
                     return synchronizer;
                 }
+                catch (CancelledSynchronizationException e)
+                {
+                }
                 catch (SynchronizationException e)
                 {
                     errorList.Add(e);
@@ -81,23 +84,28 @@ namespace Synchronization.Core
             if (!this.syncIsAvailable.WaitOne(0))
                 return;
 
-            string error = null;
+            SynchronizationException error = null;
+            string log = null;
 
             try
             {
-                this.progressStatus.SetBeginning();
+                StartOfSync(this, new SynchronizationEvent(new SyncStatus(syncType, direction, 0, null)));
 
-                error = OnDoSynchronizationAction(syncType, direction);
+                log = OnDoSynchronizationAction(syncType, direction);
+            }
+            catch (CancelledSynchronizationException ex)
+            {
+                error = ex;
             }
             catch (Exception ex)
             {
-                error = ex.Message;
+                error = new SynchronizationException("Syncronization process failed", ex);
             }
             finally
             {
                 this.syncIsAvailable.Set();
 
-                this.progressStatus.SetCompleted(new SyncStatus(100, !string.IsNullOrEmpty(error), false));
+                EndOfSync(this, new SynchronizationCompletedEvent(new SyncStatus(syncType, direction, 100, error), log));
             }
         }
 
@@ -106,6 +114,8 @@ namespace Synchronization.Core
         #region Implementation of ISyncManager
 
         public event EventHandler<SynchronizationEvent> SyncProgressChanged;
+        public event EventHandler<SynchronizationEvent> StartOfSync;
+        public event EventHandler<SynchronizationCompletedEvent> EndOfSync;
 
         public void Push(SyncDirection direction)
         {
@@ -147,12 +157,15 @@ namespace Synchronization.Core
                     errorList
                 );
 
+
             StringBuilder result = new StringBuilder();
             foreach (SynchronizationException synchronizationException in errorList)
                 result.AppendLine(synchronizationException.Message);
 
             if (succesSynchronizer != null)
                 result.AppendLine(succesSynchronizer.BuildSuccessMessage(action, direction));
+            else
+                throw new SynchronizationException(result.ToString());
 
             return result.ToString();
         }
