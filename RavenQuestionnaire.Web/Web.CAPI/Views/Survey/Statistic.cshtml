@@ -46,7 +46,7 @@
     <!-- Start of second page -->
     <div data-role="page" id="general" class="page">
         @RenderNavBar()
-        <div data-role="content" class="dummy-scroll" style="bottom: 0px">
+        <div data-role="content" data-iscroll="true" style="bottom: 0px">
             <div id="scroll">
                 <h3>@Model.Title</h3>
                 <p>
@@ -86,7 +86,7 @@
     <div data-role="page" id="main" class="page">
         @RenderNavBar()
         <!-- /header -->
-        <div data-role="content" class="dummy-scroll" style="bottom: 0px">
+        <div data-role="content" data-iscroll="true" style="bottom: 0px">
             <div id="scroll">
                 <h3>
                     Answered questions</h3>
@@ -135,7 +135,7 @@
     </div>
     <div data-role="page" id="invalid" class="page">
         @RenderNavBar()
-        <div data-role="content" class="dummy-scroll" style="bottom: 0px">
+        <div data-role="content" data-iscroll="true" style="bottom: 0px">
             <div id="scroll">
                 <h3>
                     Invalid questions</h3>

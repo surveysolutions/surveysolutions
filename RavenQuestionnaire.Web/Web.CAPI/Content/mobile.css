@@ -190,10 +190,6 @@
 	background-image:         linear-gradient(#ededed /*{c-bhover-background-start}*/, #dadada /*{c-bhover-background-end}*/);
 }
 
-#sidebar .ui-content.with-footer
-{
-	margin-bottom: 40px;
-}
 .question-comment {
 	font-size: 0.75em;
 	font-style: italic;
@@ -268,4 +264,9 @@ body.ui-mobile-viewport, div.ui-mobile-viewport {
 }
 #dashboard-page .page .ui-content {
 	bottom: 0 !important;
+}
+
+.iscroll-wrapper {
+    min-height: 0;
+    position: relative;
 }

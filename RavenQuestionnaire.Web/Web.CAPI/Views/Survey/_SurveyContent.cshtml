@@ -20,7 +20,7 @@
 <div data-role="page" id="screen-@(Model.PublicKey + (propagatedGroup==null?"":"-"+propagatedGroup.PropogationKey))" class="@(ViewBag.PagePrefix) page">
     @RenderNavigation(Model.Navigation)
     <!-- /header -->
-    <div data-role="content" class="dummy-scroll">
+    <div data-role="content" data-iscroll="">
         <div class="scroller-@(Model.PublicKey)" id="scroller">
             <div>
                 @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model)

@@ -6788,7 +6788,7 @@ $( document ).bind( "pagecreate create", function( e ) {
 			// For some reason, a $.proxy( $link, "focus" ) doesn't work as the handler
 			if ( $link.parents( ".ui-popup-container" ).length === 0 ) {
 				$( $.mobile.popup.popupManager ).one( "done", function() {
-					$link.focus();
+				//	changed by nastya kholodova - $link.focus();
 				});
 			}
 		}
