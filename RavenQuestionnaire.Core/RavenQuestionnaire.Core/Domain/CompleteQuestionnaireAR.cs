@@ -136,7 +136,7 @@ namespace RavenQuestionnaire.Core.Domain
             var answerString = "";
             if (completeAnswer != null)
             {
-                if (question is ISingleQuestion && question is IMultyOptionsQuestion)
+                if (question is ISingleQuestion)
                 {
                     var answer = question.Find<ICompleteAnswer>((Guid)completeAnswer);
                     if (answer != null)
