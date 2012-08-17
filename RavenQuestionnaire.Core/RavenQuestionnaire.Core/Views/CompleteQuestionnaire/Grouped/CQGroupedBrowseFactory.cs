@@ -41,6 +41,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
                                 q =>
                                 q.TemplateId == item.SurveyId).ToList();
                 cqGroupItem.Items = complete;
+                cqGroupItem.TotalCount = complete.Count;
             }
             return retval;
 

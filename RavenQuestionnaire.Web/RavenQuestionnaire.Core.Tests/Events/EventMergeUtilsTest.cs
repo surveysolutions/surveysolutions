@@ -112,7 +112,18 @@ namespace RavenQuestionnaire.Core.Tests.Events
             var result = stream.FindDivergentSequenceNumber(baseStream);
             Assert.AreEqual(result, 0);
         }
+        [Test]
+        public void FindDivergentSequenceNumber_BaseEventStreamAndNewEventContainsDoCrossed_ZeroReturned()
+        {
+            var eventSourceId = Guid.NewGuid();
+            var stream = new List<AggregateRootEvent> { new AggregateRootEvent() { EventSequence = 1, EventIdentifier = Guid.NewGuid(), Payload = new object() } };
 
+            var baseStream = new CommittedEventStream(eventSourceId,
+                                                      new CommittedEvent(Guid.NewGuid(), Guid.NewGuid(), eventSourceId,
+                                                                         1, DateTime.Now, new object(), new Version()));
+            var result = stream.FindDivergentSequenceNumber(baseStream);
+            Assert.AreEqual(result, 0);
+        }
         [Test]
         public void FindDivergentSequenceNumber_BaseEventStreamNotChanged_1Returned()
         {
