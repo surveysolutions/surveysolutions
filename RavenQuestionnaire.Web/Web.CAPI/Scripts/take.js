@@ -127,13 +127,13 @@ function UpdateQuestion(question) {
     var element = $('#elem-' + question.PublicKey);
 
     questionElement.removeClass("ui-disabled");
-    if (!question.Enabled) {
+    if (!question.Enabled) 
         questionElement.addClass("ui-disabled");
-        if (questionElement.children('fieldset').children('.ui-controlgroup-controls').css("display")!="none") questionElement.children('fieldset').children('.ui-controlgroup-controls').hide();
+  /*      if (questionElement.children('fieldset').children('.ui-controlgroup-controls').css("display")!="none") questionElement.children('fieldset').children('.ui-controlgroup-controls').hide();
     }
     else
         if (questionElement.children('fieldset').children('.ui-controlgroup-controls').css("display") == "none") questionElement.children('fieldset').children('.ui-controlgroup-controls').show();
-
+        */
 
     element.removeClass("error_block");
     if (!question.Valid) {

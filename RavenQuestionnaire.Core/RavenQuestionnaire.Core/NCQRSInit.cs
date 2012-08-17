@@ -10,15 +10,18 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.RavenDB;
 using Ninject;
+using Raven.Client;
+using Raven.Client.Document;
 using RavenQuestionnaire.Core.Services;
 
 namespace RavenQuestionnaire.Web.App_Start
 {
     public static class NCQRSInit
     {
-        public static void Init(string repositoryPath, IKernel kernel)
+        public static void Init( IKernel kernel)
         {
-            NcqrsEnvironment.SetDefault(InitializeEventStore(repositoryPath));
+            NcqrsEnvironment.SetDefault(InitializeEventStore(kernel.Get<DocumentStore>()));
+            
             NcqrsEnvironment.SetDefault(InitializeCommandService());
         
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1)); //key param for storing im memory
@@ -29,6 +32,8 @@ namespace RavenQuestionnaire.Web.App_Start
            
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
+
+
         static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
         {
             foreach (var type in typeof(NCQRSInit).Assembly.GetTypes().Where(ImplementsAtLeastOneIEventHandlerInterface))
@@ -86,7 +91,13 @@ namespace RavenQuestionnaire.Web.App_Start
             var eventStore = new RavenDBEventStore(storePath);
             return eventStore;
         }
-        
+
+        private static IEventStore InitializeEventStore(DocumentStore store)
+        {
+            var eventStore = new RavenDBEventStore(store);
+            return eventStore;
+        }
+
         public static void RebuildReadLayer()
         {
             var myEventBus = NcqrsEnvironment.Get<IEventBus>();

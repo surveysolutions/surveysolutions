@@ -3,6 +3,7 @@ using Kaliko.ImageLibrary;
 using Kaliko.ImageLibrary.Filters;
 using Raven.Abstractions.Data;
 using Raven.Client;
+using Raven.Client.Document;
 using Raven.Json.Linq;
 using RavenQuestionnaire.Core.Documents;
 
@@ -12,7 +13,7 @@ namespace RavenQuestionnaire.Core.Services
     {
         private IDocumentStore documentStore;
 
-        public RavenFileStorageService(IDocumentStore documentStore)
+        public RavenFileStorageService(DocumentStore documentStore)
         {
             this.documentStore = documentStore;
         }

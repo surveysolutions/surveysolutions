@@ -51,12 +51,14 @@ namespace RavenQuestionnaire.Core.Events
             this.EventSourceId = cEvent.EventSourceId;
             this.EventTimeStamp = cEvent.EventTimeStamp;
             this.EventVersion = cEvent.EventVersion;
+            this.CommitId = cEvent.CommitId;
         }
-        public UncommittedEvent CreateUncommitedEvent()
+
+        public UncommittedEvent CreateUncommitedEvent(long eventSequence,long initialVersionOfEventSource)
         {
             return new UncommittedEvent(this.EventIdentifier,
                                         this.EventSourceId,
-                                        this.EventSequence, 0,
+                                        eventSequence, initialVersionOfEventSource,
                                         this.EventTimeStamp,
                                         this.Payload,
                                         this.EventVersion);
@@ -66,6 +68,11 @@ namespace RavenQuestionnaire.Core.Events
         /// Gets the payload of the event.
         /// </summary>
         public object Payload { get; set; }
+
+        /// <summary>
+        /// If of a commit in which this event was stored (usually corresponds to a command id which caused this event).
+        /// </summary>
+        public Guid CommitId { get; set; }
 
         /// <summary>
         /// Gets the unique identifier for this event.

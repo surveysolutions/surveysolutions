@@ -109,6 +109,9 @@ namespace RavenQuestionnaire.Core.Domain
         protected void OnSetCommentCommand(CommentSeted e)
         {
             ICompleteQuestion question = _doc.QuestionHash[e.QuestionPublickey, e.PropogationPublicKey];
+            if(question==null)
+                return;
+            
             question.SetComments(e.Comments);
 
         }
@@ -242,6 +245,8 @@ namespace RavenQuestionnaire.Core.Domain
         {
 
             ICompleteQuestion question = _doc.QuestionHash[e.QuestionPublicKey, e.PropogationPublicKey];
+            if (question == null)
+                return;
             question.SetAnswer(e.Answer);
 
         }
@@ -273,8 +278,17 @@ namespace RavenQuestionnaire.Core.Domain
         protected void OnPropagatableGroupDeleted(PropagatableGroupDeleted e)
         {
             var group = new CompleteGroup(_doc.Find<CompleteGroup>(e.PublicKey), e.PropagationKey);
+            try
+            {
+
+           
             _doc.Remove(group);
-            _doc.QuestionHash.AddGroup(group);
+            _doc.QuestionHash.RemoveGroup(group);
+            }
+            catch (CompositeException)
+            {
+                //in case if group was deleted earlier
+            }
 
         }
         public void AddPropagatableGroup(Guid publicKey, Guid propagationKey)

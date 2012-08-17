@@ -32,8 +32,9 @@ namespace RavenQuestionnaire.Core
         {
             DocumentStoreProvider storeProvider = new DocumentStoreProvider(_repositoryPath, _isEmbeded);
             Bind<DocumentStoreProvider>().ToConstant(storeProvider);
-            Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
+            Bind<DocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
 
+            //Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
 
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IViewFactory<,>))));
             this.Kernel.Bind(x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(new RegisterGenericTypesOfInterface(typeof(IExpressionExecutor<,>))));
@@ -68,7 +69,7 @@ namespace RavenQuestionnaire.Core
 
     }
 
-    public class DocumentStoreProvider : Provider<IDocumentStore>
+    public class DocumentStoreProvider : Provider<DocumentStore>
     {
         public DocumentStoreProvider(string storage, bool isEmbeded)
         {
@@ -78,14 +79,22 @@ namespace RavenQuestionnaire.Core
 
         private readonly string _storage;
         private readonly bool _isEmbeded;
-        protected override IDocumentStore CreateInstance(IContext context)
+        protected override DocumentStore CreateInstance(IContext context)
         {
-            IDocumentStore store;
+            DocumentStore store;
             if (_isEmbeded)
             {
 
-                store = new EmbeddableDocumentStore() { DataDirectory = _storage, UseEmbeddedHttpServer = true };
-                Raven.Database.Server.NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(8080);
+                store = new EmbeddableDocumentStore()
+                    {
+                        DataDirectory = _storage,
+#if DEBUG                
+                        UseEmbeddedHttpServer = true
+#endif
+                    };
+
+                Raven.Database.Server.NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(8089);
+
             }
             else
             {
