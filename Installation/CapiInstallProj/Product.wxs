@@ -42,8 +42,6 @@
         <Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
             <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
         </Condition>
-
-        
         
         <Property Id='ASP_NET_MVC_4_0_DLL'>
             <DirectorySearch Id='MVC_DLL_DIR' Path='[ProgramFilesFolder]\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies'>
@@ -133,7 +131,7 @@
       <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
     </InstallUISequence>
 
-    <UIRef Id="WixUI_Mondo" />
+    <UIRef Id="WixUI_MondoCustom" />
     <UIRef Id="WixUI_ErrorProgressText" />
         
 <!--
