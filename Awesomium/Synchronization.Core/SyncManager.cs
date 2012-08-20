@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Net;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +18,7 @@ namespace Synchronization.Core
         #region Members
 
         private List<ISynchronizer> synchronizerChain;
+      
         private AutoResetEvent syncIsAvailable = new AutoResetEvent(true);
 
         #endregion
@@ -27,10 +30,10 @@ namespace Synchronization.Core
         {
         }
 
-        private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider, List<ISynchronizer> subStructure)
+        private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider,
+                            List<ISynchronizer> subStructure)
         {
             this.synchronizerChain = subStructure;
-
             SyncProgressChanged += (s, e) => progressObserver.SetProgress(e.Status);
             BgnOfSync += (s, e) => progressObserver.SetBeginning(e.Status);
             EndOfSync += (s, e) => progressObserver.SetCompleted(e.Status);
@@ -58,7 +61,22 @@ namespace Synchronization.Core
             }
         }
 
-        private ISynchronizer ExecuteAction(Action<ISynchronizer> action, IList<Exception> errorList)
+        protected abstract void CheckPushPrerequisites();
+
+        protected abstract void CheckPullPrerequisites();
+
+        protected virtual void CheckPrerequisites(SyncType type)
+        {
+            if (type == SyncType.Push)
+            {
+                CheckPushPrerequisites();
+                return;
+            }
+            CheckPullPrerequisites();
+        }
+    
+
+    private ISynchronizer ExecuteAction(Action<ISynchronizer> action, IList<Exception> errorList)
         {
             foreach (var synchronizer in synchronizerChain)
             {
@@ -90,10 +108,14 @@ namespace Synchronization.Core
             try
             {
                 BgnOfSync(this, new SynchronizationEvent(new SyncStatus(syncType, direction, 0, null)));
-
+                CheckPrerequisites(syncType);
                 log = OnDoSynchronizationAction(syncType, direction);
             }
             catch (CancelledSynchronizationException ex)
+            {
+                error = ex;
+            }
+            catch (CheckPrerequisitesException ex)
             {
                 error = ex;
             }

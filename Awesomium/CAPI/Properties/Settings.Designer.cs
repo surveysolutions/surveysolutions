@@ -61,18 +61,6 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost")]
-        public string EndpointExportPath {
-            get {
-                return ((string)(this["EndpointExportPath"]));
-            }
-            set {
-                this["EndpointExportPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/ProgressInPersentage")]
         public string NetworkCheckStatePath {
             get {
@@ -128,6 +116,30 @@ namespace Browsing.CAPI.Properties {
             }
             set {
                 this["ParentId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8083")]
+        public string EndpointExportPath {
+            get {
+                return ((string)(this["EndpointExportPath"]));
+            }
+            set {
+                this["EndpointExportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/CheckIsThereSomethingToPush")]
+        public string CheckEventPath {
+            get {
+                return ((string)(this["CheckEventPath"]));
+            }
+            set {
+                this["CheckEventPath"] = value;
             }
         }
     }
