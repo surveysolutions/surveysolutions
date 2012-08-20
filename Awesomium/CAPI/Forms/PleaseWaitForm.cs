@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Synchronization.Core.Interface;
+using Synchronization.Core.SynchronizationFlow;
 
 namespace Browsing.CAPI.Forms
 {
@@ -125,10 +126,10 @@ namespace Browsing.CAPI.Forms
         /// <summary>
         /// Reset the form content and put it foreground
         /// </summary>
-        public void SetBeginning()
+        public void SetBeginning(ISyncProgressStatus status)
         {
             SetProgress(0);
-            SetStatusLabel("Export started. Plase wait...");
+            SetStatusLabel(string.Format("{0} data is being processed. Plase wait...", status.ActionType == SyncType.Pull ? "Pulling" : "Pushing"));
 
             this.inactiveStatus.WaitOne(5000);
 
@@ -161,7 +162,7 @@ namespace Browsing.CAPI.Forms
                 return;
             }
 
-            SetStatusLabel("Data export completed successfully.");
+            SetStatusLabel(string.Format("{0} data has been completed successfully", status.ActionType == SyncType.Pull ? "Pulling" : "Pushing"));
 
             Deactivate(false);
         }

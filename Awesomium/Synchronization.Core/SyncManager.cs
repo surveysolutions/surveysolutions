@@ -32,7 +32,7 @@ namespace Synchronization.Core
             this.synchronizerChain = subStructure;
 
             SyncProgressChanged += (s, e) => progressObserver.SetProgress(e.Status);
-            StartOfSync += (s, e) => progressObserver.SetBeginning();
+            BgnOfSync += (s, e) => progressObserver.SetBeginning(e.Status);
             EndOfSync += (s, e) => progressObserver.SetCompleted(e.Status);
 
             AddSynchronizers(settingsProvider);
@@ -89,7 +89,7 @@ namespace Synchronization.Core
 
             try
             {
-                StartOfSync(this, new SynchronizationEvent(new SyncStatus(syncType, direction, 0, null)));
+                BgnOfSync(this, new SynchronizationEvent(new SyncStatus(syncType, direction, 0, null)));
 
                 log = OnDoSynchronizationAction(syncType, direction);
             }
@@ -114,7 +114,7 @@ namespace Synchronization.Core
         #region Implementation of ISyncManager
 
         public event EventHandler<SynchronizationEvent> SyncProgressChanged;
-        public event EventHandler<SynchronizationEvent> StartOfSync;
+        public event EventHandler<SynchronizationEvent> BgnOfSync;
         public event EventHandler<SynchronizationCompletedEvent> EndOfSync;
 
         public void Push(SyncDirection direction)
