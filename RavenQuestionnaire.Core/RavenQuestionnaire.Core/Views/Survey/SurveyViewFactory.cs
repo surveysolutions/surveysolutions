@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using RavenQuestionnaire.Core.Utility;
+using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Denormalizers;
 
 namespace RavenQuestionnaire.Core.Views.Survey
@@ -18,7 +20,14 @@ namespace RavenQuestionnaire.Core.Views.Survey
             var count = documentItemSession.Query().Count();
             if (count == 0)
                 return new SurveyBrowseView(input.Page, input.PageSize, count, new List<SurveyBrowseItem>());
-            var query = documentItemSession.Query().Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
+            IQueryable<SurveyBrowseItem> query = documentItemSession.Query();
+            if (input.Orders.Count>0)
+            {
+                    query = input.Orders[0].Direction == OrderDirection.Asc
+                            ? query.OrderBy(input.Orders[0].Field)
+                            : query.OrderByDescending(input.Orders[0].Field);
+            }
+            query = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
             return new SurveyBrowseView( 
                 input.Page,
                 input.PageSize, count,
