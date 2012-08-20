@@ -62,6 +62,49 @@ namespace Browsing.CAPI.Synchronization
         #endregion
 
         #region Overloaded
+        protected override void CheckPushPrerequisites()
+        {
+            bool result = false;
+            try
+            {
+                WebRequest request = WebRequest.Create(new Uri(string.Format("{0}{1}", Settings.Default.DefaultUrl, Settings.Default.CheckEventPath)));
+                request.Method = "GET";
+                // Get the response.
+                using (WebResponse response = request.GetResponse())
+                {
+                    // Get the stream containing content returned by the server.
+                    var dataStream = response.GetResponseStream();
+                    // Open the stream using a StreamReader for easy access.
+                    StreamReader reader = new StreamReader(dataStream);
+                    // Read the content.
+                    string responseFromServer = reader.ReadToEnd();
+
+                    try
+                    {
+                        result = Convert.ToBoolean(responseFromServer);
+                      
+                    }
+                    finally
+                    {
+                        // Clean up the streams.
+                        reader.Close();
+                        dataStream.Close();
+                        response.Close();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new CheckPrerequisitesException("Check Prerequisites procedure is failed",SyncType.Push, e);
+            }
+            if (!result)
+                throw new CheckPrerequisitesException("Current device don't have any changes", SyncType.Push, null);
+        }
+
+        protected override void CheckPullPrerequisites()
+        {
+            // Prerequisites empty at this moment
+        }
 
         protected override string OnDoSynchronizationAction(SyncType action, SyncDirection direction)
         {
