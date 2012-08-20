@@ -67,6 +67,7 @@ namespace Browsing.CAPI.Forms
             this.clientSettings = new ClientSettingsProvider();
             this.syncManager = new CapiSyncManager(this.pleaseWait, this.clientSettings);
             this.syncManager.EndOfSync += new EventHandler<SynchronizationCompletedEvent>(sync_EndOfSync);
+            this.syncManager.BgnOfSync += new EventHandler<SynchronizationEvent>(sync_BgnOfSync);
 
             InitializeComponent();
 
@@ -86,8 +87,19 @@ namespace Browsing.CAPI.Forms
                 this.Invoke(new MethodInvoker(() =>
                 {
                     this.pullToolStripMenuItem.Enabled = true;
+                    this.pushToolStripMenuItem.Enabled = true;
                     if (e.Status.ActionType == SyncType.Pull)
                         webView.LoadURL(Settings.Default.DefaultUrl);
+                }));
+        }
+
+        void sync_BgnOfSync(object sender, SynchronizationEvent e)
+        {
+            if (this.InvokeRequired)
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    this.pullToolStripMenuItem.Enabled = false;
+                    this.pushToolStripMenuItem.Enabled = false;
                 }));
         }
 

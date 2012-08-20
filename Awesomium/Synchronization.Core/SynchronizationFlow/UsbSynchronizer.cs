@@ -122,7 +122,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
                         webClient.DownloadDataAsync(PushAdress);
 
-                        while (!done.WaitOne(200))
+                        while (webClient.IsBusy && !done.WaitOne(200))
                         {
                             if (this.stopRequested.WaitOne(100))
                                 webClient.CancelAsync();
@@ -133,7 +133,7 @@ namespace Synchronization.Core.SynchronizationFlow
                     }
                 }
             }
-            catch (CancelledSynchronizationException ex)
+            catch (SynchronizationException)
             {
                 throw;
             }
@@ -199,7 +199,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
                         webClient.UploadFileAsync(PullAdress, usbArchive.InFile);
                         
-                        while (done.WaitOne(200))
+                        while (webClient.IsBusy && !done.WaitOne(200))
                         {
                             if (this.stopRequested.WaitOne(100))
                                 webClient.CancelAsync();
@@ -211,13 +211,13 @@ namespace Synchronization.Core.SynchronizationFlow
                 }
 
             }
-            catch (CancelledSynchronizationException ex)
+            catch (SynchronizationException)
             {
                 throw;
             }
             catch (Exception e)
             {
-                throw new SynchronizationException("Pull to usb is failed", e);
+                throw new SynchronizationException("Pull from usb is failed", e);
             }
         }
 

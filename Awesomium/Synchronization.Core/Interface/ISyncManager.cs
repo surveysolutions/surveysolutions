@@ -14,7 +14,7 @@ namespace Synchronization.Core.Interface
         void Stop();
 
         event EventHandler<SynchronizationEvent> SyncProgressChanged;
-        event EventHandler<SynchronizationEvent> StartOfSync;
+        event EventHandler<SynchronizationEvent> BgnOfSync;
         event EventHandler<SynchronizationCompletedEvent> EndOfSync;
     }
 }

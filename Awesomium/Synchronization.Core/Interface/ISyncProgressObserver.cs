@@ -7,7 +7,7 @@ namespace Synchronization.Core.Interface
 {
     public interface ISyncProgressObserver
     {
-        void SetBeginning();
+        void SetBeginning(ISyncProgressStatus status);
         void SetProgress(ISyncProgressStatus status);
         void SetCompleted(ISyncProgressStatus status);
     }
