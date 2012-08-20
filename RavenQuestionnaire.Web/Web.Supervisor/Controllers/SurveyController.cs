@@ -68,6 +68,7 @@ namespace Web.Supervisor.Controllers
 
 
         public ActionResult Details(string id, Guid? group, Guid? question, Guid? screen, Guid? propagationKey)
+        {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
@@ -86,6 +87,8 @@ namespace Web.Supervisor.Controllers
             ViewBag.CurrentQuestion = new Guid();
             ViewBag.PagePrefix = "";
             return PartialView("_SurveyContent", model);
+        }
+
         [HttpPost]
         public ActionResult AssignForm(string CqId, string userId)
         {
