@@ -1,0 +1,18 @@
+﻿@using RavenQuestionnaire.Core.Views.Question
+@model CompleteQuestionView
+@{
+    ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
+    ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+
+    var questionKey = (Guid)ViewBag.CurrentQuestion;
+    var bodyClass = Model.Enabled ? "" : "ui-disabled";
+    bodyClass += " " + (questionKey == Model.PublicKey ? "scrollHere" : "");
+    bodyClass += " " + (Model.Answered ? "answered" : "");
+    var questionId = "question" + Model.PublicKey;
+}
+<div class="@bodyClass question" id="@questionId">
+    @Html.Hidden("QuestionType", Model.QuestionType)  
+    @{ Html.RenderPartial(string.Format("~/Views/Survey/AnswerList/_{0}.cshtml", Model.QuestionType), Model); }       
+    @Html.ValidationMessage("AnswerValue")
+    @Html.Hidden("PublicKey", Model.PublicKey)
+</div>

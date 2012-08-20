@@ -4,7 +4,7 @@
 @model CompleteQuestionView
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
 {
-    var settings = new Dictionary<string, object>();
+    var settings = (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings;
     Guid selected = Guid.Empty;
     CompleteAnswerView answer = Model.Answers.FirstOrDefault(a => (a).Selected);
     if (answer != null)
@@ -15,7 +15,6 @@
     settings.Add("data-native-menu", "false");
     @Html.Hidden("Selected", true)
     @Html.Hidden("Parent", Model.Answers.FirstOrDefault().Parent)
- @*   @Html.Label("PublicKey", Model.Title)*@
     <label for="@ViewData.TemplateInfo.GetFullHtmlFieldId("PublicKey")">@Html.Raw(Model.Title)</label>
     @Html.DropDownList("PublicKey", new SelectList(Model.Answers, "PublicKey", "Title", selected), "Select answer", settings)
 }

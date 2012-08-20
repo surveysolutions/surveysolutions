@@ -3,6 +3,7 @@
 @model CompleteQuestionView
 @{
     Guid answerGuid = Model.Answers.Length > 0 ? Model.Answers[0].PublicKey : Guid.NewGuid();
+    var settings = (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings;
 }
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {
@@ -15,4 +16,5 @@
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
     @Html.Hidden("Parent", Model.PublicKey)
-    @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, Model.Title, new {draw_key_board = "true", type = "num"}, new {@class = "calculator"}, new {@class = "bold"})
+    @Html.TextBox("AnswerValue", Model.Answer ?? string.Empty, settings)
+}

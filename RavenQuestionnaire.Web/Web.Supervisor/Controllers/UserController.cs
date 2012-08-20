@@ -8,6 +8,7 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.User;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.User;
+using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
 {
@@ -59,6 +60,31 @@ namespace Web.Supervisor.Controllers
             input.Supervisor = user;
             InterviewersView model = viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
             return View(model);
+        }
+
+        public ActionResult _TableData(GridDataRequestModel data)
+        {
+            var input = new InterviewersInputModel
+            {
+                Page = data.Pager.Page,
+                PageSize = data.Pager.PageSize,
+                Orders = data.SortOrder,
+                Supervisor = new UserLight(data.SupervisorId, data.SupervisorName)
+            };
+            InterviewersView model = viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
+            return PartialView("_Table", model);
+        }
+
+        public ActionResult TableGroupByUser(GridDataRequestModel data)
+        {
+            var input = new InterviewerInputModel(data.UserId)
+            {
+                Page = data.Pager.Page,
+                PageSize = data.Pager.PageSize,
+                Orders = data.SortOrder
+            };
+            InterviewerView model = viewRepository.Load<InterviewerInputModel, InterviewerView>(input);
+            return PartialView("_TableGroupByUser", model);
         }
     }
 }

@@ -8,9 +8,19 @@ namespace RavenQuestionnaire.Core.Views.Survey
     public class SurveyGroupView
     {
         public string SurveyTitle { get; private set; }
+
+        public string TemplateId { get; private set; }
+
         public int PageSize { get; private set; }
 
         public int Page { get; private set;}
+
+        public string Order
+        {
+            get { return _order; }
+            set { _order = value; }
+        }
+        private string _order = string.Empty;
 
         public int TotalCount { get; private set; }
 
@@ -18,11 +28,12 @@ namespace RavenQuestionnaire.Core.Views.Survey
 
         public Dictionary<Guid, string> Headers { get; set; }
 
-        public SurveyGroupView(int page, int pageSize, string surveyTitle, int totalCount, IEnumerable<CompleteQuestionnaireBrowseItem> items)
+        public SurveyGroupView(int page, int pageSize, string surveyTitle, int totalCount, IEnumerable<CompleteQuestionnaireBrowseItem> items, string templateId)
         {
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
+            this.TemplateId = templateId;
             this.Items = new List<SurveyGroupItem>();
             this.Headers = new Dictionary<Guid, string>();
             foreach (var question in items.SelectMany(completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions).

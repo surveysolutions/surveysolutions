@@ -1,0 +1,65 @@
+﻿@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@model CompleteQuestionnaireMobileView
+ <script type="text/javascript">
+     $(document).ready(function () {
+         $.ajaxSetup({
+             cache: false
+         });
+
+         $('a.nav-link').live("click", function () {
+             var href = $(this).attr('href');
+
+             var ref = $('#sidebar a[href=\"' + href + '\"]');
+
+             if (ref.length > 0) {
+                 $('#sidebar a').parent().removeClass('active');
+
+                 $(ref).parent().addClass('active');
+             }
+
+             var request = $.ajax({
+                 url: href,
+                 type: "POST",
+                 data: {},
+                 dataType: "html"
+             });
+
+             request.done(function (msg) {
+                 $("#content_container").html(msg);
+             });
+
+             request.fail(function (jqXHR, textStatus) {
+                 alert("Request failed: " + textStatus);
+             });
+             return false;
+         });
+     });
+ </script>
+ <h1>@Model.Title</h1>
+<div class="row-fluid">
+    <div class="span3">
+        <div data-role="panel" data-id="menu">
+            <!-- Start of first page -->
+            <div data-role="page" id="sidebar">
+                <!-- /header -->
+                <div data-role="content" class="well with-footer dummy-scroll">
+                    <ul class="nav nav-list" data-role="listview" data-theme="c" data-dividertheme="d" data-counttheme="e">
+                        @foreach (CompleteGroupHeaders gh in Model.Groups)
+                        {
+                            var activ = @gh.Enabled ? "" : "ui-disabled";
+                            <li class="@activ" id="@gh.PublicKey"><a class="nav-link" id="ref-link-@(gh.PublicKey)"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })" >@gh.GroupText
+                                <span id="counter-@(gh.PublicKey)" class="badge ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="span9">
+        <div data-role="panel" data-id="main" id="content_container" class='@((Model.Status.PublicId == SurveyStatus.Complete.PublicId) ? "ui-disabled" : "")'>
+            @Html.Partial("_SurveyContent", Model.CurrentScreen)
+        </div>
+    </div>
+</div>

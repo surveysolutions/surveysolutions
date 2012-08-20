@@ -1,0 +1,27 @@
+﻿@using RavenQuestionnaire.Core.Views.User
+@model InterviewersView
+
+        @foreach (InterviewersItem item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("Details", "User", new {id = item.Id})">@item.Login</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @if (item.IsLocked)
+                    {
+                        <a href="@Url.Action("UnlockUser", "User", new {id = item.Id})">Unlock</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("LockUser", "User", new {id = item.Id})">Lock</a>
+                    }
+                </td>
+            </tr>
+        }
