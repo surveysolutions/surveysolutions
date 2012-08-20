@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+    
+    <?define ProductVersion="1.0.0.3" ?>
+    <?define Manufacturer="The World Bank" ?>
+    <?define ProductName="Supervisor" ?>
+
+    <?define ProductCode="a6545e7f-5f93-4f67-90f1-2bccf2fd853e"?>
+    <?define UpgradeCode="73ff9c4c-e5e9-4341-af3b-980044926d36"?>
+    
+</Include>

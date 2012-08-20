@@ -12,9 +12,9 @@
         
     <Package InstallerVersion="200" 
              Compressed="yes"
-             Description="Capi installation."/>
+             Description="Supervisor installation."/>
     
-    <Upgrade Id="cc00bf47-7cbf-4bde-8fa1-905fa1916b1e">
+    <Upgrade Id="6e2d596a-770e-4b08-a143-f7dd808e69ce">
       
       <UpgradeVersion Minimum="$(var.ProductVersion)" 
                       IncludeMinimum="no" 
@@ -42,7 +42,7 @@
         <Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
             <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
         </Condition>
-
+        
         <Property Id='ASP_NET_MVC_3_0_DLL'>
             <DirectorySearch Id='MVC_DLL_DIR' Path='[ProgramFilesFolder]\Microsoft ASP.NET\ASP.NET MVC 3\Assemblies'>
                 <FileSearch Id='MVC_DLL_FILE' Name='System.Web.Mvc.dll' MinVersion='3.0.20100'/>
@@ -85,7 +85,7 @@
             <Directory Id="CommonAppDataFolder">
                 <Directory Id="WINDOWSVOLUME">
                 <Directory Id="TheWorldBank" Name="TheWorldBank">
-                    <Directory Id="INSTALLLOCATION" Name="Capi">
+                    <Directory Id="INSTALLLOCATION" Name="Supervisor">
                         <Directory Id="CLIENTDIR" Name="Client">
                         </Directory>
                         <Directory Id="ENGINEDIR" Name="Engine">
