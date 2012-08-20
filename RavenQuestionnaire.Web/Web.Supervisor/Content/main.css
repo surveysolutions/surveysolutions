@@ -17,3 +17,9 @@
 .showForm .assignment-view {
 	display: none;
 }
+.well .nav.nav-list .badge {
+	float: right;
+}
+.well .nav.nav-list .badge:after {
+	clear: both;
+}

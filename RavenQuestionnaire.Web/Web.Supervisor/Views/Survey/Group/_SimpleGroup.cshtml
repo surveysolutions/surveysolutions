@@ -1,0 +1,81 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Question
+@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@model CompleteGroupMobileView
+@using (var enumerator = Model.Children.GetEnumerator())
+{
+    if (enumerator.MoveNext())
+    {
+        bool isLast;
+        do
+        {
+            var item = enumerator.Current;
+            isLast = !enumerator.MoveNext();
+            {
+                if ((item as CompleteQuestionView) != null)
+                {
+                    var question = item as CompleteQuestionView;                    
+                   
+    <div class="ui-body ui-body-c @(!question.Valid ? "error_block" : "")" id="elem-@(question.PublicKey)">
+        <div class="ui-grid-a question-content">
+            <div class="ui-block-a">
+                @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions))
+                {
+                    using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+                    {
+                        Html.RenderPartial("~/Views/Survey/Question/_Question.cshtml", question);
+                    }
+                    using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+                    {
+                    @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+                    @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
+
+                        if (Model is PropagatedGroupMobileView)
+                        {
+                    @Html.Hidden("PropogationPublicKey", ((PropagatedGroupMobileView)Model).PropogationKey)
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    
+                }
+                else
+                {
+                    var @group = item as CompleteGroupMobileView;
+                    if (@group.PublicKey != Guid.Empty)
+                    {
+                        if (@group.Propagated != Propagate.None)
+                        {
+    @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", @group)
+                        }
+                        else
+                        {
+                            string enabled = !@group.Enabled ? "ui-disabled" : string.Empty;
+    <div class="@enabled ui-body ui-body-c" id="@group.PublicKey">
+        <div class="group-anchor">
+            <a id="screen-ref-@(@group.PublicKey)" class="nav-link" href="@Url.Action("Screen", new { Id = @group.QuestionnairePublicKey, group = @group.PublicKey })" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
+            <script type="text/javascript">
+                $('#screen-ref-@(@group.PublicKey)').click(function () {
+                    $('.scrollHere').removeClass('scrollHere');
+                    $(this).parents('.group-anchor').addClass("scrollHere");
+                });
+            </script>
+            <input type="checkbox" disabled="disabled" style="display: none;" />
+        </div>
+    </div>
+    <div class="ui-body">
+        &nbsp;</div>
+                        }
+                    }
+                    else
+                    {
+    @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", @group)
+                    }
+                }
+            }
+        } while (!isLast);
+    }
+}

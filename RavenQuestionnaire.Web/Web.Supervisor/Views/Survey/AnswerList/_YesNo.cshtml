@@ -2,7 +2,7 @@
 @using RavenQuestionnaire.Core.Views.Answer
 @using RavenQuestionnaire.Core.Views.Question
 @model CompleteQuestionView
-@{ var settings = new Dictionary<string, object>();
+@{ var settings = (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings;
    settings.Add("onclick", "$(this.form).submit();"); }
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
 {
@@ -20,11 +20,10 @@
         {
             string radibutonname = string.Format("{0}-{1}", ViewData.TemplateInfo.GetFullHtmlFieldId("PublicKey"), item.PublicKey);
             ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)["id"] = radibutonname;
-            @Html.RadioButton("PublicKey", item.PublicKey, (item).Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
-
 
             <label for="@radibutonname">
-                @{ Html.RenderPartial(string.Format("~/Views/Survey/AnswerViewHtml5/_{0}.cshtml", item.AnswerType), item); }
+                @Html.RadioButton("PublicKey", item.PublicKey, (item).Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
+                @{ Html.RenderPartial(string.Format("~/Views/Survey/Answer/_{0}.cshtml", item.AnswerType), item); }
             </label>
             @Html.Hidden("Selected", true)
         }
