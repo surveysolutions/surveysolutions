@@ -23,3 +23,18 @@
 .well .nav.nav-list .badge:after {
 	clear: both;
 }
+
+.sorting {
+	background: url('../Content/img/sort_both.png') no-repeat center right;
+}
+.sorting span{
+	margin-right: 7px;
+}
+
+.headerSortDown{
+    background: url('../Content/img/sort_asc.png') no-repeat center right !important;
+}
+
+.headerSortUp{
+    background: url('../Content/img/sort_desc.png') no-repeat center right !important;
+}

@@ -10,7 +10,6 @@ using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Assign;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Survey;
@@ -46,8 +45,9 @@ namespace Web.Supervisor.Controllers
         public ActionResult Assigments(string id)
         {
             UserLight user = globalInfo.GetCurrentUser();
-            InterviewersView users =
-                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
+            var users =
+                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
+                                                                                  {Supervisor = user});
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             SurveyGroupView model =
                 viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(new SurveyGroupInputModel(id));
@@ -58,7 +58,8 @@ namespace Web.Supervisor.Controllers
         {
             UserLight user = globalInfo.GetCurrentUser();
             InterviewersView users =
-                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
+                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
+                                                                                  {Supervisor = user});
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             AssignSurveyView model =
                 viewRepository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
@@ -67,7 +68,6 @@ namespace Web.Supervisor.Controllers
 
 
         public ActionResult Details(string id, Guid? group, Guid? question, Guid? screen, Guid? propagationKey)
-        {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
@@ -86,8 +86,6 @@ namespace Web.Supervisor.Controllers
             ViewBag.CurrentQuestion = new Guid();
             ViewBag.PagePrefix = "";
             return PartialView("_SurveyContent", model);
-        }
-
         [HttpPost]
         public ActionResult AssignForm(string CqId, string userId)
         {
@@ -95,9 +93,10 @@ namespace Web.Supervisor.Controllers
             UserLight responsible = (user != null) ? new UserLight(user.UserId, user.UserName) : new UserLight();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new ChangeAssignmentCommand(Guid.Parse(CqId), responsible));
-            return Json(new { userId = responsible.Id, userName = responsible.Name, cqId = CqId },
+            return Json(new {userId = responsible.Id, userName = responsible.Name, cqId = CqId},
                         JsonRequestBehavior.AllowGet);
         }
+
         [HttpPost]
         public JsonResult SaveAnswer(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
         {
@@ -106,16 +105,39 @@ namespace Web.Supervisor.Controllers
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
                 commandService.Execute(new SetAnswerCommand(Guid.Parse(settings[0].QuestionnaireId), question,
-                    settings[0].PropogationPublicKey));
+                                                            settings[0].PropogationPublicKey));
             }
             catch (Exception e)
             {
                 NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
                 logger.Fatal(e);
-                return Json(new { status = "error", question = questions[0], settings = settings[0], error = e.Message },
-                        JsonRequestBehavior.AllowGet);
+                return Json(new {status = "error", question = questions[0], settings = settings[0], error = e.Message},
+                            JsonRequestBehavior.AllowGet);
             }
-            return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
+            return Json(new {status = "ok"}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult _TableData(GridDataRequestModel data)
+        {
+            var input = new SurveyViewInputModel
+                            {
+                                Page = data.Pager.Page,
+                                PageSize = data.Pager.PageSize,
+                                Orders = data.SortOrder
+                            };
+            var model = viewRepository.Load<SurveyViewInputModel, SurveyBrowseView>(input);
+            return PartialView("_Table", model);
+        }
+
+        public ActionResult _GroupTableData(GridDataRequestModel data)
+        {
+            UserLight user = globalInfo.GetCurrentUser();
+            var users =
+                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
+            ViewBag.Users = new SelectList(users.Items, "Id", "Login");
+            var input = new SurveyGroupInputModel(data.Id, data.Pager.Page, data.Pager.PageSize, data.SortOrder);
+            var model = viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(input);
+            return PartialView("_TableGroup", model);
         }
     }
 }

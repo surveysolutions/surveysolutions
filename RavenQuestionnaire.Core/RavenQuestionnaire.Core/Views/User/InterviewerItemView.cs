@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.Statistics;
 
 namespace RavenQuestionnaire.Core.Views.User
 {
@@ -20,8 +18,7 @@ namespace RavenQuestionnaire.Core.Views.User
             TemplateId = item.TemplateId;
             Status = item.Status;
             FeaturedQuestions = new Dictionary<Guid, string>();
-
-            foreach(var kvp in featuredHeaders)
+            foreach (var kvp in featuredHeaders.OrderBy(t => t.Key))
             {
                 var featured = item.FeaturedQuestions.FirstOrDefault(q => q.PublicKey == kvp.Key);
                 FeaturedQuestions.Add(kvp.Key, featured == null ? "" : featured.AnswerText);

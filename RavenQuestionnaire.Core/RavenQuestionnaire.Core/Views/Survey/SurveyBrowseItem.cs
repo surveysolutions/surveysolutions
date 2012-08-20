@@ -10,10 +10,13 @@ namespace RavenQuestionnaire.Core.Views.Survey
     {
         public string Title { get; set; }
         public string Id { get; set; }
-        public int UnAssigment { get; set; }
+        public int Unassigned { get; set; }
         public Dictionary<Guid, SurveyItem> Statistic { get; set; }
         public Dictionary<string, int> Grid { get; set; }
         public int Total { get; set; }
+        public int Initial { get; set; }
+        public int Error { get; set; }
+        public int Complete { get; set; }
 
         public SurveyBrowseItem()
         {
@@ -25,12 +28,15 @@ namespace RavenQuestionnaire.Core.Views.Survey
                 this.Grid.Add(statuse, 0);
         }
 
-        public SurveyBrowseItem(string id, string title, int unAssigment, Dictionary<Guid, SurveyItem> statistic, int total):this()
+        public SurveyBrowseItem(string id, string title, int unAssigment, Dictionary<Guid, SurveyItem> statistic, int total, int initial, int error, int completed):this()
         {
             this.Id = id;
             this.Title = title;
-            this.UnAssigment = unAssigment;
-            this.Total = statistic.Count;
+            this.Unassigned = unAssigment;
+            this.Total = total;
+            this.Initial = initial;
+            this.Error = error;
+            this.Complete = completed;
             this.Grid["Total"] = this.Total;
             this.Grid["Unassigned"] = unAssigment;
             this.Statistic = statistic;
