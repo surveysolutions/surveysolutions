@@ -49,7 +49,7 @@
             </DirectorySearch>
         </Property>
 
-        <Condition Message='ASP.NET MVC 4 is required to proceed with the installation.'>
+        <Condition Message='ASP.NET MVC 4 is required to proceed with the installation (http://www.microsoft.com/en-us/download/details.aspx?id=1491).'>
             <![CDATA[Installed OR ASP_NET_MVC_4_0_DLL]]>
         </Condition>
         
@@ -59,7 +59,7 @@
             </DirectorySearch>
         </Property>
 
-        <Condition Message="IIS Express 7.x must be installed before installation.">
+        <Condition Message="IIS Express 7.x must be installed before installation (http://www.microsoft.com/en-us/download/details.aspx?id=1038).">
             <![CDATA[Installed or APPCMDEXE]]>
         </Condition>
 
