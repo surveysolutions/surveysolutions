@@ -4,7 +4,7 @@
 @model CompleteQuestionView
 @{
 
-    var settings = new Dictionary<string, object>();
+    var settings = (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings;
     settings.Add("onclick", "$(this.form).submit();");
 }
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
@@ -20,7 +20,7 @@
             
             <label class="radio" for="@radibutonname">
                 @Html.RadioButton("PublicKey", item.PublicKey, item.Selected, settings)
-                @{ Html.RenderPartial(string.Format("answerViewHtml5/_{0}", item.AnswerType), item); }
+                @{ Html.RenderPartial(string.Format("Answer/_{0}", item.AnswerType), item); }
             </label>
         }
     </fieldset>

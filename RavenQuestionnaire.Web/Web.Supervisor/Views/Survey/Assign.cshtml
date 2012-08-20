@@ -20,13 +20,6 @@
 </script>
 <h2>Assignment</h2>
 <p><a href="@Url.Action("Assigments", new { id = Model.TemplateId })">Back to list</a></p>
-@using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions {  }, new { @class = "form-inline" }))
-{
-    @Html.Hidden("CqId", Model.Id)
-    <label class="control-label">Responsible</label>
-    @Html.DropDownList("userId", ViewBag.Users as SelectList)
-    <input name="Save" class="btn btn-primary" type="submit" value="Save" />
-}
 <div class="row-fluid">
     <div class="span12">
         <ul class="thumbnails">
@@ -42,7 +35,7 @@
                             using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                             {
                             @Html.Hidden("QuestionType", question.QuestionType)
-                                Html.RenderPartial(string.Format("AnswerListViewHtml5/_{0}", question.QuestionType), question);
+                                Html.RenderPartial(string.Format("AnswerList/_{0}", question.QuestionType), question);
                             @Html.ValidationMessage("AnswerValue")
                             @Html.Hidden("PublicKey", question.PublicKey)
                             }
@@ -58,3 +51,10 @@
         </ul>
     </div>
 </div>
+@using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions {  }, new { @class = "form-inline" }))
+{
+    @Html.Hidden("CqId", Model.Id)
+    <label class="control-label">Responsible</label>
+    @Html.DropDownList("userId", ViewBag.Users as SelectList)
+    <input name="Save" class="btn btn-primary" type="submit" value="Save" />
+}

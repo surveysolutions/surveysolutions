@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Web.Mvc;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -10,6 +11,7 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Assign;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Survey;
 using RavenQuestionnaire.Core.Views.User;
@@ -63,21 +65,27 @@ namespace Web.Supervisor.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public ActionResult AssignForm(string questionnaireId, string responsibleId, string responsibleName,
-                                       int columnsCount)
+
+        public ActionResult Details(string id, Guid? group, Guid? question, Guid? screen, Guid? propagationKey)
         {
-            UserLight user = globalInfo.GetCurrentUser();
-            InterviewersView users =
-                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
-            ViewBag.Users = new SelectList(users.Items, "Id", "Login");
-            var model = new AssigmentModel
-                            {
-                                CompleteQuestionnaireId = questionnaireId,
-                                Responsible = new UserLight(responsibleId, responsibleName),
-                                ColumnsCount = columnsCount
-                            };
-            return PartialView("EditColumn", model);
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+                new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group, CurrentScreenPublicKey = screen, PropagationKey = propagationKey });
+            ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
+            ViewBag.PagePrefix = "page-to-delete";
+            return View(model);
+        }
+
+        public PartialViewResult Screen(string id, Guid group, Guid? propagationKey)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new HttpException(404, "Invalid query string parameters");
+            var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>(
+                new CompleteQuestionnaireViewInputModel(id, group, propagationKey));
+            ViewBag.CurrentQuestion = new Guid();
+            ViewBag.PagePrefix = "";
+            return PartialView("_SurveyContent", model);
         }
 
         [HttpPost]
