@@ -27,6 +27,7 @@
     <Compile Include="Client\ClientConfig.wxs" />
     <Compile Include="Product.wxs" />
     <Compile Include="WebSite\WebSite.wxs" />
+    <Compile Include="WixUI_MondoCustom.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixNetFxExtension">
