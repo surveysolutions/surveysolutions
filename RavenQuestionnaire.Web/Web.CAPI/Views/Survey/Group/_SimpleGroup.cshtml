@@ -37,18 +37,7 @@
                         }
                     }
                 }
-                <p class="question-comment">
-                    @if (!string.IsNullOrEmpty(question.Comments))
-                    {
-                        string idComment = "comments" + @question.PublicKey;
-                        <span id="@idComment">Comments : @question.Comments</span>
-                    }
-                    else
-                    {
-                        string idComment = "comments" + @question.PublicKey;
-                        <span id="@idComment"></span>
-                    }
-                </p>
+              
             </div>
             <div class="ui-block-b">
                 @using (Ajax.BeginFormHtml5("SaveComments", "Survey", new { }, new AjaxOptions { OnComplete = "UpdateComments" }, new { @class="comment-form" }))
