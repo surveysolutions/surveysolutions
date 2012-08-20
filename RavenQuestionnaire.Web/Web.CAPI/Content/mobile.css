@@ -228,7 +228,8 @@
 	text-align: center;
 }
 .ui-body.ui-body-c{
-min-height: 90px;
+    min-height: 90px;
+    overflow: visible;
 }
 
 .hidden-checkbox {

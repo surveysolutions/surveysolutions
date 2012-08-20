@@ -32,4 +32,16 @@
     @{ Html.RenderPartial(string.Format("~/Views/Survey/Answer/AnswerList/_{0}.cshtml", Model.QuestionType), Model); }       
     @Html.ValidationMessage("AnswerValue")
     @Html.Hidden("PublicKey", Model.PublicKey)
+      <p class="question-comment">
+                    @if (!string.IsNullOrEmpty(Model.Comments))
+                    {
+                        string idComment = "comments" + @Model.PublicKey;
+                        <span id="@idComment">Comments : @Model.Comments</span>
+                    }
+                    else
+                    {
+                        string idComment = "comments" + @Model.PublicKey;
+                        <span id="@idComment"></span>
+                    }
+                </p>
 </div>

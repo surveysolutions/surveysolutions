@@ -324,21 +324,38 @@ function updateCounter() {
     },
     $.fn.hideInputsWithVirtualKeyboard = function () {
         var virtualIcons = this.find('a[open-virtual-keyboar=true]');
-        virtualIcons.each(function () {
+        virtualIcons.each(function() {
             var button = $(this);
             var target = button.attr('target-input');
             var targetInput = $('#' + target);
             var label = $('[from=' + target + ']');
             targetInput.css('display', 'none');
 
-            targetInput.change(function () {
+            targetInput.change(function() {
                 label.html(targetInput.val());
             });
+            var grabParentAreas = button.attr('grab-parent-areas');
+            var parentHandled = false;
+            if (grabParentAreas) {
+                var level = parseInt(grabParentAreas);
+                if (level && level != NaN) {
+                    var targetParent = button;
+                    for (var i = 0; i < level; i++) {
+                        targetParent = targetParent.parent();
+                    }
+                    targetParent.bind('tap', function() {
+                        targetInput.click();
+                    });
+                    parentHandled = true;
 
-            button.parent().bind('tap', function () {
-                targetInput.click();
-            });
+                }
+            }
+            if (!parentHandled) {
 
+                button.bind('tap', function() {
+                    targetInput.click();
+                });
+            }
         });
     },
     $.fn.createKeyBoard = function (layout) {
