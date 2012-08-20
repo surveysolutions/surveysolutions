@@ -176,3 +176,4 @@ Awesomium/CAPI/1337116218_to-do-list_checked2.ico
 Awesomium/CAPI/obj/*
 Awesomium/Supervisor/bin/*
 Awesomium/Supervisor/obj/*
+RavenQuestionnaire.Web/Web.CAPI/App_Data/*
