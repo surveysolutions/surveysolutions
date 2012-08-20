@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             statuses.Insert(1, "Unassigned");
             this.Headers = statuses;
             foreach (var item in items)
-                this.Items.Add(new SurveyBrowseItem(item.Id, item.Title, item.UnAssigment, item.Statistic, item.Total));
+                this.Items.Add(new SurveyBrowseItem(item.Id, item.Title, item.Unassigned, item.Statistic, item.Total, item.Initial, item.Error, item.Complete));
         }
     }
 }

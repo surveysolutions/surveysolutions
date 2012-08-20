@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using RavenQuestionnaire.Core.Utility;
+using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
 namespace RavenQuestionnaire.Core.Views.Survey
@@ -21,6 +24,20 @@ namespace RavenQuestionnaire.Core.Views.Survey
             set { _pageSize = value; }
         }
 
+        public string Order
+        {
+            get { return StringUtil.GetOrderRequestString(_orders); }
+            set { _orders = StringUtil.ParseOrderRequestString(value); }
+        }
+
+        public List<OrderRequestItem> Orders
+        {
+            get { return _orders; }
+            set { _orders = value; }
+        }
+
+        private List<OrderRequestItem> _orders = new List<OrderRequestItem>();
+
         public string Id { get; set;}
 
         public Func<CompleteQuestionnaireBrowseItem, bool> Expression
@@ -40,5 +57,14 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
         }
+
+        public SurveyGroupInputModel(string id, int page, int pageSize, List<OrderRequestItem> orders)
+        {
+            this.Id = id;
+            this.Page = page;
+            this.PageSize = pageSize;
+            this.Orders = orders;
+        }
+
     }
 }

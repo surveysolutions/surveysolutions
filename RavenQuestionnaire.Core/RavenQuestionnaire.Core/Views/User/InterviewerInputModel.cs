@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.Utility;
+using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
 namespace RavenQuestionnaire.Core.Views.User
@@ -26,6 +28,20 @@ namespace RavenQuestionnaire.Core.Views.User
         private int _pageSize = 20;
 
         public string UserId { get; private set; }
+
+        public string Order
+        {
+            get { return StringUtil.GetOrderRequestString(_orders); }
+            set { _orders = StringUtil.ParseOrderRequestString(value); }
+        }
+
+        public List<OrderRequestItem> Orders
+        {
+            get { return _orders; }
+            set { _orders = value; }
+        }
+
+        private List<OrderRequestItem> _orders = new List<OrderRequestItem>();
 
         public Func<CompleteQuestionnaireBrowseItem, bool> Expression
         {

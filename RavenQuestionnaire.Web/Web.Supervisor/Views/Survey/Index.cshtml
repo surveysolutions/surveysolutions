@@ -28,11 +28,11 @@
 <table  id="questionnaireTable" class="table table-striped table-bordered table-condensed">
     <thead>
         <tr>
-        <th sorter='{"key":"Id"}'>Survey</th>
-        <th sorter='{"key":"Id"}'>Initial date</th>
+        <th class="sorting" sorter='{"key":"Title"}'><span>Survey</span></th>
+        <th class="sorting" sorter='{"key":"StartDate"}'><span>Initial date</span></th>
             @foreach (string item in Model.Headers)
             {
-            <th sorter='{"key":"@item"}'>@item</th>
+            <th class="sorting" role="columnheader" sorter='{"key":"@item"}'><span>@item</span></th>
             }
         </tr>
     </thead>

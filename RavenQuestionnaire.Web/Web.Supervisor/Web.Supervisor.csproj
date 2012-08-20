@@ -159,7 +159,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AssigmentModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
-     <Compile Include="Models\GridDataRequestModel.cs" />
+    <Compile Include="Models\GridDataRequestModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Synchronization\SupervisorEventSync.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
@@ -181,6 +181,11 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\sort_asc.png" />
+    <Content Include="Content\img\sort_asc_disabled.png" />
+    <Content Include="Content\img\sort_both.png" />
+    <Content Include="Content\img\sort_desc.png" />
+    <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Global.asax" />
     <Content Include="README.jQuery.vsdoc.txt" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -320,9 +325,18 @@
   <ItemGroup>
     <Content Include="Views\Survey\AnswerViewHtml5\_Text.cshtml" />
   </ItemGroup>
-    <ItemGroup>
+  <ItemGroup>
     <Content Include="Views\Survey\_Table.cshtml" />
-</ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Survey\_TableGroup.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\_Table.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\_TableGroupByUser.cshtml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -340,7 +354,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4099</DevelopmentServerPort>
+          <DevelopmentServerPort>11917</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:8084/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

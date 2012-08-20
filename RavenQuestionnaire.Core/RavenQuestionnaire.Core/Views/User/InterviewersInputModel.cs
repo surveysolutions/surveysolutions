@@ -1,4 +1,7 @@
-﻿using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿using System.Collections.Generic;
+using RavenQuestionnaire.Core.Utility;
+using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Views.User
 {
@@ -19,6 +22,20 @@ namespace RavenQuestionnaire.Core.Views.User
             get { return _pageSize; }
             set { _pageSize = value; }
         }
+
+        public string Order
+        {
+            get { return StringUtil.GetOrderRequestString(_orders); }
+            set { _orders = StringUtil.ParseOrderRequestString(value); }
+        }
+
+        public List<OrderRequestItem> Orders
+        {
+            get { return _orders; }
+            set { _orders = value; }
+        }
+
+        private List<OrderRequestItem> _orders = new List<OrderRequestItem>();
 
         public UserLight Supervisor { get; set; }
         public bool AllSubordinateUsers { get; set; }

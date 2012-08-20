@@ -1,0 +1,18 @@
+﻿@using RavenQuestionnaire.Core.Views.User
+@model InterviewerView
+
+    @foreach (InterviewerItemView item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("Assigments", "Survey", new {id = item.TemplateId})">@item.QuestionnaireTitle</a>
+                </td>
+                @foreach (var question in item.FeaturedQuestions)
+                {
+                    <td>@question.Value</td>
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status.Name)
+                </td>
+            </tr>
+        }
