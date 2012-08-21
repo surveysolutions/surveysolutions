@@ -242,5 +242,10 @@ namespace Browsing.CAPI.Forms
                 throw ex;
             }
         }
+
+        private void toolStripSettingsMenuItem_Click(object sender, EventArgs e)
+        {
+            new SettingsBox().Show();
+        }
     }
 }

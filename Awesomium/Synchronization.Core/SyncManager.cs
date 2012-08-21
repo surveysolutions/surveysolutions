@@ -18,7 +18,7 @@ namespace Synchronization.Core
         #region Members
 
         private List<ISynchronizer> synchronizerChain;
-      
+
         private AutoResetEvent syncIsAvailable = new AutoResetEvent(true);
 
         #endregion
@@ -74,19 +74,21 @@ namespace Synchronization.Core
             }
             CheckPullPrerequisites();
         }
-    
 
-    private ISynchronizer ExecuteAction(Action<ISynchronizer> action, IList<Exception> errorList)
+
+        private ISynchronizer ExecuteAction(Action<ISynchronizer> action, IList<Exception> errorList)
         {
             foreach (var synchronizer in synchronizerChain)
             {
                 try
                 {
                     action(synchronizer);
+
                     return synchronizer;
                 }
-                catch (CancelledSynchronizationException e)
+                catch (CancelledSynchronizationException)
                 {
+                    throw; // cancel all in the chain at once
                 }
                 catch (SynchronizationException e)
                 {
@@ -121,7 +123,7 @@ namespace Synchronization.Core
             }
             catch (Exception ex)
             {
-                error = new SynchronizationException("Syncronization process failed", ex);
+                error = new SynchronizationException("Synchronization process failed", ex);
             }
             finally
             {

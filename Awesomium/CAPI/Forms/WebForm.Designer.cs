@@ -42,6 +42,7 @@ namespace Browsing.CAPI.Forms
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.pullToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pushToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSettingsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,8 +54,6 @@ namespace Browsing.CAPI.Forms
             this.webView.Size = new System.Drawing.Size(1600, 830);
             this.webView.Source = new System.Uri("http://google.com", System.UriKind.Absolute);
             this.webView.TabIndex = 1;
-            
-            
             // 
             // statusStrip1
             // 
@@ -68,6 +67,7 @@ namespace Browsing.CAPI.Forms
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.pullToolStripMenuItem,
+            this.toolStripSettingsMenuItem,
             this.pushToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -83,19 +83,31 @@ namespace Browsing.CAPI.Forms
             this.pullToolStripMenuItem.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.pullToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.pullToolStripMenuItem.Name = "pullToolStripMenuItem";
-            this.pullToolStripMenuItem.Size = new System.Drawing.Size(50, 40);
+            this.pullToolStripMenuItem.Size = new System.Drawing.Size(94, 40);
             this.pullToolStripMenuItem.Click += new System.EventHandler(this.pullToolStripMenuItem_Click);
             // 
-            // pullToolStripMenuItem1
+            // pushToolStripMenuItem
             // 
             this.pushToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.pushToolStripMenuItem.AutoSize = false;
             this.pushToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 1F);
-            this.pushToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pullToolStripMenuItem1.Image")));
+            this.pushToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pushToolStripMenuItem.Image")));
             this.pushToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.pushToolStripMenuItem.Name = "pullToolStripMenuItem1";
+            this.pushToolStripMenuItem.Name = "pushToolStripMenuItem";
             this.pushToolStripMenuItem.Size = new System.Drawing.Size(50, 40);
             this.pushToolStripMenuItem.Click += new System.EventHandler(this.pushToolStripMenuItem_Click);
+            // 
+            // toolStripSettingsMenuItem
+            // 
+            this.toolStripSettingsMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripSettingsMenuItem.AutoSize = false;
+            this.toolStripSettingsMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.toolStripSettingsMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSettingsMenuItem.Image")));
+            this.toolStripSettingsMenuItem.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolStripSettingsMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripSettingsMenuItem.Name = "toolStripSettingsMenuItem";
+            this.toolStripSettingsMenuItem.Size = new System.Drawing.Size(94, 40);
+            this.toolStripSettingsMenuItem.Click += new System.EventHandler(this.toolStripSettingsMenuItem_Click);
             // 
             // WebForm
             // 
@@ -127,6 +139,7 @@ namespace Browsing.CAPI.Forms
         private ToolStripMenuItem pullToolStripMenuItem;
         private ToolStripMenuItem pushToolStripMenuItem;
         private WebControl webView;
+        private ToolStripMenuItem toolStripSettingsMenuItem;
     }
 }
 
