@@ -37,6 +37,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
         public bool IsReverse { get; private set; }
 
-        public Guid? CurrentScreenPublicKey { get; set; }
+      //  public Guid? CurrentScreenPublicKey { get; set; }
     }
 }
