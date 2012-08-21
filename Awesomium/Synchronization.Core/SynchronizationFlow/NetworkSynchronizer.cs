@@ -127,7 +127,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         protected override void OnStop()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         #endregion

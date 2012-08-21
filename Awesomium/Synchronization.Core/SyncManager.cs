@@ -153,9 +153,6 @@ namespace Synchronization.Core
 
         public void Stop()
         {
-            if (!this.syncIsAvailable.WaitOne(0))
-                return;
-
             foreach (var synchronizer in synchronizerChain)
                 synchronizer.Stop();
         }

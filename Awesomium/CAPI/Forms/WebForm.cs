@@ -77,8 +77,40 @@ namespace Browsing.CAPI.Forms
             host.Size = this.statusStrip1.Size;
             this.statusStrip1.Items.AddRange(new ToolStripItem[] { host });
 
-            webView.Source = new Uri(Settings.Default.DefaultUrl);
+            this.webView.BeginLoading += new BeginLoadingEventHandler(webView_BeginLoading);
+            this.webView.LoadCompleted += new EventHandler(webView_LoadCompleted);
+            this.webView.ResourceRequest += new ResourceRequestEventHandler(webView_ResourceRequest);
+
+            this.webView.Source = new Uri(Settings.Default.DefaultUrl);
             this.webView.Focus();
+        }
+
+        #region TODO Progress indication
+
+        void webView_BeginLoading(object sender, BeginLoadingEventArgs e)
+        {
+        }
+
+        ResourceResponse webView_ResourceRequest(object sender, ResourceRequestEventArgs e)
+        {
+            return null;
+        }
+
+        void webView_LoadCompleted(object sender, EventArgs e)
+        {
+        }
+
+        #endregion
+
+        private void EnableDisableMenuItems(bool enable)
+        {
+            foreach (ToolStripMenuItem item in this.menuStrip1.Items)
+            {
+                if (item == this.toolStripCancelMenuItem)
+                    continue;
+
+                item.Enabled = enable;
+            }
         }
 
         void sync_EndOfSync(object sender, SynchronizationCompletedEvent e)
@@ -86,8 +118,8 @@ namespace Browsing.CAPI.Forms
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(() =>
                 {
-                    this.pullToolStripMenuItem.Enabled = true;
-                    this.pushToolStripMenuItem.Enabled = true;
+                    EnableDisableMenuItems(true);
+
                     if (e.Status.ActionType == SyncType.Pull)
                         webView.LoadURL(Settings.Default.DefaultUrl);
                 }));
@@ -98,8 +130,7 @@ namespace Browsing.CAPI.Forms
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(() =>
                 {
-                    this.pullToolStripMenuItem.Enabled = false;
-                    this.pushToolStripMenuItem.Enabled = false;
+                    EnableDisableMenuItems(false);
                 }));
         }
 
@@ -154,12 +185,13 @@ namespace Browsing.CAPI.Forms
 
             this.webView.Focus();
         }
+
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             if (this.webView != null)
             {
-                this.webView.IsDirtyChanged -= OnIsDirtyChanged;
-                this.webView.SelectLocalFiles -= OnSelectLocalFiles;
+                //this.webView.IsDirtyChanged -= OnIsDirtyChanged;
+                //this.webView.SelectLocalFiles -= OnSelectLocalFiles;
                 this.webView.Close();
             }
 
@@ -176,8 +208,7 @@ namespace Browsing.CAPI.Forms
 
         #region Event Handlers
 
-
-        private void OnIsDirtyChanged(object sender, EventArgs e)
+        /*private void OnIsDirtyChanged(object sender, EventArgs e)
         {
             if (!this.webView.IsLive)
                 return;
@@ -198,8 +229,9 @@ namespace Browsing.CAPI.Forms
                     this.Invalidate(this.webView.DirtyBounds.GetRectangle(), false);
                 }
             }
-        }
-        private void OnSelectLocalFiles(object sender, SelectLocalFilesEventArgs e)
+        }*/
+
+        /*private void OnSelectLocalFiles(object sender, SelectLocalFilesEventArgs e)
         {
             using (OpenFileDialog dialog = new OpenFileDialog()
             {
@@ -215,6 +247,7 @@ namespace Browsing.CAPI.Forms
                     e.Cancel = true;
             }
         }
+         */ 
         #endregion
 
         private void pushToolStripMenuItem_Click(object sender, EventArgs e)
@@ -223,10 +256,8 @@ namespace Browsing.CAPI.Forms
             {
                 this.syncManager.ExportQuestionaries();
             }
-            catch (Exception ex)
+            catch 
             {
-                // MessageBox.Show("Export error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                throw ex;
             }
         }
 
@@ -236,16 +267,25 @@ namespace Browsing.CAPI.Forms
             {
                 this.syncManager.ImportQuestionaries();
             }
-            catch (Exception ex)
+            catch
             {
-                // MessageBox.Show("Export error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                throw ex;
             }
         }
 
         private void toolStripSettingsMenuItem_Click(object sender, EventArgs e)
         {
-            new SettingsBox().Show();
+            new SettingsBox().ShowDialog();
+        }
+
+        private void toolStripCancelMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.syncManager.Stop();
+            }
+            catch
+            {
+            }
         }
     }
 }

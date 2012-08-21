@@ -154,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1337116218_to-do-list_checked2.ico" />
+    <None Include="Resources\toolStripSettingsMenuItem.Image.png" />
     <None Include="Resources\toolStripMenuItem1.Image.png" />
   </ItemGroup>
   <ItemGroup>
