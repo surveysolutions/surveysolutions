@@ -1,20 +1,21 @@
-﻿using System;
+﻿using Ncqrs;
+using System;
 using System.Web;
 using System.Web.Mvc;
-using Ncqrs;
+using Web.Supervisor.Models;
+using RavenQuestionnaire.Core;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
-using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Views.Assign;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
-using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Views.Survey;
 using RavenQuestionnaire.Core.Views.User;
-using Web.Supervisor.Models;
+using RavenQuestionnaire.Core.Views.Assign;
+using RavenQuestionnaire.Core.Views.Survey;
+using RavenQuestionnaire.Core.Denormalizers;
+using RavenQuestionnaire.Core.Views.Question;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
+
 
 namespace Web.Supervisor.Controllers
 {
@@ -37,32 +38,27 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult Index()
         {
-            SurveyBrowseView model =
-                viewRepository.Load<SurveyViewInputModel, SurveyBrowseView>(new SurveyViewInputModel());
+            SurveyBrowseView model = viewRepository.Load<SurveyViewInputModel, SurveyBrowseView>(new SurveyViewInputModel());
             return View(model);
         }
 
         public ActionResult Assigments(string id)
         {
             UserLight user = globalInfo.GetCurrentUser();
-            var users =
-                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
+            var users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
                                                                                   {Supervisor = user});
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
-            SurveyGroupView model =
-                viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(new SurveyGroupInputModel(id));
+            SurveyGroupView model = viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(new SurveyGroupInputModel(id));
             return View(model);
         }
 
         public ActionResult Assign(Guid id)
         {
             UserLight user = globalInfo.GetCurrentUser();
-            InterviewersView users =
-                viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
+            InterviewersView users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
                                                                                   {Supervisor = user});
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
-            AssignSurveyView model =
-                viewRepository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
+            AssignSurveyView model = viewRepository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
             return View(model);
         }
 
