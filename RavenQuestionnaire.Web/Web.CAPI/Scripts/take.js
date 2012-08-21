@@ -1,30 +1,12 @@
-﻿function sichronizationStarted(data, status, xhr) {
-    $('a#btnSync span span').html('Processing');
-
-    $('[data-id=main]').addClass('ui-disabled');
-}
-function spotScanCompleted(data, status, xhr) {
-    $('a#btnSync span span').html('Synchronize');
-    $('a#btnSync').removeClass('ui-btn-active');
-    $('[data-id=main]').removeClass('ui-disabled');
-    var dialog = $(data.responseText);
-    var dialogContainer = $('#dialogContainer');
-    dialogContainer.html(dialog);
-    dialog.page();
-    dialog.attr('class', dialog.attr('class') + ' ui-page-active');
-    var main = $('#main');
-    main.addClass('ui-disabled');
-    main.attr('class', main.attr('class') + ' ui-page-active');
-    dialog.find('#spotsClose').click(function () {
-        dialogContainer.html('');
-        main.removeClass('ui-disabled');
+﻿function CheckIsCanChangePage(link) {
+    var url = $(link).attr('screen-url');
+    var panel = $(link).attr('data-panel');
+    var pageContainer = $('[data-id=' + panel+']');
+    var fromPage = pageContainer.children()[0];
+    $.mobile.changePage(url, {
+        pageContainer: pageContainer
     });
 }
-
-function ExportStarted() {
-    $('#btnExport').href = "@Url.Action('Export', 'ImportExport')";
-}
-
 function GetCheck(i, j) {
     $.get(i, function (data) {
              try {
@@ -38,14 +20,6 @@ function GetCheck(i, j) {
                 window.location = j;
             }
         });
-}
-
-function sinchronizationCompleted(data, status, xhr) {
-    $('a#btnSync span span').html('Synchronize');
-    $('a#btnSync').removeClass('ui-btn-active');
-    $('[data-id=main]').removeClass('ui-disabled');
-    if (data.responseText != 'True')
-        alert('synchronization wasn\'t succefull');
 }
 
 function JsonResults(data, status, xhr) {
@@ -457,41 +431,14 @@ function updateCounter() {
         this.hideInputsWithVirtualKeyboard();
         this.disableAfterSubmit();
 
-        
-      /*  this.find('.dummy-scroll').each(function() {
-            var scroll = new iScroll(this);
-            scrolls.push(scroll);
-            // scroll.refresh();
-        });*/
-        // this.focus();
-
     };
   
     
-   /* $.fn.destroyPage = function () {
-        var currentScroll= this.find('.dummy-scroll #scroller')[0];
-        for (var j = 0; j < scrolls.length; j++) {
-                if (scrolls[j].scroller == currentScroll) {
-                    scrolls[j].destroy();
-                    scrolls.splice(j, 1);
-                }
-        }
-      //  scrolls = new Array();
-    };*/
+   
 })(jQuery);
 //  var scrolls = new Array();
 $(document).ready(function () {
-   // var doc = $(document);
-   /* doc.find('#sidebar .dummy-scroll').each(function() {
-        var scroll = new iScroll(this);
-        scroll.refresh();
-    });*/
-      /*doc.ajaxComplete(function () {
-        for (var i = 0; i < scrolls.length; i++) {
-            scrolls[i].refresh();
-        }
-    });
-    */
+  
     $('.next-question').live('click', function () {
         var id = $(this).attr('id').substr(4);
         var parent = $('#elem-' + id);
@@ -521,12 +468,6 @@ function scrollToQuestion(question) {
         return;
     scroll.refresh();
     scroll.scrollTo(0, position, 1500, false);
-    /*for (var j = 0; j < scrolls.length; j++) {
-        if ($(scrolls[j].scroller).attr('class') == $(scrollContainer.find('#scroller')).attr('class')) {
-            scrolls[j].refresh();
-            scrolls[j].scrollTo(0, position, 1500, false);
-        }
-    }*/
 }
 
 $(document).bind('pagebeforeshow', function (event, data) {
@@ -559,18 +500,8 @@ $(document).bind('pagechange', function () {
         $('.scrollHere').removeClass('scrollHere');
     }
     
-      /*for (var j = 0; j < scrolls.length; j++) {
-             scrolls[j].refresh();
-         }*/
 });
 
-$(document).bind('pagehide', function (event, data) {
-   
-  /*  var doc = $(data.prevPage);
-    doc.destroyPage();*/
- 
-    $('.page-to-delete').remove();
-});
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
