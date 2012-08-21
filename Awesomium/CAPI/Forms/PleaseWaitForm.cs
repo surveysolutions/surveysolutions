@@ -42,9 +42,14 @@ namespace Browsing.CAPI.Forms
                 return;
 
             if (InvokeRequired)
-                Invoke(new MethodInvoker(() => { this.Parent.Hide(); }));
+                Invoke(new MethodInvoker(() =>
+                {
+                    if (!this.Parent.IsDisposed) 
+                        this.Parent.Hide();
+                }));
             else
-                this.Parent.Hide();
+                if (!this.Parent.IsDisposed)
+                    this.Parent.Hide();
 
             this.inactiveStatus.Set();
         }
