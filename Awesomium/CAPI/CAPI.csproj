@@ -99,6 +99,12 @@
   <ItemGroup>
     <Compile Include="ClientSettings\ClientSettingsProvider.cs" />
     <Compile Include="ClientSettings\ClientSettings.cs" />
+    <Compile Include="Forms\SettingsBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsBox.Designer.cs">
+      <DependentUpon>SettingsBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Synchronization\CapiSyncManager.cs" />
     <Compile Include="Forms\PleaseWaitForm.cs">
       <SubType>UserControl</SubType>
@@ -116,6 +122,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\PleaseWaitForm.resx">
       <DependentUpon>PleaseWaitForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsBox.resx">
+      <DependentUpon>SettingsBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WebForm.resx">
       <DependentUpon>WebForm.cs</DependentUpon>
@@ -145,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1337116218_to-do-list_checked2.ico" />
+    <None Include="Resources\toolStripMenuItem1.Image.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
