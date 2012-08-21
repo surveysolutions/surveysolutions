@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Browsing.CAPI</RootNamespace>
-    <AssemblyName>Browsing.CAPI</AssemblyName>
+    <AssemblyName>CAPI</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -37,7 +37,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\Assemblies\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -154,8 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1337116218_to-do-list_checked2.ico" />
-    <None Include="Resources\toolStripSettingsMenuItem.Image.png" />
-    <None Include="Resources\toolStripMenuItem1.Image.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -180,10 +178,17 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{9A8843B1-978F-4E96-8523-907C257CA183}</Project>
+      <Name>Common %28Common\Common%29</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Synchronization.Core\Synchronization.Core.csproj">
       <Project>{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}</Project>
       <Name>Synchronization.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(SolutionName)'=='Awesomium.NET'">

@@ -2,9 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Browsing.CAPI.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="DefaultUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost:8083</Value>
-    </Setting>
     <Setting Name="UsbExportPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">/Synchronizations/Export</Value>
     </Setting>
@@ -26,11 +23,23 @@
     <Setting Name="ParentId" Type="System.Guid" Scope="User">
       <Value Profile="(Default)">00000000-0000-0000-0000-000000000000</Value>
     </Setting>
-    <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost:8083</Value>
-    </Setting>
     <Setting Name="CheckEventPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">/Synchronizations/CheckIsThereSomethingToPush</Value>
+    </Setting>
+    <Setting Name="DefaultUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://localhost:2001</Value>
+    </Setting>
+    <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://localhost:8085</Value>
+    </Setting>
+    <Setting Name="DefaultPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">2001</Value>
+    </Setting>
+    <Setting Name="EnginePathName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Engine</Value>
+    </Setting>
+    <Setting Name="RunClient" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>
