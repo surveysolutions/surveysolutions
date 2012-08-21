@@ -11,7 +11,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
 {
     public class CQGroupItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
                                            IEventHandler<NewQuestionnaireCreated>, 
-                                           IEventHandler<QuestionnaireTemplateLocaded>, 
+                                           IEventHandler<QuestionnaireTemplateLoaded>, 
                                            IEventHandler<CompleteQuestionnaireDeleted>
     {
         
@@ -49,7 +49,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         #region Implementation of IEventHandler<in QuestionnaireTemplateLocaded>
 
-        public void Handle(IPublishedEvent<QuestionnaireTemplateLocaded> evnt)
+        public void Handle(IPublishedEvent<QuestionnaireTemplateLoaded> evnt)
         {
             var questionnaire = new CQGroupItem(0, 100, 0, evnt.Payload.Template.Title, evnt.Payload.Template.PublicKey.ToString());
             this.documentGroupSession.Store(questionnaire, evnt.Payload.Template.PublicKey);
