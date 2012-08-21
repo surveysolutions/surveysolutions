@@ -2,10 +2,12 @@
     var url = $(link).attr('screen-url');
     var panel = $(link).attr('data-panel');
     var pageContainer = $('[data-id=' + panel+']');
-    var fromPage = pageContainer.children()[0];
+    //var fromPage = $(pageContainer.children()[0]);
     $.mobile.changePage(url, {
-        pageContainer: pageContainer
+        pageContainer: pageContainer/*,
+        fromPage: fromPage*/
     });
+    
 }
 function GetCheck(i, j) {
     $.get(i, function (data) {
@@ -97,17 +99,12 @@ function UpdateCurrentGroup(group) {
     }
 }
 function UpdateQuestion(question) {
-    var questionElement = $('#question' + question.PublicKey);
+   // var questionElement = $('#question' + question.PublicKey);
     var element = $('#elem-' + question.PublicKey);
 
-    questionElement.removeClass("ui-disabled");
-    if (!question.Enabled) 
-        questionElement.addClass("ui-disabled");
-  /*      if (questionElement.children('fieldset').children('.ui-controlgroup-controls').css("display")!="none") questionElement.children('fieldset').children('.ui-controlgroup-controls').hide();
-    }
-    else
-        if (questionElement.children('fieldset').children('.ui-controlgroup-controls').css("display") == "none") questionElement.children('fieldset').children('.ui-controlgroup-controls').show();
-        */
+    element.removeClass("ui-disabled");
+    if (!question.Enabled)
+        element.addClass("ui-disabled");
 
     element.removeClass("error_block");
     if (!question.Valid) {
@@ -115,7 +112,7 @@ function UpdateQuestion(question) {
     }
 
     if (question.Answered) {
-        questionElement.addClass("answered");
+        element.addClass("answered");
     }
 
     SetErrorToQuestion(question, question.QuestionType == 0 ? null : question.GroupPublicKey, '');
@@ -520,7 +517,7 @@ $(document).bind('pagechange', function () {
         $(target).faderEffect();
         $('.scrollHere').removeClass('scrollHere');
     }
-    
+
 });
 
 function isNumber(n) {
