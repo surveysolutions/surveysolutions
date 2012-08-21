@@ -15,11 +15,10 @@
             {
                 if ((item as CompleteQuestionView) != null)
                 {
-                    var question = item as CompleteQuestionView;                    
-                   
-    <div class="ui-body ui-body-c @(!question.Valid ? "error_block" : "")" id="elem-@(question.PublicKey)">
-        <div class="ui-grid-a question-content">
-            <div class="ui-block-a">
+                    var question = item as CompleteQuestionView;       
+    <div class="question-frame">
+        <div class="ui-body ui-body-c question-main-content @(!question.Valid ? "error_block" : "")" id="elem-@(question.PublicKey)">
+            <div class="question-content">
                 @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions))
                 {
                     using (Html.BeginCollectionItem("questions", true, question.PublicKey))
@@ -28,8 +27,8 @@
                     }
                     using (Html.BeginCollectionItem("settings", true, question.PublicKey))
                     {
-                    @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
-                    @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
+                        @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+                        @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
 
                         if (Model is PropagatedGroupMobileView)
                         {
@@ -37,33 +36,37 @@
                         }
                     }
                 }
-              
+                   @using (Ajax.BeginFormHtml5("SaveComments", "Survey", new { }, new AjaxOptions { OnComplete = "UpdateComments" }, new { @class="comment-form" }))
+                   {
+                       using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+                       {
+                         @*  @Html.IconInputComments("Comments", question.Comments ?? string.Empty, string.Empty, new {draw_key_board = "true"}, new {@class = "comments"}, new {@class = "bold"})*@
+                            @Html.TextBox("Comments", question.Comments ?? string.Empty,new {draw_key_board = "true", on_long_tap_open="true",grab_parent_areas="3"})
+                       }
+                       using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+                       {
+                           @Html.Hidden("ParentGroupPublicKey", (Guid) ViewBag.CurrentGroupPublicKey)
+                           @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
+                           if (Model is PropagatedGroupMobileView)
+                           {
+
+                               @Html.Hidden("PropogationPublicKey", ((PropagatedGroupMobileView) Model).PropogationKey)
+
+                           }
+                       }
+                       @Html.Hidden("PublicKey", question.PublicKey)
+                   }
             </div>
-            <div class="ui-block-b">
-                @using (Ajax.BeginFormHtml5("SaveComments", "Survey", new { }, new AjaxOptions { OnComplete = "UpdateComments" }, new { @class="comment-form" }))
-                {
-                    using (Html.BeginCollectionItem("questions", true, question.PublicKey))
-                    {
-                    @Html.IconInputComments("Comments", question.Comments ?? string.Empty, string.Empty, new { draw_key_board = "true" }, new { @class = "comments" }, new { @class = "bold" })
-                    }
-                    using (Html.BeginCollectionItem("settings", true, question.PublicKey))
-                    {
-                    @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
-                    @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
-                        if (Model is PropagatedGroupMobileView)
-                        {
-                            
-                    @Html.Hidden("PropogationPublicKey", ((PropagatedGroupMobileView)Model).PropogationKey)
-                            
-                        }
-                    }
-                    @Html.Hidden("PublicKey", question.PublicKey)
-                }
-                @if (!isLast)
-                {
-                    <a class="next-question" id="iam-@(question.PublicKey)">&darr;</a>
-                }
-            </div>
+        </div>
+          @if (!isLast)
+          {
+              <div class="question-arrow">
+          
+                  <a class="next-question" id="iam-@(question.PublicKey)">&darr;</a>
+            
+              </div>
+          }
+        <div style="clear: both;">
         </div>
     </div>
     <div class="ui-body">
@@ -76,33 +79,33 @@
                     {
                         if (@group.Propagated != Propagate.None)
                         {
-                            @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", @group)
+    @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", @group)
                         }
                         else
                         {
                             string enabled = !@group.Enabled ? "ui-disabled" : string.Empty;
-                            <div class="@enabled ui-body ui-body-c" id="@group.PublicKey">
-                                <div class="group-anchor">
-                                    <a id="screen-ref-@(@group.PublicKey)" class="nav-link" href="@Url.Action("Screen", new { Id = @group.QuestionnairePublicKey, group = @group.PublicKey })" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
-                                    <script type="text/javascript">
-                                        $('#screen-ref-@(@group.PublicKey)').click(function () {
-                                        $('.scrollHere').removeClass('scrollHere');
-                                        $(this).parents('.group-anchor').addClass("scrollHere");
-                                        });
-                                    </script>
-                                    <input type="checkbox" disabled="disabled" style="display: none;" />
-                                 </div>
-                            </div>
-                            <div class="ui-body">
-                        &nbsp;</div>
+    <div class="@enabled ui-body ui-body-c" id="@group.PublicKey">
+        <div class="group-anchor">
+            <a id="screen-ref-@(@group.PublicKey)" class="nav-link" href="@Url.Action("Screen", new { Id = @group.QuestionnairePublicKey, group = @group.PublicKey })" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
+            <script type="text/javascript">
+                $('#screen-ref-@(@group.PublicKey)').click(function () {
+                    $('.scrollHere').removeClass('scrollHere');
+                    $(this).parents('.group-anchor').addClass("scrollHere");
+                });
+            </script>
+            <input type="checkbox" disabled="disabled" style="display: none;" />
+        </div>
+    </div>
+    <div class="ui-body">
+        &nbsp;</div>
                         }
                     }
                     else
                     {
-                        @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", @group)
+    @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", @group)
                     }
                 }
             }
-        }while (!isLast);
+        } while (!isLast);
     }
 }

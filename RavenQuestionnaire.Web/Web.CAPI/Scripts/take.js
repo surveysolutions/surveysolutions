@@ -296,6 +296,26 @@ function updateCounter() {
         });
 
     },
+     $.fn.hideInputsWithLongTap = function () {
+         var virtualIcons = this.find('input[on-long-tap-open=true]');
+         virtualIcons.each(function() {
+             var target = $(this);
+             target.css('display', 'none');
+             var grabParentAreas = target.attr('grab-parent-areas');
+             if (grabParentAreas) {
+                 var level = parseInt(grabParentAreas);
+                 if (level && level != NaN) {
+                     var targetParent = target;
+                     for (var i = 0; i < level; i++) {
+                         targetParent = targetParent.parent();
+                     }
+                     targetParent.bind('taphold', function() {
+                         target.click();
+                     });
+                 }
+             }
+         });
+     },
     $.fn.hideInputsWithVirtualKeyboard = function () {
         var virtualIcons = this.find('a[open-virtual-keyboar=true]');
         virtualIcons.each(function() {
@@ -429,6 +449,7 @@ function updateCounter() {
         this.createKeyBoard();
      
         this.hideInputsWithVirtualKeyboard();
+        this.hideInputsWithLongTap();
         this.disableAfterSubmit();
 
     };
@@ -441,8 +462,8 @@ $(document).ready(function () {
   
     $('.next-question').live('click', function () {
         var id = $(this).attr('id').substr(4);
-        var parent = $('#elem-' + id);
-        var nextqs = parent.nextAll('.ui-body.ui-body-c');
+        var parent = $('#elem-' + id).parent();
+        var nextqs = parent.nextAll('.question-frame');
         var next = null;
         for (var i = 0; i < nextqs.length; i++) {
             if ($(nextqs[i]).find('.ui-disabled.question').length == 0) {

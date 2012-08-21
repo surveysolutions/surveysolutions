@@ -195,29 +195,27 @@
 	font-style: italic;
 	margin: 5px 0;
 }
-.ui-grid-a.question-content .ui-block-a{
+/*.ui-grid-a.question-content .ui-block-a{
 	width: 100%;
 	margin-right: -60px;
 }
 .ui-grid-a.question-content .ui-block-b {
 	width: 60px;
-}
+}*/
 .question {
-	margin-right: 60px;
+	margin-right: 6%;
 }
 .text-question {
 	margin-top: 0;
 }
 
 .next-question {
-	border: 1px solid #aaa;
-    bottom: 10px;
+	
+    
     display: block;
-    left: auto;
-    position: absolute;
-    right: 15px;
-    top: 60px;
-    width: 48px;
+    height: 100%;
+   
+    width: 100%;
     background-image: -webkit-gradient(linear, left top, left bottom, from( #ffffff ), to( #f1f1f1 )); 
 	background-image: -webkit-linear-gradient( #ffffff , #f1f1f1 ); 
 	background-image:    -moz-linear-gradient( #ffffff , #f1f1f1 ); 
@@ -226,10 +224,6 @@
 	background-image:         linear-gradient( #ffffff , #f1f1f1 );
 	vertical-align: middle;
 	text-align: center;
-}
-.ui-body.ui-body-c{
-    min-height: 90px;
-    overflow: visible;
 }
 
 .hidden-checkbox {
@@ -278,3 +272,7 @@ body.ui-mobile-viewport, div.ui-mobile-viewport {
 	border-radius: 0.6em 0.6em 0.6em 0.6em; background-color: #222222;
 	background: -moz-linear-gradient(#444444, #222222) repeat scroll 0 0 #222222
 }
+
+.question-frame{position: relative;}
+.question-frame .question-main-content{float: left; width: 90%;  min-height: 90px;overflow: visible;}
+.question-frame .question-arrow{width: 6%; border: 1px solid #aaa; position: absolute; right: 0; top: 0;bottom: 0}

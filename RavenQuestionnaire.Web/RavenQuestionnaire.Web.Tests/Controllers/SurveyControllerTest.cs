@@ -81,7 +81,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             statusDoc.Statuses.Add( new StatusItem(){PublicKey = Guid.NewGuid(), Title = "dummy"});
 
             */
-            var result = Controller.Index(output.Id, null, null, null, null);
+            var result = Controller.Index(output.Id, null, null, null);
             Assert.AreEqual(output, result.ViewData.Model);
         }
         [Test]
@@ -111,7 +111,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                x.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                    It.Is<CompleteQuestionnaireViewInputModel>(v => v.CompleteQuestionnaireId.Equals(input.CompleteQuestionnaireId))))
                .Returns(template);
-            var result = Controller.Index("cqId", null,null,null,null);
+            var result = Controller.Index("cqId", null,null,null);
             Assert.AreEqual(result.ViewData.Model.GetType(), typeof(CompleteQuestionnaireMobileView));
             Assert.AreEqual(result.ViewData.Model, template);
         }
