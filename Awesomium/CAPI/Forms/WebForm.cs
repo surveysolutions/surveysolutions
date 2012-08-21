@@ -41,6 +41,7 @@ using System.Threading;
 using Synchronization.Core.Interface;
 using Synchronization.Core.SynchronizationFlow;
 using Browsing.CAPI.Synchronization;
+using Common;
 
 #endif
 #endregion
@@ -81,6 +82,26 @@ namespace Browsing.CAPI.Forms
             this.webView.LoadCompleted += new EventHandler(webView_LoadCompleted);
             this.webView.ResourceRequest += new ResourceRequestEventHandler(webView_ResourceRequest);
 
+            string url;
+            if (Settings.Default.RunClient)
+            {
+                try
+                {
+                    url = RunEngine();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error on Engine Run. " + ex.Message);
+                    url = Settings.Default.DefaultUrl;
+                }
+
+            }
+            else
+            {
+                url = Settings.Default.DefaultUrl;
+            }
+
+            
             this.webView.Source = new Uri(Settings.Default.DefaultUrl);
             this.webView.Focus();
         }
@@ -198,8 +219,8 @@ namespace Browsing.CAPI.Forms
             base.OnFormClosed(e);
 
 #if USING_MONO
-			// TODO: Mac OS X: Sends a SIGSEGV to Mono.
-			if ( !PlatformDetection.IsMac )
+            // TODO: Mac OS X: Sends a SIGSEGV to Mono.
+            if ( !PlatformDetection.IsMac )
 #endif
             WebCore.Shutdown();
         }
@@ -286,6 +307,24 @@ namespace Browsing.CAPI.Forms
             catch
             {
             }
+        }
+
+        private string RunEngine()
+        {
+            DirectoryInfo dir = new DirectoryInfo(Application.StartupPath);
+
+            string enginePath = Path.Combine(dir.Parent.FullName, Settings.Default.EnginePathName);
+
+            if (!Directory.Exists(enginePath))
+                throw new Exception("Client was not found.");
+
+            string port = Settings.Default.DefaultPort;
+
+            EngineRunner runner = new EngineRunner();
+            runner.RunEngine(enginePath, port);
+            Application.ApplicationExit += runner.StopEngine;
+
+            return String.Format("http://localhost:{0}", port);
         }
     }
 }
