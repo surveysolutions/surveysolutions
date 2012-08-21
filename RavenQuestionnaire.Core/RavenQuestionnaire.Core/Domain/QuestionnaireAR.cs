@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.Domain
         public QuestionnaireAR(QuestionnaireDocument template)
             : base(template.PublicKey)
         {
-            ApplyEvent(new QuestionnaireTemplateLocaded
+            ApplyEvent(new QuestionnaireTemplateLoaded
             {
                 Template = template
             });
@@ -66,7 +66,7 @@ namespace RavenQuestionnaire.Core.Domain
 
         // Event handler for the NewQuestionnaireCreated event. This method
         // is automaticly wired as event handler based on convension.
-        protected void OnQuestionnaireTemplateLocaded(QuestionnaireTemplateLocaded e)
+        protected void OnQuestionnaireTemplateLocaded(QuestionnaireTemplateLoaded e)
         {
             _innerDocument = e.Template;
             _creationDate = e.Template.CreationDate;
