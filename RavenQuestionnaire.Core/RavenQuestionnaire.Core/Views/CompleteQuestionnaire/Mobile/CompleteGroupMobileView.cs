@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             Enabled = currentGroup.Enabled;
             if (currentGroup.Propagated != Propagate.None)
             {
-                PropagateTemplate = new PropagatedGroupMobileView(doc, currentGroup);
+                PropagateTemplate = new PropagatedGroupMobileView(doc, currentGroup, navigation);
             }
             else foreach (var composite in currentGroup.Children)
             {

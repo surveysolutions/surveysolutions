@@ -108,11 +108,13 @@ namespace RavenQuestionnaire.Core.Domain
         }
         protected void OnSetCommentCommand(CommentSeted e)
         {
-            ICompleteQuestion question = _doc.QuestionHash[e.QuestionPublickey, e.PropogationPublicKey];
+            var questionWrapper = _doc.QuestionHash.GetQuestion(e.QuestionPublickey, e.PropogationPublicKey);
+            ICompleteQuestion question = questionWrapper.Question;
             if(question==null)
                 return;
             
             question.SetComments(e.Comments);
+            _doc.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
 
         }
         public void Delete()
@@ -131,7 +133,7 @@ namespace RavenQuestionnaire.Core.Domain
         public void SetAnswer(Guid questionPublicKey, Guid? propogationPublicKey, object completeAnswer, List<object> completeAnswers)
         {
             //performe checka before event raising
-            ICompleteQuestion question = _doc.QuestionHash[questionPublicKey, propogationPublicKey];
+            var question = _doc.QuestionHash[questionPublicKey, propogationPublicKey];
             // ToDO clean up that crap
             var answerString = "";
             if (completeAnswer != null)
@@ -237,12 +239,12 @@ namespace RavenQuestionnaire.Core.Domain
         // is automaticly wired as event handler based on convension.
         protected void OnAnswerSet(AnswerSet e)
         {
-
-            ICompleteQuestion question = _doc.QuestionHash[e.QuestionPublicKey, e.PropogationPublicKey];
+            var questionWrapper = _doc.QuestionHash.GetQuestion(e.QuestionPublicKey, e.PropogationPublicKey);
+            ICompleteQuestion question = questionWrapper.Question;
             if (question == null)
                 return;
             question.SetAnswer(e.Answer);
-
+            _doc.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
         }
 
 
