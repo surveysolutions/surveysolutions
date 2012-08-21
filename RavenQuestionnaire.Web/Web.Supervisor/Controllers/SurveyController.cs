@@ -63,12 +63,12 @@ namespace Web.Supervisor.Controllers
         }
 
 
-        public ActionResult Details(string id, Guid? group, Guid? question, Guid? screen, Guid? propagationKey)
+        public ActionResult Details(string id, Guid? group, Guid? question,  Guid? propagationKey)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
-                new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group, CurrentScreenPublicKey = screen, PropagationKey = propagationKey });
+                new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group,  PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             ViewBag.PagePrefix = "page-to-delete";
             return View(model);

@@ -30,6 +30,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
             {
                 var doc = store.ReadByGuid<CompleteQuestionnaireDocument>(Guid.Parse(input.CompleteQuestionnaireId));
+                UpdateInputData(doc, input);
                 ICompleteGroup group = null;
 
                 var rout = new List<NodeWithLevel>();
@@ -56,7 +57,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                     UpdateNavigation(rout,new NodeWithLevel(doc,0));
                     UpdateNavigation(rout, new NodeWithLevel(group, 1));
                 }
-                return new CompleteQuestionnaireMobileView(doc, input.CurrentScreenPublicKey ?? group.PublicKey, group, CompileNavigation(rout, group));
+                var navigation = CompileNavigation(rout, group);
+                var currentScreen = navigation.BreadCumbs.Count > 1
+                                        ? navigation.BreadCumbs[1].PublicKey
+                                        : group.PublicKey;
+                return new CompleteQuestionnaireMobileView(doc, currentScreen, group, CompileNavigation(rout, group));
             }
             return null;
         }
@@ -74,7 +79,16 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             public ICompleteGroup Group { get;private set; }
             public int Level { get; private set; }
         }
-        
+        protected void UpdateInputData(CompleteQuestionnaireDocument doc, CompleteQuestionnaireViewInputModel input)
+        {
+            if (input.CurrentGroupPublicKey.HasValue)
+                return;
+            if(doc.LastVisitedGroup==null)
+                return;
+            input.CurrentGroupPublicKey = doc.LastVisitedGroup.GroupKey;
+            input.PropagationKey = doc.LastVisitedGroup.PropagationKey;
+        }
+
         protected ScreenNavigation CompileNavigation(List<NodeWithLevel> rout, ICompleteGroup group)
         {
             ScreenNavigation navigation=new ScreenNavigation();
