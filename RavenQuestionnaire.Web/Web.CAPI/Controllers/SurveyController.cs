@@ -41,13 +41,13 @@ namespace Web.CAPI.Controllers
 
         #region Actions 
 
-        public ViewResult Index(string id, Guid? group, Guid? question, Guid? screen, Guid? propagationKey)
+        public ViewResult Index(string id, Guid? group, Guid? question, Guid? propagationKey)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                 new CompleteQuestionnaireViewInputModel(id)
-                    {CurrentGroupPublicKey = group, CurrentScreenPublicKey = screen, PropagationKey = propagationKey});
+                    {CurrentGroupPublicKey = group, PropagationKey = propagationKey});
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             ViewBag.PagePrefix = "page-to-delete";
             return View(model);
