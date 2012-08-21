@@ -40,14 +40,17 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Grid["Total"] = this.Total;
             this.Grid["Unassigned"] = unAssigment;
             this.Statistic = statistic;
-            var items = statistic.Values.Where(t=>t.Responsible!=null).GroupBy(r => r.Status).Select(g => new { Status = g.Key, Count = g.Count() }).ToList();
-            foreach (var item in items)
-            {
-                if (Grid.ContainsKey(item.Status.Name))
-                    Grid[item.Status.Name] += 1;
-                else
-                    Grid.Add(item.Status.Name, 1);
-            }
+            this.Grid["Initial"] = initial;
+            this.Grid["Error"] = error;
+            this.Grid["Completed"] = completed;
+            //var items = statistic.Values.Where(t=>t.Responsible!=null).GroupBy(r => r.Status).Select(g => new { Status = g.Key, Count = g.Count() }).ToList();
+            //foreach (var item in items)
+            //{
+            //    if (Grid.ContainsKey(item.Status.Name))
+            //        Grid[item.Status.Name] += 1;
+            //    else
+            //        Grid.Add(item.Status.Name, 1);
+            //}
         }
     }
 
