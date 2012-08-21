@@ -63,11 +63,6 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            //var list = documentItemStore.Query().ToList();
-            //foreach (SurveyItem val in list.Where(i => i.Statistic.Any(
-            //    surveyItem => surveyItem.Key == evnt.Payload.CompletedQuestionnaireId)).
-            //    Select(item => item.Statistic.Where(t => t.Key == evnt.Payload.CompletedQuestionnaireId).
-            //    Select(t => t.Value).FirstOrDefault()).Where(val => val != null))
             var list = documentItemStore.Query().ToList();
             foreach (var item in list.Where(i => i.Statistic.Any(surveyItem => surveyItem.Key == evnt.Payload.CompletedQuestionnaireId)))
             {
@@ -75,8 +70,11 @@ namespace RavenQuestionnaire.Core.EventHandlers
                     item.Statistic.Where(t => t.Key == evnt.Payload.CompletedQuestionnaireId).Select(t => t.Value).
                         FirstOrDefault();
                 {
-                    IncrementCount(val.Status.Name, item);
-                    DecrementCount(evnt.Payload.Status.Name, item);
+                    if (val.Responsible != null && !string.IsNullOrEmpty(val.Responsible.Id))
+                    {
+                        IncrementCount(val.Status.Name, item);
+                        DecrementCount(evnt.Payload.Status.Name, item);
+                    }
                     val.Status = evnt.Payload.Status;
                 }
             }
@@ -93,6 +91,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                     if (val.Responsible == null && evnt.Payload.Responsible != null && !string.IsNullOrEmpty(evnt.Payload.Responsible.Id))
                     {
                         item.Unassigned--;
+                        IncrementCount(val.Status.Name, item);
                         val.Responsible = evnt.Payload.Responsible;
                     }
                 }
