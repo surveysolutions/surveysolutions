@@ -67,7 +67,8 @@ namespace RavenQuestionnaire.Core.Documents
             return result;
         }
 
-        
+
+        public VisitedGroup LastVisitedGroup { get; set; }
 
         public UserLight Creator { get; set; }
 
@@ -267,5 +268,17 @@ namespace RavenQuestionnaire.Core.Documents
         }
 
         public bool Enabled { get; set; }
+    }
+
+    public class VisitedGroup
+    {
+        public VisitedGroup(Guid groupKey, Guid? propagationKey)
+        {
+            GroupKey = groupKey;
+            PropagationKey = propagationKey;
+        }
+
+        public Guid GroupKey { get; private set; }
+        public Guid? PropagationKey { get; private set; }
     }
 }

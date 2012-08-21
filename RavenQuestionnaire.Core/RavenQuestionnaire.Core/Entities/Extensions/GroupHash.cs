@@ -13,10 +13,10 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
     {
         //     private ICompleteGroup root;
       //  private IList<ICompleteQuestion> triggers;
-        private IDictionary<string, ICompleteQuestion> hash;
+        private IDictionary<string, CompleteQuestionWrapper> hash;
         public GroupHash()
         {
-            this.hash = new Dictionary<string, ICompleteQuestion>();
+            this.hash = new Dictionary<string, CompleteQuestionWrapper>();
         }
 
         public GroupHash(ICompleteGroup root):this()
@@ -43,36 +43,39 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
 
         private void ProcessTree(ICompleteGroup root)
         {
-            Queue<IComposite> nodes = new Queue<IComposite>(new IComposite[1] { root });
+            /* foreach (IComposite composite in root.Children)
+             {*/
+            Queue<CompositeWrapper> nodes = new Queue<CompositeWrapper>(new CompositeWrapper[1] { new CompositeWrapper(root,null) });
             while (nodes.Count > 0)
             {
-                IComposite node = nodes.Dequeue();
+                CompositeWrapper node = nodes.Dequeue();
 
                 ProcessIComposite(node, nodes);
 
             }
+            // }
         }
 
-        private void ProcessIComposite(IComposite node, Queue<IComposite> nodes)
+        private void ProcessIComposite(CompositeWrapper node, Queue<CompositeWrapper> nodes)
         {
-            ICompleteQuestion question = node as ICompleteQuestion;
+            ICompleteQuestion question = node.Node as ICompleteQuestion;
             if (node is IBinded)
                 return;
 
             if (question == null)
             {
-                var group = node as ICompleteGroup;
+                var group = node.Node as ICompleteGroup;
                 if (group.Propagated != Propagate.None && !group.PropogationPublicKey.HasValue)
                     return;
-                foreach (IComposite child in node.Children)
+                foreach (IComposite child in node.Node.Children)
                 {
-                    nodes.Enqueue(child);
+                    nodes.Enqueue(new CompositeWrapper(child, node.Node.PublicKey));
                 }
                 return;
             }
             var questionKey = GetQuestionKey(question);
             if (!hash.ContainsKey(questionKey))
-                hash.Add(questionKey, question);
+                hash.Add(questionKey, new CompleteQuestionWrapper(question, node.ParentKey.Value));
 
         }
 
@@ -88,28 +91,59 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
         }
         public IEnumerable<ICompleteQuestion> Questions
         {
-            get { return this.hash.Values; }
+            get { return this.hash.Values.Select(v=>v.Question); }
         }
-
+        public CompleteQuestionWrapper GetQuestion(Guid publicKey, Guid? propagationKey)
+        {
+            if (this.hash.ContainsKey(GetQuestionKey(publicKey, null)) && !this.hash.ContainsKey(GetQuestionKey(publicKey, propagationKey)))
+                return this.hash[GetQuestionKey(publicKey, null)];
+            return this.hash[GetQuestionKey(publicKey, propagationKey)];
+        }
+        protected CompleteQuestionWrapper GetQuestion(ICompleteQuestion index)
+        {
+            if (this.hash.ContainsKey(GetQuestionKey(index.PublicKey, null)) && !this.hash.ContainsKey(GetQuestionKey(index.PublicKey, index.PropogationPublicKey)))
+                return this.hash[GetQuestionKey(index.PublicKey, null)];
+            return this.hash[GetQuestionKey(index.PublicKey, index.PropogationPublicKey)];
+        }
         public ICompleteQuestion this[Guid publicKey, Guid? propagationKey]
         {
             get
             {
-                if (this.hash.ContainsKey(GetQuestionKey(publicKey, null)) && !this.hash.ContainsKey(GetQuestionKey(publicKey, propagationKey)))
-                    return this.hash[GetQuestionKey(publicKey, null)];
-                return this.hash[GetQuestionKey(publicKey, propagationKey)];
+                return GetQuestion(publicKey, propagationKey).Question;
             }
         }
         public ICompleteQuestion this[ICompleteQuestion index]
         {
-            get
-            {
-                if (this.hash.ContainsKey(GetQuestionKey(index.PublicKey, null)) && !this.hash.ContainsKey(GetQuestionKey(index.PublicKey, index.PropogationPublicKey)))
-                    return this.hash[GetQuestionKey(index.PublicKey, null)];
-                return this.hash[GetQuestionKey(index.PublicKey, index.PropogationPublicKey)];
-            }
+            get { return GetQuestion(index).Question; }
+        }
+        public Guid GetQuestionScreen(Guid publicKey, Guid? propagationKey)
+        {
+            return GetQuestion(publicKey, propagationKey).GroupKey;
         }
 
         public Guid PublicKey { get; private set; }
+
+        public class CompleteQuestionWrapper
+        {
+            public CompleteQuestionWrapper(ICompleteQuestion question, Guid screenGuid)
+            {
+                Question = question;
+                GroupKey = screenGuid;
+            }
+
+            public ICompleteQuestion Question { get; private set; }
+            public Guid GroupKey { get; private set; }
+        }
+        protected class CompositeWrapper
+        {
+            public CompositeWrapper(IComposite node, Guid? parentKey)
+            {
+                Node = node;
+                ParentKey = parentKey;
+            }
+
+            public IComposite Node { get; private set; }
+            public Guid? ParentKey { get; private set; }
+        }
     }
 }
