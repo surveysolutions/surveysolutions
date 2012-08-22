@@ -12,9 +12,12 @@
         
     <Package InstallerVersion="200" 
              Compressed="yes"
-             Description="Capi installation."/>
-    
-    <Upgrade Id="cc00bf47-7cbf-4bde-8fa1-905fa1916b1e">
+             Description="Capi installation."
+             InstallScope="perUser"/>
+        <!--InstallPrivileges="limited"-->
+        
+
+        <Upgrade Id="cc00bf47-7cbf-4bde-8fa1-905fa1916b1e">
       
       <UpgradeVersion Minimum="$(var.ProductVersion)" 
                       IncludeMinimum="no" 

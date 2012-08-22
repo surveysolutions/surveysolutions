@@ -301,6 +301,9 @@ namespace Browsing.CAPI.Forms
         {
             DirectoryInfo dir = new DirectoryInfo(Application.StartupPath);
 
+            if (dir.Parent == null)
+                throw new Exception("Client was not found.");
+
             string enginePath = Path.Combine(dir.Parent.FullName, Settings.Default.EnginePathName);
 
             if (!Directory.Exists(enginePath))
