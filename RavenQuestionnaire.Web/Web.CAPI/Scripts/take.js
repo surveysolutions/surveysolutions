@@ -4,11 +4,13 @@
     var pageContainer = $('[data-id=' + panel+']');
     //var fromPage = $(pageContainer.children()[0]);
     $.mobile.changePage(url, {
-        pageContainer: pageContainer/*,
-        fromPage: fromPage*/
+        pageContainer: pageContainer
     });
-    
+    $.mobile.pageContainer = pageContainer.find('.ui-page-active');
+   
 }
+
+//var isokToRedirect = false;
 function GetCheck(i, j) {
     $.get(i, function (data) {
              try {
@@ -456,7 +458,7 @@ function updateCounter() {
 })(jQuery);
 //  var scrolls = new Array();
 $(document).ready(function () {
-  
+   
     $('.next-question').live('click', function () {
         var id = $(this).attr('id').substr(4);
         var parent = $('#elem-' + id).parent();
@@ -475,7 +477,7 @@ $(document).ready(function () {
     $('#CompleteLink').live('click', function () {
         var link = $(this).attr('link');
         var returnlink = $(this).attr('returnlink');
-        GetCheck(link,returnlink);
+        GetCheck(link, returnlink);
     });
 });
 function scrollToQuestion(question) {
@@ -495,6 +497,17 @@ $(document).bind('pagebeforeshow', function (event, data) {
     
     doc.focus();
 });
+
+/*$(document).bind('pageremove', function (event, data) {
+    //var doc = $(event.target);
+    if (event.target.id === $.mobile.activePage.attr('id')) {
+        $.mobile.activePage = $($('[data-id=main]').childrens()[0]);
+    }
+});*/
+$(document).bind('pagehide', function(event, data) {
+
+    $('.page-to-delete').remove();
+});
 $(document).bind('pagechange', function () {
     var groupId = location.href.substr(location.href.indexOf("group") + 6, 36);
     $("div.ui-block-a").click(function () {
@@ -509,7 +522,12 @@ $(document).bind('pagechange', function () {
             $(this).removeClass('ui-btn-active');
         });
         $('#ref-link-' + groupId).parents('li').addClass('ui-btn-active');
-    }
+    }/*else {
+        $('#sidebar .ui-li').each(function () {
+            if ($(this).find('a').attr('href').indexOf("group") != -1)
+                $(this).removeClass('ui-btn-active');
+        });
+    }*/
     if ($('.scrollHere').length > 0) {
         var q = $($('.scrollHere')[0]).attr('id');
         var target = $(q.replace('question', '#elem-'));
