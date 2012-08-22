@@ -61,17 +61,6 @@ namespace RavenQuestionnaire.Core.Domain
                 }
             }
 
-            ////var questions = doc.GetAllQuestions<ICompleteQuestion>().ToList();
-            ////var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
-            ////foreach (ICompleteQuestion completeQuestion in questions)
-            ////{
-            ////    if (completeQuestion is IBinded)
-            ////        continue;
-            ////    completeQuestion.Enabled = executor.Execute(completeQuestion);
-            ////}
-
-            //ISubscriber ????
-
             // Apply a NewQuestionnaireCreated event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
