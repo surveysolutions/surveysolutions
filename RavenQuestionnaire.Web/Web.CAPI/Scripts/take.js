@@ -478,7 +478,7 @@ $(document).ready(function () {
         var nextqs = parent.nextAll('.question-frame');
         var next = null;
         for (var i = 0; i < nextqs.length; i++) {
-            if ($(nextqs[i]).find('.ui-disabled.question').length == 0) {
+            if ($(nextqs[i]).find('.ui-disabled.question-main-content').length == 0) {
                 next = nextqs[i];
                 break;
             }
@@ -494,7 +494,7 @@ $(document).ready(function () {
     });
 });
 function scrollToQuestion(question) {
-    var scrollContainer = $(question).offsetParent();
+    var scrollContainer = $(question).parent().offsetParent();
     var position = scrollContainer.find('#scroller').offset().top - $(question).offset().top;
     var scroll = scrollContainer.data('iscrollview');
     if (!scroll)
@@ -542,10 +542,10 @@ $(document).bind('pagechange', function () {
         });
     }*/
     if ($('.scrollHere').length > 0) {
-        var q = $($('.scrollHere')[0]).attr('id');
-        var target = $(q.replace('question', '#elem-'));
-        scrollToQuestion(target);
-        $(target).faderEffect();
+        var q = $('.scrollHere');
+      //  var target = $(q.replace('question', '#elem-'));
+        scrollToQuestion(q);
+        $(q).faderEffect();
         $('.scrollHere').removeClass('scrollHere');
     }
 
