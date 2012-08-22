@@ -32,6 +32,7 @@
                             OnComplete = "JsonResults"
                         }))
                         {
+                            ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
                             using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                             {
                             @Html.Hidden("QuestionType", question.QuestionType)

@@ -8,15 +8,16 @@
         <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")">
         @MvcHtmlString.Create(Html.RenderCssHere(new List<IClientDependencyPath>
                                                        {
-                                                           new BasicPath("Content", "~/Content")
+                                                           new BasicPath("Content", "~/Content"),
+                                                           new BasicPath("Bootstrap", "~/Content/bootstrap")
                                                        }))
         @MvcHtmlString.Create(Html.RenderJsHere(new List<IClientDependencyPath>
                                                       {
                                                           new BasicPath("Scripts", "~/Scripts"),
                                                       }))
         @{
-            Html.RequiresCss("bootstrap.min.css", "Content", 10);
-            Html.RequiresCss("bootstrap.min.css", "Content", 20);
+            Html.RequiresCss("bootstrap.min.css", "Bootstrap", 10);
+            Html.RequiresCss("bootstrap-responsive.min.css", "Bootstrap", 20);
             Html.RequiresCss("main.css", "Content", 30);
 
             Html.RequiresJs("jquery-1.7.2.min.js", "Scripts", 10);
