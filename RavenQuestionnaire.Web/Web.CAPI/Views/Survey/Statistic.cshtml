@@ -22,8 +22,8 @@
         <div data-role="footer" data-position="fixed" data-id="ew-footer">
             <div data-role="navbar">
                 <ul>
-                    <li><a data-role="button" data-corners="false" href="@Url.Action("Index", "Survey", new {id = Model.CompleteQuestionnaireId})" rel="external" data-ajax="false">
-                            Survey</a></li>
+                    <li><a data-role="button" data-corners="false" href="@Url.Action("Index", "Survey", new { id = Model.CompleteQuestionnaireId })" rel="external" data-ajax="false">
+                        Survey</a></li>
                     <li>
                         @if (Model.Status.PublicId == SurveyStatus.Complete.PublicId)
                         {
@@ -32,7 +32,8 @@
                         }
                         else
                         {
-                            <a data-corners="false" href="#transparent" data-rel="popup" data-role="button" data-inline="true" id="CompleteLink" returnlink="@Url.Action("Dashboard", "Survey")" link="@Url.Action("Complete", "Survey", new { id=@Model.Id})">Complete</a>
+                            <a data-corners="false" href="#transparent" data-rel="popup" data-role="button" data-inline="true" id="CompleteLink" returnlink="@Url.Action("Dashboard", "Survey")" link="@Url.Action("Complete", "Survey", new { id = @Model.Id })">
+                                Complete</a>
                         }</li>
                 </ul>
             </div>
@@ -47,6 +48,15 @@
     <div data-role="page" id="general" class="page">
         @RenderNavBar()
         <div data-role="content" data-iscroll="true" style="bottom: 0px">
+            <a href="#transparent" style="display: none;" id="popup" data-rel="popup" data-role="button"
+                data-inline="true" data-position-to="window">Close</a>
+            <div id="transparent" data-role="popup" data-theme="none" data-shadow="false" data-position-to="window"
+                class="instructions">
+                <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete"
+                    data-iconpos="notext" class="ui-btn-right">Close</a>
+                <p class="ui-no-answer">
+                    There are unanswered questions in this questionnaire. Please, check answers!!!</p>
+            </div>
             <div id="scroll">
                 <h3>@Model.Title</h3>
                 <p>
@@ -56,7 +66,7 @@
                         <b>, Finished: @Model.EndDate.Value.ToShortTimeString()</b>
                     }
                 </p>
-               @* <p>
+                @* <p>
                     Interviewer: @Model.Creator.Name</p>*@
                 <h4>
                     Featured questions</h4>
@@ -69,17 +79,16 @@
                         }
                         else
                         {
-                            <a href="@Url.Action("Index", "Survey", new { id = Model.CompleteQuestionnaireId, group = question.GroupPublicKey, question = question.PublicKey, propagationKey = question.GroupPropagationPublicKey})" rel = "external">@Html.Raw(question.QuestionText)</a>
+                            <a href="@Url.Action("Index", "Survey", new { id = Model.CompleteQuestionnaireId, group = question.GroupPublicKey, question = question.PublicKey, propagationKey = question.GroupPropagationPublicKey })" rel = "external">@Html.Raw(question.QuestionText)</a>
                         }
                         - @question.AnswerValue
                         @if (question.ApproximateTime.HasValue)
                         {
-                            <b> , Timing : @question.ApproximateTime.Value.Minutes
+                            <b>, Timing : @question.ApproximateTime.Value.Minutes
                                 minutes @question.ApproximateTime.Value.Seconds seconds</b>
                         }
                     </p>
                 }
-              
             </div>
         </div>
     </div>
@@ -87,6 +96,15 @@
         @RenderNavBar()
         <!-- /header -->
         <div data-role="content" data-iscroll="true" style="bottom: 0px">
+            <a href="#transparent" style="display: none;" id="popup" data-rel="popup" data-role="button"
+                data-inline="true" data-position-to="window">Close</a>
+            <div id="transparent" data-role="popup" data-theme="none" data-shadow="false" data-position-to="window"
+                class="instructions">
+                <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete"
+                    data-iconpos="notext" class="ui-btn-right">Close</a>
+                <p class="ui-no-answer">
+                    There are unanswered questions in this questionnaire. Please, check answers!!!</p>
+            </div>
             <div id="scroll">
                 <h3>
                     Answered questions</h3>
@@ -128,7 +146,8 @@
                         </li>
                     }
                 </ul>
-                   <div style="width: 100%; height: 50px;">&nbsp;</div>  
+                <div style="width: 100%; height: 50px;">
+                    &nbsp;</div>
             </div>
         </div>
         <!-- /content -->
@@ -136,6 +155,15 @@
     <div data-role="page" id="invalid" class="page">
         @RenderNavBar()
         <div data-role="content" data-iscroll="true" style="bottom: 0px">
+            <a href="#transparent" style="display: none;" id="popup" data-rel="popup" data-role="button"
+                data-inline="true" data-position-to="window">Close</a>
+            <div id="transparent" data-role="popup" data-theme="none" data-shadow="false" data-position-to="window"
+                class="instructions">
+                <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete"
+                    data-iconpos="notext" class="ui-btn-right">Close</a>
+                <p class="ui-no-answer">
+                    There are unanswered questions in this questionnaire. Please, check answers!!!</p>
+            </div>
             <div id="scroll">
                 <h3>
                     Invalid questions</h3>
@@ -153,18 +181,19 @@
                         - @question.AnswerValue
                         @if (question.ApproximateTime.HasValue)
                         {
-                            <b> , Timing : @question.ApproximateTime.Value.Minutes
+                            <b>, Timing : @question.ApproximateTime.Value.Minutes
                                 minutes @question.ApproximateTime.Value.Seconds seconds</b>
                         }
                     </p>
                 }
-                   <div style="width: 100%; height: 50px;">&nbsp;</div>  
+                <div style="width: 100%; height: 50px;">
+                    &nbsp;</div>
             </div>
         </div>
     </div>
 </div>
 @helper RenderNavBar()
-{
+    {
     <div data-role="header" data-theme="b" class="navigation">
         <h1>@Model.Title</h1>
     </div>

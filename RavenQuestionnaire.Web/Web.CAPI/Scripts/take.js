@@ -13,17 +13,18 @@
 //var isokToRedirect = false;
 function GetCheck(i, j) {
     $.get(i, function (data) {
-             try {
-                   if (data.message != null && data.message == "Error") {
-                   $('#popup').click();
-                 }
-                 else {
-                        window.location = j;
-                 }
-            } catch (e) {
+        try {
+            if (data.message != null && data.message == "Error") {
+                $.mobile.hidePageLoadingMsg();
+                $('#popup').click();
+            }
+            else {
                 window.location = j;
             }
-        });
+        } catch (e) {
+            window.location = j;
+        }
+    });
 }
 
 function JsonResults(data, status, xhr) {
@@ -471,7 +472,7 @@ function updateCounter() {
 })(jQuery);
 //  var scrolls = new Array();
 $(document).ready(function () {
-   
+
     $('.next-question').live('click', function () {
         var id = $(this).attr('id').substr(4);
         var parent = $('#elem-' + id).parent();
@@ -488,6 +489,7 @@ $(document).ready(function () {
         }
     });
     $('#CompleteLink').live('click', function () {
+        $.mobile.showPageLoadingMsg();
         var link = $(this).attr('link');
         var returnlink = $(this).attr('returnlink');
         GetCheck(link, returnlink);
