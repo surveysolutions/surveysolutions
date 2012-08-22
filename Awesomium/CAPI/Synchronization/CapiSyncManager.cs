@@ -115,15 +115,14 @@ namespace Browsing.CAPI.Synchronization
             }
             catch (Exception e)
             {
-                syncResult = e.Message;
-
+                //syncResult = e.Message;
                 throw e;
             }
-            finally
+            /*finally
             {
                 if (!string.IsNullOrEmpty(syncResult))
                     MessageBox.Show(syncResult);
-            }
+            }*/
 
             return syncResult;
         }
