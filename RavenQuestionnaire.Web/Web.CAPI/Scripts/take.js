@@ -311,6 +311,19 @@ function updateCounter() {
                      targetParent.bind('taphold', function() {
                          target.click();
                      });
+                     targetParent.bind("contextmenu", function(e) {
+                         target.click();
+    return false;
+});
+//                     targetParent.mousedown(function(event) {
+//                         switch (event.which) {        
+//                         case 3:
+//                             target.click();
+//                             break;
+//                         default:
+//                             return;
+//                         }
+//                     });
                  }
              }
          });
