@@ -308,9 +308,9 @@ function updateCounter() {
                      for (var i = 0; i < level; i++) {
                          targetParent = targetParent.parent();
                      }
-                     targetParent.bind('taphold', function() {
+                  /*   targetParent.bind('taphold', function() {
                          target.click();
-                     });
+                     });*/
                      targetParent.bind("contextmenu", function(e) {
                          target.click();
     return false;
