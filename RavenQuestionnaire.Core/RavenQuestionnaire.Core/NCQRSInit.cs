@@ -112,6 +112,5 @@ namespace RavenQuestionnaire.Web.App_Start
             myEventBus.Publish(myEvents);
 
         }
-
     }
 }
