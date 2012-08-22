@@ -1,25 +1,4 @@
-﻿/***************************************************************************
- *  Project: WinFormsSample
- *  File:    WebForm.cs
- *  Version: 1.6.5.0
- *
- *  Copyright ©2012 Perikles C. Stephanidis; All rights reserved.
- *  This code is provided "AS IS" without warranty of any kind.
- *__________________________________________________________________________
- *
- *  Notes:
- *
- *  Demonstrates rendering an Awesomium WebView to a Windows Forms UI.
- *  In this sample, we simply render on the Form itself. In a real-life
- *  scenario, this should be a custom user control.
- *  
- *  This sample is available for both Awesomium.NET (.NET 4.0) as well
- *  as for Awesomium.Mono (.NET 2.0 & 4.0), for use with Mono on 
- *  all platforms.
- *   
- ***************************************************************************/
-
-#region Using
+﻿#region Using
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -73,6 +52,7 @@ namespace Browsing.CAPI.Forms
             InitializeComponent();
 
             this.statusStrip1.Hide();
+            this.progressBox.Visible = false;
 
             var host = new ToolStripControlHost(this.pleaseWait);
             host.Size = this.statusStrip1.Size;
@@ -101,15 +81,23 @@ namespace Browsing.CAPI.Forms
                 url = Settings.Default.DefaultUrl;
             }
 
-            
-            this.webView.Source = new Uri(Settings.Default.DefaultUrl);
-            this.webView.Focus();
+
+            try
+            {
+                this.webView.Source = new Uri(Settings.Default.DefaultUrl);
+                this.webView.Focus();
+            }
+            catch
+            {
+                // log
+            }
         }
 
         #region TODO Progress indication
 
         void webView_BeginLoading(object sender, BeginLoadingEventArgs e)
         {
+            this.progressBox.Visible = true;
         }
 
         ResourceResponse webView_ResourceRequest(object sender, ResourceRequestEventArgs e)
@@ -119,6 +107,7 @@ namespace Browsing.CAPI.Forms
 
         void webView_LoadCompleted(object sender, EventArgs e)
         {
+            this.progressBox.Visible = false;
         }
 
         #endregion
@@ -127,10 +116,7 @@ namespace Browsing.CAPI.Forms
         {
             foreach (ToolStripMenuItem item in this.menuStrip1.Items)
             {
-                if (item == this.toolStripCancelMenuItem)
-                    continue;
-
-                item.Enabled = enable;
+                item.Enabled = item == this.toolStripCancelMenuItem ? !enable : enable;
             }
         }
 
@@ -139,6 +125,8 @@ namespace Browsing.CAPI.Forms
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(() =>
                 {
+                    MessageBox.Show(this, e.Log);
+
                     EnableDisableMenuItems(true);
 
                     if (e.Status.ActionType == SyncType.Pull)
@@ -277,7 +265,7 @@ namespace Browsing.CAPI.Forms
             {
                 this.syncManager.ExportQuestionaries();
             }
-            catch 
+            catch
             {
             }
         }

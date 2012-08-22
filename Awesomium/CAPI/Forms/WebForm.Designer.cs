@@ -41,14 +41,17 @@ namespace Browsing.CAPI.Forms
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.pullToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripCancelMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSettingsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pushToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripCancelMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.progressBox = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.progressBox)).BeginInit();
             this.SuspendLayout();
             // 
             // webView
             // 
+            this.webView.BackColor = System.Drawing.SystemColors.Control;
             this.webView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.webView.Location = new System.Drawing.Point(0, 44);
             this.webView.Name = "webView";
@@ -88,13 +91,25 @@ namespace Browsing.CAPI.Forms
             this.pullToolStripMenuItem.Size = new System.Drawing.Size(94, 40);
             this.pullToolStripMenuItem.Click += new System.EventHandler(this.pullToolStripMenuItem_Click);
             // 
+            // toolStripCancelMenuItem
+            // 
+            this.toolStripCancelMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripCancelMenuItem.AutoSize = false;
+            this.toolStripCancelMenuItem.Enabled = false;
+            this.toolStripCancelMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.toolStripCancelMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("toolStripCancelMenuItem.Image")));
+            this.toolStripCancelMenuItem.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolStripCancelMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripCancelMenuItem.Name = "toolStripCancelMenuItem";
+            this.toolStripCancelMenuItem.Size = new System.Drawing.Size(94, 40);
+            this.toolStripCancelMenuItem.Click += new System.EventHandler(this.toolStripCancelMenuItem_Click);
+            // 
             // toolStripSettingsMenuItem
             // 
             this.toolStripSettingsMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripSettingsMenuItem.AutoSize = false;
             this.toolStripSettingsMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripSettingsMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSettingsMenuItem.Image")));
-            this.toolStripSettingsMenuItem.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolStripSettingsMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripSettingsMenuItem.Name = "toolStripSettingsMenuItem";
             this.toolStripSettingsMenuItem.Size = new System.Drawing.Size(94, 40);
@@ -111,23 +126,26 @@ namespace Browsing.CAPI.Forms
             this.pushToolStripMenuItem.Size = new System.Drawing.Size(50, 40);
             this.pushToolStripMenuItem.Click += new System.EventHandler(this.pushToolStripMenuItem_Click);
             // 
-            // toolStripCancelMenuItem
+            // progressBox
             // 
-            this.toolStripCancelMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripCancelMenuItem.AutoSize = false;
-            this.toolStripCancelMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.toolStripCancelMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("toolStripCancelMenuItem.Image")));
-            this.toolStripCancelMenuItem.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.toolStripCancelMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripCancelMenuItem.Name = "toolStripCancelMenuItem";
-            this.toolStripCancelMenuItem.Size = new System.Drawing.Size(94, 40);
-            this.toolStripCancelMenuItem.Click += new System.EventHandler(this.toolStripCancelMenuItem_Click);
+            this.progressBox.BackColor = System.Drawing.Color.Transparent;
+            this.progressBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBox.Image = ((System.Drawing.Image)(resources.GetObject("progressBox.Image")));
+            this.progressBox.InitialImage = null;
+            this.progressBox.Location = new System.Drawing.Point(0, 44);
+            this.progressBox.Name = "progressBox";
+            this.progressBox.Size = new System.Drawing.Size(1600, 808);
+            this.progressBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.progressBox.TabIndex = 2;
+            this.progressBox.TabStop = false;
+            this.progressBox.Visible = false;
             // 
             // WebForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1600, 874);
+            this.Controls.Add(this.progressBox);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.webView);
             this.Controls.Add(this.menuStrip1);
@@ -139,6 +157,7 @@ namespace Browsing.CAPI.Forms
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.progressBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -155,6 +174,7 @@ namespace Browsing.CAPI.Forms
         private WebControl webView;
         private ToolStripMenuItem toolStripSettingsMenuItem;
         private ToolStripMenuItem toolStripCancelMenuItem;
+        private PictureBox progressBox;
     }
 }
 

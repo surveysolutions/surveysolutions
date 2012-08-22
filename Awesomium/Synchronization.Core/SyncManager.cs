@@ -116,14 +116,17 @@ namespace Synchronization.Core
             catch (CancelledSynchronizationException ex)
             {
                 error = ex;
+                log = error.Message;
             }
             catch (CheckPrerequisitesException ex)
             {
                 error = ex;
+                log = error.Message;
             }
             catch (Exception ex)
             {
                 error = new SynchronizationException("Synchronization process failed", ex);
+                log = ex.Message;
             }
             finally
             {
