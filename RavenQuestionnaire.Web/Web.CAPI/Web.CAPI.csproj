@@ -170,6 +170,7 @@
     <Compile Include="Utils\ViewHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\img\bill.jpg" />
     <Content Include="Content\jquery.mobile.simpledialog.min.css" />
     <Content Include="Content\jquery.mobile.splitview.css" />
     <Content Include="Content\mobile.css" />

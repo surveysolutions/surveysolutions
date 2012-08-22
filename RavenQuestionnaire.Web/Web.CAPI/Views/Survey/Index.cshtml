@@ -62,9 +62,20 @@
                 {
                     var activ = @gh.Enabled ? "" : "ui-disabled";
                     activ += gh.IsCurrent ? "ui-btn-active" : "";
-                    <li class="@activ" id="@gh.PublicKey"><a  id="ref-link-@(gh.PublicKey)" href="javascript:void(0)"  data-panel="main" screen-url="@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })" 
-                                                              onclick="CheckIsCanChangePage(this)">@gh.GroupText
-                        <span id="counter-@(gh.PublicKey)" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
+                    <li class="@activ" id="@gh.PublicKey">
+                       @* 
+                        @if(gh.IsCurrent)
+                        {
+                            <a  id="ref-link-@(gh.PublicKey)" href="#screen-@gh.PublicKey" data-panel="main"> @gh.GroupText
+                                  <span id="counter-@(gh.PublicKey)" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a>
+                        }else{*@
+                        
+                        <a  id="ref-link-@(gh.PublicKey)" @*href="javascript:void(0)"  *@ data-panel="main" href="@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })" 
+                            @*onclick="CheckIsCanChangePage(this)"*@> @gh.GroupText
+                                  <span id="counter-@(gh.PublicKey)" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a>@*}*@
+                            
+                           
+                    </li>
                 }
             </ul>
         </div>

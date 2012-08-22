@@ -17,7 +17,7 @@
     var propagatedGroup = Model as PropagatedGroupMobileView;
 }
 <!-- Start of second page -->
-<div data-role="page" id="screen-@(Model.PublicKey + (propagatedGroup==null?"":"-"+propagatedGroup.PropogationKey))" class="page">
+<div data-role="page" id="screen-@(Model.PublicKey + (propagatedGroup==null?"":"-"+propagatedGroup.PropogationKey))" class="@(ViewBag.PagePrefix) page">
     @RenderNavigation(Model.Navigation)
     <!-- /header -->
     <div data-role="content" data-iscroll="">

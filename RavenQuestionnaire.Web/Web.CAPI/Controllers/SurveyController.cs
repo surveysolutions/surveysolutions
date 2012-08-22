@@ -49,6 +49,7 @@ namespace Web.CAPI.Controllers
                 new CompleteQuestionnaireViewInputModel(id)
                     {CurrentGroupPublicKey = group, PropagationKey = propagationKey});
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
+            ViewBag.PagePrefix = "page-to-delete";
             return View(model);
         }
 
@@ -59,6 +60,7 @@ namespace Web.CAPI.Controllers
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>(
                 new CompleteQuestionnaireViewInputModel(id, group, propagationKey));
             ViewBag.CurrentQuestion = new Guid();
+            ViewBag.PagePrefix = "";
             return PartialView("_SurveyContent", model);
         }
 

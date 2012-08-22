@@ -345,7 +345,7 @@
                         else if ($targetPanel && $targetPanel != $link.parents('div:jqmData(role="panel")')) {
                             var from = $targetPanelActivePage;
                             $.mobile.pageContainer = $targetContainer;
-                            $.mobile.changePage(href, { role: role, fromPage: from, transition: transition, reverse: reverse, pageContainer: $targetContainer });
+                            $.mobile.changePage(href, { role: role,/* fromPage: from,*/ transition: transition, reverse: reverse, pageContainer: $targetContainer });
                         }
                         else {
                             var from = $currPanelActivePage;
