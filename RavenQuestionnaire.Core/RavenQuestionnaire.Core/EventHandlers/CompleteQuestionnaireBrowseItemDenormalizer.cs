@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
