@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using RavenQuestionnaire.Core.Documents.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Statistics;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
@@ -26,6 +24,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         public UserLight Responsible { get;  set; }
         public QuestionStatisticView[] FeaturedQuestions { get;  set; }
         public SurveyStatus Status { get;  set; }
+
         public UserLight Creator { get; set; }
 
         protected CompleteQuestionnaireBrowseItem()
@@ -45,8 +44,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.TotalQuestionCount = totalQuestionCount;
             this.AnsweredQuestionCount = answeredQuestionCount;
             this.Responsible = responsible;
-           
-            
         }
         public CompleteQuestionnaireBrowseItem(CompleteQuestionnaireStatisticDocument doc)
             : this()

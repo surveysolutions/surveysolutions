@@ -52,7 +52,7 @@ namespace Browsing.CAPI.Forms
             InitializeComponent();
 
             this.statusStrip1.Hide();
-            this.progressBox.Visible = false;
+            this.progressBox.Visible = true;
 
             var host = new ToolStripControlHost(this.pleaseWait);
             host.Size = this.statusStrip1.Size;
@@ -302,12 +302,12 @@ namespace Browsing.CAPI.Forms
             DirectoryInfo dir = new DirectoryInfo(Application.StartupPath);
 
             if (dir.Parent == null)
-                throw new Exception("Client was not found.");
+                throw new Exception("Engine was not found.");
 
             string enginePath = Path.Combine(dir.Parent.FullName, Settings.Default.EnginePathName);
 
             if (!Directory.Exists(enginePath))
-                throw new Exception("Client was not found.");
+                throw new Exception("Engine was not found.");
 
             string port = Settings.Default.DefaultPort;
 
