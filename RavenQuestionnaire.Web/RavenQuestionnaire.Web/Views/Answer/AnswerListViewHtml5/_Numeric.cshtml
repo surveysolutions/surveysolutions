@@ -15,16 +15,6 @@
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
     @Html.Hidden("Parent", Model.PublicKey)
-@*
-    @Html.Label("AnswerValue", Model.Title)
-    @Html.Html5Range(0, 100, 1, Model.Answers.Length > 0 && !string.IsNullOrEmpty(Model.Answers[0].AnswerValue) ? Convert.ToInt32(Model.Answers[0].AnswerValue) : 0, viewBag)
-*@
     
     @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, Model.Title, new { draw_key_board = "true", type = "num" }, new { @class = "calculator"}, new { @class = "bold" })
-     @*  @Html.IconInput("AnswerValue", Model.Answers.Length > 0 ? (Model.Answers[0]).AnswerValue : string.Empty, new { draw_key_board = "true" }, new { @class = "keyboard" })*@
- @*   <input type="number" value="" id="@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue")" name="@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue")" />*@
-    
-    @*<div id="@Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue")" custom-numeric="true"></div>*@
-    @*
-    <input type="submit" value="Set Number" data-inline="true"/>*@
 }
