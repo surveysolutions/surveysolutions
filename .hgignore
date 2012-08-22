@@ -177,3 +177,8 @@ Awesomium/CAPI/obj/*
 Awesomium/Supervisor/bin/*
 Awesomium/Supervisor/obj/*
 RavenQuestionnaire.Web/Web.CAPI/App_Data/*
+Awesomium/CAPI/bin/Debug/*
+Awesomium/Common/bin/*
+Awesomium/CAPI/bin/*
+Awesomium/Common/obj/*
+Installation/CapiInstallProj/Setup.suo
