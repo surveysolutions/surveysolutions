@@ -8,13 +8,9 @@ namespace RavenQuestionnaire.Core.Views.User
 {
     public class InterviewerInputModel
     {
-        public InterviewerInputModel(string id)
-        {
-            UserId = id;
-        }
+        public InterviewerInputModel(string id) { UserId = id; }
 
-        public int Page
-        {
+        public int Page { 
             get { return _page; }
             set { _page = value; }
         }
@@ -25,9 +21,9 @@ namespace RavenQuestionnaire.Core.Views.User
             get { return _pageSize; }
             set { _pageSize = value; }
         }
-        private int _pageSize = 20;
+        private int _pageSize = 10;
 
-        public string UserId { get; private set; }
+        public string UserId { get; set; }
 
         public string Order
         {
@@ -50,5 +46,7 @@ namespace RavenQuestionnaire.Core.Views.User
                 return q => (q.Responsible == null ? false : q.Responsible.Id == UserId);
             }
         }
+
+        public string TemplateId { get; set; }
     }
 }

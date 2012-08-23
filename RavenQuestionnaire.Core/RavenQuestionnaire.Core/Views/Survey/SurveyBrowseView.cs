@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Views.Survey
@@ -16,6 +17,14 @@ namespace RavenQuestionnaire.Core.Views.Survey
             set { _order = value; }
         }
         private string _order = string.Empty;
+
+        public List<OrderRequestItem> Orders
+        {
+            get { return _orders; }
+            set { _orders = value; }
+        }
+
+        private List<OrderRequestItem> _orders = new List<OrderRequestItem>();
         
         public int TotalCount { get; private set; }
 

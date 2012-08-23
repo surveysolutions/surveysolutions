@@ -23,16 +23,41 @@ namespace RavenQuestionnaire.Core.Views.User
 
         public InterviewerView Load(InterviewerInputModel input)
         {
-            var count = this.documentItemSession.Query().Where(input.Expression).Count();
             var user =  this.users.Query().FirstOrDefault(u => u.Id == input.UserId);
-            if (count == 0)
+            var items = new InterviewerView(user.UserName, user.Id, new List<InterviewerGroupView>());
+            var docs = this.documentItemSession.Query().Where(q => q.Responsible != null && q.Responsible.Id == user.Id);
+            if (!string.IsNullOrEmpty(input.TemplateId))
             {
-                return new InterviewerView(input.Page, input.PageSize, count, user.UserName, user.Id, new List<CompleteQuestionnaireBrowseItem>());
+                var interviewerGroupView = SelectItems(input.TemplateId, docs, input);
+                if (interviewerGroupView.Items.Count>0)
+                    items.Items.Add(interviewerGroupView);
             }
-            var docs = this.documentItemSession.Query().Where(q =>q.Responsible!=null && q.Responsible.Id == user.Id);
-            if (input.Orders.Count>0)
+            else
             {
-                var o = docs.Where(t=>t.FeaturedQuestions.Count()!=0).SelectMany(t => t.FeaturedQuestions).Select(y => y.QuestionText).Distinct().ToList();
+                var gr = docs.GroupBy(t=>t.TemplateId);
+                var l = docs.ToList();
+                foreach (
+                    var interviewerGroupView in
+                        gr.ToList().Select(template => SelectItems(template.Key, docs, input)).Where(
+                            interviewerGroupView => interviewerGroupView.Items.Count > 0))
+                    items.Items.Add(interviewerGroupView);
+            }
+            return items;
+        }
+        
+        #endregion
+
+        #region PrivateMethod
+
+        private InterviewerGroupView SelectItems(string templateId, IQueryable<CompleteQuestionnaireBrowseItem> docs, InterviewerInputModel input)
+        {
+            int count = docs.Where(t => t.TemplateId == templateId).Count();
+            if (count == 0)
+                return new InterviewerGroupView(templateId, string.Empty, new List<CompleteQuestionnaireBrowseItem>(), input.Order, input.Page, input.PageSize, count);
+            docs = docs.Where(t => t.TemplateId == templateId);
+            if (input.Orders.Count > 0)
+            {
+                var o = docs.Where(t => t.FeaturedQuestions.Count() != 0).SelectMany(t => t.FeaturedQuestions).Select(y => y.QuestionText).Distinct().ToList();
                 if (o.Contains(input.Orders[0].Field))
                 {
                     docs = input.Orders[0].Direction == OrderDirection.Asc
@@ -53,9 +78,12 @@ namespace RavenQuestionnaire.Core.Views.User
                 }
             }
             docs = docs.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-            return new InterviewerView(input.Page, input.PageSize, count, user.UserName, user.Id, docs.ToList());
+            return new InterviewerGroupView(
+                    templateId,
+                    docs.ToList().Count>0 ? docs.ToList().FirstOrDefault().QuestionnaireTitle : string.Empty,
+                    docs.ToList(), input.Order, input.Page,
+                    input.PageSize, count);
         }
-
 
         #endregion
     }
