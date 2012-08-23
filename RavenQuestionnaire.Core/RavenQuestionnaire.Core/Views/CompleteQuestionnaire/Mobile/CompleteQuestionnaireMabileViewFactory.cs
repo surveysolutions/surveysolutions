@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Raven.Client;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Iterators;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -16,9 +17,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
     public class CompleteQuestionnaireMabileViewFactory : IViewFactory<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>
     {
-        private readonly IViewSnapshot store;
+        private IDenormalizerStorage<CompleteQuestionnaireDocument> store;
 
-        public CompleteQuestionnaireMabileViewFactory(IViewSnapshot store)
+        public CompleteQuestionnaireMabileViewFactory(IDenormalizerStorage<CompleteQuestionnaireDocument> store)
         {
             this.store = store;
         }
@@ -29,7 +30,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         {
             if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
             {
-                var doc = store.ReadByGuid<CompleteQuestionnaireDocument>(Guid.Parse(input.CompleteQuestionnaireId));
+                var doc = store.GetByGuid(Guid.Parse(input.CompleteQuestionnaireId));
                 UpdateInputData(doc, input);
                 ICompleteGroup group = null;
 

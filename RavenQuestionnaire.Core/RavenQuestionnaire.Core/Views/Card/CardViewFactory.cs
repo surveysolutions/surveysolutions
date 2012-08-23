@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Linq;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.ViewSnapshot;
 using RavenQuestionnaire.Core.Views.Question;
 
 namespace RavenQuestionnaire.Core.Views.Card
 {
     public class CardViewFactory : IViewFactory<CardViewInputModel, CardView>
     {
-        private IViewSnapshot documentSession;
+        private readonly IDenormalizerStorage<QuestionnaireDocument> _documentSession;
 
-        public CardViewFactory(IViewSnapshot documentSession)
+        public CardViewFactory(IDenormalizerStorage<QuestionnaireDocument> documentSession)
         {
-            this.documentSession = documentSession;
+            this._documentSession = documentSession;
         }
 
         public CardView Load(CardViewInputModel input)
         {
-            var doc = documentSession.ReadByGuid<QuestionnaireDocument>(Guid.Parse(input.QuestionnaireId));
+            var doc = _documentSession.GetByGuid(Guid.Parse(input.QuestionnaireId));
 
             var question = doc.Find<IQuestion>(input.QuestionKey);
             if (question == null)

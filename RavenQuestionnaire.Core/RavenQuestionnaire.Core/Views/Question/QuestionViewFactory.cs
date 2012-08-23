@@ -1,32 +1,28 @@
 ﻿using System;
-using Raven.Client;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.ViewSnapshot;
 
 namespace RavenQuestionnaire.Core.Views.Question
 {
     public class QuestionViewFactory : IViewFactory<QuestionViewInputModel, QuestionView>
     {
-        private IViewSnapshot documentSession;
+        private readonly IDenormalizerStorage<QuestionnaireDocument> _documentSession;
 
-        public QuestionViewFactory(IViewSnapshot documentSession)
+        public QuestionViewFactory(IDenormalizerStorage<QuestionnaireDocument> 
+            documentSession)
         {
-            this.documentSession = documentSession;
+            this._documentSession = documentSession;
         }
          public QuestionView Load(QuestionViewInputModel input)
          {
-             var doc = documentSession.ReadByGuid<QuestionnaireDocument>(Guid.Parse(input.QuestionnaireId));
+             var doc = _documentSession.GetByGuid(Guid.Parse(input.QuestionnaireId));
 
-             var question =
-                 new RavenQuestionnaire.Core.Entities.Questionnaire(doc).Find
-                     <IQuestion>(input.PublicKey);
+             var question = new Entities.Questionnaire(doc).Find<IQuestion>(input.PublicKey);
              if (question == null)
                  return null;
 
-
              return new QuestionView(doc, question);
-
          }
     }
 }
