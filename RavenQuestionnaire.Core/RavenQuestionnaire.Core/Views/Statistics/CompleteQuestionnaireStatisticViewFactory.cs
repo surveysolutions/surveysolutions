@@ -1,14 +1,14 @@
 ﻿using System;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.ViewSnapshot;
 
 namespace RavenQuestionnaire.Core.Views.Statistics
 {
     public class CompleteQuestionnaireStatisticViewFactory : IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>
     {
-        private readonly IViewSnapshot store;
+        private IDenormalizerStorage<CompleteQuestionnaireDocument> store;
 
-        public CompleteQuestionnaireStatisticViewFactory(IViewSnapshot store)
+        public CompleteQuestionnaireStatisticViewFactory(IDenormalizerStorage<CompleteQuestionnaireDocument> store)
         {
             this.store = store;
         }
@@ -17,11 +17,9 @@ namespace RavenQuestionnaire.Core.Views.Statistics
 
         public CompleteQuestionnaireStatisticView Load(CompleteQuestionnaireStatisticViewInputModel input)
         {
-            CompleteQuestionnaireDocument doc =
-                store.ReadByGuid<CompleteQuestionnaireDocument>(Guid.Parse(input.Id));
+            CompleteQuestionnaireDocument doc = store.GetByGuid(Guid.Parse(input.Id));
             return new CompleteQuestionnaireStatisticView(doc);
         }
-
 
         #endregion
     }

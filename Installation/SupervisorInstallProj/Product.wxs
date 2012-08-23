@@ -12,7 +12,8 @@
         
     <Package InstallerVersion="200" 
              Compressed="yes"
-             Description="Supervisor installation."/>
+             Description="Supervisor installation."
+			 InstallScope="perUser"/>
     
     <Upgrade Id="6e2d596a-770e-4b08-a143-f7dd808e69ce">
       

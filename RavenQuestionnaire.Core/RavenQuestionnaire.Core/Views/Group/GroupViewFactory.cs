@@ -1,20 +1,20 @@
 ﻿using System;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.ViewSnapshot;
 
 namespace RavenQuestionnaire.Core.Views.Group
 {
     public class GroupViewFactory : IViewFactory<GroupViewInputModel, GroupView>
     {
-        private readonly IViewSnapshot store;
+        private readonly IDenormalizerStorage<QuestionnaireDocument> store;
 
-        public GroupViewFactory(IViewSnapshot store)
+        public GroupViewFactory(IDenormalizerStorage<QuestionnaireDocument> store)
         {
             this.store = store;
         }
         public GroupView Load(GroupViewInputModel input)
         {
-            var doc = store.ReadByGuid<QuestionnaireDocument>(Guid.Parse(input.QuestionnaireId));
+            var doc = store.GetByGuid(Guid.Parse(input.QuestionnaireId));
             var group = new Entities.Questionnaire(doc).Find<Entities.SubEntities.Group>(input.PublicKey);
             if (group == null)
                 return null;

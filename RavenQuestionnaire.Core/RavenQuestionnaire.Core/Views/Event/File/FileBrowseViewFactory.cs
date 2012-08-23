@@ -1,11 +1,9 @@
 ﻿using System.Linq;
-using Raven.Client;
-using Raven.Client.Linq;
 using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Utility;
+using RavenQuestionnaire.Core.Views.File;
 
-namespace RavenQuestionnaire.Core.Views.File
+namespace RavenQuestionnaire.Core.Views.Event.File
 {
     public class FileBrowseViewFactory : IViewFactory<FileBrowseInputModel, FileBrowseView>
     {

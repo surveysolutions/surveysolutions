@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using RavenQuestionnaire.Core.Views.Card;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 

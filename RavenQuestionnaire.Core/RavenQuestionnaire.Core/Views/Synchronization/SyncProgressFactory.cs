@@ -19,7 +19,7 @@ namespace RavenQuestionnaire.Core.Views.Synchronization
 
         public SyncProgressView Load(SyncProgressInputModel input)
         {
-            var process = this.store.ReadByGuid<SyncProcessDocument>(input.ProcessKey);
+            var process = this.store.GetByGuid<SyncProcessDocument>(input.ProcessKey);
             return new SyncProgressView(process);
         }
     }

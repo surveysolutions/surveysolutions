@@ -121,7 +121,9 @@ namespace RavenQuestionnaire.Core.Domain
 
         public void SetAnswer(Guid questionPublicKey, Guid? propogationPublicKey, object completeAnswer, List<object> completeAnswers)
         {
-            //performe checka before event raising
+            //performe checka before event raising!!
+
+
             var question = _doc.QuestionHash[questionPublicKey, propogationPublicKey];
             // ToDO clean up that crap
             var answerString = "";
@@ -331,22 +333,7 @@ namespace RavenQuestionnaire.Core.Domain
 
         #endregion
 
-
-        public void PreLoad()
-        {
-            ApplyEvent(new CompletedQuestionnaireLoaded());
-        }
-
-
-        // Event handler for the PropagatableGroupAdded event. This method
-        // is automaticly wired as event handler based on convension.
-        protected void OnApplyEvent(CompletedQuestionnaireLoaded e)
-        {
-            //loads into the cache
-            //no logic
-        }
-
-
+        
         protected void ChangeStatus(SurveyStatus status)
         {
             //put check logic !!!

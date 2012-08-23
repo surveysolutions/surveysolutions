@@ -19,7 +19,6 @@ namespace RavenQuestionnaire.Core.Domain
     /// </summary>
     public class QuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
     {
-        private DateTime _creationDate;
 
         private QuestionnaireDocument _innerDocument = new QuestionnaireDocument();
 
@@ -47,12 +46,7 @@ namespace RavenQuestionnaire.Core.Domain
                 Title= text,
                 CreationDate = clock.UtcNow()
             });
-
-
-          /*  ApplyEvent(new QuestionnaireTemplateLocaded
-            {
-                Template = _innerDocument
-            });*/
+          
         }
 
         // Event handler for the NewQuestionnaireCreated event. This method
@@ -61,15 +55,14 @@ namespace RavenQuestionnaire.Core.Domain
         {
             _innerDocument.Title = e.Title;
             _innerDocument.PublicKey = e.PublicKey;
-            _creationDate = e.CreationDate;
+            _innerDocument.CreationDate = e.CreationDate;
         }
 
         // Event handler for the NewQuestionnaireCreated event. This method
         // is automaticly wired as event handler based on convension.
-        protected void OnQuestionnaireTemplateLocaded(QuestionnaireTemplateLoaded e)
+        protected void OnQuestionnaireTemplateLoaded(QuestionnaireTemplateLoaded e)
         {
             _innerDocument = e.Template;
-            _creationDate = e.Template.CreationDate;
         }
 
         public void CreateCompletedQ(Guid completeQuestionnaireId)
@@ -109,16 +102,6 @@ namespace RavenQuestionnaire.Core.Domain
             group.ConditionExpression = e.ConditionExpression;
             _innerDocument.Add(group, e.ParentGroupPublicKey);
         }
-
-        public void PreLoad()
-        {
-            ApplyEvent(new QuestionnaireLoaded());
-        }
-
-        protected void OnPreLoad(QuestionnaireLoaded e)
-        {
-        }
-
         public void MoveQuestionnaireItem(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
         {
             ApplyEvent(new QuestionnaireItemMoved
@@ -357,7 +340,6 @@ namespace RavenQuestionnaire.Core.Domain
                 //    group.Triggers = e.Triggers;
                 group.ConditionExpression = e.ConditionExpression;
                 group.Update(e.GroupText);
-                return;
             }
         }
 
