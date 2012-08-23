@@ -29,293 +29,136 @@ namespace Browsing.CAPI.Forms
 {
     public partial class WebForm : Form
     {
-        #region Fields
-        bool repaint;
-        private PleaseWaitControl pleaseWait;
-        private CapiSyncManager syncManager;
+        private Containers.CAPIBrowser capiBrowser;
+        private Containers.CAPISynchronization capiSycn;
+        private Containers.CAPIMain capiMain;
+        private Awesomium.Windows.Forms.WebControl webView;
         private ISettingsProvider clientSettings;
-        #endregion
-
         #region C-tor
 
         public WebForm()
         {
             // Notice that Control.DoubleBuffered has been set to true
             // in the designer, to prevent flickering.
-
-            this.pleaseWait = new PleaseWaitControl();
-            this.clientSettings = new ClientSettingsProvider();
-            this.syncManager = new CapiSyncManager(this.pleaseWait, this.clientSettings);
-            this.syncManager.EndOfSync += new EventHandler<SynchronizationCompletedEvent>(sync_EndOfSync);
-            this.syncManager.BgnOfSync += new EventHandler<SynchronizationEvent>(sync_BgnOfSync);
-
             InitializeComponent();
 
-            this.statusStrip1.Hide();
-            this.progressBox.Visible = true;
+            WebCore.Initialize(new WebCoreConfig()
+                                   {
+                                       EnablePlugins = true,
+                                       SaveCacheAndCookies = true
+                                   }, true);
 
-            var host = new ToolStripControlHost(this.pleaseWait);
-            host.Size = this.statusStrip1.Size;
-            this.statusStrip1.Items.AddRange(new ToolStripItem[] { host });
-
-            this.webView.BeginLoading += new BeginLoadingEventHandler(webView_BeginLoading);
-            this.webView.LoadCompleted += new EventHandler(webView_LoadCompleted);
-            this.webView.ResourceRequest += new ResourceRequestEventHandler(webView_ResourceRequest);
-
-            string url;
-            if (Settings.Default.RunClient)
-            {
-                try
-                {
-                    url = RunEngine();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error on Engine Run. " + ex.Message);
-                    url = Settings.Default.DefaultUrl;
-                }
-
-            }
-            else
-            {
-                url = Settings.Default.DefaultUrl;
-            }
-
-
-            try
-            {
-                this.webView.Source = new Uri(Settings.Default.DefaultUrl);
-                this.webView.Focus();
-            }
-            catch
-            {
-                // log
-            }
-        }
-
-        #region TODO Progress indication
-
-        void webView_BeginLoading(object sender, BeginLoadingEventArgs e)
-        {
-            this.progressBox.Visible = true;
-        }
-
-        ResourceResponse webView_ResourceRequest(object sender, ResourceRequestEventArgs e)
-        {
-            return null;
-        }
-
-        void webView_LoadCompleted(object sender, EventArgs e)
-        {
-            this.progressBox.Visible = false;
-        }
-
-        #endregion
-
-        private void EnableDisableMenuItems(bool enable)
-        {
-            foreach (ToolStripMenuItem item in this.menuStrip1.Items)
-            {
-                item.Enabled = item == this.toolStripCancelMenuItem ? !enable : enable;
-            }
-        }
-
-        void sync_EndOfSync(object sender, SynchronizationCompletedEvent e)
-        {
-            if (this.InvokeRequired)
-                this.Invoke(new MethodInvoker(() =>
-                {
-                    MessageBox.Show(this, e.Log);
-
-                    EnableDisableMenuItems(true);
-
-                    if (e.Status.ActionType == SyncType.Pull)
-                        webView.LoadURL(Settings.Default.DefaultUrl);
-                }));
-        }
-
-        void sync_BgnOfSync(object sender, SynchronizationEvent e)
-        {
-            if (this.InvokeRequired)
-                this.Invoke(new MethodInvoker(() =>
-                {
-                    EnableDisableMenuItems(false);
-                }));
-        }
-
-        #endregion
-
-        #region Methods
-        const int WM_DEVICECHANGE = 0x219;
-
-        protected override void WndProc(ref Message m)
-        {
-            switch (m.Msg)
-            {
-                case WM_DEVICECHANGE:
-
-                    int n = (int)m.WParam;
-
-                    /* if (n == 0x8000)
-                     {
-                          //Thread.Sleep(1000);
-                         try
-                         {
-                             this.export.ExportQuestionariesArchive();
-                         }
-                         catch (Exception ex)
-                         {
-                             // MessageBox.Show("Export error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                             throw ex;
-                         }
-                     }
-                     else*/
-                    if (n == 0x8004)
-                    {
-
-                        // this.export.Stop();
-                        //  this.export.FlushDriversList();
-
-                        //  this.Menu = null;
-                    }
-
-                    break;
-            }
-
-            base.WndProc(ref m);
-        }
-
-        protected override void OnActivated(EventArgs e)
-        {
-            base.OnActivated(e);
-
-            if (!this.webView.IsLive)
-                return;
-
-            this.webView.Focus();
+            this.webView=new WebControl();
+            this.clientSettings=new ClientSettingsProvider();
+            AddMain();
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
-        {
-            if (this.webView != null)
-            {
-                //this.webView.IsDirtyChanged -= OnIsDirtyChanged;
-                //this.webView.SelectLocalFiles -= OnSelectLocalFiles;
-                this.webView.Close();
-            }
+          {
+              if (this.webView != null)
+              {
+                  //this.webView.IsDirtyChanged -= OnIsDirtyChanged;
+                  //this.webView.SelectLocalFiles -= OnSelectLocalFiles;                this.webView.Close();
+              }
 
-            base.OnFormClosed(e);
+              base.OnFormClosed(e);
 
 #if USING_MONO
-            // TODO: Mac OS X: Sends a SIGSEGV to Mono.
+    // TODO: Mac OS X: Sends a SIGSEGV to Mono.
             if ( !PlatformDetection.IsMac )
 #endif
-            WebCore.Shutdown();
-        }
+              WebCore.Shutdown();
+          }
+
+        protected void AddBrowser()
+      {
+          this.capiBrowser = new Browsing.CAPI.Containers.CAPIBrowser(this.webView);
+          // 
+          // capiBrowser1
+          // 
+          this.capiBrowser.AutoSize = true;
+          this.capiBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+          this.capiBrowser.Location = new System.Drawing.Point(0, 0);
+          this.capiBrowser.Name = "capiBrowser1";
+          this.capiBrowser.HomeButtonClick += new EventHandler<EventArgs>(capiBrowser_HomeButtonClick);
+       //   this.capiBrowser.Size = new System.Drawing.Size(1596, 808);
+       //   this.capiBrowser.TabIndex = 2;
+          this.Controls.Add(this.capiBrowser);
+      }
+      protected void AddSynchronizer()
+      {
+          this.capiSycn = new Browsing.CAPI.Containers.CAPISynchronization(this.clientSettings);
+          // 
+          // capiBrowser1
+          // 
+          this.capiSycn.AutoSize = true;
+          this.capiSycn.Name = "capiSync";
+          this.capiSycn.Size = new System.Drawing.Size(this.ClientSize.Width, this.ClientSize.Height);
+          this.capiSycn.Left = 0;
+          this.capiSycn.Top = 0;
+          this.capiSycn.BackClick += new EventHandler<EventArgs>(capiSycn_BackClick);
+          this.Controls.Add(this.capiSycn);
+      }
+
+      void capiSycn_BackClick(object sender, EventArgs e)
+      {
+          this.Controls.Clear();
+          AddMain();
+      }
+      void capiBrowser_HomeButtonClick(object sender, EventArgs e)
+      {
+          this.Controls.Clear();
+          AddMain();
+      }
+      protected void AddMain()
+      {
+          this.capiMain = new Browsing.CAPI.Containers.CAPIMain(this.clientSettings);
+          // 
+          // capiBrowser1
+          // 
+        //  this.capiMain.AutoSize = true;
+      //    this.capiMain.Dock = System.Windows.Forms.DockStyle.Left;
+      //    this.capiMain.Location = new System.Drawing.Point(0, 0);
+          //this.capiMain.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right  | System.Windows.Forms.AnchorStyles.Top;
+         
+          this.capiMain.Name = "capiMain";
+          this.capiMain.Size = new System.Drawing.Size(920, 200);
+          this.capiMain.Left = (this.ClientSize.Width - this.capiMain.Width) / 2;
+          this.capiMain.Top = (this.ClientSize.Height - this.capiMain.Height) / 2;
+        //  this.capiMain.TabIndex = 2;
+          this.Controls.Add(this.capiMain);
+          this.capiMain.DashboardClick += new EventHandler<EventArgs>(capiMain_DashboardClick);
+          this.capiMain.SynchronizationClick += new EventHandler<EventArgs>(capiMain_SynchronizationClick);
+          this.capiMain.LoginClick += new EventHandler<EventArgs>(capiMain_LoginClick);
+       //   this.ClientSizeChanged += new EventHandler(capiMain_ClientSizeChanged);
+      }
+
+      void capiMain_LoginClick(object sender, EventArgs e)
+      {
+          this.Controls.Clear();
+          AddBrowser();
+      }
+
+      void capiMain_SynchronizationClick(object sender, EventArgs e)
+      {
+          this.Controls.Clear();
+          AddSynchronizer();
+      }
+
+    /*  void capiMain_ClientSizeChanged(object sender, EventArgs e)
+      {
+          this.capiMain.Left = (this.ClientSize.Width - this.capiMain.Width) / 2;
+          this.capiMain.Top = (this.ClientSize.Height - this.capiMain.Height) / 2;
+      }*/
+
+      void capiMain_DashboardClick(object sender, EventArgs e)
+      {
+          this.Controls.Clear();
+          AddBrowser();
+      }
+       
 
         #endregion
 
-        #region Event Handlers
-
-        /*private void OnIsDirtyChanged(object sender, EventArgs e)
-        {
-            if (!this.webView.IsLive)
-                return;
-
-            if (this.webView.IsDirty)
-            {
-                // Force repaint.
-                if (this.repaint)
-                {
-                    // Invalidate the whole surface.
-                    this.Invalidate();
-                    this.repaint = false;
-                }
-                else
-                {
-                    // Invalidate the dirty region only.
-                    // This significantly improves performance.
-                    this.Invalidate(this.webView.DirtyBounds.GetRectangle(), false);
-                }
-            }
-        }*/
-
-        /*private void OnSelectLocalFiles(object sender, SelectLocalFilesEventArgs e)
-        {
-            using (OpenFileDialog dialog = new OpenFileDialog()
-            {
-                Title = e.Title,
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                CheckFileExists = true,
-                Multiselect = e.SelectMultipleFiles
-            })
-            {
-                if ((dialog.ShowDialog(this) == DialogResult.OK) || dialog.FileNames.Length > 0)
-                    e.SelectedFiles = dialog.FileNames;
-                else
-                    e.Cancel = true;
-            }
-        }
-         */ 
-        #endregion
-
-        private void pushToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.syncManager.ExportQuestionaries();
-            }
-            catch
-            {
-            }
-        }
-
-        private void pullToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.syncManager.ImportQuestionaries();
-            }
-            catch
-            {
-            }
-        }
-
-        private void toolStripSettingsMenuItem_Click(object sender, EventArgs e)
-        {
-            new SettingsBox().ShowDialog();
-        }
-
-        private void toolStripCancelMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.syncManager.Stop();
-            }
-            catch
-            {
-            }
-        }
-
-        private string RunEngine()
-        {
-            DirectoryInfo dir = new DirectoryInfo(Application.StartupPath);
-
-            if (dir.Parent == null)
-                throw new Exception("Engine was not found.");
-
-            string enginePath = Path.Combine(dir.Parent.FullName, Settings.Default.EnginePathName);
-
-            if (!Directory.Exists(enginePath))
-                throw new Exception("Engine was not found.");
-
-            string port = Settings.Default.DefaultPort;
-
-            EngineRunner runner = new EngineRunner();
-            runner.RunEngine(enginePath, port);
-            Application.ApplicationExit += runner.StopEngine;
-
-            return String.Format("http://localhost:{0}", port);
-        }
     }
 }
