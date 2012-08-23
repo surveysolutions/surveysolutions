@@ -27,19 +27,22 @@
       <Value Profile="(Default)">/Synchronizations/CheckIsThereSomethingToPush</Value>
     </Setting>
     <Setting Name="DefaultUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost:2001</Value>
+      <Value Profile="(Default)">http://localhost:8083/</Value>
     </Setting>
     <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://localhost:8085</Value>
     </Setting>
     <Setting Name="DefaultPort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">2001</Value>
+      <Value Profile="(Default)">8083</Value>
     </Setting>
     <Setting Name="EnginePathName" Type="System.String" Scope="User">
       <Value Profile="(Default)">Engine</Value>
     </Setting>
     <Setting Name="RunClient" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AuthentificationCheckPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/Account/IsLoggedIn</Value>
     </Setting>
   </Settings>
 </SettingsFile>
