@@ -47,9 +47,8 @@ namespace RavenQuestionnaire.Core.Views.Survey
 
         public string QuestionnaireId { get; set; }
 
-        public SurveyGroupInputModel(string id)
+        public SurveyGroupInputModel()
         {
-            this.Id = id;
         }
 
         public SurveyGroupInputModel(string id, string questionnaireId)

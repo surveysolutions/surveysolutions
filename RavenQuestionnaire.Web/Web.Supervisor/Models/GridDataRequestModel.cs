@@ -11,6 +11,7 @@ namespace Web.Supervisor.Models
         public PagerData Pager { get; set; }
         public string SupervisorId { get; set; }
         public string SupervisorName { get; set; }
+        public string TemplateId { get; set; }
     }
 
     public class PagerData

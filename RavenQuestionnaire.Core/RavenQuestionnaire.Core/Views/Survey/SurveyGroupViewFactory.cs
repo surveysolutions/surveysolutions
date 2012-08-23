@@ -22,18 +22,11 @@ namespace RavenQuestionnaire.Core.Views.Survey
                 return new SurveyGroupView(input.Page, input.PageSize, input.QuestionnaireId, 0, new CompleteQuestionnaireBrowseItem[0], input.Id);
             IQueryable<CompleteQuestionnaireBrowseItem> query = documentItemSession.Query().Where(v=>v.TemplateId==input.Id);
             if (!string.IsNullOrEmpty(input.QuestionnaireId))
-            {
                 query = query.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
-                if (input.Orders.Count > 0)
-                    query = DefineOrderBy(query, input);
-            }
-            else
-            {
-                if (input.Orders.Count > 0)
-                    query = DefineOrderBy(query, input);
-            }
+            if (input.Orders.Count > 0)
+                query = DefineOrderBy(query, input);
             query = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-            return new SurveyGroupView(input.Page, input.PageSize, query.FirstOrDefault()!=null ? query.FirstOrDefault().QuestionnaireTitle : input.Id, 0, query, input.Id);
+            return new SurveyGroupView(input.Page, input.PageSize, query.FirstOrDefault()!=null ? query.FirstOrDefault().QuestionnaireTitle : input.Id, count, query, input.Id);
         }
 
 
@@ -55,7 +48,19 @@ namespace RavenQuestionnaire.Core.Views.Survey
             }
             else
             {
-                query = input.Orders[0].Direction == OrderDirection.Asc
+                if (input.Orders[0].Field.Contains("Responsible"))
+                {
+                    var usersnull = query.Where(t => t.Responsible == null);
+                    var contains = input.Orders[0].Direction == OrderDirection.Asc
+                        ? query.Where(t=>t.Responsible!=null).OrderBy(input.Orders[0].Field)
+                        : query.Where(t=>t.Responsible!=null).OrderByDescending(input.Orders[0].Field);;
+                    query= (input.Orders[0].Direction == OrderDirection.Asc)
+                                       ? usersnull.Union(contains)
+                                       : contains.Union(usersnull);
+
+                }
+                else
+                    query = input.Orders[0].Direction == OrderDirection.Asc
                         ? query.OrderBy(input.Orders[0].Field)
                         : query.OrderByDescending(input.Orders[0].Field);
             }

@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Ncqrs;
+using System;
 using System.Web;
 using System.Web.Mvc;
-using Ncqrs;
+using Web.Supervisor.Models;
+using RavenQuestionnaire.Core;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
-using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.Views.User;
 using RavenQuestionnaire.Core.Commands.User;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Views.User;
-using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
 {
@@ -47,10 +47,18 @@ namespace Web.Supervisor.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Details(String id)
+        public ActionResult Details(String id, InterviewerInputModel input)
         {
-            var input = new InterviewerInputModel(id) {};
-            InterviewerView model = viewRepository.Load<InterviewerInputModel, InterviewerView>(input);
+            var inputModel = input==null ? new InterviewerInputModel(id) : new InterviewerInputModel(id)
+                                                                               {
+                                                                                   Order=input.Order, 
+                                                                                   Orders = input.Orders, 
+                                                                                   PageSize = input.PageSize, 
+                                                                                   Page = input.Page, 
+                                                                                   UserId=input.UserId, 
+                                                                                   TemplateId = input.TemplateId
+                                                                               };
+            InterviewerView model = viewRepository.Load<InterviewerInputModel, InterviewerView>(inputModel);
             return View(model);
         }
 
@@ -81,10 +89,11 @@ namespace Web.Supervisor.Controllers
             {
                 Page = data.Pager.Page,
                 PageSize = data.Pager.PageSize,
-                Orders = data.SortOrder
+                Orders = data.SortOrder,
+                TemplateId = data.TemplateId
             };
             InterviewerView model = viewRepository.Load<InterviewerInputModel, InterviewerView>(input);
-            return PartialView("_TableGroupByUser", model);
+            return PartialView("_TableGroupByUser", model.Items[0]);
         }
     }
 }
