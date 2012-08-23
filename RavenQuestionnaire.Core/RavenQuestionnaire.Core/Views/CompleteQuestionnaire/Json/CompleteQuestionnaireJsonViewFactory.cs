@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.ViewSnapshot;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -12,9 +12,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
 {
     public class CompleteQuestionnaireJsonViewFactory : IViewFactory<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>
     {
-        private readonly IViewSnapshot store;
+        private IDenormalizerStorage<CompleteQuestionnaireDocument> store;
 
-        public CompleteQuestionnaireJsonViewFactory(IViewSnapshot store)
+        public CompleteQuestionnaireJsonViewFactory(IDenormalizerStorage<CompleteQuestionnaireDocument> store)
         {
             this.store = store;
         }
@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
             {
                 var doc =
-                    this.store.ReadByGuid<CompleteQuestionnaireDocument>(Guid.Parse(input.CompleteQuestionnaireId));
+                    this.store.GetByGuid(Guid.Parse(input.CompleteQuestionnaireId));
                 ICompleteGroup group = null;
                 if (input.CurrentGroupPublicKey.HasValue)
                     group = doc.FindGroupByKey(input.CurrentGroupPublicKey.Value, input.PropagationKey);
@@ -40,9 +40,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
     
     public class CompleteQuestionnaireMobileViewFactory : IViewFactory<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>
     {
-        private readonly IViewSnapshot store;
+        private IDenormalizerStorage<CompleteQuestionnaireDocument> store;
 
-        public CompleteQuestionnaireMobileViewFactory(IViewSnapshot store)
+        public CompleteQuestionnaireMobileViewFactory(IDenormalizerStorage<CompleteQuestionnaireDocument> store)
         {
             this.store = store;
         }
@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
             {
                 var doc =
-                    this.store.ReadByGuid<CompleteQuestionnaireDocument>(Guid.Parse(input.CompleteQuestionnaireId));
+                    this.store.GetByGuid(Guid.Parse(input.CompleteQuestionnaireId));
                 ICompleteGroup group = null;
                 var rout = new List<NodeWithLevel>();
                 if (input.CurrentGroupPublicKey.HasValue)

@@ -1,18 +1,15 @@
-﻿using System;
-using System.Linq;
-using RavenQuestionnaire.Core.Denormalizers;
+﻿using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.ViewSnapshot;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
 namespace RavenQuestionnaire.Core.Views.Assign
 {
     public class AssignSurveyViewFactory : IViewFactory<AssignSurveyInputModel, AssignSurveyView>
     {
-        private readonly IViewSnapshot store;
+        private IDenormalizerStorage<CompleteQuestionnaireDocument> store;
         private IDenormalizerStorage<CompleteQuestionnaireBrowseItem> docs;
 
-        public AssignSurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> docs, IViewSnapshot store)
+        public AssignSurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> docs, IDenormalizerStorage<CompleteQuestionnaireDocument> store)
         {
             this.store = store;
             this.docs = docs;
@@ -22,7 +19,7 @@ namespace RavenQuestionnaire.Core.Views.Assign
 
         public AssignSurveyView Load(AssignSurveyInputModel input)
         {
-            var q = store.ReadByGuid<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
+            var q = store.GetByGuid(input.CompleteQuestionnaireId);
             var doc = this.docs.GetByGuid(input.CompleteQuestionnaireId);
 
             return new AssignSurveyView(doc, q);

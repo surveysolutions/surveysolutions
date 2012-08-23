@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RavenQuestionnaire.Core.Documents.Statistics;
+﻿using System.Collections.Generic;
 using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped

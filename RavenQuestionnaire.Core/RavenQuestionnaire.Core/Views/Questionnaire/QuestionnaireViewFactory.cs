@@ -1,26 +1,21 @@
 ﻿using System;
-using Raven.Client;
+using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.ViewSnapshot;
 
 namespace RavenQuestionnaire.Core.Views.Questionnaire
 {
     public class QuestionnaireViewFactory : IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>
     {
-        private IViewSnapshot documentSession;
+        private IDenormalizerStorage<QuestionnaireDocument> documentSession;
 
-        public QuestionnaireViewFactory(IViewSnapshot documentSession)
+        public QuestionnaireViewFactory(IDenormalizerStorage<QuestionnaireDocument> documentSession)
         {
             this.documentSession = documentSession;
         }
         public QuestionnaireView Load(QuestionnaireViewInputModel input)
         {
-            var doc = documentSession.ReadByGuid<QuestionnaireDocument>(Guid.Parse(input.QuestionnaireId));
-
-            /*  var questions =
-                  documentSession.Query<QuestionDocument, QuestionnaireContainingQuestions>().Where(
-                      question => question.QuestionnaireId.Equals(doc.Id));*/
-
+            var doc = documentSession.GetByGuid(Guid.Parse(input.QuestionnaireId));
+            
             return new QuestionnaireView(doc);
         }
     }
