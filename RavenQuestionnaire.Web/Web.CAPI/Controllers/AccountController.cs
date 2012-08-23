@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Web.Security;
+using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Utility;
 using Web.CAPI.Models;
@@ -8,11 +9,13 @@ namespace Web.CAPI.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IGlobalInfoProvider _globalProvider;
         private IFormsAuthentication authentication;
 
-        public AccountController(IFormsAuthentication auth)
+        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider)
         {
             authentication = auth;
+            _globalProvider = globalProvider;
         }
 
         //
@@ -21,7 +24,10 @@ namespace Web.CAPI.Controllers
         {
             return View();
         }
-
+        public bool IsLoggedIn()
+        {
+            return _globalProvider.GetCurrentUser() != null;
+        }
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {

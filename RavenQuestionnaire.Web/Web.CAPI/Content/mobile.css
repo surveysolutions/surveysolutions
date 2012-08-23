@@ -1,4 +1,5 @@
-﻿/*.ui-loader{border:none;background:transparent; color:#fff;font-weight: normal;}​*/
+﻿
+/*.ui-loader{border:none;background:transparent; color:#fff;font-weight: normal;}​*/
 /*comment*/
 .ui-loader .ui-icon {background-color:transparent;border:none;display: block;height: 66px;margin: 0;padding: 0px;width: 66px;background-size: 66px 66px;}
 .ui-loader h1{font-size: 0;height: 0;overflow: hidden;width: 0;}
@@ -232,6 +233,8 @@
 }
 body.ui-mobile-viewport, div.ui-mobile-viewport {
 	overflow-x: visible;
+   /* margin-top:  1px;
+    border-top: #cccccc solid 1px;*/
 }
 
 .instructions {
@@ -259,6 +262,7 @@ body.ui-mobile-viewport, div.ui-mobile-viewport {
 }
 #dashboard-page .page .ui-content {
 	bottom: 0 !important;
+	top: 0 !important;
 }
 
 .iscroll-wrapper {

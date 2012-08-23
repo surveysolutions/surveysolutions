@@ -84,6 +84,10 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CAPI, Version=1.0.4618.21407, Culture=neutral, processorArchitecture=x86">
+      <ExecutableExtension>.exe</ExecutableExtension>
+      <HintPath>obj\x86\Debug\CAPI.exe</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
@@ -99,6 +103,33 @@
   <ItemGroup>
     <Compile Include="ClientSettings\ClientSettingsProvider.cs" />
     <Compile Include="ClientSettings\ClientSettings.cs" />
+    <Compile Include="Containers\CAPIBrowser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\CAPIBrowser.Designer.cs">
+      <DependentUpon>CAPIBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Containers\CAPIMain.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\CAPIMain.Designer.cs">
+      <DependentUpon>CAPIMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Containers\CAPISettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\CAPISettings.Designer.cs">
+      <DependentUpon>CAPISettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Containers\CAPISynchronization.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\CAPISynchronization.Designer.cs">
+      <DependentUpon>CAPISynchronization.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FlatButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\SettingsBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +151,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Containers\CAPIBrowser.resx">
+      <DependentUpon>CAPIBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Containers\CAPIMain.resx">
+      <DependentUpon>CAPIMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Containers\CAPISynchronization.resx">
+      <DependentUpon>CAPISynchronization.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\PleaseWaitForm.resx">
       <DependentUpon>PleaseWaitForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -154,6 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1337116218_to-do-list_checked2.ico" />
+    <None Include="Resources\1345735451_home.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -187,9 +228,7 @@
       <Name>Synchronization.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(SolutionName)'=='Awesomium.NET'">
       <ItemGroup>
