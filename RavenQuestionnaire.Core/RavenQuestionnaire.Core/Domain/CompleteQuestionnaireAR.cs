@@ -65,7 +65,6 @@ namespace RavenQuestionnaire.Core.Domain
 
             ApplyEvent(new NewCompleteQuestionnaireCreated
             {
-                CompletedQuestionnaireId = completeQuestionnaireId,
                 QuestionnaireId = Guid.Parse(questionnaire.Id),
                 Questionnaire = doc,
                 CreationDate = clock.UtcNow(),

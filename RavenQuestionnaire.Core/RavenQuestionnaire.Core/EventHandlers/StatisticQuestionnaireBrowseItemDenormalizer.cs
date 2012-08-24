@@ -31,7 +31,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
             {
                 var surveyitem = new SurveyItem(evnt.Payload.CreationDate, evnt.Payload.CreationDate,
                     evnt.Payload.QuestionnaireId, evnt.Payload.Questionnaire.Status, evnt.Payload.Questionnaire.Responsible);
-                var statistic = new Dictionary<Guid, SurveyItem> { { evnt.Payload.CompletedQuestionnaireId, surveyitem } };
+                var statistic = new Dictionary<Guid, SurveyItem> { { evnt.Payload.Questionnaire.PublicKey, surveyitem } };
                 this.documentItemStore.Store(
                     new SurveyBrowseItem(
                         evnt.Payload.QuestionnaireId.ToString(),
@@ -41,7 +41,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                         evnt.Payload.Questionnaire.Status == SurveyStatus.Initial && evnt.Payload.Questionnaire.Responsible == null ? 1 : 0,
                         evnt.Payload.Questionnaire.Status == SurveyStatus.Error ? 1 : 0,
                         evnt.Payload.Questionnaire.Status == SurveyStatus.Complete ? 1 : 0), 
-                    evnt.Payload.CompletedQuestionnaireId);
+                    evnt.Payload.Questionnaire.PublicKey);
             }
             else
             {
@@ -51,11 +51,11 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 else
                     IncrementCount(evnt.Payload.Questionnaire.Status.Name, item);
                 item.Statistic.Add(
-                    evnt.Payload.CompletedQuestionnaireId, 
+                    evnt.Payload.Questionnaire.PublicKey, 
                     new SurveyItem(
                         evnt.Payload.CreationDate, 
                         evnt.Payload.CreationDate, 
-                        evnt.Payload.CompletedQuestionnaireId,
+                        evnt.Payload.Questionnaire.PublicKey,
                         evnt.Payload.Questionnaire.Status, evnt.Payload.Questionnaire.Responsible));
             }
         }

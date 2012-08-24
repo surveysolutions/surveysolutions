@@ -69,7 +69,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         public override void Add(IComposite c, Guid? parent)
         {
-            throw new NotImplementedException();
+            throw new CompositeException();
             /*var question = c as ICompleteQuestion;
             if (question != null && question.PublicKey == this.PublicKey)
             {

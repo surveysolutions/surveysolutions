@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
-            this._documentStorage.Store(evnt.Payload.Questionnaire, evnt.Payload.CompletedQuestionnaireId);
+            this._documentStorage.Store(evnt.Payload.Questionnaire, evnt.Payload.Questionnaire.PublicKey);
         }
 
         #endregion
