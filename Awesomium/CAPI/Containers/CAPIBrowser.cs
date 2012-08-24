@@ -16,29 +16,21 @@ namespace Browsing.CAPI.Containers
 {
     public partial class CAPIBrowser : UserControl
     {
-        public event EventHandler<EventArgs> HomeButtonClick; 
+        public event EventHandler<EventArgs> HomeButtonClick;
+        protected bool isSinglePage = false;
         public CAPIBrowser(WebControl webView)
         {
             this.webView = webView;
+            
             InitializeComponent();
-            string url;
-            if (Settings.Default.RunClient)
-            {
-                try
-                {
-                    url = RunEngine();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error on Engine Run. " + ex.Message);
-                    url = Settings.Default.DefaultUrl;
-                }
-
-            }
-            else
-            {
-                url = Settings.Default.DefaultUrl;
-            }
+           
+           
+        }
+        public void SetMode(bool isSinglePageMode)
+        {
+            this.progressBox.Visible = true;
+            this.isSinglePage = isSinglePageMode;
+            this.panel1.Visible = true;
             try
             {
                 this.webView.Source = new Uri(Settings.Default.DefaultUrl);
@@ -61,7 +53,7 @@ namespace Browsing.CAPI.Containers
         void webView_BeginLoading(object sender, BeginLoadingEventArgs e)
         {
             this.progressBox.Visible = true;
-            this.panel1.Visible = e.Url == Settings.Default.DefaultUrl;
+            this.panel1.Visible = e.Url == Settings.Default.DefaultUrl || isSinglePage;
         }
 
         ResourceResponse webView_ResourceRequest(object sender, ResourceRequestEventArgs e)
@@ -72,32 +64,15 @@ namespace Browsing.CAPI.Containers
         void webView_LoadCompleted(object sender, EventArgs e)
         {
             this.progressBox.Visible = false;
+            if (isSinglePage && this.webView.Source.ToString() == Settings.Default.DefaultUrl)
+                homeButton_Click(sender,e);
         }
 
         #endregion
 
        
        
-        private string RunEngine()
-        {
-            DirectoryInfo dir = new DirectoryInfo(Application.StartupPath);
-
-            if (dir.Parent == null)
-                throw new Exception("Engine was not found.");
-
-            string enginePath = Path.Combine(dir.Parent.FullName, Settings.Default.EnginePathName);
-
-            if (!Directory.Exists(enginePath))
-                throw new Exception("Engine was not found.");
-
-            string port = Settings.Default.DefaultPort;
-
-            EngineRunner runner = new EngineRunner();
-            runner.RunEngine(enginePath, port);
-            Application.ApplicationExit += runner.StopEngine;
-
-            return String.Format("http://localhost:{0}", port);
-        }
+      
         
     }
 }
