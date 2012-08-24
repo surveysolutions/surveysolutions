@@ -56,7 +56,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
             Assert.AreEqual(question.GetAnswerObject(), completeAnswer.AnswerValue);
         }
 
-        [Test]
+        /*[Test]
         public void CheckAdded_Answers()
         {
             var completeAnswer = new CompleteAnswer() { AnswerValue = 5, AnswerText = "5", Selected = true };
@@ -64,6 +64,6 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
             var question = new SingleCompleteQuestion { Children = new List<IComposite>() { completeAnswer, newSelectedAnswer } };
             question.Add(newSelectedAnswer, question.PublicKey);
             Assert.AreEqual(question.GetAnswerObject(), newSelectedAnswer.AnswerValue);
-        }
+        }*/
     }
 }
