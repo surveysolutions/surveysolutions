@@ -10,6 +10,7 @@ using System.Threading;
 using System.Runtime.Remoting.Messaging;
 using Awesomium.Core;
 using Browsing.CAPI.Properties;
+using Common.Utils;
 using Synchronization.Core;
 using Synchronization.Core.Events;
 using Synchronization.Core.Errors;
@@ -27,8 +28,8 @@ namespace Browsing.CAPI.Synchronization
     {
         #region C-tor
 
-        public CapiSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider)
-            : base(pleaseWait, provider)
+        public CapiSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequesProcessor requestProcessor)
+            : base(pleaseWait, provider, requestProcessor)
         {
         }
 
@@ -36,7 +37,7 @@ namespace Browsing.CAPI.Synchronization
 
         protected override void OnAddSynchronizers(IList<ISynchronizer> syncChain, ISettingsProvider settingsProvider)
         {
-            syncChain.Add(new NetworkSynchronizer(settingsProvider, Settings.Default.DefaultUrl,
+            syncChain.Add(new NetworkSynchronizer(settingsProvider, RequestProcessor, Settings.Default.DefaultUrl,
                                                                       Settings.Default.NetworkLocalExportPath,
                                                                       Settings.Default.NetworkLocalImportPath,
                                                                       Settings.Default.NetworkCheckStatePath,
@@ -65,38 +66,11 @@ namespace Browsing.CAPI.Synchronization
         protected override void CheckPushPrerequisites()
         {
             bool result = false;
-            try
-            {
-                WebRequest request = WebRequest.Create(new Uri(string.Format("{0}{1}", Settings.Default.DefaultUrl, Settings.Default.CheckEventPath)));
-                request.Method = "GET";
-                // Get the response.
-                using (WebResponse response = request.GetResponse())
-                {
-                    // Get the stream containing content returned by the server.
-                    var dataStream = response.GetResponseStream();
-                    // Open the stream using a StreamReader for easy access.
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.
-                    string responseFromServer = reader.ReadToEnd();
 
-                    try
-                    {
-                        result = Convert.ToBoolean(responseFromServer);
-                      
-                    }
-                    finally
-                    {
-                        // Clean up the streams.
-                        reader.Close();
-                        dataStream.Close();
-                        response.Close();
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw new CheckPrerequisitesException("Check Prerequisites procedure is failed",SyncType.Push, e);
-            }
+            result =
+                this.RequestProcessor.Process<bool>(string.Format("{0}{1}", Settings.Default.DefaultUrl,
+                                                                  Settings.Default.CheckEventPath));
+
             if (!result)
                 throw new CheckPrerequisitesException("Current device don't have any changes", SyncType.Push, null);
         }

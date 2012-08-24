@@ -25,7 +25,7 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Export")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/Export")]
         public string UsbExportPath {
             get {
                 return ((string)(this["UsbExportPath"]));
@@ -37,7 +37,7 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Push")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/Push")]
         public string NetworkLocalExportPath {
             get {
                 return ((string)(this["NetworkLocalExportPath"]));
@@ -49,7 +49,7 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/ProgressInPersentage")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/ProgressInPersentage")]
         public string NetworkCheckStatePath {
             get {
                 return ((string)(this["NetworkCheckStatePath"]));
@@ -61,7 +61,7 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Import")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/Import")]
         public string UsbImportPath {
             get {
                 return ((string)(this["UsbImportPath"]));
@@ -73,7 +73,7 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/Pull")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/Pull")]
         public string NetworkLocalImportPath {
             get {
                 return ((string)(this["NetworkLocalImportPath"]));
@@ -109,7 +109,7 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("/Synchronizations/CheckIsThereSomethingToPush")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/CheckIsThereSomethingToPush")]
         public string CheckEventPath {
             get {
                 return ((string)(this["CheckEventPath"]));
@@ -133,7 +133,7 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8085")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost")]
         public string EndpointExportPath {
             get {
                 return ((string)(this["EndpointExportPath"]));
@@ -181,13 +181,25 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("/Account/IsLoggedIn")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Account/IsLoggedIn")]
         public string AuthentificationCheckPath {
             get {
                 return ((string)(this["AuthentificationCheckPath"]));
             }
             set {
                 this["AuthentificationCheckPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Account/LogOn")]
+        public string LoginPath {
+            get {
+                return ((string)(this["LoginPath"]));
+            }
+            set {
+                this["LoginPath"] = value;
             }
         }
     }

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Browsing.CAPI.ClientSettings;
 using Browsing.CAPI.Forms;
 using Browsing.CAPI.Synchronization;
+using Common.Utils;
 using Synchronization.Core.Events;
 using Synchronization.Core.Interface;
 
@@ -17,13 +18,13 @@ namespace Browsing.CAPI.Containers
     public partial class CAPISynchronization : UserControl
     {
 
-        public CAPISynchronization(ISettingsProvider clientSettings)
+        public CAPISynchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor)
         {
             InitializeComponent();
             
             this.pleaseWait = new PleaseWaitControl();
             this.clientSettings = clientSettings;
-            this.syncManager = new CapiSyncManager(this.pleaseWait, this.clientSettings);
+            this.syncManager = new CapiSyncManager(this.pleaseWait, this.clientSettings, requestProcessor);
             this.syncManager.EndOfSync += new EventHandler<SynchronizationCompletedEvent>(sync_EndOfSync);
             this.syncManager.BgnOfSync += new EventHandler<SynchronizationEvent>(sync_BgnOfSync);
 
