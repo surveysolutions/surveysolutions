@@ -20,26 +20,22 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         {
             this.TargetGroupKey = template.TargetGroupKey;
         }
-        public override object Answer
+       
+        private int? _answer;
+
+        public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            get { return answer; }
-            set
-            {
-                if (value != null)
-                answer = Convert.ToInt32(value);
-               
-            }
+            _answer = Convert.ToInt32(answerValue);
         }
-        private int? answer;
 
         public override string GetAnswerString()
         {
-            return answer.HasValue ? answer.Value.ToString() : string.Empty;
+            return _answer.HasValue ? _answer.Value.ToString() : string.Empty;
         }
 
         public override object GetAnswerObject()
         {
-            return answer;
+            return _answer;
         }
 
         public override List<IComposite> Children
@@ -56,11 +52,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         public override void Add(IComposite c, Guid? parent)
         {
-            var question = c as ICompleteQuestion;
+            throw new NotImplementedException();
+
+            /*var question = c as ICompleteQuestion;
             if (question == null || question.PublicKey != this.PublicKey)
                 throw new CompositeException();
             this.Answer = question.Answer;
-            this.AnswerDate = DateTime.Now;
+            this.AnswerDate = DateTime.Now;*/
         }
 
         public override void Remove(IComposite c)
@@ -72,7 +70,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         {
             if (publicKey != this.PublicKey)
                 throw new CompositeException();
-            this.answer = null;
+            this._answer = null;
         }
 
         public override T Find<T>(Guid publicKey)

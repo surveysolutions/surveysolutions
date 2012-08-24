@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Security;
 using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
@@ -20,35 +21,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         {
             this.Children = new List<IComposite>();
         }
-        [JsonIgnore]
-        public override object Answer
-        {
-            get
-            {
-                var answers = CollectAnswers();
-                return !answers.Any() ? null : answers;
-            }
-            set
-            {
-                
-                var selecteAnswers = value as IEnumerable<Guid>;
-                var answerObjects =
-                    this.Find<ICompleteAnswer>(
-                        a => selecteAnswers.Count(q => q.ToString() == a.PublicKey.ToString()) > 0);
-                if (answerObjects != null)
-                {
-                    this.Children.ForEach(c => ((ICompleteAnswer)c).Selected = false);
-                    foreach (ICompleteAnswer completeAnswer in answerObjects)
-                    {
-                        completeAnswer.Add(completeAnswer, null);
-                    }
-                    this.AnswerDate = DateTime.Now;
-                    return;
-                }
-                throw new CompositeException("answer wasn't found");
-            }
-        }
-
+        
         private IEnumerable<Guid> CollectAnswers()
         {
            //  return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).FirstOrDefault(); 
@@ -56,6 +29,29 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         }
 
+
+        public override void SetAnswer(List<Guid> answer, string answerValue)
+        {
+            if(answer == null)
+                throw new InvalidParameterException("Parameter: answer");
+
+            var selecteAnswers = answer;
+            var answerObjects =
+                this.Find<ICompleteAnswer>(
+                    a => selecteAnswers.Count(q => q.ToString() == a.PublicKey.ToString()) > 0);
+            if (answerObjects != null)
+            {
+                this.Children.ForEach(c => ((ICompleteAnswer)c).Selected = false);
+                foreach (ICompleteAnswer completeAnswer in answerObjects)
+                {
+                    completeAnswer.Add(completeAnswer, null);
+                }
+                this.AnswerDate = DateTime.Now;
+                return;
+            }
+            throw new CompositeException("answer wasn't found");
+
+        }
 
         public override string GetAnswerString()
         {
@@ -67,7 +63,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         public override object GetAnswerObject()
         {
-            return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText);
+            //return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText);
+            var answers = CollectAnswers();
+            return !answers.Any() ? null : answers;
         }
 
         public override List<IComposite> Children { get; set; }
@@ -80,7 +78,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         public override void Add(IComposite c, Guid? parent)
         {
-            var question = c as ICompleteQuestion;
+            throw new NotImplementedException();
+            /*var question = c as ICompleteQuestion;
             if (question != null && question.PublicKey == this.PublicKey)
             {
                 this.Answer = question.Answer;
@@ -104,7 +103,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 //this.Answer = currentAnswer.PublicKey;
 
             }
-            throw new CompositeException();
+            throw new CompositeException();*/
         }
 
         public override void Remove(IComposite c)

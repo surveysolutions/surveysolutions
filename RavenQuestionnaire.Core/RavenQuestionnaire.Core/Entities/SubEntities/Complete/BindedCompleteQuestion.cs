@@ -34,14 +34,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         }
         public void Copy(ICompleteQuestion template)
         {
-
             this.Children = template.Children;
-
-            this.Answer = template.Answer;
-            
+            this.Answer = template.GetAnswerObject();
             this.QuestionText = template.QuestionText;
             this.QuestionType = template.QuestionType;
-
         }
 
         #region Implementation of IComposite
@@ -94,7 +90,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         #region Implementation of IQuestion
 
         public object Answer { get; set; }
-        public void SetAnswer(object answer)
+        public void SetAnswer(List<Guid> answer, string answerValue)
         {
             
         }
