@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
@@ -19,39 +18,24 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         {
             this.Children = new List<IComposite>();
         }
-        [JsonIgnore]
-        public override object Answer
+
+        public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            get
+            if (answer == null)
+                return;
+            
+            Guid selecteAnswer = answer.First();
+
+            var answerObject = this.FirstOrDefault<ICompleteAnswer>(a => a.PublicKey == selecteAnswer);
+            if (answerObject != null)
             {
-                var answers = this.Children.Where(c => ((ICompleteAnswer) c).Selected).Select(c => c.PublicKey);
-                if (answers.Any()) 
-                    return answers.First();
-                return null;
+                this.Children.ForEach(c => ((ICompleteAnswer)c).Selected = false);
+                answerObject.Add(answerObject, null);
+                //this.AnswerDate = DateTime.Now;
+                return;
             }
-            set
-            {
-                if(value==null)
-                    return;
-
-                var answers = value as IEnumerable<Guid>;
-                if(answers == null)
-                    return;
-
-                Guid selecteAnswer = answers.First();
-
-                var answerObject = this.FirstOrDefault<ICompleteAnswer>(a => a.PublicKey == selecteAnswer);
-                if(answerObject!=null)
-                {
-                    this.Children.ForEach(c => ((ICompleteAnswer)c).Selected = false);
-                    answerObject.Add(answerObject, null);
-                    this.AnswerDate = DateTime.Now;
-                    return;
-                }
-                throw new CompositeException("answer wasn't found");
-            }
+            throw new CompositeException("answer wasn't found");
         }
-
 
         public override string GetAnswerString()
         {
@@ -63,7 +47,16 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         public override object GetAnswerObject()
         {
-            return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).FirstOrDefault();
+            /*return (
+                this.Children.Where(c => ((ICompleteAnswer)c).Selected))
+                .Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).FirstOrDefault();
+
+*/
+            var answers = this.Children.Where(c => ((ICompleteAnswer)c).Selected).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText);
+            if (answers.Any())
+                return answers.First();
+            return null;
+
         }
 
         public override List<IComposite> Children { get; set; }
@@ -76,7 +69,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 
         public override void Add(IComposite c, Guid? parent)
         {
-            var question = c as ICompleteQuestion;
+            throw new NotImplementedException();
+            /*var question = c as ICompleteQuestion;
             if (question != null && question.PublicKey == this.PublicKey)
             {
                 this.Answer = question.Answer;
@@ -101,7 +95,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
                 //this.Answer = currentAnswer.PublicKey;
                 
             }
-            throw new CompositeException();
+            throw new CompositeException();*/
         }
 
         public override void Remove(IComposite c)

@@ -49,7 +49,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
             {
                 var answer = completeQuestion.Find<ICompleteAnswer>(question.Children[i].PublicKey);
                 Assert.IsNotNull(answer);
-                Assert.AreEqual(question.Answer, answer.AnswerValue);
+                Assert.AreEqual(question.GetAnswerObject(), answer.AnswerValue);
             }
         }
     }

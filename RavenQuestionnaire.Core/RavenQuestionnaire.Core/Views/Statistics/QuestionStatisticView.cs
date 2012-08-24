@@ -17,7 +17,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
             GroupPropagationPublicKey = gropPropagationPublicKey;
             if (gropPropagationPublicKey.HasValue)
                 IsQuestionFromPropGroup = true;
-            if (doc.Answer != null)
+            if (doc.GetAnswerObject() != null)
             {
                 //     AnswerValue = answer.AnswerText?? answer.AnswerValue;
                 AnswerDate = doc.AnswerDate;

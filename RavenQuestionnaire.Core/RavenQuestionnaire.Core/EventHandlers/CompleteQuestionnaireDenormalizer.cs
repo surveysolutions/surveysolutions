@@ -71,7 +71,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
             ICompleteQuestion question = questionWrapper.Question;
             if (question == null)
                 return;
-            question.SetAnswer(evnt.Payload.Answer);
+            question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerValue);
 
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
         }

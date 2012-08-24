@@ -41,13 +41,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public DateTime? AnswerDate { get; set; }
 
-        public abstract object Answer { get; set; }
-        public void SetAnswer(object answer)
-        {
-            this.Answer = answer;
-            this.AnswerDate = DateTime.Now;
-        }
+        //public abstract object Answer { get; set; }
 
+        public abstract void SetAnswer(List<Guid> answer, string answerValue);
+        
         public abstract string GetAnswerString();
         public abstract object GetAnswerObject();
 
@@ -75,7 +72,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.Valid = true;
             this.Cards = new List<Image>();
             this.Triggers = new List<Guid>();
-            //this.Answers.GetObservablePropertyChanges().Subscribe(e=>e.EventArgs)
+            this.AnswerDate = DateTime.Now;
         }
 
         protected AbstractCompleteQuestion(string text)

@@ -138,7 +138,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                     }
                 }
             }
-            foreach (IComposite child in this.Children)
+           /* foreach (IComposite child in this.Children)
             {
                 try
                 {
@@ -148,7 +148,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 catch (CompositeException)
                 {
                 }
-            }
+            }*/
             throw new CompositeException();
         }
 
@@ -171,7 +171,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 if(isremoved)
                 return;
             }
-            foreach (IComposite child in Children)
+            /*foreach (IComposite child in Children)
             {
                 try
                 {
@@ -181,7 +181,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 catch (CompositeException)
                 {
                 }
-            }
+            }*/
             throw new CompositeException();
         }
 
