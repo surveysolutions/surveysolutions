@@ -18,6 +18,7 @@ namespace Browsing.CAPI.Containers
     {
         public event EventHandler<EventArgs> HomeButtonClick;
         protected bool isSinglePage = false;
+        protected string rootPathString = string.Empty;
         public CAPIBrowser(WebControl webView)
         {
             this.webView = webView;
@@ -26,14 +27,15 @@ namespace Browsing.CAPI.Containers
            
            
         }
-        public void SetMode(bool isSinglePageMode)
+        public void SetMode(bool isSinglePageMode, string rootPath)
         {
+            this.rootPathString = rootPath;
             this.progressBox.Visible = true;
             this.isSinglePage = isSinglePageMode;
             this.panel1.Visible = true;
             try
             {
-                this.webView.Source = new Uri(Settings.Default.DefaultUrl);
+                this.webView.Source = new Uri(this.rootPathString);
                 this.webView.Focus();
             }
             catch
@@ -53,7 +55,7 @@ namespace Browsing.CAPI.Containers
         void webView_BeginLoading(object sender, BeginLoadingEventArgs e)
         {
             this.progressBox.Visible = true;
-            this.panel1.Visible = e.Url == Settings.Default.DefaultUrl || isSinglePage;
+            this.panel1.Visible = e.Url == this.rootPathString;
         }
 
         ResourceResponse webView_ResourceRequest(object sender, ResourceRequestEventArgs e)
@@ -64,7 +66,7 @@ namespace Browsing.CAPI.Containers
         void webView_LoadCompleted(object sender, EventArgs e)
         {
             this.progressBox.Visible = false;
-            if (isSinglePage && this.webView.Source.ToString() == Settings.Default.DefaultUrl)
+            if (isSinglePage && this.webView.Source.ToString() != this.rootPathString)
                 homeButton_Click(sender,e);
         }
 

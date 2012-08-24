@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
+using Common.Utils;
 using Synchronization.Core.Interface;
 using Synchronization.Core.Events;
 using Synchronization.Core.Errors;
@@ -14,6 +15,7 @@ namespace Synchronization.Core.SynchronizationFlow
         #region variables
 
         private readonly string _host;
+        private readonly IRequesProcessor _requestProcessor;
         private readonly string _pushAdress;
         private readonly string _pullAdress;
         private readonly string _pushCheckStateAdress;
@@ -21,7 +23,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #endregion
 
-        public NetworkSynchronizer(ISettingsProvider settingsprovider, string host, string pushAdress, string pullAdress, string pushCheckStateAdress, string endPointAdressAdress)
+        public NetworkSynchronizer(ISettingsProvider settingsprovider, IRequesProcessor requestProcessor, string host, string pushAdress, string pullAdress, string pushCheckStateAdress, string endPointAdressAdress)
             : base(settingsprovider)
         {
             this._host = host;
@@ -29,6 +31,7 @@ namespace Synchronization.Core.SynchronizationFlow
             this._pushAdress = pushAdress;
             this._pullAdress = pullAdress;
             this._pushCheckStateAdress = pushCheckStateAdress;
+            this._requestProcessor = requestProcessor;
         }
 
         public string Host
@@ -36,14 +39,14 @@ namespace Synchronization.Core.SynchronizationFlow
             get { return _host; }
         }
 
-        protected Uri PushAdress
+        protected string PushAdress
         {
-            get { return new Uri(string.Format("{0}{1}?url={2}&syncKey={3}", _host, _pushAdress, _endPointAdressAdress, this.SettingsProvider.Settings.ClientId)); }
+            get { return string.Format("{0}{1}?url={2}&syncKey={3}", _host, _pushAdress, _endPointAdressAdress, this.SettingsProvider.Settings.ClientId); }
         }
 
-        protected Uri PullAdress
+        protected string PullAdress
         {
-            get { return new Uri(string.Format("{0}{1}?url={2}&syncKey={3}", _host, _pullAdress, _endPointAdressAdress, this.SettingsProvider.Settings.ClientId)); }
+            get { return string.Format("{0}{1}?url={2}&syncKey={3}", _host, _pullAdress, _endPointAdressAdress, this.SettingsProvider.Settings.ClientId); }
         }
 
         protected Uri PushCheckStateAdress
@@ -57,30 +60,9 @@ namespace Synchronization.Core.SynchronizationFlow
         {
             try
             {
-                WebRequest request = WebRequest.Create(PushAdress);
-                request.Method = "GET";
-                // Get the response.
-                using (WebResponse response = request.GetResponse())
-                {
-                    // Get the stream containing content returned by the server.
-                    var dataStream = response.GetResponseStream();
-                    // Open the stream using a StreamReader for easy access.
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.
-                    string responseFromServer = reader.ReadToEnd();
-
-                    try
-                    {
-                        WaitForEndProcess(Guid.Parse(responseFromServer), OnSyncProgressChanged, SyncType.Push, direction);
-                    }
-                    finally
-                    {
-                        // Clean up the streams.
-                        reader.Close();
-                        dataStream.Close();
-                        response.Close();
-                    }
-                }
+                var processGuid = this._requestProcessor.Process<Guid>(PushAdress);
+                WaitForEndProcess(processGuid, OnSyncProgressChanged, SyncType.Push, direction);
+               
             }
             catch (Exception e)
             {
@@ -93,30 +75,8 @@ namespace Synchronization.Core.SynchronizationFlow
         {
             try
             {
-                WebRequest request = WebRequest.Create(PullAdress);
-                request.Method = "GET";
-                // Get the response.
-                using (WebResponse response = request.GetResponse())
-                {
-                    // Get the stream containing content returned by the server.
-                    var dataStream = response.GetResponseStream();
-                    // Open the stream using a StreamReader for easy access.
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.
-                    string responseFromServer = reader.ReadToEnd();
-
-                    try
-                    {
-                        WaitForEndProcess(Guid.Parse(responseFromServer), OnSyncProgressChanged, SyncType.Pull, direction);
-                    }
-                    finally
-                    {
-                        // Clean up the streams.
-                        reader.Close();
-                        dataStream.Close();
-                        response.Close();
-                    }
-                }
+                var processGuid = this._requestProcessor.Process<Guid>(PullAdress);
+                WaitForEndProcess(processGuid, OnSyncProgressChanged, SyncType.Pull, direction);
             }
             catch (Exception e)
             {
@@ -140,29 +100,11 @@ namespace Synchronization.Core.SynchronizationFlow
 
             while (percentage != 100)
             {
-                WebRequest request = WebRequest.Create(string.Format("{0}?id={1}", PushCheckStateAdress, processid));
-                // Set the Method property of the request to POST.
-                request.Method = "GET";
-                // Get the response.
-                using (WebResponse response = request.GetResponse())
-                {
-                    // Get the stream containing content returned by the server.
-                    var dataStream = response.GetResponseStream();
-                    // Open the stream using a StreamReader for easy access.
-                    StreamReader reader = new StreamReader(dataStream);
+                percentage = this._requestProcessor.Process<int>(string.Format("{0}?id={1}", PushCheckStateAdress, processid));
+                if (percentage < 0)
+                    throw new SynchronizationException("network synchronization is failed");
 
-                    percentage = int.Parse(reader.ReadToEnd());
-
-                    // Clean up the streams.
-                    reader.Close();
-                    dataStream.Close();
-                    response.Close();
-                    
-                    if (percentage < 0)
-                        throw new SynchronizationException("network synchronization is failed");
-
-                    eventRiser(new SynchronizationEvent(new SyncStatus(syncType, direction, percentage, null)));
-                }
+                eventRiser(new SynchronizationEvent(new SyncStatus(syncType, direction, percentage, null)));
             
                 Thread.Sleep(1000);
             }

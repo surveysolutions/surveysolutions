@@ -59,7 +59,12 @@
     <Compile Include="SynchronizationFlow\UsbArchive.cs" />
     <Compile Include="SynchronizationFlow\UsbSynchronizer.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{9A8843B1-978F-4E96-8523-907C257CA183}</Project>
+      <Name>Common %28Common\Common%29</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

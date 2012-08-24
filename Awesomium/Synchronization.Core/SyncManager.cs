@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using Common.Utils;
 using Synchronization.Core.Interface;
 using Synchronization.Core.Events;
 using Synchronization.Core.Errors;
@@ -18,28 +19,31 @@ namespace Synchronization.Core
         #region Members
 
         private List<ISynchronizer> synchronizerChain;
-
+        
         private AutoResetEvent syncIsAvailable = new AutoResetEvent(true);
 
         #endregion
 
         #region C-tors
 
-        protected SyncManager(ISyncProgressObserver progressStatus, ISettingsProvider settingsProvider)
-            : this(progressStatus, settingsProvider, new List<ISynchronizer>())
+        protected SyncManager(ISyncProgressObserver progressStatus, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor)
+            : this(progressStatus, settingsProvider, requestProcessor, new List<ISynchronizer>())
         {
         }
 
-        private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider,
+        private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor,
                             List<ISynchronizer> subStructure)
         {
             this.synchronizerChain = subStructure;
+            this.RequestProcessor = requestProcessor;
             SyncProgressChanged += (s, e) => progressObserver.SetProgress(e.Status);
             BgnOfSync += (s, e) => progressObserver.SetBeginning(e.Status);
             EndOfSync += (s, e) => progressObserver.SetCompleted(e.Status);
 
             AddSynchronizers(settingsProvider);
         }
+
+        protected IRequesProcessor RequestProcessor { get; private set; }
 
         #endregion
 

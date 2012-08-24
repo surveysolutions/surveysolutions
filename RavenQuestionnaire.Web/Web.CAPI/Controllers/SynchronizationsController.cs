@@ -160,8 +160,11 @@ namespace Web.CAPI.Controllers
 
         public int ProgressInPersentage(Guid id)
         {
+            var stat = viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
+            if (stat == null)
+                return -1;
             return
-                viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)).ProgressPercentage;
+                stat.ProgressPercentage;
         }
 
         public ActionResult Progress(Guid id)

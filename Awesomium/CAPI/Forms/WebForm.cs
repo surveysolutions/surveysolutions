@@ -12,6 +12,7 @@ using Awesomium.Windows.Forms;
 using Browsing.CAPI;
 using Browsing.CAPI.Properties;
 using Browsing.CAPI.ClientSettings;
+using Common.Utils;
 using Synchronization.Core.Events;
 using System.Net;
 using System.IO;
@@ -34,7 +35,7 @@ namespace Browsing.CAPI.Forms
         //   private Containers.CAPIMain capiMain;
         private Awesomium.Windows.Forms.WebControl webView;
         private ISettingsProvider clientSettings;
-
+        private IRequesProcessor requestProcessor;
         #region C-tor
 
         public WebForm()
@@ -51,6 +52,7 @@ namespace Browsing.CAPI.Forms
 
             this.webView = new WebControl();
             this.clientSettings = new ClientSettingsProvider();
+            this.requestProcessor=new WebRequestProcessor();
             string url;
             if (Settings.Default.RunClient)
             {
@@ -84,11 +86,11 @@ namespace Browsing.CAPI.Forms
             WebCore.Shutdown();
         }
 
-        protected void AddBrowser(bool isSinglePage)
+        protected void AddBrowser(bool isSinglePage, string rootPath)
         {
             if(this.capiBrowser==null)
                 this.capiBrowser = new Browsing.CAPI.Containers.CAPIBrowser(this.webView);
-            this.capiBrowser.SetMode(isSinglePage);
+            this.capiBrowser.SetMode(isSinglePage, rootPath);
             this.capiBrowser.AutoSize = true;
             this.capiBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.capiBrowser.Name = "capiBrowser1";
@@ -99,7 +101,7 @@ namespace Browsing.CAPI.Forms
         protected void AddSynchronizer()
         {
             Containers.CAPISynchronization capiSycn =
-                new Browsing.CAPI.Containers.CAPISynchronization(this.clientSettings);
+                new Browsing.CAPI.Containers.CAPISynchronization(this.clientSettings,this.requestProcessor);
             capiSycn.AutoSize = true;
             capiSycn.Dock = System.Windows.Forms.DockStyle.Fill;
             capiSycn.Name = "capiSync";
@@ -109,7 +111,7 @@ namespace Browsing.CAPI.Forms
 
         protected void AddMain()
         {
-            Containers.CAPIMain capiMain = new Browsing.CAPI.Containers.CAPIMain(this.clientSettings);
+            Containers.CAPIMain capiMain = new Browsing.CAPI.Containers.CAPIMain(this.clientSettings, this.requestProcessor);
             capiMain.AutoSize = true;
             capiMain.Dock = System.Windows.Forms.DockStyle.Fill;
             capiMain.Name = "capiMain";
@@ -145,7 +147,7 @@ namespace Browsing.CAPI.Forms
         {
             //  this.tableLayoutPanel1.Controls
             ClearAll();
-            AddBrowser(true);
+            AddBrowser(true, Settings.Default.DefaultUrl + Settings.Default.LoginPath);
         }
 
         private void capiMain_SynchronizationClick(object sender, EventArgs e)
@@ -157,7 +159,7 @@ namespace Browsing.CAPI.Forms
         private void capiMain_DashboardClick(object sender, EventArgs e)
         {
             ClearAll();
-            AddBrowser(false);
+            AddBrowser(false,Settings.Default.DefaultUrl);
         }
 
 
