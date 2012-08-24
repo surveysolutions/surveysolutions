@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
@@ -7,9 +8,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
         Guid? PropogationPublicKey { get; set; }
         bool Enabled { get; set; }
         bool Valid { get; set; }
-        DateTime? AnswerDate { get; set; }
-        object Answer { get; set; }
-        void SetAnswer(object answer);
+        DateTime? AnswerDate { get; set ; }
+        //object Answer { get; set; }
+        void SetAnswer( List<Guid> answerKeys, string answerValue);
         string GetAnswerString();
         object GetAnswerObject();
         void SetComments(string comments);

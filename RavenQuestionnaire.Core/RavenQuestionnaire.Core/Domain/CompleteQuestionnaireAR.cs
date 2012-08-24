@@ -150,7 +150,8 @@ namespace RavenQuestionnaire.Core.Domain
                     CompletedQuestionnaireId = this._doc.PublicKey,
                     QuestionPublicKey = questionPublicKey,
                     PropogationPublicKey = propogationPublicKey,
-                    Answer = completeAnswers ?? (object) completeAnswerValue,
+                    AnswerKeys = completeAnswers,
+                    AnswerValue = completeAnswerValue,
                     Featured = question.Featured,
                     //clean up this values
                     QuestionText = question.QuestionText,
@@ -233,7 +234,7 @@ namespace RavenQuestionnaire.Core.Domain
             ICompleteQuestion question = questionWrapper.Question;
             if (question == null)
                 return;
-            question.SetAnswer(e.Answer);
+            question.SetAnswer(e.AnswerKeys, e.AnswerValue);
            // _doc.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
         }
 
