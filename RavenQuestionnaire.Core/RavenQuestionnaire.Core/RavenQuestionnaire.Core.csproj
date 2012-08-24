@@ -144,6 +144,7 @@
     <Compile Include="Commands\User\ChangeUserStatusCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Denormalizers\IDenormalizerStorage.cs" />
+    <Compile Include="Documents\CompleteQuestionnaireStoreDocument.cs" />
     <Compile Include="Documents\FileDocument.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -151,6 +152,7 @@
     <Compile Include="Domain\SyncProcessAR.cs" />
     <Compile Include="Domain\UserAR.cs" />
     <Compile Include="Entities\Observers\ITriggerable.cs" />
+    <Compile Include="Entities\SubEntities\VisitedGroup.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\CQGroupItemDenormalizer.cs" />
@@ -193,7 +195,6 @@
     <Compile Include="Documents\FlowGraphDocument.cs" />
     <Compile Include="Documents\LocationDocument.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
-    <Compile Include="Documents\ReportDocument.cs" />
     <Compile Include="Documents\Statistics\CompleteQuestionnaireStatisticDocument.cs" />
     <Compile Include="Documents\Statistics\QuestionStatisticDocument.cs" />
     <Compile Include="Documents\StatusDocument.cs" />
@@ -228,7 +229,6 @@
     <Compile Include="Entities\Iterators\Iterator.cs" />
     <Compile Include="Entities\Location.cs" />
     <Compile Include="Entities\Questionnaire.cs" />
-    <Compile Include="Entities\Report.cs" />
     <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\AnswerType.cs" />
     <Compile Include="Entities\SubEntities\BindedQuestion.cs" />

@@ -5,7 +5,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
-    public class NumericCompleteQuestion:AbstractCompleteQuestion, INumericQuestion
+    public sealed class NumericCompleteQuestion:AbstractCompleteQuestion, INumericQuestion
     {
         #region Properties
 

@@ -2,6 +2,7 @@
 using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
+using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
@@ -64,7 +65,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<AnswerSet> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+            var item = this._documentStorage.GetByGuid(evnt.EventSourceId);
 
             var questionWrapper = item.QuestionHash.GetQuestion(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey);
             ICompleteQuestion question = questionWrapper.Question;

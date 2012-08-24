@@ -17,11 +17,9 @@ namespace RavenQuestionnaire.Core.Events
 
         public DateTime CreationDate { get; set; }
 
-        public SurveyStatus Status { get; set; }
-
         public int TotalQuestionCount { get; set; }
 
-        public UserLight Responsible { get; set; }
+        
 
     }
 }

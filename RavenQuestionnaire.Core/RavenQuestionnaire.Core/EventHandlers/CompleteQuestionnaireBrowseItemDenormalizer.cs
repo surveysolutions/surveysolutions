@@ -37,10 +37,10 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 evnt.Payload.QuestionnaireId.ToString(),
                 evnt.Payload.Questionnaire.Title, evnt.Payload.CreationDate,
                 DateTime.Now,
-                evnt.Payload.Status,
+                evnt.Payload.Questionnaire.Status,
                 evnt.Payload.TotalQuestionCount,
                 0,
-                evnt.Payload.Responsible);
+                evnt.Payload.Questionnaire.Responsible);
             browseItem.FeaturedQuestions = featuredQuestions.ToArray();
             this.documentItemStore.Store(browseItem, evnt.Payload.CompletedQuestionnaireId);
         }
@@ -116,7 +116,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
         {
             if (evnt.Payload.Featured)
             {
-                var item = this.documentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+                var item = this.documentItemStore.GetByGuid(evnt.EventSourceId);
 
                 var featuredQuestions = new List<QuestionStatisticView>();
                 featuredQuestions.AddRange(item.FeaturedQuestions);

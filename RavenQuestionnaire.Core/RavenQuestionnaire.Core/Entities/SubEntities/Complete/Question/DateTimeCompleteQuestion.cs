@@ -5,7 +5,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
-    public class DateTimeCompleteQuestion:AbstractCompleteQuestion, IDateTimeQuestion
+    public sealed class DateTimeCompleteQuestion:AbstractCompleteQuestion, IDateTimeQuestion
     {
 
         #region Properties

@@ -7,7 +7,6 @@ using RavenQuestionnaire.Core.Events;
 using RavenQuestionnaire.Core.Documents;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.ExpressionExecutors;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -18,13 +17,11 @@ namespace RavenQuestionnaire.Core.Domain
     /// <summary>
     /// CompleteQuestionnaire Aggregate Root.
     /// </summary>
-    public class CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireDocument>
+    public class CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireStoreDocument>
     {
-        public CompleteQuestionnaireAR()
-        {
-        }
+        public CompleteQuestionnaireAR(){}
 
-        private CompleteQuestionnaireDocument _doc = new CompleteQuestionnaireDocument();
+        private CompleteQuestionnaireStoreDocument _doc = new CompleteQuestionnaireStoreDocument();
 
 
         public CompleteQuestionnaireAR(Guid completeQuestionnaireId, QuestionnaireDocument questionnaire)
@@ -38,13 +35,12 @@ namespace RavenQuestionnaire.Core.Domain
             CompleteQuestionnaireDocument doc = (CompleteQuestionnaireDocument)questionnaire;
 
             doc.PublicKey = completeQuestionnaireId;
-
-            ////Fix this with read model??
             doc.Creator = null;
             doc.Status = SurveyStatus.Initial;
             doc.Responsible = null;
 
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
+            //was moved to the read time 
+            /*var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
             foreach (IComposite child in doc.Children)
             {
                 if (child is IBinded)
@@ -59,20 +55,20 @@ namespace RavenQuestionnaire.Core.Domain
                     var question = child as ICompleteQuestion;
                     question.Enabled = executor.Execute(question);
                 }
-            }
+            }*/
+
 
             // Apply a NewQuestionnaireCreated event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
             // this event (the OnNewNoteAdded method).
+
             ApplyEvent(new NewCompleteQuestionnaireCreated
             {
                 CompletedQuestionnaireId = completeQuestionnaireId,
                 QuestionnaireId = Guid.Parse(questionnaire.Id),
                 Questionnaire = doc,
                 CreationDate = clock.UtcNow(),
-                Status = doc.Status,
-                Responsible = doc.Responsible,
                 TotalQuestionCount = doc.Find<ICompleteQuestion>(q => !(q is IBinded)).Count()
             });
         }
@@ -82,7 +78,7 @@ namespace RavenQuestionnaire.Core.Domain
         // is automaticly wired as event handler based on convension.
         protected void OnNewQuestionnaireCreated(NewCompleteQuestionnaireCreated e)
         {
-            _doc = e.Questionnaire;
+            _doc = new CompleteQuestionnaireStoreDocument(e.Questionnaire);
         }
 
         public void SetComment(Guid questionPublickey, string comments, Guid? propogationPublicKey)
@@ -103,7 +99,7 @@ namespace RavenQuestionnaire.Core.Domain
                 return;
             
             question.SetComments(e.Comments);
-            _doc.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
+            //_doc.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
 
         }
         public void Delete()
@@ -119,32 +115,28 @@ namespace RavenQuestionnaire.Core.Domain
             _doc = null;
         }
 
-        public void SetAnswer(Guid questionPublicKey, Guid? propogationPublicKey, object completeAnswer, List<object> completeAnswers)
+        #region Set Answer
+
+        public void SetAnswer(Guid questionPublicKey, Guid? propogationPublicKey, string completeAnswerValue,
+                              List<Guid> completeAnswers)
         {
-            //performe checka before event raising!!
-
-
+            //performe check before event raising!!
             var question = _doc.QuestionHash[questionPublicKey, propogationPublicKey];
-            // ToDO clean up that crap
+
+            //it's not a great idea to build here answer text
             var answerString = "";
-            if (completeAnswer != null)
+            if (completeAnswers == null)
             {
-                if (question is ISingleQuestion)
-                {
-                    var answer = question.Find<ICompleteAnswer>((Guid)completeAnswer);
-                    if (answer != null)
-                        answerString = answer.AnswerText;
-                }
-                else answerString = completeAnswer.ToString();
+                answerString = completeAnswerValue;
             }
             else
             {
                 var answerList = new List<string>();
                 foreach (var answerGuid in completeAnswers)
                 {
-                    var answer = question.Find<ICompleteAnswer>((Guid)answerGuid);
+                    var answer = question.Find<ICompleteAnswer>(answerGuid);
                     if (answer != null)
-                        answerList.Add( answer.AnswerText);
+                        answerList.Add(answer.AnswerText);
                 }
                 answerString = string.Join(", ", answerList.ToArray());
             }
@@ -154,46 +146,53 @@ namespace RavenQuestionnaire.Core.Domain
             // instance will be update in the handler of 
             // this event (the OnAnswerSet method).
             ApplyEvent(new AnswerSet
-                           {
-                               CompletedQuestionnaireId = this._doc.PublicKey,
+                {
+                    CompletedQuestionnaireId = this._doc.PublicKey,
+                    QuestionPublicKey = questionPublicKey,
+                    PropogationPublicKey = propogationPublicKey,
+                    Answer = completeAnswers ?? (object) completeAnswerValue,
+                    Featured = question.Featured,
+                    //clean up this values
+                    QuestionText = question.QuestionText,
+                    AnswerString = answerString
+                });
 
-                               QuestionPublicKey = questionPublicKey,
+            //handle group propagation
+            //to store events with guids
+            if (question is IAutoPropagate)
+            {
+                int count;
+                if (!int.TryParse(completeAnswerValue, out count))
+                    return;
+                if (count < 0)
+                    throw new InvalidOperationException("count can't be bellow zero");
 
-                               PropogationPublicKey = propogationPublicKey,
+                AddRemovePropagatedGroup(question, count);
+            }
 
-                               Answer = completeAnswer ?? completeAnswers,
 
-                               Featured = question.Featured,
-
-                               //clean up this values
-                               QuestionText = question.QuestionText,
-                               AnswerString = answerString
-                           });
-
-            AddRemovePRopagatedGroup(question);
 
         }
-        protected void AddRemovePRopagatedGroup(ICompleteQuestion question)
+
+        protected void AddRemovePropagatedGroup(ICompleteQuestion question, int count)
         {
             if (!(question is IAutoPropagate))
                 return;
-            var countObj = question.GetAnswerObject();
 
-            int count = Convert.ToInt32(countObj);
             if (count < 0)
                 throw new InvalidOperationException("count can't be bellow zero");
 
             foreach (Guid trigger in question.Triggers)
             {
-                MultylyGroup(trigger, count);
+                MultiplyGroup(trigger, count);
             }
         }
 
-        protected void MultylyGroup(Guid groupKey, int count)
+        protected void MultiplyGroup(Guid groupKey, int count)
         {
             var groups =
-               this._doc.Find<ICompleteGroup>(
-                   g => g.PublicKey == groupKey && g.PropogationPublicKey.HasValue).ToList();
+                this._doc.Find<ICompleteGroup>(
+                    g => g.PublicKey == groupKey && g.PropogationPublicKey.HasValue).ToList();
 
             if (groups.Count == count)
                 return;
@@ -202,11 +201,11 @@ namespace RavenQuestionnaire.Core.Domain
                 for (int i = 0; i < count - groups.Count; i++)
                 {
                     ApplyEvent(new PropagatableGroupAdded
-                    {
-                        CompletedQuestionnaireId = this._doc.PublicKey,
-                        PublicKey = groupKey,
-                        PropagationKey = Guid.NewGuid()
-                    });
+                        {
+                            CompletedQuestionnaireId = this._doc.PublicKey,
+                            PublicKey = groupKey,
+                            PropagationKey = Guid.NewGuid()
+                        });
                 }
             }
             else
@@ -217,11 +216,11 @@ namespace RavenQuestionnaire.Core.Domain
                         continue;
 
                     ApplyEvent(new PropagatableGroupDeleted
-                    {
-                        CompletedQuestionnaireId = this._doc.PublicKey,
-                        PublicKey = groupKey,
-                        PropagationKey = groups[i].PropogationPublicKey.Value
-                    });
+                        {
+                            CompletedQuestionnaireId = this._doc.PublicKey,
+                            PublicKey = groupKey,
+                            PropagationKey = groups[i].PropogationPublicKey.Value
+                        });
                 }
             }
         }
@@ -235,8 +234,10 @@ namespace RavenQuestionnaire.Core.Domain
             if (question == null)
                 return;
             question.SetAnswer(e.Answer);
-            _doc.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
+           // _doc.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
         }
+
+        #endregion
 
 
         public void DeletePropagatableGroup(Guid propagationKey, Guid publicKey)
@@ -321,12 +322,12 @@ namespace RavenQuestionnaire.Core.Domain
 
         #region Implementation of ISnapshotable<CompleteQuestionnaireDocument>
 
-        public CompleteQuestionnaireDocument CreateSnapshot()
+        public CompleteQuestionnaireStoreDocument CreateSnapshot()
         {
             return this._doc;
         }
 
-        public void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
+        public void RestoreFromSnapshot(CompleteQuestionnaireStoreDocument snapshot)
         {
             this._doc = snapshot;
         }

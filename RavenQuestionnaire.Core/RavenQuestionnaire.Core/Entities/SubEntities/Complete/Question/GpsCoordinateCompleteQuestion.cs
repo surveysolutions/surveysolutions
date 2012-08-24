@@ -5,7 +5,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
-    public class GpsCoordinateCompleteQuestion:AbstractCompleteQuestion, IGpsCoordinatesQuestion
+    public sealed class GpsCoordinateCompleteQuestion:AbstractCompleteQuestion, IGpsCoordinatesQuestion
     {
         #region Properties
 
