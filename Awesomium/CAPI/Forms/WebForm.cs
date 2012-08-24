@@ -12,6 +12,7 @@ using Awesomium.Windows.Forms;
 using Browsing.CAPI;
 using Browsing.CAPI.Properties;
 using Browsing.CAPI.ClientSettings;
+using Browsing.CAPI.Utils;
 using Common.Utils;
 using Synchronization.Core.Events;
 using System.Net;
@@ -36,6 +37,7 @@ namespace Browsing.CAPI.Forms
         private Awesomium.Windows.Forms.WebControl webView;
         private ISettingsProvider clientSettings;
         private IRequesProcessor requestProcessor;
+        private IUrlUtils urlUtils;
         #region C-tor
 
         public WebForm()
@@ -53,6 +55,7 @@ namespace Browsing.CAPI.Forms
             this.webView = new WebControl();
             this.clientSettings = new ClientSettingsProvider();
             this.requestProcessor=new WebRequestProcessor();
+            this.urlUtils=new UrlUtils();
             string url;
             if (Settings.Default.RunClient)
             {
@@ -101,7 +104,7 @@ namespace Browsing.CAPI.Forms
         protected void AddSynchronizer()
         {
             Containers.CAPISynchronization capiSycn =
-                new Browsing.CAPI.Containers.CAPISynchronization(this.clientSettings,this.requestProcessor);
+                new Browsing.CAPI.Containers.CAPISynchronization(this.clientSettings,this.requestProcessor,this.urlUtils);
             capiSycn.AutoSize = true;
             capiSycn.Dock = System.Windows.Forms.DockStyle.Fill;
             capiSycn.Name = "capiSync";
@@ -111,7 +114,7 @@ namespace Browsing.CAPI.Forms
 
         protected void AddMain()
         {
-            Containers.CAPIMain capiMain = new Browsing.CAPI.Containers.CAPIMain(this.clientSettings, this.requestProcessor);
+            Containers.CAPIMain capiMain = new Browsing.CAPI.Containers.CAPIMain(this.clientSettings, this.requestProcessor,this.urlUtils);
             capiMain.AutoSize = true;
             capiMain.Dock = System.Windows.Forms.DockStyle.Fill;
             capiMain.Name = "capiMain";
@@ -147,7 +150,7 @@ namespace Browsing.CAPI.Forms
         {
             //  this.tableLayoutPanel1.Controls
             ClearAll();
-            AddBrowser(true, Settings.Default.DefaultUrl + Settings.Default.LoginPath);
+            AddBrowser(true, urlUtils.GetLoginUrl());
         }
 
         private void capiMain_SynchronizationClick(object sender, EventArgs e)
@@ -159,7 +162,7 @@ namespace Browsing.CAPI.Forms
         private void capiMain_DashboardClick(object sender, EventArgs e)
         {
             ClearAll();
-            AddBrowser(false,Settings.Default.DefaultUrl);
+            AddBrowser(false, urlUtils.GetDefaultUrl());
         }
 
 

@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Awesomium.Core;
 using Browsing.CAPI.Forms;
 using Browsing.CAPI.Properties;
+using Browsing.CAPI.Utils;
 using Common.Utils;
 using Synchronization.Core.Errors;
 using Synchronization.Core.Interface;
@@ -20,11 +21,12 @@ namespace Browsing.CAPI.Containers
 {
     public partial class CAPIMain : UserControl
     {
-        public CAPIMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor)
+        public CAPIMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils)
         {
             InitializeComponent();
             this.clientSettings = clientSettings;
             this.requestProcessor = requestProcessor;
+            this.urlUtils = urlUtils;
             RefreshAuthentificationInfo();
         }
         protected void RefreshAuthentificationInfo()
@@ -37,10 +39,7 @@ namespace Browsing.CAPI.Containers
         private ISettingsProvider clientSettings;
         private IRequesProcessor requestProcessor;
         private bool? isUserLoggedIn;
-        protected string AuthentificationCheckUrl
-        {
-            get { return string.Format("{0}{1}", Settings.Default.DefaultUrl, Settings.Default.AuthentificationCheckPath); }
-        }
+        private IUrlUtils urlUtils;
 
         protected bool IsUserLoggedIn
         {
@@ -48,7 +47,7 @@ namespace Browsing.CAPI.Containers
             {
                 if (isUserLoggedIn.HasValue)
                     return isUserLoggedIn.Value;
-                isUserLoggedIn = this.requestProcessor.Process<bool>(AuthentificationCheckUrl, "GET", true);
+                isUserLoggedIn = this.requestProcessor.Process<bool>(urlUtils.GetAuthentificationCheckUrl(), "GET", true);
                 return isUserLoggedIn.Value;
             }
         }

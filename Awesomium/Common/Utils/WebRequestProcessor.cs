@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -55,7 +56,8 @@ namespace Common.Utils
 
                     try
                     {
-                        return (T)Convert.ChangeType(responseFromServer, typeof(T));
+                        return
+                            (T)TypeDescriptor.GetConverter(typeof (T)).ConvertFromInvariantString(responseFromServer);
                     }
                     finally
                     {
