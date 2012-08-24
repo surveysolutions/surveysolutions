@@ -80,9 +80,9 @@ namespace RavenQuestionnaire.Core.Views.Statistics
                 var statItem = new QuestionStatisticView(completeQuestion, gropPublicKey, gropPropagationPublicKey, screenPublicKey);
                 if (completeQuestion.Featured)
                     this.FeaturedQuestions.Add(statItem);
-                if ((!completeQuestion.Valid) || (completeQuestion.Answer==null && completeQuestion.Mandatory))
+                if ((!completeQuestion.Valid) || (completeQuestion.GetAnswerObject()== null && completeQuestion.Mandatory))
                     this.InvalidQuestions.Add(statItem);
-                if (completeQuestion.Answer != null)
+                if (completeQuestion.GetAnswerObject() != null)
                     this.AnsweredQuestions.Add(statItem);
                 this.TotalQuestionCount++;
             }

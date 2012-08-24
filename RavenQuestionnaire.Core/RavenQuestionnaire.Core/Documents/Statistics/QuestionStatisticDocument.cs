@@ -25,8 +25,8 @@ namespace RavenQuestionnaire.Core.Documents.Statistics
             ScreenPublicKey = screenPublicKey;
             QuestionText = question.QuestionText;
             QuestionType = question.QuestionType;
-        
-            if (question.Answer!=null)
+
+            if (question.GetAnswerObject()!= null)
             {
            //     AnswerValue = answer.AnswerText?? answer.AnswerValue;
                 AnswerDate = question.AnswerDate;

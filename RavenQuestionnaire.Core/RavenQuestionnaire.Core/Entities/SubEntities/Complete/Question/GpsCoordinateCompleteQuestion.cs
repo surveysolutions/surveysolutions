@@ -16,18 +16,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         public GpsCoordinateCompleteQuestion(string text) : base(text)
         {
         }
-
-        public override object Answer
-        {
-            get { return _answer; }
-            set
-            {
-                if (value != null)
-                _answer = (string)value;
-               
-            }
-        }
+        
         private string _answer;
+
+        public override void SetAnswer(List<Guid> answer, string answerValue)
+        {
+            _answer = answerValue;
+        }
 
         public override string GetAnswerString()
         {
@@ -55,11 +50,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         
         public override void Add(IComposite c, Guid? parent)
         {
-            var question = c as ICompleteQuestion;
+            throw new NotImplementedException();
+            /*var question = c as ICompleteQuestion;
             if (question == null || question.PublicKey != this.PublicKey)
                 throw new CompositeException();
             this.Answer = question.Answer;
-            this.AnswerDate = DateTime.Now;
+            this.AnswerDate = DateTime.Now;*/
         }
 
         public override void Remove(IComposite c)
