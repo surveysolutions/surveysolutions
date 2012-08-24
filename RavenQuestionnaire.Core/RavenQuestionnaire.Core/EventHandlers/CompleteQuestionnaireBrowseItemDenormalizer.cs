@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
             var featuredQuestions = FindFeaturedQuestions(evnt);
 
             var browseItem = new CompleteQuestionnaireBrowseItem(
-                evnt.Payload.CompletedQuestionnaireId.ToString(),
+                evnt.Payload.Questionnaire.PublicKey.ToString(),
                 evnt.Payload.QuestionnaireId.ToString(),
                 evnt.Payload.Questionnaire.Title, evnt.Payload.CreationDate,
                 DateTime.Now,
@@ -42,7 +42,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 0,
                 evnt.Payload.Questionnaire.Responsible);
             browseItem.FeaturedQuestions = featuredQuestions.ToArray();
-            this.documentItemStore.Store(browseItem, evnt.Payload.CompletedQuestionnaireId);
+            this.documentItemStore.Store(browseItem, evnt.Payload.Questionnaire.PublicKey);
         }
 
         private List<QuestionStatisticView> FindFeaturedQuestions(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
