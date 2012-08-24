@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using Common.Utils;
 using Synchronization.Core.Interface;
 using Synchronization.Core.Events;
 using Synchronization.Core.Errors;
@@ -12,30 +13,17 @@ namespace Synchronization.Core.SynchronizationFlow
 {
     public class UsbSynchronizer : AbstractSynchronizer
     {
-        public UsbSynchronizer(ISettingsProvider settingsprovider, string host, string pushAdress, string pullAdress)
+        public UsbSynchronizer(ISettingsProvider settingsprovider, IUrlUtils urlUtils)
             : base(settingsprovider)
         {
-            this._pushAdress = pushAdress;
-            this._pullAdress = pullAdress;
-            this._host = host;
+            this._urlUtils = urlUtils;
             //  FlushDriversList();
         }
 
         #region variables
 
-        protected Uri PushAdress
-        {
-            get { return new Uri(string.Format("{0}{1}?syncKey={2}", _host, _pushAdress, this.SettingsProvider.Settings.ClientId)); }
-        }
-
-        protected Uri PullAdress
-        {
-            get { return new Uri(string.Format("{0}{1}", _host, _pullAdress)); }
-        }
-
-        private readonly string _pushAdress;
-        private readonly string _pullAdress;
-        private readonly string _host;
+       
+        private readonly IUrlUtils _urlUtils;
         private readonly string ArchiveFileNameMask = "backup-{0}.zip";
 
         private UsbFileArchive usbArchive;
@@ -120,7 +108,7 @@ namespace Synchronization.Core.SynchronizationFlow
                                 }
                             };
 
-                        webClient.DownloadDataAsync(PushAdress);
+                        webClient.DownloadDataAsync(new Uri(this._urlUtils.GetUsbPushUrl(this.SettingsProvider.Settings.ClientId)));
 
                         while (webClient.IsBusy && !done.WaitOne(200))
                         {
@@ -197,7 +185,7 @@ namespace Synchronization.Core.SynchronizationFlow
                             };
 
 
-                        webClient.UploadFileAsync(PullAdress, usbArchive.InFile);
+                        webClient.UploadFileAsync(new Uri(this._urlUtils.GetPullUrl(this.SettingsProvider.Settings.ClientId)), usbArchive.InFile);
                         
                         while (webClient.IsBusy && !done.WaitOne(200))
                         {

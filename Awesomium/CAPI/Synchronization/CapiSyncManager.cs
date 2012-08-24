@@ -28,8 +28,8 @@ namespace Browsing.CAPI.Synchronization
     {
         #region C-tor
 
-        public CapiSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequesProcessor requestProcessor)
-            : base(pleaseWait, provider, requestProcessor)
+        public CapiSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequesProcessor requestProcessor,IUrlUtils urlUtils)
+            : base(pleaseWait, provider, requestProcessor, urlUtils)
         {
         }
 
@@ -37,15 +37,9 @@ namespace Browsing.CAPI.Synchronization
 
         protected override void OnAddSynchronizers(IList<ISynchronizer> syncChain, ISettingsProvider settingsProvider)
         {
-            syncChain.Add(new NetworkSynchronizer(settingsProvider, RequestProcessor, Settings.Default.DefaultUrl,
-                                                                      Settings.Default.NetworkLocalExportPath,
-                                                                      Settings.Default.NetworkLocalImportPath,
-                                                                      Settings.Default.NetworkCheckStatePath,
-                                                                      Settings.Default.EndpointExportPath));
+            syncChain.Add(new NetworkSynchronizer(settingsProvider, RequestProcessor, this.UrlUtils));
 
-            syncChain.Add(new UsbSynchronizer(settingsProvider, Settings.Default.DefaultUrl,
-                                                                  Settings.Default.UsbExportPath,
-                                                                  Settings.Default.UsbImportPath));
+            syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils));
         }
 
         #region Helpers
@@ -68,8 +62,7 @@ namespace Browsing.CAPI.Synchronization
             bool result = false;
 
             result =
-                this.RequestProcessor.Process<bool>(string.Format("{0}{1}", Settings.Default.DefaultUrl,
-                                                                  Settings.Default.CheckEventPath));
+                this.RequestProcessor.Process<bool>(UrlUtils.GetCheckPushPrerequisitesUrl());
 
             if (!result)
                 throw new CheckPrerequisitesException("Current device don't have any changes", SyncType.Push, null);

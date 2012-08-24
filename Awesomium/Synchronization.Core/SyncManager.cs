@@ -21,21 +21,23 @@ namespace Synchronization.Core
         private List<ISynchronizer> synchronizerChain;
         
         private AutoResetEvent syncIsAvailable = new AutoResetEvent(true);
-
+       
         #endregion
 
         #region C-tors
 
-        protected SyncManager(ISyncProgressObserver progressStatus, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor)
-            : this(progressStatus, settingsProvider, requestProcessor, new List<ISynchronizer>())
+        protected SyncManager(ISyncProgressObserver progressStatus, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+            : this(progressStatus, settingsProvider, requestProcessor, urlUtils, new List<ISynchronizer>())
         {
         }
 
-        private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor,
+        private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor,IUrlUtils urlUtils,
                             List<ISynchronizer> subStructure)
         {
+
             this.synchronizerChain = subStructure;
             this.RequestProcessor = requestProcessor;
+            this.UrlUtils = urlUtils;
             SyncProgressChanged += (s, e) => progressObserver.SetProgress(e.Status);
             BgnOfSync += (s, e) => progressObserver.SetBeginning(e.Status);
             EndOfSync += (s, e) => progressObserver.SetCompleted(e.Status);
@@ -44,6 +46,7 @@ namespace Synchronization.Core
         }
 
         protected IRequesProcessor RequestProcessor { get; private set; }
+        protected IUrlUtils UrlUtils { get; private set; }
 
         #endregion
 

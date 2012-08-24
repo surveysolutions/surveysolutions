@@ -18,13 +18,13 @@ namespace Browsing.CAPI.Containers
     public partial class CAPISynchronization : UserControl
     {
 
-        public CAPISynchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor)
+        public CAPISynchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils)
         {
             InitializeComponent();
             
             this.pleaseWait = new PleaseWaitControl();
             this.clientSettings = clientSettings;
-            this.syncManager = new CapiSyncManager(this.pleaseWait, this.clientSettings, requestProcessor);
+            this.syncManager = new CapiSyncManager(this.pleaseWait, this.clientSettings, requestProcessor, utils);
             this.syncManager.EndOfSync += new EventHandler<SynchronizationCompletedEvent>(sync_EndOfSync);
             this.syncManager.BgnOfSync += new EventHandler<SynchronizationEvent>(sync_BgnOfSync);
 
