@@ -25,7 +25,14 @@ namespace Browsing.CAPI.Containers
             this.clientSettings = clientSettings;
             RefreshAuthentificationInfo();
         }
+      /*  protected override void OnClientSizeChanged(EventArgs e)
+        {
+            base.OnClientSizeChanged(e);
 
+            this.Left = (this.ClientSize.Width - this.Width) / 2;
+            this.Top = (this.ClientSize.Height - this.Height) / 2;
+     
+        }*/
         protected void RefreshAuthentificationInfo()
         {
             isUserLoggedIn = null;
