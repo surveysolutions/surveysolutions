@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
-    public class AutoPropagateCompleteQuestion:AbstractCompleteQuestion, IAutoPropagate
+    public sealed class AutoPropagateCompleteQuestion:AbstractCompleteQuestion, IAutoPropagate
     {
 
         public AutoPropagateCompleteQuestion()

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {

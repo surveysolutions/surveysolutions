@@ -17,8 +17,8 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
 
         public Guid QuestionPublickey { get; set; }
         public Guid? PropogationPublicKey { get; set; }
-        public object CompleteAnswer { get; private set; }
-        public List<object> CompleteAnswers { get; private set; }
+        public string CompleteAnswerValue { get; private set; }
+        public List<Guid> CompleteAnswers { get; private set; }
 
         
         public SetAnswerCommand(Guid completeQuestionnaireId, CompleteQuestionView question, Guid? propogationPublicKey)
@@ -27,29 +27,25 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Completed
             PropogationPublicKey = propogationPublicKey;
             this.QuestionPublickey = question.PublicKey;
 
-            if (/*question.QuestionType == QuestionType.ExtendedDropDownList ||*/ question.QuestionType == QuestionType.DropDownList ||
-                question.QuestionType == QuestionType.SingleOption || question.QuestionType == QuestionType.YesNo)
+            if (question.QuestionType == QuestionType.DropDownList ||
+                question.QuestionType == QuestionType.SingleOption || 
+                question.QuestionType == QuestionType.YesNo ||
+                question.QuestionType == QuestionType.MultyOption)
             {
-                if (question.Answers != null)
+                if (question.Answers != null && question.Answers.Length > 0)
                 {
-
-                    this.CompleteAnswer = question.Answers[0].PublicKey;
-
+                    var answers = new List<Guid>();
+                    for (int i = 0; i < question.Answers.Length; i++)
+                    {
+                        if (question.Answers[i].Selected)
+                            answers.Add(question.Answers[i].PublicKey);
+                    }
+                    this.CompleteAnswers = answers;
                 }
-            }
-            else if (question.QuestionType == QuestionType.MultyOption)
-            {
-                var answers = new List<object>();
-                for (int i = 0; i < question.Answers.Length; i++)
-                {
-                    if (question.Answers[i].Selected)
-                        answers.Add(question.Answers[i].PublicKey);
-                }
-                this.CompleteAnswers = answers;
             }
             else
             {
-                this.CompleteAnswer = question.Answers[0].AnswerValue;
+                this.CompleteAnswerValue = question.Answers[0].AnswerValue;
             }
         }
 

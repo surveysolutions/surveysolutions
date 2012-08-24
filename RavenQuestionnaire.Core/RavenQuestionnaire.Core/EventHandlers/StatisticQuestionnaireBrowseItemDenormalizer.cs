@@ -17,7 +17,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                                                                 IEventHandler<QuestionnaireAssignmentChanged>
     {
 
-        private IDenormalizerStorage<SurveyBrowseItem> documentItemStore;
+        private readonly IDenormalizerStorage<SurveyBrowseItem> documentItemStore;
 
         public StatisticQuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<SurveyBrowseItem> documentItemStore)
         {
@@ -26,38 +26,37 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
-            var item =
-                this.documentItemStore.Query().Where(t => t.Id==evnt.Payload.QuestionnaireId.ToString()).FirstOrDefault();
+            var item = this.documentItemStore.Query().FirstOrDefault(t => t.Id==evnt.Payload.QuestionnaireId.ToString());
             if (item == null)
             {
-                var surveyitem = new SurveyItem(evnt.Payload.CreationDate, evnt.Payload.CreationDate, 
-                    evnt.Payload.QuestionnaireId, evnt.Payload.Status, evnt.Payload.Responsible);
+                var surveyitem = new SurveyItem(evnt.Payload.CreationDate, evnt.Payload.CreationDate,
+                    evnt.Payload.QuestionnaireId, evnt.Payload.Questionnaire.Status, evnt.Payload.Questionnaire.Responsible);
                 var statistic = new Dictionary<Guid, SurveyItem> { { evnt.Payload.CompletedQuestionnaireId, surveyitem } };
                 this.documentItemStore.Store(
                     new SurveyBrowseItem(
                         evnt.Payload.QuestionnaireId.ToString(),
                         evnt.Payload.Questionnaire.Title,
-                        evnt.Payload.Responsible == null ? 1 : 0, 
-                        statistic, 1, 
-                        evnt.Payload.Status==SurveyStatus.Initial && evnt.Payload.Responsible==null ? 1: 0,
-                        evnt.Payload.Status == SurveyStatus.Error ? 1 : 0,
-                        evnt.Payload.Status == SurveyStatus.Complete ? 1 : 0), 
+                        evnt.Payload.Questionnaire.Responsible == null ? 1 : 0, 
+                        statistic, 1,
+                        evnt.Payload.Questionnaire.Status == SurveyStatus.Initial && evnt.Payload.Questionnaire.Responsible == null ? 1 : 0,
+                        evnt.Payload.Questionnaire.Status == SurveyStatus.Error ? 1 : 0,
+                        evnt.Payload.Questionnaire.Status == SurveyStatus.Complete ? 1 : 0), 
                     evnt.Payload.CompletedQuestionnaireId);
             }
             else
             {
                 item.Total++;
-                if (evnt.Payload.Responsible == null)
+                if (evnt.Payload.Questionnaire.Responsible == null)
                     item.Unassigned++;
                 else
-                    IncrementCount(evnt.Payload.Status.Name, item);
+                    IncrementCount(evnt.Payload.Questionnaire.Status.Name, item);
                 item.Statistic.Add(
                     evnt.Payload.CompletedQuestionnaireId, 
                     new SurveyItem(
                         evnt.Payload.CreationDate, 
                         evnt.Payload.CreationDate, 
-                        evnt.Payload.CompletedQuestionnaireId, 
-                        evnt.Payload.Status, evnt.Payload.Responsible));
+                        evnt.Payload.CompletedQuestionnaireId,
+                        evnt.Payload.Questionnaire.Status, evnt.Payload.Questionnaire.Responsible));
             }
         }
 

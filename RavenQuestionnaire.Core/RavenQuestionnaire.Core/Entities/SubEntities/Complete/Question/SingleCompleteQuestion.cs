@@ -6,13 +6,13 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
-    public class SingleCompleteQuestion:AbstractCompleteQuestion, ISingleQuestion
+    public sealed class SingleCompleteQuestion:AbstractCompleteQuestion, ISingleQuestion
     {
         #region Properties
 
         public SingleCompleteQuestion()
         {
-            this.Children=new List<IComposite>();
+            this.Children = new List<IComposite>();
         }
 
         public SingleCompleteQuestion(string text) : base(text)
@@ -25,14 +25,21 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             get
             {
                 var answers = this.Children.Where(c => ((ICompleteAnswer) c).Selected).Select(c => c.PublicKey);
-                if (answers.Any()) return answers.First();
+                if (answers.Any()) 
+                    return answers.First();
                 return null;
             }
             set
             {
                 if(value==null)
                     return;
-                Guid selecteAnswer = Guid.Parse(value.ToString());
+
+                var answers = value as IEnumerable<Guid>;
+                if(answers == null)
+                    return;
+
+                Guid selecteAnswer = answers.First();
+
                 var answerObject = this.FirstOrDefault<ICompleteAnswer>(a => a.PublicKey == selecteAnswer);
                 if(answerObject!=null)
                 {

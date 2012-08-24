@@ -6,7 +6,7 @@ using RavenQuestionnaire.Core.Entities.Composite;
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
-    public class MultyOptionsCompleteQuestion:AbstractCompleteQuestion, IMultyOptionsQuestion
+    public sealed class MultyOptionsCompleteQuestion:AbstractCompleteQuestion, IMultyOptionsQuestion
     {
 
         #region Properties
@@ -31,7 +31,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             set
             {
                 
-                var selecteAnswers = (IEnumerable<object>)value;
+                var selecteAnswers = value as IEnumerable<object>;
                 var answerObjects =
                     this.Find<ICompleteAnswer>(
                         a => selecteAnswers.Count(q => q.ToString() == a.PublicKey.ToString()) > 0);
