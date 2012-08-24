@@ -17,11 +17,11 @@ namespace RavenQuestionnaire.Core.Domain
     /// <summary>
     /// CompleteQuestionnaire Aggregate Root.
     /// </summary>
-    public class CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireStoreDocument>
+    public class CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireDocument>
     {
         public CompleteQuestionnaireAR(){}
 
-        private CompleteQuestionnaireStoreDocument _doc = new CompleteQuestionnaireStoreDocument();
+        private CompleteQuestionnaireDocument _doc = new CompleteQuestionnaireDocument();
 
 
         public CompleteQuestionnaireAR(Guid completeQuestionnaireId, QuestionnaireDocument questionnaire)
@@ -78,7 +78,7 @@ namespace RavenQuestionnaire.Core.Domain
         // is automaticly wired as event handler based on convension.
         protected void OnNewQuestionnaireCreated(NewCompleteQuestionnaireCreated e)
         {
-            _doc = new CompleteQuestionnaireStoreDocument(e.Questionnaire);
+            _doc = e.Questionnaire;
         }
 
         public void SetComment(Guid questionPublickey, string comments, Guid? propogationPublicKey)
@@ -322,12 +322,12 @@ namespace RavenQuestionnaire.Core.Domain
 
         #region Implementation of ISnapshotable<CompleteQuestionnaireDocument>
 
-        public CompleteQuestionnaireStoreDocument CreateSnapshot()
+        public CompleteQuestionnaireDocument CreateSnapshot()
         {
             return this._doc;
         }
 
-        public void RestoreFromSnapshot(CompleteQuestionnaireStoreDocument snapshot)
+        public void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
         {
             this._doc = snapshot;
         }
