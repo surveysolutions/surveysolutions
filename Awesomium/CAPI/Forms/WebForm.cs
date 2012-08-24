@@ -29,11 +29,12 @@ namespace Browsing.CAPI.Forms
 {
     public partial class WebForm : Form
     {
-        private Containers.CAPIBrowser capiBrowser;
-        private Containers.CAPISynchronization capiSycn;
-        private Containers.CAPIMain capiMain;
+          private Containers.CAPIBrowser capiBrowser;
+        // private Containers.CAPISynchronization capiSycn;
+        //   private Containers.CAPIMain capiMain;
         private Awesomium.Windows.Forms.WebControl webView;
         private ISettingsProvider clientSettings;
+
         #region C-tor
 
         public WebForm()
@@ -48,121 +49,139 @@ namespace Browsing.CAPI.Forms
                                        SaveCacheAndCookies = true
                                    }, true);
 
-            this.webView=new WebControl();
-            this.clientSettings=new ClientSettingsProvider();
+            this.webView = new WebControl();
+            this.clientSettings = new ClientSettingsProvider();
+            string url;
+            if (Settings.Default.RunClient)
+            {
+                try
+                {
+                    RunEngine();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error on Engine Run. " + ex.Message);
+                }
+
+            }
             AddMain();
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
-          {
-              if (this.webView != null)
-              {
-                  //this.webView.IsDirtyChanged -= OnIsDirtyChanged;
-                  //this.webView.SelectLocalFiles -= OnSelectLocalFiles;                this.webView.Close();
-              }
+        {
+            if (this.webView != null)
+            {
+                //this.webView.IsDirtyChanged -= OnIsDirtyChanged;
+                //this.webView.SelectLocalFiles -= OnSelectLocalFiles;                this.webView.Close();
+            }
 
-              base.OnFormClosed(e);
+            base.OnFormClosed(e);
 
 #if USING_MONO
     // TODO: Mac OS X: Sends a SIGSEGV to Mono.
             if ( !PlatformDetection.IsMac )
 #endif
-              WebCore.Shutdown();
-          }
+            WebCore.Shutdown();
+        }
 
-        protected void AddBrowser()
-      {
-          this.capiBrowser = new Browsing.CAPI.Containers.CAPIBrowser(this.webView);
-          // 
-          // capiBrowser1
-          // 
-          this.capiBrowser.AutoSize = true;
-          this.capiBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-          this.capiBrowser.Location = new System.Drawing.Point(0, 0);
-          this.capiBrowser.Name = "capiBrowser1";
-          this.capiBrowser.HomeButtonClick += new EventHandler<EventArgs>(capiBrowser_HomeButtonClick);
-       //   this.capiBrowser.Size = new System.Drawing.Size(1596, 808);
-       //   this.capiBrowser.TabIndex = 2;
-          this.Controls.Add(this.capiBrowser);
-      }
-      protected void AddSynchronizer()
-      {
-          this.capiSycn = new Browsing.CAPI.Containers.CAPISynchronization(this.clientSettings);
-          // 
-          // capiBrowser1
-          // 
-          this.capiSycn.AutoSize = true;
-          this.capiSycn.Name = "capiSync";
-          this.capiSycn.Size = new System.Drawing.Size(this.ClientSize.Width, this.ClientSize.Height);
-          this.capiSycn.Left = 0;
-          this.capiSycn.Top = 0;
-          this.capiSycn.BackClick += new EventHandler<EventArgs>(capiSycn_BackClick);
-          this.Controls.Add(this.capiSycn);
-      }
+        protected void AddBrowser(bool isSinglePage)
+        {
+            if(this.capiBrowser==null)
+                this.capiBrowser = new Browsing.CAPI.Containers.CAPIBrowser(this.webView);
+            this.capiBrowser.SetMode(isSinglePage);
+            this.capiBrowser.AutoSize = true;
+            this.capiBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.capiBrowser.Name = "capiBrowser1";
+            this.capiBrowser.HomeButtonClick += new EventHandler<EventArgs>(capiBrowser_HomeButtonClick);
+            this.Controls.Add(this.capiBrowser);
+        }
 
-      void capiSycn_BackClick(object sender, EventArgs e)
-      {
-          this.Controls.Clear();
-          AddMain();
-      }
-      void capiBrowser_HomeButtonClick(object sender, EventArgs e)
-      {
-          this.Controls.Clear();
-          AddMain();
-      }
-      protected void AddMain()
-      {
-          this.capiMain = new Browsing.CAPI.Containers.CAPIMain(this.clientSettings);
-          // 
-          // capiBrowser1
-          // 
-        //  this.capiMain.AutoSize = true;
-          this.capiMain.Dock = System.Windows.Forms.DockStyle.Fill;
-      //    this.capiMain.Location = new System.Drawing.Point(0, 0);
-    //      this.capiMain.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left  | System.Windows.Forms.AnchorStyles.Top;
-         
-          this.capiMain.Name = "capiMain";
-       //   this.capiMain.Size = new System.Drawing.Size(920, 200);
-        //  this.capiMain.Location=new Point(0,0);
-       /*   this.capiMain.Width = this.ClientSize.Width;
-          this.capiMain.Height = this.ClientSize.Height;*/
-        /*  this.capiMain.Left = (this.ClientSize.Width - this.capiMain.Width) / 2;
-          this.capiMain.Top = (this.ClientSize.Height - this.capiMain.Height) / 2;*/
-        //  this.capiMain.TabIndex = 2;
-          this.Controls.Add(this.capiMain);
-          this.capiMain.DashboardClick += new EventHandler<EventArgs>(capiMain_DashboardClick);
-          this.capiMain.SynchronizationClick += new EventHandler<EventArgs>(capiMain_SynchronizationClick);
-          this.capiMain.LoginClick += new EventHandler<EventArgs>(capiMain_LoginClick);
-       //   this.ClientSizeChanged += new EventHandler(capiMain_ClientSizeChanged);
-      }
+        protected void AddSynchronizer()
+        {
+            Containers.CAPISynchronization capiSycn =
+                new Browsing.CAPI.Containers.CAPISynchronization(this.clientSettings);
+            capiSycn.AutoSize = true;
+            capiSycn.Dock = System.Windows.Forms.DockStyle.Fill;
+            capiSycn.Name = "capiSync";
+            capiSycn.BackClick += new EventHandler<EventArgs>(capiSycn_BackClick);
+            this.Controls.Add(capiSycn);
+        }
 
-      void capiMain_LoginClick(object sender, EventArgs e)
-      {
-        //  this.tableLayoutPanel1.Controls
-          this.Controls.Clear();
-          AddBrowser();
-      }
+        protected void AddMain()
+        {
+            Containers.CAPIMain capiMain = new Browsing.CAPI.Containers.CAPIMain(this.clientSettings);
+            capiMain.AutoSize = true;
+            capiMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            capiMain.Name = "capiMain";
+            this.Controls.Add(capiMain);
+            capiMain.DashboardClick += new EventHandler<EventArgs>(capiMain_DashboardClick);
+            capiMain.SynchronizationClick += new EventHandler<EventArgs>(capiMain_SynchronizationClick);
+            capiMain.LoginClick += new EventHandler<EventArgs>(capiMain_LoginClick);
+        }
 
-      void capiMain_SynchronizationClick(object sender, EventArgs e)
-      {
-          this.Controls.Clear();
-          AddSynchronizer();
-      }
+        protected void ClearAll()
+        {
+            /* foreach (Control control in this.Controls)
+             {
+                 control.Dispose();
+             }*/
+            this.Controls.Clear();
+        }
 
-    /*  void capiMain_ClientSizeChanged(object sender, EventArgs e)
-      {
-          this.capiMain.Left = (this.ClientSize.Width - this.capiMain.Width) / 2;
-          this.capiMain.Top = (this.ClientSize.Height - this.capiMain.Height) / 2;
-      }*/
+        private void capiSycn_BackClick(object sender, EventArgs e)
+        {
+            ClearAll();
+            AddMain();
+        }
 
-      void capiMain_DashboardClick(object sender, EventArgs e)
-      {
-          this.Controls.Clear();
-          AddBrowser();
-      }
-       
+        private void capiBrowser_HomeButtonClick(object sender, EventArgs e)
+        {
+            ClearAll();
+            AddMain();
+        }
+
+
+        private void capiMain_LoginClick(object sender, EventArgs e)
+        {
+            //  this.tableLayoutPanel1.Controls
+            ClearAll();
+            AddBrowser(true);
+        }
+
+        private void capiMain_SynchronizationClick(object sender, EventArgs e)
+        {
+            ClearAll();
+            AddSynchronizer();
+        }
+
+        private void capiMain_DashboardClick(object sender, EventArgs e)
+        {
+            ClearAll();
+            AddBrowser(false);
+        }
+
 
         #endregion
 
+        private string RunEngine()
+        {
+            DirectoryInfo dir = new DirectoryInfo(Application.StartupPath);
+
+            if (dir.Parent == null)
+                throw new Exception("Engine was not found.");
+
+            string enginePath = Path.Combine(dir.Parent.FullName, Settings.Default.EnginePathName);
+
+            if (!Directory.Exists(enginePath))
+                throw new Exception("Engine was not found.");
+
+            string port = Settings.Default.DefaultPort;
+
+            EngineRunner runner = new EngineRunner();
+            runner.RunEngine(enginePath, port);
+            Application.ApplicationExit += runner.StopEngine;
+
+            return String.Format("http://localhost:{0}", port);
+        }
     }
 }
