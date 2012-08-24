@@ -117,14 +117,17 @@ namespace Browsing.CAPI.Forms
           // capiBrowser1
           // 
         //  this.capiMain.AutoSize = true;
-      //    this.capiMain.Dock = System.Windows.Forms.DockStyle.Left;
+          this.capiMain.Dock = System.Windows.Forms.DockStyle.Fill;
       //    this.capiMain.Location = new System.Drawing.Point(0, 0);
-          //this.capiMain.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right  | System.Windows.Forms.AnchorStyles.Top;
+    //      this.capiMain.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left  | System.Windows.Forms.AnchorStyles.Top;
          
           this.capiMain.Name = "capiMain";
-          this.capiMain.Size = new System.Drawing.Size(920, 200);
-          this.capiMain.Left = (this.ClientSize.Width - this.capiMain.Width) / 2;
-          this.capiMain.Top = (this.ClientSize.Height - this.capiMain.Height) / 2;
+       //   this.capiMain.Size = new System.Drawing.Size(920, 200);
+        //  this.capiMain.Location=new Point(0,0);
+       /*   this.capiMain.Width = this.ClientSize.Width;
+          this.capiMain.Height = this.ClientSize.Height;*/
+        /*  this.capiMain.Left = (this.ClientSize.Width - this.capiMain.Width) / 2;
+          this.capiMain.Top = (this.ClientSize.Height - this.capiMain.Height) / 2;*/
         //  this.capiMain.TabIndex = 2;
           this.Controls.Add(this.capiMain);
           this.capiMain.DashboardClick += new EventHandler<EventArgs>(capiMain_DashboardClick);
@@ -135,6 +138,7 @@ namespace Browsing.CAPI.Forms
 
       void capiMain_LoginClick(object sender, EventArgs e)
       {
+        //  this.tableLayoutPanel1.Controls
           this.Controls.Clear();
           AddBrowser();
       }
