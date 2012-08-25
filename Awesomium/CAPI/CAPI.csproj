@@ -123,6 +123,12 @@
     <Compile Include="Containers\CAPISynchronization.Designer.cs">
       <DependentUpon>CAPISynchronization.cs</DependentUpon>
     </Compile>
+    <Compile Include="Containers\Screen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\ScreenHolder.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\FlatButton.cs">
       <SubType>Component</SubType>
     </Compile>

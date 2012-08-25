@@ -14,12 +14,11 @@ using Common;
 
 namespace Browsing.CAPI.Containers
 {
-    public partial class CAPIBrowser : UserControl
+    public partial class CAPIBrowser : Screen
     {
-        public event EventHandler<EventArgs> HomeButtonClick;
         protected bool isSinglePage = false;
         protected string rootPathString = string.Empty;
-        public CAPIBrowser(WebControl webView)
+        public CAPIBrowser(WebControl webView, ScreenHolder holder):base(holder)
         {
             this.webView = webView;
             
@@ -46,9 +45,7 @@ namespace Browsing.CAPI.Containers
 
         void homeButton_Click(object sender, System.EventArgs e)
         {
-            var handler = this.HomeButtonClick;
-            if (handler != null)
-                handler(this, e);
+            this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPIMain));
         }
         #region TODO Progress indication
 
