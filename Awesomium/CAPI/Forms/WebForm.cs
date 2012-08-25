@@ -10,6 +10,7 @@ using Awesomium.Mono.Forms;
 using Awesomium.Core;
 using Awesomium.Windows.Forms;
 using Browsing.CAPI;
+using Browsing.CAPI.Containers;
 using Browsing.CAPI.Properties;
 using Browsing.CAPI.ClientSettings;
 using Browsing.CAPI.Utils;
@@ -31,10 +32,11 @@ namespace Browsing.CAPI.Forms
 {
     public partial class WebForm : Form
     {
-          private Containers.CAPIBrowser capiBrowser;
+        //  private Containers.CAPIBrowser capiBrowser;
         // private Containers.CAPISynchronization capiSycn;
         //   private Containers.CAPIMain capiMain;
         private Awesomium.Windows.Forms.WebControl webView;
+        private ScreenHolder holder;
         private ISettingsProvider clientSettings;
         private IRequesProcessor requestProcessor;
         private IUrlUtils urlUtils;
@@ -45,7 +47,9 @@ namespace Browsing.CAPI.Forms
             // Notice that Control.DoubleBuffered has been set to true
             // in the designer, to prevent flickering.
             InitializeComponent();
-
+            this.holder=new ScreenHolder();
+            this.holder.Dock = DockStyle.Fill;
+            
             WebCore.Initialize(new WebCoreConfig()
                                    {
                                        EnablePlugins = true,
@@ -70,6 +74,10 @@ namespace Browsing.CAPI.Forms
 
             }
             AddMain();
+            AddBrowser();
+            AddSynchronizer();
+            this.Controls.Add(this.holder);
+            
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -89,82 +97,27 @@ namespace Browsing.CAPI.Forms
             WebCore.Shutdown();
         }
 
-        protected void AddBrowser(bool isSinglePage, string rootPath)
+        protected void AddBrowser()
         {
-            if(this.capiBrowser==null)
-                this.capiBrowser = new Browsing.CAPI.Containers.CAPIBrowser(this.webView);
-            this.capiBrowser.SetMode(isSinglePage, rootPath);
-            this.capiBrowser.AutoSize = true;
-            this.capiBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.capiBrowser.Name = "capiBrowser1";
-            this.capiBrowser.HomeButtonClick += new EventHandler<EventArgs>(capiBrowser_HomeButtonClick);
-            this.Controls.Add(this.capiBrowser);
+            var capiBrowser = new Browsing.CAPI.Containers.CAPIBrowser(this.webView, this.holder);
+       //     capiBrowser.SetMode(isSinglePage, rootPath);
+            capiBrowser.Name = "capiBrowser1";
         }
 
         protected void AddSynchronizer()
         {
             Containers.CAPISynchronization capiSycn =
-                new Browsing.CAPI.Containers.CAPISynchronization(this.clientSettings,this.requestProcessor,this.urlUtils);
-            capiSycn.AutoSize = true;
-            capiSycn.Dock = System.Windows.Forms.DockStyle.Fill;
+                new Browsing.CAPI.Containers.CAPISynchronization(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder);
             capiSycn.Name = "capiSync";
-            capiSycn.BackClick += new EventHandler<EventArgs>(capiSycn_BackClick);
-            this.Controls.Add(capiSycn);
         }
 
         protected void AddMain()
         {
-            Containers.CAPIMain capiMain = new Browsing.CAPI.Containers.CAPIMain(this.clientSettings, this.requestProcessor,this.urlUtils);
-            capiMain.AutoSize = true;
-            capiMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            Containers.CAPIMain capiMain = new Browsing.CAPI.Containers.CAPIMain(this.clientSettings,
+                                                                                 this.requestProcessor, this.urlUtils, this.holder);
             capiMain.Name = "capiMain";
-            this.Controls.Add(capiMain);
-            capiMain.DashboardClick += new EventHandler<EventArgs>(capiMain_DashboardClick);
-            capiMain.SynchronizationClick += new EventHandler<EventArgs>(capiMain_SynchronizationClick);
-            capiMain.LoginClick += new EventHandler<EventArgs>(capiMain_LoginClick);
+            this.holder.Redirect(capiMain);
         }
-
-        protected void ClearAll()
-        {
-            /* foreach (Control control in this.Controls)
-             {
-                 control.Dispose();
-             }*/
-            this.Controls.Clear();
-        }
-
-        private void capiSycn_BackClick(object sender, EventArgs e)
-        {
-            ClearAll();
-            AddMain();
-        }
-
-        private void capiBrowser_HomeButtonClick(object sender, EventArgs e)
-        {
-            ClearAll();
-            AddMain();
-        }
-
-
-        private void capiMain_LoginClick(object sender, EventArgs e)
-        {
-            //  this.tableLayoutPanel1.Controls
-            ClearAll();
-            AddBrowser(true, urlUtils.GetLoginUrl());
-        }
-
-        private void capiMain_SynchronizationClick(object sender, EventArgs e)
-        {
-            ClearAll();
-            AddSynchronizer();
-        }
-
-        private void capiMain_DashboardClick(object sender, EventArgs e)
-        {
-            ClearAll();
-            AddBrowser(false, urlUtils.GetDefaultUrl());
-        }
-
 
         #endregion
 

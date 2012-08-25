@@ -19,9 +19,9 @@ using Synchronization.Core.SynchronizationFlow;
 
 namespace Browsing.CAPI.Containers
 {
-    public partial class CAPIMain : UserControl
+    public partial class CAPIMain : Screen
     {
-        public CAPIMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+        public CAPIMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder):base(holder)
         {
             InitializeComponent();
             this.clientSettings = clientSettings;
@@ -58,30 +58,16 @@ namespace Browsing.CAPI.Containers
         }
         void btnDashboard_Click(object sender, System.EventArgs e)
         {
-            var handler = this.DashboardClick;
-            if(handler!=null)
-            {
-                handler(this, e);
-            }
+            var browser = this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPIBrowser) as CAPIBrowser;
+            browser.SetMode(false,urlUtils.GetDefaultUrl());
+            this.Holder.Redirect(browser);
         }
 
         void btnSyncronization_Click(object sender, System.EventArgs e)
         {
-            var handler = this.SynchronizationClick;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPISynchronization));
         }
 
-       
-        #region events
-
-        public event EventHandler<EventArgs> DashboardClick;
-        public event EventHandler<EventArgs> LoginClick;
-        public event EventHandler<EventArgs> SynchronizationClick;
-        
-        #endregion
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
@@ -90,10 +76,14 @@ namespace Browsing.CAPI.Containers
         }
         void btnLogin_Click(object sender, System.EventArgs e)
         {
-            var handler = this.LoginClick;
-            if (handler != null)
-                handler(this, e);
+            var browser = this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPIBrowser) as CAPIBrowser;
+            browser.SetMode(true, urlUtils.GetLoginUrl());
+            this.Holder.Redirect(browser);
         }
-
+        protected override void OnParentChanged(EventArgs e)
+        {
+            base.OnParentChanged(e);
+            RefreshAuthentificationInfo();
+        }
     }
 }

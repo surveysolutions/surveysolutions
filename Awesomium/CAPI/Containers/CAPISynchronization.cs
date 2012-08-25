@@ -15,10 +15,11 @@ using Synchronization.Core.Interface;
 
 namespace Browsing.CAPI.Containers
 {
-    public partial class CAPISynchronization : UserControl
+    public partial class CAPISynchronization : Screen
     {
 
-        public CAPISynchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils)
+        public CAPISynchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
+            : base(holder)
         {
             InitializeComponent();
             
@@ -125,14 +126,10 @@ namespace Browsing.CAPI.Containers
 
         private void flatButton1_Click(object sender, EventArgs e)
         {
-            var handler = this.BackClick;
-            if(handler!=null)
-            {
-                handler(this, e);
-            }
+            this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPIMain));
 
         }
 
-        public event EventHandler<EventArgs> BackClick;
+     //   public event EventHandler<EventArgs> BackClick;
     }
 }
