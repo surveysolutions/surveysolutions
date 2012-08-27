@@ -62,6 +62,11 @@ namespace Web.Supervisor.Controllers
             return View(model);
         }
 
+       /* public ActionResult Approve(Guid id)
+        {
+            var model = viewRepository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
+            return View(model);
+        }*/
 
         public ActionResult Details(string id, Guid? group, Guid? question,  Guid? propagationKey)
         {
