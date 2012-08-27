@@ -47,9 +47,9 @@ namespace Browsing.CAPI.Forms
             // Notice that Control.DoubleBuffered has been set to true
             // in the designer, to prevent flickering.
             InitializeComponent();
-            this.holder=new ScreenHolder();
+            this.holder = new ScreenHolder();
             this.holder.Dock = DockStyle.Fill;
-            
+
             WebCore.Initialize(new WebCoreConfig()
                                    {
                                        EnablePlugins = true,
@@ -58,8 +58,8 @@ namespace Browsing.CAPI.Forms
 
             this.webView = new WebControl();
             this.clientSettings = new ClientSettingsProvider();
-            this.requestProcessor=new WebRequestProcessor();
-            this.urlUtils=new UrlUtils();
+            this.requestProcessor = new WebRequestProcessor();
+            this.urlUtils = new UrlUtils();
             string url;
             if (Settings.Default.RunClient)
             {
@@ -77,7 +77,7 @@ namespace Browsing.CAPI.Forms
             AddBrowser();
             AddSynchronizer();
             this.Controls.Add(this.holder);
-            
+
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -100,7 +100,7 @@ namespace Browsing.CAPI.Forms
         protected void AddBrowser()
         {
             var capiBrowser = new Browsing.CAPI.Containers.CAPIBrowser(this.webView, this.holder);
-       //     capiBrowser.SetMode(isSinglePage, rootPath);
+            //     capiBrowser.SetMode(isSinglePage, rootPath);
             capiBrowser.Name = "capiBrowser1";
         }
 

@@ -28,7 +28,7 @@ namespace Browsing.CAPI.Synchronization
     {
         #region C-tor
 
-        public CapiSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequesProcessor requestProcessor,IUrlUtils urlUtils)
+        public CapiSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequesProcessor requestProcessor, IUrlUtils urlUtils)
             : base(pleaseWait, provider, requestProcessor, urlUtils)
         {
         }
@@ -62,7 +62,7 @@ namespace Browsing.CAPI.Synchronization
             bool result = false;
 
             result =
-                this.RequestProcessor.Process<bool>(UrlUtils.GetCheckPushPrerequisitesUrl());
+                this.RequestProcessor.Process<bool>(UrlUtils.GetCheckPushPrerequisitesUrl(), false);
 
             if (!result)
                 throw new CheckPrerequisitesException("Current device don't have any changes", SyncType.Push, null);
