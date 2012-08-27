@@ -2,6 +2,7 @@
 using System;
 using System.Web;
 using System.Web.Mvc;
+using RavenQuestionnaire.Core.Views.Statistics;
 using Web.Supervisor.Models;
 using RavenQuestionnaire.Core;
 using Ncqrs.Commanding.ServiceModel;
@@ -62,11 +63,32 @@ namespace Web.Supervisor.Controllers
             return View(model);
         }
 
-       /* public ActionResult Approve(Guid id)
+        public ActionResult Approve(Guid id)
         {
-            var model = viewRepository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
-            return View(model);
-        }*/
+            var stat = viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                    new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+            return View(new ApproveModel(){Id = id, Statistic = stat});
+        }
+
+        [HttpPost]
+        public ActionResult Approve(ApproveModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                var status = SurveyStatus.Approve;
+                status.ChangeComment = model.Comment;
+                commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status });
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                var stat = viewRepository.Load
+                    <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                        new CompleteQuestionnaireStatisticViewInputModel(model.Id.ToString()));
+                return View(new ApproveModel() {Id = model.Id, Statistic = stat});
+            }
+        }
 
         public ActionResult Details(string id, Guid? group, Guid? question,  Guid? propagationKey)
         {

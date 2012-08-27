@@ -357,7 +357,6 @@ namespace RavenQuestionnaire.Core.Domain
             //no logic
         }
 
-
         protected void ChangeStatus(SurveyStatus status)
         {
             //put check logic !!!
