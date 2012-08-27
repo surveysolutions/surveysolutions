@@ -16,9 +16,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         public bool Answered { get; set; }
         public object Answer { get; set; }
 
-        public CompleteQuestionView()
-        {
-        }
+        public CompleteQuestionView(){}
 
         public CompleteQuestionView(string questionnaireId, Guid? groupPublicKey)
             : base(questionnaireId, groupPublicKey)
@@ -29,10 +27,10 @@ namespace RavenQuestionnaire.Core.Views.Question
         {
         }
         public CompleteQuestionView(
-            CompleteQuestionnaireDocument questionnaire, ICompleteQuestion doc)
+            CompleteQuestionnaireStoreDocument questionnaire, ICompleteQuestion doc)
             : base(questionnaire, doc)
         {
-            this.QuestionnaireId = questionnaire.Id;
+            this.QuestionnaireKey = questionnaire.PublicKey;
             this.Valid = doc.Valid;
             this.Enabled = doc.Enabled;
             this.Answers = doc.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(doc.PublicKey, a)).ToArray();

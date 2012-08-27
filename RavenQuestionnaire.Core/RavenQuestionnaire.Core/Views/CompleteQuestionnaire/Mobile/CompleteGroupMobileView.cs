@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             Navigation = new ScreenNavigation();
         }
 
-        public CompleteGroupMobileView(CompleteQuestionnaireDocument doc, CompleteGroup currentGroup,
+        public CompleteGroupMobileView(CompleteQuestionnaireStoreDocument doc, CompleteGroup currentGroup,
                                        ScreenNavigation navigation)
             : this()
         {

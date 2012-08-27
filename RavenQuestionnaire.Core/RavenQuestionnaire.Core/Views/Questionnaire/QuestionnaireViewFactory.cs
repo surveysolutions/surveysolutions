@@ -14,7 +14,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         }
         public QuestionnaireView Load(QuestionnaireViewInputModel input)
         {
-            var doc = documentSession.GetByGuid(Guid.Parse(input.QuestionnaireId));
+            var doc = documentSession.GetByGuid(input.QuestionnaireId);
             
             return new QuestionnaireView(doc);
         }

@@ -21,16 +21,15 @@ namespace RavenQuestionnaire.Core.Views.Group
 
         public CompleteGroupView Load(CompleteGroupViewInputModel input)
         {
-            var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.QuestionnaireId);
-            Entities.SubEntities.Complete.CompleteGroup group;
+            var doc = documentSession.Load<CompleteQuestionnaireStoreDocument>(input.QuestionnaireId);
+            CompleteGroup group;
             if (input.PublicKey.HasValue)
             {
-                group = doc.Find<Entities.SubEntities.Complete.CompleteGroup>(
-                        input.PublicKey.Value);
+                group = doc.Find<CompleteGroup>(input.PublicKey.Value);
             }
             else
             {
-                group = new Entities.SubEntities.Complete.CompleteGroup()
+                group = new CompleteGroup()
                             {
                                 Children = 
                                     doc.Children.Where(c=>c is ICompleteQuestion).ToList()};

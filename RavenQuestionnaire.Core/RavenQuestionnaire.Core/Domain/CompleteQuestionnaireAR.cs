@@ -65,7 +65,7 @@ namespace RavenQuestionnaire.Core.Domain
 
             ApplyEvent(new NewCompleteQuestionnaireCreated
             {
-                QuestionnaireId = Guid.Parse(questionnaire.Id),
+                QuestionnaireId = questionnaire.PublicKey,
                 Questionnaire = doc,
                 CreationDate = clock.UtcNow(),
                 TotalQuestionCount = doc.Find<ICompleteQuestion>(q => !(q is IBinded)).Count()
@@ -106,7 +106,7 @@ namespace RavenQuestionnaire.Core.Domain
             ApplyEvent(new CompleteQuestionnaireDeleted()
                            {
                                CompletedQuestionnaireId = _doc.PublicKey,
-                               TemplateId = Guid.Parse(_doc.TemplateId)
+                               TemplateId = _doc.TemplateId
                            });
         }
         protected void OnCompleteQuestionnaireDeleted(CompleteQuestionnaireDeleted e)

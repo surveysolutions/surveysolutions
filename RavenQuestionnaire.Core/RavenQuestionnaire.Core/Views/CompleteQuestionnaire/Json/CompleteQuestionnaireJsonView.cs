@@ -1,6 +1,6 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
-using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Composite;
 using RavenQuestionnaire.Core.ExpressionExecutors;
@@ -19,26 +19,26 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             Questions = new List<CompleteQuestionsJsonView>();
             InnerGroups=new List<CompleteGroupMobileView>();
         }
-        public CompleteQuestionnaireJsonView(CompleteQuestionnaireDocument doc, ICompleteGroup currentGroup)
+        public CompleteQuestionnaireJsonView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup)
             : this()
         {
-            Id = IdUtil.ParseId(doc.Id);
+            PublicKey = doc.PublicKey;
             Status = doc.Status;
             Responsible = doc.Responsible;
             CollectAll(doc, currentGroup as CompleteGroup);
         }
 
-        public CompleteQuestionnaireJsonView(CompleteQuestionnaireDocument doc)
+        public CompleteQuestionnaireJsonView(CompleteQuestionnaireStoreDocument doc)
             : this()
         {
-            Id = IdUtil.ParseId(doc.Id);
+            PublicKey = doc.PublicKey;
             Status = doc.Status;
             Responsible = doc.Responsible;
             var group = new CompleteGroup { Children = doc.Children.Where(c => c is ICompleteQuestion).ToList() };
             CollectAll(doc, group);
         }
 
-        private void CollectAll(CompleteQuestionnaireDocument doc, CompleteGroup group)
+        private void CollectAll(CompleteQuestionnaireStoreDocument doc, CompleteGroup group)
         {
             var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
             executor.Execute(group);
@@ -79,7 +79,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             Totals = CalcProgress(doc);
         }
 
-        public string Id { get; set; }
+        public Guid PublicKey { get; set; }
 
         public SurveyStatus Status { get; set; }
 
@@ -93,7 +93,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
 
         public Counter Totals { get; set; }
 
-        protected void InitGroups(CompleteQuestionnaireDocument doc)
+        protected void InitGroups(CompleteQuestionnaireStoreDocument doc)
         {
             var groups = doc.Children.OfType<ICompleteGroup>().ToList();
 
