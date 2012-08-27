@@ -59,6 +59,14 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             }
         }
 
-
+        public static SurveyStatus Approve
+        {
+            get
+            {
+                Guid identifier = new Guid("AA6C0DC1-23C4-4B03-A3ED-B24EF0055555");
+                string name = "Approve";
+                return new SurveyStatus(identifier, name);
+            }
+        }
     }
 }

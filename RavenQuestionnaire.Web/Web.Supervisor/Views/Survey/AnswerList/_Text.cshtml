@@ -4,7 +4,7 @@
 @{
     Guid answerGuid = Model.Answers.Length > 0 ? Model.Answers[0].PublicKey : Guid.NewGuid();
     var settings = (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings;
-
+    settings.Add("onchange ", "$(this.form).submit();");
 }
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {

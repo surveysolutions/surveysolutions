@@ -4,7 +4,6 @@
 @{
     var answerGuid = Model.Answers.Length > 0 ? Model.Answers[0].PublicKey : Guid.NewGuid();
     var settings = ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings);
-   
 }
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {

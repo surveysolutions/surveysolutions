@@ -77,8 +77,7 @@ namespace Web.CAPI.Controllers
 
         public ActionResult Statistic(string id)
         {
-            var stat =
-                viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+            var stat = viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                     new CompleteQuestionnaireStatisticViewInputModel(id));
             return View(stat);
         }
