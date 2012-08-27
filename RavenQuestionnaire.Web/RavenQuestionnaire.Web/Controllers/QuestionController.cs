@@ -129,7 +129,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         [HttpPost]
-        public ActionResult _GetAnswers(Guid publicKey, Guid targetPublicKey, string questionnaireId)
+        public ActionResult _GetAnswers(Guid publicKey, Guid targetPublicKey, Guid questionnaireId)
         {
             var source = viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(publicKey, questionnaireId));
             return PartialView("_GetAnswers", new QuestionConditionModel
@@ -143,12 +143,11 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult Create(string id, Guid? groupPublicKey)
         {
             LoadImages();
-            return View("_Create",
-                               new QuestionView(id, groupPublicKey));
+            return View("_Create", new QuestionView(id, groupPublicKey));
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Edit(Guid publicKey, string questionnaireId)
+        public ActionResult Edit(Guid publicKey, Guid questionnaireId)
         {
             LoadImages();
             if (publicKey == Guid.Empty)
@@ -179,7 +178,7 @@ namespace RavenQuestionnaire.Web.Controllers
                         //new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
                         if (model.TargetGroupKey==Guid.Empty)
-                        commandService.Execute(new AddQuestionCommand(Guid.Parse(model.QuestionnaireId),
+                        commandService.Execute(new AddQuestionCommand(model.QuestionnaireKey,
                                                                                         newItemKey,
                                                                                         model.Title,
                                                                                         model.StataExportCaption,
@@ -195,7 +194,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                         ansverItems)
                                                    );
                         else
-                            commandService.Execute(new AddQuestionCommand(Guid.Parse(model.QuestionnaireId),
+                            commandService.Execute(new AddQuestionCommand(model.QuestionnaireKey,
                                                                                         newItemKey,
                                                                                         model.Title,
                                                                                         model.TargetGroupKey,
@@ -217,7 +216,7 @@ namespace RavenQuestionnaire.Web.Controllers
                         //new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
                         if (model.TargetGroupKey == Guid.Empty)
-                        commandService.Execute(new ChangeQuestionCommand(Guid.Parse(model.QuestionnaireId),
+                        commandService.Execute(new ChangeQuestionCommand(model.QuestionnaireKey,
                                                                         model.PublicKey,
                                                                       model.Title,
                                                                       model.StataExportCaption,
@@ -231,7 +230,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                       model.AnswerOrder,
                                                                       ansverItems));
                         else
-                            commandService.Execute(new ChangeQuestionCommand(Guid.Parse(model.QuestionnaireId),
+                            commandService.Execute(new ChangeQuestionCommand(model.QuestionnaireKey,
                                                                         model.PublicKey,
                                                                       model.Title,
                                                                       model.TargetGroupKey,
@@ -254,7 +253,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     ModelState.AddModelError(string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
                     return PartialView("_Create", model);
                 }
-                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId, qid=model.PublicKey});
+                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireKey, qid=model.PublicKey});
                 
                
             }

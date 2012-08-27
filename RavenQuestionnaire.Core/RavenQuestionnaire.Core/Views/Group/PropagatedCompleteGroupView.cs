@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -14,7 +11,7 @@ namespace RavenQuestionnaire.Core.Views.Group
         public PropagatableCompleteGroupView()
         {
         }
-        public PropagatableCompleteGroupView(CompleteQuestionnaireDocument doc, ICompleteGroup group, ICompleteGroupFactory groupFactory)
+        public PropagatableCompleteGroupView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group, ICompleteGroupFactory groupFactory)
             : base(doc, group, groupFactory)
         {
             this.PropogationPublicKey = group.PropogationPublicKey.Value;

@@ -10,7 +10,6 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Events.Questionnaire;
-using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
 
 namespace RavenQuestionnaire.Core.Domain
 {

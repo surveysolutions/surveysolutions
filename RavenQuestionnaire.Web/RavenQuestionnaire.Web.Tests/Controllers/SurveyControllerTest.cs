@@ -60,7 +60,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void When_GetQuestionnaireResultIsExecuted()
         {
             CompleteQuestionnaireDocument innerDoc = new CompleteQuestionnaireDocument();
-            innerDoc.Id = "completequestionnairedocuments/cqId";
+            innerDoc.PublicKey = Guid.NewGuid();
             innerDoc.CreationDate = DateTime.Now;
             innerDoc.LastEntryDate = DateTime.Now;
             innerDoc.Status = new SurveyStatus(Guid.NewGuid(), "dummyStatus");

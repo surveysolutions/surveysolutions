@@ -19,9 +19,9 @@ namespace RavenQuestionnaire.Core.EventHandlers
         IEventHandler<QuestionnaireAssignmentChanged>,
         IEventHandler<QuestionnaireStatusChanged>
     {
-        private IDenormalizerStorage<CompleteQuestionnaireDocument> _documentStorage;
+        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> _documentStorage;
 
-        public CompleteQuestionnaireDenormalizer(IDenormalizerStorage<CompleteQuestionnaireDocument> documentStorage)
+        public CompleteQuestionnaireDenormalizer(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentStorage)
         {
             this._documentStorage = documentStorage;
         }
@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
-            this._documentStorage.Store(evnt.Payload.Questionnaire, evnt.Payload.Questionnaire.PublicKey);
+            this._documentStorage.Store((CompleteQuestionnaireStoreDocument)evnt.Payload.Questionnaire, evnt.Payload.Questionnaire.PublicKey);
         }
 
         #endregion

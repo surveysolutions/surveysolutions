@@ -12,9 +12,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
 {
     public class CompleteQuestionnaireJsonViewFactory : IViewFactory<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>
     {
-        private IDenormalizerStorage<CompleteQuestionnaireDocument> store;
+        private IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
 
-        public CompleteQuestionnaireJsonViewFactory(IDenormalizerStorage<CompleteQuestionnaireDocument> store)
+        public CompleteQuestionnaireJsonViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
         {
             this.store = store;
         }
@@ -23,10 +23,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
 
         public CompleteQuestionnaireJsonView Load(CompleteQuestionnaireViewInputModel input)
         {
-            if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
+            if (input.CompleteQuestionnaireId != Guid.Empty)
             {
                 var doc =
-                    this.store.GetByGuid(Guid.Parse(input.CompleteQuestionnaireId));
+                    this.store.GetByGuid(input.CompleteQuestionnaireId);
                 ICompleteGroup group = null;
                 if (input.CurrentGroupPublicKey.HasValue)
                     group = doc.FindGroupByKey(input.CurrentGroupPublicKey.Value, input.PropagationKey);
@@ -40,9 +40,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
     
     public class CompleteQuestionnaireMobileViewFactory : IViewFactory<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>
     {
-        private IDenormalizerStorage<CompleteQuestionnaireDocument> store;
+        private IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
 
-        public CompleteQuestionnaireMobileViewFactory(IDenormalizerStorage<CompleteQuestionnaireDocument> store)
+        public CompleteQuestionnaireMobileViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
         {
             this.store = store;
         }
@@ -51,10 +51,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
 
         public CompleteGroupMobileView Load(CompleteQuestionnaireViewInputModel input)
         {
-            if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
+            if (input.CompleteQuestionnaireId != Guid.Empty)
             {
                 var doc =
-                    this.store.GetByGuid(Guid.Parse(input.CompleteQuestionnaireId));
+                    this.store.GetByGuid(input.CompleteQuestionnaireId);
                 ICompleteGroup group = null;
                 var rout = new List<NodeWithLevel>();
                 if (input.CurrentGroupPublicKey.HasValue)
@@ -109,7 +109,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             int indexOfTarget;
             if(group.PropogationPublicKey.HasValue)
             {
-                groupNeighbors = parent.Group.Children.OfType<ICompleteGroup>().Where(g=>g.PublicKey==group.PublicKey && g.PropogationPublicKey.HasValue).ToList();
+                groupNeighbors = parent.Group.Children.OfType<ICompleteGroup>()
+                    .Where(g=>g.PublicKey==group.PublicKey && g.PropogationPublicKey.HasValue).ToList();
                 indexOfTarget = groupNeighbors.FindIndex(0,
                                                          g =>
                                                          g.PropogationPublicKey == group.PropogationPublicKey);

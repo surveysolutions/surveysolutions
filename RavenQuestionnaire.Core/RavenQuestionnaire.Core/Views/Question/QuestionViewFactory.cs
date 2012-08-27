@@ -16,7 +16,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         }
          public QuestionView Load(QuestionViewInputModel input)
          {
-             var doc = _documentSession.GetByGuid(Guid.Parse(input.QuestionnaireId));
+             var doc = _documentSession.GetByGuid(input.QuestionnaireId);
 
              var question = new Entities.Questionnaire(doc).Find<IQuestion>(input.PublicKey);
              if (question == null)

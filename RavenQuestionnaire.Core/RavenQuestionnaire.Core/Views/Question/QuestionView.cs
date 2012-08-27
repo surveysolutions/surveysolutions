@@ -44,13 +44,8 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public string Comments { get; set; }
 
-        public string QuestionnaireId
-        {
-            get { return _questionnaireId; }
-            set { _questionnaireId = value; }
-        }
+        public Guid QuestionnaireKey {get; set; }
 
-        private string _questionnaireId;
 
         public Guid? Parent { get; set; }
 
@@ -67,10 +62,10 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         }
 
-        public AbstractQuestionView(string questionnaireId, Guid? groupPublicKey)
+        public AbstractQuestionView(Guid questionnaireId, Guid? groupPublicKey)
             : this()
         {
-            this.QuestionnaireId = questionnaireId;
+            this.QuestionnaireKey = questionnaireId;
             this.Parent = groupPublicKey;
         }
 
@@ -80,7 +75,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.PublicKey = doc.PublicKey;
             this.Title = doc.QuestionText;
             this.QuestionType = doc.QuestionType;
-            this.QuestionnaireId = questionnaire.Id;
+            this.QuestionnaireKey = questionnaire.PublicKey;
             this.ConditionExpression = doc.ConditionExpression;
             this.ValidationExpression = doc.ValidationExpression;
             this.ValidationMessage = doc.ValidationMessage;
@@ -139,7 +134,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         public AbstractQuestionView(string questionnaireId, Guid? groupPublicKey)
             : this()
         {
-            this.QuestionnaireId = questionnaireId;
+            this.QuestionnaireKey = Guid.Parse(questionnaireId);
             this.Parent = groupPublicKey;
         }
 

@@ -63,10 +63,10 @@ namespace Web.Supervisor.Controllers
         }
 
 
-        public ActionResult Details(string id, Guid? group, Guid? question,  Guid? propagationKey)
+        public ActionResult Details(Guid id, Guid? group, Guid? question,  Guid? propagationKey)
         {
-            if (string.IsNullOrEmpty(id))
-                throw new HttpException(404, "Invalid query string parameters");
+            //if (id)
+            //    throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                 new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group,  PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
@@ -74,10 +74,10 @@ namespace Web.Supervisor.Controllers
             return View(model);
         }
 
-        public PartialViewResult Screen(string id, Guid group, Guid? propagationKey)
+        public PartialViewResult Screen(Guid id, Guid group, Guid? propagationKey)
         {
-            if (string.IsNullOrEmpty(id))
-                throw new HttpException(404, "Invalid query string parameters");
+            //if (string.IsNullOrEmpty(id))
+            //    throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>(
                 new CompleteQuestionnaireViewInputModel(id, group, propagationKey));
             ViewBag.CurrentQuestion = new Guid();

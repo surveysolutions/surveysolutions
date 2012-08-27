@@ -11,18 +11,17 @@ namespace RavenQuestionnaire.Core.Entities
 
         //public string QuestionnaireId { get { return innerDocument; } }
 
-        public FlowGraph(string questionnaireId)
+        public FlowGraph(Guid questionnaireId)
         {
-            var fId = questionnaireId;
             innerDocument = new FlowGraphDocument
                                 {
-                                    Id = fId,
+                                    PublicKey = Guid.NewGuid(),
                                     QuestionnaireDocumentId = questionnaireId
                                 };
         }
 
         public FlowGraph(Questionnaire questionnaire)
-            : this(questionnaire.QuestionnaireId)
+            : this(questionnaire.PublicKey)
         {
             //Create new from questionnaire
         }

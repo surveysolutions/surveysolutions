@@ -41,9 +41,9 @@ namespace Web.CAPI.Controllers
 
         #region Actions 
 
-        public ViewResult Index(string id, Guid? group, Guid? question, Guid? propagationKey)
+        public ViewResult Index(Guid id, Guid? group, Guid? question, Guid? propagationKey)
         {
-            if (string.IsNullOrEmpty(id))
+            if (id == Guid.Empty)
                 throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                 new CompleteQuestionnaireViewInputModel(id)
@@ -53,9 +53,9 @@ namespace Web.CAPI.Controllers
             return View(model);
         }
 
-        public PartialViewResult Screen(string id, Guid group, Guid? propagationKey)
+        public PartialViewResult Screen(Guid id, Guid group, Guid? propagationKey)
         {
-            if (string.IsNullOrEmpty(id))
+            if (id == Guid.Empty)
                 throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>(
                 new CompleteQuestionnaireViewInputModel(id, group, propagationKey));
@@ -65,9 +65,9 @@ namespace Web.CAPI.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult _SurveyContent(string id, Guid? group, Guid? question)
+        public PartialViewResult _SurveyContent(Guid id, Guid? group, Guid? question)
         {
-            if (string.IsNullOrEmpty(id))
+            if (Guid.Empty == id)
                 throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                 new CompleteQuestionnaireViewInputModel(id) {CurrentGroupPublicKey = group});
@@ -101,7 +101,7 @@ namespace Web.CAPI.Controllers
             try
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                Guid questionnaireKey = Guid.Parse(settings[0].QuestionnaireId);
+                Guid questionnaireKey = settings[0].QuestionnaireId;
                 commandService.Execute(new SetCommentCommand(questionnaireKey, question,
                                                              settings[0].PropogationPublicKey));
             }
@@ -185,7 +185,7 @@ namespace Web.CAPI.Controllers
             try
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new SetAnswerCommand(Guid.Parse(settings[0].QuestionnaireId), question,
+                commandService.Execute(new SetAnswerCommand(settings[0].QuestionnaireId, question,
                                                             settings[0].PropogationPublicKey));
             }
             catch (Exception e)
@@ -201,13 +201,13 @@ namespace Web.CAPI.Controllers
         }
 
 
-        public JsonResult PropagateGroup(Guid publicKey, Guid parentGroupPublicKey, string questionnaireId)
+        public JsonResult PropagateGroup(Guid publicKey, Guid parentGroupPublicKey, Guid questionnaireId)
         {
             try
             {
                 var propagationKey = Guid.NewGuid();
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new AddPropagatableGroupCommand(Guid.Parse(questionnaireId), propagationKey,
+                commandService.Execute(new AddPropagatableGroupCommand(questionnaireId, propagationKey,
                                                                        publicKey));
                 var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
                     new CompleteQuestionnaireViewInputModel(questionnaireId)

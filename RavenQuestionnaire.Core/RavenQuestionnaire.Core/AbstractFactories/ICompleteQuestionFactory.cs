@@ -13,7 +13,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
     public interface ICompleteQuestionFactory
     {
         AbstractQuestion Create(QuestionType type);
-        CompleteQuestionView CreateQuestion(CompleteQuestionnaireDocument doc, ICompleteQuestion question);
+        CompleteQuestionView CreateQuestion(CompleteQuestionnaireStoreDocument doc, ICompleteQuestion question);
         ICompleteQuestion ConvertToCompleteQuestion(IQuestion question);
     }
 }
