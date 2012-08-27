@@ -17,7 +17,7 @@
                 if ((item as CompleteQuestionView) != null)
                 {
                     var question = item as CompleteQuestionView;
-                    var bodyClass = question.Enabled ? "" : "ui-disabled";
+                    var bodyClass = question.Enabled && !question.Featured ? "" : "ui-disabled";
                     bodyClass += " " + (questionKey == question.PublicKey ? "scrollHere" : "");
                     bodyClass += " " + (question.Answered ? "answered" : "");
                     bodyClass += " " + (!question.Valid ? "error_block" : "");
