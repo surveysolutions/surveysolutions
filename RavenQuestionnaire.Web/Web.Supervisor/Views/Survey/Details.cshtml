@@ -2,6 +2,7 @@
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model CompleteQuestionnaireMobileView
+           <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type = "text/javascript"> </script>
  <script type="text/javascript">
      $(document).ready(function () {
          $.ajaxSetup({
@@ -36,6 +37,14 @@
              return false;
          });
      });
+    function JsonResults(data) {
+        var response = jQuery.parseJSON(data.responseText);
+        if (response.status === "ok") {
+
+        } else {
+            alert(response.error);
+        }
+    };
  </script>
  <h1>@Model.Title</h1>
 <div class="row-fluid">
@@ -50,7 +59,7 @@
                         {
                             var activ = @gh.Enabled ? "" : "ui-disabled";
                             <li class="@activ" id="@gh.PublicKey"><a class="nav-link" id="ref-link-@(gh.PublicKey)"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.Id, group = gh.PublicKey })" >@gh.GroupText
-                                <span id="counter-@(gh.PublicKey)" class="badge ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
+                                <span id="counter-@(gh.PublicKey)" class="badge badge-info ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                         }
                     </ul>
                 </div>
