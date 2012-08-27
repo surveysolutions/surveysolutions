@@ -7,6 +7,7 @@ using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core.Views.StatusReport;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
+using RavenQuestionnaire.Core.Views.Survey;
 
 
 namespace Web.Supervisor.Controllers
@@ -47,7 +48,7 @@ namespace Web.Supervisor.Controllers
             var newQuestionnairePublicKey = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
-            return RedirectToAction("Assigments", "Survey", new { id = id });
+            return RedirectToAction("Assigments", "Survey", new { input = new SurveyGroupInputModel() {Id=id}});
         }
     }
 }

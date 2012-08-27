@@ -1,9 +1,10 @@
-﻿@model RavenQuestionnaire.Core.Views.Survey.SurveyBrowseView
+﻿@using RavenQuestionnaire.Core.Views.Survey
+@model SurveyBrowseView
 
 @foreach (var collect in Model.Items)
 {
     <tr>
-        <td>@Html.ActionLink(collect.Title, "Assigments", new { id=collect.Id })</td>        
+        <td>@Html.ActionLink(collect.Title, "Assigments", new { id = collect.Id })</td>        
         <td></td>
             @foreach (var it in collect.Grid)
             {

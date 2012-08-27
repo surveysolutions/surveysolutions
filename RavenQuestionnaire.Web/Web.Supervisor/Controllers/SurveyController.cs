@@ -36,19 +36,20 @@ namespace Web.Supervisor.Controllers
             globalInfo = provider;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(SurveyViewInputModel input)
         {
-            SurveyBrowseView model = viewRepository.Load<SurveyViewInputModel, SurveyBrowseView>(new SurveyViewInputModel());
+            SurveyBrowseView model = viewRepository.Load<SurveyViewInputModel, SurveyBrowseView>(input);
             return View(model);
         }
 
-        public ActionResult Assigments(string id)
+        public ActionResult Assigments(string id, SurveyGroupInputModel input)
         {
-            UserLight user = globalInfo.GetCurrentUser();
+            var inputModel = input==null ? new SurveyGroupInputModel(){ Id = id } : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders);
+            var user = globalInfo.GetCurrentUser();
             var users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
                                                                                   {Supervisor = user});
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
-            SurveyGroupView model = viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(new SurveyGroupInputModel(id));
+            SurveyGroupView model = viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(inputModel);
             return View(model);
         }
 
