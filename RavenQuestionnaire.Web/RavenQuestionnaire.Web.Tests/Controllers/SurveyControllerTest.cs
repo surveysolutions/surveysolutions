@@ -59,14 +59,14 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [Test]
         public void When_GetQuestionnaireResultIsExecuted()
         {
-            CompleteQuestionnaireDocument innerDoc = new CompleteQuestionnaireDocument();
+            CompleteQuestionnaireStoreDocument innerDoc = new CompleteQuestionnaireStoreDocument();
             innerDoc.PublicKey = Guid.NewGuid();
             innerDoc.CreationDate = DateTime.Now;
             innerDoc.LastEntryDate = DateTime.Now;
             innerDoc.Status = new SurveyStatus(Guid.NewGuid(), "dummyStatus");
             innerDoc.Responsible = new UserLight("-1", "dummyUser");
             var output = new CompleteQuestionnaireMobileView(innerDoc);
-            var input = new CompleteQuestionnaireViewInputModel("cqId");
+            var input = new CompleteQuestionnaireViewInputModel(innerDoc.PublicKey);
 
             ViewRepositoryMock.Setup(
                 x =>
@@ -81,7 +81,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             statusDoc.Statuses.Add( new StatusItem(){PublicKey = Guid.NewGuid(), Title = "dummy"});
 
             */
-            var result = Controller.Index(output.Id, null, null, null);
+            var result = Controller.Index(output.PublicKey, null, null, null);
             Assert.AreEqual(output, result.ViewData.Model);
         }
         [Test]
@@ -103,15 +103,15 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void Question_ValidId_FormIsReturned()
         {
             QuestionnaireDocument innerDoc = new QuestionnaireDocument();
-            innerDoc.Id = "questionnairedocuments/cqId";
-            CompleteQuestionnaireMobileView template = new CompleteQuestionnaireMobileView((CompleteQuestionnaireDocument)innerDoc);
-            var input = new CompleteQuestionnaireViewInputModel("cqId", Guid.NewGuid(),null);
+            innerDoc.PublicKey = Guid.NewGuid();
+            CompleteQuestionnaireMobileView template = new CompleteQuestionnaireMobileView((CompleteQuestionnaireStoreDocument)innerDoc);
+            var input = new CompleteQuestionnaireViewInputModel(innerDoc.PublicKey, Guid.NewGuid(), null);
             ViewRepositoryMock.Setup(
                x =>
                x.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                    It.Is<CompleteQuestionnaireViewInputModel>(v => v.CompleteQuestionnaireId.Equals(input.CompleteQuestionnaireId))))
                .Returns(template);
-            var result = Controller.Index("cqId", null,null,null);
+            var result = Controller.Index(innerDoc.PublicKey, null, null, null);
             Assert.AreEqual(result.ViewData.Model.GetType(), typeof(CompleteQuestionnaireMobileView));
             Assert.AreEqual(result.ViewData.Model, template);
         }
@@ -123,7 +123,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             CompleteQuestionView question = new CompleteQuestionView(Guid.NewGuid().ToString(), Guid.NewGuid());
             question.Answers = new CompleteAnswerView[] {new CompleteAnswerView(question.PublicKey,new CompleteAnswer())};
             Controller.SaveAnswer(
-                new CompleteQuestionSettings[] { new CompleteQuestionSettings() { QuestionnaireId = question.QuestionnaireId, PropogationPublicKey = Guid.NewGuid(), ParentGroupPublicKey = Guid.NewGuid()} },
+                new CompleteQuestionSettings[] { new CompleteQuestionSettings() { QuestionnaireId = question.QuestionnaireKey, PropogationPublicKey = Guid.NewGuid(), ParentGroupPublicKey = Guid.NewGuid()} },
                 new CompleteQuestionView[]
                     {
                         question
