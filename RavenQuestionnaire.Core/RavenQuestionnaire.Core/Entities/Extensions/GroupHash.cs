@@ -9,12 +9,10 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
 {
     public class GroupHash 
     {
-        //     private ICompleteGroup root;
-      //  private IList<ICompleteQuestion> triggers;
-        private IDictionary<string, CompleteQuestionWrapper> hash;
+        private IDictionary<string, CompleteQuestionWrapper> _hash;
         public GroupHash()
         {
-            this.hash = new Dictionary<string, CompleteQuestionWrapper>();
+            this._hash = new Dictionary<string, CompleteQuestionWrapper>();
         }
 
         public GroupHash(ICompleteGroup root):this()
@@ -32,10 +30,10 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
         {
             if (!group.PropogationPublicKey.HasValue)
                 throw new ArgumentException("only propagated group can uppdate hash");
-            foreach (string key in hash.Keys.ToArray())
+            foreach (string key in _hash.Keys.ToArray())
             {
                 if (key.EndsWith(group.PropogationPublicKey.ToString()))
-                    hash.Remove(key);
+                    _hash.Remove(key);
             }
         }
 
@@ -72,8 +70,8 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
                 return;
             }
             var questionKey = GetQuestionKey(question);
-            if (!hash.ContainsKey(questionKey))
-                hash.Add(questionKey, new CompleteQuestionWrapper(question, node.ParentKey.Value));
+            if (!_hash.ContainsKey(questionKey))
+                _hash.Add(questionKey, new CompleteQuestionWrapper(question, node.ParentKey.Value));
 
         }
 
@@ -89,19 +87,19 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
         }
         public IEnumerable<ICompleteQuestion> Questions
         {
-            get { return this.hash.Values.Select(v=>v.Question); }
+            get { return this._hash.Values.Select(v=>v.Question); }
         }
         public CompleteQuestionWrapper GetQuestion(Guid publicKey, Guid? propagationKey)
         {
-            if (this.hash.ContainsKey(GetQuestionKey(publicKey, null)) && !this.hash.ContainsKey(GetQuestionKey(publicKey, propagationKey)))
-                return this.hash[GetQuestionKey(publicKey, null)];
-            return this.hash[GetQuestionKey(publicKey, propagationKey)];
+            if (this._hash.ContainsKey(GetQuestionKey(publicKey, null)) && !this._hash.ContainsKey(GetQuestionKey(publicKey, propagationKey)))
+                return this._hash[GetQuestionKey(publicKey, null)];
+            return this._hash[GetQuestionKey(publicKey, propagationKey)];
         }
         protected CompleteQuestionWrapper GetQuestion(ICompleteQuestion index)
         {
-            if (this.hash.ContainsKey(GetQuestionKey(index.PublicKey, null)) && !this.hash.ContainsKey(GetQuestionKey(index.PublicKey, index.PropogationPublicKey)))
-                return this.hash[GetQuestionKey(index.PublicKey, null)];
-            return this.hash[GetQuestionKey(index.PublicKey, index.PropogationPublicKey)];
+            if (this._hash.ContainsKey(GetQuestionKey(index.PublicKey, null)) && !this._hash.ContainsKey(GetQuestionKey(index.PublicKey, index.PropogationPublicKey)))
+                return this._hash[GetQuestionKey(index.PublicKey, null)];
+            return this._hash[GetQuestionKey(index.PublicKey, index.PropogationPublicKey)];
         }
         public ICompleteQuestion this[Guid publicKey, Guid? propagationKey]
         {

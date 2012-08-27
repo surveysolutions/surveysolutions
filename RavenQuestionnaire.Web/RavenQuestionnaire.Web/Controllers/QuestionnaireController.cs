@@ -57,9 +57,9 @@ namespace RavenQuestionnaire.Web.Controllers
             return View(model);
         }
 
-        public ViewResult Details(string id)
+        public ViewResult Details(Guid id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (id == Guid.Empty)
                 throw new HttpException(404, "Invalid quesry string parameters");
             var model = viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
             
@@ -75,9 +75,9 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ViewResult Edit(string id)
+        public ViewResult Edit(Guid id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (id == Guid.Empty)
                 throw new HttpException(404, "Invalid query string parameters.");
             var model =
                 viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
@@ -94,7 +94,7 @@ namespace RavenQuestionnaire.Web.Controllers
             if (ModelState.IsValid)
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                if (string.IsNullOrEmpty(model.Id))
+                if (model.PublicKey == Guid.Empty)
                 {
                     //maybe better move loading defaults to the handler?
                    
@@ -109,7 +109,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 else
                 {
 
-                    commandService.Execute(new UpdateQuestionnaireCommand(model.Id, model.Title));
+                    commandService.Execute(new UpdateQuestionnaireCommand(model.PublicKey, model.Title));
                 }
                 return RedirectToAction("Index");
             }
@@ -129,9 +129,9 @@ namespace RavenQuestionnaire.Web.Controllers
         #region export
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Export(string id)
+        public ActionResult Export(Guid id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (id== Guid.Empty)
                 throw new HttpException(404, "Invalid quesry string parameters");
             var model =
                 viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
@@ -139,9 +139,9 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult GetExportedData(string id, string type)
+        public ActionResult GetExportedData(Guid id, string type)
         {
-            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(type))
+            if ((id == null) || (id == Guid.Empty) || string.IsNullOrEmpty(type))
                 throw new HttpException(404, "Invalid quesry string parameters");
             var model =
                 viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
@@ -157,7 +157,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
                     var records =
                         viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(
-                            new CompleteQuestionnaireExportInputModel {PageSize = 100, QuestionnaryId = model.Id});
+                            new CompleteQuestionnaireExportInputModel {PageSize = 100, QuestionnaryId = model.PublicKey});
 
 
                     var header = new Dictionary<Guid, string>();

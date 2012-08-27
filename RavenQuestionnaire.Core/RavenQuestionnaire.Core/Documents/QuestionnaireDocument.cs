@@ -9,7 +9,7 @@ namespace RavenQuestionnaire.Core.Documents
 {
     public interface IQuestionnaireDocument : IGroup
     {
-        string Id { get; set; }
+        //string Id { get; set; }
         DateTime CreationDate { get; set; }
         DateTime LastEntryDate { get; set; }
         DateTime? OpenDate { get; set; }
@@ -28,7 +28,7 @@ namespace RavenQuestionnaire.Core.Documents
             ConditionExpression = string.Empty;
         }
 
-        public string Id { get; set; }
+        //public string Id { get; set; }
        
         public string Title { get; set; }
         public Guid PublicKey
@@ -37,7 +37,7 @@ namespace RavenQuestionnaire.Core.Documents
             set
             {
                 publicKey = value;
-                this.Id = value.ToString();
+                //this.Id = value.ToString();
             }
         }
 

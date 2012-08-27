@@ -8,7 +8,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
 {
     public class CompleteGroupFactory: ICompleteGroupFactory
     {
-        public CompleteGroupView CreateGroup(CompleteQuestionnaireDocument doc, ICompleteGroup group)
+        public CompleteGroupView CreateGroup(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group)
         {
        //     PropagatableCompleteGroup propagatableGroup = group as PropagatableCompleteGroup;
             if (group.PropogationPublicKey.HasValue)

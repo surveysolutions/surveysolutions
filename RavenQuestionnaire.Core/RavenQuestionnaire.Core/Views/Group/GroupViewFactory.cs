@@ -14,7 +14,7 @@ namespace RavenQuestionnaire.Core.Views.Group
         }
         public GroupView Load(GroupViewInputModel input)
         {
-            var doc = store.GetByGuid(Guid.Parse(input.QuestionnaireId));
+            var doc = store.GetByGuid(input.QuestionnaireId);
             var group = new Entities.Questionnaire(doc).Find<Entities.SubEntities.Group>(input.PublicKey);
             if (group == null)
                 return null;

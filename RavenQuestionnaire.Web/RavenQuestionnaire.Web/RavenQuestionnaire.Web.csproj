@@ -214,7 +214,6 @@
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\AnswerController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
-    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Global.asax.cs">
@@ -578,8 +577,6 @@
     <Content Include="Scripts\sorter.js" />
     <Content Include="Scripts\take.js" />
     <Content Include="Views\CompleteQuestionnaire\Index.cshtml" />
-    <Content Include="Views\CompleteQuestionnaire\Result.cshtml" />
-    <Content Include="Views\CompleteQuestionnaire\Take.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -868,8 +865,6 @@
     <Content Include="Views\Answer\AnswerView\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Select.cshtml" />
     <Content Include="Views\Questionnaire\ItemList.cshtml" />
-    <Content Include="Views\Report\Index.cshtml" />
-    <Content Include="Views\Report\Report.cshtml" />
     <Content Include="Views\Questionnaire\Export.cshtml" />
     <Content Include="Views\Question\_GetAnswers.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_CompleteGroup.cshtml" />

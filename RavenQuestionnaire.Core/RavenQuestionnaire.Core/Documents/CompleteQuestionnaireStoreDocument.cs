@@ -13,45 +13,25 @@ namespace RavenQuestionnaire.Core.Documents
 {
     public class CompleteQuestionnaireStoreDocument : ICompleteQuestionnaireDocument
     {
+        
         public CompleteQuestionnaireStoreDocument()
         {
             this.CreationDate = DateTime.Now;
             this.LastEntryDate = DateTime.Now;
-           // this.PublicKey = Guid.NewGuid();
+            // this.PublicKey = Guid.NewGuid();
             this.Children = new List<IComposite>();
-          
-        }
-
-        public CompleteQuestionnaireStoreDocument(CompleteQuestionnaireDocument doc) : base()
-        {
-            foreach (IComposite child in doc.Children)
-            {
-                var question = child as IQuestion;
-                if (question != null)
-                {
-                    this.Children.Add(question);
-                    continue;
-                }
-                var group = child as IGroup;
-                if (group != null)
-                {
-                    this.Children.Add(group);
-                    continue;
-                }
-                throw new InvalidOperationException("unknown children type");
-            }
 
         }
 
-        public CompleteQuestionnaireStoreDocument(QuestionnaireDocument doc)
+        public static explicit operator CompleteQuestionnaireStoreDocument(QuestionnaireDocument doc)
         {
             CompleteQuestionnaireStoreDocument result = new CompleteQuestionnaireStoreDocument
-            {
-                TemplateId = doc.Id,
-                Title = doc.Title,
-                Triggers = doc.Triggers,
-                ConditionExpression = doc.ConditionExpression
-            };
+                {
+                    TemplateId = doc.PublicKey,
+                    Title = doc.Title,
+                    Triggers = doc.Triggers,
+                    ConditionExpression = doc.ConditionExpression
+                };
             foreach (IComposite child in doc.Children)
             {
                 var question = child as IQuestion;
@@ -68,6 +48,47 @@ namespace RavenQuestionnaire.Core.Documents
                 }
                 throw new InvalidOperationException("unknown children type");
             }
+            /*   foreach (IQuestion question in doc.Questions)
+               {
+                   result.Questions.Add(new CompleteQuestionFactory().ConvertToCompleteQuestion(question));
+               }
+               foreach (IGroup group in doc.Groups)
+               {
+                   result.Groups.Add(new CompleteGroupFactory().ConvertToCompleteGroup(group));
+               }**/
+            return result;
+        }
+
+
+
+        public static explicit operator CompleteQuestionnaireStoreDocument(CompleteQuestionnaireDocument doc)
+        {
+            CompleteQuestionnaireStoreDocument result = new CompleteQuestionnaireStoreDocument
+            {
+                PublicKey = doc.PublicKey,
+                TemplateId = doc.TemplateId,
+                Title = doc.Title,
+                Triggers = doc.Triggers,
+                ConditionExpression = doc.ConditionExpression,
+
+                CreationDate = doc.CreationDate,
+                LastEntryDate = doc.LastEntryDate,
+                Status = doc.Status,
+                Creator = doc.Creator,
+                Responsible = doc.Responsible,
+
+                StatusChangeComment = doc.StatusChangeComment,
+                PropogationPublicKey = doc.PropogationPublicKey,
+                
+
+
+
+            };
+
+            result.Children.AddRange(doc.Children);
+
+            
+            return result;
         }
 
 
@@ -75,13 +96,14 @@ namespace RavenQuestionnaire.Core.Documents
 
         public UserLight Creator { get; set; }
 
-        public string TemplateId { get; set; }
+        public Guid TemplateId { get; set; }
 
         public SurveyStatus Status { set; get; }
 
         public UserLight Responsible { get; set; }
 
         private GroupHash questionHash;
+
         [JsonIgnore]
         public GroupHash QuestionHash
         {
@@ -99,7 +121,7 @@ namespace RavenQuestionnaire.Core.Documents
         #region Implementation of IQuestionnaireDocument
 
 
-        public string Id { get; set; }
+        //public string Id { get; set; }
 
         public string Title { get; set; }
 
@@ -121,11 +143,12 @@ namespace RavenQuestionnaire.Core.Documents
             set
             {
                 publicKey = value;
-                this.Id = value.ToString();
+                //this.Id = value.ToString();
             }
         }
 
         private Guid publicKey;
+
         [XmlIgnore]
         public Propagate Propagated
         {
@@ -140,19 +163,22 @@ namespace RavenQuestionnaire.Core.Documents
         }
 
         private List<Guid> triggers = new List<Guid>();
+
         public Guid? ForcingPropagationPublicKey
         {
             get { return null; }
-            set {  }
+            set { }
         }
-      //  public List<IObserver<CompositeInfo>> Observers { get; set; }
+
+        //  public List<IObserver<CompositeInfo>> Observers { get; set; }
+
         #endregion
 
         #region Implementation of IComposite
 
         public virtual void Add(IComposite c, Guid? parent)
         {
-            if (c is ICompleteGroup && ((ICompleteGroup)c).PropogationPublicKey.HasValue && !parent.HasValue)
+            if (c is ICompleteGroup && ((ICompleteGroup) c).PropogationPublicKey.HasValue && !parent.HasValue)
             {
                 if (this.Children.Count(g => g.PublicKey.Equals(c.PublicKey)) > 0)
                 {
@@ -183,8 +209,8 @@ namespace RavenQuestionnaire.Core.Documents
                 bool isremoved = false;
                 var propagatedGroups = this.Children.Where(
                     g =>
-                    g.PublicKey.Equals(propogate.PublicKey)  &&
-                    ((ICompleteGroup)g).PropogationPublicKey==propogate.PropogationPublicKey).ToList();
+                    g.PublicKey.Equals(propogate.PublicKey) &&
+                    ((ICompleteGroup) g).PropogationPublicKey == propogate.PropogationPublicKey).ToList();
                 foreach (ICompleteGroup propagatableCompleteGroup in propagatedGroups)
                 {
                     Children.Remove(propagatableCompleteGroup);
@@ -210,14 +236,15 @@ namespace RavenQuestionnaire.Core.Documents
 
         public void Remove(Guid publicKey)
         {
-            
-                var forRemove = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
-                if (forRemove!=null && forRemove is ICompleteGroup &&((ICompleteGroup)forRemove).PropogationPublicKey.HasValue)
-                {
-                    this.Children.Remove(forRemove);
-                    return;
-                }
-            
+
+            var forRemove = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
+            if (forRemove != null && forRemove is ICompleteGroup &&
+                ((ICompleteGroup) forRemove).PropogationPublicKey.HasValue)
+            {
+                this.Children.Remove(forRemove);
+                return;
+            }
+
             foreach (IComposite completeGroup in this.Children)
             {
                 try
@@ -234,17 +261,19 @@ namespace RavenQuestionnaire.Core.Documents
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            var resultInsideGroups = this.Children.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+            var resultInsideGroups =
+                this.Children.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
             if (resultInsideGroups != null)
                 return resultInsideGroups;
-            
+
             return null;
         }
+
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
-              this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
-                      this.Children.SelectMany(q => q.Find<T>(condition)));
+                this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
+                    this.Children.SelectMany(q => q.Find<T>(condition)));
 
         }
 
@@ -258,16 +287,14 @@ namespace RavenQuestionnaire.Core.Documents
 
 
         [JsonIgnore]
-        public IComposite Parent
-        {
-            get; set;
-        }
+        public IComposite Parent { get; set; }
+
         #endregion
 
         public Guid? PropogationPublicKey
         {
             get { return null; }
-            set {}
+            set { }
         }
 
         public bool Enabled { get; set; }

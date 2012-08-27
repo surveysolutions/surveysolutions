@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 
             IOrderedQueryable<CompleteQuestionnaireDocument> query;
 
-            if (!String.IsNullOrEmpty(input.QuestionnaryId))
+            if (Guid.Empty != input.QuestionnaryId)
             {
                 query =
                     (IOrderedQueryable<CompleteQuestionnaireDocument>)
@@ -59,10 +59,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
             var page = query.Skip((input.Page - 1) * input.PageSize)
                 .Take(input.PageSize).ToArray();
 
-            var items = page
-                    .Select(
-                        x =>
-                        new CompleteQuestionnaireExportItem(x));
+            var items = page.Select( x => new CompleteQuestionnaireExportItem(x));
 
             return new CompleteQuestionnaireExportView(
                 input.Page,

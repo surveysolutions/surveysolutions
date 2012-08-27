@@ -17,9 +17,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
     public class CompleteQuestionnaireMabileViewFactory : IViewFactory<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>
     {
-        private IDenormalizerStorage<CompleteQuestionnaireDocument> store;
+        private IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
 
-        public CompleteQuestionnaireMabileViewFactory(IDenormalizerStorage<CompleteQuestionnaireDocument> store)
+        public CompleteQuestionnaireMabileViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
         {
             this.store = store;
         }
@@ -28,9 +28,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
         public CompleteQuestionnaireMobileView Load(CompleteQuestionnaireViewInputModel input)
         {
-            if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
+            if (input.CompleteQuestionnaireId != Guid.Empty)
             {
-                var doc = store.GetByGuid(Guid.Parse(input.CompleteQuestionnaireId));
+                var doc = store.GetByGuid(input.CompleteQuestionnaireId);
                 UpdateInputData(doc, input);
                 ICompleteGroup group = null;
 
@@ -80,7 +80,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             public ICompleteGroup Group { get;private set; }
             public int Level { get; private set; }
         }
-        protected void UpdateInputData(CompleteQuestionnaireDocument doc, CompleteQuestionnaireViewInputModel input)
+        protected void UpdateInputData(CompleteQuestionnaireStoreDocument doc, CompleteQuestionnaireViewInputModel input)
         {
             if (input.CurrentGroupPublicKey.HasValue)
                 return;

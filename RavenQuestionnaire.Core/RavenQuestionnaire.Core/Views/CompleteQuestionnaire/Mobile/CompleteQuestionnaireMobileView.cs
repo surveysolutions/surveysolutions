@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.Extensions;
 using RavenQuestionnaire.Core.ExpressionExecutors;
@@ -14,7 +13,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
     {
         #region Properties
 
-        public string Id { get; set; }
+        public Guid PublicKey { get; set; }
         public string Title { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate { get; set; }
@@ -32,10 +31,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         {
           
         }
-        public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc)
+        public CompleteQuestionnaireMobileView(CompleteQuestionnaireStoreDocument doc)
             : this()
         {
-            Id = IdUtil.ParseId(doc.Id);
+            PublicKey = doc.PublicKey;
             Title = doc.Title;
             CreationDate = doc.CreationDate;
             LastEntryDate = doc.LastEntryDate;
@@ -44,7 +43,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
        //     CollectAll(doc, screenPublicKey, currentGroup as CompleteGroup, navigation);
         }
 
-        public CompleteQuestionnaireMobileView(CompleteQuestionnaireDocument doc, Guid screenPublicKey, ICompleteGroup currentGroup, ScreenNavigation navigation)
+        public CompleteQuestionnaireMobileView(CompleteQuestionnaireStoreDocument doc, Guid screenPublicKey, ICompleteGroup currentGroup, ScreenNavigation navigation)
             : this(doc)
         {
             CollectAll(doc, screenPublicKey, currentGroup as CompleteGroup, navigation);
@@ -54,7 +53,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 
         #region PrivateMethod
         
-        private void CollectAll(CompleteQuestionnaireDocument doc, Guid screenPublicKey, CompleteGroup group, ScreenNavigation navigation)
+        private void CollectAll(CompleteQuestionnaireStoreDocument doc, Guid screenPublicKey, CompleteGroup group, ScreenNavigation navigation)
         {
             var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
             executor.Execute(group);
@@ -64,7 +63,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             CurrentScreen = currentGroup.Propagated != Propagate.None ? currentGroup.PropagateTemplate : currentGroup;
         }
 
-        protected void InitGroups(CompleteQuestionnaireDocument doc, Guid currentGroupPublicKey)
+        protected void InitGroups(CompleteQuestionnaireStoreDocument doc, Guid currentGroupPublicKey)
         {
             var questions = doc.Children.OfType<ICompleteQuestion>().ToList();
             var groups = doc.Children.OfType<ICompleteGroup>().ToList();

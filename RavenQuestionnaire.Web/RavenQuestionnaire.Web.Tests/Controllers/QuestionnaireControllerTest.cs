@@ -71,12 +71,12 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void When_GetQuestionnaireDetailsIsExecuted()
         {
             QuestionnaireDocument innerDoc = new QuestionnaireDocument();
-            innerDoc.Id = "questionnairedocuments/qId";
+            innerDoc.PublicKey = Guid.NewGuid();
             innerDoc.Title = "test";
             innerDoc.CreationDate = DateTime.Now;
             innerDoc.LastEntryDate = DateTime.Now;
             var output = new QuestionnaireView(innerDoc);
-            var input = new QuestionnaireViewInputModel("qId");
+            var input = new QuestionnaireViewInputModel(innerDoc.PublicKey);
 
             ViewRepositoryMock.Setup(
                 x =>
@@ -84,13 +84,13 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     It.Is<QuestionnaireViewInputModel>(v => v.QuestionnaireId.Equals(input.QuestionnaireId))))
                 .Returns(output);
 
-            var result = Controller.Details(output.Id);
+            var result = Controller.Details(output.PublicKey);
             Assert.AreEqual(output, result.ViewData.Model);
         }
         [Test]
         public void Details_IdIsEmpty_ExceptionThrowed()
         {
-            Assert.Throws<HttpException>(() => Controller.Details(null));
+            Assert.Throws<HttpException>(() => Controller.Details(Guid.Empty));
         }
         /*[Test]
         public void When_DeleteQuestionnaireIsExecuted()
@@ -109,12 +109,12 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void Edit_EditFormIsReturned()
         {
             QuestionnaireDocument innerDoc = new QuestionnaireDocument();
-            innerDoc.Id = "questionnairedocuments/qId";
+            innerDoc.PublicKey = Guid.NewGuid();
             innerDoc.Title = "test";
             innerDoc.CreationDate = DateTime.Now;
             innerDoc.LastEntryDate = DateTime.Now;
             var output = new QuestionnaireView(innerDoc);
-            var input = new QuestionnaireViewInputModel("qId");
+            var input = new QuestionnaireViewInputModel(innerDoc.PublicKey);
 
             ViewRepositoryMock.Setup(
                 x =>
@@ -122,7 +122,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     It.Is<QuestionnaireViewInputModel>(v => v.QuestionnaireId.Equals(input.QuestionnaireId))))
                 .Returns(output);
 
-            var result = Controller.Edit(output.Id);
+            var result = Controller.Edit(output.PublicKey);
             Assert.AreEqual(output, result.ViewData.Model);
         }
     }
