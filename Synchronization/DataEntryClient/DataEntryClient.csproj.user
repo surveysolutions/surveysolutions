@@ -6,4 +6,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartArguments>http://localhost 7c372b0f-ca61-44e8-801f-ca5632c13cc3</StartArguments>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-devKh|AnyCPU'">
+    <StartArguments>http://localhost 7c372b0f-ca61-44e8-801f-ca5632c13cc3</StartArguments>
+  </PropertyGroup>
 </Project>
