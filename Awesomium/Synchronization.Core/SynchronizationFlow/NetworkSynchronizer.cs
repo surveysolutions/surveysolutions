@@ -32,9 +32,9 @@ namespace Synchronization.Core.SynchronizationFlow
         {
             try
             {
-                var processGuid = this._requestProcessor.Process<Guid>(this._urlUtils.GetPushUrl(this.SettingsProvider.Settings.ClientId));
+                var processGuid = this._requestProcessor.Process<Guid>(this._urlUtils.GetPushUrl(this.SettingsProvider.Settings.ClientId), default(Guid));
+
                 WaitForEndProcess(processGuid, OnSyncProgressChanged, SyncType.Push, direction);
-               
             }
             catch (Exception e)
             {
@@ -47,7 +47,7 @@ namespace Synchronization.Core.SynchronizationFlow
         {
             try
             {
-                var processGuid = this._requestProcessor.Process<Guid>(this._urlUtils.GetPullUrl(this.SettingsProvider.Settings.ClientId));
+                var processGuid = this._requestProcessor.Process<Guid>(this._urlUtils.GetPullUrl(this.SettingsProvider.Settings.ClientId), default(Guid));
                 WaitForEndProcess(processGuid, OnSyncProgressChanged, SyncType.Pull, direction);
             }
             catch (Exception e)
@@ -72,12 +72,12 @@ namespace Synchronization.Core.SynchronizationFlow
 
             while (percentage != 100)
             {
-                percentage = this._requestProcessor.Process<int>(this._urlUtils.GetPushCheckStateUrl(processid));
+                percentage = this._requestProcessor.Process<int>(this._urlUtils.GetPushCheckStateUrl(processid), -1);
                 if (percentage < 0)
                     throw new SynchronizationException("network synchronization is failed");
 
                 eventRiser(new SynchronizationEvent(new SyncStatus(syncType, direction, percentage, null)));
-            
+
                 Thread.Sleep(1000);
             }
 

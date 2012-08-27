@@ -9,21 +9,21 @@ using Awesomium.Core;
 
 namespace Common.Utils
 {
-    public class WebRequestProcessor:IRequesProcessor
+    public class WebRequestProcessor : IRequesProcessor
     {
         #region Implementation of IRequesProcessor
 
-        public T Process<T>(string url) where T : struct
+        public T Process<T>(string url, T defaultValue) where T : struct
         {
-            return Process<T>(url, "GET");
+            return Process<T>(url, "GET", defaultValue);
         }
 
-        public T Process<T>(string url, string method) where T : struct
+        public T Process<T>(string url, string method, T defaultValue) where T : struct
         {
-            return Process<T>(url, method, false);
+            return Process<T>(url, method, false, defaultValue);
         }
 
-        public T Process<T>(string url, string method, bool includeCookies) where T : struct
+        public T Process<T>(string url, string method, bool includeCookies, T defaultValue) where T : struct
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Common.Utils
                     try
                     {
                         return
-                            (T)TypeDescriptor.GetConverter(typeof (T)).ConvertFromInvariantString(responseFromServer);
+                            (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromInvariantString(responseFromServer);
                     }
                     finally
                     {
@@ -70,7 +70,7 @@ namespace Common.Utils
             }
             catch (Exception e)
             {
-                return default(T);
+                return defaultValue;
             }
         }
 

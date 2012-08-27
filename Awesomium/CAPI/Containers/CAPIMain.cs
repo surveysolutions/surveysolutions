@@ -21,7 +21,8 @@ namespace Browsing.CAPI.Containers
 {
     public partial class CAPIMain : Screen
     {
-        public CAPIMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder):base(holder)
+        public CAPIMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
+            : base(holder)
         {
             InitializeComponent();
             this.clientSettings = clientSettings;
@@ -47,7 +48,7 @@ namespace Browsing.CAPI.Containers
             {
                 if (isUserLoggedIn.HasValue)
                     return isUserLoggedIn.Value;
-                isUserLoggedIn = this.requestProcessor.Process<bool>(urlUtils.GetAuthentificationCheckUrl(), "GET", true);
+                isUserLoggedIn = this.requestProcessor.Process<bool>(urlUtils.GetAuthentificationCheckUrl(), "GET", true, false);
                 return isUserLoggedIn.Value;
             }
         }
@@ -59,7 +60,7 @@ namespace Browsing.CAPI.Containers
         void btnDashboard_Click(object sender, System.EventArgs e)
         {
             var browser = this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPIBrowser) as CAPIBrowser;
-            browser.SetMode(false,urlUtils.GetDefaultUrl());
+            browser.SetMode(false, urlUtils.GetDefaultUrl());
             this.Holder.Redirect(browser);
         }
 
