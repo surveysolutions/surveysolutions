@@ -364,6 +364,9 @@
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Synchronizations\ViewTestUploadFile.cshtml" />
     <Content Include="Views\Survey\_SurveyContent.cshtml" />
+    <Content Include="Web.Deploy-devKh.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
