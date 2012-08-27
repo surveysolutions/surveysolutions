@@ -5,7 +5,8 @@
 @{
     ViewBag.Title = "User assignments";
 }
-<script src="../../Scripts/sorter.js" type="text/javascript"></script>
+<script type="text/javascript" src="../../Scripts/jquery-latest.js"></script> 
+<script type="text/javascript" src="../../Scripts/jquery.tablesorter.js"></script>
 <h2>@(Model.UserName)'s assignment</h2>
 @foreach (var item in Model.Items)
 {
@@ -17,7 +18,7 @@
                          $.ajax({
                                  type: "POST",
                                  url: "@Url.Action("TableGroupByUser", "User")",
-                                 data: JSON.stringify({ SortOrder: data, Pager: { Page: item.Page , PageSize: item.PageSize }, UserId: '@Model.UserId', TemplateId:'@item.TemplateId'  }),
+                                 data: JSON.stringify({ SortOrder: data, Pager: { Page: @item.Page , PageSize: @item.PageSize }, UserId: '@Model.UserId', TemplateId:'@item.TemplateId'  }),
                                  contentType: 'application/json, charset=utf-8',
                                  statusCode: {
                                      200: function(response) {
@@ -35,7 +36,7 @@
         <tr>            
             @foreach (var header in item.HeaderFeaturedQuestions)
             {
-                <th class="sorting" sorter='{"key":"@header.Value"}'>@header.Value</th>
+                <th class="sorting" sorter='{"key":"@header.Key"}'>@header.Value</th>
             }
             <th class="sorting" sorter='{"key":"Status.Name"}'>Status</th>
         </tr>

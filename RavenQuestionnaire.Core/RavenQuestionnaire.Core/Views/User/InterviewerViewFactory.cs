@@ -35,7 +35,6 @@ namespace RavenQuestionnaire.Core.Views.User
             else
             {
                 var gr = docs.GroupBy(t=>t.TemplateId);
-                var l = docs.ToList();
                 foreach (
                     var interviewerGroupView in
                         gr.ToList().Select(template => SelectItems(template.Key, docs, input)).Where(
@@ -57,17 +56,17 @@ namespace RavenQuestionnaire.Core.Views.User
             docs = docs.Where(t => t.TemplateId == templateId);
             if (input.Orders.Count > 0)
             {
-                var o = docs.Where(t => t.FeaturedQuestions.Count() != 0).SelectMany(t => t.FeaturedQuestions).Select(y => y.QuestionText).Distinct().ToList();
+                var o = docs.Where(t => t.FeaturedQuestions.Count() != 0).SelectMany(t => t.FeaturedQuestions).Select(y => y.PublicKey.ToString()).Distinct().ToList();
                 if (o.Contains(input.Orders[0].Field))
                 {
                     docs = input.Orders[0].Direction == OrderDirection.Asc
                             ? docs.OrderBy(
                                 t =>
-                                t.FeaturedQuestions.Where(y => y.QuestionText == input.Orders[0].Field).Select(
+                                t.FeaturedQuestions.Where(y => y.PublicKey.ToString() == input.Orders[0].Field).Select(
                                     x => x.AnswerValue).FirstOrDefault())
                             : docs.OrderByDescending(
                                 t =>
-                                t.FeaturedQuestions.Where(y => y.QuestionText == input.Orders[0].Field).Select(
+                                t.FeaturedQuestions.Where(y => y.PublicKey.ToString() == input.Orders[0].Field).Select(
                                     x => x.AnswerValue).FirstOrDefault());
                 }
                 else

@@ -5,7 +5,7 @@
         {
             <tr>
                 <td>
-                    <a href="@Url.Action("Details", "User", new {id = item.Id, input=new InterviewerInputModel(item.Id)})">@item.Login</a>
+                    <a href="@Url.Action("Details", "User", new {id = item.Id})">@item.Login</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreationDate)
