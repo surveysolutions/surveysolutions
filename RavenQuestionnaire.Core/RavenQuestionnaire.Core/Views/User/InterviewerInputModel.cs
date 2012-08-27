@@ -8,7 +8,10 @@ namespace RavenQuestionnaire.Core.Views.User
 {
     public class InterviewerInputModel
     {
-        public InterviewerInputModel(string id) { UserId = id; }
+        public InterviewerInputModel()
+        {
+            
+        }
 
         public int Page { 
             get { return _page; }
