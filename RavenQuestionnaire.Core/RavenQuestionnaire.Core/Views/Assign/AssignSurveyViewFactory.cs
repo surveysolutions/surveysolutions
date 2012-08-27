@@ -6,10 +6,10 @@ namespace RavenQuestionnaire.Core.Views.Assign
 {
     public class AssignSurveyViewFactory : IViewFactory<AssignSurveyInputModel, AssignSurveyView>
     {
-        private IDenormalizerStorage<CompleteQuestionnaireDocument> store;
+        private IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
         private IDenormalizerStorage<CompleteQuestionnaireBrowseItem> docs;
 
-        public AssignSurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> docs, IDenormalizerStorage<CompleteQuestionnaireDocument> store)
+        public AssignSurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> docs, IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
         {
             this.store = store;
             this.docs = docs;

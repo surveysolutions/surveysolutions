@@ -14,7 +14,7 @@ namespace RavenQuestionnaire.Core.Documents
     public interface ICompleteQuestionnaireDocument: IQuestionnaireDocument, ICompleteGroup
     {
          UserLight Creator { get; set; }
-         string TemplateId { get; set; }
+         Guid TemplateId { get; set; }
          SurveyStatus Status { set; get; }
          UserLight Responsible { get; set; }
          GroupHash QuestionHash { get; set; }
@@ -35,7 +35,7 @@ namespace RavenQuestionnaire.Core.Documents
         {
             CompleteQuestionnaireDocument result = new CompleteQuestionnaireDocument
             {
-                TemplateId = doc.Id,
+                TemplateId = doc.PublicKey,
                 Title = doc.Title,
                 Triggers = doc.Triggers,
                 ConditionExpression = doc.ConditionExpression
@@ -72,31 +72,31 @@ namespace RavenQuestionnaire.Core.Documents
 
         public UserLight Creator { get; set; }
 
-        public string TemplateId { get; set; }
+        public Guid TemplateId { get; set; }
 
         public SurveyStatus Status { set; get; }
 
         public UserLight Responsible { get; set; }
 
-        private GroupHash questionHash;
+        private GroupHash _questionHash;
         [JsonIgnore]
         public GroupHash QuestionHash
         {
             get
             {
-                if (questionHash == null)
-                    questionHash = new GroupHash(this);
-                return questionHash;
+                if (_questionHash == null)
+                    _questionHash = new GroupHash(this);
+                return _questionHash;
             }
-            set { questionHash = value; }
+            set { _questionHash = value; }
         }
-
+        
         public string StatusChangeComment { get; set; }
 
         #region Implementation of IQuestionnaireDocument
 
 
-        public string Id { get; set; }
+        //public string Id { get; set; }
 
         public string Title { get; set; }
 
@@ -118,7 +118,7 @@ namespace RavenQuestionnaire.Core.Documents
             set
             {
                 publicKey = value;
-                this.Id = value.ToString();
+                //this.Id = value.ToString();
             }
         }
 

@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Core.Export.csv
                 //iterate over records
                 foreach (var item in records.Items)
                 {
-                    writer.WriteField(item.Id);
+                    writer.WriteField(item.CompleteQuestionnaireKey);
                     foreach (var guid in template.Keys)
                     {
                  /*     TODO  var completeAnswer = item.CompleteAnswers.FirstOrDefault(a => a.QuestionPublicKey == guid);

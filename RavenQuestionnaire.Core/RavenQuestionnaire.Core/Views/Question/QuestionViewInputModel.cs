@@ -1,17 +1,16 @@
 ﻿using System;
-using RavenQuestionnaire.Core.Utility;
 
 namespace RavenQuestionnaire.Core.Views.Question
 {
     public class QuestionViewInputModel
     {
-        public QuestionViewInputModel(Guid publicKey, string questionnaireId)
+        public QuestionViewInputModel(Guid publicKey, Guid questionnaireId)
         {
             PublicKey = publicKey;
-            QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            QuestionnaireId = questionnaireId;
         }
 
-        public string QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; set; }
         public Guid PublicKey { get; private set; }
     }
 }

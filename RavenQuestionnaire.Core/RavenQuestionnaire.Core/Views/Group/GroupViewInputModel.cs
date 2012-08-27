@@ -5,13 +5,13 @@ namespace RavenQuestionnaire.Core.Views.Group
 {
     public class GroupViewInputModel
     {
-        public GroupViewInputModel(Guid publicKey, string questionnaireId)
+        public GroupViewInputModel(Guid publicKey, Guid questionnaireId)
         {
             PublicKey = publicKey;
-            QuestionnaireId = IdUtil.CreateQuestionnaireId(questionnaireId);
+            QuestionnaireId = questionnaireId;
         }
 
-        public string QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; set; }
         public Guid PublicKey { get; private set; }
     }
 }

@@ -10,7 +10,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire
     public class UpdateQuestionnaireCommand : CommandBase
     {
         [AggregateRootId]
-        public string QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; set; }
 
         public string Title{get; set;}
 
@@ -19,7 +19,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire
         /// </summary>
         /// <param name="questionnaireId"></param>
         /// <param name="title"></param>
-        public UpdateQuestionnaireCommand(string questionnaireId, string title)
+        public UpdateQuestionnaireCommand(Guid questionnaireId, string title)
         {
             this.QuestionnaireId = questionnaireId;
             this.Title = title;

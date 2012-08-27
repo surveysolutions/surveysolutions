@@ -15,7 +15,7 @@ namespace RavenQuestionnaire.Core.Entities
 
         private QuestionnaireDocument innerDocument;
 
-        public string QuestionnaireId { get { return innerDocument.Id; } }
+        //public string QuestionnaireId { get { return innerDocument.Id; } }
 
         #endregion
 

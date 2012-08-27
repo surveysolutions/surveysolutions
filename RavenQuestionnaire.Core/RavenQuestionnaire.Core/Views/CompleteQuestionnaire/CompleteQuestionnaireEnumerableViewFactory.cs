@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using RavenQuestionnaire.Core.AbstractFactories;
 using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Documents;
@@ -10,9 +11,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
     public class CompleteQuestionnaireEnumerableViewFactory :
         IViewFactory<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>
     {
-        private readonly IDenormalizerStorage<CompleteQuestionnaireDocument> documentItemSession;
+        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentItemSession;
         private ICompleteGroupFactory groupFactory;
-        public CompleteQuestionnaireEnumerableViewFactory(IDenormalizerStorage<CompleteQuestionnaireDocument> documentItemSession, ICompleteGroupFactory groupFactory)
+        public CompleteQuestionnaireEnumerableViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentItemSession, ICompleteGroupFactory groupFactory)
         {
             this.documentItemSession = documentItemSession;
             this.groupFactory = groupFactory;
@@ -20,16 +21,15 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
         public CompleteQuestionnaireViewEnumerable Load(CompleteQuestionnaireViewInputModel input)
         {
-            if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
+            if (Guid.Empty != input.CompleteQuestionnaireId)
             {
-                var doc = documentItemSession.Query().FirstOrDefault(i => i.Id == input.CompleteQuestionnaireId);
+                var doc = documentItemSession.Query().FirstOrDefault(i => i.PublicKey == input.CompleteQuestionnaireId);
                 ICompleteGroup group = null;
 
-                Iterator<ICompleteGroup> iterator =
-                    new QuestionnaireScreenIterator(doc);
+                //Iterator<ICompleteGroup> iterator = new QuestionnaireScreenIterator(doc);
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
-                    group =doc.Find<CompleteGroup>(input.CurrentGroupPublicKey.Value);
+                    group = doc.Find<CompleteGroup>(input.CurrentGroupPublicKey.Value);
                 }
                
                 return new CompleteQuestionnaireViewEnumerable(doc, group, this.groupFactory);

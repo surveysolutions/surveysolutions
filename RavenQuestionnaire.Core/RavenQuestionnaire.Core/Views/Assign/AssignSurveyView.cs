@@ -21,7 +21,7 @@ namespace RavenQuestionnaire.Core.Views.Assign
         public UserLight Responsible { get; set; }
         public List<CompleteQuestionView> FeaturedQuestions { get; set; }
 
-        public AssignSurveyView(CompleteQuestionnaireBrowseItem doc, CompleteQuestionnaireDocument completeQuestionnaire)
+        public AssignSurveyView(CompleteQuestionnaireBrowseItem doc, CompleteQuestionnaireStoreDocument completeQuestionnaire)
         {
             Id = completeQuestionnaire.PublicKey;
             QuestionnaireTitle = doc.QuestionnaireTitle;

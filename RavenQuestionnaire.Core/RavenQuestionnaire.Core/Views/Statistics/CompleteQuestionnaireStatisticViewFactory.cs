@@ -6,9 +6,9 @@ namespace RavenQuestionnaire.Core.Views.Statistics
 {
     public class CompleteQuestionnaireStatisticViewFactory : IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>
     {
-        private IDenormalizerStorage<CompleteQuestionnaireDocument> store;
+        private IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
 
-        public CompleteQuestionnaireStatisticViewFactory(IDenormalizerStorage<CompleteQuestionnaireDocument> store)
+        public CompleteQuestionnaireStatisticViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
         {
             this.store = store;
         }
@@ -17,7 +17,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
 
         public CompleteQuestionnaireStatisticView Load(CompleteQuestionnaireStatisticViewInputModel input)
         {
-            CompleteQuestionnaireDocument doc = store.GetByGuid(Guid.Parse(input.Id));
+            CompleteQuestionnaireStoreDocument doc = store.GetByGuid(Guid.Parse(input.Id));
             return new CompleteQuestionnaireStatisticView(doc);
         }
 
