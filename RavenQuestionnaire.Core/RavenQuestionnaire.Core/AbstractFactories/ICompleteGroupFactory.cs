@@ -7,7 +7,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
 {
     public interface ICompleteGroupFactory
     {
-        CompleteGroupView CreateGroup(CompleteQuestionnaireDocument doc, ICompleteGroup group);
+        CompleteGroupView CreateGroup(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group);
         ICompleteGroup ConvertToCompleteGroup(IGroup group);
     }
 }

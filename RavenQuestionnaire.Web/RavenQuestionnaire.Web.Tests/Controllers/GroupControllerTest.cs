@@ -48,7 +48,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     It.Is<QuestionnaireViewInputModel>(
                         v => v.QuestionnaireId.Equals(key.ToString()))))
                 .Returns(new QuestionnaireView(innerDocument));
-            Controller.Save(new GroupView() { Title = "test", QuestionnaireId = innerDocument.Id });
+            Controller.Save(new GroupView() { Title = "test", QuestionnaireKey = innerDocument.PublicKey});
             CommandServiceMock.Verify(x => x.Execute(It.IsAny<AddGroupCommand>()), Times.Once());
         }
 
@@ -105,7 +105,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             innerDocument.Children.Add(group);
             var groupView = new GroupView(innerDocument, group);
 
-            var input = new QuestionViewInputModel(group.PublicKey, entity.QuestionnaireId);
+            var input = new QuestionViewInputModel(group.PublicKey, entity.PublicKey);
 
             ViewRepositoryMock.Setup(
                 x =>
@@ -114,7 +114,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                         v => v.QuestionnaireId.Equals(input.QuestionnaireId) && v.PublicKey.Equals(input.PublicKey))))
                 .Returns(groupView);
 
-            var result = Controller.Edit(group.PublicKey, innerDocument.Id);
+            var result = Controller.Edit(group.PublicKey, innerDocument.PublicKey);
             Assert.AreEqual(groupView, ((ViewResult)result).ViewData.Model);
         }
     }

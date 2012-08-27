@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Documents
 {
     public interface IFlowGraphDocument
     {
-        string Id { get; set; }
+        Guid PublicKey { get; set; }
 
-        string QuestionnaireDocumentId { get; set; }
+        Guid QuestionnaireDocumentId { get; set; }
 
         DateTime CreationDate { get; set; }
         DateTime LastEntryDate { get; set; }
@@ -29,9 +27,12 @@ namespace RavenQuestionnaire.Core.Documents
             Connections = new List<FlowConnection>();
         }
 
-        public string Id { get; set; }
+        //public string Id { get; set; }
 
-        public string QuestionnaireDocumentId { get; set; }
+        public Guid PublicKey { get; set; }
+
+
+        public Guid QuestionnaireDocumentId { get; set; }
 
         public List<FlowBlock> Blocks { get; set; }
         public List<FlowConnection> Connections { get; set; }

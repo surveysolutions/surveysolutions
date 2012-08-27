@@ -1,4 +1,5 @@
-﻿using Raven.Client;
+﻿using System;
+using Raven.Client;
 using RavenQuestionnaire.Core.Documents;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
@@ -13,7 +14,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         }
         public CompleteQuestionnaireView Load(CompleteQuestionnaireViewInputModel input)
         {
-            if (!string.IsNullOrEmpty(input.CompleteQuestionnaireId))
+            if (input.CompleteQuestionnaireId != null && input.CompleteQuestionnaireId!= Guid.Empty)
             {
                 var doc = documentSession.Load<CompleteQuestionnaireDocument>(input.CompleteQuestionnaireId);
 

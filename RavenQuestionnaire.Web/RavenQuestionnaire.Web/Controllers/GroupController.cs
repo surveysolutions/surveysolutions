@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Create(string id, Guid? parentGroup)
         {
-            return View("_Create", new GroupView(id, parentGroup));
+            return View("_Create", new GroupView(Guid.Parse(id), parentGroup));
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
@@ -51,13 +51,13 @@ namespace RavenQuestionnaire.Web.Controllers
                     if (model.PublicKey == Guid.Empty)
                     {
                         var newItemKey = Guid.NewGuid();
-                        commandService.Execute(new AddGroupCommand(Guid.Parse(model.QuestionnaireId), newItemKey,
+                        commandService.Execute(new AddGroupCommand(model.QuestionnaireKey, newItemKey,
                             model.Title, model.Parent, model.ConditionExpression));
                     }
                     else
                     {
                         commandService.Execute(new UpdateGroupCommand(model.Title, model.Propagated,
-                                                                      Guid.Parse(model.QuestionnaireId),
+                                                                      model.QuestionnaireKey,
                                                                       model.PublicKey, GlobalInfo.GetCurrentUser(), model.ConditionExpression));
                     }
                 }
@@ -66,13 +66,13 @@ namespace RavenQuestionnaire.Web.Controllers
                     ModelState.AddModelError("ConditionExpression", e.Message);
                     return PartialView("_Create", model);
                 }
-                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireId });
+                return RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireKey});
             }
             return View("_Create", model);
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Edit(Guid publicKey, string questionnaireId)
+        public ActionResult Edit(Guid publicKey, Guid questionnaireId)
         {
             if (publicKey == Guid.Empty)
                 throw new HttpException(404, "Invalid query string parameters");

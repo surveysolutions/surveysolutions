@@ -32,10 +32,10 @@ namespace RavenQuestionnaire.Core.Entities
       
 
        
-        public string CompleteQuestinnaireId
+        /*public string CompleteQuestinnaireId
         {
             get { return innerDocument.Id; }
-        }
+        }*/
         public void SetStatus(SurveyStatus status)
         {
             innerDocument.Status = status;

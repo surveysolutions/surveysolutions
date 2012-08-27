@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
@@ -11,24 +10,21 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
 {
     public abstract class AbstractQuestionnaireView
     {
-        public string Id { get; set; }
+        public Guid PublicKey;
         public string Title { get; set; }
         public bool IsValid { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastEntryDate { get; set; }
 
-        public AbstractQuestionnaireView(IQuestionnaireDocument doc)
-            : this()
+        public AbstractQuestionnaireView(IQuestionnaireDocument doc): this()
         {
-            this.Id = IdUtil.ParseId(doc.Id);
+            this.PublicKey = doc.PublicKey;
             this.Title = doc.Title;
             this.CreationDate = doc.CreationDate;
             this.LastEntryDate = doc.LastEntryDate;
         }
 
-        public AbstractQuestionnaireView()
-        {
-        }
+        public AbstractQuestionnaireView(){}
     }
 
     public abstract class AbstractQuestionnaireView<TGroup, TQuestion> : AbstractQuestionnaireView
@@ -54,7 +50,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
 
         public AbstractQuestionnaireView(IQuestionnaireDocument doc)
         {
-            this.Id = IdUtil.ParseId(doc.Id); 
             this.Children = new List<ICompositeView>();
             this.Questions = new TQuestion[0];
             this.Groups = new TGroup[0];
@@ -68,26 +63,16 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         }
 
         public Guid PublicKey { get; set; }
-
         public string Title { get; set; }
-
         public Guid? Parent { get; set; }
-
         public List<ICompositeView> Children { get; set; }
     }
 
-    public class QuestionnaireView :
-        AbstractQuestionnaireView
-            <GroupView,QuestionView>
+    public class QuestionnaireView : AbstractQuestionnaireView<GroupView,QuestionView>
     {
-        public QuestionnaireView()
-            : base()
-        {
-        }
+        public QuestionnaireView(): base(){}
 
-        public QuestionnaireView(
-            IQuestionnaireDocument doc)
-            : base(doc)
+        public QuestionnaireView(IQuestionnaireDocument doc): base(doc)
         {
             foreach (var composite in doc.Children)
             {

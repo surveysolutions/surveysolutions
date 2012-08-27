@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Newtonsoft.Json;
 using Raven.Client;
 using Raven.Client.Document;
-using Ncqrs.Eventing.Sourcing;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
 {

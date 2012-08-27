@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
@@ -13,7 +14,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
     {
         public SurveyStatus Status { get; set; }
 
-        public string TemplateId { get; set; }
+        public Guid  TemplateId { get; set; }
 
 
         public UserLight Responsible { set; get; }
@@ -25,7 +26,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
         }
 
-        public CompleteQuestionnaireView(CompleteQuestionnaireDocument doc)
+        public CompleteQuestionnaireView(CompleteQuestionnaireStoreDocument doc)
             : base(doc)
         {
             this.Status = doc.Status;

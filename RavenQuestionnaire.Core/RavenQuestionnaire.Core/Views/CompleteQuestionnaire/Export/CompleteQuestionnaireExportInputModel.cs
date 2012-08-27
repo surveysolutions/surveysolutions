@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using RavenQuestionnaire.Core.Entities;
 using RavenQuestionnaire.Core.Utility;
 
@@ -35,13 +36,13 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         private int _pageSize = 20;
 
 
-        public string QuestionnaryId
+        public Guid QuestionnaryId
         {
-            get { return _responsibleId; }
-            set { _responsibleId = IdUtil.CreateQuestionnaireId(value); ; }
+            get { return _questionnaryId; }
+            set { _questionnaryId = value; ; }
         }
 
-        private string _responsibleId = "";
+        private Guid _questionnaryId;
 
 
     }

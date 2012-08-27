@@ -162,7 +162,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         {
             QuestionnaireDocument questionnaireInnerDocument = new QuestionnaireDocument();
             //queston without group
-            questionnaireInnerDocument.Id = "completequestionnairedocuments/cqID";
+            questionnaireInnerDocument.PublicKey = Guid.NewGuid();
             var testQuestion1 = new SingleQuestion(Guid.NewGuid(), "test question");
             questionnaireInnerDocument.Children.Add(testQuestion1);
             Answer answer = new Answer() {AnswerText = "answer", AnswerType = AnswerType.Select};
@@ -211,7 +211,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             List<Guid> triggers = new List<Guid>() { Guid.NewGuid() };
             QuestionnaireDocument doc = new QuestionnaireDocument()
                                             {
-                                                Id = "test",
+                                                PublicKey = Guid.NewGuid(),
                                                 Propagated = Propagate.Propagated,
                                                 Title = "new title",
                                                 Children = children,

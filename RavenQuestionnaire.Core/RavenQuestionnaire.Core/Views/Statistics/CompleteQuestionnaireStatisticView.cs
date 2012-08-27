@@ -27,13 +27,13 @@ namespace RavenQuestionnaire.Core.Views.Statistics
 
         #region Constructor
 
-        public CompleteQuestionnaireStatisticView(CompleteQuestionnaireDocument doc)
+        public CompleteQuestionnaireStatisticView(CompleteQuestionnaireStoreDocument doc)
         {
-            this.Id = doc.Id;
+            this.Id = doc.PublicKey.ToString();
             this.Title = doc.Title;
             this.StartDate = doc.CreationDate;
             this.EndDate = doc.CloseDate;
-            this.CompleteQuestionnaireId = doc.Id;
+            this.CompleteQuestionnaireId = doc.PublicKey.ToString();
             Creator = doc.Creator;
             Status = doc.Status;
             HandleQuestionTree(doc);
@@ -41,7 +41,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
 
         #endregion
 
-        protected void HandleQuestionTree(CompleteQuestionnaireDocument target)
+        protected void HandleQuestionTree(CompleteQuestionnaireStoreDocument target)
         {
             this.InvalidQuestions=new List<QuestionStatisticView>();
             this.AnsweredQuestions = new List<QuestionStatisticView>();
