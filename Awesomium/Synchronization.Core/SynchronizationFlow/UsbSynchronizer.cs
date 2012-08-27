@@ -185,7 +185,7 @@ namespace Synchronization.Core.SynchronizationFlow
                             };
 
 
-                        webClient.UploadFileAsync(new Uri(this._urlUtils.GetPullUrl(this.SettingsProvider.Settings.ClientId)), usbArchive.InFile);
+                        webClient.UploadFileAsync(new Uri(this._urlUtils.GetUsbPullUrl(this.SettingsProvider.Settings.ClientId)), usbArchive.InFile);
                         
                         while (webClient.IsBusy && !done.WaitOne(200))
                         {
