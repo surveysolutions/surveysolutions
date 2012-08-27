@@ -293,6 +293,11 @@
                 <Component Id="cmpEB43F022A90093CF37987470411EC95A" Guid="*">
                     <File Id="filAEB888322CDEFDF794FA06E95E7C40BE" KeyPath="yes" Source="$(var.SourceSiteDir)\Content\photoswipe.css" />
                 </Component>
+                <Directory Id="dir74356578B76D3900AC8B71D116F1CC36" Name="img">
+                    <Component Id="cmp2993270E3390395AF17733A901B00EE6" Guid="*">
+                        <File Id="filFEA95EB4677477AED4E0BD5C40BC7CC3" KeyPath="yes" Source="$(var.SourceSiteDir)\Content\img\bill.jpg" />
+                    </Component>
+                </Directory>
                 <Directory Id="dirD507EB08FD498F5DE5C2E203DC71EEA8" Name="themes">
                     <Directory Id="dir76D0816D9F205A8DFFE38DED61F91069" Name="base">
                         <Component Id="cmp723B5225F671921E59A2F67D82C12AB3" Guid="*">
@@ -621,6 +626,14 @@
                 <Component Id="cmpB0F7C1C67097DEDF2407C0AA935AABC2" Guid="*">
                     <File Id="filD674966E9F57E30F97EEF6DAA13415B7" KeyPath="yes" Source="$(var.SourceSiteDir)\Scripts\take.js" />
                 </Component>
+                <Directory Id="dir7FBE504154E31A34DC6A2783CDBAE555" Name="jqmIScroll">
+                    <Component Id="cmp72AEDEE87DE6621B14B698732BC6303E" Guid="*">
+                        <File Id="fil6C158844ACA1137426188FCE7C964998" KeyPath="yes" Source="$(var.SourceSiteDir)\Scripts\jqmIScroll\iscroll.js" />
+                    </Component>
+                    <Component Id="cmpDD194030B06A613C3F524E580D340D0A" Guid="*">
+                        <File Id="filAC6643D5CEA9EB87079F8A25181184E0" KeyPath="yes" Source="$(var.SourceSiteDir)\Scripts\jqmIScroll\jquery.mobile.iscrollview.js" />
+                    </Component>
+                </Directory>
             </Directory>
             <Directory Id="dir54E821EE826A4AABDECCF16DBD4A524A" Name="Views">
                 <Component Id="cmp1F06E3D227499C217B993AE3B425F7A4" Guid="*">
@@ -841,6 +854,7 @@
             <ComponentRef Id="cmp1B31C603880FCCF5C47AB09C3A347F5B" />
             <ComponentRef Id="cmpE14883ECADE3685B2ABF53D0D42B5918" />
             <ComponentRef Id="cmpEB43F022A90093CF37987470411EC95A" />
+            <ComponentRef Id="cmp2993270E3390395AF17733A901B00EE6" />
             <ComponentRef Id="cmp723B5225F671921E59A2F67D82C12AB3" />
             <ComponentRef Id="cmp0DD48924282C5559325AC7007AA03C1A" />
             <ComponentRef Id="cmpE6D4000ECBBF4E6838399AE4583997AD" />
@@ -945,6 +959,8 @@
             <ComponentRef Id="cmpFF7C38AEB1014EAE116E94BE242A4198" />
             <ComponentRef Id="cmp309469D4C7B2370654E24F57D4CE97DA" />
             <ComponentRef Id="cmpB0F7C1C67097DEDF2407C0AA935AABC2" />
+            <ComponentRef Id="cmp72AEDEE87DE6621B14B698732BC6303E" />
+            <ComponentRef Id="cmpDD194030B06A613C3F524E580D340D0A" />
             <ComponentRef Id="cmp1F06E3D227499C217B993AE3B425F7A4" />
             <ComponentRef Id="cmpDF79F3FE7C166A77712632BA7D323DEC" />
             <ComponentRef Id="cmp393D470ED08B32C3B686299532109E42" />

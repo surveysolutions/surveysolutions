@@ -15,36 +15,38 @@
              Description="Capi installation."
              InstallScope="perUser"/>
         <!--InstallPrivileges="limited"-->
-        
 
-        <Upgrade Id="cc00bf47-7cbf-4bde-8fa1-905fa1916b1e">
+
+      <MajorUpgrade Schedule="afterInstallInitialize"
+            DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit."/>    
+
+    <!--<Upgrade Id="cc00bf47-7cbf-4bde-8fa1-905fa1916b1e">
       
-      <UpgradeVersion Minimum="$(var.ProductVersion)" 
+        <UpgradeVersion Minimum="$(var.ProductVersion)" 
                       IncludeMinimum="no" 
                       OnlyDetect="yes" 
                       Language="1033"
                       Property="NEWPRODUCTFOUND" />
 
-      <UpgradeVersion Minimum="0.0.0.0" 
+        <UpgradeVersion Minimum="0.0.0.0" 
                       IncludeMinimum="yes" 
                       Maximum="$(var.ProductVersion)" 
                       IncludeMaximum="no" 
                       Language="1033"
                       Property="UPGRADEFOUND" />
-    </Upgrade>
+    </Upgrade>-->
 
     <Property Id="NEWPRODUCTFOUND" Secure="yes" />
     <Property Id="UPGRADEFOUND" Secure="yes" />
 
-
-        <Property Id="ALLUSERS" Secure="yes" />
+    <Property Id="ALLUSERS" Secure="yes" />
 
         <!-- Prerequisites -->
-        <PropertyRef Id="NETFRAMEWORK40CLIENT"/>
+    <PropertyRef Id="NETFRAMEWORK40CLIENT"/>
 
-        <Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
-            <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
-        </Condition>
+    <Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
+        <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
+    </Condition>
 
         <Property Id='ASP_NET_MVC_3_0_DLL'>
             <DirectorySearch Id='MVC_DLL_DIR' Path='[ProgramFilesFolder]\Microsoft ASP.NET\ASP.NET MVC 3\Assemblies'>
@@ -132,17 +134,17 @@
         </Feature>
 
     <!-- Prevent downgrading -->
-    <CustomAction Id="PreventDowngrading" Error="Newer version already installed." />
+    <!--<CustomAction Id="PreventDowngrading" Error="Newer version already installed." />-->
 
     <!-- Sequences -->
-    <InstallExecuteSequence>
+    <!--<InstallExecuteSequence>
       <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
       <RemoveExistingProducts After="InstallFinalize" />
     </InstallExecuteSequence>
 
     <InstallUISequence>
       <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
-    </InstallUISequence>
+    </InstallUISequence>-->
 
     <UIRef Id="WixUI_MondoCustom" />
     <UIRef Id="WixUI_ErrorProgressText" />
