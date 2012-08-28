@@ -48,7 +48,7 @@ namespace Web.Supervisor.Controllers
             var newQuestionnairePublicKey = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
-            return RedirectToAction("Assigments", "Survey", new { input = new SurveyGroupInputModel() {Id=id}});
+            return RedirectToAction("Assign", "Survey", new { Id = newQuestionnairePublicKey, Template = id });
         }
     }
 }
