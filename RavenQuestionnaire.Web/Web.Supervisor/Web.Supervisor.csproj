@@ -231,8 +231,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap-responsive.min.css" />
-    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap\bootstrap-responsive.min.css" />
+    <Content Include="Content\bootstrap\bootstrap.min.css" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Content\img\sort_asc.png" />
@@ -417,10 +417,9 @@
   <ItemGroup>
     <Content Include="Views\User\_TableGroupByUser.cshtml" />
   </ItemGroup>
-   <ItemGroup>
+  <ItemGroup>
     <Content Include="Views\Survey\Approve.cshtml" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="Web.Deploy-devKh.config">
       <DependentUpon>Web.config</DependentUpon>
