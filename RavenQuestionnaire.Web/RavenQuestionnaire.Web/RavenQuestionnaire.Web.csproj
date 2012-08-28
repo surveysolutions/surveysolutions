@@ -705,15 +705,6 @@
     <Content Include="Views\CompleteQuestionnaire\MyItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\EditorTemplates\StatusByRole.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\EditorTemplates\RolePermission.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\EditorTemplates\StatusItemView.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Content\Bootstrap\accordion.less">
       <Generator>LessGenerator</Generator>
       <LastGenOutput>accordion.css</LastGenOutput>

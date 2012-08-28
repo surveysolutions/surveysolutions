@@ -44,7 +44,7 @@
                         using (Html.BeginCollectionItem("settings", true, Model.PublicKey + "_" + Model.PropogationPublicKey))
                         {
                             @Html.Hidden("ParentGroupPublicKey", ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
-                            @Html.Hidden("QuestionnaireId", Model.QuestionnaireId)
+                            @Html.Hidden("QuestionnaireId", Model.QuestionnaireKey)
                             @Html.Hidden("PropogationPublicKey", Model.PropogationPublicKey)
                         }
                     }</div>
@@ -55,7 +55,7 @@
 </table>
 @if (!Model.AutoPropagate)
 {
-    @Ajax.ActionLink("Remove", "DeletePropagatedGroup", "Group", new {propagationKey = Model.PropogationPublicKey, publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireId, parentGroupPublicKey = ((CompleteGroupView) ViewBag.CurrentGroup).PublicKey},
+    @Ajax.ActionLink("Remove", "DeletePropagatedGroup", "Group", new {propagationKey = Model.PropogationPublicKey, publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey, parentGroupPublicKey = ((CompleteGroupView) ViewBag.CurrentGroup).PublicKey},
                            new AjaxOptions() {InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView) ViewBag.CurrentGroup).GetClientId("div")},
                            new {@class = "btn"})
     <br />

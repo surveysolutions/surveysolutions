@@ -9,10 +9,10 @@
     <div class="question-header">
         <h3>@Model.Index) @Html.Raw(Model.Title) @(Model.Featured? " - Featured":"")</h3>
         <div class="btn-group">
-            @Html.ActionLink("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new { @class = "btn btn-primary btn-mini" })
-            @Html.ActionLink("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireId },new { @class = "btn btn-danger btn-mini" })
-            @Html.ActionLink("Add cards", "AddCards", "Question", new { Model.PublicKey, Model.QuestionnaireId }, new { @class = "btn btn-info btn-mini" })
-            @Html.ActionLink("Move", "Move", "Question", new { PublicKeyQuestion = Model.PublicKey, QuestionnaireId = Model.QuestionnaireId }, new { @class = "btn btn-danger btn-mini" })            
+            @Html.ActionLink("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireKey }, new { @class = "btn btn-primary btn-mini" })
+            @Html.ActionLink("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireKey },new { @class = "btn btn-danger btn-mini" })
+            @Html.ActionLink("Add cards", "AddCards", "Question", new { Model.PublicKey, Model.QuestionnaireKey}, new { @class = "btn btn-info btn-mini" })
+            @Html.ActionLink("Move", "Move", "Question", new { PublicKeyQuestion = Model.PublicKey, QuestionnaireId = Model.QuestionnaireKey}, new { @class = "btn btn-danger btn-mini" })            
         </div>
     </div>
     <div class="question-body">
@@ -28,12 +28,12 @@
                             @using (Ajax.BeginForm("DeleteCard", "Question", new AjaxOptions() { HttpMethod = "Post", OnComplete = string.Format("$('#image{0}').remove()",i.PublicKey), Confirm = "Are you sure?" }))
                             {
                                 var imageKey = i.PublicKey;
-                                @Html.HiddenFor(x => x.QuestionnaireId)
+                                @Html.HiddenFor(x => x.QuestionnaireKey)
                                 @Html.HiddenFor(x => x.PublicKey)
                                 @Html.HiddenFor(x => imageKey)
                                 <input class="btn btn-danger btn-mini" type="submit" value="Remove" />
                             }
-                            @Ajax.ActionLinkWithIcon("Edit", "EditCard", "Question", new { Model.PublicKey, Model.QuestionnaireId, ImageKey = i.PublicKey }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-info btn-mini" }, "icon-edit icon-white")
+                            @Ajax.ActionLinkWithIcon("Edit", "EditCard", "Question", new { Model.PublicKey, Model.QuestionnaireKey, ImageKey = i.PublicKey }, new AjaxOptions() { UpdateTargetId = "addNewQuestion", OnBegin = "OpenModal" }, new { @class = "btn btn-info btn-mini" }, "icon-edit icon-white")
                         </div>
                     </div>
                 </li>
