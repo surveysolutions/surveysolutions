@@ -25,7 +25,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
                 Guid nameGuid = Guid.Parse(name);
                 Guid? propagationKey = question.PropogationPublicKey;
                 var value = hash[nameGuid, propagationKey].GetAnswerObject();
-                args.Result = value ?? string.Empty;
+                args.Result = value;
             };
             bool result = false;
             try
