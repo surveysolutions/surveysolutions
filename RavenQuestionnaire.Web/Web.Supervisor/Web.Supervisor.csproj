@@ -418,6 +418,10 @@
     <Content Include="Views\User\_TableGroupByUser.cshtml" />
   </ItemGroup>
   </ItemGroup>
+   <ItemGroup>
+    <Content Include="Views\Survey\Approve.cshtml" />
+  </ItemGroup>
+
   <ItemGroup>
     <Content Include="Web.Deploy-devKh.config">
       <DependentUpon>Web.config</DependentUpon>
