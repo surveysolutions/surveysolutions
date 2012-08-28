@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
     
-    <?define ProductVersion="1.0.0.2" ?>
+    <!--<?define ProductVersion="1.0.0.2" ?>-->
     <?define Manufacturer="The World Bank" ?>
     <?define ProductName="Capi" ?>
 

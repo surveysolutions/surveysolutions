@@ -21,11 +21,11 @@
     <div class="group-header">
         <h3>@Html.DisplayFor(modelItem => Model.Title) - @Model.PublicKey</h3>
         <div class="btn-group">
-            @Html.ActionLink("Add Question", "Create", "Question", new { id = Model.QuestionnaireId, groupPublicKey = Model.PublicKey }, new { @class = "btn btn-primary btn-mini" })
-            @Html.ActionLink("Add Group", "Create", "Group", new { id = Model.QuestionnaireId, parentGroup = Model.PublicKey }, new { @class = "btn btn-primary btn-mini" })
-            @Html.ActionLink("Edit", "Edit", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new { @class = "btn btn-primary btn-mini" })
-            @Html.ActionLink("Delete", "Delete", "Group", new { Model.PublicKey, Model.QuestionnaireId }, new { @class = "btn btn-primary btn-mini" })
-            @Html.ActionLink("Move", "Move", "Group", new { PublicKeyGroup=Model.PublicKey, Model.QuestionnaireId }, new { @class = "btn btn-danger btn-mini" })            
+            @Html.ActionLink("Add Question", "Create", "Question", new { id = Model.QuestionnaireKey, groupPublicKey = Model.PublicKey }, new { @class = "btn btn-primary btn-mini" })
+            @Html.ActionLink("Add Group", "Create", "Group", new { id = Model.QuestionnaireKey, parentGroup = Model.PublicKey }, new { @class = "btn btn-primary btn-mini" })
+            @Html.ActionLink("Edit", "Edit", "Group", new { Model.PublicKey, Model.QuestionnaireKey}, new { @class = "btn btn-primary btn-mini" })
+            @Html.ActionLink("Delete", "Delete", "Group", new { Model.PublicKey, Model.QuestionnaireKey}, new { @class = "btn btn-primary btn-mini" })
+            @Html.ActionLink("Move", "Move", "Group", new { PublicKeyGroup=Model.PublicKey, Model.QuestionnaireKey}, new { @class = "btn btn-danger btn-mini" })            
         </div>
     </div>
     <div>

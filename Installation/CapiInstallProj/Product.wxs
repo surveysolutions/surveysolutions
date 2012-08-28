@@ -17,7 +17,7 @@
         <!--InstallPrivileges="limited"-->
 
 
-      <MajorUpgrade Schedule="afterInstallInitialize"
+      <MajorUpgrade Schedule="afterInstallInitialize" AllowSameVersionUpgrades="yes"  
             DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit."/>    
 
     <!--<Upgrade Id="cc00bf47-7cbf-4bde-8fa1-905fa1916b1e">

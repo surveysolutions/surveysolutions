@@ -26,7 +26,7 @@
 
     if (prev != null)
     {
-        @Html.ActionLink("Prev Group", "QuestionHtml5", "CompleteQuestionnaire", new { id = Model.Id, group = prev.PublicKey }, new { data_corners="false", bdata_theme = "b", @class = "", data_icon = "arrow-l", iconpos = "notext", rel="external", data_ajax="false" })
+        @Html.ActionLink("Prev Group", "QuestionHtml5", "CompleteQuestionnaire", new { id = Model.PublicKey, group = prev.PublicKey }, new { data_corners="false", bdata_theme = "b", @class = "", data_icon = "arrow-l", iconpos = "notext", rel="external", data_ajax="false" })
     }
     else
     {
@@ -38,7 +38,7 @@
     }
     if (next != null)
     {
-    @Html.ActionLink("Next Group", "QuestionHtml5", "CompleteQuestionnaire", new { id = Model.Id, group = next.PublicKey }, new {data_corners="false", data_icon = "arrow-r", data_iconpos = "right", data_theme = "b", rel = "external", data_ajax = "false" })
+    @Html.ActionLink("Next Group", "QuestionHtml5", "CompleteQuestionnaire", new { id = Model.PublicKey, group = next.PublicKey }, new {data_corners="false", data_icon = "arrow-r", data_iconpos = "right", data_theme = "b", rel = "external", data_ajax = "false" })
     }
     else
     {

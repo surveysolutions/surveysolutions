@@ -702,25 +702,7 @@
     <Content Include="Views\Location\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Status\Details.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Status\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Status\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\CompleteQuestionnaire\MyItems.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\EditorTemplates\StatusByRole.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\EditorTemplates\RolePermission.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\EditorTemplates\StatusItemView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Bootstrap\accordion.less">
@@ -888,7 +870,6 @@
     <Content Include="Views\Group\CompleteGroupTemplates\_PropagatebleCompleteGroup.cshtml" />
     <Content Include="Views\FlowGraph\Index.cshtml" />
     <Content Include="Views\FlowGraph\_FlowJs.cshtml" />
-    <Content Include="Views\Status\Route.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_Numeric.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_DateTime.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_Text.cshtml" />
@@ -901,8 +882,6 @@
     <Content Include="Views\CompleteQuestionnaire\QuestionC.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\QuestionI.cshtml" />
     <Content Include="Views\Group\_ScreenI.cshtml" />
-    <Content Include="Views\Status\AddRoute.cshtml" />
-    <Content Include="Views\Status\_Route.cshtml" />
     <Content Include="Views\Shared\ViewSwitcher.cshtml" />
     <Content Include="Views\Shared\ProgressBar.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_YesNo.cshtml" />
@@ -963,7 +942,6 @@
     <Content Include="Views\Synchronizations\_ProgressContent.cshtml" />
     <Content Include="Views\Synchronizations\Scaning.cshtml" />
     <Content Include="Views\Questionnaire\_RenderChildren.cshtml" />
-    <Content Include="Views\Status\Index.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\QStatuses.cshtml" />
     <Content Include="Views\Shared\MoveQuestion.cshtml" />
     <Content Include="Web.Deploy-dev.config">
