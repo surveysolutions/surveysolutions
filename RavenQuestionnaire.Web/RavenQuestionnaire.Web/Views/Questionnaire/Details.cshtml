@@ -1,5 +1,4 @@
-﻿@using RavenQuestionnaire.Web.Models
-@using Questionnaire.Core.Web.Helpers
+﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Group
 @using RavenQuestionnaire.Core.Views.Question
 @using RavenQuestionnaire.Core.Views.Questionnaire
@@ -130,9 +129,9 @@
         <div class="navbar-inner">
             <div class="container-fluid">
                 <p>
-                    @Html.ActionLink("Add Question", "Create", "Question", new { Model.Id }, new { @class = "btn " })
-                    @Html.ActionLink("Add Screen", "Create", "Group", new { Model.Id }, new { @class = "btn " })
-                    <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-primary"><i class="icon-pencil icon-white"></i>Edit</a>
+                    @Html.ActionLink("Add Question", "Create", "Question", new { Model.PublicKey }, new { @class = "btn " })
+                    @Html.ActionLink("Add Screen", "Create", "Group", new { Model.PublicKey }, new { @class = "btn " })
+                    <a href="@Url.Action("Edit", new { id = Model.PublicKey })" class="btn btn-primary"><i class="icon-pencil icon-white"></i>Edit</a>
                     <a href="@Url.Action("Index")" class="btn"><i class="icon-arrow-left"></i>Back to Questionnaires</a>
                 </p>
             </div>

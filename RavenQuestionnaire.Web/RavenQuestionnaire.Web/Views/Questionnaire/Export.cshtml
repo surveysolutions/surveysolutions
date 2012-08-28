@@ -9,7 +9,7 @@
 @if (Model != null)
 {
     
-    @Html.DisplayFor(model => model.Id)
+    @Html.DisplayFor(model => model.PublicKey)
     <br />
     @Html.DisplayFor(model => model.Title)
     
@@ -26,14 +26,14 @@
         <tbody>
             <tr>
                 <td>
-                    @Html.ActionLink("CSV", "GetExportedData", new { id = Model.Id, type = "csv" }, new { @class = "btn small " })
+                    @Html.ActionLink("CSV", "GetExportedData", new { id = Model.PublicKey, type = "csv" }, new { @class = "btn small " })
                 </td>
                 <td>
                 </td>
             </tr>
             <tr>
                 <td>
-                    @Html.ActionLink("Tab", "GetExportedData", new { id = Model.Id, type = "tab" }, new { @class = "btn small " })
+                    @Html.ActionLink("Tab", "GetExportedData", new { id = Model.PublicKey, type = "tab" }, new { @class = "btn small " })
                 </td>
                 <td>
                 </td>
