@@ -953,6 +953,7 @@
     <Content Include="Views\Group\Mobile\_CommentsBlock.cshtml" />
     <Content Include="Web.Deploy-devKh.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
