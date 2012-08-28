@@ -26,7 +26,6 @@ namespace Browsing.CAPI.Containers
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
 
-            this.btnCancel.Enabled = false;
         }
 
         #region Assembly Attribute Accessors
@@ -127,6 +126,9 @@ namespace Browsing.CAPI.Containers
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Reload();
+
+            this.btnCancel.Enabled = false;
+            this.modified = false;
         }
 
         protected override void OnHomeButtonClick(object sender, EventArgs e)
@@ -138,6 +140,9 @@ namespace Browsing.CAPI.Containers
                 foreach (var screen in this.Holder.LoadedScreens)
                     screen.UpdateConfigDependencies();
             }
+
+            this.btnCancel.Enabled = false;
+            this.modified = false;
 
             base.OnHomeButtonClick(sender, e);
         }
