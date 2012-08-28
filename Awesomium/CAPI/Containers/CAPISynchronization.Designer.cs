@@ -33,7 +33,6 @@
             this.btnPush = new Browsing.CAPI.Controls.FlatButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.btnCancel = new Browsing.CAPI.Controls.FlatButton();
-            this.flatButton1 = new Browsing.CAPI.Controls.FlatButton();
             this.SuspendLayout();
             // 
             // btnPull
@@ -97,30 +96,12 @@
             this.btnCancel.Visible = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // flatButton1
-            // 
-            this.flatButton1.FlatAppearance.BorderSize = 0;
-            this.flatButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.flatButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
-            this.flatButton1.Image = ((System.Drawing.Image)(resources.GetObject("flatButton1.Image")));
-            this.flatButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.flatButton1.Location = new System.Drawing.Point(0, 0);
-            this.flatButton1.Margin = new System.Windows.Forms.Padding(0);
-            this.flatButton1.Name = "flatButton1";
-            this.flatButton1.Size = new System.Drawing.Size(108, 40);
-            this.flatButton1.TabIndex = 3;
-            this.flatButton1.TabStop = false;
-            this.flatButton1.Text = "Back";
-            this.flatButton1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.flatButton1.UseVisualStyleBackColor = true;
-            this.flatButton1.Click += new System.EventHandler(this.flatButton1_Click);
-            // 
             // CAPISynchronization
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.Controls.Add(this.flatButton1);
+            //this.Controls.Add(this.flatButton1);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnPush);
             this.Controls.Add(this.btnPull);
@@ -139,6 +120,5 @@
         private Controls.FlatButton btnPush;
         protected internal Controls.FlatButton btnPull;
         private Controls.FlatButton btnCancel;
-        private Controls.FlatButton flatButton1;
     }
 }

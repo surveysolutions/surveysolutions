@@ -132,12 +132,6 @@
     <Compile Include="Controls\FlatButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\SettingsBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SettingsBox.Designer.cs">
-      <DependentUpon>SettingsBox.cs</DependentUpon>
-    </Compile>
     <Compile Include="Synchronization\CapiSyncManager.cs" />
     <Compile Include="Forms\PleaseWaitForm.cs">
       <SubType>UserControl</SubType>
@@ -160,14 +154,14 @@
     <EmbeddedResource Include="Containers\CAPIMain.resx">
       <DependentUpon>CAPIMain.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Containers\CAPISettings.resx">
+      <DependentUpon>CAPISettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Containers\CAPISynchronization.resx">
       <DependentUpon>CAPISynchronization.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PleaseWaitForm.resx">
       <DependentUpon>PleaseWaitForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SettingsBox.resx">
-      <DependentUpon>SettingsBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WebForm.resx">
       <DependentUpon>WebForm.cs</DependentUpon>

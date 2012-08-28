@@ -22,7 +22,7 @@ namespace Browsing.CAPI.Containers
     public partial class CAPIMain : Screen
     {
         public CAPIMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
-            : base(holder)
+            : base(holder, false)
         {
             InitializeComponent();
             this.clientSettings = clientSettings;
@@ -55,8 +55,11 @@ namespace Browsing.CAPI.Containers
 
         void btnSettings_Click(object sender, System.EventArgs e)
         {
-            new SettingsBox().ShowDialog();
+            var settings = this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPISettings) as CAPISettings;
+            this.Holder.Redirect(settings);
+            //new SettingsBox().ShowDialog();
         }
+
         void btnDashboard_Click(object sender, System.EventArgs e)
         {
             var browser = this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPIBrowser) as CAPIBrowser;
@@ -75,12 +78,14 @@ namespace Browsing.CAPI.Containers
             WebCore.ClearCookies();
             RefreshAuthentificationInfo();
         }
+
         void btnLogin_Click(object sender, System.EventArgs e)
         {
             var browser = this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPIBrowser) as CAPIBrowser;
             browser.SetMode(true, urlUtils.GetLoginUrl());
             this.Holder.Redirect(browser);
         }
+        
         protected override void OnParentChanged(EventArgs e)
         {
             base.OnParentChanged(e);
