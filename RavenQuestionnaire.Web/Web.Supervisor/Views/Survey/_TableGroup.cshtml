@@ -13,7 +13,7 @@
             }
             <td id="row-@fitem.Id">
                 <div class="assignment-view">
-                    <a id="link-@fitem.Id" href="@Url.Action("Details", "User", new { id = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id, input=new InterviewerInputModel() })">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
+                    <a id="link-@fitem.Id" href="@Url.Action("Details", "User", new { id = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id })">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
                 </div>
                 <div class="assignment-form">
                     @using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions { OnComplete = "HideForm" }))
@@ -47,8 +47,8 @@
                         });
                     </script>
                 }
-                <a href="@Url.Action("Details", new { id = fitem.Id })">Details</a>    
-                <a href="@Url.Action("Approve", new { id = fitem.Id })">Approve</a>
+                <a href="@Url.Action("Details", new { id = fitem.Id, template = fitem.TemplateId })">Details</a>    
+                <a href="@Url.Action("Approve", new { id = fitem.Id, template = fitem.TemplateId })">Approve</a>
             </td>
         </tr>
     }

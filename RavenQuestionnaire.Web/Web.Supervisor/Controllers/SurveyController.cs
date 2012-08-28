@@ -64,11 +64,11 @@ namespace Web.Supervisor.Controllers
             return View(model);
         }
 
-        public ActionResult Approve(Guid id)
+        public ActionResult Approve(Guid id,string template)
         {
             var stat = viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                     new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
-            return View(new ApproveModel(){Id = id, Statistic = stat});
+            return View(new ApproveModel(){Id = id, Statistic = stat, TemplateId = template});
         }
 
         [HttpPost]
@@ -80,25 +80,25 @@ namespace Web.Supervisor.Controllers
                 var status = SurveyStatus.Approve;
                 status.ChangeComment = model.Comment;
                 commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status });
-                return RedirectToAction("Index");
+                return RedirectToAction("Assigments", new { id = model.TemplateId});
             }
             else
             {
                 var stat = viewRepository.Load
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                         new CompleteQuestionnaireStatisticViewInputModel(model.Id.ToString()));
-                return View(new ApproveModel() {Id = model.Id, Statistic = stat});
+                return View(new ApproveModel() {Id = model.Id, Statistic = stat, TemplateId = model.TemplateId});
             }
         }
 
-        public ActionResult Details(Guid id, Guid? group, Guid? question,  Guid? propagationKey)
+        public ActionResult Details(Guid id,string template, Guid? group, Guid? question,  Guid? propagationKey)
         {
             //if (id)
             //    throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
                 new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group,  PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
-            ViewBag.PagePrefix = "page-to-delete";
+            ViewBag.TemplateId = template;
             return View(model);
         }
 
