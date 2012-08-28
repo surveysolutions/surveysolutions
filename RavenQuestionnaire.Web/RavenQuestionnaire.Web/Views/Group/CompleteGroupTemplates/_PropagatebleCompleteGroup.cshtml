@@ -5,11 +5,10 @@
 <br />
 @if (Model.Propagated != Propagate.AutoPropagated)
 { 
-    @Ajax.ActionLink("Add",
-                "PropagateGroup", "Group", new
+    @Ajax.ActionLink("Add", "Create", "Group", new
                 {
                     publicKey = Model.PublicKey,
-                    questionnaireId = Model.QuestionnaireId,
+                    questionnaireId = Model.QuestionnaireKey,
                     parentGroupPublicKey = ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey
                 },
         new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = ((CompleteGroupView)ViewBag.CurrentGroup).GetClientId("div") },

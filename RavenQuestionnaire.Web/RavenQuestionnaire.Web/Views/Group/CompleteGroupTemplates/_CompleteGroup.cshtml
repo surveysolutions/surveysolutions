@@ -1,6 +1,6 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Group
-@model RavenQuestionnaire.Core.Views.Group.CompleteGroupView
+@model CompleteGroupView
 @foreach (var question in Model.Questions)
 {
 
@@ -14,7 +14,7 @@
         using (Html.BeginCollectionItem("settings", true, question.PublicKey))
         {
             @Html.Hidden("ParentGroupPublicKey", ((CompleteGroupView)ViewBag.CurrentGroup).PublicKey)
-            @Html.Hidden("QuestionnaireId", Model.QuestionnaireId)
+            @Html.Hidden("QuestionnaireKey", Model.QuestionnaireKey)
         }
     }
 }
