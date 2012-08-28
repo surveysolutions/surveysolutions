@@ -31,6 +31,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public bool Featured { get; set; }
 
+        public bool Capital { get; set; }
+
         public bool Mandatory { get; set; }
 
         public Guid? PropogationPublicKey { get; set; }
