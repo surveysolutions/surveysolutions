@@ -13,16 +13,23 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
     {
         public PropagatedGroupMobileView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group)
         {
-           /* if (!group.PropogationPublicKey.HasValue)
-                throw new ArgumentException("Group is not propagated");*/
+            /* if (!group.PropogationPublicKey.HasValue)
+                 throw new ArgumentException("Group is not propagated");*/
             this.PublicKey = group.PublicKey;
             this.QuestionnairePublicKey = doc.PublicKey;
             this.Title = group.Title;
             this.AutoPropagate = group.Propagated == Propagate.AutoPropagated;
-            this.PropogationKey = group.PropogationPublicKey?? Guid.Empty;
+            this.PropogationKey = group.PropogationPublicKey ?? Guid.Empty;
             this.Children =
-                group.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionFactory().CreateQuestion(doc, q) as ICompositeView).ToList();
-         
+                group.Children.OfType<ICompleteQuestion>().Select(
+                    q => new CompleteQuestionFactory().CreateQuestion(doc, q) as ICompositeView).ToList();
+
+            this.FeaturedTitle =
+                string.Concat(
+                    group.Children.OfType<ICompleteQuestion>().Where(q => q.Capital).Select(
+                        q => q.GetAnswerString() + " "));
+
+
         }
         public PropagatedGroupMobileView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group, ScreenNavigation navigation):this(doc,group)
         {
