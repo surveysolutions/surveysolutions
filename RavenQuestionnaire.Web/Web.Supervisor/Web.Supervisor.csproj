@@ -192,6 +192,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\ApproveModel.cs" />
     <Compile Include="Models\AssigmentModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
