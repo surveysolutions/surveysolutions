@@ -106,7 +106,7 @@ function UpdateQuestion(question) {
     var element = $('#elem-' + question.PublicKey);
 
     element.removeClass("ui-disabled");
-    if (!question.Enabled)
+    if (!question.Enabled || question.Featured)
         element.addClass("ui-disabled");
 
     element.removeClass("error_block");
