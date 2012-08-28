@@ -79,6 +79,7 @@ namespace RavenQuestionnaire.Core.AbstractFactories
             completeQuestion.AnswerOrder = question.AnswerOrder;
             completeQuestion.Valid = true;
             completeQuestion.Featured = question.Featured;
+            completeQuestion.Capital = question.Capital;
             completeQuestion.Mandatory = question.Mandatory;
 
             var ansersToCopy =
