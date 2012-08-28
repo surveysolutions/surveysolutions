@@ -138,6 +138,8 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             set { }
         }
 
+        public bool Capital { get; set; }
+
         public bool Mandatory
         {
             get { return false; }
