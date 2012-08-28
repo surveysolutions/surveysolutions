@@ -37,8 +37,9 @@ namespace Browsing.CAPI.Synchronization
 
         protected override void OnAddSynchronizers(IList<ISynchronizer> syncChain, ISettingsProvider settingsProvider)
         {
-            syncChain.Add(new NetworkSynchronizer(settingsProvider, RequestProcessor, this.UrlUtils));
-
+            if (!string.IsNullOrEmpty(UrlUtils.GetEnpointUrl()))
+                syncChain.Add(new NetworkSynchronizer(settingsProvider, RequestProcessor, this.UrlUtils));
+    
             syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils));
         }
 
@@ -57,6 +58,7 @@ namespace Browsing.CAPI.Synchronization
         #endregion
 
         #region Overloaded
+        
         protected override void CheckPushPrerequisites()
         {
             bool result = false;

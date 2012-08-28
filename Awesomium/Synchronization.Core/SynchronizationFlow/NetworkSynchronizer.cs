@@ -48,6 +48,7 @@ namespace Synchronization.Core.SynchronizationFlow
             try
             {
                 var processGuid = this._requestProcessor.Process<Guid>(this._urlUtils.GetPullUrl(this.SettingsProvider.Settings.ClientId), default(Guid));
+                
                 WaitForEndProcess(processGuid, OnSyncProgressChanged, SyncType.Pull, direction);
             }
             catch (Exception e)
@@ -80,7 +81,6 @@ namespace Synchronization.Core.SynchronizationFlow
 
                 Thread.Sleep(1000);
             }
-
         }
 
         #endregion

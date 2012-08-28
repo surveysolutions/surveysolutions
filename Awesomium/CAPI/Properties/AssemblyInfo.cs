@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription( "CAPI workplace" )]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany( "The World Bank" )]
-[assembly: AssemblyProduct("Interviewer's workplace")]
+[assembly: AssemblyProduct("CAPI workplace")]
 [assembly: AssemblyCopyright( "Copyright ©2012 The World Bank" )]
 [assembly: AssemblyTrademark( "CAPI is a trademark of the World Bank" )]
 [assembly: AssemblyCulture("")]

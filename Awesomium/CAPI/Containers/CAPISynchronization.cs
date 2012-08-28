@@ -19,7 +19,7 @@ namespace Browsing.CAPI.Containers
     {
 
         public CAPISynchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
-            : base(holder)
+            : base(holder, true)
         {
             InitializeComponent();
             
@@ -66,9 +66,6 @@ namespace Browsing.CAPI.Containers
                                                       EnableDisableMenuItems(false);
                                                   }));
         }
-
-
-
 
         #region Event Handlers
 
@@ -121,15 +118,13 @@ namespace Browsing.CAPI.Containers
 
         private void CAPISynchronization_Load(object sender, EventArgs e)
         {
-
         }
 
-        private void flatButton1_Click(object sender, EventArgs e)
+        protected override void OnUpdateConfigDependencies()
         {
-            this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPIMain));
+            base.OnUpdateConfigDependencies();
 
+            this.syncManager.UpdateSynchronizersList();
         }
-
-     //   public event EventHandler<EventArgs> BackClick;
     }
 }

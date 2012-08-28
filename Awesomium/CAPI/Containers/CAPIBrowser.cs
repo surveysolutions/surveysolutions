@@ -18,20 +18,22 @@ namespace Browsing.CAPI.Containers
     {
         protected bool isSinglePage = false;
         protected string rootPathString = string.Empty;
-        public CAPIBrowser(WebControl webView, ScreenHolder holder):base(holder)
+        public CAPIBrowser(WebControl webView, ScreenHolder holder)
+            : base(holder, true)
         {
             this.webView = webView;
-            
+
             InitializeComponent();
-           
-           
         }
+
         public void SetMode(bool isSinglePageMode, string rootPath)
         {
             this.rootPathString = rootPath;
             this.progressBox.Visible = true;
             this.isSinglePage = isSinglePageMode;
-            this.panel1.Visible = true;
+
+            MenuPanel.Visible = true;
+            
             try
             {
                 this.webView.Source = new Uri(this.rootPathString);
@@ -47,12 +49,13 @@ namespace Browsing.CAPI.Containers
         {
             this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPIMain));
         }
+
         #region TODO Progress indication
 
         void webView_BeginLoading(object sender, BeginLoadingEventArgs e)
         {
             this.progressBox.Visible = true;
-            this.panel1.Visible = e.Url == this.rootPathString;
+            MenuPanel.Visible = e.Url == this.rootPathString;
         }
 
         ResourceResponse webView_ResourceRequest(object sender, ResourceRequestEventArgs e)
@@ -64,14 +67,9 @@ namespace Browsing.CAPI.Containers
         {
             this.progressBox.Visible = false;
             if (isSinglePage && this.webView.Source.ToString() != this.rootPathString)
-                homeButton_Click(sender,e);
+                homeButton_Click(sender, e);
         }
 
         #endregion
-
-       
-       
-      
-        
     }
 }

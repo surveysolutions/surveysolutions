@@ -73,9 +73,12 @@ namespace Browsing.CAPI.Forms
                 }
 
             }
+            
             AddMain();
             AddBrowser();
             AddSynchronizer();
+            AddSettings();
+
             this.Controls.Add(this.holder);
 
         }
@@ -99,23 +102,35 @@ namespace Browsing.CAPI.Forms
 
         protected void AddBrowser()
         {
-            var capiBrowser = new Browsing.CAPI.Containers.CAPIBrowser(this.webView, this.holder);
-            //     capiBrowser.SetMode(isSinglePage, rootPath);
-            capiBrowser.Name = "capiBrowser1";
+            new CAPIBrowser(this.webView, this.holder)
+            {
+                Name = "capiBrowser1"
+            };
         }
 
         protected void AddSynchronizer()
         {
-            Containers.CAPISynchronization capiSycn =
-                new Browsing.CAPI.Containers.CAPISynchronization(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder);
-            capiSycn.Name = "capiSync";
+            new CAPISynchronization(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder) 
+            { 
+                Name = "capiSync" 
+            };
+        }
+
+        protected void AddSettings()
+        {
+            new CAPISettings(this.holder) 
+            { 
+                Name = "capiSettings" 
+            };
         }
 
         protected void AddMain()
         {
-            Containers.CAPIMain capiMain = new Browsing.CAPI.Containers.CAPIMain(this.clientSettings,
-                                                                                 this.requestProcessor, this.urlUtils, this.holder);
-            capiMain.Name = "capiMain";
+            var capiMain = new CAPIMain(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder)
+            {
+                Name = "capiMain"
+            };
+
             this.holder.Redirect(capiMain);
         }
 

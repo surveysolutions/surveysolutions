@@ -19,6 +19,8 @@ namespace Synchronization.Core
         #region Members
 
         private List<ISynchronizer> synchronizerChain;
+
+        private ISettingsProvider settingsProvider;
         
         private AutoResetEvent syncIsAvailable = new AutoResetEvent(true);
        
@@ -31,18 +33,21 @@ namespace Synchronization.Core
         {
         }
 
-        private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor,IUrlUtils urlUtils,
+        private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor, IUrlUtils urlUtils,
                             List<ISynchronizer> subStructure)
         {
 
             this.synchronizerChain = subStructure;
             this.RequestProcessor = requestProcessor;
             this.UrlUtils = urlUtils;
+            this.settingsProvider = settingsProvider;
+
             SyncProgressChanged += (s, e) => progressObserver.SetProgress(e.Status);
             BgnOfSync += (s, e) => progressObserver.SetBeginning(e.Status);
             EndOfSync += (s, e) => progressObserver.SetCompleted(e.Status);
 
-            AddSynchronizers(settingsProvider);
+            UpdateSynchronizersList();
+            //AddSynchronizers();
         }
 
         protected IRequesProcessor RequestProcessor { get; private set; }
@@ -52,11 +57,11 @@ namespace Synchronization.Core
 
         #region Helpers
 
-        private void AddSynchronizers(ISettingsProvider settingsProvider)
+        private void AddSynchronizers()
         {
             try
             {
-                OnAddSynchronizers(this.synchronizerChain, settingsProvider);
+                OnAddSynchronizers(this.synchronizerChain, this.settingsProvider);
 
                 Debug.Assert(this.synchronizerChain.Count > 0, "Have you missed adding synchronizers?");
 
@@ -165,6 +170,13 @@ namespace Synchronization.Core
         {
             foreach (var synchronizer in synchronizerChain)
                 synchronizer.Stop();
+        }
+
+        public void UpdateSynchronizersList()
+        {
+            this.synchronizerChain.Clear();
+
+            AddSynchronizers();
         }
 
         #endregion

@@ -12,6 +12,7 @@ namespace Synchronization.Core.Interface
         void Push(SyncDirection direction);
         void Pull(SyncDirection direction);
         void Stop();
+        void UpdateSynchronizersList();
 
         event EventHandler<SynchronizationEvent> SyncProgressChanged;
         event EventHandler<SynchronizationEvent> BgnOfSync;
