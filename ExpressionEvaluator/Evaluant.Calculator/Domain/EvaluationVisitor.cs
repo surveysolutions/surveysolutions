@@ -55,6 +55,8 @@ namespace NCalc.Domain
 
         public int CompareUsingMostPreciseType(object a, object b)
         {
+            if (a == null || b == null)
+                return -1;
             Type mpt = GetMostPreciseType(a.GetType(), b.GetType());
             return Comparer.Default.Compare(Convert.ChangeType(a, mpt), Convert.ChangeType(b, mpt));
         }
