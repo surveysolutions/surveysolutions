@@ -1,37 +1,74 @@
-﻿using Ncqrs;
-using System;
-using System.Linq;
-using Ncqrs.Domain;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Documents;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
-using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Events.Questionnaire;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="QuestionnaireAR.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   Questionnaire Aggregate Root.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace RavenQuestionnaire.Core.Domain
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Ncqrs;
+    using Ncqrs.Domain;
+    using Ncqrs.Eventing.Sourcing.Snapshotting;
+
+    using RavenQuestionnaire.Core.AbstractFactories;
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Events;
+    using RavenQuestionnaire.Core.Events.Questionnaire;
+
     /// <summary>
     /// Questionnaire Aggregate Root.
     /// </summary>
     public class QuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
     {
+        #region Fields
 
-        private QuestionnaireDocument _innerDocument = new QuestionnaireDocument();
+        /// <summary>
+        /// The _inner document.
+        /// </summary>
+        private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
-        public QuestionnaireAR(){}
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
+        /// </summary>
+        public QuestionnaireAR()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
+        /// </summary>
+        /// <param name="template">
+        /// The template.
+        /// </param>
         public QuestionnaireAR(QuestionnaireDocument template)
             : base(template.PublicKey)
         {
-            ApplyEvent(new QuestionnaireTemplateLoaded
-            {
-                Template = template
-            });
+            this.ApplyEvent(new QuestionnaireTemplateLoaded { Template = template });
         }
 
-        public QuestionnaireAR(Guid questionnaireId, String text) : base(questionnaireId)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        public QuestionnaireAR(Guid questionnaireId, string text)
+            : base(questionnaireId)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
 
@@ -39,167 +76,519 @@ namespace RavenQuestionnaire.Core.Domain
             // creation of this instance. The state of this
             // instance will be update in the handler of 
             // this event (the OnNewQuestionnaireCreated method).
-            ApplyEvent(new NewQuestionnaireCreated
-            {
-                PublicKey = questionnaireId,
-                Title= text,
-                CreationDate = clock.UtcNow()
-            });
-          
+            this.ApplyEvent(
+                new NewQuestionnaireCreated { PublicKey = questionnaireId, Title = text, CreationDate = clock.UtcNow() });
         }
+
+        #endregion
 
         // Event handler for the NewQuestionnaireCreated event. This method
         // is automaticly wired as event handler based on convension.
-        protected void OnNewQuestionnaireCreated(NewQuestionnaireCreated e)
-        {
-            _innerDocument.Title = e.Title;
-            _innerDocument.PublicKey = e.PublicKey;
-            _innerDocument.CreationDate = e.CreationDate;
-        }
+        #region Public Methods and Operators
 
-        // Event handler for the NewQuestionnaireCreated event. This method
-        // is automaticly wired as event handler based on convension.
-        protected void OnQuestionnaireTemplateLoaded(QuestionnaireTemplateLoaded e)
+        /// <summary>
+        /// The add group.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        /// <param name="propagateble">
+        /// The propagateble.
+        /// </param>
+        /// <param name="parentGroupKey">
+        /// The parent group key.
+        /// </param>
+        /// <param name="conditionExpression">
+        /// The condition expression.
+        /// </param>
+        public void AddGroup(
+            Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression)
         {
-            _innerDocument = e.Template;
-        }
-
-        public void CreateCompletedQ(Guid completeQuestionnaireId)
-        {
-            //TODO: check is it good to create new AR form another?
-            CompleteQuestionnaireAR cq = new CompleteQuestionnaireAR(completeQuestionnaireId, _innerDocument);
-        }
-        
-        public void AddGroup(Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression)
-        {
-            //performe checka before event raising
-
+            //// performe checka before event raising
 
             // Apply a NewGroupAdded event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
             // this event (the OnNewGroupAdded method).
-            ApplyEvent(new NewGroupAdded
-            {
-                QuestionnairePublicKey=this._innerDocument.PublicKey,
-                PublicKey = publicKey,
-                GroupText = text,
-                ParentGroupPublicKey = parentGroupKey,
-                Paropagateble = propagateble,
-                ConditionExpression = conditionExpression
-            });
+            this.ApplyEvent(
+                new NewGroupAdded
+                    {
+                        QuestionnairePublicKey = this.innerDocument.PublicKey, 
+                        PublicKey = publicKey, 
+                        GroupText = text, 
+                        ParentGroupPublicKey = parentGroupKey, 
+                        Paropagateble = propagateble, 
+                        ConditionExpression = conditionExpression
+                    });
         }
 
         // Event handler for the NewGroupAdded event. This method
         // is automaticly wired as event handler based on convension.
-        protected void OnNewGroupAdded(NewGroupAdded e)
-        {
-            Group group = new Group();
-            group.Title = e.GroupText;
-            group.Propagated = e.Paropagateble;
-            group.PublicKey = e.PublicKey;
-            group.ConditionExpression = e.ConditionExpression;
-            _innerDocument.Add(group, e.ParentGroupPublicKey);
-        }
-        public void MoveQuestionnaireItem(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
-        {
-            ApplyEvent(new QuestionnaireItemMoved
-            {
-                AfterItemKey = afterItemKey,
-                GroupKey = groupKey,
-                PublicKey = publicKey
-            });
-        }
-
-        protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
-        {
-            var questionnaire = new Questionnaire(this._innerDocument);
-            questionnaire.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
-        }
-
-        public void DeleteQuestion(Guid questionId)
-        {
-            ApplyEvent(new QuestionDeleted() { QuestionId = questionId });
-        }
-
-        protected void OnQuestionDeleted(QuestionDeleted e)
-        {
-            this._innerDocument.Remove(e.QuestionId);
-        }
-
-        public void ChangeQuestion(Guid publicKey, string questionText, Guid TargetGroupKey,
-            string stataExportCaption, string instructions, 
-            QuestionType questionType, Guid? groupPublicKey,
-            string conditionExpression, string validationExpression, string validationMessage,
-            bool featured, bool mandatory, Order answerOrder, Answer[] answers)
-        {
-            ApplyEvent(new QuestionChanged
-            {
-                QuestionText = questionText,
-                TargetGroupKey = TargetGroupKey,
-                StataExportCaption = stataExportCaption,
-                QuestionType = questionType,
-                ConditionExpression = conditionExpression,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
-                Featured = featured,
-                Mandatory = mandatory,
-                AnswerOrder = answerOrder,
-                PublicKey = publicKey,
-                Answers = answers,
-                Instructions = instructions
-            });
-        }
 
         /// <summary>
         /// Handler method for adding question.
         /// </summary>
-        /// <param name="questionText"></param>
-        /// <param name="stataExportCaption"></param>
-        /// <param name="questionType"></param>
-        /// <param name="conditionExpression"></param>
-        /// <param name="validationExpression"></param>
-        /// <param name="featured"></param>
-        /// <param name="answerOrder"></param>
-        /// <param name="instructions"> </param>
-        /// <param name="groupPublicKey"></param>
-        /// <param name="answers"></param>
-        public void AddQuestion(Guid publicKey, string questionText, string stataExportCaption,QuestionType questionType,
-                                                     string conditionExpression,string validationExpression, string validationMessage,
-                                                     bool featured, bool mandatory, Order answerOrder, string instructions,  Guid? groupPublicKey, Guid TargetGroupKey,
-                                                     Answer[] answers)
+        /// <param name="publicKey">
+        /// The public Key.
+        /// </param>
+        /// <param name="questionText">
+        /// </param>
+        /// <param name="stataExportCaption">
+        /// </param>
+        /// <param name="questionType">
+        /// </param>
+        /// <param name="conditionExpression">
+        /// </param>
+        /// <param name="validationExpression">
+        /// </param>
+        /// <param name="validationMessage">
+        /// The validation Message.
+        /// </param>
+        /// <param name="featured">
+        /// </param>
+        /// <param name="mandatory">
+        /// The mandatory.
+        /// </param>
+        /// <param name="answerOrder">
+        /// </param>
+        /// <param name="instructions">
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// </param>
+        /// <param name="targetGroupKey">
+        /// The Target Group Key.
+        /// </param>
+        /// <param name="answers">
+        /// </param>
+        public void AddQuestion(
+            Guid publicKey, 
+            string questionText, 
+            string stataExportCaption, 
+            QuestionType questionType, 
+            string conditionExpression, 
+            string validationExpression, 
+            string validationMessage, 
+            bool featured, 
+            bool mandatory, 
+            Order answerOrder, 
+            string instructions, 
+            Guid? groupPublicKey, 
+            Guid targetGroupKey, 
+            Answer[] answers)
         {
-            //performe checks before event raising
-
+            //// performe checks before event raising
 
             // Apply a NewQuestionAdded event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
             // this event (the OnNewQuestionAdded method).
-            ApplyEvent(new NewQuestionAdded
-            {
-                PublicKey = publicKey,
-                QuestionText = questionText,
-                StataExportCaption = stataExportCaption,
-                QuestionType = questionType,
-                ConditionExpression = conditionExpression,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
-                Featured = featured,
-                Mandatory = mandatory,
-                AnswerOrder = answerOrder,
-                GroupPublicKey = groupPublicKey,
-                TargetGroupKey = TargetGroupKey,
-                Answers = answers,
-                Instructions = instructions
-            });
+            this.ApplyEvent(
+                new NewQuestionAdded
+                    {
+                        PublicKey = publicKey, 
+                        QuestionText = questionText, 
+                        StataExportCaption = stataExportCaption, 
+                        QuestionType = questionType, 
+                        ConditionExpression = conditionExpression, 
+                        ValidationExpression = validationExpression, 
+                        ValidationMessage = validationMessage, 
+                        Featured = featured, 
+                        Mandatory = mandatory, 
+                        AnswerOrder = answerOrder, 
+                        GroupPublicKey = groupPublicKey, 
+                        TargetGroupKey = targetGroupKey, 
+                        Answers = answers, 
+                        Instructions = instructions
+                    });
+        }
+
+        /// <summary>
+        /// The change question.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="questionText">
+        /// The question text.
+        /// </param>
+        /// <param name="targetGroupKey">
+        /// The target group key.
+        /// </param>
+        /// <param name="stataExportCaption">
+        /// The stata export caption.
+        /// </param>
+        /// <param name="instructions">
+        /// The instructions.
+        /// </param>
+        /// <param name="questionType">
+        /// The question type.
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// The group public key.
+        /// </param>
+        /// <param name="conditionExpression">
+        /// The condition expression.
+        /// </param>
+        /// <param name="validationExpression">
+        /// The validation expression.
+        /// </param>
+        /// <param name="validationMessage">
+        /// The validation message.
+        /// </param>
+        /// <param name="featured">
+        /// The featured.
+        /// </param>
+        /// <param name="mandatory">
+        /// The mandatory.
+        /// </param>
+        /// <param name="answerOrder">
+        /// The answer order.
+        /// </param>
+        /// <param name="answers">
+        /// The answers.
+        /// </param>
+        public void ChangeQuestion(
+            Guid publicKey, 
+            string questionText, 
+            Guid targetGroupKey, 
+            string stataExportCaption, 
+            string instructions, 
+            QuestionType questionType, 
+            Guid? groupPublicKey, 
+            string conditionExpression, 
+            string validationExpression, 
+            string validationMessage, 
+            bool featured, 
+            bool mandatory, 
+            Order answerOrder, 
+            Answer[] answers)
+        {
+            this.ApplyEvent(
+                new QuestionChanged
+                    {
+                        QuestionText = questionText, 
+                        TargetGroupKey = targetGroupKey, 
+                        StataExportCaption = stataExportCaption, 
+                        QuestionType = questionType, 
+                        ConditionExpression = conditionExpression, 
+                        ValidationExpression = validationExpression, 
+                        ValidationMessage = validationMessage, 
+                        Featured = featured, 
+                        Mandatory = mandatory, 
+                        AnswerOrder = answerOrder, 
+                        PublicKey = publicKey, 
+                        Answers = answers, 
+                        Instructions = instructions
+                    });
+        }
+
+        /// <summary>
+        /// The create completed q.
+        /// </summary>
+        /// <param name="completeQuestionnaireId">
+        /// The complete questionnaire id.
+        /// </param>
+        public void CreateCompletedQ(Guid completeQuestionnaireId)
+        {
+            //// TODO: check is it good to create new AR form another?
+            var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument);
+        }
+
+        /// <summary>
+        /// The create snapshot.
+        /// </summary>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Documents.QuestionnaireDocument.
+        /// </returns>
+        public QuestionnaireDocument CreateSnapshot()
+        {
+            return this.innerDocument;
         }
 
         // Event handler for the NewGroupAdded event. This method
         // is automaticly wired as event handler based on convension.
+
+        /// <summary>
+        /// The delete group.
+        /// </summary>
+        /// <param name="groupPublicKey">
+        /// The group public key.
+        /// </param>
+        public void DeleteGroup(Guid groupPublicKey)
+        {
+            this.ApplyEvent(new GroupDeleted { GroupPublicKey = groupPublicKey });
+        }
+
+        /// <summary>
+        /// The delete image.
+        /// </summary>
+        /// <param name="questionKey">
+        /// The question key.
+        /// </param>
+        /// <param name="imageKey">
+        /// The image key.
+        /// </param>
+        public void DeleteImage(Guid questionKey, Guid imageKey)
+        {
+            this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey });
+        }
+
+        /// <summary>
+        /// The delete question.
+        /// </summary>
+        /// <param name="questionId">
+        /// The question id.
+        /// </param>
+        public void DeleteQuestion(Guid questionId)
+        {
+            this.ApplyEvent(new QuestionDeleted { QuestionId = questionId });
+        }
+
+        /// <summary>
+        /// The move questionnaire item.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="groupKey">
+        /// The group key.
+        /// </param>
+        /// <param name="afterItemKey">
+        /// The after item key.
+        /// </param>
+        public void MoveQuestionnaireItem(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
+        {
+            this.ApplyEvent(
+                new QuestionnaireItemMoved { AfterItemKey = afterItemKey, GroupKey = groupKey, PublicKey = publicKey });
+        }
+
+        /// <summary>
+        /// The restore from snapshot.
+        /// </summary>
+        /// <param name="snapshot">
+        /// The snapshot.
+        /// </param>
+        public void RestoreFromSnapshot(QuestionnaireDocument snapshot)
+        {
+            this.innerDocument = snapshot;
+        }
+
+        // public void UpdateGroup(string groupText, Propagate propagateble, Guid groupPublicKey, List<Guid> triggers)
+        // {
+        // Group group = this._innerDocument.Find<Group>(groupPublicKey);
+        // if (group == null)
+        // throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+        // ApplyEvent(new GroupUpdated()
+        // {
+        // parentGroup = groupPublicKey,
+        // GroupText = groupText,
+        // Propagateble = propagateble,
+        // Triggers = triggers
+        // });
+        // }
+
+        /// <summary>
+        /// The update group.
+        /// </summary>
+        /// <param name="groupText">
+        /// The group text.
+        /// </param>
+        /// <param name="propagateble">
+        /// The propagateble.
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// The group public key.
+        /// </param>
+        /// <param name="executor">
+        /// The executor.
+        /// </param>
+        /// <param name="conditionExpression">
+        /// The condition expression.
+        /// </param>
+        /// <exception cref="ArgumentException">
+        /// </exception>
+        public void UpdateGroup(
+            string groupText, 
+            Propagate propagateble, 
+            Guid groupPublicKey, 
+            UserLight executor, 
+            string conditionExpression)
+        {
+            var group = this.innerDocument.Find<Group>(groupPublicKey);
+            if (group == null)
+            {
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+            }
+
+            this.ApplyEvent(
+                new GroupUpdated
+                    {
+                        GroupPublicKey = groupPublicKey, 
+                        GroupText = groupText, 
+                        Propagateble = propagateble, 
+                        Executor = executor, 
+                        ConditionExpression = conditionExpression
+                    });
+        }
+
+        /// <summary>
+        /// The update image.
+        /// </summary>
+        /// <param name="questionKey">
+        /// The question key.
+        /// </param>
+        /// <param name="imageKey">
+        /// The image key.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
+        public void UpdateImage(Guid questionKey, Guid imageKey, string title, string description)
+        {
+            this.ApplyEvent(
+                new ImageUpdated
+                    {
+                       Description = description, ImageKey = imageKey, QuestionKey = questionKey, Title = title 
+                    });
+        }
+
+        /// <summary>
+        /// The upload image.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
+        /// <param name="imagePublicKey">
+        /// The image public key.
+        /// </param>
+        public void UploadImage(Guid publicKey, string title, string description, Guid imagePublicKey)
+        {
+            this.ApplyEvent(
+                new ImageUploaded
+                    {
+                       Description = description, Title = title, PublicKey = publicKey, ImagePublicKey = imagePublicKey 
+                    });
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The on group deleted.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnGroupDeleted(GroupDeleted e)
+        {
+            this.innerDocument.Remove(e.GroupPublicKey);
+        }
+
+        /// <summary>
+        /// The on group updated.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnGroupUpdated(GroupUpdated e)
+        {
+            var group = this.innerDocument.Find<Group>(e.GroupPublicKey);
+            if (group != null)
+            {
+                group.Propagated = e.Propagateble;
+
+                //// if(e.Triggers!=null)
+                // group.Triggers = e.Triggers;
+                group.ConditionExpression = e.ConditionExpression;
+                group.Update(e.GroupText);
+            }
+        }
+
+        /// <summary>
+        /// The on image deleted.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnImageDeleted(ImageDeleted e)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
+
+            question.RemoveCard(e.ImageKey);
+        }
+
+        /// <summary>
+        /// The on image updated.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnImageUpdated(ImageUpdated e)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
+
+            question.UpdateCard(e.ImageKey, e.Title, e.Description);
+        }
+
+        /// <summary>
+        /// The on image uploaded.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnImageUploaded(ImageUploaded e)
+        {
+            var newImage = new Image
+                {
+                    PublicKey = e.ImagePublicKey, 
+                    Title = e.Title, 
+                    Description = e.Description, 
+                    CreationDate = DateTime.Now
+                };
+
+            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
+
+            question.AddCard(newImage);
+        }
+
+        /// <summary>
+        /// The on new group added.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnNewGroupAdded(NewGroupAdded e)
+        {
+            var group = new Group();
+            group.Title = e.GroupText;
+            group.Propagated = e.Paropagateble;
+            group.PublicKey = e.PublicKey;
+            group.ConditionExpression = e.ConditionExpression;
+            this.innerDocument.Add(group, e.ParentGroupPublicKey);
+        }
+
+        /// <summary>
+        /// The on new question added.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         protected void OnNewQuestionAdded(NewQuestionAdded e)
         {
-            var result = new CompleteQuestionFactory().Create(e.QuestionType);
+            AbstractQuestion result = new CompleteQuestionFactory().Create(e.QuestionType);
             result.QuestionType = e.QuestionType;
             result.QuestionText = e.QuestionText;
             result.StataExportCaption = e.StataExportCaption;
@@ -212,23 +601,42 @@ namespace RavenQuestionnaire.Core.Domain
             result.Instructions = e.Instructions;
             result.PublicKey = e.PublicKey;
             result.Triggers.Add(e.TargetGroupKey);
-            UpdateAnswerList(e.Answers, result);
-            
-            _innerDocument.Add(result, e.GroupPublicKey);
+            this.UpdateAnswerList(e.Answers, result);
+
+            this.innerDocument.Add(result, e.GroupPublicKey);
         }
-        
-        // Event handler for the QuestionChanged event. This method
-        // is automaticly wired as event handler based on convension.
+
+        /// <summary>
+        /// The on new questionnaire created.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnNewQuestionnaireCreated(NewQuestionnaireCreated e)
+        {
+            this.innerDocument.Title = e.Title;
+            this.innerDocument.PublicKey = e.PublicKey;
+            this.innerDocument.CreationDate = e.CreationDate;
+        }
+
+        /// <summary>
+        /// The on question changed.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         protected void OnQuestionChanged(QuestionChanged e)
         {
-
-            var question = this._innerDocument.Find<AbstractQuestion>(e.PublicKey);
+            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
             if (question == null)
+            {
                 return;
+            }
+
             question.QuestionText = e.QuestionText;
             question.StataExportCaption = e.StataExportCaption;
             question.QuestionType = e.QuestionType;
-            UpdateAnswerList(e.Answers, question);
+            this.UpdateAnswerList(e.Answers, question);
             question.ConditionExpression = e.ConditionExpression;
             question.ValidationExpression = e.ValidationExpression;
             question.ValidationMessage = e.ValidationMessage;
@@ -238,134 +646,61 @@ namespace RavenQuestionnaire.Core.Domain
             question.Triggers.Add(e.TargetGroupKey);
             question.AnswerOrder = e.AnswerOrder;
         }
-        
+
+        /// <summary>
+        /// The on question deleted.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnQuestionDeleted(QuestionDeleted e)
+        {
+            this.innerDocument.Remove(e.QuestionId);
+        }
+
+        /// <summary>
+        /// The on questionnaire item moved.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
+        {
+            var questionnaire = new Questionnaire(this.innerDocument);
+            questionnaire.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
+        }
+
+        /// <summary>
+        /// The on questionnaire template loaded.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnQuestionnaireTemplateLoaded(QuestionnaireTemplateLoaded e)
+        {
+            this.innerDocument = e.Template;
+        }
+
+        /// <summary>
+        /// The update answer list.
+        /// </summary>
+        /// <param name="answers">
+        /// The answers.
+        /// </param>
+        /// <param name="question">
+        /// The question.
+        /// </param>
         protected void UpdateAnswerList(IEnumerable<Answer> answers, AbstractQuestion question)
         {
-            if (answers != null && answers.Any())
+            List<Answer> enumerable = answers as List<Answer> ?? answers.ToList();
+            if (answers != null && enumerable.Any())
             {
                 question.Children.Clear();
-                foreach (Answer answer in answers)
+                foreach (Answer answer in enumerable)
                 {
                     question.Add(answer, question.PublicKey);
                 }
             }
-        }
-
-        public void UpdateImage(Guid questionKey, Guid imageKey, string title, string description)
-        {
-            ApplyEvent(new ImageUpdated() { Description = description, ImageKey = imageKey, QuestionKey = questionKey, Title = title });
-        }
-
-        protected void OnImageUpdated(ImageUpdated e)
-        {
-            var question = this._innerDocument.Find<AbstractQuestion>(e.QuestionKey);
-
-            question.UpdateCard(e.ImageKey, e.Title, e.Description);
-        }
-        protected void OnImageUploaded(ImageUploaded e)
-        {
-
-            var newImage = new Image
-            {
-                PublicKey = e.ImagePublicKey,
-                Title = e.Title,
-                Description = e.Description,
-                CreationDate = DateTime.Now
-            };
-
-            var question = this._innerDocument.Find<AbstractQuestion>(e.PublicKey);
-
-            question.AddCard(newImage);
-        }
-        public void DeleteImage(Guid questionKey, Guid imageKey)
-        {
-            ApplyEvent(new ImageDeleted() {ImageKey = imageKey, QuestionKey = questionKey});
-        }
-
-        protected void OnImageDeleted(ImageDeleted e)
-        {
-            var question = this._innerDocument.Find<AbstractQuestion>(e.QuestionKey);
-
-            question.RemoveCard(e.ImageKey);
-        }
-
-        public void DeleteGroup(Guid groupPublicKey)
-        {
-            ApplyEvent(new GroupDeleted(){ GroupPublicKey = groupPublicKey});
-        }
-
-        protected void OnGroupDeleted(GroupDeleted e)
-        {
-            this._innerDocument.Remove(e.GroupPublicKey);
-        }
-
-        //public void UpdateGroup(string groupText, Propagate propagateble, Guid groupPublicKey, List<Guid> triggers)
-        //{
-        //    Group group = this._innerDocument.Find<Group>(groupPublicKey);
-        //    if (group == null)
-        //        throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
-        //    ApplyEvent(new GroupUpdated()
-        //                   {
-        //                       parentGroup = groupPublicKey,
-        //                       GroupText = groupText,
-        //                       Propagateble = propagateble,
-        //                       Triggers = triggers
-        //                   });
-        //}
-
-        public void UpdateGroup(string groupText, Propagate propagateble, Guid groupPublicKey, UserLight executor, string conditionExpression)
-        {
-            Group group = this._innerDocument.Find<Group>(groupPublicKey);
-            if (group == null)
-                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
-            ApplyEvent(new GroupUpdated()
-            {
-                GroupPublicKey = groupPublicKey,
-                GroupText = groupText,
-                Propagateble = propagateble,
-                Executor = executor,
-                ConditionExpression = conditionExpression
-            });
-        }
-
-
-        protected void OnGroupUpdated(GroupUpdated e)
-        {
-            Group group = this._innerDocument.Find<Group>(e.GroupPublicKey);
-            if (group != null)
-            {
-                group.Propagated = e.Propagateble;
-                //if(e.Triggers!=null)
-                //    group.Triggers = e.Triggers;
-                group.ConditionExpression = e.ConditionExpression;
-                group.Update(e.GroupText);
-            }
-        }
-
-        public void UploadImage(Guid publicKey, string title, string description,
-            Guid imagePublicKey)
-        {
-            ApplyEvent(new ImageUploaded()
-                           {
-                               Description = description,
-                               Title = title,
-                               PublicKey = publicKey,
-                               ImagePublicKey = imagePublicKey
-                           });
-        }
-
-       
-
-        #region Implementation of ISnapshotable<QuestionnaireDocument>
-
-        public QuestionnaireDocument CreateSnapshot()
-        {
-            return this._innerDocument;
-        }
-
-        public void RestoreFromSnapshot(QuestionnaireDocument snapshot)
-        {
-            this._innerDocument = snapshot;
         }
 
         #endregion

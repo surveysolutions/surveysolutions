@@ -54,10 +54,6 @@
     <OutputPath>bin\Deploy-dev\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AsyncCtpLibrary, Version=1.0.4107.18181, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.1.0.499\lib\net40\AsyncCtpLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
@@ -91,9 +87,6 @@
     </Reference>
     <Reference Include="Raven.Backup">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Backup.exe</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Debug">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.1.0.499\lib\net40\Raven.Client.Debug.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Client.Embedded, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <HintPath>..\packages\RavenDB.Embedded.1.0.960\lib\net40\Raven.Client.Embedded.dll</HintPath>

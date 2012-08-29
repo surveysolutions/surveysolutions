@@ -1,70 +1,161 @@
-﻿using System.Linq;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SurveyGroupViewFactory.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The survey group view factory.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Survey
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Denormalizers;
+    using RavenQuestionnaire.Core.Entities;
+    using RavenQuestionnaire.Core.Utility;
+    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+
+    /// <summary>
+    /// The survey group view factory.
+    /// </summary>
     public class SurveyGroupViewFactory : IViewFactory<SurveyGroupInputModel, SurveyGroupView>
     {
+        #region Fields
+
+        /// <summary>
+        /// The document item session.
+        /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
 
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyGroupViewFactory"/> class.
+        /// </summary>
+        /// <param name="documentItemSession">
+        /// The document item session.
+        /// </param>
         public SurveyGroupViewFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The load.
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Views.Survey.SurveyGroupView.
+        /// </returns>
         public SurveyGroupView Load(SurveyGroupInputModel input)
         {
-            var count = documentItemSession.Query().Where(x => x.TemplateId == input.Id).ToList().Count;
-            if (count==0)
-                return new SurveyGroupView(input.Page, input.PageSize, input.QuestionnaireId, 0, new CompleteQuestionnaireBrowseItem[0], input.Id);
-            IQueryable<CompleteQuestionnaireBrowseItem> query = documentItemSession.Query().Where(v=>v.TemplateId==input.Id);
+            int count = this.documentItemSession.Query().Where(x => x.TemplateId == input.Id).ToList().Count;
+            if (count == 0)
+            {
+                return new SurveyGroupView(
+                    input.Page, 
+                    input.PageSize, 
+                    input.QuestionnaireId, 
+                    0, 
+                    new CompleteQuestionnaireBrowseItem[0], 
+                    input.Id);
+            }
+
+            IQueryable<CompleteQuestionnaireBrowseItem> query =
+                this.documentItemSession.Query().Where(v => v.TemplateId == input.Id);
             if (!string.IsNullOrEmpty(input.QuestionnaireId))
+            {
                 query = query.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
+            }
+
             if (input.Orders.Count > 0)
-                query = DefineOrderBy(query, input);
+            {
+                query = this.DefineOrderBy(query, input);
+            }
+
             query = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-            return new SurveyGroupView(input.Page, input.PageSize, query.FirstOrDefault()!=null ? query.FirstOrDefault().QuestionnaireTitle : input.Id, count, query, input.Id);
+            return new SurveyGroupView(
+                input.Page, 
+                input.PageSize, 
+                query.FirstOrDefault() != null ? query.FirstOrDefault().QuestionnaireTitle : input.Id, 
+                count, 
+                query, 
+                input.Id);
         }
 
+        #endregion
 
+        #region Methods
 
-        private IQueryable<CompleteQuestionnaireBrowseItem> DefineOrderBy(IQueryable<CompleteQuestionnaireBrowseItem> query, SurveyGroupInputModel input)
+        /// <summary>
+        /// The define order by.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// The System.Linq.IQueryable`1[T -&gt; RavenQuestionnaire.Core.Views.CompleteQuestionnaire.CompleteQuestionnaireBrowseItem].
+        /// </returns>
+        private IQueryable<CompleteQuestionnaireBrowseItem> DefineOrderBy(
+            IQueryable<CompleteQuestionnaireBrowseItem> query, SurveyGroupInputModel input)
         {
-            var o = query.SelectMany(t => t.FeaturedQuestions).Select(y => y.QuestionText).Distinct().ToList();
+            List<string> o = query.SelectMany(t => t.FeaturedQuestions).Select(y => y.QuestionText).Distinct().ToList();
             if (o.Contains(input.Orders[0].Field))
             {
                 query = input.Orders[0].Direction == OrderDirection.Asc
-                        ? query.OrderBy(
-                            t =>
-                            t.FeaturedQuestions.Where(y => y.QuestionText == input.Orders[0].Field).Select(
-                                x => x.AnswerValue).FirstOrDefault())
-                        : query.OrderByDescending(
-                            t =>
-                            t.FeaturedQuestions.Where(y => y.QuestionText == input.Orders[0].Field).Select(
-                                x => x.AnswerValue).FirstOrDefault());
+                            ? query.OrderBy(
+                                t =>
+                                t.FeaturedQuestions.Where(y => y.QuestionText == input.Orders[0].Field).Select(
+                                    x => x.AnswerValue).FirstOrDefault())
+                            : query.OrderByDescending(
+                                t =>
+                                t.FeaturedQuestions.Where(y => y.QuestionText == input.Orders[0].Field).Select(
+                                    x => x.AnswerValue).FirstOrDefault());
             }
             else
             {
                 if (input.Orders[0].Field.Contains("Responsible"))
                 {
-                    var usersnull = query.Where(t => t.Responsible == null);
-                    var contains = input.Orders[0].Direction == OrderDirection.Asc
-                        ? query.Where(t=>t.Responsible!=null).OrderBy(input.Orders[0].Field)
-                        : query.Where(t=>t.Responsible!=null).OrderByDescending(input.Orders[0].Field);;
-                    query= (input.Orders[0].Direction == OrderDirection.Asc)
-                                       ? usersnull.Union(contains)
-                                       : contains.Union(usersnull);
-
+                    IQueryable<CompleteQuestionnaireBrowseItem> usersnull = query.Where(t => t.Responsible == null);
+                    IOrderedQueryable<CompleteQuestionnaireBrowseItem> contains = input.Orders[0].Direction
+                                                                                  == OrderDirection.Asc
+                                                                                      ? query.Where(
+                                                                                          t => t.Responsible != null).
+                                                                                            OrderBy(
+                                                                                                input.Orders[0].Field)
+                                                                                      : query.Where(
+                                                                                          t => t.Responsible != null).
+                                                                                            OrderByDescending(
+                                                                                                input.Orders[0].Field);
+                    
+                    query = (input.Orders[0].Direction == OrderDirection.Asc)
+                                ? usersnull.Union(contains)
+                                : contains.Union(usersnull);
                 }
                 else
+                {
                     query = input.Orders[0].Direction == OrderDirection.Asc
-                        ? query.OrderBy(input.Orders[0].Field)
-                        : query.OrderByDescending(input.Orders[0].Field);
+                                ? query.OrderBy(input.Orders[0].Field)
+                                : query.OrderByDescending(input.Orders[0].Field);
+                }
             }
+
             return query;
         }
+
+        #endregion
     }
 }

@@ -1,13 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RavenQuestionnaire.Core.Documents;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SyncProgressView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The sync progress view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Synchronization
 {
+    using System;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Documents;
+
+    /// <summary>
+    /// The sync progress view.
+    /// </summary>
     public class SyncProgressView
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SyncProgressView"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
         public SyncProgressView(SyncProcessDocument doc)
         {
             this.ProcessPublicKey = doc.PublicKey;
@@ -29,20 +48,51 @@ namespace RavenQuestionnaire.Core.Views.Synchronization
                     break;
                 case EventState.InProgress:
                     this.StateDescription = "Retrieving documents";
-                    var initialStateEventsCount = doc.Chunks.Count(e => e.Handled == EventState.Initial);
-                    this.ProgressPercentage = doc.Chunks.Count == 0 ? 100 : (int)(initialStateEventsCount * 100 / doc.Chunks.Count);
-                        //(((decimal)(doc.Chunks.Count - initialStateEventsCount) / doc.Chunks.Count) * 100);
+                    int initialStateEventsCount = doc.Chunks.Count(e => e.Handled == EventState.Initial);
+                    this.ProgressPercentage = doc.Chunks.Count == 0
+                                                  ? 100
+                                                  : (initialStateEventsCount * 100 / doc.Chunks.Count);
+
+                    // (((decimal)(doc.Chunks.Count - initialStateEventsCount) / doc.Chunks.Count) * 100);
                     // process can't display 100% when it's not marked as completed
                     if (this.ProgressPercentage == 100)
+                    {
                         this.ProgressPercentage = 99;
+                    }
+
                     break;
             }
         }
 
-        public string StateDescription { get; set; }
-        public Guid ProcessPublicKey { get; set; }
-        public DateTime StartDate { get; set; }
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the end date.
+        /// </summary>
         public DateTime? EndDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the process public key.
+        /// </summary>
+        public Guid ProcessPublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the progress percentage.
+        /// </summary>
         public int ProgressPercentage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the start date.
+        /// </summary>
+        public DateTime StartDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the state description.
+        /// </summary>
+        public string StateDescription { get; set; }
+
+        #endregion
     }
 }

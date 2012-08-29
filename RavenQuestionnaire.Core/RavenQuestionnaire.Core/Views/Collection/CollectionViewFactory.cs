@@ -1,22 +1,65 @@
-﻿using System.Linq;
-using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Documents;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CollectionViewFactory.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The collection view factory.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Collection
 {
-    public class CollectionViewFactory:IViewFactory<CollectionViewInputModel, CollectionView>
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Denormalizers;
+    using RavenQuestionnaire.Core.Documents;
+
+    /// <summary>
+    /// The collection view factory.
+    /// </summary>
+    public class CollectionViewFactory : IViewFactory<CollectionViewInputModel, CollectionView>
     {
+        #region Fields
+
+        /// <summary>
+        /// The document item session.
+        /// </summary>
         private readonly IDenormalizerStorage<CollectionDocument> documentItemSession;
 
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CollectionViewFactory"/> class.
+        /// </summary>
+        /// <param name="documentItemSession">
+        /// The document item session.
+        /// </param>
         public CollectionViewFactory(IDenormalizerStorage<CollectionDocument> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The load.
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Views.Collection.CollectionView.
+        /// </returns>
         public CollectionView Load(CollectionViewInputModel input)
         {
-            var doc = documentItemSession.Query().FirstOrDefault(u => u.Id == input.CollectionId);
+            CollectionDocument doc = this.documentItemSession.Query().FirstOrDefault(u => u.Id == input.CollectionId);
             return new CollectionView(doc);
         }
+
+        #endregion
     }
 }

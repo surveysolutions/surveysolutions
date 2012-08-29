@@ -1,12 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IBinded.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The Binded interface.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
+    using System;
+
+    /// <summary>
+    /// The Binded interface.
+    /// </summary>
     public interface IBinded
     {
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the parent public key.
+        /// </summary>
         Guid ParentPublicKey { get; set; }
+
+        #endregion
     }
 }

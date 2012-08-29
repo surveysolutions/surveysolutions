@@ -1,27 +1,75 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Raven.Client;
-using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CompleteGroupViewFactory.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The complete group view factory.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Group
 {
+    using System;
+    using System.Linq;
+
+    using Raven.Client;
+
+    using RavenQuestionnaire.Core.AbstractFactories;
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+
+    /// <summary>
+    /// The complete group view factory.
+    /// </summary>
     public class CompleteGroupViewFactory : IViewFactory<CompleteGroupViewInputModel, CompleteGroupView>
     {
-        private IDocumentSession documentSession;
-        private ICompleteGroupFactory groupFactory;
+        #region Fields
+
+        /// <summary>
+        /// The document session.
+        /// </summary>
+        private readonly IDocumentSession documentSession;
+
+        /// <summary>
+        /// The group factory.
+        /// </summary>
+        private readonly ICompleteGroupFactory groupFactory;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteGroupViewFactory"/> class.
+        /// </summary>
+        /// <param name="documentSession">
+        /// The document session.
+        /// </param>
+        /// <param name="groupFactory">
+        /// The group factory.
+        /// </param>
         public CompleteGroupViewFactory(IDocumentSession documentSession, ICompleteGroupFactory groupFactory)
         {
             this.documentSession = documentSession;
             this.groupFactory = groupFactory;
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The load.
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Views.Group.CompleteGroupView.
+        /// </returns>
         public CompleteGroupView Load(CompleteGroupViewInputModel input)
         {
-            var doc = documentSession.Load<CompleteQuestionnaireStoreDocument>(input.QuestionnaireId);
+            var doc = this.documentSession.Load<CompleteQuestionnaireStoreDocument>(input.QuestionnaireId);
             CompleteGroup group;
             if (input.PublicKey.HasValue)
             {
@@ -29,15 +77,13 @@ namespace RavenQuestionnaire.Core.Views.Group
             }
             else
             {
-                group = new CompleteGroup()
-                            {
-                                Children = 
-                                    doc.Children.Where(c=>c is ICompleteQuestion).ToList()};
+                group = new CompleteGroup { Children = doc.Children.Where(c => c is ICompleteQuestion).ToList() };
                 group.PublicKey = Guid.Empty;
-
             }
+
             return this.groupFactory.CreateGroup(doc, group);
         }
+
+        #endregion
     }
 }
-

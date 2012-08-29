@@ -1,26 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using Ncqrs.Eventing.Storage;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AnswerSet.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The answer set.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Events.Questionnaire.Completed
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Ncqrs.Eventing.Storage;
+
+    /// <summary>
+    /// The answer set.
+    /// </summary>
     [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:AnswerSet")]
     public class AnswerSet
     {
-        public Guid CompletedQuestionnaireId { get; set; }//is it necessary?
-        
-        public Guid QuestionPublicKey { set; get; }
-        public Guid? PropogationPublicKey { set; get; }
+        #region Public Properties
 
-        public List<Guid> AnswerKeys { set; get; }
+        /// <summary>
+        /// Gets or sets the answer keys.
+        /// </summary>
+        public List<Guid> AnswerKeys { get; set; }
 
-        public string AnswerValue { set; get; }
+        /// <summary>
+        /// Gets or sets the answer string.
+        /// </summary>
+        public string AnswerString { get; set; }
 
-        public string AnswerString { set; get; }
+        /// <summary>
+        /// Gets or sets the answer value.
+        /// </summary>
+        public string AnswerValue { get; set; }
 
-        public bool Featured { set; get; }
+        /// <summary>
+        /// Gets or sets the completed questionnaire id.
+        /// </summary>
+        public Guid CompletedQuestionnaireId { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether featured.
+        /// </summary>
+        public bool Featured { get; set; }
+
+        /// <summary>
+        /// Gets or sets the propogation public key.
+        /// </summary>
+        public Guid? PropogationPublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question public key.
+        /// </summary>
+        public Guid QuestionPublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question text.
+        /// </summary>
         public string QuestionText { get; set; }
+
+        #endregion
     }
 }

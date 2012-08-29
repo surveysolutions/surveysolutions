@@ -1,40 +1,118 @@
-﻿using System;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="QuestionStatisticView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The question statistic view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Statistics
 {
+    using System;
+
+    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+
+    /// <summary>
+    /// The question statistic view.
+    /// </summary>
     public class QuestionStatisticView
     {
-        public QuestionStatisticView(ICompleteQuestion doc, Guid gropPublicKey, Guid? gropPropagationPublicKey,
-                                     Guid screenPublicKey)
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionStatisticView"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="gropPublicKey">
+        /// The grop public key.
+        /// </param>
+        /// <param name="gropPropagationPublicKey">
+        /// The grop propagation public key.
+        /// </param>
+        /// <param name="screenPublicKey">
+        /// The screen public key.
+        /// </param>
+        public QuestionStatisticView(
+            ICompleteQuestion doc, Guid gropPublicKey, Guid? gropPropagationPublicKey, Guid screenPublicKey)
         {
-            PublicKey = doc.PublicKey;
-            QuestionText = doc.QuestionText;
-            //    this.AnswerValue = doc.GetAnswerString();
-            //   this.ApproximateTime = doc.ApproximateTime;
-            GroupPublicKey = gropPublicKey;
-            ScreenPublicKey = screenPublicKey;
-            GroupPropagationPublicKey = gropPropagationPublicKey;
+            this.PublicKey = doc.PublicKey;
+            this.QuestionText = doc.QuestionText;
+
+            // this.AnswerValue = doc.GetAnswerString();
+            // this.ApproximateTime = doc.ApproximateTime;
+            this.GroupPublicKey = gropPublicKey;
+            this.ScreenPublicKey = screenPublicKey;
+            this.GroupPropagationPublicKey = gropPropagationPublicKey;
             if (gropPropagationPublicKey.HasValue)
-                IsQuestionFromPropGroup = true;
+            {
+                this.IsQuestionFromPropGroup = true;
+            }
+
             if (doc.GetAnswerObject() != null)
             {
-                //     AnswerValue = answer.AnswerText?? answer.AnswerValue;
-                AnswerDate = doc.AnswerDate;
-                AnswerValue = AnswerText = doc.GetAnswerString();
+                // AnswerValue = answer.AnswerText?? answer.AnswerValue;
+                this.AnswerDate = doc.AnswerDate;
+                this.AnswerValue = this.AnswerText = doc.GetAnswerString();
             }
         }
 
-        public Guid PublicKey { get; set; }
-        public Guid GroupPublicKey { get; set; }
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the answer date.
+        /// </summary>
+        public DateTime? AnswerDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the answer text.
+        /// </summary>
+        public string AnswerText { get; set; }
+
+        /// <summary>
+        /// Gets or sets the answer value.
+        /// </summary>
+        public string AnswerValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets the approximate time.
+        /// </summary>
+        public TimeSpan? ApproximateTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the group propagation public key.
+        /// </summary>
         public Guid? GroupPropagationPublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the group public key.
+        /// </summary>
+        public Guid GroupPublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is question from prop group.
+        /// </summary>
+        public bool IsQuestionFromPropGroup { get; set; }
+
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question text.
+        /// </summary>
+        public string QuestionText { get; set; }
+
+        /// <summary>
+        /// Gets or sets the screen public key.
+        /// </summary>
         public Guid ScreenPublicKey { get; set; }
 
-        public bool IsQuestionFromPropGroup { get; set; }
-        public DateTime? AnswerDate { get; set; }
-        public TimeSpan? ApproximateTime { get; set; }
-        public string QuestionText { get; set; }
-        public string AnswerValue { get; set; }
-        public string AnswerText { get; set; }
+        #endregion
     }
 }

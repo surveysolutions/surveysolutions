@@ -1,32 +1,68 @@
-﻿using System;
-using System.Linq;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Core.Events.Questionnaire;
-using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CQGroupItemDenormalizer.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The cq group item denormalizer.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.EventHandlers
 {
-    public class CQGroupItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
+    using System;
+    using System.Linq;
+
+    using Ncqrs.Eventing.ServiceModel.Bus;
+
+    using RavenQuestionnaire.Core.Denormalizers;
+    using RavenQuestionnaire.Core.Events;
+    using RavenQuestionnaire.Core.Events.Questionnaire;
+    using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
+    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
+
+    /// <summary>
+    /// The cq group item denormalizer.
+    /// </summary>
+    public class CQGroupItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
                                            IEventHandler<NewQuestionnaireCreated>, 
                                            IEventHandler<QuestionnaireTemplateLoaded>, 
                                            IEventHandler<CompleteQuestionnaireDeleted>
     {
-        
-        private IDenormalizerStorage<CQGroupItem> documentGroupSession;
+        #region Fields
 
+        /// <summary>
+        /// The document group session.
+        /// </summary>
+        private readonly IDenormalizerStorage<CQGroupItem> documentGroupSession;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CQGroupItemDenormalizer"/> class.
+        /// </summary>
+        /// <param name="documentGroupSession">
+        /// The document group session.
+        /// </param>
         public CQGroupItemDenormalizer(IDenormalizerStorage<CQGroupItem> documentGroupSession)
         {
             this.documentGroupSession = documentGroupSession;
         }
 
-        #region Implementation of IEventHandler<in CreateCompleteQuestionnaireCommand>
+        #endregion
 
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
-            var group =
+            IQueryable<CQGroupItem> group =
                 this.documentGroupSession.Query().Where(g => g.SurveyId == evnt.Payload.QuestionnaireId.ToString());
             foreach (CQGroupItem cqGroupItem in group)
             {
@@ -34,34 +70,40 @@ namespace RavenQuestionnaire.Core.EventHandlers
             }
         }
 
-        #endregion
-
-
-        #region Implementation of IEventHandler<in CreateQuestionnaireCommand>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
             var questionnaire = new CQGroupItem(0, 100, 0, evnt.Payload.Title, evnt.Payload.PublicKey.ToString());
             this.documentGroupSession.Store(questionnaire, evnt.Payload.PublicKey);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in QuestionnaireTemplateLocaded>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<QuestionnaireTemplateLoaded> evnt)
         {
-            var questionnaire = new CQGroupItem(0, 100, 0, evnt.Payload.Template.Title, evnt.Payload.Template.PublicKey.ToString());
+            var questionnaire = new CQGroupItem(
+                0, 100, 0, evnt.Payload.Template.Title, evnt.Payload.Template.PublicKey.ToString());
             this.documentGroupSession.Store(questionnaire, evnt.Payload.Template.PublicKey);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in CompleteQuestionnaireDeleted>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
         {
-            var group =
+            IQueryable<CQGroupItem> group =
                 this.documentGroupSession.Query().Where(g => Guid.Parse(g.SurveyId) == evnt.Payload.TemplateId);
             foreach (CQGroupItem cqGroupItem in group)
             {
@@ -70,7 +112,5 @@ namespace RavenQuestionnaire.Core.EventHandlers
         }
 
         #endregion
-
-        
     }
 }

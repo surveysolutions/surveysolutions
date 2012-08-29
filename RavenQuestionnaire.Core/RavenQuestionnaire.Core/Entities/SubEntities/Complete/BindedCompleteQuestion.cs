@@ -1,37 +1,312 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using RavenQuestionnaire.Core.Entities.Composite;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="BindedCompleteQuestion.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The binded complete question.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Newtonsoft.Json;
+
+    using RavenQuestionnaire.Core.Entities.Composite;
+
+    /// <summary>
+    /// The binded complete question.
+    /// </summary>
     public class BindedCompleteQuestion : ICompleteQuestion, IBinded
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BindedCompleteQuestion"/> class.
+        /// </summary>
         public BindedCompleteQuestion()
         {
-            PublicKey = Guid.NewGuid();
-            Children=new List<IComposite>();
-        }
-        public BindedCompleteQuestion(Guid publicKey,IBinded template)
-        {
-            PublicKey = publicKey;
-            ParentPublicKey = template.ParentPublicKey;
+            this.PublicKey = Guid.NewGuid();
+            this.Children = new List<IComposite>();
         }
 
-/*
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BindedCompleteQuestion"/> class.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="template">
+        /// The template.
+        /// </param>
+        public BindedCompleteQuestion(Guid publicKey, IBinded template)
+        {
+            this.PublicKey = publicKey;
+            this.ParentPublicKey = template.ParentPublicKey;
+        }
+
+        #endregion
+
+        /*
         public BindedCompleteQuestion(ICompleteQuestion template)
         {
             this.ParentPublicKey = template.PublicKey;
         }*/
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the answer.
+        /// </summary>
+        public object Answer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the answer date.
+        /// </summary>
+        public DateTime? AnswerDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the answer order.
+        /// </summary>
+        public Order AnswerOrder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the attributes.
+        /// </summary>
+        public Dictionary<string, object> Attributes
+        {
+            get
+            {
+                return new Dictionary<string, object>(0);
+            }
+
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the cards.
+        /// </summary>
+        public List<Image> Cards { get; set; }
+
+        /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
+        public List<IComposite> Children
+        {
+            get
+            {
+                return new List<IComposite>();
+            }
+
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the comments.
+        /// </summary>
+        public string Comments { get; set; }
+
+        /// <summary>
+        /// Gets or sets the condition expression.
+        /// </summary>
+        public string ConditionExpression { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether enabled.
+        /// </summary>
+        public bool Enabled
+        {
+            get
+            {
+                return false;
+            }
+
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether featured.
+        /// </summary>
+        public bool Featured
+        {
+            get
+            {
+                return false;
+            }
+
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the instructions.
+        /// </summary>
+        public string Instructions { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether mandatory.
+        /// </summary>
+        public bool Mandatory
+        {
+            get
+            {
+                return false;
+            }
+
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// Gets the parent.
+        /// </summary>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        [JsonIgnore]
+        public IComposite Parent
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the parent public key.
+        /// </summary>
+        public Guid ParentPublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the propogation public key.
+        /// </summary>
+        public Guid? PropogationPublicKey
+        {
+            get
+            {
+                return null;
+            }
+
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question text.
+        /// </summary>
+        public string QuestionText { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question type.
+        /// </summary>
+        public QuestionType QuestionType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the stata export caption.
+        /// </summary>
+        public string StataExportCaption { get; set; }
+
+        /// <summary>
+        /// Gets or sets the triggers.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// </exception>
+        [JsonIgnore]
+        public List<Guid> Triggers
+        {
+            get
+            {
+                return new List<Guid>(0);
+            }
+
+            set
+            {
+                throw new InvalidOperationException();
+            }
+        }
+        
+        public bool Capital { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets a value indicating whether valid.
+        /// </summary>
+        public bool Valid
+        {
+            get
+            {
+                return true;
+            }
+
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the validation expression.
+        /// </summary>
+        public string ValidationExpression { get; set; }
+
+        /// <summary>
+        /// Gets or sets the validation message.
+        /// </summary>
+        public string ValidationMessage { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The op_ explicit.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <returns>
+        /// </returns>
         public static explicit operator BindedCompleteQuestion(BindedQuestion doc)
         {
-            BindedCompleteQuestion result = new BindedCompleteQuestion
-            {
-                PublicKey = doc.PublicKey,
-                ParentPublicKey = doc.ParentPublicKey
-            };
+            var result = new BindedCompleteQuestion { PublicKey = doc.PublicKey, ParentPublicKey = doc.ParentPublicKey };
             return result;
         }
+
+        /// <summary>
+        /// The add.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
+        public void Add(IComposite c, Guid? parent)
+        {
+            throw new CompositeException();
+        }
+
+        /// <summary>
+        /// The copy.
+        /// </summary>
+        /// <param name="template">
+        /// The template.
+        /// </param>
         public void Copy(ICompleteQuestion template)
         {
             this.Children = template.Children;
@@ -40,158 +315,125 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
             this.QuestionType = template.QuestionType;
         }
 
-        #region Implementation of IComposite
-
-        public void Add(IComposite c, Guid? parent)
-        {
-            throw new CompositeException();
-        }
-
-        public void Remove(IComposite c)
-        {
-            throw new CompositeException();
-        }
-
-        public void Remove(Guid publicKey)
-        {
-            throw new CompositeException();
-        }
-
+        /// <summary>
+        /// The find.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The T.
+        /// </returns>
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
             return null;
         }
 
+        /// <summary>
+        /// The find.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
+        /// </returns>
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return new T[0];
         }
 
+        /// <summary>
+        /// The first or default.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The T.
+        /// </returns>
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
         {
             return null;
         }
 
-        public List<IComposite> Children
-        {
-            get { return new List<IComposite>(); }
-            set { }
-        }
-
-
-        [JsonIgnore]
-        public IComposite Parent
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        #endregion
-
-        #region Implementation of IQuestion
-
-        public object Answer { get; set; }
-        public void SetAnswer(List<Guid> answer, string answerValue)
-        {
-            
-        }
-
-        public string GetAnswerString()
-        {
-            return Answer == null ? string.Empty : Answer.ToString();
-        }
-
+        /// <summary>
+        /// The get answer object.
+        /// </summary>
+        /// <returns>
+        /// The System.Object.
+        /// </returns>
         public object GetAnswerObject()
         {
-            return Answer;
+            return this.Answer;
         }
 
-        public string Comments{ get; set; }
+        /// <summary>
+        /// The get answer string.
+        /// </summary>
+        /// <returns>
+        /// The System.String.
+        /// </returns>
+        public string GetAnswerString()
+        {
+            return this.Answer == null ? string.Empty : this.Answer.ToString();
+        }
 
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
+        public void Remove(IComposite c)
+        {
+            throw new CompositeException();
+        }
+
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
+        public void Remove(Guid publicKey)
+        {
+            throw new CompositeException();
+        }
+
+        /// <summary>
+        /// The set answer.
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        /// <param name="answerValue">
+        /// The answer value.
+        /// </param>
+        public void SetAnswer(List<Guid> answer, string answerValue)
+        {
+        }
+
+        /// <summary>
+        /// The set comments.
+        /// </summary>
+        /// <param name="comments">
+        /// The comments.
+        /// </param>
         public void SetComments(string comments)
         {
         }
 
-        public Guid PublicKey { get; set; }
-        public string QuestionText { get; set; }
-
-        public QuestionType QuestionType { get; set; }
-
-        public string ConditionExpression { get; set; }
-
-        public string ValidationExpression
-        { get; set; }
-
-        public string ValidationMessage
-        { get; set; }
-
-        public string StataExportCaption { get; set; }
-
-        public string Instructions { get; set; }
-
-        public List<Image> Cards { get; set; }
-
-        public Order AnswerOrder { get; set; }
-
-        public bool Featured
-        {
-            get { return false; }
-            set { }
-        }
-
-        public bool Capital { get; set; }
-
-        public bool Mandatory
-        {
-            get { return false; }
-            set { }
-        }
-
-        public Dictionary<string, object> Attributes
-        {
-            get { return new Dictionary<string, object>(0); }
-            set { }
-        }
-
-        #endregion
-
-        #region Implementation of ICompleteQuestion
-
-        public Guid? PropogationPublicKey
-        {
-            get { return null; }
-            set { }
-        }
-
-        public bool Enabled
-        {
-            get { return false; }
-            set { }
-        }
-
-        public bool Valid
-        {
-            get { return true; }
-            set { }
-        }
-
-        public DateTime? AnswerDate { get; set; }
-
-        #endregion
-
-        #region Implementation of IBinded
-
-        public Guid ParentPublicKey { get; set; }
-
-        #endregion
-
-
-        #region Implementation of ITriggerable
-        [JsonIgnore]
-        public List<Guid> Triggers
-        {
-            get { return new List<Guid>(0); }
-            set { throw new InvalidOperationException(); }
-        }
         #endregion
     }
 }

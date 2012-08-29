@@ -1,63 +1,179 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Linq;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IDenormalizerStorage.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The DenormalizerStorage interface.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Denormalizers
 {
-    public interface IDenormalizerStorage<T> where T : class
+    using System;
+    using System.Collections.Concurrent;
+    using System.Linq;
+
+    /// <summary>
+    /// The DenormalizerStorage interface.
+    /// </summary>
+    /// <typeparam name="T">
+    /// </typeparam>
+    public interface IDenormalizerStorage<T>
+        where T : class
     {
-        T GetByGuid(Guid key);
-        IQueryable<T> Query();
-        void Store(T denormalizer, Guid key);
-        void Remove(Guid key);
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The count.
+        /// </summary>
+        /// <returns>
+        /// The System.Int32.
+        /// </returns>
         int Count();
+
+        /// <summary>
+        /// The get by guid.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The T.
+        /// </returns>
+        T GetByGuid(Guid key);
+
+        /// <summary>
+        /// The query.
+        /// </summary>
+        /// <returns>
+        /// The System.Linq.IQueryable`1[T -&gt; T].
+        /// </returns>
+        IQueryable<T> Query();
+
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        void Remove(Guid key);
+
+        /// <summary>
+        /// The store.
+        /// </summary>
+        /// <param name="denormalizer">
+        /// The denormalizer.
+        /// </param>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        void Store(T denormalizer, Guid key);
+
+        #endregion
     }
 
-    public class InMemoryDenormalizer<T> : IDenormalizerStorage<T> where T : class
+    /// <summary>
+    /// The in memory denormalizer.
+    /// </summary>
+    /// <typeparam name="T">
+    /// </typeparam>
+    public class InMemoryDenormalizer<T> : IDenormalizerStorage<T>
+        where T : class
     {
+        #region Fields
+
+        /// <summary>
+        /// The _hash.
+        /// </summary>
         private readonly ConcurrentDictionary<Guid, T> _hash;
 
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InMemoryDenormalizer{T}"/> class.
+        /// </summary>
         public InMemoryDenormalizer()
         {
             this._hash = new ConcurrentDictionary<Guid, T>();
         }
 
-        #region Implementation of IDenormalizerStorage
+        #endregion
 
-        public T GetByGuid(Guid key) 
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The count.
+        /// </summary>
+        /// <returns>
+        /// The System.Int32.
+        /// </returns>
+        public int Count()
         {
-            if (!this._hash.ContainsKey(key))
-                return null;
-            return this._hash[key];
-            
+            return this._hash.Count;
         }
 
+        /// <summary>
+        /// The get by guid.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The T.
+        /// </returns>
+        public T GetByGuid(Guid key)
+        {
+            if (!this._hash.ContainsKey(key))
+            {
+                return null;
+            }
+
+            return this._hash[key];
+        }
+
+        /// <summary>
+        /// The query.
+        /// </summary>
+        /// <returns>
+        /// The System.Linq.IQueryable`1[T -&gt; T].
+        /// </returns>
         public IQueryable<T> Query()
         {
             return this._hash.Values.AsQueryable();
-            
         }
 
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        public void Remove(Guid key)
+        {
+            T val;
+            this._hash.TryRemove(key, out val);
+        }
+
+        /// <summary>
+        /// The store.
+        /// </summary>
+        /// <param name="denormalizer">
+        /// The denormalizer.
+        /// </param>
+        /// <param name="key">
+        /// The key.
+        /// </param>
         public void Store(T denormalizer, Guid key)
         {
             if (this._hash.ContainsKey(key))
             {
-
-                _hash[key] = denormalizer;
+                this._hash[key] = denormalizer;
                 return;
             }
-            _hash.TryAdd(key, denormalizer);
-        }
 
-        public void Remove(Guid key)
-        {
-            T val;
-            _hash.TryRemove(key, out val);
-        }
-
-        public int Count()
-        {
-            return _hash.Count;
+            this._hash.TryAdd(key, denormalizer);
         }
 
         #endregion

@@ -1,56 +1,102 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities.Composite;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="GpsCoordinateCompleteQuestion.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The gps coordinate complete question.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
-    public sealed class GpsCoordinateCompleteQuestion:AbstractCompleteQuestion, IGpsCoordinatesQuestion
-    {
-        #region Properties
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
+    using RavenQuestionnaire.Core.Entities.Composite;
+
+    /// <summary>
+    /// The gps coordinate complete question.
+    /// </summary>
+    public sealed class GpsCoordinateCompleteQuestion : AbstractCompleteQuestion, IGpsCoordinatesQuestion
+    {
+        #region Fields
+
+        /// <summary>
+        /// The _answer.
+        /// </summary>
+        private string _answer;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GpsCoordinateCompleteQuestion"/> class.
+        /// </summary>
         public GpsCoordinateCompleteQuestion()
         {
         }
 
-        public GpsCoordinateCompleteQuestion(string text) : base(text)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GpsCoordinateCompleteQuestion"/> class.
+        /// </summary>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        public GpsCoordinateCompleteQuestion(string text)
+            : base(text)
         {
         }
-        
-        private string _answer;
 
-        public override void SetAnswer(List<Guid> answer, string answerValue)
-        {
-            _answer = answerValue;
-        }
+        #endregion
 
-        public override string GetAnswerString()
-        {
-            return _answer;
-        }
+        #region Public Properties
 
-        public override object GetAnswerObject()
-        {
-            return _answer;
-        }
-
-        public override List<IComposite> Children
-        {
-            get { return new List<IComposite>(); }
-            set { }
-        }
-
+        /// <summary>
+        /// Gets or sets the add gps coordinate attr.
+        /// </summary>
         public string AddGpsCoordinateAttr { get; set; }
 
+        /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
+        public override List<IComposite> Children
+        {
+            get
+            {
+                return new List<IComposite>();
+            }
+
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the int attr.
+        /// </summary>
         public char IntAttr { get; set; }
 
         #endregion
 
-        #region Method
-        
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The add.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
         public override void Add(IComposite c, Guid? parent)
         {
             throw new NotImplementedException();
+
             /*var question = c as ICompleteQuestion;
             if (question == null || question.PublicKey != this.PublicKey)
                 throw new CompositeException();
@@ -58,38 +104,135 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             this.AnswerDate = DateTime.Now;*/
         }
 
+        /// <summary>
+        /// The find.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The T.
+        /// </returns>
+        public override T Find<T>(Guid publicKey)
+        {
+            if (typeof(T).IsAssignableFrom(this.GetType()))
+            {
+                if (this.PublicKey.Equals(publicKey))
+                {
+                    return this as T;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// The find.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
+        /// </returns>
+        public override IEnumerable<T> Find<T>(Func<T, bool> condition)
+        {
+            if (!(this is T))
+            {
+                return new T[0];
+            }
+
+            if (condition(this as T))
+            {
+                return new[] { this as T };
+            }
+
+            return new T[0];
+        }
+
+        /// <summary>
+        /// The first or default.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The T.
+        /// </returns>
+        public override T FirstOrDefault<T>(Func<T, bool> condition)
+        {
+            return Find(condition).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// The get answer object.
+        /// </summary>
+        /// <returns>
+        /// The System.Object.
+        /// </returns>
+        public override object GetAnswerObject()
+        {
+            return this._answer;
+        }
+
+        /// <summary>
+        /// The get answer string.
+        /// </summary>
+        /// <returns>
+        /// The System.String.
+        /// </returns>
+        public override string GetAnswerString()
+        {
+            return this._answer;
+        }
+
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
         public override void Remove(IComposite c)
         {
             this.Remove(c.PublicKey);
         }
 
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
         public override void Remove(Guid publicKey)
         {
             if (publicKey != this.PublicKey)
+            {
                 throw new CompositeException();
+            }
+
             this._answer = null;
         }
 
-        public override T Find<T>(Guid publicKey)
+        /// <summary>
+        /// The set answer.
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        /// <param name="answerValue">
+        /// The answer value.
+        /// </param>
+        public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            if (typeof(T).IsAssignableFrom(GetType()))
-                if (this.PublicKey.Equals(publicKey))
-                    return this as T;
-            return null;
-        }
-
-        public override IEnumerable<T> Find<T>(Func<T, bool> condition)
-        {
-            if (!(this is T))
-                return new T[0];
-            if (condition(this as T))
-                return new T[] { this as T };
-            return new T[0];
-        }
-
-        public override T FirstOrDefault<T>(Func<T, bool> condition)
-        {
-            return Find<T>(condition).FirstOrDefault();
+            this._answer = answerValue;
         }
 
         #endregion

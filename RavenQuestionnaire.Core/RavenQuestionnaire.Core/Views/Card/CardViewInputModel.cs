@@ -1,18 +1,61 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CardViewInputModel.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The card view input model.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Question
 {
+    using System;
+
+    /// <summary>
+    /// The card view input model.
+    /// </summary>
     public class CardViewInputModel
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CardViewInputModel"/> class.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="imageKey">
+        /// The image key.
+        /// </param>
         public CardViewInputModel(Guid publicKey, string questionnaireId, Guid imageKey)
         {
-            QuestionKey = publicKey;
-            ImageKey = imageKey;
-            QuestionnaireId = questionnaireId;
+            this.QuestionKey = publicKey;
+            this.ImageKey = imageKey;
+            this.QuestionnaireId = questionnaireId;
         }
 
-        public string QuestionnaireId { get; set; }
-        public Guid QuestionKey { get; private set; }
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets the image key.
+        /// </summary>
         public Guid ImageKey { get; private set; }
+
+        /// <summary>
+        /// Gets the question key.
+        /// </summary>
+        public Guid QuestionKey { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the questionnaire id.
+        /// </summary>
+        public string QuestionnaireId { get; set; }
+
+        #endregion
     }
 }

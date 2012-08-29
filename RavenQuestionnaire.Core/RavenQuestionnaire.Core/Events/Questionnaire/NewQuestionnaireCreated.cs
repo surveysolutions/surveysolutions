@@ -1,15 +1,42 @@
-﻿using System;
-using Ncqrs.Eventing.Storage;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="NewQuestionnaireCreated.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The new questionnaire created.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Events
 {
+    using System;
+
+    using Ncqrs.Eventing.Storage;
+
+    /// <summary>
+    /// The new questionnaire created.
+    /// </summary>
     [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:NewQuestionnaireCreated")]
     public class NewQuestionnaireCreated
     {
-        public Guid PublicKey { set; get; }
+        #region Public Properties
 
-        public string Title { get; set; }
+        /// <summary>
+        /// Gets or sets the creation date.
+        /// </summary>
         public DateTime CreationDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        #endregion
     }
 }

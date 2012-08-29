@@ -1,64 +1,108 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Core.Events.Questionnaire;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="QuestionnaireDenormalizer.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   Defines the QuestionnaireDenormalizer type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace RavenQuestionnaire.Core.EventHandlers
 {
-    public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>,
-        IEventHandler<QuestionnaireTemplateLoaded>, IEventHandler<NewGroupAdded>,
-        IEventHandler<QuestionnaireItemMoved>, IEventHandler<QuestionDeleted>,
-        IEventHandler<NewQuestionAdded>, IEventHandler<QuestionChanged>,
-        IEventHandler<ImageUpdated>, IEventHandler<ImageUploaded>,
-        IEventHandler<ImageDeleted>, IEventHandler<GroupDeleted>, 
-        IEventHandler<GroupUpdated>
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Ncqrs.Eventing.ServiceModel.Bus;
+
+    using RavenQuestionnaire.Core.AbstractFactories;
+    using RavenQuestionnaire.Core.Denormalizers;
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Events;
+    using RavenQuestionnaire.Core.Events.Questionnaire;
+
+    /// <summary>
+    /// The questionnaire denormalizer.
+    /// </summary>
+    public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>, 
+                                             IEventHandler<QuestionnaireTemplateLoaded>, 
+                                             IEventHandler<NewGroupAdded>, 
+                                             IEventHandler<QuestionnaireItemMoved>, 
+                                             IEventHandler<QuestionDeleted>, 
+                                             IEventHandler<NewQuestionAdded>, 
+                                             IEventHandler<QuestionChanged>, 
+                                             IEventHandler<ImageUpdated>, 
+                                             IEventHandler<ImageUploaded>, 
+                                             IEventHandler<ImageDeleted>, 
+                                             IEventHandler<GroupDeleted>, 
+                                             IEventHandler<GroupUpdated>
     {
+        #region Fields
 
-        private readonly IDenormalizerStorage<QuestionnaireDocument> _documentStorage;
+        /// <summary>
+        /// The document storage.
+        /// </summary>
+        private readonly IDenormalizerStorage<QuestionnaireDocument> documentStorage;
 
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionnaireDenormalizer"/> class.
+        /// </summary>
+        /// <param name="documentStorage">
+        /// The document storage.
+        /// </param>
         public QuestionnaireDenormalizer(IDenormalizerStorage<QuestionnaireDocument> documentStorage)
         {
-            this._documentStorage = documentStorage;
+            this.documentStorage = documentStorage;
         }
 
-        #region Implementation of IEventHandler<in NewQuestionnaireCreated>
+        #endregion
 
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
-            QuestionnaireDocument item = new QuestionnaireDocument();
+            var item = new QuestionnaireDocument();
 
             item.Title = evnt.Payload.Title;
             item.PublicKey = evnt.Payload.PublicKey;
             item.CreationDate = evnt.Payload.CreationDate;
 
-            this._documentStorage.Store(item, item.PublicKey);
+            this.documentStorage.Store(item, item.PublicKey);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in QuestionnaireTemplateLoaded>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<QuestionnaireTemplateLoaded> evnt)
         {
-            this._documentStorage.Store(evnt.Payload.Template, evnt.Payload.Template.PublicKey);
+            this.documentStorage.Store(evnt.Payload.Template, evnt.Payload.Template.PublicKey);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in NewGroupAdded>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<NewGroupAdded> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.Payload.QuestionnairePublicKey);
+            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.Payload.QuestionnairePublicKey);
 
-            Group group = new Group();
+            var group = new Group();
             group.Title = evnt.Payload.GroupText;
             group.Propagated = evnt.Payload.Paropagateble;
             group.PublicKey = evnt.Payload.PublicKey;
@@ -66,37 +110,43 @@ namespace RavenQuestionnaire.Core.EventHandlers
             item.Add(group, evnt.Payload.ParentGroupPublicKey);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in QuestionnaireItemMoved>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.Payload.PublicKey);
+            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.Payload.PublicKey);
 
             var questionnaire = new Questionnaire(item);
             questionnaire.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.AfterItemKey);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in QuestionDeleted>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<QuestionDeleted> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
             item.Remove(evnt.Payload.QuestionId);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in NewQuestionAdded>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
 
-            var result = new CompleteQuestionFactory().Create(evnt.Payload.QuestionType);
+            AbstractQuestion result = new CompleteQuestionFactory().Create(evnt.Payload.QuestionType);
             result.QuestionType = evnt.Payload.QuestionType;
             result.QuestionText = evnt.Payload.QuestionText;
             result.StataExportCaption = evnt.Payload.StataExportCaption;
@@ -109,39 +159,33 @@ namespace RavenQuestionnaire.Core.EventHandlers
             result.Instructions = evnt.Payload.Instructions;
             result.PublicKey = evnt.Payload.PublicKey;
             result.Triggers.Add(evnt.Payload.TargetGroupKey);
-            UpdateAnswerList(evnt.Payload.Answers, result);
+            this.UpdateAnswerList(evnt.Payload.Answers, result);
 
             item.Add(result, evnt.Payload.GroupPublicKey);
         }
-        //move it out of there
-        protected void UpdateAnswerList(IEnumerable<Answer> answers, AbstractQuestion question)
-        {
-            if (answers != null && answers.Any())
-            {
-                question.Children.Clear();
-                foreach (Answer answer in answers)
-                {
-                    question.Add(answer, question.PublicKey);
-                }
-            }
-        }
 
-        #endregion
+        //// move it out of there
 
-        #region Implementation of IEventHandler<in QuestionChanged>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<QuestionChanged> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
 
             var question = item.Find<AbstractQuestion>(evnt.Payload.PublicKey);
             if (question == null)
+            {
                 return;
+            }
 
             question.QuestionText = evnt.Payload.QuestionText;
             question.StataExportCaption = evnt.Payload.StataExportCaption;
             question.QuestionType = evnt.Payload.QuestionType;
-            UpdateAnswerList(evnt.Payload.Answers, question);
+            this.UpdateAnswerList(evnt.Payload.Answers, question);
             question.ConditionExpression = evnt.Payload.ConditionExpression;
             question.ValidationExpression = evnt.Payload.ValidationExpression;
             question.ValidationMessage = evnt.Payload.ValidationMessage;
@@ -152,73 +196,110 @@ namespace RavenQuestionnaire.Core.EventHandlers
             question.AnswerOrder = evnt.Payload.AnswerOrder;
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in ImageUpdated>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<ImageUpdated> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
             var question = item.Find<AbstractQuestion>(evnt.Payload.QuestionKey);
             question.UpdateCard(evnt.Payload.ImageKey, evnt.Payload.Title, evnt.Payload.Description);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in ImageUploaded>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<ImageUploaded> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
             var newImage = new Image
-            {
-                PublicKey = evnt.Payload.ImagePublicKey,
-                Title = evnt.Payload.Title,
-                Description = evnt.Payload.Description,
-                CreationDate = DateTime.Now
-            };
+                {
+                    PublicKey = evnt.Payload.ImagePublicKey, 
+                    Title = evnt.Payload.Title, 
+                    Description = evnt.Payload.Description, 
+                    CreationDate = DateTime.Now
+                };
             var question = item.Find<AbstractQuestion>(evnt.Payload.PublicKey);
             question.AddCard(newImage);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in ImageDeleted>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<ImageDeleted> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
             var question = item.Find<AbstractQuestion>(evnt.Payload.QuestionKey);
 
             question.RemoveCard(evnt.Payload.ImageKey);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in GroupDeleted>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<GroupDeleted> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
 
             item.Remove(evnt.Payload.GroupPublicKey);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in GroupUpdated>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<GroupUpdated> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.EventSourceId);
-            Group group = item.Find<Group>(evnt.Payload.GroupPublicKey);
+            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            var group = item.Find<Group>(evnt.Payload.GroupPublicKey);
             if (group != null)
             {
                 group.Propagated = evnt.Payload.Propagateble;
-                //if(e.Triggers!=null)
-                //    group.Triggers = e.Triggers;
+
+                ////if(e.Triggers!=null)
+                // group.Triggers = e.Triggers;
                 group.ConditionExpression = evnt.Payload.ConditionExpression;
                 group.Update(evnt.Payload.GroupText);
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The update answer list.
+        /// </summary>
+        /// <param name="answers">
+        /// The answers.
+        /// </param>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        protected void UpdateAnswerList(IEnumerable<Answer> answers, AbstractQuestion question)
+        {
+            List<Answer> enumerable = answers as List<Answer> ?? answers.ToList();
+            if (answers != null && enumerable.Any())
+            {
+                question.Children.Clear();
+                foreach (Answer answer in enumerable)
+                {
+                    question.Add(answer, question.PublicKey);
+                }
             }
         }
 

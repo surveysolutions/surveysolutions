@@ -1,78 +1,175 @@
-﻿#region
-
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-
-#endregion
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="GroupView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The abstract group view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Group
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities.Composite;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Views.Question;
+
+    /// <summary>
+    /// The abstract group view.
+    /// </summary>
     public abstract class AbstractGroupView : ICompositeView
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractGroupView"/> class.
+        /// </summary>
         public AbstractGroupView()
         {
             this.Children = new List<ICompositeView>();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractGroupView"/> class.
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="parentGroup">
+        /// The parent group.
+        /// </param>
         public AbstractGroupView(string questionnaireId, Guid? parentGroup)
         {
-            QuestionnaireKey = Guid.Parse(questionnaireId);
-            Parent = parentGroup;
+            this.QuestionnaireKey = Guid.Parse(questionnaireId);
+            this.Parent = parentGroup;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractGroupView"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="group">
+        /// The group.
+        /// </param>
         protected AbstractGroupView(IQuestionnaireDocument doc, IGroup group)
         {
             if (group.Triggers != null)
             {
                 this.Trigger = group.Triggers.Count > 0 ? group.Triggers[0].ToString() : null;
             }
-            else this.Trigger = null;
+            else
+            {
+                this.Trigger = null;
+            }
         }
-        public Guid PublicKey { get; set; }
 
-        public string Title { get; set; }
+        #endregion
 
-        public Guid? Parent { get; set; }
+        #region Public Properties
 
-        public string ConditionExpression { get; set; }
-
+        /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
         public List<ICompositeView> Children { get; set; }
 
+        /// <summary>
+        /// Gets or sets the condition expression.
+        /// </summary>
+        public string ConditionExpression { get; set; }
+
+        /// <summary>
+        /// Gets or sets the parent.
+        /// </summary>
+        public Guid? Parent { get; set; }
+
+        /// <summary>
+        /// Gets or sets the propagated.
+        /// </summary>
         public Propagate Propagated { get; set; }
 
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the questionnaire key.
+        /// </summary>
+        public Guid QuestionnaireKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets the trigger.
+        /// </summary>
         public string Trigger { get; set; }
 
-        public Guid QuestionnaireKey
-        {
-            get; set; }
-
+        #endregion
     }
 
-    public abstract class AbstractGroupView<TGroup, TQuestion> : AbstractGroupView 
-        where TGroup:AbstractGroupView
-        where TQuestion : AbstractQuestionView
+    /// <summary>
+    /// The abstract group view.
+    /// </summary>
+    /// <typeparam name="TGroup">
+    /// </typeparam>
+    /// <typeparam name="TQuestion">
+    /// </typeparam>
+    public abstract class AbstractGroupView<TGroup, TQuestion> : AbstractGroupView
+        where TGroup : AbstractGroupView where TQuestion : AbstractQuestionView
     {
-        
+        #region Fields
+
+        /// <summary>
+        /// The _questions.
+        /// </summary>
         private TQuestion[] _questions;
 
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractGroupView{TGroup,TQuestion}"/> class.
+        /// </summary>
         public AbstractGroupView()
         {
-            Questions = new TQuestion[] { };
-            Groups = new TGroup[] { };
+            this.Questions = new TQuestion[] { };
+            this.Groups = new TGroup[] { };
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractGroupView{TGroup,TQuestion}"/> class.
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="parentGroup">
+        /// The parent group.
+        /// </param>
         public AbstractGroupView(Guid questionnaireId, Guid? parentGroup)
         {
-            QuestionnaireKey = questionnaireId;
-            Parent = parentGroup;
+            this.QuestionnaireKey = questionnaireId;
+            this.Parent = parentGroup;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractGroupView{TGroup,TQuestion}"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="group">
+        /// The group.
+        /// </param>
         protected AbstractGroupView(IQuestionnaireDocument doc, IGroup group)
         {
             this.QuestionnaireKey = doc.PublicKey;
@@ -81,99 +178,206 @@ namespace RavenQuestionnaire.Core.Views.Group
             this.Propagated = group.Propagated;
             if (group.Triggers != null)
             {
-                this.Trigger = group.Triggers.Count>0 ? group.Triggers[0].ToString() : null;
+                this.Trigger = group.Triggers.Count > 0 ? group.Triggers[0].ToString() : null;
             }
-            else this.Trigger = null;
+            else
+            {
+                this.Trigger = null;
+            }
         }
 
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the groups.
+        /// </summary>
+        public TGroup[] Groups { get; set; }
+
+        /// <summary>
+        /// Gets or sets the questions.
+        /// </summary>
         public TQuestion[] Questions
         {
-            get { return _questions; }
+            get
+            {
+                return this._questions;
+            }
+
             set
             {
-                _questions = value;
-                for (var i = 0; i < _questions.Length; i++)
+                this._questions = value;
+                for (int i = 0; i < this._questions.Length; i++)
                 {
-                    _questions[i].Index = i + 1;
+                    this._questions[i].Index = i + 1;
                 }
             }
         }
 
-        public TGroup[] Groups { get; set; }
-
-
-       
+        #endregion
     }
 
-    public abstract class GroupView<TGroupView, TQuestionView,TGroup, TQuestion> : AbstractGroupView<TGroupView, TQuestionView>
+    /// <summary>
+    /// The group view.
+    /// </summary>
+    /// <typeparam name="TGroupView">
+    /// </typeparam>
+    /// <typeparam name="TQuestionView">
+    /// </typeparam>
+    /// <typeparam name="TGroup">
+    /// </typeparam>
+    /// <typeparam name="TQuestion">
+    /// </typeparam>
+    public abstract class GroupView<TGroupView, TQuestionView, TGroup, TQuestion> :
+        AbstractGroupView<TGroupView, TQuestionView>
         where TGroupView : AbstractGroupView
         where TQuestionView : AbstractQuestionView
         where TQuestion : IQuestion
         where TGroup : IGroup
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GroupView{TGroupView,TQuestionView,TGroup,TQuestion}"/> class.
+        /// </summary>
         public GroupView()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GroupView{TGroupView,TQuestionView,TGroup,TQuestion}"/> class.
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="parentGroup">
+        /// The parent group.
+        /// </param>
         public GroupView(Guid questionnaireId, Guid? parentGroup)
             : base(questionnaireId, parentGroup)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GroupView{TGroupView,TQuestionView,TGroup,TQuestion}"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="group">
+        /// The group.
+        /// </param>
         public GroupView(IQuestionnaireDocument doc, TGroup group)
             : base(doc, group)
         {
-            this.Parent = GetGroupParent(doc, group);
+            this.Parent = this.GetGroupParent(doc, group);
         }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The get group parent.
+        /// </summary>
+        /// <param name="questionnaire">
+        /// The questionnaire.
+        /// </param>
+        /// <param name="group">
+        /// The group.
+        /// </param>
+        /// <returns>
+        /// The System.Nullable`1[T -&gt; System.Guid].
+        /// </returns>
         protected Guid? GetGroupParent(IQuestionnaireDocument questionnaire, TGroup group)
         {
             if (questionnaire.Children.Any(q => q.PublicKey.Equals(group.PublicKey)))
+            {
                 return null;
+            }
+
             var groups = new Queue<IComposite>();
-            foreach (var child in questionnaire.Children)
+            foreach (IComposite child in questionnaire.Children)
             {
                 groups.Enqueue(child);
             }
+
             while (groups.Count != 0)
             {
-                var queueItem = groups.Dequeue();
-                if(queueItem==null)
+                IComposite queueItem = groups.Dequeue();
+                if (queueItem == null)
+                {
                     continue;
+                }
 
                 if (queueItem.Children != null && queueItem.Children.Any(q => q.PublicKey.Equals(group.PublicKey)))
+                {
                     return queueItem.PublicKey;
+                }
+
                 if (queueItem.Children != null)
-                    foreach (var child in queueItem.Children)
+                {
+                    foreach (IComposite child in queueItem.Children)
                     {
                         groups.Enqueue(child);
                     }
+                }
             }
+
             return null;
         }
+
+        #endregion
     }
 
-    public class GroupView : GroupView<GroupView, QuestionView, IGroup,IQuestion>
+    /// <summary>
+    /// The group view.
+    /// </summary>
+    public class GroupView : GroupView<GroupView, QuestionView, IGroup, IQuestion>
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GroupView"/> class.
+        /// </summary>
         public GroupView()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GroupView"/> class.
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="parentGroup">
+        /// The parent group.
+        /// </param>
         public GroupView(Guid questionnaireId, Guid? parentGroup)
             : base(questionnaireId, parentGroup)
         {
         }
 
-        public GroupView(
-            IQuestionnaireDocument doc, IGroup group)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GroupView"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="group">
+        /// The group.
+        /// </param>
+        public GroupView(IQuestionnaireDocument doc, IGroup group)
             : base(doc, group)
         {
-            foreach (var composite in group.Children)
+            foreach (IComposite composite in group.Children)
             {
                 if ((composite as IQuestion) != null)
                 {
                     var q = composite as IQuestion;
                     List<IQuestion> r = group.Children.OfType<IQuestion>().ToList();
-                    this.Children.Add(new QuestionView(doc, q){ Index = r.IndexOf(q)+1 });
+                    this.Children.Add(new QuestionView(doc, q) { Index = r.IndexOf(q) + 1 });
                 }
                 else
                 {
@@ -181,13 +385,12 @@ namespace RavenQuestionnaire.Core.Views.Group
                     this.Children.Add(new GroupView(doc, g));
                 }
             }
-            this.Questions =
-                group.Children.OfType<IQuestion>().Select(
-                    q =>
-                    new QuestionView(doc, q)).ToArray();
+
+            this.Questions = group.Children.OfType<IQuestion>().Select(q => new QuestionView(doc, q)).ToArray();
             this.Groups = group.Children.OfType<IGroup>().Select(g => new GroupView(doc, g)).ToArray();
             this.ConditionExpression = group.ConditionExpression;
         }
 
+        #endregion
     }
 }

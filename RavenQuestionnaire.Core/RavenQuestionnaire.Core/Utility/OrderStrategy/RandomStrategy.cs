@@ -1,15 +1,36 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="RandomStrategy.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The random strategy.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Utility.OrderStrategy
 {
-    public class RandomStrategy:IOrderStrategy
-    {
-        #region Implementation of IOrderStrategy
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
+    /// <summary>
+    /// The random strategy.
+    /// </summary>
+    public class RandomStrategy : IOrderStrategy
+    {
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The reorder.
+        /// </summary>
+        /// <param name="list">
+        /// The list.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
+        /// </returns>
         public IEnumerable<T> Reorder<T>(IEnumerable<T> list)
         {
             return list.OrderBy(x => Guid.NewGuid());

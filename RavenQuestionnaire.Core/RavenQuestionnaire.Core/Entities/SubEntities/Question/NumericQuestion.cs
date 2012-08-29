@@ -1,59 +1,168 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="NumericQuestion.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The numeric question.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Question
 {
-    public class NumericQuestion:AbstractQuestion, INumericQuestion
+    using System;
+    using System.Collections.Generic;
+
+    using RavenQuestionnaire.Core.Entities.Composite;
+    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+
+    /// <summary>
+    /// The numeric question.
+    /// </summary>
+    public class NumericQuestion : AbstractQuestion, INumericQuestion
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NumericQuestion"/> class.
+        /// </summary>
         public NumericQuestion()
         {
         }
 
-        public NumericQuestion(string text) : base(text)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NumericQuestion"/> class.
+        /// </summary>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        public NumericQuestion(string text)
+            : base(text)
         {
         }
 
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the add numeric attr.
+        /// </summary>
+        public string AddNumericAttr { get; set; }
+
+        /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
+        public override List<IComposite> Children
+        {
+            get
+            {
+                return new List<IComposite>(0);
+            }
+
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the int attr.
+        /// </summary>
+        public int IntAttr { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The add.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
         public override void Add(IComposite c, Guid? parent)
         {
             throw new CompositeException();
         }
 
-        public override void Remove(IComposite c)
-        {
-            throw new CompositeException();
-        }
-
-        public override void Remove(Guid publicKey)
-        {
-            throw new CompositeException();
-        }
-
+        /// <summary>
+        /// The find.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The T.
+        /// </returns>
         public override T Find<T>(Guid publicKey)
         {
             return null;
         }
 
+        /// <summary>
+        /// The find.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
+        /// </returns>
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
-         return new T[0];
+            return new T[0];
         }
 
+        /// <summary>
+        /// The first or default.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The T.
+        /// </returns>
         public override T FirstOrDefault<T>(Func<T, bool> condition)
         {
             return null;
         }
 
-        public override List<IComposite> Children
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
+        public override void Remove(IComposite c)
         {
-            get { return new List<IComposite>(0);}
-            set { }
+            throw new CompositeException();
         }
 
-        public string AddNumericAttr { get; set; }
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
+        public override void Remove(Guid publicKey)
+        {
+            throw new CompositeException();
+        }
 
-        public int IntAttr { get; set; }
+        #endregion
     }
 }

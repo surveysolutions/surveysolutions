@@ -1,20 +1,46 @@
-using System;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Views.Question;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="PropagatedQuestion.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The propagated question.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
+    using System;
+    using System.Collections.Generic;
+
+    using RavenQuestionnaire.Core.Views.Question;
+
+    /// <summary>
+    /// The propagated question.
+    /// </summary>
     public class PropagatedQuestion
     {
-        public Guid PublicKey { get; set; }
-        public string QuestionText { get; set; }
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the instructions.
+        /// </summary>
         public string Instructions { get; set; }
 
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question text.
+        /// </summary>
+        public string QuestionText { get; set; }
+
+        /// <summary>
+        /// Gets or sets the questions.
+        /// </summary>
         public List<CompleteQuestionView> Questions { get; set; }
 
-        public PropagatedQuestion()
-        {
-
-        }
+        #endregion
     }
 }

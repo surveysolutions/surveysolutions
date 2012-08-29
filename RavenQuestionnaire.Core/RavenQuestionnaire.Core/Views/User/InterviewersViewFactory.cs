@@ -1,51 +1,119 @@
-﻿using System.Linq;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="InterviewersViewFactory.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The interviewers view factory.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.User
 {
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Denormalizers;
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Utility;
+    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+
+    /// <summary>
+    /// The interviewers view factory.
+    /// </summary>
     public class InterviewersViewFactory : IViewFactory<InterviewersInputModel, InterviewersView>
     {
-        private IDenormalizerStorage<UserDocument> users;
-        private IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        #region Fields
 
-        public InterviewersViewFactory(IDenormalizerStorage<UserDocument> users, IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession)
+        /// <summary>
+        /// The document item session.
+        /// </summary>
+        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+
+        /// <summary>
+        /// The users.
+        /// </summary>
+        private readonly IDenormalizerStorage<UserDocument> users;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InterviewersViewFactory"/> class.
+        /// </summary>
+        /// <param name="users">
+        /// The users.
+        /// </param>
+        /// <param name="documentSession">
+        /// The document session.
+        /// </param>
+        public InterviewersViewFactory(
+            IDenormalizerStorage<UserDocument> users, 
+            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession)
         {
             this.users = users;
             this.documentItemSession = documentSession;
         }
 
-        #region Implementation of IViewFactory<UserBrowseInputModel,UserBrowseView>
+        #endregion
 
-          public InterviewersView Load(InterviewersInputModel input)
-          {
-              var count = users.Query().Where(u => u.Supervisor!=null).Where(u => u.Supervisor.Id == input.Supervisor.Id).Count();
-              if (count == 0)
-                  return new InterviewersView(input.Page, input.PageSize, count, new InterviewersItem[0], input.Supervisor.Id, input.Supervisor.Name);
-              var query = users.Query().Where(u => u.Supervisor != null).Where(u => u.Supervisor.Id == input.Supervisor.Id);
-              var questionnaire =
-                  documentItemSession.Query().Where(t => t.Responsible != null);
-              var items = query.Select(x => new InterviewersItem(x.Id, x.UserName, x.Email, x.CreationDate, x.IsLocked,
-                  questionnaire.Where(t => t.Responsible.Id == x.Id).Count(),
-                  questionnaire.Where(t => t.Responsible.Id == x.Id).Where(t => t.Status == SurveyStatus.Complete).Count(),
-                  questionnaire.Where(t => t.Responsible.Id == x.Id).Where(t => t.Status != SurveyStatus.Complete).Count()));
-              if (input.Orders.Count > 0)
-              {
-                  items = input.Orders[0].Direction == OrderDirection.Asc
-                          ? items.OrderBy(input.Orders[0].Field)
-                          : items.OrderByDescending(input.Orders[0].Field);
-              }
-              items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-              return new InterviewersView(
-                  input.Page,
-                  input.PageSize, count,
-                  items, input.Supervisor.Id, input.Supervisor.Name);
-          }
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The load.
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Views.User.InterviewersView.
+        /// </returns>
+        public InterviewersView Load(InterviewersInputModel input)
+        {
+            int count =
+                this.users.Query().Where(u => u.Supervisor != null).Where(u => u.Supervisor.Id == input.Supervisor.Id).
+                    Count();
+            if (count == 0)
+            {
+                return new InterviewersView(
+                    input.Page, 
+                    input.PageSize, 
+                    count, 
+                    new InterviewersItem[0], 
+                    input.Supervisor.Id, 
+                    input.Supervisor.Name);
+            }
+
+            IQueryable<UserDocument> query =
+                this.users.Query().Where(u => u.Supervisor != null).Where(u => u.Supervisor.Id == input.Supervisor.Id);
+            IQueryable<CompleteQuestionnaireBrowseItem> questionnaire =
+                this.documentItemSession.Query().Where(t => t.Responsible != null);
+            IQueryable<InterviewersItem> items =
+                query.Select(
+                    x =>
+                    new InterviewersItem(
+                        x.Id, 
+                        x.UserName, 
+                        x.Email, 
+                        x.CreationDate, 
+                        x.IsLocked, 
+                        questionnaire.Where(t => t.Responsible.Id == x.Id).Count(), 
+                        questionnaire.Where(t => t.Responsible.Id == x.Id).Where(t => t.Status == SurveyStatus.Complete)
+                        .Count(), 
+                        questionnaire.Where(t => t.Responsible.Id == x.Id).Where(t => t.Status != SurveyStatus.Complete)
+                        .Count()));
+            if (input.Orders.Count > 0)
+            {
+                items = input.Orders[0].Direction == OrderDirection.Asc
+                            ? items.OrderBy(input.Orders[0].Field)
+                            : items.OrderByDescending(input.Orders[0].Field);
+            }
+
+            items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+            return new InterviewersView(
+                input.Page, input.PageSize, count, items, input.Supervisor.Id, input.Supervisor.Name);
+        }
 
         #endregion
     }
