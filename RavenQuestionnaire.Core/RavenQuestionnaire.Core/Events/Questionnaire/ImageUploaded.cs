@@ -1,27 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Ncqrs.Eventing.Storage;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImageUploaded.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The image uploaded.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Events.Questionnaire
 {
+    using System;
+
+    using Ncqrs.Eventing.Storage;
+
+    /// <summary>
+    /// The image uploaded.
+    /// </summary>
     [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:ImageUploaded")]
     public class ImageUploaded
     {
-        public Guid PublicKey { get; set; }
+        #region Public Properties
 
-        public Guid ImagePublicKey { get; set; }
-
-        public string Title { get; set; }
-
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
         public string Description { get; set; }
 
-      
+        /// <summary>
+        /// Gets or sets the image public key.
+        /// </summary>
+        public Guid ImagePublicKey { get; set; }
 
-     //   public string FileName { get; set; }
-        
-     //   public string ThumbName { get; set; }
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        #endregion
+
+        // public string FileName { get; set; }
+
+        // public string ThumbName { get; set; }
     }
 }

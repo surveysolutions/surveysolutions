@@ -1,35 +1,61 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.Extensions;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Questionnaire.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The questionnaire.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Entities
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.AbstractFactories;
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities.Composite;
+    using RavenQuestionnaire.Core.Entities.Extensions;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+
+    /// <summary>
+    /// The questionnaire.
+    /// </summary>
     public class Questionnaire : IEntity<QuestionnaireDocument>
     {
-        #region Properties
+        #region Fields
 
-        private QuestionnaireDocument innerDocument;
-
-        //public string QuestionnaireId { get { return innerDocument.Id; } }
+        /// <summary>
+        /// The inner document.
+        /// </summary>
+        private readonly QuestionnaireDocument innerDocument;
 
         #endregion
 
-        #region Constructor
+        // public string QuestionnaireId { get { return innerDocument.Id; } }
+        #region Constructors and Destructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Questionnaire"/> class.
+        /// </summary>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
         public Questionnaire(string title, Guid publicKey)
         {
-            innerDocument = new QuestionnaireDocument()
-            {
-                Title = title,
-                PublicKey = publicKey
-            };
+            this.innerDocument = new QuestionnaireDocument { Title = title, PublicKey = publicKey };
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Questionnaire"/> class.
+        /// </summary>
+        /// <param name="innerDocument">
+        /// The inner document.
+        /// </param>
         public Questionnaire(QuestionnaireDocument innerDocument)
         {
             this.innerDocument = innerDocument;
@@ -37,23 +63,257 @@ namespace RavenQuestionnaire.Core.Entities
 
         #endregion
 
-        #region PublicMethod
-        
-        public void UpdateText(string text)
+        #region Public Properties
+
+        /// <summary>
+        /// Gets the public key.
+        /// </summary>
+        public Guid PublicKey
         {
-            innerDocument.Title = text;
-            innerDocument.LastEntryDate = DateTime.Now;
+            get
+            {
+                return this.innerDocument.PublicKey;
+            }
         }
 
-        public void ClearQuestions()
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The add.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        public void Add(IComposite c, Guid? parent)
         {
-            innerDocument.Children.RemoveAll(a=>a is IQuestion);
+            this.innerDocument.Add(c, parent);
         }
 
-        public AbstractQuestion AddQuestion(Guid qid, string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, bool mandatory, Order answerOrder, Guid? groupPublicKey,
-            IEnumerable<Answer> answers, Guid publicKey)
+        /// <summary>
+        /// The add group.
+        /// </summary>
+        /// <param name="groupText">
+        /// The group text.
+        /// </param>
+        /// <param name="propageted">
+        /// The propageted.
+        /// </param>
+        /// <param name="triggers">
+        /// The triggers.
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        /// <param name="conditionExpression">
+        /// The condition expression.
+        /// </param>
+        /// <exception cref="ArgumentException">
+        /// </exception>
+        public void AddGroup(
+            string groupText, Propagate propageted, List<Guid> triggers, Guid? parent, string conditionExpression)
         {
-            var result = new CompleteQuestionFactory().Create(type);
+            var group = new Group();
+            group.Title = groupText;
+            group.Propagated = propageted;
+            group.Triggers = triggers;
+            group.ConditionExpression = conditionExpression;
+            try
+            {
+                this.Add(group, parent);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
+            }
+        }
+
+        /// <summary>
+        /// The add group.
+        /// </summary>
+        /// <param name="groupText">
+        /// The group text.
+        /// </param>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="propageted">
+        /// The propageted.
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        /// <param name="conditionExpression">
+        /// The condition expression.
+        /// </param>
+        /// <exception cref="ArgumentException">
+        /// </exception>
+        public void AddGroup(
+            string groupText, Guid publicKey, Propagate propageted, Guid? parent, string conditionExpression)
+        {
+            var group = new Group();
+            group.Title = groupText;
+            group.Propagated = propageted;
+            group.PublicKey = publicKey;
+            group.ConditionExpression = conditionExpression;
+            try
+            {
+                this.Add(group, parent);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
+            }
+        }
+
+        /// <summary>
+        /// The add group.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="groupText">
+        /// The group text.
+        /// </param>
+        /// <param name="propageted">
+        /// The propageted.
+        /// </param>
+        /// <param name="triggers">
+        /// The triggers.
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        /// <param name="conditionExpression">
+        /// The condition expression.
+        /// </param>
+        /// <exception cref="ArgumentException">
+        /// </exception>
+        public void AddGroup(
+            Guid publicKey, 
+            string groupText, 
+            Propagate propageted, 
+            List<Guid> triggers, 
+            Guid? parent, 
+            string conditionExpression)
+        {
+            var group = new Group();
+            group.Title = groupText;
+            group.PublicKey = publicKey;
+            group.Propagated = propageted;
+            group.Triggers = triggers;
+            group.ConditionExpression = conditionExpression;
+            try
+            {
+                this.Add(group, parent);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
+            }
+        }
+
+        /// <summary>
+        /// The add group.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="groupText">
+        /// The group text.
+        /// </param>
+        /// <param name="propageted">
+        /// The propageted.
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        /// <param name="conditionExpression">
+        /// The condition expression.
+        /// </param>
+        /// <exception cref="ArgumentException">
+        /// </exception>
+        public void AddGroup(
+            Guid publicKey, string groupText, Propagate propageted, Guid? parent, string conditionExpression)
+        {
+            var group = new Group();
+            group.PublicKey = publicKey;
+            group.Title = groupText;
+            group.Propagated = propageted;
+            group.ConditionExpression = conditionExpression;
+            try
+            {
+                this.Add(group, parent);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
+            }
+        }
+
+        /// <summary>
+        /// The add question.
+        /// </summary>
+        /// <param name="qid">
+        /// The qid.
+        /// </param>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        /// <param name="stataExportCaption">
+        /// The stata export caption.
+        /// </param>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <param name="validation">
+        /// The validation.
+        /// </param>
+        /// <param name="featured">
+        /// The featured.
+        /// </param>
+        /// <param name="mandatory">
+        /// The mandatory.
+        /// </param>
+        /// <param name="answerOrder">
+        /// The answer order.
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// The group public key.
+        /// </param>
+        /// <param name="answers">
+        /// The answers.
+        /// </param>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Entities.SubEntities.AbstractQuestion.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// </exception>
+        public AbstractQuestion AddQuestion(
+            Guid qid, 
+            string text, 
+            string stataExportCaption, 
+            QuestionType type, 
+            string condition, 
+            string validation, 
+            bool featured, 
+            bool mandatory, 
+            Order answerOrder, 
+            Guid? groupPublicKey, 
+            IEnumerable<Answer> answers, 
+            Guid publicKey)
+        {
+            AbstractQuestion result = new CompleteQuestionFactory().Create(type);
             result.PublicKey = qid;
             result.QuestionType = type;
             result.QuestionText = text;
@@ -64,151 +324,175 @@ namespace RavenQuestionnaire.Core.Entities
             result.Featured = featured;
             result.Mandatory = mandatory;
             result.PublicKey = publicKey;
-            UpdateAnswerList(answers, result);
+            this.UpdateAnswerList(answers, result);
             try
             {
-                Add(result, groupPublicKey);
+                this.Add(result, groupPublicKey);
                 return result;
             }
             catch (Exception)
             {
-                throw new ArgumentException(string.Format("group with  publick key {0} can't be found",
-                                                          groupPublicKey.Value));
+                throw new ArgumentException(
+                    string.Format("group with  publick key {0} can't be found", groupPublicKey.Value));
             }
         }
 
-        protected void UpdateAnswerList(IEnumerable<Answer> answers, AbstractQuestion question)
+        /// <summary>
+        /// The clear questions.
+        /// </summary>
+        public void ClearQuestions()
         {
-            if (answers != null && answers.Any())
-            {
-                question.Children.Clear();
-                foreach (Answer answer in answers)
-                    question.Add(answer, question.PublicKey);
-            }
+            this.innerDocument.Children.RemoveAll(a => a is IQuestion);
         }
 
+        /// <summary>
+        /// The find.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The T.
+        /// </returns>
+        public T Find<T>(Guid publicKey) where T : class, IComposite
+        {
+            return this.innerDocument.Find<T>(publicKey);
+        }
+
+        /// <summary>
+        /// The find.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
+        /// </returns>
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
+        {
+            return this.innerDocument.Find(condition);
+        }
+
+        /// <summary>
+        /// The first or default.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The T.
+        /// </returns>
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            return this.innerDocument.FirstOrDefault(condition);
+        }
+
+        /// <summary>
+        /// The get all questions.
+        /// </summary>
+        /// <returns>
+        /// The System.Collections.Generic.IList`1[T -&gt; RavenQuestionnaire.Core.Entities.SubEntities.IQuestion].
+        /// </returns>
+        public IList<IQuestion> GetAllQuestions()
+        {
+            return this.innerDocument.GetAllQuestions<IQuestion>().ToList();
+        }
+
+        /// <summary>
+        /// The move item.
+        /// </summary>
+        /// <param name="itemPublicKey">
+        /// The item public key.
+        /// </param>
+        /// <param name="groupKey">
+        /// The group key.
+        /// </param>
+        /// <param name="after">
+        /// The after.
+        /// </param>
+        /// <exception cref="ArgumentException">
+        /// </exception>
         public void MoveItem(Guid itemPublicKey, Guid? groupKey, Guid? after)
         {
-            var result= MoveItem(this.innerDocument, itemPublicKey, groupKey, after);
-            if(!result)
+            bool result = this.MoveItem(this.innerDocument, itemPublicKey, groupKey, after);
+            if (!result)
+            {
                 throw new ArgumentException(string.Format("item doesn't exists -{0}", itemPublicKey));
-        }
-
-        protected bool MoveItem(IComposite root, Guid itemPublicKey, Guid? groupKey,  Guid? after)
-        {
-            if (Move(root.Children, itemPublicKey, groupKey, after))
-                return true;
-            return root.Children.Any(@group => MoveItem(group, itemPublicKey, groupKey, after));
-        }
-
-        protected bool Move(List<IComposite> groups, Guid itemPublicKey, Guid? groupKey, Guid? after)
-        {
-            var moveble = groups.FirstOrDefault(g => g.PublicKey == itemPublicKey);
-            if (moveble == null)
-                return false;
-            if (groupKey.HasValue)
-            {
-                Group moveToGroup = innerDocument.Find<Group>((Guid) groupKey);
-                if (moveToGroup != null)
-                {
-                    groups.Remove(moveble);
-                    moveToGroup.Insert(moveble, after);
-                    return true;
-                }
-            }
-            if (!after.HasValue)
-            {
-                groups.Remove(moveble);
-                groups.Insert(0, moveble);
-                return true;
-            }
-            for (int i = 0; i < groups.Count; i++)
-            {
-                if (groups[i].PublicKey == after.Value)
-                {
-                    groups.Remove(moveble);
-                    if (i < groups.Count)
-                        groups.Insert(i + 1, moveble);
-                    else
-                        groups.Add(moveble);
-                    return true;
-                }
-            }
-            throw new ArgumentException(string.Format("target item doesn't exists -{0}", after));
-        }
-
-        public void AddGroup(string groupText,Propagate propageted,List<Guid> triggers,Guid? parent, string conditionExpression)
-        {
-            Group group = new Group();
-            group.Title = groupText;
-            group.Propagated = propageted;
-            group.Triggers = triggers;
-            group.ConditionExpression = conditionExpression;
-            try
-            {
-                Add(group, parent);
-            }
-            catch (Exception)
-            {
-                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
             }
         }
 
-        public void AddGroup(string groupText, Guid publicKey, Propagate propageted, Guid? parent, string conditionExpression)
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        public void Remove(IComposite c)
         {
-            Group group = new Group();
-            group.Title = groupText;
-            group.Propagated = propageted;
-            group.PublicKey = publicKey;
-             group.ConditionExpression = conditionExpression;
-            try
-            {
-                Add(group, parent);
-            }
-            catch (Exception)
-            {
-                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
-            }
+            this.innerDocument.Remove(c);
         }
 
-        public void AddGroup(Guid publicKey, string groupText, Propagate propageted, List<Guid> triggers, Guid? parent, string conditionExpression)
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        public void Remove(Guid publicKey)
         {
-            Group group = new Group();
-            group.Title = groupText;
-            group.PublicKey = publicKey;
-            group.Propagated = propageted;
-            group.Triggers = triggers;
-            group.ConditionExpression = conditionExpression;
-            try
-            {
-                Add(group, parent);
-            }
-            catch (Exception)
-            {
-                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
-            }
+            this.innerDocument.Remove(publicKey);
         }
 
-        public void AddGroup(Guid publicKey,string groupText, Propagate propageted, Guid? parent, string conditionExpression)
+        /// <summary>
+        /// The update condition expression.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        public void UpdateConditionExpression(Guid publicKey, string condition)
         {
-            Group group = new Group();
-            group.PublicKey = publicKey;
-            group.Title = groupText;
-            group.Propagated = propageted;
-            group.ConditionExpression = conditionExpression;
-            try
+            var question = Find<AbstractQuestion>(publicKey);
+            if (question == null)
             {
-                Add(group, parent);
+                return;
             }
-            catch (Exception)
-            {
-                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", parent.Value));
-            }
+
+            question.ConditionExpression = condition;
         }
 
-        public void UpdateGroup(string groupText, Propagate propageted,List<Guid> triggers, Guid publicKey, string conditionExpression)
+        /// <summary>
+        /// The update group.
+        /// </summary>
+        /// <param name="groupText">
+        /// The group text.
+        /// </param>
+        /// <param name="propageted">
+        /// The propageted.
+        /// </param>
+        /// <param name="triggers">
+        /// The triggers.
+        /// </param>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="conditionExpression">
+        /// The condition expression.
+        /// </param>
+        /// <exception cref="ArgumentException">
+        /// </exception>
+        public void UpdateGroup(
+            string groupText, Propagate propageted, List<Guid> triggers, Guid publicKey, string conditionExpression)
         {
-            Group group = Find<Group>(publicKey);
+            var group = Find<Group>(publicKey);
             if (group != null)
             {
                 group.Propagated = propageted;
@@ -217,12 +501,30 @@ namespace RavenQuestionnaire.Core.Entities
                 group.Update(groupText);
                 return;
             }
+
             throw new ArgumentException(string.Format("group with  publick key {0} can't be found", publicKey));
         }
 
+        /// <summary>
+        /// The update group.
+        /// </summary>
+        /// <param name="groupText">
+        /// The group text.
+        /// </param>
+        /// <param name="propageted">
+        /// The propageted.
+        /// </param>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="conditionExpression">
+        /// The condition expression.
+        /// </param>
+        /// <exception cref="ArgumentException">
+        /// </exception>
         public void UpdateGroup(string groupText, Propagate propageted, Guid publicKey, string conditionExpression)
         {
-            Group group = Find<Group>(publicKey);
+            var group = Find<Group>(publicKey);
             if (group != null)
             {
                 group.Propagated = propageted;
@@ -230,24 +532,73 @@ namespace RavenQuestionnaire.Core.Entities
                 group.Update(groupText);
                 return;
             }
+
             throw new ArgumentException(string.Format("group with  publick key {0} can't be found", publicKey));
         }
 
-        QuestionnaireDocument IEntity<QuestionnaireDocument>.GetInnerDocument()
-        {
-            return this.innerDocument;
-        }
-
-        public void UpdateQuestion(Guid publicKey, string text, string stataExportCaption, QuestionType type,
-            string condition, string validation, string message, string instructions, bool featured, bool mandatory, Order answerOrder, IEnumerable<Answer> answers)
+        /// <summary>
+        /// The update question.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        /// <param name="stataExportCaption">
+        /// The stata export caption.
+        /// </param>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <param name="validation">
+        /// The validation.
+        /// </param>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        /// <param name="instructions">
+        /// The instructions.
+        /// </param>
+        /// <param name="featured">
+        /// The featured.
+        /// </param>
+        /// <param name="mandatory">
+        /// The mandatory.
+        /// </param>
+        /// <param name="answerOrder">
+        /// The answer order.
+        /// </param>
+        /// <param name="answers">
+        /// The answers.
+        /// </param>
+        public void UpdateQuestion(
+            Guid publicKey, 
+            string text, 
+            string stataExportCaption, 
+            QuestionType type, 
+            string condition, 
+            string validation, 
+            string message, 
+            string instructions, 
+            bool featured, 
+            bool mandatory, 
+            Order answerOrder, 
+            IEnumerable<Answer> answers)
         {
             var question = Find<AbstractQuestion>(publicKey);
             if (question == null)
+            {
                 return;
+            }
+
             question.QuestionText = text;
             question.StataExportCaption = stataExportCaption;
             question.QuestionType = type;
-            UpdateAnswerList(answers, question);
+            this.UpdateAnswerList(answers, question);
             question.ConditionExpression = condition;
             question.ValidationExpression = validation;
             question.ValidationMessage = message;
@@ -257,55 +608,151 @@ namespace RavenQuestionnaire.Core.Entities
             question.AnswerOrder = answerOrder;
         }
 
-        public void UpdateConditionExpression(Guid publicKey, string condition)
+        /// <summary>
+        /// The update text.
+        /// </summary>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        public void UpdateText(string text)
         {
-            var question = Find<AbstractQuestion>(publicKey);
-            if (question == null)
-                return;
-            question.ConditionExpression = condition;
+            this.innerDocument.Title = text;
+            this.innerDocument.LastEntryDate = DateTime.Now;
         }
 
-        public Guid PublicKey
+        #endregion
+
+        #region Explicit Interface Methods
+
+        /// <summary>
+        /// The get inner document.
+        /// </summary>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Documents.QuestionnaireDocument.
+        /// </returns>
+        QuestionnaireDocument IEntity<QuestionnaireDocument>.GetInnerDocument()
         {
-            get { return innerDocument.PublicKey; }
+            return this.innerDocument;
         }
 
-        public void Add(IComposite c, Guid? parent)
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The move.
+        /// </summary>
+        /// <param name="groups">
+        /// The groups.
+        /// </param>
+        /// <param name="itemPublicKey">
+        /// The item public key.
+        /// </param>
+        /// <param name="groupKey">
+        /// The group key.
+        /// </param>
+        /// <param name="after">
+        /// The after.
+        /// </param>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// </exception>
+        protected bool Move(List<IComposite> groups, Guid itemPublicKey, Guid? groupKey, Guid? after)
         {
-            innerDocument.Add(c, parent);
+            IComposite moveble = groups.FirstOrDefault(g => g.PublicKey == itemPublicKey);
+            if (moveble == null)
+            {
+                return false;
+            }
+
+            if (groupKey.HasValue)
+            {
+                var moveToGroup = this.innerDocument.Find<Group>((Guid)groupKey);
+                if (moveToGroup != null)
+                {
+                    groups.Remove(moveble);
+                    moveToGroup.Insert(moveble, after);
+                    return true;
+                }
+            }
+
+            if (!after.HasValue)
+            {
+                groups.Remove(moveble);
+                groups.Insert(0, moveble);
+                return true;
+            }
+
+            for (int i = 0; i < groups.Count; i++)
+            {
+                if (groups[i].PublicKey == after.Value)
+                {
+                    groups.Remove(moveble);
+                    if (i < groups.Count)
+                    {
+                        groups.Insert(i + 1, moveble);
+                    }
+                    else
+                    {
+                        groups.Add(moveble);
+                    }
+
+                    return true;
+                }
+            }
+
+            throw new ArgumentException(string.Format("target item doesn't exists -{0}", after));
         }
 
-        public void Remove(IComposite c)
+        /// <summary>
+        /// The move item.
+        /// </summary>
+        /// <param name="root">
+        /// The root.
+        /// </param>
+        /// <param name="itemPublicKey">
+        /// The item public key.
+        /// </param>
+        /// <param name="groupKey">
+        /// The group key.
+        /// </param>
+        /// <param name="after">
+        /// The after.
+        /// </param>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        protected bool MoveItem(IComposite root, Guid itemPublicKey, Guid? groupKey, Guid? after)
         {
-           innerDocument.Remove(c);
+            if (this.Move(root.Children, itemPublicKey, groupKey, after))
+            {
+                return true;
+            }
+
+            return root.Children.Any(@group => this.MoveItem(group, itemPublicKey, groupKey, after));
         }
 
-        public void Remove(Guid publicKey)
+        /// <summary>
+        /// The update answer list.
+        /// </summary>
+        /// <param name="answers">
+        /// The answers.
+        /// </param>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        protected void UpdateAnswerList(IEnumerable<Answer> answers, AbstractQuestion question)
         {
-            innerDocument.Remove(publicKey);
-        }
-
-        public T Find<T>(Guid publicKey) where T : class, IComposite
-        {
-            return innerDocument.Find<T>(publicKey);
-        }
-
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
-        {
-            return
-                innerDocument.Find<T>(condition);
-        }
-
-        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
-        {
-            return
-              innerDocument.FirstOrDefault<T>(condition);
-        }
-
-
-        public IList<IQuestion> GetAllQuestions()
-        {
-            return this.innerDocument.GetAllQuestions<IQuestion>().ToList();
+            if (answers != null && answers.Any())
+            {
+                question.Children.Clear();
+                foreach (Answer answer in answers)
+                {
+                    question.Add(answer, question.PublicKey);
+                }
+            }
         }
 
         #endregion

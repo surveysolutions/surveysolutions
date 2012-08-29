@@ -1,91 +1,193 @@
-﻿using System;
-using Ncqrs.Domain;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Events.User;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="UserAR.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   Aggregate root for User.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace RavenQuestionnaire.Core.Domain
 {
+    using System;
+
+    using Ncqrs.Domain;
+
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Events.User;
+
     /// <summary>
-    /// 
+    /// Aggregate root for User.
     /// </summary>
     public class UserAR : AggregateRootMappedByConvention
     {
-        private Guid _publicKey;
+        #region Fields
 
-        private string _userName;
-        private string _email;
-        private string _password;
-        private bool _isLocked;
-        private UserRoles[] _roles;
-        private UserLight _supervisor;
+        /// <summary>
+        /// Email of the user.
+        /// </summary>
+        private string email;
 
-        public UserAR() { }
+        /// <summary>
+        /// The is locked.
+        /// </summary>
+        private bool isLocked;
 
-        public UserAR(Guid publicKey, string userName, string password, string email, UserRoles[] roles,
-            bool isLocked, UserLight supervisor)
+        /// <summary>
+        /// User Password Hash.
+        /// </summary>
+        private string password;
+
+        /// <summary>
+        /// The roles.
+        /// </summary>
+        private UserRoles[] roles;
+
+        /// <summary>
+        /// The supervisor.
+        /// </summary>
+        private UserLight supervisor;
+
+        /// <summary>
+        /// Name of the user.
+        /// </summary>
+        private string userName;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserAR"/> class.
+        /// </summary>
+        public UserAR()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserAR"/> class.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="userName">
+        /// The user name.
+        /// </param>
+        /// <param name="password">
+        /// The password.
+        /// </param>
+        /// <param name="email">
+        /// The email.
+        /// </param>
+        /// <param name="roles">
+        /// The roles.
+        /// </param>
+        /// <param name="isLocked">
+        /// The is locked.
+        /// </param>
+        /// <param name="supervisor">
+        /// The supervisor.
+        /// </param>
+        public UserAR(
+            Guid publicKey, 
+            string userName, 
+            string password, 
+            string email, 
+            UserRoles[] roles, 
+            bool isLocked, 
+            UserLight supervisor)
             : base(publicKey)
         {
-
-            //Check for uniqueness of person name and email!
-
-
-
-            ApplyEvent(new NewUserCreated()
-            {
-                Name = userName,
-                Password = password,
-                Email = email,
-                IsLocked = isLocked,
-                Roles = roles,
-                Supervisor = supervisor,
-                PublicKey = publicKey
-            });
+            //// Check for uniqueness of person name and email!
+            this.ApplyEvent(
+                new NewUserCreated
+                    {
+                        Name = userName, 
+                        Password = password, 
+                        Email = email, 
+                        IsLocked = isLocked, 
+                        Roles = roles, 
+                        Supervisor = supervisor, 
+                        PublicKey = publicKey
+                    });
         }
 
-        // Event handler for the NewUserCreated event. This method
-        // is automaticly wired as event handler based on convension.
-        protected void OnNewQuestionnaireCreated(NewUserCreated e)
-        {
-            _userName = e.Name;
-            _email = e.Email;
-            _password = e.Password;
-            _isLocked = e.IsLocked;
-            _roles = e.Roles;
-            _supervisor = e.Supervisor;
-        }
+        #endregion
 
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// Makes changes to user.
+        /// </summary>
+        /// <param name="email">
+        /// User Email. 
+        /// </param>
+        /// <param name="isLocked">
+        /// Is user Locked. 
+        /// </param>
+        /// <param name="roles">
+        /// Roles for User. 
+        /// </param>
         public void ChangeUser(string email, bool isLocked, UserRoles[] roles)
         {
-            ApplyEvent(new UserChanged()
-            {
-                Email = email,
-                IsLocked = isLocked,
-                Roles = roles,
-                PublicKey = _publicKey
-            });
+            this.ApplyEvent(new UserChanged { Email = email, IsLocked = isLocked, Roles = roles });
         }
 
-
-        public void SetUserLockState(bool isLocked)
+        /// <summary>
+        /// The set user lock state.
+        /// </summary>
+        /// <param name="isUserLocked">
+        /// The is user locked.
+        /// </param>
+        public void SetUserLockState(bool isUserLocked)
         {
-            ApplyEvent(new UserStatusChanged()
-            {
-                IsLocked = isLocked,
-                PublicKey = _publicKey
-            });
+            this.ApplyEvent(new UserStatusChanged { IsLocked = isUserLocked });
         }
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Event handler for the NewUserCreated event. This method
+        /// is automaticly wired as event handler based on convension.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnNewQuestionnaireCreated(NewUserCreated e)
+        {
+            this.userName = e.Name;
+            this.email = e.Email;
+            this.password = e.Password;
+            this.isLocked = e.IsLocked;
+            this.roles = e.Roles;
+            this.supervisor = e.Supervisor;
+        }
+
+        /// <summary>
+        /// The on set user lock state.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         protected void OnSetUserLockState(UserStatusChanged e)
         {
-            _isLocked = e.IsLocked;
+            this.isLocked = e.IsLocked;
         }
 
+        /// <summary>
+        /// The on user change.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         protected void OnUserChange(UserChanged e)
         {
-            _email = e.Email;
-            _isLocked = e.IsLocked;
-            _roles = e.Roles;
-
+            this.email = e.Email;
+            this.isLocked = e.IsLocked;
+            this.roles = e.Roles;
         }
+
+        #endregion
     }
 }

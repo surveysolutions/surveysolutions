@@ -1,34 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CQStatusReportView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The cq status report view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.StatusReport
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+
+    /// <summary>
+    /// The cq status report view.
+    /// </summary>
     public class CQStatusReportView
     {
-        public string QuestionnaireId { get; set; }
-        public string Title { get; set; }
-        public List<CQStatusReportItemView> Items { get; set; }
-        public string StatusName { get; set; }
+        #region Constructors and Destructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CQStatusReportView"/> class.
+        /// </summary>
+        /// <param name="status">
+        /// The status.
+        /// </param>
+        /// <param name="statisticDocuments">
+        /// The statistic documents.
+        /// </param>
         public CQStatusReportView(StatusItem status, IEnumerable<CompleteQuestionnaireBrowseItem> statisticDocuments)
         {
-            StatusName = status.Title;
-            
-            Items = new List<CQStatusReportItemView>();
-            foreach (var statisticDocument in statisticDocuments)
+            this.StatusName = status.Title;
+
+            this.Items = new List<CQStatusReportItemView>();
+            foreach (CompleteQuestionnaireBrowseItem statisticDocument in statisticDocuments)
             {
-                var view = new CQStatusReportItemView()
-                               {
-                                   AssignToUser = statisticDocument.Responsible,
-                                   LastChangeDate = statisticDocument.LastEntryDate,
-                                   LastSyncDate = DateTime.Now,
-                                   Description = string.Join(", ", statisticDocument.FeaturedQuestions.Select(f => f.QuestionText + ": " + f.AnswerText))
-                               };
-                Items.Add(view);
+                var view = new CQStatusReportItemView
+                    {
+                        AssignToUser = statisticDocument.Responsible, 
+                        LastChangeDate = statisticDocument.LastEntryDate, 
+                        LastSyncDate = DateTime.Now, 
+                        Description =
+                            string.Join(
+                                ", ", 
+                                statisticDocument.FeaturedQuestions.Select(f => f.QuestionText + ": " + f.AnswerText))
+                    };
+                this.Items.Add(view);
             }
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the items.
+        /// </summary>
+        public List<CQStatusReportItemView> Items { get; set; }
+
+        /// <summary>
+        /// Gets or sets the questionnaire id.
+        /// </summary>
+        public string QuestionnaireId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status name.
+        /// </summary>
+        public string StatusName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        #endregion
     }
 }

@@ -1,39 +1,85 @@
-﻿using System;
-using System.Linq;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Views.Questionnaire;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CompleteQuestionnaireView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The complete questionnaire view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
-    public class CompleteQuestionnaireView : AbstractQuestionnaireView
-            <CompleteGroupView, CompleteQuestionView>
+    using System;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using RavenQuestionnaire.Core.Views.Group;
+    using RavenQuestionnaire.Core.Views.Question;
+    using RavenQuestionnaire.Core.Views.Questionnaire;
+
+    /// <summary>
+    /// The complete questionnaire view.
+    /// </summary>
+    public class CompleteQuestionnaireView : AbstractQuestionnaireView<CompleteGroupView, CompleteQuestionView>
     {
-        public SurveyStatus Status { get; set; }
+        #region Constructors and Destructors
 
-        public Guid  TemplateId { get; set; }
-
-
-        public UserLight Responsible { set; get; }
-         public CompleteQuestionnaireView()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteQuestionnaireView"/> class.
+        /// </summary>
+        public CompleteQuestionnaireView()
         {
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteQuestionnaireView"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
         public CompleteQuestionnaireView(IQuestionnaireDocument doc)
             : base(doc)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteQuestionnaireView"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
         public CompleteQuestionnaireView(CompleteQuestionnaireStoreDocument doc)
             : base(doc)
         {
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
-            this.Questions = doc.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionView(doc, q)).ToArray();
+            this.Questions =
+                doc.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionView(doc, q)).ToArray();
             this.TemplateId = doc.TemplateId;
             this.IsValid = doc.IsValid;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the responsible.
+        /// </summary>
+        public UserLight Responsible { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status.
+        /// </summary>
+        public SurveyStatus Status { get; set; }
+
+        /// <summary>
+        /// Gets or sets the template id.
+        /// </summary>
+        public Guid TemplateId { get; set; }
+
+        #endregion
     }
 }

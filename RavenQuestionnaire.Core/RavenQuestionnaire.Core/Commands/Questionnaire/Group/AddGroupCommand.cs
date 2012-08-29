@@ -1,31 +1,94 @@
-﻿using System;
-using Ncqrs.Commanding;
-using RavenQuestionnaire.Core.Domain;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AddGroupCommand.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The add group command.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Commands.Questionnaire.Group
 {
+    using System;
+
+    using Ncqrs.Commanding;
+    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+
+    using RavenQuestionnaire.Core.Domain;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+
+    /// <summary>
+    /// The add group command.
+    /// </summary>
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "AddGroup")]
-    public class AddGroupCommand : CommandBase 
+    public class AddGroupCommand : CommandBase
     {
-        [AggregateRootId]
-        public Guid QuestionnaireId { get; set; }
-        public Guid PublicKey { get; set; }
-        public string Text { get; set; }
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddGroupCommand"/> class.
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        /// <param name="parentGroupKey">
+        /// The parent group key.
+        /// </param>
+        /// <param name="conditionExpression">
+        /// The condition expression.
+        /// </param>
+        public AddGroupCommand(
+            Guid questionnaireId, Guid publicKey, string text, Guid? parentGroupKey, string conditionExpression)
+        {
+            this.QuestionnaireId = questionnaireId;
+            this.PublicKey = publicKey;
+            this.Text = text;
+            this.ConditionExpression = conditionExpression;
+            this.ParentGroupKey = parentGroupKey;
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the condition expression.
+        /// </summary>
         public string ConditionExpression { get; set; }
-        public Propagate Propagateble { get; set; }
+
+        /// <summary>
+        /// Gets or sets the parent group key.
+        /// </summary>
         public Guid? ParentGroupKey { get; set; }
 
-        public AddGroupCommand(Guid questionnaireId, Guid publicKey, string text,  Guid? parentGroupKey, string conditionExpression)
-        {
-            QuestionnaireId = questionnaireId;
-            PublicKey = publicKey;
-            Text = text;
-            ConditionExpression = conditionExpression;
-            ParentGroupKey = parentGroupKey;
-        }
+        /// <summary>
+        /// Gets or sets the propagateble.
+        /// </summary>
+        public Propagate Propagateble { get; set; }
+
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the questionnaire id.
+        /// </summary>
+        [AggregateRootId]
+        public Guid QuestionnaireId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the text.
+        /// </summary>
+        public string Text { get; set; }
+
+        #endregion
     }
 }

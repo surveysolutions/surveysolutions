@@ -1,21 +1,51 @@
-﻿using System;
-using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using RavenQuestionnaire.Core.Domain;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DeleteFileCommand.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The delete file command.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Commands.File
 {
+    using System;
+
+    using Ncqrs.Commanding;
+    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+
+    using RavenQuestionnaire.Core.Domain;
+
+    /// <summary>
+    /// The delete file command.
+    /// </summary>
     [Serializable]
     [MapsToAggregateRootMethod(typeof(FileAR), "DeleteFile")]
     public class DeleteFileCommand : CommandBase
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteFileCommand"/> class.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
         public DeleteFileCommand(Guid publicKey)
         {
-            PublicKey = publicKey;
+            this.PublicKey = publicKey;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets the public key.
+        /// </summary>
         [AggregateRootId]
         public Guid PublicKey { get; private set; }
 
+        #endregion
     }
 }

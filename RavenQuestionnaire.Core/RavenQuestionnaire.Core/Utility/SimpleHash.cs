@@ -1,33 +1,67 @@
-using System;
-using System.Security.Cryptography;
-using System.Text;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SimpleHash.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The simple hash.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Utility
 {
+    using System;
+    using System.Security.Cryptography;
+    using System.Text;
+
+    /// <summary>
+    /// The simple hash.
+    /// </summary>
     public class SimpleHash
     {
+        #region Static Fields
+
+        /// <summary>
+        /// The salt.
+        /// </summary>
         private static readonly byte[] salt = Encoding.UTF8.GetBytes("3858f62230ac3c915f300c664312c63f");
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The compute hash.
+        /// </summary>
+        /// <param name="plainText">
+        /// The plain text.
+        /// </param>
+        /// <returns>
+        /// The System.String.
+        /// </returns>
         public static string ComputeHash(string plainText)
         {
             // Convert plain text into a byte array.
-            var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+            byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
 
             // Allocate array, which will hold plain text and salt.
             var plainTextWithSaltBytes = new byte[plainTextBytes.Length + salt.Length];
 
             // Copy plain text bytes into resulting array.
             for (int i = 0; i < plainTextBytes.Length; i++)
+            {
                 plainTextWithSaltBytes[i] = plainTextBytes[i];
+            }
 
             // Append salt bytes to the resulting array.
             for (int i = 0; i < salt.Length; i++)
+            {
                 plainTextWithSaltBytes[plainTextBytes.Length + i] = salt[i];
+            }
 
             var hash = new MD5CryptoServiceProvider();
 
             // Compute hash value of our plain text with appended salt.
-            var hashBytes = hash.ComputeHash(plainTextWithSaltBytes);
+            byte[] hashBytes = hash.ComputeHash(plainTextWithSaltBytes);
 
             // Convert result into a base64-encoded string.
             string hashValue = Convert.ToBase64String(hashBytes);
@@ -35,6 +69,7 @@ namespace RavenQuestionnaire.Core.Utility
             // Return the result.
             return hashValue;
         }
+
         /// <summary>
         /// Generates a hash for the given plain text value and returns a
         /// base64-encoded result. Before the hash is computed, a random salt
@@ -53,8 +88,7 @@ namespace RavenQuestionnaire.Core.Utility
         /// <returns>
         /// Hash value formatted as a base64-encoded string.
         /// </returns>
-        public static string ComputeHash(string plainText,
-                                         byte[] saltBytes)
+        public static string ComputeHash(string plainText, byte[] saltBytes)
         {
             // If salt is not specified, generate it on the fly.
             if (saltBytes == null)
@@ -64,14 +98,14 @@ namespace RavenQuestionnaire.Core.Utility
                 int maxSaltSize = 8;
 
                 // Generate a random number for the size of the salt.
-                Random random = new Random();
+                var random = new Random();
                 int saltSize = random.Next(minSaltSize, maxSaltSize);
 
                 // Allocate a byte array, which will hold the salt.
                 saltBytes = new byte[saltSize];
 
                 // Initialize a random number generator.
-                RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+                var rng = new RNGCryptoServiceProvider();
 
                 // Fill the salt with cryptographically strong byte values.
                 rng.GetNonZeroBytes(saltBytes);
@@ -81,32 +115,39 @@ namespace RavenQuestionnaire.Core.Utility
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
 
             // Allocate array, which will hold plain text and salt.
-            byte[] plainTextWithSaltBytes = new byte[plainTextBytes.Length + saltBytes.Length];
+            var plainTextWithSaltBytes = new byte[plainTextBytes.Length + saltBytes.Length];
 
             // Copy plain text bytes into resulting array.
             for (int i = 0; i < plainTextBytes.Length; i++)
+            {
                 plainTextWithSaltBytes[i] = plainTextBytes[i];
+            }
 
             // Append salt bytes to the resulting array.
             for (int i = 0; i < saltBytes.Length; i++)
+            {
                 plainTextWithSaltBytes[plainTextBytes.Length + i] = saltBytes[i];
+            }
 
             var hash = new MD5CryptoServiceProvider();
 
             // Compute hash value of our plain text with appended salt.
-            var hashBytes = hash.ComputeHash(plainTextWithSaltBytes);
+            byte[] hashBytes = hash.ComputeHash(plainTextWithSaltBytes);
 
             // Create array which will hold hash and original salt bytes.
-            var hashWithSaltBytes = new byte[hashBytes.Length +
-                                                saltBytes.Length];
+            var hashWithSaltBytes = new byte[hashBytes.Length + saltBytes.Length];
 
             // Copy hash bytes into resulting array.
             for (int i = 0; i < hashBytes.Length; i++)
+            {
                 hashWithSaltBytes[i] = hashBytes[i];
+            }
 
             // Append salt bytes to the result.
             for (int i = 0; i < saltBytes.Length; i++)
+            {
                 hashWithSaltBytes[hashBytes.Length + i] = saltBytes[i];
+            }
 
             // Convert result into a base64-encoded string.
             string hashValue = Convert.ToBase64String(hashWithSaltBytes);
@@ -132,40 +173,42 @@ namespace RavenQuestionnaire.Core.Utility
         /// If computed hash mathes the specified hash the function the return
         /// value is true; otherwise, the function returns false.
         /// </returns>
-        public static bool VerifyHash(string plainText,
-                                      string hashValue)
+        public static bool VerifyHash(string plainText, string hashValue)
         {
             // Convert base64-encoded hash value into a byte array.
-            var hashWithSaltBytes = Convert.FromBase64String(hashValue);
+            byte[] hashWithSaltBytes = Convert.FromBase64String(hashValue);
 
             // We must know size of hash (without salt).
             int hashSizeInBits, hashSizeInBytes;
 
             hashSizeInBits = 128;
 
-
             // Convert size of hash from bits to bytes.
             hashSizeInBytes = hashSizeInBits / 8;
 
             // Make sure that the specified hash value is long enough.
             if (hashWithSaltBytes.Length < hashSizeInBytes)
+            {
                 return false;
+            }
 
             // Allocate array to hold original salt bytes retrieved from hash.
-            var saltBytes = new byte[hashWithSaltBytes.Length -
-                                        hashSizeInBytes];
+            var saltBytes = new byte[hashWithSaltBytes.Length - hashSizeInBytes];
 
             // Copy salt from the end of the hash to the new array.
             for (int i = 0; i < saltBytes.Length; i++)
+            {
                 saltBytes[i] = hashWithSaltBytes[hashSizeInBytes + i];
+            }
 
             // Compute a new hash string.
-            var expectedHashString =
-                        ComputeHash(plainText, saltBytes);
+            string expectedHashString = ComputeHash(plainText, saltBytes);
 
             // If the computed hash matches the specified hash,
             // the plain text value must be correct.
-            return (hashValue == expectedHashString);
+            return hashValue == expectedHashString;
         }
+
+        #endregion
     }
 }

@@ -131,17 +131,11 @@
     <Reference Include="Raven.Backup">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Backup.exe</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Debug">
-      <HintPath>..\packages\RavenDB.1.0.499\lib\net40\Raven.Client.Debug.dll</HintPath>
-    </Reference>
     <Reference Include="Raven.Client.Embedded, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <HintPath>..\packages\RavenDB.Embedded.1.0.960\lib\net40\Raven.Client.Embedded.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Client.Lightweight, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <HintPath>..\packages\RavenDB.Client.1.0.960\lib\net40\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.MvcIntegration">
-      <HintPath>..\packages\RavenDB.1.0.499\lib\net40\Raven.Client.MvcIntegration.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Database, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Database.dll</HintPath>

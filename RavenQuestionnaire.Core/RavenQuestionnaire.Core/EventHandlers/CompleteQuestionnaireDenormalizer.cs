@@ -1,88 +1,143 @@
-﻿using Ncqrs.Eventing.ServiceModel.Bus;
-using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CompleteQuestionnaireDenormalizer.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The complete questionnaire denormalizer.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.EventHandlers
 {
-    public class CompleteQuestionnaireDenormalizer : 
-        IEventHandler<NewCompleteQuestionnaireCreated>,
-        IEventHandler<CommentSeted>, 
-        IEventHandler<CompleteQuestionnaireDeleted>, 
-        IEventHandler<AnswerSet>,
-        IEventHandler<PropagatableGroupAdded>,
-        IEventHandler<PropagatableGroupDeleted>,
-        IEventHandler<QuestionnaireAssignmentChanged>,
-        IEventHandler<QuestionnaireStatusChanged>
+    using Ncqrs.Eventing.ServiceModel.Bus;
+
+    using RavenQuestionnaire.Core.Denormalizers;
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities.Composite;
+    using RavenQuestionnaire.Core.Entities.Extensions;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using RavenQuestionnaire.Core.Events;
+    using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
+
+    /// <summary>
+    /// The complete questionnaire denormalizer.
+    /// </summary>
+    public class CompleteQuestionnaireDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
+                                                     IEventHandler<CommentSeted>, 
+                                                     IEventHandler<CompleteQuestionnaireDeleted>, 
+                                                     IEventHandler<AnswerSet>, 
+                                                     IEventHandler<PropagatableGroupAdded>, 
+                                                     IEventHandler<PropagatableGroupDeleted>, 
+                                                     IEventHandler<QuestionnaireAssignmentChanged>, 
+                                                     IEventHandler<QuestionnaireStatusChanged>
     {
+        #region Fields
+
+        /// <summary>
+        /// The _document storage.
+        /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> _documentStorage;
 
-        public CompleteQuestionnaireDenormalizer(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentStorage)
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteQuestionnaireDenormalizer"/> class.
+        /// </summary>
+        /// <param name="documentStorage">
+        /// The document storage.
+        /// </param>
+        public CompleteQuestionnaireDenormalizer(
+            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentStorage)
         {
             this._documentStorage = documentStorage;
         }
 
-        #region Implementation of IEventHandler<in NewCompleteQuestionnaireCreated>
-
-        public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
-        {
-            this._documentStorage.Store((CompleteQuestionnaireStoreDocument)evnt.Payload.Questionnaire, evnt.Payload.Questionnaire.PublicKey);
-        }
-
         #endregion
 
-        #region Implementation of IEventHandler<in CommentSeted>
+        #region Public Methods and Operators
 
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
+        public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
+        {
+            this._documentStorage.Store(
+                (CompleteQuestionnaireStoreDocument)evnt.Payload.Questionnaire, evnt.Payload.Questionnaire.PublicKey);
+        }
+
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<CommentSeted> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.Payload.CompleteQuestionnaireId);
+            CompleteQuestionnaireStoreDocument item =
+                this._documentStorage.GetByGuid(evnt.Payload.CompleteQuestionnaireId);
 
-            var questionWrapper = item.QuestionHash.GetQuestion(evnt.Payload.QuestionPublickey, evnt.Payload.PropogationPublicKey);
+            GroupHash.CompleteQuestionWrapper questionWrapper =
+                item.QuestionHash.GetQuestion(evnt.Payload.QuestionPublickey, evnt.Payload.PropogationPublicKey);
             ICompleteQuestion question = questionWrapper.Question;
             if (question == null)
+            {
                 return;
+            }
 
             question.SetComments(evnt.Payload.Comments);
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in CompleteQuestionnaireDeleted>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
         {
             this._documentStorage.Remove(evnt.Payload.CompletedQuestionnaireId);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in AnswerSet>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<AnswerSet> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.EventSourceId);
 
-            var questionWrapper = item.QuestionHash.GetQuestion(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey);
+            GroupHash.CompleteQuestionWrapper questionWrapper =
+                item.QuestionHash.GetQuestion(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey);
             ICompleteQuestion question = questionWrapper.Question;
             if (question == null)
+            {
                 return;
+            }
+
             question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerValue);
 
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in PropagatableGroupAdded>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<PropagatableGroupAdded> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+            CompleteQuestionnaireStoreDocument item =
+                this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
 
             var template = item.Find<CompleteGroup>(evnt.Payload.PublicKey);
 
@@ -91,13 +146,16 @@ namespace RavenQuestionnaire.Core.EventHandlers
             item.QuestionHash.AddGroup(newGroup);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in PropagatableGroupDeleted>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<PropagatableGroupDeleted> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+            CompleteQuestionnaireStoreDocument item =
+                this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
 
             var group = new CompleteGroup(item.Find<CompleteGroup>(evnt.Payload.PublicKey), evnt.Payload.PropagationKey);
             try
@@ -107,28 +165,34 @@ namespace RavenQuestionnaire.Core.EventHandlers
             }
             catch (CompositeException)
             {
-                //in case if group was deleted earlier
+                // in case if group was deleted earlier
             }
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in QuestionnaireAssignmentChanged>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
-            
+            CompleteQuestionnaireStoreDocument item =
+                this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+
             item.Responsible = evnt.Payload.Responsible;
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in QuestionnaireStatusChanged>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            var item = this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+            CompleteQuestionnaireStoreDocument item =
+                this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
             item.Status = evnt.Payload.Status;
         }
 

@@ -1,11 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="LocationDeleted.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The location deleted.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Events.Location
 {
-    class LocationDeleted
+    /// <summary>
+    /// The location deleted.
+    /// </summary>
+    internal class LocationDeleted
     {
     }
 }
