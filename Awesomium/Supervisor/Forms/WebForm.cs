@@ -6,6 +6,7 @@ using Awesomium.Core;
 using System.Windows.Forms;
 using Awesomium.Windows.Forms;
 using Browsing.Supervisor.Utils;
+using Browsing.Supervisor.Controls;
 using Browsing.Supervisor.Containers;
 using Browsing.Supervisor.Properties;
 using Synchronization.Core.Interface;
@@ -54,6 +55,7 @@ namespace Browsing.Supervisor.Forms
             AddMain();
             AddBrowser();
             AddSynchronizer();
+            AddSettings();
             this.Controls.Add(this.holder);
         }
 
@@ -72,17 +74,21 @@ namespace Browsing.Supervisor.Forms
             new BrowserPage(this.webView, this.holder) { Name = "supervisorBrowser" };
         }
 
+
+        protected void AddSettings()
+        {
+            new SettingsPage(this.holder) { Name = "supervisorSettings" };
+        }
+
         protected void AddSynchronizer()
         {
-            //Containers.CAPISynchronization capiSycn =
-            //    new Browsing.CAPI.Containers.CAPISynchronization(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder);
-            //capiSycn.Name = "capiSync";
+            new SynchronizationPage(this.holder) { Name = "supervisorSync" };
         }
 
         protected void AddMain()
         {
             var pageMain = new MainPage(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder)
-                                    {Name = "capiMain"};
+                                    {Name = "supervisorMain"};
             this.holder.Redirect(pageMain);
         }
 

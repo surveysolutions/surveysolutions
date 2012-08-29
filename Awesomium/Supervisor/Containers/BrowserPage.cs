@@ -2,9 +2,11 @@
 using System.Linq;
 using Awesomium.Core;
 using Awesomium.Windows.Forms;
+using Browsing.Supervisor.Controls;
 
 namespace Browsing.Supervisor.Containers
 {
+    
     public partial class BrowserPage : Screen
     {
 
@@ -18,10 +20,9 @@ namespace Browsing.Supervisor.Containers
         #region Constructor
 
         public BrowserPage(WebControl webView, ScreenHolder holder)
-            : base(holder)
+            : base(holder, true)
         {
             this.webView = webView;
-
             InitializeComponent();
         }
 
@@ -45,7 +46,7 @@ namespace Browsing.Supervisor.Containers
             }
         }
 
-        private void homeButton_Click(object sender, System.EventArgs e)
+        private void homeButton_Click(object sender, EventArgs e)
         {
             this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is MainPage));
         }

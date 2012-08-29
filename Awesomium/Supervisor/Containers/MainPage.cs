@@ -2,11 +2,12 @@
 using System.Linq;
 using Common.Utils;
 using Awesomium.Core;
-using Browsing.Supervisor.Forms;
+using Browsing.Supervisor.Controls;
 using Synchronization.Core.Interface;
 
 namespace Browsing.Supervisor.Containers
 {
+    
     public partial class MainPage : Screen
     {
 
@@ -33,7 +34,7 @@ namespace Browsing.Supervisor.Containers
         #region Constructor
 
         public MainPage(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
-            : base(holder)
+            : base(holder, false)
         {
             InitializeComponent();
             this.clientSettings = clientSettings;
@@ -55,7 +56,8 @@ namespace Browsing.Supervisor.Containers
 
         void btnSettings_Click(object sender, EventArgs e)
         {
-            new SettingsBox().ShowDialog();
+            var settings = this.Holder.LoadedScreens.FirstOrDefault(s => s is SettingsPage) as SettingsPage;
+            this.Holder.Redirect(settings);
         }
 
         void btnDashboard_Click(object sender, EventArgs e)
@@ -68,7 +70,7 @@ namespace Browsing.Supervisor.Containers
 
         void btnSyncronization_Click(object sender, EventArgs e)
         {
-            //this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPISynchronization));
+            this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is SynchronizationPage));
         }
         
         private void btnLogout_Click(object sender, EventArgs e)
