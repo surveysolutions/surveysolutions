@@ -153,9 +153,7 @@ namespace Web.CAPI.Controllers
         }
 
        #endregion
-
         
-
         #region Progress
 
         public int ProgressInPersentage(Guid id)
@@ -180,8 +178,7 @@ namespace Web.CAPI.Controllers
         }
 
         #endregion
-
-
+        
         #region discovery
 
         public ActionResult DiscoverPage()
