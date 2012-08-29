@@ -692,11 +692,11 @@ namespace RavenQuestionnaire.Core.Domain
         /// </param>
         protected void UpdateAnswerList(IEnumerable<Answer> answers, AbstractQuestion question)
         {
-            List<Answer> enumerable = answers as List<Answer> ?? answers.ToList();
-            if (answers != null && enumerable.Any())
+            //// List<Answer> enumerable = answers as List<Answer> ?? answers.ToList();
+            if (answers != null && answers.Any())
             {
                 question.Children.Clear();
-                foreach (Answer answer in enumerable)
+                foreach (Answer answer in answers)
                 {
                     question.Add(answer, question.PublicKey);
                 }
