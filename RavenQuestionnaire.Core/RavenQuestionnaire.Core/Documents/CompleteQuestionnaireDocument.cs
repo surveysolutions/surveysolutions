@@ -122,23 +122,7 @@ namespace RavenQuestionnaire.Core.Documents
         /// Gets or sets a value indicating whether enabled.
         /// </summary>
         public bool Enabled { get; set; }
-
-        /// <summary>
-        /// Gets or sets the forcing propagation public key.
-        /// </summary>
-        public Guid? ForcingPropagationPublicKey
-        {
-            get
-            {
-                return null;
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
+        
         /// <summary>
         /// Gets or sets a value indicating whether is valid.
         /// </summary>
@@ -193,7 +177,7 @@ namespace RavenQuestionnaire.Core.Documents
 
             set
             {
-                throw new NotImplementedException();
+               
             }
         }
 
