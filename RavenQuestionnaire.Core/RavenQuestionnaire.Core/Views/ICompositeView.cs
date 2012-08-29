@@ -1,17 +1,44 @@
-using System;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ICompositeView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The CompositeView interface.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views
 {
+    using System;
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// The CompositeView interface.
+    /// </summary>
     public interface ICompositeView
     {
-        Guid PublicKey { get; set; }
+        #region Public Properties
 
-        string Title { get; set; }
+        /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
+        List<ICompositeView> Children { get; set; }
 
+        /// <summary>
+        /// Gets or sets the parent.
+        /// </summary>
         Guid? Parent { get; set; }
 
-        List<ICompositeView> Children { get; set; }
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        string Title { get; set; }
+
+        #endregion
     }
 }

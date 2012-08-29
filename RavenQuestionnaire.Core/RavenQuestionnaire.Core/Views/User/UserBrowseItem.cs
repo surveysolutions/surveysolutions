@@ -1,12 +1,67 @@
-﻿using System;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Utility;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="UserBrowseItem.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The user browse item.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.User
 {
+    using System;
+
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Utility;
+
+    /// <summary>
+    /// The user browse item.
+    /// </summary>
     public class UserBrowseItem
     {
-        public UserBrowseItem(string id, string name, string email, DateTime creationDate, bool isLocked, UserLight supervisor, string location)
+        #region Fields
+
+        /// <summary>
+        /// The _id.
+        /// </summary>
+        private string _id;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserBrowseItem"/> class.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="email">
+        /// The email.
+        /// </param>
+        /// <param name="creationDate">
+        /// The creation date.
+        /// </param>
+        /// <param name="isLocked">
+        /// The is locked.
+        /// </param>
+        /// <param name="supervisor">
+        /// The supervisor.
+        /// </param>
+        /// <param name="location">
+        /// The location.
+        /// </param>
+        public UserBrowseItem(
+            string id, 
+            string name, 
+            string email, 
+            DateTime creationDate, 
+            bool isLocked, 
+            UserLight supervisor, 
+            string location)
         {
             this.Id = id;
             this.UserName = name;
@@ -14,29 +69,63 @@ namespace RavenQuestionnaire.Core.Views.User
             this.CreationDate = creationDate;
             this.IsLocked = isLocked;
             if (supervisor != null)
+            {
                 this.SupervisorName = supervisor.Name;
+            }
+
             this.LocationName = location;
         }
 
-        public string Id
-        {
-            get { return IdUtil.ParseId(_id); }
-            private set { _id = value; }
-        }
+        #endregion
 
-        private string _id;
+        #region Public Properties
 
-        public string UserName { get;private set; }
-
-        public string Email { get;private set; }
-
+        /// <summary>
+        /// Gets the creation date.
+        /// </summary>
         public DateTime CreationDate { get; private set; }
 
+        /// <summary>
+        /// Gets the email.
+        /// </summary>
+        public string Email { get; private set; }
+
+        /// <summary>
+        /// Gets the id.
+        /// </summary>
+        public string Id
+        {
+            get
+            {
+                return IdUtil.ParseId(this._id);
+            }
+
+            private set
+            {
+                this._id = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether is locked.
+        /// </summary>
         public bool IsLocked { get; private set; }
 
-        public string SupervisorName { get; set; }
-
+        /// <summary>
+        /// Gets or sets the location name.
+        /// </summary>
         public string LocationName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the supervisor name.
+        /// </summary>
+        public string SupervisorName { get; set; }
+
+        /// <summary>
+        /// Gets the user name.
+        /// </summary>
+        public string UserName { get; private set; }
+
+        #endregion
     }
 }

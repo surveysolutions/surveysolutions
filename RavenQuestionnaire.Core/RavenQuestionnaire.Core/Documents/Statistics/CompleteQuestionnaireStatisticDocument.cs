@@ -1,30 +1,110 @@
-using System;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CompleteQuestionnaireStatisticDocument.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The complete questionnaire statistic document.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Documents.Statistics
 {
+    using System;
+    using System.Collections.Generic;
+
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+
+    /// <summary>
+    /// The complete questionnaire statistic document.
+    /// </summary>
     public class CompleteQuestionnaireStatisticDocument
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteQuestionnaireStatisticDocument"/> class.
+        /// </summary>
         public CompleteQuestionnaireStatisticDocument()
         {
             this.AnsweredQuestions = new List<QuestionStatisticDocument>();
             this.InvalidQuestions = new List<QuestionStatisticDocument>();
             this.FeturedQuestions = new List<QuestionStatisticDocument>();
         }
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public string CompleteQuestionnaireId { get; set; }
-        public string TemplateId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime LastEntryDate { get; set; }
-        public DateTime? EndDate { get; set; }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the answered questions.
+        /// </summary>
         public IList<QuestionStatisticDocument> AnsweredQuestions { get; set; }
-        public IList<QuestionStatisticDocument> InvalidQuestions { get; set; }
-        public IList<QuestionStatisticDocument> FeturedQuestions { get; set; }
-        public SurveyStatus Status { set; get; }
-        public int TotalQuestionCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the complete questionnaire id.
+        /// </summary>
+        public string CompleteQuestionnaireId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creator.
+        /// </summary>
         public UserLight Creator { get; set; }
+
+        /// <summary>
+        /// Gets or sets the end date.
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the fetured questions.
+        /// </summary>
+        public IList<QuestionStatisticDocument> FeturedQuestions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the id.
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invalid questions.
+        /// </summary>
+        public IList<QuestionStatisticDocument> InvalidQuestions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last entry date.
+        /// </summary>
+        public DateTime LastEntryDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the responsible.
+        /// </summary>
         public UserLight Responsible { get; set; }
+
+        /// <summary>
+        /// Gets or sets the start date.
+        /// </summary>
+        public DateTime StartDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status.
+        /// </summary>
+        public SurveyStatus Status { get; set; }
+
+        /// <summary>
+        /// Gets or sets the template id.
+        /// </summary>
+        public string TemplateId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets the total question count.
+        /// </summary>
+        public int TotalQuestionCount { get; set; }
+
+        #endregion
     }
 }

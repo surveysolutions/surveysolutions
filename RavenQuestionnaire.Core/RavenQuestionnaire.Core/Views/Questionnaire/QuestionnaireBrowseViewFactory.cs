@@ -1,30 +1,76 @@
-﻿using System;
-using System.Linq;
-using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="QuestionnaireBrowseViewFactory.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The questionnaire browse view factory.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Questionnaire
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Denormalizers;
+    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
+
+    /// <summary>
+    /// The questionnaire browse view factory.
+    /// </summary>
     public class QuestionnaireBrowseViewFactory : IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>
     {
-        private IDenormalizerStorage<CQGroupItem> documentGroupSession;
+        #region Fields
 
+        /// <summary>
+        /// The document group session.
+        /// </summary>
+        private readonly IDenormalizerStorage<CQGroupItem> documentGroupSession;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionnaireBrowseViewFactory"/> class.
+        /// </summary>
+        /// <param name="documentGroupSession">
+        /// The document group session.
+        /// </param>
         public QuestionnaireBrowseViewFactory(IDenormalizerStorage<CQGroupItem> documentGroupSession)
         {
             this.documentGroupSession = documentGroupSession;
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The load.
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireBrowseView.
+        /// </returns>
         public QuestionnaireBrowseView Load(QuestionnaireBrowseInputModel input)
         {
-            var query = documentGroupSession.Query();
-            // Adjust the model appropriately
-            var count = query.Count();
-            if (count == 0)
-                return new QuestionnaireBrowseView(input.Page, input.PageSize, count, new QuestionnaireBrowseItem[0], "");
-            // Perform the paged query
-         
+            IQueryable<CQGroupItem> query = this.documentGroupSession.Query();
 
-         /*   if (input.Orders.Count > 0)
+            // Adjust the model appropriately
+            int count = query.Count();
+            if (count == 0)
+            {
+                return new QuestionnaireBrowseView(
+                    input.Page, input.PageSize, count, new QuestionnaireBrowseItem[0], string.Empty);
+            }
+
+            // Perform the paged query
+
+            /*   if (input.Orders.Count > 0)
             {
                 query = input.Orders[0].Direction == OrderDirection.Asc
                             ? query.OrderBy(input.Orders[0].Field)
@@ -38,21 +84,16 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
                                 ? query.ThenBy(order.Field)
                                 : query.ThenByDescending(order.Field);
                 }*/
-
-            var page = query.Skip((input.Page - 1)*input.PageSize)
-                .Take(input.PageSize)
-                .ToList();
+            List<CQGroupItem> page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
 
             // And enact this query
-            var items = page
-                .Select(x => new QuestionnaireBrowseItem(x.SurveyId, x.SurveyTitle, DateTime.Now, DateTime.Now))
-                .ToArray();
+            QuestionnaireBrowseItem[] items =
+                page.Select(x => new QuestionnaireBrowseItem(x.SurveyId, x.SurveyTitle, DateTime.Now, DateTime.Now)).
+                    ToArray();
 
-            return new QuestionnaireBrowseView(
-                input.Page,
-                input.PageSize, count,
-                items,
-                input.Order);
+            return new QuestionnaireBrowseView(input.Page, input.PageSize, count, items, input.Order);
         }
+
+        #endregion
     }
 }

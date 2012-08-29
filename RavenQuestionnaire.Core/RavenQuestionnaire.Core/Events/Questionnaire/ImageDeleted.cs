@@ -1,17 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Ncqrs.Eventing.Storage;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImageDeleted.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The image deleted.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Events.Questionnaire
 {
+    using System;
+
+    using Ncqrs.Eventing.Storage;
+
+    /// <summary>
+    /// The image deleted.
+    /// </summary>
     [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:ImageDeleted")]
     public class ImageDeleted
     {
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the image key.
+        /// </summary>
+        public Guid ImageKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question key.
+        /// </summary>
         public Guid QuestionKey { get; set; }
 
-        public Guid ImageKey { get; set; }
+        #endregion
     }
 }

@@ -1,21 +1,72 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CompleteAnswerView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The complete answer view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
 namespace RavenQuestionnaire.Core.Views.Answer
 {
+    using System;
+
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+
+    /// <summary>
+    /// The complete answer view.
+    /// </summary>
     public class CompleteAnswerView : AnswerView
     {
-        public bool Selected { get; set; }
-        
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteAnswerView"/> class.
+        /// </summary>
         public CompleteAnswerView()
         {
         }
-        public CompleteAnswerView(Guid questionPublicKey, Entities.SubEntities.IAnswer doc):base(questionPublicKey, doc)
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteAnswerView"/> class.
+        /// </summary>
+        /// <param name="questionPublicKey">
+        /// The question public key.
+        /// </param>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        public CompleteAnswerView(Guid questionPublicKey, IAnswer doc)
+            : base(questionPublicKey, doc)
         {
             this.Selected = false;
         }
-        public CompleteAnswerView(Guid questionKey, RavenQuestionnaire.Core.Entities.SubEntities.Complete.ICompleteAnswer answer)
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteAnswerView"/> class.
+        /// </summary>
+        /// <param name="questionKey">
+        /// The question key.
+        /// </param>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        public CompleteAnswerView(Guid questionKey, ICompleteAnswer answer)
             : base(questionKey, answer)
         {
             this.Selected = answer.Selected;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether selected.
+        /// </summary>
+        public bool Selected { get; set; }
+
+        #endregion
     }
 }

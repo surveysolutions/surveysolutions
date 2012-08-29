@@ -1,112 +1,215 @@
-using System.IO;
-using Kaliko.ImageLibrary;
-using Kaliko.ImageLibrary.Filters;
-using Raven.Abstractions.Data;
-using Raven.Client;
-using Raven.Client.Document;
-using Raven.Json.Linq;
-using RavenQuestionnaire.Core.Documents;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="RavenFileStorageService.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The raven file storage service.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Services
 {
+    using System.IO;
+
+    using Kaliko.ImageLibrary;
+    using Kaliko.ImageLibrary.Filters;
+
+    using Raven.Abstractions.Data;
+    using Raven.Client;
+    using Raven.Client.Document;
+    using Raven.Json.Linq;
+
+    using RavenQuestionnaire.Core.Documents;
+
+    /// <summary>
+    /// The raven file storage service.
+    /// </summary>
     public class RavenFileStorageService : IFileStorageService
     {
-        private IDocumentStore documentStore;
+        #region Fields
 
+        /// <summary>
+        /// The document store.
+        /// </summary>
+        private readonly IDocumentStore documentStore;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RavenFileStorageService"/> class.
+        /// </summary>
+        /// <param name="documentStore">
+        /// The document store.
+        /// </param>
         public RavenFileStorageService(DocumentStore documentStore)
         {
             this.documentStore = documentStore;
         }
-        public void StoreFile( FileDescription file)
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The delete file.
+        /// </summary>
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        public void DeleteFile(string filename)
         {
-            Attachment a = documentStore.DatabaseCommands.GetAttachment(file.PublicKey);
+            this.documentStore.DatabaseCommands.DeleteAttachment(filename, null);
+            this.documentStore.DatabaseCommands.DeleteAttachment(this.GetThumbName(filename), null);
+        }
+
+        /*     public void StoreImage(Stream image, string title, string description)
+        {
+            throw new NotImplementedException();
+        }*/
+
+        /// <summary>
+        /// The retrieve file.
+        /// </summary>
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Documents.FileDescription.
+        /// </returns>
+        public FileDescription RetrieveFile(string filename)
+        {
+            var file = new FileDescription();
+            Attachment a = this.documentStore.DatabaseCommands.GetAttachment(filename);
+
+            /*   var memoryStream = new MemoryStream();
+            a.Data().CopyTo(memoryStream);*/
+            file.Content = a.Data();
+            file.PublicKey = filename;
+            file.Description = a.Metadata["Description"].Value<string>();
+            file.Title = a.Metadata["Description"].Value<string>();
+            return file;
+
+            // return a.Data;
+        }
+
+        /// <summary>
+        /// The retrieve thumb.
+        /// </summary>
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Documents.FileDescription.
+        /// </returns>
+        public FileDescription RetrieveThumb(string filename)
+        {
+            return this.RetrieveFile(this.GetThumbName(filename));
+        }
+
+        /// <summary>
+        /// The store file.
+        /// </summary>
+        /// <param name="file">
+        /// The file.
+        /// </param>
+        public void StoreFile(FileDescription file)
+        {
+            Attachment a = this.documentStore.DatabaseCommands.GetAttachment(file.PublicKey);
             if (a == null)
             {
-              
-              /*  using (MemoryStream theMemStream = new MemoryStream())
+                /*  using (MemoryStream theMemStream = new MemoryStream())
                 {
 
                     theMemStream.Write(file.Content, 0, file.Content.Length);*/
-                documentStore.DatabaseCommands.PutAttachment(file.PublicKey, null, file.Content,
-                                                                 new RavenJObject
-                                                                     {
-                                                                         {"PublicKey", file.PublicKey},
-                                                                         {"Description", file.Description},
-                                                                         {"Title", file.Title}
-                                                                     });
+                this.documentStore.DatabaseCommands.PutAttachment(
+                    file.PublicKey, 
+                    null, 
+                    file.Content, 
+                    new RavenJObject
+                        {
+                            { "PublicKey", file.PublicKey }, 
+                            { "Description", file.Description }, 
+                            { "Title", file.Title }
+                        });
                 file.Content.Position = 0;
                 var image = new KalikoImage(file.Content);
                 int thumbWidth, thumbHeight;
-                var thumbData = ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
-                documentStore.DatabaseCommands.PutAttachment(GetThumbName(file.PublicKey), null, thumbData,
-                                                                 new RavenJObject
-                                                                     {
-                                                                         {"PublicKey", GetThumbName(file.PublicKey)}
-                                                                     });
-               // }
+                MemoryStream thumbData = this.ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
+                this.documentStore.DatabaseCommands.PutAttachment(
+                    this.GetThumbName(file.PublicKey), 
+                    null, 
+                    thumbData, 
+                    new RavenJObject { { "PublicKey", this.GetThumbName(file.PublicKey) } });
+
+                // }
             }
         }
+
+        #endregion
+
+        // public List<RavenJObject> RetrieveEventDocuments()
+        // {
+        // return documentStore.DatabaseCommands.Query("Raven/DocumentsByEntityName", new IndexQuery
+        // {
+        // Query = "Tag:EventDocuments"
+        // }, null).Results;
+        // }
+        #region Methods
+
+        /// <summary>
+        /// The get thumb name.
+        /// </summary>
+        /// <param name="fileName">
+        /// The file name.
+        /// </param>
+        /// <returns>
+        /// The System.String.
+        /// </returns>
+        private string GetThumbName(string fileName)
+        {
+            return string.Format("{0}_thumb", fileName);
+        }
+
+        /// <summary>
+        /// The resize image.
+        /// </summary>
+        /// <param name="image">
+        /// The image.
+        /// </param>
+        /// <param name="width">
+        /// The width.
+        /// </param>
+        /// <param name="height">
+        /// The height.
+        /// </param>
+        /// <param name="newWidth">
+        /// The new width.
+        /// </param>
+        /// <param name="newHeight">
+        /// The new height.
+        /// </param>
+        /// <returns>
+        /// The System.IO.MemoryStream.
+        /// </returns>
         private MemoryStream ResizeImage(KalikoImage image, int width, int height, out int newWidth, out int newHeight)
         {
-            var thumb = image.GetThumbnailImage(width, height, ThumbnailMethod.Fit);
+            KalikoImage thumb = image.GetThumbnailImage(width, height, ThumbnailMethod.Fit);
             thumb.ApplyFilter(new UnsharpMaskFilter(1.4, 0.32));
 
             var ms = new MemoryStream();
             thumb.SavePng(ms, 80);
             ms.Position = 0;
 
-            //    var thumbData = new byte[ms.Length];
-            //    ms.Read(thumbData, 0, thumbData.Length);
-
+            // var thumbData = new byte[ms.Length];
+            // ms.Read(thumbData, 0, thumbData.Length);
             newHeight = thumb.Height;
             newWidth = thumb.Width;
 
             return ms;
         }
-   /*     public void StoreImage(Stream image, string title, string description)
-        {
-            throw new NotImplementedException();
-        }*/
 
-        public FileDescription RetrieveFile(string filename)
-        {
-            FileDescription file = new FileDescription();
-            Attachment a = documentStore.DatabaseCommands.GetAttachment(filename);
-            
-         /*   var memoryStream = new MemoryStream();
-            a.Data().CopyTo(memoryStream);*/
-
-
-            file.Content = a.Data();
-            file.PublicKey = filename;
-            file.Description = a.Metadata["Description"].Value<string>();
-            file.Title = a.Metadata["Description"].Value<string>();
-            return file;
-             
-            //return a.Data;
-        }
-
-        public FileDescription RetrieveThumb(string filename)
-        {
-            return RetrieveFile(GetThumbName(filename));
-        }
-
-        //public List<RavenJObject> RetrieveEventDocuments()
-        //{
-        //    return documentStore.DatabaseCommands.Query("Raven/DocumentsByEntityName", new IndexQuery
-        //                   {
-        //                        Query = "Tag:EventDocuments"
-        //                   }, null).Results;
-        //}
-        
-        public void DeleteFile(string filename)
-        {
-            documentStore.DatabaseCommands.DeleteAttachment(filename, null);
-            documentStore.DatabaseCommands.DeleteAttachment(GetThumbName(filename), null);
-        }
-        private string GetThumbName(string fileName)
-        {
-            return string.Format("{0}_thumb", fileName);
-        }
+        #endregion
     }
 }
