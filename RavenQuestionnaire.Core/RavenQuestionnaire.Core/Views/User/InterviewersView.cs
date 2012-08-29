@@ -1,29 +1,60 @@
-﻿using System.Collections.Generic;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="InterviewersView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The interviewers view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.User
 {
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// The interviewers view.
+    /// </summary>
     public class InterviewersView
     {
-        public int PageSize { get; private set; }
+        #region Fields
 
-        public int Page { get; private set; }
-
-        public string Order 
-        {
-            get { return _order; }
-            set { _order = value; }
-        }
+        /// <summary>
+        /// The _order.
+        /// </summary>
         private string _order = string.Empty;
 
-        public string SupervisorId { get; private set; }
+        #endregion
 
-        public string SupervisorName { get; private set; }
+        #region Constructors and Destructors
 
-        public int TotalCount { get; private set; }
-
-        public IEnumerable<InterviewersItem> Items { get; private set; }
-
-        public InterviewersView(int page, int pageSize, int totalCount, IEnumerable<InterviewersItem> items, string supervisorId, string supervisorName)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InterviewersView"/> class.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="pageSize">
+        /// The page size.
+        /// </param>
+        /// <param name="totalCount">
+        /// The total count.
+        /// </param>
+        /// <param name="items">
+        /// The items.
+        /// </param>
+        /// <param name="supervisorId">
+        /// The supervisor id.
+        /// </param>
+        /// <param name="supervisorName">
+        /// The supervisor name.
+        /// </param>
+        public InterviewersView(
+            int page, 
+            int pageSize, 
+            int totalCount, 
+            IEnumerable<InterviewersItem> items, 
+            string supervisorId, 
+            string supervisorName)
         {
             this.Page = page;
             this.TotalCount = totalCount;
@@ -32,5 +63,57 @@ namespace RavenQuestionnaire.Core.Views.User
             this.SupervisorId = supervisorId;
             this.SupervisorName = supervisorName;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets the items.
+        /// </summary>
+        public IEnumerable<InterviewersItem> Items { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the order.
+        /// </summary>
+        public string Order
+        {
+            get
+            {
+                return this._order;
+            }
+
+            set
+            {
+                this._order = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the page.
+        /// </summary>
+        public int Page { get; private set; }
+
+        /// <summary>
+        /// Gets the page size.
+        /// </summary>
+        public int PageSize { get; private set; }
+
+        /// <summary>
+        /// Gets the supervisor id.
+        /// </summary>
+        public string SupervisorId { get; private set; }
+
+        /// <summary>
+        /// Gets the supervisor name.
+        /// </summary>
+        public string SupervisorName { get; private set; }
+
+        /// <summary>
+        /// Gets the total count.
+        /// </summary>
+        public int TotalCount { get; private set; }
+
+        #endregion
     }
 }

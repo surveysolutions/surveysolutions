@@ -1,34 +1,65 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SurveyGroupView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The survey group view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Survey
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+    using RavenQuestionnaire.Core.Views.Statistics;
+
+    /// <summary>
+    /// The survey group view.
+    /// </summary>
     public class SurveyGroupView
     {
-        public string SurveyTitle { get; private set; }
+        #region Fields
 
-        public string TemplateId { get; private set; }
-
-        public int PageSize { get; private set; }
-
-        public int Page { get; private set;}
-
-        public string Order
-        {
-            get { return _order; }
-            set { _order = value; }
-        }
+        /// <summary>
+        /// The _order.
+        /// </summary>
         private string _order = string.Empty;
 
-        public int TotalCount { get; private set; }
+        #endregion
 
-        public List<SurveyGroupItem> Items { get; set; }
+        #region Constructors and Destructors
 
-        public Dictionary<Guid, string> Headers { get; set; }
-
-        public SurveyGroupView(int page, int pageSize, string surveyTitle, int totalCount, IEnumerable<CompleteQuestionnaireBrowseItem> items, string templateId)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyGroupView"/> class.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="pageSize">
+        /// The page size.
+        /// </param>
+        /// <param name="surveyTitle">
+        /// The survey title.
+        /// </param>
+        /// <param name="totalCount">
+        /// The total count.
+        /// </param>
+        /// <param name="items">
+        /// The items.
+        /// </param>
+        /// <param name="templateId">
+        /// The template id.
+        /// </param>
+        public SurveyGroupView(
+            int page, 
+            int pageSize, 
+            string surveyTitle, 
+            int totalCount, 
+            IEnumerable<CompleteQuestionnaireBrowseItem> items, 
+            string templateId)
         {
             this.Page = page;
             this.TotalCount = totalCount;
@@ -36,16 +67,78 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.TemplateId = templateId;
             this.Items = new List<SurveyGroupItem>();
             this.Headers = new Dictionary<Guid, string>();
-            foreach (var question in items.SelectMany(completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions).
-                Where(question => !Headers.ContainsKey(question.PublicKey)))
+            foreach (
+                QuestionStatisticView question in
+                    items.SelectMany(
+                        completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions).Where(
+                            question => !this.Headers.ContainsKey(question.PublicKey)))
             {
-                Headers.Add(question.PublicKey, question.QuestionText);
+                this.Headers.Add(question.PublicKey, question.QuestionText);
             }
-            foreach (var it in items)
+
+            foreach (CompleteQuestionnaireBrowseItem it in items)
             {
-                Items.Add(new SurveyGroupItem(it, Headers));
+                this.Items.Add(new SurveyGroupItem(it, this.Headers));
             }
-            SurveyTitle = surveyTitle;
+
+            this.SurveyTitle = surveyTitle;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the headers.
+        /// </summary>
+        public Dictionary<Guid, string> Headers { get; set; }
+
+        /// <summary>
+        /// Gets or sets the items.
+        /// </summary>
+        public List<SurveyGroupItem> Items { get; set; }
+
+        /// <summary>
+        /// Gets or sets the order.
+        /// </summary>
+        public string Order
+        {
+            get
+            {
+                return this._order;
+            }
+
+            set
+            {
+                this._order = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the page.
+        /// </summary>
+        public int Page { get; private set; }
+
+        /// <summary>
+        /// Gets the page size.
+        /// </summary>
+        public int PageSize { get; private set; }
+
+        /// <summary>
+        /// Gets the survey title.
+        /// </summary>
+        public string SurveyTitle { get; private set; }
+
+        /// <summary>
+        /// Gets the template id.
+        /// </summary>
+        public string TemplateId { get; private set; }
+
+        /// <summary>
+        /// Gets the total count.
+        /// </summary>
+        public int TotalCount { get; private set; }
+
+        #endregion
     }
 }

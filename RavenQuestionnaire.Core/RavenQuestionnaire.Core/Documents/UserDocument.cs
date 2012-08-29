@@ -1,49 +1,116 @@
-﻿using System;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="UserDocument.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   Defines the UserDocument type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace RavenQuestionnaire.Core.Documents
 {
+    using System;
+    using System.Collections.Generic;
+
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+
+    /// <summary>
+    /// The user document.
+    /// </summary>
     public class UserDocument
     {
+        #region Fields
+
+        /// <summary>
+        /// The public key.
+        /// </summary>
+        private Guid publicKey;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserDocument"/> class.
+        /// </summary>
         public UserDocument()
         {
-            CreationDate = DateTime.Now;
-            PublicKey = Guid.NewGuid();
-            Roles= new List<UserRoles>();
-            Location= new LocationDocument();
+            this.CreationDate = DateTime.Now;
+            this.PublicKey = Guid.NewGuid();
+            this.Roles = new List<UserRoles>();
+            this.Location = new LocationDocument();
         }
 
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the creation date.
+        /// </summary>
+        public DateTime CreationDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the email.
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Gets or sets the id.
+        /// </summary>
         public string Id { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether is deleted.
+        /// </summary>
+        public bool IsDeleted { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is locked.
+        /// </summary>
+        public bool IsLocked { get; set; }
+
+        /// <summary>
+        /// Gets or sets the location.
+        /// </summary>
+        public LocationDocument Location { get; set; }
+
+        /// <summary>
+        /// Gets or sets the password.
+        /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
         public Guid PublicKey
         {
-            get { return publicKey; }
+            get
+            {
+                return this.publicKey;
+            }
+
             set
             {
-                publicKey = value;
+                this.publicKey = value;
                 this.Id = value.ToString();
             }
         }
 
-        private Guid publicKey;
-
-        public string UserName { get; set; }
-
-        public string Password { get; set; }
-
-        public string Email { get; set; }
-
-        public DateTime CreationDate { get; set; }
-
+        /// <summary>
+        /// Gets or sets the roles.
+        /// </summary>
         public List<UserRoles> Roles { get; set; }
 
-        public bool IsLocked { get; set; }
-
-        public bool IsDeleted { get; set; }
-
+        /// <summary>
+        /// Gets or sets the supervisor.
+        /// </summary>
         public UserLight Supervisor { get; set; }
 
-        public LocationDocument Location { get; set; }
+        /// <summary>
+        /// Gets or sets the user name.
+        /// </summary>
+        public string UserName { get; set; }
+
+        #endregion
     }
 }

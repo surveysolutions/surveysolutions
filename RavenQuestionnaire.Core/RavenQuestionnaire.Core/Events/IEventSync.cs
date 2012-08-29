@@ -1,84 +1,182 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Ncqrs;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Storage;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Web.App_Start;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IEventSync.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   Defines the IEventSync type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace RavenQuestionnaire.Core.Events
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Ncqrs;
+    using Ncqrs.Eventing;
+    using Ncqrs.Eventing.ServiceModel.Bus;
+    using Ncqrs.Eventing.Storage;
+
+    using RavenQuestionnaire.Core.Utility;
+
+    /// <summary>
+    /// The EventSync interface.
+    /// </summary>
     public interface IEventSync
     {
+        #region Public Methods and Operators
+
         /// <summary>
-        /// return list of ALL events grouped by aggregate root, please use very carefully
+        /// Returns list of ALL events grouped by aggregate root, please use very carefully
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The System.Collections.Generic.IEnumerable`1[T -&gt; RavenQuestionnaire.Core.Events.AggregateRootEvent].
+        /// </returns>
         IEnumerable<AggregateRootEvent> ReadEvents();
+
+        /// <summary>
+        /// The write events.
+        /// </summary>
+        /// <param name="stream">
+        /// The stream.
+        /// </param>
         void WriteEvents(IEnumerable<AggregateRootEvent> stream);
-  //      AggregateRootEventStream ReadEventStream(Guid eventSurceId);
-       // IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare();
+
+        #endregion
+
+        //// AggregateRootEventStream ReadEventStream(Guid eventSurceId);
+        //// IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare();
     }
 
+    /// <summary>
+    /// The event sync extensions.
+    /// </summary>
     public static class EventSyncExtensions
     {
-        public static IEnumerable<IEnumerable<AggregateRootEvent>> ReadEventsByChunks(this IEventSync source, int chunksize = 2048)
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The read events by chunks.
+        /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
+        /// <param name="chunksize">
+        /// The chunksize.
+        /// </param>
+        /// <returns>
+        /// The System.Collections.Generic.IEnumerable`1[T -&gt; System.Collections.Generic.IEnumerable`1[T -&gt; RavenQuestionnaire.Core.Events.AggregateRootEvent]].
+        /// </returns>
+        public static IEnumerable<IEnumerable<AggregateRootEvent>> ReadEventsByChunks(
+            this IEventSync source, int chunksize = 2048)
         {
-            var events = source.ReadEvents();
-            
-            return events.Chunk(chunksize,
-                                (e, previous) =>
-                                    {
-                                        return e.CommitId == previous.CommitId;
-                                    });
+            IEnumerable<AggregateRootEvent> events = source.ReadEvents();
+
+            return events.Chunk(chunksize, (e, previous) => e.CommitId == previous.CommitId);
         }
+
+        #endregion
     }
 
+    /// <summary>
+    /// The abstract event sync.
+    /// </summary>
     public abstract class AbstractEventSync : IEventSync
     {
-        private IEventStore eventStore;
+        #region Fields
+
+        /// <summary>
+        /// The event store.
+        /// </summary>
+        private readonly IEventStore eventStore;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractEventSync"/> class.
+        /// </summary>
+        /// <exception cref="Exception">
+        /// </exception>
         public AbstractEventSync()
         {
-            eventStore = NcqrsEnvironment.Get<IEventStore>();
-            if (eventStore == null)
+            this.eventStore = NcqrsEnvironment.Get<IEventStore>();
+            if (this.eventStore == null)
+            {
                 throw new Exception("IEventStore is not properly initialized.");
+            }
         }
 
-        #region Implementation of IEventSync
+        #endregion
 
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The read events.
+        /// </summary>
+        /// <returns>
+        /// The System.Collections.Generic.IEnumerable`1[T -&gt; RavenQuestionnaire.Core.Events.AggregateRootEvent].
+        /// </returns>
         public abstract IEnumerable<AggregateRootEvent> ReadEvents();
+
+        /// <summary>
+        /// The write events.
+        /// </summary>
+        /// <param name="stream">
+        /// The stream.
+        /// </param>
+        /// <exception cref="Exception">
+        /// </exception>
         public void WriteEvents(IEnumerable<AggregateRootEvent> stream)
         {
-            var uncommitedStreams = BuildEventStreams(stream);
+            IEnumerable<UncommittedEventStream> uncommitedStreams = this.BuildEventStreams(stream);
 
-            if (!uncommitedStreams.Any())
+            UncommittedEventStream[] uncommittedEventStreams = uncommitedStreams as UncommittedEventStream[]
+                                                               ?? uncommitedStreams.ToArray();
+            if (!uncommittedEventStreams.Any())
+            {
                 return;
+            }
 
             var myEventBus = NcqrsEnvironment.Get<IEventBus>();
             if (myEventBus == null)
-                throw new Exception("IEventBus is not properly initialized.");
-
-            foreach (UncommittedEventStream uncommittedEventStream in uncommitedStreams)
             {
-                if (!uncommittedEventStream.Any()) continue;
-                
-                eventStore.Store(uncommittedEventStream);
+                throw new Exception("IEventBus is not properly initialized.");
+            }
+
+            foreach (UncommittedEventStream uncommittedEventStream in uncommittedEventStreams)
+            {
+                if (!uncommittedEventStream.Any())
+                {
+                    continue;
+                }
+
+                this.eventStore.Store(uncommittedEventStream);
                 myEventBus.Publish(uncommittedEventStream);
             }
         }
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// The build event streams.
+        /// </summary>
+        /// <param name="stream">
+        /// The stream.
+        /// </param>
+        /// <returns>
+        /// The System.Collections.Generic.IEnumerable`1[T -&gt; Ncqrs.Eventing.UncommittedEventStream].
+        /// </returns>
         protected IEnumerable<UncommittedEventStream> BuildEventStreams(IEnumerable<AggregateRootEvent> stream)
         {
             return
                 stream.GroupBy(x => x.EventSourceId).Select(
-                    g => g.CreateUncommittedEventStream(eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue)));
+                    g => g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue)));
         }
+
+        #endregion
     }
 }

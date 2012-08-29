@@ -1,22 +1,48 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="QuestionnaireView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The abstract questionnaire view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Questionnaire
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities.Composite;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Views.Group;
+    using RavenQuestionnaire.Core.Views.Question;
+
+    /// <summary>
+    /// The abstract questionnaire view.
+    /// </summary>
     public abstract class AbstractQuestionnaireView
     {
-        public Guid PublicKey;
-        public string Title { get; set; }
-        public bool IsValid { get; set; }
-        public DateTime CreationDate { get; set; }
-        public DateTime LastEntryDate { get; set; }
+        #region Fields
 
-        public AbstractQuestionnaireView(IQuestionnaireDocument doc): this()
+        /// <summary>
+        /// The public key.
+        /// </summary>
+        public Guid PublicKey;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractQuestionnaireView"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        protected AbstractQuestionnaireView(IQuestionnaireDocument doc)
+            : this()
         {
             this.PublicKey = doc.PublicKey;
             this.Title = doc.Title;
@@ -24,30 +50,67 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
             this.LastEntryDate = doc.LastEntryDate;
         }
 
-        public AbstractQuestionnaireView(){}
-    }
-
-    public abstract class AbstractQuestionnaireView<TGroup, TQuestion> : AbstractQuestionnaireView
-        where TGroup : AbstractGroupView
-        where TQuestion : AbstractQuestionView, ICompositeView
-    {
-
-        public TQuestion[] Questions
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractQuestionnaireView"/> class.
+        /// </summary>
+        protected AbstractQuestionnaireView()
         {
-            get { return _questions; }
-            set
-            {
-                _questions = value;
-                for (int i = 0; i < this._questions.Length; i++)
-                {
-                    this._questions[i].Index = i + 1;
-                }
-            }
         }
 
-        public TGroup[] Groups { get; set; }
-        private TQuestion[] _questions;
+        #endregion
 
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the creation date.
+        /// </summary>
+        public DateTime CreationDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is valid.
+        /// </summary>
+        public bool IsValid { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last entry date.
+        /// </summary>
+        public DateTime LastEntryDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        #endregion
+    }
+
+    /// <summary>
+    /// The abstract questionnaire view.
+    /// </summary>
+    /// <typeparam name="TGroup">
+    /// </typeparam>
+    /// <typeparam name="TQuestion">
+    /// </typeparam>
+    public abstract class AbstractQuestionnaireView<TGroup, TQuestion> : AbstractQuestionnaireView
+        where TGroup : AbstractGroupView where TQuestion : AbstractQuestionView, ICompositeView
+    {
+        #region Fields
+
+        /// <summary>
+        /// The questions.
+        /// </summary>
+        private TQuestion[] questions;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractQuestionnaireView{TGroup,TQuestion}"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
         public AbstractQuestionnaireView(IQuestionnaireDocument doc)
         {
             this.Children = new List<ICompositeView>();
@@ -57,24 +120,82 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
             this.Title = doc.Title;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractQuestionnaireView{TGroup,TQuestion}"/> class.
+        /// </summary>
         public AbstractQuestionnaireView()
         {
-            Children = new List<ICompositeView>();
+            this.Children = new List<ICompositeView>();
         }
 
-        public Guid PublicKey { get; set; }
-        public string Title { get; set; }
-        public Guid? Parent { get; set; }
+        #endregion
+
+        // public Guid PublicKey { get; set; }
+        // public string Title { get; set; }
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
         public List<ICompositeView> Children { get; set; }
+
+        /// <summary>
+        /// Gets or sets the groups.
+        /// </summary>
+        public TGroup[] Groups { get; set; }
+
+        /// <summary>
+        /// Gets or sets the parent.
+        /// </summary>
+        public Guid? Parent { get; set; }
+
+        /// <summary>
+        /// Gets or sets the questions.
+        /// </summary>
+        public TQuestion[] Questions
+        {
+            get
+            {
+                return this.questions;
+            }
+
+            set
+            {
+                this.questions = value;
+                for (int i = 0; i < this.questions.Length; i++)
+                {
+                    this.questions[i].Index = i + 1;
+                }
+            }
+        }
+
+        #endregion
     }
 
-    public class QuestionnaireView : AbstractQuestionnaireView<GroupView,QuestionView>
+    /// <summary>
+    /// The questionnaire view.
+    /// </summary>
+    public class QuestionnaireView : AbstractQuestionnaireView<GroupView, QuestionView>
     {
-        public QuestionnaireView(): base(){}
+        #region Constructors and Destructors
 
-        public QuestionnaireView(IQuestionnaireDocument doc): base(doc)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionnaireView"/> class.
+        /// </summary>
+        public QuestionnaireView()
         {
-            foreach (var composite in doc.Children)
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionnaireView"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        public QuestionnaireView(IQuestionnaireDocument doc)
+            : base(doc)
+        {
+            foreach (IComposite composite in doc.Children)
             {
                 if ((composite as IQuestion) != null)
                 {
@@ -86,11 +207,13 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
                 {
                     var g = composite as IGroup;
                     this.Children.Add(new GroupView(doc, g));
-
                 }
             }
+
             this.Questions = doc.Children.OfType<IQuestion>().Select(q => new QuestionView(doc, q)).ToArray();
             this.Groups = doc.Children.OfType<IGroup>().Select(g => new GroupView(doc, g)).ToArray();
         }
+
+        #endregion
     }
 }

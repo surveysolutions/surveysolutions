@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Ncqrs.Commanding;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CreateFlowGraphCommand.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   CreateFlowGraphCommand.cs
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-namespace RavenQuestionnaire.Core.Commands.Questionnaire.Flow
-{
-    class CreateFlowGraphCommand : CommandBase
-    {
-
-    }
-}

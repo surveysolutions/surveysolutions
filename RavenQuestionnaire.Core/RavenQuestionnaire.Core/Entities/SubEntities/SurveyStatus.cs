@@ -1,72 +1,143 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SurveyStatus.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The survey status.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
+    using System;
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// The survey status.
+    /// </summary>
     public class SurveyStatus
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyStatus"/> class.
+        /// </summary>
         public SurveyStatus()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyStatus"/> class.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
         public SurveyStatus(Guid id)
         {
-            PublicId = id;
+            this.PublicId = id;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyStatus"/> class.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
         public SurveyStatus(Guid id, string name)
         {
-            PublicId = id;
-            Name = name;
+            this.PublicId = id;
+            this.Name = name;
         }
 
-        public Guid PublicId { get; set; }
-        public string Name { get; set; }
-        public string ChangeComment { get; set; }
+        #endregion
 
-        public static IEnumerable<SurveyStatus> GetAllStatuses()
-        {
-            return new[] {Initial, Error, Complete};
-        }
+        #region Public Properties
 
-        public static SurveyStatus Initial 
+        /// <summary>
+        /// Gets the approve.
+        /// </summary>
+        public static SurveyStatus Approve
         {
             get
             {
-                Guid identifier = new Guid("8927D124-3CFB-4374-AD36-2FD99B62CE13");
-                string name = "Initial";
-                return new SurveyStatus(identifier, name); 
-            } 
-        }
-
-        public static SurveyStatus Error
-        {
-            get
-            {
-                Guid identifier = new Guid("D65CF1F6-8A75-43FA-9158-B745EB4D6A1F");
-                string name = "Error";
+                var identifier = new Guid("AA6C0DC1-23C4-4B03-A3ED-B24EF0055555");
+                string name = "Approve";
                 return new SurveyStatus(identifier, name);
             }
         }
 
+        /// <summary>
+        /// Gets the complete.
+        /// </summary>
         public static SurveyStatus Complete
         {
             get
             {
-                Guid identifier = new Guid("776C0DC1-23C4-4B03-A3ED-B24EF005559B");
+                var identifier = new Guid("776C0DC1-23C4-4B03-A3ED-B24EF005559B");
                 string name = "Complete";
                 return new SurveyStatus(identifier, name);
             }
         }
 
-        public static SurveyStatus Approve
+        /// <summary>
+        /// Gets the error.
+        /// </summary>
+        public static SurveyStatus Error
         {
             get
             {
-                Guid identifier = new Guid("AA6C0DC1-23C4-4B03-A3ED-B24EF0055555");
-                string name = "Approve";
+                var identifier = new Guid("D65CF1F6-8A75-43FA-9158-B745EB4D6A1F");
+                string name = "Error";
                 return new SurveyStatus(identifier, name);
             }
         }
+
+        /// <summary>
+        /// Gets the initial.
+        /// </summary>
+        public static SurveyStatus Initial
+        {
+            get
+            {
+                var identifier = new Guid("8927D124-3CFB-4374-AD36-2FD99B62CE13");
+                string name = "Initial";
+                return new SurveyStatus(identifier, name);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the change comment.
+        /// </summary>
+        public string ChangeComment { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the public id.
+        /// </summary>
+        public Guid PublicId { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The get all statuses.
+        /// </summary>
+        /// <returns>
+        /// The System.Collections.Generic.IEnumerable`1[T -&gt; RavenQuestionnaire.Core.Entities.SubEntities.SurveyStatus].
+        /// </returns>
+        public static IEnumerable<SurveyStatus> GetAllStatuses()
+        {
+            return new[] { Initial, Error, Complete };
+        }
+
+        #endregion
     }
 }

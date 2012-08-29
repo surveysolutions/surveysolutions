@@ -1,32 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="UserBrowseView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The user browse view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.User
 {
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// The user browse view.
+    /// </summary>
     public class UserBrowseView
     {
-          public int PageSize
-        {
-            get;
-            private set;
-        }
+        #region Constructors and Destructors
 
-        public int Page
-        {
-            get;
-            private set;
-        }
-
-        public int TotalCount { get; private set; }
-
-        public IEnumerable<UserBrowseItem> Items
-        {
-            get;
-            private set;
-        }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserBrowseView"/> class.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="pageSize">
+        /// The page size.
+        /// </param>
+        /// <param name="totalCount">
+        /// The total count.
+        /// </param>
+        /// <param name="items">
+        /// The items.
+        /// </param>
         public UserBrowseView(int page, int pageSize, int totalCount, IEnumerable<UserBrowseItem> items)
         {
             this.Page = page;
@@ -34,5 +40,31 @@ namespace RavenQuestionnaire.Core.Views.User
             this.PageSize = pageSize;
             this.Items = items;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets the items.
+        /// </summary>
+        public IEnumerable<UserBrowseItem> Items { get; private set; }
+
+        /// <summary>
+        /// Gets the page.
+        /// </summary>
+        public int Page { get; private set; }
+
+        /// <summary>
+        /// Gets the page size.
+        /// </summary>
+        public int PageSize { get; private set; }
+
+        /// <summary>
+        /// Gets the total count.
+        /// </summary>
+        public int TotalCount { get; private set; }
+
+        #endregion
     }
 }

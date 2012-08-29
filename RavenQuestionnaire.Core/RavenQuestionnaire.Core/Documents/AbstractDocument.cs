@@ -1,15 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AbstractDocument.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   Defines the AbstractDocument type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace RavenQuestionnaire.Core.Documents
 {
+    /// <summary>
+    /// The abstract document.
+    /// </summary>
     public abstract class AbstractDocument
     {
+        #region Public Properties
+
         /// <summary>
-        /// Document ID.
+        /// Gets or sets the id.
         /// </summary>
-        public string Id { set; get; }
+        public string Id { get; set; }
+
+        #endregion
     }
 }

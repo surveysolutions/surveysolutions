@@ -1,67 +1,48 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Views.Answer;
-using System.ComponentModel.DataAnnotations;
-using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-
-using RavenQuestionnaire.Core.Views.Card;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="QuestionView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The abstract question view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Question
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities.Composite;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Views.Answer;
+    using RavenQuestionnaire.Core.Views.Card;
+
+    /// <summary>
+    /// The abstract question view.
+    /// </summary>
     public abstract class AbstractQuestionView : ICompositeView
     {
-        #region Properties
+        #region Constructors and Destructors
 
-        public int Index { get; set; }
-        public Guid PublicKey { get; set; }
-
-        [Display(Prompt = "Type question here")]
-        public string Title { get; set; }
-
-        [Display(Prompt = "When this question is enabled?")]
-        public string ConditionExpression { get; set; }
-
-        [Display(Prompt = "When this question is valid?")]
-        public string ValidationExpression { get; set; }
-
-        public string ValidationMessage { get; set; }
-        
-        public QuestionType QuestionType { get; set; }
-
-        public bool Featured { get; set; }
-
-        public bool Mandatory { get; set; }
-
-        public Order AnswerOrder { get; set; }
-        //remove when exportSchema will be done 
-        public string StataExportCaption { get; set; }
-
-        public string Instructions { get; set; }
-
-        public string Comments { get; set; }
-
-        public Guid QuestionnaireKey {get; set; }
-
-
-        public Guid? Parent { get; set; }
-
-        public Guid TargetGroupKey { get; set; }
-
-        public List<ICompositeView> Children { get; set; }
-
-        #endregion
-
-        #region Constructor
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractQuestionView"/> class.
+        /// </summary>
         public AbstractQuestionView()
         {
-
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractQuestionView"/> class.
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// The group public key.
+        /// </param>
         public AbstractQuestionView(Guid questionnaireId, Guid? groupPublicKey)
             : this()
         {
@@ -69,6 +50,15 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.Parent = groupPublicKey;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractQuestionView"/> class.
+        /// </summary>
+        /// <param name="questionnaire">
+        /// The questionnaire.
+        /// </param>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
         protected AbstractQuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
             : this()
         {
@@ -85,25 +75,184 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
             this.Mandatory = doc.Mandatory;
-            if (doc.Triggers.Count>0)
+            if (doc.Triggers.Count > 0)
+            {
                 this.TargetGroupKey = doc.Triggers.First();
+            }
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the answer order.
+        /// </summary>
+        public Order AnswerOrder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
+        public List<ICompositeView> Children { get; set; }
+
+        /// <summary>
+        /// Gets or sets the comments.
+        /// </summary>
+        public string Comments { get; set; }
+
+        /// <summary>
+        /// Gets or sets the condition expression.
+        /// </summary>
+        [Display(Prompt = "When this question is enabled?")]
+        public string ConditionExpression { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether featured.
+        /// </summary>
+        public bool Featured { get; set; }
+
+        /// <summary>
+        /// Gets or sets the index.
+        /// </summary>
+        public int Index { get; set; }
+
+        /// <summary>
+        /// Gets or sets the instructions.
+        /// </summary>
+        public string Instructions { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether mandatory.
+        /// </summary>
+        public bool Mandatory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the parent.
+        /// </summary>
+        public Guid? Parent { get; set; }
+
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question type.
+        /// </summary>
+        public QuestionType QuestionType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the questionnaire key.
+        /// </summary>
+        public Guid QuestionnaireKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the stata export caption.
+        /// </summary>
+        public string StataExportCaption { get; set; }
+
+        /// <summary>
+        /// Gets or sets the target group key.
+        /// </summary>
+        public Guid TargetGroupKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        [Display(Prompt = "Type question here")]
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets the validation expression.
+        /// </summary>
+        [Display(Prompt = "When this question is valid?")]
+        public string ValidationExpression { get; set; }
+
+        /// <summary>
+        /// Gets or sets the validation message.
+        /// </summary>
+        public string ValidationMessage { get; set; }
 
         #endregion
     }
 
-    public abstract class AbstractQuestionView<T> : AbstractQuestionView where T : AnswerView
+    /// <summary>
+    /// The abstract question view.
+    /// </summary>
+    /// <typeparam name="T">
+    /// </typeparam>
+    public abstract class AbstractQuestionView<T> : AbstractQuestionView
+        where T : AnswerView
     {
-        #region Properties
+        #region Fields
 
-        public CardView[] Cards { get; set; }
+        /// <summary>
+        /// The _answers.
+        /// </summary>
+        private T[] _answers;
 
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractQuestionView{T}"/> class.
+        /// </summary>
+        public AbstractQuestionView()
+        {
+            this.Answers = new T[0];
+            this.Cards = new CardView[0];
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractQuestionView{T}"/> class.
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// The group public key.
+        /// </param>
+        public AbstractQuestionView(string questionnaireId, Guid? groupPublicKey)
+            : this()
+        {
+            this.QuestionnaireKey = Guid.Parse(questionnaireId);
+            this.Parent = groupPublicKey;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractQuestionView{T}"/> class.
+        /// </summary>
+        /// <param name="questionnaire">
+        /// The questionnaire.
+        /// </param>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        public AbstractQuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
+            : base(questionnaire, doc)
+        {
+            this.Answers = new T[0];
+            this.Cards = new CardView[0];
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the answers.
+        /// </summary>
         public T[] Answers
         {
-            get { return _answers; }
+            get
+            {
+                return this._answers;
+            }
+
             set
             {
-                _answers = value;
+                this._answers = value;
                 if (this._answers == null)
                 {
                     this._answers = new T[0];
@@ -114,83 +263,123 @@ namespace RavenQuestionnaire.Core.Views.Question
                 {
                     this._answers[i].Index = i + 1;
                 }
-
             }
         }
 
-        private T[] _answers;
-
-        #endregion
-
-        #region Constructor
-
-        public AbstractQuestionView()
-            : base()
-        {
-            Answers = new T[0];
-            Cards = new CardView[0];
-        }
-
-        public AbstractQuestionView(string questionnaireId, Guid? groupPublicKey)
-            : this()
-        {
-            this.QuestionnaireKey = Guid.Parse(questionnaireId);
-            this.Parent = groupPublicKey;
-        }
-
-        public AbstractQuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
-            : base(questionnaire, doc)
-        {
-            Answers = new T[0];
-            Cards = new CardView[0];
-        }
+        /// <summary>
+        /// Gets or sets the cards.
+        /// </summary>
+        public CardView[] Cards { get; set; }
 
         #endregion
     }
 
+    /// <summary>
+    /// The question view.
+    /// </summary>
+    /// <typeparam name="T">
+    /// </typeparam>
+    /// <typeparam name="TGroup">
+    /// </typeparam>
+    /// <typeparam name="TQuestion">
+    /// </typeparam>
     public abstract class QuestionView<T, TGroup, TQuestion> : AbstractQuestionView<T>
-        where T: AnswerView
-        where TQuestion : IQuestion
-        where TGroup : IGroup
+        where T : AnswerView where TQuestion : IQuestion where TGroup : IGroup
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionView{T,TGroup,TQuestion}"/> class.
+        /// </summary>
         public QuestionView()
         {
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionView{T,TGroup,TQuestion}"/> class.
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// The group public key.
+        /// </param>
         public QuestionView(string questionnaireId, Guid? groupPublicKey)
             : base(questionnaireId, groupPublicKey)
         {
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionView{T,TGroup,TQuestion}"/> class.
+        /// </summary>
+        /// <param name="questionnaire">
+        /// The questionnaire.
+        /// </param>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        public QuestionView(IQuestionnaireDocument questionnaire, TQuestion doc)
+            : base(questionnaire, doc)
+        {
+            this.Parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionView{T,TGroup,TQuestion}"/> class.
+        /// </summary>
+        /// <param name="questionnaire">
+        /// The questionnaire.
+        /// </param>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
         protected QuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
             : base(questionnaire, doc)
         {
         }
 
-        public QuestionView(
-            IQuestionnaireDocument questionnaire, TQuestion doc)
-            :
-                base(questionnaire, doc)
-        {
-            
-            this.Parent = GetQuestionGroup(questionnaire, doc.PublicKey);
-        }
+        #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// The get question group.
+        /// </summary>
+        /// <param name="questionnaire">
+        /// The questionnaire.
+        /// </param>
+        /// <param name="questionKey">
+        /// The question key.
+        /// </param>
+        /// <returns>
+        /// The System.Nullable`1[T -&gt; System.Guid].
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// </exception>
         protected Guid? GetQuestionGroup(IQuestionnaireDocument questionnaire, Guid questionKey)
         {
             if (questionnaire.Children.Any(q => q.PublicKey.Equals(questionKey)))
+            {
                 return null;
+            }
+
             var group = new Queue<IComposite>();
-            foreach (var child in questionnaire.Children)
+            foreach (IComposite child in questionnaire.Children)
             {
                 group.Enqueue(child);
             }
+
             while (group.Count != 0)
             {
-                var queueItem = group.Dequeue();
+                IComposite queueItem = group.Dequeue();
                 if (queueItem.Children != null)
                 {
                     if (queueItem.Children.Any(q => q.PublicKey.Equals(questionKey)))
+                    {
                         return queueItem.PublicKey;
-                    foreach (var child in queueItem.Children)
+                    }
+
+                    foreach (IComposite child in queueItem.Children)
                     {
                         /* var childWithQuestion = child as IGroup<IGroup, TQuestion>;
                          if(childWithQuestion!=null)*/
@@ -198,33 +387,62 @@ namespace RavenQuestionnaire.Core.Views.Question
                     }
                 }
             }
+
             throw new ArgumentException("group does not exist");
         }
+
+        #endregion
     }
 
-    public class QuestionView : QuestionView<AnswerView, Entities.SubEntities.Group, IQuestion>
+    /// <summary>
+    /// The question view.
+    /// </summary>
+    public class QuestionView : QuestionView<AnswerView, Group, IQuestion>
     {
+        #region Constructors and Destructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionView"/> class.
+        /// </summary>
         public QuestionView()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionView"/> class.
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// The group public key.
+        /// </param>
         public QuestionView(string questionnaireId, Guid? groupPublicKey)
             : base(questionnaireId, groupPublicKey)
         {
         }
 
-        public QuestionView(
-            IQuestionnaireDocument questionnaire,
-            IQuestion doc)
-            :
-                base(questionnaire, doc)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionView"/> class.
+        /// </summary>
+        /// <param name="questionnaire">
+        /// The questionnaire.
+        /// </param>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        public QuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
+            : base(questionnaire, doc)
         {
-            this.Answers = doc.Children.Where(a=>a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
+            this.Answers =
+                doc.Children.Where(a => a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
             if (doc.Cards != null)
+            {
                 this.Cards =
                     doc.Cards.Select(c => new CardView(doc.PublicKey, c)).OrderBy(a => Guid.NewGuid()).ToArray();
-
+            }
         }
+
+        #endregion
     }
 }

@@ -1,35 +1,69 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="InterviewerGroupView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The interviewer group view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.User
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+    using RavenQuestionnaire.Core.Views.Statistics;
+
+    /// <summary>
+    /// The interviewer group view.
+    /// </summary>
     public class InterviewerGroupView
     {
-        public string Order
-        {
-            get { return _order; }
-            set { _order = value; }
-        }
+        #region Fields
+
+        /// <summary>
+        /// The _order.
+        /// </summary>
         private string _order = string.Empty;
 
-        public int PageSize { get; private set; }
+        #endregion
 
-        public int Page { get; private set; }
+        #region Constructors and Destructors
 
-        public int TotalCount { get; private set; }
-
-        public string TemplateId { get; set; }
-
-        public string Title { get; set; }
-
-        public List<CompleteQuestionnaireBrowseItem> Items { get; set; }
-
-        public Dictionary<Guid, string> HeaderFeaturedQuestions { get; set; }
-
-        public InterviewerGroupView(string templateId, string title, List<CompleteQuestionnaireBrowseItem> items, string order, int page, int pageSize, int totalCount)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InterviewerGroupView"/> class.
+        /// </summary>
+        /// <param name="templateId">
+        /// The template id.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="items">
+        /// The items.
+        /// </param>
+        /// <param name="order">
+        /// The order.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="pageSize">
+        /// The page size.
+        /// </param>
+        /// <param name="totalCount">
+        /// The total count.
+        /// </param>
+        public InterviewerGroupView(
+            string templateId, 
+            string title, 
+            List<CompleteQuestionnaireBrowseItem> items, 
+            string order, 
+            int page, 
+            int pageSize, 
+            int totalCount)
         {
             this.TemplateId = templateId;
             this.Title = title;
@@ -39,10 +73,75 @@ namespace RavenQuestionnaire.Core.Views.User
             this.PageSize = pageSize;
             this.TotalCount = totalCount;
             var helper = new Dictionary<Guid, string>();
-            foreach (var question in items.SelectMany(completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions.Where(t => !string.IsNullOrEmpty(t.QuestionText)))
-                .Where(question => !helper.ContainsKey(question.PublicKey)))
+            foreach (
+                QuestionStatisticView question in
+                    items.SelectMany(
+                        completeQuestionnaireBrowseItem =>
+                        completeQuestionnaireBrowseItem.FeaturedQuestions.Where(
+                            t => !string.IsNullOrEmpty(t.QuestionText))).Where(
+                                question => !helper.ContainsKey(question.PublicKey)))
+            {
                 helper.Add(question.PublicKey, question.QuestionText);
+            }
+
             this.HeaderFeaturedQuestions = helper;
         }
-   }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the header featured questions.
+        /// </summary>
+        public Dictionary<Guid, string> HeaderFeaturedQuestions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the items.
+        /// </summary>
+        public List<CompleteQuestionnaireBrowseItem> Items { get; set; }
+
+        /// <summary>
+        /// Gets or sets the order.
+        /// </summary>
+        public string Order
+        {
+            get
+            {
+                return this._order;
+            }
+
+            set
+            {
+                this._order = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the page.
+        /// </summary>
+        public int Page { get; private set; }
+
+        /// <summary>
+        /// Gets the page size.
+        /// </summary>
+        public int PageSize { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the template id.
+        /// </summary>
+        public string TemplateId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Gets the total count.
+        /// </summary>
+        public int TotalCount { get; private set; }
+
+        #endregion
+    }
 }
