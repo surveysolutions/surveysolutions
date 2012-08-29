@@ -8,10 +8,8 @@
         private Awesomium.Windows.Forms.WebControl webView;
         private System.Windows.Forms.PictureBox progressBox;
         private System.Windows.Forms.Panel panel1;
-        private Browsing.Supervisor.Controls.FlatButton homeButton;
-
-        #endregion
         
+        #endregion
 
         protected override void Dispose(bool disposing)
         {
@@ -30,7 +28,6 @@
 
             this.progressBox = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.homeButton = new Browsing.Supervisor.Controls.FlatButton();
             ((System.ComponentModel.ISupportInitialize)(this.progressBox)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -61,32 +58,12 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.homeButton);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1440, 50);
             this.panel1.TabIndex = 1;
-            // 
-            // homeButton
-            // 
-            this.homeButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.homeButton.BackColor = System.Drawing.Color.Transparent;
-            this.homeButton.FlatAppearance.BorderSize = 0;
-            this.homeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.homeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
-            this.homeButton.Image = ((System.Drawing.Image)(resources.GetObject("homeButton.Image")));
-            this.homeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.homeButton.Location = new System.Drawing.Point(2, 2);
-            this.homeButton.Margin = new System.Windows.Forms.Padding(0);
-            this.homeButton.Name = "homeButton";
-            this.homeButton.Size = new System.Drawing.Size(100, 44);
-            this.homeButton.TabIndex = 0;
-            this.homeButton.Text = "Back";
-            this.homeButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.homeButton.UseVisualStyleBackColor = false;
-            this.homeButton.Click += new System.EventHandler(this.homeButton_Click);
             // 
             // Browser
             // 

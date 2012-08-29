@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using Screen = Browsing.Supervisor.Containers.Screen;
 
-namespace Browsing.Supervisor.Containers
+
+namespace Browsing.Supervisor.Controls
 {
+
     public partial class ScreenHolder : Panel
     {
 
@@ -41,7 +44,7 @@ namespace Browsing.Supervisor.Containers
                 throw new ArgumentException("screen wasn't loaded in holder");
             this.Controls.Clear();
             screen.AutoSize = true;
-            screen.Dock = System.Windows.Forms.DockStyle.Fill;
+            screen.Dock = DockStyle.Fill;
             screen.Name = screen.Name;
             this.Controls.Add(screen);
         }

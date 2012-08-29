@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Awesomium.Core;
 using System.Diagnostics;
 using System.Windows.Forms;
-using Awesomium.Core;
 using Browsing.Supervisor.Forms;
 
 namespace Supervisor
@@ -41,8 +39,6 @@ namespace Supervisor
             }
 
             Application.Run(new WebForm());
-
-
         }
     }
 }

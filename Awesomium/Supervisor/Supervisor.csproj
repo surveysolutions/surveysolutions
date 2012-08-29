@@ -60,17 +60,35 @@
     <Compile Include="Containers\MainPage.Designer.cs">
       <DependentUpon>MainPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Containers\PleaseWaitPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\PleaseWaitPage.Designer.cs">
+      <DependentUpon>PleaseWaitPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Containers\Screen.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Containers\ScreenHolder.cs">
-      <SubType>Component</SubType>
+    <Compile Include="Containers\SettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\SettingsPage.Designer.cs">
+      <DependentUpon>SettingsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Containers\SynchronizationPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\SynchronizationPage.Designer.cs">
+      <DependentUpon>SynchronizationPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\FlatButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\FlatButton.Designer.cs">
       <DependentUpon>FlatButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ScreenHolder.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\SettingsBox.cs">
       <SubType>Form</SubType>
@@ -86,6 +104,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Synchronization\SyncManager.cs" />
     <Compile Include="Utils\UrlUtils.cs" />
     <EmbeddedResource Include="Containers\BrowserPage.resx">
       <DependentUpon>BrowserPage.cs</DependentUpon>
@@ -94,6 +113,17 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Containers\MainPage.resx">
       <DependentUpon>MainPage.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Containers\SettingsPage.resx">
+      <DependentUpon>SettingsPage.cs</DependentUpon>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SettingsPage1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Containers\SynchronizationPage.resx">
+      <DependentUpon>SynchronizationPage.cs</DependentUpon>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SynchronizationPage1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsBox.resx">
       <DependentUpon>SettingsBox.cs</DependentUpon>
@@ -130,7 +160,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <None Include="Resources\icon-headquarters-pin-HQ-pin_500-medium-280x280.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Hardware-Tablet-PC-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
