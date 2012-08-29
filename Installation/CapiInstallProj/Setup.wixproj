@@ -12,7 +12,7 @@
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <PublishPath Condition=" '$(PublishPath)' == '' ">C:\Temp\publish-Capi</PublishPath>
     <ClientPath Condition=" '$(ClientPath)' == '' ">c:\Temp\Client</ClientPath>
-    <Version Condition=" '$(Version)' == '' ">1.0.0.3</Version>
+    <Version Condition=" '$(Version)' == '' ">1.0.3.0</Version>
     <DefineConstants Condition=" '$(DefineConstants)' == '' ">SourceSiteDir=$(PublishPath);SourceClientDir=$(ClientPath);ProductVersion=$(Version)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
