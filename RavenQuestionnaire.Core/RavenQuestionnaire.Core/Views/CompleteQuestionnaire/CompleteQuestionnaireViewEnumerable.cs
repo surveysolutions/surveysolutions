@@ -1,28 +1,54 @@
-﻿using System;
-using System.Linq;
-using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.Views.Group;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CompleteQuestionnaireViewEnumerable.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The complete questionnaire view enumerable.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.AbstractFactories;
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using RavenQuestionnaire.Core.Views.Group;
+
+    /// <summary>
+    /// The complete questionnaire view enumerable.
+    /// </summary>
     public class CompleteQuestionnaireViewEnumerable
     {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public DateTime CreationDate { get; set; }
-        public DateTime LastEntryDate { get; set; }
+        #region Fields
 
-        public SurveyStatus Status { get; set; }
+        /// <summary>
+        /// The group factory.
+        /// </summary>
+        protected readonly ICompleteGroupFactory GroupFactory;
 
-        public UserLight Responsible { set; get; }
-        public CompleteGroupView CurrentGroup { get; set; }
-        public CompleteGroupView[] Groups { get; set; }
+        #endregion
 
-        public CompleteQuestionnaireViewEnumerable(CompleteQuestionnaireStoreDocument doc,
-                                                   ICompleteGroup currentGroup, ICompleteGroupFactory groupFactory)
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteQuestionnaireViewEnumerable"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="currentGroup">
+        /// The current group.
+        /// </param>
+        /// <param name="groupFactory">
+        /// The group factory.
+        /// </param>
+        public CompleteQuestionnaireViewEnumerable(
+            CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ICompleteGroupFactory groupFactory)
         {
             this.GroupFactory = groupFactory;
             this.Id = doc.PublicKey.ToString();
@@ -31,31 +57,95 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             this.LastEntryDate = doc.LastEntryDate;
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
-            InitGroups(doc);
-            this.CurrentGroup = GroupFactory.CreateGroup(doc, currentGroup);
+            this.InitGroups(doc);
+            this.CurrentGroup = this.GroupFactory.CreateGroup(doc, currentGroup);
         }
-        public CompleteQuestionnaireViewEnumerable(CompleteQuestionnaireStoreDocument doc, ICompleteGroupFactory groupFactory)
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteQuestionnaireViewEnumerable"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="groupFactory">
+        /// The group factory.
+        /// </param>
+        public CompleteQuestionnaireViewEnumerable(
+            CompleteQuestionnaireStoreDocument doc, ICompleteGroupFactory groupFactory)
         {
             this.GroupFactory = groupFactory;
             this.Title = doc.Title;
-            CompleteGroup group = new CompleteGroup(){Children = doc.Children.Where(c=>c is ICompleteQuestion).ToList()};
-            this.CurrentGroup = GroupFactory.CreateGroup(doc,group);
-            InitGroups(doc);
+            var group = new CompleteGroup { Children = doc.Children.Where(c => c is ICompleteQuestion).ToList() };
+            this.CurrentGroup = this.GroupFactory.CreateGroup(doc, group);
+            this.InitGroups(doc);
         }
 
-        protected readonly ICompleteGroupFactory GroupFactory;
+        #endregion
 
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the creation date.
+        /// </summary>
+        public DateTime CreationDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current group.
+        /// </summary>
+        public CompleteGroupView CurrentGroup { get; set; }
+
+        /// <summary>
+        /// Gets or sets the groups.
+        /// </summary>
+        public CompleteGroupView[] Groups { get; set; }
+
+        /// <summary>
+        /// Gets or sets the id.
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last entry date.
+        /// </summary>
+        public DateTime LastEntryDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the responsible.
+        /// </summary>
+        public UserLight Responsible { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status.
+        /// </summary>
+        public SurveyStatus Status { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The init groups.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
         protected void InitGroups(CompleteQuestionnaireStoreDocument doc)
         {
-            var questions = doc.Children.OfType<ICompleteQuestion>().ToList();
-            var groups = doc.Children.OfType<ICompleteGroup>().ToList();
+            List<ICompleteQuestion> questions = doc.Children.OfType<ICompleteQuestion>().ToList();
+            List<ICompleteGroup> groups = doc.Children.OfType<ICompleteGroup>().ToList();
             if (questions.Count > 0)
             {
                 this.Groups = new CompleteGroupView[groups.Count + 1];
-                this.Groups[0] = GroupFactory.CreateGroup(doc, new CompleteGroup("Main") { PublicKey = Guid.Empty });
+                this.Groups[0] = this.GroupFactory.CreateGroup(
+                    doc, new CompleteGroup("Main") { PublicKey = Guid.Empty });
                 for (int i = 1; i <= groups.Count; i++)
                 {
-                    this.Groups[i] = GroupFactory.CreateGroup(doc, groups[i - 1]);
+                    this.Groups[i] = this.GroupFactory.CreateGroup(doc, groups[i - 1]);
                 }
             }
             else
@@ -63,9 +153,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 this.Groups = new CompleteGroupView[groups.Count];
                 for (int i = 0; i < groups.Count; i++)
                 {
-                    this.Groups[i] = GroupFactory.CreateGroup(doc, groups[i]);
+                    this.Groups[i] = this.GroupFactory.CreateGroup(doc, groups[i]);
                 }
             }
         }
+
+        #endregion
     }
 }

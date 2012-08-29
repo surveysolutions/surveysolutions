@@ -1,21 +1,46 @@
-﻿using System;
-using Ncqrs.Eventing.Storage;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="FileUploaded.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The file uploaded.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace RavenQuestionnaire.Core.Events.File
 {
+    using System;
+
+    using Ncqrs.Eventing.Storage;
+
+    /// <summary>
+    /// The file uploaded.
+    /// </summary>
     [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:FileUploaded")]
     public class FileUploaded
     {
-        public Guid PublicKey { get; set; }
+        #region Public Properties
 
-        public string Title { get; set; }
-
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Gets or sets the original file.
+        /// </summary>
         public string OriginalFile { get; set; }
 
-     //   public string ThumbFile { get; set; }
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
 
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        #endregion
     }
 }

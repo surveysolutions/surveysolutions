@@ -1,40 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="StatusItem.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The status item.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
+    using System;
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// The status item.
+    /// </summary>
     public class StatusItem
     {
-        public Guid PublicKey { get; set; }
-        public string Title { get; set; }
-        public bool IsVisible {get; set;}
+        #region Constructors and Destructors
 
         /// <summary>
-        /// Is used for defining of the status for initially created CQ.
+        /// Initializes a new instance of the <see cref="StatusItem"/> class.
         /// </summary>
-        public bool IsInitial { get; set;}
+        public StatusItem()
+        {
+            this.PublicKey = Guid.NewGuid();
+            this.IsVisible = true;
+            this.StatusRoles = new Dictionary<string, List<SurveyStatus>>();
+            this.FlowRules = new Dictionary<Guid, FlowRule>();
+        }
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
-        /// Holds restriction by role.
+        /// List of flow rules is used for status changing.
         /// </summary>
-        public Dictionary<string, List<SurveyStatus>> StatusRoles { set;get;}
-        
+        public Dictionary<Guid, FlowRule> FlowRules { get; set; }
+
         /// <summary>
         /// Flag displays status is used for stuck item in the commonon flow.
         /// </summary>
         public bool IsDefaultStuck { get; set; }
 
         /// <summary>
-        /// List of flow rules is used for status changing.
+        /// Is used for defining of the status for initially created CQ.
         /// </summary>
-        public Dictionary<Guid,FlowRule> FlowRules { get; set;}
+        public bool IsInitial { get; set; }
 
-        public StatusItem()
-        {
-            this.PublicKey = Guid.NewGuid();
-            IsVisible = true;
-            StatusRoles = new Dictionary<string, List<SurveyStatus>>();
-            FlowRules = new Dictionary<Guid, FlowRule>();
-        }
+        /// <summary>
+        /// Gets or sets a value indicating whether is visible.
+        /// </summary>
+        public bool IsVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Holds restriction by role.
+        /// </summary>
+        public Dictionary<string, List<SurveyStatus>> StatusRoles { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        #endregion
     }
 }

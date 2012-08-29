@@ -1,53 +1,150 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SurveyBrowseView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The survey browse view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Survey
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Entities;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+
+    /// <summary>
+    /// The survey browse view.
+    /// </summary>
     public class SurveyBrowseView
     {
-        public int PageSize { get; private set; }
+        #region Fields
 
-        public int Page { get; private set; }
-        
-        public string Order
-        {
-            get { return _order; }
-            set { _order = value; }
-        }
+        /// <summary>
+        /// The _order.
+        /// </summary>
         private string _order = string.Empty;
 
-        public List<OrderRequestItem> Orders
-        {
-            get { return _orders; }
-            set { _orders = value; }
-        }
-
+        /// <summary>
+        /// The _orders.
+        /// </summary>
         private List<OrderRequestItem> _orders = new List<OrderRequestItem>();
-        
-        public int TotalCount { get; private set; }
 
-        public List<SurveyBrowseItem> Items { get; set; }
+        #endregion
 
-        public List<string> Headers { get; set; }
+        #region Constructors and Destructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyBrowseView"/> class.
+        /// </summary>
         public SurveyBrowseView()
         {
             this.Items = new List<SurveyBrowseItem>();
         }
 
-        public SurveyBrowseView(int page, int pageSize, int totalCount, IEnumerable<SurveyBrowseItem> items):this()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyBrowseView"/> class.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="pageSize">
+        /// The page size.
+        /// </param>
+        /// <param name="totalCount">
+        /// The total count.
+        /// </param>
+        /// <param name="items">
+        /// The items.
+        /// </param>
+        public SurveyBrowseView(int page, int pageSize, int totalCount, IEnumerable<SurveyBrowseItem> items)
+            : this()
         {
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
-            var statuses = SurveyStatus.GetAllStatuses().Select(s => s.Name).ToList();
+            List<string> statuses = SurveyStatus.GetAllStatuses().Select(s => s.Name).ToList();
             statuses.Insert(0, "Total");
             statuses.Insert(1, "Unassigned");
             this.Headers = statuses;
-            foreach (var item in items)
-                this.Items.Add(new SurveyBrowseItem(item.Id, item.Title, item.Unassigned, item.Statistic, item.Total, item.Initial, item.Error, item.Complete));
+            foreach (SurveyBrowseItem item in items)
+            {
+                this.Items.Add(
+                    new SurveyBrowseItem(
+                        item.Id, 
+                        item.Title, 
+                        item.Unassigned, 
+                        item.Statistic, 
+                        item.Total, 
+                        item.Initial, 
+                        item.Error, 
+                        item.Complete));
+            }
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the headers.
+        /// </summary>
+        public List<string> Headers { get; set; }
+
+        /// <summary>
+        /// Gets or sets the items.
+        /// </summary>
+        public List<SurveyBrowseItem> Items { get; set; }
+
+        /// <summary>
+        /// Gets or sets the order.
+        /// </summary>
+        public string Order
+        {
+            get
+            {
+                return this._order;
+            }
+
+            set
+            {
+                this._order = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the orders.
+        /// </summary>
+        public List<OrderRequestItem> Orders
+        {
+            get
+            {
+                return this._orders;
+            }
+
+            set
+            {
+                this._orders = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the page.
+        /// </summary>
+        public int Page { get; private set; }
+
+        /// <summary>
+        /// Gets the page size.
+        /// </summary>
+        public int PageSize { get; private set; }
+
+        /// <summary>
+        /// Gets the total count.
+        /// </summary>
+        public int TotalCount { get; private set; }
+
+        #endregion
     }
 }

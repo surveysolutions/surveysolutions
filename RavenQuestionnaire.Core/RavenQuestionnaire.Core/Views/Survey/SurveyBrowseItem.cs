@@ -1,34 +1,79 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SurveyBrowseItem.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The survey browse item.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Survey
 {
-    
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+
+    /// <summary>
+    /// The survey browse item.
+    /// </summary>
     public class SurveyBrowseItem
     {
-        public string Title { get; set; }
-        public string Id { get; set; }
-        public int Unassigned { get; set; }
-        public Dictionary<Guid, SurveyItem> Statistic { get; set; }
-        public Dictionary<string, int> Grid { get; set; }
-        public int Total { get; set; }
-        public int Initial { get; set; }
-        public int Error { get; set; }
-        public int Complete { get; set; }
+        #region Constructors and Destructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyBrowseItem"/> class.
+        /// </summary>
         public SurveyBrowseItem()
         {
             this.Grid = new Dictionary<string, int>();
-            var statuses = SurveyStatus.GetAllStatuses().Select(s => s.Name).ToList();
+            List<string> statuses = SurveyStatus.GetAllStatuses().Select(s => s.Name).ToList();
             statuses.Insert(0, "Total");
             statuses.Insert(1, "Unassigned");
-            foreach (var statuse in statuses)
+            foreach (string statuse in statuses)
+            {
                 this.Grid.Add(statuse, 0);
+            }
         }
 
-        public SurveyBrowseItem(string id, string title, int unAssigment, Dictionary<Guid, SurveyItem> statistic, int total, int initial, int error, int completed):this()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyBrowseItem"/> class.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="unAssigment">
+        /// The un assigment.
+        /// </param>
+        /// <param name="statistic">
+        /// The statistic.
+        /// </param>
+        /// <param name="total">
+        /// The total.
+        /// </param>
+        /// <param name="initial">
+        /// The initial.
+        /// </param>
+        /// <param name="error">
+        /// The error.
+        /// </param>
+        /// <param name="completed">
+        /// The completed.
+        /// </param>
+        public SurveyBrowseItem(
+            string id, 
+            string title, 
+            int unAssigment, 
+            Dictionary<Guid, SurveyItem> statistic, 
+            int total, 
+            int initial, 
+            int error, 
+            int completed)
+            : this()
         {
             this.Id = id;
             this.Title = title;
@@ -44,18 +89,90 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Grid["Error"] = error;
             this.Grid["Complete"] = completed;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the complete.
+        /// </summary>
+        public int Complete { get; set; }
+
+        /// <summary>
+        /// Gets or sets the error.
+        /// </summary>
+        public int Error { get; set; }
+
+        /// <summary>
+        /// Gets or sets the grid.
+        /// </summary>
+        public Dictionary<string, int> Grid { get; set; }
+
+        /// <summary>
+        /// Gets or sets the id.
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the initial.
+        /// </summary>
+        public int Initial { get; set; }
+
+        /// <summary>
+        /// Gets or sets the statistic.
+        /// </summary>
+        public Dictionary<Guid, SurveyItem> Statistic { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets the total.
+        /// </summary>
+        public int Total { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unassigned.
+        /// </summary>
+        public int Unassigned { get; set; }
+
+        #endregion
     }
 
-
+    /// <summary>
+    /// The survey item.
+    /// </summary>
     public class SurveyItem
     {
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public Guid CompleteQuestionnaireId { get; set; }
-        public SurveyStatus Status { get; set; }
-        public UserLight Responsible { get; set; }
+        #region Constructors and Destructors
 
-        public SurveyItem(DateTime startDate, DateTime endDate, Guid completeQuestionnaireId, SurveyStatus status, UserLight responsible)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyItem"/> class.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="completeQuestionnaireId">
+        /// The complete questionnaire id.
+        /// </param>
+        /// <param name="status">
+        /// The status.
+        /// </param>
+        /// <param name="responsible">
+        /// The responsible.
+        /// </param>
+        public SurveyItem(
+            DateTime startDate, 
+            DateTime endDate, 
+            Guid completeQuestionnaireId, 
+            SurveyStatus status, 
+            UserLight responsible)
         {
             this.Status = status;
             this.EndDate = endDate;
@@ -63,5 +180,36 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Responsible = responsible;
             this.CompleteQuestionnaireId = completeQuestionnaireId;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the complete questionnaire id.
+        /// </summary>
+        public Guid CompleteQuestionnaireId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the end date.
+        /// </summary>
+        public DateTime EndDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the responsible.
+        /// </summary>
+        public UserLight Responsible { get; set; }
+
+        /// <summary>
+        /// Gets or sets the start date.
+        /// </summary>
+        public DateTime StartDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status.
+        /// </summary>
+        public SurveyStatus Status { get; set; }
+
+        #endregion
     }
 }

@@ -1,75 +1,80 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities.Composite;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SingleCompleteQuestion.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The single complete question.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
 {
-    public sealed class SingleCompleteQuestion:AbstractCompleteQuestion, ISingleQuestion
-    {
-        #region Properties
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
+    using RavenQuestionnaire.Core.Entities.Composite;
+
+    /// <summary>
+    /// The single complete question.
+    /// </summary>
+    public sealed class SingleCompleteQuestion : AbstractCompleteQuestion, ISingleQuestion
+    {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SingleCompleteQuestion"/> class.
+        /// </summary>
         public SingleCompleteQuestion()
         {
             this.Children = new List<IComposite>();
         }
 
-        public SingleCompleteQuestion(string text) : base(text)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SingleCompleteQuestion"/> class.
+        /// </summary>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        public SingleCompleteQuestion(string text)
+            : base(text)
         {
             this.Children = new List<IComposite>();
         }
 
-        public override void SetAnswer(List<Guid> answer, string answerValue)
-        {
-            if (answer == null)
-                return;
-            
-            Guid selecteAnswer = answer.First();
+        #endregion
 
-            var answerObject = this.FirstOrDefault<ICompleteAnswer>(a => a.PublicKey == selecteAnswer);
-            if (answerObject != null)
-            {
-                this.Children.ForEach(c => ((ICompleteAnswer)c).Selected = false);
-                answerObject.Add(answerObject, null);
-                //this.AnswerDate = DateTime.Now;
-                return;
-            }
-            throw new CompositeException("answer wasn't found");
-        }
+        #region Public Properties
 
-        public override string GetAnswerString()
-        {
-            var answer = this.Find<ICompleteAnswer>(a => a.Selected).FirstOrDefault();
-            if (answer == null)
-                return string.Empty;
-            else return answer.AnswerText;
-        }
-
-        public override object GetAnswerObject()
-        {
-            /*return (
-                this.Children.Where(c => ((ICompleteAnswer)c).Selected))
-                .Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).FirstOrDefault();
-
-*/
-            var answers = this.Children.Where(c => ((ICompleteAnswer)c).Selected).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText);
-            if (answers.Any())
-                return answers.First();
-            return null;
-
-        }
-
-        public override List<IComposite> Children { get; set; }
-
+        /// <summary>
+        /// Gets or sets the add single attr.
+        /// </summary>
         public string AddSingleAttr { get; set; }
+
+        /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
+        public override List<IComposite> Children { get; set; }
 
         #endregion
 
-        #region Method
+        #region Public Methods and Operators
 
+        /// <summary>
+        /// The add.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
         public override void Add(IComposite c, Guid? parent)
         {
             throw new CompositeException();
+
             /*var question = c as ICompleteQuestion;
             if (question != null && question.PublicKey == this.PublicKey)
             {
@@ -98,58 +103,189 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
             throw new CompositeException();*/
         }
 
+        /// <summary>
+        /// The find.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The T.
+        /// </returns>
+        public override T Find<T>(Guid publicKey)
+        {
+            if (typeof(T).IsAssignableFrom(this.GetType()))
+            {
+                if (this.PublicKey.Equals(publicKey))
+                {
+                    return this as T;
+                }
+            }
+
+            if (typeof(T).IsAssignableFrom(typeof(CompleteAnswer)))
+            {
+                return this.Children.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(
+                    result => result != null);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// The find.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
+        /// </returns>
+        public override IEnumerable<T> Find<T>(Func<T, bool> condition)
+        {
+            return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T);
+        }
+
+        /// <summary>
+        /// The first or default.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The T.
+        /// </returns>
+        public override T FirstOrDefault<T>(Func<T, bool> condition)
+        {
+            return Find(condition).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// The get answer object.
+        /// </summary>
+        /// <returns>
+        /// The System.Object.
+        /// </returns>
+        public override object GetAnswerObject()
+        {
+            /*return (
+                this.Children.Where(c => ((ICompleteAnswer)c).Selected))
+                .Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).FirstOrDefault();
+
+*/
+            IEnumerable<object> answers =
+                this.Children.Where(c => ((ICompleteAnswer)c).Selected).Select(
+                    c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText);
+            if (answers.Any())
+            {
+                return answers.First();
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// The get answer string.
+        /// </summary>
+        /// <returns>
+        /// The System.String.
+        /// </returns>
+        public override string GetAnswerString()
+        {
+            ICompleteAnswer answer = this.Find<ICompleteAnswer>(a => a.Selected).FirstOrDefault();
+            if (answer == null)
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return answer.AnswerText;
+            }
+        }
+
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
         public override void Remove(IComposite c)
         {
             Remove(c.PublicKey);
         }
 
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
         public override void Remove(Guid publicKey)
         {
-
             if (this.PublicKey == publicKey)
             {
                 foreach (CompleteAnswer answer in this.Children)
+                {
                     answer.Remove(answer);
-                
+                }
+
                 return;
             }
+
             foreach (CompleteAnswer completeAnswer in this.Children)
             {
                 try
                 {
                     completeAnswer.Remove(publicKey);
-                  
+
                     return;
                 }
                 catch (CompositeException)
                 {
                 }
             }
+
             throw new CompositeException("answer wasn't found");
-
-
         }
 
-        public override T Find<T>(Guid publicKey)
+        /// <summary>
+        /// The set answer.
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        /// <param name="answerValue">
+        /// The answer value.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
+        public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            if (typeof(T).IsAssignableFrom(GetType()))
-                if (this.PublicKey.Equals(publicKey))
-                    return this as T;
-            if (typeof(T).IsAssignableFrom(typeof(CompleteAnswer)))
-                return this.Children.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
-            return null;
-        }
+            if (answer == null)
+            {
+                return;
+            }
 
-        public override IEnumerable<T> Find<T>(Func<T, bool> condition)
-        {
-            return
-                 Children.Where(a => a is T && condition(a as T)).Select
-                     (a => a as T);
-        }
+            Guid selecteAnswer = answer.First();
 
-        public override T FirstOrDefault<T>(Func<T, bool> condition)
-        {
-            return Find<T>(condition).FirstOrDefault();
+            var answerObject = this.FirstOrDefault<ICompleteAnswer>(a => a.PublicKey == selecteAnswer);
+            if (answerObject != null)
+            {
+                this.Children.ForEach(c => ((ICompleteAnswer)c).Selected = false);
+                answerObject.Add(answerObject, null);
+
+                // this.AnswerDate = DateTime.Now;
+                return;
+            }
+
+            throw new CompositeException("answer wasn't found");
         }
 
         #endregion

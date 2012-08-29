@@ -1,42 +1,94 @@
-﻿using System;
-using System.Linq;
-using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities.Iterators;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CompleteQuestionnaireEnumerableViewFactory.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The complete questionnaire enumerable view factory.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
+    using System;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.AbstractFactories;
+    using RavenQuestionnaire.Core.Denormalizers;
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+
+    /// <summary>
+    /// The complete questionnaire enumerable view factory.
+    /// </summary>
     public class CompleteQuestionnaireEnumerableViewFactory :
         IViewFactory<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireViewEnumerable>
     {
+        #region Fields
+
+        /// <summary>
+        /// The document item session.
+        /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentItemSession;
-        private ICompleteGroupFactory groupFactory;
-        public CompleteQuestionnaireEnumerableViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentItemSession, ICompleteGroupFactory groupFactory)
+
+        /// <summary>
+        /// The group factory.
+        /// </summary>
+        private readonly ICompleteGroupFactory groupFactory;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteQuestionnaireEnumerableViewFactory"/> class.
+        /// </summary>
+        /// <param name="documentItemSession">
+        /// The document item session.
+        /// </param>
+        /// <param name="groupFactory">
+        /// The group factory.
+        /// </param>
+        public CompleteQuestionnaireEnumerableViewFactory(
+            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentItemSession, 
+            ICompleteGroupFactory groupFactory)
         {
             this.documentItemSession = documentItemSession;
             this.groupFactory = groupFactory;
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The load.
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Views.CompleteQuestionnaire.CompleteQuestionnaireViewEnumerable.
+        /// </returns>
         public CompleteQuestionnaireViewEnumerable Load(CompleteQuestionnaireViewInputModel input)
         {
             if (Guid.Empty != input.CompleteQuestionnaireId)
             {
-                var doc = documentItemSession.Query().FirstOrDefault(i => i.PublicKey == input.CompleteQuestionnaireId);
+                CompleteQuestionnaireStoreDocument doc =
+                    this.documentItemSession.Query().FirstOrDefault(i => i.PublicKey == input.CompleteQuestionnaireId);
                 ICompleteGroup group = null;
 
-                //Iterator<ICompleteGroup> iterator = new QuestionnaireScreenIterator(doc);
+                // Iterator<ICompleteGroup> iterator = new QuestionnaireScreenIterator(doc);
                 if (input.CurrentGroupPublicKey.HasValue)
                 {
                     group = doc.Find<CompleteGroup>(input.CurrentGroupPublicKey.Value);
                 }
-               
+
                 return new CompleteQuestionnaireViewEnumerable(doc, group, this.groupFactory);
             }
-         
-            return null;
 
+            return null;
         }
+
+        #endregion
     }
 }

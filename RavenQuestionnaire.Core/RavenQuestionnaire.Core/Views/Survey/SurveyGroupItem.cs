@@ -1,26 +1,40 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SurveyGroupItem.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The survey group item.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Survey
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+    using RavenQuestionnaire.Core.Views.Statistics;
+
+    /// <summary>
+    /// The survey group item.
+    /// </summary>
     public class SurveyGroupItem
     {
-        public string Title { get; set; }
-        public string Id { get; set; }
-        public UserLight Responsible { get; set; }
-        public string TemplateId { get; set; }
-        public SurveyStatus Status { get; set; }
-        public Dictionary<Guid, string> FeatureadValue { get; set; }
-        
-        private SurveyGroupItem()
-        {
-            this.FeatureadValue = new Dictionary<Guid, string>();
-        }
+        #region Constructors and Destructors
 
-        public SurveyGroupItem(CompleteQuestionnaireBrowseItem it, Dictionary<Guid, string> headers):this()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyGroupItem"/> class.
+        /// </summary>
+        /// <param name="it">
+        /// The it.
+        /// </param>
+        /// <param name="headers">
+        /// The headers.
+        /// </param>
+        public SurveyGroupItem(CompleteQuestionnaireBrowseItem it, Dictionary<Guid, string> headers)
+            : this()
         {
             this.Title = it.QuestionnaireTitle;
             this.Id = it.CompleteQuestionnaireId;
@@ -29,9 +43,53 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Status = it.Status;
             foreach (var header in headers)
             {
-                var question = it.FeaturedQuestions.FirstOrDefault(t=>t.PublicKey==header.Key);
+                QuestionStatisticView question = it.FeaturedQuestions.FirstOrDefault(t => t.PublicKey == header.Key);
                 this.FeatureadValue.Add(header.Key, question != null ? question.AnswerValue : string.Empty);
             }
         }
+
+        /// <summary>
+        /// Prevents a default instance of the <see cref="SurveyGroupItem"/> class from being created.
+        /// </summary>
+        private SurveyGroupItem()
+        {
+            this.FeatureadValue = new Dictionary<Guid, string>();
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the featuread value.
+        /// </summary>
+        public Dictionary<Guid, string> FeatureadValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets the id.
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the responsible.
+        /// </summary>
+        public UserLight Responsible { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status.
+        /// </summary>
+        public SurveyStatus Status { get; set; }
+
+        /// <summary>
+        /// Gets or sets the template id.
+        /// </summary>
+        public string TemplateId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        #endregion
     }
 }

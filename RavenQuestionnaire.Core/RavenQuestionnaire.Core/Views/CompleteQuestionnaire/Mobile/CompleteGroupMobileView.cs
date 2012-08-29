@@ -1,123 +1,261 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.AbstractFactories;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CompleteGroupMobileView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The abstract group mobile view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.AbstractFactories;
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities.Composite;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using RavenQuestionnaire.Core.Views.Question;
+
+    /// <summary>
+    /// The abstract group mobile view.
+    /// </summary>
     public abstract class AbstractGroupMobileView : ICompositeView
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractGroupMobileView"/> class.
+        /// </summary>
         public AbstractGroupMobileView()
         {
-            Children = new List<ICompositeView>();
+            this.Children = new List<ICompositeView>();
             this.QuestionsWithCards = new List<CompleteQuestionView>();
             this.QuestionsWithInstructions = new List<CompleteQuestionView>();
         }
 
-        public Guid PublicKey { get; set; }
-        public Guid UniqueKey { get; set; }
-        public string Title { get; set; }
-        public Guid? Parent { get; set; }
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
         public List<ICompositeView> Children { get; set; }
-        public Propagate Propagated { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether enabled.
+        /// </summary>
         public bool Enabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets the navigation.
+        /// </summary>
         public ScreenNavigation Navigation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the parent.
+        /// </summary>
+        public Guid? Parent { get; set; }
+
+        /// <summary>
+        /// Gets or sets the propagated.
+        /// </summary>
+        public Propagate Propagated { get; set; }
+
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the questionnaire public key.
+        /// </summary>
         public Guid QuestionnairePublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the questions with cards.
+        /// </summary>
         public List<CompleteQuestionView> QuestionsWithCards { get; set; }
+
+        /// <summary>
+        /// Gets or sets the questions with instructions.
+        /// </summary>
         public List<CompleteQuestionView> QuestionsWithInstructions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique key.
+        /// </summary>
+        public Guid UniqueKey { get; set; }
+
+        #endregion
     }
 
+    /// <summary>
+    /// The complete group mobile view.
+    /// </summary>
     public class CompleteGroupMobileView : AbstractGroupMobileView
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteGroupMobileView"/> class.
+        /// </summary>
         public CompleteGroupMobileView()
-            : base()
         {
-            Propagated = Propagate.None;
-            Navigation = new ScreenNavigation();
+            this.Propagated = Propagate.None;
+            this.Navigation = new ScreenNavigation();
         }
 
-        public CompleteGroupMobileView(CompleteQuestionnaireStoreDocument doc, CompleteGroup currentGroup,
-                                       ScreenNavigation navigation)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteGroupMobileView"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="currentGroup">
+        /// The current group.
+        /// </param>
+        /// <param name="navigation">
+        /// The navigation.
+        /// </param>
+        public CompleteGroupMobileView(
+            CompleteQuestionnaireStoreDocument doc, CompleteGroup currentGroup, ScreenNavigation navigation)
             : this()
         {
             this.QuestionnairePublicKey = doc.PublicKey;
             this.Navigation = navigation;
-            PublicKey = currentGroup.PublicKey;
-            Title = currentGroup.Title;
-            Propagated = currentGroup.Propagated;
-            Enabled = currentGroup.Enabled;
+            this.PublicKey = currentGroup.PublicKey;
+            this.Title = currentGroup.Title;
+            this.Propagated = currentGroup.Propagated;
+            this.Enabled = currentGroup.Enabled;
             if (currentGroup.Propagated != Propagate.None)
             {
-                PropagateTemplate = new PropagatedGroupMobileView(doc, currentGroup, navigation);
+                this.PropagateTemplate = new PropagatedGroupMobileView(doc, currentGroup, navigation);
             }
-            else foreach (var composite in currentGroup.Children)
+            else
             {
-                if ((composite as ICompleteQuestion) != null)
+                foreach (IComposite composite in currentGroup.Children)
                 {
-                    var q = composite as ICompleteQuestion;
-                    var question = new CompleteQuestionFactory().CreateQuestion(doc, q);
-                    Children.Add(question);
-                }
-                else
-                {
-                    var g = composite as CompleteGroup;
-                    if (g.Propagated == Propagate.None || !g.PropogationPublicKey.HasValue)
-                        Children.Add(new CompleteGroupMobileView(doc, g, new ScreenNavigation()));
+                    if ((composite as ICompleteQuestion) != null)
+                    {
+                        var q = composite as ICompleteQuestion;
+                        CompleteQuestionView question = new CompleteQuestionFactory().CreateQuestion(doc, q);
+                        this.Children.Add(question);
+                    }
                     else
                     {
-                        var template =
-                            Children.FirstOrDefault(
-                                parent => parent.PublicKey == g.PublicKey && !(parent is PropagatedGroupMobileView));
-                        template.Children.Add(new PropagatedGroupMobileView(doc, g));
-
+                        var g = composite as CompleteGroup;
+                        if (g.Propagated == Propagate.None || !g.PropogationPublicKey.HasValue)
+                        {
+                            this.Children.Add(new CompleteGroupMobileView(doc, g, new ScreenNavigation()));
+                        }
+                        else
+                        {
+                            ICompositeView template =
+                                this.Children.FirstOrDefault(
+                                    parent => parent.PublicKey == g.PublicKey && !(parent is PropagatedGroupMobileView));
+                            template.Children.Add(new PropagatedGroupMobileView(doc, g));
+                        }
                     }
-                }
-                CollectGalleries(this);
-                CollectInstructions(this);
-            }
 
+                    this.CollectGalleries(this);
+                    this.CollectInstructions(this);
+                }
+            }
         }
 
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the propagate template.
+        /// </summary>
         public PropagatedGroupMobileView PropagateTemplate { get; set; }
 
+        /// <summary>
+        /// Gets or sets the totals.
+        /// </summary>
         public Counter Totals { get; set; }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The get header.
+        /// </summary>
+        /// <param name="group">
+        /// The group.
+        /// </param>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Views.CompleteQuestionnaire.CompleteGroupHeaders.
+        /// </returns>
         public static CompleteGroupHeaders GetHeader(ICompleteGroup group)
         {
             return group == null
                        ? null
-                       : new CompleteGroupHeaders
-                             {
-                                 GroupText = group.Title,
-                                 PublicKey = group.PublicKey
-                             };
+                       : new CompleteGroupHeaders { GroupText = group.Title, PublicKey = group.PublicKey };
         }
 
+        /// <summary>
+        /// The get client id.
+        /// </summary>
+        /// <param name="prefix">
+        /// The prefix.
+        /// </param>
+        /// <returns>
+        /// The System.String.
+        /// </returns>
         public virtual string GetClientId(string prefix)
         {
-            return string.Format("{0}_{1}", prefix, PublicKey);
+            return string.Format("{0}_{1}", prefix, this.PublicKey);
         }
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The collect galleries.
+        /// </summary>
+        /// <param name="group">
+        /// The group.
+        /// </param>
         private void CollectGalleries(CompleteGroupMobileView @group)
         {
-            var qs = @group.Children.OfType<CompleteQuestionView>().ToList();
+            List<CompleteQuestionView> qs = @group.Children.OfType<CompleteQuestionView>().ToList();
             if (qs.Count() > 0)
             {
-                QuestionsWithCards.AddRange(qs.Where(question => (question.Cards.Length > 0)).ToList());
+                this.QuestionsWithCards.AddRange(qs.Where(question => (question.Cards.Length > 0)).ToList());
             }
         }
 
+        /// <summary>
+        /// The collect instructions.
+        /// </summary>
+        /// <param name="group">
+        /// The group.
+        /// </param>
         private void CollectInstructions(CompleteGroupMobileView @group)
         {
-            var qs = @group.Children.OfType<CompleteQuestionView>().ToList();
+            List<CompleteQuestionView> qs = @group.Children.OfType<CompleteQuestionView>().ToList();
             if (qs.Count > 0)
             {
-                QuestionsWithInstructions.AddRange(qs.Where(question => !string.IsNullOrWhiteSpace(question.Instructions)).ToList());
+                this.QuestionsWithInstructions.AddRange(
+                    qs.Where(question => !string.IsNullOrWhiteSpace(question.Instructions)).ToList());
             }
         }
+
+        #endregion
     }
 }

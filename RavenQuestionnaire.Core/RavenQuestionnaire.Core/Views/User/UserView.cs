@@ -1,29 +1,88 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Utility;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="UserView.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The user view.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.User
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Utility;
+
+    /// <summary>
+    /// The user view.
+    /// </summary>
     public class UserView
     {
+        #region Fields
+
+        /// <summary>
+        /// The _primary role.
+        /// </summary>
+        private UserRoles? _primaryRole;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserView"/> class.
+        /// </summary>
         public UserView()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserView"/> class.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="username">
+        /// The username.
+        /// </param>
+        /// <param name="password">
+        /// The password.
+        /// </param>
+        /// <param name="email">
+        /// The email.
+        /// </param>
+        /// <param name="creationDate">
+        /// The creation date.
+        /// </param>
+        /// <param name="roles">
+        /// The roles.
+        /// </param>
+        /// <param name="isLocked">
+        /// The is locked.
+        /// </param>
+        /// <param name="supervisor">
+        /// The supervisor.
+        /// </param>
+        /// <param name="locationId">
+        /// The location id.
+        /// </param>
         public UserView(
-            Guid publicKey,
-            string id,
-            string username,
-            string password,
-            string email,
-            DateTime creationDate,
-            IEnumerable<UserRoles> roles,
-            bool isLocked,
-            UserLight supervisor,
-            string locationId
-            )
+            Guid publicKey, 
+            string id, 
+            string username, 
+            string password, 
+            string email, 
+            DateTime creationDate, 
+            IEnumerable<UserRoles> roles, 
+            bool isLocked, 
+            UserLight supervisor, 
+            string locationId)
         {
             this.PublicKey = publicKey;
             this.UserId = IdUtil.ParseId(id);
@@ -36,39 +95,103 @@ namespace RavenQuestionnaire.Core.Views.User
             this.Supervisor = supervisor;
             this.LocationId = IdUtil.ParseId(locationId);
         }
-        public Guid PublicKey { get; set; }
-        public string UserId { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-        public bool IsLocked { get; set; }
-        public UserLight Supervisor { get; set; }
 
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the creation date.
+        /// </summary>
+        public DateTime CreationDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the email.
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is locked.
+        /// </summary>
+        public bool IsLocked { get; set; }
+
+        /// <summary>
+        /// Gets or sets the location id.
+        /// </summary>
+        public string LocationId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the password.
+        /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
+        /// Gets or sets the primary role.
+        /// </summary>
         public UserRoles PrimaryRole
         {
             get
             {
-                if (_primaryRole.HasValue)
-                    return _primaryRole.Value;
-                if (Roles != null)
-                    return Roles.FirstOrDefault();
+                if (this._primaryRole.HasValue)
+                {
+                    return this._primaryRole.Value;
+                }
+
+                if (this.Roles != null)
+                {
+                    return this.Roles.FirstOrDefault();
+                }
+
                 return UserRoles.User;
             }
-            set { _primaryRole = value; }
+
+            set
+            {
+                this._primaryRole = value;
+            }
         }
 
-        private UserRoles? _primaryRole;
+        /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
 
-        public DateTime CreationDate { get; set; }
-
+        /// <summary>
+        /// Gets or sets the roles.
+        /// </summary>
         public IEnumerable<UserRoles> Roles { get; set; }
 
-        public string LocationId { get; set; }
+        /// <summary>
+        /// Gets or sets the supervisor.
+        /// </summary>
+        public UserLight Supervisor { get; set; }
 
+        /// <summary>
+        /// Gets or sets the user id.
+        /// </summary>
+        public string UserId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user name.
+        /// </summary>
+        public string UserName { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The new.
+        /// </summary>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Views.User.UserView.
+        /// </returns>
         public static UserView New()
         {
-            return new UserView(Guid.Empty, null, null, null, null, DateTime.UtcNow, new UserRoles[] {UserRoles.User}, false, null,
-                                null);
+            return new UserView(
+                Guid.Empty, null, null, null, null, DateTime.UtcNow, new[] { UserRoles.User }, false, null, null);
         }
+
+        #endregion
     }
 }

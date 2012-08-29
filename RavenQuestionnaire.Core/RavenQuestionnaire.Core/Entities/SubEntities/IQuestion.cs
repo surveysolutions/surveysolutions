@@ -1,23 +1,87 @@
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.Observers;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IQuestion.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The Question interface.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities
 {
+    using System.Collections.Generic;
+
+    using RavenQuestionnaire.Core.Entities.Composite;
+    using RavenQuestionnaire.Core.Entities.Observers;
+
+    /// <summary>
+    /// The Question interface.
+    /// </summary>
     public interface IQuestion : IComposite, ITriggerable
     {
-        string QuestionText { get; set; }
-        QuestionType QuestionType { get; set; }
-        string ConditionExpression { get; set; }
-        string ValidationExpression { get; set; }
-        string ValidationMessage { get; set; }
-        string StataExportCaption { get; set; }
-        string Instructions { get; set; }
-        List<Image> Cards { get; set; }
-        Order AnswerOrder { get; set; }
-        bool Featured { get; set; }
-        bool Mandatory { get; set; }
-        string Comments { get; set; }
-    }
+        #region Public Properties
 
+        /// <summary>
+        /// Gets or sets the answer order.
+        /// </summary>
+        Order AnswerOrder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the cards.
+        /// </summary>
+        List<Image> Cards { get; set; }
+
+        /// <summary>
+        /// Gets or sets the comments.
+        /// </summary>
+        string Comments { get; set; }
+
+        /// <summary>
+        /// Gets or sets the condition expression.
+        /// </summary>
+        string ConditionExpression { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether featured.
+        /// </summary>
+        bool Featured { get; set; }
+
+        /// <summary>
+        /// Gets or sets the instructions.
+        /// </summary>
+        string Instructions { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether mandatory.
+        /// </summary>
+        bool Mandatory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question text.
+        /// </summary>
+        string QuestionText { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question type.
+        /// </summary>
+        QuestionType QuestionType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the stata export caption.
+        /// </summary>
+        string StataExportCaption { get; set; }
+
+        /// <summary>
+        /// Gets or sets the validation expression.
+        /// </summary>
+        string ValidationExpression { get; set; }
+
+        /// <summary>
+        /// Gets or sets the validation message.
+        /// </summary>
+        string ValidationMessage { get; set; }
+        bool Capital { get; set; }
+
+        #endregion
+    }
 }

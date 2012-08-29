@@ -1,28 +1,74 @@
-﻿using System.Linq;
-using RavenQuestionnaire.Core.Denormalizers;
-using RavenQuestionnaire.Core.Documents;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CollectionBrowseViewFactory.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The collection browse view factory.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Collection
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RavenQuestionnaire.Core.Denormalizers;
+    using RavenQuestionnaire.Core.Documents;
+
+    /// <summary>
+    /// The collection browse view factory.
+    /// </summary>
     public class CollectionBrowseViewFactory : IViewFactory<CollectionBrowseInputModel, CollectionBrowseView>
     {
+        #region Fields
+
+        /// <summary>
+        /// The document item session.
+        /// </summary>
         private readonly IDenormalizerStorage<CollectionDocument> documentItemSession;
 
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CollectionBrowseViewFactory"/> class.
+        /// </summary>
+        /// <param name="documentItemSession">
+        /// The document item session.
+        /// </param>
         public CollectionBrowseViewFactory(IDenormalizerStorage<CollectionDocument> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The load.
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Views.Collection.CollectionBrowseView.
+        /// </returns>
         public CollectionBrowseView Load(CollectionBrowseInputModel input)
         {
-            var count = documentItemSession.Count();
+            int count = this.documentItemSession.Count();
             if (count == 0)
+            {
                 return new CollectionBrowseView(input.Page, input.PageSize, count, new CollectionBrowseItem[0]);
+            }
 
-            var query = documentItemSession.Query().Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
-            var items = query.Select(x => new CollectionBrowseItem(x.Id, x.Name)).ToArray();
+            List<CollectionDocument> query =
+                this.documentItemSession.Query().Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
+            CollectionBrowseItem[] items = query.Select(x => new CollectionBrowseItem(x.Id, x.Name)).ToArray();
             return new CollectionBrowseView(input.Page, input.PageSize, count, items);
         }
+
+        #endregion
     }
 }
-

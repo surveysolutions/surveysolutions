@@ -1,31 +1,87 @@
-﻿using System;
-using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using RavenQuestionnaire.Core.Domain;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="UpdateImageCommand.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The update image command.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Commands
 {
+    using System;
+
+    using Ncqrs.Commanding;
+    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+
+    using RavenQuestionnaire.Core.Domain;
+
+    /// <summary>
+    /// The update image command.
+    /// </summary>
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "UpdateImage")]
     public class UpdateImageCommand : CommandBase
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdateImageCommand"/> class.
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="questionKey">
+        /// The question key.
+        /// </param>
+        /// <param name="imageKey">
+        /// The image key.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="desc">
+        /// The desc.
+        /// </param>
         public UpdateImageCommand(Guid questionnaireId, Guid questionKey, Guid imageKey, string title, string desc)
         {
-            QuestionKey = questionKey;
-            ImageKey = imageKey;
-            QuestionnaireId = questionnaireId;
-            Title = title;
-            Description = desc;
+            this.QuestionKey = questionKey;
+            this.ImageKey = imageKey;
+            this.QuestionnaireId = questionnaireId;
+            this.Title = title;
+            this.Description = desc;
         }
-        
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the image key.
+        /// </summary>
+        public Guid ImageKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question key.
+        /// </summary>
         public Guid QuestionKey { get; set; }
 
-        public Guid ImageKey { get; set; }
+        /// <summary>
+        /// Gets or sets the questionnaire id.
+        /// </summary>
         [AggregateRootId]
         public Guid QuestionnaireId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
         public string Title { get; set; }
-        public string Description { get; set; }
+
+        #endregion
     }
 }

@@ -1,58 +1,168 @@
-﻿using System;
-using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities.Composite;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DateTimeQuestion.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The date time question.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Entities.SubEntities.Question
 {
-    public class DateTimeQuestion:AbstractQuestion, IDateTimeQuestion
+    using System;
+    using System.Collections.Generic;
+
+    using RavenQuestionnaire.Core.Entities.Composite;
+    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+
+    /// <summary>
+    /// The date time question.
+    /// </summary>
+    public class DateTimeQuestion : AbstractQuestion, IDateTimeQuestion
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DateTimeQuestion"/> class.
+        /// </summary>
         public DateTimeQuestion()
         {
         }
 
-        public DateTimeQuestion(string text) : base(text)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DateTimeQuestion"/> class.
+        /// </summary>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        public DateTimeQuestion(string text)
+            : base(text)
         {
         }
 
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the add date time attr.
+        /// </summary>
+        public string AddDateTimeAttr { get; set; }
+
+        /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
+        public override List<IComposite> Children
+        {
+            get
+            {
+                return new List<IComposite>(0);
+            }
+
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the date time attr.
+        /// </summary>
+        public DateTime DateTimeAttr { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The add.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
         public override void Add(IComposite c, Guid? parent)
         {
             throw new CompositeException();
         }
 
-        public override void Remove(IComposite c)
-        {
-            throw new CompositeException();
-        }
-
-        public override void Remove(Guid publicKey)
-        {
-            throw new CompositeException();
-        }
-
+        /// <summary>
+        /// The find.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The T.
+        /// </returns>
         public override T Find<T>(Guid publicKey)
         {
             return null;
         }
 
+        /// <summary>
+        /// The find.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
+        /// </returns>
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
             return new T[0];
         }
 
+        /// <summary>
+        /// The first or default.
+        /// </summary>
+        /// <param name="condition">
+        /// The condition.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The T.
+        /// </returns>
         public override T FirstOrDefault<T>(Func<T, bool> condition)
         {
             return null;
         }
 
-        public override List<IComposite> Children
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
+        public override void Remove(IComposite c)
         {
-            get { return new List<IComposite>(0);}
-            set { }
+            throw new CompositeException();
         }
 
-        public string AddDateTimeAttr { get; set; }
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
+        public override void Remove(Guid publicKey)
+        {
+            throw new CompositeException();
+        }
 
-        public DateTime DateTimeAttr { get; set; }
+        #endregion
     }
 }

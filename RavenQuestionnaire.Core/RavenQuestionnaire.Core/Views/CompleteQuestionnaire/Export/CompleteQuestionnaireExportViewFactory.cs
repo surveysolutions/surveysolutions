@@ -1,29 +1,74 @@
-﻿using System;
-using System.Linq;
-using Raven.Client;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities;
-using RavenQuestionnaire.Core.Utility;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CompleteQuestionnaireExportViewFactory.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The complete questionnaire export view factory.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 {
-    public class CompleteQuestionnaireExportViewFactory : IViewFactory<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Raven.Client;
+
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities;
+    using RavenQuestionnaire.Core.Utility;
+
+    /// <summary>
+    /// The complete questionnaire export view factory.
+    /// </summary>
+    public class CompleteQuestionnaireExportViewFactory :
+        IViewFactory<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
     {
-        private IDocumentSession documentSession;
+        #region Fields
+
+        /// <summary>
+        /// The document session.
+        /// </summary>
+        private readonly IDocumentSession documentSession;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompleteQuestionnaireExportViewFactory"/> class.
+        /// </summary>
+        /// <param name="documentSession">
+        /// The document session.
+        /// </param>
         public CompleteQuestionnaireExportViewFactory(IDocumentSession documentSession)
         {
             this.documentSession = documentSession;
-
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The load.
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export.CompleteQuestionnaireExportView.
+        /// </returns>
         public CompleteQuestionnaireExportView Load(CompleteQuestionnaireExportInputModel input)
         {
             // Adjust the model appropriately
-            var count = documentSession.Query<CompleteQuestionnaireDocument>().Count();
+            int count = this.documentSession.Query<CompleteQuestionnaireDocument>().Count();
             if (count == 0)
-                return new CompleteQuestionnaireExportView(input.Page, input.PageSize, count,
-                                                           new CompleteQuestionnaireExportItem[0],
-                                                           input.Order);
+            {
+                return new CompleteQuestionnaireExportView(
+                    input.Page, input.PageSize, count, new CompleteQuestionnaireExportItem[0], input.Order);
+            }
 
             IOrderedQueryable<CompleteQuestionnaireDocument> query;
 
@@ -31,14 +76,13 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
             {
                 query =
                     (IOrderedQueryable<CompleteQuestionnaireDocument>)
-                    documentSession.Query<CompleteQuestionnaireDocument>()
-                        .Where(x => x.TemplateId == input.QuestionnaryId);
+                    this.documentSession.Query<CompleteQuestionnaireDocument>().Where(
+                        x => x.TemplateId == input.QuestionnaryId);
             }
             else
             {
-                return new CompleteQuestionnaireExportView(input.Page, input.PageSize, count,
-                                                          new CompleteQuestionnaireExportItem[0],
-                                                          input.Order);
+                return new CompleteQuestionnaireExportView(
+                    input.Page, input.PageSize, count, new CompleteQuestionnaireExportItem[0], input.Order);
             }
 
             if (input.Orders.Count > 0)
@@ -46,26 +90,27 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
                 query = input.Orders[0].Direction == OrderDirection.Asc
                             ? query.OrderBy(input.Orders[0].Field)
                             : query.OrderByDescending(input.Orders[0].Field);
-
             }
+
             if (input.Orders.Count > 1)
-                foreach (var order in input.Orders.Skip(1))
+            {
+                foreach (OrderRequestItem order in input.Orders.Skip(1))
                 {
                     query = order.Direction == OrderDirection.Asc
                                 ? query.ThenBy(order.Field)
                                 : query.ThenByDescending(order.Field);
                 }
+            }
 
-            var page = query.Skip((input.Page - 1) * input.PageSize)
-                .Take(input.PageSize).ToArray();
+            CompleteQuestionnaireDocument[] page =
+                query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
 
-            var items = page.Select( x => new CompleteQuestionnaireExportItem(x));
+            IEnumerable<CompleteQuestionnaireExportItem> items = page.Select(
+                x => new CompleteQuestionnaireExportItem(x));
 
-            return new CompleteQuestionnaireExportView(
-                input.Page,
-                input.PageSize, count,
-                items,
-                input.Order);
+            return new CompleteQuestionnaireExportView(input.Page, input.PageSize, count, items, input.Order);
         }
+
+        #endregion
     }
 }

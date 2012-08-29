@@ -1,23 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using Ncqrs;
-using Ncqrs.Domain;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Events;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CollectionAR.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   Defines the CollectionAR type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace RavenQuestionnaire.Core.Domain
 {
-    class CollectionAR : AggregateRootMappedByConvention
+    using System;
+    using System.Collections.Generic;
+
+    using Ncqrs;
+    using Ncqrs.Domain;
+
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Events.Collection;
+
+    /// <summary>
+    /// The collection ar.
+    /// </summary>
+    public class CollectionAR : AggregateRootMappedByConvention
     {
-        private DateTime _creationDate;
-        private string _title;
-        private List<CollectionItem> _items;
-        
-        public CollectionAR ()
+        #region Fields
+
+        /// <summary>
+        /// The creation date.
+        /// </summary>
+        private DateTime creationDate;
+
+        /// <summary>
+        /// The items.
+        /// </summary>
+        private List<CollectionItem> items;
+
+        /// <summary>
+        /// The title.
+        /// </summary>
+        private string title;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CollectionAR"/> class.
+        /// </summary>
+        public CollectionAR()
         {
         }
 
-        public CollectionAR(Guid collectionId, String text, List<CollectionItem>  items)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CollectionAR"/> class.
+        /// </summary>
+        /// <param name="collectionId">
+        /// The collection id.
+        /// </param>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        /// <param name="items">
+        /// The items.
+        /// </param>
+        public CollectionAR(Guid collectionId, string text, List<CollectionItem> items)
             : base(collectionId)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
@@ -26,47 +71,32 @@ namespace RavenQuestionnaire.Core.Domain
             // creation of this instance. The state of this
             // instance will be update in the handler of 
             // this event (the OnNewNoteAdded method).
-            ApplyEvent(new NewCollectionCreated
-            {
-                CollectionId = collectionId,
-                Title = text,
-                Items = items,
-                CreationDate = clock.UtcNow()
-            });
+            this.ApplyEvent(
+                new NewCollectionCreated
+                    {
+                       CollectionId = collectionId, Title = text, Items = items, CreationDate = clock.UtcNow() 
+                    });
         }
+
+        #endregion
 
         // Event handler for the NewQuestionnaireCreated event. This method
         // is automaticly wired as event handler based on convension.
+        #region Methods
+
+        /// <summary>
+        /// The on new questionnaire created.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         protected void OnNewQuestionnaireCreated(NewCollectionCreated e)
         {
-            _title = e.Title;
-            _creationDate = e.CreationDate;
-            _items = e.Items;
+            this.title = e.Title;
+            this.creationDate = e.CreationDate;
+            this.items = e.Items;
         }
 
-        public void PreLoad()
-        {
-            //loads into the cache
-            //no logic
-        }
-
-
-/*
-        public void RemoveCollection(Guid guid)
-        {
-            ApplyEvent(new CommentSeted()
-            {
-                     });
-        }
-
-        public void RemoveCollectionItem(Guid guid)
-        {
-            ApplyEvent(new CommentSeted()
-            {
-                     });
-        }*/
-
-        
-
+        #endregion
     }
 }
