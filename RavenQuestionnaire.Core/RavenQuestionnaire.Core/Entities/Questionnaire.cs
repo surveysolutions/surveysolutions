@@ -69,6 +69,7 @@ namespace RavenQuestionnaire.Core.Entities
         /// Gets the public key.
         /// </summary>
         public Guid PublicKey
+            result.Capital = capital;
         {
             get
             {
@@ -307,6 +308,7 @@ namespace RavenQuestionnaire.Core.Entities
             string condition, 
             string validation, 
             bool featured, 
+            bool capital,
             bool mandatory, 
             Order answerOrder, 
             Guid? groupPublicKey, 
@@ -322,6 +324,7 @@ namespace RavenQuestionnaire.Core.Entities
             result.ValidationExpression = validation;
             result.AnswerOrder = answerOrder;
             result.Featured = featured;
+            result.Capital = capital;
             result.Mandatory = mandatory;
             result.PublicKey = publicKey;
             this.UpdateAnswerList(answers, result);
@@ -585,6 +588,7 @@ namespace RavenQuestionnaire.Core.Entities
             string message, 
             string instructions, 
             bool featured, 
+            bool capital,
             bool mandatory, 
             Order answerOrder, 
             IEnumerable<Answer> answers)
@@ -604,6 +608,7 @@ namespace RavenQuestionnaire.Core.Entities
             question.ValidationMessage = message;
             question.Instructions = instructions;
             question.Featured = featured;
+            question.Capital = capital;
             question.Mandatory = mandatory;
             question.AnswerOrder = answerOrder;
         }

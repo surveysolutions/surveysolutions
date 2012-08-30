@@ -83,6 +83,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             string validationMessage, 
             string instructions, 
             bool featured, 
+            bool capital, 
             bool mandatory, 
             Order answerOrder, 
             Answer[] answers)
@@ -96,6 +97,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.ValidationMessage = validationMessage;
             this.Instructions = instructions;
             this.Featured = featured;
+            this.Capital = capital;
             this.Mandatory = mandatory;
             this.AnswerOrder = answerOrder;
             this.GroupPublicKey = groupPublicKey;
@@ -163,7 +165,8 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             string validationExpression, 
             string validationMessage, 
             string instructions, 
-            bool featured, 
+            bool featured,
+            bool capital, 
             bool mandatory, 
             Order answerOrder, 
             Answer[] answers)
@@ -178,6 +181,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.ValidationMessage = validationMessage;
             this.Instructions = instructions;
             this.Featured = featured;
+            this.Capital = capital;
             this.Mandatory = mandatory;
             this.AnswerOrder = answerOrder;
             this.GroupPublicKey = groupPublicKey;
@@ -268,3 +272,4 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         #endregion
     }
 }
+

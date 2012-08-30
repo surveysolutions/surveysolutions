@@ -81,6 +81,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         /// </summary>
         string ValidationMessage { get; set; }
         bool Capital { get; set; }
+        bool Capital { get; set; }
 
         #endregion
     }

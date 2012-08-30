@@ -1,24 +1,24 @@
-﻿using Ncqrs;
-using System;
+﻿using System;
 using System.IO;
-using System.Web;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using Kaliko.ImageLibrary;
-using RavenQuestionnaire.Core;
 using Kaliko.ImageLibrary.Filters;
+using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using RavenQuestionnaire.Core.Commands.File;
-using RavenQuestionnaire.Web.Models;
 using Questionnaire.Core.Web.Security;
+using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands;
-using RavenQuestionnaire.Core.Views.Card;
-using RavenQuestionnaire.Core.Views.File;
-using RavenQuestionnaire.Core.Views.Answer;
-using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Commands.File;
 using RavenQuestionnaire.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.Answer;
+using RavenQuestionnaire.Core.Views.Card;
+using RavenQuestionnaire.Core.Views.File;
+using RavenQuestionnaire.Core.Views.Question;
+using RavenQuestionnaire.Web.Models;
 
 
 namespace RavenQuestionnaire.Web.Controllers
@@ -147,13 +147,13 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Edit(Guid publicKey, Guid questionnaireId)
+        public ActionResult Edit(Guid publicKey, Guid QuestionnaireKey)
         {
             LoadImages();
             if (publicKey == Guid.Empty)
                 throw new HttpException(404, "Invalid query string parameters");
             var model =
-                viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(publicKey, questionnaireId));
+                viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(publicKey, QuestionnaireKey));
             return PartialView("_Create", model);
         }
 
@@ -189,6 +189,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                         model.ValidationMessage,
                                                                                         model.Instructions,
                                                                                         model.Featured,
+                                                                                        model.Capital,
                                                                                         model.Mandatory,
                                                                                         model.AnswerOrder,
                                                                                         ansverItems)
@@ -206,6 +207,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                                         model.ValidationMessage,
                                                                                         model.Instructions,
                                                                                         model.Featured,
+                                                                                        model.Capital,
                                                                                         model.Mandatory,
                                                                                         model.AnswerOrder,
                                                                                         ansverItems)
@@ -226,6 +228,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                       model.ValidationMessage,
                                                                       model.Instructions,
                                                                       model.Featured,
+                                                                      model.Capital,
                                                                       model.Mandatory,
                                                                       model.AnswerOrder,
                                                                       ansverItems));
@@ -241,6 +244,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                                                       model.ValidationMessage,
                                                                       model.Instructions,
                                                                       model.Featured,
+                                                                      model.Capital,
                                                                       model.Mandatory,
                                                                       model.AnswerOrder,
                                                                       ansverItems));

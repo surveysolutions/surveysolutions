@@ -36,6 +36,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
 
         public bool Capital { get; set; }
 
+        public bool Capital { get; set; }
         private string conditionExpression;
 
         #endregion

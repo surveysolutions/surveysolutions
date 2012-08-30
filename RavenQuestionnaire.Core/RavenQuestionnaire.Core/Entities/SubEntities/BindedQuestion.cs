@@ -107,6 +107,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         [JsonIgnore]
         public string Instructions { get; set; }
 
+         /// <summary>
+        /// Gets or sets a value indicating whether capital.
+        /// </summary>
         public bool Capital { get; set; }
         
         /// <summary>

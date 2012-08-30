@@ -44,6 +44,11 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire
         /// </summary>
         public bool Featured { get; set; }
 
+         /// <summary>
+        /// Gets or sets a value indicating whether capital.
+        /// </summary>
+        public bool Capital { get; set; }
+
         /// <summary>
         /// Gets or sets the group public key.
         /// </summary>
