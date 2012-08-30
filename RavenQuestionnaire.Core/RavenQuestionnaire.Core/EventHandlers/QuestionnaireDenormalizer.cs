@@ -155,6 +155,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
             result.ValidationMessage = evnt.Payload.ValidationMessage;
             result.AnswerOrder = evnt.Payload.AnswerOrder;
             result.Featured = evnt.Payload.Featured;
+            result.Capital = evnt.Payload.Capital;
             result.Mandatory = evnt.Payload.Mandatory;
             result.Instructions = evnt.Payload.Instructions;
             result.PublicKey = evnt.Payload.PublicKey;
@@ -191,6 +192,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
             question.ValidationMessage = evnt.Payload.ValidationMessage;
             question.Instructions = evnt.Payload.Instructions;
             question.Featured = evnt.Payload.Featured;
+            question.Capital = evnt.Payload.Capital;
             question.Mandatory = evnt.Payload.Mandatory;
             question.Triggers.Add(evnt.Payload.TargetGroupKey);
             question.AnswerOrder = evnt.Payload.AnswerOrder;

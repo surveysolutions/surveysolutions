@@ -22,6 +22,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
     public class CompleteQuestionsJsonView
     {
         #region Constructors and Destructors
+        public bool Capital { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompleteQuestionsJsonView"/> class.
@@ -50,6 +51,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             this.QuestionType = doc.QuestionType;
             this.PublicKey = doc.PublicKey;
             this.Featured = doc.Featured;
+            this.Capital = doc.Capital;
             this.Valid = doc.Valid;
             this.Comments = doc.Comments;
             this.Enabled = doc.Enabled;

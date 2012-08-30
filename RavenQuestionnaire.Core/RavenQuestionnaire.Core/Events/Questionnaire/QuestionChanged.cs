@@ -43,6 +43,12 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire
         /// Gets or sets a value indicating whether featured.
         /// </summary>
         public bool Featured { get; set; }
+        
+         /// <summary>
+        /// Gets or sets a value indicating whether сapital.
+        /// </summary>
+        public bool Capital { get; set; }
+
 
         /// <summary>
         /// Gets or sets the instructions.

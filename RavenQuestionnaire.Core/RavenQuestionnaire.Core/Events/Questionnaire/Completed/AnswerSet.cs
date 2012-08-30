@@ -49,6 +49,12 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire.Completed
         public bool Featured { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether capital.
+        /// </summary>
+        public bool Capital { set; get; }
+
+        
+        /// <summary>
         /// Gets or sets the propogation public key.
         /// </summary>
         public Guid? PropogationPublicKey { get; set; }

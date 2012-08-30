@@ -172,6 +172,7 @@ namespace RavenQuestionnaire.Core.Domain
             string validationExpression, 
             string validationMessage, 
             bool featured, 
+            bool capital,
             bool mandatory, 
             Order answerOrder, 
             string instructions, 
@@ -196,6 +197,7 @@ namespace RavenQuestionnaire.Core.Domain
                         ValidationExpression = validationExpression, 
                         ValidationMessage = validationMessage, 
                         Featured = featured, 
+                Capital = capital,
                         Mandatory = mandatory, 
                         AnswerOrder = answerOrder, 
                         GroupPublicKey = groupPublicKey, 
@@ -262,6 +264,7 @@ namespace RavenQuestionnaire.Core.Domain
             string validationExpression, 
             string validationMessage, 
             bool featured, 
+            bool capital,
             bool mandatory, 
             Order answerOrder, 
             Answer[] answers)
@@ -277,6 +280,7 @@ namespace RavenQuestionnaire.Core.Domain
                         ValidationExpression = validationExpression, 
                         ValidationMessage = validationMessage, 
                         Featured = featured, 
+                Capital = capital,
                         Mandatory = mandatory, 
                         AnswerOrder = answerOrder, 
                         PublicKey = publicKey, 
@@ -292,9 +296,11 @@ namespace RavenQuestionnaire.Core.Domain
         /// The complete questionnaire id.
         /// </param>
         public void CreateCompletedQ(Guid completeQuestionnaireId)
+            result.Capital = e.Capital;
         {
             //// TODO: check is it good to create new AR form another?
             var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument);
+            question.Capital = e.Capital;
         }
 
         /// <summary>
