@@ -34,6 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Awesomium.Core, Version=1.6.6.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86" />
+    <Reference Include="Awesomium.Windows.Forms, Version=1.6.6.0, Culture=neutral, PublicKeyToken=9bd24830fbe304a0, processorArchitecture=x86" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -42,7 +44,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="ClientSettings\ClientSettings.cs" />
+    <Compile Include="ClientSettings\ClientSettingsProvider.cs" />
+    <Compile Include="Containers\BrowserPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\BrowserPage.Designer.cs">
+      <DependentUpon>BrowserPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Containers\MainPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\MainPage.Designer.cs">
+      <DependentUpon>MainPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Containers\PleaseWaitPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\PleaseWaitPage.Designer.cs">
+      <DependentUpon>PleaseWaitPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Containers\Screen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\SettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\SettingsPage.Designer.cs">
+      <DependentUpon>SettingsPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Containers\SyncCapiProcessPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -55,13 +85,46 @@
     <Compile Include="Containers\SyncHQProcessPage.Designer.cs">
       <DependentUpon>SyncHQProcessPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Containers\SynchronizationPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\SynchronizationPage.Designer.cs">
+      <DependentUpon>SynchronizationPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FlatButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\FlatButton.Designer.cs">
+      <DependentUpon>FlatButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ScreenHolder.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Forms\SettingsBox.Designer.cs">
+      <DependentUpon>SettingsBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\WebForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WebForm.Designer.cs">
+      <DependentUpon>WebForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Synchronization\SyncManager.cs" />
+    <Compile Include="Utils\UrlUtils.cs" />
+    <EmbeddedResource Include="Containers\BrowserPage.resx">
+      <DependentUpon>BrowserPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Containers\MainPage.resx">
+      <DependentUpon>MainPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Containers\SettingsPage.resx">
+      <DependentUpon>SettingsPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Containers\SyncCapiProcessPage.resx">
       <DependentUpon>SyncCapiProcessPage.cs</DependentUpon>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -71,6 +134,12 @@
       <DependentUpon>SyncHQProcessPage.cs</DependentUpon>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SyncHQProcessPage1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Containers\SynchronizationPage.resx">
+      <DependentUpon>SynchronizationPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsBox.resx">
+      <DependentUpon>SettingsBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -83,6 +152,10 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="bin\Debug\NLog.config" />
+    <None Include="bin\Debug\Supervisor.exe.config" />
+    <None Include="bin\Debug\Supervisor.vshost.exe.config" />
+    <None Include="bin\Debug\Supervisor.vshost.exe.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -93,9 +166,33 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Symbol-Construction.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\Common.dll" />
+    <Content Include="bin\Debug\Common.pdb" />
+    <Content Include="bin\Debug\NLog.dll" />
+    <Content Include="bin\Debug\NLog.xml" />
+    <Content Include="bin\Debug\Supervisor.exe" />
+    <Content Include="bin\Debug\Supervisor.pdb" />
+    <Content Include="bin\Debug\Supervisor.vshost.exe" />
+    <Content Include="bin\Debug\Synchronization.Core.dll" />
+    <Content Include="bin\Debug\Synchronization.Core.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{9A8843B1-978F-4E96-8523-907C257CA183}</Project>
+      <Name>Common %28Common\Common%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Synchronization.Core\Synchronization.Core.csproj">
+      <Project>{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}</Project>
+      <Name>Synchronization.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
