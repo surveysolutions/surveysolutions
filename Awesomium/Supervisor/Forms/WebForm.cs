@@ -56,6 +56,8 @@ namespace Browsing.Supervisor.Forms
             AddBrowser();
             AddSynchronizer();
             AddSettings();
+            AddSyncHQPage();
+            AddSyncCapiPage();
             this.Controls.Add(this.holder);
         }
 
@@ -90,6 +92,17 @@ namespace Browsing.Supervisor.Forms
             var pageMain = new MainPage(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder)
                                     {Name = "supervisorMain"};
             this.holder.Redirect(pageMain);
+        }
+
+        protected void AddSyncHQPage()
+        {
+            new SyncHQProcessPage(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder)
+                { Name = "SynchronizationHQ" };
+        }
+
+        protected void AddSyncCapiPage()
+        {
+            new SyncCapiProcessPage(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder) { Name = "SynchronizationCapi" };
         }
 
         private string RunEngine()

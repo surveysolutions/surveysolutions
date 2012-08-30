@@ -43,6 +43,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Form1.cs">
+    <Compile Include="Containers\SyncCapiProcessPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\SyncCapiProcessPage.Designer.cs">
+      <DependentUpon>SyncCapiProcessPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Containers\SyncHQProcessPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\SyncHQProcessPage.Designer.cs">
+      <DependentUpon>SyncHQProcessPage.cs</DependentUpon>
+    </Compile>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
@@ -50,6 +62,16 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Containers\SyncCapiProcessPage.resx">
+      <DependentUpon>SyncCapiProcessPage.cs</DependentUpon>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SyncCapiProcessPage1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Containers\SyncHQProcessPage.resx">
+      <DependentUpon>SyncHQProcessPage.cs</DependentUpon>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SyncHQProcessPage1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -71,6 +93,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Symbol-Construction.jpg" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
