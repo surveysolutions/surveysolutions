@@ -8,14 +8,18 @@
 }
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {
+    <fieldset><legend>@Html.Raw(Model.Title)</legend>
+        @{
     var viewBag = new Dictionary<string, object>();
 
     viewBag.Add("name", Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue"));
     string id = Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
     viewBag.Add("id", id);
     viewBag.Add("draw-key-board", "true");
-    @Html.Hidden("PublicKey", answerGuid)
-    @Html.Hidden("Selected", true)
-    @Html.Hidden("Parent", Model.PublicKey)
-    @Html.TextBox("AnswerValue", Model.Answer ?? string.Empty, settings)
+        }
+        @Html.Hidden("PublicKey", answerGuid)
+        @Html.Hidden("Selected", true)
+        @Html.Hidden("Parent", Model.PublicKey)
+        @Html.TextBox("AnswerValue", Model.Answer ?? string.Empty, settings)
+    </fieldset>
 }
