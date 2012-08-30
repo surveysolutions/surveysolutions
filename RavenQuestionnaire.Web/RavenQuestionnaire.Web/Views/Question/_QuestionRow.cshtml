@@ -1,25 +1,18 @@
 ﻿@using RavenQuestionnaire.Web.Utils
 @using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Question
+
 @model QuestionView
 @{ var currentRowId = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, Model.PublicKey.ToString()); }
 <div id="@currentRowId" class="display-question">
-    <input type="checkbox" id="@Model.PublicKey.ToString()" style="position: absolute; z-index: -999; right: 50px;"/>
+<input type="checkbox" id="@Model.PublicKey.ToString()" style="position: absolute; z-index: -999; right: 50px;"/>
     <div class="question-header">
-        <h3>
-            @if (Model.Featured)
-            {
-                <i class="icon-star"></i>
-            }
-            else if (Model.Capital)
-            {
-                <i class=" icon-flag"></i>
-            }@Model.Index) @Html.Raw(Model.Title) @(Model.Featured ? " - Featured" : "")</h3>
+        <h3>@Model.Index) @Html.Raw(Model.Title) @(Model.Featured? " - Featured":"")</h3>
         <div class="btn-group">
             @Html.ActionLink("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireKey }, new { @class = "btn btn-primary btn-mini" })
-            @Html.ActionLink("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireKey }, new { @class = "btn btn-danger btn-mini" })
-            @Html.ActionLink("Add cards", "AddCards", "Question", new { Model.PublicKey, Model.QuestionnaireKey }, new { @class = "btn btn-info btn-mini" })
-            @Html.ActionLink("Move", "Move", "Question", new { PublicKeyQuestion = Model.PublicKey, QuestionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-danger btn-mini" })
+            @Html.ActionLink("Delete", "Delete", "Question", new { Model.PublicKey, Model.QuestionnaireKey },new { @class = "btn btn-danger btn-mini" })
+            @Html.ActionLink("Add cards", "AddCards", "Question", new { Model.PublicKey, Model.QuestionnaireKey}, new { @class = "btn btn-info btn-mini" })
+            @Html.ActionLink("Move", "Move", "Question", new { PublicKeyQuestion = Model.PublicKey, QuestionnaireId = Model.QuestionnaireKey}, new { @class = "btn btn-danger btn-mini" })            
         </div>
     </div>
     <div class="question-body">
@@ -32,7 +25,7 @@
                     <div class="thumbnail">
                         <img src="@Url.Action("Thumb", "Resource", new { id = i.PublicKey })" alt="@i.Title" />
                         <div class="caption">
-                            @using (Ajax.BeginForm("DeleteCard", "Question", new AjaxOptions() { HttpMethod = "Post", OnComplete = string.Format("$('#image{0}').remove()", i.PublicKey), Confirm = "Are you sure?" }))
+                            @using (Ajax.BeginForm("DeleteCard", "Question", new AjaxOptions() { HttpMethod = "Post", OnComplete = string.Format("$('#image{0}').remove()",i.PublicKey), Confirm = "Are you sure?" }))
                             {
                                 var imageKey = i.PublicKey;
                                 @Html.HiddenFor(x => x.QuestionnaireKey)

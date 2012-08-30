@@ -11,7 +11,6 @@ using Synchronization.Core.Interface;
 using Synchronization.Core.Events;
 using Synchronization.Core.Errors;
 using Synchronization.Core.SynchronizationFlow;
-using NLog;
 
 namespace Synchronization.Core
 {
@@ -19,10 +18,10 @@ namespace Synchronization.Core
     {
         #region Members
 
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         private List<ISynchronizer> synchronizerChain;
+
         private ISettingsProvider settingsProvider;
+        
         private AutoResetEvent syncIsAvailable = new AutoResetEvent(true);
        
         #endregion
@@ -32,7 +31,6 @@ namespace Synchronization.Core
         protected SyncManager(ISyncProgressObserver progressStatus, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor, IUrlUtils urlUtils)
             : this(progressStatus, settingsProvider, requestProcessor, urlUtils, new List<ISynchronizer>())
         {
-            //LogManager.EnableLogging();
         }
 
         private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor, IUrlUtils urlUtils,
@@ -145,8 +143,6 @@ namespace Synchronization.Core
             finally
             {
                 this.syncIsAvailable.Set();
-
-                Logger.Info(log);
 
                 EndOfSync(this, new SynchronizationCompletedEvent(new SyncStatus(syncType, direction, 100, error), log));
             }

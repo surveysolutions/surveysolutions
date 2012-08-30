@@ -1,26 +1,23 @@
 ﻿using System.Web.Mvc;
 using System.Web.Security;
-using Web.Supervisor.Models;
-using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
-using RavenQuestionnaire.Core.Utility;
 using RavenQuestionnaire.Core.Entities.SubEntities;
-
+using RavenQuestionnaire.Core.Utility;
+using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IFormsAuthentication authentication;
-        private readonly IGlobalInfoProvider globalProvider;
 
-        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider _globalProvider)
+        public AccountController(IFormsAuthentication auth)
         {
             authentication = auth;
-            globalProvider = _globalProvider;
         }
 
-        [HttpGet]
+        //
+        // GET: /Account/LogOn
         public ActionResult LogOn()
         {
             return View();
@@ -49,14 +46,12 @@ namespace Web.Supervisor.Controllers
             return View(model);
         }
 
-        public bool IsLoggedIn()
-        {
-            return globalProvider.GetCurrentUser() != null;
-        }
-
+        //
+        // GET: /Account/LogOff
         public ActionResult LogOff()
         {
             authentication.SignOut();
+
             return Redirect("~/");
         }
     }

@@ -47,11 +47,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         bool Featured { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether capital.
-        /// </summary>
-        bool Capital { get; set; }
-
-        /// <summary>
         /// Gets or sets the instructions.
         /// </summary>
         string Instructions { get; set; }
@@ -85,7 +80,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         /// Gets or sets the validation message.
         /// </summary>
         string ValidationMessage { get; set; }
-
+        bool Capital { get; set; }
 
         #endregion
     }

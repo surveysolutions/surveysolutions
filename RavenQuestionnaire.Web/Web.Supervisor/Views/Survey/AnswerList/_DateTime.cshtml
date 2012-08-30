@@ -4,18 +4,14 @@
 
 @using (Html.BeginCollectionItem("Answers", true, Guid.NewGuid()))
 {
-    <fieldset><legend>@Html.Raw(Model.Title)</legend>
-    @{
-        var settings = (IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings;
-        settings.Add("onchange", "$(this.form).submit();");
+    var settings = (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings;
+    settings.Add("onchange", "$(this.form).submit();");
 
-        string dateValue = Model.Answer == null ? string.Empty : Model.Answer.ToString();
-    }
+    string dateValue = Model.Answer == null ? string.Empty : Model.Answer.ToString();
     @Html.Hidden("Parent", Model.PublicKey)
 
     <div class="answer hide-date-box">
         @Html.Hidden("Selected", true)     
         @Html.TextBox("AnswerValue", dateValue, settings)   
     </div>
-    </fieldset>
 }

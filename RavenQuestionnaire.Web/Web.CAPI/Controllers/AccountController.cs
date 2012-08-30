@@ -24,12 +24,10 @@ namespace Web.CAPI.Controllers
         {
             return View();
         }
-
         public bool IsLoggedIn()
         {
             return _globalProvider.GetCurrentUser() != null;
         }
-
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {

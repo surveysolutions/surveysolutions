@@ -18,14 +18,6 @@
             alert(response.error);
         }
     };
-    function OnResponsibleComplete(data) {
-        var response = jQuery.parseJSON(data.responseText);
-        if (response.status === "ok") {
-            $.jGrowl(response.userName + " is responsible for this survey", { life: 2000 });
-        } else {
-            alert(response.error);
-        }
-    };
 </script>
 <h2>Assignment</h2>
 <p><a href="@Url.Action("Assigments", new { id = Model.TemplateId, input=new SurveyGroupInputModel() })">Back to list</a></p>
@@ -61,7 +53,7 @@
         </ul>
     </div>
 </div>
-@using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions { OnComplete = "OnResponsibleComplete" }, new { @class = "form-inline" }))
+@using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions {  }, new { @class = "form-inline" }))
 {
     @Html.Hidden("CqId", Model.Id)
     <label class="control-label">Responsible</label>

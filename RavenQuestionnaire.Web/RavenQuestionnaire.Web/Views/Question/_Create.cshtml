@@ -1,5 +1,4 @@
-﻿@using RavenQuestionnaire.Core.Entities.SubEntities
-@using RavenQuestionnaire.Web.Utils
+﻿@using RavenQuestionnaire.Web.Utils
 @using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Question
 @model QuestionView
@@ -32,13 +31,15 @@
 }
 @if (Model.PublicKey != Guid.Empty)
 {
-    <h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey, qid = Model.PublicKey })" class="btn">
-        <i class="icon-arrow-left"></i></a>Edit Question</h3>
+    <h3>
+        <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey, qid = Model.PublicKey })" class="btn">
+            <i class="icon-arrow-left"></i></a>Edit Question</h3>
 }
 else
 {
-    <h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey })" class="btn">
-        <i class="icon-arrow-left"></i></a>Edit Question</h3> 
+    <h3>
+        <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey})" class="btn">
+            <i class="icon-arrow-left"></i></a>Edit Question</h3> 
 }
 @using (Html.BeginForm("Save", "Question"))
 {
@@ -54,33 +55,22 @@ else
                     @Html.ValidationMessageFor(model => model.Title)
                 </div>
             </div>
-            @if (Model.PublicKey == Guid.Empty || Model.TargetGroupKey != Guid.Empty)
+            @if (Model.PublicKey == Guid.Empty || Model.TargetGroupKey!=Guid.Empty) 
             {
-                <div class="control-group">
-                    <label class="control-label">Propagateble GUID</label>
-                    <div class="controls">
-                        @Html.EditorFor(model => Model.TargetGroupKey)
-                    </div>
+            <div class="control-group">
+                <label class="control-label"> Propagateble GUID</label>
+                <div class="controls">
+                    @Html.EditorFor(model => Model.TargetGroupKey)
                 </div>
+            </div>
             }
-           @* @if (Model.ParentGroupType == Propagate.None)
-            {*@
-                <div class="control-group">
-                    @Html.LabelFor(model => model.Featured, new { @class = "control-label" })
-                    <div class="controls">
-                        <label class="checkbox">@Html.CheckBoxFor(model => model.Featured) Yes </label>
-                    </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.Featured, new { @class = "control-label" })
+                <div class="controls">
+                    <label class="checkbox">@Html.CheckBoxFor(model => model.Featured) Yes
+                    </label>
                 </div>
-           @* }
-            else
-            {*@
-                <div class="control-group">
-                    @Html.LabelFor(model => model.Capital, new { @class = "control-label" })
-                    <div class="controls">
-                        <label class="checkbox">@Html.CheckBoxFor(model => model.Capital) Yes </label>
-                    </div>
-                </div>
-            @*}*@
+            </div>
             <div class="control-group">
                 @Html.LabelFor(model => model.Mandatory, new { @class = "control-label" })
                 <div class="controls">
@@ -95,17 +85,19 @@ else
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Type</label>
+                <label class="control-label">
+                    Type</label>
                 <div class="controls">
                     @{
-            IDictionary<string, object> html = new Dictionary<string, object>();
-            html.Add("customName", "questionName");
+        IDictionary<string, object> html = new Dictionary<string, object>();
+        html.Add("customName", "questionName");
                         @Html.EnumDropDownListFor(model => Model.QuestionType, html)
                     }
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Answer order</label>
+                <label class="control-label">
+                    Answer order</label>
                 <div class="controls">
                     @Html.EnumDropDownListFor(model => Model.AnswerOrder)
                 </div>

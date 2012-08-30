@@ -45,9 +45,10 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult Assigments(string id, SurveyGroupInputModel input)
         {
-            var inputModel = input == null ? new SurveyGroupInputModel() { Id = id } : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders);
+            var inputModel = input==null ? new SurveyGroupInputModel(){ Id = id } : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders);
             var user = globalInfo.GetCurrentUser();
-            var users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
+            var users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
+                                                                                  {Supervisor = user});
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             SurveyGroupView model = viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(inputModel);
             return View(model);
@@ -56,17 +57,18 @@ namespace Web.Supervisor.Controllers
         public ActionResult Assign(Guid id)
         {
             UserLight user = globalInfo.GetCurrentUser();
-            InterviewersView users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
+            InterviewersView users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
+                                                                                  {Supervisor = user});
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             AssignSurveyView model = viewRepository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
             return View(model);
         }
 
-        public ActionResult Approve(Guid id, string template)
+        public ActionResult Approve(Guid id,string template)
         {
             var stat = viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                     new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
-            return View(new ApproveModel() { Id = id, Statistic = stat, TemplateId = template });
+            return View(new ApproveModel(){Id = id, Statistic = stat, TemplateId = template});
         }
 
         [HttpPost]
@@ -78,23 +80,23 @@ namespace Web.Supervisor.Controllers
                 var status = SurveyStatus.Approve;
                 status.ChangeComment = model.Comment;
                 commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status });
-                return RedirectToAction("Assigments", new { id = model.TemplateId });
+                return RedirectToAction("Assigments", new { id = model.TemplateId});
             }
             else
             {
                 var stat = viewRepository.Load
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                         new CompleteQuestionnaireStatisticViewInputModel(model.Id.ToString()));
-                return View(new ApproveModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
+                return View(new ApproveModel() {Id = model.Id, Statistic = stat, TemplateId = model.TemplateId});
             }
         }
 
-        public ActionResult Details(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
+        public ActionResult Details(Guid id,string template, Guid? group, Guid? question,  Guid? propagationKey)
         {
             //if (id)
             //    throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
-                new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey });
+                new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group,  PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             ViewBag.TemplateId = template;
             return View(model);
@@ -114,19 +116,11 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult AssignForm(string CqId, string userId)
         {
-            UserLight responsible = null;
-            try
-            {
-                UserView user = viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(userId));
-                responsible = (user != null) ? new UserLight(user.UserId, user.UserName) : new UserLight();
-                var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new ChangeAssignmentCommand(Guid.Parse(CqId), responsible));
-            }
-            catch (Exception e)
-            {
-                return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
-            }
-            return Json(new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = CqId },
+            UserView user = viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(userId));
+            UserLight responsible = (user != null) ? new UserLight(user.UserId, user.UserName) : new UserLight();
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(new ChangeAssignmentCommand(Guid.Parse(CqId), responsible));
+            return Json(new {userId = responsible.Id, userName = responsible.Name, cqId = CqId},
                         JsonRequestBehavior.AllowGet);
         }
 
@@ -144,10 +138,10 @@ namespace Web.Supervisor.Controllers
             {
                 NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
                 logger.Fatal(e);
-                return Json(new { status = "error", question = questions[0], settings = settings[0], error = e.Message },
+                return Json(new {status = "error", question = questions[0], settings = settings[0], error = e.Message},
                             JsonRequestBehavior.AllowGet);
             }
-            return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
+            return Json(new {status = "ok"}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult _TableData(GridDataRequestModel data)
