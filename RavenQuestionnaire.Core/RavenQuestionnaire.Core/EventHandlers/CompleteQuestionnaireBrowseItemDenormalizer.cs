@@ -93,11 +93,6 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// <param name="evnt">
         /// The evnt.
         /// </param>
-
-                if (completeQuestion.Capital)
-                {
-                    //TODO : update propagate group title
-                }
         public void Handle(IPublishedEvent<PropagatableGroupAdded> evnt)
         {
             // throw new NotImplementedException();

@@ -149,6 +149,7 @@ namespace RavenQuestionnaire.Core.Domain
         /// </param>
         /// <param name="featured">
         /// </param>
+        /// <param name="capital">The capital</param>
         /// <param name="mandatory">
         /// The mandatory.
         /// </param>
@@ -197,7 +198,7 @@ namespace RavenQuestionnaire.Core.Domain
                         ValidationExpression = validationExpression, 
                         ValidationMessage = validationMessage, 
                         Featured = featured, 
-                Capital = capital,
+                        Capital = capital,
                         Mandatory = mandatory, 
                         AnswerOrder = answerOrder, 
                         GroupPublicKey = groupPublicKey, 
@@ -243,6 +244,7 @@ namespace RavenQuestionnaire.Core.Domain
         /// <param name="featured">
         /// The featured.
         /// </param>
+        /// <param name="capital">The capital</param>
         /// <param name="mandatory">
         /// The mandatory.
         /// </param>
@@ -280,7 +282,7 @@ namespace RavenQuestionnaire.Core.Domain
                         ValidationExpression = validationExpression, 
                         ValidationMessage = validationMessage, 
                         Featured = featured, 
-                Capital = capital,
+                        Capital = capital,
                         Mandatory = mandatory, 
                         AnswerOrder = answerOrder, 
                         PublicKey = publicKey, 
@@ -296,11 +298,9 @@ namespace RavenQuestionnaire.Core.Domain
         /// The complete questionnaire id.
         /// </param>
         public void CreateCompletedQ(Guid completeQuestionnaireId)
-            result.Capital = e.Capital;
         {
             //// TODO: check is it good to create new AR form another?
             var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument);
-            question.Capital = e.Capital;
         }
 
         /// <summary>
@@ -603,6 +603,7 @@ namespace RavenQuestionnaire.Core.Domain
             result.ValidationMessage = e.ValidationMessage;
             result.AnswerOrder = e.AnswerOrder;
             result.Featured = e.Featured;
+            result.Capital = e.Capital;
             result.Mandatory = e.Mandatory;
             result.Instructions = e.Instructions;
             result.PublicKey = e.PublicKey;
@@ -648,6 +649,7 @@ namespace RavenQuestionnaire.Core.Domain
             question.ValidationMessage = e.ValidationMessage;
             question.Instructions = e.Instructions;
             question.Featured = e.Featured;
+            question.Capital = e.Capital;
             question.Mandatory = e.Mandatory;
             question.Triggers.Add(e.TargetGroupKey);
             question.AnswerOrder = e.AnswerOrder;

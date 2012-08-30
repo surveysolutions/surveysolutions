@@ -69,7 +69,6 @@ namespace RavenQuestionnaire.Core.Entities
         /// Gets the public key.
         /// </summary>
         public Guid PublicKey
-            result.Capital = capital;
         {
             get
             {
@@ -279,6 +278,9 @@ namespace RavenQuestionnaire.Core.Entities
         /// </param>
         /// <param name="featured">
         /// The featured.
+        /// </param>
+        /// <param name="capital">
+        /// The capital
         /// </param>
         /// <param name="mandatory">
         /// The mandatory.
@@ -568,6 +570,9 @@ namespace RavenQuestionnaire.Core.Entities
         /// </param>
         /// <param name="featured">
         /// The featured.
+        /// </param>
+        /// <param name="capital">
+        /// The capital
         /// </param>
         /// <param name="mandatory">
         /// The mandatory.
