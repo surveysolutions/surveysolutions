@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyncHQProcessPage));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyncCapiProcessPage));
             this.btnPull = new Browsing.Supervisor.Controls.FlatButton();
             this.btnPush = new Browsing.Supervisor.Controls.FlatButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
