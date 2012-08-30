@@ -20,6 +20,8 @@ namespace Browsing.CAPI.Containers
         {
             InitializeComponent();
 
+            ContentPanel.Controls.Add(this.tableLayoutPanel1);
+
             this.Text = AssemblyTitle;
             this.labelProductName.Text = AssemblyProduct;
             this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);

@@ -40,7 +40,8 @@ namespace Browsing.CAPI.Containers
             // 
             this.webView.BackColor = System.Drawing.SystemColors.Control;
             this.webView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webView.Location = new System.Drawing.Point(0, 50);
+            //this.webView.Margin = new System.Windows.Forms.Padding(3, 50, 3, 3);
+            //this.webView.Location = new System.Drawing.Point(0, 50);
             this.webView.Name = "webView";
             this.webView.Size = new System.Drawing.Size(1440, 578);
            
@@ -66,8 +67,8 @@ namespace Browsing.CAPI.Containers
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSize = true;
-            this.Controls.Add(this.progressBox);
-            this.Controls.Add(this.webView);
+            this.ContentPanel.Controls.Add(this.progressBox);
+            this.ContentPanel.Controls.Add(this.webView);
             this.Name = "CAPIBrowser";
             this.Size = new System.Drawing.Size(1440, 628);
             ((System.ComponentModel.ISupportInitialize)(this.progressBox)).EndInit();

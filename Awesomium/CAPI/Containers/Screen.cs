@@ -10,9 +10,15 @@ namespace Browsing.CAPI.Containers
     {
         private readonly ScreenHolder holder;
         private System.Windows.Forms.Panel menuPanel;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Panel contentPanel;
         private Browsing.CAPI.Controls.FlatButton homeButton;
 
         #region C-tor
+
+        public Screen() : this(null, true)
+        {
+        }
 
         public Screen(ScreenHolder holder, bool menuIsVisible)
         {
@@ -21,7 +27,8 @@ namespace Browsing.CAPI.Containers
             this.menuPanel.Visible = menuIsVisible;
 
             this.holder = holder;
-            this.holder.LoadedScreens.Add(this);
+            if (this.holder != null)
+                this.holder.LoadedScreens.Add(this);
         }
 
         #endregion
@@ -38,27 +45,32 @@ namespace Browsing.CAPI.Containers
             get { return this.menuPanel; }
         }
 
-        #endregion
+        protected Panel ContentPanel
+        {
+            get { return this.contentPanel; }
+        }
 
+        #endregion
 
         #region Helpers
 
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CAPIBrowser));
-
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Screen));
             this.menuPanel = new System.Windows.Forms.Panel();
             this.homeButton = new Browsing.CAPI.Controls.FlatButton();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.contentPanel = new System.Windows.Forms.Panel();
             this.menuPanel.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuPanel
             // 
             this.menuPanel.Controls.Add(this.homeButton);
-            this.menuPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.menuPanel.Location = new System.Drawing.Point(0, 0);
             this.menuPanel.Margin = new System.Windows.Forms.Padding(0);
-            this.menuPanel.Name = "panel1";
+            this.menuPanel.Name = "menuPanel";
             this.menuPanel.Size = new System.Drawing.Size(1440, 50);
             this.menuPanel.TabIndex = 1;
             // 
@@ -79,17 +91,42 @@ namespace Browsing.CAPI.Containers
             this.homeButton.Text = "Back";
             this.homeButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.homeButton.UseVisualStyleBackColor = false;
-            this.homeButton.Click += new EventHandler(homeButton_Click);
+            this.homeButton.Click += new System.EventHandler(this.homeButton_Click);
             // 
-            // CAPIBrowser
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.menuPanel, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.contentPanel, 0, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1440, 628);
+            this.tableLayoutPanel1.TabIndex = 2;
+            // 
+            // contentPanel
+            // 
+            this.contentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.contentPanel.Location = new System.Drawing.Point(3, 53);
+            this.contentPanel.Name = "contentPanel";
+            this.contentPanel.Size = new System.Drawing.Size(1434, 572);
+            this.contentPanel.TabIndex = 2;
+            // 
+            // Screen
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSize = true;
-            this.Controls.Add(this.menuPanel);
-            this.Name = "CAPIBrowser";
+            this.Controls.Add(this.tableLayoutPanel1);
+            this.Name = "Screen";
             this.Size = new System.Drawing.Size(1440, 628);
             this.menuPanel.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
 
         #endregion
