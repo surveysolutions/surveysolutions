@@ -1,12 +1,11 @@
 using System;
-using System.Web.Security;
+
 using Moq;
 using NUnit.Framework;
 using Ninject;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.User;
 
@@ -57,8 +56,8 @@ namespace RavenQuestionnaire.Web.Tests.Membership
         [Test]
         public void WhenValidateExistingUser_UserIsValid()
         {
-            UserView result = new UserView(Guid.Empty, "some_id", "test", "1234", "email@test.com", DateTime.Now,
-                                           new[] {UserRoles.User}, false, null, null);
+            UserView result = new UserView(Guid.Empty,  "test", "1234", "email@test.com", DateTime.Now,
+                                           new[] {UserRoles.User}, false, null, Guid.NewGuid());
             ViewRepositoryMock.Setup(
                 x =>
                 x.Load<UserViewInputModel, UserView>(
@@ -72,8 +71,8 @@ namespace RavenQuestionnaire.Web.Tests.Membership
         [Test]
         public void WhenValidateExistingUserWithInvalidPassword_UserIsInvalid()
         {
-            UserView result = new UserView(Guid.Empty, "some_id", "test", "1234", "email@test.com", DateTime.Now,
-                                           new[] {UserRoles.User}, false, null, null);
+            UserView result = new UserView(Guid.Empty, "test", "1234", "email@test.com", DateTime.Now,
+                                           new[] {UserRoles.User}, false, null, Guid.Empty);
             ViewRepositoryMock.Setup(
                 x =>
                 x.Load<UserViewInputModel, UserView>(

@@ -63,14 +63,13 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
-            SurveyBrowseItem item =
-                this.documentItemStore.Query().FirstOrDefault(t => t.Id == evnt.Payload.QuestionnaireId.ToString());
+            SurveyBrowseItem item = this.documentItemStore.Query().FirstOrDefault(t => t.Id == evnt.Payload.Questionnaire.TemplateId);
             if (item == null)
             {
                 var surveyitem = new SurveyItem(
                     evnt.Payload.CreationDate, 
                     evnt.Payload.CreationDate, 
-                    evnt.Payload.QuestionnaireId, 
+                    evnt.Payload.Questionnaire.TemplateId, 
                     evnt.Payload.Questionnaire.Status, 
                     evnt.Payload.Questionnaire.Responsible);
                 var statistic = new Dictionary<Guid, SurveyItem>
@@ -79,7 +78,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                     };
                 this.documentItemStore.Store(
                     new SurveyBrowseItem(
-                        evnt.Payload.QuestionnaireId.ToString(), 
+                        evnt.Payload.Questionnaire.TemplateId, 
                         evnt.Payload.Questionnaire.Title, 
                         evnt.Payload.Questionnaire.Responsible == null ? 1 : 0, 
                         statistic, 
@@ -133,7 +132,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                     item.Statistic.Where(t => t.Key == evnt.Payload.CompletedQuestionnaireId).Select(t => t.Value).
                         FirstOrDefault();
                 {
-                    if (val.Responsible != null && !string.IsNullOrEmpty(val.Responsible.Id))
+                    if (val.Responsible != null && (val.Responsible.Id != Guid.Empty))
                     {
                         this.IncrementCount(val.Status.Name, item);
                         this.DecrementCount(evnt.Payload.Status.Name, item);
@@ -164,7 +163,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 if (val != null)
                 {
                     if (val.Responsible == null && evnt.Payload.Responsible != null
-                        && !string.IsNullOrEmpty(evnt.Payload.Responsible.Id))
+                        && (evnt.Payload.Responsible.Id != Guid.Empty) )
                     {
                         item.Unassigned--;
                         this.IncrementCount(val.Status.Name, item);

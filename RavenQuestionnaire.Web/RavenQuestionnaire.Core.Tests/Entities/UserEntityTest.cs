@@ -137,7 +137,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
          {
              UserDocument innerDocument = new UserDocument();
              User user = new User(innerDocument);
-             UserLight supervisor = new UserLight("som_id", "some_name" );
+             UserLight supervisor = new UserLight(Guid.NewGuid(), "some_name" );
              user.SetSupervisor(supervisor);
 
              Assert.AreEqual(innerDocument.Supervisor, supervisor);
@@ -156,7 +156,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
          {
              UserDocument innerDocument = new UserDocument();
              User user = new User(innerDocument);
-             UserLight supervisor = new UserLight( "som_id" , "some_name");
+             UserLight supervisor = new UserLight( Guid.NewGuid(), "some_name");
              innerDocument.Supervisor = supervisor;
              user.ClearSupervisor();
 

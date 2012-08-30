@@ -71,9 +71,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// </returns>
         public InterviewersView Load(InterviewersInputModel input)
         {
-            int count =
-                this.users.Query().Where(u => u.Supervisor != null).Where(u => u.Supervisor.Id == input.Supervisor.Id).
-                    Count();
+            int count = this.users.Query().Where(u => u.Supervisor != null).Count(u => u.Supervisor.Id == input.Supervisor.Id);
             if (count == 0)
             {
                 return new InterviewersView(
@@ -93,16 +91,14 @@ namespace RavenQuestionnaire.Core.Views.User
                 query.Select(
                     x =>
                     new InterviewersItem(
-                        x.Id, 
+                        x.PublicKey, 
                         x.UserName, 
                         x.Email, 
                         x.CreationDate, 
                         x.IsLocked, 
-                        questionnaire.Where(t => t.Responsible.Id == x.Id).Count(), 
-                        questionnaire.Where(t => t.Responsible.Id == x.Id).Where(t => t.Status == SurveyStatus.Complete)
-                        .Count(), 
-                        questionnaire.Where(t => t.Responsible.Id == x.Id).Where(t => t.Status != SurveyStatus.Complete)
-                        .Count()));
+                        questionnaire.Count(t => t.Responsible.Id == x.PublicKey), 
+                        questionnaire.Where(t => t.Responsible.Id == x.PublicKey).Count(t => t.Status == SurveyStatus.Complete), 
+                        questionnaire.Where(t => t.Responsible.Id == x.PublicKey).Count(t => t.Status != SurveyStatus.Complete)));
             if (input.Orders.Count > 0)
             {
                 items = input.Orders[0].Direction == OrderDirection.Asc

@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <summary>
         /// The _order.
         /// </summary>
-        private string _order = string.Empty;
+        private string order = string.Empty;
 
         #endregion
 
@@ -57,7 +57,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// The total count.
         /// </param>
         public InterviewerGroupView(
-            string templateId, 
+            Guid templateId, 
             string title, 
             List<CompleteQuestionnaireBrowseItem> items, 
             string order, 
@@ -108,12 +108,12 @@ namespace RavenQuestionnaire.Core.Views.User
         {
             get
             {
-                return this._order;
+                return this.order;
             }
 
             set
             {
-                this._order = value;
+                this.order = value;
             }
         }
 
@@ -130,7 +130,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <summary>
         /// Gets or sets the template id.
         /// </summary>
-        public string TemplateId { get; set; }
+        public Guid TemplateId { get; set; }
 
         /// <summary>
         /// Gets or sets the title.

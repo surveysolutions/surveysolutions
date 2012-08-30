@@ -28,7 +28,7 @@ namespace Web.Supervisor.Controllers
             return View(model);
         }
 
-        public ActionResult Status(string questionnaireId, Guid statusId)
+        public ActionResult Status(Guid questionnaireId, Guid statusId)
         {
             var model = viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(new CQStatusReportViewInputModel(questionnaireId, statusId));
             return View(model);

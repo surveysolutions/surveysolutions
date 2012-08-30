@@ -47,7 +47,7 @@ namespace Web.Supervisor.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Details(String id, InterviewerInputModel input)
+        public ActionResult Details(Guid id, InterviewerInputModel input)
         {
             var inputModel = input==null ? new InterviewerInputModel(){UserId = id} : new InterviewerInputModel()
                                                                                {

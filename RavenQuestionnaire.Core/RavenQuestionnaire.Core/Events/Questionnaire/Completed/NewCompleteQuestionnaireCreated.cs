@@ -35,11 +35,6 @@ namespace RavenQuestionnaire.Core.Events
         public CompleteQuestionnaireDocument Questionnaire { get; set; }
 
         /// <summary>
-        /// Gets or sets the questionnaire id.
-        /// </summary>
-        public Guid QuestionnaireId { get; set; }
-
-        /// <summary>
         /// Gets or sets the total question count.
         /// </summary>
         public int TotalQuestionCount { get; set; }

@@ -9,6 +9,7 @@
 
 namespace RavenQuestionnaire.Core.Views.User
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -30,7 +31,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <param name="groupViews">
         /// The group views.
         /// </param>
-        public InterviewerView(string userName, string userId, List<InterviewerGroupView> groupViews)
+        public InterviewerView(string userName, Guid userId, List<InterviewerGroupView> groupViews)
         {
             this.UserId = userId;
             this.UserName = userName;
@@ -49,7 +50,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <summary>
         /// Gets the user id.
         /// </summary>
-        public string UserId { get; private set; }
+        public Guid UserId { get; private set; }
 
         /// <summary>
         /// Gets the user name.

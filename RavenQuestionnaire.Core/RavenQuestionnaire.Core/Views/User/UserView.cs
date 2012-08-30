@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <summary>
         /// The _primary role.
         /// </summary>
-        private UserRoles? _primaryRole;
+        private UserRoles? primaryRole;
 
         #endregion
 
@@ -73,8 +73,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// The location id.
         /// </param>
         public UserView(
-            Guid publicKey, 
-            string id, 
+            Guid publicKey,
             string username, 
             string password, 
             string email, 
@@ -82,10 +81,9 @@ namespace RavenQuestionnaire.Core.Views.User
             IEnumerable<UserRoles> roles, 
             bool isLocked, 
             UserLight supervisor, 
-            string locationId)
+            Guid locationId)
         {
             this.PublicKey = publicKey;
-            this.UserId = IdUtil.ParseId(id);
             this.UserName = username;
             this.Password = password;
             this.Email = email;
@@ -93,7 +91,7 @@ namespace RavenQuestionnaire.Core.Views.User
             this.Roles = roles;
             this.IsLocked = isLocked;
             this.Supervisor = supervisor;
-            this.LocationId = IdUtil.ParseId(locationId);
+            this.LocationId = locationId;
         }
 
         #endregion
@@ -118,7 +116,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <summary>
         /// Gets or sets the location id.
         /// </summary>
-        public string LocationId { get; set; }
+        public Guid LocationId { get; set; }
 
         /// <summary>
         /// Gets or sets the password.
@@ -132,9 +130,9 @@ namespace RavenQuestionnaire.Core.Views.User
         {
             get
             {
-                if (this._primaryRole.HasValue)
+                if (this.primaryRole.HasValue)
                 {
-                    return this._primaryRole.Value;
+                    return this.primaryRole.Value;
                 }
 
                 if (this.Roles != null)
@@ -147,7 +145,7 @@ namespace RavenQuestionnaire.Core.Views.User
 
             set
             {
-                this._primaryRole = value;
+                this.primaryRole = value;
             }
         }
 
@@ -165,12 +163,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// Gets or sets the supervisor.
         /// </summary>
         public UserLight Supervisor { get; set; }
-
-        /// <summary>
-        /// Gets or sets the user id.
-        /// </summary>
-        public string UserId { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the user name.
         /// </summary>
@@ -189,7 +182,7 @@ namespace RavenQuestionnaire.Core.Views.User
         public static UserView New()
         {
             return new UserView(
-                Guid.Empty, null, null, null, null, DateTime.UtcNow, new[] { UserRoles.User }, false, null, null);
+                Guid.Empty, null, null, null, DateTime.UtcNow, new[] { UserRoles.User }, false, null, Guid.Empty);
         }
 
         #endregion

@@ -74,8 +74,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
             List<QuestionStatisticView> featuredQuestions = this.FindFeaturedQuestions(evnt);
 
             var browseItem = new CompleteQuestionnaireBrowseItem(
-                evnt.Payload.Questionnaire.PublicKey.ToString(), 
-                evnt.Payload.QuestionnaireId.ToString(), 
+                evnt.Payload.Questionnaire.PublicKey, 
+                evnt.Payload.Questionnaire.TemplateId, 
                 evnt.Payload.Questionnaire.Title, 
                 evnt.Payload.CreationDate, 
                 DateTime.Now, 

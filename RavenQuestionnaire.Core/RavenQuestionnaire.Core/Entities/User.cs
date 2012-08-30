@@ -126,11 +126,11 @@ namespace RavenQuestionnaire.Core.Entities
         /// <summary>
         /// Gets the user id.
         /// </summary>
-        public string UserId
+        public Guid UserId
         {
             get
             {
-                return this.innerDocument.Id;
+                return this.innerDocument.PublicKey;
             }
         }
 

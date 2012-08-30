@@ -20,11 +20,6 @@ namespace RavenQuestionnaire.Core.Views.User
     {
         #region Fields
 
-        /// <summary>
-        /// The _id.
-        /// </summary>
-        private string _id;
-
         #endregion
 
         #region Constructors and Destructors
@@ -57,7 +52,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// The in process.
         /// </param>
         public InterviewersItem(
-            string id, 
+            Guid id, 
             string name, 
             string email, 
             DateTime creationDate, 
@@ -98,18 +93,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <summary>
         /// Gets the id.
         /// </summary>
-        public string Id
-        {
-            get
-            {
-                return IdUtil.ParseId(this._id);
-            }
-
-            private set
-            {
-                this._id = value;
-            }
-        }
+        public Guid Id { get; private set; }
 
         /// <summary>
         /// Gets the in process.

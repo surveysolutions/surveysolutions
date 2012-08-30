@@ -9,6 +9,7 @@
 
 namespace RavenQuestionnaire.Core.Views.Survey
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -59,37 +60,40 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// </returns>
         public SurveyGroupView Load(SurveyGroupInputModel input)
         {
-            int count = this.documentItemSession.Query().Where(x => x.TemplateId == input.Id).ToList().Count;
+            int count = this.documentItemSession.Query().Count(x => x.TemplateId == input.Id);
             if (count == 0)
             {
                 return new SurveyGroupView(
                     input.Page, 
                     input.PageSize, 
-                    input.QuestionnaireId, 
+                    String.Empty, // where is this item used?   
                     0, 
                     new CompleteQuestionnaireBrowseItem[0], 
                     input.Id);
             }
 
-            IQueryable<CompleteQuestionnaireBrowseItem> query =
-                this.documentItemSession.Query().Where(v => v.TemplateId == input.Id);
-            if (!string.IsNullOrEmpty(input.QuestionnaireId))
+            IQueryable<CompleteQuestionnaireBrowseItem> items = this.documentItemSession.Query().Where(v => v.TemplateId == input.Id);
+            
+            if (input.QuestionnaireId != Guid.Empty)
             {
-                query = query.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
+                items = items.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
             }
 
             if (input.Orders.Count > 0)
             {
-                query = this.DefineOrderBy(query, input);
+                items = this.DefineOrderBy(items, input);
             }
 
-            query = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+            items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+
             return new SurveyGroupView(
                 input.Page, 
-                input.PageSize, 
-                query.FirstOrDefault() != null ? query.FirstOrDefault().QuestionnaireTitle : input.Id, 
+                input.PageSize,
+
+                items.FirstOrDefault() != null ? items.FirstOrDefault().QuestionnaireTitle : input.Id.ToString(), //Fix it!
+                
                 count, 
-                query, 
+                items, 
                 input.Id);
         }
 

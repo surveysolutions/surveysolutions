@@ -89,11 +89,10 @@ namespace Questionnaire.Core.Web.Security
         {
             if (!(providerUserKey is byte[]))
                 return null;
-            MembershipUser retval =
-                HttpContext.Current.Items[providerUserKey] as MembershipUser;
+            MembershipUser retval = HttpContext.Current.Items[providerUserKey] as MembershipUser;
             if (retval == null)
             {
-                var person = this.ViewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(providerUserKey.ToString()));
+                var person = this.ViewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel((Guid)providerUserKey));
                 if (person == null)
                     return null;
                 retval = MembershipInstance(person);
@@ -138,12 +137,12 @@ namespace Questionnaire.Core.Web.Security
         /// <returns>A <see cref="MembershipUser" /> object populated with the information from the <see cref="DataRow" />.</returns>
         private MembershipUser MembershipInstance(UserView person)
         {
-            byte[] bsid = new System.Text.UTF8Encoding().GetBytes(person.UserId);
+            //byte[] bsid = new System.Text.UTF8Encoding().GetBytes(person.PublicKey);
             DateTime now = DateTime.Now;
             MembershipUser mu = new MembershipUser(
                 this.GetType().Name,
-                person.UserName, 
-                bsid,
+                person.UserName,
+                person.PublicKey,
                 null, 
                 null, 
                 null, 

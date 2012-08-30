@@ -87,7 +87,7 @@ namespace Web.CAPI.Controllers
             var user = _globalProvider.GetCurrentUser();
             var inputModel = new CQGroupedBrowseInputModel();
             if(user!=null)
-            inputModel.InterviewerId = Guid.Parse(user.Id);
+            inputModel.InterviewerId = user.Id;
             var model =
                 viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(inputModel);
             return View(model);

@@ -13,7 +13,6 @@ namespace RavenQuestionnaire.Core.Views.User
 
     using RavenQuestionnaire.Core.Documents;
     using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Utility;
 
     /// <summary>
     /// The user browse input model.
@@ -65,9 +64,9 @@ namespace RavenQuestionnaire.Core.Views.User
         {
             get
             {
-                if (!string.IsNullOrEmpty(this.LocationId))
+                if (this.LocationId != Guid.Empty)
                 {
-                    string locatianOriginalId = IdUtil.CreateLocationId(this.LocationId);
+                    Guid locatianOriginalId = this.LocationId;
                     return e => !e.IsDeleted && e.Location.Id == locatianOriginalId;
                 }
 
@@ -83,7 +82,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <summary>
         /// Gets or sets the location id.
         /// </summary>
-        public string LocationId { get; set; }
+        public Guid LocationId { get; set; }
 
         /// <summary>
         /// Gets or sets the page.
