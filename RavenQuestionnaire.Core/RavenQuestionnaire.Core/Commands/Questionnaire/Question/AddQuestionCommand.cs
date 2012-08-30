@@ -62,6 +62,9 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         /// <param name="featured">
         /// The featured.
         /// </param>
+        /// <param name="capital">
+        /// The capital
+        /// </param>
         /// <param name="mandatory">
         /// The mandatory.
         /// </param>
@@ -212,6 +215,11 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         /// Gets or sets a value indicating whether featured.
         /// </summary>
         public bool Featured { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether capital.
+        /// </summary>
+        public bool Capital { get; set; }
 
         /// <summary>
         /// Gets or sets the group public key.

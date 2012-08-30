@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractQuestionView"/> class.
         /// </summary>
-        public bool Capital { get; set; }
+
 
         public Propagate ParentGroupType { get; set; }
         public AbstractQuestionView()
@@ -331,8 +331,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         public QuestionView(IQuestionnaireDocument questionnaire, TQuestion doc)
             : base(questionnaire, doc)
         {
-         
-            var parent = GetQuestionGroup(questionnaire, doc.PublicKey);
+            var parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
             this.Parent = parent.PublicKey;
             this.ParentGroupType = (parent as IGroup) != null ? (parent as IGroup).Propagated : Propagate.None;
         }
@@ -369,6 +368,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         /// </returns>
         /// <exception cref="ArgumentException">
         /// </exception>
+        protected IComposite GetQuestionGroup(IQuestionnaireDocument questionnaire, Guid questionKey)
         {
             if (questionnaire.Children.Any(q => q.PublicKey.Equals(questionKey)))
             {
@@ -388,6 +388,7 @@ namespace RavenQuestionnaire.Core.Views.Question
                 {
                     if (queueItem.Children.Any(q => q.PublicKey.Equals(questionKey)))
                     {
+                        return queueItem;
                     }
 
                     foreach (IComposite child in queueItem.Children)

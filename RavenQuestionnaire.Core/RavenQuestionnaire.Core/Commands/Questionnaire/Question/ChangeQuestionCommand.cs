@@ -25,51 +25,6 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
     public class ChangeQuestionCommand : CommandBase
     {
         #region Constructors and Destructors
-        public ChangeQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText,
-                                     string stataExportCaption, QuestionType questionType,
-                                     string conditionExpression, string validationExpression, string validationMessage,
-                                     string instructions, bool featured, bool capital, bool mandatory, Order answerOrder,
-                                     Answer[] answers)
-        {
-            QuestionnaireId = questionnaireId;
-            QuestionText = questionText;
-            StataExportCaption = stataExportCaption;
-            QuestionType = questionType;
-            ConditionExpression = conditionExpression;
-            ValidationExpression = validationExpression;
-            ValidationMessage = validationMessage;
-            Instructions = instructions;
-            Featured = featured;
-            Capital = capital;
-            Mandatory = mandatory;
-            AnswerOrder = answerOrder;
-            PublicKey = publicKey;
-            Answers = answers;
-        }
-
-        public ChangeQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, Guid TargetGroupKey,
-                                     string stataExportCaption, QuestionType questionType,
-                                     string conditionExpression, string validationExpression, string validationMessage,
-                                     string instructions, bool featured, bool capital, bool mandatory, Order answerOrder,
-                                     Answer[] answers)
-        {
-            QuestionnaireId = questionnaireId;
-            QuestionText = questionText;
-            this.TargetGroupKey = TargetGroupKey;
-            StataExportCaption = stataExportCaption;
-            QuestionType = questionType;
-            ConditionExpression = conditionExpression;
-            ValidationExpression = validationExpression;
-            ValidationMessage = validationMessage;
-            Instructions = instructions;
-            Featured = featured;
-            Capital = capital;
-            Mandatory = mandatory;
-            AnswerOrder = answerOrder;
-            PublicKey = publicKey;
-            Answers = answers;
-        }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChangeQuestionCommand"/> class.
@@ -103,6 +58,9 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         /// </param>
         /// <param name="featured">
         /// The featured.
+        /// </param>
+        /// <param name="capital">
+        /// The capital
         /// </param>
         /// <param name="mandatory">
         /// The mandatory.
@@ -157,7 +115,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         /// <param name="questionText">
         /// The question text.
         /// </param>
-        /// <param name="TargetGroupKey">
+        /// <param name="targetGroupKey">
         /// The target group key.
         /// </param>
         /// <param name="stataExportCaption">
@@ -181,6 +139,9 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         /// <param name="featured">
         /// The featured.
         /// </param>
+        /// <param name="capital">
+        /// The capital
+        /// </param>
         /// <param name="mandatory">
         /// The mandatory.
         /// </param>
@@ -194,7 +155,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             Guid questionnaireId, 
             Guid publicKey, 
             string questionText, 
-            Guid TargetGroupKey, 
+            Guid targetGroupKey, 
             string stataExportCaption, 
             QuestionType questionType, 
             string conditionExpression, 
@@ -202,13 +163,14 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             string validationMessage, 
             string instructions, 
             bool featured, 
+            bool capital,
             bool mandatory, 
             Order answerOrder, 
             Answer[] answers)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionText = questionText;
-            this.TargetGroupKey = TargetGroupKey;
+            this.TargetGroupKey = targetGroupKey;
             this.StataExportCaption = stataExportCaption;
             this.QuestionType = questionType;
             this.ConditionExpression = conditionExpression;
@@ -216,6 +178,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.ValidationMessage = validationMessage;
             this.Instructions = instructions;
             this.Featured = featured;
+            this.Capital = capital;
             this.Mandatory = mandatory;
             this.AnswerOrder = answerOrder;
             this.PublicKey = publicKey;
