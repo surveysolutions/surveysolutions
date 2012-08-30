@@ -56,10 +56,12 @@ namespace RavenQuestionnaire.Core.Views.Survey
         public SurveyGroupView(
             int page, 
             int pageSize, 
+
             string surveyTitle, 
+            
             int totalCount, 
             IEnumerable<CompleteQuestionnaireBrowseItem> items, 
-            string templateId)
+            Guid templateId)
         {
             this.Page = page;
             this.TotalCount = totalCount;
@@ -67,8 +69,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.TemplateId = templateId;
             this.Items = new List<SurveyGroupItem>();
             this.Headers = new Dictionary<Guid, string>();
-            foreach (
-                QuestionStatisticView question in
+            foreach (QuestionStatisticView question in
                     items.SelectMany(
                         completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions).Where(
                             question => !this.Headers.ContainsKey(question.PublicKey)))
@@ -132,7 +133,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <summary>
         /// Gets the template id.
         /// </summary>
-        public string TemplateId { get; private set; }
+        public Guid TemplateId { get; private set; }
 
         /// <summary>
         /// Gets the total count.

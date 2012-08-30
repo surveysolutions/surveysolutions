@@ -79,7 +79,7 @@ namespace RavenQuestionnaire.Core.Views.User
                 query.Select(
                     x =>
                     new UserBrowseItem(
-                        x.Id, x.UserName, x.Email, x.CreationDate, x.IsLocked, x.Supervisor, x.Location.Location)).
+                        x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLocked, x.Supervisor, x.Location.Location)).
                     ToArray();
 
             return new UserBrowseView(input.Page, input.PageSize, count, items.ToArray());

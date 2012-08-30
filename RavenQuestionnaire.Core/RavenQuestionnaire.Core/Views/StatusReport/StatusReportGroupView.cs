@@ -36,7 +36,7 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
         /// <param name="title">
         /// The title.
         /// </param>
-        public StatusReportGroupView(string id, string title)
+        public StatusReportGroupView(Guid id, string title)
             : this()
         {
             this.Id = id;
@@ -55,7 +55,7 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the items.

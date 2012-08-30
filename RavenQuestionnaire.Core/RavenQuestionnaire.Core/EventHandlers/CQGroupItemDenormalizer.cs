@@ -9,7 +9,6 @@
 
 namespace RavenQuestionnaire.Core.EventHandlers
 {
-    using System;
     using System.Linq;
 
     using Ncqrs.Eventing.ServiceModel.Bus;
@@ -63,7 +62,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
             IQueryable<CQGroupItem> group =
-                this.documentGroupSession.Query().Where(g => g.SurveyId == evnt.Payload.QuestionnaireId.ToString());
+                this.documentGroupSession.Query().Where(g => g.SurveyId == evnt.Payload.Questionnaire.TemplateId);
             foreach (CQGroupItem cqGroupItem in group)
             {
                 cqGroupItem.TotalCount++;
@@ -78,7 +77,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
-            var questionnaire = new CQGroupItem(0, 100, 0, evnt.Payload.Title, evnt.Payload.PublicKey.ToString());
+            var questionnaire = new CQGroupItem(0, 100, 0, evnt.Payload.Title, evnt.Payload.PublicKey);
             this.documentGroupSession.Store(questionnaire, evnt.Payload.PublicKey);
         }
 
@@ -91,7 +90,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
         public void Handle(IPublishedEvent<QuestionnaireTemplateLoaded> evnt)
         {
             var questionnaire = new CQGroupItem(
-                0, 100, 0, evnt.Payload.Template.Title, evnt.Payload.Template.PublicKey.ToString());
+                0, 100, 0, evnt.Payload.Template.Title, evnt.Payload.Template.PublicKey);
             this.documentGroupSession.Store(questionnaire, evnt.Payload.Template.PublicKey);
         }
 
@@ -104,7 +103,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
         public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
         {
             IQueryable<CQGroupItem> group =
-                this.documentGroupSession.Query().Where(g => Guid.Parse(g.SurveyId) == evnt.Payload.TemplateId);
+                this.documentGroupSession.Query().Where(g => g.SurveyId == evnt.Payload.TemplateId);
             foreach (CQGroupItem cqGroupItem in group)
             {
                 cqGroupItem.TotalCount--;

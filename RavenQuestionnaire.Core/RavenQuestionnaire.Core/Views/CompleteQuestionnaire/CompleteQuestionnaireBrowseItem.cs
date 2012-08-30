@@ -13,7 +13,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
     using RavenQuestionnaire.Core.Documents.Statistics;
     using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Utility;
     using RavenQuestionnaire.Core.Views.Statistics;
 
     /// <summary>
@@ -22,11 +21,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
     public class CompleteQuestionnaireBrowseItem
     {
         #region Fields
-
-        /// <summary>
-        /// The _id.
-        /// </summary>
-        private string _id;
 
         #endregion
 
@@ -63,8 +57,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         /// The responsible.
         /// </param>
         public CompleteQuestionnaireBrowseItem(
-            string completeQuestionnaireId, 
-            string templateId, 
+            Guid completeQuestionnaireId, 
+            Guid templateId, 
             string questionnaireTitle, 
             DateTime creationDate, 
             DateTime lastEntryDate, 
@@ -127,18 +121,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         /// <summary>
         /// Gets or sets the complete questionnaire id.
         /// </summary>
-        public string CompleteQuestionnaireId
-        {
-            get
-            {
-                return IdUtil.ParseId(this._id);
-            }
-
-            set
-            {
-                this._id = value;
-            }
-        }
+        public Guid CompleteQuestionnaireId { get; set; }
 
         /// <summary>
         /// Gets or sets the creation date.
@@ -178,7 +161,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         /// <summary>
         /// Gets or sets the template id.
         /// </summary>
-        public string TemplateId { get; set; }
+        public Guid TemplateId { get; set; }
 
         /// <summary>
         /// Gets or sets the total question count.

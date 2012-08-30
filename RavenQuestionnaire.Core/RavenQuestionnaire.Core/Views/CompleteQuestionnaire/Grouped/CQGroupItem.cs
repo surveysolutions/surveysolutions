@@ -9,9 +9,8 @@
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 {
+    using System;
     using System.Collections.Generic;
-
-    using RavenQuestionnaire.Core.Utility;
 
     /// <summary>
     /// The cq group item.
@@ -19,11 +18,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
     public class CQGroupItem
     {
         #region Fields
-
-        /// <summary>
-        /// The _id.
-        /// </summary>
-        private string _id;
 
         #endregion
 
@@ -60,7 +54,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
             int pageSize, 
             int totalCount, 
             /*IEnumerable<CompleteQuestionnaireStatisticDocument> items,*/ string title, 
-            string id)
+            Guid id)
             : this()
         {
             this.Page = page;
@@ -94,18 +88,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
         /// <summary>
         /// Gets or sets the survey id.
         /// </summary>
-        public string SurveyId
-        {
-            get
-            {
-                return IdUtil.ParseId(this._id);
-            }
-
-            set
-            {
-                this._id = value;
-            }
-        }
+        public Guid SurveyId { get; set; }
 
         /// <summary>
         /// Gets or sets the survey title.

@@ -68,7 +68,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the responsible.
@@ -83,7 +83,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <summary>
         /// Gets or sets the template id.
         /// </summary>
-        public string TemplateId { get; set; }
+        public Guid TemplateId { get; set; }
 
         /// <summary>
         /// Gets or sets the title.

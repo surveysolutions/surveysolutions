@@ -26,17 +26,17 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <summary>
         /// The _orders.
         /// </summary>
-        private List<OrderRequestItem> _orders = new List<OrderRequestItem>();
+        private List<OrderRequestItem> orders = new List<OrderRequestItem>();
 
         /// <summary>
         /// The _page.
         /// </summary>
-        private int _page = 1;
+        private int page = 1;
 
         /// <summary>
         /// The _page size.
         /// </summary>
-        private int _pageSize = 10;
+        private int pageSize = 10;
 
         #endregion
 
@@ -49,7 +49,7 @@ namespace RavenQuestionnaire.Core.Views.User
         {
             get
             {
-                return q => (q.Responsible == null ? false : q.Responsible.Id == this.UserId);
+                return q => (q.Responsible != null && q.Responsible.Id == this.UserId);
             }
         }
 
@@ -60,12 +60,12 @@ namespace RavenQuestionnaire.Core.Views.User
         {
             get
             {
-                return StringUtil.GetOrderRequestString(this._orders);
+                return StringUtil.GetOrderRequestString(this.orders);
             }
 
             set
             {
-                this._orders = StringUtil.ParseOrderRequestString(value);
+                this.orders = StringUtil.ParseOrderRequestString(value);
             }
         }
 
@@ -76,12 +76,12 @@ namespace RavenQuestionnaire.Core.Views.User
         {
             get
             {
-                return this._orders;
+                return this.orders;
             }
 
             set
             {
-                this._orders = value;
+                this.orders = value;
             }
         }
 
@@ -92,12 +92,12 @@ namespace RavenQuestionnaire.Core.Views.User
         {
             get
             {
-                return this._page;
+                return this.page;
             }
 
             set
             {
-                this._page = value;
+                this.page = value;
             }
         }
 
@@ -108,24 +108,24 @@ namespace RavenQuestionnaire.Core.Views.User
         {
             get
             {
-                return this._pageSize;
+                return this.pageSize;
             }
 
             set
             {
-                this._pageSize = value;
+                this.pageSize = value;
             }
         }
 
         /// <summary>
         /// Gets or sets the template id.
         /// </summary>
-        public string TemplateId { get; set; }
+        public Guid TemplateId { get; set; }
 
         /// <summary>
         /// Gets or sets the user id.
         /// </summary>
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         #endregion
     }

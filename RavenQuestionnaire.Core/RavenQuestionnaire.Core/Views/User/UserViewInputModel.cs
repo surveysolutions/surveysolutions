@@ -9,6 +9,8 @@
 
 namespace RavenQuestionnaire.Core.Views.User
 {
+    using System;
+
     /// <summary>
     /// The user view input model.
     /// </summary>
@@ -22,7 +24,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <param name="id">
         /// The id.
         /// </param>
-        public UserViewInputModel(string id)
+        public UserViewInputModel(Guid id)
         {
             this.UserId = id;
         }
@@ -54,7 +56,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <summary>
         /// Gets the user id.
         /// </summary>
-        public string UserId { get; private set; }
+        public Guid UserId { get; private set; }
 
         /// <summary>
         /// Gets the user name.

@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
         /// <param name="sId">
         /// The s id.
         /// </param>
-        public CQStatusReportViewInputModel(string qId, Guid sId)
+        public CQStatusReportViewInputModel(Guid qId, Guid sId)
         {
             this.StatusId = sId;
             this.QuestionnaireId = qId;
@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
         /// <summary>
         /// Gets or sets the questionnaire id.
         /// </summary>
-        public string QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; set; }
 
         /// <summary>
         /// Gets or sets the status id.

@@ -9,6 +9,7 @@
 
 namespace RavenQuestionnaire.Core.Views.User
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -21,7 +22,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <summary>
         /// The _order.
         /// </summary>
-        private string _order = string.Empty;
+        private string order = string.Empty;
 
         #endregion
 
@@ -53,7 +54,7 @@ namespace RavenQuestionnaire.Core.Views.User
             int pageSize, 
             int totalCount, 
             IEnumerable<InterviewersItem> items, 
-            string supervisorId, 
+            Guid supervisorId, 
             string supervisorName)
         {
             this.Page = page;
@@ -80,12 +81,12 @@ namespace RavenQuestionnaire.Core.Views.User
         {
             get
             {
-                return this._order;
+                return this.order;
             }
 
             set
             {
-                this._order = value;
+                this.order = value;
             }
         }
 
@@ -102,7 +103,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <summary>
         /// Gets the supervisor id.
         /// </summary>
-        public string SupervisorId { get; private set; }
+        public Guid SupervisorId { get; private set; }
 
         /// <summary>
         /// Gets the supervisor name.
