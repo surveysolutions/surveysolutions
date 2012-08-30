@@ -29,14 +29,8 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         /// <param name="gropPublicKey">
         /// The grop public key.
         /// </param>
-        /// <param name="gropPropagationPublicKey">
-        /// The grop propagation public key.
-        /// </param>
-        /// <param name="screenPublicKey">
-        /// The screen public key.
-        /// </param>
         public QuestionStatisticView(
-            ICompleteQuestion doc, Guid gropPublicKey, Guid? gropPropagationPublicKey, Guid screenPublicKey)
+            ICompleteQuestion doc, Guid gropPublicKey)
         {
             this.PublicKey = doc.PublicKey;
             this.QuestionText = doc.QuestionText;
@@ -44,9 +38,9 @@ namespace RavenQuestionnaire.Core.Views.Statistics
             // this.AnswerValue = doc.GetAnswerString();
             // this.ApproximateTime = doc.ApproximateTime;
             this.GroupPublicKey = gropPublicKey;
-            this.ScreenPublicKey = screenPublicKey;
-            this.GroupPropagationPublicKey = gropPropagationPublicKey;
-            if (gropPropagationPublicKey.HasValue)
+            this.GroupPropagationPublicKey = doc.PropogationPublicKey;
+            this.ErrorMessage = doc.ValidationMessage;
+            if (doc.PropogationPublicKey.HasValue)
             {
                 this.IsQuestionFromPropGroup = true;
             }
@@ -84,6 +78,11 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         public TimeSpan? ApproximateTime { get; set; }
 
         /// <summary>
+        /// Gets or sets the error message
+        /// </summary>
+        public string ErrorMessage { get; set; }
+
+        /// <summary>
         /// Gets or sets the group propagation public key.
         /// </summary>
         public Guid? GroupPropagationPublicKey { get; set; }
@@ -108,10 +107,6 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         /// </summary>
         public string QuestionText { get; set; }
 
-        /// <summary>
-        /// Gets or sets the screen public key.
-        /// </summary>
-        public Guid ScreenPublicKey { get; set; }
 
         #endregion
     }

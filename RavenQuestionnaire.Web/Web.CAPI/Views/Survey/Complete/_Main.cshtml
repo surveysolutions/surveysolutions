@@ -1,0 +1,74 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Entities.SubEntities
+@model RavenQuestionnaire.Core.Views.Statistics.CompleteQuestionnaireStatisticView
+<div data-role="page" id="ref-link-complete" class="page">
+    <div data-role="header" data-theme="b" class="ui-bar">
+        <h1>@Model.Title
+            @foreach (var featured in @Model.FeaturedQuestions)
+            {
+          
+                @featured.AnswerText
+            }</h1>
+    </div>
+    <div data-role="content" data-iscroll="">
+        <div id="scroller">
+          @*  <p>
+                Started: @Model.StartDate.ToShortTimeString()</p>*@
+            <div class="ui-body ui-body-c">
+                <div class="group-anchor">
+                    <a class="nav-link" href="@Url.Action("Answered", new { Id = Model.CompleteQuestionnaireId })" 
+                       data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">
+                        Answered - @Model.AnsweredQuestions.Count</a>
+                </div>
+            </div>
+            <div class="ui-body">
+                &nbsp;</div>
+            <div class="ui-body ui-body-c">
+                <div class="group-anchor">
+                    <a class="nav-link" href="@Url.Action("Unanswered", new { Id = Model.CompleteQuestionnaireId })" 
+                       data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">
+                        Unanswered - @Model.UnansweredQuestions.Count</a>
+                </div>
+            </div>
+            <div class="ui-body">
+                &nbsp;</div>
+            <div class='ui-body ui-body-c @(Model.InvalidQuestions.Count == 0 ? "ui-disabled" : "")'>
+                  @if (Model.Status.PublicId == SurveyStatus.Error.PublicId)
+                   {
+                       <div class="ui-body ui-body-e">
+                           <h1>Please fix invalid questions!</h1>
+                       </div>
+                   }
+                <div class="group-anchor">
+                    <a class="nav-link" href="@Url.Action("Invalid", new { Id = Model.CompleteQuestionnaireId })" 
+                       data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">
+                        Invalid - @Model.InvalidQuestions.Count</a>
+                </div>
+            </div>
+            
+            <div class="ui-body">
+                &nbsp;</div>
+                 
+            @using (Html.BeginForm("Complete", "Survey", new { id = @Model.CompleteQuestionnaireId }, FormMethod.Post, new { data_ajax="false" }))
+            {
+                <div class="ui-body">
+                    <label for="comments" style="color: red">
+                        Need attention comments:</label>
+                    <textarea name="comments" id="comments" value="" data-corners="false"></textarea>
+                </div>
+                <div class="ui-body">
+                    <fieldset class="ui-grid-b">
+                        <div class="ui-block-a">
+                        </div>
+                        <div class="ui-block-b">
+                        </div>
+                        <div class="ui-block-c">
+                            <button type="submit" data-corners="false" date-mini="true">
+                                Complete</button>
+                        </div>
+                    </fieldset>
+                </div>
+            }
+        </div>
+    </div>
+</div>
