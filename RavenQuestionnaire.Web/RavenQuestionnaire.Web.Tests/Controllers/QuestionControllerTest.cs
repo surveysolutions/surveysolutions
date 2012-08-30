@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.PublicKey = Guid.NewGuid();
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, false, Order.AsIs, null, null, Guid.NewGuid());
+            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, false, false, Order.AsIs, null, null, Guid.NewGuid());
 
             var questionView = new QuestionView(innerDocument, question);
             ViewRepositoryMock.Setup(
@@ -90,7 +90,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, false, Order.AsIs, null, null, Guid.NewGuid());
+            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, false, false, Order.AsIs, null, null, Guid.NewGuid());
             var questionView = new QuestionView(innerDocument, question);
 
             var input = new QuestionViewInputModel(question.PublicKey, entity.PublicKey);

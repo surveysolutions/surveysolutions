@@ -50,7 +50,7 @@ namespace RavenQuestionnaire.Core.Entities
             innerDocument.Children.RemoveAll(a=>a is IQuestion);
         }
 
-        public AbstractQuestion AddQuestion(Guid qid, string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, bool mandatory, Order answerOrder, Guid? groupPublicKey,
+        public AbstractQuestion AddQuestion(Guid qid, string text, string stataExportCaption, QuestionType type, string condition, string validation, bool featured, bool capital, bool mandatory, Order answerOrder, Guid? groupPublicKey,
             IEnumerable<Answer> answers, Guid publicKey)
         {
             var result = new CompleteQuestionFactory().Create(type);
@@ -62,6 +62,7 @@ namespace RavenQuestionnaire.Core.Entities
             result.ValidationExpression = validation;
             result.AnswerOrder = answerOrder;
             result.Featured = featured;
+            result.Capital = capital;
             result.Mandatory = mandatory;
             result.PublicKey = publicKey;
             UpdateAnswerList(answers, result);
@@ -239,7 +240,7 @@ namespace RavenQuestionnaire.Core.Entities
         }
 
         public void UpdateQuestion(Guid publicKey, string text, string stataExportCaption, QuestionType type,
-            string condition, string validation, string message, string instructions, bool featured, bool mandatory, Order answerOrder, IEnumerable<Answer> answers)
+            string condition, string validation, string message, string instructions, bool featured, bool  capital, bool mandatory, Order answerOrder, IEnumerable<Answer> answers)
         {
             var question = Find<AbstractQuestion>(publicKey);
             if (question == null)
@@ -253,6 +254,7 @@ namespace RavenQuestionnaire.Core.Entities
             question.ValidationMessage = message;
             question.Instructions = instructions;
             question.Featured = featured;
+            question.Capital = capital;
             question.Mandatory = mandatory;
             question.AnswerOrder = answerOrder;
         }

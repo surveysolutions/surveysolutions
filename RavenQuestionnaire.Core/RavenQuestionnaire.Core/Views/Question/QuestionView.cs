@@ -34,6 +34,8 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public bool Featured { get; set; }
 
+        public bool Capital { get; set; }
+
         public bool Mandatory { get; set; }
 
         public Order AnswerOrder { get; set; }
@@ -46,6 +48,7 @@ namespace RavenQuestionnaire.Core.Views.Question
 
         public Guid QuestionnaireKey {get; set; }
 
+        public Propagate ParentGroupType { get; set; }
 
         public Guid? Parent { get; set; }
 
@@ -84,6 +87,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.Comments = doc.Comments;
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
+            this.Capital = doc.Capital;
             this.Mandatory = doc.Mandatory;
             if (doc.Triggers.Count>0)
                 this.TargetGroupKey = doc.Triggers.First();
@@ -163,6 +167,10 @@ namespace RavenQuestionnaire.Core.Views.Question
         protected QuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
             : base(questionnaire, doc)
         {
+
+            var parent = GetQuestionGroup(questionnaire, doc.PublicKey);
+            this.Parent = parent.PublicKey;
+            this.ParentGroupType = (parent as IGroup) != null ? (parent as IGroup).Propagated : Propagate.None;
         }
 
         public QuestionView(
@@ -170,11 +178,9 @@ namespace RavenQuestionnaire.Core.Views.Question
             :
                 base(questionnaire, doc)
         {
-            
-            this.Parent = GetQuestionGroup(questionnaire, doc.PublicKey);
         }
 
-        protected Guid? GetQuestionGroup(IQuestionnaireDocument questionnaire, Guid questionKey)
+        protected IComposite GetQuestionGroup(IQuestionnaireDocument questionnaire, Guid questionKey)
         {
             if (questionnaire.Children.Any(q => q.PublicKey.Equals(questionKey)))
                 return null;
@@ -189,7 +195,7 @@ namespace RavenQuestionnaire.Core.Views.Question
                 if (queueItem.Children != null)
                 {
                     if (queueItem.Children.Any(q => q.PublicKey.Equals(questionKey)))
-                        return queueItem.PublicKey;
+                        return queueItem;
                     foreach (var child in queueItem.Children)
                     {
                         /* var childWithQuestion = child as IGroup<IGroup, TQuestion>;

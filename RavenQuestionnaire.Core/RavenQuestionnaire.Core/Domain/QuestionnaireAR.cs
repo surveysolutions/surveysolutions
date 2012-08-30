@@ -131,7 +131,7 @@ namespace RavenQuestionnaire.Core.Domain
             string stataExportCaption, string instructions, 
             QuestionType questionType, Guid? groupPublicKey,
             string conditionExpression, string validationExpression, string validationMessage,
-            bool featured, bool mandatory, Order answerOrder, Answer[] answers)
+            bool featured, bool capital, bool mandatory, Order answerOrder, Answer[] answers)
         {
             ApplyEvent(new QuestionChanged
             {
@@ -143,6 +143,7 @@ namespace RavenQuestionnaire.Core.Domain
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Featured = featured,
+                Capital = capital,
                 Mandatory = mandatory,
                 AnswerOrder = answerOrder,
                 PublicKey = publicKey,
@@ -166,7 +167,7 @@ namespace RavenQuestionnaire.Core.Domain
         /// <param name="answers"></param>
         public void AddQuestion(Guid publicKey, string questionText, string stataExportCaption,QuestionType questionType,
                                                      string conditionExpression,string validationExpression, string validationMessage,
-                                                     bool featured, bool mandatory, Order answerOrder, string instructions,  Guid? groupPublicKey, Guid TargetGroupKey,
+                                                     bool featured, bool capital, bool mandatory, Order answerOrder, string instructions, Guid? groupPublicKey, Guid TargetGroupKey,
                                                      Answer[] answers)
         {
             //performe checks before event raising
@@ -186,6 +187,7 @@ namespace RavenQuestionnaire.Core.Domain
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Featured = featured,
+                Capital = capital,
                 Mandatory = mandatory,
                 AnswerOrder = answerOrder,
                 GroupPublicKey = groupPublicKey,
@@ -208,6 +210,7 @@ namespace RavenQuestionnaire.Core.Domain
             result.ValidationMessage = e.ValidationMessage;
             result.AnswerOrder = e.AnswerOrder;
             result.Featured = e.Featured;
+            result.Capital = e.Capital;
             result.Mandatory = e.Mandatory;
             result.Instructions = e.Instructions;
             result.PublicKey = e.PublicKey;
@@ -234,6 +237,7 @@ namespace RavenQuestionnaire.Core.Domain
             question.ValidationMessage = e.ValidationMessage;
             question.Instructions = e.Instructions;
             question.Featured = e.Featured;
+            question.Capital = e.Capital;
             question.Mandatory = e.Mandatory;
             question.Triggers.Add(e.TargetGroupKey);
             question.AnswerOrder = e.AnswerOrder;

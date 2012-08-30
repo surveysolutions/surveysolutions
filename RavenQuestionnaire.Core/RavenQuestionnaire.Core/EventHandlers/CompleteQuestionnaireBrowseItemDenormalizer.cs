@@ -90,6 +90,11 @@ namespace RavenQuestionnaire.Core.EventHandlers
                     var statItem = new QuestionStatisticView(completeQuestion, gropPublicKey, gropPropagationPublicKey, screenPublicKey);
                     featuredQuestions.Add(statItem);
                 }
+
+                if (completeQuestion.Capital)
+                {
+                    //TODO : update propagate group title
+                }
             }
         }
         #region Implementation of IEventHandler<in AddPropagatableGroupCommand>
