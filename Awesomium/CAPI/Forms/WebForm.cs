@@ -60,7 +60,7 @@ namespace Browsing.CAPI.Forms
             this.clientSettings = new ClientSettingsProvider();
             this.requestProcessor = new WebRequestProcessor();
             this.urlUtils = new UrlUtils();
-            string url;
+
             if (Settings.Default.RunClient)
             {
                 try

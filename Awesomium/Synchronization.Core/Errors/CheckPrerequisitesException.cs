@@ -10,7 +10,7 @@ namespace Synchronization.Core.Errors
     {
         public SyncType SychronizationType { get; private set; }
 
-        public CheckPrerequisitesException(string message,SyncType type, Exception innerException)
+        public CheckPrerequisitesException(string message, SyncType type, Exception innerException)
             : base(message, innerException)
         {
             this.SychronizationType = type;

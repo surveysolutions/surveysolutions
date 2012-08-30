@@ -24,8 +24,6 @@ namespace Synchronization.Core.SynchronizationFlow
 
        
         private readonly IUrlUtils _urlUtils;
-        private readonly string ArchiveFileNameMask = "backup-{0}.zip";
-
         private UsbFileArchive usbArchive;
         private AutoResetEvent stopRequested = new AutoResetEvent(false);
 

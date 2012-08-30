@@ -11,7 +11,7 @@ namespace Browsing.CAPI.Containers
         public ScreenHolder()
         {
             this.loadedScreens = new List<Screen>();
-            
+
         }
         public ScreenHolder(IList<Screen> screens)
         {
@@ -20,7 +20,7 @@ namespace Browsing.CAPI.Containers
 
         public void Redirect(Screen screen)
         {
-            if(!this.LoadedScreens.Contains(screen))
+            if (!this.LoadedScreens.Contains(screen))
                 throw new ArgumentException("screen wasn't loaded in holder");
             this.Controls.Clear();
             screen.AutoSize = true;
@@ -28,7 +28,7 @@ namespace Browsing.CAPI.Containers
             screen.Name = screen.Name;
             this.Controls.Add(screen);
         }
-        
+
         private IList<Screen> loadedScreens;
 
         public IList<Screen> LoadedScreens

@@ -29,7 +29,7 @@ namespace Synchronization.Core.SynchronizationFlow
         public SyncStatus(
             SyncType actionType,
             SyncDirection direction,
-            int progress, 
+            int progress,
             SynchronizationException error)
         {
             this.progressPercents = progress;
@@ -38,8 +38,8 @@ namespace Synchronization.Core.SynchronizationFlow
             this.direction = direction;
         }
 
-        public SyncType ActionType { get { return this.actionType;} }
-        public SyncDirection Direction { get { return this.direction;} }
+        public SyncType ActionType { get { return this.actionType; } }
+        public SyncDirection Direction { get { return this.direction; } }
         public int ProgressPercents { get { return this.progressPercents; } }
         public SynchronizationException Error { get { return this.error; } }
     }
