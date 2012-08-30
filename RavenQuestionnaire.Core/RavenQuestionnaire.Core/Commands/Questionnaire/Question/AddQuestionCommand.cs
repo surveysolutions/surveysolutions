@@ -62,9 +62,6 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         /// <param name="featured">
         /// The featured.
         /// </param>
-        /// <param name="capital">
-        /// The capital
-        /// </param>
         /// <param name="mandatory">
         /// The mandatory.
         /// </param>
@@ -86,7 +83,6 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             string validationMessage, 
             string instructions, 
             bool featured, 
-            bool capital, 
             bool mandatory, 
             Order answerOrder, 
             Answer[] answers)
@@ -100,7 +96,6 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.ValidationMessage = validationMessage;
             this.Instructions = instructions;
             this.Featured = featured;
-            this.Capital = capital;
             this.Mandatory = mandatory;
             this.AnswerOrder = answerOrder;
             this.GroupPublicKey = groupPublicKey;
@@ -168,8 +163,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             string validationExpression, 
             string validationMessage, 
             string instructions, 
-            bool featured,
-            bool capital, 
+            bool featured, 
             bool mandatory, 
             Order answerOrder, 
             Answer[] answers)
@@ -184,7 +178,6 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.ValidationMessage = validationMessage;
             this.Instructions = instructions;
             this.Featured = featured;
-            this.Capital = capital;
             this.Mandatory = mandatory;
             this.AnswerOrder = answerOrder;
             this.GroupPublicKey = groupPublicKey;
@@ -215,11 +208,6 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         /// Gets or sets a value indicating whether featured.
         /// </summary>
         public bool Featured { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether capital.
-        /// </summary>
-        public bool Capital { get; set; }
 
         /// <summary>
         /// Gets or sets the group public key.
@@ -280,4 +268,3 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         #endregion
     }
 }
-

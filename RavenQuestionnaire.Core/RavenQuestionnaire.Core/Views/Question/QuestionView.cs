@@ -30,9 +30,6 @@ namespace RavenQuestionnaire.Core.Views.Question
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractQuestionView"/> class.
         /// </summary>
-
-
-        public Propagate ParentGroupType { get; set; }
         public AbstractQuestionView()
         {
         }
@@ -77,7 +74,6 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.Comments = doc.Comments;
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
-            this.Capital = doc.Capital;
             this.Mandatory = doc.Mandatory;
             if (doc.Triggers.Count > 0)
             {
@@ -114,12 +110,6 @@ namespace RavenQuestionnaire.Core.Views.Question
         /// Gets or sets a value indicating whether featured.
         /// </summary>
         public bool Featured { get; set; }
-        
-         /// <summary>
-        /// Gets or sets a value indicating whether capital.
-        /// </summary>
-        public bool Capital { get; set; }
-
 
         /// <summary>
         /// Gets or sets the index.
@@ -331,9 +321,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         public QuestionView(IQuestionnaireDocument questionnaire, TQuestion doc)
             : base(questionnaire, doc)
         {
-            var parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
-            this.Parent = parent.PublicKey;
-            this.ParentGroupType = (parent as IGroup) != null ? (parent as IGroup).Propagated : Propagate.None;
+            this.Parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
         }
 
         /// <summary>
@@ -368,7 +356,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         /// </returns>
         /// <exception cref="ArgumentException">
         /// </exception>
-        protected IComposite GetQuestionGroup(IQuestionnaireDocument questionnaire, Guid questionKey)
+        protected Guid? GetQuestionGroup(IQuestionnaireDocument questionnaire, Guid questionKey)
         {
             if (questionnaire.Children.Any(q => q.PublicKey.Equals(questionKey)))
             {
@@ -388,7 +376,7 @@ namespace RavenQuestionnaire.Core.Views.Question
                 {
                     if (queueItem.Children.Any(q => q.PublicKey.Equals(questionKey)))
                     {
-                        return queueItem;
+                        return queueItem.PublicKey;
                     }
 
                     foreach (IComposite child in queueItem.Children)

@@ -258,8 +258,8 @@ namespace RavenQuestionnaire.Core.Domain
                         PropogationPublicKey = propogationPublicKey, 
                         AnswerKeys = completeAnswers, 
                         AnswerValue = completeAnswerValue, 
-                        Featured = question.Featured,                        
-                        Capital = question.Capital,
+                        Featured = question.Featured, 
+                        
                         ////clean up this values
                         QuestionText = question.QuestionText, 
                         AnswerString = answerString

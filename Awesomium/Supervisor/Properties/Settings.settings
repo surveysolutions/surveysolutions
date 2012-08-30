@@ -1,51 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Browsing.Supervisor.Properties" GeneratedClassName="Settings">
-  <Profiles />
-  <Settings>
-    <Setting Name="NetworkLocalImportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronizations/Pull</Value>
-    </Setting>
-    <Setting Name="NetworkLocalExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronizations/Push</Value>
-    </Setting>
-    <Setting Name="NetworkCheckStatePath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronizations/ProgressInPersentage</Value>
-    </Setting>
-    <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost</Value>
-    </Setting>
-    <Setting Name="DefaultUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost:8083/</Value>
-    </Setting>
-    <Setting Name="CheckEventPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronizations/CheckIsThereSomethingToPush</Value>
-    </Setting>
-    <Setting Name="ClientId" Type="System.Guid" Scope="User">
-      <Value Profile="(Default)">00000000-0000-0000-0000-000000000000</Value>
-    </Setting>
-    <Setting Name="ParentId" Type="System.Guid" Scope="User">
-      <Value Profile="(Default)">00000000-0000-0000-0000-000000000000</Value>
-    </Setting>
-    <Setting Name="AuthentificationCheckPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Account/IsLoggedIn</Value>
-    </Setting>
-    <Setting Name="RunClient" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="UsbExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronizations/Export</Value>
-    </Setting>
-    <Setting Name="UsbImportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronizations/Import</Value>
-    </Setting>
-    <Setting Name="LoginPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Account/LogOn</Value>
-    </Setting>
-    <Setting Name="EnginePathName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Engine</Value>
-    </Setting>
-    <Setting Name="DefaultPort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">8083</Value>
-    </Setting>
-  </Settings>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings />
 </SettingsFile>

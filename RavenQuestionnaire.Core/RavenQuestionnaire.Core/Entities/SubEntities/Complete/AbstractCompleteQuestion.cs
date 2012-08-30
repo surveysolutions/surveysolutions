@@ -74,7 +74,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
 
         public bool Capital { get; set; }
 
-
         
         /// <summary>
         /// Gets or sets the comments.

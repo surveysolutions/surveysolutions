@@ -238,10 +238,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete
                 throw new InvalidOperationException();
             }
         }
-        /// <summary>
-        /// Gets or sets a value indicating whether capital.
-        /// </summary>
-
+        
         public bool Capital { get; set; }
 
 

@@ -33,6 +33,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         /// <summary>
         /// The condition expression.
         /// </summary>
+
+        public bool Capital { get; set; }
+
         private string conditionExpression;
 
         #endregion
@@ -106,11 +109,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         /// Gets or sets a value indicating whether featured.
         /// </summary>
         public bool Featured { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether capital.
-        /// </summary>
-        public bool Capital { get; set; }
 
         /// <summary>
         /// Gets or sets the instructions.
