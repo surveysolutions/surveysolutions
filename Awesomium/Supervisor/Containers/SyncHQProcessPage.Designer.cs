@@ -25,7 +25,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SynchronizationPage));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyncHQProcessPage));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pnlHolder = new System.Windows.Forms.Panel();
             this.btnUnderConstruction = new Browsing.Supervisor.Controls.FlatButton();
@@ -68,7 +68,7 @@
             this.btnUnderConstruction.Location = new System.Drawing.Point(270, 0);
             this.btnUnderConstruction.Margin = new System.Windows.Forms.Padding(0);
             this.btnUnderConstruction.Name = "btnConstruction";
-            this.btnUnderConstruction.Size = new System.Drawing.Size(200, 200);
+            this.btnUnderConstruction.Size = new System.Drawing.Size(220, 200);
             this.btnUnderConstruction.TabIndex = 3;
             this.btnUnderConstruction.Text = "Under construction";
             this.btnUnderConstruction.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
