@@ -133,8 +133,6 @@ namespace RavenQuestionnaire.Core.EventHandlers
                                 {
                                    PublicKey = evnt.Payload.QuestionPublicKey 
                                 }, 
-                            Guid.Empty, 
-                            null, 
                             Guid.Empty);
                     featuredQuestions.Add(currentFeatured);
                 }
@@ -218,7 +216,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 if (completeQuestion.Featured)
                 {
                     var statItem = new QuestionStatisticView(
-                        completeQuestion, gropPublicKey, gropPropagationPublicKey, screenPublicKey);
+                        completeQuestion, gropPublicKey);
                     featuredQuestions.Add(statItem);
                 }
             }

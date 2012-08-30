@@ -367,6 +367,10 @@
     <Content Include="Web.Deploy-devKh.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <Content Include="Views\Survey\Complete\_Main.cshtml" />
+    <Content Include="Views\Survey\Complete\_Answered.cshtml" />
+    <Content Include="Views\Survey\Complete\_Invalid.cshtml" />
+    <Content Include="Views\Survey\Complete\_Unanswered.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
