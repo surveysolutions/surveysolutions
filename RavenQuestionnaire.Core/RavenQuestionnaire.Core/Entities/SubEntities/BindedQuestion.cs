@@ -41,6 +41,12 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             set { }
         }
 
+        public bool Capital
+        {
+            get { return false; }
+            set { }
+        }
+
         public bool Mandatory
         {
             get { return false; }

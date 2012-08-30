@@ -23,7 +23,8 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public string ConditionExpression { get; set; }
         public string ValidationExpression { get; set; }
         public string ValidationMessage { get; set; }
-        public bool Featured { get; set;}
+        public bool Featured { get; set; }
+        public bool Capital { get; set; }
         public bool Mandatory { get;  set;}
         public Order AnswerOrder { get; set; }
         public Guid TargetGroupKey { get; set; }
@@ -34,7 +35,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public AddQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, string stataExportCaption, QuestionType questionType,
                                                         Guid? groupPublicKey,
                                                      string conditionExpression, string validationExpression, string validationMessage, string instructions,
-                                                     bool featured, bool mandatory, Order answerOrder, 
+                                                     bool featured, bool capital, bool mandatory, Order answerOrder, 
                                                      Answer[] answers)
         {
             this.QuestionnaireId = questionnaireId;
@@ -46,6 +47,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.ValidationMessage = validationMessage;
             this.Instructions = instructions;
             this.Featured = featured;
+            this.Capital = capital;
             this.Mandatory = mandatory;
             this.AnswerOrder = answerOrder;
             this.GroupPublicKey = groupPublicKey;
@@ -55,7 +57,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
         public AddQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, Guid TargetGroupKey, string stataExportCaption, QuestionType questionType,
                                                         Guid? groupPublicKey,
                                                      string conditionExpression, string validationExpression, string validationMessage, string instructions,
-                                                     bool featured, bool mandatory, Order answerOrder,
+                                                     bool featured, bool capital, bool mandatory, Order answerOrder,
                                                      Answer[] answers)
         {
             this.QuestionnaireId = questionnaireId;
@@ -68,6 +70,7 @@ namespace RavenQuestionnaire.Core.Commands.Questionnaire.Question
             this.ValidationMessage = validationMessage;
             this.Instructions = instructions;
             this.Featured = featured;
+            this.Capital = capital;
             this.Mandatory = mandatory;
             this.AnswerOrder = answerOrder;
             this.GroupPublicKey = groupPublicKey;

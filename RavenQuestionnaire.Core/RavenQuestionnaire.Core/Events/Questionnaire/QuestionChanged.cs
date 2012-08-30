@@ -26,6 +26,8 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire
 
         public bool Featured { get; set; }
 
+        public bool Capital { get; set; }
+
         public bool Mandatory { get; set; }
 
         public Guid TargetGroupKey { get; set; }

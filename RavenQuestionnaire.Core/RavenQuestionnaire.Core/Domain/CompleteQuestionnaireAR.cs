@@ -152,6 +152,7 @@ namespace RavenQuestionnaire.Core.Domain
                     AnswerKeys = completeAnswers,
                     AnswerValue = completeAnswerValue,
                     Featured = question.Featured,
+                    Capital = question.Capital,
                     //clean up this values
                     QuestionText = question.QuestionText,
                     AnswerString = answerString

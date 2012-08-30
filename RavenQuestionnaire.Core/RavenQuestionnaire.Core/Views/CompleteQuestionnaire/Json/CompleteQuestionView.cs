@@ -14,6 +14,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         public string Title { get; set; }
         public QuestionType QuestionType { get; set; }
         public bool Featured { get; set; }
+        public bool Capital { get; set; }
         public bool Mandatory { get; set; }
         public bool Enabled { get; set; }
         public bool Valid { get; set; }
@@ -34,6 +35,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             this.QuestionType = doc.QuestionType;
             this.PublicKey = doc.PublicKey;
             this.Featured = doc.Featured;
+            this.Capital = doc.Capital;
             this.Valid = doc.Valid;
             this.Comments = doc.Comments;
             this.Enabled = doc.Enabled;

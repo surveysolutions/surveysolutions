@@ -21,6 +21,8 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire.Completed
 
         public bool Featured { set; get; }
 
+        public bool Capital { set; get; }
+        
         public string QuestionText { get; set; }
     }
 }

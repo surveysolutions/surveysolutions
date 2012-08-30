@@ -16,6 +16,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         List<Image> Cards { get; set; }
         Order AnswerOrder { get; set; }
         bool Featured { get; set; }
+        bool Capital { get; set; }
         bool Mandatory { get; set; }
         string Comments { get; set; }
     }
