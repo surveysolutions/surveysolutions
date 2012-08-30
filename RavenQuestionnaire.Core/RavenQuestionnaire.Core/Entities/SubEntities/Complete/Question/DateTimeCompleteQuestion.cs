@@ -189,7 +189,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override string GetAnswerString()
         {
-            return this._answer.HasValue ? Convert.ToString(this._answer.Value,System.Globalization.CultureInfo.InvariantCulture) : string.Empty;
+            return this._answer.HasValue
+                       ? Convert.ToString(this._answer.Value, System.Globalization.CultureInfo.InvariantCulture)
+                       : string.Empty;
         }
 
         /// <summary>
