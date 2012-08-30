@@ -17,14 +17,16 @@ namespace Browsing.CAPI.Containers
 {
     public partial class CAPISynchronization : Screen
     {
-
         public CAPISynchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
             : base(holder, true)
         {
             InitializeComponent();
+
+            ContentPanel.Controls.AddRange(new Control[] { this.btnPull, this.btnPush, this.btnCancel, this.statusStrip1});
             
             this.pleaseWait = new PleaseWaitControl();
             this.clientSettings = clientSettings;
+
             this.syncManager = new CapiSyncManager(this.pleaseWait, this.clientSettings, requestProcessor, utils);
             this.syncManager.EndOfSync += new EventHandler<SynchronizationCompletedEvent>(sync_EndOfSync);
             this.syncManager.BgnOfSync += new EventHandler<SynchronizationEvent>(sync_BgnOfSync);
@@ -33,6 +35,7 @@ namespace Browsing.CAPI.Containers
 
             var host = new ToolStripControlHost(this.pleaseWait);
             host.Size = this.statusStrip1.Size;
+
             this.statusStrip1.Items.AddRange(new ToolStripItem[] {host});
         }
 

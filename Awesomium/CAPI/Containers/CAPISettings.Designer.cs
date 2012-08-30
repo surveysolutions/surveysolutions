@@ -49,7 +49,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48.16956F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.83044F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 37F));
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.textBox1, 1, 3);
@@ -66,7 +66,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 73F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 53.33333F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(550, 550);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(540, 490);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel
@@ -81,14 +81,14 @@
             this.tableLayoutPanel.Controls.Add(this.labelCompanyName, 0, 3);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tableLayoutPanel.Location = new System.Drawing.Point(250, 103);
+            this.tableLayoutPanel.Location = new System.Drawing.Point(245, 103);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
             this.tableLayoutPanel.RowCount = 4;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(260, 144);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(254, 144);
             this.tableLayoutPanel.TabIndex = 4;
             // 
             // labelProductName
@@ -99,7 +99,7 @@
             this.labelProductName.Location = new System.Drawing.Point(6, 0);
             this.labelProductName.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelProductName.Name = "labelProductName";
-            this.labelProductName.Size = new System.Drawing.Size(251, 36);
+            this.labelProductName.Size = new System.Drawing.Size(245, 36);
             this.labelProductName.TabIndex = 19;
             this.labelProductName.Text = "Product Name";
             this.labelProductName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -112,7 +112,7 @@
             this.labelVersion.Location = new System.Drawing.Point(6, 36);
             this.labelVersion.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(251, 36);
+            this.labelVersion.Size = new System.Drawing.Size(245, 36);
             this.labelVersion.TabIndex = 0;
             this.labelVersion.Text = "Version";
             this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -125,7 +125,7 @@
             this.labelCopyright.Location = new System.Drawing.Point(6, 72);
             this.labelCopyright.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelCopyright.Name = "labelCopyright";
-            this.labelCopyright.Size = new System.Drawing.Size(251, 36);
+            this.labelCopyright.Size = new System.Drawing.Size(245, 36);
             this.labelCopyright.TabIndex = 21;
             this.labelCopyright.Text = "Copyright";
             this.labelCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -138,7 +138,7 @@
             this.labelCompanyName.Location = new System.Drawing.Point(6, 108);
             this.labelCompanyName.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelCompanyName.Name = "labelCompanyName";
-            this.labelCompanyName.Size = new System.Drawing.Size(251, 36);
+            this.labelCompanyName.Size = new System.Drawing.Size(245, 36);
             this.labelCompanyName.TabIndex = 22;
             this.labelCompanyName.Text = "Company Name";
             this.labelCompanyName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -147,10 +147,10 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(3, 330);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(3, 302);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(241, 55);
+            this.label1.Size = new System.Drawing.Size(236, 55);
             this.label1.TabIndex = 0;
             this.label1.Text = "Supervisor\'s host address: ";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -159,10 +159,10 @@
             // 
             this.textBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Browsing.CAPI.Properties.Settings.Default, "EndpointExportPath", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox1.Location = new System.Drawing.Point(250, 333);
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox1.Location = new System.Drawing.Point(245, 305);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(260, 49);
+            this.textBox1.Size = new System.Drawing.Size(254, 44);
             this.textBox1.TabIndex = 1;
             this.textBox1.Text = global::Browsing.CAPI.Properties.Settings.Default.EndpointExportPath;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
@@ -175,10 +175,10 @@
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
             this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnCancel.Location = new System.Drawing.Point(247, 394);
+            this.btnCancel.Location = new System.Drawing.Point(242, 366);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(0);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(266, 55);
+            this.btnCancel.Size = new System.Drawing.Size(260, 55);
             this.btnCancel.TabIndex = 2;
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -192,7 +192,7 @@
             this.pictureBox1.InitialImage = null;
             this.pictureBox1.Location = new System.Drawing.Point(3, 103);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(241, 144);
+            this.pictureBox1.Size = new System.Drawing.Size(236, 144);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
@@ -201,7 +201,6 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "CAPISettings";
             this.Size = new System.Drawing.Size(550, 550);
             this.tableLayoutPanel1.ResumeLayout(false);
