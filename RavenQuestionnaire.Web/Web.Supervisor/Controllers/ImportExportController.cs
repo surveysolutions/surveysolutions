@@ -10,6 +10,12 @@ namespace Web.Supervisor.Controllers
     {
         private readonly IExportImport exportimportEvents;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImportExportController"/> class.
+        /// </summary>
+        /// <param name="exportImport">
+        /// The export import.
+        /// </param>
         public ImportExportController(IExportImport exportImport)
         {
             exportimportEvents = exportImport;
@@ -17,12 +23,21 @@ namespace Web.Supervisor.Controllers
 
         #region PublicMethod
 
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
         [AcceptVerbs(HttpVerbs.Get)]
         public ActionResult Import()
         {
             return View("ViewTestUploadFile");
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="myfile">
+        /// The myfile.
+        /// </param>
         [AcceptVerbs(HttpVerbs.Post)]
         public void ImportAsync(HttpPostedFileBase myfile)
         {
@@ -37,11 +52,20 @@ namespace Web.Supervisor.Controllers
             }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
         public ActionResult ImportCompleted()
         {
             return RedirectToAction("Index", "Dashboard");
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="clientGuid">
+        /// The client guid.
+        /// </param>
         public void ExportAsync(Guid clientGuid)
         {
             AsyncManager.OutstandingOperations.Increment();
@@ -60,6 +84,13 @@ namespace Web.Supervisor.Controllers
                                                  });
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// </returns>
         public ActionResult ExportCompleted(byte[] result)
         {
             return File(result, "application/zip",
