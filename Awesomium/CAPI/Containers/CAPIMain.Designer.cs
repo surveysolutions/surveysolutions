@@ -81,6 +81,7 @@ namespace Browsing.CAPI.Containers
             this.btnLogout.Location = new System.Drawing.Point(0, 0);
             this.btnLogout.Margin = new System.Windows.Forms.Padding(0);
             this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.btnLogout.Size = new System.Drawing.Size(200, 200);
             this.btnLogout.TabIndex = 4;
             this.btnLogout.Text = "Logout";
@@ -99,6 +100,7 @@ namespace Browsing.CAPI.Containers
             this.btnSettings.Location = new System.Drawing.Point(720, 0);
             this.btnSettings.Margin = new System.Windows.Forms.Padding(0);
             this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.btnSettings.Size = new System.Drawing.Size(200, 200);
             this.btnSettings.TabIndex = 3;
             this.btnSettings.Text = "Settings";
@@ -116,6 +118,7 @@ namespace Browsing.CAPI.Containers
             this.btnSyncronization.Location = new System.Drawing.Point(460, 0);
             this.btnSyncronization.Margin = new System.Windows.Forms.Padding(0);
             this.btnSyncronization.Name = "btnSyncronization";
+            this.btnSyncronization.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.btnSyncronization.Size = new System.Drawing.Size(200, 200);
             this.btnSyncronization.TabIndex = 2;
             this.btnSyncronization.Text = "Synchronization";
@@ -133,6 +136,7 @@ namespace Browsing.CAPI.Containers
             this.btnDashboard.Location = new System.Drawing.Point(230, 0);
             this.btnDashboard.Margin = new System.Windows.Forms.Padding(0);
             this.btnDashboard.Name = "btnDashboard";
+            this.btnDashboard.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.btnDashboard.Size = new System.Drawing.Size(200, 200);
             this.btnDashboard.TabIndex = 1;
             this.btnDashboard.Text = "Dashboard";
@@ -149,6 +153,7 @@ namespace Browsing.CAPI.Containers
             this.btnLogin.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnLogin.Location = new System.Drawing.Point(0, 0);
             this.btnLogin.Margin = new System.Windows.Forms.Padding(0);
+            this.btnLogin.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(200, 200);
             this.btnLogin.TabIndex = 0;
@@ -161,12 +166,12 @@ namespace Browsing.CAPI.Containers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.MinimumSize = new System.Drawing.Size(920, 200);
             this.Name = "CAPIMain";
             this.Size = new System.Drawing.Size(920, 200);
+            this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.pnlHolder.ResumeLayout(false);
             this.ResumeLayout(false);
