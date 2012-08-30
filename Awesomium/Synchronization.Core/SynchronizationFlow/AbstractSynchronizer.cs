@@ -19,7 +19,7 @@ namespace Synchronization.Core.SynchronizationFlow
         protected abstract void OnPull(SyncDirection direction);
         protected abstract void OnStop();
 
-        //The event-invoking method that derived classes can override.
+        // The event-invoking method that derived classes can override.
         protected virtual void OnSyncProgressChanged(SynchronizationEvent e)
         {
             // Make a temporary copy of the event to avoid possibility of

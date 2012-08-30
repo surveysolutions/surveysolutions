@@ -80,9 +80,11 @@ namespace Synchronization.Core.SynchronizationFlow
         private const string In = "In";
         private const string Out = "Out";
         private DriveInfo usbDriver;
-      //  private string fileName = null;
-   //     private Header header = new Header();
-        //private const int MaxSize = int.MaxValue;//504857600;
+
+        // private string fileName = null;
+        // private Header header = new Header();
+        // private const int MaxSize = int.MaxValue;//504857600;
+
         private const int MaxSize = 504857600;
 
         internal UsbFileArchive(string driver)
@@ -94,7 +96,7 @@ namespace Synchronization.Core.SynchronizationFlow
                 if (d.Name == driver)
                 {
                     this.usbDriver = d;
-              //      this.fileName = CreateFileName(0);
+                    // this.fileName = CreateFileName(0);
 
                     break;
                 }
@@ -126,74 +128,74 @@ namespace Synchronization.Core.SynchronizationFlow
             return stream;
         }
 
-       /* protected FileStream CreateFile()
-        {
-          //  var space = this.usbDriver.TotalFreeSpace;
-            return File.Create(this.fileName);
-              var fileIndex = (int)(this.usbDriver.TotalFreeSpace / MaxSize);
-            var fileVolume = (int)(this.usbDriver.TotalFreeSpace % MaxSize);
+        /* protected FileStream CreateFile()
+         {
+           //  var space = this.usbDriver.TotalFreeSpace;
+             return File.Create(this.fileName);
+               var fileIndex = (int)(this.usbDriver.TotalFreeSpace / MaxSize);
+             var fileVolume = (int)(this.usbDriver.TotalFreeSpace % MaxSize);
 
-            FileStream fileStream = null;
+             FileStream fileStream = null;
 
-            if (fileVolume == 0)
-            {
-                fileIndex -= 1;
-                fileVolume = MaxSize;
-            }
+             if (fileVolume == 0)
+             {
+                 fileIndex -= 1;
+                 fileVolume = MaxSize;
+             }
 
-            for (; fileIndex >= 0; fileIndex--, fileVolume = MaxSize)
-            {
-                if (fileStream != null)
-                    fileStream.Close();
+             for (; fileIndex >= 0; fileIndex--, fileVolume = MaxSize)
+             {
+                 if (fileStream != null)
+                     fileStream.Close();
 
-                if(fileVolume >(int)this.usbDriver.TotalFreeSpace)
-                    fileVolume =(int)this.usbDriver.TotalFreeSpace;
+                 if(fileVolume >(int)this.usbDriver.TotalFreeSpace)
+                     fileVolume =(int)this.usbDriver.TotalFreeSpace;
 
-                fileStream = PutFile(fileIndex, fileVolume);
-            }
+                 fileStream = PutFile(fileIndex, fileVolume);
+             }
             
-            return fileStream;
-        }*/
+             return fileStream;
+         }*/
 
-     /*   private FileStream ReadHeader()
-        {
-            var fileStream = File.Open(this.fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-           // fileStream.Read(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);
+        /*   private FileStream ReadHeader()
+           {
+               var fileStream = File.Open(this.fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+              // fileStream.Read(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);
 
-            return fileStream;
-        }*/
+               return fileStream;
+           }*/
 
         public void SaveArchive(byte[] data)
         {
 
             try
             {
-                if(File.Exists(this.OutFile))
+                if (File.Exists(this.OutFile))
                     File.Delete(this.OutFile);
-                var fileStream = File.Create(this.OutFile); 
+                var fileStream = File.Create(this.OutFile);
 
-         /*       int newPosition = this.header.ArchivePosition;
+                /*       int newPosition = this.header.ArchivePosition;
 
-                if (newPosition >= data.Length)
-                {
-                    // put data before existing archive
-                    newPosition = 0;
-                }
-                else
-                {
-                    // put data after exsitinge archive
-                    newPosition += this.header.ArchiveSize;
-                }*/
-                
+                       if (newPosition >= data.Length)
+                       {
+                           // put data before existing archive
+                           newPosition = 0;
+                       }
+                       else
+                       {
+                           // put data after exsitinge archive
+                           newPosition += this.header.ArchiveSize;
+                       }*/
+
                 // step 1: write archive
                 fileStream.Position = 0;
                 fileStream.Write(data, 0, data.Length);
 
                 // step 2: update archive placement info
-               // this.header.FormatHeader(newPosition, data.Length);
+                // this.header.FormatHeader(newPosition, data.Length);
 
-              /*  fileStream.Position = 0;
-                fileStream.Write(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);*/
+                /*  fileStream.Position = 0;
+                  fileStream.Write(this.header.ByteBuffer, 0, this.header.ByteBuffer.Length);*/
                 fileStream.Close();
             }
             catch (Exception exception)
@@ -210,7 +212,7 @@ namespace Synchronization.Core.SynchronizationFlow
             byte[] result = null;
             using (var file = File.Open(this.InFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             {
-                byte[] buffer = new byte[16*1024];
+                byte[] buffer = new byte[16 * 1024];
                 using (MemoryStream ms = new MemoryStream())
                 {
                     int read;
@@ -223,10 +225,10 @@ namespace Synchronization.Core.SynchronizationFlow
             }
             return result;
         }
-/*
-        public string FileName
-        {
-            get { return this.fileName; }
-        }*/
+        /*
+                public string FileName
+                {
+                    get { return this.fileName; }
+                }*/
     }
 }

@@ -68,7 +68,7 @@ namespace Common.Utils
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return defaultValue;
             }

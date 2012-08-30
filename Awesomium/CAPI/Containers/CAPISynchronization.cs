@@ -97,7 +97,6 @@ namespace Browsing.CAPI.Containers
 
         #region Fields
 
-        private bool repaint;
         private PleaseWaitControl pleaseWait;
         private CapiSyncManager syncManager;
         private StatusStrip statusStrip1;
