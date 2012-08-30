@@ -20,7 +20,9 @@
             $(function () {
                 $(".datepicker-@(Model.PublicKey)").datepicker({
                     format: 'mm/dd/yyyy'
-                    });
+                }).on('hide', function (e) {
+                    $(this.form).submit();
+                });
             })
         </script>
     </fieldset>
