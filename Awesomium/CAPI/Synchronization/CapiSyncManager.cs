@@ -1,23 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.IO;
-using System.Windows.Forms;
 using System.Threading;
-using System.Runtime.Remoting.Messaging;
-using Awesomium.Core;
-using Browsing.CAPI.Properties;
+
 using Common.Utils;
 using Synchronization.Core;
-using Synchronization.Core.Events;
 using Synchronization.Core.Errors;
 using Synchronization.Core.Interface;
 using Synchronization.Core.SynchronizationFlow;
-using Browsing.CAPI.Forms;
-
 
 namespace Browsing.CAPI.Synchronization
 {

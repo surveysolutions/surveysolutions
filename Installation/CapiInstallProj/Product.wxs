@@ -3,7 +3,7 @@
 
     <?include Variables.wxi?>
   
-    <Product Id="$(var.ProductCode)"
+    <Product Id="*"
            Language="1033"
            Name="$(var.ProductName)"
            Version="$(var.ProductVersion)" 
@@ -17,7 +17,10 @@
         <!--InstallPrivileges="limited"-->
 
 
-      <MajorUpgrade Schedule="afterInstallInitialize" AllowSameVersionUpgrades="yes"  
+      <MajorUpgrade Schedule="afterInstallValidate" 
+                    AllowSameVersionUpgrades="yes" 
+                    AllowDowngrades="no" 
+                    Disallow="no" 
             DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit."/>    
 
     <!--<Upgrade Id="cc00bf47-7cbf-4bde-8fa1-905fa1916b1e">
@@ -36,8 +39,8 @@
                       Property="UPGRADEFOUND" />
     </Upgrade>-->
 
-    <Property Id="NEWPRODUCTFOUND" Secure="yes" />
-    <Property Id="UPGRADEFOUND" Secure="yes" />
+    <!--<Property Id="NEWPRODUCTFOUND" Secure="yes" />
+    <Property Id="UPGRADEFOUND" Secure="yes" />-->
 
     <Property Id="ALLUSERS" Secure="yes" />
 

@@ -45,9 +45,6 @@
                 <Component Id="cmp37BDE0469DD8A3A7AAD149F746E9BF4E" Guid="*">
                     <File Id="filC2C4FC4A6B1F4AD3DFAE8AB655747066" KeyPath="yes" Source="$(var.SourceSiteDir)\bin\DataEntryClient.dll" />
                 </Component>
-                <Component Id="cmpB6ECCD38D47346C7AF46D1F625BC29B3" Guid="*">
-                    <File Id="filA24E5BFE65D176E8D11E05C7129CDA93" KeyPath="yes" Source="$(var.SourceSiteDir)\bin\DataEntryClient.pdb" />
-                </Component>
                 <Component Id="cmp91276524D50C4CD81E19FFF6ECDA2741" Guid="*">
                     <File Id="fil9BA59AA7626B0AE6A63DB74D089402E6" KeyPath="yes" Source="$(var.SourceSiteDir)\bin\Esent.Interop.dll" />
                 </Component>
@@ -772,7 +769,6 @@
             <ComponentRef Id="cmpCD25A567E98AFC70FEB2C3033B6B8699" />
             <ComponentRef Id="cmp634EAE3132174FF52859BE8FBB822352" />
             <ComponentRef Id="cmp37BDE0469DD8A3A7AAD149F746E9BF4E" />
-            <ComponentRef Id="cmpB6ECCD38D47346C7AF46D1F625BC29B3" />
             <ComponentRef Id="cmp91276524D50C4CD81E19FFF6ECDA2741" />
             <ComponentRef Id="cmpF8DCBFA4928A62E21291E1D48A0B7A30" />
             <ComponentRef Id="cmpD6A4D2417C58D696F2B408FA06C5585F" />
