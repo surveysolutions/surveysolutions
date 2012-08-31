@@ -62,9 +62,7 @@ namespace Synchronization.Core
             try
             {
                 OnAddSynchronizers(this.synchronizerChain, this.settingsProvider);
-
                 Debug.Assert(this.synchronizerChain.Count > 0, "Have you missed adding synchronizers?");
-
                 foreach (var synchronizer in this.synchronizerChain)
                     synchronizer.SyncProgressChanged += this.SyncProgressChanged;
             }
