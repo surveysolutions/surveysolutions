@@ -39,6 +39,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
             this.CompleteQuestionnaireId = doc.PublicKey.ToString();
             this.Creator = doc.Creator;
             this.Status = doc.Status;
+            this.LastScreenPublicKey = doc.Children.OfType<ICompleteGroup>().Last().PublicKey;
             this.HandleQuestionTree(doc);
         }
 
@@ -50,6 +51,11 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         /// Gets or sets the answered questions.
         /// </summary>
         public IList<QuestionStatisticView> AnsweredQuestions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last screen.
+        /// </summary>
+        public Guid LastScreenPublicKey { get; set; }
 
         /// <summary>
         /// Gets or sets the complete questionnaire id.
