@@ -3,16 +3,15 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Browsing.Supervisor.Forms;
 
+
 namespace Supervisor
 {
+    
+
     static class Program
     {
-        static void Main()
+        static void Main(string[] args)
         {
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Form1());
-
             // Checks if this is a child rendering process and if so,
             // transfers control of the process to Awesomium.
             if (WebCore.IsChildProcess)

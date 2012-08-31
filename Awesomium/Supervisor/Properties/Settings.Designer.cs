@@ -25,78 +25,6 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/Pull")]
-        public string NetworkLocalImportPath {
-            get {
-                return ((string)(this["NetworkLocalImportPath"]));
-            }
-            set {
-                this["NetworkLocalImportPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/Push")]
-        public string NetworkLocalExportPath {
-            get {
-                return ((string)(this["NetworkLocalExportPath"]));
-            }
-            set {
-                this["NetworkLocalExportPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/ProgressInPersentage")]
-        public string NetworkCheckStatePath {
-            get {
-                return ((string)(this["NetworkCheckStatePath"]));
-            }
-            set {
-                this["NetworkCheckStatePath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost")]
-        public string EndpointExportPath {
-            get {
-                return ((string)(this["EndpointExportPath"]));
-            }
-            set {
-                this["EndpointExportPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8083/")]
-        public string DefaultUrl {
-            get {
-                return ((string)(this["DefaultUrl"]));
-            }
-            set {
-                this["DefaultUrl"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/CheckIsThereSomethingToPush")]
-        public string CheckEventPath {
-            get {
-                return ((string)(this["CheckEventPath"]));
-            }
-            set {
-                this["CheckEventPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("00000000-0000-0000-0000-000000000000")]
         public global::System.Guid ClientId {
             get {
@@ -121,13 +49,97 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Account/IsLoggedIn")]
-        public string AuthentificationCheckPath {
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8084/")]
+        public string DefaultUrl {
             get {
-                return ((string)(this["AuthentificationCheckPath"]));
+                return ((string)(this["DefaultUrl"]));
             }
             set {
-                this["AuthentificationCheckPath"] = value;
+                this["DefaultUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost")]
+        public string EndpointExportPath {
+            get {
+                return ((string)(this["EndpointExportPath"]));
+            }
+            set {
+                this["EndpointExportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8084")]
+        public string DefaultPort {
+            get {
+                return ((string)(this["DefaultPort"]));
+            }
+            set {
+                this["DefaultPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Engine")]
+        public string EnginePathName {
+            get {
+                return ((string)(this["EnginePathName"]));
+            }
+            set {
+                this["EnginePathName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Account/LogOn")]
+        public string LoginPath {
+            get {
+                return ((string)(this["LoginPath"]));
+            }
+            set {
+                this["LoginPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/ProgressInPersentage")]
+        public string NetworkCheckStatePath {
+            get {
+                return ((string)(this["NetworkCheckStatePath"]));
+            }
+            set {
+                this["NetworkCheckStatePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/Push")]
+        public string NetworkLocalExportPath {
+            get {
+                return ((string)(this["NetworkLocalExportPath"]));
+            }
+            set {
+                this["NetworkLocalExportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/Pull")]
+        public string NetworkLocalImportPath {
+            get {
+                return ((string)(this["NetworkLocalImportPath"]));
+            }
+            set {
+                this["NetworkLocalImportPath"] = value;
             }
         }
         
@@ -169,37 +181,25 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Account/LogOn")]
-        public string LoginPath {
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/CheckIsThereSomethingToPush")]
+        public string CheckEventPath {
             get {
-                return ((string)(this["LoginPath"]));
+                return ((string)(this["CheckEventPath"]));
             }
             set {
-                this["LoginPath"] = value;
+                this["CheckEventPath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Engine")]
-        public string EnginePathName {
+        [global::System.Configuration.DefaultSettingValueAttribute("Account/IsLoggedIn")]
+        public string AuthentificationCheckPath {
             get {
-                return ((string)(this["EnginePathName"]));
+                return ((string)(this["AuthentificationCheckPath"]));
             }
             set {
-                this["EnginePathName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8083")]
-        public string DefaultPort {
-            get {
-                return ((string)(this["DefaultPort"]));
-            }
-            set {
-                this["DefaultPort"] = value;
+                this["AuthentificationCheckPath"] = value;
             }
         }
     }

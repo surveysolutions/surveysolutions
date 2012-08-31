@@ -38,10 +38,8 @@
     <Reference Include="Awesomium.Windows.Forms, Version=1.6.6.0, Culture=neutral, PublicKeyToken=9bd24830fbe304a0, processorArchitecture=x86" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -74,6 +72,18 @@
     </Compile>
     <Compile Include="Containers\SettingsPage.Designer.cs">
       <DependentUpon>SettingsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Containers\SyncCapiProcessPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\SyncCapiProcessPage.Designer.cs">
+      <DependentUpon>SyncCapiProcessPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Containers\SyncHQProcessPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\SyncHQProcessPage.Designer.cs">
+      <DependentUpon>SyncHQProcessPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Containers\SynchronizationPage.cs">
       <SubType>UserControl</SubType>
@@ -108,22 +118,25 @@
     <Compile Include="Utils\UrlUtils.cs" />
     <EmbeddedResource Include="Containers\BrowserPage.resx">
       <DependentUpon>BrowserPage.cs</DependentUpon>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>BrowserPage1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Containers\MainPage.resx">
       <DependentUpon>MainPage.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Containers\SettingsPage.resx">
       <DependentUpon>SettingsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Containers\SyncCapiProcessPage.resx">
+      <DependentUpon>SyncCapiProcessPage.cs</DependentUpon>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SettingsPage1.Designer.cs</LastGenOutput>
+      <LastGenOutput>SyncCapiProcessPage1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Containers\SyncHQProcessPage.resx">
+      <DependentUpon>SyncHQProcessPage.cs</DependentUpon>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SyncHQProcessPage1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Containers\SynchronizationPage.resx">
       <DependentUpon>SynchronizationPage.cs</DependentUpon>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SynchronizationPage1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsBox.resx">
       <DependentUpon>SettingsBox.cs</DependentUpon>
@@ -139,6 +152,10 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="bin\Debug\NLog.config" />
+    <None Include="bin\Debug\Supervisor.exe.config" />
+    <None Include="bin\Debug\Supervisor.vshost.exe.config" />
+    <None Include="bin\Debug\Supervisor.vshost.exe.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -150,6 +167,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Symbol-Construction.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\Common.dll" />
+    <Content Include="bin\Debug\Common.pdb" />
+    <Content Include="bin\Debug\NLog.dll" />
+    <Content Include="bin\Debug\NLog.xml" />
+    <Content Include="bin\Debug\Supervisor.exe" />
+    <Content Include="bin\Debug\Supervisor.pdb" />
+    <Content Include="bin\Debug\Supervisor.vshost.exe" />
+    <Content Include="bin\Debug\Synchronization.Core.dll" />
+    <Content Include="bin\Debug\Synchronization.Core.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{9A8843B1-978F-4E96-8523-907C257CA183}</Project>
       <Name>Common %28Common\Common%29</Name>
@@ -158,12 +192,6 @@
       <Project>{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}</Project>
       <Name>Synchronization.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon-headquarters-pin-HQ-pin_500-medium-280x280.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Hardware-Tablet-PC-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
