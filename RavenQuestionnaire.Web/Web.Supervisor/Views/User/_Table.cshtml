@@ -25,11 +25,11 @@
                 <td>
                     @if (item.IsLocked)
                     {
-                        <a href="@Url.Action("UnlockUser", "User", new {id = item.Id})">Unlock</a>
+                        @Html.ActionLink("Unlock", "UnlockUser", "User",new {id = item.Id}, new {onclick = "return confirm('Are you sure you wish to change person status?')"})
                     }
                     else
                     {
-                        <a href="@Url.Action("LockUser", "User", new {id = item.Id})">Lock</a>
+                        @Html.ActionLink("Lock", "LockUser", "User", new { id = item.Id }, new { onclick = "return confirm('Are you sure you wish to change person status?')" })
                     }
                 </td>
             </tr>
