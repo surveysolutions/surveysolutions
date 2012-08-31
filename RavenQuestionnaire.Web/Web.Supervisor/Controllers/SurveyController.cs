@@ -1,6 +1,5 @@
 ﻿using Ncqrs;
 using System;
-using System.Web;
 using System.Web.Mvc;
 using RavenQuestionnaire.Core.Views.Statistics;
 using Web.Supervisor.Models;
@@ -10,7 +9,6 @@ using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core.Views.User;
 using RavenQuestionnaire.Core.Views.Assign;
 using RavenQuestionnaire.Core.Views.Survey;
-using RavenQuestionnaire.Core.Denormalizers;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
@@ -23,17 +21,15 @@ namespace Web.Supervisor.Controllers
     [Authorize]
     public class SurveyController : Controller
     {
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
         private readonly IGlobalInfoProvider globalInfo;
         private readonly IViewRepository viewRepository;
 
 
         public SurveyController(IViewRepository viewRepository,
-                                IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession,
+                                
                                 IGlobalInfoProvider provider)
         {
             this.viewRepository = viewRepository;
-            this.documentItemSession = documentItemSession;
             globalInfo = provider;
         }
 
@@ -43,7 +39,7 @@ namespace Web.Supervisor.Controllers
             return View(model);
         }
 
-        public ActionResult Assigments(string id, SurveyGroupInputModel input)
+        public ActionResult Assigments(Guid id, SurveyGroupInputModel input)
         {
             var inputModel = input == null ? new SurveyGroupInputModel() { Id = id } : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders);
             var user = globalInfo.GetCurrentUser();
@@ -112,15 +108,15 @@ namespace Web.Supervisor.Controllers
         }
 
         [HttpPost]
-        public ActionResult AssignForm(string CqId, string userId)
+        public ActionResult AssignForm(Guid CqId, Guid userId)
         {
             UserLight responsible = null;
             try
             {
                 UserView user = viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(userId));
-                responsible = (user != null) ? new UserLight(user.UserId, user.UserName) : new UserLight();
+                responsible = (user != null) ? new UserLight(user.PublicKey, user.UserName) : new UserLight();
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new ChangeAssignmentCommand(Guid.Parse(CqId), responsible));
+                commandService.Execute(new ChangeAssignmentCommand(CqId, responsible));
             }
             catch (Exception e)
             {

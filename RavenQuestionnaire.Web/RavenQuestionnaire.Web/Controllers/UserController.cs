@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.User;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -29,7 +28,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 viewRepository.Load<UserBrowseInputModel, UserBrowseView>(new UserBrowseInputModel(UserRoles.Supervisor)
                                                                               {PageSize = 100}).Items;
             List<UserBrowseItem> list = supervisors.ToList();
-            list.Insert(0, new UserBrowseItem("", "", null, DateTime.MinValue, false, null, null));
+            list.Insert(0, new UserBrowseItem(Guid.Empty, "", null, DateTime.MinValue, false, null, null));
             ViewBag.Supervisors = list;
         }
         protected void AddLocationsListToViewBag()
@@ -46,9 +45,9 @@ namespace RavenQuestionnaire.Web.Controllers
             var model = viewRepository.Load<UserBrowseInputModel, UserBrowseView>(input);
             return View(model);
         }
-        public ActionResult Manage(string id)
+        public ActionResult Manage(Guid id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (id == null || id == Guid.Empty)
                 throw new HttpException(404, "Invalid quesry string parameters");
             var model = viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(id));
             AddSupervisorListToViewBag();
@@ -66,15 +65,15 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (string.IsNullOrEmpty(model.UserId))
+                if (model.PublicKey == Guid.Empty)
                 {
                     var publicKey = Guid.NewGuid();
 
-                    if (!string.IsNullOrEmpty(model.Supervisor.Id) )
+                    if (model.Supervisor.Id != Guid.Empty )
                     {
                         var super = viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(model.Supervisor.Id));
                         model.Supervisor.Name = super.UserName;
-                        model.Supervisor.PublicId = super.PublicKey;
+                        model.Supervisor.Id = super.PublicKey;
                     }
 
                     var commandService = NcqrsEnvironment.Get<ICommandService>();
@@ -84,7 +83,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 else
                 {
                     var commandService = NcqrsEnvironment.Get<ICommandService>();
-                    commandService.Execute(new ChangeUserCommand(Guid.Parse(model.UserId), model.Email,
+                    commandService.Execute(new ChangeUserCommand(model.PublicKey, model.Email,
                         new UserRoles[] { model.PrimaryRole }, model.IsLocked));
 
 

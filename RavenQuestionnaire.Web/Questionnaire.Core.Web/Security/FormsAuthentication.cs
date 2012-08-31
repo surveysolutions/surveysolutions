@@ -21,7 +21,7 @@ namespace Questionnaire.Core.Web.Security
         public string GetUserIdForCurrentUser()
         {
             UserLight user = GetCurrentUser();
-            return user != null ? user.Id : null;
+            return user != null ? user.Id.ToString() : null;
         }
 
 
@@ -39,9 +39,9 @@ namespace Questionnaire.Core.Web.Security
             if (u == null)
                 return null;
 
-            byte[] key = (byte[])u.ProviderUserKey;
+            //byte[] key = (byte[])u.ProviderUserKey;
 
-            return new UserLight(new System.Text.UTF8Encoding().GetString(key), u.UserName);
+            return new UserLight((Guid)u.ProviderUserKey, u.UserName);
 
         }
 

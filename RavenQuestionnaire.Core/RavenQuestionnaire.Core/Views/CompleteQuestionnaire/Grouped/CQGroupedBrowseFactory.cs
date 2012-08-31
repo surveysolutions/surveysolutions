@@ -80,9 +80,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
                 if (input.InterviewerId.HasValue)
                 {
                     complete =
-                        questionnaires.Where(
-                            q =>
-                            q.Responsible != null && q.Responsible.Id == input.InterviewerId.Value.ToString()
+                        questionnaires.Where(q => q.Responsible != null && q.Responsible.Id == input.InterviewerId.Value
                             && q.TemplateId == item.SurveyId).ToList();
                 }
                 else
@@ -114,14 +112,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
         /// The System.Linq.Expressions.Expression`1[TDelegate -&gt; System.Func`2[T -&gt; RavenQuestionnaire.Core.Views.CompleteQuestionnaire.CompleteQuestionnaireBrowseItem, TResult -&gt; System.Boolean]].
         /// </returns>
         protected Expression<Func<CompleteQuestionnaireBrowseItem, bool>> BuildPredicate(
-            CQGroupedBrowseInputModel input, string surveyId)
+            CQGroupedBrowseInputModel input, Guid surveyId)
         {
             IList<Expression<Func<CompleteQuestionnaireBrowseItem, bool>>> predicats =
                 new List<Expression<Func<CompleteQuestionnaireBrowseItem, bool>>>();
             predicats.Add((q) => q.TemplateId == surveyId);
             if (input.InterviewerId.HasValue)
             {
-                predicats.Add((q) => q.Responsible != null && q.Responsible.Id == input.InterviewerId.ToString());
+                predicats.Add((q) => q.Responsible != null && q.Responsible.Id == input.InterviewerId);
             }
 
             return this.AndAll(predicats);
@@ -147,14 +145,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
                 throw new ArgumentNullException("expressions");
             }
 
-            if (expressions.Count() == 0)
+            if (!expressions.Any())
             {
                 return t => true;
             }
 
             Type delegateType =
                 typeof(Func<,>).GetGenericTypeDefinition().MakeGenericType(new[] { typeof(T), typeof(bool) });
-            Expression combined = expressions.Cast<Expression>().Aggregate((e1, e2) => Expression.AndAlso(e1, e2));
+            Expression combined = expressions.Cast<Expression>().Aggregate(Expression.AndAlso);
             return (Expression<Func<T, bool>>)Expression.Lambda(delegateType, combined);
         }
 

@@ -39,6 +39,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
             this.CompleteQuestionnaireId = doc.PublicKey.ToString();
             this.Creator = doc.Creator;
             this.Status = doc.Status;
+            this.LastScreenPublicKey = doc.Children.OfType<ICompleteGroup>().Last().PublicKey;
             this.HandleQuestionTree(doc);
         }
 
@@ -50,6 +51,11 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         /// Gets or sets the answered questions.
         /// </summary>
         public IList<QuestionStatisticView> AnsweredQuestions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last screen.
+        /// </summary>
+        public Guid LastScreenPublicKey { get; set; }
 
         /// <summary>
         /// Gets or sets the complete questionnaire id.
@@ -80,6 +86,11 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         /// Gets or sets the invalid questions.
         /// </summary>
         public IList<QuestionStatisticView> InvalidQuestions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invalid questions.
+        /// </summary>
+        public IList<QuestionStatisticView> UnansweredQuestions { get; set; }
 
         /// <summary>
         /// Gets or sets the start date.
@@ -139,81 +150,51 @@ namespace RavenQuestionnaire.Core.Views.Statistics
             this.InvalidQuestions = new List<QuestionStatisticView>();
             this.AnsweredQuestions = new List<QuestionStatisticView>();
             this.FeaturedQuestions = new List<QuestionStatisticView>();
-            var nodes = new Queue<ICompleteGroup>(new List<ICompleteGroup> { target });
-            var keys = new Queue<Guid>();
-            keys.Enqueue(target.PublicKey);
-            this.TotalQuestionCount = 0;
+            this.UnansweredQuestions = new List<QuestionStatisticView>();
+            foreach (var question in target.QuestionHash.WrapedQuestions)
             {
-                ICompleteGroup group = nodes.Dequeue();
-                Guid key = keys.Dequeue();
-                this.ProccessQuestions(
-                    @group.Children.OfType<ICompleteQuestion>(), group.PublicKey, group.PropogationPublicKey, key);
-                foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
-                {
-                    nodes.Enqueue(subGroup);
-                    keys.Enqueue(subGroup.PublicKey);
-                }
+                this.ProccessQuestions(question.Question, question.GroupKey);
             }
-
-            while (nodes.Count > 0)
-            {
-                ICompleteGroup group = nodes.Dequeue();
-                Guid key = keys.Dequeue();
-                this.ProccessQuestions(
-                    group.Children.OfType<ICompleteQuestion>(), group.PublicKey, group.PropogationPublicKey, key);
-                foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
-                {
-                    nodes.Enqueue(subGroup);
-                    keys.Enqueue(key);
-                }
-            }
-
             this.CalculateApproximateAnswerTime(this.AnsweredQuestions);
         }
 
         /// <summary>
         /// The proccess questions.
         /// </summary>
-        /// <param name="questions">
+        /// <param name="question">
         /// The questions.
         /// </param>
         /// <param name="gropPublicKey">
         /// The grop public key.
         /// </param>
-        /// <param name="gropPropagationPublicKey">
-        /// The grop propagation public key.
-        /// </param>
-        /// <param name="screenPublicKey">
-        /// The screen public key.
-        /// </param>
-        protected void ProccessQuestions(
-            IEnumerable<ICompleteQuestion> questions, 
-            Guid gropPublicKey, 
-            Guid? gropPropagationPublicKey, 
-            Guid screenPublicKey)
+        protected void ProccessQuestions(ICompleteQuestion question, Guid gropPublicKey)
         {
-            foreach (ICompleteQuestion completeQuestion in questions)
+            if (!question.Enabled)
+                return;
+
+            var statItem = new QuestionStatisticView(
+                question, gropPublicKey);
+            if (question.Featured)
             {
-                var statItem = new QuestionStatisticView(
-                    completeQuestion, gropPublicKey, gropPropagationPublicKey, screenPublicKey);
-                if (completeQuestion.Featured)
-                {
-                    this.FeaturedQuestions.Add(statItem);
-                }
-
-                if ((!completeQuestion.Valid)
-                    || (completeQuestion.GetAnswerObject() == null && completeQuestion.Mandatory))
-                {
-                    this.InvalidQuestions.Add(statItem);
-                }
-
-                if (completeQuestion.GetAnswerObject() != null)
-                {
-                    this.AnsweredQuestions.Add(statItem);
-                }
-
-                this.TotalQuestionCount++;
+                this.FeaturedQuestions.Add(statItem);
             }
+
+            if ((!question.Valid)
+                || (question.GetAnswerObject() == null && question.Mandatory))
+            {
+                this.InvalidQuestions.Add(statItem);
+            }
+
+            if (question.GetAnswerObject() != null)
+            {
+                this.AnsweredQuestions.Add(statItem);
+            }
+            else
+            {
+                this.UnansweredQuestions.Add(statItem);
+            }
+
+            this.TotalQuestionCount++;
         }
 
         #endregion

@@ -3,6 +3,8 @@ using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace Questionnaire.Core.Web.Helpers
 {
+    using System;
+
     public class GlobalInfo 
     {
         public static UserLight GetCurrentUser()
@@ -11,8 +13,8 @@ namespace Questionnaire.Core.Web.Helpers
             if (currentUser == null)
                 return null;
             
-            byte[] key = (byte[])currentUser.ProviderUserKey;
-            return new UserLight(new System.Text.UTF8Encoding().GetString(key), currentUser.UserName);
+            //byte[] key = (byte[])currentUser.ProviderUserKey;
+            return new UserLight((Guid)currentUser.ProviderUserKey, currentUser.UserName);
         }
     }
 }

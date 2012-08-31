@@ -244,11 +244,11 @@ body.ui-mobile-viewport, div.ui-mobile-viewport {
 .ui-footer .ui-btn-left, .ui-footer .ui-btn-right {
 	top: 2px;
 }
-#content_container .ui-header .ui-btn {
+/*#content_container .ui-header .ui-btn {
 	left: 0;
     position: relative;
     top: 0;
-}
+}*/
 .ui-footer .ui-title {
 	margin: 0.5em 0 0.5em;
 }
@@ -280,3 +280,4 @@ body.ui-mobile-viewport, div.ui-mobile-viewport {
 .question-frame{position: relative;}
 .question-frame .question-main-content{float: left; width: 90%;  min-height: 90px;overflow: visible;}
 .question-frame .question-arrow{width: 6%; border: 1px solid #aaa; position: absolute; right: 0; top: 0;bottom: 0;z-index: 100;}
+.ui-disabled-opacity{ opacity: 1;}

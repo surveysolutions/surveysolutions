@@ -63,7 +63,42 @@ namespace Web.CAPI.Controllers
             ViewBag.PagePrefix = "";
             return PartialView("_SurveyContent", model);
         }
-
+        public PartialViewResult CompleteSummary(Guid id)
+        {
+            if (id == Guid.Empty)
+                throw new HttpException(404, "Invalid query string parameters");
+            var stat = viewRepository.Load
+                <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                    new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+            return PartialView("Complete/_Main", stat);
+        }
+        public PartialViewResult Answered(Guid id)
+        {
+            if (id == Guid.Empty)
+                throw new HttpException(404, "Invalid query string parameters");
+            var stat = viewRepository.Load
+                <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                    new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+            return PartialView("Complete/_Answered", stat);
+        }
+        public PartialViewResult Unanswered(Guid id)
+        {
+            if (id == Guid.Empty)
+                throw new HttpException(404, "Invalid query string parameters");
+            var stat = viewRepository.Load
+                <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                    new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+            return PartialView("Complete/_Unanswered", stat);
+        }
+        public PartialViewResult Invalid(Guid id)
+        {
+            if (id == Guid.Empty)
+                throw new HttpException(404, "Invalid query string parameters");
+            var stat = viewRepository.Load
+                <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                    new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+            return PartialView("Complete/_Invalid", stat);
+        }
         [HttpPost]
         public PartialViewResult _SurveyContent(Guid id, Guid? group, Guid? question)
         {
@@ -87,7 +122,7 @@ namespace Web.CAPI.Controllers
             var user = _globalProvider.GetCurrentUser();
             var inputModel = new CQGroupedBrowseInputModel();
             if(user!=null)
-            inputModel.InterviewerId = Guid.Parse(user.Id);
+            inputModel.InterviewerId = user.Id;
             var model =
                 viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(inputModel);
             return View(model);
@@ -117,7 +152,7 @@ namespace Web.CAPI.Controllers
         }
 
 
-        public ActionResult Complete(string id)
+        public ActionResult Complete(string id, string comments)
         {
             if (string.IsNullOrEmpty(id))
                 throw new HttpException(404, "Invalid query string parameters");
@@ -127,17 +162,31 @@ namespace Web.CAPI.Controllers
             var stat = viewRepository.Load
                 <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>
                 (new CompleteQuestionnaireStatisticViewInputModel(id));
+            
             var commandService = NcqrsEnvironment.Get<ICommandService>();
+            SurveyStatus status;
             if (stat != null && stat.InvalidQuestions.Count > 0)
             {
-                commandService.Execute(new ChangeStatusCommand()
-                                           {CompleteQuestionnaireId = key, Status = SurveyStatus.Error});
+                status = SurveyStatus.Error;
+                status.ChangeComment = comments;
+                commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = key, Status = status });
                 //return Redirect(Url.RouteUrl(new {controller = "Survey", action = "Statistic", id = id}) + "#" + "invalid");
-                return Json(new {message = "Error"}, JsonRequestBehavior.AllowGet);
+                // return Json(new {message = "Error"}, JsonRequestBehavior.AllowGet);
+
+                return RedirectToAction("Index",
+                                        new
+                                            {
+                                                id = id,
+                                                group = stat.InvalidQuestions[0].GroupPublicKey,
+                                                question = stat.InvalidQuestions[0].PublicKey,
+                                                propagationKey = stat.InvalidQuestions[0].GroupPropagationPublicKey
+                                            });
             }
+            status = SurveyStatus.Complete;
+            status.ChangeComment = comments;
             commandService.Execute(new ChangeStatusCommand()
-                                       {CompleteQuestionnaireId = key, Status = SurveyStatus.Complete});
-            return Json(new {message = "Complete"}, JsonRequestBehavior.AllowGet);
+                                       {CompleteQuestionnaireId = key, Status = status});
+            return RedirectToAction("Dashboard");
         }
 
         public ActionResult ReInit(string id)

@@ -9,6 +9,7 @@
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
+    using System;
     using System.Collections.Generic;
 
     using RavenQuestionnaire.Core.Entities;
@@ -24,22 +25,22 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         /// <summary>
         /// The _orders.
         /// </summary>
-        public List<OrderRequestItem> _orders = new List<OrderRequestItem>();
+        public List<OrderRequestItem> orders = new List<OrderRequestItem>();
 
         /// <summary>
         /// The _page.
         /// </summary>
-        private int _page = 1;
+        private int page = 1;
 
         /// <summary>
         /// The _page size.
         /// </summary>
-        private int _pageSize = 20;
+        private int pageSize = 20;
 
         /// <summary>
         /// The _responsible id.
         /// </summary>
-        private string _responsibleId = string.Empty;
+        private Guid responsibleId = Guid.Empty;
 
         #endregion
 
@@ -52,12 +53,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
             get
             {
-                return StringUtil.GetOrderRequestString(this._orders);
+                return StringUtil.GetOrderRequestString(this.orders);
             }
 
             set
             {
-                this._orders = StringUtil.ParseOrderRequestString(value);
+                this.orders = StringUtil.ParseOrderRequestString(value);
             }
         }
 
@@ -68,12 +69,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
             get
             {
-                return this._orders;
+                return this.orders;
             }
 
             set
             {
-                this._orders = value;
+                this.orders = value;
             }
         }
 
@@ -84,12 +85,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
             get
             {
-                return this._page;
+                return this.page;
             }
 
             set
             {
-                this._page = value;
+                this.page = value;
             }
         }
 
@@ -100,28 +101,28 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
             get
             {
-                return this._pageSize;
+                return this.pageSize;
             }
 
             set
             {
-                this._pageSize = value;
+                this.pageSize = value;
             }
         }
 
         /// <summary>
         /// Gets or sets the responsible id.
         /// </summary>
-        public string ResponsibleId
+        public Guid ResponsibleId
         {
             get
             {
-                return this._responsibleId;
+                return this.responsibleId;
             }
 
             set
             {
-                this._responsibleId = value;
+                this.responsibleId = value;
             }
         }
 

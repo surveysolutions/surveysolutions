@@ -464,6 +464,11 @@ function updateCounter() {
         this.hideInputsWithVirtualKeyboard();
         this.hideInputsWithLongTap();
         this.disableAfterSubmit();
+        var scripts = this.find('script');
+/*for (var ix = 0; ix < scripts.length; ix++) {
+    alert(scripts[ix].text);
+   // eval(scripts[ix].text);
+}*/
 
     };
   
@@ -507,7 +512,7 @@ function scrollToQuestion(question) {
 
 $(document).bind('pagebeforeshow', function (event, data) {
     var doc = $(event.target);
-   
+
     doc.initPage();
     
     doc.focus();
@@ -524,7 +529,7 @@ $(document).bind('pagehide', function(event, data) {
     $('.page-to-delete').remove();
 });
 $(document).bind('pagechange', function () {
-    var groupId = location.href.substr(location.href.indexOf("group") + 6, 36);
+    //   var groupId = location.href.substr(location.href.indexOf("group") + 6, 36);
     $("div.ui-block-a").click(function () {
         if (jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:visible").length > 0)
             jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:visible").hide();
@@ -532,20 +537,21 @@ $(document).bind('pagechange', function () {
             if (jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:hidden").length > 0)
                 jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:hidden").show();
     });
-    if ($('#sidebar #ref-link-' + groupId).length > 0) {
-        $('#sidebar .ui-li').each(function () {
-            $(this).removeClass('ui-btn-active');
-        });
-        $('#ref-link-' + groupId).parents('li').addClass('ui-btn-active');
-    }/*else {
-        $('#sidebar .ui-li').each(function () {
-            if ($(this).find('a').attr('href').indexOf("group") != -1)
-                $(this).removeClass('ui-btn-active');
-        });
+    
+    /* if ($('#sidebar #ref-link-' + groupId).length > 0) {
+    $('#sidebar .ui-li').each(function () {
+    $(this).removeClass('ui-btn-active');
+    });
+    $('#ref-link-' + groupId).parents('li').addClass('ui-btn-active');
+    }else {
+    $('#sidebar .ui-li').each(function () {
+    if ($(this).find('a').attr('href').indexOf("group") != -1)
+    $(this).removeClass('ui-btn-active');
+    });
     }*/
     if ($('.scrollHere').length > 0) {
         var q = $('.scrollHere');
-      //  var target = $(q.replace('question', '#elem-'));
+        //  var target = $(q.replace('question', '#elem-'));
         scrollToQuestion(q);
         $(q).faderEffect();
         $('.scrollHere').removeClass('scrollHere');

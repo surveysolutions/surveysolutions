@@ -61,20 +61,23 @@ namespace Web.Supervisor.Controllers
             return RedirectToAction("Index", "Dashboard");
         }
 
-        /// <summary>
         /// </summary>
         /// <param name="clientGuid">
         /// The client guid.
         /// </param>
-        public void ExportAsync(Guid clientGuid)
+        public void ExportAsync(Guid? clientGuid)
         {
+            if (!clientGuid.HasValue || clientGuid.Value == Guid.Empty)
+                return;
+            
+
             AsyncManager.OutstandingOperations.Increment();
             AsyncQuestionnaireUpdater.Update(() =>
                                                  {
                                                      try
                                                      {
                                                          AsyncManager.Parameters["result"] =
-                                                             exportimportEvents.Export(clientGuid);
+                                                             exportimportEvents.Export(clientGuid.Value);
                                                      }
                                                      catch
                                                      {

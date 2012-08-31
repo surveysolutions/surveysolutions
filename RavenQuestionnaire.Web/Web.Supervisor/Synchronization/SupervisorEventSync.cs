@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Ncqrs;
-using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Entities.SubEntities;
@@ -50,7 +49,7 @@ namespace Web.Supervisor.Synchronization
             {
                 if (item.Status.Name != SurveyStatus.Initial.Name)
                     continue;
-                GetEventStreamById(retval, Guid.Parse(item.CompleteQuestionnaireId));
+                GetEventStreamById(retval, item.CompleteQuestionnaireId);
             }
         }
         protected void AddQuestionnairesTemplates(List<AggregateRootEvent> retval)
@@ -60,7 +59,7 @@ namespace Web.Supervisor.Synchronization
                      new QuestionnaireBrowseInputModel());
               foreach (var item in model.Items)
               {
-                  GetEventStreamById(retval, Guid.Parse(item.Id));
+                  GetEventStreamById(retval, item.Id);
               }
         }
         protected void AddUsers(List<AggregateRootEvent> retval)
@@ -70,7 +69,7 @@ namespace Web.Supervisor.Synchronization
                    new UserBrowseInputModel());
             foreach (var item in model.Items)
             {
-                GetEventStreamById(retval, Guid.Parse(item.Id));
+                GetEventStreamById(retval, item.Id);
             }
         }
         protected void AddFiles(List<AggregateRootEvent> retval)

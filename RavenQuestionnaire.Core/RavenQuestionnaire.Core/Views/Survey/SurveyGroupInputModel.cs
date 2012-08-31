@@ -26,17 +26,17 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <summary>
         /// The _orders.
         /// </summary>
-        private List<OrderRequestItem> _orders = new List<OrderRequestItem>();
+        private List<OrderRequestItem> orders = new List<OrderRequestItem>();
 
         /// <summary>
         /// The _page.
         /// </summary>
-        private int _page = 1;
+        private int page = 1;
 
         /// <summary>
         /// The _page size.
         /// </summary>
-        private int _pageSize = 20;
+        private int pageSize = 20;
 
         #endregion
 
@@ -58,7 +58,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
-        public SurveyGroupInputModel(string id, string questionnaireId)
+        public SurveyGroupInputModel(Guid id, Guid questionnaireId)
         {
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
@@ -79,7 +79,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="orders">
         /// The orders.
         /// </param>
-        public SurveyGroupInputModel(string id, int page, int pageSize, List<OrderRequestItem> orders)
+        public SurveyGroupInputModel(Guid id, int page, int pageSize, List<OrderRequestItem> orders)
         {
             this.Id = id;
             this.Page = page;
@@ -105,7 +105,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the order.
@@ -114,12 +114,12 @@ namespace RavenQuestionnaire.Core.Views.Survey
         {
             get
             {
-                return StringUtil.GetOrderRequestString(this._orders);
+                return StringUtil.GetOrderRequestString(this.orders);
             }
 
             set
             {
-                this._orders = StringUtil.ParseOrderRequestString(value);
+                this.orders = StringUtil.ParseOrderRequestString(value);
             }
         }
 
@@ -130,12 +130,12 @@ namespace RavenQuestionnaire.Core.Views.Survey
         {
             get
             {
-                return this._orders;
+                return this.orders;
             }
 
             set
             {
-                this._orders = value;
+                this.orders = value;
             }
         }
 
@@ -146,12 +146,12 @@ namespace RavenQuestionnaire.Core.Views.Survey
         {
             get
             {
-                return this._page;
+                return this.page;
             }
 
             set
             {
-                this._page = value;
+                this.page = value;
             }
         }
 
@@ -162,19 +162,19 @@ namespace RavenQuestionnaire.Core.Views.Survey
         {
             get
             {
-                return this._pageSize;
+                return this.pageSize;
             }
 
             set
             {
-                this._pageSize = value;
+                this.pageSize = value;
             }
         }
 
         /// <summary>
         /// Gets or sets the questionnaire id.
         /// </summary>
-        public string QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; set; }
 
         #endregion
     }

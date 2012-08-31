@@ -9,6 +9,7 @@
 
 namespace RavenQuestionnaire.Core.Views.User
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -71,11 +72,11 @@ namespace RavenQuestionnaire.Core.Views.User
         /// </returns>
         public InterviewerView Load(InterviewerInputModel input)
         {
-            UserDocument user = this.users.Query().FirstOrDefault(u => u.Id == input.UserId);
-            var items = new InterviewerView(user.UserName, user.Id, new List<InterviewerGroupView>());
+            UserDocument user = this.users.Query().FirstOrDefault(u => u.PublicKey == input.UserId);
+            var items = new InterviewerView(user.UserName, user.PublicKey, new List<InterviewerGroupView>());
             IQueryable<CompleteQuestionnaireBrowseItem> docs =
-                this.documentItemSession.Query().Where(q => q.Responsible != null && q.Responsible.Id == user.Id);
-            if (!string.IsNullOrEmpty(input.TemplateId))
+                this.documentItemSession.Query().Where(q => q.Responsible != null && q.Responsible.Id == user.PublicKey);
+            if (input.TemplateId != Guid.Empty)
             {
                 InterviewerGroupView interviewerGroupView = this.SelectItems(input.TemplateId, docs, input);
                 if (interviewerGroupView.Items.Count > 0)
@@ -85,7 +86,7 @@ namespace RavenQuestionnaire.Core.Views.User
             }
             else
             {
-                IQueryable<IGrouping<string, CompleteQuestionnaireBrowseItem>> gr = docs.GroupBy(t => t.TemplateId);
+                IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> gr = docs.GroupBy(t => t.TemplateId);
                 foreach (InterviewerGroupView interviewerGroupView in
                     gr.ToList().Select(template => this.SelectItems(template.Key, docs, input)).Where(
                         interviewerGroupView => interviewerGroupView.Items.Count > 0))
@@ -117,7 +118,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// The RavenQuestionnaire.Core.Views.User.InterviewerGroupView.
         /// </returns>
         private InterviewerGroupView SelectItems(
-            string templateId, IQueryable<CompleteQuestionnaireBrowseItem> docs, InterviewerInputModel input)
+            Guid templateId, IQueryable<CompleteQuestionnaireBrowseItem> docs, InterviewerInputModel input)
         {
             int count = docs.Where(t => t.TemplateId == templateId).Count();
             if (count == 0)

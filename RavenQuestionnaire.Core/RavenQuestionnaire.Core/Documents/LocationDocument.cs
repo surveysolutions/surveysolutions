@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.Documents
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the location.

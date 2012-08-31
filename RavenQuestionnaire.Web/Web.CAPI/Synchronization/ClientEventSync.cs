@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using RavenQuestionnaire.Core;
@@ -34,7 +33,7 @@ namespace Web.CAPI.Synchronization
             {
                 if (item.Status.Name != SurveyStatus.Complete.Name)
                     continue;
-                var events = myEventStore.ReadFrom(Guid.Parse(item.CompleteQuestionnaireId),
+                var events = myEventStore.ReadFrom(item.CompleteQuestionnaireId,
                                                    int.MinValue, int.MaxValue);
                 retval.AddRange(events.Select(e => new AggregateRootEvent(e)));
                 /* retval.Add(

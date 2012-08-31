@@ -69,7 +69,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 
             IQueryable<CompleteQuestionnaireBrowseItem> query;
 
-            if (!string.IsNullOrEmpty(input.ResponsibleId))
+            if (input.ResponsibleId != Guid.Empty)
             {
                 // filter result by responsible
                 query = this.documentSession.Query().Where(x => x.Responsible.Id == input.ResponsibleId);
@@ -78,22 +78,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             {
                 query = this.documentSession.Query();
             }
-
-            /* if (input.Orders.Count > 0)
-            {
-                query = input.Orders[0].Direction == OrderDirection.Asc
-                            ? query.OrderBy(input.Orders[0].Field)
-                            : query.OrderByDescending(input.Orders[0].Field);
-
-            }
-            if (input.Orders.Count > 1)
-                foreach (var order in input.Orders.Skip(1))
-                {
-                    query = order.Direction == OrderDirection.Asc
-                                ? query.ThenBy(order.Field)
-                                : query.ThenByDescending(order.Field);
-                }
-            */
+            
             CompleteQuestionnaireBrowseItem[] page =
                 query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
 
@@ -101,9 +86,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
                 page.Select(
                     x =>
                     new CompleteQuestionnaireBrowseItem(
-                        x.CompleteQuestionnaireId, 
-                        x.QuestionnaireTitle, 
-                        x.TemplateId, 
+                        x.CompleteQuestionnaireId,
+                        x.TemplateId,
+                        x.QuestionnaireTitle,
                         x.CreationDate, 
                         x.LastEntryDate, 
                         x.Status, 

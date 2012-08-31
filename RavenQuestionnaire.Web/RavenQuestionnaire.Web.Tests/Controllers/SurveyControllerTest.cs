@@ -64,7 +64,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             innerDoc.CreationDate = DateTime.Now;
             innerDoc.LastEntryDate = DateTime.Now;
             innerDoc.Status = new SurveyStatus(Guid.NewGuid(), "dummyStatus");
-            innerDoc.Responsible = new UserLight("-1", "dummyUser");
+            innerDoc.Responsible = new UserLight(Guid.NewGuid(), "dummyUser");
             var output = new CompleteQuestionnaireMobileView(innerDoc);
             var input = new CompleteQuestionnaireViewInputModel(innerDoc.PublicKey);
 
@@ -129,8 +129,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                         question
                     }
                 );
-            CommandServiceMock.Verify(x => x.Execute(It.IsAny<SetAnswerCommand>()),
-                                      Times.Once());
+            CommandServiceMock.Verify(x => x.Execute(It.IsAny<SetAnswerCommand>()), Times.Once());
         }
     }
 }

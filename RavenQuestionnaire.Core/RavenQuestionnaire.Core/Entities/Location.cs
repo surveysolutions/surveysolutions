@@ -9,6 +9,8 @@
 
 namespace RavenQuestionnaire.Core.Entities
 {
+    using System;
+
     using RavenQuestionnaire.Core.Documents;
 
     /// <summary>
@@ -56,7 +58,7 @@ namespace RavenQuestionnaire.Core.Entities
         /// <summary>
         /// Gets the location id.
         /// </summary>
-        public string LocationId
+        public Guid LocationId
         {
             get
             {

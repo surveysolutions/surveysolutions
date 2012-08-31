@@ -79,7 +79,6 @@ namespace RavenQuestionnaire.Core.Domain
             this.ApplyEvent(
                 new NewCompleteQuestionnaireCreated
                     {
-                        QuestionnaireId = questionnaire.PublicKey, 
                         Questionnaire = document, 
                         CreationDate = clock.UtcNow(), 
                         TotalQuestionCount = document.Find<ICompleteQuestion>(q => !(q is IBinded)).Count()

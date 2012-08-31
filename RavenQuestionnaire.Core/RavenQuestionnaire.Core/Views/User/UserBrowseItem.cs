@@ -12,7 +12,7 @@ namespace RavenQuestionnaire.Core.Views.User
     using System;
 
     using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Utility;
+    
 
     /// <summary>
     /// The user browse item.
@@ -20,11 +20,6 @@ namespace RavenQuestionnaire.Core.Views.User
     public class UserBrowseItem
     {
         #region Fields
-
-        /// <summary>
-        /// The _id.
-        /// </summary>
-        private string _id;
 
         #endregion
 
@@ -55,7 +50,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// The location.
         /// </param>
         public UserBrowseItem(
-            string id, 
+            Guid id, 
             string name, 
             string email, 
             DateTime creationDate, 
@@ -93,18 +88,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <summary>
         /// Gets the id.
         /// </summary>
-        public string Id
-        {
-            get
-            {
-                return IdUtil.ParseId(this._id);
-            }
-
-            private set
-            {
-                this._id = value;
-            }
-        }
+        public Guid Id { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether is locked.
