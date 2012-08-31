@@ -39,8 +39,13 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         {
             //Mock<ICompleteGroup> questionnaireMoq= new Mock<ICompleteGroup>();
             var mainGroup = new CompleteGroup("root");
-            mainGroup.Children.Add(new SingleCompleteQuestion("q1") { ValidationExpression = "1 != 1", Valid = true });
-            mainGroup.Children.Add(new SingleCompleteQuestion("q2") { ValidationExpression = "2 != 2", Valid = true });
+            var q1 = new TextCompleteQuestion("q1") {ValidationExpression = "1 != 1", Valid = true};
+            q1.SetAnswer(null,"hello");
+            mainGroup.Children.Add(q1);
+            var q2 = new TextCompleteQuestion("q2") {ValidationExpression = "2 != 2", Valid = true};
+            q2.SetAnswer(null,"2");
+            mainGroup.Children.Add(q2);
+            
             CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(new GroupHash(mainGroup));
             executor.Execute();
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[0]).Valid, false);
@@ -55,8 +60,13 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             mainGroup.Children.Add(subGroup1);
             var subGroup2 = new CompleteGroup("subgroup2");
             mainGroup.Children.Add(subGroup2);
-            subGroup1.Children.Add(new SingleCompleteQuestion("q1") { ValidationExpression = "1 != 1", Valid = true });
-            subGroup2.Children.Add(new SingleCompleteQuestion("q2") { ValidationExpression = "2 != 2", Valid = true });
+         
+            var q1 = new TextCompleteQuestion("q1") { ValidationExpression = "1 != 1", Valid = true };
+            q1.SetAnswer(null, "hello");
+            subGroup1.Children.Add(q1);
+            var q2 = new TextCompleteQuestion("q2") { ValidationExpression = "2 != 2", Valid = true };
+            q2.SetAnswer(null, "2");
+            subGroup2.Children.Add(q2);
             CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(new GroupHash(subGroup1));
             executor.Execute();
             Assert.AreEqual(((ICompleteQuestion)subGroup1.Children[0]).Valid, false);
@@ -83,6 +93,70 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             executor.Execute();
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[0]).Valid, true);
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[0]).Valid, true);
+        }
+
+        [Test]
+        public void EvaluateCondition_DisabledQuestion_ResultISTrue()
+        {
+            var mainGroup = new CompleteGroup("root");
+            ICompleteQuestion q1 = new SingleCompleteQuestion("q1") {Enabled = false};
+            mainGroup.Children.Add(q1);
+            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(new GroupHash(mainGroup));
+            var result = executor.Execute(q1);
+            Assert.AreEqual(result, true);
+        }
+        [Test]
+        public void EvaluateCondition_EmptyQuestionNotMandatory_ResultISTrue()
+        {
+            var mainGroup = new CompleteGroup("root");
+            ICompleteQuestion q1 = new SingleCompleteQuestion("q1") { Enabled = true };
+            mainGroup.Children.Add(q1);
+            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(new GroupHash(mainGroup));
+            var result = executor.Execute(q1);
+            Assert.AreEqual(result, true);
+        }
+        [Test]
+        public void EvaluateCondition_EmptyQuestionMandatory_ResultISFalse()
+        {
+            var mainGroup = new CompleteGroup("root");
+            ICompleteQuestion q1 = new SingleCompleteQuestion("q1") { Enabled = true, Mandatory = true};
+            mainGroup.Children.Add(q1);
+            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(new GroupHash(mainGroup));
+            var result = executor.Execute(q1);
+            Assert.AreEqual(result, false);
+        }
+        [Test]
+        public void EvaluateCondition_NotEmptyQuestionValidationConditionIsEmpty_ResultISTrue()
+        {
+            var mainGroup = new CompleteGroup("root");
+            ICompleteQuestion q1 = new TextCompleteQuestion("q1"){ Enabled = true, Mandatory = false, ValidationExpression = string.Empty};
+            q1.SetAnswer(null, "answer");
+            mainGroup.Children.Add(q1);
+            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(new GroupHash(mainGroup));
+            var result = executor.Execute(q1);
+            Assert.AreEqual(result, true);
+        }
+        [Test]
+        public void EvaluateCondition_NotEmptyQuestionValidationConditionIContainsThisValidCondition_ResultISTrue()
+        {
+            var mainGroup = new CompleteGroup("root");
+            ICompleteQuestion q1 = new TextCompleteQuestion("q1") { Enabled = true, Mandatory = false, ValidationExpression = "[this]=='Answer'" };
+            q1.SetAnswer(null, "Answer");
+            mainGroup.Children.Add(q1);
+            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(new GroupHash(mainGroup));
+            var result = executor.Execute(q1);
+            Assert.AreEqual(result, true);
+        }
+        [Test]
+        public void EvaluateCondition_NotEmptyQuestionValidationConditionIContainsThisInValidCondition_ResultISFalse()
+        {
+            var mainGroup = new CompleteGroup("root");
+            ICompleteQuestion q1 = new TextCompleteQuestion("q1") { Enabled = true, Mandatory = false, ValidationExpression = "[this]!='Answer'" };
+            q1.SetAnswer(null, "Answer");
+            mainGroup.Children.Add(q1);
+            CompleteQuestionnaireValidationExecutor executor = new CompleteQuestionnaireValidationExecutor(new GroupHash(mainGroup));
+            var result = executor.Execute(q1);
+            Assert.AreEqual(result, false);
         }
     }
 }

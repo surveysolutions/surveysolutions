@@ -195,8 +195,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
                 this.FeaturedQuestions.Add(statItem);
             }
 
-            if ((!question.Valid)
-                || (question.GetAnswerObject() == null && question.Mandatory))
+            if (!question.Valid)
             {
                 this.InvalidQuestions.Add(statItem);
             }
