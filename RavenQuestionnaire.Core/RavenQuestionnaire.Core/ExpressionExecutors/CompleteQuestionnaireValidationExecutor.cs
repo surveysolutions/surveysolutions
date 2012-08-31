@@ -93,7 +93,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         /// <returns>
         /// The System.Boolean.
         /// </returns>
-        protected bool Execute(ICompleteQuestion question)
+        public bool Execute(ICompleteQuestion question)
         {
             if (!question.Enabled)
             {

@@ -52,11 +52,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         string ConditionExpression { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether is valid.
-        /// </summary>
-        bool IsValid { get; set; }
-
-        /// <summary>
         /// Gets or sets the propagated.
         /// </summary>
         Propagate Propagated { get; set; }
@@ -120,10 +115,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         /// </summary>
         public bool Enabled { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether is valid.
-        /// </summary>
-        public bool IsValid { get; set; }
 
         /// <summary>
         /// Gets the parent.
