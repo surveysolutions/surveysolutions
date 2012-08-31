@@ -65,7 +65,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// The completed.
         /// </param>
         public SurveyBrowseItem(
-            string id, 
+            Guid id, 
             string title, 
             int unAssigment, 
             Dictionary<Guid, SurveyItem> statistic, 
@@ -112,7 +112,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the initial.

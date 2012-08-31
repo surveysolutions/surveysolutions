@@ -74,8 +74,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
             List<QuestionStatisticView> featuredQuestions = this.FindFeaturedQuestions(evnt);
 
             var browseItem = new CompleteQuestionnaireBrowseItem(
-                evnt.Payload.Questionnaire.PublicKey.ToString(), 
-                evnt.Payload.QuestionnaireId.ToString(), 
+                evnt.Payload.Questionnaire.PublicKey, 
+                evnt.Payload.Questionnaire.TemplateId, 
                 evnt.Payload.Questionnaire.Title, 
                 evnt.Payload.CreationDate, 
                 DateTime.Now, 
@@ -133,8 +133,6 @@ namespace RavenQuestionnaire.Core.EventHandlers
                                 {
                                    PublicKey = evnt.Payload.QuestionPublicKey 
                                 }, 
-                            Guid.Empty, 
-                            null, 
                             Guid.Empty);
                     featuredQuestions.Add(currentFeatured);
                 }
@@ -218,7 +216,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 if (completeQuestion.Featured)
                 {
                     var statItem = new QuestionStatisticView(
-                        completeQuestion, gropPublicKey, gropPropagationPublicKey, screenPublicKey);
+                        completeQuestion, gropPublicKey);
                     featuredQuestions.Add(statItem);
                 }
             }

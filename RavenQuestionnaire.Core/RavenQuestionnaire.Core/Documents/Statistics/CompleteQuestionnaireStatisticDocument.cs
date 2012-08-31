@@ -43,7 +43,7 @@ namespace RavenQuestionnaire.Core.Documents.Statistics
         /// <summary>
         /// Gets or sets the complete questionnaire id.
         /// </summary>
-        public string CompleteQuestionnaireId { get; set; }
+        public Guid CompleteQuestionnaireId { get; set; }
 
         /// <summary>
         /// Gets or sets the creator.

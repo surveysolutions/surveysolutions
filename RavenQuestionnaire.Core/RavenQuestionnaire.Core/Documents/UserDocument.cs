@@ -20,11 +20,6 @@ namespace RavenQuestionnaire.Core.Documents
     {
         #region Fields
 
-        /// <summary>
-        /// The public key.
-        /// </summary>
-        private Guid publicKey;
-
         #endregion
 
         #region Constructors and Destructors
@@ -54,11 +49,7 @@ namespace RavenQuestionnaire.Core.Documents
         /// </summary>
         public string Email { get; set; }
 
-        /// <summary>
-        /// Gets or sets the id.
-        /// </summary>
-        public string Id { get; set; }
-
+        
         /// <summary>
         /// Gets or sets a value indicating whether is deleted.
         /// </summary>
@@ -82,19 +73,7 @@ namespace RavenQuestionnaire.Core.Documents
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
-        public Guid PublicKey
-        {
-            get
-            {
-                return this.publicKey;
-            }
-
-            set
-            {
-                this.publicKey = value;
-                this.Id = value.ToString();
-            }
-        }
+        public Guid PublicKey { get; set; }
 
         /// <summary>
         /// Gets or sets the roles.

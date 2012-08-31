@@ -73,7 +73,16 @@ namespace RavenQuestionnaire.Core.Entities.Extensions
                 return this._hash.Values.Select(v => v.Question);
             }
         }
-
+        /// <summary>
+        /// Gets the questions.
+        /// </summary>
+        public IEnumerable<CompleteQuestionWrapper> WrapedQuestions
+        {
+            get
+            {
+                return this._hash.Values;
+            }
+        }
         #endregion
 
         #region Public Indexers

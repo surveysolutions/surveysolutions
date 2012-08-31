@@ -9,6 +9,7 @@
 
 namespace RavenQuestionnaire.Core.Views.User
 {
+    using System;
     using System.Linq;
 
     using RavenQuestionnaire.Core.Denormalizers;
@@ -64,13 +65,13 @@ namespace RavenQuestionnaire.Core.Views.User
         {
             UserDocument doc = null;
 
-            if (!string.IsNullOrEmpty(input.UserId))
+            if (input.UserId != Guid.Empty)
             {
-                doc = this.users.Query().FirstOrDefault(u => u.Id == input.UserId);
+                doc = this.users.Query().FirstOrDefault(u => u.PublicKey == input.UserId);
             }
             else if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))
             {
-                doc = this.users.Query().FirstOrDefault(u => string.Compare(u.UserName, input.UserName, true) == 0);
+                doc = this.users.Query().FirstOrDefault(u => System.String.Compare(u.UserName, input.UserName, System.StringComparison.OrdinalIgnoreCase) == 0);
             }
 
             if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
@@ -89,8 +90,7 @@ namespace RavenQuestionnaire.Core.Views.User
             }
 
             return new UserView(
-                doc.PublicKey, 
-                doc.Id, 
+                doc.PublicKey,
                 doc.UserName, 
                 doc.Password, 
                 doc.Email, 

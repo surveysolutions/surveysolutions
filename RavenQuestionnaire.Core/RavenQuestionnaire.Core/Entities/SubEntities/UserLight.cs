@@ -34,7 +34,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         /// <param name="name">
         /// The name.
         /// </param>
-        public UserLight(string id, string name)
+        public UserLight(Guid id, string name)
         {
             this.Id = id;
             this.Name = name;
@@ -47,17 +47,13 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the public id.
-        /// </summary>
-        public Guid PublicId { get; set; }
+        
 
         #endregion
     }

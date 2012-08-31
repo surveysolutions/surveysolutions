@@ -87,7 +87,7 @@ namespace RavenQuestionnaire.Core.Views.Assign
         /// <summary>
         /// Gets or sets the template id.
         /// </summary>
-        public string TemplateId { get; set; }
+        public Guid TemplateId { get; set; }
 
         #endregion
     }

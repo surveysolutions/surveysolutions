@@ -20,11 +20,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
     {
         #region Fields
 
-        /// <summary>
-        /// The _id.
-        /// </summary>
-        private string _id;
-
         #endregion
 
         #region Constructors and Destructors
@@ -44,7 +39,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         /// <param name="lastEntryDate">
         /// The last entry date.
         /// </param>
-        public QuestionnaireBrowseItem(string id, string title, DateTime creationDate, DateTime lastEntryDate)
+        public QuestionnaireBrowseItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate)
         {
             this.Id = id;
             this.Title = title;
@@ -64,18 +59,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         /// <summary>
         /// Gets the id.
         /// </summary>
-        public string Id
-        {
-            get
-            {
-                return IdUtil.ParseId(this._id);
-            }
-
-            private set
-            {
-                this._id = value;
-            }
-        }
+        public Guid Id { get; private set; }
 
         /// <summary>
         /// Gets the last entry date.
@@ -99,7 +83,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         /// </returns>
         public static QuestionnaireBrowseItem New()
         {
-            return new QuestionnaireBrowseItem(null, null, DateTime.Now, DateTime.Now);
+            return new QuestionnaireBrowseItem(Guid.Empty, null, DateTime.Now, DateTime.Now);
         }
 
         #endregion
