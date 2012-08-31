@@ -279,36 +279,6 @@
             this.textBox1.TabIndex = 1;
             this.textBox1.Text = global::Browsing.Supervisor.Properties.Settings.Default.DefaultUrl;
             // 
-            // textBox3
-            // 
-            this.textBox3.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.textBox3.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Browsing.Supervisor.Properties.Settings.Default, "NetworkCheckStatePath", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textBox3.Location = new System.Drawing.Point(307, 335);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(326, 20);
-            this.textBox3.TabIndex = 28;
-            this.textBox3.Text = global::Browsing.Supervisor.Properties.Settings.Default.NetworkCheckStatePath;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.textBox4.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Browsing.Supervisor.Properties.Settings.Default, "NetworkLocalImportPath", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textBox4.Location = new System.Drawing.Point(307, 270);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(326, 20);
-            this.textBox4.TabIndex = 29;
-            this.textBox4.Text = global::Browsing.Supervisor.Properties.Settings.Default.NetworkLocalImportPath;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.textBox2.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Browsing.Supervisor.Properties.Settings.Default, "NetworkLocalExportPath", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textBox2.Location = new System.Drawing.Point(307, 239);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(326, 20);
-            this.textBox2.TabIndex = 27;
-            this.textBox2.Text = global::Browsing.Supervisor.Properties.Settings.Default.NetworkLocalExportPath;
-            // 
             // label6
             // 
             this.label6.Anchor = System.Windows.Forms.AnchorStyles.Right;
@@ -354,7 +324,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "CAPI";
+            this.Text = "Supervisor";
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
