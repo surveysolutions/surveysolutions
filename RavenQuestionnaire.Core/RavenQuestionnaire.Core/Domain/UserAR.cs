@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Core.Domain
         /// <summary>
         /// The is locked.
         /// </summary>
-        private bool isLocked;
+        private bool isUserLocked;
 
         /// <summary>
         /// User Password Hash.
@@ -135,12 +135,12 @@ namespace RavenQuestionnaire.Core.Domain
         /// <summary>
         /// The set user lock state.
         /// </summary>
-        /// <param name="isUserLocked">
+        /// <param name="isLocked">
         /// The is user locked.
         /// </param>
-        public void SetUserLockState(bool isUserLocked)
+        public void SetUserLockState(bool isLocked)
         {
-            this.ApplyEvent(new UserStatusChanged { IsLocked = isUserLocked });
+            this.ApplyEvent(new UserStatusChanged { IsLocked = isLocked });
         }
 
         #endregion
@@ -159,7 +159,7 @@ namespace RavenQuestionnaire.Core.Domain
             this.userName = e.Name;
             this.email = e.Email;
             this.password = e.Password;
-            this.isLocked = e.IsLocked;
+            this.isUserLocked = e.IsLocked;
             this.roles = e.Roles;
             this.supervisor = e.Supervisor;
         }
@@ -172,7 +172,7 @@ namespace RavenQuestionnaire.Core.Domain
         /// </param>
         protected void OnSetUserLockState(UserStatusChanged e)
         {
-            this.isLocked = e.IsLocked;
+            this.isUserLocked = e.IsLocked;
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace RavenQuestionnaire.Core.Domain
         protected void OnUserChange(UserChanged e)
         {
             this.email = e.Email;
-            this.isLocked = e.IsLocked;
+            this.isUserLocked = e.IsLocked;
             this.roles = e.Roles;
         }
 
