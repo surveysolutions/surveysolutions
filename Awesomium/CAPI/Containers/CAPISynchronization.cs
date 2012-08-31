@@ -5,12 +5,14 @@ using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Management;
 using System.Windows.Forms;
 using Browsing.CAPI.ClientSettings;
 using Browsing.CAPI.Forms;
 using Browsing.CAPI.Synchronization;
 using Common.Utils;
 using Synchronization.Core.Events;
+using Synchronization.Core.SynchronizationFlow;
 using Synchronization.Core.Interface;
 
 namespace Browsing.CAPI.Containers
@@ -22,32 +24,17 @@ namespace Browsing.CAPI.Containers
         {
             InitializeComponent();
 
-            ContentPanel.Controls.AddRange(new Control[] { this.btnPull, this.btnPush, this.btnCancel, this.statusStrip1});
+            this.syncPanel.Parent = ContentPanel;
+
+            this.syncPanel.PullPressed += btnPull_Click;
+            this.syncPanel.PushPressed += btnPush_Click;
+            this.syncPanel.CancelPressed += btnCancel_Click;
             
             this.pleaseWait = new PleaseWaitControl();
-            this.clientSettings = clientSettings;
 
-            this.syncManager = new CapiSyncManager(this.pleaseWait, this.clientSettings, requestProcessor, utils);
+            this.syncManager = new CapiSyncManager(this.syncPanel, clientSettings, requestProcessor, utils);
             this.syncManager.EndOfSync += new EventHandler<SynchronizationCompletedEvent>(sync_EndOfSync);
             this.syncManager.BgnOfSync += new EventHandler<SynchronizationEvent>(sync_BgnOfSync);
-
-            this.statusStrip1.Hide();
-
-            var host = new ToolStripControlHost(this.pleaseWait);
-            host.Size = this.statusStrip1.Size;
-
-            this.statusStrip1.Items.AddRange(new ToolStripItem[] {host});
-        }
-
-        private void EnableDisableMenuItems(bool enable)
-        {
-            this.btnPull.Enabled = enable;
-            this.btnPush.Enabled = enable;
-            this.btnCancel.Visible = !enable;
-            /*   foreach (ToolStripMenuItem item in this.menuStrip1.Items)
-            {
-                item.Enabled = item == this.toolStripCancelMenuItem ? !enable : enable;
-            }*/
         }
 
         private void sync_EndOfSync(object sender, SynchronizationCompletedEvent e)
@@ -55,9 +42,8 @@ namespace Browsing.CAPI.Containers
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(() =>
                                                   {
-                                                      MessageBox.Show(this, e.Log);
-
-                                                      EnableDisableMenuItems(true);
+                                                      this.syncPanel.ShowResult(e.Log);
+                                                      this.syncPanel.State = SyncState.Idle;
                                                   }));
         }
 
@@ -66,7 +52,8 @@ namespace Browsing.CAPI.Containers
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(() =>
                                                   {
-                                                      EnableDisableMenuItems(false);
+                                                      this.syncPanel.State = 
+                                                          e.Status.ActionType == SyncType.Push ? SyncState.Push : SyncState.Pull;
                                                   }));
         }
 
@@ -96,17 +83,6 @@ namespace Browsing.CAPI.Containers
 
         }
 
-        #endregion
-
-        #region Fields
-
-        private PleaseWaitControl pleaseWait;
-        private CapiSyncManager syncManager;
-        private StatusStrip statusStrip1;
-        private ISettingsProvider clientSettings;
-
-        #endregion
-
         private void btnCancel_Click(object sender, EventArgs e)
         {
             try
@@ -118,15 +94,36 @@ namespace Browsing.CAPI.Containers
             }
         }
 
-        private void CAPISynchronization_Load(object sender, EventArgs e)
-        {
-        }
+        #endregion
+
+        #region Fields
+
+        private PleaseWaitControl pleaseWait;
+        private CapiSyncManager syncManager;
+
+        #endregion
+
+        #region Overloading
 
         protected override void OnUpdateConfigDependencies()
         {
             base.OnUpdateConfigDependencies();
 
             this.syncManager.UpdateSynchronizersList();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            this.syncPanel.UpdateLook();
+        }
+
+        #endregion
+
+        public void UpdateUsbList()
+        {
+            this.syncPanel.UpdateUsbList();
         }
     }
 }

@@ -129,6 +129,12 @@
     <Compile Include="Containers\ScreenHolder.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Containers\SyncPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\SyncPanel.Designer.cs">
+      <DependentUpon>SyncPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FlatButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -162,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Containers\Screen.resx">
       <DependentUpon>Screen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Containers\SyncPanel.resx">
+      <DependentUpon>SyncPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PleaseWaitForm.resx">
       <DependentUpon>PleaseWaitForm.cs</DependentUpon>
