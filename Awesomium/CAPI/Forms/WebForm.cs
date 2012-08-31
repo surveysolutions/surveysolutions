@@ -1,5 +1,6 @@
 ﻿#region Using
 using System;
+using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
@@ -32,9 +33,10 @@ namespace Browsing.CAPI.Forms
 {
     public partial class WebForm : Form
     {
-        //  private Containers.CAPIBrowser capiBrowser;
-        // private Containers.CAPISynchronization capiSycn;
-        //   private Containers.CAPIMain capiMain;
+        private const int WM_DEVICECHANGE = 0x0219;
+        private const int DBT_DEVICEARRIVAL = 0x8000;
+        private const int DBT_DEVICEREMOVECOMPLETE = 0x8004;
+
         private Awesomium.Windows.Forms.WebControl webView;
         private ScreenHolder holder;
         private ISettingsProvider clientSettings;
@@ -155,6 +157,27 @@ namespace Browsing.CAPI.Forms
             Application.ApplicationExit += runner.StopEngine;
 
             return String.Format("http://localhost:{0}", port);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
+                case WM_DEVICECHANGE:
+
+                    int n = (int)m.WParam;
+
+                    if (n == DBT_DEVICEARRIVAL || n == DBT_DEVICEREMOVECOMPLETE)
+                    {
+                        var syncScreen = this.holder.LoadedScreens.FirstOrDefault(s => s is CAPISynchronization);
+                        if(syncScreen != null)
+                            (syncScreen as CAPISynchronization).UpdateUsbList();
+                    }
+
+                    break;
+            }
+
+            base.WndProc(ref m);
         }
     }
 }
