@@ -109,42 +109,6 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/ProgressInPersentage")]
-        public string NetworkCheckStatePath {
-            get {
-                return ((string)(this["NetworkCheckStatePath"]));
-            }
-            set {
-                this["NetworkCheckStatePath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/Push")]
-        public string NetworkLocalExportPath {
-            get {
-                return ((string)(this["NetworkLocalExportPath"]));
-            }
-            set {
-                this["NetworkLocalExportPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/Pull")]
-        public string NetworkLocalImportPath {
-            get {
-                return ((string)(this["NetworkLocalImportPath"]));
-            }
-            set {
-                this["NetworkLocalImportPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool RunClient {
             get {
@@ -157,19 +121,7 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/Export")]
-        public string UsbExportPath {
-            get {
-                return ((string)(this["UsbExportPath"]));
-            }
-            set {
-                this["UsbExportPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/Import")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronization/Import")]
         public string UsbImportPath {
             get {
                 return ((string)(this["UsbImportPath"]));
@@ -181,7 +133,7 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/CheckIsThereSomethingToPush")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronization/CheckIsThereSomethingToPush")]
         public string CheckEventPath {
             get {
                 return ((string)(this["CheckEventPath"]));

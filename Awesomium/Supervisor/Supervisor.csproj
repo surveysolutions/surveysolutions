@@ -114,7 +114,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Synchronization\SyncManager.cs" />
+    <Compile Include="Synchronization\SupervisorSyncManager.cs" />
     <Compile Include="Utils\UrlUtils.cs" />
     <EmbeddedResource Include="Containers\BrowserPage.resx">
       <DependentUpon>BrowserPage.cs</DependentUpon>

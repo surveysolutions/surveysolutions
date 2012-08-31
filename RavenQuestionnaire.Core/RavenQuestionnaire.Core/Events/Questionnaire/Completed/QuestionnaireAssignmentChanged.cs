@@ -34,6 +34,11 @@ namespace RavenQuestionnaire.Core.Events.Questionnaire.Completed
         /// </summary>
         public UserLight Responsible { get; set; }
 
+        /// <summary>
+        /// Gets or sets previous responsible person.
+        /// </summary>
+        public UserLight PreviousResponsible { get; set; }
+
         #endregion
     }
 }

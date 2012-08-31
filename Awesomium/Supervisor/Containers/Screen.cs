@@ -11,18 +11,25 @@ namespace Browsing.Supervisor.Containers
 
         private readonly ScreenHolder holder;
         private Panel menuPanel;
-        private Controls.FlatButton homeButton;
+        private FlatButton homeButton;
 
         #endregion
 
         #region C-tor
 
+        public Screen()
+        {
+        }
+
         public Screen(ScreenHolder holder, bool menuIsVisible)
         {
             InitializeComponent();
             this.menuPanel.Visible = menuIsVisible;
-            this.holder = holder;
-            this.holder.LoadedScreens.Add(this);
+            if (holder != null)
+            {
+                this.holder = holder;
+                this.holder.LoadedScreens.Add(this);
+            }
         }
 
         #endregion

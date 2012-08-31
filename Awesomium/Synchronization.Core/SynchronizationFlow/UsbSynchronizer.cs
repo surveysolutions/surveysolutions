@@ -129,6 +129,73 @@ namespace Synchronization.Core.SynchronizationFlow
             }
         }
 
+        protected override void OnPushSupervisorCapi(SyncDirection direction)
+        {
+            string drive = GetDrive(); // accept driver to flush on
+            if (drive == null)
+                throw new SynchronizationException("Usb drivers are absend");
+            try
+            {
+                this.stopRequested.Reset();
+                usbArchive = new UsbFileArchive(drive);
+                var file = usbArchive.LoadArchive();
+                using (var done = new ManualResetEvent(false))
+                {
+                    using (var webClient = new WebClient())
+                    {
+                        SynchronizationException error = null;
+                        webClient.UploadProgressChanged +=
+                            (s, e) =>
+                            {
+                                var percents = e.TotalBytesToSend == 0 ? 100 :
+                                    e.BytesSent * 100 / e.TotalBytesToSend;
+                                var status = new SyncStatus(SyncType.Push, direction, (int)percents, null);
+                                OnSyncProgressChanged(new SynchronizationEvent(status));
+                            };
+                        webClient.UploadFileCompleted +=
+                            (s, e) =>
+                            {
+                                bool errornous = e.Error != null;
+                                bool cancelled = e.Cancelled;
+                                int percents = errornous || cancelled ? 0 : 100;
+                                try
+                                {
+                                    if (errornous)
+                                        error = new SynchronizationException("Push from usb is failed", e.Error);
+                                    else if (cancelled)
+                                        error = new CancelledSynchronizationException("Push from usb is cancelled", error);
+                                    var status = new SyncStatus(SyncType.Push, direction, percents, error);
+                                    OnSyncProgressChanged(new SynchronizationEvent(status));
+                                }
+                                finally
+                                {
+                                    done.Set();
+                                }
+                            };
+                        string s1 = this._urlUtils.GetUsbPushUrl(SettingsProvider.Settings.ClientId);
+                        webClient.UploadFileAsync(new Uri(s1), usbArchive.InFile);
+                        while (webClient.IsBusy && !done.WaitOne(200))
+                        {
+                            if (this.stopRequested.WaitOne(100))
+                                webClient.CancelAsync();
+                        }
+
+                        if (error != null)
+                            throw error;
+                    }
+                }
+            }
+            catch (SynchronizationException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                throw new SynchronizationException("Push to usb is failed", e);
+            }
+        }
+
+
         protected override void OnPull(SyncDirection direction)
         {
             string drive = GetDrive(); // accept driver to flush on
