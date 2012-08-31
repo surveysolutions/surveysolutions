@@ -1,10 +1,7 @@
 ﻿namespace Browsing.Supervisor.Containers
 {
-    partial class SynchronizationPage
+    partial class SyncHQProcessPage
     {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary> 
@@ -28,11 +25,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SynchronizationPage));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyncHQProcessPage));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pnlHolder = new System.Windows.Forms.Panel();
-            this.btnSettings = new Browsing.Supervisor.Controls.FlatButton();
-            this.btnDashboard = new Browsing.Supervisor.Controls.FlatButton();
+            this.btnUnderConstruction = new Browsing.Supervisor.Controls.FlatButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlHolder.SuspendLayout();
             this.SuspendLayout();
@@ -56,46 +52,28 @@
             // 
             // pnlHolder
             // 
-            this.pnlHolder.Controls.Add(this.btnSettings);
-            this.pnlHolder.Controls.Add(this.btnDashboard);
+            this.pnlHolder.Controls.Add(this.btnUnderConstruction);
             this.pnlHolder.Location = new System.Drawing.Point(3, 3);
             this.pnlHolder.Name = "pnlHolder";
             this.pnlHolder.Size = new System.Drawing.Size(914, 194);
             this.pnlHolder.TabIndex = 0;
             // 
-            // btnSettings
+            // btnConstruction
             // 
-            this.btnSettings.FlatAppearance.BorderSize = 0;
-            this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSettings.Image = ((System.Drawing.Image)(resources.GetObject("btnTablet.Image")));
-            this.btnSettings.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnSettings.Location = new System.Drawing.Point(720, 0);
-            this.btnSettings.Margin = new System.Windows.Forms.Padding(0);
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(200, 200);
-            this.btnSettings.TabIndex = 3;
-            this.btnSettings.Text = "Tablet synchronization";
-            this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnSettings.UseVisualStyleBackColor = true;
-            this.btnSettings.Click += new System.EventHandler(this.btnTablet_Click);
-            // 
-            // btnDashboard
-            // 
-            this.btnDashboard.FlatAppearance.BorderSize = 0;
-            this.btnDashboard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDashboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDashboard.Image = ((System.Drawing.Image)(resources.GetObject("btnHQ.Image")));
-            this.btnDashboard.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnDashboard.Location = new System.Drawing.Point(130, 0);
-            this.btnDashboard.Margin = new System.Windows.Forms.Padding(0);
-            this.btnDashboard.Name = "btnDashboard";
-            this.btnDashboard.Size = new System.Drawing.Size(200, 200);
-            this.btnDashboard.TabIndex = 1;
-            this.btnDashboard.Text = "Headquater synchronization";
-            this.btnDashboard.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnDashboard.UseVisualStyleBackColor = true;
-            this.btnDashboard.Click += new System.EventHandler(this.btnHeadQuater_Click);
+            this.btnUnderConstruction.FlatAppearance.BorderSize = 0;
+            this.btnUnderConstruction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUnderConstruction.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUnderConstruction.Image = ((System.Drawing.Image)(resources.GetObject("Construction.Image")));
+            this.btnUnderConstruction.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnUnderConstruction.Location = new System.Drawing.Point(270, 0);
+            this.btnUnderConstruction.Margin = new System.Windows.Forms.Padding(0);
+            this.btnUnderConstruction.Name = "btnConstruction";
+            this.btnUnderConstruction.Size = new System.Drawing.Size(220, 200);
+            this.btnUnderConstruction.TabIndex = 3;
+            this.btnUnderConstruction.Text = "Under construction";
+            this.btnUnderConstruction.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnUnderConstruction.UseVisualStyleBackColor = true;
+
             // 
             // SupervisorMain
             // 
@@ -115,8 +93,7 @@
 
         #endregion
 
-        private Controls.FlatButton btnDashboard;
-        private Controls.FlatButton btnSettings;
+        private Controls.FlatButton btnUnderConstruction;
         private System.Windows.Forms.Panel pnlHolder;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }

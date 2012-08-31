@@ -189,7 +189,9 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override string GetAnswerString()
         {
-            return this._answer.HasValue ? this._answer.Value.ToShortDateString() : string.Empty;
+            return this._answer.HasValue
+                       ? Convert.ToString(this._answer.Value, System.Globalization.CultureInfo.InvariantCulture)
+                       : string.Empty;
         }
 
         /// <summary>
@@ -232,7 +234,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         /// </param>
         public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            this._answer = Convert.ToDateTime(answerValue);
+            this._answer = Convert.ToDateTime(answerValue, System.Globalization.CultureInfo.InvariantCulture);
         }
 
         #endregion
