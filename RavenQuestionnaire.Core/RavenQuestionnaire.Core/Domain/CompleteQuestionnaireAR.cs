@@ -348,11 +348,14 @@ namespace RavenQuestionnaire.Core.Domain
         /// </param>
         protected void ChangeAssignment(UserLight responsible)
         {
+            var prevResponsible = this.doc.Responsible;
             //// put check logic !!!
             this.ApplyEvent(
                 new QuestionnaireAssignmentChanged
                     {
-                       CompletedQuestionnaireId = this.doc.PublicKey, Responsible = responsible 
+                       CompletedQuestionnaireId = this.doc.PublicKey, 
+                       PreviousResponsible = prevResponsible,
+                       Responsible = responsible 
                     });
         }
 
