@@ -61,5 +61,11 @@ namespace Browsing.Supervisor.Utils
             return string.Format("{0}{1}", Settings.Default.DefaultUrl,
                                  Settings.Default.CheckEventPath);
         }
+
+        public string GetCheckNoCompletedTemplatesForCapiUrl()
+        {
+            return string.Format("{0}{1}", Settings.Default.DefaultUrl,
+                                 Settings.Default.NetworkSelectNoCompletedQuestionnaire);
+        }
     }
 }
