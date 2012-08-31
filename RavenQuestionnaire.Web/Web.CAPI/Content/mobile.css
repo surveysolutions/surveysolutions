@@ -1,6 +1,7 @@
 ﻿
 /*.ui-loader{border:none;background:transparent; color:#fff;font-weight: normal;}​*/
 /*comment*/
+textarea{ resize: none;}
 .ui-loader .ui-icon {background-color:transparent;border:none;display: block;height: 66px;margin: 0;padding: 0px;width: 66px;background-size: 66px 66px;}
 .ui-loader h1{font-size: 0;height: 0;overflow: hidden;width: 0;}
 
