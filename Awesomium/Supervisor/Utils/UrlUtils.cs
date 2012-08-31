@@ -21,25 +21,6 @@ namespace Browsing.Supervisor.Utils
             return string.Format("{0}{1}", Settings.Default.DefaultUrl, Settings.Default.AuthentificationCheckPath);
         }
 
-        public string GetPushUrl(Guid clientId)
-        {
-            return string.Format("{0}{1}?url={2}&syncKey={3}", Settings.Default.DefaultUrl,
-                                 Settings.Default.NetworkLocalExportPath, Settings.Default.EndpointExportPath,
-                                 clientId);
-        }
-
-        public string GetPullUrl(Guid clientId)
-        {
-            return string.Format("{0}{1}?url={2}&syncKey={3}", Settings.Default.DefaultUrl,
-                                 Settings.Default.NetworkLocalImportPath, Settings.Default.EndpointExportPath, clientId);
-        }
-
-        public string GetPushCheckStateUrl(Guid processid)
-        {
-            return string.Format("{0}{1}?id={2}", Settings.Default.DefaultUrl, Settings.Default.NetworkCheckStatePath,
-                                 processid);
-        }
-
         public string GetEnpointUrl()
         {
             return Settings.Default.EndpointExportPath;
@@ -47,19 +28,35 @@ namespace Browsing.Supervisor.Utils
 
         public string GetUsbPushUrl(Guid clientId)
         {
-            return string.Format("{0}{1}?syncKey={2}", Settings.Default.DefaultUrl, Settings.Default.UsbExportPath,
+            return string.Format("{0}{1}?syncKey={2}", Settings.Default.DefaultUrl, Settings.Default.UsbImportPath,
                                  clientId);
         }
 
-        public string GetUsbPullUrl(Guid clientId)
-        {
-            return string.Format("{0}{1}", Settings.Default.DefaultUrl, Settings.Default.UsbImportPath);
-        }
 
         public string GetCheckPushPrerequisitesUrl()
         {
             return string.Format("{0}{1}", Settings.Default.DefaultUrl,
                                  Settings.Default.CheckEventPath);
+        }
+
+        public string GetPushUrl(Guid clientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetPullUrl(Guid clientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetPushCheckStateUrl(Guid processid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetUsbPullUrl(Guid clientId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

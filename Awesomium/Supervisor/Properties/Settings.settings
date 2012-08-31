@@ -23,26 +23,14 @@
     <Setting Name="LoginPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/LogOn</Value>
     </Setting>
-    <Setting Name="NetworkCheckStatePath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronizations/ProgressInPersentage</Value>
-    </Setting>
-    <Setting Name="NetworkLocalExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronizations/Push</Value>
-    </Setting>
-    <Setting Name="NetworkLocalImportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronizations/Pull</Value>
-    </Setting>
     <Setting Name="RunClient" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="UsbExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronizations/Export</Value>
-    </Setting>
     <Setting Name="UsbImportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronizations/Import</Value>
+      <Value Profile="(Default)">Synchronization/Import</Value>
     </Setting>
     <Setting Name="CheckEventPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronizations/CheckIsThereSomethingToPush</Value>
+      <Value Profile="(Default)">Synchronization/CheckIsThereSomethingToPush</Value>
     </Setting>
     <Setting Name="AuthentificationCheckPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/IsLoggedIn</Value>
