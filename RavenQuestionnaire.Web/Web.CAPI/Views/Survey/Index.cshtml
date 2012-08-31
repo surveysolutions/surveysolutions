@@ -63,14 +63,8 @@
                     var activ = @gh.Enabled ? "" : "ui-disabled";
                     activ += gh.IsCurrent ? "ui-btn-active" : "";
                     <li class="@activ" id="@gh.PublicKey" onclick="$(this).siblings().removeClass('ui-btn-active');">
-                       @* 
-                        @if(gh.IsCurrent)
-                        {
-                            <a  id="ref-link-@(gh.PublicKey)" href="#screen-@gh.PublicKey" data-panel="main"> @gh.GroupText
-                                  <span id="counter-@(gh.PublicKey)" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a>
-                        }else{*@
-                        
-                        <a  id="ref-link-@(gh.PublicKey)" @*href="javascript:void(0)"  *@ data-panel="main" href="@Url.Action("Screen", new { Id = Model.PublicKey, group = gh.PublicKey })"> @gh.GroupText
+                     
+                        <a  id="ref-link-@(gh.PublicKey)" data-panel="main" href="@Url.Action("Screen", new { Id = Model.PublicKey, group = gh.PublicKey })"> @gh.GroupText
                                   <span id="counter-@(gh.PublicKey)" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a>@*}*@
                             
                            
@@ -90,26 +84,6 @@
                 </li>
             </ul>
         </div>
-       @* <!-- /content -->
-        <div data-role="footer" data-position="fixed" data-id="ew-footer">
-            <div data-role="navbar">
-                <ul>
-                    <li><a data-role="button" data-corners="false" href="@Url.Action("Statistic", "Survey", new { id = Model.PublicKey })" 
-                           rel="external" data-ajax="false">Statistics</a></li>
-                    <li>
-                        @if (Model.Status.PublicId == SurveyStatus.Complete.PublicId)
-                        {
-                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("ReInit", "Survey", new { id = Model.PublicKey })">
-                                ReInit</a>
-                        }
-                        else
-                        {
-                            <a data-corners="false" href="#transparent" data-rel="popup" data-role="button" data-inline="true" id="CompleteLink" 
-                            returnlink="@Url.Action("Dashboard", "Survey")" link="@Url.Action("Complete", "Survey", new { id=@Model.PublicKey})">Complete</a>
-                        }</li>
-                </ul>
-            </div>
-        </div>*@
     </div>
 </div>
 <div data-role="panel" data-id="main" id="content_container" class='@((Model.Status.PublicId == SurveyStatus.Complete.PublicId) ? "ui-disabled ui-disabled-opacity" : "")'>
@@ -123,4 +97,5 @@
             if (jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:hidden").length > 0)
                 jQuery(this).find("div.ui-disabled div.ui-controlgroup-controls:hidden").show();
     });
+    
 </script>

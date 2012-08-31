@@ -35,11 +35,11 @@
                             <div class="ui-block-a">
                                 @if (!question.GroupPropagationPublicKey.HasValue)
                                 {
-                                    <a href="@Url.Action("Index", "Survey", new { id = Model.CompleteQuestionnaireId, group = question.GroupPublicKey, question = question.PublicKey })" rel = "external">@Html.Raw(question.QuestionText)</a>
+                                    <a href="@Url.Action("Screen", "Survey", new { id = Model.CompleteQuestionnaireId, group = question.GroupPublicKey, question = question.PublicKey })">@Html.Raw(question.QuestionText)</a>
                                 }
                                 else
                                 {
-                                    <a href="@Url.Action("Index", "Survey", new { id = Model.CompleteQuestionnaireId, group = question.GroupPublicKey, question = question.PublicKey, propagationKey = question.GroupPropagationPublicKey })" rel = "external">@Html.Raw(question.QuestionText)</a>
+                                    <a href="@Url.Action("Screen", "Survey", new { id = Model.CompleteQuestionnaireId, group = question.GroupPublicKey, question = question.PublicKey, propagationKey = question.GroupPropagationPublicKey })">@Html.Raw(question.QuestionText)</a>
                                 }
                             </div>
                            

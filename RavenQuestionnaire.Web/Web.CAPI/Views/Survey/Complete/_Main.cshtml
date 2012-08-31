@@ -12,7 +12,7 @@
     </div>
     <div data-role="content" data-iscroll="">
         <div id="scroller">
-          @*  <p>
+            @*  <p>
                 Started: @Model.StartDate.ToShortTimeString()</p>*@
             <div class="ui-body ui-body-c">
                 <div class="group-anchor">
@@ -33,12 +33,12 @@
             <div class="ui-body">
                 &nbsp;</div>
             <div class='ui-body ui-body-c @(Model.InvalidQuestions.Count == 0 ? "ui-disabled" : "")'>
-                  @if (Model.Status.PublicId == SurveyStatus.Error.PublicId)
-                   {
-                       <div class="ui-body ui-body-e">
-                           <h1>Please fix invalid questions!</h1>
-                       </div>
-                   }
+                @if (Model.Status.PublicId == SurveyStatus.Error.PublicId && Model.InvalidQuestions.Count > 0)
+                {
+                    <div class="ui-body ui-body-e">
+                        <h1>Please fix invalid questions!</h1>
+                    </div>
+                }
                 <div class="group-anchor">
                     <a class="nav-link" href="@Url.Action("Invalid", new { Id = Model.CompleteQuestionnaireId })" 
                        data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">
@@ -63,7 +63,7 @@
                         <div class="ui-block-b">
                         </div>
                         <div class="ui-block-c">
-                            <button type="submit" data-corners="false" date-mini="true">
+                            <button type="submit" data-corners="false" date-mini="true" data-theme="a">
                                 Complete</button>
                         </div>
                     </fieldset>
@@ -71,4 +71,25 @@
             }
         </div>
     </div>
+     <div data-role="footer" data-theme="b">
+        
+           
+            
+            <a class="nav-link ui-btn-left" href="@Url.Action("Screen", new { Id = Model.CompleteQuestionnaireId, group = Model.LastScreenPublicKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext">
+                Prev Group</a>
+            
+        
+        
+        <h1><span></span></h1>
+       
+         <a class="next-screen ui-disabled ui-btn-right  nav-link" href="#" data-icon="arrow-r" data-iconpos="right"
+            data-theme="b" data-corners="false">Next Group</a>
+            
+             <script>
+                 var target = $('#ref-link-complete').parents('li');
+                 target.addClass('ui-btn-active');
+                 target.siblings().removeClass('ui-btn-active');
+    </script>
+        
+     </div>
 </div>
