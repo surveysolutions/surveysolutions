@@ -6,6 +6,9 @@
 //   Defines the QuestionnaireDenormalizer type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using RavenQuestionnaire.Core.Entities.Extensions;
+
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     using System;
@@ -120,8 +123,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
         {
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.Payload.PublicKey);
 
-            var questionnaire = new Questionnaire(item);
-            questionnaire.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.AfterItemKey);
+         //   var questionnaire = new Questionnaire(item);
+            item.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.AfterItemKey);
         }
 
         /// <summary>

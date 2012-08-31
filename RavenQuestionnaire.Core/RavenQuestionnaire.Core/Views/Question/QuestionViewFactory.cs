@@ -58,7 +58,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         {
             QuestionnaireDocument doc = this._documentSession.GetByGuid(input.QuestionnaireId);
 
-            var question = new Questionnaire(doc).Find<IQuestion>(input.PublicKey);
+            var question = doc.Find<IQuestion>(input.PublicKey);
             if (question == null)
             {
                 return null;
