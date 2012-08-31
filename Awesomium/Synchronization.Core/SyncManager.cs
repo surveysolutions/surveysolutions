@@ -1,17 +1,15 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Threading;
-using System.Collections.Generic;
-using System.Linq;
+﻿using NLog;
+using System;
 using System.Text;
-using System.Diagnostics;
 using Common.Utils;
-using Synchronization.Core.Interface;
+using System.Threading;
+using System.Diagnostics;
+using System.Collections.Generic;
 using Synchronization.Core.Events;
 using Synchronization.Core.Errors;
+using Synchronization.Core.Interface;
 using Synchronization.Core.SynchronizationFlow;
-using NLog;
+
 
 namespace Synchronization.Core
 {
@@ -86,8 +84,7 @@ namespace Synchronization.Core
             }
             CheckPullPrerequisites();
         }
-
-
+        
         private ISynchronizer ExecuteAction(Action<ISynchronizer> action, IList<Exception> errorList)
         {
             foreach (var synchronizer in synchronizerChain)
@@ -163,6 +160,11 @@ namespace Synchronization.Core
             DoSynchronizationAction(SyncType.Push, direction);
         }
 
+        public void PushSupervisorCapi(SyncDirection direction)
+        {
+            DoSynchronizationActionSupervisorCapi(SyncType.Push, direction);
+        }
+
         public void Pull(SyncDirection direction)
         {
             DoSynchronizationAction(SyncType.Pull, direction);
@@ -177,7 +179,6 @@ namespace Synchronization.Core
         public void UpdateSynchronizersList()
         {
             this.synchronizerChain.Clear();
-
             AddSynchronizers();
         }
 
@@ -190,28 +191,46 @@ namespace Synchronization.Core
         protected virtual string OnDoSynchronizationAction(SyncType action, SyncDirection direction)
         {
             IList<Exception> errorList = new List<Exception>();
-
             var succesSynchronizer = ExecuteAction(
                     s =>
                     {
                         if (action == SyncType.Pull)
                             s.Pull(direction);
                         else
+                        {
                             s.Push(direction);
+                        }
                     },
                     errorList
                 );
-
-
-            StringBuilder result = new StringBuilder();
+            var result = new StringBuilder();
             foreach (SynchronizationException synchronizationException in errorList)
                 result.AppendLine(synchronizationException.Message);
-
             if (succesSynchronizer != null)
                 result.AppendLine(succesSynchronizer.BuildSuccessMessage(action, direction));
             else
                 throw new SynchronizationException(result.ToString());
+            return result.ToString();
+        }
 
+        protected virtual string DoSynchronizationActionSupervisorCapi(SyncType action, SyncDirection direction)
+        {
+            IList<Exception> errorList = new List<Exception>();
+            var succesSynchronizer = ExecuteAction(
+                    s =>
+                    {
+                        if (action == SyncType.Push)
+                            s.PushSupervisorCAPI(direction);
+                    },
+                    errorList
+                );
+            StringBuilder result = new StringBuilder();
+            foreach (SynchronizationException synchronizationException in errorList)
+                result.AppendLine(synchronizationException.Message);
+            if (succesSynchronizer != null)
+                result.AppendLine(succesSynchronizer.BuildSuccessMessage(action, direction));
+            else
+                throw new SynchronizationException(result.ToString());
             return result.ToString();
         }
 

@@ -54,23 +54,13 @@ namespace Browsing.Supervisor.Synchronization
             new Thread(DoExport).Start();
         }
 
-        internal void ImportQuestionaries()
-        {
-            new Thread(DoImport).Start();
-        }
-
         #endregion
 
         #region Helpers
 
         private void DoExport()
         {
-            Push(SyncDirection.Up);
-        }
-
-        private void DoImport()
-        {
-            Pull(SyncDirection.Down);
+            this.PushSupervisorCapi(SyncDirection.Up);
         }
 
         #endregion

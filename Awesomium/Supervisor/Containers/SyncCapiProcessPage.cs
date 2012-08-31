@@ -42,7 +42,6 @@ namespace Browsing.Supervisor.Containers
 
         private void EnableDisableMenuItems(bool enable)
         {
-            this.btnPull.Enabled = enable;
             this.btnPush.Enabled = enable;
             this.btnCancel.Visible = !enable;
         }
@@ -77,22 +76,8 @@ namespace Browsing.Supervisor.Containers
             catch
             {
             }
-
         }
-
-        private void btnPull_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.syncManager.ImportQuestionaries();
-            }
-            catch
-            {
-            }
-
-        }
-
-
+        
         private void btnCancel_Click(object sender, EventArgs e)
         {
             try
@@ -104,17 +89,11 @@ namespace Browsing.Supervisor.Containers
             }
         }
 
+        private void Synchronization_Load(object sender, EventArgs e)
+        {
+        }
+
         #endregion
-
-
-        private void HQSynchronization_Load(object sender, EventArgs e)
-        {
-        }
-
-        protected override void OnUpdateConfigDependencies()
-        {
-            //base.OnUpdateConfigDependencies();
-            //this.syncManager.UpdateSynchronizersList();
-        }
+        
     }
 }

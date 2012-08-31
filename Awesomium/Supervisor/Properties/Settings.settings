@@ -23,20 +23,8 @@
     <Setting Name="LoginPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/LogOn</Value>
     </Setting>
-    <Setting Name="NetworkCheckStatePath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronization/ProgressInPersentage</Value>
-    </Setting>
-    <Setting Name="NetworkLocalExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronization/Push</Value>
-    </Setting>
-    <Setting Name="NetworkLocalImportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronization/Pull</Value>
-    </Setting>
     <Setting Name="RunClient" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="UsbExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronization/Export</Value>
     </Setting>
     <Setting Name="UsbImportPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Synchronization/Import</Value>
@@ -46,9 +34,6 @@
     </Setting>
     <Setting Name="AuthentificationCheckPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/IsLoggedIn</Value>
-    </Setting>
-    <Setting Name="NetworkSelectNoCompletedQuestionnaire" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronization/SelectNoCompletedQuestionnaire</Value>
     </Setting>
   </Settings>
 </SettingsFile>

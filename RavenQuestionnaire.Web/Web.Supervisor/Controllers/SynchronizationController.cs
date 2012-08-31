@@ -1,15 +1,17 @@
 ﻿using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using RavenQuestionnaire.Core;
 using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core.Events;
+using Questionnaire.Core.Web.Threading;
 
 namespace Web.Supervisor.Controllers
 {
-    using System.Collections.Generic;
-
-    public class SynchronizationController : Controller
+    
+    [AsyncTimeout(20000000)]
+    public class SynchronizationController : AsyncController
     {
 
         #region Properties
@@ -46,10 +48,26 @@ namespace Web.Supervisor.Controllers
             return this.synchronizer.ReadEvents().Any();
         }
 
-        public List<AggregateRootEvent> SelectNoCompletedQuestionnaire()
+        public void ImportAsync(HttpPostedFileBase myfile)
         {
-            return this.synchronizer.ReadEvents().ToList();
+            if (myfile == null && Request.Files.Count > 0)
+                myfile = Request.Files[0];
+            if (myfile != null && myfile.ContentLength != 0)
+            {
+                AsyncManager.OutstandingOperations.Increment();
+                AsyncQuestionnaireUpdater.Update(() =>
+                {
+                    exportimportEvents.Import(myfile);
+                    AsyncManager.OutstandingOperations.Decrement();
+                });
+            }
         }
+
+        public ActionResult ImportCompleted()
+        {
+            return RedirectToAction("Index", "Dashboard");
+        }
+       
 
         #endregion
     }
