@@ -135,7 +135,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         /// </returns>
         public static IEnumerable<SurveyStatus> GetAllStatuses()
         {
-            return new[] { Initial, Error, Complete };
+            return new[] { Initial, Error, Complete, Approve };
         }
 
         #endregion
