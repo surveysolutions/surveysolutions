@@ -9,5 +9,9 @@ namespace Synchronization.Core.Interface
     {
         Guid ClientId { get; set; }
         Guid ParentId { get; set; }
+        bool RunEngine { get; }
+
+        string DefaultPort { get; }
+        string EnginePathName { get; }
     }
 }

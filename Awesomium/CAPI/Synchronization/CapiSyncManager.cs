@@ -17,8 +17,8 @@ namespace Browsing.CAPI.Synchronization
     {
         #region C-tor
 
-        public CapiSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequesProcessor requestProcessor, IUrlUtils urlUtils)
-            : base(pleaseWait, provider, requestProcessor, urlUtils)
+        public CapiSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+            : base(pleaseWait, provider, requestProcessor, urlUtils, usbProvider)
         {
         }
 
@@ -29,7 +29,7 @@ namespace Browsing.CAPI.Synchronization
             if (!string.IsNullOrEmpty(UrlUtils.GetEnpointUrl()))
                 syncChain.Add(new NetworkSynchronizer(settingsProvider, RequestProcessor, this.UrlUtils));
     
-            syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils));
+            syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
         }
 
         #region Helpers
@@ -56,7 +56,7 @@ namespace Browsing.CAPI.Synchronization
                 this.RequestProcessor.Process<bool>(UrlUtils.GetCheckPushPrerequisitesUrl(), false);
 
             if (!result)
-                throw new CheckPrerequisitesException("Current device don't have any changes", SyncType.Push, null);
+                throw new CheckPrerequisitesException("Current device doesn't contain any changes", SyncType.Push, null);
         }
 
         protected override void CheckPullPrerequisites()

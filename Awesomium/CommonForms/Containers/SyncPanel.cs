@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
 using System.Threading;
+using System.Windows.Forms;
+using Browsing.Common.Controls;
 using Synchronization.Core.Interface;
 using Synchronization.Core.SynchronizationFlow;
 
-
-namespace Browsing.CAPI.Containers
+namespace Browsing.Common.Containers
 {
     public enum SyncState
     {
@@ -21,13 +18,15 @@ namespace Browsing.CAPI.Containers
         Push
     }
 
-    public partial class SyncPanel : UserControl, ISyncProgressObserver
+    public partial class SyncPanel : UserControl, ISyncProgressObserver, IUsbProvider
     {
         ManualResetEvent inactiveStatus = new ManualResetEvent(true);
 
         internal EventHandler PushPressed;
         internal EventHandler PullPressed;
         internal EventHandler CancelPressed;
+
+        private DriveInfo choozenUSB = null;
 
         public SyncPanel()
         {
@@ -44,7 +43,7 @@ namespace Browsing.CAPI.Containers
 
         public SyncState State
         {
-            set 
+            set
             {
                 switch (value)
                 {
@@ -103,15 +102,15 @@ namespace Browsing.CAPI.Containers
         /// Create list of available drivers
         /// </summary>
         /// <returns></returns>
-        private List<string> ReviewDriversList()
+        private List<DriveInfo> ReviewDriversList()
         {
-            List<string> drivers = new List<string>();
+            List<DriveInfo> drivers = new List<DriveInfo>();
             DriveInfo[] listDrives = DriveInfo.GetDrives();
 
             foreach (var drive in listDrives)
             {
                 if (drive.DriveType == DriveType.Removable)
-                    drivers.Add(drive.ToString());
+                    drivers.Add(drive);
             }
 
             return drivers;
@@ -119,13 +118,72 @@ namespace Browsing.CAPI.Containers
 
         internal void UpdateUsbList()
         {
+            this.usbStrip.Items.Clear();
+            this.choozenUSB = null;
+
             var drives = ReviewDriversList();
 
-            string s = string.Empty;
-            foreach(var d in drives)
-                s += d + "  ";
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(SyncPanel));
+            foreach (var drive in drives)
+            {
+                int imageIndex = 0;
+                bool theDriverIsChoozen = this.choozenUSB != null && string.Compare(drive.Name, this.choozenUSB.Name, true) == 0;
+                if (theDriverIsChoozen)
+                {
+                    this.choozenUSB = drive;
+                    imageIndex = 1;
+                }
 
-            SetLabel(this.labelAvlUsb, string.IsNullOrEmpty(s) ? null : string.Format("Available USB drivers: {0}", s));
+                FlatButton item = new FlatButton()
+                {
+                    Text = drive.Name,
+                    Tag = drive,
+
+                    Image = this.usbImageList.Images[imageIndex],
+                    Font = this.tableLayoutPanel2.Font,
+                    ImageAlign = ContentAlignment.TopCenter,
+                    BackgroundImageLayout = ImageLayout.Stretch,
+                    TextAlign = ContentAlignment.TopLeft,
+                    FlatStyle = FlatStyle.Flat,
+                };
+
+                item.Click += UsbChoosen;
+
+                this.usbStrip.Items.Add(new ToolStripControlHost(item));
+            }
+
+            if (this.usbStrip.Items.Count == 0)
+            {
+                this.usbStrip.Visible = false;
+                this.usbStrip.Height = 120;
+                SetLabel(this.labelAvlUsb, null);
+            }
+            else
+            {
+                this.usbStrip.Visible = true;
+                SetLabel(this.labelAvlUsb, "Available USB drivers:");
+            }
+        }
+
+        private void UsbChoosen(object sender, EventArgs args)
+        {
+            this.choozenUSB = null;
+
+            foreach (var usbItem in this.usbStrip.Items)
+            {
+                var control = (usbItem as ToolStripControlHost).Control;
+                var button = control as FlatButton;
+                if (button == null)
+                    continue;
+
+                if (button == sender)
+                {
+                    this.choozenUSB = button.Tag as DriveInfo;
+                    button.Image = this.usbImageList.Images[1];
+                }
+                else
+                    button.Image = this.usbImageList.Images[0];
+            }
         }
 
         internal void ShowResult(string log)
@@ -204,9 +262,9 @@ namespace Browsing.CAPI.Containers
         private void SetProgress(int progressPercentage)
         {
             if (this.progressBar.InvokeRequired)
-                this.progressBar.Invoke(new MethodInvoker(() => 
-                { 
-                    this.progressBar.Value = progressPercentage; 
+                this.progressBar.Invoke(new MethodInvoker(() =>
+                {
+                    this.progressBar.Value = progressPercentage;
                 }));
             else
                 this.progressBar.Value = progressPercentage;
@@ -226,7 +284,7 @@ namespace Browsing.CAPI.Containers
             this.inactiveStatus.WaitOne(5000);
 
             if (InvokeRequired)
-                Invoke(new MethodInvoker(() => this.progressBar.Show() ));
+                Invoke(new MethodInvoker(() => this.progressBar.Show()));
             else
                 this.progressBar.Show();
 
@@ -249,6 +307,20 @@ namespace Browsing.CAPI.Containers
             MakeInvisibleProgressBar(0);
             SetLabel(this.statusLabel, statusText, error);
             Deactivate(false);
+        }
+
+        #endregion
+
+        #region IDriverProvider Memebers
+
+        public DriveInfo ActiveUsb
+        {
+            get { return this.choozenUSB; }
+        }
+
+        public bool IsAnyAvailable
+        {
+            get { return ReviewDriversList().Count > 0; }
         }
 
         #endregion

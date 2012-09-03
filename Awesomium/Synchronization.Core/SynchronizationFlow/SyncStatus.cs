@@ -7,15 +7,33 @@ using Synchronization.Core.Errors;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
+    /// <summary>
+    /// Synchronization action for current node.
+    /// </summary>
     public enum SyncType
     {
+        /// <summary>
+        /// Doucments are being uploaded to another node
+        /// </summary>
         Push,
+        /// <summary>
+        /// Doucments are being downloaded from another node
+        /// </summary>
         Pull
     }
 
+    /// <summary>
+    /// Direction in documents synxhronization flow.
+    /// </summary>
     public enum SyncDirection
     {
+        /// <summary>
+        /// The way from tablet side to headquater via supervisor
+        /// </summary>
         Up,
+        /// <summary>
+        /// The way from headquater to tablet via supervisor
+        /// </summary>
         Down
     }
 

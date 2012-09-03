@@ -1,129 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Management;
 using System.Windows.Forms;
-using Browsing.CAPI.ClientSettings;
-using Browsing.CAPI.Forms;
 using Browsing.CAPI.Synchronization;
 using Common.Utils;
 using Synchronization.Core.Events;
-using Synchronization.Core.SynchronizationFlow;
 using Synchronization.Core.Interface;
+using Synchronization.Core.SynchronizationFlow;
+using Browsing.Common.Containers;
+using System.Threading;
 
 namespace Browsing.CAPI.Containers
 {
-    public partial class CAPISynchronization : Screen
+    public partial class CAPISynchronization : Common.Containers.Synchronization
     {
         public CAPISynchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
-            : base(holder, true)
+            : base(clientSettings, requestProcessor, utils, holder)
         {
             InitializeComponent();
-
-            this.syncPanel.Parent = ContentPanel;
-
-            this.syncPanel.PullPressed += btnPull_Click;
-            this.syncPanel.PushPressed += btnPush_Click;
-            this.syncPanel.CancelPressed += btnCancel_Click;
-            
-            this.pleaseWait = new PleaseWaitControl();
-
-            this.syncManager = new CapiSyncManager(this.syncPanel, clientSettings, requestProcessor, utils);
-            this.syncManager.EndOfSync += new EventHandler<SynchronizationCompletedEvent>(sync_EndOfSync);
-            this.syncManager.BgnOfSync += new EventHandler<SynchronizationEvent>(sync_BgnOfSync);
         }
 
-        private void sync_EndOfSync(object sender, SynchronizationCompletedEvent e)
+        protected override ISyncManager DoInstantiateSyncManager(ISyncProgressObserver progressObserver, ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, IUsbProvider usbProvider)
         {
-            if (this.InvokeRequired)
-                this.Invoke(new MethodInvoker(() =>
-                                                  {
-                                                      this.syncPanel.ShowResult(e.Log);
-                                                      this.syncPanel.State = SyncState.Idle;
-                                                  }));
+            return new CapiSyncManager(progressObserver, clientSettings, requestProcessor, utils, usbProvider);
         }
 
-        private void sync_BgnOfSync(object sender, SynchronizationEvent e)
+        private void ExportData()
         {
-            if (this.InvokeRequired)
-                this.Invoke(new MethodInvoker(() =>
-                                                  {
-                                                      this.syncPanel.State = 
-                                                          e.Status.ActionType == SyncType.Push ? SyncState.Push : SyncState.Pull;
-                                                  }));
+            SyncManager.Push(SyncDirection.Up);
         }
 
-        #region Event Handlers
-
-        private void btnPush_Click(object sender, EventArgs e)
+        private void ImportData()
         {
-            try
-            {
-                this.syncManager.ExportQuestionaries();
-            }
-            catch
-            {
-            }
-
+            SyncManager.Pull(SyncDirection.Down);
         }
 
-        private void btnPull_Click(object sender, EventArgs e)
+        protected override void OnPushClicked()
         {
-            try
-            {
-                this.syncManager.ImportQuestionaries();
-            }
-            catch
-            {
-            }
-
+            new Thread(ExportData).Start();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        protected override void OnPullClicked()
         {
-            try
-            {
-                this.syncManager.Stop();
-            }
-            catch
-            {
-            }
-        }
-
-        #endregion
-
-        #region Fields
-
-        private PleaseWaitControl pleaseWait;
-        private CapiSyncManager syncManager;
-
-        #endregion
-
-        #region Overloading
-
-        protected override void OnUpdateConfigDependencies()
-        {
-            base.OnUpdateConfigDependencies();
-
-            this.syncManager.UpdateSynchronizersList();
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            this.syncPanel.UpdateLook();
-        }
-
-        #endregion
-
-        public void UpdateUsbList()
-        {
-            this.syncPanel.UpdateUsbList();
+            new Thread(ImportData).Start();
         }
     }
 }

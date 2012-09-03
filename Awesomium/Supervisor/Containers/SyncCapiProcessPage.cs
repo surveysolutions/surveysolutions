@@ -4,12 +4,13 @@ using System.Windows.Forms;
 using Browsing.Supervisor.Controls;
 using global::Synchronization.Core.Events;
 using global::Synchronization.Core.Interface;
+using System.IO;
 
 namespace Browsing.Supervisor.Containers
 {
     using Browsing.Supervisor.Synchronization;
 
-    public partial class SyncCapiProcessPage : Screen
+    public partial class SyncCapiProcessPage : Screen, IUsbProvider
     {
         #region Fields
 
@@ -29,7 +30,7 @@ namespace Browsing.Supervisor.Containers
             InitializeComponent();
             this.pleaseWait = new PleaseWaitPage();
             this.clientSettings = clientSettings;
-            this.syncManager = new SupervisorSyncManager(this.pleaseWait, this.clientSettings, requestProcessor, utils);
+            this.syncManager = new SupervisorSyncManager(this.pleaseWait, this.clientSettings, requestProcessor, utils, this);
             this.syncManager.EndOfSync += new EventHandler<SynchronizationCompletedEvent>(sync_EndOfSync);
             this.syncManager.BgnOfSync += new EventHandler<SynchronizationEvent>(sync_BgnOfSync);
             this.statusStrip1.Hide();
@@ -39,6 +40,16 @@ namespace Browsing.Supervisor.Containers
         }
 
         #endregion
+
+        public DriveInfo ActiveUsb
+        {
+            get { return null; }
+        }
+
+        public bool IsAnyAvailable
+        {
+            get { return false; }
+        }
 
         private void EnableDisableMenuItems(bool enable)
         {

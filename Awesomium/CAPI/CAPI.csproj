@@ -123,28 +123,7 @@
     <Compile Include="Containers\CAPISynchronization.Designer.cs">
       <DependentUpon>CAPISynchronization.cs</DependentUpon>
     </Compile>
-    <Compile Include="Containers\Screen.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Containers\ScreenHolder.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Containers\SyncPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Containers\SyncPanel.Designer.cs">
-      <DependentUpon>SyncPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\FlatButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Synchronization\CapiSyncManager.cs" />
-    <Compile Include="Forms\PleaseWaitForm.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\PleaseWaitForm.Designer.cs">
-      <DependentUpon>PleaseWaitForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\WebForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,15 +144,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Containers\CAPISynchronization.resx">
       <DependentUpon>CAPISynchronization.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Containers\Screen.resx">
-      <DependentUpon>Screen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Containers\SyncPanel.resx">
-      <DependentUpon>SyncPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PleaseWaitForm.resx">
-      <DependentUpon>PleaseWaitForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WebForm.resx">
       <DependentUpon>WebForm.cs</DependentUpon>
@@ -228,6 +198,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonForms\CommonForms.csproj">
+      <Project>{3CBB33EB-D522-4D91-B488-84AA4BE7E295}</Project>
+      <Name>CommonForms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{9A8843B1-978F-4E96-8523-907C257CA183}</Project>
       <Name>Common %28Common\Common%29</Name>

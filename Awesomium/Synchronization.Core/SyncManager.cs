@@ -27,19 +27,20 @@ namespace Synchronization.Core
 
         #region C-tors
 
-        protected SyncManager(ISyncProgressObserver progressStatus, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor, IUrlUtils urlUtils)
-            : this(progressStatus, settingsProvider, requestProcessor, urlUtils, new List<ISynchronizer>())
+        protected SyncManager(ISyncProgressObserver progressStatus, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+            : this(progressStatus, settingsProvider, requestProcessor, urlUtils, usbProvider, new List<ISynchronizer>())
         {
             //LogManager.EnableLogging();
         }
 
-        private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor, IUrlUtils urlUtils,
+        private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider,
                             List<ISynchronizer> subStructure)
         {
 
             this.synchronizerChain = subStructure;
             this.RequestProcessor = requestProcessor;
             this.UrlUtils = urlUtils;
+            this.UsbProvider = usbProvider;
             this.settingsProvider = settingsProvider;
 
             SyncProgressChanged += (s, e) => progressObserver.SetProgress(e.Status);
@@ -52,6 +53,7 @@ namespace Synchronization.Core
 
         protected IRequesProcessor RequestProcessor { get; private set; }
         protected IUrlUtils UrlUtils { get; private set; }
+        protected IUsbProvider UsbProvider { get; private set; }
 
         #endregion
 
@@ -82,6 +84,7 @@ namespace Synchronization.Core
                 CheckPushPrerequisites();
                 return;
             }
+
             CheckPullPrerequisites();
         }
         

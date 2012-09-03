@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
-namespace Browsing.CAPI.Containers
+namespace Browsing.Common.Containers
 {
     public class Screen : UserControl
     {
@@ -12,7 +10,7 @@ namespace Browsing.CAPI.Containers
         private System.Windows.Forms.Panel menuPanel;
         private TableLayoutPanel tableLayoutPanel1;
         private Panel contentPanel;
-        private Browsing.CAPI.Controls.FlatButton homeButton;
+        private Browsing.Common.Controls.FlatButton homeButton;
 
         #region C-tor
 
@@ -58,7 +56,7 @@ namespace Browsing.CAPI.Containers
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Screen));
             this.menuPanel = new System.Windows.Forms.Panel();
-            this.homeButton = new Browsing.CAPI.Controls.FlatButton();
+            this.homeButton = new Browsing.Common.Controls.FlatButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.contentPanel = new System.Windows.Forms.Panel();
             this.menuPanel.SuspendLayout();
@@ -149,7 +147,7 @@ namespace Browsing.CAPI.Containers
 
         protected virtual void OnHomeButtonClick(object sender, EventArgs e)
         {
-            this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPIMain));
+            this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is Main));
         }
 
         protected virtual void OnUpdateConfigDependencies()
