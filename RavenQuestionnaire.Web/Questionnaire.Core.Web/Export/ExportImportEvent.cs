@@ -1,34 +1,78 @@
-using System;
-using System.Collections.Generic;
-using Ionic.Zip;
-using System.IO;
-using Ionic.Zlib;
-using System.Web;
-using System.Text;
-using Newtonsoft.Json;
-using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Events;
-
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ExportImportEvent.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The i export import.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Questionnaire.Core.Web.Export
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using System.Web;
+
+    using Ionic.Zip;
+    using Ionic.Zlib;
+
+    using Newtonsoft.Json;
+
+    using RavenQuestionnaire.Core.Events;
+
+    /// <summary>
+    /// The i export import.
+    /// </summary>
     public interface IExportImport
     {
-        void Import(HttpPostedFileBase uploadFile);
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// Export events for given user
+        /// </summary>
+        /// <param name="clientGuid">
+        /// Client guid.
+        /// </param>
+        /// <returns>
+        /// Zip archive contains backup.txt file with serialized events for given user
+        /// </returns>
         byte[] Export(Guid clientGuid);
+
+        /// <summary>
+        /// Import data from *.capi file
+        /// </summary>
+        /// <param name="uploadFile">
+        /// The upload file.
+        /// </param>
+        void Import(HttpPostedFileBase uploadFile);
+
+        #endregion
     }
 
+    /// <summary>
+    /// The export import event helper class.
+    /// </summary>
     public class ExportImportEvent : IExportImport
     {
+        #region Constants and Fields
 
-        #region FieldsProperties
-
-        private IEventSync synchronizer;
+        /// <summary>
+        /// The synchronizer.
+        /// </summary>
+        private readonly IEventSync synchronizer;
 
         #endregion
 
-        #region Constructor
+        #region Constructors and Destructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExportImportEvent"/> class.
+        /// </summary>
+        /// <param name="synchronizer">
+        /// The synchronizer to collect events
+        /// </param>
         public ExportImportEvent(IEventSync synchronizer)
         {
             this.synchronizer = synchronizer;
@@ -36,8 +80,28 @@ namespace Questionnaire.Core.Web.Export
 
         #endregion
 
-        #region PublicMethod
+        #region Public Methods and Operators
 
+        /// <summary>
+        /// Export events for given user
+        /// </summary>
+        /// <param name="clientGuid">
+        /// The client guid.
+        /// </param>
+        /// <returns>
+        /// Zip archive contains backup.txt file with serialized events for given user
+        /// </returns>
+        public byte[] Export(Guid clientGuid)
+        {
+            return this.ExportInternal(clientGuid, this.synchronizer.ReadEvents);
+        }
+
+        /// <summary>
+        /// Import data from *.capi file
+        /// </summary>
+        /// <param name="uploadFile">
+        /// The upload file.
+        /// </param>
         public void Import(HttpPostedFileBase uploadFile)
         {
             if (ZipFile.IsZipFile(uploadFile.InputStream, false))
@@ -48,23 +112,38 @@ namespace Questionnaire.Core.Web.Export
                 using (var stream = new MemoryStream())
                 {
                     foreach (ZipEntry e in zip)
+                    {
                         e.Extract(stream);
+                    }
 
                     var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-                    var result = JsonConvert.DeserializeObject<ZipFileData>
-                        (Encoding.Default.GetString(stream.ToArray()), settings);
+                    var result = JsonConvert.DeserializeObject<ZipFileData>(
+                        Encoding.Default.GetString(stream.ToArray()), settings);
 
-                    synchronizer.WriteEvents(result.Events);
+                    this.synchronizer.WriteEvents(result.Events);
                 }
             }
         }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The export internal.
+        /// </summary>
+        /// <param name="clientGuid">
+        /// The client guid.
+        /// </param>
+        /// <param name="action">
+        /// The action.
+        /// </param>
+        /// <returns>
+        /// Zip file as array of bytes
+        /// </returns>
         protected byte[] ExportInternal(Guid clientGuid, Func<IEnumerable<AggregateRootEvent>> action)
         {
-            var data = new ZipFileData
-            {
-                ClientGuid = clientGuid,
-                Events = action()
-            };
+            var data = new ZipFileData { ClientGuid = clientGuid, Events = action() };
 
             var outputStream = new MemoryStream();
 
@@ -72,9 +151,7 @@ namespace Questionnaire.Core.Web.Export
             {
                 var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
                 zip.CompressionLevel = CompressionLevel.None;
-                string filename = string.Format("backup-{0}.txt", DateTime.Now.ToString().Replace(" ", "_"));
-
-                zip.AddEntry(filename, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
+                zip.AddEntry("backup.txt", JsonConvert.SerializeObject(data, Formatting.Indented, settings));
                 zip.Save(outputStream);
             }
 
@@ -82,16 +159,6 @@ namespace Questionnaire.Core.Web.Export
 
             return outputStream.ToArray();
         }
-
-        public byte[] Export(Guid clientGuid)
-        {
-            return ExportInternal(clientGuid, this.synchronizer.ReadEvents);
-        }
-
-        
-
         #endregion
-
-
     }
 }
