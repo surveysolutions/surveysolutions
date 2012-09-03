@@ -970,7 +970,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>22364</DevelopmentServerPort>
+          <DevelopmentServerPort>38447</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/SUB</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
