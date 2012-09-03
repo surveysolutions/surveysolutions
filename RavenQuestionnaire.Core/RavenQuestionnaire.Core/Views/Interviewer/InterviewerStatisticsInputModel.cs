@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewersInputModel.cs" company="The World Bank">
+// <copyright file="InterviewerStatisticsInputModel.cs" company="The World Bank">
 //   2012
 // </copyright>
 // <summary>
@@ -7,19 +7,19 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RavenQuestionnaire.Core.Views.User
+
+namespace RavenQuestionnaire.Core.Views.Interviewer
 {
     using System;
     using System.Collections.Generic;
 
     using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
     using RavenQuestionnaire.Core.Utility;
 
     /// <summary>
-    /// The interviewers input model.
+    /// Input model for interviewer statisctic page
     /// </summary>
-    public class InterviewersInputModel
+    public class InterviewerStatisticsInputModel
     {
         #region Fields
 
@@ -29,9 +29,9 @@ namespace RavenQuestionnaire.Core.Views.User
         private List<OrderRequestItem> orders = new List<OrderRequestItem>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InterviewersInputModel"/> class.
+        /// Initializes a new instance of the <see cref="InterviewerStatisticsInputModel"/> class.
         /// </summary>
-        public InterviewersInputModel()
+        public InterviewerStatisticsInputModel()
         {
             this.Page = 1;
             this.PageSize = 20;
@@ -74,6 +74,11 @@ namespace RavenQuestionnaire.Core.Views.User
         }
 
         /// <summary>
+        /// Gets or sets a user public key.
+        /// </summary>
+        public Guid UserId { get; set; }
+
+        /// <summary>
         /// Gets or sets the page.
         /// </summary>
         public int Page { get; set; }
@@ -82,11 +87,6 @@ namespace RavenQuestionnaire.Core.Views.User
         /// Gets or sets the page size.
         /// </summary>
         public int PageSize { get; set; }
-
-        /// <summary>
-        /// Gets or sets the supervisor.
-        /// </summary>
-        public UserLight Supervisor { get; set; }
 
         #endregion
     }

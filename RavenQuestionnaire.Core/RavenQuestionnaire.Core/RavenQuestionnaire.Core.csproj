@@ -427,8 +427,12 @@
     <Compile Include="Views\Group\PropagatedCompleteGroupView.cs" />
     <Compile Include="Views\Event\EventBrowseInputModel.cs" />
     <Compile Include="Views\Event\EventViewInputModel.cs" />
+    <Compile Include="Views\Interviewer\InterviewerStatisticsView.cs" />
     <Compile Include="Views\Interviewer\InterviewerStatistics.cs" />
+    <Compile Include="Views\Interviewer\InterviewerStatisticsFactory.cs" />
+    <Compile Include="Views\Interviewer\InterviewerStatisticsInputModel.cs" />
     <Compile Include="Views\Interviewer\InterviewerStatisticsItem.cs" />
+    <Compile Include="Views\Interviewer\InterviewerStatisticsViewItem.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseInputModel.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseView.cs" />

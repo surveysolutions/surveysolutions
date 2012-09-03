@@ -2,9 +2,6 @@
 // <copyright file="InterviewerStatisticsItem.cs" company="The World Bank">
 //   2012
 // </copyright>
-// <summary>
-//   The interviewer item view.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Core.Views.Interviewer
@@ -12,7 +9,6 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
     using RavenQuestionnaire.Core.Entities.SubEntities;
 
@@ -21,6 +17,8 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
     /// </summary>
     public class InterviewerStatisticsItem
     {
+        #region Constructors and Destructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InterviewerStatisticsItem"/> class.
         /// </summary>
@@ -28,6 +26,10 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         {
             this.StatusesByCQ = new List<InterviewerStatistics>();
         }
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         /// Gets or sets interviewer id.
@@ -44,34 +46,64 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// </summary>
         public List<InterviewerStatistics> StatusesByCQ { get; set; }
 
+        #endregion
+
+        #region Public Methods and Operators
+
         /// <summary>
         /// Add status item to dictionary
         /// </summary>
         /// <param name="publicKey">
-        /// Complete questionnaire public key.
+        ///   Complete questionnaire public key.
         /// </param>
         /// <param name="templateId">
-        /// Questionnaire public key
+        ///   Questionnaire public key
         /// </param>
+        /// <param name="title">CQ title</param>
         /// <param name="status">
-        /// Current CQ status
+        ///   Current CQ status
         /// </param>
-        public void AddCQ(Guid publicKey, Guid templateId, SurveyStatus status)
+        public void AddCQ(Guid publicKey, Guid templateId, string title, SurveyStatus status)
         {
-            var item = this.StatusesByCQ.FirstOrDefault(s => s.Id == publicKey);
+            InterviewerStatistics item = this.StatusesByCQ.FirstOrDefault(s => s.Id == publicKey);
             if (item != null)
             {
                 item.Status = status;
             }
             else
             {
-                this.StatusesByCQ.Add(new InterviewerStatistics()
-                    {
-                        Id = publicKey,
-                        Status = status,
-                        TemplateId = templateId
-                    });
+                this.StatusesByCQ.Add(
+                    new InterviewerStatistics { Id = publicKey, Status = status, Title = title, TemplateId = templateId });
             }
+        }
+
+        /// <summary>
+        /// The get table rows.
+        /// </summary>
+        /// <returns>
+        /// List of table rows
+        /// </returns>
+        public List<InterviewerStatisticsViewItem> GetTableRows()
+        {
+            var templateGuids = this.StatusesByCQ.Select(s => new { Id = s.TemplateId, s.Title }).Distinct();
+
+            return 
+                templateGuids.Select(
+                    t =>
+                    new InterviewerStatisticsViewItem(
+                        this.Id, 
+                        this.Name, 
+                        t.Title, 
+                        t.Id, 
+                        this.StatusesByCQ.Count(
+                            s => (s.TemplateId == t.Id) && (s.Status.PublicId == SurveyStatus.Initial.PublicId)), 
+                        this.StatusesByCQ.Count(
+                            s => (s.TemplateId == t.Id) && (s.Status.PublicId == SurveyStatus.Error.PublicId)), 
+                        this.StatusesByCQ.Count(
+                            s => (s.TemplateId == t.Id) && (s.Status.PublicId == SurveyStatus.Complete.PublicId)),
+                        this.StatusesByCQ.Count(
+                            s => (s.TemplateId == t.Id) && (s.Status.PublicId == SurveyStatus.Approve.PublicId)))).
+                    ToList();
         }
 
         /// <summary>
@@ -87,5 +119,7 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
                 this.StatusesByCQ.Remove(this.StatusesByCQ.Single(s => s.Id == publicKey));
             }
         }
+
+        #endregion
     }
 }
