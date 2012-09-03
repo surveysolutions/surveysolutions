@@ -59,7 +59,7 @@ namespace Synchronization.Core.SynchronizationFlow
             catch (Exception e)
             {
                 throw new SynchronizationException(
-                   string.Format("Pull to local center {0} is failed ", this._urlUtils.GetEnpointUrl()), e);
+                   string.Format("Pull from local center {0} is failed ", this._urlUtils.GetEnpointUrl()), e);
             }
         }
 

@@ -5,21 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Browsing.CAPI.Controls
+namespace Browsing.Common.Controls
 {
     public class FlatButton : System.Windows.Forms.Button
     {
         public FlatButton()
-        : base()
-    {
-        // Prevent the button from drawing its own border
-        FlatAppearance.BorderSize = 0;
-        FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-    }
-        public override void NotifyDefault(bool value)
+            : base()
         {
+            // Prevent the button from drawing its own border
+            FlatAppearance.BorderSize = 0;
+            FlatStyle = System.Windows.Forms.FlatStyle.Flat;
         }
-        protected override void OnPaint(PaintEventArgs e)
+        /*public override void NotifyDefault(bool value)
+        {
+        }*/
+        /*protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
 
@@ -27,6 +27,6 @@ namespace Browsing.CAPI.Controls
             Pen pen = new Pen(FlatAppearance.BorderColor, 1);
             Rectangle rectangle = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
             e.Graphics.DrawRectangle(pen, rectangle);
-        }
+        }*/
     }
 }

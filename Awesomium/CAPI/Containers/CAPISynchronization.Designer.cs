@@ -29,32 +29,18 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CAPISynchronization));
-            this.syncPanel = new Browsing.CAPI.Containers.SyncPanel();
             this.SuspendLayout();
-            // 
-            // syncPanel1
-            // 
-            this.syncPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.syncPanel.Location = new System.Drawing.Point(0, 0);
-            this.syncPanel.Name = "syncPanel1";
-            this.syncPanel.Size = new System.Drawing.Size(600, 500);
-            this.syncPanel.TabIndex = 3;
             // 
             // CAPISynchronization
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.syncPanel);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "CAPISynchronization";
             this.Size = new System.Drawing.Size(600, 500);
-            this.Controls.SetChildIndex(this.syncPanel, 0);
             this.ResumeLayout(false);
-
         }
 
         #endregion
-
-        private SyncPanel syncPanel;
     }
 }

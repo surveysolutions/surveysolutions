@@ -17,8 +17,8 @@ namespace Browsing.Supervisor.Synchronization
     {
         #region C-tor
 
-        public SupervisorSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequesProcessor requestProcessor, IUrlUtils urlUtils)
-            : base(pleaseWait, provider, requestProcessor, urlUtils)
+        public SupervisorSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+            : base(pleaseWait, provider, requestProcessor, urlUtils, usbProvider)
         {
         }
 
@@ -32,7 +32,7 @@ namespace Browsing.Supervisor.Synchronization
             result =
                 this.RequestProcessor.Process<bool>(UrlUtils.GetCheckPushPrerequisitesUrl(), false);
             if (!result)
-                throw new CheckPrerequisitesException("Current device don't have any changes", SyncType.Push, null);
+                throw new CheckPrerequisitesException("Current device doesn't contain any changes", SyncType.Push, null);
         }
 
         #endregion
@@ -44,7 +44,7 @@ namespace Browsing.Supervisor.Synchronization
 
         protected override void OnAddSynchronizers(IList<ISynchronizer> syncChain, ISettingsProvider settingsProvider)
         {
-            syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils));
+            syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
         }
 
         #region Methods
@@ -58,9 +58,19 @@ namespace Browsing.Supervisor.Synchronization
 
         #region Helpers
 
+        /*private void DoExport()
+        {
+            Push(SyncDirection.Down);
+        }
+
+        private void DoImport()
+        {
+            Pull(SyncDirection.Up);
+        }*/
+
         private void DoExport()
         {
-            this.PushSupervisorCapi(SyncDirection.Up);
+            this.PushSupervisorCapi(SyncDirection.Up); // ?????? wow... wow....wow....
         }
 
         #endregion

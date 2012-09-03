@@ -13,17 +13,19 @@ namespace Synchronization.Core.SynchronizationFlow
 {
     public class UsbSynchronizer : AbstractSynchronizer
     {
-        public UsbSynchronizer(ISettingsProvider settingsprovider, IUrlUtils urlUtils)
+        public UsbSynchronizer(ISettingsProvider settingsprovider, IUrlUtils urlUtils, IUsbProvider usbProvider)
             : base(settingsprovider)
         {
             this._urlUtils = urlUtils;
+            this.usbProvider = usbProvider;
             //  FlushDriversList();
         }
 
         #region variables
 
-       
+
         private readonly IUrlUtils _urlUtils;
+        private readonly IUsbProvider usbProvider;
         private UsbFileArchive usbArchive;
         private AutoResetEvent stopRequested = new AutoResetEvent(false);
 
@@ -54,8 +56,6 @@ namespace Synchronization.Core.SynchronizationFlow
         protected override void OnPush(SyncDirection direction)
         {
             string drive = GetDrive(); // accept driver to flush on
-            if (drive == null)
-                throw new SynchronizationException("Usb drivers are absend");
 
             try
             {
@@ -89,10 +89,10 @@ namespace Synchronization.Core.SynchronizationFlow
 
                                 try
                                 {
-                                    if (errornous)
-                                        error = new SynchronizationException("Push to usb is failed", e.Error);
-                                    else if (cancelled)
+                                    if (cancelled)
                                         error = new CancelledSynchronizationException("Push to usb is cancelled", error);
+                                    else if (errornous)
+                                        error = new SynchronizationException("Push to usb is failed", e.Error);
                                     else
                                         usbArchive.SaveArchive(e.Result);
 
@@ -111,7 +111,10 @@ namespace Synchronization.Core.SynchronizationFlow
                         while (webClient.IsBusy && !done.WaitOne(200))
                         {
                             if (this.stopRequested.WaitOne(100))
+                            {
                                 webClient.CancelAsync();
+                                done.WaitOne(60000);
+                            }
                         }
 
                         if (error != null)
@@ -132,13 +135,13 @@ namespace Synchronization.Core.SynchronizationFlow
         protected override void OnPushSupervisorCapi(SyncDirection direction)
         {
             string drive = GetDrive(); // accept driver to flush on
-            if (drive == null)
-                throw new SynchronizationException("Usb drivers are absend");
+
             try
             {
                 this.stopRequested.Reset();
+
                 usbArchive = new UsbFileArchive(drive);
-                var file = usbArchive.LoadArchive();
+
                 using (var done = new ManualResetEvent(false))
                 {
                     using (var webClient = new WebClient())
@@ -161,9 +164,9 @@ namespace Synchronization.Core.SynchronizationFlow
                                 try
                                 {
                                     if (errornous)
-                                        error = new SynchronizationException("Push from usb is failed", e.Error);
+                                        error = new SynchronizationException("Push to usb is failed", e.Error);
                                     else if (cancelled)
-                                        error = new CancelledSynchronizationException("Push from usb is cancelled", error);
+                                        error = new CancelledSynchronizationException("Push to usb is cancelled", error);
                                     var status = new SyncStatus(SyncType.Push, direction, percents, error);
                                     OnSyncProgressChanged(new SynchronizationEvent(status));
                                 }
@@ -172,12 +175,16 @@ namespace Synchronization.Core.SynchronizationFlow
                                     done.Set();
                                 }
                             };
+
                         string s1 = this._urlUtils.GetUsbPushUrl(SettingsProvider.Settings.ClientId);
                         webClient.UploadFileAsync(new Uri(s1), usbArchive.InFile);
                         while (webClient.IsBusy && !done.WaitOne(200))
                         {
                             if (this.stopRequested.WaitOne(100))
+                            {
                                 webClient.CancelAsync();
+                                done.WaitOne(60000);
+                            }
                         }
 
                         if (error != null)
@@ -196,11 +203,13 @@ namespace Synchronization.Core.SynchronizationFlow
         }
 
 
+        /// <summary>
+        /// Getting USB file and uploading it to web service
+        /// </summary>
+        /// <param name="direction"></param>
         protected override void OnPull(SyncDirection direction)
         {
             string drive = GetDrive(); // accept driver to flush on
-            if (drive == null)
-                throw new SynchronizationException("Usb drivers are absend");
 
             try
             {
@@ -218,7 +227,7 @@ namespace Synchronization.Core.SynchronizationFlow
                             (s, e) =>
                             {
                                 var percents = e.TotalBytesToSend == 0 ? 100 :
-                                    e.BytesSent * 100 /  e.TotalBytesToSend;
+                                    e.BytesSent * 100 / e.TotalBytesToSend;
 
                                 var status = new SyncStatus(SyncType.Pull, direction, (int)percents, null);
 
@@ -234,10 +243,10 @@ namespace Synchronization.Core.SynchronizationFlow
 
                                 try
                                 {
-                                    if (errornous)
+                                    if (cancelled)
+                                        error = new CancelledSynchronizationException("Pull from usb is cancelled", error);
+                                    else if (errornous)
                                         error = new SynchronizationException("Pull from usb is failed", e.Error);
-                                    else if (cancelled)
-                                        error = new CancelledSynchronizationException("Pull from usb is cancelled",  error);
 
                                     var status = new SyncStatus(SyncType.Push, direction, percents, error);
 
@@ -251,13 +260,16 @@ namespace Synchronization.Core.SynchronizationFlow
 
 
                         webClient.UploadFileAsync(new Uri(this._urlUtils.GetUsbPullUrl(this.SettingsProvider.Settings.ClientId)), usbArchive.InFile);
-                        
+
                         while (webClient.IsBusy && !done.WaitOne(200))
                         {
                             if (this.stopRequested.WaitOne(100))
+                            {
                                 webClient.CancelAsync();
+                                done.WaitOne(60000);
+                            }
                         }
-                        
+
                         if (error != null)
                             throw error;
                     }
@@ -293,30 +305,15 @@ namespace Synchronization.Core.SynchronizationFlow
         /// <returns>Driver to put data on</returns>
         private string GetDrive()
         {
-            List<string> currentDrivers = ReviewDriversList();
+            var drive = this.usbProvider.ActiveUsb == null ? null : this.usbProvider.ActiveUsb.Name;
 
-            /* var pluggedDrivers = currentDrivers.Except(this.cachedDrives);
+            if (drive == null)
+                if (this.usbProvider.IsAnyAvailable)
+                    throw new SynchronizationException("Usb flush memory device have not been choozen");
+                else
+                    throw new SynchronizationException("Usb flush memory device have not been plugged");
 
-            return pluggedDrivers.Any() ? pluggedDrivers.First() : null;*/
-            return currentDrivers.FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Create list of available drivers
-        /// </summary>
-        /// <returns></returns>
-        private List<string> ReviewDriversList()
-        {
-            List<string> drivers = new List<string>();
-            DriveInfo[] listDrives = DriveInfo.GetDrives();
-
-            foreach (var drive in listDrives)
-            {
-                if (drive.DriveType == DriveType.Removable)
-                    drivers.Add(drive.ToString());
-            }
-
-            return drivers;
+            return drive;
         }
 
         #endregion

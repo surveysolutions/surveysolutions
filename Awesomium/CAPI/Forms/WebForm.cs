@@ -26,158 +26,64 @@ using Synchronization.Core.SynchronizationFlow;
 using Browsing.CAPI.Synchronization;
 using Common;
 
+using Browsing.Common.Containers;
+
 #endif
 #endregion
 
 namespace Browsing.CAPI.Forms
 {
-    public partial class WebForm : Form
+    public partial class WebForm : Browsing.Common.Forms.WebForm
     {
-        private const int WM_DEVICECHANGE = 0x0219;
-        private const int DBT_DEVICEARRIVAL = 0x8000;
-        private const int DBT_DEVICEREMOVECOMPLETE = 0x8004;
-
-        private Awesomium.Windows.Forms.WebControl webView;
-        private ScreenHolder holder;
-        private ISettingsProvider clientSettings;
-        private IRequesProcessor requestProcessor;
-        private IUrlUtils urlUtils;
         #region C-tor
 
-        public WebForm()
+        public WebForm() :
+            base(new ClientSettingsProvider())
         {
             // Notice that Control.DoubleBuffered has been set to true
             // in the designer, to prevent flickering.
             InitializeComponent();
-            this.holder = new ScreenHolder();
-            this.holder.Dock = DockStyle.Fill;
-
-            WebCore.Initialize(new WebCoreConfig()
-                                   {
-                                       EnablePlugins = true,
-                                       SaveCacheAndCookies = true
-                                   }, true);
-
-            this.webView = new WebControl();
-            this.clientSettings = new ClientSettingsProvider();
-            this.requestProcessor = new WebRequestProcessor();
-            this.urlUtils = new UrlUtils();
-
-            if (Settings.Default.RunClient)
-            {
-                try
-                {
-                    RunEngine();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error on Engine Run. " + ex.Message);
-                }
-
-            }
-            
-            AddMain();
-            AddBrowser();
-            AddSynchronizer();
-            AddSettings();
-
-            this.Controls.Add(this.holder);
-
         }
 
-        protected override void OnFormClosed(FormClosedEventArgs e)
+        protected override Browser InstantiateBrowserContainer(WebControl webView)
         {
-            if (this.webView != null)
-            {
-                //this.webView.IsDirtyChanged -= OnIsDirtyChanged;
-                //this.webView.SelectLocalFiles -= OnSelectLocalFiles;                this.webView.Close();
-            }
-
-            base.OnFormClosed(e);
-
-#if USING_MONO
-    // TODO: Mac OS X: Sends a SIGSEGV to Mono.
-            if ( !PlatformDetection.IsMac )
-#endif
-            WebCore.Shutdown();
+            return new CAPIBrowser(webView, Holder)
+                        {
+                            Name = "capiBrowser1"
+                        };
         }
 
-        protected void AddBrowser()
+
+        protected override Common.Containers.Synchronization InstantiateSynchronizerContainer(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
-            new CAPIBrowser(this.webView, this.holder)
+            return new CAPISynchronization(settingsProvider, requestProcessor, urlUtils, Holder)
             {
-                Name = "capiBrowser1"
+                Name = "capiSync"
             };
         }
 
-        protected void AddSynchronizer()
+        protected override Main InstantiateMainPageContainer(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
-            new CAPISynchronization(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder) 
-            { 
-                Name = "capiSync" 
-            };
-        }
-
-        protected void AddSettings()
-        {
-            new CAPISettings(this.holder) 
-            { 
-                Name = "capiSettings" 
-            };
-        }
-
-        protected void AddMain()
-        {
-            var capiMain = new CAPIMain(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder)
+            return new CAPIMain(settingsProvider, requestProcessor, urlUtils, Holder)
             {
                 Name = "capiMain"
             };
+        }
 
-            this.holder.Redirect(capiMain);
+        protected override Common.Containers.Settings InstantiateSettingsContainer()
+        {
+            return new CAPISettings(this.Holder)
+            {
+                Name = "capiSettings"
+            };
+        }
+
+        protected override IUrlUtils InstantiateUrlProvider()
+        {
+            return new UrlUtils();
         }
 
         #endregion
 
-        private string RunEngine()
-        {
-            DirectoryInfo dir = new DirectoryInfo(Application.StartupPath);
-
-            if (dir.Parent == null)
-                throw new Exception("Engine was not found.");
-
-            string enginePath = Path.Combine(dir.Parent.FullName, Settings.Default.EnginePathName);
-
-            if (!Directory.Exists(enginePath))
-                throw new Exception("Engine was not found.");
-
-            string port = Settings.Default.DefaultPort;
-
-            EngineRunner runner = new EngineRunner();
-            runner.RunEngine(enginePath, port);
-            Application.ApplicationExit += runner.StopEngine;
-
-            return String.Format("http://localhost:{0}", port);
-        }
-
-        protected override void WndProc(ref Message m)
-        {
-            switch (m.Msg)
-            {
-                case WM_DEVICECHANGE:
-
-                    int n = (int)m.WParam;
-
-                    if (n == DBT_DEVICEARRIVAL || n == DBT_DEVICEREMOVECOMPLETE)
-                    {
-                        var syncScreen = this.holder.LoadedScreens.FirstOrDefault(s => s is CAPISynchronization);
-                        if(syncScreen != null)
-                            (syncScreen as CAPISynchronization).UpdateUsbList();
-                    }
-
-                    break;
-            }
-
-            base.WndProc(ref m);
-        }
     }
 }
