@@ -41,11 +41,11 @@ namespace RavenQuestionnaire.Core.Commands.User
         /// <param name="isLocked">
         /// The is locked.
         /// </param>
-        public ChangeUserStatusCommand(Guid publicKey, bool isLocked)
+        public ChangeUserStatusCommand(Guid publicKey, bool isUserLocked)
             : base(publicKey)
         {
             this.PublicKey = publicKey;
-            this.IsLocked = isLocked;
+            this.IsUserLocked = isUserLocked;
         }
 
         #endregion
@@ -55,7 +55,7 @@ namespace RavenQuestionnaire.Core.Commands.User
         /// <summary>
         /// Gets or sets a value indicating whether is locked.
         /// </summary>
-        public bool IsLocked { get; set; }
+        public bool IsUserLocked { get; set; }
 
         /// <summary>
         /// Gets or sets the public key.

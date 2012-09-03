@@ -68,7 +68,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
             CompleteQuestionnaireStoreDocument cq =
                 this.completeDocumentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
             InterviewerStatisticsItem item = this.documentItemStore.GetByGuid(cq.Responsible.Id);
-            item.AddCQ(evnt.Payload.CompletedQuestionnaireId, cq.TemplateId, evnt.Payload.Status);
+            item.AddCQ(evnt.Payload.CompletedQuestionnaireId, cq.TemplateId, cq.Title, evnt.Payload.Status);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 pitem.RemoveCQ(cq.PublicKey);
             }
 
-            item.AddCQ(cq.PublicKey, cq.TemplateId, cq.Status);
+            item.AddCQ(cq.PublicKey, cq.TemplateId, cq.Title, cq.Status);
         }
 
         /// <summary>
