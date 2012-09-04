@@ -103,11 +103,6 @@ namespace RavenQuestionnaire.Core.Documents
         /// </summary>
         public DateTime CreationDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether is valid.
-        /// </summary>
-        [JsonIgnore]
-        public bool IsValid { get; set; }
 
         /// <summary>
         /// Gets or sets the last entry date.

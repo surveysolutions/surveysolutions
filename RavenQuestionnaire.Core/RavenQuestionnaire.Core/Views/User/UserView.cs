@@ -14,7 +14,6 @@ namespace RavenQuestionnaire.Core.Views.User
     using System.Linq;
 
     using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Utility;
 
     /// <summary>
     /// The user view.
@@ -44,9 +43,6 @@ namespace RavenQuestionnaire.Core.Views.User
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
-        /// </param>
-        /// <param name="id">
-        /// The id.
         /// </param>
         /// <param name="username">
         /// The username.

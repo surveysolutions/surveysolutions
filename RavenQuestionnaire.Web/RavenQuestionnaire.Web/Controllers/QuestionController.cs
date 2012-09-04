@@ -147,13 +147,18 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Edit(Guid publicKey, Guid questionnaireId)
+        public ActionResult Edit(Guid? publicKey, Guid? questionnaireKey)
         {
-            LoadImages();
-            if (publicKey == Guid.Empty)
+            
+            if (!publicKey.HasValue || publicKey == Guid.Empty)
                 throw new HttpException(404, "Invalid query string parameters");
+
+            if (!questionnaireKey.HasValue || questionnaireKey == Guid.Empty)
+                throw new HttpException(404, "Invalid query string parameters");
+
+            LoadImages();
             var model =
-                viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(publicKey, questionnaireId));
+                viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(publicKey.Value, questionnaireKey.Value));
             return PartialView("_Create", model);
         }
 

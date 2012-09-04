@@ -67,11 +67,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         public DateTime CreationDate { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether is valid.
-        /// </summary>
-        public bool IsValid { get; set; }
-
-        /// <summary>
         /// Gets or sets the last entry date.
         /// </summary>
         public DateTime LastEntryDate { get; set; }

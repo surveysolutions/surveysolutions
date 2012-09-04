@@ -368,7 +368,7 @@ function updateCounter() {
     $.fn.createKeyBoard = function (layout) {
         
        
-        var keyboardInputs = this.find('input[draw-key-board=true][type=text]');
+        var keyboardInputs = this.find('input[draw-key-board=true][type=text], textarea[draw-key-board=true]');
         var numericInputs = this.find('input[draw-key-board=true][type!=text]');
        
     //    keyboardInputs.add(numericInputs).removeAttr("draw-key-board");
@@ -388,7 +388,8 @@ function updateCounter() {
                 var keyboard = input.getkeyboard();
                 keyboard.$preview.val('');
                 target.change();
-                target.closest("form").submit();
+                if(target.attr('submit-form')!='false')
+                    target.closest("form").submit();
             });
             input.bind('visible.keyboard', function(event) {
                // var jInput = $(this);

@@ -367,16 +367,11 @@ namespace RavenQuestionnaire.Core.Domain
         /// </param>
         protected void ChangeStatus(SurveyStatus status)
         {
-            //// put check logic !!!
-            var validator = new CompleteQuestionnaireValidationExecutor(this.doc.QuestionHash);
-
-            bool result = validator.Execute();
-            this.doc.IsValid = result;
-
             this.ApplyEvent(
                 new QuestionnaireStatusChanged
                     {
-                       CompletedQuestionnaireId = this.doc.PublicKey, Status = result ? status : SurveyStatus.Error 
+                        CompletedQuestionnaireId = this.doc.PublicKey,
+                        Status = status
                     });
         }
 

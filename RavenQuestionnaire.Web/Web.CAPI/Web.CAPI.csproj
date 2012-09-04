@@ -336,7 +336,6 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Views\Survey\Statistic.cshtml" />
-    <Content Include="Views\Synchronizations\_ProgressContent.cshtml" />
     <Content Include="Views\Synchronizations\Progress.cshtml" />
     <Content Include="Views\Synchronizations\Scaning.cshtml" />
     <Content Include="Views\Synchronizations\Spots.cshtml" />

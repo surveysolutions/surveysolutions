@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using RavenQuestionnaire.Core.ExpressionExecutors;
+
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     using Ncqrs.Eventing.ServiceModel.Bus;
@@ -124,6 +126,13 @@ namespace RavenQuestionnaire.Core.EventHandlers
             }
 
             question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerValue);
+
+            var group = item.FindGroupByKey(questionWrapper.GroupKey, question.PropogationPublicKey);
+            var executor = new CompleteQuestionnaireConditionExecutor(item.QuestionHash);
+            executor.Execute(group);
+
+            var validator = new CompleteQuestionnaireValidationExecutor(item.QuestionHash);
+            validator.Execute(group);
 
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
         }
