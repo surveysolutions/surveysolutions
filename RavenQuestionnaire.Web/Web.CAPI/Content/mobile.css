@@ -6,6 +6,8 @@ textarea{ resize: none;}
 .ui-loader h1{font-size: 0;height: 0;overflow: hidden;width: 0;}
 
 .ui-loader{height: 66px;width: 66px;background-color: white;opacity: 1;border: #456F9A 1px solid;}
+
+.ui-header.bradcrumbs > .ui-btn{ position: relative;right: auto;margin-right: 5px;}
 .ui-no-corners .ui-btn-corner-all
 {
 	border-radius: 0;

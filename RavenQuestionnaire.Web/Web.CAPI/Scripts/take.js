@@ -350,8 +350,14 @@ function updateCounter() {
                     for (var i = 0; i < level; i++) {
                         targetParent = targetParent.parent();
                     }
-                    targetParent.bind('tap', function() {
-                        targetInput.click();
+                    targetParent.mouseup(function(event) {
+                        switch (event.which) {
+                        case 1:
+                            targetInput.click();
+                            break;
+                        default:
+                            return;
+                        }
                     });
                     parentHandled = true;
 
@@ -359,8 +365,14 @@ function updateCounter() {
             }
             if (!parentHandled) {
 
-                button.bind('tap', function() {
-                    targetInput.click();
+                button.mouseup(function(event) {
+                    switch (event.which) {
+                    case 1:
+                        targetInput.click();
+                        break;
+                    default:
+                        return;
+                    }
                 });
             }
         });
