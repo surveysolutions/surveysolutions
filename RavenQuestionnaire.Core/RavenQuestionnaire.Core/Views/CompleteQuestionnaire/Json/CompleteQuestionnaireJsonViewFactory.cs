@@ -155,11 +155,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                 {
                     group = doc.Children.OfType<ICompleteGroup>().First();
                 }
-
-                var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
-                executor.Execute(group);
-                var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
-                validator.Execute(group);
                 if (input.PropagationKey.HasValue)
                 {
                     return new PropagatedGroupMobileView(doc, group, this.CompileNavigation(rout, group));

@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using RavenQuestionnaire.Core.ExpressionExecutors;
+
 namespace RavenQuestionnaire.Core.Views.Statistics
 {
     using System;
@@ -22,6 +24,13 @@ namespace RavenQuestionnaire.Core.Views.Statistics
     /// </summary>
     public class CompleteQuestionnaireStatisticView
     {
+        #region fields
+
+        protected readonly CompleteQuestionnaireConditionExecutor executor;
+        protected readonly CompleteQuestionnaireValidationExecutor validator;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -32,6 +41,11 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         /// </param>
         public CompleteQuestionnaireStatisticView(CompleteQuestionnaireStoreDocument doc)
         {
+            this.executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
+
+
+            this.validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
+          
             this.Id = doc.PublicKey.ToString();
             this.Title = doc.Title;
             this.StartDate = doc.CreationDate;
@@ -169,6 +183,8 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         /// </param>
         protected void ProccessQuestions(ICompleteQuestion question, Guid gropPublicKey)
         {
+            question.Enabled = executor.Execute(question);
+            question.Valid = validator.Execute(question);
             if (!question.Enabled)
                 return;
 
@@ -179,8 +195,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
                 this.FeaturedQuestions.Add(statItem);
             }
 
-            if ((!question.Valid)
-                || (question.GetAnswerObject() == null && question.Mandatory))
+            if (!question.Valid)
             {
                 this.InvalidQuestions.Add(statItem);
             }

@@ -93,32 +93,25 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         /// <returns>
         /// The System.Boolean.
         /// </returns>
-        protected bool Execute(ICompleteQuestion question)
+        public bool Execute(ICompleteQuestion question)
         {
             if (!question.Enabled)
-            {
                 return true;
-            }
-
+            if (question.GetAnswerObject() == null)
+                return !question.Mandatory;
             if (string.IsNullOrEmpty(question.ValidationExpression))
-            {
                 return true;
-            }
-
-            string expression = question.ValidationExpression.ToLower();
-            if (expression.Contains("this"))
-            {
-                expression = expression.Replace("this", question.PublicKey.ToString());
-            }
-
-            var e = new Expression(expression);
+            var e = new Expression(question.ValidationExpression);
             e.EvaluateParameter += (name, args) =>
-                {
-                    Guid nameGuid = Guid.Parse(name);
-                    Guid? propagationKey = question.PropogationPublicKey;
-                    object value = this.hash[nameGuid, propagationKey].GetAnswerObject();
-                    args.Result = value;
-                };
+                                       {
+                                           Guid nameGuid;
+                                           if (string.Compare("this", name, true) == 0)
+                                               nameGuid = question.PublicKey;
+                                           else nameGuid = Guid.Parse(name);
+                                           Guid? propagationKey = question.PropogationPublicKey;
+                                           object value = this.hash[nameGuid, propagationKey].GetAnswerObject();
+                                           args.Result = value;
+                                       };
             bool result = false;
             try
             {

@@ -122,11 +122,6 @@ namespace RavenQuestionnaire.Core.Documents
         /// Gets or sets a value indicating whether enabled.
         /// </summary>
         public bool Enabled { get; set; }
-        
-        /// <summary>
-        /// Gets or sets a value indicating whether is valid.
-        /// </summary>
-        public bool IsValid { get; set; }
 
         /// <summary>
         /// Gets or sets the last entry date.
