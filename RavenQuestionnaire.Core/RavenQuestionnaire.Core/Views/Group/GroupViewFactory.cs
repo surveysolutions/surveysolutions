@@ -57,7 +57,7 @@ namespace RavenQuestionnaire.Core.Views.Group
         public GroupView Load(GroupViewInputModel input)
         {
             QuestionnaireDocument doc = this.store.GetByGuid(input.QuestionnaireId);
-            var group = new Questionnaire(doc).Find<Group>(input.PublicKey);
+            var group = doc.Find<Group>(input.PublicKey);
             if (group == null)
             {
                 return null;

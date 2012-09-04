@@ -8,6 +8,8 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
+using RavenQuestionnaire.Core.Entities.SubEntities.Question;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
@@ -36,9 +38,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Guid key = Guid.NewGuid();
             innerDocument.PublicKey= key;
-            Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion(Guid.NewGuid(),"question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, false,
-                Order.AsIs, null, null, Guid.NewGuid());
+         //   Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
+            var question = new SingleQuestion(Guid.NewGuid(),"question");
             var questionView = new QuestionView(innerDocument, question);
 
 
@@ -52,46 +53,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             CommandServiceMock.Verify(x => x.Execute(It.IsAny<AddGroupCommand>()), Times.Once());
         }
 
-        /*[Test]
-        public void WhenExistingGroupIsSubmittedWIthValidModel_CommandIsSent()
-        {
-            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            Guid key = Guid.NewGuid();
-            innerDocument.PublicKey = key;
-            Group group = new Group("test");
-            innerDocument.Children.Add(group);
-
-            var groupView = new GroupView(innerDocument, group);
-            Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(new Core.Entities.Questionnaire(innerDocument));
-            ViewRepositoryMock.Setup(
-              x =>
-              x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                  It.Is<QuestionnaireViewInputModel>(
-                      v => v.QuestionnaireId.Equals(key.ToString()))))
-              .Returns(new QuestionnaireView(innerDocument));
-
-
-            Controller.Save(groupView);
-            CommandServiceMock.Verify(x => x.Execute(It.IsAny<UpdateGroupCommand>()), Times.Once());
-        }
-        [Test]
-        public void When_DeleteGroupIsExecuted()
-        {
-            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            Guid key = Guid.NewGuid();
-            innerDocument.PublicKey = key;
-            Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            Group group = new Group("test");
-            innerDocument.Children.Add(group);
-
-            Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
-
-            Controller.Delete(group.PublicKey, entity.QuestionnaireId);
-            CommandServiceMock.Verify(x => x.Execute(It.IsAny<DeleteGroupCommand>()), Times.Once());
-        }*/
-
         [Test]
         public void When_EditQuestionDetailsIsReturned()
         {
@@ -100,12 +61,12 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             Guid key = Guid.NewGuid();
             innerDocument.PublicKey = key;
-            Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
+           
             Group group = new Group("test");
             innerDocument.Children.Add(group);
             var groupView = new GroupView(innerDocument, group);
 
-            var input = new QuestionViewInputModel(group.PublicKey, entity.PublicKey);
+            var input = new QuestionViewInputModel(group.PublicKey, innerDocument.PublicKey);
 
             ViewRepositoryMock.Setup(
                 x =>
