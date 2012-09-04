@@ -6,6 +6,9 @@
 //   Questionnaire Aggregate Root.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using RavenQuestionnaire.Core.Entities.Extensions;
+
 namespace RavenQuestionnaire.Core.Domain
 {
     using System;
@@ -666,8 +669,7 @@ namespace RavenQuestionnaire.Core.Domain
         /// </param>
         protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
         {
-            var questionnaire = new Questionnaire(this.innerDocument);
-            questionnaire.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
+            this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
         }
 
         /// <summary>

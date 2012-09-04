@@ -90,7 +90,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             get
             {
                 var identifier = new Guid("D65CF1F6-8A75-43FA-9158-B745EB4D6A1F");
-                string name = "Error";
+                string name = "Complete with Error";
                 return new SurveyStatus(identifier, name);
             }
         }
@@ -136,6 +136,16 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         public static IEnumerable<SurveyStatus> GetAllStatuses()
         {
             return new[] { Initial, Error, Complete, Approve };
+        }
+
+        /// <summary>
+        /// check status on allowance to be pushed from capi
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public static bool IsStatusAllowCapiSync(SurveyStatus status)
+        {
+            return status.PublicId == SurveyStatus.Complete.PublicId || status.PublicId == SurveyStatus.Error.PublicId;
         }
 
         #endregion
