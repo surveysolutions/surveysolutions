@@ -1,73 +1,140 @@
-using System;
-using System.Web;
-using System.Web.Mvc;
-using Questionnaire.Core.Web.Export;
-using Questionnaire.Core.Web.Threading;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImportExportController.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The import export controller.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Web.Supervisor.Controllers
 {
+    using System;
+    using System.Web;
+    using System.Web.Mvc;
+
+    using Questionnaire.Core.Web.Export;
+    using Questionnaire.Core.Web.Threading;
+
+    /// <summary>
+    /// The import export controller.
+    /// </summary>
     public class ImportExportController : AsyncController
     {
+        #region Constants and Fields
+
+        /// <summary>
+        /// The exportimport events.
+        /// </summary>
         private readonly IExportImport exportimportEvents;
 
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImportExportController"/> class.
+        /// </summary>
+        /// <param name="exportImport">
+        /// The export import.
+        /// </param>
         public ImportExportController(IExportImport exportImport)
         {
-            exportimportEvents = exportImport;
+            this.exportimportEvents = exportImport;
         }
 
-        #region PublicMethod
+        #endregion
 
-        [AcceptVerbs(HttpVerbs.Get)]
-        public ActionResult Import()
-        {
-            return View("ViewTestUploadFile");
-        }
+        #region Public Methods and Operators
 
-        [AcceptVerbs(HttpVerbs.Post)]
-        public void ImportAsync(HttpPostedFileBase myfile)
-        {
-            if (myfile != null && myfile.ContentLength != 0)
-            {
-                AsyncManager.OutstandingOperations.Increment();
-                AsyncQuestionnaireUpdater.Update(() =>
-                {
-                    exportimportEvents.Import(myfile);
-                    AsyncManager.OutstandingOperations.Decrement();
-                });
-            }
-        }
-
-        public ActionResult ImportCompleted()
-        {
-            return RedirectToAction("Index", "Dashboard");
-        }
-
+        /// <summary>
+        /// The export async.
+        /// </summary>
+        /// <param name="clientGuid">
+        /// The client guid.
+        /// </param>
         public void ExportAsync(Guid? clientGuid)
         {
             if (!clientGuid.HasValue || clientGuid.Value == Guid.Empty)
-                return;
-
-
-            AsyncManager.OutstandingOperations.Increment();
-            AsyncQuestionnaireUpdater.Update(() =>
             {
-                try
-                {
-                    AsyncManager.Parameters["result"] =
-                        exportimportEvents.Export(clientGuid.Value);
-                }
-                catch
-                {
-                    AsyncManager.Parameters["result"] = null;
-                }
-                AsyncManager.OutstandingOperations.Decrement();
-            });
+                return;
+            }
+
+            this.AsyncManager.OutstandingOperations.Increment();
+            AsyncQuestionnaireUpdater.Update(
+                () =>
+                    {
+                        try
+                        {
+                            this.AsyncManager.Parameters["result"] = this.exportimportEvents.Export(clientGuid.Value);
+                        }
+                        catch
+                        {
+                            this.AsyncManager.Parameters["result"] = null;
+                        }
+
+                        this.AsyncManager.OutstandingOperations.Decrement();
+                    });
         }
 
+        /// <summary>
+        /// The export completed.
+        /// </summary>
+        /// <param name="result">
+        /// Zip archive as array of bytes
+        /// </param>
+        /// <returns>
+        /// Downlods zip archive with events to client
+        /// </returns>
         public ActionResult ExportCompleted(byte[] result)
         {
-            return File(result, "application/zip",
-                        string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
+            return this.File(result, "application/zip", string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
+        }
+
+        /// <summary>
+        /// Import action
+        /// </summary>
+        /// <returns>
+        /// View with input to upload file
+        /// </returns>
+        [AcceptVerbs(HttpVerbs.Get)]
+        public ActionResult Import()
+        {
+            return this.View("ViewTestUploadFile");
+        }
+
+        /// <summary>
+        /// The import async.
+        /// </summary>
+        /// <param name="myfile">
+        /// .capi file with events
+        /// </param>
+        [AcceptVerbs(HttpVerbs.Post)]
+        public void ImportAsync(HttpPostedFileBase myfile)
+        {
+            if (myfile == null || myfile.ContentLength == 0)
+            {
+                return;
+            }
+
+            this.AsyncManager.OutstandingOperations.Increment();
+            AsyncQuestionnaireUpdater.Update(
+                () =>
+                    {
+                        this.exportimportEvents.Import(myfile);
+                        this.AsyncManager.OutstandingOperations.Decrement();
+                    });
+        }
+
+        /// <summary>
+        /// The import completed 
+        /// </summary>
+        /// <returns>
+        /// Redirects on main page after import complete
+        /// </returns>
+        public ActionResult ImportCompleted()
+        {
+            return this.RedirectToAction("Index", "Dashboard");
         }
 
         #endregion
