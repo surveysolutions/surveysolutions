@@ -22,10 +22,13 @@ namespace Browsing.Common.Containers
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
 
-            BindDefaultUrl(this.textBox1);
+            BindDefaultUrl(this.labelEndPoint, this.textEndPoint);
+
+            this.btnCancel.Enabled = false;
+
         }
 
-        protected internal abstract void BindDefaultUrl(TextBox defaultUrlTextBox);
+        protected internal abstract void BindDefaultUrl(Label labelEndPoint,TextBox defaultUrlTextBox);
         protected internal abstract void ReloadSettings();
         protected internal abstract void SaveSettings();
 
@@ -35,7 +38,7 @@ namespace Browsing.Common.Containers
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+                object[] attributes = GetMainAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
                 if (attributes.Length > 0)
                 {
                     AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
@@ -44,13 +47,13 @@ namespace Browsing.Common.Containers
                         return titleAttribute.Title;
                     }
                 }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                return System.IO.Path.GetFileNameWithoutExtension(GetMainAssembly().CodeBase);
             }
         }
 
         private string CompileVersionInfo()
         {
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            var version = GetMainAssembly().GetName().Version;
             var time = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);
 
             return version
@@ -59,7 +62,7 @@ namespace Browsing.Common.Containers
                  + "/" + time.Date.Month.ToString()
                  + "/" + time.Date.Day.ToString();
 
-            //return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            //return GetMainAssembly().GetName().Version.ToString();
         }
 
         public string AssemblyVersion
@@ -70,11 +73,16 @@ namespace Browsing.Common.Containers
             }
         }
 
+        private Assembly GetMainAssembly()
+        {
+            return Assembly.GetEntryAssembly();
+        }
+
         public string AssemblyDescription
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
+                object[] attributes = GetMainAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
                 if (attributes.Length == 0)
                 {
                     return "";
@@ -87,7 +95,7 @@ namespace Browsing.Common.Containers
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+                object[] attributes = GetMainAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
                 if (attributes.Length == 0)
                 {
                     return "";
@@ -100,7 +108,7 @@ namespace Browsing.Common.Containers
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+                object[] attributes = GetMainAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
                 if (attributes.Length == 0)
                 {
                     return "";
@@ -113,7 +121,7 @@ namespace Browsing.Common.Containers
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                object[] attributes = GetMainAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
                 if (attributes.Length == 0)
                 {
                     return "";
