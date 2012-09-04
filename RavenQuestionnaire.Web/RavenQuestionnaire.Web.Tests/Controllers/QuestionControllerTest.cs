@@ -8,6 +8,8 @@ using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
 using RavenQuestionnaire.Core.Documents;
 using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
+using RavenQuestionnaire.Core.Entities.SubEntities.Question;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
@@ -53,8 +55,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
             innerDocument.PublicKey = Guid.NewGuid();
-            Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, false, Order.AsIs, null, null, Guid.NewGuid());
+            var question = new SingleQuestion(Guid.NewGuid(), "question");
 
             var questionView = new QuestionView(innerDocument, question);
             ViewRepositoryMock.Setup(
@@ -89,11 +90,10 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
            // var output = new QuestionnaireView("questionnairedocuments/qId", "test", DateTime.Now, DateTime.Now, new QuestionView[0]);
 
             QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = entity.AddQuestion(Guid.NewGuid(), "question", "stataCap", QuestionType.SingleOption, string.Empty, string.Empty, false, false, Order.AsIs, null, null, Guid.NewGuid());
+            var question = new SingleQuestion(Guid.NewGuid(), "question");
             var questionView = new QuestionView(innerDocument, question);
 
-            var input = new QuestionViewInputModel(question.PublicKey, entity.PublicKey);
+            var input = new QuestionViewInputModel(question.PublicKey, innerDocument.PublicKey);
 
             ViewRepositoryMock.Setup(
                 x =>

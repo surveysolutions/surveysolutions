@@ -33,7 +33,7 @@
             <div class="ui-body">
                 &nbsp;</div>
             <div class='ui-body ui-body-c @(Model.InvalidQuestions.Count == 0 ? "ui-disabled" : "")'>
-                @if (Model.Status.PublicId == SurveyStatus.Error.PublicId && Model.InvalidQuestions.Count > 0)
+                @if (Model.InvalidQuestions.Count > 0)
                 {
                     <div class="ui-body ui-body-e">
                         <h1>Please fix invalid questions!</h1>

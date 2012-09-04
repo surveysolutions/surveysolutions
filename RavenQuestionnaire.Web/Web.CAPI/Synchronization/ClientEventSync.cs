@@ -27,18 +27,16 @@ namespace Web.CAPI.Synchronization
             var model =
                 viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(
                     new CompleteQuestionnaireBrowseInputModel());
-
             List<AggregateRootEvent> retval = new List<AggregateRootEvent>();
+            if (model == null)
+                return retval;
             foreach (var item in model.Items)
             {
-                if (item.Status.Name != SurveyStatus.Complete.Name)
+                if (SurveyStatus.IsStatusAllowCapiSync(item.Status))
                     continue;
                 var events = myEventStore.ReadFrom(item.CompleteQuestionnaireId,
                                                    int.MinValue, int.MaxValue);
                 retval.AddRange(events.Select(e => new AggregateRootEvent(e)));
-                /* retval.Add(
-                    new AggregateRootEventStream(myEventStore.ReadFrom(Guid.Parse(item.CompleteQuestionnaireId),
-                                                                       int.MinValue, int.MaxValue));*/
             }
             // return retval;
             return retval.OrderBy(x => x.EventTimeStamp);
