@@ -12,7 +12,8 @@
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <PublishPath Condition=" '$(PublishPath)' == '' ">C:\Temp\publish-Capi</PublishPath>
     <ClientPath Condition=" '$(ClientPath)' == '' ">c:\Temp\Client</ClientPath>
-    <DefineConstants Condition=" '$(DefineConstants)' == '' ">SourceSiteDir=$(PublishPath);SourceClientDir=$(ClientPath)</DefineConstants>
+    <Version Condition=" '$(Version)' == '' ">1.0.3.0</Version>
+    <DefineConstants Condition=" '$(DefineConstants)' == '' ">SourceSiteDir=$(PublishPath);SourceClientDir=$(ClientPath);ProductVersion=$(Version)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -53,11 +54,11 @@
     <HeatDirectory OutputFile="Client\Client.wxs" Directory="$(ClientPath)" DirectoryRefId="CLIENTDIR" ComponentGroupName="Client_Project" AutogenerateGuids="true" SuppressCom="true" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.SourceClientDir" />
   </Target>
   <!--
-	To modify your build process, add your task inside one of the targets below and uncomment it.
-	Other similar extension points exist, see Wix.targets.
-	<Target Name="BeforeBuild">
-	</Target>
-	<Target Name="AfterBuild">
-	</Target>
-	-->
+    To modify your build process, add your task inside one of the targets below and uncomment it.
+    Other similar extension points exist, see Wix.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
 </Project>

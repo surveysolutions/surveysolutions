@@ -45,9 +45,6 @@
                 <Component Id="cmp37BDE0469DD8A3A7AAD149F746E9BF4E" Guid="*">
                     <File Id="filC2C4FC4A6B1F4AD3DFAE8AB655747066" KeyPath="yes" Source="$(var.SourceSiteDir)\bin\DataEntryClient.dll" />
                 </Component>
-                <Component Id="cmpB6ECCD38D47346C7AF46D1F625BC29B3" Guid="*">
-                    <File Id="filA24E5BFE65D176E8D11E05C7129CDA93" KeyPath="yes" Source="$(var.SourceSiteDir)\bin\DataEntryClient.pdb" />
-                </Component>
                 <Component Id="cmp91276524D50C4CD81E19FFF6ECDA2741" Guid="*">
                     <File Id="fil9BA59AA7626B0AE6A63DB74D089402E6" KeyPath="yes" Source="$(var.SourceSiteDir)\bin\Esent.Interop.dll" />
                 </Component>
@@ -293,6 +290,11 @@
                 <Component Id="cmpEB43F022A90093CF37987470411EC95A" Guid="*">
                     <File Id="filAEB888322CDEFDF794FA06E95E7C40BE" KeyPath="yes" Source="$(var.SourceSiteDir)\Content\photoswipe.css" />
                 </Component>
+                <Directory Id="dir74356578B76D3900AC8B71D116F1CC36" Name="img">
+                    <Component Id="cmp2993270E3390395AF17733A901B00EE6" Guid="*">
+                        <File Id="filFEA95EB4677477AED4E0BD5C40BC7CC3" KeyPath="yes" Source="$(var.SourceSiteDir)\Content\img\bill.jpg" />
+                    </Component>
+                </Directory>
                 <Directory Id="dirD507EB08FD498F5DE5C2E203DC71EEA8" Name="themes">
                     <Directory Id="dir76D0816D9F205A8DFFE38DED61F91069" Name="base">
                         <Component Id="cmp723B5225F671921E59A2F67D82C12AB3" Guid="*">
@@ -621,6 +623,14 @@
                 <Component Id="cmpB0F7C1C67097DEDF2407C0AA935AABC2" Guid="*">
                     <File Id="filD674966E9F57E30F97EEF6DAA13415B7" KeyPath="yes" Source="$(var.SourceSiteDir)\Scripts\take.js" />
                 </Component>
+                <Directory Id="dir7FBE504154E31A34DC6A2783CDBAE555" Name="jqmIScroll">
+                    <Component Id="cmp72AEDEE87DE6621B14B698732BC6303E" Guid="*">
+                        <File Id="fil6C158844ACA1137426188FCE7C964998" KeyPath="yes" Source="$(var.SourceSiteDir)\Scripts\jqmIScroll\iscroll.js" />
+                    </Component>
+                    <Component Id="cmpDD194030B06A613C3F524E580D340D0A" Guid="*">
+                        <File Id="filAC6643D5CEA9EB87079F8A25181184E0" KeyPath="yes" Source="$(var.SourceSiteDir)\Scripts\jqmIScroll\jquery.mobile.iscrollview.js" />
+                    </Component>
+                </Directory>
             </Directory>
             <Directory Id="dir54E821EE826A4AABDECCF16DBD4A524A" Name="Views">
                 <Component Id="cmp1F06E3D227499C217B993AE3B425F7A4" Guid="*">
@@ -700,6 +710,20 @@
                             </Component>
                         </Directory>
                     </Directory>
+                    <Directory Id="dir68F35C6F14DA17FF506635634C720F0D" Name="Complete">
+                        <Component Id="cmpB711548A8F054F1BA01CC3E021725C41" Guid="*">
+                            <File Id="fil8BC81190B3F26F5F81381BCF6DC2DCE2" KeyPath="yes" Source="$(var.SourceSiteDir)\Views\Survey\Complete\_Answered.cshtml" />
+                        </Component>
+                        <Component Id="cmp89D06758DEE52956BBFC6FF8CA58E555" Guid="*">
+                            <File Id="filC1B4842CF5C6DE5606653E86034189A3" KeyPath="yes" Source="$(var.SourceSiteDir)\Views\Survey\Complete\_Invalid.cshtml" />
+                        </Component>
+                        <Component Id="cmp7D45E5D259F89DDE154DD42430F342CB" Guid="*">
+                            <File Id="fil29F19A7E37FC7682828B06EFC2CED42A" KeyPath="yes" Source="$(var.SourceSiteDir)\Views\Survey\Complete\_Main.cshtml" />
+                        </Component>
+                        <Component Id="cmpAE869FFF2989C32EDC46120D37384349" Guid="*">
+                            <File Id="fil46476D17CDD06203A4C12C62FFB3F1BA" KeyPath="yes" Source="$(var.SourceSiteDir)\Views\Survey\Complete\_Unanswered.cshtml" />
+                        </Component>
+                    </Directory>
                     <Directory Id="dirDF2C0362B4C181FF7EEB5DF2D5EE826B" Name="Group">
                         <Component Id="cmpE6CDF1D767AD462F5E67F5F15D8F2FAC" Guid="*">
                             <File Id="fil5A65943283920CDED89C2547806E2474" KeyPath="yes" Source="$(var.SourceSiteDir)\Views\Survey\Group\_CompleteGroup.cshtml" />
@@ -736,9 +760,6 @@
                     <Component Id="cmp985A9A6B6AF8931AFD94189B149DE91B" Guid="*">
                         <File Id="fil6FC3D97FFADEB39902D2AC10789A7090" KeyPath="yes" Source="$(var.SourceSiteDir)\Views\Synchronizations\ViewTestUploadFile.cshtml" />
                     </Component>
-                    <Component Id="cmpFDFB60F4EC4B2585999E6EB4A1041971" Guid="*">
-                        <File Id="fil6C78A2A60196BD902F1969B876F7B795" KeyPath="yes" Source="$(var.SourceSiteDir)\Views\Synchronizations\_ProgressContent.cshtml" />
-                    </Component>
                 </Directory>
             </Directory>
         </DirectoryRef>
@@ -759,7 +780,6 @@
             <ComponentRef Id="cmpCD25A567E98AFC70FEB2C3033B6B8699" />
             <ComponentRef Id="cmp634EAE3132174FF52859BE8FBB822352" />
             <ComponentRef Id="cmp37BDE0469DD8A3A7AAD149F746E9BF4E" />
-            <ComponentRef Id="cmpB6ECCD38D47346C7AF46D1F625BC29B3" />
             <ComponentRef Id="cmp91276524D50C4CD81E19FFF6ECDA2741" />
             <ComponentRef Id="cmpF8DCBFA4928A62E21291E1D48A0B7A30" />
             <ComponentRef Id="cmpD6A4D2417C58D696F2B408FA06C5585F" />
@@ -841,6 +861,7 @@
             <ComponentRef Id="cmp1B31C603880FCCF5C47AB09C3A347F5B" />
             <ComponentRef Id="cmpE14883ECADE3685B2ABF53D0D42B5918" />
             <ComponentRef Id="cmpEB43F022A90093CF37987470411EC95A" />
+            <ComponentRef Id="cmp2993270E3390395AF17733A901B00EE6" />
             <ComponentRef Id="cmp723B5225F671921E59A2F67D82C12AB3" />
             <ComponentRef Id="cmp0DD48924282C5559325AC7007AA03C1A" />
             <ComponentRef Id="cmpE6D4000ECBBF4E6838399AE4583997AD" />
@@ -945,6 +966,8 @@
             <ComponentRef Id="cmpFF7C38AEB1014EAE116E94BE242A4198" />
             <ComponentRef Id="cmp309469D4C7B2370654E24F57D4CE97DA" />
             <ComponentRef Id="cmpB0F7C1C67097DEDF2407C0AA935AABC2" />
+            <ComponentRef Id="cmp72AEDEE87DE6621B14B698732BC6303E" />
+            <ComponentRef Id="cmpDD194030B06A613C3F524E580D340D0A" />
             <ComponentRef Id="cmp1F06E3D227499C217B993AE3B425F7A4" />
             <ComponentRef Id="cmpDF79F3FE7C166A77712632BA7D323DEC" />
             <ComponentRef Id="cmp393D470ED08B32C3B686299532109E42" />
@@ -967,6 +990,10 @@
             <ComponentRef Id="cmpA3F00950B85D63933305EAFCF737F10E" />
             <ComponentRef Id="cmpE9989C58C59D45895D6C05AA87408EF2" />
             <ComponentRef Id="cmpB465A9BA8C22EF4EF4906BF53DFE7159" />
+            <ComponentRef Id="cmpB711548A8F054F1BA01CC3E021725C41" />
+            <ComponentRef Id="cmp89D06758DEE52956BBFC6FF8CA58E555" />
+            <ComponentRef Id="cmp7D45E5D259F89DDE154DD42430F342CB" />
+            <ComponentRef Id="cmpAE869FFF2989C32EDC46120D37384349" />
             <ComponentRef Id="cmpE6CDF1D767AD462F5E67F5F15D8F2FAC" />
             <ComponentRef Id="cmpFEDA64D3122780922F33D1E2026AF5A9" />
             <ComponentRef Id="cmpFE4AB437E53A17849BD6C0C525A4680B" />
@@ -977,7 +1004,6 @@
             <ComponentRef Id="cmpE343E57E1C729015C3615A3EFAD04AB8" />
             <ComponentRef Id="cmpB0F8F7021049F80042CC603BA96B0F9A" />
             <ComponentRef Id="cmp985A9A6B6AF8931AFD94189B149DE91B" />
-            <ComponentRef Id="cmpFDFB60F4EC4B2585999E6EB4A1041971" />
         </ComponentGroup>
     </Fragment>
 </Wix>

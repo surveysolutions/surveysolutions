@@ -14,27 +14,14 @@
              Compressed="yes"
              Description="Supervisor installation."
 			 InstallScope="perUser"/>
-    
-    <Upgrade Id="6e2d596a-770e-4b08-a143-f7dd808e69ce">
-      
-      <UpgradeVersion Minimum="$(var.ProductVersion)" 
-                      IncludeMinimum="no" 
-                      OnlyDetect="yes" 
-                      Language="1033"
-                      Property="NEWPRODUCTFOUND" />
 
-      <UpgradeVersion Minimum="0.0.0.0" 
-                      IncludeMinimum="yes" 
-                      Maximum="$(var.ProductVersion)" 
-                      IncludeMaximum="no" 
-                      Language="1033"
-                      Property="UPGRADEFOUND" />
-    </Upgrade>
+        <MajorUpgrade Schedule="afterInstallValidate"
+                        AllowSameVersionUpgrades="yes"
+                        AllowDowngrades="no"
+                        Disallow="no"
+                DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit."/>
 
-    <Property Id="NEWPRODUCTFOUND" Secure="yes" />
-    <Property Id="UPGRADEFOUND" Secure="yes" />
-
-
+        
         <Property Id="ALLUSERS" Secure="yes" />
 
         <!-- Prerequisites -->
@@ -129,10 +116,10 @@
       
         </Feature>
 
-    <!-- Prevent downgrading -->
+    <!--~1~ Prevent downgrading @1@
     <CustomAction Id="PreventDowngrading" Error="Newer version already installed." />
 
-    <!-- Sequences -->
+    ~1~ Sequences @1@
     <InstallExecuteSequence>
       <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
       <RemoveExistingProducts After="InstallFinalize" />
@@ -140,7 +127,7 @@
 
     <InstallUISequence>
       <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
-    </InstallUISequence>
+    </InstallUISequence>-->
 
     <UIRef Id="WixUI_MondoCustom" />
     <UIRef Id="WixUI_ErrorProgressText" />
