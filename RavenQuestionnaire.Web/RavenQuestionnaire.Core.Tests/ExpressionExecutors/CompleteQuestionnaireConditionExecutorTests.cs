@@ -54,8 +54,6 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         {
             
             CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire entity = new CompleteQuestionnaire(doc);
-           
             var question = new SingleCompleteQuestion("");
             question.ConditionExpression = "[" + question.PublicKey + "]==3";
             doc.Children.Add(question);
@@ -77,7 +75,6 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
 
             
             CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
-            CompleteQuestionnaire entity = new CompleteQuestionnaire(doc);
            
             var question = new SingleCompleteQuestion("");
             question.ConditionExpression = "[" + question.PublicKey + "]==3";

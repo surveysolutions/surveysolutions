@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using RavenQuestionnaire.Core.Documents;
+
 namespace RavenQuestionnaire.Core.ExpressionExecutors
 {
     using System;
@@ -22,7 +24,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
     /// <summary>
     /// The questionnaire parameters parser.
     /// </summary>
-    public class QuestionnaireParametersParser : IExpressionExecutor<Questionnaire, IList<IQuestion>>
+    public class QuestionnaireParametersParser : IExpressionExecutor<QuestionnaireDocument, IList<IQuestion>>
     {
         #region Public Methods and Operators
 
@@ -40,7 +42,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">
         /// </exception>
-        public IList<IQuestion> Execute(Questionnaire entity, string expression)
+        public IList<IQuestion> Execute(QuestionnaireDocument entity, string expression)
         {
             IList<IQuestion> result = new List<IQuestion>();
             if (string.IsNullOrEmpty(expression))
@@ -53,7 +55,7 @@ namespace RavenQuestionnaire.Core.ExpressionExecutors
             expressionEntity.EvaluateParameter += (name, args) =>
                 {
                     IQuestion question =
-                        entity.GetAllQuestions().FirstOrDefault(q => q.PublicKey.ToString().Equals(name));
+                        entity.FirstOrDefault<IQuestion>(q => q.PublicKey.ToString().Equals(name));
                     if (question == null)
                     {
                         throw new ArgumentOutOfRangeException(string.Format("Parameter {0} is invalid", name));

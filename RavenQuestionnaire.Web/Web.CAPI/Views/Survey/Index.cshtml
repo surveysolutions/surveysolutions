@@ -71,7 +71,7 @@
                     </li>
                 }
                 <li onclick="$(this).siblings().removeClass('ui-btn-active');">
-                     @if (Model.Status.PublicId == SurveyStatus.Complete.PublicId)
+                     @if (SurveyStatus.IsStatusAllowCapiSync(Model.Status))
                         {
                             <a id="ref-link-complete"  data-ajax="false" rel="external" href="@Url.Action("ReInit", "Survey", new { id = Model.PublicKey })">
                                 ReInit</a>
@@ -86,7 +86,7 @@
         </div>
     </div>
 </div>
-<div data-role="panel" data-id="main" id="content_container" class='@((Model.Status.PublicId == SurveyStatus.Complete.PublicId) ? "ui-disabled ui-disabled-opacity" : "")'>
+<div data-role="panel" data-id="main" id="content_container" class='@(SurveyStatus.IsStatusAllowCapiSync(Model.Status) ? "ui-disabled ui-disabled-opacity" : "")'>
     @Html.Partial("_SurveyContent", Model.CurrentScreen)
 </div>
 <script type="text/javascript">
