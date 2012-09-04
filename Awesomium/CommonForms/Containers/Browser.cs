@@ -48,7 +48,7 @@ namespace Browsing.Common.Containers
         void webView_BeginLoading(object sender, BeginLoadingEventArgs e)
         {
             this.progressBox.Visible = true;
-            MenuPanel.Visible = e.Url == this.rootPathString;
+            MenuPanel.Visible = string.Compare(e.Url, this.rootPathString, true) == 0;
         }
 
         ResourceResponse webView_ResourceRequest(object sender, ResourceRequestEventArgs e)
