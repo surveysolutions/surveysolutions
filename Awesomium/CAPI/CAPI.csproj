@@ -69,7 +69,7 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>1337116218_to-do-list_checked2.ico</ApplicationIcon>
+    <ApplicationIcon>capi.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>A933067264F4A2817E3DDAE765426C6ED0F150A8</ManifestCertificateThumbprint>
@@ -172,7 +172,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="1337116218_to-do-list_checked2.ico" />
+    <Content Include="capi.ico" />
     <None Include="Resources\1345735451_home.png" />
   </ItemGroup>
   <ItemGroup>

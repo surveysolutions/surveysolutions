@@ -4,6 +4,7 @@ using Awesomium.Core;
 using Common.Utils;
 using Synchronization.Core.Interface;
 using Browsing.Common.Containers;
+using Browsing.Common.Controls;
 
 namespace Browsing.CAPI.Containers
 {

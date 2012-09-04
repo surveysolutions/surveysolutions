@@ -163,11 +163,6 @@ namespace Synchronization.Core
             DoSynchronizationAction(SyncType.Push, direction);
         }
 
-        public void PushSupervisorCapi(SyncDirection direction)
-        {
-            DoSynchronizationActionSupervisorCapi(SyncType.Push, direction);
-        }
-
         public void Pull(SyncDirection direction)
         {
             DoSynchronizationAction(SyncType.Pull, direction);
@@ -206,6 +201,7 @@ namespace Synchronization.Core
                     },
                     errorList
                 );
+            
             var result = new StringBuilder();
             foreach (SynchronizationException synchronizationException in errorList)
                 result.AppendLine(synchronizationException.Message);
@@ -213,27 +209,7 @@ namespace Synchronization.Core
                 result.AppendLine(succesSynchronizer.BuildSuccessMessage(action, direction));
             else
                 throw new SynchronizationException(result.ToString());
-            return result.ToString();
-        }
 
-        protected virtual string DoSynchronizationActionSupervisorCapi(SyncType action, SyncDirection direction)
-        {
-            IList<Exception> errorList = new List<Exception>();
-            var succesSynchronizer = ExecuteAction(
-                    s =>
-                    {
-                        if (action == SyncType.Push)
-                            s.PushSupervisorCAPI(direction);
-                    },
-                    errorList
-                );
-            StringBuilder result = new StringBuilder();
-            foreach (SynchronizationException synchronizationException in errorList)
-                result.AppendLine(synchronizationException.Message);
-            if (succesSynchronizer != null)
-                result.AppendLine(succesSynchronizer.BuildSuccessMessage(action, direction));
-            else
-                throw new SynchronizationException(result.ToString());
             return result.ToString();
         }
 

@@ -6,118 +6,82 @@ using Awesomium.Core;
 using System.Windows.Forms;
 using Awesomium.Windows.Forms;
 using Browsing.Supervisor.Utils;
-using Browsing.Supervisor.Controls;
 using Browsing.Supervisor.Containers;
 using Browsing.Supervisor.Properties;
 using Synchronization.Core.Interface;
 using Browsing.Supervisor.ClientSettings;
 
+using Browsing.Common.Containers;
+using Browsing.Common.Controls;
+using Browsing.Common.Forms;
+
 namespace Browsing.Supervisor.Forms
 {
-    public partial class WebForm : Form
+    public partial class WebForm : Common.Forms.WebForm
     {
-        #region Properties
-
-        private WebControl webView;
-        private ScreenHolder holder;
-        private ISettingsProvider clientSettings;
-        private IRequesProcessor requestProcessor;
-        private IUrlUtils urlUtils;
-
-        #endregion
-
         #region Constructor
 
         public WebForm()
+            : base(new ClientSettingsProvider())
         {
             InitializeComponent();
-            this.holder = new ScreenHolder {Dock = DockStyle.Fill};
-            WebCore.Initialize(new WebCoreConfig()
-                                                {
-                                                    EnablePlugins = true,
-                                                    SaveCacheAndCookies = true
-                                                }, true);
-            this.webView = new WebControl();
-            this.clientSettings = new ClientSettingsProvider();
-            this.requestProcessor = new WebRequestProcessor();
-            this.urlUtils = new UrlUtils();
-            if (Settings.Default.RunClient)
-            {
-                try
-                {
-                    RunEngine();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error on Engine Run. " + ex.Message);
-                }
-            }
-            AddMain();
-            AddBrowser();
-            AddSynchronizer();
-            AddSettings();
-            AddSyncHQPage();
-            AddSyncCapiPage();
-            this.Controls.Add(this.holder);
+
+/*#if DEBUG
+            Properties.Settings.Default.RunClient = false;
+            Properties.Settings.Default.DefaultUrl = "http://192.168.3.113/DevKharkiv-Supervisor/";
+            Properties.Settings.Default.Save();
+#endif*/
         }
 
         #endregion
 
-        #region Methods
+        #region Overloaded
 
-        protected override void OnFormClosed(FormClosedEventArgs e)
+        protected override Browser OnAddBrowserScreen(WebControl webView)
         {
-            base.OnFormClosed(e);
-            WebCore.Shutdown();
+            return new SupervisorBrowser(webView, Holder)
+            {
+                Name = "supervisorBrowser"
+            };
         }
 
-        protected void AddBrowser()
+        protected override Common.Containers.Synchronization OnAddSynchronizerScreens(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
-            new BrowserPage(this.webView, this.holder) { Name = "supervisorBrowser" };
+            new SyncChoicePage(Holder)
+            {
+                Name = "supervisorSyncChoice"
+            };
+
+            new SyncHQProcessPage(settingsProvider, requestProcessor, urlUtils, Holder)
+            {
+                Name = "supervisorHQSync"
+            };
+            
+            return new SyncCapiProcessPage(settingsProvider, requestProcessor, urlUtils, Holder)
+            {
+                Name = "supervisorSyncChoice"
+            };
         }
 
-
-        protected void AddSettings()
+        protected override Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
-            new SettingsPage(this.holder) { Name = "supervisorSettings" };
+            return new SupervisorMain(settingsProvider, requestProcessor, urlUtils, Holder)
+            {
+                Name = "supervisorMain"
+            };
         }
 
-        protected void AddSynchronizer()
+        protected override Common.Containers.Settings OnAddSettingsScreen()
         {
-            new SynchronizationPage(this.holder) { Name = "supervisorSync" };
+            return new SupervisorSettings(this.Holder)
+            {
+                Name = "supervisorSettings"
+            };
         }
 
-        protected void AddMain()
+        protected override IUrlUtils InstantiateUrlProvider()
         {
-            var pageMain = new MainPage(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder)
-                                    {Name = "supervisorMain"};
-            this.holder.Redirect(pageMain);
-        }
-
-        protected void AddSyncHQPage()
-        {
-            new SyncHQProcessPage(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder)
-                { Name = "SynchronizationHQ" };
-        }
-
-        protected void AddSyncCapiPage()
-        {
-            new SyncCapiProcessPage(this.clientSettings, this.requestProcessor, this.urlUtils, this.holder) { Name = "SynchronizationCapi" };
-        }
-
-        private string RunEngine()
-        {
-            var dir = new DirectoryInfo(Application.StartupPath);
-            if (dir.Parent == null)
-                throw new Exception("Engine was not found.");
-            string enginePath = Path.Combine(dir.Parent.FullName, Settings.Default.EnginePathName);
-            if (!Directory.Exists(enginePath))
-                throw new Exception("Engine was not found.");
-            string port = Settings.Default.DefaultPort;
-            var runner = new EngineRunner();
-            runner.RunEngine(enginePath, port);
-            Application.ApplicationExit += runner.StopEngine;
-            return String.Format("http://localhost:{0}", port);
+            return new UrlUtils();
         }
 
         #endregion

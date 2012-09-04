@@ -16,7 +16,6 @@ namespace Synchronization.Core.SynchronizationFlow
         #region Abstract and Virtual
 
         protected abstract void OnPush(SyncDirection direction);
-        protected abstract void OnPushSupervisorCapi(SyncDirection direction);
         protected abstract void OnPull(SyncDirection direction);
         protected abstract void OnStop();
 
@@ -44,18 +43,6 @@ namespace Synchronization.Core.SynchronizationFlow
             try
             {
                 OnPush(direction);
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public void PushSupervisorCAPI(SyncDirection direction)
-        {
-            try
-            {
-                OnPushSupervisorCapi(direction);
             }
             catch
             {

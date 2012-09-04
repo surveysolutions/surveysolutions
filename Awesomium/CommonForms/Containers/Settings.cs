@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
+using Browsing.Common.Controls;
 
 namespace Browsing.Common.Containers
 {
-    public abstract partial class Settings : //UserControl
-        Screen
+    public abstract partial class Settings : Screen
     {
         private bool modified = false;
 

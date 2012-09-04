@@ -3,15 +3,20 @@ using System.Reflection;
 using Browsing.Common.Controls;
 using Browsing.Common.Containers;
 
-namespace Browsing.CAPI.Containers
+namespace Browsing.Supervisor.Containers
 {
-    public partial class CAPISettings : Settings
+    public partial class SupervisorSettings : Settings
     {
-        public CAPISettings(ScreenHolder holder)
+        #region Constructor
+
+        public SupervisorSettings(ScreenHolder holder)
             : base(holder)
         {
             InitializeComponent();
+            this.Text = AssemblyTitle;
         }
+
+        #endregion
 
         protected override void BindDefaultUrl(System.Windows.Forms.TextBox defaultUrlTextBox)
         {

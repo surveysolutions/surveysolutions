@@ -72,7 +72,7 @@
     <Compile Include="Containers\Screen.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Containers\ScreenHolder.cs">
+    <Compile Include="Controls\ScreenHolder.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Containers\SyncPanel.cs">

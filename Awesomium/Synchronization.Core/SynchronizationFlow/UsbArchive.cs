@@ -81,39 +81,28 @@ namespace Synchronization.Core.SynchronizationFlow
         private const string Out = "Out";
         private DriveInfo usbDriver;
 
+        private bool downFlowDirection;
+
         // private string fileName = null;
         // private Header header = new Header();
         // private const int MaxSize = int.MaxValue;//504857600;
 
         private const int MaxSize = 504857600;
 
-        internal UsbFileArchive(string driver)
+        internal UsbFileArchive(DriveInfo driver, bool downFlowDirection)
         {
-            var drives = DriveInfo.GetDrives();
-
-            foreach (var d in drives)
-            {
-                if (d.Name == driver)
-                {
-                    this.usbDriver = d;
-                    // this.fileName = CreateFileName(0);
-
-                    break;
-                }
-            }
+            this.usbDriver = driver;
+            this.downFlowDirection = downFlowDirection;
 
             if (this.usbDriver == null)
                 throw new Exception(string.Format("USB driver with name {0} not found", driver));
         }
 
-        public string InFile
+        public string ArchiveFileName
         {
-            get { return string.Format("{0}{1}{2}{3}{4}", this.usbDriver.Name, Path.DirectorySeparatorChar, In, ShortFileName, FileExt); }
+            get { return string.Format("{0}{1}{2}{3}{4}", this.usbDriver.Name, Path.DirectorySeparatorChar, downFlowDirection ? In : Out, ShortFileName, FileExt); }
         }
-        public string OutFile
-        {
-            get { return string.Format("{0}{1}{2}{3}{4}", this.usbDriver.Name, Path.DirectorySeparatorChar, Out, ShortFileName, FileExt); }
-        }
+
         private string CreateFileName(int chunkNumber)
         {
             return this.usbDriver.Name + Path.DirectorySeparatorChar + ShortFileName + (chunkNumber > 0 ? chunkNumber.ToString() : string.Empty) + FileExt;
@@ -170,9 +159,10 @@ namespace Synchronization.Core.SynchronizationFlow
 
             try
             {
-                if (File.Exists(this.OutFile))
-                    File.Delete(this.OutFile);
-                var fileStream = File.Create(this.OutFile);
+                if (File.Exists(this.ArchiveFileName))
+                    File.Delete(this.ArchiveFileName);
+
+                var fileStream = File.Create(this.ArchiveFileName);
 
                 /*       int newPosition = this.header.ArchivePosition;
 
@@ -210,7 +200,7 @@ namespace Synchronization.Core.SynchronizationFlow
         public byte[] LoadArchive()
         {
             byte[] result = null;
-            using (var file = File.Open(this.InFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            using (var file = File.Open(this.ArchiveFileName, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             {
                 byte[] buffer = new byte[16 * 1024];
                 using (MemoryStream ms = new MemoryStream())

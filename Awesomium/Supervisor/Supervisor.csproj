@@ -46,32 +46,23 @@
   <ItemGroup>
     <Compile Include="ClientSettings\ClientSettings.cs" />
     <Compile Include="ClientSettings\ClientSettingsProvider.cs" />
-    <Compile Include="Containers\BrowserPage.cs">
+    <Compile Include="Containers\SupervisorBrowser.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Containers\BrowserPage.Designer.cs">
-      <DependentUpon>BrowserPage.cs</DependentUpon>
+    <Compile Include="Containers\SupervisorBrowser.Designer.cs">
+      <DependentUpon>SupervisorBrowser.cs</DependentUpon>
     </Compile>
-    <Compile Include="Containers\MainPage.cs">
+    <Compile Include="Containers\SupervisorMain.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Containers\MainPage.Designer.cs">
-      <DependentUpon>MainPage.cs</DependentUpon>
+    <Compile Include="Containers\SupervisorMain.Designer.cs">
+      <DependentUpon>SupervisorMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Containers\PleaseWaitPage.cs">
+    <Compile Include="Containers\SupervisorSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Containers\PleaseWaitPage.Designer.cs">
-      <DependentUpon>PleaseWaitPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Containers\Screen.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Containers\SettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Containers\SettingsPage.Designer.cs">
-      <DependentUpon>SettingsPage.cs</DependentUpon>
+    <Compile Include="Containers\SupervisorSettings.Designer.cs">
+      <DependentUpon>SupervisorSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Containers\SyncCapiProcessPage.cs">
       <SubType>UserControl</SubType>
@@ -85,26 +76,11 @@
     <Compile Include="Containers\SyncHQProcessPage.Designer.cs">
       <DependentUpon>SyncHQProcessPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Containers\SynchronizationPage.cs">
+    <Compile Include="Containers\SyncChoicePage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Containers\SynchronizationPage.Designer.cs">
-      <DependentUpon>SynchronizationPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\FlatButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\FlatButton.Designer.cs">
-      <DependentUpon>FlatButton.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ScreenHolder.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Forms\SettingsBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SettingsBox.Designer.cs">
-      <DependentUpon>SettingsBox.cs</DependentUpon>
+    <Compile Include="Containers\SyncChoicePage.Designer.cs">
+      <DependentUpon>SyncChoicePage.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\WebForm.cs">
       <SubType>Form</SubType>
@@ -116,14 +92,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Synchronization\SupervisorSyncManager.cs" />
     <Compile Include="Utils\UrlUtils.cs" />
-    <EmbeddedResource Include="Containers\BrowserPage.resx">
-      <DependentUpon>BrowserPage.cs</DependentUpon>
+    <EmbeddedResource Include="Containers\SupervisorBrowser.resx">
+      <DependentUpon>SupervisorBrowser.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Containers\MainPage.resx">
-      <DependentUpon>MainPage.cs</DependentUpon>
+    <EmbeddedResource Include="Containers\SupervisorMain.resx">
+      <DependentUpon>SupervisorMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Containers\SettingsPage.resx">
-      <DependentUpon>SettingsPage.cs</DependentUpon>
+    <EmbeddedResource Include="Containers\SupervisorSettings.resx">
+      <DependentUpon>SupervisorSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Containers\SyncCapiProcessPage.resx">
       <DependentUpon>SyncCapiProcessPage.cs</DependentUpon>
@@ -135,12 +111,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SyncHQProcessPage1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Containers\SynchronizationPage.resx">
-      <DependentUpon>SynchronizationPage.cs</DependentUpon>
+    <EmbeddedResource Include="Containers\SyncChoicePage.resx">
+      <DependentUpon>SyncChoicePage.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SettingsBox.resx">
-      <DependentUpon>SettingsBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -157,6 +130,7 @@
     <None Include="bin\Debug\Supervisor.exe.config" />
     <None Include="bin\Debug\Supervisor.vshost.exe.config" />
     <None Include="bin\Debug\Supervisor.vshost.exe.manifest" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -185,6 +159,10 @@
     <Folder Include="bin\Release\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonForms\CommonForms.csproj">
+      <Project>{3CBB33EB-D522-4D91-B488-84AA4BE7E295}</Project>
+      <Name>CommonForms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{9A8843B1-978F-4E96-8523-907C257CA183}</Project>
       <Name>Common %28Common\Common%29</Name>

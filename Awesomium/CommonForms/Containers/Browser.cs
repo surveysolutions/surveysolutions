@@ -2,6 +2,7 @@
 using System.Linq;
 using Awesomium.Core;
 using Awesomium.Windows.Forms;
+using Browsing.Common.Controls;
 
 namespace Browsing.Common.Containers
 {

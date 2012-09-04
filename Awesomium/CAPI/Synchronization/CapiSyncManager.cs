@@ -50,13 +50,11 @@ namespace Browsing.CAPI.Synchronization
         
         protected override void CheckPushPrerequisites()
         {
-            bool result = false;
-
-            result =
-                this.RequestProcessor.Process<bool>(UrlUtils.GetCheckPushPrerequisitesUrl(), false);
-
+//#if !DEBUG
+            var result =  this.RequestProcessor.Process<bool>(UrlUtils.GetCheckPushPrerequisitesUrl(), false);
             if (!result)
-                throw new CheckPrerequisitesException("Current device doesn't contain any changes", SyncType.Push, null);
+                throw new CheckPrerequisitesException("Current device doesn't contain any changes to export", SyncType.Push, null);
+//#endif
         }
 
         protected override void CheckPullPrerequisites()
@@ -83,20 +81,6 @@ namespace Browsing.CAPI.Synchronization
             }*/
 
             return syncResult;
-        }
-
-        #endregion
-
-        #region Methods
-
-        internal void ExportQuestionaries()
-        {
-            new Thread(DoExport).Start(); // initialize export operation in independent thread
-        }
-
-        internal void ImportQuestionaries()
-        {
-            new Thread(DoImport).Start(); // initialize export operation in independent thread
         }
 
         #endregion

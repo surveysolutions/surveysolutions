@@ -43,9 +43,19 @@ namespace Browsing.CAPI.Forms
             // Notice that Control.DoubleBuffered has been set to true
             // in the designer, to prevent flickering.
             InitializeComponent();
+
+/*#if DEBUG
+            Properties.Settings.Default.RunClient = false;
+            Properties.Settings.Default.DefaultUrl = "http://192.168.3.113/DevKharkiv-CAPI/";
+            Properties.Settings.Default.Save();
+#endif*/
         }
 
-        protected override Browser InstantiateBrowserContainer(WebControl webView)
+        #endregion
+
+        #region Overloaded
+
+        protected override Browser OnAddBrowserScreen(WebControl webView)
         {
             return new CAPIBrowser(webView, Holder)
                         {
@@ -53,8 +63,7 @@ namespace Browsing.CAPI.Forms
                         };
         }
 
-
-        protected override Common.Containers.Synchronization InstantiateSynchronizerContainer(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
+        protected override Common.Containers.Synchronization OnAddSynchronizerScreens(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
             return new CAPISynchronization(settingsProvider, requestProcessor, urlUtils, Holder)
             {
@@ -62,7 +71,7 @@ namespace Browsing.CAPI.Forms
             };
         }
 
-        protected override Main InstantiateMainPageContainer(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
+        protected override Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
             return new CAPIMain(settingsProvider, requestProcessor, urlUtils, Holder)
             {
@@ -70,7 +79,7 @@ namespace Browsing.CAPI.Forms
             };
         }
 
-        protected override Common.Containers.Settings InstantiateSettingsContainer()
+        protected override Common.Containers.Settings OnAddSettingsScreen()
         {
             return new CAPISettings(this.Holder)
             {
@@ -85,5 +94,5 @@ namespace Browsing.CAPI.Forms
 
         #endregion
 
-    }
+   }
 }

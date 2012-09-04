@@ -43,11 +43,6 @@ namespace Synchronization.Core.SynchronizationFlow
             }
         }
 
-        protected override void OnPushSupervisorCapi(SyncDirection direction)
-        {
-            throw new NotImplementedException();
-        }
-
         protected override void OnPull(SyncDirection direction)
         {
             try

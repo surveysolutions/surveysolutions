@@ -1,10 +1,4 @@
-﻿using System.ComponentModel;
-using System.Windows.Forms;
-using System.Threading;
-using System;
-using Awesomium.Core;
-using Awesomium.Windows.Forms;
-
+﻿
 namespace Browsing.Common.Forms
 {
     partial class WebForm
@@ -36,9 +30,7 @@ namespace Browsing.Common.Forms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebForm));
-           
             this.SuspendLayout();
-           
             // 
             // WebForm
             // 
@@ -55,15 +47,9 @@ namespace Browsing.Common.Forms
             this.Text = "CAPI";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ResumeLayout(false);
-
         }
 
         #endregion
-
-      
-
-      
-        
     }
 }
 

@@ -13,12 +13,12 @@ namespace Browsing.Supervisor.Utils
 
         public string GetLoginUrl()
         {
-            return Settings.Default.DefaultUrl + Settings.Default.LoginPath;
+            return GetDefaultUrl() + Settings.Default.LoginPath;
         }
 
         public string GetAuthentificationCheckUrl()
         {
-            return string.Format("{0}{1}", Settings.Default.DefaultUrl, Settings.Default.AuthentificationCheckPath);
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.AuthentificationCheckPath);
         }
 
         public string GetEnpointUrl()
@@ -28,15 +28,12 @@ namespace Browsing.Supervisor.Utils
 
         public string GetUsbPushUrl(Guid clientId)
         {
-            return string.Format("{0}{1}?syncKey={2}", Settings.Default.DefaultUrl, Settings.Default.UsbImportPath,
-                                 clientId);
+            throw new NotImplementedException();
         }
-
 
         public string GetCheckPushPrerequisitesUrl()
         {
-            return string.Format("{0}{1}", Settings.Default.DefaultUrl,
-                                 Settings.Default.CheckEventPath);
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.CheckEventPath);
         }
 
         public string GetPushUrl(Guid clientId)
@@ -56,7 +53,7 @@ namespace Browsing.Supervisor.Utils
 
         public string GetUsbPullUrl(Guid clientId)
         {
-            throw new NotImplementedException();
+            return string.Format("{0}{1}?syncKey={2}", GetDefaultUrl(), Settings.Default.UsbImportPath, clientId);
         }
     }
 }

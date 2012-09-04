@@ -1,8 +1,8 @@
-﻿namespace Browsing.Supervisor.Controls
+﻿namespace Browsing.Supervisor.Containers
 {
-    partial class FlatButton
+    partial class SupervisorSettings
     {
-        /// <summary>
+        /// <summary> 
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
@@ -22,13 +22,23 @@
 
         #region Component Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SupervisorSettings));
+            this.SuspendLayout();
+            // 
+            // SupervisorSettings
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "SupervisorSettings";
+            this.Size = new System.Drawing.Size(550, 550);
+            this.ResumeLayout(false);
+
         }
 
         #endregion

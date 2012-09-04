@@ -1,110 +1,62 @@
-﻿using System;
+﻿using Browsing.Common.Controls;
+using Browsing.Supervisor.Synchronization;
 using Common.Utils;
-using System.Windows.Forms;
-using Browsing.Supervisor.Controls;
-using global::Synchronization.Core.Events;
-using global::Synchronization.Core.Interface;
-using System.IO;
+using Synchronization.Core.Interface;
+using Synchronization.Core.SynchronizationFlow;
+using System.Threading;
 
 namespace Browsing.Supervisor.Containers
 {
-    using Browsing.Supervisor.Synchronization;
-
-    public partial class SyncCapiProcessPage : Screen, IUsbProvider
+    public partial class SyncCapiProcessPage : Common.Containers.Synchronization
     {
-        #region Fields
-
-        private bool repaint;
-        private PleaseWaitPage pleaseWait;
-        private SupervisorSyncManager syncManager;
-        private StatusStrip statusStrip1;
-        private ISettingsProvider clientSettings;
-
-        #endregion
-
         #region Constructor
 
-        public SyncCapiProcessPage(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
-            : base(holder, true)
+        public SyncCapiProcessPage(
+            ISettingsProvider clientSettings,
+            IRequesProcessor requestProcessor,
+            IUrlUtils utils,
+            ScreenHolder holder)
+            : base(clientSettings, requestProcessor, utils, holder)
         {
             InitializeComponent();
-            this.pleaseWait = new PleaseWaitPage();
-            this.clientSettings = clientSettings;
-            this.syncManager = new SupervisorSyncManager(this.pleaseWait, this.clientSettings, requestProcessor, utils, this);
-            this.syncManager.EndOfSync += new EventHandler<SynchronizationCompletedEvent>(sync_EndOfSync);
-            this.syncManager.BgnOfSync += new EventHandler<SynchronizationEvent>(sync_BgnOfSync);
-            this.statusStrip1.Hide();
-            var host = new ToolStripControlHost(this.pleaseWait);
-            host.Size = this.statusStrip1.Size;
-            this.statusStrip1.Items.AddRange(new ToolStripItem[] {host});
+
+            EnablePush(false);
         }
 
         #endregion
 
-        public DriveInfo ActiveUsb
-        {
-            get { return null; }
-        }
+        #region Overloaded
 
-        public bool IsAnyAvailable
+        protected override ISyncManager DoInstantiateSyncManager(ISyncProgressObserver progressObserver, ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, IUsbProvider usbProvider)
         {
-            get { return false; }
-        }
-
-        private void EnableDisableMenuItems(bool enable)
-        {
-            this.btnPush.Enabled = enable;
-            this.btnCancel.Visible = !enable;
-        }
-
-        private void sync_EndOfSync(object sender, SynchronizationCompletedEvent e)
-        {
-            if (this.InvokeRequired)
-                this.Invoke(new MethodInvoker(() =>
-                                                  {
-                                                      MessageBox.Show(this, e.Log);
-                                                      EnableDisableMenuItems(true);
-                                                  }));
-        }
-
-        private void sync_BgnOfSync(object sender, SynchronizationEvent e)
-        {
-            if (this.InvokeRequired)
-                this.Invoke(new MethodInvoker(() =>
-                                                  {
-                                                      EnableDisableMenuItems(false);
-                                                  }));
-        }
-
-        #region Event Handlers
-
-        private void btnPush_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.syncManager.ExportQuestionaries();
-            }
-            catch
-            {
-            }
-        }
-        
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.syncManager.Stop();
-            }
-            catch
-            {
-            }
-        }
-
-        private void Synchronization_Load(object sender, EventArgs e)
-        {
+            return new SupervisorSyncManager(progressObserver, clientSettings, requestProcessor, utils, usbProvider);
         }
 
         #endregion
-        
+
+        private void ExportData()
+        {
+            //SyncManager.Push(SyncDirection.Down);
+        }
+
+        private void ImportData()
+        {
+            SyncManager.Pull(SyncDirection.Up);
+        }
+
+        protected override void OnEnablePush(bool enable)
+        {
+            base.OnEnablePush(false);
+        }
+
+        protected override void OnPushClicked()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void OnPullClicked()
+        {
+            new Thread(ImportData).Start();
+        }
     }
 }

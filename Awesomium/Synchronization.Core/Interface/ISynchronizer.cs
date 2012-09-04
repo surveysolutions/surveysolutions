@@ -6,7 +6,6 @@ namespace Synchronization.Core.Interface
 {
     public interface ISynchronizer
     {
-        void PushSupervisorCAPI(SyncDirection direction = SyncDirection.Down);
         void Push(SyncDirection direction = SyncDirection.Up);
         void Pull(SyncDirection direction = SyncDirection.Down);
         void Stop();
