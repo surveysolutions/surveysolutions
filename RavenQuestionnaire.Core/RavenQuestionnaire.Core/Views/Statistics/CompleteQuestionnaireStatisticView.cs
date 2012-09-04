@@ -184,9 +184,12 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         protected void ProccessQuestions(ICompleteQuestion question, Guid gropPublicKey)
         {
             question.Enabled = executor.Execute(question);
-            question.Valid = validator.Execute(question);
+
             if (!question.Enabled)
                 return;
+
+            question.Valid = validator.Execute(question);
+           
 
             var statItem = new QuestionStatisticView(
                 question, gropPublicKey);

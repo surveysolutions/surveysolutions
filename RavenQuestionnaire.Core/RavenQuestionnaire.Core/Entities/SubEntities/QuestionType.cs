@@ -29,7 +29,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         /// </summary>
         DropDownList, 
 
-        // ExtendedDropDownList,
         /// <summary>
         /// The multy option.
         /// </summary>
