@@ -3,7 +3,7 @@
 
     <?include Variables.wxi?>
   
-    <Product Id="$(var.ProductCode)"
+    <Product Id="*"
            Language="1033"
            Name="$(var.ProductName)"
            Version="$(var.ProductVersion)" 
@@ -96,7 +96,7 @@
             
         </Directory>
 
-      <Feature Id="ProductFeature" Title="Capi" Level="1" ConfigurableDirectory="INSTALLLOCATION">
+      <Feature Id="ProductFeature" Title="Supervisor" Level="1" ConfigurableDirectory="INSTALLLOCATION">
             <!-- TODO: Remove the comments around this ComponentRef element and the Component above in order to add resources to this installer. -->
             <!-- <ComponentRef Id="ProductComponent" /> -->
             
@@ -105,7 +105,7 @@
           
           <!-- <ComponentGroupRef Id="Product.Generated" />-->
           
-            <Feature Id="CapiFeature" Title="Capi" Level="1">
+            <Feature Id="CapiFeature" Title="Supervisor" Level="1">
                 <ComponentGroupRef Id="WebSite_Project"/>
                 <ComponentGroupRef Id="Client_Project"/>
 

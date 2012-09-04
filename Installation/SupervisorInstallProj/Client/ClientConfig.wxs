@@ -13,8 +13,8 @@
                     Value="1"
                     KeyPath="yes"/>
                 <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
-                <Shortcut Id="AppProgramsCapi"
-                    Target="[CLIENTDIR]Capi.exe"
+                <Shortcut Id="AppProgramsSupervisor"
+                    Target="[CLIENTDIR]Supervisor.exe"
                     Name="Supervisor"
                     WorkingDirectory="CLIENTDIR"
                     Description ="$(var.ProductName)"
@@ -26,10 +26,10 @@
                 <RegistryKey Root="HKCU" Key="$(var.Manufacturer)\$(var.ProductName)\SC" Action="createAndRemoveOnUninstall">
                     <RegistryValue Name="AnyValueName" Value="1" Type="integer" KeyPath="yes"/>
                 </RegistryKey>
-                <Shortcut Id="DesktopShortcutCapi"
+                <Shortcut Id="DesktopShortcutSupervisor"
                           Directory="DesktopFolder"
                           Name="Supervisor"
-                          Target="[CLIENTDIR]Capi.exe"/>
+                          Target="[CLIENTDIR]Supervisor.exe"/>
             </Component>
         </DirectoryRef>
         

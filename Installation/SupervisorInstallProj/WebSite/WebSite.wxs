@@ -17,6 +17,35 @@
             <Component Id="cmp3B8B3D65B65CC081FC93E8669C1F1B1E" Guid="*">
                 <File Id="fil1C824642957EB630B7736ADE7986DF0A" KeyPath="yes" Source="$(var.SourceSiteDir)\Web.config" />
             </Component>
+            <Directory Id="dir91B115D86248AE11BEE93A7A7FF70127" Name="App_Data">
+                <Directory Id="dirDA196BFC9718C671411DF663434B93E5" Name="LocalStorage">
+                    <Component Id="cmpC1F24447B8B0B9195919276A7AD2EB80" Guid="*">
+                        <File Id="fil4FE7CB5BE61DE2C9E1D1F5672F8EC39C" KeyPath="yes" Source="$(var.SourceSiteDir)\App_Data\LocalStorage\Data" />
+                    </Component>
+                    <Component Id="cmpF072A86519EE31EFCDA35DAF4A820D2E" Guid="*">
+                        <File Id="fil1E6D464FE587EDFF689E3733BEC67B93" KeyPath="yes" Source="$(var.SourceSiteDir)\App_Data\LocalStorage\desktop.ini" />
+                    </Component>
+                    <Component Id="cmp4AA1937D1CCDE80B6B9559A02FB002C4" Guid="*">
+                        <File Id="fil1AEF3AF5BB51FDB15FF3404062057508" KeyPath="yes" Source="$(var.SourceSiteDir)\App_Data\LocalStorage\raven-data.ico" />
+                    </Component>
+                    <Directory Id="dirA4A9D4262E168C1899E6C0DDE0903C13" Name="logs">
+                        <Component Id="cmp204D0FDDA13839C37E3550CF01AE6254" Guid="*">
+                            <File Id="filF363365581403A39171B5F158AFDC25E" KeyPath="yes" Source="$(var.SourceSiteDir)\App_Data\LocalStorage\logs\RVN.log" />
+                        </Component>
+                        <Component Id="cmp7A7F652E85C30984E482084AFF107DC4" Guid="*">
+                            <File Id="fil0DA59CA9C539E5457DB977214F77899F" KeyPath="yes" Source="$(var.SourceSiteDir)\App_Data\LocalStorage\logs\RVNres00001.jrs" />
+                        </Component>
+                        <Component Id="cmpE71FE05565CF82244B344845B8A856ED" Guid="*">
+                            <File Id="filD1CF6DA494E33357504199751FA20F23" KeyPath="yes" Source="$(var.SourceSiteDir)\App_Data\LocalStorage\logs\RVNres00002.jrs" />
+                        </Component>
+                    </Directory>
+                    <Directory Id="dirE7820CB4009326D75E8C520B69EA74A0" Name="system">
+                        <Component Id="cmp73994F1443EAF566A0ABE3E6449B47E6" Guid="*">
+                            <File Id="fil03B078EE222CF29DE43EF7197C06CE3A" KeyPath="yes" Source="$(var.SourceSiteDir)\App_Data\LocalStorage\system\RVN.chk" />
+                        </Component>
+                    </Directory>
+                </Directory>
+            </Directory>
             <Directory Id="dirBBDAD101EA9C760C59F21301F4C43E35" Name="bin">
                 <Component Id="cmp81FCA3DA63D72E89584580C13419B9CE" Guid="*">
                     <File Id="fil590BAC6CD8C4104496C394CE28CD0B7A" KeyPath="yes" Source="$(var.SourceSiteDir)\bin\Antlr3.Runtime.dll" />
@@ -535,6 +564,11 @@
                     </Directory>
                 </Directory>
             </Directory>
+            <Directory Id="dir4062EDAC4B67582A47CC9E1C1C4EAE3D" Name="logs">
+                <Component Id="cmp62B397B1BE65B410E65FB59E58977607" Guid="*">
+                    <File Id="filF5B657AB1FAEFB4F54D036154D6C2D7E" KeyPath="yes" Source="$(var.SourceSiteDir)\logs\2012-09-04.log" />
+                </Component>
+            </Directory>
             <Directory Id="dirCCCE52ED92E8F3AD16689098B427E591" Name="Scripts">
                 <Component Id="cmp7A3F40C700336C41C144DE91A587F6E1" Guid="*">
                     <File Id="filAF470AC1A8BA84C035275C7824AA0D3F" KeyPath="yes" Source="$(var.SourceSiteDir)\Scripts\code.photoswipe.jquery-3.0.4.min.js" />
@@ -771,6 +805,13 @@
             <ComponentRef Id="cmp75A10FABF23588E8D19B5562EB0BDE13" />
             <ComponentRef Id="cmp706A82DC1A5377528479E646C6E133DD" />
             <ComponentRef Id="cmp3B8B3D65B65CC081FC93E8669C1F1B1E" />
+            <ComponentRef Id="cmpC1F24447B8B0B9195919276A7AD2EB80" />
+            <ComponentRef Id="cmpF072A86519EE31EFCDA35DAF4A820D2E" />
+            <ComponentRef Id="cmp4AA1937D1CCDE80B6B9559A02FB002C4" />
+            <ComponentRef Id="cmp204D0FDDA13839C37E3550CF01AE6254" />
+            <ComponentRef Id="cmp7A7F652E85C30984E482084AFF107DC4" />
+            <ComponentRef Id="cmpE71FE05565CF82244B344845B8A856ED" />
+            <ComponentRef Id="cmp73994F1443EAF566A0ABE3E6449B47E6" />
             <ComponentRef Id="cmp81FCA3DA63D72E89584580C13419B9CE" />
             <ComponentRef Id="cmp95CE83722817066C110E979816C72A05" />
             <ComponentRef Id="cmp53CBCE4C61C8468357C567869E409058" />
@@ -937,6 +978,7 @@
             <ComponentRef Id="cmp212CE6B681C832CAA4DD8F5458326C71" />
             <ComponentRef Id="cmp6378006B31E27347DCF228E02CD4F458" />
             <ComponentRef Id="cmpEBC6FD50F6465D3F5833684EDEDE52F6" />
+            <ComponentRef Id="cmp62B397B1BE65B410E65FB59E58977607" />
             <ComponentRef Id="cmp7A3F40C700336C41C144DE91A587F6E1" />
             <ComponentRef Id="cmp114915524884DAB4BFB4C5980B742E8F" />
             <ComponentRef Id="cmpEAE379DF715893006EA7CA665D59AF2B" />
