@@ -130,7 +130,6 @@
     <None Include="bin\Debug\Supervisor.exe.config" />
     <None Include="bin\Debug\Supervisor.vshost.exe.config" />
     <None Include="bin\Debug\Supervisor.vshost.exe.manifest" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
