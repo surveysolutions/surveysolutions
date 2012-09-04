@@ -511,6 +511,9 @@ function scrollToQuestion(question) {
     scroll.scrollTo(0, position, 1500, false);
 }
 
+$(window).bind("pagecontainercreate", function () {
+    $.mobile.hashListeningEnabled = false;
+});
 $(document).bind('pagebeforeshow', function (event, data) {
     var doc = $(event.target);
 
