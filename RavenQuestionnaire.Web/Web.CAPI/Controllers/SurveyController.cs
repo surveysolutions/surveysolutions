@@ -53,13 +53,13 @@ namespace Web.CAPI.Controllers
             return View(model);
         }
 
-        public PartialViewResult Screen(Guid id, Guid group, Guid? propagationKey)
+        public PartialViewResult Screen(Guid id, Guid group, Guid? propagationKey, Guid? question)
         {
             if (id == Guid.Empty)
                 throw new HttpException(404, "Invalid query string parameters");
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>(
                 new CompleteQuestionnaireViewInputModel(id, group, propagationKey));
-            ViewBag.CurrentQuestion = new Guid();
+            ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             ViewBag.PagePrefix = "";
             return PartialView("_SurveyContent", model);
         }
