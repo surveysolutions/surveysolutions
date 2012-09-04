@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using Browsing.Common.Controls;
 
 namespace Browsing.Common.Containers
 {

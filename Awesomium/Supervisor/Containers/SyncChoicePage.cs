@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Linq;
-using Browsing.Supervisor.Controls;
+using Browsing.Common.Controls;
+using Browsing.Common.Containers;
 
 namespace Browsing.Supervisor.Containers
 {
-    
-    public partial class SynchronizationPage : Screen
+    public partial class SyncChoicePage : Screen
     {
-
         #region Constructor
 
-        public SynchronizationPage(ScreenHolder holder)
+        public SyncChoicePage(ScreenHolder holder)
             : base(holder, true)
         {
             InitializeComponent();
+
+            this.tableLayoutPanel1.Parent = this.ContentPanel;
         }
 
         #endregion

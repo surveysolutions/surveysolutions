@@ -1,12 +1,9 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Threading;
 using Browsing.CAPI.Synchronization;
+using Browsing.Common.Controls;
 using Common.Utils;
-using Synchronization.Core.Events;
 using Synchronization.Core.Interface;
 using Synchronization.Core.SynchronizationFlow;
-using Browsing.Common.Containers;
-using System.Threading;
 
 namespace Browsing.CAPI.Containers
 {

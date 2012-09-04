@@ -3,6 +3,7 @@ using System.Linq;
 using Awesomium.Core;
 using Common.Utils;
 using Synchronization.Core.Interface;
+using Browsing.Common.Controls;
 
 namespace Browsing.Common.Containers
 {
@@ -42,37 +43,60 @@ namespace Browsing.Common.Containers
 
         void btnSettings_Click(object sender, System.EventArgs e)
         {
-            var settings = this.Holder.LoadedScreens.FirstOrDefault(s => s is Settings) as Settings;
-            this.Holder.Redirect(settings);
-            //new SettingsBox().ShowDialog();
+            OnSettingsClicked(sender, e);
         }
 
         void btnDashboard_Click(object sender, System.EventArgs e)
+        {
+            OnDashboardClicked(sender, e);
+        }
+
+        void btnSyncronization_Click(object sender, System.EventArgs e)
+        {
+            OnSynchronizationClicked(sender, e);
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            OnLogoutClicked(sender, e);
+        }
+
+        void btnLogin_Click(object sender, System.EventArgs e)
+        {
+            OnLoginClicked(sender, e);
+        }
+
+        protected virtual void OnSynchronizationClicked(object sender, System.EventArgs e)
+        {
+            this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is Synchronization));
+        }
+
+        protected virtual void OnLoginClicked(object sender, System.EventArgs e)
+        {
+            var browser = this.Holder.LoadedScreens.FirstOrDefault(s => s is Browser) as Browser;
+            browser.SetMode(true, urlUtils.GetLoginUrl());
+            this.Holder.Redirect(browser);
+        }
+
+        protected virtual void OnLogoutClicked(object sender, System.EventArgs e)
+        {
+            WebCore.ClearCookies();
+            RefreshAuthentificationInfo();
+        }
+
+        protected virtual void OnDashboardClicked(object sender, System.EventArgs e)
         {
             var browser = this.Holder.LoadedScreens.FirstOrDefault(s => s is Browser) as Browser;
             browser.SetMode(false, urlUtils.GetDefaultUrl());
             this.Holder.Redirect(browser);
         }
 
-        void btnSyncronization_Click(object sender, System.EventArgs e)
+        protected virtual void OnSettingsClicked(object sender, System.EventArgs e)
         {
-            this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is Synchronization));
+            var settings = this.Holder.LoadedScreens.FirstOrDefault(s => s is Settings) as Settings;
+            this.Holder.Redirect(settings);
         }
 
-
-        private void btnLogout_Click(object sender, EventArgs e)
-        {
-            WebCore.ClearCookies();
-            RefreshAuthentificationInfo();
-        }
-
-        void btnLogin_Click(object sender, System.EventArgs e)
-        {
-            var browser = this.Holder.LoadedScreens.FirstOrDefault(s => s is Browser) as Browser;
-            browser.SetMode(true, urlUtils.GetLoginUrl());
-            this.Holder.Redirect(browser);
-        }
-        
         protected override void OnParentChanged(EventArgs e)
         {
             base.OnParentChanged(e);

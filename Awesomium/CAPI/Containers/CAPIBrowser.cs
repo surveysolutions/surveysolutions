@@ -1,5 +1,6 @@
 ﻿using Awesomium.Windows.Forms;
 using Browsing.Common.Containers;
+using Browsing.Common.Controls;
 
 namespace Browsing.CAPI.Containers
 {

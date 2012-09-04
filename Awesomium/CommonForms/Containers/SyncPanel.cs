@@ -324,5 +324,15 @@ namespace Browsing.Common.Containers
         }
 
         #endregion
+
+        internal void EnablePush(bool enable)
+        {
+            this.pushButton.Enabled = enable;
+        }
+
+        internal void EnablePull(bool enable)
+        {
+            this.pullButton.Enabled = enable;
+        }
     }
 }

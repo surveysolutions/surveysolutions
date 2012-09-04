@@ -1,7 +1,8 @@
 ﻿namespace Browsing.Supervisor.Containers
 {
-    partial class SyncHQProcessPage
+    partial class SupervisorMain
     {
+
         private System.ComponentModel.IContainer components = null;
 
         /// <summary> 
@@ -25,19 +26,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyncHQProcessPage));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SupervisorMain));
             this.SuspendLayout();
             // 
-            // SupervisorMain
+            // CAPIMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.MinimumSize = new System.Drawing.Size(920, 200);
-            this.Name = "Synchronization";
+            this.Name = "CAPIMain";
             this.Size = new System.Drawing.Size(920, 200);
             this.ResumeLayout(false);
+
         }
 
         #endregion

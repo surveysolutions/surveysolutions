@@ -28,51 +28,21 @@ namespace Browsing.Supervisor.Synchronization
 
         protected override void CheckPushPrerequisites()
         {
-            var result = false;
-            result =
-                this.RequestProcessor.Process<bool>(UrlUtils.GetCheckPushPrerequisitesUrl(), false);
+            var result = this.RequestProcessor.Process<bool>(UrlUtils.GetCheckPushPrerequisitesUrl(), false);
             if (!result)
-                throw new CheckPrerequisitesException("Current device doesn't contain any changes", SyncType.Push, null);
+                throw new CheckPrerequisitesException("Current device doesn't contain any changes to export", SyncType.Push, null);
         }
 
         #endregion
 
         protected override void CheckPullPrerequisites()
         {
-           throw new Exception("No implemented");
+            // Prerequisites empty at this moment
         }
 
         protected override void OnAddSynchronizers(IList<ISynchronizer> syncChain, ISettingsProvider settingsProvider)
         {
             syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
         }
-
-        #region Methods
-
-        internal void ExportQuestionaries()
-        {
-            new Thread(DoExport).Start();
-        }
-
-        #endregion
-
-        #region Helpers
-
-        /*private void DoExport()
-        {
-            Push(SyncDirection.Down);
-        }
-
-        private void DoImport()
-        {
-            Pull(SyncDirection.Up);
-        }*/
-
-        private void DoExport()
-        {
-            this.PushSupervisorCapi(SyncDirection.Up); // ?????? wow... wow....wow....
-        }
-
-        #endregion
     }
 }
