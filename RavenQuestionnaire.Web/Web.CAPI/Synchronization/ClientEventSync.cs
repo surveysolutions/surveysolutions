@@ -32,7 +32,7 @@ namespace Web.CAPI.Synchronization
                 return retval;
             foreach (var item in model.Items)
             {
-                if (SurveyStatus.IsStatusAllowCapiSync(item.Status))
+                if (!SurveyStatus.IsStatusAllowCapiSync(item.Status))
                     continue;
                 var events = myEventStore.ReadFrom(item.CompleteQuestionnaireId,
                                                    int.MinValue, int.MaxValue);
