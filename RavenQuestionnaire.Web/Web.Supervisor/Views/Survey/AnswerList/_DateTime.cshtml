@@ -3,13 +3,14 @@
 @model CompleteQuestionView
 @using (Html.BeginCollectionItem("Answers", true, Guid.NewGuid()))
 {
-    <fieldset><legend>@Html.Raw(Model.Title)</legend>
+    <fieldset>
+        <legend>@Html.Raw(Model.Title)</legend>
         @{
     var settings = (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings;
+    settings.Add("readonly","readonly");
     settings.Add("onchange", "$(this.form).submit();");
     settings.Add("class", "datepicker-" + Model.PublicKey);
-
-    string dateValue = Model.Answer == null ? string.Empty : Model.Answer.ToString();
+    string dateValue = Model.Answer == null ? DateTime.Now.ToString("MM/dd/yyyy") : Model.Answer.ToString()==String.Empty?DateTime.Now.ToString("MM/dd/yyyy"): Model.Answer.ToString();
         }
         @Html.Hidden("Parent", Model.PublicKey)
         <div class="answer hide-date-box ">
@@ -17,13 +18,17 @@
             @Html.TextBox("AnswerValue", dateValue, settings)
         </div>
         <script type="text/javascript">
-            $(function () {
+          
+            $(function() {
                 $(".datepicker-@(Model.PublicKey)").datepicker({
-                    format: 'mm/dd/yyyy'
-                }).on('hide', function (e) {
-                    $(this.form).submit();
-                });
-            })
+                        format: 'mm/dd/yyyy'
+                    }).on('hide', function(e) {
+                        $(this.form).submit();
+                    });
+
+
+            });
+            $('.datepicker-@(Model.PublicKey)').css('cursor', 'pointer');
         </script>
     </fieldset>
 }
