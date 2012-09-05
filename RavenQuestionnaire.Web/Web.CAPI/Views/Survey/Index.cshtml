@@ -73,8 +73,8 @@
                 <li onclick="$(this).siblings().removeClass('ui-btn-active');">
                      @if (SurveyStatus.IsStatusAllowCapiSync(Model.Status))
                         {
-                            <a id="ref-link-complete"  data-ajax="false" rel="external" href="@Url.Action("ReInit", "Survey", new { id = Model.PublicKey })">
-                                ReInit</a>
+                            <a id="ref-link-complete"  data-panel="main" href="@Url.Action("CompleteSummary", new { Id = Model.PublicKey })">
+                                Summary</a>
                         }
                         else
                         {
