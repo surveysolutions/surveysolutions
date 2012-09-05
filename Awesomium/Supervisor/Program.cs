@@ -2,42 +2,58 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 using Browsing.Supervisor.Forms;
+using System.Threading;
+using System;
+using System.Runtime.InteropServices;
 
 
 namespace Supervisor
 {
-    
-
-    static class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+      
+
+        private static void Main(string[] args)
         {
-            // Checks if this is a child rendering process and if so,
-            // transfers control of the process to Awesomium.
-            if (WebCore.IsChildProcess)
+            bool createdNew = true;
+            using (Mutex mutex = new Mutex(true, "Supervisor", out createdNew))
             {
-                WebCore.ChildProcessMain();
-                // When our process is not used any more, exit it.
-                return;
-            }
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            // Using our executable as a child rendering process, is not
-            // available when debugging in VS.
-            if (!Process.GetCurrentProcess().ProcessName.EndsWith("vshost"))
-            {
-                // Initialize the WebCore specifying that this executable
-                // can be used as a child rendering process.
-                WebCore.Initialize(new WebCoreConfig()
+               if (!createdNew)
+               {
+                   MessageBox.Show("One copy of the application is already running");
+                   return;
+               }
+               else
                 {
-                    ChildProcessPath = WebCoreConfig.CHILD_PROCESS_SELF,
-                    LogLevel = LogLevel.Verbose,
-                });
-            }
+                    // Checks if this is a child rendering process and if so,
+                    // transfers control of the process to Awesomium.
+                    if (WebCore.IsChildProcess)
+                    {
+                        WebCore.ChildProcessMain();
+                        // When our process is not used any more, exit it.
+                        return;
+                    }
 
-            Application.Run(new WebForm());
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+
+                    // Using our executable as a child rendering process, is not
+                    // available when debugging in VS.
+                    if (!Process.GetCurrentProcess().ProcessName.EndsWith("vshost"))
+                    {
+                        // Initialize the WebCore specifying that this executable
+                        // can be used as a child rendering process.
+                        WebCore.Initialize(new WebCoreConfig()
+                                               {
+                                                   ChildProcessPath = WebCoreConfig.CHILD_PROCESS_SELF,
+                                                   LogLevel = LogLevel.Verbose,
+                                               });
+                    }
+
+                    Application.Run(new WebForm());
+                }
+                
+            }
         }
     }
 }
