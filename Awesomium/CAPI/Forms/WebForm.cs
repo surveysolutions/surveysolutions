@@ -44,11 +44,11 @@ namespace Browsing.CAPI.Forms
             // in the designer, to prevent flickering.
             InitializeComponent();
 
-#if DEBUG
+/*#if DEBUG
             Properties.Settings.Default.RunClient = false;
             Properties.Settings.Default.DefaultUrl = "http://192.168.3.113/DevKharkiv-CAPI/";
             Properties.Settings.Default.Save();
-#endif
+#endif*/
         }
 
         #endregion
