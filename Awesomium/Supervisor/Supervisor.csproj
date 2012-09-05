@@ -110,6 +110,7 @@
       <DependentUpon>SyncHQProcessPage.cs</DependentUpon>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SyncHQProcessPage1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Containers\SyncChoicePage.resx">
       <DependentUpon>SyncChoicePage.cs</DependentUpon>
@@ -139,9 +140,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Symbol-Construction.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Debug\Common.dll" />
