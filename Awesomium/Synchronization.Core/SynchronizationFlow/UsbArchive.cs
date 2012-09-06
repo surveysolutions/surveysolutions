@@ -77,6 +77,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         private const string ShortFileName = "UsbArchive";
         private const string FileExt = ".capi";
+        private const string EndExt = ".zip";
         private const string In = "In";
         private const string Out = "Out";
         private DriveInfo usbDriver;
@@ -100,7 +101,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         public string ArchiveFileName
         {
-            get { return string.Format("{0}{1}{2}{3}{4}", this.usbDriver.Name, Path.DirectorySeparatorChar, downFlowDirection ? In : Out, ShortFileName, FileExt); }
+            get { return string.Format("{0}{1}{2}{3}{4}{5}", this.usbDriver.Name, Path.DirectorySeparatorChar, downFlowDirection ? In : Out, ShortFileName, FileExt, EndExt); }
         }
 
         private string CreateFileName(int chunkNumber)
