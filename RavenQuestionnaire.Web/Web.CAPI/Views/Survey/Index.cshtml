@@ -57,7 +57,7 @@
         </div>
         <!-- /header -->
         <div data-role="content" class="with-footer" data-iscroll="">
-            <ul data-role="listview" data-theme="c" data-dividertheme="d" data-counttheme="e">
+            <ul data-role="listview" data-theme="c" data-dividertheme="d">
                 @foreach (CompleteGroupHeaders gh in Model.Groups)
                 {
                     var activ = @gh.Enabled ? "" : "ui-disabled";
@@ -65,7 +65,10 @@
                     <li class="@activ" id="@gh.PublicKey" onclick="$(this).siblings().removeClass('ui-btn-active');">
                      
                         <a  id="ref-link-@(gh.PublicKey)" data-panel="main" href="@Url.Action("Screen", new { Id = Model.PublicKey, group = gh.PublicKey })"> @gh.GroupText
-                                  <span id="counter-@(gh.PublicKey)" class="ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a>@*}*@
+                            <span id="counter-@(gh.PublicKey)" 
+                                  class="ui-li-count current
+                                  @(gh.Totals.Answered == gh.Totals.Enablad ? "ui-btn-up-e" : "")
+                                  ">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a>@*}*@
                             
                            
                     </li>
