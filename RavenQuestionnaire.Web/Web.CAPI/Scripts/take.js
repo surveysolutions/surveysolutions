@@ -95,7 +95,13 @@ function UpdateInnerGroup(group) {
 function UpdateCurrentGroup(group) {
     for (var j = 0; j < group.Menu.length; j++) {
         var total = group.Menu[j].Totals;
-        $("#counter-" + group.Menu[j].PublicKey).html(total.Answered + "/" + total.Enablad);
+        var counterElement = $("#counter-" + group.Menu[j].PublicKey);
+        counterElement.html(total.Answered + "/" + total.Enablad);
+        if (total.Answered == total.Enablad)
+            counterElement.addClass('ui-btn-up-e');
+        else
+            counterElement.removeClass('ui-btn-up-e');
+
     }
     for (var j = 0; j < group.Questions.length; j++) {
         UpdateQuestion(group.Questions[j], group.Questions[j].GroupPublicKey);
@@ -491,6 +497,12 @@ function updateCounter() {
 
 })(jQuery);
 jQuery(document).bind("pagecreate", function (e) {
+    //disable scrolled content in order to avoid unnessesarry clicks in touch emulator mode
+
+    // if browser supports touch events then fo nothing
+    if ("ontouchend" in document) {
+        return;
+    }
     var elements = jQuery(e.target).find(":jqmData(iscroll)");
     if (!elements || elements.length <= 0)
         return;
@@ -509,7 +521,7 @@ jQuery(document).bind("pagecreate", function (e) {
 
         var target = this.iscrollview.$scrollerContent;
         if (!target.hasClass(disableClass))
-        target.addClass(disableClass);
+            target.addClass(disableClass);
 
     };
 });
