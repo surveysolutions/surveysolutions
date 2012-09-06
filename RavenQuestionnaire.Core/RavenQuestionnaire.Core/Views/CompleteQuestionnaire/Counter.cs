@@ -42,8 +42,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         /// </summary>
         public int Enablad { get; set; }
 
-        public int Invalid { get; set; }
-
         /// <summary>
         /// Gets the progress.
         /// </summary>
