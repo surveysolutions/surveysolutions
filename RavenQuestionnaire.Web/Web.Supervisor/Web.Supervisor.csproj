@@ -69,7 +69,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-dev|AnyCPU'">
     <OutputPath>bin\</OutputPath>
-    <PackageAsSingleFile>false</PackageAsSingleFile>
+    <PackageAsSingleFile>true</PackageAsSingleFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-devKh|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>

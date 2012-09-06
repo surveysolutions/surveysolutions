@@ -60,7 +60,7 @@
     <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
-    <PackageAsSingleFile>false</PackageAsSingleFile>
+    <PackageAsSingleFile>true</PackageAsSingleFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-Main|AnyCPU'">
     <OutputPath>bin\</OutputPath>
@@ -489,7 +489,7 @@
     <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-1x100.png" />
     <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
