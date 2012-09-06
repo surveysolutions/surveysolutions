@@ -77,7 +77,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             get
             {
                 var identifier = new Guid("776C0DC1-23C4-4B03-A3ED-B24EF005559B");
-                string name = "Complete";
+                string name = "Completed";
                 return new SurveyStatus(identifier, name);
             }
         }
@@ -90,7 +90,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             get
             {
                 var identifier = new Guid("D65CF1F6-8A75-43FA-9158-B745EB4D6A1F");
-                string name = "Complete with Error";
+                string name = "Completed with Error";
                 return new SurveyStatus(identifier, name);
             }
         }
