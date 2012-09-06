@@ -64,7 +64,7 @@ namespace RavenQuestionnaire.Core.Views.Question
             this.Answers =
                 doc.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(doc.PublicKey, a)).ToArray();
             this.Answer = doc.GetAnswerString();
-            this.Answered = this.Answers.Any(a => a.Selected);
+            this.Answered = doc.GetAnswerObject() != null;
             this.Featured = doc.Featured;
             this.Mandatory = doc.Mandatory;
             this.Comments = doc.Comments;
