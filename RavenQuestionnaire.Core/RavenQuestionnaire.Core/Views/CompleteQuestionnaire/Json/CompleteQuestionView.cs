@@ -57,7 +57,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
             CompleteAnswerView[] answers =
                 doc.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(doc.PublicKey, a)).ToArray();
             this.Answer = doc.GetAnswerString();
-            this.Answered = answers.Any(a => a.Selected);
+            this.Answered = doc.GetAnswerObject() != null;
         }
 
         #endregion

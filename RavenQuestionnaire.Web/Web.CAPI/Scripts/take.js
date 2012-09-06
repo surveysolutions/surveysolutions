@@ -116,6 +116,8 @@ function UpdateQuestion(question) {
 
     if (question.Answered) {
         element.addClass("answered");
+    } else {
+        element.removeClass("answered");
     }
 
     SetErrorToQuestion(question, question.QuestionType == 0 ? null : question.GroupPublicKey, '');
@@ -493,16 +495,21 @@ jQuery(document).bind("pagecreate", function (e) {
     if (!elements || elements.length <= 0)
         return;
     var scrolls = elements.data('iscrollview').iscroll;
-    var originalOnScrollEndMethod = scrolls.options.onScrollEnd;
-    scrolls.options.onScrollEnd = function (evt) {
-        originalOnScrollEndMethod.call(this, evt);
-        this.iscrollview.$scrollerContent.removeClass('ui-disabled ui-disabled-opacity');
+    var disableClass = 'ui-disabled ui-disabled-opacity';
+    var originalOnTouchEndMethod = scrolls.options.onTouchEnd;
+    scrolls.options.onTouchEnd = function (evt) {
+        originalOnTouchEndMethod.call(this, evt);
+        this.iscrollview.$scrollerContent.removeClass(disableClass);
 
     };
-    var originalOnBeforeScrollMoveMethod = scrolls.options.onBeforeScrollMove;
-    scrolls.options.onBeforeScrollMove = function (evt) {
-        originalOnBeforeScrollMoveMethod.call(this, evt);
-        this.iscrollview.$scrollerContent.addClass('ui-disabled ui-disabled-opacity');
+
+    var originalOnScrollMoveMethod = scrolls.options.onScrollMove;
+    scrolls.options.onScrollMove = function (evt) {
+        originalOnScrollMoveMethod.call(this, evt);
+
+        var target = this.iscrollview.$scrollerContent;
+        if (!target.hasClass(disableClass))
+        target.addClass(disableClass);
 
     };
 });

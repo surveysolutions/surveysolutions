@@ -8,6 +8,7 @@ textarea{ resize: none;}
 .ui-loader{height: 66px;width: 66px;background-color: white;opacity: 1;border: #456F9A 1px solid;}
 
 .ui-header.bradcrumbs > .ui-btn{ position: relative;right: auto;margin-right: 5px;}
+.answered{ border-color: green;border-width: 2px;}
 .ui-no-corners .ui-btn-corner-all
 {
 	border-radius: 0;
