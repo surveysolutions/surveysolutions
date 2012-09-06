@@ -165,24 +165,15 @@ namespace Web.CAPI.Controllers
             
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             SurveyStatus status;
-            if (stat != null && stat.InvalidQuestions.Count > 0)
+            if (stat.InvalidQuestions.Count > 0)
             {
                 status = SurveyStatus.Error;
-                status.ChangeComment = comments;
-                commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = key, Status = status });
-                //return Redirect(Url.RouteUrl(new {controller = "Survey", action = "Statistic", id = id}) + "#" + "invalid");
-                // return Json(new {message = "Error"}, JsonRequestBehavior.AllowGet);
-
-                return RedirectToAction("Index",
-                                        new
-                                            {
-                                                id = id,
-                                                group = stat.InvalidQuestions[0].GroupPublicKey,
-                                                question = stat.InvalidQuestions[0].PublicKey,
-                                                propagationKey = stat.InvalidQuestions[0].GroupPropagationPublicKey
-                                            });
             }
-            status = SurveyStatus.Complete;
+            else
+            {
+                status = SurveyStatus.Complete;
+            }
+
             status.ChangeComment = comments;
             commandService.Execute(new ChangeStatusCommand()
                                        {CompleteQuestionnaireId = key, Status = status});

@@ -42,6 +42,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             this.Title = group.Title;
             this.AutoPropagate = group.Propagated == Propagate.AutoPropagated;
             this.PropogationKey = group.PropogationPublicKey ?? Guid.Empty;
+            this.IsQuestionnaireActive = !SurveyStatus.IsStatusAllowCapiSync(doc.Status);
             this.Children =
                 group.Children.OfType<ICompleteQuestion>().Select(
                     q => new CompleteQuestionFactory().CreateQuestion(doc, q) as ICompositeView).ToList();

@@ -137,6 +137,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             this.Title = currentGroup.Title;
             this.Propagated = currentGroup.Propagated;
             this.Enabled = currentGroup.Enabled;
+            this.IsQuestionnaireActive = !SurveyStatus.IsStatusAllowCapiSync(doc.Status);
             if (currentGroup.Propagated != Propagate.None)
             {
                 this.PropagateTemplate = new PropagatedGroupMobileView(doc, currentGroup, navigation);
@@ -176,6 +177,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// get or set questionnaire active status - active if allow to edit, not error or completed
+        /// </summary>
+        public bool IsQuestionnaireActive { get; set; }
 
         /// <summary>
         /// Gets or sets the propagate template.

@@ -69,6 +69,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-dev|AnyCPU'">
     <OutputPath>bin\</OutputPath>
+    <PackageAsSingleFile>false</PackageAsSingleFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-devKh|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -101,9 +102,6 @@
     </Reference>
     <Reference Include="ICSharpCode.NRefactory">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>
-    <Reference Include="Lucene.Net">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="Lucene.Net.Contrib.Spatial">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.Contrib.Spatial.dll</HintPath>
@@ -150,17 +148,11 @@
     <Reference Include="Raven.Munin">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Munin.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Smuggler">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Smuggler.exe</HintPath>
-    </Reference>
     <Reference Include="Raven.Storage.Esent">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Storage.Esent.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Storage.Managed">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Storage.Managed.dll</HintPath>
-    </Reference>
-    <Reference Include="Spatial4n.Core">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Spatial4n.Core.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.Entity" />
