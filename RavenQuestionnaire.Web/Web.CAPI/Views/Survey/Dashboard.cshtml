@@ -1,10 +1,11 @@
-﻿@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
+﻿@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 @model CQGroupedBrowseView
 <div data-role="panel" data-id="main" id="dashboard-page">
     <!-- Start of second page -->
     <div data-role="page" id="main" class="page">
-      @*  <div data-role="header" data-theme="b">
+        @*  <div data-role="header" data-theme="b">
             <h1>
                 Dashboard
             </h1>
@@ -37,29 +38,36 @@
                         </li>
 
                        
-                        <li data-theme="c" class="grid-header">
-                        
-                            <span class="ui-li-count ui-btn-up-c ui-btn-corner-all" style="visibility: hidden">@group.TotalCount</span>
-                        </li>
+                        <li data-theme="c" class="grid-header"><span class="ui-li-count ui-btn-up-c ui-btn-corner-all"
+                            style="visibility: hidden">@group.TotalCount</span> </li>
 
                            
-                                                                                                          foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
-                                                                                                          {
-                                                                                                              <li>
-                                                                                                                 @* <h1>@survey.Status.Name</h1>*@
-                                                                                                                     @Html.ActionLink(survey.Status.Name+" "+string.Concat(survey.FeaturedQuestions.Select(f=>f.AnswerText+" ")), "Index", "Survey", new { id = survey.CompleteQuestionnaireId }, new
+                                                  foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
+                                                  {
+                                                      <li>@* <h1>@survey.Status.Name</h1>*@
+                                                      @{
+                                                          string style = string.Empty;
+                                                          if (survey.Status.PublicId == SurveyStatus.Error.PublicId)
+                                                          {
+                                                              style = "color:red";
+                                                          }
+                                                          else if (survey.Status.PublicId == SurveyStatus.Complete.PublicId)
+                                                          {
+                                                              style = "color:green";
+                                                          }
+                                                      }
+                            @Html.ActionLink(" " + string.Concat(survey.FeaturedQuestions.Select(f =>f.QuestionText+" "+ f.AnswerText + " ")), "Index", "Survey", new { id = survey.CompleteQuestionnaireId }, new
                                                                                                                                                                               {
                                                                                                                                                                                   data_theme = "b",
-                                                                                                                                                                                  rel = "external"
+                                                                                                                                                                                  rel = "external",
+                                                                                                                                                                                  style = style
                                                                                                                                                                               })
-                                                                                                      
-                                                                                                                  @*<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@survey.AnsweredQuestionCount/@survey.TotalQuestionCount</span>*@
-                                                                                                              </li>
-                                                                                                          }
+                            @*<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@survey.AnsweredQuestionCount/@survey.TotalQuestionCount</span>*@
+                        </li>
+                                                  }
                         }
                     }
                 </ul>
-               
             </div>
         </div>
     </div>
