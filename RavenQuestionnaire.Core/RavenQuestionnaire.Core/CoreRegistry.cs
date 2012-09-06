@@ -9,6 +9,7 @@
 
 namespace RavenQuestionnaire.Core
 {
+    using System;
     using System.Linq;
 
     using Ncqrs.Eventing.ServiceModel.Bus;
@@ -166,27 +167,28 @@ namespace RavenQuestionnaire.Core
         /// </returns>
         protected override DocumentStore CreateInstance(IContext context)
         {
-            DocumentStore store;
-            if (this.isEmbeded)
+            DocumentStore store = null;
+            try
             {
-                store = new EmbeddableDocumentStore 
+                if (this.isEmbeded)
                 {
-                    DataDirectory = this.storage
-                                                      //// ,UseEmbeddedHttpServer = true
-                };
+                    store = new EmbeddableDocumentStore
+                    {
+                        DataDirectory = this.storage
+                    };
+                }
+                else
+                {
+                    store = new DocumentStore { Url = this.storage };
+                }
 
-                // Raven.Database.Server.NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(8089);
+                store.Initialize();
             }
-            else
+            catch (Exception ex)
             {
-                store = new DocumentStore { Url = this.storage };
+                throw;// new Exception(ex.Message, ex);
             }
 
-            store.Initialize();
-
-            // IndexCreation.CreateIndexes(typeof(QuestionnaireContainingQuestions).Assembly, store);
-            // IndexCreation.CreateIndexes(typeof(UsersInLocationIndex).Assembly, store);
-            // IndexCreation.CreateIndexes(typeof(QuestionnaireGroupedByTemplateIndex).Assembly, store);
             return store;
         }
 
