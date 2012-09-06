@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Discovery;
-using System.Text;
+
 using SynchronizationMessages.Discover;
 
 namespace Questionnaire.Core.Web.WCF
 {
     public class ServiceDiscover
     {
+        NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         public IEnumerable<SyncSpot> DiscoverChannels()
         {
             var dc = new DiscoveryClient(new UdpDiscoveryEndpoint());
@@ -43,7 +44,7 @@ namespace Questionnaire.Core.Web.WCF
                 }
                 catch (Exception e)
                 {
-                    NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+                    
                     logger.Fatal(e);
                 
                 }
