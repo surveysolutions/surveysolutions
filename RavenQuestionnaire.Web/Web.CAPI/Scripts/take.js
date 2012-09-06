@@ -484,13 +484,26 @@ function updateCounter() {
 }*/
 
     };
-  
-    
-   
-})(jQuery);
-//  var scrolls = new Array();
-$(document).ready(function () {
 
+
+
+})(jQuery);
+jQuery(document).bind("pagecreate", function(e) {
+    var scrolls = jQuery(e.target).find(":jqmData(iscroll)").data('iscrollview').iscroll;
+    var originalOnScrollEndMethod = scrolls.options.onScrollEnd;
+    scrolls.options.onScrollEnd = function(evt) {
+        originalOnScrollEndMethod.call(this, evt);
+        this.iscrollview.$scrollerContent.removeClass('ui-disabled ui-disabled-opacity');
+
+    };
+    var originalOnBeforeScrollMoveMethod = scrolls.options.onBeforeScrollMove;
+    scrolls.options.onBeforeScrollMove = function(evt) {
+        originalOnBeforeScrollMoveMethod.call(this,evt);
+        this.iscrollview.$scrollerContent.addClass('ui-disabled ui-disabled-opacity');
+
+    };
+});
+$(document).ready(function () {
     $('.next-question').live('click', function () {
         var id = $(this).attr('id').substr(4);
         var parent = $('#elem-' + id).parent();
