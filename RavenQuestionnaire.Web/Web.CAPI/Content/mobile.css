@@ -9,6 +9,7 @@ textarea{ resize: none;}
 
 .ui-header.bradcrumbs > .ui-btn{ position: relative;right: auto;margin-right: 5px;}
 .answered{ border-color: green;border-width: 2px;}
+.answered.error_block{ border-color: red;}
 .ui-no-corners .ui-btn-corner-all
 {
 	border-radius: 0;
