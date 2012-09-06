@@ -488,17 +488,20 @@ function updateCounter() {
 
 
 })(jQuery);
-jQuery(document).bind("pagecreate", function(e) {
-    var scrolls = jQuery(e.target).find(":jqmData(iscroll)").data('iscrollview').iscroll;
+jQuery(document).bind("pagecreate", function (e) {
+    var elements = jQuery(e.target).find(":jqmData(iscroll)");
+    if (!elements || elements.length <= 0)
+        return;
+    var scrolls = elements.data('iscrollview').iscroll;
     var originalOnScrollEndMethod = scrolls.options.onScrollEnd;
-    scrolls.options.onScrollEnd = function(evt) {
+    scrolls.options.onScrollEnd = function (evt) {
         originalOnScrollEndMethod.call(this, evt);
         this.iscrollview.$scrollerContent.removeClass('ui-disabled ui-disabled-opacity');
 
     };
     var originalOnBeforeScrollMoveMethod = scrolls.options.onBeforeScrollMove;
-    scrolls.options.onBeforeScrollMove = function(evt) {
-        originalOnBeforeScrollMoveMethod.call(this,evt);
+    scrolls.options.onBeforeScrollMove = function (evt) {
+        originalOnBeforeScrollMoveMethod.call(this, evt);
         this.iscrollview.$scrollerContent.addClass('ui-disabled ui-disabled-opacity');
 
     };
