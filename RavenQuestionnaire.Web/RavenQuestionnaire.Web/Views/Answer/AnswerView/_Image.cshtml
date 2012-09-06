@@ -1,14 +1,14 @@
 ﻿@using RavenQuestionnaire.Core.Views.Answer
 @model CompleteAnswerView
 @{
-    var i = Model.Image;
+    var i = Model.AnswerImage;
 }
-<div class="thumbnails">
-    <div class="span2" id="image@(i.PublicKey)">
+@*<div class="thumbnails">
+    <div class="span2" id="image@(i)">
         <div class="thumbnail">
             <img src="@Url.Action("Images", "Resource", new { id = i.Thumb })" alt="@i.Title" />
             <h5>@i.Title</h5>
             <p>@i.Description</p>
         </div>
     </div>
-</div>
+</div>*@
