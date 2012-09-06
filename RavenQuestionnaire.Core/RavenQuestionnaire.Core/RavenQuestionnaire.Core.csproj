@@ -145,6 +145,7 @@
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
     <Compile Include="Commands\Collection\RemoveCollectionCommand.cs" />
+    <Compile Include="Commands\ConcurrencyResolveCommandService.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\PreLoadCompleteQuestionnaireCommand.cs" />
