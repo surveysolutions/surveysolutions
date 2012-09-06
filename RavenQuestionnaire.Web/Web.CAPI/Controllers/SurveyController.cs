@@ -231,7 +231,7 @@ namespace Web.CAPI.Controllers
             {
                 NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
                 logger.Fatal(e);
-                return Json(new {question = questions[0], settings = settings[0], error = e.Message});
+                return Json(new { questionPublicKey = question.PublicKey, settings = settings[0], error = e.Message });
             }
             var model = viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
                 new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId, settings[0].ParentGroupPublicKey,

@@ -28,6 +28,7 @@ namespace RavenQuestionnaire.Web.App_Start
 
     using Raven.Client.Document;
 
+    using RavenQuestionnaire.Core.Commands;
     using RavenQuestionnaire.Core.Services;
 
     /// <summary>
@@ -125,7 +126,7 @@ namespace RavenQuestionnaire.Web.App_Start
         private static ICommandService InitializeCommandService()
         {
             var mapper = new AttributeBasedCommandMapper();
-            var service = new CommandService();
+            var service = new ConcurrencyResolveCommandService();
             foreach (Type type in typeof(NCQRSInit).Assembly.GetTypes().Where(ImplementsAtLeastOneICommand))
             {
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
