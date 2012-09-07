@@ -53,28 +53,22 @@ namespace Web.Supervisor.Controllers
         /// <param name="clientGuid">
         /// The client guid.
         /// </param>
-        public void ExportAsync(Guid? clientGuid)
+        public void ExportAsync(Guid syncKey)
         {
-            if (!clientGuid.HasValue || clientGuid.Value == Guid.Empty)
+            AsyncManager.OutstandingOperations.Increment();
+            AsyncQuestionnaireUpdater.Update(() =>
             {
-                return;
-            }
-
-            this.AsyncManager.OutstandingOperations.Increment();
-            AsyncQuestionnaireUpdater.Update(
-                () =>
-                    {
-                        try
-                        {
-                            this.AsyncManager.Parameters["result"] = this.exportimportEvents.Export(clientGuid.Value);
-                        }
-                        catch
-                        {
-                            this.AsyncManager.Parameters["result"] = null;
-                        }
-
-                        this.AsyncManager.OutstandingOperations.Decrement();
-                    });
+                try
+                {
+                    AsyncManager.Parameters["result"] =
+                        exportimportEvents.Export(syncKey);
+                }
+                catch
+                {
+                    AsyncManager.Parameters["result"] = null;
+                }
+                AsyncManager.OutstandingOperations.Decrement();
+            });
         }
 
         /// <summary>
@@ -112,6 +106,8 @@ namespace Web.Supervisor.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public void ImportAsync(HttpPostedFileBase myfile)
         {
+            if (myfile == null && Request.Files.Count > 0)
+                myfile = Request.Files[0];
             if (myfile == null || myfile.ContentLength == 0)
             {
                 return;
