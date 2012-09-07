@@ -18,6 +18,8 @@ namespace Synchronization.Core.SynchronizationFlow
         protected abstract void OnPush(SyncDirection direction);
         protected abstract void OnPull(SyncDirection direction);
         protected abstract void OnStop();
+        protected abstract bool OnCheckIsPushPossible(SyncDirection direction);
+        protected abstract bool OnCheckIsPullPossible(SyncDirection direction);
 
         // The event-invoking method that derived classes can override.
         protected virtual void OnSyncProgressChanged(SynchronizationEvent e)
@@ -75,6 +77,16 @@ namespace Synchronization.Core.SynchronizationFlow
         }
 
         public abstract string BuildSuccessMessage(SyncType syncAction, SyncDirection direction);
+
+        public bool IsPushPossible(SyncDirection direction)
+        {
+            return OnCheckIsPushPossible(direction);
+        }
+
+        public bool IsPullPossible(SyncDirection direction)
+        {
+            return OnCheckIsPullPossible(direction);
+        }
 
         #endregion
     }

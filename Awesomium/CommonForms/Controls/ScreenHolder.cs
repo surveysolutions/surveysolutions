@@ -25,7 +25,9 @@ namespace Browsing.Common.Controls
             screen.AutoSize = true;
             screen.Dock = System.Windows.Forms.DockStyle.Fill;
             screen.Name = screen.Name;
-            
+
+            screen.ValidateContent();
+
             this.Controls.Add(screen);
         }
 

@@ -13,17 +13,17 @@ namespace Common.Utils
     {
         #region Implementation of IRequesProcessor
 
-        public T Process<T>(string url, T defaultValue) where T : struct
+        public T Process<T>(string url, T defaultValue)// where T : struct
         {
             return Process<T>(url, "GET", defaultValue);
         }
 
-        public T Process<T>(string url, string method, T defaultValue) where T : struct
+        public T Process<T>(string url, string method, T defaultValue)// where T : struct
         {
             return Process<T>(url, method, false, defaultValue);
         }
 
-        public T Process<T>(string url, string method, bool includeCookies, T defaultValue) where T : struct
+        public T Process<T>(string url, string method, bool includeCookies, T defaultValue)// where T : struct
         {
             try
             {

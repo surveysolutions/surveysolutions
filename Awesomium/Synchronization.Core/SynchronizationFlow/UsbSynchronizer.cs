@@ -120,76 +120,6 @@ namespace Synchronization.Core.SynchronizationFlow
             }
         }
 
-        /*protected override void OnPushSupervisorCapi(SyncDirection direction)
-        {
-            string drive = GetDrive(); // accept driver to flush on
-
-            try
-            {
-                this.stopRequested.Reset();
-
-                usbArchive = new UsbFileArchive(drive);
-
-                using (var done = new ManualResetEvent(false))
-                {
-                    using (var webClient = new WebClient())
-                    {
-                        SynchronizationException error = null;
-                        webClient.UploadProgressChanged +=
-                            (s, e) =>
-                            {
-                                var percents = e.TotalBytesToSend == 0 ? 100 :
-                                    e.BytesSent * 100 / e.TotalBytesToSend;
-                                var status = new SyncStatus(SyncType.Push, direction, (int)percents, null);
-                                OnSyncProgressChanged(new SynchronizationEvent(status));
-                            };
-                        webClient.UploadFileCompleted +=
-                            (s, e) =>
-                            {
-                                bool errornous = e.Error != null;
-                                bool cancelled = e.Cancelled;
-                                int percents = errornous || cancelled ? 0 : 100;
-                                try
-                                {
-                                    if (errornous)
-                                        error = new SynchronizationException("Push to usb is failed", e.Error);
-                                    else if (cancelled)
-                                        error = new CancelledSynchronizationException("Push to usb is cancelled", error);
-                                    var status = new SyncStatus(SyncType.Push, direction, percents, error);
-                                    OnSyncProgressChanged(new SynchronizationEvent(status));
-                                }
-                                finally
-                                {
-                                    done.Set();
-                                }
-                            };
-
-                        string s1 = this._urlUtils.GetUsbPushUrl(SettingsProvider.Settings.ClientId);
-                        webClient.UploadFileAsync(new Uri(s1), usbArchive.InFile);
-                        while (webClient.IsBusy && !done.WaitOne(200))
-                        {
-                            if (this.stopRequested.WaitOne(100))
-                            {
-                                webClient.CancelAsync();
-                                done.WaitOne(60000);
-                            }
-                        }
-
-                        if (error != null)
-                            throw error;
-                    }
-                }
-            }
-            catch (SynchronizationException)
-            {
-                throw;
-            }
-            catch (Exception e)
-            {
-                throw new SynchronizationException("Push to usb is failed", e);
-            }
-        }*/
-
         /// <summary>
         /// Getting USB file and uploading it to web service
         /// </summary>
@@ -291,6 +221,29 @@ namespace Synchronization.Core.SynchronizationFlow
             this.stopRequested.Set();
         }
 
+        public override string BuildSuccessMessage(SyncType syncAction, SyncDirection direction)
+        {
+            return string.Format("Usb {0} is successful with file {1}", syncAction, this.lastUsbArchiveName);
+        }
+
+        protected override bool OnCheckIsPushPossible(SyncDirection direction)
+        {
+            return OnCheckIsPullPossible(direction);
+        }
+
+        protected override bool OnCheckIsPullPossible(SyncDirection direction)
+        {
+            try
+            {
+                var drive = GetDrive(); // only check if usb driver available and choozen
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         #endregion
 
         #region utility methods
@@ -314,11 +267,5 @@ namespace Synchronization.Core.SynchronizationFlow
         }
 
         #endregion
-
-        public override string BuildSuccessMessage(SyncType syncAction, SyncDirection direction)
-        {
-            return string.Format("Usb {0} is successful with file {1}", syncAction, this.lastUsbArchiveName);
-        }
-
     }
 }

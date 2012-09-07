@@ -28,7 +28,6 @@
             this.MinimumSize = new System.Drawing.Size(920, 300);
 
             this.DoubleBuffered = true;
-            //this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WebForm";
             this.Text = "Supervisor";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

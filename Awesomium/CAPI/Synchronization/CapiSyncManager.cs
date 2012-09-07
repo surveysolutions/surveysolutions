@@ -47,8 +47,8 @@ namespace Browsing.CAPI.Synchronization
         #endregion
 
         #region Overloaded
-        
-        protected override void CheckPushPrerequisites()
+
+        protected override void CheckPushPrerequisites(SyncDirection direction)
         {
 //#if !DEBUG
             var result =  this.RequestProcessor.Process<bool>(UrlUtils.GetCheckPushPrerequisitesUrl(), false);
@@ -57,7 +57,7 @@ namespace Browsing.CAPI.Synchronization
 //#endif
         }
 
-        protected override void CheckPullPrerequisites()
+        protected override void CheckPullPrerequisites(SyncDirection direction)
         {
             // Prerequisites empty at this moment
         }

@@ -62,11 +62,11 @@
             this.pnlHolder.Controls.Add(this.btnSettings, 0, 0);
             this.pnlHolder.Controls.Add(this.btnDashboard, 1, 0);
             this.pnlHolder.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlHolder.Location = new System.Drawing.Point(3, 3);
+            this.pnlHolder.Location = new System.Drawing.Point(3, -22);
             this.pnlHolder.Name = "pnlHolder";
             this.pnlHolder.RowCount = 1;
             this.pnlHolder.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.pnlHolder.Size = new System.Drawing.Size(914, 194);
+            this.pnlHolder.Size = new System.Drawing.Size(914, 244);
             this.pnlHolder.TabIndex = 1;
             // 
             // btnSettings
@@ -79,7 +79,7 @@
             this.btnSettings.Location = new System.Drawing.Point(0, 0);
             this.btnSettings.Margin = new System.Windows.Forms.Padding(0);
             this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(457, 194);
+            this.btnSettings.Size = new System.Drawing.Size(457, 244);
             this.btnSettings.TabIndex = 3;
             this.btnSettings.Text = "Tablet synchronization";
             this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -96,7 +96,7 @@
             this.btnDashboard.Location = new System.Drawing.Point(457, 0);
             this.btnDashboard.Margin = new System.Windows.Forms.Padding(0);
             this.btnDashboard.Name = "btnDashboard";
-            this.btnDashboard.Size = new System.Drawing.Size(457, 194);
+            this.btnDashboard.Size = new System.Drawing.Size(457, 244);
             this.btnDashboard.TabIndex = 1;
             this.btnDashboard.Text = "Headquater synchronization";
             this.btnDashboard.TextAlign = System.Drawing.ContentAlignment.BottomCenter;

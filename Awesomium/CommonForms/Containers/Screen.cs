@@ -151,10 +151,16 @@ namespace Browsing.Common.Containers
             this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is Main));
         }
 
-        protected virtual void OnUpdateConfigDependencies()
-        {
-        }
+        protected virtual void OnUpdateConfigDependencies() { }
+
+        protected virtual void OnValidateContent() { }
 
         #endregion
+
+        internal void ValidateContent()
+        {
+            OnValidateContent();
+        }
+
     }
 }

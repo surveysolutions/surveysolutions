@@ -14,6 +14,9 @@ namespace Synchronization.Core.Interface
         void Stop();
         void UpdateSynchronizersList();
 
+        bool IsPushPossible(SyncDirection direction);
+        bool IsPullPossible(SyncDirection direction);
+
         event EventHandler<SynchronizationEvent> SyncProgressChanged;
         event EventHandler<SynchronizationEvent> BgnOfSync;
         event EventHandler<SynchronizationCompletedEvent> EndOfSync;

@@ -13,5 +13,8 @@ namespace Synchronization.Core.Interface
         event EventHandler<SynchronizationEvent> SyncProgressChanged;
 
         string BuildSuccessMessage(SyncType syncAction, SyncDirection direction);
+
+        bool IsPushPossible(SyncDirection direction);
+        bool IsPullPossible(SyncDirection direction);
     }
 }

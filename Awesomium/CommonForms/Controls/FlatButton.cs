@@ -19,7 +19,7 @@ namespace Browsing.Common.Controls
         /*public override void NotifyDefault(bool value)
         {
         }*/
-        /*protected override void OnPaint(PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
 
@@ -27,6 +27,6 @@ namespace Browsing.Common.Controls
             Pen pen = new Pen(FlatAppearance.BorderColor, 1);
             Rectangle rectangle = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
             e.Graphics.DrawRectangle(pen, rectangle);
-        }*/
+        }
     }
 }
