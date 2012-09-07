@@ -15,7 +15,7 @@ namespace RavenQuestionnaire.Core.Commands
     /// </summary>
     public class ConcurrencyResolveCommandService : CommandService
     {
-        NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
         public override void Execute(ICommand command)
         {
