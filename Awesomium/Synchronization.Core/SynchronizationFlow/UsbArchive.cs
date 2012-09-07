@@ -101,7 +101,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         public string ArchiveFileName
         {
-            get { return string.Format("{0}{1}{2}{3}{4}{5}", this.usbDriver.Name, Path.DirectorySeparatorChar, downFlowDirection ? In : Out, ShortFileName, FileExt, EndExt); }
+            get { return string.Format("{0}{1}{2}{3}{4}", this.usbDriver.Name, Path.DirectorySeparatorChar, downFlowDirection ? In : Out, ShortFileName, FileExt); }
         }
 
         private string CreateFileName(int chunkNumber)
