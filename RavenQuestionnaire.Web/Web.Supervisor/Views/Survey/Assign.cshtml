@@ -6,9 +6,9 @@
 @{
     ViewBag.Title = "Assignment";
 }
-<script src="../../Scripts/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
-<script src="../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
-<script src="../../Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery.unobtrusive-ajax.min.js" type="text/javascript"> </script>
+<script src="../../Scripts/jquery.validate.min.js" type="text/javascript"> </script>
+<script src="../../Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"> </script>
 <script type="text/javascript">
     function JsonResults(data) {
         var response = jQuery.parseJSON(data.responseText);
@@ -28,7 +28,7 @@
     };
 </script>
 <h2>Assignment</h2>
-<p><a href="@Url.Action("Assigments", new { id = Model.TemplateId, input=new SurveyGroupInputModel() })">Back to list</a></p>
+<p><a href="@Url.Action("Assigments", new {id = Model.TemplateId, input = new SurveyGroupInputModel()})">Back to list</a></p>
 <div class="row-fluid">
     <div class="span12">
         <ul class="thumbnails">
@@ -37,22 +37,22 @@
                 <li class="span4">
                     <div class="thumbnail">
                         @using (Ajax.BeginForm("SaveAnswer", "Survey", new AjaxOptions()
-                        {
-                            OnComplete = "JsonResults"
-                        }))
+                                                                      {
+                                                                          OnComplete = "JsonResults"
+                                                                      }))
                         {
                             ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
                             using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                             {
-                            @Html.Hidden("QuestionType", question.QuestionType)
+                                @Html.Hidden("QuestionType", question.QuestionType)
                                 Html.RenderPartial(string.Format("AnswerList/_{0}", question.QuestionType), question);
-                            @Html.ValidationMessage("AnswerValue")
-                            @Html.Hidden("PublicKey", question.PublicKey)
+                                @Html.ValidationMessage("AnswerValue")
+                                @Html.Hidden("PublicKey", question.PublicKey)
                             }
                             using (Html.BeginCollectionItem("settings", true, question.PublicKey))
                             {
-                            @Html.Hidden("ParentGroupPublicKey", question.ParentGroupPublicKey)
-                            @Html.Hidden("QuestionnaireId", Model.Id)
+                                @Html.Hidden("ParentGroupPublicKey", question.ParentGroupPublicKey)
+                                @Html.Hidden("QuestionnaireId", Model.Id)
                             }
                         }
                     </div>
@@ -61,9 +61,10 @@
         </ul>
     </div>
 </div>
-@using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions { OnComplete = "OnResponsibleComplete" }, new { @class = "form-inline" }))
+@using (Html.BeginForm("AssignForm", "Survey"))
 {
     @Html.Hidden("CqId", Model.Id)
+    @Html.Hidden("TmptId", Model.TemplateId)
     <label class="control-label">Responsible</label>
     @Html.DropDownList("userId", ViewBag.Users as SelectList)
     <input name="Save" class="btn btn-primary" type="submit" value="Save" />
