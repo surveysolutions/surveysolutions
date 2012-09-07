@@ -122,9 +122,9 @@ namespace Web.Supervisor.Controllers
             {
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = CqId },JsonRequestBehavior.AllowGet);
+            //return Json(new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = CqId },JsonRequestBehavior.AllowGet);
             //new AjaxOptions { OnComplete = "OnResponsibleComplete" }, new { @class = "form-inline" }))
-            //return RedirectToAction("Assigments", "Survey", new {id = TmptId, input = new SurveyGroupInputModel()});
+            return RedirectToAction("Assigments", "Survey", new {id = TmptId});
          }
 
         [HttpPost]
