@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -63,22 +64,21 @@ namespace Synchronization.Core.SynchronizationFlow
             // throw new NotImplementedException();
         }
 
-        protected override bool OnCheckIsPushPossible(SyncDirection direction)
+        protected override IList<SynchronizationException> OnCheckSyncIssues(SyncType syncType, SyncDirection direction)
         {
-            return OnCheckIsPullPossible(direction);
-        }
-
-        protected override bool OnCheckIsPullPossible(SyncDirection direction)
-        {
+            SynchronizationException e = null;
             try
             {
                 // test if there is connection to synchronization endpoint
-                return this._requestProcessor.Process<string>(this._urlUtils.GetEnpointUrl(), "False") != "False";
+                if (this._requestProcessor.Process<string>(this._urlUtils.GetEnpointUrl(), "False") == "False")
+                    e = new NetUnreachableException(this._urlUtils.GetEnpointUrl());
             }
-            catch
+            catch(Exception ex)
             {
-                return false;
+                e = new NetUnreachableException(ex.Message);
             }
+
+            return e == null ? null : new List<SynchronizationException>() { e };
         }
 
         public override string BuildSuccessMessage(SyncType syncAction, SyncDirection direction)

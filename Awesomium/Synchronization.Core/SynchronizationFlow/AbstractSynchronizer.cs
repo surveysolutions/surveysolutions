@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Synchronization.Core.Interface;
 using Synchronization.Core.Events;
+using Synchronization.Core.Errors;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
@@ -18,9 +20,8 @@ namespace Synchronization.Core.SynchronizationFlow
         protected abstract void OnPush(SyncDirection direction);
         protected abstract void OnPull(SyncDirection direction);
         protected abstract void OnStop();
-        protected abstract bool OnCheckIsPushPossible(SyncDirection direction);
-        protected abstract bool OnCheckIsPullPossible(SyncDirection direction);
-
+        protected abstract IList<SynchronizationException> OnCheckSyncIssues(SyncType syncAction, SyncDirection direction);
+        
         // The event-invoking method that derived classes can override.
         protected virtual void OnSyncProgressChanged(SynchronizationEvent e)
         {
@@ -78,14 +79,9 @@ namespace Synchronization.Core.SynchronizationFlow
 
         public abstract string BuildSuccessMessage(SyncType syncAction, SyncDirection direction);
 
-        public bool IsPushPossible(SyncDirection direction)
+        public IList<SynchronizationException> CheckSyncIssues(SyncType syncAction, SyncDirection direction)
         {
-            return OnCheckIsPushPossible(direction);
-        }
-
-        public bool IsPullPossible(SyncDirection direction)
-        {
-            return OnCheckIsPullPossible(direction);
+            return OnCheckSyncIssues(syncAction, direction);
         }
 
         #endregion

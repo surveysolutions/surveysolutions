@@ -226,21 +226,16 @@ namespace Synchronization.Core.SynchronizationFlow
             return string.Format("Usb {0} is successful with file {1}", syncAction, this.lastUsbArchiveName);
         }
 
-        protected override bool OnCheckIsPushPossible(SyncDirection direction)
-        {
-            return OnCheckIsPullPossible(direction);
-        }
-
-        protected override bool OnCheckIsPullPossible(SyncDirection direction)
+        protected override IList<SynchronizationException> OnCheckSyncIssues(SyncType syncType, SyncDirection direction)
         {
             try
             {
                 var drive = GetDrive(); // only check if usb driver available and choozen
-                return true;
+                return null;
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                return new List<SynchronizationException>() { new UsbUnaccebleException(ex.Message) };
             }
         }
 
@@ -259,9 +254,9 @@ namespace Synchronization.Core.SynchronizationFlow
 
             if (drive == null)
                 if (this.usbProvider.IsAnyAvailable)
-                    throw new SynchronizationException("Usb flush memory device has not been choozen");
+                    throw new UsbUnaccebleException("Usb flush memory device has not been choozen");
                 else
-                    throw new SynchronizationException("Usb flush memory device has not been plugged");
+                    throw new UsbUnaccebleException("Usb flush memory device has not been plugged");
 
             return drive;
         }

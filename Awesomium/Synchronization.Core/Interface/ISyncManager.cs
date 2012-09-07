@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Synchronization.Core.Events;
+using Synchronization.Core.Errors;
 using Synchronization.Core.SynchronizationFlow;
 
 namespace Synchronization.Core.Interface
@@ -14,8 +15,7 @@ namespace Synchronization.Core.Interface
         void Stop();
         void UpdateSynchronizersList();
 
-        bool IsPushPossible(SyncDirection direction);
-        bool IsPullPossible(SyncDirection direction);
+        IList<SynchronizationException> CheckSyncIssues(SyncType syncAction, SyncDirection direction);
 
         event EventHandler<SynchronizationEvent> SyncProgressChanged;
         event EventHandler<SynchronizationEvent> BgnOfSync;
