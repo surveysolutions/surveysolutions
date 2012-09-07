@@ -1,7 +1,6 @@
 ﻿using Ncqrs;
 using System;
 using System.Web.Mvc;
-using RavenQuestionnaire.Core.Views.Statistics;
 using Web.Supervisor.Models;
 using RavenQuestionnaire.Core;
 using Ncqrs.Commanding.ServiceModel;
@@ -10,6 +9,7 @@ using RavenQuestionnaire.Core.Views.User;
 using RavenQuestionnaire.Core.Views.Assign;
 using RavenQuestionnaire.Core.Views.Survey;
 using RavenQuestionnaire.Core.Views.Question;
+using RavenQuestionnaire.Core.Views.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
@@ -122,9 +122,9 @@ namespace Web.Supervisor.Controllers
             {
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
-            //return Json(new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = CqId },JsonRequestBehavior.AllowGet);
+            return Json(new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = CqId },JsonRequestBehavior.AllowGet);
             //new AjaxOptions { OnComplete = "OnResponsibleComplete" }, new { @class = "form-inline" }))
-            return RedirectToAction("Assigments", "Survey", new {id = TmptId, input = new SurveyGroupInputModel()});
+            //return RedirectToAction("Assigments", "Survey", new {id = TmptId, input = new SurveyGroupInputModel()});
          }
 
         [HttpPost]

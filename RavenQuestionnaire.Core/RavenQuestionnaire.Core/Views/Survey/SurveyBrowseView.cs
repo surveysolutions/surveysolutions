@@ -9,6 +9,7 @@
 
 namespace RavenQuestionnaire.Core.Views.Survey
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -65,10 +66,15 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
-            List<string> statuses = SurveyStatus.GetAllStatuses().Select(s => s.Name==SurveyStatus.Error.Name ? "Complete with Error" : s.Name).ToList();
-            statuses.Insert(0, "Total");
-            statuses.Insert(1, "Unassigned");
-            this.Headers = statuses;
+            this.Headers = new Dictionary<Guid, string>()
+                {
+                    { Guid.NewGuid(), "Total"},
+                    { Guid.NewGuid(), "Unassigned"},
+                    { SurveyStatus.Initial.PublicId, SurveyStatus.Initial.Name },
+                    { SurveyStatus.Error.PublicId, SurveyStatus.Error.Name },
+                    { SurveyStatus.Complete.PublicId, SurveyStatus.Complete.Name },
+                    { SurveyStatus.Approve.PublicId, SurveyStatus.Approve.Name }
+                };
             foreach (SurveyBrowseItem item in items)
             {
                 this.Items.Add(
@@ -81,7 +87,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
                         item.Initial, 
                         item.Error, 
                         item.Completed, 
-                        item.Approve));
+                        item.Approve, this.Headers));
             }
         }
 
@@ -92,7 +98,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <summary>
         /// Gets or sets the headers.
         /// </summary>
-        public List<string> Headers { get; set; }
+        public Dictionary<Guid, string> Headers { get; set; }
 
         /// <summary>
         /// Gets or sets the items.
