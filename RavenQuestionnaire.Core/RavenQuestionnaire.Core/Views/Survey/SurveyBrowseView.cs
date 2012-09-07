@@ -65,7 +65,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
-            List<string> statuses = SurveyStatus.GetAllStatuses().Select(s => s.Name).ToList();
+            List<string> statuses = SurveyStatus.GetAllStatuses().Select(s => s.Name==SurveyStatus.Error.Name ? "Complete with Error" : s.Name).ToList();
             statuses.Insert(0, "Total");
             statuses.Insert(1, "Unassigned");
             this.Headers = statuses;
@@ -80,7 +80,8 @@ namespace RavenQuestionnaire.Core.Views.Survey
                         item.Total, 
                         item.Initial, 
                         item.Error, 
-                        item.Complete));
+                        item.Complete, 
+                        item.Approve));
             }
         }
 
