@@ -20,6 +20,7 @@
                 {
                     var id = fitem.Id + "";
                     @Html.Hidden("CqId", id)
+                    @Html.Hidden("TmptId", fitem.TemplateId)
                     <div>@Html.DropDownList("userId", ViewBag.Users as SelectList)</div>
                     <div>
                         <input class="btn btn-primary" name="Save" type="submit" value="Save" />
