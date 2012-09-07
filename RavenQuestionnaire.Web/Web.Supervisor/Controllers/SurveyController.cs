@@ -1,7 +1,6 @@
 ﻿using Ncqrs;
 using System;
 using System.Web.Mvc;
-using RavenQuestionnaire.Core.Views.Statistics;
 using Web.Supervisor.Models;
 using RavenQuestionnaire.Core;
 using Ncqrs.Commanding.ServiceModel;
@@ -10,6 +9,7 @@ using RavenQuestionnaire.Core.Views.User;
 using RavenQuestionnaire.Core.Views.Assign;
 using RavenQuestionnaire.Core.Views.Survey;
 using RavenQuestionnaire.Core.Views.Question;
+using RavenQuestionnaire.Core.Views.Statistics;
 using RavenQuestionnaire.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;

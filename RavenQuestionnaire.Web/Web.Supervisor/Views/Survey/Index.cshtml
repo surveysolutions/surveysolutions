@@ -1,5 +1,6 @@
 ﻿@using RavenQuestionnaire.Core.Views.Survey
 @using Web.Supervisor.Models
+@using RavenQuestionnaire.Core.Entities.SubEntities
 @model SurveyBrowseView
 @{
     ViewBag.Title = "Surveys";
@@ -30,10 +31,10 @@
         <tr>
         <th class="sorting" sorter='{"key":"Title"}'><span>Survey</span></th>
         <th class="sorting" sorter='{"key":"StartDate"}'><span>Initial date</span></th>
-            @foreach (string item in Model.Headers)
+            @foreach (var item in Model.Headers)
             {
-                var nameSorting = item == "Complete with Error" ? "Error" : item;
-                <th class="sorting" role="columnheader" sorter='{"key": "@nameSorting"}'><span>@item</span></th>
+                var nameSorting = item.Value == SurveyStatus.Error.Name ? "Error" : item.Value;
+                <th class="sorting" role="columnheader" sorter='{"key": "@nameSorting"}'><span>@item.Value</span></th>
             }
         </tr>
     </thead>
