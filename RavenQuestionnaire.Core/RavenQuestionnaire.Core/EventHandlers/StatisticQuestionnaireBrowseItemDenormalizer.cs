@@ -226,7 +226,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                     item.Error--;
                     break;
                 case "Complete":
-                    item.Complete--;
+                    item.Completed--;
                     break;
                 case "Approve":
                     item.Approve--;
@@ -254,7 +254,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                     item.Error++;
                     break;
                 case "Complete":
-                    item.Complete++;
+                    item.Completed++;
                     break;
                 case "Approve":
                     item.Approve++;
