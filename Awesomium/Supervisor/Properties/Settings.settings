@@ -27,10 +27,10 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="UsbImportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronization/Import</Value>
+      <Value Profile="(Default)">ImportExport/Import</Value>
     </Setting>
     <Setting Name="CheckEventPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Synchronization/CheckIsThereSomethingToPush</Value>
+      <Value Profile="(Default)">ImportExport/CheckIsThereSomethingToPush</Value>
     </Setting>
     <Setting Name="AuthentificationCheckPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/IsLoggedIn</Value>
