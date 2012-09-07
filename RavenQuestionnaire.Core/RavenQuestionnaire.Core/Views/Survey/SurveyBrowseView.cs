@@ -80,7 +80,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
                         item.Total, 
                         item.Initial, 
                         item.Error, 
-                        item.Complete, 
+                        item.Completed, 
                         item.Approve));
             }
         }
