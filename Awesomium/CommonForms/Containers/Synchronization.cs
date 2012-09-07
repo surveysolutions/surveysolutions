@@ -17,6 +17,9 @@ namespace Browsing.Common.Containers
         IRequesProcessor requestProcessor;
         IUrlUtils utils;
 
+        private bool isPushPossible = true;
+        private bool isPullPossible = true;
+
         #region C-tor
 
         public Synchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
@@ -52,32 +55,76 @@ namespace Browsing.Common.Containers
 
         protected virtual void OnEnablePush(bool enable)
         {
-            this.syncPanel.EnablePush(enable);
+            this.syncPanel.EnablePush(this.isPushPossible && enable);
         }
 
         protected virtual void OnEnablePull(bool enable)
         {
-            this.syncPanel.EnablePull(enable);
+            this.syncPanel.EnablePull(this.isPullPossible && enable);
         }
 
         #endregion
 
         #region Helpers
 
-        private void TestPullPossibility()
+        private void CheckSyncPossibilities()
         {
-            /*var endpointAvailable = this.requestProcessor.Process<string>(this.utils.GetEnpointUrl(), "False") != "False";
+            try
+            {
+                // assume sync possibility by default
+                this.isPullPossible = true;
+                this.isPushPossible = true;
 
-            IList<SynchronizationException> issues = this.SyncManager.CheckSyncIssues(SyncType.Pull, SyncDirection.Up);
+                IList<SynchronizationException> issues = this.SyncManager.CheckSyncIssues(SyncType.Push, SyncDirection.Up);
+                if (issues == null || issues.Count == 0)
+                    return;
 
-            issues.FirstOrDefault<SynchronizationException>(x => x is NetUnreachableException);*/
+                SynchronizationException ex = issues.FirstOrDefault<SynchronizationException>(x => x is LocalHosUnreachableException);
+                if (ex != null)
+                {
+                    this.isPullPossible = false;
+                    this.isPushPossible = false;
 
-            //EnablePull(this.SyncManager.IsPullPossible(SyncDirection.Up));
-        }
+                    this.syncPanel.ShowError(ex.Message);
 
-        private void TestPushPossibility()
-        {
-            //EnablePush(this.SyncManager.IsPushPossible(SyncDirection.Up));
+                    return; // fatal
+                }
+
+                string status = string.Empty;
+                ex = issues.FirstOrDefault<SynchronizationException>(x => x is NetUnreachableException);
+                if (ex != null)
+                {
+                    status = ex.Message;
+
+                    ex = issues.FirstOrDefault<SynchronizationException>(x => x is UsbUnaccebleException);
+                    if (ex != null)
+                    {
+                        this.isPullPossible = false;
+                        this.isPushPossible = false;
+
+                        this.syncPanel.ShowError(status + "\n" + ex.Message);
+
+                        return; // fatal
+                    }
+                }
+
+                ex = issues.FirstOrDefault<SynchronizationException>(x => x is CheckPrerequisitesException);
+                if (ex != null)
+                {
+                    this.isPullPossible = true;
+                    this.isPushPossible = false;
+
+                    status += "\n" + ex.Message;
+                }
+
+                if (!string.IsNullOrEmpty(status))
+                    this.syncPanel.ShowError(status);
+            }
+            finally
+            {
+                EnablePull(this.isPullPossible);
+                EnablePush(this.isPushPossible);
+            }
         }
 
         #endregion
@@ -172,8 +219,7 @@ namespace Browsing.Common.Containers
         {
             base.OnValidateContent();
 
-            TestPullPossibility();
-            TestPushPossibility();
+            CheckSyncPossibilities();
         }
 
         #endregion
@@ -183,6 +229,8 @@ namespace Browsing.Common.Containers
         public void UpdateUsbList()
         {
             this.syncPanel.UpdateUsbList();
+
+            CheckSyncPossibilities();
         }
 
         public void EnablePush(bool enable)

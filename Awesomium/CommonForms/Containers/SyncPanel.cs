@@ -189,6 +189,11 @@ namespace Browsing.Common.Containers
             SetLabel(this.resultLabel, log);
         }
 
+        internal void ShowError(string log)
+        {
+            SetLabel(this.statusLabel, log, true);
+        }
+
         #region Helpers
 
         /// <summary>

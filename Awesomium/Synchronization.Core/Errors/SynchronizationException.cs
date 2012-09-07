@@ -44,9 +44,10 @@ namespace Synchronization.Core.Errors
         }
     }
 
-    internal class LocalHosUnreachable : SynchronizationException
+    public class LocalHosUnreachableException : SynchronizationException
     {
-        public LocalHosUnreachable() : base("Threre is no connection to local host")
+        public LocalHosUnreachableException()
+            : base("Threre is no connection to local host")
         {
         }
     }

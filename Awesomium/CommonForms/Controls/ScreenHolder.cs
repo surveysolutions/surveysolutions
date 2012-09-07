@@ -26,9 +26,9 @@ namespace Browsing.Common.Controls
             screen.Dock = System.Windows.Forms.DockStyle.Fill;
             screen.Name = screen.Name;
 
-            screen.ValidateContent();
-
             this.Controls.Add(screen);
+
+            screen.ValidateContent();
         }
 
         private IList<Containers.Screen> loadedScreens;

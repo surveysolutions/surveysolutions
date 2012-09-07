@@ -182,8 +182,11 @@ namespace Synchronization.Core
 
         public IList<SynchronizationException> CheckSyncIssues(SyncType syncType, SyncDirection direction)
         {
-            if (!this.RequestProcessor.Process<bool>(this.UrlUtils.GetDefaultUrl(), false))
-                return new List<SynchronizationException>() { new LocalHosUnreachable() }; // there is no connection to local host
+            if (this.RequestProcessor.Process<string>(this.UrlUtils.GetDefaultUrl(), "False") == "False")
+                return new List<SynchronizationException>() { new LocalHosUnreachableException() }; // there is no connection to local host
+
+
+            IList<SynchronizationException> errors = new List<SynchronizationException>();
 
             try
             {
@@ -191,10 +194,8 @@ namespace Synchronization.Core
             }
             catch (CheckPrerequisitesException e)
             {
-                return new List<SynchronizationException>() { e };
+                errors.Add(e);
             }
-
-            IList<SynchronizationException> errors = new List<SynchronizationException>();
 
             foreach (var synchronizer in this.synchronizerChain)
             {
@@ -202,7 +203,7 @@ namespace Synchronization.Core
                 if (sErrors == null || sErrors.Count == 0)
                     continue;
 
-                errors.Concat<SynchronizationException>(sErrors);
+                errors = errors.Union(sErrors).ToList();
             }
 
             return errors;
