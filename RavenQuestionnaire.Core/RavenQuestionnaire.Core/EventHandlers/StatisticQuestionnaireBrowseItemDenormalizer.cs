@@ -83,12 +83,10 @@ namespace RavenQuestionnaire.Core.EventHandlers
                         evnt.Payload.Questionnaire.Responsible == null ? 1 : 0, 
                         statistic, 
                         1, 
-                        evnt.Payload.Questionnaire.Status == SurveyStatus.Initial
-                        && evnt.Payload.Questionnaire.Responsible == null
-                            ? 1
-                            : 0, 
+                        evnt.Payload.Questionnaire.Status == SurveyStatus.Initial && evnt.Payload.Questionnaire.Responsible == null ? 1 : 0, 
                         evnt.Payload.Questionnaire.Status == SurveyStatus.Error ? 1 : 0, 
-                        evnt.Payload.Questionnaire.Status == SurveyStatus.Complete ? 1 : 0), 
+                        evnt.Payload.Questionnaire.Status == SurveyStatus.Complete ? 1 : 0,
+                        evnt.Payload.Questionnaire.Status==SurveyStatus.Approve ? 1 : 0), 
                     evnt.Payload.Questionnaire.PublicKey);
             }
             else
@@ -134,8 +132,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 {
                     if (val.Responsible != null && (val.Responsible.Id != Guid.Empty))
                     {
-                        this.IncrementCount(val.Status.Name, item);
-                        this.DecrementCount(evnt.Payload.Status.Name, item);
+                        this.IncrementCount(evnt.Payload.Status.Name, item);
+                        this.DecrementCount(val.Status.Name, item);
                     }
 
                     val.Status = evnt.Payload.Status;
@@ -227,8 +225,11 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 case "Error":
                     item.Error--;
                     break;
-                case "Completed":
-                    item.Complete--;
+                case "Complete":
+                    item.Completed--;
+                    break;
+                case "Approve":
+                    item.Approve--;
                     break;
                 default:
                     item.Initial--;
@@ -252,8 +253,11 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 case "Error":
                     item.Error++;
                     break;
-                case "Completed":
-                    item.Complete++;
+                case "Complete":
+                    item.Completed++;
+                    break;
+                case "Approve":
+                    item.Approve++;
                     break;
                 default:
                     item.Initial++;

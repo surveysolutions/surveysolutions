@@ -121,7 +121,7 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Synchronization/Import")]
+        [global::System.Configuration.DefaultSettingValueAttribute("ImportExport/Import")]
         public string UsbImportPath {
             get {
                 return ((string)(this["UsbImportPath"]));
@@ -133,7 +133,7 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Synchronization/CheckIsThereSomethingToPush")]
+        [global::System.Configuration.DefaultSettingValueAttribute("ImportExport/CheckIsThereSomethingToPush")]
         public string CheckEventPath {
             get {
                 return ((string)(this["CheckEventPath"]));

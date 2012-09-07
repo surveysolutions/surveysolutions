@@ -72,7 +72,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             int total, 
             int initial, 
             int error, 
-            int completed)
+            int completed, int approve)
             : this()
         {
             this.Id = id;
@@ -81,13 +81,13 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Total = total;
             this.Initial = initial;
             this.Error = error;
-            this.Complete = completed;
+            this.Completed = completed;
             this.Grid["Total"] = this.Total;
             this.Grid["Unassigned"] = unAssigment;
             this.Statistic = statistic;
             this.Grid["Initial"] = initial;
-            this.Grid["Error"] = error;
-            this.Grid["Complete"] = completed;
+            this.Grid["Approve"] = approve;
+            this.Grid["Completed"] = completed;
         }
 
         #endregion
@@ -97,7 +97,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <summary>
         /// Gets or sets the complete.
         /// </summary>
-        public int Complete { get; set; }
+        public int Completed { get; set; }
 
         /// <summary>
         /// Gets or sets the error.
@@ -138,6 +138,11 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// Gets or sets the unassigned.
         /// </summary>
         public int Unassigned { get; set; }
+
+        /// <summary>
+        /// Gets or sets Approve.
+        /// </summary>
+        public int Approve { get; set; }
 
         #endregion
     }
