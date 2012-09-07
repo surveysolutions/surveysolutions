@@ -10,6 +10,8 @@ namespace Browsing.Common.Containers
 {
     public abstract partial class Synchronization : Screen
     {
+        #region C-tor
+
         public Synchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
             : base(holder, true)
         {
@@ -29,6 +31,11 @@ namespace Browsing.Common.Containers
             this.SyncManager.BgnOfSync += new EventHandler<SynchronizationEvent>(sync_BgnOfSync);
         }
 
+
+        #endregion
+
+        #region Virtual and Abstract
+
         protected abstract ISyncManager DoInstantiateSyncManager(ISyncProgressObserver progressObserver, ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, IUsbProvider usbProvider);
         protected abstract void OnPushClicked();
         protected abstract void OnPullClicked();
@@ -43,17 +50,35 @@ namespace Browsing.Common.Containers
             this.syncPanel.EnablePull(enable);
         }
 
+        #endregion
+
+        #region Helpers
+
+        private void TestPullPossibility()
+        {
+            //EnablePull(this.SyncManager.IsPullPossible(SyncDirection.Up));
+        }
+
+        private void TestPushPossibility()
+        {
+            //EnablePush(this.SyncManager.IsPushPossible(SyncDirection.Up));
+        }
+
+        #endregion
+
+        #region Event Handlers
+
         private void sync_BgnOfSync(object sender, SynchronizationEvent e)
         {
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(() =>
-                                                  {
-                                                      this.syncPanel.State =
-                                                          e.Status.ActionType == SyncType.Push ? SyncState.Push : SyncState.Pull;
+                {
+                    this.syncPanel.State =
+                        e.Status.ActionType == SyncType.Push ? SyncState.Push : SyncState.Pull;
 
-                                                      EnablePush(false);
-                                                      EnablePull(false);
-                                                  }));
+                    EnablePush(false);
+                    EnablePull(false);
+                }));
         }
 
         private void sync_EndOfSync(object sender, SynchronizationCompletedEvent e)
@@ -68,9 +93,6 @@ namespace Browsing.Common.Containers
                     EnablePull(true);
                 }));
         }
-
-
-        #region Event Handlers
 
         private void btnPush_Click(object sender, EventArgs e)
         {
@@ -128,6 +150,14 @@ namespace Browsing.Common.Containers
             base.OnLoad(e);
 
             this.syncPanel.UpdateLook();
+        }
+
+        protected override void OnValidateContent()
+        {
+            base.OnValidateContent();
+
+            TestPullPossibility();
+            TestPushPossibility();
         }
 
         #endregion

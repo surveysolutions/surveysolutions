@@ -26,7 +26,7 @@ namespace Browsing.Supervisor.Synchronization
 
         #region FromCAPI
 
-        protected override void CheckPushPrerequisites()
+        protected override void CheckPushPrerequisites(SyncDirection direction)
         {
             var result = this.RequestProcessor.Process<bool>(UrlUtils.GetCheckPushPrerequisitesUrl(), false);
             if (!result)
@@ -35,7 +35,7 @@ namespace Browsing.Supervisor.Synchronization
 
         #endregion
 
-        protected override void CheckPullPrerequisites()
+        protected override void CheckPullPrerequisites(SyncDirection direction)
         {
             // Prerequisites empty at this moment
         }

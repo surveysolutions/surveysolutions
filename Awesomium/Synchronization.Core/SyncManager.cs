@@ -73,19 +73,18 @@ namespace Synchronization.Core
             }
         }
 
-        protected abstract void CheckPushPrerequisites();
+        protected abstract void CheckPushPrerequisites(SyncDirection direction);
+        protected abstract void CheckPullPrerequisites(SyncDirection direction);
 
-        protected abstract void CheckPullPrerequisites();
-
-        protected virtual void CheckPrerequisites(SyncType type)
+        protected virtual void CheckPrerequisites(SyncType typeSync, SyncDirection direction)
         {
-            if (type == SyncType.Push)
+            if (typeSync == SyncType.Push)
             {
-                CheckPushPrerequisites();
+                CheckPushPrerequisites(direction);
                 return;
             }
 
-            CheckPullPrerequisites();
+            CheckPullPrerequisites(direction);
         }
         
         private ISynchronizer ExecuteAction(Action<ISynchronizer> action, IList<Exception> errorList)
@@ -122,7 +121,7 @@ namespace Synchronization.Core
             try
             {
                 BgnOfSync(this, new SynchronizationEvent(new SyncStatus(syncType, direction, 0, null)));
-                CheckPrerequisites(syncType);
+                CheckPrerequisites(syncType, direction);
                 log = OnDoSynchronizationAction(syncType, direction);
             }
             catch (CancelledSynchronizationException ex)
@@ -179,6 +178,31 @@ namespace Synchronization.Core
             this.synchronizerChain.Clear();
             AddSynchronizers();
         }
+
+        public bool IsPushPossible(SyncDirection direction)
+        {
+            //if (!this.RequestProcessor.Process<bool>(this.UrlUtils.GetDefaultUrl(), false))
+              //  return false; // threr is no connection to local host
+
+            foreach (var synchronizer in this.synchronizerChain)
+                if (synchronizer.IsPushPossible(direction))
+                    return true;
+
+            return false;
+        }
+
+        public bool IsPullPossible(SyncDirection direction)
+        {
+            //if (!this.RequestProcessor.Process<bool>(this.UrlUtils.GetDefaultUrl(), false))
+              //  return false; // threr is no connection to local host
+
+            foreach (var synchronizer in this.synchronizerChain)
+                if (synchronizer.IsPullPossible(direction))
+                    return true;
+
+            return false;
+        }
+
 
         #endregion
 

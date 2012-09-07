@@ -63,6 +63,29 @@ namespace Synchronization.Core.SynchronizationFlow
             // throw new NotImplementedException();
         }
 
+        protected override bool OnCheckIsPushPossible(SyncDirection direction)
+        {
+            return OnCheckIsPullPossible(direction);
+        }
+
+        protected override bool OnCheckIsPullPossible(SyncDirection direction)
+        {
+            try
+            {
+                // test if there is connection to synchronization endpoint
+                return this._requestProcessor.Process<string>(this._urlUtils.GetEnpointUrl(), "False") != "False";
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public override string BuildSuccessMessage(SyncType syncAction, SyncDirection direction)
+        {
+            return string.Format("Network {0} is successful with local center {1}", syncAction, this._urlUtils.GetEnpointUrl());
+        }
+
         #endregion
 
         #region utility methods
@@ -84,10 +107,5 @@ namespace Synchronization.Core.SynchronizationFlow
         }
 
         #endregion
-
-        public override string BuildSuccessMessage(SyncType syncAction, SyncDirection direction)
-        {
-            return string.Format("Network {0} is successful with local center {1}", syncAction, this._urlUtils.GetEnpointUrl());
-        }
     }
 }
