@@ -147,7 +147,11 @@ textarea{ resize: none;}
 {
 	right: 10px;
 }
-
+#sidebar  .ui-li-has-count .ui-li-count.complete
+{
+    background-color: #FADB4E;
+    background-image: none;
+}
 .ui-header .ui-btn-left.breadcrumb, .ui-header .ui-btn-right.breadcrumb,
 .breadcrumb
 {

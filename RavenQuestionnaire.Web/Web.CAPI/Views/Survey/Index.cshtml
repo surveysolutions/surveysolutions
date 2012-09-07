@@ -66,9 +66,7 @@
                      
                         <a  id="ref-link-@(gh.PublicKey)" data-panel="main" href="@Url.Action("Screen", new { Id = Model.PublicKey, group = gh.PublicKey })"> @gh.GroupText
                             <span id="counter-@(gh.PublicKey)" 
-                                  class="ui-li-count current
-                                  @(gh.Totals.Answered == gh.Totals.Enablad ? "ui-btn-up-e" : "")
-                                  ">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a>@*}*@
+                                  class="ui-li-count @(gh.Totals.Answered == gh.Totals.Enablad ? "complete" : "")" data-role="none">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a>@*}*@
                             
                            
                     </li>

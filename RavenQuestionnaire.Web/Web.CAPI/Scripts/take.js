@@ -98,9 +98,9 @@ function UpdateCurrentGroup(group) {
         var counterElement = $("#counter-" + group.Menu[j].PublicKey);
         counterElement.html(total.Answered + "/" + total.Enablad);
         if (total.Answered == total.Enablad)
-            counterElement.addClass('ui-btn-up-e');
+            counterElement.addClass('complete');
         else
-            counterElement.removeClass('ui-btn-up-e');
+            counterElement.removeClass('complete');
 
     }
     for (var j = 0; j < group.Questions.length; j++) {
