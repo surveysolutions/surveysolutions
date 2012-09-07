@@ -28,13 +28,6 @@ namespace RavenQuestionnaire.Core.Views.Survey
         public SurveyBrowseItem()
         {
             this.Grid = new Dictionary<string, int>();
-            List<string> statuses = SurveyStatus.GetAllStatuses().Select(s => s.Name).ToList();
-            statuses.Insert(0, "Total");
-            statuses.Insert(1, "Unassigned");
-            foreach (string statuse in statuses)
-            {
-                this.Grid.Add(statuse, 0);
-            }
         }
 
         /// <summary>
@@ -72,7 +65,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             int total, 
             int initial, 
             int error, 
-            int completed, int approve)
+            int completed, int approve, Dictionary<Guid, string> headers)
             : this()
         {
             this.Id = id;
@@ -82,12 +75,16 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Initial = initial;
             this.Error = error;
             this.Completed = completed;
-            this.Grid["Total"] = this.Total;
-            this.Grid["Unassigned"] = unAssigment;
+            foreach (var header in headers)
+            {
+                if (header.Value==SurveyStatus.Initial.Name) this.Grid.Add(header.Value, initial);
+                if (header.Value == SurveyStatus.Approve.Name) this.Grid.Add(header.Value, approve);
+                if (header.Value == SurveyStatus.Complete.Name) this.Grid.Add(header.Value, completed);
+                if (header.Value == SurveyStatus.Error.Name) this.Grid.Add(header.Value, error);
+                if (header.Value == "Total") this.Grid.Add(header.Value, this.Total);
+                if (header.Value == "Unassigned") this.Grid.Add(header.Value, unAssigment);
+            }
             this.Statistic = statistic;
-            this.Grid["Initial"] = initial;
-            this.Grid["Approve"] = approve;
-            this.Grid["Completed"] = completed;
         }
 
         #endregion
