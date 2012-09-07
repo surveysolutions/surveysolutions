@@ -9,25 +9,19 @@
 
 namespace RavenQuestionnaire.Core.Views.Interviewer
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-
-    using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using System.Collections.Generic;
     using RavenQuestionnaire.Core.Utility;
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+    using RavenQuestionnaire.Core.Entities;
     using RavenQuestionnaire.Core.Views.User;
+    using RavenQuestionnaire.Core.Denormalizers;
 
     /// <summary>
     /// Interviewer statistics factory
     /// </summary>
     public class InterviewerStatisticsFactory : IViewFactory<InterviewerStatisticsInputModel, InterviewerStatisticsView>
     {
-       #region Fields
+        #region Fields
         
         /// <summary>
         /// The users.
@@ -68,17 +62,11 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
             if (s.StatusesByCQ.Count == 0)
             {
                     return new InterviewerStatisticsView(
-                    s.Id, 
-                    s.Name, 
-                    input.Order, 
+                    s.Id, s.Name, input.Order, 
                     new List<InterviewerStatisticsViewItem>(), 
-                    input.Page, 
-                    input.PageSize, 
-                    0);
+                    input.Page, input.PageSize, 0);
             }
-
             var items = s.GetTableRows().AsQueryable();
-             
             if (input.Orders.Count > 0)
             {
                 items = input.Orders[0].Direction == OrderDirection.Asc
