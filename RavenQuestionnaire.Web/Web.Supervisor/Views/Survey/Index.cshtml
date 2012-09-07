@@ -32,7 +32,8 @@
         <th class="sorting" sorter='{"key":"StartDate"}'><span>Initial date</span></th>
             @foreach (string item in Model.Headers)
             {
-            <th class="sorting" role="columnheader" sorter='{"key":"@item"}'><span>@item</span></th>
+                var nameSorting = item == "Complete with Error" ? "Error" : item;
+                <th class="sorting" role="columnheader" sorter='{"key": "@nameSorting"}'><span>@item</span></th>
             }
         </tr>
     </thead>
