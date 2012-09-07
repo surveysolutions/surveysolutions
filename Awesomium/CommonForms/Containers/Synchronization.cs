@@ -1,21 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Browsing.Common.Controls;
 using Common.Utils;
 using Synchronization.Core.Events;
+using Synchronization.Core.Errors;
 using Synchronization.Core.Interface;
 using Synchronization.Core.SynchronizationFlow;
+
 
 namespace Browsing.Common.Containers
 {
     public abstract partial class Synchronization : Screen
     {
+        IRequesProcessor requestProcessor;
+        IUrlUtils utils;
+
         #region C-tor
 
         public Synchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
             : base(holder, true)
         {
             InitializeComponent();
+
+            this.requestProcessor = requestProcessor;
+            this.utils = utils;
 
             this.syncPanel.Parent = ContentPanel;
 
@@ -56,6 +66,12 @@ namespace Browsing.Common.Containers
 
         private void TestPullPossibility()
         {
+            /*var endpointAvailable = this.requestProcessor.Process<string>(this.utils.GetEnpointUrl(), "False") != "False";
+
+            IList<SynchronizationException> issues = this.SyncManager.CheckSyncIssues(SyncType.Pull, SyncDirection.Up);
+
+            issues.FirstOrDefault<SynchronizationException>(x => x is NetUnreachableException);*/
+
             //EnablePull(this.SyncManager.IsPullPossible(SyncDirection.Up));
         }
 

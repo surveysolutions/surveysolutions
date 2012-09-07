@@ -1,5 +1,6 @@
 ﻿using NLog;
 using System;
+using System.Linq;
 using System.Text;
 using Common.Utils;
 using System.Threading;
@@ -22,7 +23,7 @@ namespace Synchronization.Core
         private List<ISynchronizer> synchronizerChain;
         private ISettingsProvider settingsProvider;
         private AutoResetEvent syncIsAvailable = new AutoResetEvent(true);
-       
+
         #endregion
 
         #region C-tors
@@ -86,7 +87,7 @@ namespace Synchronization.Core
 
             CheckPullPrerequisites(direction);
         }
-        
+
         private ISynchronizer ExecuteAction(Action<ISynchronizer> action, IList<Exception> errorList)
         {
             foreach (var synchronizer in synchronizerChain)
@@ -179,30 +180,33 @@ namespace Synchronization.Core
             AddSynchronizers();
         }
 
-        public bool IsPushPossible(SyncDirection direction)
+        public IList<SynchronizationException> CheckSyncIssues(SyncType syncType, SyncDirection direction)
         {
-            //if (!this.RequestProcessor.Process<bool>(this.UrlUtils.GetDefaultUrl(), false))
-              //  return false; // threr is no connection to local host
+            if (!this.RequestProcessor.Process<bool>(this.UrlUtils.GetDefaultUrl(), false))
+                return new List<SynchronizationException>() { new LocalHosUnreachable() }; // there is no connection to local host
+
+            try
+            {
+                CheckPrerequisites(syncType, direction);
+            }
+            catch (CheckPrerequisitesException e)
+            {
+                return new List<SynchronizationException>() { e };
+            }
+
+            IList<SynchronizationException> errors = new List<SynchronizationException>();
 
             foreach (var synchronizer in this.synchronizerChain)
-                if (synchronizer.IsPushPossible(direction))
-                    return true;
+            {
+                IList<SynchronizationException> sErrors = synchronizer.CheckSyncIssues(syncType, direction);
+                if (sErrors == null || sErrors.Count == 0)
+                    continue;
 
-            return false;
+                errors.Concat<SynchronizationException>(sErrors);
+            }
+
+            return errors;
         }
-
-        public bool IsPullPossible(SyncDirection direction)
-        {
-            //if (!this.RequestProcessor.Process<bool>(this.UrlUtils.GetDefaultUrl(), false))
-              //  return false; // threr is no connection to local host
-
-            foreach (var synchronizer in this.synchronizerChain)
-                if (synchronizer.IsPullPossible(direction))
-                    return true;
-
-            return false;
-        }
-
 
         #endregion
 
@@ -225,7 +229,7 @@ namespace Synchronization.Core
                     },
                     errorList
                 );
-            
+
             var result = new StringBuilder();
             foreach (SynchronizationException synchronizationException in errorList)
                 result.AppendLine(synchronizationException.Message);

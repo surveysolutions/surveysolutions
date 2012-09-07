@@ -27,4 +27,27 @@ namespace Synchronization.Core.Errors
                 {
                 }*/
     }
+
+    public class NetUnreachableException : SynchronizationException
+    {
+        public NetUnreachableException(string url)
+            : base(string.Format("Loacl center {0} is not available", url))
+        {
+        }
+    }
+
+    public class UsbUnaccebleException : SynchronizationException
+    {
+        public UsbUnaccebleException(string message)
+            : base(message)
+        {
+        }
+    }
+
+    internal class LocalHosUnreachable : SynchronizationException
+    {
+        public LocalHosUnreachable() : base("Threre is no connection to local host")
+        {
+        }
+    }
 }
