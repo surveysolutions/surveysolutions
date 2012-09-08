@@ -21,7 +21,13 @@
                     var id = fitem.Id + "";
                     @Html.Hidden("CqId", id)
                     @Html.Hidden("TmptId", fitem.TemplateId)
-                    <div>@Html.DropDownList("userId", ViewBag.Users as SelectList)</div>
+                    var options = (ViewBag.Users as SelectList).Select(item => new SelectListItem
+                    {
+                        Value = item.Value,
+                        Text = item.Text,
+                        Selected = (fitem.Responsible != null && fitem.Responsible.Id.ToString() == item.Value)
+                    }).ToList();                  
+                    <div>@Html.DropDownList("userId", options)</div>
                     <div>
                         <input class="btn btn-primary" name="Save" type="submit" value="Save" />
                         <input class="btn btn-danger" id="canc-@fitem.Id" name="Cancel" type="button" value="Cancel" />
