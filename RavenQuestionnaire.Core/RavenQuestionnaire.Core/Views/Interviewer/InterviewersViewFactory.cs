@@ -97,8 +97,8 @@ namespace RavenQuestionnaire.Core.Views.User
                         x.CreationDate, 
                         x.IsLocked, 
                         questionnaire.Count(t => t.Responsible.Id == x.PublicKey), 
-                        questionnaire.Where(t => t.Responsible.Id == x.PublicKey).Count(t => t.Status == SurveyStatus.Complete), 
-                        questionnaire.Where(t => t.Responsible.Id == x.PublicKey).Count(t => t.Status != SurveyStatus.Complete)));
+                        questionnaire.Where(t => t.Responsible.Id == x.PublicKey).Count(t => t.Status.PublicId == SurveyStatus.Complete.PublicId), 
+                        questionnaire.Where(t => t.Responsible.Id == x.PublicKey).Count(t => t.Status.PublicId != SurveyStatus.Complete.PublicId)));
             if (input.Orders.Count > 0)
             {
                 items = input.Orders[0].Direction == OrderDirection.Asc
