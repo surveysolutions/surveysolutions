@@ -48,9 +48,7 @@ namespace Web.Supervisor.Controllers
             var user = globalInfo.GetCurrentUser();
             SurveyGroupView model = viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(inputModel);
             var users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
-            var r = users.Items.ToList();
-            r.Insert(0, new InterviewersItem(Guid.Empty, string.Empty, string.Empty, DateTime.MinValue, false, 0, 0, 0));
-            ViewBag.Users = new SelectList(r, "Id", "Login");
+            ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             return View(model);
         }
 
@@ -135,8 +133,8 @@ namespace Web.Supervisor.Controllers
             {
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
-            //return Json(new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = CqId },JsonRequestBehavior.AllowGet);
-            //new AjaxOptions { OnComplete = "OnResponsibleComplete" }, new { @class = "form-inline" }))
+            if (Request.IsAjaxRequest())
+                return Json(new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = CqId },JsonRequestBehavior.AllowGet);
             return RedirectToAction("Assigments", "Survey", new { id = TmptId });
         }
 
