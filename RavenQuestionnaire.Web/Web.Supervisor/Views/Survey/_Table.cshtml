@@ -1,14 +1,31 @@
-﻿@using RavenQuestionnaire.Core.Views.Survey
+﻿@using RavenQuestionnaire.Core.Entities.SubEntities
+@using RavenQuestionnaire.Core.Views.Survey
 @model SurveyBrowseView
-
 @foreach (var collect in Model.Items)
 {
     <tr>
-        <td>@Html.ActionLink(collect.Title, "Assigments", new { id = collect.Id })</td>        
-        <td></td>
-            @foreach (var it in collect.Grid)
+        <td>@Html.ActionLink(collect.Title, "Assigments", new { id = collect.Id })
+        </td>
+        <td>
+        </td>
+        @foreach (var it in collect.Grid)
+        {
+            if (SurveyStatus.IsValidStatus(it.Key) != null)
             {
-                <td>@it.Value</td>
+            <td>
+                @Html.ActionLink(it.Value.ToString(), "Assigments",
+                     new
+                     {
+                         id = collect.Id,
+                         status = it.Key
+                     })
+            </td>
             }
+            else
+            {
+            <td>@it.Value
+            </td>
+            }
+        }
     </tr>
 }

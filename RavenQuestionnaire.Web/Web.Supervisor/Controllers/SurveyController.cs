@@ -18,7 +18,6 @@ using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 
 namespace Web.Supervisor.Controllers
 {
-    using System.Collections.Generic;
     using System.Linq;
 
     [Authorize]
@@ -42,9 +41,9 @@ namespace Web.Supervisor.Controllers
             return View(model);
         }
 
-        public ActionResult Assigments(Guid id, SurveyGroupInputModel input)
+        public ActionResult Assigments(Guid id, SurveyGroupInputModel input, string status)
         {
-            var inputModel = input == null ? new SurveyGroupInputModel() { Id = id } : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders);
+            var inputModel = input == null?new SurveyGroupInputModel() { Id = id, Status = status} : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders, status);
             var user = globalInfo.GetCurrentUser();
             SurveyGroupView model = viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(inputModel);
             var users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
@@ -73,6 +72,7 @@ namespace Web.Supervisor.Controllers
         {
             var stat = viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                     new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+            
             return View(new ApproveModel() { Id = id, Statistic = stat, TemplateId = template });
         }
 

@@ -38,6 +38,11 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// </summary>
         private int pageSize = 20;
 
+        /// <summary>
+        /// The filter status.
+        /// </summary>
+        private string status = null;
+
         #endregion
 
         #region Constructors and Destructors
@@ -70,6 +75,24 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="id">
         /// The id.
         /// </param>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// /// <param name="status">
+        /// The statistic filter.
+        /// </param>
+        public SurveyGroupInputModel(Guid id, Guid questionnaireId, string status)
+        {
+            this.Id = id;
+            this.QuestionnaireId = questionnaireId;
+            this.status = status;
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyGroupInputModel"/> class.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
         /// <param name="page">
         /// The page.
         /// </param>
@@ -79,6 +102,33 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="orders">
         /// The orders.
         /// </param>
+        public SurveyGroupInputModel(Guid id, int page, int pageSize, List<OrderRequestItem> orders, string status)
+        {
+            this.Id = id;
+            this.Page = page;
+            this.PageSize = pageSize;
+            this.Orders = orders;
+            this.status = status;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyGroupInputModel"/> class.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="pageSize">
+        /// The page size.
+        /// </param>
+        /// <param name="orders">
+        /// The orders.
+        /// </param>
+        /// <param name="status">
+        /// The statistic filter
+        /// </param>
         public SurveyGroupInputModel(Guid id, int page, int pageSize, List<OrderRequestItem> orders)
         {
             this.Id = id;
@@ -86,7 +136,6 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.PageSize = pageSize;
             this.Orders = orders;
         }
-
         #endregion
 
         #region Public Properties
@@ -175,6 +224,12 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// Gets or sets the questionnaire id.
         /// </summary>
         public Guid QuestionnaireId { get; set; }
+
+        public string Status
+        {
+            get { return this.status; }
+            set { this.status = value; }
+        }
 
         #endregion
     }
