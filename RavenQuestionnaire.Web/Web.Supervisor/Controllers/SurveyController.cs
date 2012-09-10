@@ -18,7 +18,6 @@ using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 
 namespace Web.Supervisor.Controllers
 {
-    using System.Collections.Generic;
     using System.Linq;
 
     [Authorize]
@@ -73,6 +72,7 @@ namespace Web.Supervisor.Controllers
         {
             var stat = viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                     new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+            
             return View(new ApproveModel() { Id = id, Statistic = stat, TemplateId = template });
         }
 
