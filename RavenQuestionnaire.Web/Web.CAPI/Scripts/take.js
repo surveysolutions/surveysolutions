@@ -508,6 +508,8 @@ jQuery(document).bind("pagecreate", function (e) {
         return;
     var scrolls = elements.data('iscrollview').iscroll;
     var disableClass = 'ui-disabled ui-disabled-opacity';
+    scrolls.options.hideScrollbar = true;
+  //  scrolls.options.handleClick = false;
     var originalOnTouchEndMethod = scrolls.options.onTouchEnd;
     scrolls.options.onTouchEnd = function (evt) {
         originalOnTouchEndMethod.call(this, evt);
@@ -520,7 +522,7 @@ jQuery(document).bind("pagecreate", function (e) {
         originalOnScrollMoveMethod.call(this, evt);
 
         var target = this.iscrollview.$scrollerContent;
-        if (!target.hasClass(disableClass))
+        if (this.absDistY>40 && !target.hasClass(disableClass))
             target.addClass(disableClass);
 
     };
