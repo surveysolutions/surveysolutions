@@ -93,13 +93,17 @@ namespace RavenQuestionnaire.Core.Views.Survey
             }
 
             items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+            var title = string.Empty;
+            if (items.FirstOrDefault() != null) title = items.FirstOrDefault().QuestionnaireTitle;
+            else
+                title =
+                    this.documentItemSession.Query().Where(v => v.TemplateId == input.Id).FirstOrDefault().
+                        QuestionnaireTitle;
 
             return new SurveyGroupView(
                 input.Page, 
                 input.PageSize,
-
-                items.FirstOrDefault() != null ? items.FirstOrDefault().QuestionnaireTitle : input.Id.ToString(), //Fix it!
-                
+                title,
                 count, 
                 items, 
                 input.Id);
