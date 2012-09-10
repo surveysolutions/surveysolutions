@@ -61,7 +61,7 @@
                     using (Html.BeginCollectionItem("questions", true, question.PublicKey))
                     {
 @*  @Html.IconInputComments("Comments", question.Comments ?? string.Empty, string.Empty, new {draw_key_board = "true"}, new {@class = "comments"}, new {@class = "bold"})*@
-                    @Html.TextBox("Comments", question.Comments ?? string.Empty, new { draw_key_board = "true", on_long_tap_open = "true", grab_parent_areas = "3" })
+                    @Html.TextBox("Comments", question.Comments ?? string.Empty, new { draw_key_board = "true", on_long_tap_open = "true", grab_parent_areas = "3",style="display:none;" })
                     }
                     using (Html.BeginCollectionItem("settings", true, question.PublicKey))
                     {
