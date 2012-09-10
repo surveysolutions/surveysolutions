@@ -65,6 +65,20 @@ namespace Browsing.Common.Forms
 
             }
 
+            //engine warm up
+            new System.Threading.Thread(delegate()
+                {
+                    try
+                    {
+                        requestProcessor.Process(urlUtils.GetDefaultUrl(), "False");
+                    }
+                    catch (Exception)
+                    {
+                        //throw;
+                    }
+                    
+                }).Start();
+
             AddMainScreen(requestProcessor, settingsProvider, urlUtils);
             AddBrowserScreen(webView);
             AddSynchronizerScreens(requestProcessor, settingsProvider, urlUtils);
