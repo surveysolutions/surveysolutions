@@ -13,7 +13,6 @@
     function JsonResults(data) {
         var response = jQuery.parseJSON(data.responseText);
         if (response.status === "ok") {
-
         } else {
             alert(response.error);
         }
@@ -66,6 +65,6 @@
     @Html.Hidden("CqId", Model.Id)
     @Html.Hidden("TmptId", Model.TemplateId)
     <label class="control-label">Responsible</label>
-    @Html.DropDownList("userId", ViewBag.Users as SelectList)
+    @Html.DropDownList("userId")
     <input name="Save" class="btn btn-primary" type="submit" value="Save" />
 }

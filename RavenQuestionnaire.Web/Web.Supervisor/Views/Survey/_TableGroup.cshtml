@@ -21,7 +21,17 @@
                     var id = fitem.Id + "";
                     @Html.Hidden("CqId", id)
                     @Html.Hidden("TmptId", fitem.TemplateId)
-                    <div>@Html.DropDownList("userId", ViewBag.Users as SelectList)</div>
+                    var options = (ViewBag.Users as SelectList).Select(item => new SelectListItem
+                    {
+                        Value = item.Value,
+                        Text = item.Text,
+                        Selected = (fitem.Responsible != null && fitem.Responsible.Id.ToString() == item.Value)
+                    }).ToList();
+                    if (fitem.Responsible == null)
+                    {
+                        options.Add(new SelectListItem() { Selected = true, Text = string.Empty, Value = string.Empty });
+                    }
+                    <div>@Html.DropDownList("userId", options)</div>
                     <div>
                         <input class="btn btn-primary" name="Save" type="submit" value="Save" />
                         <input class="btn btn-danger" id="canc-@fitem.Id" name="Cancel" type="button" value="Cancel" />
@@ -51,7 +61,7 @@
                     });
                 </script>
             }
-            @if (fitem.Status.PublicId == SurveyStatus.Complete.PublicId)
+            @if (fitem.Status.PublicId == SurveyStatus.Complete.PublicId || fitem.Status.PublicId == SurveyStatus.Error.PublicId)
             {
                 <a class="btn  btn-small" href="@Url.Action("Approve", new { id = fitem.Id, template = fitem.TemplateId })">
                     <i class="icon-ok-sign"></i>Approve</a>

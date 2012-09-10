@@ -18,6 +18,9 @@ using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 
 namespace Web.Supervisor.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     [Authorize]
     public class SurveyController : Controller
     {
@@ -26,7 +29,7 @@ namespace Web.Supervisor.Controllers
 
 
         public SurveyController(IViewRepository viewRepository,
-                                
+
                                 IGlobalInfoProvider provider)
         {
             this.viewRepository = viewRepository;
@@ -43,9 +46,9 @@ namespace Web.Supervisor.Controllers
         {
             var inputModel = input == null ? new SurveyGroupInputModel() { Id = id } : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders);
             var user = globalInfo.GetCurrentUser();
+            SurveyGroupView model = viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(inputModel);
             var users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
-            SurveyGroupView model = viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(inputModel);
             return View(model);
         }
 
@@ -53,8 +56,16 @@ namespace Web.Supervisor.Controllers
         {
             UserLight user = globalInfo.GetCurrentUser();
             InterviewersView users = viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
-            ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             AssignSurveyView model = viewRepository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
+            var r = users.Items.ToList();
+            r.Insert(0, new InterviewersItem(Guid.Empty, string.Empty, string.Empty, DateTime.MinValue, false, 0, 0, 0));
+            var options = r.Select(item => new SelectListItem
+                {
+                    Value = item.Id.ToString(),
+                    Text = item.Login,
+                    Selected = (model.Responsible != null && model.Responsible.Id == item.Id) || (model.Responsible == null && item.Id == Guid.Empty)
+                }).ToList();
+            ViewBag.userId = options;
             return View(model);
         }
 
@@ -122,10 +133,10 @@ namespace Web.Supervisor.Controllers
             {
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
-            //return Json(new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = CqId },JsonRequestBehavior.AllowGet);
-            //new AjaxOptions { OnComplete = "OnResponsibleComplete" }, new { @class = "form-inline" }))
-            return RedirectToAction("Assigments", "Survey", new {id = TmptId});
-         }
+            if (Request.IsAjaxRequest())
+                return Json(new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = CqId },JsonRequestBehavior.AllowGet);
+            return RedirectToAction("Assigments", "Survey", new { id = TmptId });
+        }
 
         [HttpPost]
         public JsonResult SaveAnswer(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
