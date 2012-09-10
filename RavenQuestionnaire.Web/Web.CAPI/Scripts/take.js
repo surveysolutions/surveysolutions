@@ -520,7 +520,7 @@ jQuery(document).bind("pagecreate", function (e) {
         originalOnScrollMoveMethod.call(this, evt);
 
         var target = this.iscrollview.$scrollerContent;
-        if (!target.hasClass(disableClass))
+        if (Math.abs(evt.mozMovementY)>10 && !target.hasClass(disableClass))
             target.addClass(disableClass);
 
     };
