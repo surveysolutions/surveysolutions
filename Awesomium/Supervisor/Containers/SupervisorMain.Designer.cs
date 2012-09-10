@@ -35,7 +35,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.MinimumSize = new System.Drawing.Size(920, 200);
+            //this.MinimumSize = new System.Drawing.Size(920, 200);
             this.Name = "CAPIMain";
             this.Size = new System.Drawing.Size(920, 200);
             this.ResumeLayout(false);

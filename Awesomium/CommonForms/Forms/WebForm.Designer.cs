@@ -41,8 +41,6 @@ namespace Browsing.Common.Forms
             this.ClientSize = new System.Drawing.Size(904, 562);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(1024, 600);
-            this.MinimumSize = new System.Drawing.Size(920, 300);
             this.Name = "WebForm";
             this.Text = "CAPI";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
