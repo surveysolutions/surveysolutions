@@ -47,7 +47,7 @@ namespace Synchronization.Core.Errors
     public class LocalHosUnreachableException : SynchronizationException
     {
         public LocalHosUnreachableException()
-            : base("Threre is no connection to local host")
+            : base("There is no connection to local host")
         {
         }
     }
