@@ -17,8 +17,8 @@ namespace Browsing.Common.Containers
         IRequesProcessor requestProcessor;
         IUrlUtils utils;
 
-        private bool isPushPossible = true;
-        private bool isPullPossible = true;
+        private bool isPushPossible = false;
+        private bool isPullPossible = false;
 
         #region C-tor
 
@@ -68,7 +68,15 @@ namespace Browsing.Common.Containers
 
         #region Helpers
 
-        private void CheckSyncPossibilities()
+        private void CheckSyncPossibilities(bool background = true)
+        {
+            if (background)
+                new System.Threading.Thread(CheckSync).Start();
+            else
+                CheckSync();
+        }
+
+        private void CheckSync()
         {
             try
             {
@@ -226,6 +234,10 @@ namespace Browsing.Common.Containers
             base.OnLoad(e);
 
             this.syncPanel.UpdateLook();
+            EnablePush(false);
+            EnablePull(false);
+            this.syncPanel.ShowError("Looking for available data points ...");
+
         }
 
         protected override void OnValidateContent()
