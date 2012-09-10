@@ -154,7 +154,6 @@ namespace Browsing.Common.Containers
             if (this.usbStrip.Items.Count == 0)
             {
                 this.usbStrip.Visible = false;
-                this.usbStrip.Height = 120;
                 SetLabel(this.labelAvlUsb, null);
             }
             else
