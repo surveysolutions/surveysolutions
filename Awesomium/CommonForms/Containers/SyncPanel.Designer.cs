@@ -74,11 +74,11 @@
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.ColumnCount = 3;
+            this.tableLayoutPanel2.ColumnCount = 2;
             this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel2, 3);
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 204F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.Controls.Add(this.resultLabel, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.statusLabel, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.labelAvlUsb, 0, 3);
@@ -103,10 +103,10 @@
             this.resultLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.resultLabel.Location = new System.Drawing.Point(3, 34);
             this.resultLabel.Name = "resultLabel";
-            this.resultLabel.Size = new System.Drawing.Size(658, 24);
+            this.resultLabel.Size = new System.Drawing.Size(728, 24);
             this.resultLabel.TabIndex = 2;
             this.resultLabel.Text = "result";
-            this.resultLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.resultLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // statusLabel
             // 
@@ -116,10 +116,10 @@
             this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.statusLabel.Location = new System.Drawing.Point(3, 0);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(658, 24);
+            this.statusLabel.Size = new System.Drawing.Size(728, 24);
             this.statusLabel.TabIndex = 3;
             this.statusLabel.Text = "status";
-            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelAvlUsb
             // 
@@ -129,19 +129,18 @@
             this.labelAvlUsb.Location = new System.Drawing.Point(3, 63);
             this.labelAvlUsb.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
             this.labelAvlUsb.Name = "labelAvlUsb";
-            this.labelAvlUsb.Size = new System.Drawing.Size(657, 24);
+            this.labelAvlUsb.Size = new System.Drawing.Size(198, 24);
             this.labelAvlUsb.TabIndex = 0;
-            this.labelAvlUsb.Text = "Available USB";
-            this.labelAvlUsb.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelAvlUsb.Text = "Available USB drivers:";
             // 
             // usbStrip
             // 
             this.usbStrip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.usbStrip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.usbStrip.Dock = System.Windows.Forms.DockStyle.Left;
             this.usbStrip.GripMargin = new System.Windows.Forms.Padding(0);
             this.usbStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.usbStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.usbStrip.Location = new System.Drawing.Point(663, 58);
+            this.usbStrip.Location = new System.Drawing.Point(204, 58);
             this.usbStrip.Name = "usbStrip";
             this.usbStrip.ShowItemToolTips = false;
             this.usbStrip.Size = new System.Drawing.Size(1, 29);
