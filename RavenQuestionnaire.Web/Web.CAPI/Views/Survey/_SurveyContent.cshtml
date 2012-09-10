@@ -18,7 +18,7 @@
     var propagatedGroup = Model as PropagatedGroupMobileView;
 }
 <!-- Start of second page -->
-<div data-role="page" id="screen-@(Model.PublicKey + (propagatedGroup == null ? "" : "-" + propagatedGroup.PropogationKey))" class="@(ViewBag.PagePrefix) page">
+<div data-role="page" id="screen-@(Model.PublicKey + (propagatedGroup == null ? "" : "-" + propagatedGroup.PropogationKey))" class="@(ViewBag.PagePrefix) page" data-header-theme="@(Model.IsQuestionnaireActive?"b":"e")" data-footer-theme="b" data-content-theme="c">
     @RenderNavigation(Model.Navigation)
     <!-- /header -->
     <div data-role="content" data-iscroll="">
@@ -67,7 +67,7 @@
 @helper RenderNavigation(ScreenNavigation screen)
     {
         List<CompleteGroupHeaders> crumbs = screen.BreadCumbs.Skip(1).ToList();
-    <div data-role="header" data-theme="b" class="ui-bar bradcrumbs">
+    <div data-role="header" class="ui-bar bradcrumbs">
         @for (int i = 0; i < crumbs.Count; i++)
         {
             CompleteGroupHeaders breadCumb = crumbs[i];
@@ -82,25 +82,27 @@
             }
         }
         <a class=" ui-disabled nav-link" aria-disabled="true" data-role="button" data-inline="true"
-            data-corners="false" data-icon="arrow-r" data-iconpos="right">@screen.CurrentScreenTitle</a>
-     
+           data-corners="false" data-icon="arrow-r" data-iconpos="right">@screen.CurrentScreenTitle</a>
+           @if(!Model.IsQuestionnaireActive)
+           {
+               <h1>Questionnaire is readonly</h1>
+           }
     </div>
 }
 @helper RenderFooter(ScreenNavigation screen)
     {
-    <div data-role="footer" data-theme="b">
+    <div data-role="footer">
         @if (screen.PrevScreen != null)
         {
            
             
-            <a class="nav-link ui-btn-left" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.PrevScreen.PublicKey, propagationKey = screen.PrevScreen.PropagationKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext">
+            <a class="nav-link ui-btn-left" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.PrevScreen.PublicKey, propagationKey = screen.PrevScreen.PropagationKey })" data-corners = "false" data-icon = "arrow-l" iconpos = "notext">
                 Prev Group</a>
             
         }
         else
         {
-            <a class="previous-screen ui-disabled ui-btn-left nav-link" href="#" data-icon="arrow-l"
-                data-theme="b" iconpos="notext" data-corners="false">Prev Group</a>
+            <a class="previous-screen ui-disabled ui-btn-left nav-link" href="#" data-icon="arrow-l" iconpos="notext" data-corners="false">Prev Group</a>
         }
         <h1>
             <span></span>@screen.CurrentScreenTitle</h1>
