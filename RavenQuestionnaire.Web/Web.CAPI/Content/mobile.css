@@ -291,3 +291,7 @@ body.ui-mobile-viewport, div.ui-mobile-viewport {
 .question-frame .question-main-content{float: left; width: 90%;  min-height: 90px;overflow: visible;}
 .question-frame .question-arrow{width: 6%; border: 1px solid #aaa; position: absolute; right: 0; top: 0;bottom: 0;z-index: 100;}
 .ui-disabled-opacity{ opacity: 1;}
+
+@media screen and (orientation: landscape){
+.ui-mobile, .ui-mobile .ui-page { min-height: 100px !important; }
+}
