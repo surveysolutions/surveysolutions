@@ -10,8 +10,7 @@
         </td>
         @foreach (var it in collect.Grid)
         {
-            // @SurveyStatus s = (SurveyStatus) Enum.Parse(typeof (SurveyStatus), it.Key);
-            if (SurveyStatus.IsValidStatus(it.Key)!=null)
+            if (SurveyStatus.IsValidStatus(it.Key) != null)
             {
             <td>
                 @Html.ActionLink(it.Value.ToString(), "Assigments",
@@ -23,9 +22,9 @@
             </td>
             }
             else
-
             {
-                <td>it.Value</td>
+            <td>@it.Value
+            </td>
             }
         }
     </tr>
