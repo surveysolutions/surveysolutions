@@ -152,6 +152,8 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// </summary>
         public int TotalCount { get; private set; }
 
+        
+
         #endregion
     }
 }
