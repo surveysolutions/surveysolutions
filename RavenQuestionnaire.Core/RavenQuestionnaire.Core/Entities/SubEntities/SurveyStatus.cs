@@ -148,6 +148,19 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
             return status.PublicId == SurveyStatus.Complete.PublicId || status.PublicId == SurveyStatus.Error.PublicId;
         }
 
+        /// <summary>
+        /// check status on allowance to be pushed from capi
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public static SurveyStatus IsValidStatus(String status)
+        {
+            if (status == Approve.Name) return Approve;
+            if (status == Error.Name) return Error;
+            if (status == Complete.Name) return Complete;
+            if (status == Initial.Name) return Initial;
+            return null;
+        }
         #endregion
     }
 }

@@ -36,6 +36,11 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// </summary>
         private int _pageSize = 20;
 
+        /// <summary>
+        /// The _status size.
+        /// </summary>
+        private string _status = null;
+
         #endregion
 
         #region Public Properties
@@ -103,6 +108,24 @@ namespace RavenQuestionnaire.Core.Views.Survey
                 this._pageSize = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets statistic filtres.
+        /// </summary>
+        public string Status
+        {
+            get
+            {
+                return this._status;
+            }
+
+            set
+            {
+                this._status = value;
+            }
+        }
+
+
 
         #endregion
     }
