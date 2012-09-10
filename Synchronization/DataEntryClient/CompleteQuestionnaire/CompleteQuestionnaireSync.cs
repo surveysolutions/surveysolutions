@@ -8,8 +8,7 @@ using DataEntryClient.WcfInfrastructure;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
-using Raven.Client;
-using Raven.Client.Document;
+
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
 using RavenQuestionnaire.Core.Commands.Synchronization;

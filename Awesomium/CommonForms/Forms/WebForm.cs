@@ -76,7 +76,6 @@ namespace Browsing.Common.Forms
                     {
                         //throw;
                     }
-                    
                 }).Start();
 
             AddMainScreen(requestProcessor, settingsProvider, urlUtils);

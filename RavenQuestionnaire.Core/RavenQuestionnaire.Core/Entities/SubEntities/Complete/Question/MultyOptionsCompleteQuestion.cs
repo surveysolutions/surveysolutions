@@ -13,8 +13,6 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
     using System.Collections.Generic;
     using System.Linq;
 
-    using Org.BouncyCastle.Security;
-
     using RavenQuestionnaire.Core.Entities.Composite;
 
     /// <summary>
@@ -264,7 +262,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         /// <param name="answerValue">
         /// The answer value.
         /// </param>
-        /// <exception cref="InvalidParameterException">
+        /// <exception cref="Exception">
         /// </exception>
         /// <exception cref="CompositeException">
         /// </exception>
@@ -272,7 +270,7 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question
         {
             if (answer == null)
             {
-                throw new InvalidParameterException("Parameter: answer");
+                throw new Exception("Parameter: answer");
             }
 
             List<Guid> selecteAnswers = answer;
