@@ -10,7 +10,7 @@
 namespace RavenQuestionnaire.Core.Services
 {
     using System.IO;
-
+    
     using Kaliko.ImageLibrary;
     using Kaliko.ImageLibrary.Filters;
 
@@ -134,7 +134,7 @@ namespace RavenQuestionnaire.Core.Services
                             { "Title", file.Title }
                         });
                 file.Content.Position = 0;
-                var image = new KalikoImage(file.Content);
+                KalikoImage image = new KalikoImage(file.Content);
                 int thumbWidth, thumbHeight;
                 MemoryStream thumbData = this.ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
                 this.documentStore.DatabaseCommands.PutAttachment(

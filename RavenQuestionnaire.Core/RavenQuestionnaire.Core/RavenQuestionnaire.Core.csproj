@@ -74,17 +74,8 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
     <Reference Include="CsvHelper">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\CsvHelper.1.1.0\lib\CsvHelper.dll</HintPath>
-    </Reference>
-    <Reference Include="Esent.Interop, Version=1.7.0.0, Culture=neutral, PublicKeyToken=8dd49bbdae3f61af, processorArchitecture=MSIL">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Esent.Interop.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory, Version=3.0.0.3800, Culture=neutral, PublicKeyToken=efe927acf176eea2, processorArchitecture=MSIL">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
     <Reference Include="Kaliko.ImageLibrary">
       <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
@@ -96,15 +87,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Extensions.ContextPreservation">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.Extensions.ContextPreservation.3.0.0.8\lib\net40\Ninject.Extensions.ContextPreservation.dll</HintPath>
-    </Reference>
     <Reference Include="Ninject.Extensions.Conventions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.Extensions.Conventions.3.0.0.11\lib\net40\Ninject.Extensions.Conventions.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject.Extensions.NamedScope">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\Ninject.Extensions.NamedScope.3.0.0.5\lib\net40\Ninject.Extensions.NamedScope.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
@@ -122,19 +107,17 @@
     <Reference Include="Raven.Database">
       <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Database.dll</HintPath>
     </Reference>
-    <Reference Include="Spatial4n.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9f9456e1ca16d45e, processorArchitecture=MSIL">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Spatial4n.Core.dll</HintPath>
+    <Reference Include="Raven.Storage.Esent">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Storage.Esent.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +143,7 @@
     <Compile Include="Commands\User\ChangeUserStatusCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Denormalizers\IDenormalizerStorage.cs" />
+    <Compile Include="DocumentStoreProvider.cs" />
     <Compile Include="Documents\CompleteQuestionnaireStoreDocument.cs" />
     <Compile Include="Documents\FileDocument.cs">
       <SubType>Code</SubType>
