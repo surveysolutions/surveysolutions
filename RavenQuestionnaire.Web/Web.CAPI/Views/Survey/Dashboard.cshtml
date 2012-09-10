@@ -15,11 +15,15 @@
         <div data-role="content" data-iscroll="true" style="bottom: 0px">
             <div id="scroll">
                 <ul class="dashboard-list" data-inset="true" data-role="listview" data-split-icon="plus">
+                    @{
+                        bool isDashboardEmpty = true;
+                    }
                     @foreach (CQGroupItem group in Model.Groups)
                     {
                         if (@group.Items.Any())
                         {
-                        
+                            isDashboardEmpty = false;
+
                         <li data-role="list-divider" data-theme="b" name="@group.SurveyId" class="divider"><a>
                             @group.SurveyTitle's assigments <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
                             @* @Html.ActionLink("New", "Participate", "Survey", new { id = group.SurveyId, mode = "Html5" }, new
@@ -37,35 +41,43 @@
                             @*  <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>*@
                         </li>
 
-                       
+
                         <li data-theme="c" class="grid-header"><span class="ui-li-count ui-btn-up-c ui-btn-corner-all"
                             style="visibility: hidden">@group.TotalCount</span> </li>
 
-                           
+
                                                   foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
                                                   {
-                                                      <li>@* <h1>@survey.Status.Name</h1>*@
-                                                      @{
-                                                          string style = string.Empty;
-                                                          if (survey.Status.PublicId == SurveyStatus.Error.PublicId)
-                                                          {
-                                                              style = "color:red";
-                                                          }
-                                                          else if (survey.Status.PublicId == SurveyStatus.Complete.PublicId)
-                                                          {
-                                                              style = "color:green";
-                                                          }
+                        <li>@* <h1>@survey.Status.Name</h1>*@
+                            @{
+                                                      string style = string.Empty;
+                                                      if (survey.Status.PublicId == SurveyStatus.Error.PublicId)
+                                                      {
+                                                          style = "color:red";
                                                       }
-                            @Html.ActionLink(" " + string.Concat(survey.FeaturedQuestions.Select(f =>f.QuestionText+" "+ f.AnswerText + " ")), "Index", "Survey", new { id = survey.CompleteQuestionnaireId }, new
-                                                                                                                                                                              {
-                                                                                                                                                                                  data_theme = "b",
-                                                                                                                                                                                  rel = "external",
-                                                                                                                                                                                  style = style
-                                                                                                                                                                              })
+                                                      else if (survey.Status.PublicId == SurveyStatus.Complete.PublicId)
+                                                      {
+                                                          style = "color:green";
+                                                      }
+                            }
+                            @Html.ActionLink(" " + string.Concat(survey.FeaturedQuestions.Select(f => f.QuestionText + " " + f.AnswerText + " ")), "Index", "Survey", new { id = survey.CompleteQuestionnaireId }, new
+                                                                                                                                                                                                 {
+                                                                                                                                                                                                     data_theme = "b",
+                                                                                                                                                                                                     rel = "external",
+                                                                                                                                                                                                     style = style
+                                                                                                                                                                                                 })
                             @*<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@survey.AnsweredQuestionCount/@survey.TotalQuestionCount</span>*@
                         </li>
                                                   }
                         }
+
+                    }
+                    @if (isDashboardEmpty)
+                    {
+                        <li>
+                            <h1>
+                                No assignments was found.</h1>
+                        </li>
                     }
                 </ul>
             </div>
