@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using RavenQuestionnaire.Core.Entities.SubEntities;
+
 namespace RavenQuestionnaire.Core.Views.Survey
 {
     using System;
@@ -55,6 +57,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="input">
         /// The input.
         /// </param>
+        /// <param name="status"></param>
         /// <returns>
         /// The RavenQuestionnaire.Core.Views.Survey.SurveyGroupView.
         /// </returns>
@@ -71,8 +74,13 @@ namespace RavenQuestionnaire.Core.Views.Survey
                     new CompleteQuestionnaireBrowseItem[0], 
                     input.Id);
             }
-
-            IQueryable<CompleteQuestionnaireBrowseItem> items = this.documentItemSession.Query().Where(v => v.TemplateId == input.Id);
+            SurveyStatus st = SurveyStatus.IsValidStatus(input.Status);
+            IQueryable<CompleteQuestionnaireBrowseItem> items = (st == null)
+                                                                    ? this.documentItemSession.Query().Where(
+                                                                        v => v.TemplateId == input.Id)
+                                                                    : this.documentItemSession.Query().Where(
+                                                                        v => v.TemplateId == input.Id).Where(
+                                                                            v => v.Status.PublicId == st.PublicId);
             
             if (input.QuestionnaireId != Guid.Empty)
             {
@@ -161,5 +169,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         }
 
         #endregion
+
+
     }
 }
