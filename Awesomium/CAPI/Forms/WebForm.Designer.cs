@@ -48,7 +48,7 @@ namespace Browsing.CAPI.Forms
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(249)))), ((int)(((byte)(249)))));
             this.ClientSize = new System.Drawing.Size(784, 762);
-            this.MinimumSize = new System.Drawing.Size(920, 300); 
+            //this.MinimumSize = new System.Drawing.Size(920, 300); 
            
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

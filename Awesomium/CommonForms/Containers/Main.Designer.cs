@@ -153,8 +153,8 @@ namespace Browsing.Common.Containers
             this.btnLogin.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnLogin.Location = new System.Drawing.Point(0, 0);
             this.btnLogin.Margin = new System.Windows.Forms.Padding(0);
-            this.btnLogin.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.btnLogin.Name = "btnLogin";
+            this.btnLogin.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.btnLogin.Size = new System.Drawing.Size(200, 200);
             this.btnLogin.TabIndex = 0;
             this.btnLogin.Text = "Login";
@@ -162,14 +162,13 @@ namespace Browsing.Common.Containers
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
-            // CAPIMain
+            // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.MinimumSize = new System.Drawing.Size(920, 200);
-            this.Name = "CAPIMain";
+            this.Name = "Main";
             this.Size = new System.Drawing.Size(920, 200);
             this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
             this.tableLayoutPanel1.ResumeLayout(false);

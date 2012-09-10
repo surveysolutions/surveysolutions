@@ -25,6 +25,7 @@ namespace Browsing.Common.Containers
         internal EventHandler PushPressed;
         internal EventHandler PullPressed;
         internal EventHandler CancelPressed;
+        internal EventHandler UsbPressed;
 
         private DriveInfo choozenUSB = null;
 
@@ -182,6 +183,9 @@ namespace Browsing.Common.Containers
                 else
                     button.Image = this.usbImageList.Images[0];
             }
+
+            if (UsbPressed != null)
+                UsbPressed(sender, args); 
         }
 
         internal void ShowResult(string log)

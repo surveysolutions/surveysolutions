@@ -109,7 +109,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.MinimumSize = new System.Drawing.Size(920, 200);
+            //this.MinimumSize = new System.Drawing.Size(920, 200);
             this.Name = "SyncChoicePage";
             this.Size = new System.Drawing.Size(920, 200);
             this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);

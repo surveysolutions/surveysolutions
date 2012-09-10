@@ -35,6 +35,7 @@ namespace Browsing.Common.Containers
             this.syncPanel.PullPressed += btnPull_Click;
             this.syncPanel.PushPressed += btnPush_Click;
             this.syncPanel.CancelPressed += btnCancel_Click;
+            this.syncPanel.UsbPressed += usb_Click;
 
             this.SyncManager = DoInstantiateSyncManager(this.syncPanel, clientSettings, requestProcessor, utils, this.syncPanel);
 
@@ -74,6 +75,8 @@ namespace Browsing.Common.Containers
                 // assume sync possibility by default
                 this.isPullPossible = true;
                 this.isPushPossible = true;
+
+                //return;
 
                 IList<SynchronizationException> issues = this.SyncManager.CheckSyncIssues(SyncType.Push, SyncDirection.Up);
                 if (issues == null || issues.Count == 0)
@@ -166,7 +169,6 @@ namespace Browsing.Common.Containers
             catch
             {
             }
-
         }
 
         private void btnPull_Click(object sender, EventArgs e)
@@ -185,6 +187,17 @@ namespace Browsing.Common.Containers
             try
             {
                 this.SyncManager.Stop();
+            }
+            catch
+            {
+            }
+        }
+
+        private void usb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CheckSyncPossibilities();
             }
             catch
             {
