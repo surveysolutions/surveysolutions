@@ -70,7 +70,7 @@ namespace Browsing.Common.Forms
                 {
                     try
                     {
-                        requestProcessor.Process(urlUtils.GetDefaultUrl(), "False");
+                        requestProcessor.Process(urlUtils.GetLoginUrl(), "False");
                     }
                     catch (Exception)
                     {
