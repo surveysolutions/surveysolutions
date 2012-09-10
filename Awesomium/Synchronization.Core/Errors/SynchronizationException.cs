@@ -31,7 +31,7 @@ namespace Synchronization.Core.Errors
     public class NetUnreachableException : SynchronizationException
     {
         public NetUnreachableException(string url)
-            : base(string.Format("Loacl center {0} is not available", url))
+            : base(string.Format("Local center {0} is not available", url))
         {
         }
     }

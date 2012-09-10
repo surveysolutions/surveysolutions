@@ -334,12 +334,18 @@ namespace Browsing.Common.Containers
 
         internal void EnablePush(bool enable)
         {
-            this.pushButton.Enabled = enable;
+            if (this.pushButton.InvokeRequired)
+                this.pushButton.Invoke(new MethodInvoker(() => this.pushButton.Enabled = enable));
+            else
+                this.pushButton.Enabled = enable;
         }
 
         internal void EnablePull(bool enable)
         {
-            this.pullButton.Enabled = enable;
+            if (this.pullButton.InvokeRequired)
+                this.pullButton.Invoke(new MethodInvoker(() => this.pullButton.Enabled = enable));
+            else
+                this.pullButton.Enabled = enable;
         }
     }
 }

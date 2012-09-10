@@ -113,6 +113,7 @@
             this.statusLabel.AutoSize = true;
             this.tableLayoutPanel2.SetColumnSpan(this.statusLabel, 2);
             this.statusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.statusLabel.Location = new System.Drawing.Point(3, 0);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(658, 24);
