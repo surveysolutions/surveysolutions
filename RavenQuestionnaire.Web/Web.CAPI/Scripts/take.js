@@ -552,10 +552,13 @@ $(document).ready(function () {
 });
 function scrollToQuestion(question) {
     var scrollContainer = $(question).parent().offsetParent();
-    var position = scrollContainer.find('#scroller').offset().top - $(question).offset().top;
+    
     var scroll = scrollContainer.data('iscrollview');
     if (!scroll)
         return;
+
+    var position = Math.max(scrollContainer.find('#scroller').offset().top - $(question).offset().top, scroll.iscroll.maxScrollY);
+   
     scroll.refresh();
     scroll.scrollTo(0, position, 1500, false);
 }
