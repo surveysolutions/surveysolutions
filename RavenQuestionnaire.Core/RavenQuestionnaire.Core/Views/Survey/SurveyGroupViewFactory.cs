@@ -96,10 +96,10 @@ namespace RavenQuestionnaire.Core.Views.Survey
             var title = string.Empty;
             if (items.FirstOrDefault() != null) title = items.FirstOrDefault().QuestionnaireTitle;
             else
-                title =
-                    this.documentItemSession.Query().Where(v => v.TemplateId == input.Id).FirstOrDefault().
-                        QuestionnaireTitle;
-
+            {
+                var template = this.documentItemSession.Query().Where(v => v.TemplateId == input.Id).FirstOrDefault();
+                if (template != null) title = template.QuestionnaireTitle;
+            }
             return new SurveyGroupView(
                 input.Page, 
                 input.PageSize,
