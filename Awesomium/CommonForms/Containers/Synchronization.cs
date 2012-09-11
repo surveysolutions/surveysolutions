@@ -128,8 +128,7 @@ namespace Browsing.Common.Containers
                     status += "\n" + ex.Message;
                 }
 
-                if (!string.IsNullOrEmpty(status))
-                    this.syncPanel.ShowError(status);
+                this.syncPanel.ShowError(status);
             }
             finally
             {
