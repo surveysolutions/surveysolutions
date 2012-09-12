@@ -12,10 +12,10 @@ namespace RavenQuestionnaire.Core.Views.Survey
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
     using RavenQuestionnaire.Core.Entities.SubEntities;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
     using RavenQuestionnaire.Core.Views.Statistics;
+    
 
     /// <summary>
     /// The survey group item.
@@ -23,6 +23,14 @@ namespace RavenQuestionnaire.Core.Views.Survey
     public class SurveyGroupItem
     {
         #region Constructors and Destructors
+
+        /// <summary>
+        /// Prevents a default instance of the <see cref="SurveyGroupItem"/> class from being created.
+        /// </summary>
+        private SurveyGroupItem()
+        {
+            this.FeatureadValue = new Dictionary<Guid, string>();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SurveyGroupItem"/> class.
@@ -33,8 +41,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="headers">
         /// The headers.
         /// </param>
-        public SurveyGroupItem(CompleteQuestionnaireBrowseItem it, Dictionary<Guid, string> headers)
-            : this()
+        public SurveyGroupItem(CompleteQuestionnaireBrowseItem it, Dictionary<Guid, string> headers) : this()
         {
             this.Title = it.QuestionnaireTitle;
             this.Id = it.CompleteQuestionnaireId;
@@ -47,15 +54,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
                 this.FeatureadValue.Add(header.Key, question != null ? question.AnswerValue : string.Empty);
             }
         }
-
-        /// <summary>
-        /// Prevents a default instance of the <see cref="SurveyGroupItem"/> class from being created.
-        /// </summary>
-        private SurveyGroupItem()
-        {
-            this.FeatureadValue = new Dictionary<Guid, string>();
-        }
-
+        
         #endregion
 
         #region Public Properties

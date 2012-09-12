@@ -11,8 +11,6 @@ namespace RavenQuestionnaire.Core.Views.Survey
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-
     using RavenQuestionnaire.Core.Entities.SubEntities;
 
     /// <summary>
@@ -39,7 +37,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="title">
         /// The title.
         /// </param>
-        /// <param name="unAssigment">
+        /// <param name="unAssigned">
         /// The un assigment.
         /// </param>
         /// <param name="statistic">
@@ -57,24 +55,18 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="completed">
         /// The completed.
         /// </param>
-        public SurveyBrowseItem(
-            Guid id, 
-            string title, 
-            int unAssigment, 
-            Dictionary<Guid, SurveyItem> statistic, 
-            int total, 
-            int initial, 
-            int error, 
-            int completed, int approve, Dictionary<Guid, string> headers)
-            : this()
+        public SurveyBrowseItem(Guid id, string title, int unAssigned, Dictionary<Guid, SurveyItem> statistic, 
+                                int total, int initial, int error, int completed, int approve, 
+                                Dictionary<Guid, string> headers): this()
         {
             this.Id = id;
             this.Title = title;
-            this.Unassigned = unAssigment;
+            this.Unassigned = unAssigned;
             this.Total = total;
             this.Initial = initial;
             this.Error = error;
             this.Completed = completed;
+            this.Statistic = statistic;
             foreach (var header in headers)
             {
                 if (header.Value==SurveyStatus.Initial.Name) this.Grid.Add(header.Value, initial);
@@ -82,9 +74,8 @@ namespace RavenQuestionnaire.Core.Views.Survey
                 if (header.Value == SurveyStatus.Complete.Name) this.Grid.Add(header.Value, completed);
                 if (header.Value == SurveyStatus.Error.Name) this.Grid.Add(header.Value, error);
                 if (header.Value == "Total") this.Grid.Add(header.Value, this.Total);
-                if (header.Value == "Unassigned") this.Grid.Add(header.Value, unAssigment);
+                if (header.Value == "Unassigned") this.Grid.Add(header.Value, unAssigned);
             }
-            this.Statistic = statistic;
         }
 
         #endregion

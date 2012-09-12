@@ -11,7 +11,6 @@ namespace RavenQuestionnaire.Core.Views.Survey
 {
     using System;
     using System.Collections.Generic;
-
     using RavenQuestionnaire.Core.Entities;
     using RavenQuestionnaire.Core.Utility;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
@@ -37,11 +36,6 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// The _page size.
         /// </summary>
         private int pageSize = 20;
-
-        /// <summary>
-        /// The filter status.
-        /// </summary>
-        private string status = null;
 
         #endregion
 
@@ -85,7 +79,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         {
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
-            this.status = status;
+            this.StatusName = status;
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="SurveyGroupInputModel"/> class.
@@ -108,7 +102,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Page = page;
             this.PageSize = pageSize;
             this.Orders = orders;
-            this.status = status;
+            this.StatusName = status;
         }
 
         /// <summary>
@@ -225,11 +219,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// </summary>
         public Guid QuestionnaireId { get; set; }
 
-        public string Status
-        {
-            get { return this.status; }
-            set { this.status = value; }
-        }
+        public string StatusName { get; set; }
 
         #endregion
     }

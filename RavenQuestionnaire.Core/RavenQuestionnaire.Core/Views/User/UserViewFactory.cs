@@ -11,7 +11,6 @@ namespace RavenQuestionnaire.Core.Views.User
 {
     using System;
     using System.Linq;
-
     using RavenQuestionnaire.Core.Denormalizers;
     using RavenQuestionnaire.Core.Documents;
 
@@ -20,12 +19,6 @@ namespace RavenQuestionnaire.Core.Views.User
     /// </summary>
     public class UserViewFactory : IViewFactory<UserViewInputModel, UserView>
     {
-        // remove when done
-        /*  private IDocumentSession documentSession;
-        public UserViewFactory(IDocumentSession documentSession)
-        {
-            this.documentSession = documentSession;
-        }*/
         #region Fields
 
         /// <summary>
@@ -64,41 +57,27 @@ namespace RavenQuestionnaire.Core.Views.User
         public UserView Load(UserViewInputModel input)
         {
             UserDocument doc = null;
-
-            if (input.UserId != Guid.Empty)
-            {
+            if (input.UserId != Guid.Empty) 
                 doc = this.users.Query().FirstOrDefault(u => u.PublicKey == input.UserId);
-            }
-            else if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))
-            {
-                doc = this.users.Query().FirstOrDefault(u => System.String.Compare(u.UserName, input.UserName, System.StringComparison.OrdinalIgnoreCase) == 0);
-            }
+            else 
+                if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))
+                {
+                    doc = this.users.Query().FirstOrDefault(u => 
+                        String.Compare(u.UserName, input.UserName, StringComparison.OrdinalIgnoreCase) == 0);
+                }
 
             if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
             {
                 doc = this.users.Query().FirstOrDefault(u => u.UserName == input.UserName);
-
-                if (doc != null && doc.Password != input.Password)
-                {
+                if (doc != null && doc.Password != input.Password) 
                     return null;
-                }
             }
 
-            if (doc == null || doc.IsDeleted)
-            {
+            if (doc == null || doc.IsDeleted) 
                 return null;
-            }
 
-            return new UserView(
-                doc.PublicKey,
-                doc.UserName, 
-                doc.Password, 
-                doc.Email, 
-                doc.CreationDate, 
-                doc.Roles, 
-                doc.IsLocked, 
-                doc.Supervisor, 
-                doc.Location.Id);
+            return new UserView(doc.PublicKey, doc.UserName, doc.Password, doc.Email, 
+                                doc.CreationDate, doc.Roles, doc.IsLocked, doc.Supervisor, doc.Location.Id);
         }
 
         #endregion
