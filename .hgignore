@@ -187,3 +187,7 @@ Awesomium/Awesomium.NET Browser.6.0.ReSharper.user
 Awesomium/Supervisor/_ReSharper*
 Awesomium/CommonForms/obj/*
 Awesomium/CommonForms/bin/*
+Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB.Tests/bin/*
+Externals/Framework/src/Ncqrs/bin/*
+Externals/Framework/src/Ncqrs.Spec/bin/*
+Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB/bin/*
