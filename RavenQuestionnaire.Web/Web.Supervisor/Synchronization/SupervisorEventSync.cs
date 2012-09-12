@@ -83,11 +83,5 @@ namespace Web.Supervisor.Synchronization
                 GetEventStreamById(retval, Guid.Parse(item.FileName));
             }
         }
-        protected void GetEventStreamById(List<AggregateRootEvent> retval, Guid aggregateRootId)
-        {
-            var events = myEventStore.ReadFrom(aggregateRootId,
-                                                     int.MinValue, int.MaxValue);
-            retval.AddRange(events.Select(e => new AggregateRootEvent(e)).ToList());
-        }
     }
 }

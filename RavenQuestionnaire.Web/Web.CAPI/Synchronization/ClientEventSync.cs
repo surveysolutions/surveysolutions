@@ -34,9 +34,7 @@ namespace Web.CAPI.Synchronization
             {
                 if (!SurveyStatus.IsStatusAllowCapiSync(item.Status))
                     continue;
-                var events = myEventStore.ReadFrom(item.CompleteQuestionnaireId,
-                                                   int.MinValue, int.MaxValue);
-                retval.AddRange(events.Select(e => new AggregateRootEvent(e)));
+                GetEventStreamById(retval, item.CompleteQuestionnaireId);
             }
             // return retval;
             return retval.OrderBy(x => x.EventTimeStamp);

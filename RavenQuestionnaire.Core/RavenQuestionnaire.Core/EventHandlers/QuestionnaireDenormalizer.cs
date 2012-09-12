@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Ncqrs.Restoring.EventStapshoot;
 using RavenQuestionnaire.Core.Entities.Extensions;
 
 namespace RavenQuestionnaire.Core.EventHandlers
@@ -29,7 +30,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
     /// The questionnaire denormalizer.
     /// </summary>
     public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>, 
-                                             IEventHandler<QuestionnaireTemplateLoaded>, 
+                                             IEventHandler<SnapshootLoaded>, 
                                              IEventHandler<NewGroupAdded>, 
                                              IEventHandler<QuestionnaireItemMoved>, 
                                              IEventHandler<QuestionDeleted>, 
@@ -90,9 +91,12 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// <param name="evnt">
         /// The evnt.
         /// </param>
-        public void Handle(IPublishedEvent<QuestionnaireTemplateLoaded> evnt)
+        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
         {
-            this.documentStorage.Store(evnt.Payload.Template, evnt.Payload.Template.PublicKey);
+            var document = evnt.Payload.Template.Payload as QuestionnaireDocument;
+            if (document == null)
+                return;
+            this.documentStorage.Store(document, document.PublicKey);
         }
 
         /// <summary>
