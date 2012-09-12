@@ -10,7 +10,6 @@
 namespace RavenQuestionnaire.Core.Views.User
 {
     using System;
-
     using RavenQuestionnaire.Core.Entities.SubEntities;
     
 
@@ -49,26 +48,16 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <param name="location">
         /// The location.
         /// </param>
-        public UserBrowseItem(
-            Guid id, 
-            string name, 
-            string email, 
-            DateTime creationDate, 
-            bool isLocked, 
-            UserLight supervisor, 
-            string location)
+        public UserBrowseItem(Guid id, string name, string email, DateTime creationDate, bool isLocked, UserLight supervisor, string location)
         {
             this.Id = id;
-            this.UserName = name;
             this.Email = email;
-            this.CreationDate = creationDate;
+            this.UserName = name;
             this.IsLocked = isLocked;
-            if (supervisor != null)
-            {
-                this.SupervisorName = supervisor.Name;
-            }
-
             this.LocationName = location;
+            this.CreationDate = creationDate;
+            if (supervisor != null) 
+                this.SupervisorName = supervisor.Name;
         }
 
         #endregion

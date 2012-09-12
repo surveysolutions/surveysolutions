@@ -12,7 +12,6 @@ namespace RavenQuestionnaire.Core.Views.Survey
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
     using RavenQuestionnaire.Core.Views.Statistics;
 
@@ -53,15 +52,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="templateId">
         /// The template id.
         /// </param>
-        public SurveyGroupView(
-            int page, 
-            int pageSize, 
-
-            string surveyTitle, 
-            
-            int totalCount, 
-            IEnumerable<CompleteQuestionnaireBrowseItem> items, 
-            Guid templateId)
+        public SurveyGroupView(int page, int pageSize, string surveyTitle, int totalCount, IEnumerable<CompleteQuestionnaireBrowseItem> items, Guid templateId)
         {
             this.Page = page;
             this.TotalCount = totalCount;
@@ -69,19 +60,18 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.TemplateId = templateId;
             this.Items = new List<SurveyGroupItem>();
             this.Headers = new Dictionary<Guid, string>();
-            foreach (QuestionStatisticView question in
+            if (items != null)
+            {
+                foreach (QuestionStatisticView question in
                     items.SelectMany(
                         completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions).Where(
                             question => !this.Headers.ContainsKey(question.PublicKey)))
-            {
-                this.Headers.Add(question.PublicKey, question.QuestionText);
+                {
+                    this.Headers.Add(question.PublicKey, question.QuestionText);
+                }
+                foreach (CompleteQuestionnaireBrowseItem it in items) 
+                    this.Items.Add(new SurveyGroupItem(it, this.Headers));
             }
-
-            foreach (CompleteQuestionnaireBrowseItem it in items)
-            {
-                this.Items.Add(new SurveyGroupItem(it, this.Headers));
-            }
-
             this.SurveyTitle = surveyTitle;
         }
 

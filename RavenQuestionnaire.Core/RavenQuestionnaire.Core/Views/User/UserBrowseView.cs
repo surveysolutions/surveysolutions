@@ -36,9 +36,9 @@ namespace RavenQuestionnaire.Core.Views.User
         public UserBrowseView(int page, int pageSize, int totalCount, IEnumerable<UserBrowseItem> items)
         {
             this.Page = page;
-            this.TotalCount = totalCount;
-            this.PageSize = pageSize;
             this.Items = items;
+            this.PageSize = pageSize;
+            this.TotalCount = totalCount;
         }
 
         #endregion

@@ -11,11 +11,10 @@ namespace RavenQuestionnaire.Core.Views.Survey
 {
     using System.Collections.Generic;
     using System.Linq;
-
     using RavenQuestionnaire.Core.Denormalizers;
     using RavenQuestionnaire.Core.Entities;
     using RavenQuestionnaire.Core.Utility;
-
+    
     /// <summary>
     /// The survey view factory.
     /// </summary>
@@ -58,20 +57,14 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// </returns>
         public SurveyBrowseView Load(SurveyViewInputModel input)
         {
-            int count = this.documentItemSession.Query().Count();
-            if (count == 0)
-            {
+            var count = this.documentItemSession.Query().Count();
+            if (count == 0) 
                 return new SurveyBrowseView(input.Page, input.PageSize, count, new List<SurveyBrowseItem>());
-            }
-
             IQueryable<SurveyBrowseItem> query = this.documentItemSession.Query();
             if (input.Orders.Count > 0)
-            {
                 query = input.Orders[0].Direction == OrderDirection.Asc
                             ? query.OrderBy(input.Orders[0].Field)
                             : query.OrderByDescending(input.Orders[0].Field);
-            }
-
             query = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
             return new SurveyBrowseView(input.Page, input.PageSize, count, query);
         }
