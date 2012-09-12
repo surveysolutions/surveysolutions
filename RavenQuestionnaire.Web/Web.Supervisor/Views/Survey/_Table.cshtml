@@ -17,7 +17,7 @@
                      new
                      {
                          id = collect.Id,
-                         status = it.Key
+                         status = SurveyStatus.IsValidStatus(it.Key).PublicId
                      })
             </td>
             }
