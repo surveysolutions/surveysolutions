@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using RavenQuestionnaire.Core.Entities.SubEntities;
+
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 {
     using System;
@@ -77,7 +79,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
             {
                 CQGroupItem item = cqGroupItem;
                 List<CompleteQuestionnaireBrowseItem> complete;
-                if (input.InterviewerId.HasValue)
+
+                complete = questionnaires.Where(BuildPredicate(input, item.SurveyId)).ToList();
+               /* if (input.InterviewerId.HasValue)
                 {
                     complete =
                         questionnaires.Where(q => q.Responsible != null && q.Responsible.Id == input.InterviewerId.Value
@@ -86,7 +90,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
                 else
                 {
                     complete = questionnaires.Where(q => q.TemplateId == item.SurveyId).ToList();
-                }
+                }*/
 
                 cqGroupItem.Items = complete;
                 cqGroupItem.TotalCount = complete.Count;
@@ -116,7 +120,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
         {
             IList<Expression<Func<CompleteQuestionnaireBrowseItem, bool>>> predicats =
                 new List<Expression<Func<CompleteQuestionnaireBrowseItem, bool>>>();
-            predicats.Add((q) => q.TemplateId == surveyId);
+            predicats.Add((q) => q.TemplateId == surveyId && q.Status.PublicId != SurveyStatus.Approve.PublicId);
             if (input.InterviewerId.HasValue)
             {
                 predicats.Add((q) => q.Responsible != null && q.Responsible.Id == input.InterviewerId);
@@ -149,11 +153,19 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
             {
                 return t => true;
             }
-
-            Type delegateType =
-                typeof(Func<,>).GetGenericTypeDefinition().MakeGenericType(new[] { typeof(T), typeof(bool) });
-            Expression combined = expressions.Cast<Expression>().Aggregate(Expression.AndAlso);
-            return (Expression<Func<T, bool>>)Expression.Lambda(delegateType, combined);
+            Expression<Func<T, bool>> result = c => true;
+            foreach (Expression<Func<T, bool>> expression in expressions)
+            {
+                var prefix = result.Compile();
+                var compiledExp = expression.Compile();
+                result = c => prefix(c) && compiledExp(c);
+            }
+            return result;
+            /*    Type delegateType =
+                typeof (Func<,>).GetGenericTypeDefinition().MakeGenericType(new[] {typeof (T), typeof (bool)});
+        
+            Expression combined = expressions.Select(e => e.Body).Aggregate(Expression.AndAlso);
+            return (Expression<Func<T, bool>>) Expression.Lambda(combined,expressions.FirstOrDefault().Parameters);*/
         }
 
         #endregion

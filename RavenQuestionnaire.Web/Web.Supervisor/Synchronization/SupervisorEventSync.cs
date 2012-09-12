@@ -40,18 +40,19 @@ namespace Web.Supervisor.Synchronization
 
         #endregion
 
-        protected void AddCompleteQuestionnairesInitState(List<AggregateRootEvent> retval)
-        {
-            var model =
+         protected void AddCompleteQuestionnairesInitState(List<AggregateRootEvent> retval)
+         {
+             var model =
                  viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(
                      new CompleteQuestionnaireBrowseInputModel());
-            foreach (var item in model.Items)
-            {
-                if (item.Status.Name != SurveyStatus.Initial.Name)
-                    continue;
-                GetEventStreamById(retval, item.CompleteQuestionnaireId);
-            }
-        }
+             foreach (var item in model.Items)
+             {
+                 if (!SurveyStatus.IsStatusAllowDownSupervisorSync(item.Status))
+                     continue;
+                 GetEventStreamById(retval, item.CompleteQuestionnaireId);
+             }
+         }
+
         protected void AddQuestionnairesTemplates(List<AggregateRootEvent> retval)
         {
               var model =
