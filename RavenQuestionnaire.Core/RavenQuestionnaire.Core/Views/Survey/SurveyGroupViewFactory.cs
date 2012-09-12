@@ -74,13 +74,13 @@ namespace RavenQuestionnaire.Core.Views.Survey
                     new CompleteQuestionnaireBrowseItem[0], 
                     input.Id);
             }
-            SurveyStatus st = SurveyStatus.IsValidStatus(input.Status);
+            Guid st = Guid.Parse(input.Status);
             IQueryable<CompleteQuestionnaireBrowseItem> items = (st == null)
                                                                     ? this.documentItemSession.Query().Where(
                                                                         v => v.TemplateId == input.Id)
                                                                     : this.documentItemSession.Query().Where(
                                                                         v => v.TemplateId == input.Id).Where(
-                                                                            v => v.Status.PublicId == st.PublicId);
+                                                                            v => v.Status.PublicId == st);
             
             if (input.QuestionnaireId != Guid.Empty)
             {
