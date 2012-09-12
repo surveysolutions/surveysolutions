@@ -26,9 +26,7 @@ namespace Browsing.CAPI.Synchronization
 
         protected override void OnAddSynchronizers(IList<ISynchronizer> syncChain, ISettingsProvider settingsProvider)
         {
-            if (!string.IsNullOrEmpty(UrlUtils.GetEnpointUrl()))
-                syncChain.Add(new NetworkSynchronizer(settingsProvider, RequestProcessor, this.UrlUtils));
-    
+            syncChain.Add(new NetworkSynchronizer(settingsProvider, RequestProcessor, this.UrlUtils));
             syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
         }
 

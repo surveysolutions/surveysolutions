@@ -35,6 +35,8 @@ namespace Synchronization.Core.SynchronizationFlow
             }
         }
 
+        protected abstract bool OnUpdateStatus();
+
         #endregion
 
         #region Implementation of ISynchronizer
@@ -77,7 +79,14 @@ namespace Synchronization.Core.SynchronizationFlow
             }
         }
 
-        public abstract string BuildSuccessMessage(SyncType syncAction, SyncDirection direction);
+        public void UpdateStatus()
+        {
+            IsActive = OnUpdateStatus();
+        }
+
+        public bool IsActive { get; private set; }
+
+        public abstract string GetSuccessMessage(SyncType syncAction, SyncDirection direction);
 
         public IList<SynchronizationException> CheckSyncIssues(SyncType syncAction, SyncDirection direction)
         {

@@ -13,7 +13,10 @@ namespace Synchronization.Core.Interface
         void Push(SyncDirection direction);
         void Pull(SyncDirection direction);
         void Stop();
-        void UpdateSynchronizersList();
+        /// <summary>
+        /// Requests to update active status for all managed synchronizers
+        /// </summary>
+        void UpdateStatuses();
 
         IList<SynchronizationException> CheckSyncIssues(SyncType syncAction, SyncDirection direction);
 
