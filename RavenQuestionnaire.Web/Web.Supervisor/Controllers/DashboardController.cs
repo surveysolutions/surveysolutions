@@ -1,45 +1,113 @@
-﻿using Ncqrs;
-using System;
-using System.Web;
-using System.Web.Mvc;
-using RavenQuestionnaire.Core;
-using Ncqrs.Commanding.ServiceModel;
-using RavenQuestionnaire.Core.Views.StatusReport;
-using RavenQuestionnaire.Core.Views.Questionnaire;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-using RavenQuestionnaire.Core.Views.Survey;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DashboardController.cs" company="World bank">
+//   2012
+// </copyright>
+// <summary>
+//   Defines the DashboardController type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Web.Supervisor.Controllers
 {
+    using System;
+    using System.Web;
+    using System.Web.Mvc;
+    using Ncqrs;
+    using Ncqrs.Commanding.ServiceModel;
+    using RavenQuestionnaire.Core;
+    using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
+    using RavenQuestionnaire.Core.Views.Questionnaire;
+    using RavenQuestionnaire.Core.Views.StatusReport;
+
+    /// <summary>
+    /// Show Statistics
+    /// </summary>
     [Authorize]
     public class DashboardController : Controller
     {
+        #region Fields
+
+        /// <summary>
+        /// ViewRepository object
+        /// </summary>
         private IViewRepository viewRepository;
 
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DashboardController"/> class.
+        /// </summary>
+        /// <param name="viewRepository">
+        /// The view repository.
+        /// </param>
         public DashboardController(IViewRepository viewRepository)
         {
             this.viewRepository = viewRepository;
         }
-        
+
+        #endregion
+
+        #region Actions
+
+        /// <summary>
+        /// Show statistic on Index Page
+        /// </summary>
+        /// <returns>
+        /// Return Index View
+        /// </returns>
         public ActionResult Index()
         {
-            var model = viewRepository.Load<StatusReportViewInputModel, StatusReportView>(new StatusReportViewInputModel());
-            return View(model);
+            var model = this.viewRepository.Load<StatusReportViewInputModel, StatusReportView>(new StatusReportViewInputModel());
+            return this.View(model);
         }
 
+        /// <summary>
+        /// Display statistic on page
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="statusId">
+        /// The status id.
+        /// </param>
+        /// <returns>
+        /// Return Status View
+        /// </returns>
         public ActionResult Status(Guid questionnaireId, Guid statusId)
         {
-            var model = viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(new CQStatusReportViewInputModel(questionnaireId, statusId));
-            return View(model);
+            var model = this.viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(new CQStatusReportViewInputModel(questionnaireId, statusId));
+            return this.View(model);
         }
 
+        /// <summary>
+        /// Display all questionnaire template list
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// Return page with all questionnaire templates
+        /// </returns>
         public ActionResult Questionnaires(QuestionnaireBrowseInputModel input)
         {
-            var model = viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
-            return View(model);
+            var model = this.viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
+            return this.View(model);
         }
 
+        /// <summary>
+        /// Dispay page for creation new questionnaire
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// Redirect to form creation new questionnaire
+        /// </returns>
+        /// <exception cref="HttpException">
+        /// throw 404 exception
+        /// </exception>
         public ActionResult NewSurvey(string id)
         {
             Guid key;
@@ -50,5 +118,7 @@ namespace Web.Supervisor.Controllers
             commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
             return RedirectToAction("Assign", "Survey", new { Id = newQuestionnairePublicKey, Template = id });
         }
+
+        #endregion
     }
 }

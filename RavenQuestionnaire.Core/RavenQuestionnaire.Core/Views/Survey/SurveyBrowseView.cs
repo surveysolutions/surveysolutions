@@ -11,8 +11,6 @@ namespace RavenQuestionnaire.Core.Views.Survey
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-
     using RavenQuestionnaire.Core.Entities;
     using RavenQuestionnaire.Core.Entities.SubEntities;
 
@@ -151,8 +149,6 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// Gets the total count.
         /// </summary>
         public int TotalCount { get; private set; }
-
-        
 
         #endregion
     }

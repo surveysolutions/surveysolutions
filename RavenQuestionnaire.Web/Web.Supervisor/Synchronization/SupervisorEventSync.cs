@@ -1,92 +1,167 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Ncqrs;
-using Ncqrs.Eventing.Storage;
-using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.File;
-using RavenQuestionnaire.Core.Views.Questionnaire;
-using RavenQuestionnaire.Core.Views.User;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SupervisorEventSync.cs" company="World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   Defines the SupervisorEventSync type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Web.Supervisor.Synchronization
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Ncqrs;
+    using Ncqrs.Eventing.Storage;
+    using RavenQuestionnaire.Core;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Events;
+    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+    using RavenQuestionnaire.Core.Views.File;
+    using RavenQuestionnaire.Core.Views.Questionnaire;
+    using RavenQuestionnaire.Core.Views.User;
+
+    /// <summary>
+    /// Responsible for supervisor synchronization
+    /// </summary>
     public class SupervisorEventSync : AbstractEventSync
     {
-         private readonly IViewRepository viewRepository;
-         private readonly IEventStore myEventStore;
-         public SupervisorEventSync(IViewRepository viewRepository)
+        #region Fields
+
+        /// <summary>
+        /// ViewRepository  object
+        /// </summary>
+        private readonly IViewRepository viewRepository;
+
+        /// <summary>
+        /// myEventStore object
+        /// </summary>
+        private readonly IEventStore myEventStore;
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SupervisorEventSync"/> class.
+        /// </summary>
+        /// <param name="viewRepository">
+        /// The view repository.
+        /// </param>
+        /// <exception cref="Exception">
+        /// added new exception
+        /// </exception>
+        public SupervisorEventSync(IViewRepository viewRepository)
          {
              this.viewRepository = viewRepository;
              this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
-
-             if (myEventStore == null)
+             if (this.myEventStore == null)
                  throw new Exception("IEventStore is not correct.");
          }
 
+        #endregion
+
         #region Overrides of AbstractEventSync
 
-         public override IEnumerable<AggregateRootEvent> ReadEvents()
+        /// <summary>
+        /// Responsible for read events from database
+        /// </summary>
+        /// <returns>
+        /// List of events
+        /// </returns>
+        public override IEnumerable<AggregateRootEvent> ReadEvents()
          {
-             List<AggregateRootEvent> retval = new List<AggregateRootEvent>();
-             AddCompleteQuestionnairesInitState(retval);
-             AddQuestionnairesTemplates(retval);
-             AddUsers(retval);
-             AddFiles(retval);
+             var retval = new List<AggregateRootEvent>();
+             this.AddCompleteQuestionnairesInitState(retval);
+             this.AddQuestionnairesTemplates(retval);
+             this.AddUsers(retval);
+             this.AddFiles(retval);
              return retval.OrderBy(x => x.EventTimeStamp).ToList();
          }
 
         #endregion
 
+        #region Protected
+
+        /// <summary>
+        /// Responsible for added init state
+        /// </summary>
+        /// <param name="retval">
+        /// The retval.
+        /// </param>
         protected void AddCompleteQuestionnairesInitState(List<AggregateRootEvent> retval)
         {
-            var model =
-                 viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(
+            var model = this.viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(
                      new CompleteQuestionnaireBrowseInputModel());
-            foreach (var item in model.Items)
+            foreach (var item in model.Items.Where(item => item.Status.Name == SurveyStatus.Initial.Name))
             {
-                if (item.Status.Name != SurveyStatus.Initial.Name)
-                    continue;
-                GetEventStreamById(retval, item.CompleteQuestionnaireId);
+                this.GetEventStreamById(retval, item.CompleteQuestionnaireId);
             }
         }
+
+        /// <summary>
+        /// Responsible for added questionnaire templates
+        /// </summary>
+        /// <param name="retval">
+        /// The retval.
+        /// </param>
         protected void AddQuestionnairesTemplates(List<AggregateRootEvent> retval)
         {
-              var model =
-                 viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(
+              var model = this.viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(
                      new QuestionnaireBrowseInputModel());
               foreach (var item in model.Items)
               {
-                  GetEventStreamById(retval, item.Id);
+                  this.GetEventStreamById(retval, item.Id);
               }
         }
+
+        /// <summary>
+        /// Responsible for load and added users from database
+        /// </summary>
+        /// <param name="retval">
+        /// The retval.
+        /// </param>
         protected void AddUsers(List<AggregateRootEvent> retval)
         {
-            var model =
-               viewRepository.Load<UserBrowseInputModel, UserBrowseView>(
-                   new UserBrowseInputModel());
+            var model = this.viewRepository.Load<UserBrowseInputModel, UserBrowseView>(new UserBrowseInputModel());
             foreach (var item in model.Items)
             {
-                GetEventStreamById(retval, item.Id);
+                this.GetEventStreamById(retval, item.Id);
             }
         }
+
+        /// <summary>
+        /// Responsible for upload and added files from database
+        /// </summary>
+        /// <param name="retval">
+        /// The retval.
+        /// </param>
         protected void AddFiles(List<AggregateRootEvent> retval)
         {
-            var model =
-               viewRepository.Load<FileBrowseInputModel, FileBrowseView>(
+            var model = this.viewRepository.Load<FileBrowseInputModel, FileBrowseView>(
                    new FileBrowseInputModel());
             foreach (var item in model.Items)
             {
-                GetEventStreamById(retval, Guid.Parse(item.FileName));
+                this.GetEventStreamById(retval, Guid.Parse(item.FileName));
             }
         }
+
+        /// <summary>
+        /// Responsible for reaching eventstream by id
+        /// </summary>
+        /// <param name="retval">
+        /// The retval.
+        /// </param>
+        /// <param name="aggregateRootId">
+        /// The aggregate root id.
+        /// </param>
         protected void GetEventStreamById(List<AggregateRootEvent> retval, Guid aggregateRootId)
         {
-            var events = myEventStore.ReadFrom(aggregateRootId,
-                                                     int.MinValue, int.MaxValue);
+            var events = this.myEventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);
             retval.AddRange(events.Select(e => new AggregateRootEvent(e)).ToList());
         }
+
+        #endregion
     }
 }

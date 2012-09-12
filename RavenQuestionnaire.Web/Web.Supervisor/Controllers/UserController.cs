@@ -1,25 +1,35 @@
-﻿using Ncqrs;
-using System;
-using System.Web;
-using System.Web.Mvc;
-using Web.Supervisor.Models;
-using RavenQuestionnaire.Core;
-using Ncqrs.Commanding.ServiceModel;
-using Questionnaire.Core.Web.Helpers;
-using RavenQuestionnaire.Core.Views.User;
-using RavenQuestionnaire.Core.Commands.User;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="UserController.cs" company="The World bank">
+//   2012
+// </copyright>
+// <summary>
+//  Define User controller
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Web.Supervisor.Controllers
 {
+    using System;
+    using System.Web;
+    using System.Web.Mvc;
+    using Ncqrs;
+    using Ncqrs.Commanding.ServiceModel;
+    using Questionnaire.Core.Web.Helpers;
+    using RavenQuestionnaire.Core;
+    using RavenQuestionnaire.Core.Commands.User;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
     using RavenQuestionnaire.Core.Views.Interviewer;
+    using RavenQuestionnaire.Core.Views.User;
+    using Web.Supervisor.Models;
 
     /// <summary>
-    /// User controller
+    /// User controller responsible for dispay users, lock/unlock users, counting statistics
     /// </summary>
     [Authorize]
     public class UserController : Controller
     {
+        #region Fields
+
         /// <summary>
         /// Global info object
         /// </summary>
@@ -29,6 +39,10 @@ namespace Web.Supervisor.Controllers
         /// View repository
         /// </summary>
         private readonly IViewRepository viewRepository;
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
@@ -44,6 +58,10 @@ namespace Web.Supervisor.Controllers
             this.viewRepository = viewRepository;
             this.globalInfo = globalInfo;
         }
+
+        #endregion
+
+        #region PublicActions
 
         /// <summary>
         /// Unlock user
@@ -72,8 +90,7 @@ namespace Web.Supervisor.Controllers
         {
             return this.SetUserLock(id, true);
         }
-
-
+        
         /// <summary>
         /// Display user's statistics
         /// </summary>
@@ -84,6 +101,7 @@ namespace Web.Supervisor.Controllers
         /// The input.
         /// </param>
         /// <returns>
+        /// /// Show details view if everything is ok
         /// </returns>
         public ActionResult Details(Guid id, InterviewerInputModel input)
         {
@@ -91,14 +109,14 @@ namespace Web.Supervisor.Controllers
                                  ? new InterviewerInputModel() { UserId = id }
                                  : new InterviewerInputModel()
                                      {
-                                         Order = input.Order,
+                                         Order = input.Order, 
                                          Orders = input.Orders,
-                                         PageSize = input.PageSize,
+                                         PageSize = input.PageSize, 
                                          Page = input.Page,
-                                         UserId = id,
+                                         UserId = id, 
                                          TemplateId = input.TemplateId
                                      };
-            InterviewerView model = this.viewRepository.Load<InterviewerInputModel, InterviewerView>(inputModel);
+            var model = this.viewRepository.Load<InterviewerInputModel, InterviewerView>(inputModel);
             return this.View(model);
         }
 
@@ -112,16 +130,17 @@ namespace Web.Supervisor.Controllers
         /// The input.
         /// </param>
         /// <returns>
+        /// Show statistics view if everything is ok
         /// </returns>
         public ActionResult Statistics(Guid id, InterviewerStatisticsInputModel input)
         {
-            var inputModel = input == null
-                                 ? new InterviewerStatisticsInputModel() { UserId = id }
-                                 : new InterviewerStatisticsInputModel()
+            var inputModel = input == null 
+                ? new InterviewerStatisticsInputModel() { UserId = id } 
+                : new InterviewerStatisticsInputModel()
                                  {
-                                     Order = input.Order,
+                                     Order = input.Order, 
                                      Orders = input.Orders,
-                                     PageSize = input.PageSize,
+                                     PageSize = input.PageSize, 
                                      Page = input.Page,
                                      UserId = id
                                  };
@@ -140,9 +159,9 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Index(InterviewersInputModel input)
         {
-            UserLight user = this.globalInfo.GetCurrentUser();
+            var user = this.globalInfo.GetCurrentUser();
             input.Supervisor = user;
-            InterviewersView model = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
+            var model = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
             return this.View(model);
         }
 
@@ -164,7 +183,7 @@ namespace Web.Supervisor.Controllers
                 Orders = data.SortOrder,
                 Supervisor = new UserLight(data.SupervisorId, data.SupervisorName)
             };
-            InterviewersView model = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
+            var model = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
             return this.PartialView("_Table", model);
         }
 
@@ -215,6 +234,10 @@ namespace Web.Supervisor.Controllers
             return this.PartialView("_UserStatistics", model);
         }
 
+        #endregion
+
+        #region Private
+
         /// <summary>
         /// Change user lock status
         /// </summary>
@@ -233,15 +256,13 @@ namespace Web.Supervisor.Controllers
         private ActionResult SetUserLock(string id, bool status)
         {
             Guid key;
-            if (!Guid.TryParse(id, out key))
-            {
+            if (!Guid.TryParse(id, out key)) 
                 throw new HttpException("404");
-            }
-
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new ChangeUserStatusCommand(key, status));
-
             return this.RedirectToAction("Index");
         }
+
+        #endregion
     }
 }
