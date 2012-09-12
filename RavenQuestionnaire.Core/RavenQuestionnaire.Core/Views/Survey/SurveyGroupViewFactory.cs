@@ -69,14 +69,13 @@ namespace RavenQuestionnaire.Core.Views.Survey
             if (count == 0)
                 return new SurveyGroupView(
                     input.Page, input.PageSize, title, 0, new CompleteQuestionnaireBrowseItem[0], input.Id);
-            SurveyStatus st = SurveyStatus.IsValidStatus(input.StatusName);
-            Guid st = Guid.Parse(input.Status);
-            IQueryable<CompleteQuestionnaireBrowseItem> items = (st == null)
+            
+            IQueryable<CompleteQuestionnaireBrowseItem> items = (string.IsNullOrEmpty(input.Status))
                                                                     ? this.documentItemSession.Query().Where(
                                                                         v => v.TemplateId == input.Id)
                                                                     : this.documentItemSession.Query().Where(
                                                                         v => v.TemplateId == input.Id).Where(
-                                                                            v => v.Status.PublicId == st);
+                                                                            v => v.Status.PublicId == Guid.Parse(input.Status));
             if (input.QuestionnaireId != Guid.Empty)
                 items = items.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
             if (input.Orders.Count > 0)

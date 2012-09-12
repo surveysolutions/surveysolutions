@@ -101,7 +101,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult Assigments(Guid id, SurveyGroupInputModel input, string status)
         {
             var inputModel = input == null
-                                 ? new SurveyGroupInputModel() { Id = id, StatusName = status }
+                                 ? new SurveyGroupInputModel() { Id = id, Status = status }
                                  : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders, status);
             var user = this.globalInfo.GetCurrentUser();
             var model = this.viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(inputModel);

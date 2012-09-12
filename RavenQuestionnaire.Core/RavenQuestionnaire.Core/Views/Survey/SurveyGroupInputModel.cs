@@ -79,7 +79,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         {
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
-            this.StatusName = status;
+            this.Status = status;
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="SurveyGroupInputModel"/> class.
@@ -102,7 +102,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Page = page;
             this.PageSize = pageSize;
             this.Orders = orders;
-            this.StatusName = status;
+            this.Status = status;
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// </summary>
         public Guid QuestionnaireId { get; set; }
 
-        public string StatusName { get; set; }
+        public string Status { get; set; }
 
         #endregion
     }

@@ -62,7 +62,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Headers = new Dictionary<Guid, string>();
             if (items != null)
             {
-                foreach (QuestionStatisticView question in
+                foreach (var question in
                     items.SelectMany(
                         completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions).Where(
                             question => !this.Headers.ContainsKey(question.PublicKey)))
