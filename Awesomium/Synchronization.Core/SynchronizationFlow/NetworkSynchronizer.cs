@@ -81,7 +81,12 @@ namespace Synchronization.Core.SynchronizationFlow
             return e == null ? null : new List<SynchronizationException>() { e };
         }
 
-        public override string BuildSuccessMessage(SyncType syncAction, SyncDirection direction)
+        protected override bool OnUpdateStatus()
+        {
+            return !string.IsNullOrEmpty(this._urlUtils.GetEnpointUrl());
+        }
+
+        public override string GetSuccessMessage(SyncType syncAction, SyncDirection direction)
         {
             return string.Format("Network {0} is successful with local center {1}", syncAction, this._urlUtils.GetEnpointUrl());
         }

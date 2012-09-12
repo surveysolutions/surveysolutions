@@ -225,7 +225,7 @@ namespace Browsing.Common.Containers
         {
             base.OnUpdateConfigDependencies();
 
-            this.SyncManager.UpdateSynchronizersList();
+            this.SyncManager.UpdateStatuses();
         }
 
         protected override void OnLoad(EventArgs e)

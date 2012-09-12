@@ -48,8 +48,7 @@ namespace Synchronization.Core
             BgnOfSync += (s, e) => progressObserver.SetBeginning(e.Status);
             EndOfSync += (s, e) => progressObserver.SetCompleted(e.Status);
 
-            UpdateSynchronizersList();
-            //AddSynchronizers();
+            AddSynchronizers();
         }
 
         protected IRequesProcessor RequestProcessor { get; private set; }
@@ -65,9 +64,13 @@ namespace Synchronization.Core
             try
             {
                 OnAddSynchronizers(this.synchronizerChain, this.settingsProvider);
+
                 Debug.Assert(this.synchronizerChain.Count > 0, "Have you missed adding synchronizers?");
+
                 foreach (var synchronizer in this.synchronizerChain)
                     synchronizer.SyncProgressChanged += this.SyncProgressChanged;
+
+                UpdateStatuses();
             }
             catch
             {
@@ -90,8 +93,11 @@ namespace Synchronization.Core
 
         private ISynchronizer ExecuteAction(Action<ISynchronizer> action, IList<Exception> errorList)
         {
-            foreach (var synchronizer in synchronizerChain)
+            foreach (var synchronizer in this.synchronizerChain)
             {
+                if (!synchronizer.IsActive)
+                    continue;
+
                 try
                 {
                     action(synchronizer);
@@ -170,14 +176,14 @@ namespace Synchronization.Core
 
         public void Stop()
         {
-            foreach (var synchronizer in synchronizerChain)
+            foreach (var synchronizer in this.synchronizerChain)
                 synchronizer.Stop();
         }
 
-        public void UpdateSynchronizersList()
+        public void UpdateStatuses()
         {
-            this.synchronizerChain.Clear();
-            AddSynchronizers();
+            foreach (var synchronizer in this.synchronizerChain)
+                synchronizer.UpdateStatus();
         }
 
         public IList<SynchronizationException> CheckSyncIssues(SyncType syncType, SyncDirection direction)
@@ -199,6 +205,9 @@ namespace Synchronization.Core
 
             foreach (var synchronizer in this.synchronizerChain)
             {
+                if (!synchronizer.IsActive)
+                    continue;
+
                 IList<SynchronizationException> sErrors = synchronizer.CheckSyncIssues(syncType, direction);
                 if (sErrors == null || sErrors.Count == 0)
                     continue;
@@ -235,7 +244,7 @@ namespace Synchronization.Core
             foreach (SynchronizationException synchronizationException in errorList)
                 result.AppendLine(synchronizationException.Message);
             if (succesSynchronizer != null)
-                result.AppendLine(succesSynchronizer.BuildSuccessMessage(action, direction));
+                result.AppendLine(succesSynchronizer.GetSuccessMessage(action, direction));
             else
                 throw new SynchronizationException(result.ToString());
 

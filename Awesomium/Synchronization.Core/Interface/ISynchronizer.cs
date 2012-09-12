@@ -14,7 +14,13 @@ namespace Synchronization.Core.Interface
 
         event EventHandler<SynchronizationEvent> SyncProgressChanged;
 
-        string BuildSuccessMessage(SyncType syncAction, SyncDirection direction);
+        /// <summary>
+        /// Formates a message about successfull completing the sync operation
+        /// </summary>
+        /// <param name="syncAction"></param>
+        /// <param name="direction"></param>
+        /// <returns></returns>
+        string GetSuccessMessage(SyncType syncAction, SyncDirection direction);
         
         /// <summary>
         /// Make list of current issues which may prevent synchronization
@@ -23,5 +29,15 @@ namespace Synchronization.Core.Interface
         /// <param name="direction"></param>
         /// <returns></returns>
         IList<SynchronizationException> CheckSyncIssues(SyncType syncAction, SyncDirection direction);
+
+        /// <summary>
+        /// Defines availabiltiy for the synchronizer
+        /// </summary>
+        bool IsActive { get; }
+
+        /// <summary>
+        /// Checks current environment and set/reset IsActive status
+        /// </summary>
+        void UpdateStatus();
     }
 }

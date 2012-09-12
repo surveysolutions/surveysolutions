@@ -221,7 +221,7 @@ namespace Synchronization.Core.SynchronizationFlow
             this.stopRequested.Set();
         }
 
-        public override string BuildSuccessMessage(SyncType syncAction, SyncDirection direction)
+        public override string GetSuccessMessage(SyncType syncAction, SyncDirection direction)
         {
             return string.Format("Usb {0} is successful with file {1}", syncAction, this.lastUsbArchiveName);
         }
@@ -237,6 +237,11 @@ namespace Synchronization.Core.SynchronizationFlow
             {
                 return new List<SynchronizationException>() { new UsbUnaccebleException(ex.Message) };
             }
+        }
+
+        protected override bool OnUpdateStatus()
+        {
+            return true;
         }
 
         #endregion
