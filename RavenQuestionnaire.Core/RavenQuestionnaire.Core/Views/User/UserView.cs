@@ -12,7 +12,6 @@ namespace RavenQuestionnaire.Core.Views.User
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
     using RavenQuestionnaire.Core.Entities.SubEntities;
 
     /// <summary>
@@ -44,7 +43,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        /// <param name="username">
+        /// <param name="userName">
         /// The username.
         /// </param>
         /// <param name="password">
@@ -68,19 +67,11 @@ namespace RavenQuestionnaire.Core.Views.User
         /// <param name="locationId">
         /// The location id.
         /// </param>
-        public UserView(
-            Guid publicKey,
-            string username, 
-            string password, 
-            string email, 
-            DateTime creationDate, 
-            IEnumerable<UserRoles> roles, 
-            bool isLocked, 
-            UserLight supervisor, 
-            Guid locationId)
+        public UserView(Guid publicKey, string userName, string password, string email, DateTime creationDate, 
+            IEnumerable<UserRoles> roles, bool isLocked, UserLight supervisor, Guid locationId)
         {
             this.PublicKey = publicKey;
-            this.UserName = username;
+            this.UserName = userName;
             this.Password = password;
             this.Email = email;
             this.CreationDate = creationDate;
@@ -126,16 +117,10 @@ namespace RavenQuestionnaire.Core.Views.User
         {
             get
             {
-                if (this.primaryRole.HasValue)
-                {
+                if (this.primaryRole.HasValue) 
                     return this.primaryRole.Value;
-                }
-
-                if (this.Roles != null)
-                {
+                if (this.Roles != null) 
                     return this.Roles.FirstOrDefault();
-                }
-
                 return UserRoles.User;
             }
 

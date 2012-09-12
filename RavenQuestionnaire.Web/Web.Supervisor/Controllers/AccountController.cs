@@ -1,31 +1,86 @@
-﻿using System.Web.Mvc;
-using System.Web.Security;
-using Web.Supervisor.Models;
-using Questionnaire.Core.Web.Helpers;
-using Questionnaire.Core.Web.Security;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AccountController.cs" company="World bank">
+//   2012
+// </copyright>
+// <summary>
+//   Defines the AccountController type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Web.Supervisor.Controllers
 {
+    using System.Web.Mvc;
+    using System.Web.Security;
+    using Questionnaire.Core.Web.Helpers;
+    using Questionnaire.Core.Web.Security;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Utility;
+    using Web.Supervisor.Models;
+
+    /// <summary>
+    /// AccountController responsible for users authentication
+    /// </summary>
     public class AccountController : Controller
     {
+        #region Fields
+
+        /// <summary>
+        /// Authentication object
+        /// </summary>
         private readonly IFormsAuthentication authentication;
+
+        /// <summary>
+        /// Global info object
+        /// </summary>
         private readonly IGlobalInfoProvider globalProvider;
 
-        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider _globalProvider)
+        #endregion
+
+        #region Constructror
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccountController"/> class.
+        /// </summary>
+        /// <param name="auth">
+        /// The auth.
+        /// </param>
+        /// <param name="globalProvider">
+        /// The global provider.
+        /// </param>
+        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider)
         {
-            authentication = auth;
-            globalProvider = _globalProvider;
+            this.authentication = auth;
+            this.globalProvider = globalProvider;
         }
 
+        #endregion
+
+        #region Actions
+
+        /// <summary>
+        /// Show LogOn Page
+        /// </summary>
+        /// <returns>
+        /// LogOn Page
+        /// </returns>
         [HttpGet]
         public ActionResult LogOn()
         {
-            return View();
+            return this.View();
         }
 
+        /// <summary>
+        /// Redirect on needed page after authentication if everything is Ok
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <param name="returnUrl">
+        /// The return url.
+        /// </param>
+        /// <returns>
+        /// Redirect on page after authentication
+        /// </returns>
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
@@ -33,31 +88,43 @@ namespace Web.Supervisor.Controllers
             {
                 if (Membership.ValidateUser(model.UserName, SimpleHash.ComputeHash(model.Password)))
                 {
-                    if (Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString()) ||
-                        Roles.IsUserInRole(model.UserName, UserRoles.Administrator.ToString()))
+                    if (Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString())
+                        || Roles.IsUserInRole(model.UserName, UserRoles.Administrator.ToString()))
                     {
-                        authentication.SignIn(model.UserName, false);
-                        return Redirect("~/");
+                        this.authentication.SignIn(model.UserName, false);
+                        return this.Redirect("~/");
                     }
-                    ModelState.AddModelError("", "You have no access to this site. Contact your administrator.");
+                    ModelState.AddModelError(string.Empty, "You have no access to this site. Contact your administrator.");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
-                }
+                else 
+                    ModelState.AddModelError(string.Empty, "The user name or password provided is incorrect.");
             }
-            return View(model);
+            return this.View(model);
         }
 
+        /// <summary>
+        /// Check if loggedIn
+        /// </summary>
+        /// <returns>
+        /// result user
+        /// </returns>
         public bool IsLoggedIn()
         {
-            return globalProvider.GetCurrentUser() != null;
+            return this.globalProvider.GetCurrentUser() != null;
         }
 
+        /// <summary>
+        /// Logout user
+        /// </summary>
+        /// <returns>
+        /// Return Login page
+        /// </returns>
         public ActionResult LogOff()
         {
-            authentication.SignOut();
-            return Redirect("~/");
+            this.authentication.SignOut();
+            return this.Redirect("~/");
         }
+
+        #endregion
     }
 }

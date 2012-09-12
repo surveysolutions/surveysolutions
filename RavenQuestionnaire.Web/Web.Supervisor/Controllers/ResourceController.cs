@@ -1,32 +1,83 @@
-﻿using System;
-using System.Web.Mvc;
-using NLog;
-using RavenQuestionnaire.Core.Services;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ResourceController.cs" company="World bank">
+//   2012
+// </copyright>
+// <summary>
+//   Defines the ResourceController type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-namespace Web.CAPI.Controllers
+namespace Web.Supervisor.Controllers
 {
+    using System.Web.Mvc;
+    using NLog;
+    using RavenQuestionnaire.Core.Services;
+
+    /// <summary>
+    /// Responsible for load images
+    /// </summary>
     public class ResourceController : Controller
     {
+        #region FieldsConstants
+
+        /// <summary>
+        /// documentation log
+        /// </summary>
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private IFileStorageService fileStorageService;
 
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceController"/> class.
+        /// </summary>
+        /// <param name="fileStorageService">
+        /// The file storage service.
+        /// </param>
         public ResourceController(IFileStorageService fileStorageService)
         {
             this.fileStorageService = fileStorageService;
         }
 
+        #endregion
+
+        #region Actions
+
+        /// <summary>
+        /// Upload and return file
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// Return file contains
+        /// </returns>
         [HttpGet]
         public ActionResult Images(string id)
         {
-            var fileBytes = fileStorageService.RetrieveFile(id).Content;
-            return File(fileBytes, "image/png");
+            var fileBytes = this.fileStorageService.RetrieveFile(id).Content;
+            return this.File(fileBytes, "image/png");
         }
+
+        /// <summary>
+        /// Upload and return file
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// Return file contains
+        /// </returns>
         [HttpGet]
         public ActionResult Thumb(string id)
         {
-            var fileBytes = fileStorageService.RetrieveThumb(id).Content;
-            return File(fileBytes, "image/png");
+            var fileBytes = this.fileStorageService.RetrieveThumb(id).Content;
+            return this.File(fileBytes, "image/png");
         }
+
+        #endregion
     }
 }

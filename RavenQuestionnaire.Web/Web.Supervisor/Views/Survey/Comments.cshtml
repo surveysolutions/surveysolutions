@@ -1,0 +1,22 @@
+﻿@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
+@model CompleteQuestionnaireMobileView
+        
+<br/>   
+<div class="row-fluid">
+    <div class="span3">
+        <p>
+            <a href="@Url.Action("Details", new { id = @Model.PublicKey, template = ViewBag.TemplateId })">Back to questionnaire</a>        
+        </p>
+    </div>
+</div>
+
+<h2> Comments</h2>
+ 
+@if (!string.IsNullOrEmpty(Model.Status.ChangeComment))
+{
+    @Model.Status.ChangeComment    
+}
+else
+{
+    <em>No comments here...</em>
+}

@@ -12,7 +12,6 @@ namespace Web.Supervisor.Controllers
     using System;
     using System.Web;
     using System.Web.Mvc;
-
     using Questionnaire.Core.Web.Export;
     using Questionnaire.Core.Web.Threading;
 
@@ -50,8 +49,8 @@ namespace Web.Supervisor.Controllers
         /// <summary>
         /// The export async.
         /// </summary>
-        /// <param name="clientGuid">
-        /// The client guid.
+        /// <param name="syncKey">
+        /// The synchronization key.
         /// </param>
         public void ExportAsync(Guid syncKey)
         {
@@ -108,11 +107,7 @@ namespace Web.Supervisor.Controllers
         {
             if (myfile == null && Request.Files.Count > 0)
                 myfile = Request.Files[0];
-            if (myfile == null || myfile.ContentLength == 0)
-            {
-                return;
-            }
-
+            if (myfile == null || myfile.ContentLength == 0) return;
             this.AsyncManager.OutstandingOperations.Increment();
             AsyncQuestionnaireUpdater.Update(
                 () =>

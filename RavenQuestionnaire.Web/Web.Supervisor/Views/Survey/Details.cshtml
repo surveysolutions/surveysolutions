@@ -47,7 +47,17 @@
     };
  </script>
  <h1>@Model.Title</h1>
- <p><a href="@Url.Action("Assigments", new { id = ViewBag.TemplateId })">Back to list</a></p>
+ <div class="row-fluid">
+    <div class="span3">
+        <p>
+            <a href="@Url.Action("Assigments", new { id = ViewBag.TemplateId })">Back to list</a>
+            @if (Model.Status.PublicId == SurveyStatus.Complete.PublicId || Model.Status.PublicId == SurveyStatus.Error.PublicId)
+            {
+                <a href="@Url.Action("ShowComments", new { id = Model.PublicKey, template = ViewBag.TemplateId })" style="float: right;">Read comments</a>
+            }
+        </p>
+    </div>
+</div> 
 <div class="row-fluid">
     <div class="span3">
         <div data-role="panel" data-id="menu">

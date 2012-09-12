@@ -10,7 +10,6 @@
 namespace RavenQuestionnaire.Core.Views.User
 {
     using System;
-
     using RavenQuestionnaire.Core.Documents;
     using RavenQuestionnaire.Core.Entities.SubEntities;
 
@@ -66,15 +65,11 @@ namespace RavenQuestionnaire.Core.Views.User
             {
                 if (this.LocationId != Guid.Empty)
                 {
-                    Guid locatianOriginalId = this.LocationId;
+                    var locatianOriginalId = this.LocationId;
                     return e => !e.IsDeleted && e.Location.Id == locatianOriginalId;
                 }
-
-                if (!this.Role.HasValue)
-                {
+                if (!this.Role.HasValue) 
                     return e => !e.IsDeleted;
-                }
-
                 return e => !e.IsDeleted && e.Roles.Contains(this.Role.Value);
             }
         }

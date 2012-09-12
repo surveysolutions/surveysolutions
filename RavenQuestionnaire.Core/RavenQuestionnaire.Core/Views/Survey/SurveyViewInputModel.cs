@@ -10,7 +10,6 @@
 namespace RavenQuestionnaire.Core.Views.Survey
 {
     using System.Collections.Generic;
-
     using RavenQuestionnaire.Core.Entities;
     using RavenQuestionnaire.Core.Utility;
 
@@ -35,11 +34,6 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// The _page size.
         /// </summary>
         private int _pageSize = 20;
-
-        /// <summary>
-        /// The _status size.
-        /// </summary>
-        private string _status = null;
 
         #endregion
 
@@ -112,21 +106,8 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <summary>
         /// Gets or sets statistic filtres.
         /// </summary>
-        public string Status
-        {
-            get
-            {
-                return this._status;
-            }
-
-            set
-            {
-                this._status = value;
-            }
-        }
-
-
-
+        public string Status { get; set; }
+        
         #endregion
     }
 }

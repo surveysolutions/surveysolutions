@@ -432,6 +432,7 @@
     </None>
     <Content Include="Views\User\Statistics.cshtml" />
     <Content Include="Views\User\_UserStatistics.cshtml" />
+    <Content Include="Views\Survey\Comments.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

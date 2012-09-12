@@ -1,10 +1,22 @@
-﻿using System;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="PagingExtensions.cs" company="World bank">
+//   2012
+// </copyright>
+// <summary>
+//   Defines the PagingExtensions type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Web.Supervisor.Models
 {
+    using System;
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
+    /// <summary>
+    /// Responsible for added new properties for QPager
+    /// </summary>
     public static class PagingExtensions
     {
         public static HtmlString QPager(this HtmlHelper htmlHelper, int pageSize, int currentPage, int totalItemCount)

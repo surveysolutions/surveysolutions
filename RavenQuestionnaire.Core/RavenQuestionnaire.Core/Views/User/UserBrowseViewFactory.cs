@@ -11,7 +11,6 @@ namespace RavenQuestionnaire.Core.Views.User
 {
     using System.Collections.Generic;
     using System.Linq;
-
     using RavenQuestionnaire.Core.Denormalizers;
     using RavenQuestionnaire.Core.Documents;
 
@@ -20,12 +19,6 @@ namespace RavenQuestionnaire.Core.Views.User
     /// </summary>
     public class UserBrowseViewFactory : IViewFactory<UserBrowseInputModel, UserBrowseView>
     {
-        /* private IDocumentSession documentSession;
-        public UserBrowseViewFactory(IDocumentSession documentSession)
-        {
-            this.documentSession = documentSession;
-        }
-*/
         #region Fields
 
         /// <summary>
@@ -64,10 +57,8 @@ namespace RavenQuestionnaire.Core.Views.User
         public UserBrowseView Load(UserBrowseInputModel input)
         {
             int count = this.documentItemSession.Query().Count();
-            if (count == 0)
-            {
+            if (count == 0) 
                 return new UserBrowseView(input.Page, input.PageSize, count, new UserBrowseItem[0]);
-            }
 
             // Perform the paged query
             IEnumerable<UserDocument> query =
@@ -75,13 +66,8 @@ namespace RavenQuestionnaire.Core.Views.User
                     input.PageSize);
 
             // And enact this query
-            UserBrowseItem[] items =
-                query.Select(
-                    x =>
-                    new UserBrowseItem(
-                        x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLocked, x.Supervisor, x.Location.Location)).
-                    ToArray();
-
+            UserBrowseItem[] items = query.Select(x => new UserBrowseItem(x.PublicKey, x.UserName, x.Email, 
+                x.CreationDate, x.IsLocked, x.Supervisor, x.Location.Location)).ToArray();
             return new UserBrowseView(input.Page, input.PageSize, count, items.ToArray());
         }
 
