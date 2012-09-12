@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Ncqrs.Restoring.EventStapshoot;
+using RavenQuestionnaire.Core.Documents;
+
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     using System.Linq;
@@ -23,8 +26,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
     /// The cq group item denormalizer.
     /// </summary>
     public class CQGroupItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
-                                           IEventHandler<NewQuestionnaireCreated>, 
-                                           IEventHandler<QuestionnaireTemplateLoaded>, 
+                                           IEventHandler<NewQuestionnaireCreated>,
+                                           IEventHandler<SnapshootLoaded>, 
                                            IEventHandler<CompleteQuestionnaireDeleted>
     {
         #region Fields
@@ -87,11 +90,14 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// <param name="evnt">
         /// The evnt.
         /// </param>
-        public void Handle(IPublishedEvent<QuestionnaireTemplateLoaded> evnt)
+        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
         {
+            var document = evnt.Payload.Template.Payload as QuestionnaireDocument;
+            if (document == null)
+                return;
             var questionnaire = new CQGroupItem(
-                0, 100, 0, evnt.Payload.Template.Title, evnt.Payload.Template.PublicKey);
-            this.documentGroupSession.Store(questionnaire, evnt.Payload.Template.PublicKey);
+                0, 100, 0, document.Title, document.PublicKey);
+            this.documentGroupSession.Store(questionnaire, document.PublicKey);
         }
 
         /// <summary>

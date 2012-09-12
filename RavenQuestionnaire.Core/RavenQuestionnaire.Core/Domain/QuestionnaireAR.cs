@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Ncqrs.Restoring.EventStapshoot;
 using RavenQuestionnaire.Core.Entities.Extensions;
 
 namespace RavenQuestionnaire.Core.Domain
@@ -29,7 +30,7 @@ namespace RavenQuestionnaire.Core.Domain
     /// <summary>
     /// Questionnaire Aggregate Root.
     /// </summary>
-    public class QuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
+    public class QuestionnaireAR : SnapshootableAggregateRoot, ISnapshotable<QuestionnaireDocument>
     {
         #region Fields
 
@@ -47,18 +48,6 @@ namespace RavenQuestionnaire.Core.Domain
         /// </summary>
         public QuestionnaireAR()
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
-        /// </summary>
-        /// <param name="template">
-        /// The template.
-        /// </param>
-        public QuestionnaireAR(QuestionnaireDocument template)
-            : base(template.PublicKey)
-        {
-            this.ApplyEvent(new QuestionnaireTemplateLoaded { Template = template });
         }
 
         /// <summary>
@@ -672,16 +661,6 @@ namespace RavenQuestionnaire.Core.Domain
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
         }
 
-        /// <summary>
-        /// The on questionnaire template loaded.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        protected void OnQuestionnaireTemplateLoaded(QuestionnaireTemplateLoaded e)
-        {
-            this.innerDocument = e.Template;
-        }
 
         /// <summary>
         /// The update answer list.
