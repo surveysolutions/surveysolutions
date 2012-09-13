@@ -181,12 +181,15 @@ Awesomium/CAPI/bin/Debug/*
 Awesomium/Common/bin/*
 Awesomium/CAPI/bin/*
 Awesomium/Common/obj/*
+Awesomium/Common/obj/*
 Installation/CapiInstallProj/Setup.suo
 Awesomium/Awesomium.NET Browser.1.2.dotCover
 Awesomium/Awesomium.NET Browser.6.0.ReSharper.user
 Awesomium/Supervisor/_ReSharper*
 Awesomium/CommonForms/obj/*
 Awesomium/CommonForms/bin/*
-Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB.Tests/bin/Debug/*
-Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB/bin/Debug/*.*
-Externals/Framework/src/*
+Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB.Tests/bin/*
+Externals/Framework/src/Ncqrs/bin/*
+Externals/Framework/src/Ncqrs.Spec/bin/*
+Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB/bin/*
+

@@ -90,15 +90,18 @@ namespace Web.Supervisor.Synchronization
         /// <param name="retval">
         /// The retval.
         /// </param>
-        protected void AddCompleteQuestionnairesInitState(List<AggregateRootEvent> retval)
-        {
+         protected void AddCompleteQuestionnairesInitState(List<AggregateRootEvent> retval)
+         {
             var model = this.viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(
                      new CompleteQuestionnaireBrowseInputModel());
+                     
             foreach (var item in model.Items.Where(item => item.Status.Name == SurveyStatus.Initial.Name))
-            {
-                this.GetEventStreamById(retval, item.CompleteQuestionnaireId);
-            }
-        }
+             {
+                 if (!SurveyStatus.IsStatusAllowDownSupervisorSync(item.Status))
+                     continue;
+                 GetEventStreamById(retval, item.CompleteQuestionnaireId);
+             }
+         }
 
         /// <summary>
         /// Responsible for added questionnaire templates
@@ -108,11 +111,16 @@ namespace Web.Supervisor.Synchronization
         /// </param>
         protected void AddQuestionnairesTemplates(List<AggregateRootEvent> retval)
         {
-              var model = this.viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(
-                     new QuestionnaireBrowseInputModel());
-              foreach (var item in model.Items)
-              {
-                  this.GetEventStreamById(retval, item.Id);
+             var model =
+                 viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(
+                     new CompleteQuestionnaireBrowseInputModel());
+
+             foreach (var item in model.Items.Where(item => item.Status.Name == SurveyStatus.Initial.Name))
+             {
+                 if (!SurveyStatus.IsStatusAllowDownSupervisorSync(item.Status))
+                     continue;
+                     
+                 GetEventStreamById(retval, item.CompleteQuestionnaireId);
               }
         }
 
