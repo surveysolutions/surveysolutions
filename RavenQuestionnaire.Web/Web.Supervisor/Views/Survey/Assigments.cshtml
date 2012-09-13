@@ -30,10 +30,10 @@
         $('#row-' + json.cqId).removeClass("showForm");
 
         if (json.userId != null && json.userName != null) {
-            $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Details/' + json.userId + '">' + json.userName + '</a>');
+            $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Statistics/' + json.userId + '">' + json.userName + '</a>');
         }
         else {
-            $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Details/"></a>');
+            $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Statistics/"></a>');
         }
     }
 </script>

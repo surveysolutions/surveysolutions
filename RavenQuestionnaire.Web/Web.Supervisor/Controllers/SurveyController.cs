@@ -92,17 +92,20 @@ namespace Web.Supervisor.Controllers
         /// <param name="input">
         /// The input.
         /// </param>
-        /// <param name="status">
+        /// <param name="statusId">
         /// The status.
+        /// </param>
+        /// <param name="isNotAssigned">
+        /// The isNotAssigned.
         /// </param>
         /// <returns>
         /// Return Assigments page
         /// </returns>
-        public ActionResult Assigments(Guid id, SurveyGroupInputModel input, string status)
+        public ActionResult Assigments(Guid id, SurveyGroupInputModel input, string statusId, bool? isNotAssigned)
         {
             var inputModel = input == null
-                                 ? new SurveyGroupInputModel() { Id = id, Status = status }
-                                 : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders, status);
+                                 ? new SurveyGroupInputModel() { Id = id, StatusId = statusId }
+                                 : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders, statusId, isNotAssigned ?? false);
             var user = this.globalInfo.GetCurrentUser();
             var model = this.viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(inputModel);
             var users = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });

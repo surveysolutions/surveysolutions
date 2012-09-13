@@ -72,37 +72,14 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
-        /// /// <param name="status">
+        /// /// <param name="statusId">
         /// The statistic filter.
         /// </param>
-        public SurveyGroupInputModel(Guid id, Guid questionnaireId, string status)
+        public SurveyGroupInputModel(Guid id, Guid questionnaireId, string statusId)
         {
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
-            this.Status = status;
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyGroupInputModel"/> class.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="pageSize">
-        /// The page size.
-        /// </param>
-        /// <param name="orders">
-        /// The orders.
-        /// </param>
-        public SurveyGroupInputModel(Guid id, int page, int pageSize, List<OrderRequestItem> orders, string status)
-        {
-            this.Id = id;
-            this.Page = page;
-            this.PageSize = pageSize;
-            this.Orders = orders;
-            this.Status = status;
+            this.StatusId = statusId;
         }
 
         /// <summary>
@@ -120,8 +97,36 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="orders">
         /// The orders.
         /// </param>
-        /// <param name="status">
-        /// The statistic filter
+        /// /// <param name="statusId">
+        /// The statusId.
+        /// </param>
+        /// <param name="isNotAssigned">
+        /// The isNotAssigned.
+        /// </param>
+        public SurveyGroupInputModel(Guid id, int page, int pageSize, List<OrderRequestItem> orders, string statusId, bool isNotAssigned)
+        {
+            this.Id = id;
+            this.Page = page;
+            this.PageSize = pageSize;
+            this.Orders = orders;
+            this.StatusId = statusId;
+            this.IsNotAssigned = isNotAssigned;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyGroupInputModel"/> class.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="pageSize">
+        /// The page size.
+        /// </param>
+        /// <param name="orders">
+        /// The orders.
         /// </param>
         public SurveyGroupInputModel(Guid id, int page, int pageSize, List<OrderRequestItem> orders)
         {
@@ -219,7 +224,15 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// </summary>
         public Guid QuestionnaireId { get; set; }
 
-        public string Status { get; set; }
+        /// <summary>
+        /// Gets or sets StatusId.
+        /// </summary>
+        public string StatusId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether IsNotAssigned.
+        /// </summary>
+        public bool IsNotAssigned { get; set; }
 
         #endregion
     }

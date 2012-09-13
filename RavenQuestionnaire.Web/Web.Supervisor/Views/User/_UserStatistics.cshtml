@@ -3,8 +3,8 @@
 @foreach (var item in Model.Items)
 {
     <tr>
-        <td>
-            <a href="@Url.Action("Details","User", new {id = Model.Id, templateId = item.TemplateId})">@item.Title</a>
+        <td>        
+            <a href="@Url.Action("Assigments","Survey", new {id = item.TemplateId})">@item.Title</a>
         </td>
         @foreach (var header in Model.Headers)
         {

@@ -36,12 +36,11 @@
                 <div class="container-fluid">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
                                                                                                      class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                    </a><a href="@Url.Action("Index", "Dashboard")" class="brand">Home</a>
+                    </a><a href="@Url.Action("Index", "Survey")" class="brand">Home</a>
                     <div class="nav-collapse ">
                         <ul id="menu" class="nav">
                             <li>@Html.ActionLink("Interviewers", "Index", "User")</li>
-                            <li>@Html.ActionLink("Survey", "Index", "Survey")</li>
-                        <li>@Html.ActionLink("Take new", "Questionnaires", "Dashboard")</li>
+                            <li>@Html.ActionLink("Take new", "Questionnaires", "Dashboard")</li>
                         </ul>
                         @Html.Partial("_LogOnPartial")
                     </div>

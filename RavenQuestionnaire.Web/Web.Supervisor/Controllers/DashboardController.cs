@@ -17,7 +17,6 @@ namespace Web.Supervisor.Controllers
     using RavenQuestionnaire.Core;
     using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
     using RavenQuestionnaire.Core.Views.Questionnaire;
-    using RavenQuestionnaire.Core.Views.StatusReport;
 
     /// <summary>
     /// Show Statistics
@@ -52,50 +51,20 @@ namespace Web.Supervisor.Controllers
         #region Actions
 
         /// <summary>
-        /// Show statistic on Index Page
-        /// </summary>
-        /// <returns>
-        /// Return Index View
-        /// </returns>
-        public ActionResult Index()
-        {
-            var model = this.viewRepository.Load<StatusReportViewInputModel, StatusReportView>(new StatusReportViewInputModel());
-            return this.View(model);
-        }
-
-        /// <summary>
-        /// Display statistic on page
-        /// </summary>
-        /// <param name="questionnaireId">
-        /// The questionnaire id.
-        /// </param>
-        /// <param name="statusId">
-        /// The status id.
-        /// </param>
-        /// <returns>
-        /// Return Status View
-        /// </returns>
-        public ActionResult Status(Guid questionnaireId, Guid statusId)
-        {
-            var model = this.viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(new CQStatusReportViewInputModel(questionnaireId, statusId));
-            return this.View(model);
-        }
-
-        /// <summary>
-        /// Display all questionnaire template list
+        /// Show all template for questionnaire
         /// </summary>
         /// <param name="input">
         /// The input.
         /// </param>
         /// <returns>
-        /// Return page with all questionnaire templates
+        /// Return page with template questionnaire
         /// </returns>
         public ActionResult Questionnaires(QuestionnaireBrowseInputModel input)
         {
-            var model = this.viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
-            return this.View(model);
+             var model = this.viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
+             return this.View(model);
         }
-
+  
         /// <summary>
         /// Dispay page for creation new questionnaire
         /// </summary>
@@ -116,7 +85,7 @@ namespace Web.Supervisor.Controllers
             var newQuestionnairePublicKey = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
-            return RedirectToAction("Assign", "Survey", new { Id = newQuestionnairePublicKey, Template = id });
+            return this.RedirectToAction("Assign", "Survey", new { Id = newQuestionnairePublicKey, Template = id });
         }
 
         #endregion

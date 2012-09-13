@@ -303,12 +303,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Dashboard\Index.cshtml">
-      <SubType>
-      </SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Dashboard\Status.cshtml" />
   </ItemGroup>
   <ItemGroup>

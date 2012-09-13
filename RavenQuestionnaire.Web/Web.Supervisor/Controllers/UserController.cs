@@ -91,34 +91,6 @@ namespace Web.Supervisor.Controllers
             return this.SetUserLock(id, true);
         }
         
-        /// <summary>
-        /// Display user's statistics
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// /// Show details view if everything is ok
-        /// </returns>
-        public ActionResult Details(Guid id, InterviewerInputModel input)
-        {
-            var inputModel = input == null
-                                 ? new InterviewerInputModel() { UserId = id }
-                                 : new InterviewerInputModel()
-                                     {
-                                         Order = input.Order, 
-                                         Orders = input.Orders,
-                                         PageSize = input.PageSize, 
-                                         Page = input.Page,
-                                         UserId = id, 
-                                         TemplateId = input.TemplateId
-                                     };
-            var model = this.viewRepository.Load<InterviewerInputModel, InterviewerView>(inputModel);
-            return this.View(model);
-        }
 
         /// <summary>
         /// Display user's statistics grouped by surveys and statuses
