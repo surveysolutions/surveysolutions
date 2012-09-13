@@ -7,7 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 using RavenQuestionnaire.Core.Entities.SubEntities;
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 {
     using System;

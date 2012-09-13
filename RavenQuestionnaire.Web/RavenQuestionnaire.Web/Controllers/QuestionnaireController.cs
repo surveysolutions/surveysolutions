@@ -8,8 +8,8 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Questionnaire;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+using Main.Core.Commands.Questionnaire;
+using Main.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Export;
 using RavenQuestionnaire.Core.Export.csv;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
@@ -99,8 +99,6 @@ namespace RavenQuestionnaire.Web.Controllers
                     //maybe better move loading defaults to the handler?
                    
                     Guid key = Guid.NewGuid();
-
-                   
                     //new fw
                     
                     commandService.Execute(new CreateQuestionnaireCommand(key, model.Title));

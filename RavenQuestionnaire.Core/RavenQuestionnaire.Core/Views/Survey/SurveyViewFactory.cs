@@ -13,6 +13,9 @@ namespace RavenQuestionnaire.Core.Views.Survey
     using Main.Core.Entities;
     using Main.Core.Utility;
 
+    using Main.Core.Entities;
+    using Main.Core.Utility;
+
     using RavenQuestionnaire.Core.Denormalizers;
     
     /// <summary>

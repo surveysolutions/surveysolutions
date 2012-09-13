@@ -1,37 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Newtonsoft.Json;
-using RavenQuestionnaire.Core.Events;
-using SynchronizationMessages.Synchronization;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImportSynchronizationMessage.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The import synchronization message.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace SynchronizationMessages.CompleteQuestionnaire
 {
+    using System.IO;
+
+    using Main.Core.Events;
+
+    using Newtonsoft.Json;
+
+    using SynchronizationMessages.Synchronization;
+
+    /// <summary>
+    /// The import synchronization message.
+    /// </summary>
     public class ImportSynchronizationMessage : ICustomSerializable
     {
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the event stream.
+        /// </summary>
         public AggregateRootEvent[] EventStream { get; set; }
 
-        #region Implementation of ICustomSerializable
+        #endregion
 
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The initialize from.
+        /// </summary>
+        /// <param name="stream">
+        /// The stream.
+        /// </param>
+        public void InitializeFrom(Stream stream)
+        {
+            var settings = new JsonSerializerSettings();
+            settings.TypeNameHandling = TypeNameHandling.Objects;
+            string commandString = FormatHelper.ReadString(stream);
+            var command = JsonConvert.DeserializeObject<AggregateRootEvent[]>(commandString, settings);
+
+            this.EventStream = command;
+        }
+
+        /// <summary>
+        /// The write to.
+        /// </summary>
+        /// <param name="stream">
+        /// The stream.
+        /// </param>
         public void WriteTo(Stream stream)
         {
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
 
-            var command = JsonConvert.SerializeObject(EventStream, Formatting.Indented, settings);
+            string command = JsonConvert.SerializeObject(this.EventStream, Formatting.Indented, settings);
             FormatHelper.WriteString(stream, command);
-        }
-
-        public void InitializeFrom(Stream stream)
-        {
-            var settings = new JsonSerializerSettings();
-            settings.TypeNameHandling = TypeNameHandling.Objects;
-            var commandString = FormatHelper.ReadString(stream);
-            var command = JsonConvert.DeserializeObject<AggregateRootEvent[]>(commandString, settings);
-
-            this.EventStream = command;
         }
 
         #endregion

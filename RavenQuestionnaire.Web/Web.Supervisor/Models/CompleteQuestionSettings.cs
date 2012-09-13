@@ -16,10 +16,9 @@ namespace Web.Supervisor.Models
     /// </summary>
     public class CompleteQuestionSettings
     {
-        /// <summary>
+        public Guid QuestionnaireId { get; set; }
         /// Gets or sets QuestionnaireId.
         /// </summary>
-        public string QuestionnaireId { get; set; }
 
         /// <summary>
         /// Gets or sets ParentGroupPublicKey.

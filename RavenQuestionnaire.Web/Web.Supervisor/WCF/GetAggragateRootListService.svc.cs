@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Events;
+using Main.Core.Documents;
+using Main.Core.Events;
 using SynchronizationMessages.CompleteQuestionnaire;
 
 namespace Web.Supervisor.WCF

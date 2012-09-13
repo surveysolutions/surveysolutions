@@ -15,7 +15,7 @@ namespace Web.Supervisor.Controllers
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
     using RavenQuestionnaire.Core;
-    using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
+using Main.Core.Commands.Questionnaire.Completed;
     using RavenQuestionnaire.Core.Views.Questionnaire;
 
     /// <summary>

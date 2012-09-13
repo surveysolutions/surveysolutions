@@ -6,7 +6,7 @@ using Ninject;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.User;
 
 namespace RavenQuestionnaire.Web.Tests.Membership

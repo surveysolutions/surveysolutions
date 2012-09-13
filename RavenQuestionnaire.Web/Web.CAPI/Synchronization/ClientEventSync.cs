@@ -4,12 +4,14 @@ using System.Linq;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Events;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Events;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
 namespace Web.CAPI.Synchronization
 {
+    using Main.Core.Events;
+
     public class ClientEventSync : AbstractEventSync
     {
         private readonly IViewRepository viewRepository;

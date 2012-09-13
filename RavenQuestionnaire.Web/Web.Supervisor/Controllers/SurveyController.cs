@@ -16,10 +16,11 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
     using Questionnaire.Core.Web.Helpers;
     using RavenQuestionnaire.Core;
-    using RavenQuestionnaire.Core.Commands.Questionnaire.Completed;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+   
+using Main.Core.Entities.SubEntities;
     using RavenQuestionnaire.Core.Views.Assign;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using Main.Core.Commands.Questionnaire.Completed;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
     using RavenQuestionnaire.Core.Views.Question;
     using RavenQuestionnaire.Core.Views.Statistics;
@@ -30,6 +31,12 @@ namespace Web.Supervisor.Controllers
     /// <summary>
     /// Responsible for display surveys and statistic info about surveys
     /// </summary>
+    using System.Collections.Generic;
+    using Main.Core.Commands.Questionnaire.Completed;
+    using Main.Core.Entities.SubEntities;
+
+    using RavenQuestionnaire.Core.Views.Interviewer;
+
     [Authorize]
     public class SurveyController : Controller
     {
@@ -293,10 +300,42 @@ namespace Web.Supervisor.Controllers
         public JsonResult SaveAnswer(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
         {
             var question = questions[0];
+
+            List<Guid> answers = new List<Guid>();
+            string completeAnswerValue = null;
+
             try
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new SetAnswerCommand(Guid.Parse(settings[0].QuestionnaireId), question, settings[0].PropogationPublicKey));
+
+                if (question.QuestionType == QuestionType.DropDownList ||
+                question.QuestionType == QuestionType.SingleOption ||
+                question.QuestionType == QuestionType.YesNo ||
+                question.QuestionType == QuestionType.MultyOption)
+                {
+                    if (question.Answers != null && question.Answers.Length > 0)
+                    {
+                        for (int i = 0; i < question.Answers.Length; i++)
+                        {
+                            if (question.Answers[i].Selected)
+                            {
+                                answers.Add(question.Answers[i].PublicKey);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    completeAnswerValue = question.Answers[0].AnswerValue;
+                }
+
+                commandService.Execute(
+                    new SetAnswerCommand(
+                        settings[0].QuestionnaireId,
+                        question.PublicKey,
+                        answers,
+                        completeAnswerValue,
+                        settings[0].PropogationPublicKey));
             }
             catch (Exception e)
             {

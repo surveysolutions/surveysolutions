@@ -6,9 +6,9 @@ using System.Web.Mvc;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.User;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Utility;
+using Main.Core.Commands.User;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
 using RavenQuestionnaire.Core.Views.User;
 
 namespace RavenQuestionnaire.Web.Controllers

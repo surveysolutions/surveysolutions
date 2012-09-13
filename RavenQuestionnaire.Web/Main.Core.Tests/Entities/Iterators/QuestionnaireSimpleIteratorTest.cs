@@ -1,0 +1,87 @@
+﻿using System;
+using NUnit.Framework;
+using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Entities;
+using RavenQuestionnaire.Core.Entities.Iterators;
+using RavenQuestionnaire.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+using RavenQuestionnaire.Core.ExpressionExecutors;
+
+namespace RavenQuestionnaire.Core.Tests.Entities.Iterators
+{
+    [TestFixture]
+    public class QuestionnaireSimpleIteratorTest
+    {
+        [SetUp]
+        public void CreateObjects()
+        {
+
+        }
+        [Test]
+        public void WhenEmptyQuestionnaireIsPassed_ExceptionIsThrowed()
+        {
+            var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
+            Assert.Throws<ArgumentException>(
+                () => new QuestionnaireSimpleIterator(questionnaire, new CompleteQuestionnaireConditionExecutor()));
+        }
+        [Test]
+        public void First_FirstItemIsReturned()
+        {
+            var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
+            questionnaire.GetInnerDocument().Questions.Add(
+                new CompleteQuestion("first", QuestionType.DynamicInputList));
+            questionnaire.GetInnerDocument().Questions.Add(
+                new CompleteQuestion("second", QuestionType.DynamicInputList));
+            var iterator = new QuestionnaireSimpleIterator(questionnaire, new CompleteQuestionnaireConditionExecutor());
+            Assert.AreEqual(iterator.First.QuestionText, "first");
+
+            var takeNext = iterator.Next;
+            Assert.AreEqual(iterator.First.QuestionText, "first");
+        }
+
+        [Test]
+        public void Iteration_WithoutConditions_GeneralTestForIteration()
+        {
+            var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
+            questionnaire.GetInnerDocument().Questions.Add(
+                new CompleteQuestion("first", QuestionType.DynamicInputList));
+            questionnaire.GetInnerDocument().Questions.Add(
+                new CompleteQuestion("second", QuestionType.DynamicInputList));
+            var iterator = new QuestionnaireSimpleIterator(questionnaire, new CompleteQuestionnaireConditionExecutor());
+
+           /* Assert.AreEqual(iterator.Next.QuestionText, "first");*/
+            Assert.AreEqual(iterator.IsDone, false);
+            Assert.AreEqual(iterator.Next.QuestionText, "second");
+            Assert.AreEqual(iterator.IsDone, true);
+            Assert.AreEqual(iterator.Previous.QuestionText, "first");
+            Assert.AreEqual(iterator.IsDone, false);
+        }
+
+        [Test]
+        public void Iteration_WithConditions_GeneralTestForIteration()
+        {
+            var questionnaire = new CompleteQuestionnaire(new CompleteQuestionnaireDocument());
+
+
+            CompleteQuestion falseConditionQuestion = new CompleteQuestion("false", QuestionType.DynamicInputList);
+            falseConditionQuestion.ConditionExpression="5<1";
+            CompleteQuestion trueConditionQuestion1 = new CompleteQuestion("true1", QuestionType.DynamicInputList);
+            trueConditionQuestion1.ConditionExpression="5>1";
+            CompleteQuestion trueConditionQuestion2 = new CompleteQuestion("true2", QuestionType.DynamicInputList);
+            trueConditionQuestion2.ConditionExpression="5>1";
+         
+            questionnaire.GetInnerDocument().Questions.Add(trueConditionQuestion1);
+            questionnaire.GetInnerDocument().Questions.Add(trueConditionQuestion2);
+            questionnaire.GetInnerDocument().Questions.Add(falseConditionQuestion);
+
+            var iterator = new QuestionnaireSimpleIterator(questionnaire, new CompleteQuestionnaireConditionExecutor());
+
+            Assert.AreEqual(iterator.Next, trueConditionQuestion2);
+            Assert.AreEqual(iterator.IsDone, false);
+            Assert.AreEqual(iterator.Next, null);
+            Assert.AreEqual(iterator.IsDone, true);
+            Assert.AreEqual(iterator.Previous, trueConditionQuestion2);
+            Assert.AreEqual(iterator.IsDone, false);
+        }
+    }
+}

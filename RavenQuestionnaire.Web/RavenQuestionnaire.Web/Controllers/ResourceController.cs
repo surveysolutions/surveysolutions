@@ -10,15 +10,17 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.File;
-using RavenQuestionnaire.Core.Commands.Questionnaire;
+using Main.Core.Commands.File;
+using Main.Core.Commands.Questionnaire;
 using RavenQuestionnaire.Core.Services;
-using RavenQuestionnaire.Core.Utility;
-using RavenQuestionnaire.Core.Views.File;
+using Main.Core.Utility;
+
 using LogManager = NLog.LogManager;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
+    using RavenQuestionnaire.Core.Views.Event.File;
+
     public class ViewDataUploadFilesResult
     {
         public string name { get; set; }

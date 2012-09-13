@@ -1,74 +1,114 @@
-﻿using System;
-using System.Web.Mvc;
-using Moq;
-using NUnit.Framework;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
-using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
-using RavenQuestionnaire.Core.Entities.SubEntities.Question;
-using RavenQuestionnaire.Core.Views.Answer;
-using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Views.Questionnaire;
-using RavenQuestionnaire.Web.Controllers;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="QuestionControllerTest.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The question controller test.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
+    using System;
+    using System.Web.Mvc;
+
+    using Main.Core.Commands.Questionnaire.Question;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities.Question;
+
+    using Moq;
+
+    using Ncqrs;
+    using Ncqrs.Commanding.ServiceModel;
+
+    using NUnit.Framework;
+
+    using RavenQuestionnaire.Core;
+    using RavenQuestionnaire.Core.Views.Answer;
+    using RavenQuestionnaire.Core.Views.Question;
+    using RavenQuestionnaire.Core.Views.Questionnaire;
+    using RavenQuestionnaire.Web.Controllers;
+
+    /// <summary>
+    /// The question controller test.
+    /// </summary>
     [TestFixture]
     public class QuestionControllerTest
     {
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the command service mock.
+        /// </summary>
         public Mock<ICommandService> CommandServiceMock { get; set; }
-        public Mock<IViewRepository> ViewRepositoryMock { get; set; }
+
+        /// <summary>
+        /// Gets or sets the controller.
+        /// </summary>
         public QuestionController Controller { get; set; }
 
+        /// <summary>
+        /// Gets or sets the view repository mock.
+        /// </summary>
+        public Mock<IViewRepository> ViewRepositoryMock { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The create objects.
+        /// </summary>
         [SetUp]
         public void CreateObjects()
         {
-            CommandServiceMock = new Mock<ICommandService>();
-            ViewRepositoryMock = new Mock<IViewRepository>();
-            NcqrsEnvironment.SetDefault<ICommandService>(CommandServiceMock.Object);
-            Controller = new QuestionController(ViewRepositoryMock.Object);
-        }
-        [Test]
-        public void WhenNewQuestioneIsSubmittedWIthValidModel_CommandIsSent()
-        {
-            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            innerDocument.PublicKey = Guid.NewGuid();
-          
-
-            ViewRepositoryMock.Setup(
-                x =>
-                x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                    It.Is<QuestionnaireViewInputModel>(
-                        v => v.QuestionnaireId.Equals(innerDocument.PublicKey))))
-                .Returns(new QuestionnaireView(innerDocument));
-            Controller.Save(new QuestionView[]
-                                {new QuestionView() {Title = "test", QuestionnaireKey = innerDocument.PublicKey}}, new AnswerView[0]);
-            CommandServiceMock.Verify(x => x.Execute(It.IsAny<AddQuestionCommand>()), Times.Once());
+            this.CommandServiceMock = new Mock<ICommandService>();
+            this.ViewRepositoryMock = new Mock<IViewRepository>();
+            NcqrsEnvironment.SetDefault(this.CommandServiceMock.Object);
+            this.Controller = new QuestionController(this.ViewRepositoryMock.Object);
         }
 
+        /// <summary>
+        /// The when existing question is submitted w ith valid model_ command is sent.
+        /// </summary>
         [Test]
         public void WhenExistingQuestionIsSubmittedWIthValidModel_CommandIsSent()
         {
-            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+            var innerDocument = new QuestionnaireDocument();
             innerDocument.PublicKey = Guid.NewGuid();
             var question = new SingleQuestion(Guid.NewGuid(), "question");
 
             var questionView = new QuestionView(innerDocument, question);
-            ViewRepositoryMock.Setup(
-              x =>
-              x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                  It.Is<QuestionnaireViewInputModel>(
-                      v => v.QuestionnaireId.Equals(innerDocument.PublicKey))))
-              .Returns(new QuestionnaireView(innerDocument));
+            this.ViewRepositoryMock.Setup(
+                x =>
+                x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
+                    It.Is<QuestionnaireViewInputModel>(v => v.QuestionnaireId.Equals(innerDocument.PublicKey)))).Returns
+                (new QuestionnaireView(innerDocument));
 
-
-            Controller.Save(new QuestionView[] {questionView}, questionView.Answers);
-            CommandServiceMock.Verify(x => x.Execute(It.IsAny<ChangeQuestionCommand>()), Times.Once());
+            this.Controller.Save(new[] { questionView }, questionView.Answers);
+            this.CommandServiceMock.Verify(x => x.Execute(It.IsAny<ChangeQuestionCommand>()), Times.Once());
         }
+
+        /// <summary>
+        /// The when new questione is submitted w ith valid model_ command is sent.
+        /// </summary>
+        [Test]
+        public void WhenNewQuestioneIsSubmittedWIthValidModel_CommandIsSent()
+        {
+            var innerDocument = new QuestionnaireDocument();
+            innerDocument.PublicKey = Guid.NewGuid();
+
+            this.ViewRepositoryMock.Setup(
+                x =>
+                x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
+                    It.Is<QuestionnaireViewInputModel>(v => v.QuestionnaireId.Equals(innerDocument.PublicKey)))).Returns
+                (new QuestionnaireView(innerDocument));
+            this.Controller.Save(
+                new[] { new QuestionView { Title = "test", QuestionnaireKey = innerDocument.PublicKey } }, 
+                new AnswerView[0]);
+            this.CommandServiceMock.Verify(x => x.Execute(It.IsAny<AddQuestionCommand>()), Times.Once());
+        }
+
         /*[Test]
         public void When_DeleteQuestionIsExecuted()
         {
@@ -84,27 +124,30 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             CommandServiceMock.Verify(x => x.Execute(It.IsAny<DeleteQuestionCommand>()), Times.Once());
         }*/
 
+        /// <summary>
+        /// The when_ edit question details is returned.
+        /// </summary>
         [Test]
         public void When_EditQuestionDetailsIsReturned()
         {
-           // var output = new QuestionnaireView("questionnairedocuments/qId", "test", DateTime.Now, DateTime.Now, new QuestionView[0]);
-
-            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+            // var output = new QuestionnaireView("questionnairedocuments/qId", "test", DateTime.Now, DateTime.Now, new QuestionView[0]);
+            var innerDocument = new QuestionnaireDocument();
             var question = new SingleQuestion(Guid.NewGuid(), "question");
             var questionView = new QuestionView(innerDocument, question);
 
             var input = new QuestionViewInputModel(question.PublicKey, innerDocument.PublicKey);
 
-            ViewRepositoryMock.Setup(
+            this.ViewRepositoryMock.Setup(
                 x =>
                 x.Load<QuestionViewInputModel, QuestionView>(
                     It.Is<QuestionViewInputModel>(
-                        v => v.QuestionnaireId.Equals(input.QuestionnaireId) && v.PublicKey.Equals(input.PublicKey))))
-                .Returns(questionView);
+                        v => v.QuestionnaireId.Equals(input.QuestionnaireId) && v.PublicKey.Equals(input.PublicKey)))).
+                Returns(questionView);
 
-            var result = Controller.Edit(question.PublicKey, innerDocument.PublicKey);
+            ActionResult result = this.Controller.Edit(question.PublicKey, innerDocument.PublicKey);
             Assert.AreEqual(questionView, ((PartialViewResult)result).ViewData.Model);
         }
-     
+
+        #endregion
     }
 }

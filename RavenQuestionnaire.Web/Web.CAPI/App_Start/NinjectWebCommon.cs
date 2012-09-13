@@ -11,8 +11,8 @@ using Questionnaire.Core.Web.Security;
 using Raven.Client;
 using Raven.Client.Document;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Web.App_Start;
+using Main.Core.Events;
+
 using Web.CAPI.Synchronization;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(Web.CAPI.App_Start.NinjectWebCommon), "Start")]

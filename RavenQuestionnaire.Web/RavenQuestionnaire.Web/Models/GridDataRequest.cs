@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
-using RavenQuestionnaire.Core.Entities;
+using Main.Core.Entities;
 
 namespace RavenQuestionnaire.Web.Models
 {
+    using Main.Core.Entities;
+
     public class GridDataRequest
     {
         public List<OrderRequestItem> SortOrder { get; set; }

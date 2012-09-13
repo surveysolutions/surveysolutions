@@ -6,7 +6,6 @@
 //   The i export import.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Questionnaire.Core.Web.Export
 {
     using System;
@@ -18,9 +17,9 @@ namespace Questionnaire.Core.Web.Export
     using Ionic.Zip;
     using Ionic.Zlib;
 
-    using Newtonsoft.Json;
+    using Main.Core.Events;
 
-    using RavenQuestionnaire.Core.Events;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The i export import.
@@ -56,7 +55,7 @@ namespace Questionnaire.Core.Web.Export
     /// </summary>
     public class ExportImportEvent : IExportImport
     {
-        #region Constants and Fields
+        #region Fields
 
         /// <summary>
         /// The synchronizer.
@@ -159,6 +158,7 @@ namespace Questionnaire.Core.Web.Export
 
             return outputStream.ToArray();
         }
+
         #endregion
     }
 }

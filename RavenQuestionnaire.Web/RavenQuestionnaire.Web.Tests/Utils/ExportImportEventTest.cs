@@ -8,7 +8,7 @@ using Questionnaire.Core.Web.Export;
 using NUnit.Framework;
 using RavenQuestionnaire.Core;
 using System.Collections.Generic;
-using RavenQuestionnaire.Core.Events;
+using Main.Core.Events;
 
 
 namespace RavenQuestionnaire.Web.Tests.Utils

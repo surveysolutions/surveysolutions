@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using RavenQuestionnaire.Core.Events;
+using Main.Core.Events;
 using SynchronizationMessages.CompleteQuestionnaire;
 
 namespace Web.Supervisor.WCF

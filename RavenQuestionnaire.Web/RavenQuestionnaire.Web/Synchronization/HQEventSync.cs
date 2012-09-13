@@ -4,7 +4,7 @@ using System.Linq;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using RavenQuestionnaire.Core.Events;
+using Main.Core.Events;
 
 namespace RavenQuestionnaire.Web.Synchronization
 {

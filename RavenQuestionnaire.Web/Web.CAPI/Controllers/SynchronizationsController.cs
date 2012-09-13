@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -10,21 +8,23 @@ using DataEntryClient.CompleteQuestionnaire;
 using NLog;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Questionnaire.Core.Web;
+
 using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Threading;
 using Questionnaire.Core.Web.WCF;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Synchronization;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Events;
+using Main.Core.Commands.Synchronization;
+using Main.Core.Documents;
+
 using RavenQuestionnaire.Core.Views.Synchronization;
-using Web.CAPI.Utils;
+
 using LogManager = NLog.LogManager;
 
 namespace Web.CAPI.Controllers
 {
+    using Main.Core.Events;
+
     [AsyncTimeout(20000000)]
     public class SynchronizationsController : AsyncController
     {

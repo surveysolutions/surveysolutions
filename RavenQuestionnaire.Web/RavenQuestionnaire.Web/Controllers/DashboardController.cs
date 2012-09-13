@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 

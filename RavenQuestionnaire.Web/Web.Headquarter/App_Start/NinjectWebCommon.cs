@@ -8,7 +8,6 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using Raven.Client;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Web.App_Start;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(Web.Headquarter.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(Web.Headquarter.App_Start.NinjectWebCommon), "Stop")]

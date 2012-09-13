@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using Ninject;
-using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands;
-using RavenQuestionnaire.Core.Events;
+using Main.Core;
+using Main.Core.Commands;
+using Main.Core.Events;
 using SynchronizationMessages.CompleteQuestionnaire;
 using Web.Supervisor.WCF;
 

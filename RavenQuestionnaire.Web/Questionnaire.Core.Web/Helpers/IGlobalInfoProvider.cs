@@ -1,9 +1,31 @@
-﻿using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IGlobalInfoProvider.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The GlobalInfoProvider interface.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Questionnaire.Core.Web.Helpers
 {
+    using Main.Core.Entities.SubEntities;
+
+    /// <summary>
+    /// The GlobalInfoProvider interface.
+    /// </summary>
     public interface IGlobalInfoProvider
     {
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The get current user.
+        /// </summary>
+        /// <returns>
+        /// The ???.
+        /// </returns>
         UserLight GetCurrentUser();
+
+        #endregion
     }
 }

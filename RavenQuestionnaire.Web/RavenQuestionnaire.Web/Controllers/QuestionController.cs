@@ -8,21 +8,22 @@ using Kaliko.ImageLibrary;
 using RavenQuestionnaire.Core;
 using Kaliko.ImageLibrary.Filters;
 using Ncqrs.Commanding.ServiceModel;
-using RavenQuestionnaire.Core.Commands.File;
+using Main.Core.Commands.File;
 using RavenQuestionnaire.Web.Models;
 using Questionnaire.Core.Web.Security;
-using RavenQuestionnaire.Core.Commands;
+using Main.Core.Commands;
 using RavenQuestionnaire.Core.Views.Card;
-using RavenQuestionnaire.Core.Views.File;
 using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Commands.Questionnaire;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Question;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Commands.Questionnaire;
+using Main.Core.Commands.Questionnaire.Question;
 
 
 namespace RavenQuestionnaire.Web.Controllers
 {
+    using RavenQuestionnaire.Core.Views.Event.File;
+
     [Authorize]
     [ValidateInput(false)]
     public class QuestionController : Controller

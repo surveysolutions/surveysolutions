@@ -1,19 +1,33 @@
-using System;
-using System.Web;
-using Moq;
-using NUnit.Framework;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
-using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands.Questionnaire;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Views.Questionnaire;
-using RavenQuestionnaire.Web.Controllers;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="QuestionnaireControllerTest.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   This is a test class for QuestionnaireControllerTest and is intended
+//   to contain all QuestionnaireControllerTest Unit Tests
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
-    
-    
+    using System;
+    using System.Web;
+    using System.Web.Mvc;
+
+    using Main.Core.Commands.Questionnaire;
+    using Main.Core.Documents;
+
+    using Moq;
+
+    using Ncqrs;
+    using Ncqrs.Commanding.ServiceModel;
+
+    using NUnit.Framework;
+
+    using RavenQuestionnaire.Core;
+    using RavenQuestionnaire.Core.Views.Questionnaire;
+    using RavenQuestionnaire.Web.Controllers;
+
     /// <summary>
     ///This is a test class for QuestionnaireControllerTest and is intended
     ///to contain all QuestionnaireControllerTest Unit Tests
@@ -21,77 +35,49 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     [TestFixture]
     public class QuestionnaireControllerTest
     {
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the command service mock.
+        /// </summary>
         public Mock<ICommandService> CommandServiceMock { get; set; }
-        public Mock<IViewRepository> ViewRepositoryMock { get; set; }
+
+        /// <summary>
+        /// Gets or sets the controller.
+        /// </summary>
         public QuestionnaireController Controller { get; set; }
+
+        /// <summary>
+        /// Gets or sets the view repository mock.
+        /// </summary>
+        public Mock<IViewRepository> ViewRepositoryMock { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The create objects.
+        /// </summary>
         [SetUp]
         public void CreateObjects()
         {
-            ViewRepositoryMock = new Mock<IViewRepository>();
+            this.ViewRepositoryMock = new Mock<IViewRepository>();
 
-            CommandServiceMock = new Mock<ICommandService>();
-            NcqrsEnvironment.SetDefault<ICommandService>(CommandServiceMock.Object);
-            Controller = new QuestionnaireController(ViewRepositoryMock.Object);
+            this.CommandServiceMock = new Mock<ICommandService>();
+            NcqrsEnvironment.SetDefault(this.CommandServiceMock.Object);
+            this.Controller = new QuestionnaireController(this.ViewRepositoryMock.Object);
         }
 
-
-        [Test]
-        public void WhenNewQuestionnaireIsSubmittedWithValidModel_CommandIsSent()
-        {
-            Controller.Save(new QuestionnaireView() {Title = "test"});
-            CommandServiceMock.Verify(x => x.Execute(It.IsAny<CreateQuestionnaireCommand>()), Times.Once());
-        }
-        /*[Test]
-        public void WhenExistingQuestionnaireIsSubmittedWIthValidModel_CommandIsSent()
-        {
-            QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-            Guid key = Guid.NewGuid();
-            innerDocument.PublicKey = key;
-            Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-
-            Mock<IQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.Load(key.ToString())).Returns(entity);
-
-            Controller.Save(new QuestionnaireView(innerDocument));
-            CommandServiceMock.Verify(x => x.Execute(It.IsAny<UpdateQuestionnaireCommand>()), Times.Once());
-        }*/
-        [Test]
-        public void When_GetQuestionnaireIsExecutedModelIsReturned()
-        {
-            var input = new QuestionnaireBrowseInputModel();
-            var output = new QuestionnaireBrowseView(0, 10, 0, new QuestionnaireBrowseItem[0],"");
-            ViewRepositoryMock.Setup(x => x.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input))
-                .Returns(output);
-
-            var result = Controller.ItemList(input);
-            Assert.AreEqual(output, result.ViewData.Model);
-        }
-
-        [Test]
-        public void When_GetQuestionnaireDetailsIsExecuted()
-        {
-            QuestionnaireDocument innerDoc = new QuestionnaireDocument();
-            innerDoc.PublicKey = Guid.NewGuid();
-            innerDoc.Title = "test";
-            innerDoc.CreationDate = DateTime.Now;
-            innerDoc.LastEntryDate = DateTime.Now;
-            var output = new QuestionnaireView(innerDoc);
-            var input = new QuestionnaireViewInputModel(innerDoc.PublicKey);
-
-            ViewRepositoryMock.Setup(
-                x =>
-                x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                    It.Is<QuestionnaireViewInputModel>(v => v.QuestionnaireId.Equals(input.QuestionnaireId))))
-                .Returns(output);
-
-            var result = Controller.Details(output.PublicKey);
-            Assert.AreEqual(output, result.ViewData.Model);
-        }
+        /// <summary>
+        /// The details_ id is empty_ exception throwed.
+        /// </summary>
         [Test]
         public void Details_IdIsEmpty_ExceptionThrowed()
         {
-            Assert.Throws<HttpException>(() => Controller.Details(Guid.Empty));
+            Assert.Throws<HttpException>(() => this.Controller.Details(Guid.Empty));
         }
+
         /*[Test]
         public void When_DeleteQuestionnaireIsExecuted()
         {
@@ -105,10 +91,14 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Controller.Delete(entity.QuestionnaireId);
             CommandInvokerMock.Verify(x => x.Execute(It.IsAny<DeleteQuestionnaireCommand>()), Times.Once());
         }*/
+
+        /// <summary>
+        /// The edit_ edit form is returned.
+        /// </summary>
         [Test]
         public void Edit_EditFormIsReturned()
         {
-            QuestionnaireDocument innerDoc = new QuestionnaireDocument();
+            var innerDoc = new QuestionnaireDocument();
             innerDoc.PublicKey = Guid.NewGuid();
             innerDoc.Title = "test";
             innerDoc.CreationDate = DateTime.Now;
@@ -116,14 +106,65 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             var output = new QuestionnaireView(innerDoc);
             var input = new QuestionnaireViewInputModel(innerDoc.PublicKey);
 
-            ViewRepositoryMock.Setup(
+            this.ViewRepositoryMock.Setup(
                 x =>
                 x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                    It.Is<QuestionnaireViewInputModel>(v => v.QuestionnaireId.Equals(input.QuestionnaireId))))
-                .Returns(output);
+                    It.Is<QuestionnaireViewInputModel>(v => v.QuestionnaireId.Equals(input.QuestionnaireId)))).Returns(
+                        output);
 
-            var result = Controller.Edit(output.PublicKey);
+            ViewResult result = this.Controller.Edit(output.PublicKey);
             Assert.AreEqual(output, result.ViewData.Model);
         }
+
+        /// <summary>
+        /// The when new questionnaire is submitted with valid model_ command is sent.
+        /// </summary>
+        [Test]
+        public void WhenNewQuestionnaireIsSubmittedWithValidModel_CommandIsSent()
+        {
+            this.Controller.Save(new QuestionnaireView { Title = "test" });
+            this.CommandServiceMock.Verify(x => x.Execute(It.IsAny<CreateQuestionnaireCommand>()), Times.Once());
+        }
+
+        /// <summary>
+        /// The when_ get questionnaire details is executed.
+        /// </summary>
+        [Test]
+        public void When_GetQuestionnaireDetailsIsExecuted()
+        {
+            var innerDoc = new QuestionnaireDocument();
+            innerDoc.PublicKey = Guid.NewGuid();
+            innerDoc.Title = "test";
+            innerDoc.CreationDate = DateTime.Now;
+            innerDoc.LastEntryDate = DateTime.Now;
+            var output = new QuestionnaireView(innerDoc);
+            var input = new QuestionnaireViewInputModel(innerDoc.PublicKey);
+
+            this.ViewRepositoryMock.Setup(
+                x =>
+                x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
+                    It.Is<QuestionnaireViewInputModel>(v => v.QuestionnaireId.Equals(input.QuestionnaireId)))).Returns(
+                        output);
+
+            ViewResult result = this.Controller.Details(output.PublicKey);
+            Assert.AreEqual(output, result.ViewData.Model);
+        }
+
+        /// <summary>
+        /// The when_ get questionnaire is executed model is returned.
+        /// </summary>
+        [Test]
+        public void When_GetQuestionnaireIsExecutedModelIsReturned()
+        {
+            var input = new QuestionnaireBrowseInputModel();
+            var output = new QuestionnaireBrowseView(0, 10, 0, new QuestionnaireBrowseItem[0], string.Empty);
+            this.ViewRepositoryMock.Setup(x => x.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input)).
+                Returns(output);
+
+            ViewResult result = this.Controller.ItemList(input);
+            Assert.AreEqual(output, result.ViewData.Model);
+        }
+
+        #endregion
     }
 }

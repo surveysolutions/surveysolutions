@@ -1,0 +1,33 @@
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ProcessEnded.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   Defines the ProcessEnded type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace Main.Core.Events.Synchronization
+{
+    using System;
+
+    using Main.Core.Documents;
+
+    using Ncqrs.Eventing.Storage;
+
+    /// <summary>
+    /// The process ended.
+    /// </summary>
+    [Serializable]
+    [EventName("RavenQuestionnaire.Core:Events:ProcessEnded")]
+    public class ProcessEnded
+    {
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the status.
+        /// </summary>
+        public EventState Status { get; set; }
+
+        #endregion
+    }
+}

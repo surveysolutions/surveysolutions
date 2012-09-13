@@ -15,9 +15,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
     using Main.Core.Entities.SubEntities;
     using Main.Core.Utility;
 
-
     using RavenQuestionnaire.Core.Denormalizers;
-   
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
     /// <summary>
@@ -73,6 +71,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             
             IQueryable<CompleteQuestionnaireBrowseItem> items = (string.IsNullOrEmpty(input.StatusId))
   
+
                                                                     ? this.documentItemSession.Query().Where(
                                                                         v => v.TemplateId == input.Id)
                                                                     : this.documentItemSession.Query().Where(
@@ -87,7 +86,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
             return new SurveyGroupView(input.Page, input.PageSize, title, count, items, input.Id);
            
-        }
+
 
         #endregion
 

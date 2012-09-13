@@ -10,7 +10,7 @@ using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using Web.CAPI.Synchronization;
 

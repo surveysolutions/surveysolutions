@@ -13,8 +13,8 @@ namespace Web.Supervisor.Controllers
     using System.Web.Security;
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Security;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Utility;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Utility;
     using Web.Supervisor.Models;
 
     /// <summary>

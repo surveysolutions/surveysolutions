@@ -1,69 +1,163 @@
-using System;
-using System.Threading;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AsyncQuestionnaireUpdater.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The async questionnaire updater.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Questionnaire.Core.Web.Threading
 {
+    using System;
+    using System.Threading;
+
+    /// <summary>
+    /// The async questionnaire updater.
+    /// </summary>
     public static class AsyncQuestionnaireUpdater
     {
+        #region Delegates
+
+        /// <summary>
+        /// The save single result.
+        /// </summary>
         public delegate void SaveSingleResult();
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The update.
+        /// </summary>
+        /// <param name="resp">
+        /// The resp.
+        /// </param>
+        /// <returns>
+        /// The System.IAsyncResult.
+        /// </returns>
         public static IAsyncResult Update(SaveSingleResult resp)
         {
-
             return new AsyncViewResult(resp);
-
         }
 
+        #endregion
+
+        /// <summary>
+        /// The async view result.
+        /// </summary>
         private class AsyncViewResult : IAsyncResult
-        //private class MyAsyncResult : IAsyncResult
         {
-            private static int mCount = 0;
-            private readonly SaveSingleResult updateQuestionnare;
+            // private class MyAsyncResult : IAsyncResult
+            #region Static Fields
+
+            /// <summary>
+            /// The m count.
+            /// </summary>
+            private static int mCount;
+
+            #endregion
+
+            #region Fields
+
+            /// <summary>
+            /// The m thread.
+            /// </summary>
             private readonly Thread mThread;
+
+            /// <summary>
+            /// The m wait.
+            /// </summary>
             private readonly AutoResetEvent mWait;
 
+            /// <summary>
+            /// The update questionnare.
+            /// </summary>
+            private readonly SaveSingleResult updateQuestionnare;
+
+            #endregion
+
+            #region Constructors and Destructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="AsyncViewResult"/> class.
+            /// </summary>
+            /// <param name="updateQuestionnare">
+            /// The update questionnare.
+            /// </param>
             public AsyncViewResult(SaveSingleResult updateQuestionnare)
             {
                 this.updateQuestionnare = updateQuestionnare;
 
                 bool hasMail = Interlocked.Increment(ref mCount) % 2 == 0;
 
-                mWait = new AutoResetEvent(false);
+                this.mWait = new AutoResetEvent(false);
 
-                mThread = new Thread(new ThreadStart(() =>
-                                                         {
-                                                             // some very long operation. OK sleeping ;)
-                                                             Thread.Sleep(TimeSpan.FromMilliseconds(5000));
+                this.mThread = new Thread(
+                    () =>
+                        {
+                            // some very long operation. OK sleeping ;)
+                            Thread.Sleep(TimeSpan.FromMilliseconds(5000));
 
-                                                             // notify that the long operation is complete:
-                                                             this.updateQuestionnare();
+                            // notify that the long operation is complete:
+                            this.updateQuestionnare();
 
-                                                             mWait.Set();
-                                                         }));
+                            this.mWait.Set();
+                        });
 
-                mThread.Start();
-
+                this.mThread.Start();
             }
 
+            #endregion
+
+            #region Public Properties
+
+            /// <summary>
+            /// Gets the async state.
+            /// </summary>
             public object AsyncState
             {
-                get { return null; }
+                get
+                {
+                    return null;
+                }
             }
 
-            public System.Threading.WaitHandle AsyncWaitHandle
+            /// <summary>
+            /// Gets the async wait handle.
+            /// </summary>
+            public WaitHandle AsyncWaitHandle
             {
-                get { return mWait; }
+                get
+                {
+                    return this.mWait;
+                }
             }
 
+            /// <summary>
+            /// Gets a value indicating whether completed synchronously.
+            /// </summary>
             public bool CompletedSynchronously
             {
-                get { return false; }
+                get
+                {
+                    return false;
+                }
             }
 
+            /// <summary>
+            /// Gets a value indicating whether is completed.
+            /// </summary>
             public bool IsCompleted
             {
-                get { return mThread.IsAlive; }
+                get
+                {
+                    return this.mThread.IsAlive;
+                }
             }
+
+            #endregion
         }
     }
 }
