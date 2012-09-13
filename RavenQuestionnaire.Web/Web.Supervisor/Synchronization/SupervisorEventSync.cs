@@ -53,12 +53,12 @@ namespace Web.Supervisor.Synchronization
         /// added new exception
         /// </exception>
         public SupervisorEventSync(IViewRepository viewRepository)
-         {
-             this.viewRepository = viewRepository;
-             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
-             if (this.myEventStore == null)
-                 throw new Exception("IEventStore is not correct.");
-         }
+        {
+            this.viewRepository = viewRepository;
+            this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
+            if (this.myEventStore == null)
+                throw new Exception("IEventStore is not correct.");
+        }
 
         #endregion
 
@@ -71,14 +71,14 @@ namespace Web.Supervisor.Synchronization
         /// List of events
         /// </returns>
         public override IEnumerable<AggregateRootEvent> ReadEvents()
-         {
-             var retval = new List<AggregateRootEvent>();
-             this.AddCompleteQuestionnairesInitState(retval);
-             this.AddQuestionnairesTemplates(retval);
-             this.AddUsers(retval);
-             this.AddFiles(retval);
-             return retval.OrderBy(x => x.EventTimeStamp).ToList();
-         }
+        {
+            var retval = new List<AggregateRootEvent>();
+            this.AddCompleteQuestionnairesInitState(retval);
+            this.AddQuestionnairesTemplates(retval);
+            this.AddUsers(retval);
+            this.AddFiles(retval);
+            return retval.OrderBy(x => x.EventTimeStamp).ToList();
+        }
 
         #endregion
 
@@ -90,18 +90,18 @@ namespace Web.Supervisor.Synchronization
         /// <param name="retval">
         /// The retval.
         /// </param>
-         protected void AddCompleteQuestionnairesInitState(List<AggregateRootEvent> retval)
-         {
+        protected void AddCompleteQuestionnairesInitState(List<AggregateRootEvent> retval)
+        {
             var model = this.viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(
                      new CompleteQuestionnaireBrowseInputModel());
-                     
-            foreach (var item in model.Items.Where(item => item.Status.Name == SurveyStatus.Initial.Name))
-             {
-                 if (!SurveyStatus.IsStatusAllowDownSupervisorSync(item.Status))
-                     continue;
-                 GetEventStreamById(retval, item.CompleteQuestionnaireId);
-             }
-         }
+
+            foreach (var item in model.Items)
+            {
+                if (!SurveyStatus.IsStatusAllowDownSupervisorSync(item.Status))
+                    continue;
+                GetEventStreamById(retval, item.CompleteQuestionnaireId);
+            }
+        }
 
         /// <summary>
         /// Responsible for added questionnaire templates
@@ -111,17 +111,13 @@ namespace Web.Supervisor.Synchronization
         /// </param>
         protected void AddQuestionnairesTemplates(List<AggregateRootEvent> retval)
         {
-             var model =
-                 viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(
-                     new CompleteQuestionnaireBrowseInputModel());
+            var model = this.viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(
+                   new QuestionnaireBrowseInputModel());
 
-             foreach (var item in model.Items.Where(item => item.Status.Name == SurveyStatus.Initial.Name))
-             {
-                 if (!SurveyStatus.IsStatusAllowDownSupervisorSync(item.Status))
-                     continue;
-                     
-                 GetEventStreamById(retval, item.CompleteQuestionnaireId);
-              }
+            foreach (var item in model.Items)
+            {
+                this.GetEventStreamById(retval, item.Id);
+            }
         }
 
         /// <summary>
