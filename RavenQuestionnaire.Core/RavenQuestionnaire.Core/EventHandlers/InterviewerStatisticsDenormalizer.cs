@@ -2,15 +2,18 @@
 // <copyright file="InterviewerStatisticsDenormalizer.cs" company="The World Bank">
 //   2012
 // </copyright>
+// <summary>
+//   The CQ statistic grouped by user.
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.EventHandlers
 {
+    using Main.Core.Documents;
+    using Main.Core.Events.Questionnaire.Completed;
+
     using Ncqrs.Eventing.ServiceModel.Bus;
 
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
     using RavenQuestionnaire.Core.Views.Interviewer;
 
     /// <summary>
@@ -20,7 +23,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                                                      IEventHandler<QuestionnaireStatusChanged>, 
                                                      IEventHandler<QuestionnaireAssignmentChanged>
     {
-        #region Constants and Fields
+        #region Fields
 
         /// <summary>
         /// Complete questionnaire store

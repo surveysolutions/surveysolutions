@@ -6,12 +6,11 @@
 //   The user browse input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.User
 {
     using System;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
 
     /// <summary>
     /// The user browse input model.

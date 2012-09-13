@@ -6,8 +6,7 @@
 //   The file browse input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Views.File
+namespace RavenQuestionnaire.Core.Views.Event.File
 {
     /// <summary>
     /// The file browse input model.

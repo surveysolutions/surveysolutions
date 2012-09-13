@@ -6,16 +6,18 @@
 //   The survey group view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-
 namespace RavenQuestionnaire.Core.Views.Survey
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using Main.Core.Entities;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Utility;
+
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Utility;
+   
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
     /// <summary>
@@ -70,6 +72,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
                     input.Page, input.PageSize, title, 0, new CompleteQuestionnaireBrowseItem[0], input.Id);
             
             IQueryable<CompleteQuestionnaireBrowseItem> items = (string.IsNullOrEmpty(input.StatusId))
+  
                                                                     ? this.documentItemSession.Query().Where(
                                                                         v => v.TemplateId == input.Id)
                                                                     : this.documentItemSession.Query().Where(
@@ -83,6 +86,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
                 items = this.DefineOrderBy(items, input);
             items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
             return new SurveyGroupView(input.Page, input.PageSize, title, count, items, input.Id);
+           
         }
 
         #endregion

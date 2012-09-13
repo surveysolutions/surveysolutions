@@ -379,7 +379,8 @@
                     <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="newLine" minOccurs="0" maxOccurs="1" type="xs:boolean" />
                     <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
-                    <xs:element name="onOverflow" minOccurs="0" maxOccurs="1" type="NLog.Targets.NetworkTargetOverflowAction" />
+                    <xs:element name="onOverflow" minOccurs="0" maxOccurs="1"
+                                type="NLog.Targets.NetworkTargetOverflowAction" />
                     <xs:element name="maxMessageSize" minOccurs="0" maxOccurs="1" type="xs:integer" />
                     <xs:element name="encoding" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="connectionCacheSize" minOccurs="0" maxOccurs="1" type="xs:integer" />
@@ -391,7 +392,8 @@
                     <xs:element name="ndcItemSeparator" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="includeNdc" minOccurs="0" maxOccurs="1" type="xs:boolean" />
                     <xs:element name="includeNLogData" minOccurs="0" maxOccurs="1" type="xs:boolean" />
-                    <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.NLogViewerParameterInfo" />
+                    <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded"
+                                type="NLog.Targets.NLogViewerParameterInfo" />
                     <xs:element name="includeMdc" minOccurs="0" maxOccurs="1" type="xs:boolean" />
                 </xs:choice>
                 <xs:attribute name="name" type="xs:string">
@@ -588,7 +590,8 @@
                     <xs:element name="uninstall-command" minOccurs="0" maxOccurs="unbounded"
                                 type="NLog.Targets.DatabaseCommandInfo" />
                     <xs:element name="commandText" minOccurs="0" maxOccurs="1" type="Layout" />
-                    <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.DatabaseParameterInfo" />
+                    <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded"
+                                type="NLog.Targets.DatabaseParameterInfo" />
                 </xs:choice>
                 <xs:attribute name="name" type="xs:string">
                     <xs:annotation>
@@ -816,10 +819,12 @@
                     <xs:element name="archiveAboveSize" minOccurs="0" maxOccurs="1" type="xs:long" />
                     <xs:element name="maxArchiveFiles" minOccurs="0" maxOccurs="1" type="xs:integer" />
                     <xs:element name="archiveFileName" minOccurs="0" maxOccurs="1" type="Layout" />
-                    <xs:element name="archiveNumbering" minOccurs="0" maxOccurs="1" type="NLog.Targets.ArchiveNumberingMode" />
+                    <xs:element name="archiveNumbering" minOccurs="0" maxOccurs="1"
+                                type="NLog.Targets.ArchiveNumberingMode" />
                     <xs:element name="archiveEvery" minOccurs="0" maxOccurs="1" type="NLog.Targets.FileArchivePeriod" />
                     <xs:element name="replaceFileContentsOnEachWrite" minOccurs="0" maxOccurs="1" type="xs:boolean" />
-                    <xs:element name="fileAttributes" minOccurs="0" maxOccurs="1" type="NLog.Targets.Win32FileAttributes" />
+                    <xs:element name="fileAttributes" minOccurs="0" maxOccurs="1"
+                                type="NLog.Targets.Win32FileAttributes" />
                     <xs:element name="fileName" minOccurs="0" maxOccurs="1" type="Layout" />
                     <xs:element name="deleteOldFileOnStartup" minOccurs="0" maxOccurs="1" type="xs:boolean" />
                     <xs:element name="enableFileDelete" minOccurs="0" maxOccurs="1" type="xs:boolean" />
@@ -1132,7 +1137,8 @@
                     <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="methodName" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="className" minOccurs="0" maxOccurs="1" type="xs:string" />
-                    <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.MethodCallParameter" />
+                    <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded"
+                                type="NLog.Targets.MethodCallParameter" />
                 </xs:choice>
                 <xs:attribute name="name" type="xs:string">
                     <xs:annotation>
@@ -1187,7 +1193,8 @@
             <xs:extension base="Target">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
-                    <xs:element name="onOverflow" minOccurs="0" maxOccurs="1" type="NLog.Targets.NetworkTargetOverflowAction" />
+                    <xs:element name="onOverflow" minOccurs="0" maxOccurs="1"
+                                type="NLog.Targets.NetworkTargetOverflowAction" />
                     <xs:element name="newLine" minOccurs="0" maxOccurs="1" type="xs:boolean" />
                     <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
                     <xs:element name="maxMessageSize" minOccurs="0" maxOccurs="1" type="xs:integer" />
@@ -1263,7 +1270,8 @@
                     <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="newLine" minOccurs="0" maxOccurs="1" type="xs:boolean" />
                     <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
-                    <xs:element name="onOverflow" minOccurs="0" maxOccurs="1" type="NLog.Targets.NetworkTargetOverflowAction" />
+                    <xs:element name="onOverflow" minOccurs="0" maxOccurs="1"
+                                type="NLog.Targets.NetworkTargetOverflowAction" />
                     <xs:element name="maxMessageSize" minOccurs="0" maxOccurs="1" type="xs:integer" />
                     <xs:element name="encoding" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="connectionCacheSize" minOccurs="0" maxOccurs="1" type="xs:integer" />
@@ -1275,7 +1283,8 @@
                     <xs:element name="ndcItemSeparator" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="includeNdc" minOccurs="0" maxOccurs="1" type="xs:boolean" />
                     <xs:element name="includeNLogData" minOccurs="0" maxOccurs="1" type="xs:boolean" />
-                    <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.NLogViewerParameterInfo" />
+                    <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded"
+                                type="NLog.Targets.NLogViewerParameterInfo" />
                     <xs:element name="includeMdc" minOccurs="0" maxOccurs="1" type="xs:boolean" />
                 </xs:choice>
                 <xs:attribute name="name" type="xs:string">
@@ -1443,7 +1452,8 @@
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="defaultFilter" minOccurs="0" maxOccurs="1" type="Condition" />
-                    <xs:element name="when" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.Wrappers.FilteringRule" />
+                    <xs:element name="when" minOccurs="0" maxOccurs="unbounded"
+                                type="NLog.Targets.Wrappers.FilteringRule" />
                 </xs:choice>
                 <xs:attribute name="name" type="xs:string">
                     <xs:annotation>
@@ -1579,7 +1589,8 @@
             <xs:extension base="Target">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
-                    <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.MethodCallParameter" />
+                    <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded"
+                                type="NLog.Targets.MethodCallParameter" />
                     <xs:element name="url" minOccurs="0" maxOccurs="1" type="xs:anyURI" />
                     <xs:element name="encoding" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="protocol" minOccurs="0" maxOccurs="1" type="NLog.Targets.WebServiceProtocol" />
@@ -2430,8 +2441,10 @@
                     <xs:element name="impersonationLevel" minOccurs="0" maxOccurs="1"
                                 type="NLog.Targets.Wrappers.SecurityImpersonationLevel" />
                     <xs:element name="domain" minOccurs="0" maxOccurs="1" type="xs:string" />
-                    <xs:element name="logOnType" minOccurs="0" maxOccurs="1" type="NLog.Targets.Wrappers.SecurityLogOnType" />
-                    <xs:element name="logOnProvider" minOccurs="0" maxOccurs="1" type="NLog.Targets.Wrappers.LogOnProviderType" />
+                    <xs:element name="logOnType" minOccurs="0" maxOccurs="1"
+                                type="NLog.Targets.Wrappers.SecurityLogOnType" />
+                    <xs:element name="logOnProvider" minOccurs="0" maxOccurs="1"
+                                type="NLog.Targets.Wrappers.LogOnProviderType" />
                 </xs:choice>
                 <xs:attribute name="name" type="xs:string">
                     <xs:annotation>
@@ -2531,7 +2544,8 @@
                     <xs:element name="smtpUserName" minOccurs="0" maxOccurs="1" type="Layout" />
                     <xs:element name="enableSsl" minOccurs="0" maxOccurs="1" type="xs:boolean" />
                     <xs:element name="smtpPassword" minOccurs="0" maxOccurs="1" type="Layout" />
-                    <xs:element name="smtpAuthentication" minOccurs="0" maxOccurs="1" type="NLog.Targets.SmtpAuthenticationMode" />
+                    <xs:element name="smtpAuthentication" minOccurs="0" maxOccurs="1"
+                                type="NLog.Targets.SmtpAuthenticationMode" />
                     <xs:element name="smtpServer" minOccurs="0" maxOccurs="1" type="Layout" />
                     <xs:element name="smtpPort" minOccurs="0" maxOccurs="1" type="xs:integer" />
                 </xs:choice>
@@ -2675,7 +2689,8 @@
                     <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="instanceName" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="counterHelp" minOccurs="0" maxOccurs="1" type="xs:string" />
-                    <xs:element name="counterType" minOccurs="0" maxOccurs="1" type="System.Diagnostics.PerformanceCounterType" />
+                    <xs:element name="counterType" minOccurs="0" maxOccurs="1"
+                                type="System.Diagnostics.PerformanceCounterType" />
                     <xs:element name="autoCreate" minOccurs="0" maxOccurs="1" type="xs:boolean" />
                     <xs:element name="categoryName" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="counterName" minOccurs="0" maxOccurs="1" type="xs:string" />
@@ -2989,7 +3004,8 @@
                     <xs:element name="endpointConfigurationName" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="endpointAddress" minOccurs="0" maxOccurs="1" type="xs:string" />
                     <xs:element name="useBinaryEncoding" minOccurs="0" maxOccurs="1" type="xs:boolean" />
-                    <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.MethodCallParameter" />
+                    <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded"
+                                type="NLog.Targets.MethodCallParameter" />
                     <xs:element name="clientId" minOccurs="0" maxOccurs="1" type="Layout" />
                     <xs:element name="includeEventProperties" minOccurs="0" maxOccurs="1" type="xs:boolean" />
                 </xs:choice>

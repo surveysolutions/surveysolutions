@@ -6,8 +6,7 @@
 //   The file browse view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Views.File
+namespace RavenQuestionnaire.Core.Views.Event.File
 {
     using System.Collections.Generic;
 

@@ -6,11 +6,11 @@
 //   The assign survey view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Assign
 {
+    using Main.Core.Documents;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
     /// <summary>

@@ -6,22 +6,15 @@
 //   The questionnaire browse item.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Questionnaire
 {
     using System;
-
-    using RavenQuestionnaire.Core.Utility;
 
     /// <summary>
     /// The questionnaire browse item.
     /// </summary>
     public class QuestionnaireBrowseItem
     {
-        #region Fields
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>

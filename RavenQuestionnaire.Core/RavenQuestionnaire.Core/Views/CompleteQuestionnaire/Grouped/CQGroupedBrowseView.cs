@@ -6,7 +6,6 @@
 //   The cq grouped browse view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 {
     using System.Collections.Generic;

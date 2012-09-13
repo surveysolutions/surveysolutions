@@ -6,14 +6,13 @@
 //   The complete questionnaire browse input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     using System;
     using System.Collections.Generic;
 
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Utility;
+    using Main.Core.Entities;
+    using Main.Core.Utility;
 
     /// <summary>
     /// The complete questionnaire browse input model.

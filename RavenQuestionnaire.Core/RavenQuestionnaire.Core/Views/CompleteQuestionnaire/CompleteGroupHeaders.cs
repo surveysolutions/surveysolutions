@@ -6,12 +6,11 @@
 //   The complete group headers.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     using System;
 
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Main.Core.Entities.SubEntities.Complete;
 
     /// <summary>
     /// The complete group headers.

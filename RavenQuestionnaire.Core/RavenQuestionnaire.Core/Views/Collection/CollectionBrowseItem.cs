@@ -6,7 +6,6 @@
 //   The collection browse item.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Collection
 {
     /// <summary>

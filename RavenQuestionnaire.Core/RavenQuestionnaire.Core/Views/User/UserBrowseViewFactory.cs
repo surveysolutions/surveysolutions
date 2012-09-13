@@ -6,13 +6,13 @@
 //   The user browse view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.User
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Main.Core.Documents;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
 
     /// <summary>
     /// The user browse view factory.

@@ -6,18 +6,17 @@
 //   The complete questionnaire json view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Documents;
+    using Main.Core.Entities.Extensions;
+    using Main.Core.Entities.SubEntities.Complete;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.Extensions;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-    using RavenQuestionnaire.Core.ExpressionExecutors;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 
     /// <summary>
@@ -155,6 +154,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
                 {
                     group = doc.Children.OfType<ICompleteGroup>().First();
                 }
+
                 if (input.PropagationKey.HasValue)
                 {
                     return new PropagatedGroupMobileView(doc, group, this.CompileNavigation(rout, group));
@@ -232,7 +232,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
         /// The propagation key.
         /// </param>
         /// <returns>
-        /// The RavenQuestionnaire.Core.Entities.SubEntities.Complete.ICompleteGroup.
+        /// The Main.Core.Entities.SubEntities.Complete.ICompleteGroup.
         /// </returns>
         protected ICompleteGroup ProceedGroup(ICompleteGroup node, Guid publicKey, Guid? propagationKey)
         {

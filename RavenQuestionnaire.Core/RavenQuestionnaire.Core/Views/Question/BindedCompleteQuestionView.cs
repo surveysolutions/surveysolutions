@@ -6,15 +6,15 @@
 //   The binded complete question view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Question
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities.Complete;
+
     using RavenQuestionnaire.Core.Views.Answer;
 
     /// <summary>
@@ -59,7 +59,7 @@ namespace RavenQuestionnaire.Core.Views.Question
                     return;
                 }
 
-                // var questionnaire = new RavenQuestionnaire.Core.Entities.CompleteQuestionnaire(doc);
+                // var questionnaire = new Main.Core.Entities.CompleteQuestionnaire(doc);
                 template =
                     doc.Find<ICompleteGroup>(g => g.PropogationPublicKey == group.PropogationPublicKey.Value).SelectMany
                         (g => g.Find<AbstractCompleteQuestion>(q => q.PublicKey.Equals(bindedQuestion.ParentPublicKey)))

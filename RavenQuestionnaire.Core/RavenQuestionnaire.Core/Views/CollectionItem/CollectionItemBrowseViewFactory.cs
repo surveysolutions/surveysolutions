@@ -6,16 +6,15 @@
 //   The collection item browse view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CollectionItem
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using Raven.Client;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
 
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Raven.Client;
 
     /// <summary>
     /// The collection item browse view factory.

@@ -6,13 +6,12 @@
 //   The question view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Question
 {
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
 
     /// <summary>
     /// The question view factory.
