@@ -1,15 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel;
-using System.Text;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ISpotSync.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The SpotSync interface.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace SynchronizationMessages.Discover
 {
+    using System.ServiceModel;
+
+    /// <summary>
+    /// The SpotSync interface.
+    /// </summary>
     [ServiceContract]
     public interface ISpotSync
     {
-        [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/ISpotSync/Process", ReplyAction = "http://tempuri.org/ISpotSync/ProcessResponse")]
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The process.
+        /// </summary>
+        /// <returns>
+        /// The System.String.
+        /// </returns>
+        [OperationContract(Action = "http://tempuri.org/ISpotSync/Process", 
+            ReplyAction = "http://tempuri.org/ISpotSync/ProcessResponse")]
         string Process();
+
+        #endregion
     }
 }

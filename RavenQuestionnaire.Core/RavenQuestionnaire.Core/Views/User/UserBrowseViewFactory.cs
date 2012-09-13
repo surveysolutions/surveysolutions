@@ -12,6 +12,8 @@ namespace RavenQuestionnaire.Core.Views.User
     using System.Linq;
     using Main.Core.Documents;
 
+    using Main.Core.Documents;
+
     using RavenQuestionnaire.Core.Denormalizers;
 
     /// <summary>

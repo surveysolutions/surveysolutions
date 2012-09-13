@@ -13,6 +13,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
     using System.Linq;
     using Main.Core.Entities.SubEntities;
 
+
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
     using RavenQuestionnaire.Core.Views.Statistics;
     
