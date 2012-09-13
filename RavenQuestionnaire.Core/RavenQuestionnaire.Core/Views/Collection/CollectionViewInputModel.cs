@@ -6,7 +6,6 @@
 //   The collection view input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Collection
 {
     /// <summary>

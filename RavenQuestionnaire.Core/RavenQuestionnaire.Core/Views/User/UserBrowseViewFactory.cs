@@ -6,14 +6,14 @@
 //   The user browse view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.User
 {
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Documents;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
 
     /// <summary>
     /// The user browse view factory.
@@ -79,8 +79,8 @@ namespace RavenQuestionnaire.Core.Views.User
                 query.Select(
                     x =>
                     new UserBrowseItem(
-                        x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLocked, x.Supervisor, x.Location.Location)).
-                    ToArray();
+                        x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLocked, x.Supervisor, x.Location.Location))
+                    .ToArray();
 
             return new UserBrowseView(input.Page, input.PageSize, count, items.ToArray());
         }

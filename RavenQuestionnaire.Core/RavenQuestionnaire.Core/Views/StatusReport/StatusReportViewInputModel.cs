@@ -6,7 +6,6 @@
 //   The status report view input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.StatusReport
 {
     /// <summary>

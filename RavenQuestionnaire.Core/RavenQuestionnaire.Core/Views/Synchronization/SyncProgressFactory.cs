@@ -6,10 +6,10 @@
 //   The sync progress factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Synchronization
 {
-    using RavenQuestionnaire.Core.Documents;
+    using Main.Core.Documents;
+
     using RavenQuestionnaire.Core.ViewSnapshot;
 
     /// <summary>

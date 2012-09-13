@@ -6,7 +6,6 @@
 //   The assign survey input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Assign
 {
     using System;

@@ -6,16 +6,16 @@
 //   The propagated group mobile view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
     using System;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.AbstractFactories;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+
+    using RavenQuestionnaire.Core.Views.Question;
 
     /// <summary>
     /// The propagated group mobile view.
@@ -45,14 +45,12 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
             this.IsQuestionnaireActive = !SurveyStatus.IsStatusAllowCapiSync(doc.Status);
             this.Children =
                 group.Children.OfType<ICompleteQuestion>().Select(
-                    q => new CompleteQuestionFactory().CreateQuestion(doc, q) as ICompositeView).ToList();
+                    q => new CompleteQuestionView(doc, q) as ICompositeView).ToList();
 
             this.FeaturedTitle =
                 string.Concat(
                     group.Children.OfType<ICompleteQuestion>().Where(q => q.Capital).Select(
                         q => q.GetAnswerString() + " "));
-
-
         }
 
         /// <summary>

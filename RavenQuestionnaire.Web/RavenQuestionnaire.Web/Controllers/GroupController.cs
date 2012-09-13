@@ -8,8 +8,8 @@ using RavenQuestionnaire.Web.Models;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Commands.Questionnaire.Group;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Commands.Questionnaire.Group;
 
 
 namespace RavenQuestionnaire.Web.Controllers

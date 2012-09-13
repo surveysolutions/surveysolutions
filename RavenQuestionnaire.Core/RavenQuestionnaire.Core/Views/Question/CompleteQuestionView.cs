@@ -6,15 +6,15 @@
 //   The complete question view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Question
 {
     using System;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+
     using RavenQuestionnaire.Core.Views.Answer;
     using RavenQuestionnaire.Core.Views.Card;
 

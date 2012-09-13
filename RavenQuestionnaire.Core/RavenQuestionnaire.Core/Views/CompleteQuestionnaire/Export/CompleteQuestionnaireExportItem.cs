@@ -6,14 +6,13 @@
 //   The complete questionnaire export item.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 {
     using System;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities.Complete;
 
     /// <summary>
     /// The complete questionnaire export item.

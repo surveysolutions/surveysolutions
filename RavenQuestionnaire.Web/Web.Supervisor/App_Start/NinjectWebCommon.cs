@@ -14,8 +14,8 @@ using Questionnaire.Core.Web.Security;
 using Raven.Client;
 using Raven.Client.Document;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Events;
-using RavenQuestionnaire.Web.App_Start;
+using Main.Core.Events;
+
 using Web.Supervisor.App_Start;
 using Web.Supervisor.Synchronization;
 using WebActivator;

@@ -6,7 +6,6 @@
 //   The DenormalizerStorage interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Denormalizers
 {
     using System;

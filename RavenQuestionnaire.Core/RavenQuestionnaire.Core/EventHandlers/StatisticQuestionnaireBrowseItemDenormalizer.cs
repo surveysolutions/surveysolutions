@@ -6,19 +6,20 @@
 //   The statistic questionnaire browse item denormalizer.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     using System;
-    using System.Linq;
     using System.Collections.Generic;
-    using RavenQuestionnaire.Core.Events;
+    using System.Linq;
+
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Events.Questionnaire.Completed;
+
     using Ncqrs.Eventing.ServiceModel.Bus;
-    using RavenQuestionnaire.Core.Views.Survey;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
-    
+    using RavenQuestionnaire.Core.Views.Survey;
+
     /// <summary>
     /// The statistic questionnaire browse item denormalizer.
     /// </summary>
@@ -61,7 +62,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
-            var item = this.documentItemStore.Query().FirstOrDefault(t => t.Id == evnt.Payload.Questionnaire.TemplateId);
+            SurveyBrowseItem item =
+                this.documentItemStore.Query().FirstOrDefault(t => t.Id == evnt.Payload.Questionnaire.TemplateId);
             if (item == null)
             {
                 var surveyitem = new SurveyItem(
@@ -81,19 +83,28 @@ namespace RavenQuestionnaire.Core.EventHandlers
                         evnt.Payload.Questionnaire.Responsible == null ? 1 : 0, 
                         statistic, 
                         1, 
-                        evnt.Payload.Questionnaire.Status == SurveyStatus.Initial && evnt.Payload.Questionnaire.Responsible == null ? 1 : 0, 
+                        evnt.Payload.Questionnaire.Status == SurveyStatus.Initial
+                        && evnt.Payload.Questionnaire.Responsible == null
+                            ? 1
+                            : 0, 
                         evnt.Payload.Questionnaire.Status == SurveyStatus.Error ? 1 : 0, 
-                        evnt.Payload.Questionnaire.Status == SurveyStatus.Complete ? 1 : 0,
-                        evnt.Payload.Questionnaire.Status == SurveyStatus.Approve ? 1 : 0, new Dictionary<Guid, string>()), 
+                        evnt.Payload.Questionnaire.Status == SurveyStatus.Complete ? 1 : 0, 
+                        evnt.Payload.Questionnaire.Status == SurveyStatus.Approve ? 1 : 0, 
+                        new Dictionary<Guid, string>()), 
                     evnt.Payload.Questionnaire.PublicKey);
             }
             else
             {
                 item.Total++;
-                if (evnt.Payload.Questionnaire.Responsible == null) 
+                if (evnt.Payload.Questionnaire.Responsible == null)
+                {
                     item.Unassigned++;
-                else 
+                }
+                else
+                {
                     this.IncrementCount(evnt.Payload.Questionnaire.Status, item);
+                }
+
                 item.Statistic.Add(
                     evnt.Payload.Questionnaire.PublicKey, 
                     new SurveyItem(
@@ -113,13 +124,11 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            var list = this.documentItemStore.Query().ToList();
-            foreach (
-                var item in
-                    list.Where(
-                        i => i.Statistic.Any(surveyItem => surveyItem.Key == evnt.Payload.CompletedQuestionnaireId)))
+            List<SurveyBrowseItem> list = this.documentItemStore.Query().ToList();
+            foreach (SurveyBrowseItem item in
+                list.Where(i => i.Statistic.Any(surveyItem => surveyItem.Key == evnt.Payload.CompletedQuestionnaireId)))
             {
-                var val =
+                SurveyItem val =
                     item.Statistic.Where(t => t.Key == evnt.Payload.CompletedQuestionnaireId).Select(t => t.Value).
                         FirstOrDefault();
                 {
@@ -128,6 +137,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                         this.IncrementCount(evnt.Payload.Status, item);
                         this.DecrementCount(val.Status, item);
                     }
+
                     val.Status = evnt.Payload.Status;
                 }
             }
@@ -141,19 +151,17 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            var list = this.documentItemStore.Query().ToList();
-            foreach (
-                var item in
-                    list.Where(
-                        i => i.Statistic.Any(surveyItem => surveyItem.Key == evnt.Payload.CompletedQuestionnaireId)))
+            List<SurveyBrowseItem> list = this.documentItemStore.Query().ToList();
+            foreach (SurveyBrowseItem item in
+                list.Where(i => i.Statistic.Any(surveyItem => surveyItem.Key == evnt.Payload.CompletedQuestionnaireId)))
             {
-                var val =
+                SurveyItem val =
                     item.Statistic.Where(t => t.Key == evnt.Payload.CompletedQuestionnaireId).Select(t => t.Value).
                         FirstOrDefault();
                 if (val != null)
                 {
                     if (val.Responsible == null && evnt.Payload.Responsible != null
-                        && (evnt.Payload.Responsible.Id != Guid.Empty) )
+                        && (evnt.Payload.Responsible.Id != Guid.Empty))
                     {
                         item.Unassigned--;
                         this.IncrementCount(val.Status, item);
@@ -172,10 +180,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
         public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
         {
             List<SurveyBrowseItem> list = this.documentItemStore.Query().ToList();
-            foreach (
-                var item in
-                    list.Where(
-                        i => i.Statistic.Any(surveyItem => surveyItem.Key == evnt.Payload.CompletedQuestionnaireId)))
+            foreach (SurveyBrowseItem item in
+                list.Where(i => i.Statistic.Any(surveyItem => surveyItem.Key == evnt.Payload.CompletedQuestionnaireId)))
             {
                 SurveyItem val =
                     item.Statistic.Where(t => t.Key == evnt.Payload.CompletedQuestionnaireId).Select(t => t.Value).
@@ -183,10 +189,15 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 if (val != null)
                 {
                     item.Total--;
-                    if (val.Responsible == null) 
+                    if (val.Responsible == null)
+                    {
                         item.Unassigned--;
-                    else 
+                    }
+                    else
+                    {
                         this.DecrementCount(val.Status, item);
+                    }
+
                     item.Statistic.Remove(evnt.Payload.CompletedQuestionnaireId);
                 }
             }
@@ -199,35 +210,65 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// <summary>
         /// The decrement count.
         /// </summary>
-        /// <param name="name">
-        /// The name.
+        /// <param name="status">
+        /// The status.
         /// </param>
         /// <param name="item">
         /// The item.
         /// </param>
         private void DecrementCount(SurveyStatus status, SurveyBrowseItem item)
         {
-            if (status.PublicId == SurveyStatus.Error.PublicId) item.Error--;
-            if (status.PublicId == SurveyStatus.Complete.PublicId) item.Completed--;
-            if (status.PublicId == SurveyStatus.Approve.PublicId) item.Approve--;
-            if (status.PublicId == SurveyStatus.Initial.PublicId) item.Initial--;
+            if (status.PublicId == SurveyStatus.Error.PublicId)
+            {
+                item.Error--;
+            }
+
+            if (status.PublicId == SurveyStatus.Complete.PublicId)
+            {
+                item.Completed--;
+            }
+
+            if (status.PublicId == SurveyStatus.Approve.PublicId)
+            {
+                item.Approve--;
+            }
+
+            if (status.PublicId == SurveyStatus.Initial.PublicId)
+            {
+                item.Initial--;
+            }
         }
 
         /// <summary>
         /// The increment count.
         /// </summary>
-        /// <param name="name">
-        /// The name.
+        /// <param name="status">
+        /// The status.
         /// </param>
         /// <param name="item">
         /// The item.
         /// </param>
         private void IncrementCount(SurveyStatus status, SurveyBrowseItem item)
         {
-            if (status.PublicId == SurveyStatus.Error.PublicId) item.Error++;
-            if (status.PublicId == SurveyStatus.Complete.PublicId) item.Completed++;
-            if (status.PublicId == SurveyStatus.Approve.PublicId) item.Approve++;
-            if (status.PublicId == SurveyStatus.Initial.PublicId) item.Initial++;
+            if (status.PublicId == SurveyStatus.Error.PublicId)
+            {
+                item.Error++;
+            }
+
+            if (status.PublicId == SurveyStatus.Complete.PublicId)
+            {
+                item.Completed++;
+            }
+
+            if (status.PublicId == SurveyStatus.Approve.PublicId)
+            {
+                item.Approve++;
+            }
+
+            if (status.PublicId == SurveyStatus.Initial.PublicId)
+            {
+                item.Initial++;
+            }
         }
 
         #endregion

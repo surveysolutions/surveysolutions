@@ -5,8 +5,8 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
 using RavenQuestionnaire.Core.Views.Collection;
-using RavenQuestionnaire.Core.Commands.Collection;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+using Main.Core.Commands.Collection;
+using Main.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CollectionItem;
 
 namespace RavenQuestionnaire.Web.Controllers

@@ -6,14 +6,14 @@
 //   The interviewer input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Views.User
+namespace RavenQuestionnaire.Core.Views.Interviewer
 {
     using System;
     using System.Collections.Generic;
 
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Utility;
+    using Main.Core.Entities;
+    using Main.Core.Utility;
+
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
     /// <summary>

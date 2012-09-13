@@ -6,16 +6,15 @@
 //   The card view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Card
 {
     using System;
     using System.Linq;
 
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Views.Question;
 
     /// <summary>
     /// The card view factory.

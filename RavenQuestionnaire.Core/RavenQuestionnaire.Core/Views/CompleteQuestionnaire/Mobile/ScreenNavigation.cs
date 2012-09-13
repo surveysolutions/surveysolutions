@@ -6,7 +6,6 @@
 //   The screen navigation.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
     using System;

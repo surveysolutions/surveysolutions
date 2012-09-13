@@ -6,9 +6,9 @@ using Web.Supervisor.Models;
 using RavenQuestionnaire.Core;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
-using RavenQuestionnaire.Core.Views.User;
-using RavenQuestionnaire.Core.Commands.User;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+
+using Main.Core.Commands.User;
+using Main.Core.Entities.SubEntities;
 
 namespace Web.Supervisor.Controllers
 {

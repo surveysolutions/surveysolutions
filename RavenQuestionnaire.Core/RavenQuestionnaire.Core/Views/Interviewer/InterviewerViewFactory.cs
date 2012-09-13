@@ -6,17 +6,17 @@
 //   The interviewer view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Views.User
+namespace RavenQuestionnaire.Core.Views.Interviewer
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Documents;
+    using Main.Core.Entities;
+    using Main.Core.Utility;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Utility;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
     /// <summary>

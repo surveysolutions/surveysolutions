@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ServiceModel.Activation;
 using Ninject;
-using RavenQuestionnaire.Core.Events;
+using Main.Core.Events;
 using SynchronizationMessages.CompleteQuestionnaire;
 
 namespace Web.Supervisor.WCF

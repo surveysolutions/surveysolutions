@@ -6,7 +6,6 @@
 //   The cq status report view input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.StatusReport
 {
     using System;

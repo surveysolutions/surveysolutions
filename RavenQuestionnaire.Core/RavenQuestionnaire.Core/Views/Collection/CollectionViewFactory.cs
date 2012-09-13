@@ -6,13 +6,13 @@
 //   The collection view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Collection
 {
     using System.Linq;
 
+    using Main.Core.Documents;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
 
     /// <summary>
     /// The collection view factory.

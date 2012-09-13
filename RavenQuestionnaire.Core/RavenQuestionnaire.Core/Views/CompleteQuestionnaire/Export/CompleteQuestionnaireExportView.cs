@@ -6,7 +6,6 @@
 //   The complete questionnaire export view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 {
     using System.Collections.Generic;

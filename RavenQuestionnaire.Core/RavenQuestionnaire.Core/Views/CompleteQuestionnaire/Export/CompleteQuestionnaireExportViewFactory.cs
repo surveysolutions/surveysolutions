@@ -6,18 +6,17 @@
 //   The complete questionnaire export view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using Raven.Client;
+    using Main.Core.Documents;
+    using Main.Core.Entities;
+    using Main.Core.Utility;
 
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Utility;
+    using Raven.Client;
 
     /// <summary>
     /// The complete questionnaire export view factory.

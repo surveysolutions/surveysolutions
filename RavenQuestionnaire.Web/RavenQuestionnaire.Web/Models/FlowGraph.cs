@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Web.Models
 {

@@ -6,13 +6,13 @@
 //   The complete questionnaire browse item.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     using System;
 
-    using RavenQuestionnaire.Core.Documents.Statistics;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Documents.Statistics;
+    using Main.Core.Entities.SubEntities;
+
     using RavenQuestionnaire.Core.Views.Statistics;
 
     /// <summary>
@@ -20,10 +20,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
     /// </summary>
     public class CompleteQuestionnaireBrowseItem
     {
-        #region Fields
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>

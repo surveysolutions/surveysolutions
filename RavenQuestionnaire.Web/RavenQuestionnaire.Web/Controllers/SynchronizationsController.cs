@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Web.Configuration;
 using System.Web.Mvc;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Threading;
 using Questionnaire.Core.Web.WCF;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.Synchronization;
 
 namespace RavenQuestionnaire.Web.Controllers

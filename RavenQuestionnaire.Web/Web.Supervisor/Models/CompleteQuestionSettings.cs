@@ -4,7 +4,7 @@ namespace Web.Supervisor.Models
 {
     public class CompleteQuestionSettings
     {
-        public string QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; set; }
         public Guid ParentGroupPublicKey { get; set; }
         public Guid? PropogationPublicKey { get; set; }
     }

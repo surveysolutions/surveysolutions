@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 using Questionnaire.Core.Web.Security;
-using RavenQuestionnaire.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Web.Controllers
 {

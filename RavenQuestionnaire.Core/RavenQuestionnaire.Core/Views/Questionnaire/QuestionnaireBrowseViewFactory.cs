@@ -6,7 +6,6 @@
 //   The questionnaire browse view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Questionnaire
 {
     using System;

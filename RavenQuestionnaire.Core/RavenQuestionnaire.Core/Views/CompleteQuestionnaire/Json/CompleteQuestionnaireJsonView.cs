@@ -6,19 +6,19 @@
 //   The complete questionnaire json view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.Composite;
-    using RavenQuestionnaire.Core.Entities.Extensions;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-    using RavenQuestionnaire.Core.ExpressionExecutors;
+    using Main.Core.Documents;
+    using Main.Core.Entities.Composite;
+    using Main.Core.Entities.Extensions;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.ExpressionExecutors;
+
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
 
     /// <summary>

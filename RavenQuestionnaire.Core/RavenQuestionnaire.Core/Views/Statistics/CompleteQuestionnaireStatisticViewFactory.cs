@@ -6,13 +6,13 @@
 //   The complete questionnaire statistic view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Statistics
 {
     using System;
 
+    using Main.Core.Documents;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
 
     /// <summary>
     /// The complete questionnaire statistic view factory.

@@ -6,7 +6,6 @@
 //   The ExportProvider interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Export
 {
     using System;

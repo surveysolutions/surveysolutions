@@ -6,7 +6,6 @@
 //   The status report group view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.StatusReport
 {
     using System;

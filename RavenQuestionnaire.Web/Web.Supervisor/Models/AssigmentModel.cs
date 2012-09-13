@@ -1,4 +1,4 @@
-﻿using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿using Main.Core.Entities.SubEntities;
 
 namespace Web.Supervisor.Models
 {

@@ -6,7 +6,6 @@
 //   The complete group view input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Group
 {
     using System;

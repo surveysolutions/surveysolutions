@@ -6,7 +6,6 @@
 //   The CompositeView interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views
 {
     using System;

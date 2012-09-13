@@ -6,12 +6,11 @@
 //   The collection item view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CollectionItem
 {
     using System;
 
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities;
 
     /// <summary>
     /// The collection item view.

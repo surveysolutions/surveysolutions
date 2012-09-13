@@ -6,22 +6,15 @@
 //   The interviewers item.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Views.User
+namespace RavenQuestionnaire.Core.Views.Interviewer
 {
     using System;
-
-    using RavenQuestionnaire.Core.Utility;
 
     /// <summary>
     /// The interviewers item.
     /// </summary>
     public class InterviewersItem
     {
-        #region Fields
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>

@@ -6,7 +6,6 @@
 //   The view repository.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core
 {
     using Ninject;

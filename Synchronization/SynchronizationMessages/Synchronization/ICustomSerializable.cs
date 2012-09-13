@@ -1,14 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ICustomSerializable.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The CustomSerializable interface.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace SynchronizationMessages.Synchronization
 {
+    using System.IO;
+
+    /// <summary>
+    /// The CustomSerializable interface.
+    /// </summary>
     public interface ICustomSerializable
     {
-        void WriteTo(Stream stream);
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The initialize from.
+        /// </summary>
+        /// <param name="stream">
+        /// The stream.
+        /// </param>
         void InitializeFrom(Stream stream);
+
+        /// <summary>
+        /// The write to.
+        /// </summary>
+        /// <param name="stream">
+        /// The stream.
+        /// </param>
+        void WriteTo(Stream stream);
+
+        #endregion
     }
 }

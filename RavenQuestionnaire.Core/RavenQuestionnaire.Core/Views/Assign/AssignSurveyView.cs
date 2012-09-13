@@ -6,16 +6,15 @@
 //   The assign survey view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Assign
 {
     using System;
     using System.Collections.Generic;
 
-    using RavenQuestionnaire.Core.AbstractFactories;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
     using RavenQuestionnaire.Core.Views.Question;
     using RavenQuestionnaire.Core.Views.Statistics;
@@ -48,8 +47,7 @@ namespace RavenQuestionnaire.Core.Views.Assign
             foreach (QuestionStatisticView q in doc.FeaturedQuestions)
             {
                 var question = completeQuestionnaire.Find<ICompleteQuestion>(q.PublicKey);
-                CompleteQuestionView questionView = new CompleteQuestionFactory().CreateQuestion(
-                    completeQuestionnaire, question);
+                var questionView = new CompleteQuestionView(completeQuestionnaire, question);
                 questionView.ParentGroupPublicKey = q.GroupPublicKey;
                 this.FeaturedQuestions.Add(questionView);
             }

@@ -6,7 +6,6 @@
 //   Implements comma-separated values export format.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Export.csv
 {
     using System;

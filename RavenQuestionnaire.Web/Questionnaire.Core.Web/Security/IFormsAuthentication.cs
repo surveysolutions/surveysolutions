@@ -1,12 +1,55 @@
-﻿using RavenQuestionnaire.Core.Entities.SubEntities;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IFormsAuthentication.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The FormsAuthentication interface.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Questionnaire.Core.Web.Security
 {
+    using Main.Core.Entities.SubEntities;
+
+    /// <summary>
+    /// The FormsAuthentication interface.
+    /// </summary>
     public interface IFormsAuthentication
     {
-        void SignIn(string userName, bool rememberMe);
-        void SignOut();
-        string GetUserIdForCurrentUser();
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The get current user.
+        /// </summary>
+        /// <returns>
+        /// The ???.
+        /// </returns>
         UserLight GetCurrentUser();
+
+        /// <summary>
+        /// The get user id for current user.
+        /// </summary>
+        /// <returns>
+        /// The System.String.
+        /// </returns>
+        string GetUserIdForCurrentUser();
+
+        /// <summary>
+        /// The sign in.
+        /// </summary>
+        /// <param name="userName">
+        /// The user name.
+        /// </param>
+        /// <param name="rememberMe">
+        /// The remember me.
+        /// </param>
+        void SignIn(string userName, bool rememberMe);
+
+        /// <summary>
+        /// The sign out.
+        /// </summary>
+        void SignOut();
+
+        #endregion
     }
 }

@@ -6,21 +6,20 @@
 //   The complete questionnaire browse item denormalizer.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.Entities.SubEntities.Complete.Question;
+    using Main.Core.Events.Questionnaire.Completed;
+
     using Ncqrs.Eventing.ServiceModel.Bus;
 
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete.Question;
-    using RavenQuestionnaire.Core.Events;
-    using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
     using RavenQuestionnaire.Core.Views.Statistics;
 
@@ -215,8 +214,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
             {
                 if (completeQuestion.Featured)
                 {
-                    var statItem = new QuestionStatisticView(
-                        completeQuestion, gropPublicKey);
+                    var statItem = new QuestionStatisticView(completeQuestion, gropPublicKey);
                     featuredQuestions.Add(statItem);
                 }
             }

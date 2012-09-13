@@ -6,15 +6,13 @@
 //   The interviewers input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Views.User
+namespace RavenQuestionnaire.Core.Views.Interviewer
 {
-    using System;
     using System.Collections.Generic;
 
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Utility;
+    using Main.Core.Entities;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Utility;
 
     /// <summary>
     /// The interviewers input model.
@@ -27,6 +25,10 @@ namespace RavenQuestionnaire.Core.Views.User
         /// The _orders.
         /// </summary>
         private List<OrderRequestItem> orders = new List<OrderRequestItem>();
+
+        #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InterviewersInputModel"/> class.

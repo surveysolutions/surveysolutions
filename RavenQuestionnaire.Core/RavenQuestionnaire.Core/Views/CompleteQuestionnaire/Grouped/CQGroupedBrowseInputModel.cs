@@ -6,12 +6,11 @@
 //   The cq grouped browse input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 {
     using System;
 
-    using RavenQuestionnaire.Core.Utility;
+    using Main.Core.Utility;
 
     /// <summary>
     /// The cq grouped browse input model.

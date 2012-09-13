@@ -6,7 +6,6 @@
 //   The user browse view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.User
 {
     using System.Collections.Generic;

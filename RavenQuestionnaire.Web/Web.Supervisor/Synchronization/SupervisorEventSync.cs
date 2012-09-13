@@ -4,15 +4,19 @@ using System.Linq;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Events;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Events;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.File;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Core.Views.User;
 
 namespace Web.Supervisor.Synchronization
 {
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Events;
+
+    using RavenQuestionnaire.Core.Views.Event.File;
+
     public class SupervisorEventSync : AbstractEventSync
     {
          private readonly IViewRepository viewRepository;
