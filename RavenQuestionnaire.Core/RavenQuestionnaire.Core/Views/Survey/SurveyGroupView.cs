@@ -6,7 +6,6 @@
 //   The survey group view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Survey
 {
     using System;

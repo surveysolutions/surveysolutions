@@ -6,8 +6,7 @@
 //   The file browse item.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Views.File
+namespace RavenQuestionnaire.Core.Views.Event.File
 {
     /// <summary>
     /// The file browse item.

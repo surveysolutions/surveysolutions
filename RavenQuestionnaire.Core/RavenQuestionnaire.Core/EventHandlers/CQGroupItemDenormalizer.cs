@@ -6,17 +6,16 @@
 //   The cq group item denormalizer.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     using System.Linq;
 
+    using Main.Core.Events.Questionnaire;
+    using Main.Core.Events.Questionnaire.Completed;
+
     using Ncqrs.Eventing.ServiceModel.Bus;
 
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Events;
-    using RavenQuestionnaire.Core.Events.Questionnaire;
-    using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 
     /// <summary>
@@ -89,8 +88,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireTemplateLoaded> evnt)
         {
-            var questionnaire = new CQGroupItem(
-                0, 100, 0, evnt.Payload.Template.Title, evnt.Payload.Template.PublicKey);
+            var questionnaire = new CQGroupItem(0, 100, 0, evnt.Payload.Template.Title, evnt.Payload.Template.PublicKey);
             this.documentGroupSession.Store(questionnaire, evnt.Payload.Template.PublicKey);
         }
 

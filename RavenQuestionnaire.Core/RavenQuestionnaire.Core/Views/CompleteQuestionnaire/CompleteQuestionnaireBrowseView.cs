@@ -6,7 +6,6 @@
 //   The complete questionnaire browse view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     using System.Collections.Generic;

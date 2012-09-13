@@ -6,21 +6,19 @@
 //   The complete questionnaire denormalizer.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using RavenQuestionnaire.Core.ExpressionExecutors;
-
 namespace RavenQuestionnaire.Core.EventHandlers
 {
+    using Main.Core.Documents;
+    using Main.Core.Entities.Composite;
+    using Main.Core.Entities.Extensions;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.Events.Questionnaire.Completed;
+    using Main.Core.ExpressionExecutors;
+
     using Ncqrs.Eventing.ServiceModel.Bus;
 
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.Composite;
-    using RavenQuestionnaire.Core.Entities.Extensions;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
-    using RavenQuestionnaire.Core.Events;
-    using RavenQuestionnaire.Core.Events.Questionnaire.Completed;
 
     /// <summary>
     /// The complete questionnaire denormalizer.
@@ -127,7 +125,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
 
             question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerValue);
 
-            var group = item.FindGroupByKey(questionWrapper.GroupKey, question.PropogationPublicKey);
+            ICompleteGroup group = item.FindGroupByKey(questionWrapper.GroupKey, question.PropogationPublicKey);
             var executor = new CompleteQuestionnaireConditionExecutor(item.QuestionHash);
             executor.Execute(group);
 

@@ -6,13 +6,12 @@
 //   The survey browse view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Survey
 {
     using System;
     using System.Collections.Generic;
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Entities;
+    using Main.Core.Entities.SubEntities;
 
     /// <summary>
     /// The survey browse view.
@@ -64,13 +63,13 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
-            this.Headers = new Dictionary<Guid, string>()
+            this.Headers = new Dictionary<Guid, string>
                 {
-                    { Guid.NewGuid(), "Total"},
-                    { Guid.NewGuid(), "Unassigned"},
-                    { SurveyStatus.Initial.PublicId, SurveyStatus.Initial.Name },
-                    { SurveyStatus.Error.PublicId, SurveyStatus.Error.Name },
-                    { SurveyStatus.Complete.PublicId, SurveyStatus.Complete.Name },
+                    { Guid.NewGuid(), "Total" }, 
+                    { Guid.NewGuid(), "Unassigned" }, 
+                    { SurveyStatus.Initial.PublicId, SurveyStatus.Initial.Name }, 
+                    { SurveyStatus.Error.PublicId, SurveyStatus.Error.Name }, 
+                    { SurveyStatus.Complete.PublicId, SurveyStatus.Complete.Name }, 
                     { SurveyStatus.Approve.PublicId, SurveyStatus.Approve.Name }
                 };
             foreach (SurveyBrowseItem item in items)
@@ -85,7 +84,8 @@ namespace RavenQuestionnaire.Core.Views.Survey
                         item.Initial, 
                         item.Error, 
                         item.Completed, 
-                        item.Approve, this.Headers));
+                        item.Approve, 
+                        this.Headers));
             }
         }
 

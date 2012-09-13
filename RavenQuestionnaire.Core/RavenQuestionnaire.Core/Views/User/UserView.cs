@@ -6,13 +6,12 @@
 //   The user view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.User
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities;
 
     /// <summary>
     /// The user view.
@@ -144,7 +143,7 @@ namespace RavenQuestionnaire.Core.Views.User
         /// Gets or sets the supervisor.
         /// </summary>
         public UserLight Supervisor { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the user name.
         /// </summary>

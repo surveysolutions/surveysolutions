@@ -6,14 +6,14 @@
 //   The complete group view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Group
 {
     using System.Linq;
 
-    using RavenQuestionnaire.Core.AbstractFactories;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Main.Core.AbstractFactories;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities.Complete;
+
     using RavenQuestionnaire.Core.Views.Question;
 
     /// <summary>
@@ -49,15 +49,41 @@ namespace RavenQuestionnaire.Core.Views.Group
         {
             this.ConditionExpression = doc.ConditionExpression;
             this.Questions =
-                group.Children.OfType<ICompleteQuestion>().Select(
-                    q => new CompleteQuestionFactory().CreateQuestion(doc, q)).ToArray();
+                group.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionView(doc, q)).ToArray();
             this.Groups =
-                group.Children.OfType<ICompleteGroup>().Select(g => groupFactory.CreateGroup(doc, g)).ToArray();
+                group.Children.OfType<ICompleteGroup>().Select(g => CreateGroup(doc, g, groupFactory)).ToArray();
         }
 
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// The create group.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="group">
+        /// The group.
+        /// </param>
+        /// <param name="groupFactory">
+        /// The group Factory.
+        /// </param>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Views.Group.CompleteGroupView.
+        /// </returns>
+        public static CompleteGroupView CreateGroup(
+            CompleteQuestionnaireStoreDocument doc, ICompleteGroup group, ICompleteGroupFactory groupFactory)
+        {
+            //// PropagatableCompleteGroup propagatableGroup = group as PropagatableCompleteGroup;
+            if (group.PropogationPublicKey.HasValue)
+            {
+                return new PropagatableCompleteGroupView(doc, group, groupFactory);
+            }
+
+            return new CompleteGroupView(doc, group, groupFactory);
+        }
 
         /// <summary>
         /// The get client id.

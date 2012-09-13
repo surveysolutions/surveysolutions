@@ -1,9 +1,11 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="DocumentStoreProvider.cs" company="">
-// TODO: Update copyright text.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DocumentStoreProvider.cs" company="The World Bank">
+//   2012
 // </copyright>
-// -----------------------------------------------------------------------
-
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace RavenQuestionnaire.Core
 {
     using System;
@@ -12,10 +14,8 @@ namespace RavenQuestionnaire.Core
 
     using Raven.Client.Document;
     using Raven.Client.Embedded;
-   
-    //ref to dll
-    using Raven.Database;
-    using Raven.Storage.Esent;
+
+    // ref to dll
 
     /// <summary>
     /// TODO: Update summary.
@@ -73,10 +73,7 @@ namespace RavenQuestionnaire.Core
             {
                 if (this.isEmbeded)
                 {
-                    store = new EmbeddableDocumentStore
-                    {
-                        DataDirectory = this.storage
-                    };
+                    store = new EmbeddableDocumentStore { DataDirectory = this.storage };
                 }
                 else
                 {
@@ -87,7 +84,7 @@ namespace RavenQuestionnaire.Core
             }
             catch (Exception ex)
             {
-                throw;// new Exception(ex.Message, ex);
+                throw; // new Exception(ex.Message, ex);
             }
 
             return store;

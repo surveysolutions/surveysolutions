@@ -6,13 +6,13 @@
 //   The user view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.User
 {
     using System;
     using System.Linq;
+    using Main.Core.Documents;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
 
     /// <summary>
     /// The user view factory.
@@ -62,8 +62,9 @@ namespace RavenQuestionnaire.Core.Views.User
             else 
                 if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))
                 {
-                    doc = this.users.Query().FirstOrDefault(u => 
-                        String.Compare(u.UserName, input.UserName, StringComparison.OrdinalIgnoreCase) == 0);
+                doc =
+                    this.users.Query().FirstOrDefault(
+                        u => string.Compare(u.UserName, input.UserName, StringComparison.OrdinalIgnoreCase) == 0);
                 }
 
             if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))

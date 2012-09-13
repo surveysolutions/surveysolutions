@@ -6,14 +6,14 @@
 //   The status report view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.StatusReport
 {
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Entities.SubEntities;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
 

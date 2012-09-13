@@ -6,10 +6,9 @@
 //   The FileStorageService interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Services
 {
-    using RavenQuestionnaire.Core.Documents;
+    using Main.Core.Documents;
 
     /// <summary>
     /// The FileStorageService interface.

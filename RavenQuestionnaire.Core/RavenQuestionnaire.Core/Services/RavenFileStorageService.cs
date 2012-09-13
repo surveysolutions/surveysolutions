@@ -6,20 +6,19 @@
 //   The raven file storage service.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Services
 {
     using System.IO;
-    
+
     using Kaliko.ImageLibrary;
     using Kaliko.ImageLibrary.Filters;
+
+    using Main.Core.Documents;
 
     using Raven.Abstractions.Data;
     using Raven.Client;
     using Raven.Client.Document;
     using Raven.Json.Linq;
-
-    using RavenQuestionnaire.Core.Documents;
 
     /// <summary>
     /// The raven file storage service.
@@ -134,7 +133,7 @@ namespace RavenQuestionnaire.Core.Services
                             { "Title", file.Title }
                         });
                 file.Content.Position = 0;
-                KalikoImage image = new KalikoImage(file.Content);
+                var image = new KalikoImage(file.Content);
                 int thumbWidth, thumbHeight;
                 MemoryStream thumbData = this.ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
                 this.documentStore.DatabaseCommands.PutAttachment(

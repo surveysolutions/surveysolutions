@@ -6,15 +6,13 @@
 //   The interviewers input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-
 namespace RavenQuestionnaire.Core.Views.Interviewer
 {
     using System;
     using System.Collections.Generic;
 
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Utility;
+    using Main.Core.Entities;
+    using Main.Core.Utility;
 
     /// <summary>
     /// Input model for interviewer statisctic page
@@ -27,6 +25,10 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// The _orders.
         /// </summary>
         private List<OrderRequestItem> orders = new List<OrderRequestItem>();
+
+        #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InterviewerStatisticsInputModel"/> class.
@@ -74,11 +76,6 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         }
 
         /// <summary>
-        /// Gets or sets a user public key.
-        /// </summary>
-        public Guid UserId { get; set; }
-
-        /// <summary>
         /// Gets or sets the page.
         /// </summary>
         public int Page { get; set; }
@@ -87,6 +84,11 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// Gets or sets the page size.
         /// </summary>
         public int PageSize { get; set; }
+
+        /// <summary>
+        /// Gets or sets a user public key.
+        /// </summary>
+        public Guid UserId { get; set; }
 
         #endregion
     }

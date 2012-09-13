@@ -6,13 +6,12 @@
 //   The group view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Group
 {
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
 
     /// <summary>
     /// The group view factory.

@@ -6,14 +6,14 @@
 //   The collection view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Collection
 {
     using System.Collections.Generic;
 
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Utility;
+    using Main.Core.Documents;
+    using Main.Core.Utility;
+    using Main.Core.Entities.SubEntities;
+
     using RavenQuestionnaire.Core.Views.CollectionItem;
 
     /// <summary>

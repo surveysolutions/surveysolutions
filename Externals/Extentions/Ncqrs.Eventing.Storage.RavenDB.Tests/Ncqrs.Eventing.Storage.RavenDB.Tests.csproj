@@ -32,13 +32,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Esent.Interop">
-      <HintPath>..\..\..\RavenQuestionnaire.Web\packages\RavenDB.1.0.499\server\Esent.Interop.dll</HintPath>
+      <HintPath>..\..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\Esent.Interop.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\..\..\RavenQuestionnaire.Web\packages\FluentAssertions.1.7.1.1\Lib\net40\FluentAssertions.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>..\..\..\RavenQuestionnaire.Web\packages\RavenDB.1.0.499\server\ICSharpCode.NRefactory.dll</HintPath>
+      <HintPath>..\..\..\RavenQuestionnaire.Web\packages\RavenDB.Database.1.0.960\lib\net40\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\RavenQuestionnaire.Web\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>

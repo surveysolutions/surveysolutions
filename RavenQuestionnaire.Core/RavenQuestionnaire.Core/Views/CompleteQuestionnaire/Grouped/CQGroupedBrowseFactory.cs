@@ -6,7 +6,6 @@
 //   The cq grouped browse factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 using RavenQuestionnaire.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
@@ -84,7 +83,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
                /* if (input.InterviewerId.HasValue)
                 {
                     complete =
-                        questionnaires.Where(q => q.Responsible != null && q.Responsible.Id == input.InterviewerId.Value
+                        questionnaires.Where(
+                            q =>
+                            q.Responsible != null && q.Responsible.Id == input.InterviewerId.Value
                             && q.TemplateId == item.SurveyId).ToList();
                 }
                 else

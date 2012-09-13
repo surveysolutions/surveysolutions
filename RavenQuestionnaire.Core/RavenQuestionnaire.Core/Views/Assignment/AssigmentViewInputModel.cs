@@ -6,7 +6,6 @@
 //   The assigment view input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Assignment
 {
     /// <summary>

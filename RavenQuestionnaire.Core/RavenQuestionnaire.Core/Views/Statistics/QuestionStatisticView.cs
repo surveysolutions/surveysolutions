@@ -6,12 +6,11 @@
 //   The question statistic view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Statistics
 {
     using System;
 
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Main.Core.Entities.SubEntities.Complete;
 
     /// <summary>
     /// The question statistic view.
@@ -29,8 +28,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         /// <param name="gropPublicKey">
         /// The grop public key.
         /// </param>
-        public QuestionStatisticView(
-            ICompleteQuestion doc, Guid gropPublicKey)
+        public QuestionStatisticView(ICompleteQuestion doc, Guid gropPublicKey)
         {
             this.PublicKey = doc.PublicKey;
             this.QuestionText = doc.QuestionText;
@@ -106,7 +104,6 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         /// Gets or sets the question text.
         /// </summary>
         public string QuestionText { get; set; }
-
 
         #endregion
     }

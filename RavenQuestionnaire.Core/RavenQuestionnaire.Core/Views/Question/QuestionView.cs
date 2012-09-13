@@ -6,7 +6,6 @@
 //   The abstract question view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Question
 {
     using System;
@@ -14,9 +13,10 @@ namespace RavenQuestionnaire.Core.Views.Question
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.Composite;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Documents;
+    using Main.Core.Entities.Composite;
+    using Main.Core.Entities.SubEntities;
+
     using RavenQuestionnaire.Core.Views.Answer;
     using RavenQuestionnaire.Core.Views.Card;
 

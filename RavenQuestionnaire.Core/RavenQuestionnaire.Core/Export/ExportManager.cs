@@ -6,7 +6,6 @@
 //   The export manager.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Export
 {
     using System;

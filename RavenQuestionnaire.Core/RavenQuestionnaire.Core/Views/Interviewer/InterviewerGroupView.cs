@@ -6,8 +6,7 @@
 //   The interviewer group view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Views.User
+namespace RavenQuestionnaire.Core.Views.Interviewer
 {
     using System;
     using System.Collections.Generic;
@@ -73,13 +72,11 @@ namespace RavenQuestionnaire.Core.Views.User
             this.PageSize = pageSize;
             this.TotalCount = totalCount;
             var helper = new Dictionary<Guid, string>();
-            foreach (
-                QuestionStatisticView question in
-                    items.SelectMany(
-                        completeQuestionnaireBrowseItem =>
-                        completeQuestionnaireBrowseItem.FeaturedQuestions.Where(
-                            t => !string.IsNullOrEmpty(t.QuestionText))).Where(
-                                question => !helper.ContainsKey(question.PublicKey)))
+            foreach (QuestionStatisticView question in
+                items.SelectMany(
+                    completeQuestionnaireBrowseItem =>
+                    completeQuestionnaireBrowseItem.FeaturedQuestions.Where(t => !string.IsNullOrEmpty(t.QuestionText)))
+                    .Where(question => !helper.ContainsKey(question.PublicKey)))
             {
                 helper.Add(question.PublicKey, question.QuestionText);
             }

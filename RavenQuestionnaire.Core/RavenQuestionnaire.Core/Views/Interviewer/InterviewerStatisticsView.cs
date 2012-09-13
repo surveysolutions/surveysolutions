@@ -2,14 +2,16 @@
 // <copyright file="InterviewerStatisticsView.cs" company="The World Bank">
 //   2012
 // </copyright>
+// <summary>
+//   TODO: Update summary.
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Interviewer
 {
     using System;
     using System.Collections.Generic;
 
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities;
 
     /// <summary>
     /// TODO: Update summary.
@@ -58,11 +60,11 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
             this.Page = page;
             this.PageSize = pageSize;
             this.TotalCount = totalCount;
-            this.Headers = new Dictionary<Guid, string>()
+            this.Headers = new Dictionary<Guid, string>
                 {
-                    { SurveyStatus.Initial.PublicId, SurveyStatus.Initial.Name },
-                    { SurveyStatus.Error.PublicId, SurveyStatus.Error.Name },
-                    { SurveyStatus.Complete.PublicId, SurveyStatus.Complete.Name },
+                    { SurveyStatus.Initial.PublicId, SurveyStatus.Initial.Name }, 
+                    { SurveyStatus.Error.PublicId, SurveyStatus.Error.Name }, 
+                    { SurveyStatus.Complete.PublicId, SurveyStatus.Complete.Name }, 
                     { SurveyStatus.Approve.PublicId, SurveyStatus.Approve.Name }
                 };
         }
@@ -72,14 +74,14 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets interviewer id.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
         /// Gets or sets table headers.
         /// </summary>
         public Dictionary<Guid, string> Headers { get; set; }
+
+        /// <summary>
+        /// Gets or sets interviewer id.
+        /// </summary>
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets Items.
