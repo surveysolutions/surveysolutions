@@ -147,7 +147,10 @@ namespace RavenQuestionnaire.Core.Entities.SubEntities
         {
             return status.PublicId == SurveyStatus.Complete.PublicId || status.PublicId == SurveyStatus.Error.PublicId;
         }
-
+        public static bool IsStatusAllowDownSupervisorSync(SurveyStatus status)
+        {
+            return status.PublicId == SurveyStatus.Initial.PublicId || status.PublicId == SurveyStatus.Approve.PublicId;
+        }
         /// <summary>
         /// check status on allowance to be pushed from capi
         /// </summary>
