@@ -6,12 +6,11 @@
 //   The card view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Card
 {
     using System;
 
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities;
 
     /// <summary>
     /// The card view.

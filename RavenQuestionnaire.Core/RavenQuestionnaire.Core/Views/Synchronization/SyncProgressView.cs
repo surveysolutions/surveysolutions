@@ -6,13 +6,13 @@
 //   The sync progress view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Synchronization
 {
     using System;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.Documents;
+    using Main.Core.Documents;
+    using Main.Core.Utility;
 
     /// <summary>
     /// The sync progress view.

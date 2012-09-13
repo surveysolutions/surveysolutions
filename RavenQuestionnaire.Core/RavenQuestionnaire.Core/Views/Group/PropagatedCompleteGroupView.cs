@@ -6,15 +6,14 @@
 //   The propagatable complete group view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Group
 {
     using System;
 
-    using RavenQuestionnaire.Core.AbstractFactories;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Main.Core.AbstractFactories;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
 
     /// <summary>
     /// The propagatable complete group view.

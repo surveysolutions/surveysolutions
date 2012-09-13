@@ -6,25 +6,22 @@
 //   The core registry.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core
 {
-    using System;
     using System.Linq;
+
+    using Main.Core.Entities.Iterators;
+    using Main.Core.ExpressionExecutors;
 
     using Ncqrs.Eventing.ServiceModel.Bus;
 
-    using Ninject.Activation;
     using Ninject.Extensions.Conventions;
     using Ninject.Modules;
 
     using Raven.Client.Document;
-    using Raven.Client.Embedded;
 
-    using RavenQuestionnaire.Core.Conventions;
+    using Main.Core.Conventions;
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Entities.Iterators;
-    using RavenQuestionnaire.Core.ExpressionExecutors;
 
     /// <summary>
     /// The core registry.
@@ -85,11 +82,11 @@ namespace RavenQuestionnaire.Core
                     new RegisterGenericTypesOfInterface(typeof(IViewFactory<,>))));
             this.Kernel.Bind(
                 x =>
-                x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(
+                x.FromAssembliesMatching("Main.Core").SelectAllClasses().BindWith(
                     new RegisterGenericTypesOfInterface(typeof(IExpressionExecutor<,>))));
             this.Kernel.Bind(
                 x =>
-                x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllClasses().BindWith(
+                x.FromAssembliesMatching("Main.Core").SelectAllClasses().BindWith(
                     new RegisterGenericTypesOfInterface(typeof(Iterator<>))));
             this.Kernel.Bind(
                 scanner =>
@@ -101,15 +98,27 @@ namespace RavenQuestionnaire.Core
 
             this.Kernel.Bind(
                 scanner =>
-                scanner.FromAssembliesMatching("RavenQuestionnaire.*").Select(
+                scanner.FromAssembliesMatching("Main.Core").Select(
                     t =>
                     t.GetInterfaces().FirstOrDefault(
                         i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventHandler<>)) != null).
                     BindAllInterfaces());
 
             this.Kernel.Bind(
+                scanner =>
+                scanner.FromAssembliesMatching("RavenQuestionnaire.*").Select(
+                    t =>
+                    t.GetInterfaces().FirstOrDefault(
+                        i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventHandler<>)) != null).
+                    BindAllInterfaces());
+
+
+            this.Kernel.Bind(
+                x => x.FromAssembliesMatching("Main.Core").SelectAllInterfaces()
+                    /*.Excluding<IFileStorageService>()*/.BindWith(new RegisterFirstInstanceOfInterface()));
+
+            this.Kernel.Bind(
                 x => x.FromAssembliesMatching("RavenQuestionnaire.*").SelectAllInterfaces()
-                    
                          /*.Excluding<IFileStorageService>()*/.BindWith(new RegisterFirstInstanceOfInterface()));
         }
 

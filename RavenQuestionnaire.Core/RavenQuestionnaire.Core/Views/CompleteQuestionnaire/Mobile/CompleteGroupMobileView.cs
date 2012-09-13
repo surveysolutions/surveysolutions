@@ -6,18 +6,17 @@
 //   The abstract group mobile view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.AbstractFactories;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.Composite;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Main.Core.Documents;
+    using Main.Core.Entities.Composite;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+
     using RavenQuestionnaire.Core.Views.Question;
 
     /// <summary>
@@ -149,7 +148,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
                     if ((composite as ICompleteQuestion) != null)
                     {
                         var q = composite as ICompleteQuestion;
-                        CompleteQuestionView question = new CompleteQuestionFactory().CreateQuestion(doc, q);
+                        var question = new CompleteQuestionView(doc, q);
                         this.Children.Add(question);
                     }
                     else

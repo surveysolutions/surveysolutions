@@ -6,18 +6,18 @@
 //   The survey group view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using RavenQuestionnaire.Core.Entities.SubEntities;
-
 namespace RavenQuestionnaire.Core.Views.Survey
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Entities;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Utility;
+
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Utility;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
     /// <summary>
@@ -57,7 +57,6 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="input">
         /// The input.
         /// </param>
-        /// <param name="status"></param>
         /// <returns>
         /// The RavenQuestionnaire.Core.Views.Survey.SurveyGroupView.
         /// </returns>
@@ -69,11 +68,13 @@ namespace RavenQuestionnaire.Core.Views.Survey
                 return new SurveyGroupView(
                     input.Page, 
                     input.PageSize, 
-                    String.Empty, // where is this item used?   
+                    string.Empty, 
+                    // where is this item used?   
                     0, 
                     new CompleteQuestionnaireBrowseItem[0], 
                     input.Id);
             }
+
             SurveyStatus st = SurveyStatus.IsValidStatus(input.Status);
             IQueryable<CompleteQuestionnaireBrowseItem> items = (st == null)
                                                                     ? this.documentItemSession.Query().Where(
@@ -81,7 +82,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
                                                                     : this.documentItemSession.Query().Where(
                                                                         v => v.TemplateId == input.Id).Where(
                                                                             v => v.Status.PublicId == st.PublicId);
-            
+
             if (input.QuestionnaireId != Guid.Empty)
             {
                 items = items.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
@@ -93,20 +94,22 @@ namespace RavenQuestionnaire.Core.Views.Survey
             }
 
             items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-            var title = string.Empty;
-            if (items.FirstOrDefault() != null) title = items.FirstOrDefault().QuestionnaireTitle;
+            string title = string.Empty;
+            if (items.FirstOrDefault() != null)
+            {
+                title = items.FirstOrDefault().QuestionnaireTitle;
+            }
             else
             {
-                var template = this.documentItemSession.Query().Where(v => v.TemplateId == input.Id).FirstOrDefault();
-                if (template != null) title = template.QuestionnaireTitle;
+                CompleteQuestionnaireBrowseItem template =
+                    this.documentItemSession.Query().Where(v => v.TemplateId == input.Id).FirstOrDefault();
+                if (template != null)
+                {
+                    title = template.QuestionnaireTitle;
+                }
             }
-            return new SurveyGroupView(
-                input.Page, 
-                input.PageSize,
-                title,
-                count, 
-                items, 
-                input.Id);
+
+            return new SurveyGroupView(input.Page, input.PageSize, title, count, items, input.Id);
         }
 
         #endregion
@@ -156,7 +159,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
                                                                                           t => t.Responsible != null).
                                                                                             OrderByDescending(
                                                                                                 input.Orders[0].Field);
-                    
+
                     query = (input.Orders[0].Direction == OrderDirection.Asc)
                                 ? usersnull.Union(contains)
                                 : contains.Union(usersnull);
@@ -173,7 +176,5 @@ namespace RavenQuestionnaire.Core.Views.Survey
         }
 
         #endregion
-
-
     }
 }

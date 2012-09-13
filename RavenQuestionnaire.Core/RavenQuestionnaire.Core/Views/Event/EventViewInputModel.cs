@@ -6,7 +6,6 @@
 //   The event view input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Event
 {
     using System;

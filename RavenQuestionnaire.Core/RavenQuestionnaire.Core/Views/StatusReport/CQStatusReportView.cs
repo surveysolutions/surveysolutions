@@ -6,14 +6,14 @@
 //   The cq status report view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.StatusReport
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities;
+
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
     /// <summary>

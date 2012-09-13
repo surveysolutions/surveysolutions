@@ -6,7 +6,6 @@
 //   The complete questionnaire statistic view input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Statistics
 {
     /// <summary>

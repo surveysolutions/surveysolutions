@@ -6,12 +6,13 @@
 //   The ncqrs init.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Web.App_Start
+namespace RavenQuestionnaire.Core
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using Main.Core.Commands;
 
     using Ncqrs;
     using Ncqrs.Commanding;
@@ -28,7 +29,6 @@ namespace RavenQuestionnaire.Web.App_Start
 
     using Raven.Client.Document;
 
-    using RavenQuestionnaire.Core.Commands;
     using RavenQuestionnaire.Core.Services;
 
     /// <summary>
@@ -51,8 +51,8 @@ namespace RavenQuestionnaire.Web.App_Start
             NcqrsEnvironment.SetDefault(InitializeCommandService());
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
-                
-                // key param for storing im memory
+
+            // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
             NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
             var bus = new InProcessEventBus(true);
@@ -127,7 +127,8 @@ namespace RavenQuestionnaire.Web.App_Start
         {
             var mapper = new AttributeBasedCommandMapper();
             var service = new ConcurrencyResolveCommandService();
-            foreach (Type type in typeof(NCQRSInit).Assembly.GetTypes().Where(ImplementsAtLeastOneICommand))
+
+            foreach (Type type in service.GetType().Assembly.GetTypes().Where(ImplementsAtLeastOneICommand))
             {
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }

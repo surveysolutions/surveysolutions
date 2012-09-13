@@ -6,14 +6,13 @@
 //   The complete questionnaire export input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 {
     using System;
     using System.Collections.Generic;
 
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Utility;
+    using Main.Core.Entities;
+    using Main.Core.Utility;
 
     /// <summary>
     /// The complete questionnaire export input model.
@@ -36,11 +35,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// The _page size.
         /// </summary>
         private int _pageSize = 20;
-
-        /// <summary>
-        /// The _questionnary id.
-        /// </summary>
-        private Guid _questionnaryId;
 
         #endregion
 
@@ -113,19 +107,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// <summary>
         /// Gets or sets the questionnary id.
         /// </summary>
-        public Guid QuestionnaryId
-        {
-            get
-            {
-                return this._questionnaryId;
-            }
-
-            set
-            {
-                this._questionnaryId = value;
-                
-            }
-        }
+        public Guid QuestionnaryId { get; set; }
 
         #endregion
     }

@@ -6,13 +6,12 @@
 //   The complete answer view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Answer
 {
     using System;
 
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
 
     /// <summary>
     /// The complete answer view.

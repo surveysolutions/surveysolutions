@@ -6,14 +6,14 @@
 //   The survey group item.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Survey
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities;
+
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
     using RavenQuestionnaire.Core.Views.Statistics;
 

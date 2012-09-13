@@ -11,12 +11,13 @@ namespace RavenQuestionnaire.Core.EventHandlers
     using System;
     using System.Collections.Generic;
 
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Events.User;
+
     using Ncqrs.Eventing.ServiceModel.Bus;
 
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Events.User;
 
     /// <summary>
     /// The user denormalizer.

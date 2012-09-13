@@ -6,7 +6,6 @@
 //   The cq group item.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 {
     using System;
@@ -17,10 +16,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
     /// </summary>
     public class CQGroupItem
     {
-        #region Fields
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>

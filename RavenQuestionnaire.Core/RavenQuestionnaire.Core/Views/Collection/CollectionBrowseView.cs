@@ -6,7 +6,6 @@
 //   The collection browse view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Collection
 {
     using System.Collections.Generic;

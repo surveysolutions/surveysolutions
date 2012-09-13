@@ -6,8 +6,7 @@
 //   The interviewers view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Views.User
+namespace RavenQuestionnaire.Core.Views.Interviewer
 {
     using System;
     using System.Collections.Generic;

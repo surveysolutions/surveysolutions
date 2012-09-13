@@ -6,7 +6,6 @@
 //   The survey group view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Survey
 {
     using System;
@@ -56,9 +55,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         public SurveyGroupView(
             int page, 
             int pageSize, 
-
             string surveyTitle, 
-            
             int totalCount, 
             IEnumerable<CompleteQuestionnaireBrowseItem> items, 
             Guid templateId)
@@ -70,9 +67,8 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Items = new List<SurveyGroupItem>();
             this.Headers = new Dictionary<Guid, string>();
             foreach (QuestionStatisticView question in
-                    items.SelectMany(
-                        completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions).Where(
-                            question => !this.Headers.ContainsKey(question.PublicKey)))
+                items.SelectMany(completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions).
+                    Where(question => !this.Headers.ContainsKey(question.PublicKey)))
             {
                 this.Headers.Add(question.PublicKey, question.QuestionText);
             }

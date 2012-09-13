@@ -6,15 +6,15 @@
 //   The complete questionnaire view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     using System;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+
     using RavenQuestionnaire.Core.Views.Group;
     using RavenQuestionnaire.Core.Views.Question;
     using RavenQuestionnaire.Core.Views.Questionnaire;

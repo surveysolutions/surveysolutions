@@ -6,7 +6,6 @@
 //   The collection item browse input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CollectionItem
 {
     using System;

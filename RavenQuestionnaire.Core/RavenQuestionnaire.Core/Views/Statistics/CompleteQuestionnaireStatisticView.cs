@@ -6,27 +6,32 @@
 //   The complete questionnaire statistic view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using RavenQuestionnaire.Core.ExpressionExecutors;
-
 namespace RavenQuestionnaire.Core.Views.Statistics
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.ExpressionExecutors;
 
     /// <summary>
     /// The complete questionnaire statistic view.
     /// </summary>
     public class CompleteQuestionnaireStatisticView
     {
-        #region fields
+        #region Fields
 
+        /// <summary>
+        /// The executor.
+        /// </summary>
         protected readonly CompleteQuestionnaireConditionExecutor executor;
+
+        /// <summary>
+        /// The validator.
+        /// </summary>
         protected readonly CompleteQuestionnaireValidationExecutor validator;
 
         #endregion
@@ -43,9 +48,8 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         {
             this.executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
 
-
             this.validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
-          
+
             this.Id = doc.PublicKey.ToString();
             this.Title = doc.Title;
             this.StartDate = doc.CreationDate;
@@ -65,11 +69,6 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         /// Gets or sets the answered questions.
         /// </summary>
         public IList<QuestionStatisticView> AnsweredQuestions { get; set; }
-
-        /// <summary>
-        /// Gets or sets the last screen.
-        /// </summary>
-        public Guid LastScreenPublicKey { get; set; }
 
         /// <summary>
         /// Gets or sets the complete questionnaire id.
@@ -102,9 +101,9 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         public IList<QuestionStatisticView> InvalidQuestions { get; set; }
 
         /// <summary>
-        /// Gets or sets the invalid questions.
+        /// Gets or sets the last screen.
         /// </summary>
-        public IList<QuestionStatisticView> UnansweredQuestions { get; set; }
+        public Guid LastScreenPublicKey { get; set; }
 
         /// <summary>
         /// Gets or sets the start date.
@@ -125,6 +124,11 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         /// Gets or sets the total question count.
         /// </summary>
         public int TotalQuestionCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invalid questions.
+        /// </summary>
+        public IList<QuestionStatisticView> UnansweredQuestions { get; set; }
 
         #endregion
 
@@ -169,6 +173,7 @@ namespace RavenQuestionnaire.Core.Views.Statistics
             {
                 this.ProccessQuestions(question.Question, question.GroupKey);
             }
+
             this.CalculateApproximateAnswerTime(this.AnsweredQuestions);
         }
 
@@ -183,16 +188,16 @@ namespace RavenQuestionnaire.Core.Views.Statistics
         /// </param>
         protected void ProccessQuestions(ICompleteQuestion question, Guid gropPublicKey)
         {
-            question.Enabled = executor.Execute(question);
+            question.Enabled = this.executor.Execute(question);
 
             if (!question.Enabled)
+            {
                 return;
+            }
 
-            question.Valid = validator.Execute(question);
-           
+            question.Valid = this.validator.Execute(question);
 
-            var statItem = new QuestionStatisticView(
-                question, gropPublicKey);
+            var statItem = new QuestionStatisticView(question, gropPublicKey);
             if (question.Featured)
             {
                 this.FeaturedQuestions.Add(statItem);

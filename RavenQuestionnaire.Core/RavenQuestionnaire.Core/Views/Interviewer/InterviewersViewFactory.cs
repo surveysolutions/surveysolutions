@@ -6,16 +6,16 @@
 //   The interviewers view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Views.User
+namespace RavenQuestionnaire.Core.Views.Interviewer
 {
     using System.Linq;
 
+    using Main.Core.Documents;
+    using Main.Core.Entities;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Utility;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Utility;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
     /// <summary>
@@ -71,7 +71,8 @@ namespace RavenQuestionnaire.Core.Views.User
         /// </returns>
         public InterviewersView Load(InterviewersInputModel input)
         {
-            int count = this.users.Query().Where(u => u.Supervisor != null).Count(u => u.Supervisor.Id == input.Supervisor.Id);
+            int count =
+                this.users.Query().Where(u => u.Supervisor != null).Count(u => u.Supervisor.Id == input.Supervisor.Id);
             if (count == 0)
             {
                 return new InterviewersView(
@@ -97,8 +98,10 @@ namespace RavenQuestionnaire.Core.Views.User
                         x.CreationDate, 
                         x.IsLocked, 
                         questionnaire.Count(t => t.Responsible.Id == x.PublicKey), 
-                        questionnaire.Where(t => t.Responsible.Id == x.PublicKey).Count(t => t.Status.PublicId == SurveyStatus.Complete.PublicId), 
-                        questionnaire.Where(t => t.Responsible.Id == x.PublicKey).Count(t => t.Status.PublicId != SurveyStatus.Complete.PublicId)));
+                        questionnaire.Where(t => t.Responsible.Id == x.PublicKey).Count(
+                            t => t.Status.PublicId == SurveyStatus.Complete.PublicId), 
+                        questionnaire.Where(t => t.Responsible.Id == x.PublicKey).Count(
+                            t => t.Status.PublicId != SurveyStatus.Complete.PublicId)));
             if (input.Orders.Count > 0)
             {
                 items = input.Orders[0].Direction == OrderDirection.Asc

@@ -6,7 +6,6 @@
 //   The ViewFactory interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core
 {
     /// <summary>

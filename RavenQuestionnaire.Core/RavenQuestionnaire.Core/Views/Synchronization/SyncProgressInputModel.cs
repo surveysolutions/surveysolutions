@@ -6,7 +6,6 @@
 //   The sync progress input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Synchronization
 {
     using System;

@@ -6,16 +6,16 @@
 //   The abstract group view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Group
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.Composite;
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Documents;
+    using Main.Core.Entities.Composite;
+    using Main.Core.Entities.SubEntities;
+
     using RavenQuestionnaire.Core.Views.Question;
 
     /// <summary>

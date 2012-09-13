@@ -6,7 +6,6 @@
 //   The ViewRepository interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core
 {
     /// <summary>

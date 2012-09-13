@@ -6,23 +6,17 @@
 //   The user browse item.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.User
 {
     using System;
 
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    
+    using Main.Core.Entities.SubEntities;
 
     /// <summary>
     /// The user browse item.
     /// </summary>
     public class UserBrowseItem
     {
-        #region Fields
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>

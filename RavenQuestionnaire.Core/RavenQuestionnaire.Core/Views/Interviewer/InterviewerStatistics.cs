@@ -6,25 +6,28 @@
 //   The interviewer item view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Interviewer
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
     public class InterviewerStatistics
     {
+        #region Public Properties
+
         /// <summary>
         /// Gets or sets CQ Id.
         /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets Status.
+        /// </summary>
+        public SurveyStatus Status { get; set; }
 
         /// <summary>
         /// Gets or sets TemplateId.
@@ -36,9 +39,6 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// </summary>
         public string Title { get; set; }
 
-        /// <summary>
-        /// Gets or sets Status.
-        /// </summary>
-        public SurveyStatus Status { get; set; }
+        #endregion
     }
 }

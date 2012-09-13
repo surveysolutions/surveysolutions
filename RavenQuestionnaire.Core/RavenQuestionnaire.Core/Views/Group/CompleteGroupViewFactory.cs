@@ -6,17 +6,16 @@
 //   The complete group view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Group
 {
     using System;
     using System.Linq;
 
-    using Raven.Client;
+    using Main.Core.AbstractFactories;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities.Complete;
 
-    using RavenQuestionnaire.Core.AbstractFactories;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
+    using Raven.Client;
 
     /// <summary>
     /// The complete group view factory.
@@ -81,7 +80,7 @@ namespace RavenQuestionnaire.Core.Views.Group
                 group.PublicKey = Guid.Empty;
             }
 
-            return this.groupFactory.CreateGroup(doc, group);
+            return CompleteGroupView.CreateGroup(doc, group, this.groupFactory);
         }
 
         #endregion

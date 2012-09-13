@@ -6,17 +6,17 @@
 //   Class handles file changes events.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     using System;
     using System.IO;
 
+    using Main.Core.Documents;
+    using Main.Core.Events.File;
+
     using Ncqrs.Eventing.ServiceModel.Bus;
 
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Events.File;
     using RavenQuestionnaire.Core.Services;
 
     /// <summary>
@@ -70,6 +70,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
             var fileDescription = new FileDescription
                 {
                     PublicKey = evnt.Payload.PublicKey.ToString(), 
+                    
+                    
                     
                     // Content = original,
                     Description = evnt.Payload.Description, 

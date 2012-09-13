@@ -2,15 +2,17 @@
 // <copyright file="InterviewerStatisticsItem.cs" company="The World Bank">
 //   2012
 // </copyright>
+// <summary>
+//   Interviewer's statistics item
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Interviewer
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities;
 
     /// <summary>
     /// Interviewer's statistics item
@@ -54,14 +56,16 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// Add status item to dictionary
         /// </summary>
         /// <param name="publicKey">
-        ///   Complete questionnaire public key.
+        /// Complete questionnaire public key.
         /// </param>
         /// <param name="templateId">
-        ///   Questionnaire public key
+        /// Questionnaire public key
         /// </param>
-        /// <param name="title">CQ title</param>
+        /// <param name="title">
+        /// CQ title
+        /// </param>
         /// <param name="status">
-        ///   Current CQ status
+        /// Current CQ status
         /// </param>
         public void AddCQ(Guid publicKey, Guid templateId, string title, SurveyStatus status)
         {
@@ -73,7 +77,10 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
             else
             {
                 this.StatusesByCQ.Add(
-                    new InterviewerStatistics { Id = publicKey, Status = status, Title = title, TemplateId = templateId });
+                    new InterviewerStatistics
+                        {
+                           Id = publicKey, Status = status, Title = title, TemplateId = templateId 
+                        });
             }
         }
 
@@ -87,7 +94,7 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         {
             var templateGuids = this.StatusesByCQ.Select(s => new { Id = s.TemplateId, s.Title }).Distinct();
 
-            return 
+            return
                 templateGuids.Select(
                     t =>
                     new InterviewerStatisticsViewItem(

@@ -2,15 +2,16 @@
 // <copyright file="InterviewerStatisticsViewItem.cs" company="The World Bank">
 //   2012
 // </copyright>
+// <summary>
+//   TODO: Update summary.
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Interviewer
 {
     using System;
     using System.Collections.Generic;
 
-    using RavenQuestionnaire.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Views.User;
+    using Main.Core.Entities.SubEntities;
 
     /// <summary>
     /// TODO: Update summary.
@@ -59,11 +60,11 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
             this.Completed = complete;
             this.Approve = approve;
 
-            this.Counters = new Dictionary<Guid, int>()
+            this.Counters = new Dictionary<Guid, int>
                 {
-                    { SurveyStatus.Initial.PublicId, initial },
-                    { SurveyStatus.Error.PublicId, error },
-                    { SurveyStatus.Complete.PublicId, complete },
+                    { SurveyStatus.Initial.PublicId, initial }, 
+                    { SurveyStatus.Error.PublicId, error }, 
+                    { SurveyStatus.Complete.PublicId, complete }, 
                     { SurveyStatus.Approve.PublicId, approve }
                 };
         }
@@ -71,11 +72,6 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         #endregion
 
         #region Public Properties
-
-        /// <summary>
-        /// Gets or sets table headers.
-        /// </summary>
-        public Dictionary<Guid, int> Counters { get; set; }
 
         /// <summary>
         /// Gets the completed.
@@ -86,6 +82,11 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// Gets the completed.
         /// </summary>
         public int Completed { get; private set; }
+
+        /// <summary>
+        /// Gets or sets table headers.
+        /// </summary>
+        public Dictionary<Guid, int> Counters { get; set; }
 
         /// <summary>
         /// Gets the completed.

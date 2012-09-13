@@ -6,8 +6,7 @@
 //   The card view input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Views.Question
+namespace RavenQuestionnaire.Core.Views.Card
 {
     using System;
 

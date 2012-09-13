@@ -6,7 +6,6 @@
 //   The user view input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.User
 {
     using System;

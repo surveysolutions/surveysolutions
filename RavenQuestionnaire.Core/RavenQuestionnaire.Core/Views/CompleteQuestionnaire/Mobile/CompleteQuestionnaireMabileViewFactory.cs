@@ -6,16 +6,16 @@
 //   The complete questionnaire mabile view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities.Complete;
+
     using RavenQuestionnaire.Core.Denormalizers;
-    using RavenQuestionnaire.Core.Documents;
-    using RavenQuestionnaire.Core.Entities.SubEntities.Complete;
 
     /// <summary>
     /// The complete questionnaire mabile view factory.
@@ -174,7 +174,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
         /// The propagation key.
         /// </param>
         /// <returns>
-        /// The RavenQuestionnaire.Core.Entities.SubEntities.Complete.ICompleteGroup.
+        /// The Main.Core.Entities.SubEntities.Complete.ICompleteGroup.
         /// </returns>
         protected ICompleteGroup ProceedGroup(ICompleteGroup node, Guid publicKey, Guid? propagationKey)
         {
