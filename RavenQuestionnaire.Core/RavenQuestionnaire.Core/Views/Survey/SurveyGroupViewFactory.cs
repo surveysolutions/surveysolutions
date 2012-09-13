@@ -75,6 +75,8 @@ namespace RavenQuestionnaire.Core.Views.Survey
                                                                     : this.documentItemSession.Query().Where(
                                                                         v => v.TemplateId == input.Id).Where(
                                                                             v => v.Status.PublicId == Guid.Parse(input.StatusId));
+            if (input.IsNotAssigned) 
+                items = items.Where(t => t.Responsible == null);
             if (input.QuestionnaireId != Guid.Empty)
                 items = items.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
             if (input.Orders.Count > 0)
