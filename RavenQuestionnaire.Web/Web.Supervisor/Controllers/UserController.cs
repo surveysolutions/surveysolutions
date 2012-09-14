@@ -10,17 +10,18 @@
 namespace Web.Supervisor.Controllers
 {
     using System;
+    using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+    using Main.Core.Commands.User;
+    using Main.Core.Entities.SubEntities;
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
     using Questionnaire.Core.Web.Helpers;
     using RavenQuestionnaire.Core;
-using Main.Core.Commands.User;
-using Main.Core.Entities.SubEntities;
     using RavenQuestionnaire.Core.Views.Interviewer;
-    using RavenQuestionnaire.Core.Views.User;
     using Web.Supervisor.Models;
+    
 
     /// <summary>
     /// User controller responsible for dispay users, lock/unlock users, counting statistics
@@ -114,7 +115,8 @@ using Main.Core.Entities.SubEntities;
                                      Orders = input.Orders,
                                      PageSize = input.PageSize, 
                                      Page = input.Page,
-                                     UserId = id
+                                     UserId = id,
+                                     UserName = input.UserName
                                  };
             var model = this.viewRepository.Load<InterviewerStatisticsInputModel, InterviewerStatisticsView>(inputModel);
             return this.View(model);
