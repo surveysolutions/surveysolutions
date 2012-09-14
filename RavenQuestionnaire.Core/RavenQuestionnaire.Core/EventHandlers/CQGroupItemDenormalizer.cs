@@ -7,8 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 using System;
+using Main.Core.Documents;
 using Ncqrs.Restoring.EventStapshoot;
-using RavenQuestionnaire.Core.Documents;
 
 namespace RavenQuestionnaire.Core.EventHandlers
 {
