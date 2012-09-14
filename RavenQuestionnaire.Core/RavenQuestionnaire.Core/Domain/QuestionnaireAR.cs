@@ -30,7 +30,7 @@ namespace RavenQuestionnaire.Core.Domain
     /// <summary>
     /// Questionnaire Aggregate Root.
     /// </summary>
-    public class QuestionnaireAR : SnapshootableAggregateRoot, ISnapshotable<QuestionnaireDocument>
+    public class QuestionnaireAR : SnapshootableAggregateRoot<QuestionnaireDocument>
     {
         #region Fields
 
@@ -295,7 +295,7 @@ namespace RavenQuestionnaire.Core.Domain
         /// <returns>
         /// The RavenQuestionnaire.Core.Documents.QuestionnaireDocument.
         /// </returns>
-        public QuestionnaireDocument CreateSnapshot()
+        public override QuestionnaireDocument CreateSnapshot()
         {
             return this.innerDocument;
         }
@@ -363,7 +363,7 @@ namespace RavenQuestionnaire.Core.Domain
         /// <param name="snapshot">
         /// The snapshot.
         /// </param>
-        public void RestoreFromSnapshot(QuestionnaireDocument snapshot)
+        public override void RestoreFromSnapshot(QuestionnaireDocument snapshot)
         {
             this.innerDocument = snapshot;
         }

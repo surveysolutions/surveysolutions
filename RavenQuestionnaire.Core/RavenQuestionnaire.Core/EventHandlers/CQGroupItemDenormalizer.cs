@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using Ncqrs.Restoring.EventStapshoot;
 using RavenQuestionnaire.Core.Documents;
 
@@ -64,8 +65,12 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
+            HandleCompleteQuestionnaire(evnt.Payload.Questionnaire.TemplateId);
+        }
+        protected void HandleCompleteQuestionnaire(Guid templateId)
+        {
             IQueryable<CQGroupItem> group =
-                this.documentGroupSession.Query().Where(g => g.SurveyId == evnt.Payload.Questionnaire.TemplateId);
+               this.documentGroupSession.Query().Where(g => g.SurveyId == templateId);
             foreach (CQGroupItem cqGroupItem in group)
             {
                 cqGroupItem.TotalCount++;
@@ -80,8 +85,12 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
-            var questionnaire = new CQGroupItem(0, 100, 0, evnt.Payload.Title, evnt.Payload.PublicKey);
-            this.documentGroupSession.Store(questionnaire, evnt.Payload.PublicKey);
+           HandleQuestionnaire(evnt.Payload.Title, evnt.Payload.PublicKey);
+        }
+        protected void HandleQuestionnaire(string title, Guid key)
+        {
+            var questionnaire = new CQGroupItem(0, 100, 0, title, key);
+            this.documentGroupSession.Store(questionnaire, key);
         }
 
         /// <summary>
@@ -92,12 +101,17 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
         {
-            var document = evnt.Payload.Template.Payload as QuestionnaireDocument;
-            if (document == null)
+            var questionnaireDoc = evnt.Payload.Template.Payload as QuestionnaireDocument;
+            if (questionnaireDoc != null)
+            {
+                HandleQuestionnaire(questionnaireDoc.Title, questionnaireDoc.PublicKey);
                 return;
-            var questionnaire = new CQGroupItem(
-                0, 100, 0, document.Title, document.PublicKey);
-            this.documentGroupSession.Store(questionnaire, document.PublicKey);
+            }
+            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
+            if (document != null)
+            {
+                HandleCompleteQuestionnaire(document.TemplateId);
+            }
         }
 
         /// <summary>

@@ -176,12 +176,7 @@ namespace RavenQuestionnaire.Core.Events
                 stream.GroupBy(x => x.EventSourceId).Select(
                     g => g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue)));
         }
-        protected void GetEventStreamById(List<AggregateRootEvent> retval, Guid aggregateRootId)
-        {
-            var events = this.eventStore.ReadFrom(aggregateRootId,
-                                                     int.MinValue, int.MaxValue);
-            retval.AddRange(events.Select(e => new AggregateRootEvent(e)).ToList());
-        }
+        
         #endregion
     }
 }

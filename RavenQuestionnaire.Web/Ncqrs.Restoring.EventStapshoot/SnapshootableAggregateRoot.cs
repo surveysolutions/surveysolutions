@@ -4,7 +4,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Mapping;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 namespace Ncqrs.Restoring.EventStapshoot
 {
@@ -16,7 +18,7 @@ namespace Ncqrs.Restoring.EventStapshoot
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class SnapshootableAggregateRoot : MappedAggregateRoot
+    public abstract class SnapshootableAggregateRoot<T> : MappedAggregateRoot, ISnapshotable<T>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SnapshootableAggregateRoot"/> class.
@@ -29,6 +31,30 @@ namespace Ncqrs.Restoring.EventStapshoot
         protected SnapshootableAggregateRoot(Guid id)
             : base(id, new SnapshootableEventHandlerMappingStrategy(new ConventionBasedEventHandlerMappingStrategy()))
         {
+        }
+
+        #region Implementation of ISnapshotable<T>
+
+        public abstract T CreateSnapshot();
+
+        public abstract void RestoreFromSnapshot(T snapshot);
+
+        #endregion
+        public override void InitializeFromHistory(CommittedEventStream history)
+        {
+            var lastSnapshoot = history.LastOrDefault(e => e.Payload is SnapshootLoaded);
+            if (lastSnapshoot == null)
+            {
+                base.InitializeFromHistory(history);
+                return;
+            }
+            var newHistory = new CommittedEventStream(history.SourceId,
+                                                      history.SkipWhile(e => e != lastSnapshoot).Select(
+                                                          (e, i) =>
+                                                          new CommittedEvent(e.CommitId, e.EventIdentifier,
+                                                                             e.EventSourceId, i + 1, e.EventTimeStamp,
+                                                                             e.Payload, e.EventVersion)));
+            base.InitializeFromHistory(newHistory);
         }
     }
 
