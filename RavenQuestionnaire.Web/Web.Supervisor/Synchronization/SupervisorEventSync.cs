@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Domain;
+using Ncqrs.Restoring.EventStapshoot;
+
 namespace Web.Supervisor.Synchronization
 {
     using System;
@@ -17,15 +20,12 @@ namespace Web.Supervisor.Synchronization
     using Main.Core.Events;
 
     using Ncqrs;
-using Ncqrs.Domain;
-using Ncqrs.Domain.Storage;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
+    using Ncqrs.Domain;
+    using Ncqrs.Domain.Storage;
+    using Ncqrs.Eventing;
+    using Ncqrs.Eventing.Sourcing.Snapshotting;
     using Ncqrs.Eventing.Storage;
-using Ncqrs.Restoring.EventStapshoot;
     using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Documents;
-using RavenQuestionnaire.Core.Domain;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
     using RavenQuestionnaire.Core.Views.Event.File;
     using RavenQuestionnaire.Core.Views.Questionnaire;
@@ -47,7 +47,9 @@ using RavenQuestionnaire.Core.Domain;
         /// myEventStore object
         /// </summary>
         private readonly IEventStore myEventStore;
-         private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
         #endregion
 
         #region Constructor
@@ -65,7 +67,9 @@ using RavenQuestionnaire.Core.Domain;
         {
             this.viewRepository = viewRepository;
             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
-             this.unitOfWorkFactory = NcqrsEnvironment.Get<IUnitOfWorkFactory>();
+            this.unitOfWorkFactory = NcqrsEnvironment.Get<IUnitOfWorkFactory>();
+            if (myEventStore == null)
+
                 throw new Exception("IEventStore is not correct.");
         }
 
@@ -101,14 +105,15 @@ using RavenQuestionnaire.Core.Domain;
         /// </param>
         protected void AddCompleteQuestionnairesInitState(List<AggregateRootEvent> retval)
         {
-            var model = this.viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>(
-                     new CompleteQuestionnaireBrowseInputModel());
+            var model = this.viewRepository.Load<CompleteQuestionnaireBrowseInputModel, CompleteQuestionnaireBrowseView>
+                (
+                    new CompleteQuestionnaireBrowseInputModel());
 
             foreach (var item in model.Items)
             {
                 if (!SurveyStatus.IsStatusAllowDownSupervisorSync(item.Status))
                     continue;
-                 retval.AddRange(this.GetEventStreamById(item.CompleteQuestionnaireId, typeof(CompleteQuestionnaireAR)));
+                retval.AddRange(this.GetEventStreamById(item.CompleteQuestionnaireId, typeof (CompleteQuestionnaireAR)));
             }
         }
 
@@ -121,11 +126,11 @@ using RavenQuestionnaire.Core.Domain;
         protected void AddQuestionnairesTemplates(List<AggregateRootEvent> retval)
         {
             var model = this.viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(
-                   new QuestionnaireBrowseInputModel());
+                new QuestionnaireBrowseInputModel());
 
             foreach (var item in model.Items)
             {
-                  retval.AddRange(this.GetEventStreamById(item.Id, typeof(QuestionnaireAR)));
+                retval.AddRange(this.GetEventStreamById(item.Id, typeof (QuestionnaireAR)));
             }
         }
 
@@ -140,7 +145,7 @@ using RavenQuestionnaire.Core.Domain;
             var model = this.viewRepository.Load<UserBrowseInputModel, UserBrowseView>(new UserBrowseInputModel());
             foreach (var item in model.Items)
             {
-                retval.AddRange(this.GetEventStreamById(item.Id, typeof(UserAR)));
+                retval.AddRange(this.GetEventStreamById(item.Id, typeof (UserAR)));
             }
         }
 
@@ -153,22 +158,22 @@ using RavenQuestionnaire.Core.Domain;
         protected void AddFiles(List<AggregateRootEvent> retval)
         {
             var model = this.viewRepository.Load<FileBrowseInputModel, FileBrowseView>(
-                   new FileBrowseInputModel());
+                new FileBrowseInputModel());
             foreach (var item in model.Items)
             {
-                retval.AddRange(this.GetEventStreamById( Guid.Parse(item.FileName), typeof(FileAR)));
+                retval.AddRange(this.GetEventStreamById(Guid.Parse(item.FileName), typeof (FileAR)));
             }
         }
 
         public List<AggregateRootEvent> GetEventStreamById(Guid aggregateRootId, Type arType)
-        /// Responsible for reaching eventstream by id
-        /// </summary>
-        /// <param name="retval">
-        /// The retval.
-        /// </param>
-        /// <param name="aggregateRootId">
-        /// The aggregate root id.
-        /// </param>
+            /// Responsible for reaching eventstream by id
+            /// </summary>
+            /// <param name="retval">
+            /// The retval.
+            /// </param>
+            /// <param name="aggregateRootId">
+            /// The aggregate root id.
+            /// </param>
         {
 
             var events = this.myEventStore.ReadFrom(aggregateRootId,
@@ -183,7 +188,7 @@ using RavenQuestionnaire.Core.Domain;
                 return BuildEventStream(events);
 
             if (!typeof (SnapshootableAggregateRoot<>).MakeGenericType(
-                    snapshotables.FirstOrDefault().GetGenericArguments()[0]).IsAssignableFrom(arType))
+                snapshotables.FirstOrDefault().GetGenericArguments()[0]).IsAssignableFrom(arType))
                 return BuildEventStream(events);
             if (events.Last().Payload is SnapshootLoaded)
                 return new List<AggregateRootEvent>()
@@ -201,21 +206,21 @@ using RavenQuestionnaire.Core.Domain;
                     return BuildEventStream(events);
             }
             var snapshoot = arType.GetMethod("CreateSnapshot").Invoke(aggregateRoot, new object[0]);
-                var eventSnapshoot = new SnapshootLoaded()
-                                         {
-                                             Template =
-                                                 new Snapshot(aggregateRootId,
-                                                              1,
-                                                              snapshoot)
-                                         };
-                Guid commitId = Guid.NewGuid();
-                Guid eventId = Guid.NewGuid();
-                var uncommitedStream = new UncommittedEventStream(commitId);
-                uncommitedStream.Append(new UncommittedEvent(eventId, aggregateRootId, aggregateRoot.Version + 1,
-                                                             aggregateRoot.InitialVersion, DateTime.Now, eventSnapshoot,
-                                                             events.Last().GetType().Assembly.GetName().Version));
-                this.myEventStore.Store(uncommitedStream);
-            
+            var eventSnapshoot = new SnapshootLoaded()
+                                     {
+                                         Template =
+                                             new Snapshot(aggregateRootId,
+                                                          1,
+                                                          snapshoot)
+                                     };
+            Guid commitId = Guid.NewGuid();
+            Guid eventId = Guid.NewGuid();
+            var uncommitedStream = new UncommittedEventStream(commitId);
+            uncommitedStream.Append(new UncommittedEvent(eventId, aggregateRootId, aggregateRoot.Version + 1,
+                                                         aggregateRoot.InitialVersion, DateTime.Now, eventSnapshoot,
+                                                         events.Last().GetType().Assembly.GetName().Version));
+            this.myEventStore.Store(uncommitedStream);
+
             return new List<AggregateRootEvent>()
                        {
 
@@ -225,9 +230,10 @@ using RavenQuestionnaire.Core.Domain;
                        };
 
         }
+
         private List<AggregateRootEvent> BuildEventStream(IEnumerable<CommittedEvent> events)
         {
-           return events.Select(e => new AggregateRootEvent(e)).ToList();
+            return events.Select(e => new AggregateRootEvent(e)).ToList();
         }
 
         #endregion
