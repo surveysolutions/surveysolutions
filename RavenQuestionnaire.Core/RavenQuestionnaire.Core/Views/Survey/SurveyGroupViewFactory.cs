@@ -63,30 +63,26 @@ namespace RavenQuestionnaire.Core.Views.Survey
             int count = this.documentItemSession.Query().Count(x => x.TemplateId == input.Id);
             var title = string.Empty;
             var template = this.documentItemSession.Query().Where(v => v.TemplateId == input.Id).FirstOrDefault();
-            if (template != null)
-                title = template.QuestionnaireTitle;
+            if (template != null) title = template.QuestionnaireTitle;
             if (count == 0)
                 return new SurveyGroupView(
                     input.Page, input.PageSize, title, 0, new CompleteQuestionnaireBrowseItem[0], input.Id);
-            
-            IQueryable<CompleteQuestionnaireBrowseItem> items = (string.IsNullOrEmpty(input.StatusId))
-  
 
+            IQueryable<CompleteQuestionnaireBrowseItem> items = (string.IsNullOrEmpty(input.StatusId))
                                                                     ? this.documentItemSession.Query().Where(
                                                                         v => v.TemplateId == input.Id)
                                                                     : this.documentItemSession.Query().Where(
                                                                         v => v.TemplateId == input.Id).Where(
-                                                                            v => v.Status.PublicId == Guid.Parse(input.StatusId));
-            if (input.IsNotAssigned) 
-                items = items.Where(t => t.Responsible == null);
-            if (input.QuestionnaireId != Guid.Empty)
-                items = items.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
-            if (input.Orders.Count > 0)
-                items = this.DefineOrderBy(items, input);
+                                                                            v =>
+                                                                            v.Status.PublicId
+                                                                            == Guid.Parse(input.StatusId));
+            if (input.IsNotAssigned) items = items.Where(t => t.Responsible == null);
+            if (input.QuestionnaireId != Guid.Empty) items = items.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
+            if (input.Orders.Count > 0) items = this.DefineOrderBy(items, input);
             items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
             return new SurveyGroupView(input.Page, input.PageSize, title, count, items, input.Id);
-           
 
+        }
 
         #endregion
 
