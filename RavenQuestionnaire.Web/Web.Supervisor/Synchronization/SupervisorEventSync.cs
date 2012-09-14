@@ -17,9 +17,15 @@ namespace Web.Supervisor.Synchronization
     using Main.Core.Events;
 
     using Ncqrs;
+using Ncqrs.Domain;
+using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
     using Ncqrs.Eventing.Storage;
-
+using Ncqrs.Restoring.EventStapshoot;
     using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Core.Documents;
+using RavenQuestionnaire.Core.Domain;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
     using RavenQuestionnaire.Core.Views.Event.File;
     using RavenQuestionnaire.Core.Views.Questionnaire;
@@ -41,7 +47,7 @@ namespace Web.Supervisor.Synchronization
         /// myEventStore object
         /// </summary>
         private readonly IEventStore myEventStore;
-
+         private readonly IUnitOfWorkFactory unitOfWorkFactory;
         #endregion
 
         #region Constructor
@@ -59,7 +65,7 @@ namespace Web.Supervisor.Synchronization
         {
             this.viewRepository = viewRepository;
             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
-            if (this.myEventStore == null)
+             this.unitOfWorkFactory = NcqrsEnvironment.Get<IUnitOfWorkFactory>();
                 throw new Exception("IEventStore is not correct.");
         }
 
@@ -102,7 +108,7 @@ namespace Web.Supervisor.Synchronization
             {
                 if (!SurveyStatus.IsStatusAllowDownSupervisorSync(item.Status))
                     continue;
-                GetEventStreamById(retval, item.CompleteQuestionnaireId);
+                 retval.AddRange(this.GetEventStreamById(item.CompleteQuestionnaireId, typeof(CompleteQuestionnaireAR)));
             }
         }
 
@@ -119,7 +125,7 @@ namespace Web.Supervisor.Synchronization
 
             foreach (var item in model.Items)
             {
-                this.GetEventStreamById(retval, item.Id);
+                  retval.AddRange(this.GetEventStreamById(item.Id, typeof(QuestionnaireAR)));
             }
         }
 
@@ -134,7 +140,7 @@ namespace Web.Supervisor.Synchronization
             var model = this.viewRepository.Load<UserBrowseInputModel, UserBrowseView>(new UserBrowseInputModel());
             foreach (var item in model.Items)
             {
-                this.GetEventStreamById(retval, item.Id);
+                retval.AddRange(this.GetEventStreamById(item.Id, typeof(UserAR)));
             }
         }
 
@@ -150,11 +156,11 @@ namespace Web.Supervisor.Synchronization
                    new FileBrowseInputModel());
             foreach (var item in model.Items)
             {
-                this.GetEventStreamById(retval, Guid.Parse(item.FileName));
+                retval.AddRange(this.GetEventStreamById( Guid.Parse(item.FileName), typeof(FileAR)));
             }
         }
 
-        /// <summary>
+        public List<AggregateRootEvent> GetEventStreamById(Guid aggregateRootId, Type arType)
         /// Responsible for reaching eventstream by id
         /// </summary>
         /// <param name="retval">
@@ -163,10 +169,65 @@ namespace Web.Supervisor.Synchronization
         /// <param name="aggregateRootId">
         /// The aggregate root id.
         /// </param>
-        protected void GetEventStreamById(List<AggregateRootEvent> retval, Guid aggregateRootId)
         {
-            var events = this.myEventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);
-            retval.AddRange(events.Select(e => new AggregateRootEvent(e)).ToList());
+
+            var events = this.myEventStore.ReadFrom(aggregateRootId,
+                                                    int.MinValue, int.MaxValue);
+
+            if (!events.Any())
+                return new List<AggregateRootEvent>(0);
+            var snapshotables = from i in arType.GetInterfaces()
+                                where i.IsGenericType && i.GetGenericTypeDefinition() == typeof (ISnapshotable<>)
+                                select i;
+            if (!snapshotables.Any())
+                return BuildEventStream(events);
+
+            if (!typeof (SnapshootableAggregateRoot<>).MakeGenericType(
+                    snapshotables.FirstOrDefault().GetGenericArguments()[0]).IsAssignableFrom(arType))
+                return BuildEventStream(events);
+            if (events.Last().Payload is SnapshootLoaded)
+                return new List<AggregateRootEvent>()
+                           {
+
+                               new AggregateRootEvent(events.Last())
+                           };
+            AggregateRoot aggregateRoot;
+            using (var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork(Guid.NewGuid()))
+            {
+                if (unitOfWork == null)
+                    return BuildEventStream(events);
+                aggregateRoot = unitOfWork.GetById(arType, aggregateRootId, null);
+                if (aggregateRoot == null)
+                    return BuildEventStream(events);
+            }
+            var snapshoot = arType.GetMethod("CreateSnapshot").Invoke(aggregateRoot, new object[0]);
+                var eventSnapshoot = new SnapshootLoaded()
+                                         {
+                                             Template =
+                                                 new Snapshot(aggregateRootId,
+                                                              1,
+                                                              snapshoot)
+                                         };
+                Guid commitId = Guid.NewGuid();
+                Guid eventId = Guid.NewGuid();
+                var uncommitedStream = new UncommittedEventStream(commitId);
+                uncommitedStream.Append(new UncommittedEvent(eventId, aggregateRootId, aggregateRoot.Version + 1,
+                                                             aggregateRoot.InitialVersion, DateTime.Now, eventSnapshoot,
+                                                             events.Last().GetType().Assembly.GetName().Version));
+                this.myEventStore.Store(uncommitedStream);
+            
+            return new List<AggregateRootEvent>()
+                       {
+
+                           new AggregateRootEvent(new CommittedEvent(commitId, eventId, aggregateRootId, 1,
+                                                                     DateTime.Now, eventSnapshoot,
+                                                                     events.Last().GetType().Assembly.GetName().Version))
+                       };
+
+        }
+        private List<AggregateRootEvent> BuildEventStream(IEnumerable<CommittedEvent> events)
+        {
+           return events.Select(e => new AggregateRootEvent(e)).ToList();
         }
 
         #endregion

@@ -56,8 +56,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenQuestionnaire.Web.Tests", "RavenQuestionnaire.Web.Tests\RavenQuestionnaire.Web.Tests.csproj", "{36EF9349-47B6-452B-8556-5952DAF19A43}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main.Core", "Main.Core\Main.Core.csproj", "{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ncqrs.Restoring.EventStapshoot", "Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj", "{7598C70B-5772-4ED5-81DE-C0D7718BC164}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main.Core.Tests", "Main.Core.Tests\Main.Core.Tests.csproj", "{ABD380D9-B4F3-410F-AF37-3635B6C5449C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ncqrs.Restoring.EventStapshoot.test", "Ncqrs.Restoring.EventStapshoot.test\Ncqrs.Restoring.EventStapshoot.test.csproj", "{2719C23D-0A12-4E5B-B4DC-99CDBF413937}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -621,5 +623,7 @@ Global
 		{AA90754B-CA47-429E-BDC8-2A83E94179B7} = {CD907549-A81C-4C72-B968-0B68A3DF6829}
 		{EA93A91D-7BC9-4EC0-8A22-8A772AFD76C3} = {C60EC93D-7BEA-4550-BE0A-77CC24F48375}
 		{7714E2D3-372D-4B0A-9393-F7A0EDA331F5} = {C60EC93D-7BEA-4550-BE0A-77CC24F48375}
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164} = {C60EC93D-7BEA-4550-BE0A-77CC24F48375}
+		{2719C23D-0A12-4E5B-B4DC-99CDBF413937} = {C60EC93D-7BEA-4550-BE0A-77CC24F48375}
 	EndGlobalSection
 EndGlobal
