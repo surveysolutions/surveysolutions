@@ -6,6 +6,9 @@
 //   CompleteQuestionnaire Aggregate Root.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Ncqrs.Restoring.EventStapshoot;
+
 namespace RavenQuestionnaire.Core.Domain
 {
     using System;
@@ -28,7 +31,7 @@ namespace RavenQuestionnaire.Core.Domain
     /// <summary>
     /// CompleteQuestionnaire Aggregate Root.
     /// </summary>
-    public class CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireDocument>
+    public class CompleteQuestionnaireAR : SnapshootableAggregateRoot<CompleteQuestionnaireDocument>
     {
         #region Fields
 
@@ -135,7 +138,7 @@ namespace RavenQuestionnaire.Core.Domain
         /// <returns>
         /// The RavenQuestionnaire.Core.Documents.CompleteQuestionnaireDocument.
         /// </returns>
-        public CompleteQuestionnaireDocument CreateSnapshot()
+        public override CompleteQuestionnaireDocument CreateSnapshot()
         {
             return this.doc;
         }
@@ -195,7 +198,7 @@ namespace RavenQuestionnaire.Core.Domain
         /// <param name="snapshot">
         /// The snapshot.
         /// </param>
-        public void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
+        public override void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
         {
             this.doc = snapshot;
         }

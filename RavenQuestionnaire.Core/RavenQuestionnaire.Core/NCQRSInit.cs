@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Ncqrs.Restoring.EventStapshoot;
+
 namespace RavenQuestionnaire.Web.App_Start
 {
     using System;
@@ -135,20 +137,6 @@ namespace RavenQuestionnaire.Web.App_Start
             return service;
         }
 
-        /// <summary>
-        /// The initialize event store.
-        /// </summary>
-        /// <param name="storePath">
-        /// The store path.
-        /// </param>
-        /// <returns>
-        /// The Ncqrs.Eventing.Storage.IEventStore.
-        /// </returns>
-        private static IEventStore InitializeEventStore(string storePath)
-        {
-            var eventStore = new RavenDBEventStore(storePath);
-            return eventStore;
-        }
 
         /// <summary>
         /// The initialize event store.
