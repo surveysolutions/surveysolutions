@@ -45,17 +45,6 @@ namespace Main.Core.Domain
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
-        /// </summary>
-        /// <param name="template">
-        /// The template.
-        /// </param>
-        public QuestionnaireAR(QuestionnaireDocument template)
-            : base(template.PublicKey)
-        {
-            this.ApplyEvent(new QuestionnaireTemplateLoaded { Template = template });
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
@@ -666,17 +655,6 @@ namespace Main.Core.Domain
         protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
         {
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
-        }
-
-        /// <summary>
-        /// The on questionnaire template loaded.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        protected void OnQuestionnaireTemplateLoaded(QuestionnaireTemplateLoaded e)
-        {
-            this.innerDocument = e.Template;
         }
 
         /// <summary>
