@@ -59,12 +59,16 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// </returns>
         public InterviewerStatisticsView Load(InterviewerStatisticsInputModel input)
         {
-            InterviewerStatisticsItem s = this.stat.GetByGuid(input.UserId);
-            if (s.StatusesByCQ.Count == 0)
-            {
+            var s = this.stat.GetByGuid(input.UserId);
+            if (s == null || s.StatusesByCQ.Count == 0)
                 return new InterviewerStatisticsView(
-                    s.Id, s.Name, input.Order, new List<InterviewerStatisticsViewItem>(), input.Page, input.PageSize, 0);
-            }
+                    input.UserId,
+                    input.UserName, //fix this
+                    input.Order,
+                    new List<InterviewerStatisticsViewItem>(),
+                    input.Page,
+                    input.PageSize,
+                    0);
 
             IQueryable<InterviewerStatisticsViewItem> items = s.GetTableRows().AsQueryable();
             if (input.Orders.Count > 0)

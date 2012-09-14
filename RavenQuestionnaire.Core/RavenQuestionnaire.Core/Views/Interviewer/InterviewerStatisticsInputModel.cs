@@ -90,6 +90,11 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// </summary>
         public Guid UserId { get; set; }
 
+        /// <summary>
+        /// Gets or sets UserName.
+        /// </summary>
+        public string UserName { get; set; }
+
         #endregion
     }
 }
