@@ -6,7 +6,7 @@
 //   The cq grouped browse factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-using RavenQuestionnaire.Core.Entities.SubEntities;
+
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
 {
     using System;
@@ -14,6 +14,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
     using System.Linq;
     using System.Linq.Expressions;
 
+
+    using Main.Core.Entities.SubEntities;
     using RavenQuestionnaire.Core.Denormalizers;
 
     /// <summary>

@@ -151,6 +151,20 @@ namespace Main.Core.Entities.SubEntities
         }
 
         /// <summary>
+        /// The is status allow down supervisor sync.
+        /// </summary>
+        /// <param name="status">
+        /// The status.
+        /// </param>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        public static bool IsStatusAllowDownSupervisorSync(SurveyStatus status)
+        {            
+             return status.PublicId == SurveyStatus.Initial.PublicId || status.PublicId == SurveyStatus.Approve.PublicId;
+        }
+
+        /// <summary>
         /// check status on allowance to be pushed from capi
         /// </summary>
         /// <param name="status">

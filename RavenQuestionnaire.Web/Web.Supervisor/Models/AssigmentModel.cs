@@ -9,7 +9,7 @@
 
 namespace Web.Supervisor.Models
 {
-    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities;
 
     /// <summary>
     /// Define aasigment model
