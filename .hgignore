@@ -197,3 +197,7 @@ RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot.test/bin/*
 RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot.test/obj/*
 RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot/bin/*
 RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot/obj/*
+RavenQuestionnaire.Web/Main.Core.Tests/bin/*
+RavenQuestionnaire.Web/Main.Core.Tests/obj/*
+RavenQuestionnaire.Web/Main.Core/bin/*
+RavenQuestionnaire.Web/Main.Core/obj/*
