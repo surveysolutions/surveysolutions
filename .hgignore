@@ -193,3 +193,6 @@ Externals/Framework/src/Ncqrs/bin/*
 Externals/Framework/src/Ncqrs.Spec/bin/*
 Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB/bin/*
 
+RavenQuestionnaire.Web/Main.Core.Tests/*
+RavenQuestionnaire.Web/Main.Core/bin/*
+RavenQuestionnaire.Web/Main.Core/obj/Debug/*.*
