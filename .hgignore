@@ -193,3 +193,7 @@ Externals/Framework/src/Ncqrs/bin/*
 Externals/Framework/src/Ncqrs.Spec/bin/*
 Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB/bin/*
 
+RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot.test/bin/*
+RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot.test/obj/*
+RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot/bin/*
+RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot/obj/*
