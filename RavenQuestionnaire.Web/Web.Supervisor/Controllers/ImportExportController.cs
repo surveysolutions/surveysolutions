@@ -125,7 +125,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult ImportCompleted()
         {
-            return this.RedirectToAction("Index", "Dashboard");
+            return this.RedirectToAction("Index", "Survey");
         }
 
         #endregion

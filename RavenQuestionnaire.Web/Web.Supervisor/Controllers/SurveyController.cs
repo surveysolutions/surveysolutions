@@ -10,18 +10,19 @@
 namespace Web.Supervisor.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using Main.Core.Commands.Questionnaire.Completed;   
+    using Main.Core.Entities.SubEntities;
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
     using Questionnaire.Core.Web.Helpers;
     using RavenQuestionnaire.Core;
-   
-using Main.Core.Entities.SubEntities;
     using RavenQuestionnaire.Core.Views.Assign;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using Main.Core.Commands.Questionnaire.Completed;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
+    using RavenQuestionnaire.Core.Views.Interviewer;
     using RavenQuestionnaire.Core.Views.Question;
     using RavenQuestionnaire.Core.Views.Statistics;
     using RavenQuestionnaire.Core.Views.Survey;
@@ -31,12 +32,6 @@ using Main.Core.Commands.Questionnaire.Completed;
     /// <summary>
     /// Responsible for display surveys and statistic info about surveys
     /// </summary>
-    using System.Collections.Generic;
-    using Main.Core.Commands.Questionnaire.Completed;
-    using Main.Core.Entities.SubEntities;
-
-    using RavenQuestionnaire.Core.Views.Interviewer;
-
     [Authorize]
     public class SurveyController : Controller
     {
