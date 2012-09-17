@@ -1,31 +1,36 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireAR.cs" company="">
-//   
+// <copyright file="QuestionnaireAR.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   Questionnaire Aggregate Root.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Domain
+
+using Ncqrs.Restoring.EventStapshoot;
+using RavenQuestionnaire.Core.Entities.Extensions;
+
+namespace RavenQuestionnaire.Core.Domain
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using Main.Core.AbstractFactories;
-    using Main.Core.Documents;
-    using Main.Core.Entities.Extensions;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Events.Questionnaire;
-
     using Ncqrs;
     using Ncqrs.Domain;
     using Ncqrs.Eventing.Sourcing.Snapshotting;
 
+    using RavenQuestionnaire.Core.AbstractFactories;
+    using RavenQuestionnaire.Core.Documents;
+    using RavenQuestionnaire.Core.Entities;
+    using RavenQuestionnaire.Core.Entities.SubEntities;
+    using RavenQuestionnaire.Core.Events;
+    using RavenQuestionnaire.Core.Events.Questionnaire;
+
     /// <summary>
     /// Questionnaire Aggregate Root.
     /// </summary>
-    public class QuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
+    public class QuestionnaireAR : SnapshootableAggregateRoot<QuestionnaireDocument>
     {
         #region Fields
 
@@ -44,7 +49,6 @@ namespace Main.Core.Domain
         public QuestionnaireAR()
         {
         }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
@@ -291,7 +295,7 @@ namespace Main.Core.Domain
         /// <returns>
         /// The RavenQuestionnaire.Core.Documents.QuestionnaireDocument.
         /// </returns>
-        public QuestionnaireDocument CreateSnapshot()
+        public override QuestionnaireDocument CreateSnapshot()
         {
             return this.innerDocument;
         }
@@ -359,7 +363,7 @@ namespace Main.Core.Domain
         /// <param name="snapshot">
         /// The snapshot.
         /// </param>
-        public void RestoreFromSnapshot(QuestionnaireDocument snapshot)
+        public override void RestoreFromSnapshot(QuestionnaireDocument snapshot)
         {
             this.innerDocument = snapshot;
         }
@@ -656,6 +660,7 @@ namespace Main.Core.Domain
         {
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
         }
+
 
         /// <summary>
         /// The update answer list.

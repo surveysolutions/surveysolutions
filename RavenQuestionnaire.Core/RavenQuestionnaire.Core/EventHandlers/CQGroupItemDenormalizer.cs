@@ -6,6 +6,10 @@
 //   The cq group item denormalizer.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+using System;
+using Main.Core.Documents;
+using Ncqrs.Restoring.EventStapshoot;
+
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     using System.Linq;
@@ -22,8 +26,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
     /// The cq group item denormalizer.
     /// </summary>
     public class CQGroupItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
-                                           IEventHandler<NewQuestionnaireCreated>, 
-                                           IEventHandler<QuestionnaireTemplateLoaded>, 
+                                           IEventHandler<NewQuestionnaireCreated>,
+                                           IEventHandler<SnapshootLoaded>, 
                                            IEventHandler<CompleteQuestionnaireDeleted>
     {
         #region Fields
@@ -60,8 +64,12 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
+            HandleCompleteQuestionnaire(evnt.Payload.Questionnaire.TemplateId);
+        }
+        protected void HandleCompleteQuestionnaire(Guid templateId)
+        {
             IQueryable<CQGroupItem> group =
-                this.documentGroupSession.Query().Where(g => g.SurveyId == evnt.Payload.Questionnaire.TemplateId);
+               this.documentGroupSession.Query().Where(g => g.SurveyId == templateId);
             foreach (CQGroupItem cqGroupItem in group)
             {
                 cqGroupItem.TotalCount++;
@@ -76,8 +84,12 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
-            var questionnaire = new CQGroupItem(0, 100, 0, evnt.Payload.Title, evnt.Payload.PublicKey);
-            this.documentGroupSession.Store(questionnaire, evnt.Payload.PublicKey);
+           HandleQuestionnaire(evnt.Payload.Title, evnt.Payload.PublicKey);
+        }
+        protected void HandleQuestionnaire(string title, Guid key)
+        {
+            var questionnaire = new CQGroupItem(0, 100, 0, title, key);
+            this.documentGroupSession.Store(questionnaire, key);
         }
 
         /// <summary>
@@ -86,10 +98,19 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// <param name="evnt">
         /// The evnt.
         /// </param>
-        public void Handle(IPublishedEvent<QuestionnaireTemplateLoaded> evnt)
+        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
         {
-            var questionnaire = new CQGroupItem(0, 100, 0, evnt.Payload.Template.Title, evnt.Payload.Template.PublicKey);
-            this.documentGroupSession.Store(questionnaire, evnt.Payload.Template.PublicKey);
+            var questionnaireDoc = evnt.Payload.Template.Payload as QuestionnaireDocument;
+            if (questionnaireDoc != null)
+            {
+                HandleQuestionnaire(questionnaireDoc.Title, questionnaireDoc.PublicKey);
+                return;
+            }
+            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
+            if (document != null)
+            {
+                HandleCompleteQuestionnaire(document.TemplateId);
+            }
         }
 
         /// <summary>
