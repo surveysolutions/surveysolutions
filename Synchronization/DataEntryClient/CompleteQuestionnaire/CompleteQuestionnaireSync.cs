@@ -19,6 +19,8 @@ namespace DataEntryClient.CompleteQuestionnaire
     using Main.Core.Documents;
     using Main.Core.Events;
 
+    using NLog;
+
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
@@ -26,6 +28,8 @@ namespace DataEntryClient.CompleteQuestionnaire
 
     using SynchronizationMessages.CompleteQuestionnaire;
     using SynchronizationMessages.Handshake;
+
+    using LogManager = NLog.LogManager;
 
     /// <summary>
     /// The complete questionnaire sync.
@@ -104,8 +108,10 @@ namespace DataEntryClient.CompleteQuestionnaire
                 // TODO: uncomment that string if we'll be synchronizing delta instead of everything   Guid? lastSyncEventGuid = GetLastSyncEventGuid(syncKey);
                 this.UploadEvents(syncKey, null);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger logger = LogManager.GetCurrentClassLogger();
+                logger.Fatal("Import error", ex);
                 this.invoker.Execute(new EndProcessComand(this.processGuid, EventState.Error));
             }
         }
@@ -169,8 +175,11 @@ namespace DataEntryClient.CompleteQuestionnaire
                                         new ChangeEventStatusCommand(
                                             this.processGuid, root.EventChunckPublicKey, EventState.Completed));
                                 }
-                                catch (Exception)
+                                catch (Exception ex)
                                 {
+                                    Logger logger = LogManager.GetCurrentClassLogger();
+                                    logger.Fatal("Import error", ex);
+
                                     events = null;
                                     this.invoker.Execute(
                                         new ChangeEventStatusCommand(
@@ -186,8 +195,10 @@ namespace DataEntryClient.CompleteQuestionnaire
                 this.eventStore.WriteEvents(events);
                 this.invoker.Execute(new EndProcessComand(this.processGuid, EventState.Completed));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger logger = LogManager.GetCurrentClassLogger();
+                logger.Fatal("Import error", ex);
                 this.invoker.Execute(new EndProcessComand(this.processGuid, EventState.Error));
             }
         }

@@ -124,7 +124,7 @@ namespace Web.CAPI.Controllers
                 catch (Exception e)
                 {
                     Logger logger = LogManager.GetCurrentClassLogger();
-                    logger.Fatal(e);
+                    logger.Fatal("Error on import ", e);
                 }
             };
             ThreadPool.QueueUserWorkItem(callback, syncProcess);
