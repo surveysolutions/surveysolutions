@@ -26,15 +26,6 @@
     <Setting Name="CheckEventPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Synchronizations/CheckIsThereSomethingToPush</Value>
     </Setting>
-    <Setting Name="DefaultUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost:8083/</Value>
-    </Setting>
-    <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost</Value>
-    </Setting>
-    <Setting Name="DefaultPort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">8083</Value>
-    </Setting>
     <Setting Name="EnginePathName" Type="System.String" Scope="User">
       <Value Profile="(Default)">Engine</Value>
     </Setting>
@@ -46,6 +37,15 @@
     </Setting>
     <Setting Name="LoginPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/LogOn</Value>
+    </Setting>
+    <Setting Name="DefaultUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://localhost:7089/</Value>
+    </Setting>
+    <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DefaultPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">7089</Value>
     </Setting>
   </Settings>
 </SettingsFile>
