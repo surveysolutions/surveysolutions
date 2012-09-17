@@ -121,42 +121,6 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8083/")]
-        public string DefaultUrl {
-            get {
-                return ((string)(this["DefaultUrl"]));
-            }
-            set {
-                this["DefaultUrl"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost")]
-        public string EndpointExportPath {
-            get {
-                return ((string)(this["EndpointExportPath"]));
-            }
-            set {
-                this["EndpointExportPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8083")]
-        public string DefaultPort {
-            get {
-                return ((string)(this["DefaultPort"]));
-            }
-            set {
-                this["DefaultPort"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Engine")]
         public string EnginePathName {
             get {
@@ -200,6 +164,42 @@ namespace Browsing.CAPI.Properties {
             }
             set {
                 this["LoginPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:7089/")]
+        public string DefaultUrl {
+            get {
+                return ((string)(this["DefaultUrl"]));
+            }
+            set {
+                this["DefaultUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EndpointExportPath {
+            get {
+                return ((string)(this["EndpointExportPath"]));
+            }
+            set {
+                this["EndpointExportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("7089")]
+        public string DefaultPort {
+            get {
+                return ((string)(this["DefaultPort"]));
+            }
+            set {
+                this["DefaultPort"] = value;
             }
         }
     }
