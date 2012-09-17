@@ -196,3 +196,7 @@ Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB/bin/*
 RavenQuestionnaire.Web/Main.Core.Tests/*
 RavenQuestionnaire.Web/Main.Core/bin/*
 RavenQuestionnaire.Web/Main.Core/obj/Debug/*.*
+RavenQuestionnaire.Web/RavenQuestionnaire.Web/Bin/*
+RavenQuestionnaire.Web/Main.Core/obj/*
+RavenQuestionnaire.Web/Web.CAPI/Bin/*
+RavenQuestionnaire.Web/Web.Headquarter/Bin/*
