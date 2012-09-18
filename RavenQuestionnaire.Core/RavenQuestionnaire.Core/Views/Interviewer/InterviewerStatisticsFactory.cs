@@ -109,7 +109,11 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
                                                              templateGroup.Count(
                                                                  q =>
                                                                  q.Status.PublicId ==
-                                                                 SurveyStatus.Approve.PublicId)
+                                                                 SurveyStatus.Approve.PublicId),
+                                                                 templateGroup.Count(
+                                                                 q =>
+                                                                 q.Status.PublicId ==
+                                                                 SurveyStatus.Redo.PublicId)
                         );
             }
         }

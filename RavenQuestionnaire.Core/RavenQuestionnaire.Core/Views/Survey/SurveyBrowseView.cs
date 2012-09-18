@@ -93,8 +93,9 @@ namespace RavenQuestionnaire.Core.Views.Survey
                     new SurveyBrowseItem(
                         item.Id,
                         item.Title,
-                        item.Unassigned, item.Total, item.Initial, item.Error, item.Complete, item.Approve));
-                        item.Redo,
+                        item.Unassigned, item.Total, item.Initial, item.Error, item.Complete, item.Approve,
+                        item.Redo));
+
             }
         }
 
