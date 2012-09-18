@@ -65,7 +65,8 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
                     { SurveyStatus.Initial.PublicId, SurveyStatus.Initial.Name }, 
                     { SurveyStatus.Error.PublicId, SurveyStatus.Error.Name }, 
                     { SurveyStatus.Complete.PublicId, SurveyStatus.Complete.Name }, 
-                    { SurveyStatus.Approve.PublicId, SurveyStatus.Approve.Name }
+                    { SurveyStatus.Approve.PublicId, SurveyStatus.Approve.Name },
+                    { SurveyStatus.Redo.PublicId, SurveyStatus.Redo.Name }
                 };
         }
 
