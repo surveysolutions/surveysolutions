@@ -114,9 +114,11 @@ namespace Main.Core.Events
         /// </returns>
         protected IEnumerable<UncommittedEventStream> BuildEventStreams(IEnumerable<AggregateRootEvent> stream)
         {
-            return
-                stream.GroupBy(x => x.EventSourceId).Select(
-                    g => g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue)));
+            foreach (IGrouping<Guid, AggregateRootEvent> g in stream.GroupBy(x => x.EventSourceId))
+            {
+                yield return
+                    g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue));
+            }
         }
 
         #endregion

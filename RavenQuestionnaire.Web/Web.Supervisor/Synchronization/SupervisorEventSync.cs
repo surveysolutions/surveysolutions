@@ -191,11 +191,14 @@ namespace Web.Supervisor.Synchronization
                 snapshotables.FirstOrDefault().GetGenericArguments()[0]).IsAssignableFrom(arType))
                 return BuildEventStream(events);
             if (events.Last().Payload is SnapshootLoaded)
+            {
+
                 return new List<AggregateRootEvent>()
                            {
 
                                new AggregateRootEvent(events.Last())
                            };
+            }
             AggregateRoot aggregateRoot;
             using (var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork(Guid.NewGuid()))
             {
@@ -220,7 +223,6 @@ namespace Web.Supervisor.Synchronization
                                                          aggregateRoot.InitialVersion, DateTime.Now, eventSnapshoot,
                                                          events.Last().GetType().Assembly.GetName().Version));
             this.myEventStore.Store(uncommitedStream);
-
             return new List<AggregateRootEvent>()
                        {
 

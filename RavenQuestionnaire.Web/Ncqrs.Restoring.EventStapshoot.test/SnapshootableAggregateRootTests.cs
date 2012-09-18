@@ -57,7 +57,7 @@ namespace Ncqrs.Restoring.EventStapshoot.test
                                                                                                    Template =
                                                                                                        new Snapshot(
                                                                                                        aggreagateRootId,
-                                                                                                       1, new object())
+                                                                                                       2, new object())
                                                                                                },
                                                                                            new Version())
                                                                         ,
@@ -99,7 +99,7 @@ namespace Ncqrs.Restoring.EventStapshoot.test
                                                                                                Template =
                                                                                                    new Snapshot(
                                                                                                    aggreagateRootId,
-                                                                                                   1, new object())
+                                                                                                   2, new object())
                                                                                            },
                                                                                            new Version())
                                                                         ,

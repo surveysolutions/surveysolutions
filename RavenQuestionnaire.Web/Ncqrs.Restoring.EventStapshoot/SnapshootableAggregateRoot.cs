@@ -48,12 +48,16 @@ namespace Ncqrs.Restoring.EventStapshoot
                 base.InitializeFromHistory(history);
                 return;
             }
+           
             var newHistory = new CommittedEventStream(history.SourceId,
-                                                      history.SkipWhile(e => e != lastSnapshoot).Select(
+                                                      history.SkipWhile(e => e != lastSnapshoot).Skip(1).Select(
                                                           (e, i) =>
                                                           new CommittedEvent(e.CommitId, e.EventIdentifier,
-                                                                             e.EventSourceId, i + 1, e.EventTimeStamp,
+                                                                             e.EventSourceId, e.EventSequence, e.EventTimeStamp,
                                                                              e.Payload, e.EventVersion)));
+            Snapshot snapshotEvent = ((SnapshootLoaded) lastSnapshoot.Payload).Template;
+            this.InitializeFromSnapshot(new Snapshot(snapshotEvent.EventSourceId, history.Count() - newHistory.Count(), null));
+            this.RestoreFromSnapshot((T)snapshotEvent.Payload);
             base.InitializeFromHistory(newHistory);
         }
     }
