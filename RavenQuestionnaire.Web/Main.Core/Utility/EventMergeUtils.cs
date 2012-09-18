@@ -141,6 +141,8 @@ namespace Main.Core.Utility
                 startPoint--;
                 croppedBase = baseStream.TakeWhile(e => e.EventSequence <= startPoint);
                 croppedNewStream = stream.TakeWhile(e => e.EventSequence <= startPoint);
+                if (!croppedNewStream.Any())
+                    return baseStream.Last().EventSequence;
             }
 
             return startPoint;

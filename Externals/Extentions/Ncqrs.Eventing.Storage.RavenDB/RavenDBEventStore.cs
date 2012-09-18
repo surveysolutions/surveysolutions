@@ -135,7 +135,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        protected IList<StoredEvent> AccumulateEvents(Expression<Func<StoredEvent, bool>> query)
+        protected IEnumerable<StoredEvent> AccumulateEvents(Expression<Func<StoredEvent, bool>> query)
         {
             List<StoredEvent> retval = new List<StoredEvent>();
             int maxPageSize = 1024;
@@ -149,8 +149,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                     Raven.Client.Linq.RavenQueryStatistics stats;
                     var chunk =
                         session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Statistics(out stats).Skip(page * maxPageSize).
-                        Take(maxPageSize).Where(query).OrderBy(x => x.EventTimeStamp).ToList();
-                    if (chunk.Count == 0)
+                        Take(maxPageSize).Where(query);
+                    if (!chunk.Any())
                         break;
 
                     retval.AddRange(chunk);
@@ -158,7 +158,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 }
             }
 
-            return retval;
+            return retval.OrderBy(x=>x.EventSequence);
 
         }
 

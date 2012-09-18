@@ -147,7 +147,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
         /// The find divergent sequence number_ base event stream and new event contains do crossed_ zero returned.
         /// </summary>
         [Test]
-        public void FindDivergentSequenceNumber_BaseEventStreamAndNewEventContainsDoCrossed_ZeroReturned()
+        public void FindDivergentSequenceNumber_BaseEventStreamAndNewEventContainsDoNotCrossed_EventSequenseForNewStreamWillBeStartetFromLastInBaseStream()
         {
             Guid eventSourceId = Guid.NewGuid();
             var stream = new List<AggregateRootEvent>
@@ -160,7 +160,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
                 new CommittedEvent(
                     Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 1, DateTime.Now, new object(), new Version()));
             var result = stream.FindDivergentSequenceNumber(baseStream);
-            Assert.AreEqual(result, 0);
+            Assert.AreEqual(result, 1);
         }
 
         /// <summary>

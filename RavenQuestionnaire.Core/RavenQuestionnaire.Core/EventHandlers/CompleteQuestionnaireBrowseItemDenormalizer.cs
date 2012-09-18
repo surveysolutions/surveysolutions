@@ -83,11 +83,17 @@ namespace RavenQuestionnaire.Core.EventHandlers
         protected void HandleNewQuestionnaire(CompleteQuestionnaireDocument document)
         {
             // getting all featured questions
+            var browseItem = this.documentItemStore.GetByGuid(document.PublicKey);
+            if (browseItem == null)
+            {
+                browseItem = new CompleteQuestionnaireBrowseItem(document);
+                this.documentItemStore.Store(browseItem, document.PublicKey);
+            }
             List<QuestionStatisticView> featuredQuestions = this.FindFeaturedQuestions(document);
 
-            var browseItem = new CompleteQuestionnaireBrowseItem(document);
             browseItem.FeaturedQuestions = featuredQuestions.ToArray();
-            this.documentItemStore.Store(browseItem, document.PublicKey);
+            browseItem.Status = document.Status;
+            browseItem.Responsible = document.Responsible;
         }
 
         /// <summary>
