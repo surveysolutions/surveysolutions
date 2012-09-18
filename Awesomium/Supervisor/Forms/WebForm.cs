@@ -26,11 +26,11 @@ namespace Browsing.Supervisor.Forms
         {
             InitializeComponent();
 
-/*#if DEBUG
+#if DEBUG
             Properties.Settings.Default.RunClient = false;
             Properties.Settings.Default.DefaultUrl = "http://192.168.3.113/DevKharkiv-Supervisor/";
             Properties.Settings.Default.Save();
-#endif*/
+#endif
         }
 
         #endregion

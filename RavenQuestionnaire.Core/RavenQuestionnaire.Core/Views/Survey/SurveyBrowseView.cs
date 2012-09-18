@@ -70,7 +70,8 @@ namespace RavenQuestionnaire.Core.Views.Survey
                     { SurveyStatus.Initial.PublicId, SurveyStatus.Initial.Name }, 
                     { SurveyStatus.Error.PublicId, SurveyStatus.Error.Name }, 
                     { SurveyStatus.Complete.PublicId, SurveyStatus.Complete.Name }, 
-                    { SurveyStatus.Approve.PublicId, SurveyStatus.Approve.Name }
+                    { SurveyStatus.Approve.PublicId, SurveyStatus.Approve.Name },
+                    { SurveyStatus.Redo.PublicId, SurveyStatus.Redo.Name }
                 };
             foreach (SurveyBrowseItem item in items)
             {
@@ -85,6 +86,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
                         item.Error, 
                         item.Completed, 
                         item.Approve, 
+                        item.Redo,
                         this.Headers));
             }
         }
