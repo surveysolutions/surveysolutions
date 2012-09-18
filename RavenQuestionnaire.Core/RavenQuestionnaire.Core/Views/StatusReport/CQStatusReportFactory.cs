@@ -6,6 +6,9 @@
 //   The cq status report factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Documents;
+
 namespace RavenQuestionnaire.Core.Views.StatusReport
 {
     using System.Collections.Generic;
@@ -66,7 +69,7 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
                 return null; // no satelite status document 
             }
 
-            var status = new StatusItem { Title = statuseFirst.Name };
+            var status = new StatusItem {Title = statuseFirst.Name};
 
             // statuses.FirstOrDefault(s => s.PublicId == input.StatusId);}
             List<CompleteQuestionnaireBrowseItem> query =

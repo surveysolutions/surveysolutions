@@ -6,6 +6,13 @@
 //   The interviewers factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System;
+using Main.Core.Entities.SubEntities;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
+using RavenQuestionnaire.Core.Views.Survey;
+
 namespace RavenQuestionnaire.Core.Views.Interviewer
 {
     using System.Collections.Generic;
@@ -26,7 +33,7 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<InterviewerStatisticsItem> stat;
+        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
 
         #endregion
 
@@ -39,9 +46,9 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// <param name="users">
         /// The users.
         /// </param>
-        public InterviewerStatisticsFactory(IDenormalizerStorage<InterviewerStatisticsItem> users)
+        public InterviewerStatisticsFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
         {
-            this.stat = users;
+            this.documentItemSession = documentItemSession;
         }
 
         #endregion
@@ -59,28 +66,52 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// </returns>
         public InterviewerStatisticsView Load(InterviewerStatisticsInputModel input)
         {
-            var s = this.stat.GetByGuid(input.UserId);
-            if (s == null || s.StatusesByCQ.Count == 0)
-                return new InterviewerStatisticsView(
-                    input.UserId,
-                    input.UserName, //fix this
-                    input.Order,
-                    new List<InterviewerStatisticsViewItem>(),
-                    input.Page,
-                    input.PageSize,
-                    0);
+            var questionnairesGroupedByTemplate =
+                BuildItems(
+                    this.documentItemSession.Query().Where(q => q.Responsible.Id == input.UserId).GroupBy(
+                        x => x.TemplateId), input.UserId, input.UserName).AsQueryable();
 
-            IQueryable<InterviewerStatisticsViewItem> items = s.GetTableRows().AsQueryable();
+            var retval = new InterviewerStatisticsView(input.UserId, input.UserName, input.Order,
+                                                       new List<InterviewerStatisticsViewItem>(), input.Page,
+                                                       input.PageSize, questionnairesGroupedByTemplate.Count());
             if (input.Orders.Count > 0)
             {
-                items = input.Orders[0].Direction == OrderDirection.Asc
-                            ? items.OrderBy(input.Orders[0].Field)
-                            : items.OrderByDescending(input.Orders[0].Field);
+                questionnairesGroupedByTemplate = input.Orders[0].Direction == OrderDirection.Asc
+                                                      ? questionnairesGroupedByTemplate.OrderBy(input.Orders[0].Field)
+                                                      : questionnairesGroupedByTemplate.OrderByDescending(
+                                                          input.Orders[0].Field);
             }
 
-            items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-            return new InterviewerStatisticsView(
-                s.Id, s.Name, input.Order, items.ToList(), input.Page, input.PageSize, items.Count());
+            retval.Items =
+                questionnairesGroupedByTemplate.Skip((input.Page - 1)*input.PageSize).Take(input.PageSize).ToList();
+            return retval;
+        }
+
+        protected IEnumerable<InterviewerStatisticsViewItem> BuildItems(IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> grouped, Guid userId, string userName)
+        {
+            foreach (var templateGroup in grouped)
+            {
+                yield
+                    return new InterviewerStatisticsViewItem(userId, userName,
+                                                             templateGroup.FirstOrDefault().QuestionnaireTitle,
+                                                             templateGroup.Key,
+                                                             templateGroup.Count(
+                                                                 q =>
+                                                                 q.Status.PublicId ==
+                                                                 SurveyStatus.Initial.PublicId),
+                                                             templateGroup.Count(
+                                                                 q =>
+                                                                 q.Status.PublicId == SurveyStatus.Error.PublicId),
+                                                             templateGroup.Count(
+                                                                 q =>
+                                                                 q.Status.PublicId ==
+                                                                 SurveyStatus.Complete.PublicId),
+                                                             templateGroup.Count(
+                                                                 q =>
+                                                                 q.Status.PublicId ==
+                                                                 SurveyStatus.Approve.PublicId)
+                        );
+            }
         }
 
         #endregion
