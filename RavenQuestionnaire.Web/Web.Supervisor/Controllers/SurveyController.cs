@@ -103,11 +103,11 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Return Assigments page
         /// </returns>
-        public ActionResult Assigments(Guid id, SurveyGroupInputModel input, string statusId, bool? isNotAssigned)
+        public ActionResult Assigments(Guid id, SurveyGroupInputModel input, string status, bool? isNotAssigned)
         {
             var inputModel = input == null
-                                 ? new SurveyGroupInputModel() { Id = id, StatusId = statusId }
-                                 : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders, statusId, isNotAssigned ?? false);
+                                 ? new SurveyGroupInputModel() { Id = id, StatusId = status }
+                                 : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders, status, isNotAssigned ?? false);
             var user = this.globalInfo.GetCurrentUser();
             var model = this.viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(inputModel);
             var users = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });

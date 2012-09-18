@@ -15,20 +15,20 @@
 
             if (status != null)
             {
-                <td>
-                    @Html.ActionLink(Model.Headers.GetItemValue(collect, it.Key), "Assigments",
+            <td>
+                @Html.ActionLink(Model.Headers.GetItemValue(collect, it.Key), "Assigments",
                                        new
                                            {
                                                id = collect.Id,
                                                status = status.PublicId
                                            })
-                </td>
+            </td>
             }
             else
             {
-                <td>
-                    @Html.ActionLink(Model.Headers.GetItemValue(collect, it.Key), "Assigments", new { id = collect.Id })
-                </td>
+            <td>
+                @Html.ActionLink(Model.Headers.GetItemValue(collect, it.Key), "Assigments", new { id = collect.Id, isNotAssigned = it.Key == "Total" ? string.Empty : "true" })
+            </td>
             }
 
 
