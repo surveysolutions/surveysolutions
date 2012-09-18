@@ -55,7 +55,7 @@ namespace RavenQuestionnaire.Core.Views.Question
         /// <param name="doc">
         /// The doc.
         /// </param>
-        public CompleteQuestionView(CompleteQuestionnaireStoreDocument questionnaire, ICompleteQuestion doc)
+        public CompleteQuestionView(ICompleteQuestionnaireDocument questionnaire, ICompleteQuestion doc)
             : base(questionnaire, doc)
         {
             this.QuestionnaireKey = questionnaire.PublicKey;

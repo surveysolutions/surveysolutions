@@ -63,31 +63,39 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
-            this.Headers = new Dictionary<Guid, string>
-                {
-                    { Guid.NewGuid(), "Total" }, 
-                    { Guid.NewGuid(), "Unassigned" }, 
-                    { SurveyStatus.Initial.PublicId, SurveyStatus.Initial.Name }, 
-                    { SurveyStatus.Error.PublicId, SurveyStatus.Error.Name }, 
-                    { SurveyStatus.Complete.PublicId, SurveyStatus.Complete.Name }, 
-                    { SurveyStatus.Approve.PublicId, SurveyStatus.Approve.Name },
-                    { SurveyStatus.Redo.PublicId, SurveyStatus.Redo.Name }
-                };
+            this.Headers = new SurveyGroupedByStatusHeader(new Dictionary<string, string>
+                                                               {
+                                                                   {"Total", "Total"},
+                                                                   {"Unassigned", "Unassigned"},
+                                                                   {
+                                                                       "Initial",
+                                                                       SurveyStatus.Initial.Name
+                                                                       },
+                                                                   {
+                                                                       "Error",
+                                                                       SurveyStatus.Error.Name
+                                                                       },
+                                                                   {
+                                                                       "Complete",
+                                                                       SurveyStatus.Complete.Name
+                                                                       },
+                                                                   {
+                                                                       "Approve",
+                                                                       SurveyStatus.Approve.Name
+                                                                       },
+                                                                        { "Redo", SurveyStatus.Redo.Name }
+
+                                                               });
+
             foreach (SurveyBrowseItem item in items)
             {
                 this.Items.Add(
                     new SurveyBrowseItem(
-                        item.Id, 
-                        item.Title, 
-                        item.Unassigned, 
-                        item.Statistic, 
-                        item.Total, 
-                        item.Initial, 
-                        item.Error, 
-                        item.Completed, 
-                        item.Approve, 
-                        item.Redo,
-                        this.Headers));
+                        item.Id,
+                        item.Title,
+                        item.Unassigned, item.Total, item.Initial, item.Error, item.Complete, item.Approve,
+                        item.Redo));
+
             }
         }
 
@@ -98,7 +106,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <summary>
         /// Gets or sets the headers.
         /// </summary>
-        public Dictionary<Guid, string> Headers { get; set; }
+        public SurveyGroupedByStatusHeader Headers { get; set; }
 
         /// <summary>
         /// Gets or sets the items.

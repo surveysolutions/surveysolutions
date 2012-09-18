@@ -20,10 +20,6 @@ namespace RavenQuestionnaire.Core.Views.Assign
     {
         #region Fields
 
-        /// <summary>
-        /// The docs.
-        /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> docs;
 
         /// <summary>
         /// The store.
@@ -44,11 +40,9 @@ namespace RavenQuestionnaire.Core.Views.Assign
         /// The store.
         /// </param>
         public AssignSurveyViewFactory(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> docs, 
             IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
         {
             this.store = store;
-            this.docs = docs;
         }
 
         #endregion
@@ -67,9 +61,8 @@ namespace RavenQuestionnaire.Core.Views.Assign
         public AssignSurveyView Load(AssignSurveyInputModel input)
         {
             CompleteQuestionnaireStoreDocument q = this.store.GetByGuid(input.CompleteQuestionnaireId);
-            CompleteQuestionnaireBrowseItem doc = this.docs.GetByGuid(input.CompleteQuestionnaireId);
 
-            return new AssignSurveyView(doc, q);
+            return new AssignSurveyView(q);
         }
 
         #endregion

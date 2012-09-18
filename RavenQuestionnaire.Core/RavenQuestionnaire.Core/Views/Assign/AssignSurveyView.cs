@@ -6,6 +6,9 @@
 //   The assign survey view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System.Linq;
+
 namespace RavenQuestionnaire.Core.Views.Assign
 {
     using System;
@@ -35,20 +38,19 @@ namespace RavenQuestionnaire.Core.Views.Assign
         /// <param name="completeQuestionnaire">
         /// The complete questionnaire.
         /// </param>
-        public AssignSurveyView(
-            CompleteQuestionnaireBrowseItem doc, CompleteQuestionnaireStoreDocument completeQuestionnaire)
+        public AssignSurveyView(ICompleteQuestionnaireDocument completeQuestionnaire)
         {
             this.Id = completeQuestionnaire.PublicKey;
-            this.QuestionnaireTitle = doc.QuestionnaireTitle;
-            this.TemplateId = doc.TemplateId;
-            this.Status = doc.Status;
-            this.Responsible = doc.Responsible;
+            this.QuestionnaireTitle = completeQuestionnaire.Title;
+            this.TemplateId = completeQuestionnaire.TemplateId;
+            this.Status = completeQuestionnaire.Status;
+            this.Responsible = completeQuestionnaire.Responsible;
             this.FeaturedQuestions = new List<CompleteQuestionView>();
-            foreach (QuestionStatisticView q in doc.FeaturedQuestions)
+            foreach (ICompleteQuestion q in completeQuestionnaire.QuestionHash.Questions.Where(q => q.Featured))
             {
-                var question = completeQuestionnaire.Find<ICompleteQuestion>(q.PublicKey);
-                var questionView = new CompleteQuestionView(completeQuestionnaire, question);
-                questionView.ParentGroupPublicKey = q.GroupPublicKey;
+                //     var question = completeQuestionnaire.Find<ICompleteQuestion>(q.PublicKey);
+                var questionView = new CompleteQuestionView(completeQuestionnaire, q);
+                //  questionView.ParentGroupPublicKey = q.GroupPublicKey;
                 this.FeaturedQuestions.Add(questionView);
             }
         }

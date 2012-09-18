@@ -6,6 +6,7 @@
 //   The complete questionnaire denormalizer.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+using Ncqrs.Restoring.EventStapshoot;
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     using Main.Core.Documents;
@@ -25,6 +26,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
     /// </summary>
     public class CompleteQuestionnaireDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
                                                      IEventHandler<CommentSeted>, 
+                                                     IEventHandler<SnapshootLoaded>,
                                                      IEventHandler<CompleteQuestionnaireDeleted>, 
                                                      IEventHandler<AnswerSet>, 
                                                      IEventHandler<PropagatableGroupAdded>, 
@@ -201,6 +203,20 @@ namespace RavenQuestionnaire.Core.EventHandlers
             CompleteQuestionnaireStoreDocument item =
                 this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
             item.Status = evnt.Payload.Status;
+        }
+
+        #endregion
+
+        #region Implementation of IEventHandler<in SnapshootLoaded>
+
+        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
+        {
+            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
+            if (document == null)
+                return;
+
+            this._documentStorage.Store(
+                (CompleteQuestionnaireStoreDocument) document, document.PublicKey);
         }
 
         #endregion

@@ -25,7 +25,6 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// </summary>
         public SurveyBrowseItem()
         {
-            this.Grid = new Dictionary<string, int>();
         }
 
         /// <summary>
@@ -37,11 +36,8 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="title">
         /// The title.
         /// </param>
-        /// <param name="unAssigment">
+        /// <param name="unassigment">
         /// The un assigment.
-        /// </param>
-        /// <param name="statistic">
-        /// The statistic.
         /// </param>
         /// <param name="total">
         /// The total.
@@ -58,69 +54,27 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <param name="approve">
         /// The approve.
         /// </param>
-        /// <param name="headers">
-        /// The headers.
-        /// </param>
         public SurveyBrowseItem(
             Guid id, 
             string title, 
-            int unAssigment, 
-            Dictionary<Guid, SurveyItem> statistic, 
+            int unassigment, 
             int total, 
             int initial, 
             int error, 
             int completed, 
-            int approve, 
-            int redo,
-            Dictionary<Guid, string> headers)
+            int approve,
+            int redo)
             : this()
         {
             this.Id = id;
             this.Title = title;
-            this.Unassigned = unAssigment;
+            this.Unassigned = unassigment;
             this.Total = total;
             this.Initial = initial;
             this.Error = error;
-            this.Completed = completed;
-            foreach (var header in headers)
-            {
-                if (header.Value == SurveyStatus.Initial.Name)
-                {
-                    this.Grid.Add(header.Value, initial);
-                }
-
-                if (header.Value == SurveyStatus.Approve.Name)
-                {
-                    this.Grid.Add(header.Value, approve);
-                }
-
-                if (header.Value == SurveyStatus.Complete.Name)
-                {
-                    this.Grid.Add(header.Value, completed);
-                }
-
-                if (header.Value == SurveyStatus.Error.Name)
-                {
-                    this.Grid.Add(header.Value, error);
-                }
-
-                if (header.Value == "Total")
-                {
-                    this.Grid.Add(header.Value, this.Total);
-                }
-
-                if (header.Value == "Unassigned")
-                {
-                    this.Grid.Add(header.Value, unAssigment);
-                }
-
-                if (header.Value == "Redo")
-                {
-                    this.Grid.Add(header.Value, redo);
-                }
-            }
-
-            this.Statistic = statistic;
+            this.Complete = completed;
+            this.Approve = approve;
+            this.Redo = redo;
         }
 
         #endregion
@@ -135,17 +89,12 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// <summary>
         /// Gets or sets the complete.
         /// </summary>
-        public int Completed { get; set; }
+        public int Complete { get; set; }
 
         /// <summary>
         /// Gets or sets the error.
         /// </summary>
         public int Error { get; set; }
-
-        /// <summary>
-        /// Gets or sets the grid.
-        /// </summary>
-        public Dictionary<string, int> Grid { get; set; }
 
         /// <summary>
         /// Gets or sets the id.
@@ -161,12 +110,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// Gets or sets Redo.
         /// </summary>
         public int Redo { get; set; }
-
-        /// <summary>
-        /// Gets or sets the statistic.
-        /// </summary>
-        public Dictionary<Guid, SurveyItem> Statistic { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the title.
         /// </summary>

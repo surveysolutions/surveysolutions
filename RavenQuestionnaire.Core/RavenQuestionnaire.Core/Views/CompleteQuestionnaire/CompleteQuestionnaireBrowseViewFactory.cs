@@ -6,6 +6,9 @@
 //   The complete questionnaire browse view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Documents;
+
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     using System;
@@ -81,21 +84,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             CompleteQuestionnaireBrowseItem[] page =
                 query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
 
-            IEnumerable<CompleteQuestionnaireBrowseItem> items =
-                page.Select(
-                    x =>
-                    new CompleteQuestionnaireBrowseItem(
-                        x.CompleteQuestionnaireId, 
-                        x.TemplateId, 
-                        x.QuestionnaireTitle, 
-                        x.CreationDate, 
-                        x.LastEntryDate, 
-                        x.Status, 
-                        0, 
-                        0, 
-                        x.Responsible));
-
-            return new CompleteQuestionnaireBrowseView(input.Page, input.PageSize, count, items, input.Order);
+            return new CompleteQuestionnaireBrowseView(input.Page, input.PageSize, count, page, input.Order);
         }
 
         #endregion
