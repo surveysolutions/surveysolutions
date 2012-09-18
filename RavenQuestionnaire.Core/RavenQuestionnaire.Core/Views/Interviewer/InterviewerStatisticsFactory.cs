@@ -76,7 +76,7 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
                 return null;
             var questionnairesGroupedByTemplate =
                 BuildItems(
-                    this.documentItemSession.Query().Where(q => q.Responsible.Id == input.UserId).GroupBy(
+                    this.documentItemSession.Query().Where(q => q.Responsible!=null && q.Responsible.Id == input.UserId).GroupBy(
                         x => x.TemplateId)).AsQueryable();
 
             var retval = new InterviewerStatisticsView(input.UserId, user.UserName, input.Order,
