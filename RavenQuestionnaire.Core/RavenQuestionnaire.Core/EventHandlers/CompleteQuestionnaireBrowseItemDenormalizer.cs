@@ -6,6 +6,8 @@
 //   The complete questionnaire browse item denormalizer.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+using Ncqrs.Restoring.EventStapshoot;
+
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     using System;
@@ -28,11 +30,10 @@ namespace RavenQuestionnaire.Core.EventHandlers
     /// </summary>
     public class CompleteQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
                                                                IEventHandler<AnswerSet>, 
-                                                               IEventHandler<PropagatableGroupAdded>, 
-                                                               IEventHandler<PropagatableGroupDeleted>, 
                                                                IEventHandler<CompleteQuestionnaireDeleted>, 
                                                                IEventHandler<QuestionnaireStatusChanged>, 
-                                                               IEventHandler<QuestionnaireAssignmentChanged>
+                                                               IEventHandler<QuestionnaireAssignmentChanged>,
+                                                               IEventHandler<SnapshootLoaded>
     {
         #region Fields
 
@@ -69,43 +70,24 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
+            HandleNewQuestionnaire(evnt.Payload.Questionnaire);
+        }
+        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
+        {
+            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
+            if(document==null)
+                return;
+            HandleNewQuestionnaire(document);
+        }
+
+        protected void HandleNewQuestionnaire(CompleteQuestionnaireDocument document)
+        {
             // getting all featured questions
-            List<QuestionStatisticView> featuredQuestions = this.FindFeaturedQuestions(evnt);
+            List<QuestionStatisticView> featuredQuestions = this.FindFeaturedQuestions(document);
 
-            var browseItem = new CompleteQuestionnaireBrowseItem(
-                evnt.Payload.Questionnaire.PublicKey, 
-                evnt.Payload.Questionnaire.TemplateId, 
-                evnt.Payload.Questionnaire.Title, 
-                evnt.Payload.CreationDate, 
-                DateTime.Now, 
-                evnt.Payload.Questionnaire.Status, 
-                evnt.Payload.TotalQuestionCount, 
-                0, 
-                evnt.Payload.Questionnaire.Responsible);
+            var browseItem = new CompleteQuestionnaireBrowseItem(document);
             browseItem.FeaturedQuestions = featuredQuestions.ToArray();
-            this.documentItemStore.Store(browseItem, evnt.Payload.Questionnaire.PublicKey);
-        }
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
-        public void Handle(IPublishedEvent<PropagatableGroupAdded> evnt)
-        {
-            // throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
-        public void Handle(IPublishedEvent<PropagatableGroupDeleted> evnt)
-        {
-            // throw new NotImplementedException();
+            this.documentItemStore.Store(browseItem, document.PublicKey);
         }
 
         /// <summary>
@@ -229,11 +211,9 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// <returns>
         /// The System.Collections.Generic.List`1[T -&gt; RavenQuestionnaire.Core.Views.Statistics.QuestionStatisticView].
         /// </returns>
-        private List<QuestionStatisticView> FindFeaturedQuestions(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
+        private List<QuestionStatisticView> FindFeaturedQuestions(CompleteQuestionnaireDocument target)
         {
             var featuredQuestions = new List<QuestionStatisticView>();
-
-            CompleteQuestionnaireDocument target = evnt.Payload.Questionnaire;
             var nodes = new Queue<ICompleteGroup>(new List<ICompleteGroup> { target });
             var keys = new Queue<Guid>();
             keys.Enqueue(target.PublicKey);
