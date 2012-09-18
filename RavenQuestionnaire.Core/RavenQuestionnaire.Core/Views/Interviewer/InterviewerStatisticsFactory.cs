@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
@@ -34,7 +35,10 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// The users.
         /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
-
+        /// <summary>
+        /// The users.
+        /// </summary>
+        private readonly IDenormalizerStorage<UserDocument> users;
         #endregion
 
         #region Constructors and Destructors
@@ -46,9 +50,10 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// <param name="users">
         /// The users.
         /// </param>
-        public InterviewerStatisticsFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
+        public InterviewerStatisticsFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession, IDenormalizerStorage<UserDocument> users)
         {
             this.documentItemSession = documentItemSession;
+            this.users = users;
         }
 
         #endregion
@@ -66,12 +71,15 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// </returns>
         public InterviewerStatisticsView Load(InterviewerStatisticsInputModel input)
         {
+            var user = this.users.GetByGuid(input.UserId);
+            if (user == null)
+                return null;
             var questionnairesGroupedByTemplate =
                 BuildItems(
                     this.documentItemSession.Query().Where(q => q.Responsible.Id == input.UserId).GroupBy(
-                        x => x.TemplateId), input.UserId, input.UserName).AsQueryable();
+                        x => x.TemplateId)).AsQueryable();
 
-            var retval = new InterviewerStatisticsView(input.UserId, input.UserName, input.Order,
+            var retval = new InterviewerStatisticsView(input.UserId, user.UserName, input.Order,
                                                        new List<InterviewerStatisticsViewItem>(), input.Page,
                                                        input.PageSize, questionnairesGroupedByTemplate.Count());
             if (input.Orders.Count > 0)
@@ -87,13 +95,14 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
             return retval;
         }
 
-        protected IEnumerable<InterviewerStatisticsViewItem> BuildItems(IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> grouped, Guid userId, string userName)
+        protected IEnumerable<InterviewerStatisticsViewItem> BuildItems(IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> grouped)
         {
             foreach (var templateGroup in grouped)
             {
+                var first = templateGroup.FirstOrDefault();
                 yield
-                    return new InterviewerStatisticsViewItem(userId, userName,
-                                                             templateGroup.FirstOrDefault().QuestionnaireTitle,
+                    return new InterviewerStatisticsViewItem(first.Responsible.Id, first.Responsible.Name,
+                                                             first.QuestionnaireTitle,
                                                              templateGroup.Key,
                                                              templateGroup.Count(
                                                                  q =>

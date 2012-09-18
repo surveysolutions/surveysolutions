@@ -28,7 +28,7 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentItemSession;
+        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
 
         /// <summary>
         /// The users.
@@ -50,7 +50,7 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// </param>
         public InterviewersViewFactory(
             IDenormalizerStorage<UserDocument> users,
-            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentSession)
+            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession)
         {
             this.users = users;
             this.documentItemSession = documentSession;
@@ -86,7 +86,7 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
 
             IQueryable<UserDocument> query =
                 this.users.Query().Where(u => u.Supervisor != null).Where(u => u.Supervisor.Id == input.Supervisor.Id);
-            IQueryable<CompleteQuestionnaireStoreDocument> questionnaire =
+            IQueryable<CompleteQuestionnaireBrowseItem> questionnaire =
                 this.documentItemSession.Query().Where(t => t.Responsible != null);
             IQueryable<InterviewersItem> items =
                 query.Select(
