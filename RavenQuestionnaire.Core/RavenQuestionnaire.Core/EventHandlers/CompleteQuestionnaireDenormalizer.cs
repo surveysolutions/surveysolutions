@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
     /// </summary>
     public class CompleteQuestionnaireDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
                                                      IEventHandler<CommentSeted>, 
-        IEventHandler<SnapshootLoaded>,
+                                                     IEventHandler<SnapshootLoaded>,
                                                      IEventHandler<CompleteQuestionnaireDeleted>, 
                                                      IEventHandler<AnswerSet>, 
                                                      IEventHandler<PropagatableGroupAdded>, 

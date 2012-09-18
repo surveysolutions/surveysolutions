@@ -30,12 +30,10 @@ namespace RavenQuestionnaire.Core.EventHandlers
     /// </summary>
     public class CompleteQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
                                                                IEventHandler<AnswerSet>, 
-                                                               IEventHandler<PropagatableGroupAdded>, 
-                                                               IEventHandler<PropagatableGroupDeleted>, 
                                                                IEventHandler<CompleteQuestionnaireDeleted>, 
                                                                IEventHandler<QuestionnaireStatusChanged>, 
                                                                IEventHandler<QuestionnaireAssignmentChanged>,
-        IEventHandler<SnapshootLoaded>
+                                                               IEventHandler<SnapshootLoaded>
     {
         #region Fields
 
@@ -81,45 +79,15 @@ namespace RavenQuestionnaire.Core.EventHandlers
                 return;
             HandleNewQuestionnaire(document);
         }
+
         protected void HandleNewQuestionnaire(CompleteQuestionnaireDocument document)
         {
             // getting all featured questions
             List<QuestionStatisticView> featuredQuestions = this.FindFeaturedQuestions(document);
 
-            var browseItem = new CompleteQuestionnaireBrowseItem(
-                document.PublicKey,
-                document.TemplateId,
-                document.Title,
-                document.CreationDate,
-                DateTime.Now,
-                document.Status,
-                0,
-                0,
-                document.Responsible);
+            var browseItem = new CompleteQuestionnaireBrowseItem(document);
             browseItem.FeaturedQuestions = featuredQuestions.ToArray();
             this.documentItemStore.Store(browseItem, document.PublicKey);
-        }
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
-        public void Handle(IPublishedEvent<PropagatableGroupAdded> evnt)
-        {
-            // throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
-        public void Handle(IPublishedEvent<PropagatableGroupDeleted> evnt)
-        {
-            // throw new NotImplementedException();
         }
 
         /// <summary>
