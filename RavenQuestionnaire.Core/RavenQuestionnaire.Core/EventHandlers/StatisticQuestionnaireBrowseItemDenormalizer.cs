@@ -90,6 +90,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                         evnt.Payload.Questionnaire.Status == SurveyStatus.Error ? 1 : 0, 
                         evnt.Payload.Questionnaire.Status == SurveyStatus.Complete ? 1 : 0, 
                         evnt.Payload.Questionnaire.Status == SurveyStatus.Approve ? 1 : 0, 
+                        evnt.Payload.Questionnaire.Status == SurveyStatus.Redo ? 1 : 0,
                         new Dictionary<Guid, string>()), 
                     evnt.Payload.Questionnaire.PublicKey);
             }
@@ -237,6 +238,11 @@ namespace RavenQuestionnaire.Core.EventHandlers
             {
                 item.Initial--;
             }
+
+            if (status.PublicId == SurveyStatus.Redo.PublicId)
+            {
+                item.Redo--;
+            }
         }
 
         /// <summary>
@@ -268,6 +274,11 @@ namespace RavenQuestionnaire.Core.EventHandlers
             if (status.PublicId == SurveyStatus.Initial.PublicId)
             {
                 item.Initial++;
+            }
+
+            if (status.PublicId == SurveyStatus.Redo.PublicId)
+            {
+                item.Redo++;
             }
         }
 

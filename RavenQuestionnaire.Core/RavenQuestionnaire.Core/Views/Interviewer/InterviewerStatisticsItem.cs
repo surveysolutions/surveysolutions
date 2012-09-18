@@ -109,7 +109,9 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
                         this.StatusesByCQ.Count(
                             s => (s.TemplateId == t.Id) && (s.Status.PublicId == SurveyStatus.Complete.PublicId)),
                         this.StatusesByCQ.Count(
-                            s => (s.TemplateId == t.Id) && (s.Status.PublicId == SurveyStatus.Approve.PublicId)))).
+                            s => (s.TemplateId == t.Id) && (s.Status.PublicId == SurveyStatus.Approve.PublicId)),
+                        this.StatusesByCQ.Count(
+                            s => (s.TemplateId == t.Id) && (s.Status.PublicId == SurveyStatus.Redo.PublicId)))).
                     ToList();
         }
 

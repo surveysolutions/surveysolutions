@@ -67,7 +67,7 @@
             }
             @if (fitem.Status.PublicId == SurveyStatus.Complete.PublicId || fitem.Status.PublicId == SurveyStatus.Error.PublicId)
             {
-                <a class="btn btn-small" href="@Url.Action("Redo", new { id = fitem.Id })">
+                <a class="btn btn-small" href="@Url.Action("Redo", new { id = fitem.Id, template = fitem.TemplateId })">
                     <i class="icon-list"></i>Redo</a>
             }
         </td>

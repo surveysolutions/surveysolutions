@@ -71,6 +71,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             int error, 
             int completed, 
             int approve, 
+            int redo,
             Dictionary<Guid, string> headers)
             : this()
         {
@@ -112,6 +113,11 @@ namespace RavenQuestionnaire.Core.Views.Survey
                 {
                     this.Grid.Add(header.Value, unAssigment);
                 }
+
+                if (header.Value == "Redo")
+                {
+                    this.Grid.Add(header.Value, redo);
+                }
             }
 
             this.Statistic = statistic;
@@ -150,6 +156,11 @@ namespace RavenQuestionnaire.Core.Views.Survey
         /// Gets or sets the initial.
         /// </summary>
         public int Initial { get; set; }
+
+        /// <summary>
+        /// Gets or sets Redo.
+        /// </summary>
+        public int Redo { get; set; }
 
         /// <summary>
         /// Gets or sets the statistic.
