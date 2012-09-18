@@ -8,27 +8,30 @@
         </td>
         <td>
         </td>
-        @foreach (var it in collect.Grid)
+        @foreach (var it in Model.Headers)
         {
-            if (SurveyStatus.IsValidStatus(it.Key) != null)
+
+            var status = SurveyStatus.IsValidStatus(it.Value);
+
+            if (status != null)
             {
-                <td>
-                    @Html.ActionLink(it.Value.ToString(), "Assigments",
-                         new
-                         {
-                             id = collect.Id,
-                            status = SurveyStatus.IsValidStatus(it.Key).PublicId
-                         })
-                </td>
+            <td>
+                @Html.ActionLink(Model.Headers.GetItemValue(collect, it.Key), "Assigments",
+                                       new
+                                           {
+                                               id = collect.Id,
+                                               status = status.PublicId
+                                           })
+            </td>
             }
             else
             {
-                <td>
-                    @(it.Key == "Unassigned" ? Html.ActionLink(it.Value.ToString(), "Assigments",
-                                new { id = collect.Id, isNotAssigned = true }) 
-                                : Html.ActionLink(it.Value.ToString(), "Assigments", new { id = collect.Id }))
-                </td>
+            <td>
+                @Html.ActionLink(Model.Headers.GetItemValue(collect, it.Key), "Assigments", new { id = collect.Id, isNotAssigned = it.Key == "Total" ? string.Empty : "true" })
+            </td>
             }
+
+
         }
     </tr>
 }

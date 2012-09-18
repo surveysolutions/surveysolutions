@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
 using Ncqrs;
@@ -50,7 +51,7 @@ namespace RavenQuestionnaire.Web.Tests.Synchronization
                                                             DateTime.Now, new object(), new Version())));
             var questionnaireList = new CompleteQuestionnaireBrowseView(1, 10, 1, new []
                                                                                       {
-                                                                                          new CompleteQuestionnaireBrowseItem(eventSourceId,Guid.NewGuid(),"t",DateTime.Now,DateTime.Now,SurveyStatus.Initial,1,1,null)
+                                                                                          new CompleteQuestionnaireBrowseItem(new CompleteQuestionnaireDocument(){PublicKey = eventSourceId, Status = SurveyStatus.Initial})
                                                                                       },
                                                                         string.Empty);
             repositoryMock.Setup(
@@ -74,7 +75,7 @@ namespace RavenQuestionnaire.Web.Tests.Synchronization
                                                             DateTime.Now, new object(), new Version())));
             var questionnaireList = new CompleteQuestionnaireBrowseView(1, 10, 1, new[]
                                                                                       {
-                                                                                          new CompleteQuestionnaireBrowseItem(eventSourceId,Guid.NewGuid(),"t",DateTime.Now,DateTime.Now,SurveyStatus.Complete,1,1,null)
+                                                                                          new CompleteQuestionnaireBrowseItem(new CompleteQuestionnaireDocument(){PublicKey = eventSourceId, Status = SurveyStatus.Complete})
                                                                                       },
                                                                         string.Empty);
             repositoryMock.Setup(
@@ -98,7 +99,7 @@ namespace RavenQuestionnaire.Web.Tests.Synchronization
                                                             DateTime.Now, new object(), new Version())));
             var questionnaireList = new CompleteQuestionnaireBrowseView(1, 10, 1, new[]
                                                                                       {
-                                                                                          new CompleteQuestionnaireBrowseItem(eventSourceId,Guid.NewGuid(),"t",DateTime.Now,DateTime.Now,SurveyStatus.Error,1,1,null)
+                                                                                          new CompleteQuestionnaireBrowseItem(new CompleteQuestionnaireDocument(){PublicKey = eventSourceId, Status = SurveyStatus.Error})
                                                                                       },
                                                                         string.Empty);
             repositoryMock.Setup(

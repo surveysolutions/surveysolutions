@@ -49,7 +49,7 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// The document session.
         /// </param>
         public InterviewersViewFactory(
-            IDenormalizerStorage<UserDocument> users, 
+            IDenormalizerStorage<UserDocument> users,
             IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession)
         {
             this.users = users;

@@ -133,11 +133,16 @@ namespace Main.Core.Utility
             long startPoint = Math.Min(baseStream.Last().EventSequence, stream.Last().EventSequence);
             IEnumerable<CommittedEvent> croppedBase = baseStream.TakeWhile(e => e.EventSequence <= startPoint);
             IEnumerable<AggregateRootEvent> croppedNewStream = stream.TakeWhile(e => e.EventSequence <= startPoint);
+
+            if (!croppedNewStream.Any())
+                return baseStream.Last().EventSequence;
             while (startPoint > 0 && (croppedBase.Last().EventIdentifier != croppedNewStream.Last().EventIdentifier))
             {
                 startPoint--;
                 croppedBase = baseStream.TakeWhile(e => e.EventSequence <= startPoint);
                 croppedNewStream = stream.TakeWhile(e => e.EventSequence <= startPoint);
+                if (!croppedNewStream.Any())
+                    return baseStream.Last().EventSequence;
             }
 
             return startPoint;

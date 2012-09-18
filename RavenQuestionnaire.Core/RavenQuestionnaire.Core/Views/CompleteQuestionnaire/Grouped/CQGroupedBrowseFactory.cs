@@ -26,11 +26,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
         #region Fields
 
         /// <summary>
-        /// The document group session.
-        /// </summary>
-        private readonly IDenormalizerStorage<CQGroupItem> documentGroupSession;
-
-        /// <summary>
         /// The document item session.
         /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
@@ -49,11 +44,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
         /// The document group session.
         /// </param>
         public CQGroupedBrowseFactory(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession, 
-            IDenormalizerStorage<CQGroupItem> documentGroupSession)
+            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
-            this.documentGroupSession = documentGroupSession;
         }
 
         #endregion
@@ -71,31 +64,17 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
         /// </returns>
         public CQGroupedBrowseView Load(CQGroupedBrowseInputModel input)
         {
-            IQueryable<CompleteQuestionnaireBrowseItem> questionnaires = this.documentItemSession.Query();
-            IQueryable<CQGroupItem> templates = this.documentGroupSession.Query();
+            var questionnairesGroupedByTemplate =
+                this.documentItemSession.Query().Where(BuildPredicate(input)).GroupBy(x => x.TemplateId);
 
-            var retval = new CQGroupedBrowseView(0, 100, 100, templates.ToList());
-            foreach (CQGroupItem cqGroupItem in retval.Groups)
+            var retval = new CQGroupedBrowseView(0, 100, 100, new List<CQGroupItem>());
+            foreach (var templateGroup in questionnairesGroupedByTemplate)
             {
-                CQGroupItem item = cqGroupItem;
-                List<CompleteQuestionnaireBrowseItem> complete;
 
-                complete = questionnaires.Where(BuildPredicate(input, item.SurveyId)).ToList();
-               /* if (input.InterviewerId.HasValue)
-                {
-                    complete =
-                        questionnaires.Where(
-                            q =>
-                            q.Responsible != null && q.Responsible.Id == input.InterviewerId.Value
-                            && q.TemplateId == item.SurveyId).ToList();
-                }
-                else
-                {
-                    complete = questionnaires.Where(q => q.TemplateId == item.SurveyId).ToList();
-                }*/
-
-                cqGroupItem.Items = complete;
-                cqGroupItem.TotalCount = complete.Count;
+                CQGroupItem item = new CQGroupItem(1, 100, templateGroup.Count(),
+                                                   templateGroup.FirstOrDefault().QuestionnaireTitle, templateGroup.Key);
+                item.Items = templateGroup.ToList();
+                retval.Groups.Add(item);
             }
 
             return retval;
@@ -118,11 +97,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
         /// The System.Linq.Expressions.Expression`1[TDelegate -&gt; System.Func`2[T -&gt; RavenQuestionnaire.Core.Views.CompleteQuestionnaire.CompleteQuestionnaireBrowseItem, TResult -&gt; System.Boolean]].
         /// </returns>
         protected Expression<Func<CompleteQuestionnaireBrowseItem, bool>> BuildPredicate(
-            CQGroupedBrowseInputModel input, Guid surveyId)
+            CQGroupedBrowseInputModel input)
         {
             IList<Expression<Func<CompleteQuestionnaireBrowseItem, bool>>> predicats =
                 new List<Expression<Func<CompleteQuestionnaireBrowseItem, bool>>>();
-            predicats.Add((q) => q.TemplateId == surveyId && q.Status.PublicId != SurveyStatus.Approve.PublicId);
+            predicats.Add((q) => q.Status.PublicId != SurveyStatus.Approve.PublicId);
             if (input.InterviewerId.HasValue)
             {
                 predicats.Add((q) => q.Responsible != null && q.Responsible.Id == input.InterviewerId);

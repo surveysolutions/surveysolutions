@@ -116,8 +116,9 @@ namespace Questionnaire.Core.Web.Export
                     }
 
                     var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+                    string data = Encoding.Default.GetString(stream.ToArray());
                     var result = JsonConvert.DeserializeObject<ZipFileData>(
-                        Encoding.Default.GetString(stream.ToArray()), settings);
+                        data, settings);
 
                     this.synchronizer.WriteEvents(result.Events);
                 }

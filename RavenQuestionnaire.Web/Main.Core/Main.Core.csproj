@@ -262,7 +262,6 @@
     <Compile Include="Events\Questionnaire\QuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\QuestionDeleted.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireTemplateLoaded.cs" />
     <Compile Include="Events\Synchronization\AggregateRootStatusChanged.cs" />
     <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs" />
     <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs" />
@@ -303,6 +302,10 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
+      <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
+      <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

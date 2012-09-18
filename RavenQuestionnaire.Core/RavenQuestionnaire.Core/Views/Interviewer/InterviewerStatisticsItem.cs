@@ -48,42 +48,11 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// </summary>
         public List<InterviewerStatistics> StatusesByCQ { get; set; }
 
+
         #endregion
 
         #region Public Methods and Operators
-
-        /// <summary>
-        /// Add status item to dictionary
-        /// </summary>
-        /// <param name="publicKey">
-        /// Complete questionnaire public key.
-        /// </param>
-        /// <param name="templateId">
-        /// Questionnaire public key
-        /// </param>
-        /// <param name="title">
-        /// CQ title
-        /// </param>
-        /// <param name="status">
-        /// Current CQ status
-        /// </param>
-        public void AddCQ(Guid publicKey, Guid templateId, string title, SurveyStatus status)
-        {
-            InterviewerStatistics item = this.StatusesByCQ.FirstOrDefault(s => s.Id == publicKey);
-            if (item != null)
-            {
-                item.Status = status;
-            }
-            else
-            {
-                this.StatusesByCQ.Add(
-                    new InterviewerStatistics
-                        {
-                           Id = publicKey, Status = status, Title = title, TemplateId = templateId 
-                        });
-            }
-        }
-
+      
         /// <summary>
         /// The get table rows.
         /// </summary>
@@ -128,7 +97,28 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
                 this.StatusesByCQ.Remove(this.StatusesByCQ.Single(s => s.Id == publicKey));
             }
         }
-
+        /// <param name="status">
+        /// Current CQ status
+        /// </param>
+        public void AddCQ(Guid publicKey, Guid templateId, string title, SurveyStatus status)
+        {
+            InterviewerStatistics item = this.StatusesByCQ.FirstOrDefault(s => s.Id == publicKey);
+            if (item != null)
+            {
+                item.Status = status;
+            }
+            else
+            {
+                this.StatusesByCQ.Add(
+                    new InterviewerStatistics
+                    {
+                        Id = publicKey,
+                        Status = status,
+                        Title = title,
+                        TemplateId = templateId
+                    });
+            }
+        }
         #endregion
     }
 }
