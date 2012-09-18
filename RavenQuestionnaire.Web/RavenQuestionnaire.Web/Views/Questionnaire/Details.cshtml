@@ -129,8 +129,8 @@
         <div class="navbar-inner">
             <div class="container-fluid">
                 <p>
-                    @Html.ActionLink("Add Question", "Create", "Question", new { Model.PublicKey }, new { @class = "btn " })
-                    @Html.ActionLink("Add Screen", "Create", "Group", new { Model.PublicKey }, new { @class = "btn " })
+                    @Html.ActionLink("Add Question", "Create", "Question", new { id = Model.PublicKey }, new { @class = "btn " })
+                    @Html.ActionLink("Add Screen", "Create", "Group", new { id = Model.PublicKey }, new { @class = "btn " })
                     <a href="@Url.Action("Edit", new { id = Model.PublicKey })" class="btn btn-primary"><i class="icon-pencil icon-white"></i>Edit</a>
                     <a href="@Url.Action("Index")" class="btn"><i class="icon-arrow-left"></i>Back to Questionnaires</a>
                 </p>
