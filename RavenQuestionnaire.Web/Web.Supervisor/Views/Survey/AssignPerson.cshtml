@@ -1,0 +1,18 @@
+﻿@using Questionnaire.Core.Web.Helpers
+@using RavenQuestionnaire.Core.Views.Assign
+@using RavenQuestionnaire.Core.Views.Question
+@using RavenQuestionnaire.Core.Views.Survey
+@model AssignSurveyView
+@{
+    ViewBag.Title = "Assignment";
+}
+<h2>Assignment Person</h2>
+<p><a href="@Url.Action("Assigments", new {id = Model.TemplateId, input = new SurveyGroupInputModel()})">Back to list</a></p>
+@using (Html.BeginForm("AssignForm", "Survey"))
+{
+    @Html.Hidden("CqId", Model.Id)
+    @Html.Hidden("TmptId", Model.TemplateId)
+    <label class="control-label">Responsible</label>
+    @Html.DropDownList("userId")
+    <input name="Save" class="btn btn-primary" type="submit" value="Save" />
+}

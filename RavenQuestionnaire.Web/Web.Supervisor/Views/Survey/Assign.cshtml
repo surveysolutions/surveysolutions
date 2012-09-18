@@ -60,11 +60,4 @@
         </ul>
     </div>
 </div>
-@using (Html.BeginForm("AssignForm", "Survey"))
-{
-    @Html.Hidden("CqId", Model.Id)
-    @Html.Hidden("TmptId", Model.TemplateId)
-    <label class="control-label">Responsible</label>
-    @Html.DropDownList("userId")
-    <input name="Save" class="btn btn-primary" type="submit" value="Save" />
-}
+<p><a href="@Url.Action("AssignPerson", new { id = Model.Id, tmptId = Model.TemplateId})">Next</a></p>

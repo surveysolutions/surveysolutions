@@ -126,21 +126,35 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Assign(Guid id)
         {
+            var model = this.viewRepository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
+            return this.View(model);
+        }
+
+        /// <summary>
+        /// Display assign form
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// Return Assign form
+        /// </returns>
+        public ActionResult AssignPerson(Guid id,Guid tmptId)
+        {
             var user = this.globalInfo.GetCurrentUser();
             var users = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
             var model = this.viewRepository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
             var r = users.Items.ToList();
             r.Insert(0, new InterviewersItem(Guid.Empty, string.Empty, string.Empty, DateTime.MinValue, false, 0, 0, 0));
             var options = r.Select(item => new SelectListItem
-                {
-                    Value = item.Id.ToString(),
-                    Text = item.Login,
-                    Selected = (model.Responsible != null && model.Responsible.Id == item.Id) || (model.Responsible == null && item.Id == Guid.Empty)
-                }).ToList();
+            {
+                Value = item.Id.ToString(),
+                Text = item.Login,
+                Selected = (model.Responsible != null && model.Responsible.Id == item.Id) || (model.Responsible == null && item.Id == Guid.Empty)
+            }).ToList();
             ViewBag.userId = options;
             return this.View(model);
         }
-
         /// <summary>
         /// Display approve page
         /// </summary>
