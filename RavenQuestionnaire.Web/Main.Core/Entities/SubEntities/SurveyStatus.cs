@@ -207,7 +207,7 @@ namespace Main.Core.Entities.SubEntities
                 return Initial;
             }
 
-            if (status == Redo.Name)
+            if (statusName == Redo.Name)
             {
                 return Redo;
             }

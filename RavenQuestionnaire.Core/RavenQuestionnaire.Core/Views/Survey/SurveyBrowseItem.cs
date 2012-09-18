@@ -62,8 +62,8 @@ namespace RavenQuestionnaire.Core.Views.Survey
             int initial, 
             int error, 
             int completed, 
-            int approve)
-            int redo,
+            int approve,
+            int redo)
             : this()
         {
             this.Id = id;
@@ -74,11 +74,7 @@ namespace RavenQuestionnaire.Core.Views.Survey
             this.Error = error;
             this.Complete = completed;
             this.Approve = approve;
-
-                if (header.Value == "Redo")
-                {
-                    this.Grid.Add(header.Value, redo);
-                }
+            this.Redo = redo;
         }
 
         #endregion
