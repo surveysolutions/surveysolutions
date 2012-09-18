@@ -23,7 +23,7 @@
     using Ncqrs.Eventing.Sourcing.Snapshotting;
     using Ncqrs.Eventing.Storage;
     using Ncqrs.Eventing.Storage.RavenDB;
-
+    using Ncqrs.Restoring.EventStapshoot;
     using Ninject;
 
     using Raven.Client.Document;
@@ -80,8 +80,20 @@ public static class NCQRSInit
             throw new Exception("IEventStore is not correct.");
         }
 
-        IEnumerable<CommittedEvent> myEvents = myEventStore.ReadFrom(DateTime.MinValue);
-        myEventBus.Publish(myEvents);
+        var myEvents = myEventStore.ReadFrom(DateTime.MinValue);
+        foreach (IGrouping<Guid, CommittedEvent> eventsByAggregateRoot in myEvents.GroupBy(x => x.EventSourceId))
+        {
+            myEventBus.Publish(ExcludeHistoryBefaourSnapshoot(eventsByAggregateRoot));
+        }
+    }
+    private static IEnumerable<CommittedEvent> ExcludeHistoryBefaourSnapshoot(IEnumerable<CommittedEvent> events)
+    {
+        var lastSnapshoot = events.LastOrDefault(x => x.Payload is SnapshootLoaded);
+        if (lastSnapshoot == null)
+            return events;
+        else
+            return events.SkipWhile(x => x != lastSnapshoot);
+
     }
 
     #endregion
