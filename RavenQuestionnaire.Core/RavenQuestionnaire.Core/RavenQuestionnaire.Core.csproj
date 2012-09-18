@@ -123,14 +123,13 @@
   <ItemGroup>
     <Compile Include="Denormalizers\IDenormalizerStorage.cs" />
     <Compile Include="DocumentStoreProvider.cs" />
-    <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
+    <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="EventHandlers\CompleteQuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandlers\InterviewerStatisticsDenormalizer.cs" />
-    <Compile Include="EventHandlers\CQGroupItemDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
-    <Compile Include="EventHandlers\StatisticQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="CoreRegistry.cs" />
     <Compile Include="Export\csv\CSVExporter.cs" />
     <Compile Include="Export\ExportManager.cs" />
@@ -249,13 +248,9 @@
     <Compile Include="Views\StatusReport\CQStatusReportViewInputModel.cs" />
     <Compile Include="Views\StatusReport\CQStatusReportFactory.cs" />
     <Compile Include="Views\StatusReport\CQStatusReportItemView.cs" />
-    <Compile Include="Views\StatusReport\StatusReportGroupView.cs" />
-    <Compile Include="Views\StatusReport\StatusReportItemView.cs" />
-    <Compile Include="Views\StatusReport\StatusReportView.cs" />
-    <Compile Include="Views\StatusReport\StatusReportViewFactory.cs" />
-    <Compile Include="Views\StatusReport\StatusReportViewInputModel.cs" />
     <Compile Include="Views\Survey\SurveyBrowseItem.cs" />
     <Compile Include="Views\Survey\SurveyBrowseView.cs" />
+    <Compile Include="Views\Survey\SurveyGroupedByStatusHeader.cs" />
     <Compile Include="Views\Survey\SurveyGroupInputModel.cs" />
     <Compile Include="Views\Survey\SurveyGroupItem.cs" />
     <Compile Include="Views\Survey\SurveyGroupView.cs" />

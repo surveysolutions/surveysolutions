@@ -172,24 +172,24 @@ namespace Main.Core.Entities.SubEntities
         /// <returns>
         /// The Main.Core.Entities.SubEntities.SurveyStatus.
         /// </returns>
-        public static SurveyStatus IsValidStatus(string status)
+        public static SurveyStatus IsValidStatus(string statusName)
         {
-            if (status == Approve.Name)
+            if (statusName == Approve.Name)
             {
                 return Approve;
             }
 
-            if (status == Error.Name)
+            if (statusName == Error.Name)
             {
                 return Error;
             }
 
-            if (status == Complete.Name)
+            if (statusName == Complete.Name)
             {
                 return Complete;
             }
 
-            if (status == Initial.Name)
+            if (statusName == Initial.Name)
             {
                 return Initial;
             }

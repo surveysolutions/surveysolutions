@@ -6,6 +6,9 @@
 //   The complete questionnaire browse item.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Documents;
+
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     using System;
@@ -25,54 +28,21 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         /// <summary>
         /// Initializes a new instance of the <see cref="CompleteQuestionnaireBrowseItem"/> class.
         /// </summary>
-        /// <param name="completeQuestionnaireId">
-        /// The complete questionnaire id.
+        /// <param name="doc">
+        /// The complete questionnaire.
         /// </param>
-        /// <param name="templateId">
-        /// The template id.
-        /// </param>
-        /// <param name="questionnaireTitle">
-        /// The questionnaire title.
-        /// </param>
-        /// <param name="creationDate">
-        /// The creation date.
-        /// </param>
-        /// <param name="lastEntryDate">
-        /// The last entry date.
-        /// </param>
-        /// <param name="status">
-        /// The status.
-        /// </param>
-        /// <param name="totalQuestionCount">
-        /// The total question count.
-        /// </param>
-        /// <param name="answeredQuestionCount">
-        /// The answered question count.
-        /// </param>
-        /// <param name="responsible">
-        /// The responsible.
-        /// </param>
-        public CompleteQuestionnaireBrowseItem(
-            Guid completeQuestionnaireId, 
-            Guid templateId, 
-            string questionnaireTitle, 
-            DateTime creationDate, 
-            DateTime lastEntryDate, 
-            SurveyStatus status, 
-            int totalQuestionCount, 
-            int answeredQuestionCount, 
-            UserLight responsible)
+        public CompleteQuestionnaireBrowseItem(ICompleteQuestionnaireDocument doc)
             : this()
         {
-            this.CompleteQuestionnaireId = completeQuestionnaireId;
-            this.TemplateId = templateId;
-            this.QuestionnaireTitle = questionnaireTitle;
-            this.CreationDate = creationDate;
-            this.LastEntryDate = lastEntryDate;
-            this.Status = status;
-            this.TotalQuestionCount = totalQuestionCount;
-            this.AnsweredQuestionCount = answeredQuestionCount;
-            this.Responsible = responsible;
+            this.CompleteQuestionnaireId = doc.PublicKey;
+            this.TemplateId = doc.TemplateId;
+            this.QuestionnaireTitle = doc.Title;
+            this.CreationDate = doc.CreationDate;
+            this.LastEntryDate = doc.LastEntryDate;
+            this.Status = doc.Status;
+            this.TotalQuestionCount = 0;
+            this.AnsweredQuestionCount = 0;
+            this.Responsible = doc.Responsible;
         }
 
         /// <summary>

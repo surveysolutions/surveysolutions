@@ -14,11 +14,6 @@ namespace RavenQuestionnaire.Web.Controllers
             this.viewRepository = viewRepository;
         }
 
-        public ViewResult Index()
-        {
-            var model = viewRepository.Load<StatusReportViewInputModel, StatusReportView>(new StatusReportViewInputModel());
-            return View(model);
-        }
 
         /*[QuestionnaireAuthorize(UserRoles.Administrator)]
         public ViewResult Details(string Qid)
