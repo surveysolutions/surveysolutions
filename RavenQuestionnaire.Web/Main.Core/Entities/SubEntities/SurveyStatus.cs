@@ -174,7 +174,7 @@ namespace Main.Core.Entities.SubEntities
         /// </returns>
         public static bool IsStatusAllowDownSupervisorSync(SurveyStatus status)
         {            
-             return status.PublicId == SurveyStatus.Initial.PublicId || status.PublicId == SurveyStatus.Approve.PublicId;
+             return status.PublicId == SurveyStatus.Initial.PublicId || status.PublicId == SurveyStatus.Approve.PublicId || status.PublicId == SurveyStatus.Redo.PublicId;
         }
 
         /// <summary>
