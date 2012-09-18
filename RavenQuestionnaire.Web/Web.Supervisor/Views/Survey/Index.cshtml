@@ -33,7 +33,7 @@
         <th class="sorting" sorter='{"key":"StartDate"}'><span>Initial date</span></th>
             @foreach (var item in Model.Headers)
             {
-                <th class="sorting" role="columnheader" sorter='{"key": "@item.Value"}'><span>@item.Value</span></th>
+                <th class="sorting" role="columnheader" sorter='{"key": "@item.Key"}'><span>@item.Value</span></th>
             }
         </tr>
     </thead>
