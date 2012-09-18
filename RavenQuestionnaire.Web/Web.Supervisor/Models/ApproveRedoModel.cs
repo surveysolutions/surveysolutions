@@ -15,7 +15,7 @@ namespace Web.Supervisor.Models
     /// <summary>
     /// Define Approve model
     /// </summary>
-    public class ApproveModel
+    public class ApproveRedoModel
     {
         /// <summary>
         /// Gets or sets TemplateId.
@@ -36,5 +36,10 @@ namespace Web.Supervisor.Models
         /// Gets or sets Statistic.
         /// </summary>
         public CompleteQuestionnaireStatisticView Statistic { get; set; }
+
+        /// <summary>
+        /// Gets or sets StatusId.
+        /// </summary>
+        public Guid StatusId { get; set; }
     }
 }

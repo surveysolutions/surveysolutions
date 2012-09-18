@@ -171,7 +171,7 @@ namespace Web.Supervisor.Controllers
         {
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                     new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
-            return this.View(new ApproveModel() { Id = id, Statistic = stat, TemplateId = template });
+            return this.View(new ApproveRedoModel() { Id = id, Statistic = stat, TemplateId = template });
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace Web.Supervisor.Controllers
         /// Return view
         /// </returns>
         [HttpPost]
-        public ActionResult Approve(ApproveModel model)
+        public ActionResult Approve(ApproveRedoModel model)
         {
             if (ModelState.IsValid)
             {
@@ -197,7 +197,7 @@ namespace Web.Supervisor.Controllers
 
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                     new CompleteQuestionnaireStatisticViewInputModel(model.Id.ToString()));
-            return this.View(new ApproveModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
+            return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
         }
 
         /// <summary>
@@ -415,6 +415,60 @@ namespace Web.Supervisor.Controllers
             ViewBag.TemplateId = template;
             return this.View("Comments", model);
         }
+
+        /// <summary>
+        /// ability to sign status Redo for questionnaire
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="template">
+        /// The template.
+        /// </param>
+        /// <returns>
+        /// Return page with ability to came back questionnaire
+        /// </returns>
+        public ActionResult Redo(Guid id, string template)
+        {
+            var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                    new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+            return this.View(new ApproveRedoModel() { Id = id, TemplateId = template, Statistic = stat, StatusId = SurveyStatus.Redo.PublicId });
+        }
+
+        /// <summary>
+        /// Save redo status in database
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <param name="redo">
+        /// The redo.
+        /// </param>
+        /// <param name="cancel">
+        /// The cancel.
+        /// </param>
+        /// <returns>
+        /// return view
+        /// </returns>
+        [HttpPost]
+        public ActionResult Redo(ApproveRedoModel model, string redo, string cancel)
+        {
+            if (cancel != null) 
+                return this.RedirectToAction("Assigments", new { id = model.TemplateId });
+            if (ModelState.IsValid)
+            {
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                var status = SurveyStatus.Redo;
+                status.ChangeComment = model.Comment;
+                commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status });
+                return this.RedirectToAction("Assigments", new { id = model.TemplateId });
+            }
+
+            var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                    new CompleteQuestionnaireStatisticViewInputModel(model.Id.ToString()));
+            return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
+        }
+
 
         #endregion
     }

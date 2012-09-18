@@ -108,6 +108,19 @@ namespace Main.Core.Entities.SubEntities
         }
 
         /// <summary>
+        /// Gets Redo.
+        /// </summary>
+        public static SurveyStatus Redo
+        {
+            get
+            {
+                var identifier = new Guid("2bb6f94d-5beb-4374-8749-fac7cee1e020");
+                string name = "Redo";
+                return new SurveyStatus(identifier, name);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the change comment.
         /// </summary>
         public string ChangeComment { get; set; }
@@ -134,7 +147,7 @@ namespace Main.Core.Entities.SubEntities
         /// </returns>
         public static IEnumerable<SurveyStatus> GetAllStatuses()
         {
-            return new[] { Initial, Error, Complete, Approve };
+            return new[] { Initial, Error, Complete, Approve, Redo };
         }
 
         /// <summary>
@@ -192,6 +205,11 @@ namespace Main.Core.Entities.SubEntities
             if (status == Initial.Name)
             {
                 return Initial;
+            }
+
+            if (status == Redo.Name)
+            {
+                return Redo;
             }
 
             return null;

@@ -48,8 +48,11 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// <param name="approve">
         /// Approved count
         /// </param>
+        /// <param name="redo">
+        /// The redo.
+        /// </param>
         public InterviewerStatisticsViewItem(
-            Guid id, string name, string title, Guid templateId, int initial, int error, int complete, int approve)
+            Guid id, string name, string title, Guid templateId, int initial, int error, int complete, int approve, int redo)
         {
             this.Id = id;
             this.Login = name;
@@ -59,13 +62,14 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
             this.Error = error;
             this.Completed = complete;
             this.Approve = approve;
-
+            this.Redo = redo;
             this.Counters = new Dictionary<Guid, int>
                 {
                     { SurveyStatus.Initial.PublicId, initial }, 
                     { SurveyStatus.Error.PublicId, error }, 
                     { SurveyStatus.Complete.PublicId, complete }, 
-                    { SurveyStatus.Approve.PublicId, approve }
+                    { SurveyStatus.Approve.PublicId, approve },
+                    { SurveyStatus.Redo.PublicId, redo }
                 };
         }
 
@@ -92,6 +96,11 @@ namespace RavenQuestionnaire.Core.Views.Interviewer
         /// Gets the completed.
         /// </summary>
         public int Error { get; private set; }
+
+        /// <summary>
+        /// Gets Redo.
+        /// </summary>
+        public int Redo { get; private set; }
 
         /// <summary>
         /// Gets the id.
