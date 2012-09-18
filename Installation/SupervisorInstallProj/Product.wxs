@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
 
     <?include Variables.wxi?>
   
@@ -41,15 +42,6 @@
             <![CDATA[Installed OR ASP_NET_MVC_3_0_DLL]]>
         </Condition>
 
-        <!--<Property Id='ASP_NET_MVC_4_0_DLL'>
-            <DirectorySearch Id='MVC_DLL_DIR' Path='[ProgramFilesFolder]\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies'>
-                <FileSearch Id='MVC_DLL_FILE' Name='System.Web.Mvc.dll' MinVersion='4.0.20100'/>
-            </DirectorySearch>
-        </Property>
-
-        <Condition Message='ASP.NET MVC 4 is required to proceed with the installation (http://www.microsoft.com/en-us/download/details.aspx?id=1491).'>
-            <![CDATA[Installed OR ASP_NET_MVC_4_0_DLL]]>
-        </Condition>-->
         
         <Property Id="APPCMDEXE">
             <DirectorySearch Id="IISExpressDir" Path="[ProgramFilesFolder]IIS Express">
@@ -57,13 +49,18 @@
             </DirectorySearch>
         </Property>
 
+        
+        <!--
         <Condition Message="IIS Express 7.x must be installed before installation (http://www.microsoft.com/en-us/download/details.aspx?id=1038).">
             <![CDATA[Installed or APPCMDEXE]]>
         </Condition>
+        <PropertyRef Id="IISMAJORVERSION"/>
+        <Condition Message="Install requires IIS 6 or 7.">
+            <![CDATA[Installed OR (IISMAJORVERSION AND (IISMAJORVERSION = "#6" OR IISMAJORVERSION = "#7"))]]>
+        </Condition>
+-->
 
-        
-        
-    <SetDirectory Id="WINDOWSVOLUME" Value="[WindowsVolume]"/>
+        <SetDirectory Id="WINDOWSVOLUME" Value="[WindowsVolume]"/>
 
         <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
 
@@ -111,6 +108,8 @@
 
                 <ComponentRef Id="CapiApplicationShortcut"/>
                 <ComponentRef Id="DesktopShortcutCapi"/>
+
+                <!--<ComponentRef Id="MyWebSite_IISConfigure"/>-->
 
             </Feature>
       
