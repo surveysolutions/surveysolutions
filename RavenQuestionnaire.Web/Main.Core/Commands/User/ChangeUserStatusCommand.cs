@@ -44,7 +44,7 @@ namespace Main.Core.Commands.User
             : base(publicKey)
         {
             this.PublicKey = publicKey;
-            this.IsUserLocked = isUserLocked;
+            this.IsLocked = isUserLocked;
         }
 
         #endregion
@@ -54,7 +54,7 @@ namespace Main.Core.Commands.User
         /// <summary>
         /// Gets or sets a value indicating whether is locked.
         /// </summary>
-        public bool IsUserLocked { get; set; }
+        public bool IsLocked { get; set; }
 
         /// <summary>
         /// Gets or sets the public key.
