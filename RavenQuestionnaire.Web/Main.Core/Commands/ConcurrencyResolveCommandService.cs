@@ -1,18 +1,19 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConcurrencyResolveCommandService.cs" company="">
-//   
+// <copyright file="ConcurrencyResolveCommandService.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   Repeates command execution until success.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Commands
 {
-    using NLog;
-
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
     using Ncqrs.Eventing.Storage;
+
+    using NLog;
 
     /// <summary>
     /// Repeates command execution until success.
@@ -22,10 +23,15 @@ namespace Main.Core.Commands
         #region Fields
 
         /// <summary>
+        /// The repeat try count.
+        /// </summary>
+        private const int RepeatTryCount = 50;
+        
+        /// <summary>
         /// The logger.
         /// </summary>
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
-
+        
         #endregion
 
         #region Public Methods and Operators
@@ -38,14 +44,21 @@ namespace Main.Core.Commands
         /// </param>
         public override void Execute(ICommand command)
         {
-            try
+            bool inProgress = true;
+            int currentTry = 1;
+
+            while (inProgress && (currentTry < ConcurrencyResolveCommandService.RepeatTryCount))
             {
-                base.Execute(command);
-            }
-            catch (ConcurrencyException exc)
-            {
-                this.logger.Info("Concurrency execution retry");
-                this.Execute(command);
+                try
+                {
+                    base.Execute(command);
+                    inProgress = false;
+                }
+                catch (ConcurrencyException exc)
+                {
+                    this.logger.Info(string.Format("Concurrency execution retry ({0})! ({1})" , currentTry, exc.Message));
+                    currentTry++;
+                }
             }
         }
 

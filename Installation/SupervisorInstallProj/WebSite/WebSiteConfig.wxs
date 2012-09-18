@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" 
+	 xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension"
+	 xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	<Fragment>
+
+		<DirectoryRef Id="ENGINEDIR">
+			<Component Id="MyWebSite_IISConfigure" Guid="A720C1C9-1D8D-4941-666D-FB1C5C9EF8AA" KeyPath="yes">
+				<!--<util:User Id="MyWebSite_AppPoolUser" Name="domainusername" Password="pwd-FB1C5C9EF8AA" />-->
+
+				<!--define application pool-->
+				<iis:WebAppPool Id="MyWebSite_AppPool" 
+								Name="SupervisorApplicationPool" 
+								RecycleMinutes="0"
+								ManagedRuntimeVersion="v4.0" 
+								IdleTimeout="0" 
+								Identity="networkService" /> 
+				<!--User="MyWebSite_AppPoolUser"-->
+
+				<!--define web site-->
+				<iis:WebSite Id="MyWebSite_Website" 
+							 Description="SupervisorSite" 
+							 AutoStart="yes" 
+							 StartOnInstall="yes"
+							 ConfigureIfExists="yes" 
+							 Directory="ENGINEDIR" 
+							 ConnectionTimeout="360">
+                    
+					<iis:WebAddress Id="MYSite_Bindings" 
+									Port="9089" />
+					
+					<iis:WebApplication Id="MY_WebApp" 
+										Name="SupervisorApp" 
+										WebAppPool="MyWebSite_AppPool" 
+										ScriptTimeout="360" />
+					
+					<iis:WebDirProperties Id="MyWebSite_Properties" 
+										  AnonymousAccess="yes" 
+										  WindowsAuthentication="no"
+										  DefaultDocuments="Default.aspx" />
+				</iis:WebSite>
+			</Component>
+
+		</DirectoryRef>
+
+	</Fragment>
+</Wix>

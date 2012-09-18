@@ -20,11 +20,8 @@
             <Component Id="cmp56F68F447E271564236AD2107DCEB726" Guid="*">
                 <File Id="filFE6D38AFA848ECFCA2B1B58EAD46055B" KeyPath="yes" Source="$(var.SourceClientDir)\AwesomiumProcess" />
             </Component>
-            <Component Id="cmp6E9E2D78BF7C4A1EE99FDF909DF524A6" Guid="*">
-                <File Id="fil51652D7AD655D1675D5422957431888E" KeyPath="yes" Source="$(var.SourceClientDir)\Capi.exe" />
-            </Component>
-            <Component Id="cmp8A9337377ACA545E01B3DEF393BBEEF6" Guid="*">
-                <File Id="filB6C6540BDA632446E6C6EE1A7939A6D7" KeyPath="yes" Source="$(var.SourceClientDir)\Capi.exe.config" />
+            <Component Id="cmp93052E890F53198045CDA94C85D0FE36" Guid="*">
+                <File Id="fil0AD3A2B8092B570A5F39997D52956E67" KeyPath="yes" Source="$(var.SourceClientDir)\Browsing.Common.dll" />
             </Component>
             <Component Id="cmp57F2184BCCD6E1A6F0CE7C91ED631A2F" Guid="*">
                 <File Id="fil23E84AE0BBEF82D155FF1C3F5D205C89" KeyPath="yes" Source="$(var.SourceClientDir)\Common.dll" />
@@ -34,6 +31,18 @@
             </Component>
             <Component Id="cmp831E6A3FE37D5A7628579030F3F44395" Guid="*">
                 <File Id="filFB408E4CC3410259924106C91DFFB0EB" KeyPath="yes" Source="$(var.SourceClientDir)\icudt42.dll" />
+            </Component>
+            <Component Id="cmp7EFEC5D7E2155DF97F9CEC4DC59CAD19" Guid="*">
+                <File Id="fil1E22DA16E5E1876466084C0E8AB0FB39" KeyPath="yes" Source="$(var.SourceClientDir)\NLog.config" />
+            </Component>
+            <Component Id="cmpEC8050BEF7C4F28C2B1EF19B9451E675" Guid="*">
+                <File Id="fil0C3941A8B2E51C115840C0CE3F0061AB" KeyPath="yes" Source="$(var.SourceClientDir)\NLog.dll" />
+            </Component>
+            <Component Id="cmpA7B4A9B54627A55A2F8CB9FBE4F361D8" Guid="*">
+                <File Id="fil3E139BE911F0A421FEA96AEAA4FF6F97" KeyPath="yes" Source="$(var.SourceClientDir)\Supervisor.exe" />
+            </Component>
+            <Component Id="cmpAECE465033EB02DCD6A29636B7671DEF" Guid="*">
+                <File Id="fil09D0E11B58BA6249426B6A6B4C68F757" KeyPath="yes" Source="$(var.SourceClientDir)\Supervisor.exe.config" />
             </Component>
             <Component Id="cmp702F871DF0951365204679D251AEC6BF" Guid="*">
                 <File Id="filA2DC1854358CF0111DE397964DE63CC2" KeyPath="yes" Source="$(var.SourceClientDir)\Synchronization.Core.dll" />
@@ -48,11 +57,14 @@
             <ComponentRef Id="cmp1D3D31D8750CEE4A002B129618F4A0D6" />
             <ComponentRef Id="cmpFDDA7C561EDCAD5B19D1FE26A20731D1" />
             <ComponentRef Id="cmp56F68F447E271564236AD2107DCEB726" />
-            <ComponentRef Id="cmp6E9E2D78BF7C4A1EE99FDF909DF524A6" />
-            <ComponentRef Id="cmp8A9337377ACA545E01B3DEF393BBEEF6" />
+            <ComponentRef Id="cmp93052E890F53198045CDA94C85D0FE36" />
             <ComponentRef Id="cmp57F2184BCCD6E1A6F0CE7C91ED631A2F" />
             <ComponentRef Id="cmp0A74E9DB7B80DDE95EF0BD280F1C718F" />
             <ComponentRef Id="cmp831E6A3FE37D5A7628579030F3F44395" />
+            <ComponentRef Id="cmp7EFEC5D7E2155DF97F9CEC4DC59CAD19" />
+            <ComponentRef Id="cmpEC8050BEF7C4F28C2B1EF19B9451E675" />
+            <ComponentRef Id="cmpA7B4A9B54627A55A2F8CB9FBE4F361D8" />
+            <ComponentRef Id="cmpAECE465033EB02DCD6A29636B7671DEF" />
             <ComponentRef Id="cmp702F871DF0951365204679D251AEC6BF" />
         </ComponentGroup>
     </Fragment>
