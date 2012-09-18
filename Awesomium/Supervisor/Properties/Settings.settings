@@ -8,14 +8,8 @@
     <Setting Name="ParentId" Type="System.Guid" Scope="User">
       <Value Profile="(Default)">00000000-0000-0000-0000-000000000000</Value>
     </Setting>
-    <Setting Name="DefaultUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost:8084/</Value>
-    </Setting>
     <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://localhost</Value>
-    </Setting>
-    <Setting Name="DefaultPort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">8084</Value>
     </Setting>
     <Setting Name="EnginePathName" Type="System.String" Scope="User">
       <Value Profile="(Default)">Engine</Value>
@@ -34,6 +28,12 @@
     </Setting>
     <Setting Name="AuthentificationCheckPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/IsLoggedIn</Value>
+    </Setting>
+    <Setting Name="DefaultUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://localhost:9089/</Value>
+    </Setting>
+    <Setting Name="DefaultPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">9089</Value>
     </Setting>
   </Settings>
 </SettingsFile>

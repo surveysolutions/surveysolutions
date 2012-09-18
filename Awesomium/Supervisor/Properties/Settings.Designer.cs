@@ -49,18 +49,6 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8084/")]
-        public string DefaultUrl {
-            get {
-                return ((string)(this["DefaultUrl"]));
-            }
-            set {
-                this["DefaultUrl"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://localhost")]
         public string EndpointExportPath {
             get {
@@ -68,18 +56,6 @@ namespace Browsing.Supervisor.Properties {
             }
             set {
                 this["EndpointExportPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8084")]
-        public string DefaultPort {
-            get {
-                return ((string)(this["DefaultPort"]));
-            }
-            set {
-                this["DefaultPort"] = value;
             }
         }
         
@@ -152,6 +128,30 @@ namespace Browsing.Supervisor.Properties {
             }
             set {
                 this["AuthentificationCheckPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9089/")]
+        public string DefaultUrl {
+            get {
+                return ((string)(this["DefaultUrl"]));
+            }
+            set {
+                this["DefaultUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("9089")]
+        public string DefaultPort {
+            get {
+                return ((string)(this["DefaultPort"]));
+            }
+            set {
+                this["DefaultPort"] = value;
             }
         }
     }
