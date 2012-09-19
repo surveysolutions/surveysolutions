@@ -122,7 +122,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.Payload.PublicKey);
+            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.Payload.QuestionnaireId);
 
             // var questionnaire = new Questionnaire(item);
             item.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.AfterItemKey);

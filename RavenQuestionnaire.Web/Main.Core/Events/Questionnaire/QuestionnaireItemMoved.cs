@@ -39,7 +39,7 @@ namespace Main.Core.Events.Questionnaire
         /// <summary>
         /// Gets or sets the questionnaire id.
         /// </summary>
-        public string QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; set; }
 
         #endregion
     }
