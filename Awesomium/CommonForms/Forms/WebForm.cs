@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using System.Reflection;
 
 #if USING_MONO
 using Awesomium.Mono;
@@ -39,10 +40,20 @@ namespace Browsing.Common.Forms
             this.Holder = new ScreenHolder();
             this.Holder.Dock = DockStyle.Fill;
 
+            var appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            var assembly = Assembly.GetCallingAssembly();
+            var cachePath = System.IO.Path.GetFileName(assembly.FullName);
+            cachePath = cachePath.Remove(cachePath.IndexOf(','));
+            cachePath = appDataFolder + "\\" + cachePath;// + "." + assembly.ImageRuntimeVersion;
+
             WebCore.Initialize(new WebCoreConfig()
                                    {
                                        EnablePlugins = true,
-                                       SaveCacheAndCookies = true
+                                       SaveCacheAndCookies = true,
+                                       UserDataPath = cachePath,
+                                       LogLevel = Awesomium.Core.LogLevel.Normal,//.Verbose,
+                                       ForceSingleProcess = true
                                    }, true);
 
             var webView = new WebControl();
