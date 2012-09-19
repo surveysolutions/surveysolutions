@@ -14,7 +14,7 @@
     <Package InstallerVersion="200" 
              Compressed="yes"
              Description="Supervisor installation."
-			 InstallScope="perUser"/>
+			 InstallScope="perMachine"/>
 
         <MajorUpgrade Schedule="afterInstallValidate"
                         AllowSameVersionUpgrades="yes"
@@ -23,7 +23,7 @@
                 DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit."/>
 
         
-        <Property Id="ALLUSERS" Secure="yes" />
+        <!--<Property Id="ALLUSERS" Secure="yes" />-->
 
         <!-- Prerequisites -->
         <PropertyRef Id="NETFRAMEWORK40CLIENT"/>
@@ -41,24 +41,23 @@
         <Condition Message='ASP.NET MVC 3 is required to proceed with the installation (http://www.microsoft.com/en-us/download/details.aspx?id=1491).'>
             <![CDATA[Installed OR ASP_NET_MVC_3_0_DLL]]>
         </Condition>
-
         
+<!--
         <Property Id="APPCMDEXE">
             <DirectorySearch Id="IISExpressDir" Path="[ProgramFilesFolder]IIS Express">
                 <FileSearch Name="appcmd.exe" />
             </DirectorySearch>
         </Property>
-
         
-        <!--
         <Condition Message="IIS Express 7.x must be installed before installation (http://www.microsoft.com/en-us/download/details.aspx?id=1038).">
             <![CDATA[Installed or APPCMDEXE]]>
         </Condition>
+-->
+
         <PropertyRef Id="IISMAJORVERSION"/>
         <Condition Message="Install requires IIS 6 or 7.">
             <![CDATA[Installed OR (IISMAJORVERSION AND (IISMAJORVERSION = "#6" OR IISMAJORVERSION = "#7"))]]>
         </Condition>
--->
 
         <SetDirectory Id="WINDOWSVOLUME" Value="[WindowsVolume]"/>
 
@@ -109,7 +108,7 @@
                 <ComponentRef Id="CapiApplicationShortcut"/>
                 <ComponentRef Id="DesktopShortcutCapi"/>
 
-                <!--<ComponentRef Id="MyWebSite_IISConfigure"/>-->
+                <ComponentRef Id="MyWebSite_IISConfigure"/>
 
             </Feature>
       
