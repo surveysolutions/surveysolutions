@@ -63,7 +63,7 @@ namespace Main.Core.Entities.SubEntities
             get
             {
                 var identifier = new Guid("AA6C0DC1-23C4-4B03-A3ED-B24EF0055555");
-                string name = "Approve";
+                string name = "Approved";
                 return new SurveyStatus(identifier, name);
             }
         }
@@ -89,7 +89,7 @@ namespace Main.Core.Entities.SubEntities
             get
             {
                 var identifier = new Guid("D65CF1F6-8A75-43FA-9158-B745EB4D6A1F");
-                string name = "Completed with Error";
+                string name = "Completed with error";
                 return new SurveyStatus(identifier, name);
             }
         }
