@@ -24,6 +24,7 @@
     using Ncqrs.Eventing.Storage;
     using Ncqrs.Eventing.Storage.RavenDB;
     using Ncqrs.Restoring.EventStapshoot;
+    using Ncqrs.Restoring.EventStapshoot.EventStores.RavenDB;
     using Ninject;
 
     using Raven.Client.Document;
@@ -65,7 +66,7 @@ public static class NCQRSInit
     /// </summary>
     /// <exception cref="Exception">
     /// </exception>
-    public static void RebuildReadLayer()
+    public static void RebuildReadLayer(DocumentStore store)
     {
         var myEventBus = NcqrsEnvironment.Get<IEventBus>();
         if (myEventBus == null)
@@ -79,12 +80,13 @@ public static class NCQRSInit
         {
             throw new Exception("IEventStore is not correct.");
         }
-
-        var myEvents = myEventStore.ReadFrom(DateTime.MinValue);
-        foreach (IGrouping<Guid, CommittedEvent> eventsByAggregateRoot in myEvents.GroupBy(x => x.EventSourceId))
+        store.CreateIndex();
+        var myEvents = store.GetAllEvents();
+        myEventBus.Publish(myEvents);
+       /* foreach (IGrouping<Guid, CommittedEvent> eventsByAggregateRoot in myEvents.GroupBy(x => x.EventSourceId))
         {
             myEventBus.Publish(ExcludeHistoryBefaourSnapshoot(eventsByAggregateRoot));
-        }
+        }*/
     }
     private static IEnumerable<CommittedEvent> ExcludeHistoryBefaourSnapshoot(IEnumerable<CommittedEvent> events)
     {

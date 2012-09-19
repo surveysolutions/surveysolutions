@@ -102,12 +102,6 @@ namespace Ncqrs.Eventing.Storage.NoDB
                 sourceId.ReleaseWriteLock();
             }
         }
-
-        public IEnumerable<CommittedEvent> ReadFrom(DateTime start)
-        {
-            throw new NotImplementedException("please implement some body");
-        }
-
         public byte[] GetBytes(UncommittedEvent evnt)
         {
             string eventName;

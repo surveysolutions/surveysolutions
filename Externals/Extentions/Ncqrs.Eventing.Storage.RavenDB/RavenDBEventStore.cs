@@ -11,7 +11,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
     {
         private bool useAsyncSave = false;//research. in the embedded mode true is not valid  
 
-        private readonly IDocumentStore _documentStore;
+        protected readonly IDocumentStore _documentStore;
 
         public RavenDBEventStore(string ravenUrl)
         {
@@ -49,7 +49,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         }
        
 
-        public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
+        public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
             /*  using (var session = _documentStore.OpenSession())
             {
@@ -68,7 +68,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             // }
         }
 
-        private static CommittedEvent ToComittedEvent(StoredEvent x)
+        public static CommittedEvent ToComittedEvent(StoredEvent x)
         {
             return new CommittedEvent(x.CommitId, x.EventIdentifier, x.EventSourceId,x.EventSequence, x.EventTimeStamp, x.Data, x.Version);
         }
@@ -135,9 +135,28 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        protected IEnumerable<StoredEvent> AccumulateEvents(Expression<Func<StoredEvent, bool>> query)
+        protected virtual IEnumerable<StoredEvent> AccumulateEvents(Expression<Func<StoredEvent, bool>> query)
         {
-            List<StoredEvent> retval = new List<StoredEvent>();
+            IQueryable<StoredEvent> result = Enumerable.Empty<StoredEvent>().AsQueryable(); 
+            int maxPageSize = 1024;
+            int page = 0;
+            while (true)
+            {
+                using (var session = _documentStore.OpenSession())
+                {
+                    var chunk =
+                        session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).
+                            Skip(page * maxPageSize).
+                            Take(maxPageSize).Where(query);
+                    if (!chunk.Any())
+                        break;
+
+                    result = result.Concat(chunk);
+                    page++;
+                }
+            }
+            return result.OrderBy(x => x.EventSequence);
+          /*  List<StoredEvent> retval = new List<StoredEvent>();
             int maxPageSize = 1024;
             int page = 0;
             while (true)
@@ -158,22 +177,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 }
             }
 
-            return retval.OrderBy(x=>x.EventSequence);
+            return retval.OrderBy(x=>x.EventSequence);*/
 
         }
-
-        public IEnumerable<CommittedEvent> ReadFrom(DateTime start)
-        {
-            var result = new List<CommittedEvent>();
-
-            //var storedEvents = AccumulateWithPaging(x => x.EventTimeStamp >= start).OrderBy(x => x.EventTimeStamp);
-
-            var storedEvents = AccumulateEvents(x => x.EventTimeStamp >= start);
-            
-            result = storedEvents.Select(ToComittedEvent).ToList();
-
-            return result;
-        }
-
     }
 }

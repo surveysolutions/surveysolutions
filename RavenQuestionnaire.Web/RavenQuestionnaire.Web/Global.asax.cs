@@ -2,6 +2,9 @@
 using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Ninject;
+using Questionnaire.Core.Web.Helpers;
+using Raven.Client.Document;
 using RavenQuestionnaire.Web.App_Start;
 
 namespace RavenQuestionnaire.Web
@@ -39,7 +42,7 @@ namespace RavenQuestionnaire.Web
             RegisterRoutes(RouteTable.Routes);
 
             //maybe better to move outside this class
-            NCQRSInit.RebuildReadLayer();
+            NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());
 
         }
         protected void HostServices()

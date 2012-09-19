@@ -2,6 +2,9 @@
 using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Ninject;
+using Questionnaire.Core.Web.Helpers;
+using Raven.Client.Document;
 
 namespace Web.CAPI
 {
@@ -34,7 +37,7 @@ namespace Web.CAPI
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
-            NCQRSInit.RebuildReadLayer();
+            NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
         }
