@@ -377,6 +377,7 @@
   <ItemGroup>
     <Content Include="Web.Deploy-devKh.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
