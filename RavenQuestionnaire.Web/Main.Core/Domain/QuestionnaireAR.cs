@@ -353,7 +353,7 @@ namespace Main.Core.Domain
         public void MoveQuestionnaireItem(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
         {
             this.ApplyEvent(
-                new QuestionnaireItemMoved { AfterItemKey = afterItemKey, GroupKey = groupKey, PublicKey = publicKey });
+                new QuestionnaireItemMoved { QuestionnaireId  = this.innerDocument.PublicKey,  AfterItemKey = afterItemKey, GroupKey = groupKey, PublicKey = publicKey });
         }
 
         /// <summary>
