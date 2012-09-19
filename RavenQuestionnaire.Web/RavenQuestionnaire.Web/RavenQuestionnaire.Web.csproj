@@ -219,6 +219,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\CollectionController.cs" />
+    <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\SynchronizationsController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />

@@ -5,26 +5,27 @@ using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Main.Core.Events;
+using Raven.Client.Document;
 
 namespace RavenQuestionnaire.Web.Synchronization
 {
     public class HQEventSync : AbstractEventSync
     {
-        private IEventSync synchronizer;
-        public HQEventSync(IEventSync synchronizer)
+     //   private DocumentStore store;
+        public HQEventSync()
         {
-            this.synchronizer = synchronizer;
+           // this.store = store;
         }
 
         #region Overrides of AbstractEventSync
 
         public override IEnumerable<AggregateRootEvent> ReadEvents()
         {
-            var myEventStore = NcqrsEnvironment.Get<IEventStore>();
+          /*  var myEventStore = NcqrsEnvironment.Get<IEventStore>();
 
             if (myEventStore == null)
-                throw new Exception("IEventStore is not correct.");
-            return this.synchronizer.ReadEvents();
+                throw new Exception("IEventStore is not correct.");*/
+            return Enumerable.Empty<AggregateRootEvent>();
         }
 
         #endregion
