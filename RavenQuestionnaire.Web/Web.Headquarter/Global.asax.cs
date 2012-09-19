@@ -7,6 +7,10 @@ using System.Web.Routing;
 
 namespace Web.Headquarter
 {
+    using Ninject;
+
+    using Questionnaire.Core.Web.Helpers;
+
     using RavenQuestionnaire.Core;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
@@ -38,7 +42,7 @@ namespace Web.Headquarter
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
-            NCQRSInit.RebuildReadLayer();
+            //NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
         }
