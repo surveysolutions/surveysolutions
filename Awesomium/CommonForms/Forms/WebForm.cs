@@ -53,7 +53,7 @@ namespace Browsing.Common.Forms
                                        SaveCacheAndCookies = true,
                                        UserDataPath = cachePath,
                                        LogLevel = Awesomium.Core.LogLevel.Normal,//.Verbose,
-                                       ForceSingleProcess = true
+                                       //ForceSingleProcess = true
                                    }, true);
 
             var webView = new WebControl();
