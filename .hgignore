@@ -198,6 +198,13 @@ RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot.test/obj/*
 RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot/bin/*
 RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot/obj/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/Bin/*
+RavenQuestionnaire.Web/Core.CAPI.Tests/bin/*
+RavenQuestionnaire.Web/Core.CAPI/bin/*
+RavenQuestionnaire.Web/Core.CAPI/obj/*
+RavenQuestionnaire.Web/Core.CAPI.Tests/obj/*
+RavenQuestionnaire.Web/Core.Supervisor.Tests/bin/*
+RavenQuestionnaire.Web/Core.Supervisor.Tests/obj/*
+RavenQuestionnaire.Web/Core.Supervisor/bin/*
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
