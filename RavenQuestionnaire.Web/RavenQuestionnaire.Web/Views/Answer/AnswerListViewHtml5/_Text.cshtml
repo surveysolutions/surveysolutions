@@ -1,5 +1,4 @@
 ﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.Answer
 @model Main.Core.View.Question.CompleteQuestionView
 @{
     var answerGuid = Model.Answers.Length > 0 ? Model.Answers[0].PublicKey : Guid.NewGuid();

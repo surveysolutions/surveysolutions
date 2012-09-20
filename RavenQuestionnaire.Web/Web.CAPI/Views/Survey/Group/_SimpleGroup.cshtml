@@ -3,7 +3,6 @@
 @using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Question
 @using Main.Core.Entities.SubEntities
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @model Main.Core.View.Group.CompleteGroupMobileView
               @{ var questionKey = (Guid) ViewBag.CurrentQuestion; }
 @using (var enumerator = Model.Children.GetEnumerator())

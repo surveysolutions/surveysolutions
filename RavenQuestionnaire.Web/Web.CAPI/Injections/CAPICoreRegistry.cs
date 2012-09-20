@@ -4,7 +4,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Linq;
+using System.Reflection;
+using Core.CAPI.Synchronization;
 using Main.Core;
+using Main.Core.Events;
+using Questionnaire.Core.Web.Security;
 
 namespace Web.CAPI.Injections
 {
@@ -16,6 +21,16 @@ namespace Web.CAPI.Injections
         public CAPICoreRegistry(string repositoryPath, bool isEmbeded)
             : base(repositoryPath, isEmbeded)
         {
+        }
+        public override System.Collections.Generic.IEnumerable<System.Reflection.Assembly> GetAssweblysForRegister()
+        {
+            return
+                base.GetAssweblysForRegister().Concat(new Assembly[] { typeof(ClientEventSync).Assembly, typeof(QuestionnaireMembershipProvider).Assembly });
+        }
+        public override void Load()
+        {
+            base.Load();
+            this.Bind<IEventSync>().To<ClientEventSync>();
         }
     }
 }

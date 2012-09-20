@@ -1,4 +1,4 @@
-﻿@using RavenQuestionnaire.Core.Views.User
+﻿
 @using RavenQuestionnaire.Web.Utils
 @model Main.Core.View.User.UserView
 @using (Html.BeginForm("Save", "User", null, FormMethod.Post, new {@class="form-horizontal"}))
@@ -10,7 +10,7 @@
         <div class="modal-body">
             @Html.BootstrapValidationSummary("")
             <fieldset>
-                @if (!string.IsNullOrEmpty(Model.UserId))
+                @if (Model.PublicKey!=Guid.Empty)
                 { 
                     <div class="control-group">
                         @Html.LabelFor(model => model.UserName, new { @class = "control-label" })
@@ -69,7 +69,7 @@
                         @Html.DropDownListFor(model => model.Supervisor.Id, new SelectList(ViewBag.Supervisors, "Id", "UserName"))
                     </div>
                 </div>
-                @Html.HiddenFor(model => model.UserId)
+                @Html.HiddenFor(model => model.PublicKey)
             </fieldset>
         </div>
         <div class="modal-footer">

@@ -5,6 +5,8 @@
 // -----------------------------------------------------------------------
 
 using Main.Core;
+using Main.Core.Events;
+using RavenQuestionnaire.Web.Synchronization;
 
 namespace RavenQuestionnaire.Web.Injections
 {
@@ -15,6 +17,11 @@ namespace RavenQuestionnaire.Web.Injections
     {
         public MainCoreRegistry(string repositoryPath, bool isEmbeded) : base(repositoryPath, isEmbeded)
         {
+        }
+        public override void Load()
+        {
+            base.Load();
+            this.Bind<IEventSync>().To<HQEventSync>();
         }
     }
 }

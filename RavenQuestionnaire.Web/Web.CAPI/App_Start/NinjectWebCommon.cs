@@ -74,9 +74,7 @@ namespace Web.CAPI.App_Start
             KernelLocator.SetKernel(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            kernel.Bind<IExportImport>().To<ExportImportEvent>();
             kernel.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
-            kernel.Bind<IEventSync>().To<ClientEventSync>();
             RegisterServices(kernel);
             NCQRSInit.Init(/*System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"], */kernel);
             return kernel;
