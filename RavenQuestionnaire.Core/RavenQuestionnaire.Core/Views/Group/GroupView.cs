@@ -6,6 +6,10 @@
 //   The abstract group view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.View;
+using Main.Core.View.Question;
+
 namespace RavenQuestionnaire.Core.Views.Group
 {
     using System;

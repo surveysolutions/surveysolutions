@@ -6,6 +6,9 @@
 //   The propagated question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.View.Question;
+
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     using System;

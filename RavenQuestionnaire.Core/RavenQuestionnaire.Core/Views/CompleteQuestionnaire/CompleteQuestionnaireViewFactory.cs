@@ -6,6 +6,10 @@
 //   The complete questionnaire view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.View;
+using Main.Core.View.CompleteQuestionnaire;
+
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     using System;

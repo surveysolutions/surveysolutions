@@ -6,6 +6,10 @@
 //   The abstract questionnaire view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.View;
+using Main.Core.View.Question;
+
 namespace RavenQuestionnaire.Core.Views.Questionnaire
 {
     using System;
