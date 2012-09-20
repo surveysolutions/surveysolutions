@@ -24,7 +24,6 @@ namespace Questionnaire.Core.Web.Security
     using Questionnaire.Core.Web.Helpers;
 
     using RavenQuestionnaire.Core;
-    using RavenQuestionnaire.Core.Views.User;
 
     /// <summary>
     /// The questionnaire role provider.

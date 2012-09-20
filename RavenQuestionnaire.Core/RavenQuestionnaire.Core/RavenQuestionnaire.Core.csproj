@@ -121,38 +121,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Denormalizers\IDenormalizerStorage.cs" />
-    <Compile Include="DocumentStoreProvider.cs" />
-    <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EventHandlers\CompleteQuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
-    <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandlers\UserDenormalizer.cs" />
-    <Compile Include="CoreRegistry.cs" />
     <Compile Include="Export\csv\CSVExporter.cs" />
     <Compile Include="Export\ExportManager.cs" />
     <Compile Include="Export\IExportProvider.cs" />
-    <Compile Include="NCQRSInit.cs" />
-    <Compile Include="Services\IFileStorageService.cs" />
-    <Compile Include="IViewFactory.cs" />
-    <Compile Include="IViewRepsoitory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\RavenFileStorageService.cs" />
-    <Compile Include="ViewRepository.cs" />
-    <Compile Include="ViewSnapshot\IViewSnapshot.cs" />
-    <Compile Include="Views\Answer\AnswerView.cs" />
-    <Compile Include="Views\Answer\CompleteAnswerView.cs" />
     <Compile Include="Views\Assignment\AssigmentBrowseInputModel.cs" />
     <Compile Include="Views\Assignment\AssigmentBrowseItem.cs" />
     <Compile Include="Views\Assignment\AssigmentViewInputModel.cs" />
-    <Compile Include="Views\Assign\AssignSurveyView.cs" />
-    <Compile Include="Views\Assign\AssignSurveyViewFactory.cs" />
-    <Compile Include="Views\Assign\AssignSurveyInputModel.cs" />
-    <Compile Include="Views\Card\CardView.cs" />
-    <Compile Include="Views\Card\CardViewFactory.cs" />
-    <Compile Include="Views\Card\CardViewInputModel.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseInputModel.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseItem.cs" />
     <Compile Include="Views\CollectionItem\CollectionItemBrowseView.cs" />
@@ -165,8 +140,6 @@
     <Compile Include="Views\Collection\CollectionView.cs" />
     <Compile Include="Views\Collection\CollectionViewFactory.cs" />
     <Compile Include="Views\Collection\CollectionViewInputModel.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireEnumerableViewFactory.cs" />
@@ -177,25 +150,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewFactory.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\CompleteGroupHeaders.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Json\CompleteQuestionnaireJsonViewFactory.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Json\CompleteQuestionnaireJsonView.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Json\CompleteQuestionView.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupedBrowseFactory.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupedBrowseInputModel.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupedBrowseView.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Grouped\CQGroupItem.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteQuestionnaireMabileViewFactory.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteGroupMobileView.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Mobile\CompleteQuestionnaireMobileView.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Mobile\PropagatedGroupMobileView.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Mobile\ScreenNavigation.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportInputModel.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportViewFactory.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Counter.cs" />
     <Compile Include="Views\CompleteQuestionnaire\PropagatedGroup.cs" />
     <Compile Include="Views\CompleteQuestionnaire\PropagatedQuestion.cs" />
     <Compile Include="Views\Event\File\FileBrowseInputModel.cs">
@@ -216,67 +174,17 @@
     <Compile Include="Views\Group\GroupView.cs" />
     <Compile Include="Views\Group\GroupViewFactory.cs" />
     <Compile Include="Views\Group\GroupViewInputModel.cs" />
-    <Compile Include="Views\ICompositeView.cs" />
     <Compile Include="Views\Group\PropagatedCompleteGroupView.cs" />
     <Compile Include="Views\Event\EventBrowseInputModel.cs" />
     <Compile Include="Views\Event\EventViewInputModel.cs" />
-    <Compile Include="Views\Interviewer\InterviewerStatisticsView.cs" />
-    <Compile Include="Views\Interviewer\InterviewerStatistics.cs" />
-    <Compile Include="Views\Interviewer\InterviewerStatisticsFactory.cs" />
-    <Compile Include="Views\Interviewer\InterviewerStatisticsInputModel.cs" />
-    <Compile Include="Views\Interviewer\InterviewerStatisticsItem.cs" />
-    <Compile Include="Views\Interviewer\InterviewerStatisticsViewItem.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseInputModel.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseView.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireView.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireViewInputModel.cs" />
     <Compile Include="Views\Question\BindedCompleteQuestionView.cs" />
-    <Compile Include="Views\Question\CompleteQuestionView.cs" />
-    <Compile Include="Views\Question\QuestionView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Question\QuestionViewFactory.cs" />
-    <Compile Include="Views\Question\QuestionViewInputModel.cs" />
-    <Compile Include="Views\Statistics\CompleteQuestionnaireStatisticView.cs" />
-    <Compile Include="Views\Statistics\CompleteQuestionnaireStatisticViewFactory.cs" />
-    <Compile Include="Views\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />
-    <Compile Include="Views\Statistics\QuestionStatisticView.cs" />
     <Compile Include="Views\StatusReport\CQStatusReportView.cs" />
     <Compile Include="Views\StatusReport\CQStatusReportViewInputModel.cs" />
     <Compile Include="Views\StatusReport\CQStatusReportFactory.cs" />
     <Compile Include="Views\StatusReport\CQStatusReportItemView.cs" />
-    <Compile Include="Views\Survey\SurveyBrowseItem.cs" />
-    <Compile Include="Views\Survey\SurveyBrowseView.cs" />
-    <Compile Include="Views\Survey\SurveyGroupedByStatusHeader.cs" />
-    <Compile Include="Views\Survey\SurveyGroupInputModel.cs" />
-    <Compile Include="Views\Survey\SurveyGroupItem.cs" />
-    <Compile Include="Views\Survey\SurveyGroupView.cs" />
-    <Compile Include="Views\Survey\SurveyGroupViewFactory.cs" />
-    <Compile Include="Views\Survey\SurveyItem.cs" />
-    <Compile Include="Views\Survey\SurveyViewFactory.cs" />
-    <Compile Include="Views\Survey\SurveyViewInputModel.cs" />
-    <Compile Include="Views\Synchronization\SyncProgressFactory.cs" />
-    <Compile Include="Views\Synchronization\SyncProgressInputModel.cs" />
-    <Compile Include="Views\Synchronization\SyncProgressView.cs" />
-    <Compile Include="Views\Interviewer\InterviewerGroupView.cs" />
-    <Compile Include="Views\Interviewer\InterviewerItemView.cs" />
-    <Compile Include="Views\Interviewer\InterviewerView.cs" />
-    <Compile Include="Views\Interviewer\InterviewerViewFactory.cs" />
-    <Compile Include="Views\Interviewer\InterviewerInputModel.cs" />
-    <Compile Include="Views\Interviewer\InterviewersInputModel.cs" />
-    <Compile Include="Views\Interviewer\InterviewersItem.cs" />
-    <Compile Include="Views\Interviewer\InterviewersView.cs" />
-    <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
-    <Compile Include="Views\User\UserBrowseInputModel.cs" />
-    <Compile Include="Views\User\UserBrowseItem.cs" />
-    <Compile Include="Views\User\UserBrowseView.cs" />
-    <Compile Include="Views\User\UserBrowseViewFactory.cs" />
-    <Compile Include="Views\User\UserView.cs" />
-    <Compile Include="Views\User\UserViewFactory.cs" />
-    <Compile Include="Views\User\UserViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Event\ExportCommands.xml" />
@@ -311,7 +219,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\CompleteQuestionnaire\Mobile\" />
     <Folder Include="Views\NewFolder1\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
