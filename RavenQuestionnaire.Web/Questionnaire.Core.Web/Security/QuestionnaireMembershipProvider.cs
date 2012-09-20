@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.View;
+using Main.Core.View.User;
+
 namespace Questionnaire.Core.Web.Security
 {
     using System;
@@ -21,7 +24,6 @@ namespace Questionnaire.Core.Web.Security
 
     using Questionnaire.Core.Web.Helpers;
 
-    using RavenQuestionnaire.Core;
 
     /// <summary>
     /// The questionnaire membership provider.

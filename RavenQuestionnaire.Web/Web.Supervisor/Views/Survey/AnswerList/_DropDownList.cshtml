@@ -1,7 +1,7 @@
-﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.Answer
+﻿@using Main.Core.View.Answer
+@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Question
-@model CompleteQuestionView
+@model Main.Core.View.Question.CompleteQuestionView
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
 {
     var settings = (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings;

@@ -7,6 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Core.CAPI.Views.Grouped;
+using Core.CAPI.Views.Json;
+using Main.Core.View;
+using Main.Core.View.CompleteQuestionnaire;
+using Main.Core.View.CompleteQuestionnaire.Statistics;
+using Main.Core.View.Group;
+using Main.Core.View.Question;
+
 namespace Web.CAPI.Controllers
 {
     using System;
@@ -24,16 +32,8 @@ namespace Web.CAPI.Controllers
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Security;
 
-    using RavenQuestionnaire.Core;
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Commands.Questionnaire.Group;
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Json;
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
-    using RavenQuestionnaire.Core.Views.Question;
-    using RavenQuestionnaire.Core.Views.Statistics;
-
     using Web.CAPI.Models;
 
     using LogManager = NLog.LogManager;

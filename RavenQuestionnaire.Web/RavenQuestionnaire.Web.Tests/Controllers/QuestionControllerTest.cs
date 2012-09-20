@@ -7,6 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.View;
+using Main.Core.View.Answer;
+using Main.Core.View.Question;
+
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     using System;
@@ -24,7 +28,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     using NUnit.Framework;
 
     using RavenQuestionnaire.Core;
-    using RavenQuestionnaire.Core.Views.Answer;
     using RavenQuestionnaire.Core.Views.Question;
     using RavenQuestionnaire.Core.Views.Questionnaire;
     using RavenQuestionnaire.Web.Controllers;

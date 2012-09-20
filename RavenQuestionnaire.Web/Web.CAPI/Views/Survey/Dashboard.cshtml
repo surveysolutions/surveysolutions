@@ -1,7 +1,8 @@
-﻿@using Main.Core.Entities.SubEntities
+﻿@using Core.CAPI.Views.Grouped
+@using Main.Core.Entities.SubEntities
+@using Main.Core.View.CompleteQuestionnaire
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped
-@model CQGroupedBrowseView
+@model Core.CAPI.Views.Grouped.CQGroupedBrowseView
 <div data-role="panel" data-id="main" id="dashboard-page">
     <!-- Start of second page -->
     <div data-role="page" id="main" class="page">
@@ -60,7 +61,7 @@
                                                           style = "color:green";
                                                       }
                             }
-                            @Html.ActionLink(" " + string.Concat(survey.FeaturedQuestions.Select(f => f.QuestionText + " " + f.AnswerText + " ")), "Index", "Survey", new { id = survey.CompleteQuestionnaireId }, new
+                            @Html.ActionLink(" " + string.Concat(survey.FeaturedQuestions.Select(f => f.QuestionText + " " + f.GetAnswerString() + " ")), "Index", "Survey", new { id = survey.CompleteQuestionnaireId }, new
                                                                                                                                                                                                  {
                                                                                                                                                                                                      data_theme = "b",
                                                                                                                                                                                                      rel = "external",

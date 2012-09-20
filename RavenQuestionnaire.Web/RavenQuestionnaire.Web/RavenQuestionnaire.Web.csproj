@@ -13,7 +13,7 @@
     <RootNamespace>RavenQuestionnaire.Web</RootNamespace>
     <AssemblyName>RavenQuestionnaire.Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <MvcBuildViews>false</MvcBuildViews>
+    <MvcBuildViews>true</MvcBuildViews>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -221,10 +221,9 @@
     <Compile Include="Controllers\CollectionController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
-    <Compile Include="Controllers\SynchronizationsController.cs" />
-    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
+    <Compile Include="Injections\MainCoreRegistry.cs" />
     <Compile Include="Models\FlowGraph.cs" />
     <Compile Include="Models\GridDataRequest.cs" />
     <Compile Include="Controllers\GroupController.cs" />
@@ -700,12 +699,6 @@
     <Content Include="Views\User\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Location\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Location\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\CompleteQuestionnaire\MyItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -855,7 +848,6 @@
     </None>
     <Content Include="Views\Questionnaire\_Table.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\_Table.cshtml" />
-    <Content Include="Views\FlowGraph\Edit.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\_TableIndex.cshtml" />
     <Content Include="Views\Administration\Menu.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Question.cshtml" />
@@ -872,30 +864,18 @@
     <Content Include="Views\Group\CompleteGroupTemplates\_CompleteGroup.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_PropagatedCompleteGroup.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_PropagatebleCompleteGroup.cshtml" />
-    <Content Include="Views\FlowGraph\Index.cshtml" />
-    <Content Include="Views\FlowGraph\_FlowJs.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_Numeric.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_DateTime.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_SingleOption.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_GpsCoordinates.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_MultyOption.cshtml" />
-    <Content Include="Views\CompleteQuestionnaire\QuestionV.cshtml" />
-    <Content Include="Views\Group\_ScreenV.cshtml" />
-    <Content Include="Views\Group\_ScreenC.cshtml" />
-    <Content Include="Views\CompleteQuestionnaire\QuestionC.cshtml" />
-    <Content Include="Views\CompleteQuestionnaire\QuestionI.cshtml" />
-    <Content Include="Views\Group\_ScreenI.cshtml" />
     <Content Include="Views\Shared\ViewSwitcher.cshtml" />
     <Content Include="Views\Shared\ProgressBar.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_YesNo.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_Percentage.cshtml" />
     <Content Include="Views\Question\_AddCards.cshtml" />
     <Content Include="Views\Question\_EditCard.cshtml" />
-    <Content Include="Views\Shared\GroupNavigation.cshtml" />
-    <Content Include="Views\Group\GroupTemplates\_PropagatebleGroup.cshtml" />
-    <Content Include="Views\Group\GroupTemplates\_SimpleGroup.cshtml" />
-    <Content Include="Views\Group\GroupTemplates\_CompleteGroup.cshtml" />
     <Content Include="Views\Resource\Upload.cshtml" />
     <Content Include="Views\Resource\Index.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Image.cshtml" />
@@ -919,7 +899,6 @@
     <Content Include="Views\Group\Mobile\_CompleteGroup.cshtml" />
     <Content Include="Views\Group\Mobile\_SimpleGroup.cshtml" />
     <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
-    <Content Include="Views\Statistic\Details.cshtml" />
     <Content Include="Views\Answer\_EditCollectionItem.cshtml" />
     <Content Include="Views\Shared\MobileGroupNavigation.cshtml" />
     <Content Include="Views\Shared\MobileProgressBar.cshtml" />
@@ -928,7 +907,6 @@
     <Content Include="Views\Collection\EditCollectionItem.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_CompleteGroupTemplate.cshtml" />
     <Content Include="Views\Group\Mobile\_PropagatedGrooup.cshtml" />
-    <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Shared\_MoveItem.cshtml" />
     <Content Include="Views\Answer\AnswerListViewHtml5\_AutoPropagate.cshtml" />
     <Content Include="Views\Answer\answerViewHtml5\_Image.cshtml" />
@@ -941,10 +919,6 @@
     <Content Include="Views\Group\Mobile\_PropagatedScreen.cshtml" />
     <Content Include="Views\Shared\ViewTestUploadFile.cshtml" />
     <Content Include="Views\Account\LogOnMobile.cshtml" />
-    <Content Include="Views\Synchronizations\Spots.cshtml" />
-    <Content Include="Views\Synchronizations\Progress.cshtml" />
-    <Content Include="Views\Synchronizations\_ProgressContent.cshtml" />
-    <Content Include="Views\Synchronizations\Scaning.cshtml" />
     <Content Include="Views\Questionnaire\_RenderChildren.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\QStatuses.cshtml" />
     <Content Include="Views\Shared\MoveQuestion.cshtml" />

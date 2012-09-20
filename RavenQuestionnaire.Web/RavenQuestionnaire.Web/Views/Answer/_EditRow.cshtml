@@ -1,7 +1,6 @@
 ﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.Answer
 @using RavenQuestionnaire.Web.Utils
-@model AnswerView
+@model Main.Core.View.Answer.AnswerView
 @{ 
     var currentRowId = "divEditAnswer" + Model.PublicKey.ToString();
     var images = ViewBag.Images as SelectList;

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
+using Main.Core.View;
+using Main.Core.View.Questionnaire;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Security;
