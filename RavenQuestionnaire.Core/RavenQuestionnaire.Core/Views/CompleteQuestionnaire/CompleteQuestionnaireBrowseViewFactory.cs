@@ -7,15 +7,16 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Denormalizers;
 using Main.Core.Documents;
+using Main.Core.View;
+using Main.Core.View.CompleteQuestionnaire;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using RavenQuestionnaire.Core.Denormalizers;
 
     /// <summary>
     /// The complete questionnaire browse view factory.

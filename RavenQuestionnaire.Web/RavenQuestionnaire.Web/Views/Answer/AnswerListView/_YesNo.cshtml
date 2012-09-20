@@ -1,6 +1,7 @@
-﻿@using Questionnaire.Core.Web.Helpers
+﻿@using Main.Core.View.Answer
+@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Answer
-@model RavenQuestionnaire.Core.Views.Question.CompleteQuestionView
+@model Main.Core.View.Question.CompleteQuestionView
 @{ ((IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings).Add("onclick", "$(this.form).submit();"); }
 @using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
 {

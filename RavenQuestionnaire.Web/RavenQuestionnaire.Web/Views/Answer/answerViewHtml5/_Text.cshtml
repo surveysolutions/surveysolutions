@@ -1,6 +1,6 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Answer
-@model CompleteAnswerView
+@model Main.Core.View.Answer.CompleteAnswerView
 @{
     var radibutonname = string.Format("radiobutton-{0}", Model.PublicKey);
     var textArrtrs = new Dictionary<string, object>() { { "onchange", Model.Selected ? "$(this.form).submit();" : "" }, { "input-label", true }, { "style", "float: right; height: auto; margin: 0; position: static;" } };

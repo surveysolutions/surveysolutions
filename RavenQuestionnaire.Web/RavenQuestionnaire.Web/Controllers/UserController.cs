@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Main.Core.View;
+using Main.Core.View.User;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core;
 using Main.Core.Commands.User;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
-using RavenQuestionnaire.Core.Views.User;
 
 namespace RavenQuestionnaire.Web.Controllers
 {

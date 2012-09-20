@@ -1,7 +1,8 @@
-﻿@using Questionnaire.Core.Web.Helpers
+﻿@using Main.Core.View.Answer
+@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Answer
 @using RavenQuestionnaire.Core.Views.Question
-@model CompleteQuestionView
+@model Main.Core.View.Question.CompleteQuestionView
 @{ ((IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings).Add("onclick", "$(this.form).submit();"); }
 <fieldset data-role="controlgroup" data-type="horizontal">
     <legend @if (!String.IsNullOrEmpty(Model.Instructions))

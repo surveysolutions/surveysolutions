@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Kaliko.ImageLibrary;
 using Kaliko.ImageLibrary.Filters;
+using Main.Core.Services;
+using Main.Core.View;
 using NLog;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -12,7 +14,6 @@ using Questionnaire.Core.Web.Helpers;
 using RavenQuestionnaire.Core;
 using Main.Core.Commands.File;
 using Main.Core.Commands.Questionnaire;
-using RavenQuestionnaire.Core.Services;
 using Main.Core.Utility;
 
 using LogManager = NLog.LogManager;

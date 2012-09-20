@@ -1,4 +1,5 @@
-﻿using Ncqrs;
+﻿using Main.Core.View;
+using Ncqrs;
 using System;
 using System.Web;
 using System.Web.Mvc;

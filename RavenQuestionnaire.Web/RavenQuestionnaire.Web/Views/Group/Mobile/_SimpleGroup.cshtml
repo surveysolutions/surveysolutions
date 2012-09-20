@@ -1,8 +1,10 @@
-﻿@using Questionnaire.Core.Web.Helpers
+﻿@using Main.Core.View.Group
+@using Main.Core.View.Question
+@using Questionnaire.Core.Web.Helpers
 @using Main.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @using RavenQuestionnaire.Core.Views.Question
-@model CompleteGroupMobileView
+@model Main.Core.View.Group.CompleteGroupMobileView
 @foreach (var item in Model.Children)
 {
     if ((item as CompleteQuestionView) != null)

@@ -6,14 +6,16 @@
 //   The propagated group.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.View.Answer;
+using Main.Core.View.Group;
+using Main.Core.View.Question;
+
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using RavenQuestionnaire.Core.Views.Answer;
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
     using RavenQuestionnaire.Core.Views.Question;
 
     /// <summary>

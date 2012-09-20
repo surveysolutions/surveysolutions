@@ -6,6 +6,9 @@
 //   The complete group view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.View;
+
 namespace RavenQuestionnaire.Core.Views.Group
 {
     using System;

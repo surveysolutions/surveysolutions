@@ -4,7 +4,10 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using Core.CAPI.Synchronization;
+using Core.CAPI.Views.Synchronization;
 using DataEntryClient.CompleteQuestionnaire;
+using Main.Core.View;
 using NLog;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -13,12 +16,8 @@ using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Threading;
 using Questionnaire.Core.Web.WCF;
-using RavenQuestionnaire.Core;
 using Main.Core.Commands.Synchronization;
 using Main.Core.Documents;
-
-using RavenQuestionnaire.Core.Views.Synchronization;
-
 using LogManager = NLog.LogManager;
 
 namespace Web.CAPI.Controllers

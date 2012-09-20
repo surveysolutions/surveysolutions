@@ -177,7 +177,6 @@
   <ItemGroup>
     <Compile Include="Controllers\SurveyControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Synchronization\ClientEventSyncTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config">
@@ -189,13 +188,13 @@
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
-      <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
-      <Name>RavenQuestionnaire.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core.CAPI\Core.CAPI.csproj">
+      <Project>{C71E88E7-10A1-40FB-A789-E1FF2F0687D4}</Project>
+      <Name>Core.CAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>

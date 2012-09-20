@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Main.Core;
 using NLog;
 using Ninject;
 using Questionnaire.Core.Web.Helpers;
@@ -9,7 +10,6 @@ using Raven.Client.Document;
 
 namespace Web.Supervisor
 {
-    using RavenQuestionnaire.Core;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801

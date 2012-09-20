@@ -63,6 +63,9 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Kaliko.ImageLibrary">
+      <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -75,6 +78,10 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RavenDB.Client.1.0.960\lib\net40\Raven.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Raven.Client.Embedded">
       <HintPath>..\packages\RavenDB.Embedded.1.0.960\lib\net40\Raven.Client.Embedded.dll</HintPath>
     </Reference>
@@ -83,6 +90,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -135,6 +143,10 @@
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="Conventions\RegisterGenericTypesOfInterface.cs" />
+    <Compile Include="CoreRegistry.cs" />
+    <Compile Include="Denormalizers\IDenormalizer.cs" />
+    <Compile Include="Denormalizers\IDenormalizerStorage.cs" />
+    <Compile Include="DocumentStoreProvider.cs" />
     <Compile Include="Documents\AbstractDocument.cs" />
     <Compile Include="Documents\ClientSettingsDocument.cs" />
     <Compile Include="Documents\CollectionDocument.cs" />
@@ -169,8 +181,6 @@
     <Compile Include="Entities\Extensions\GroupHash.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\Extensions\IGroupExtensions.cs" />
-    <Compile Include="Entities\Iterators\Iterator.cs" />
-    <Compile Include="Entities\Iterators\QuestionnaireScreenIterator.cs" />
     <Compile Include="Entities\Observers\ITriggerable.cs" />
     <Compile Include="Entities\OrderDirection.cs" />
     <Compile Include="Entities\OrderRequestItem.cs" />
@@ -229,6 +239,11 @@
     <Compile Include="Entities\SubEntities\UserLight.cs" />
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
     <Compile Include="Entities\SubEntities\VisitedGroup.cs" />
+    <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
+    <Compile Include="EventHandlers\CompleteQuestionnaireDenormalizer.cs" />
+    <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
+    <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="Events\AbstractEventSync.cs" />
     <Compile Include="Events\AggregateRootEvent.cs" />
     <Compile Include="Events\AggregateRootEventStream.cs" />
@@ -274,7 +289,10 @@
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />
     <Compile Include="ExpressionExecutors\StatusProcessorExecutor.cs" />
+    <Compile Include="NCQRSInit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IFileStorageService.cs" />
+    <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="Utility\EnumerableExtensions.cs" />
     <Compile Include="Utility\EventMergeUtils.cs" />
     <Compile Include="Utility\IdUtil.cs" />
@@ -289,6 +307,45 @@
     <Compile Include="Utility\OrderStrategy\ZAStrategy.cs" />
     <Compile Include="Utility\SimpleHash.cs" />
     <Compile Include="Utility\StringUtil.cs" />
+    <Compile Include="View\Answer\AnswerView.cs" />
+    <Compile Include="View\Answer\CompleteAnswerView.cs" />
+    <Compile Include="View\Card\CardView.cs" />
+    <Compile Include="View\Card\CardViewFactory.cs" />
+    <Compile Include="View\Card\CardViewInputModel.cs" />
+    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
+    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
+    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireMabileViewFactory.cs" />
+    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireMobileView.cs" />
+    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireMobileViewFactory.cs" />
+    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
+    <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticView.cs" />
+    <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewFactory.cs" />
+    <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />
+    <Compile Include="View\CompleteQuestionnaire\Statistics\QuestionStatisticView.cs" />
+    <Compile Include="View\Group\CompleteGroupHeaders.cs" />
+    <Compile Include="View\Group\CompleteGroupMobileView.cs" />
+    <Compile Include="View\Group\Counter.cs" />
+    <Compile Include="View\Group\PropagatedGroupMobileView.cs" />
+    <Compile Include="View\Group\ScreenNavigation.cs" />
+    <Compile Include="View\ICompositeView.cs" />
+    <Compile Include="View\IViewFactory.cs" />
+    <Compile Include="View\IViewRepsoitory.cs" />
+    <Compile Include="View\Questionnaire\QuestionnaireBrowseInputModel.cs" />
+    <Compile Include="View\Questionnaire\QuestionnaireBrowseItem.cs" />
+    <Compile Include="View\Questionnaire\QuestionnaireBrowseView.cs" />
+    <Compile Include="View\Questionnaire\QuestionnaireBrowseViewFactory.cs" />
+    <Compile Include="View\Question\CompleteQuestionView.cs" />
+    <Compile Include="View\Question\QuestionView.cs" />
+    <Compile Include="View\Question\QuestionViewFactory.cs" />
+    <Compile Include="View\Question\QuestionViewInputModel.cs" />
+    <Compile Include="View\User\UserBrowseInputModel.cs" />
+    <Compile Include="View\User\UserBrowseItem.cs" />
+    <Compile Include="View\User\UserBrowseView.cs" />
+    <Compile Include="View\User\UserBrowseViewFactory.cs" />
+    <Compile Include="View\User\UserView.cs" />
+    <Compile Include="View\User\UserViewFactory.cs" />
+    <Compile Include="View\User\UserViewInputModel.cs" />
+    <Compile Include="View\ViewRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">

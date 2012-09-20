@@ -4,6 +4,8 @@ using System.Threading;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using Core.Supervisor.Synchronization;
+using Main.Core;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Web.Common;
@@ -13,11 +15,10 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using Raven.Client;
 using Raven.Client.Document;
-using RavenQuestionnaire.Core;
 using Main.Core.Events;
 
 using Web.Supervisor.App_Start;
-using Web.Supervisor.Synchronization;
+using Web.Supervisor.Injections;
 using WebActivator;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -61,7 +62,7 @@ namespace Web.Supervisor.App_Start
                 storePath = WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"];
             else
                 storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
-            var kernel = new StandardKernel(new CoreRegistry(storePath, isEmbeded));
+            var kernel = new StandardKernel(new SupervisorCoreRegistry(storePath, isEmbeded));
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
             KernelLocator.SetKernel(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
@@ -84,9 +85,6 @@ namespace Web.Supervisor.App_Start
             kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<DocumentStore>().OpenSession()).When(b => OperationContext.Current != null).InScope(o => OperationContext.Current);
             kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<DocumentStore>().OpenSession()).When(b => HttpContext.Current == null && OperationContext.Current == null).InScope(o => Thread.CurrentThread);
 
-            kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
-            kernel.Bind<IBagManager>().To<ViewBagManager>();
-            kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
         }
     }
 }

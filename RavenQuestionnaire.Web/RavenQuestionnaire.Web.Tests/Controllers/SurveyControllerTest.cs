@@ -1,20 +1,19 @@
 using System;
+using Core.CAPI.Views.Grouped;
+using Main.Core.View;
+using Main.Core.View.Answer;
+using Main.Core.View.CompleteQuestionnaire;
+using Main.Core.View.Question;
 using Moq;
 using NUnit.Framework;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
-using RavenQuestionnaire.Core;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
-using RavenQuestionnaire.Core.Views.Answer;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Grouped;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
-using RavenQuestionnaire.Core.Views.Question;
 using Web.CAPI.Controllers;
 using Web.CAPI.Models;
 
@@ -26,7 +25,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         //public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
         public Mock<IViewRepository> ViewRepositoryMock { get; set; }
         public Mock<IFormsAuthentication> Authentication { get; set; }
-        public Mock<IBagManager> BagManager { get; set; }
         public Mock<IGlobalInfoProvider> InfoProvider { get; set; }
         public Mock<ICommandService> CommandServiceMock { get; set; }
         public SurveyController Controller { get; set; }
@@ -36,7 +34,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             ViewRepositoryMock = new Mock<IViewRepository>();
             Authentication = new Mock<IFormsAuthentication>();
-            BagManager = new Mock<IBagManager>();
 
             InfoProvider = new Mock<IGlobalInfoProvider>();
 

@@ -1,7 +1,8 @@
-﻿@using Questionnaire.Core.Web.Helpers
+﻿@using Main.Core.View.Question
+@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @using RavenQuestionnaire.Core.Views.Question
-@model PropagatedGroupMobileView
+@model Main.Core.View.Group.PropagatedGroupMobileView
 @{ string groupKey = "propagatedGroup" + Model.PropogationKey; }
 <ul data-role="listview" data-inset="true" id="@groupKey">
     @foreach (CompleteQuestionView pquestion in Model.Children.OfType<CompleteQuestionView>())

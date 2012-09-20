@@ -8,6 +8,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.View;
+using Main.Core.View.Questionnaire;
+
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     using System;

@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Core.Supervisor.Views.Interviewer;
+using Main.Core.View;
+
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -17,8 +20,6 @@ namespace Web.Supervisor.Controllers
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
     using Questionnaire.Core.Web.Helpers;
-    using RavenQuestionnaire.Core;
-    using RavenQuestionnaire.Core.Views.Interviewer;
     using Web.Supervisor.Models;
     
 

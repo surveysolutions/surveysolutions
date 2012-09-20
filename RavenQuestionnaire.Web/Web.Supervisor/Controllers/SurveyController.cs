@@ -7,6 +7,16 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Core.Supervisor.Views.Assign;
+using Core.Supervisor.Views.Interviewer;
+using Core.Supervisor.Views.Survey;
+using Main.Core.View;
+using Main.Core.View.CompleteQuestionnaire;
+using Main.Core.View.CompleteQuestionnaire.Statistics;
+using Main.Core.View.Group;
+using Main.Core.View.Question;
+using Main.Core.View.User;
+
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -18,15 +28,6 @@ namespace Web.Supervisor.Controllers
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
     using Questionnaire.Core.Web.Helpers;
-    using RavenQuestionnaire.Core;
-    using RavenQuestionnaire.Core.Views.Assign;
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
-    using RavenQuestionnaire.Core.Views.Interviewer;
-    using RavenQuestionnaire.Core.Views.Question;
-    using RavenQuestionnaire.Core.Views.Statistics;
-    using RavenQuestionnaire.Core.Views.Survey;
-    using RavenQuestionnaire.Core.Views.User;
     using Web.Supervisor.Models;
 
     /// <summary>
