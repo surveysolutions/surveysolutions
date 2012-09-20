@@ -205,6 +205,7 @@ RavenQuestionnaire.Web/Core.CAPI.Tests/obj/*
 RavenQuestionnaire.Web/Core.Supervisor.Tests/bin/*
 RavenQuestionnaire.Web/Core.Supervisor.Tests/obj/*
 RavenQuestionnaire.Web/Core.Supervisor/bin/*
+RavenQuestionnaire.Web/Core.Supervisor/obj/*
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
