@@ -6,6 +6,9 @@
 //   The cq status report view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.View.CompleteQuestionnaire;
+
 namespace RavenQuestionnaire.Core.Views.StatusReport
 {
     using System;
@@ -47,7 +50,7 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
                         Description =
                             string.Join(
                                 ", ", 
-                                statisticDocument.FeaturedQuestions.Select(f => f.QuestionText + ": " + f.AnswerText))
+                                statisticDocument.FeaturedQuestions.Select(f => f.Title + ": " + f.Answer.ToString()))
                     };
                 this.Items.Add(view);
             }

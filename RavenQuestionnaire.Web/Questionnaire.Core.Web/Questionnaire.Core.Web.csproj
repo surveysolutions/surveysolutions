@@ -110,12 +110,10 @@
     <Compile Include="Helpers\GlobalInfoProvider.cs" />
     <Compile Include="Helpers\Html5Extensions.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
-    <Compile Include="Helpers\IBagManager.cs" />
     <Compile Include="Helpers\IGlobalInfoProvider.cs" />
     <Compile Include="Helpers\InputExtensions.cs" />
     <Compile Include="Helpers\KernelLocator.cs" />
     <Compile Include="Helpers\SelectExtensions.cs" />
-    <Compile Include="Helpers\ViewBagManager.cs" />
     <Compile Include="Security\FormsAuthentication.cs" />
     <Compile Include="Security\IFormsAuthentication.cs" />
     <Compile Include="Security\QuestionnaireAuthorizeAttribute.cs" />
@@ -129,10 +127,6 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
-      <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
-      <Name>RavenQuestionnaire.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>

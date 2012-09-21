@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -13,7 +14,7 @@
     <RootNamespace>RavenQuestionnaire.Web</RootNamespace>
     <AssemblyName>RavenQuestionnaire.Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <MvcBuildViews>false</MvcBuildViews>
+    <MvcBuildViews>true</MvcBuildViews>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -23,6 +24,15 @@
     <SccProvider>
     </SccProvider>
     <UseIISExpress>false</UseIISExpress>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -221,10 +231,9 @@
     <Compile Include="Controllers\CollectionController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
-    <Compile Include="Controllers\SynchronizationsController.cs" />
-    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
+    <Compile Include="Injections\MainCoreRegistry.cs" />
     <Compile Include="Models\FlowGraph.cs" />
     <Compile Include="Models\GridDataRequest.cs" />
     <Compile Include="Controllers\GroupController.cs" />
@@ -243,7 +252,6 @@
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuestionConditionModel.cs" />
     <Compile Include="Models\SwitcherModel.cs" />
-    <Compile Include="Synchronization\HQEventSync.cs" />
     <Content Include="Content\img\bar-chart.png" />
     <Content Include="Content\img\bill.jpg" />
     <Content Include="Content\img\lock.png" />
@@ -648,6 +656,10 @@
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Core.HQ\Core.HQ.csproj">
+      <Project>{067794ca-73e6-4221-b7da-6d6b91c735a5}</Project>
+      <Name>Core.HQ</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
@@ -698,12 +710,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\User\Manage.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Location\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Location\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\CompleteQuestionnaire\MyItems.cshtml" />
@@ -855,7 +861,6 @@
     </None>
     <Content Include="Views\Questionnaire\_Table.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\_Table.cshtml" />
-    <Content Include="Views\FlowGraph\Edit.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\_TableIndex.cshtml" />
     <Content Include="Views\Administration\Menu.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\Question.cshtml" />
@@ -872,30 +877,18 @@
     <Content Include="Views\Group\CompleteGroupTemplates\_CompleteGroup.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_PropagatedCompleteGroup.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_PropagatebleCompleteGroup.cshtml" />
-    <Content Include="Views\FlowGraph\Index.cshtml" />
-    <Content Include="Views\FlowGraph\_FlowJs.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_Numeric.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_DateTime.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_SingleOption.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_GpsCoordinates.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_MultyOption.cshtml" />
-    <Content Include="Views\CompleteQuestionnaire\QuestionV.cshtml" />
-    <Content Include="Views\Group\_ScreenV.cshtml" />
-    <Content Include="Views\Group\_ScreenC.cshtml" />
-    <Content Include="Views\CompleteQuestionnaire\QuestionC.cshtml" />
-    <Content Include="Views\CompleteQuestionnaire\QuestionI.cshtml" />
-    <Content Include="Views\Group\_ScreenI.cshtml" />
     <Content Include="Views\Shared\ViewSwitcher.cshtml" />
     <Content Include="Views\Shared\ProgressBar.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_YesNo.cshtml" />
     <Content Include="Views\Answer\AnswerListView\_Percentage.cshtml" />
     <Content Include="Views\Question\_AddCards.cshtml" />
     <Content Include="Views\Question\_EditCard.cshtml" />
-    <Content Include="Views\Shared\GroupNavigation.cshtml" />
-    <Content Include="Views\Group\GroupTemplates\_PropagatebleGroup.cshtml" />
-    <Content Include="Views\Group\GroupTemplates\_SimpleGroup.cshtml" />
-    <Content Include="Views\Group\GroupTemplates\_CompleteGroup.cshtml" />
     <Content Include="Views\Resource\Upload.cshtml" />
     <Content Include="Views\Resource\Index.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Image.cshtml" />
@@ -919,7 +912,6 @@
     <Content Include="Views\Group\Mobile\_CompleteGroup.cshtml" />
     <Content Include="Views\Group\Mobile\_SimpleGroup.cshtml" />
     <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
-    <Content Include="Views\Statistic\Details.cshtml" />
     <Content Include="Views\Answer\_EditCollectionItem.cshtml" />
     <Content Include="Views\Shared\MobileGroupNavigation.cshtml" />
     <Content Include="Views\Shared\MobileProgressBar.cshtml" />
@@ -928,7 +920,6 @@
     <Content Include="Views\Collection\EditCollectionItem.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_CompleteGroupTemplate.cshtml" />
     <Content Include="Views\Group\Mobile\_PropagatedGrooup.cshtml" />
-    <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Shared\_MoveItem.cshtml" />
     <Content Include="Views\Answer\AnswerListViewHtml5\_AutoPropagate.cshtml" />
     <Content Include="Views\Answer\answerViewHtml5\_Image.cshtml" />
@@ -941,10 +932,6 @@
     <Content Include="Views\Group\Mobile\_PropagatedScreen.cshtml" />
     <Content Include="Views\Shared\ViewTestUploadFile.cshtml" />
     <Content Include="Views\Account\LogOnMobile.cshtml" />
-    <Content Include="Views\Synchronizations\Spots.cshtml" />
-    <Content Include="Views\Synchronizations\Progress.cshtml" />
-    <Content Include="Views\Synchronizations\_ProgressContent.cshtml" />
-    <Content Include="Views\Synchronizations\Scaning.cshtml" />
     <Content Include="Views\Questionnaire\_RenderChildren.cshtml" />
     <Content Include="Views\CompleteQuestionnaire\QStatuses.cshtml" />
     <Content Include="Views\Shared\MoveQuestion.cshtml" />
@@ -960,8 +947,13 @@
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

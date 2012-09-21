@@ -6,6 +6,9 @@
 //   The complete group view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.View.Question;
+
 namespace RavenQuestionnaire.Core.Views.Group
 {
     using System.Linq;

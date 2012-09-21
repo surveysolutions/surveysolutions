@@ -7,11 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Services;
+
 namespace Web.Supervisor.Controllers
 {
     using System.Web.Mvc;
     using NLog;
-    using RavenQuestionnaire.Core.Services;
 
     /// <summary>
     /// Responsible for load images

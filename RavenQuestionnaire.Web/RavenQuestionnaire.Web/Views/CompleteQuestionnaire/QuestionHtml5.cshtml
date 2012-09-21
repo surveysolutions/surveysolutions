@@ -1,7 +1,7 @@
-﻿@using Questionnaire.Core.Web.Helpers
+﻿@using Main.Core.View.Group
+@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
-@model CompleteQuestionnaireMobileView
+@model Main.Core.View.CompleteQuestionnaire.CompleteQuestionnaireMobileView
 @{
     Layout = "~/Views/Shared/_LayputHtml5.cshtml";
     var questionKey = (Guid)ViewBag.CurrentQuestion;
@@ -69,7 +69,7 @@
                 {
                     if (!gh.IsCurrent)
                     {
-                    <li data-icon="false"><a href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = gh.PublicKey })" rel="external" data-ajax="false">@gh.GroupText
+                    <li data-icon="false"><a href="@Url.Action("QuestionHtml5", new { id = Model.PublicKey, group = gh.PublicKey })" rel="external" data-ajax="false">@gh.GroupText
                         <span  id="counter-@(gh.PublicKey)" class="ui-li-count">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                     }
                     else
@@ -83,17 +83,17 @@
         <div data-role="footer" data-position="fixed" data-id="ew-footer">
             <div data-role="navbar">
                 <ul>
-                    <li><a data-role="button" data-corners="false" href="@Url.Action("Details", "Statistic", new { id = Model.Id })" 
+                    <li><a data-role="button" data-corners="false" href="@Url.Action("Details", "Statistic", new { id = Model.PublicKey })" 
                    rel="external" data-ajax="false">Statistic</a></li>
                     <li>
                         @if (Model.Status.Name == "Completed")
                         {
-                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("ReInit", "CompleteQuestionnaire", new { id = Model.Id })">
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("ReInit", "CompleteQuestionnaire", new { id = Model.PublicKey })">
                                 ReInit</a>
                         }
                         else
                         {
-                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("Complete", "CompleteQuestionnaire", new { id = Model.Id })">
+                            <a data-corners="false" data-ajax="false" data-role="button" rel="external" href="@Url.Action("Complete", "CompleteQuestionnaire", new { id = Model.PublicKey })">
                                 Complete</a>
                         }</li>
                 </ul>
@@ -215,7 +215,7 @@
             }
             else
             {*@
-            <a class="nav-link" href="@Url.Action("QuestionHtml5", new { id = Model.Id, group = screen.PrevScreen.PublicKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" rel="external" data-ajax="false">
+            <a class="nav-link" href="@Url.Action("QuestionHtml5", new { id = Model.PublicKey, group = screen.PrevScreen.PublicKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext" rel="external" data-ajax="false">
                 Next Group</a>
             //}
         }

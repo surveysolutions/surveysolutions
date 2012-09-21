@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.View;
+using Main.Core.View.CompleteQuestionnaire.Statistics;
+
 namespace RavenQuestionnaire.Web.Controllers
 {
     using System.Web.Mvc;
@@ -14,7 +17,6 @@ namespace RavenQuestionnaire.Web.Controllers
     using Questionnaire.Core.Web.Helpers;
 
     using RavenQuestionnaire.Core;
-    using RavenQuestionnaire.Core.Views.Statistics;
 
     /// <summary>
     /// The statistic controller.
