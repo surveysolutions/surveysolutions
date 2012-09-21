@@ -244,7 +244,6 @@
     <Compile Include="Models\QuestionConditionModel.cs" />
     <Compile Include="Models\SwitcherModel.cs" />
     <Compile Include="Synchronization\HQEventSync.cs" />
-    <Content Include="Content\Bootstrap\bootstrap-responsive.css" />
     <Content Include="Content\Bootstrap\bootstrap-responsive.min.css" />
     <Content Include="Content\Bootstrap\bootstrap.css" />
     <Content Include="Content\Bootstrap\bootstrap.min.css" />
