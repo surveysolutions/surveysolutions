@@ -6,7 +6,7 @@
         <tr>            
             @foreach (var question in item.FeaturedQuestions)
             {
-                <td>@question.GetAnswerString()</td>
+                <td>@question.Answer</td>
             }
             <td>
                 @Html.DisplayFor(modelItem => item.Status.Name)

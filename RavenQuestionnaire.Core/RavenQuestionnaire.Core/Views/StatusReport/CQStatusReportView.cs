@@ -50,7 +50,7 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
                         Description =
                             string.Join(
                                 ", ", 
-                                statisticDocument.FeaturedQuestions.Select(f => f.QuestionText + ": " + f.GetAnswerString()))
+                                statisticDocument.FeaturedQuestions.Select(f => f.Title + ": " + f.Answer.ToString()))
                     };
                 this.Items.Add(view);
             }

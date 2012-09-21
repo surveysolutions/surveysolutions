@@ -101,18 +101,18 @@ namespace Core.Supervisor.Views.Survey
         private IQueryable<CompleteQuestionnaireBrowseItem> DefineOrderBy(
             IQueryable<CompleteQuestionnaireBrowseItem> query, SurveyGroupInputModel input)
         {
-            var o = Queryable.Distinct<string>(query.SelectMany(t => t.FeaturedQuestions).Select(y => y.QuestionText)).ToList();
+            var o = Queryable.Distinct<string>(query.SelectMany(t => t.FeaturedQuestions).Select(y => y.Title)).ToList();
             if (o.Contains(input.Orders[0].Field))
             {
                 query = input.Orders[0].Direction == OrderDirection.Asc
                             ? query.OrderBy(
                                 t =>
-                                t.FeaturedQuestions.Where(y => y.QuestionText == input.Orders[0].Field).Select(
-                                    x => x.GetAnswerString()).FirstOrDefault())
+                                t.FeaturedQuestions.Where(y => y.Title == input.Orders[0].Field).Select(
+                                    x => x.Answer.ToString()).FirstOrDefault())
                             : query.OrderByDescending(
                                 t =>
-                                t.FeaturedQuestions.Where(y => y.QuestionText == input.Orders[0].Field).Select(
-                                    x => x.GetAnswerString()).FirstOrDefault());
+                                t.FeaturedQuestions.Where(y => y.Title == input.Orders[0].Field).Select(
+                                    x => x.Answer.ToString()).FirstOrDefault());
             }
             else
             {

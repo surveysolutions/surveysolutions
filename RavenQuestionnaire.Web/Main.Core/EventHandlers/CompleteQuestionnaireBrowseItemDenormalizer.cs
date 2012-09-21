@@ -16,6 +16,7 @@ using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Complete.Question;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.View.CompleteQuestionnaire;
+using Main.Core.View.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Restoring.EventStapshoot;
 
@@ -87,7 +88,9 @@ namespace Main.Core.EventHandlers
             }
             List<ICompleteQuestion> featuredQuestions = this.FindFeaturedQuestions(document);
 
-            browseItem.FeaturedQuestions = featuredQuestions.ToArray();
+            browseItem.FeaturedQuestions =
+                featuredQuestions.Select(
+                    q => new CompleteQuestionView() {PublicKey = q.PublicKey, Answer = q.GetAnswerString(), Title = q.QuestionText}).ToArray();
             browseItem.Status = document.Status;
             browseItem.Responsible = document.Responsible;
         }
@@ -103,20 +106,13 @@ namespace Main.Core.EventHandlers
             if (evnt.Payload.Featured)
             {
                 CompleteQuestionnaireBrowseItem item = this.documentItemStore.GetByGuid(evnt.EventSourceId);
+                if (item == null)
+                    return;
+                CompleteQuestionView currentFeatured =
+                    item.FeaturedQuestions.FirstOrDefault(q => q.PublicKey == evnt.Payload.QuestionPublicKey);
 
-                var featuredQuestions = new List<ICompleteQuestion>();
-                featuredQuestions.AddRange(item.FeaturedQuestions);
-
-                ICompleteQuestion currentFeatured = new TextCompleteQuestion(evnt.Payload.QuestionText)
-                                                        {
-                                                            PublicKey = evnt.Payload.QuestionPublicKey
-                                                        };
-                featuredQuestions.RemoveAll(q => q.PublicKey == evnt.Payload.QuestionPublicKey);
-
-                featuredQuestions.Add(currentFeatured);
-
-
-                item.FeaturedQuestions = featuredQuestions.ToArray();
+                if (currentFeatured != null)
+                    currentFeatured.Answer = evnt.Payload.AnswerString;
             }
         }
 
@@ -182,7 +178,7 @@ namespace Main.Core.EventHandlers
         /// The screen public key.
         /// </param>
         protected void ProccessQuestions(
-            List<ICompleteQuestion> featuredQuestions, 
+            List<ICompleteQuestion> featuredQuestions,
             IEnumerable<ICompleteQuestion> questions, 
             Guid gropPublicKey, 
             Guid? gropPropagationPublicKey, 

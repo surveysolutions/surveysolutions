@@ -74,10 +74,10 @@ namespace Core.Supervisor.Views.Interviewer
             foreach (var question in
                 items.SelectMany(
                     completeQuestionnaireBrowseItem =>
-                    completeQuestionnaireBrowseItem.FeaturedQuestions.Where(t => !string.IsNullOrEmpty(t.QuestionText)))
+                    completeQuestionnaireBrowseItem.FeaturedQuestions.Where(t => !string.IsNullOrEmpty(t.Title)))
                     .Where(question => !helper.ContainsKey(question.PublicKey)))
             {
-                helper.Add(question.PublicKey, question.QuestionText);
+                helper.Add(question.PublicKey, question.Title);
             }
 
             this.HeaderFeaturedQuestions = helper;

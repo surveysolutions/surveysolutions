@@ -144,11 +144,11 @@ namespace Core.Supervisor.Views.Interviewer
                                ? docs.OrderBy(
                                    t =>
                                    t.FeaturedQuestions.Where(y => y.PublicKey.ToString() == input.Orders[0].Field).
-                                       Select(x => x.GetAnswerString()).FirstOrDefault())
+                                       Select(x => x.Answer.ToString()).FirstOrDefault())
                                : docs.OrderByDescending(
                                    t =>
                                    t.FeaturedQuestions.Where(y => y.PublicKey.ToString() == input.Orders[0].Field).
-                                       Select(x => x.GetAnswerString()).FirstOrDefault());
+                                       Select(x => x.Answer.ToString()).FirstOrDefault());
                 }
                 else
                 {

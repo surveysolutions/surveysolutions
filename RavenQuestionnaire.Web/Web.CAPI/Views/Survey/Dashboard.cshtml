@@ -61,7 +61,7 @@
                                                           style = "color:green";
                                                       }
                             }
-                            @Html.ActionLink(" " + string.Concat(survey.FeaturedQuestions.Select(f => f.QuestionText + " " + f.GetAnswerString() + " ")), "Index", "Survey", new { id = survey.CompleteQuestionnaireId }, new
+                            @Html.ActionLink(" " + string.Concat(survey.FeaturedQuestions.Select(f => f.Title + " " + f.Answer + " ")), "Index", "Survey", new { id = survey.CompleteQuestionnaireId }, new
                                                                                                                                                                                                  {
                                                                                                                                                                                                      data_theme = "b",
                                                                                                                                                                                                      rel = "external",

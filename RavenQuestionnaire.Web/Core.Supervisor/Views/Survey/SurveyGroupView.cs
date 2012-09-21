@@ -66,7 +66,7 @@ namespace Core.Supervisor.Views.Survey
                         completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions).Where(
                             question => !this.Headers.ContainsKey(question.PublicKey)))
                 {
-                    this.Headers.Add(question.PublicKey, question.QuestionText);
+                    this.Headers.Add(question.PublicKey, question.Title);
                 }
                 foreach (CompleteQuestionnaireBrowseItem it in items) 
                     this.Items.Add(new SurveyGroupItem(it, this.Headers));

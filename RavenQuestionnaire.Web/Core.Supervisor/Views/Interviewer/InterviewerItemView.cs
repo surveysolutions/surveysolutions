@@ -39,7 +39,7 @@ namespace Core.Supervisor.Views.Interviewer
             foreach (var kvp in featuredHeaders.OrderBy(t => t.Key))
             {
                 var featured = item.FeaturedQuestions.FirstOrDefault(q => q.PublicKey == kvp.Key);
-                this.FeaturedQuestions.Add(kvp.Key, featured == null ? string.Empty : featured.GetAnswerString());
+                this.FeaturedQuestions.Add(kvp.Key, featured == null ? string.Empty : featured.Answer.ToString());
             }
 
             this.QuestionnaireTitle = item.QuestionnaireTitle;

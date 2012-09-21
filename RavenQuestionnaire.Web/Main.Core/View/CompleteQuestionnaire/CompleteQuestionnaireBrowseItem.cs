@@ -12,6 +12,7 @@ using Main.Core.Documents;
 using Main.Core.Documents.Statistics;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.View.Question;
 
 namespace Main.Core.View.CompleteQuestionnaire
 {
@@ -69,7 +70,7 @@ namespace Main.Core.View.CompleteQuestionnaire
         /// </summary>
         protected CompleteQuestionnaireBrowseItem()
         {
-            this.FeaturedQuestions = new ICompleteQuestion[0];
+            this.FeaturedQuestions = new CompleteQuestionView[0];
         }
 
         #endregion
@@ -99,7 +100,7 @@ namespace Main.Core.View.CompleteQuestionnaire
         /// <summary>
         /// Gets or sets the featured questions.
         /// </summary>
-        public ICompleteQuestion[] FeaturedQuestions { get; set; }
+        public CompleteQuestionView[] FeaturedQuestions { get; set; }
 
         /// <summary>
         /// Gets or sets the last entry date.
