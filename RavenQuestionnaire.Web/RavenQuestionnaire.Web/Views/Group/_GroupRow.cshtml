@@ -18,7 +18,7 @@
 </script>
 <div id="group-@(Model.PublicKey)" class="display-group">
 <input type="checkbox" id="@Model.PublicKey.ToString()" style="position: absolute; z-index: -999; right: 50px;"/>
-    <div class="group-header" >
+    <div class="group-header"  data-toggle="collapse" data-target=".group-body-@(Model.PublicKey)" >
         <h3>@Html.DisplayFor(modelItem => Model.Title)</h3>
         <div class="btn-group">
             @Html.ActionLink("Add Question", "Create", "Question", new { id = Model.QuestionnaireKey, groupPublicKey = Model.PublicKey }, new { @class = "btn btn-success btn-mini" })
@@ -28,7 +28,7 @@
             @Html.ActionLink("Move", "Move", "Group", new { PublicKeyGroup = Model.PublicKey, QuestionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-success btn-mini" })            
         </div>
     </div>
-    <div class="group-body">
+    <div class="group-body group-body-@(Model.PublicKey) collapse in">
     <div class="alert alert-success">
             <strong>@Model.PublicKey</strong>
         </div>
