@@ -34,8 +34,9 @@ namespace Main.Core.EventHandlers
                                              IEventHandler<ImageUpdated>, 
                                              IEventHandler<ImageUploaded>, 
                                              IEventHandler<ImageDeleted>, 
-                                             IEventHandler<GroupDeleted>, 
-                                             IEventHandler<GroupUpdated>
+                                             IEventHandler<GroupDeleted>,
+                                             IEventHandler<GroupUpdated>,
+                                             IEventHandler<QuestionnaireUpdated>
     {
         #region Fields
 
@@ -303,6 +304,18 @@ namespace Main.Core.EventHandlers
                     question.Add(answer, question.PublicKey);
                 }
             }
+        }
+
+        #endregion
+
+        #region Implementation of IEventHandler<in QuestionnaireUpdated>
+
+        public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            if (document == null)
+                return;
+            document.Title = evnt.Payload.Title;
         }
 
         #endregion

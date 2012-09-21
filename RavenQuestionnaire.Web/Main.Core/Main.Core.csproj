@@ -277,6 +277,7 @@
     <Compile Include="Events\Questionnaire\QuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\QuestionDeleted.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
+    <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
     <Compile Include="Events\Synchronization\AggregateRootStatusChanged.cs" />
     <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs" />
     <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs" />
