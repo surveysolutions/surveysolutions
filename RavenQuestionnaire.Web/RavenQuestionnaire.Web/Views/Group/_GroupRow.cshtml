@@ -16,25 +16,30 @@
         }
     }
 </script>
-<div id="@currentRowId" class="display-group">
+<div id="group-@(Model.PublicKey)" class="display-group">
 <input type="checkbox" id="@Model.PublicKey.ToString()" style="position: absolute; z-index: -999; right: 50px;"/>
-    <div class="group-header">
-        <h3>@Html.DisplayFor(modelItem => Model.Title) - @Model.PublicKey</h3>
+    <div class="group-header" >
+        <h3>@Html.DisplayFor(modelItem => Model.Title)</h3>
         <div class="btn-group">
-            @Html.ActionLink("Add Question", "Create", "Question", new { id = Model.QuestionnaireKey, groupPublicKey = Model.PublicKey }, new { @class = "btn btn-primary btn-mini" })
-            @Html.ActionLink("Add Group", "Create", "Group", new { id = Model.QuestionnaireKey, parentGroup = Model.PublicKey }, new { @class = "btn btn-primary btn-mini" })
-            @Html.ActionLink("Edit", "Edit", "Group", new { publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-primary btn-mini" })
-            @Html.ActionLink("Delete", "Delete", "Group", new { publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-primary btn-mini" })
-            @Html.ActionLink("Move", "Move", "Group", new { PublicKeyGroup = Model.PublicKey, QuestionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-danger btn-mini" })            
+            @Html.ActionLink("Add Question", "Create", "Question", new { id = Model.QuestionnaireKey, groupPublicKey = Model.PublicKey }, new { @class = "btn btn-success btn-mini" })
+            @Html.ActionLink("Add Group", "Create", "Group", new { id = Model.QuestionnaireKey, parentGroup = Model.PublicKey }, new { @class = "btn btn-success btn-mini" })
+            @Html.ActionLink("Edit", "Edit", "Group", new { publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-success btn-mini" })
+            @Html.ActionLink("Delete", "Delete", "Group", new { publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-success btn-mini" })
+            @Html.ActionLink("Move", "Move", "Group", new { PublicKeyGroup = Model.PublicKey, QuestionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-success btn-mini" })            
         </div>
     </div>
+    <div class="group-body">
+    <div class="alert alert-success">
+            <strong>@Model.PublicKey</strong>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.ConditionExpression))
+        {
+            <div class="alert alert-success">
+               <strong>Condition:</strong> @Model.ConditionExpression
+            </div>
+        }
     <div>
         @{ Html.RenderPartial("~/Views/Questionnaire/_RenderChildren.cshtml", Model.Children); }
     </div>
-    @*<div id='@allQuestions'>
-        @{Html.RenderPartial("~/Views/Question/_Index.cshtml", Model.Questions);}
     </div>
-    <div id="@allGroups">
-        @{Html.RenderPartial("~/Views/Group/_Index.cshtml", Model.Groups);}
-    </div>*@
 </div>
