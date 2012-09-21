@@ -17,16 +17,8 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
     /// <summary>
     /// The text complete question.
     /// </summary>
-    public sealed class TextCompleteQuestion : AbstractCompleteQuestion, ITextCompleteQuestion
+    public sealed class TextCompleteQuestion : AbstractCompleteQuestion, ITextCompleteQuestion, ICompelteValueQuestion<string>
     {
-        #region Fields
-
-        /// <summary>
-        /// The _answer.
-        /// </summary>
-        private string _answer;
-
-        #endregion
 
         #region Constructors and Destructors
 
@@ -172,7 +164,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override object GetAnswerObject()
         {
-            return this._answer;
+            return this.Answer;
         }
 
         /// <summary>
@@ -183,7 +175,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override string GetAnswerString()
         {
-            return this._answer ?? string.Empty;
+            return this.Answer ?? string.Empty;
         }
 
         /// <summary>
@@ -212,7 +204,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
                 throw new CompositeException();
             }
 
-            this._answer = null;
+            this.Answer = null;
         }
 
         /// <summary>
@@ -226,8 +218,14 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </param>
         public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            this._answer = answerValue;
+            this.Answer = answerValue;
         }
+
+        #endregion
+
+        #region Implementation of ICompelteValueQuestion<string>
+
+        public string Answer { get; set; }
 
         #endregion
     }

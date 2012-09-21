@@ -12,7 +12,7 @@ namespace Main.Core.Entities.SubEntities.Complete
     /// <summary>
     /// The TextCompleteQuestion interface.
     /// </summary>
-    public interface ITextCompleteQuestion
+    public interface ITextCompleteQuestion 
     {
         #region Public Properties
 
@@ -21,6 +21,9 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </summary>
         string AddTextAttr { get; set; }
 
+        
+
         #endregion
+
     }
 }

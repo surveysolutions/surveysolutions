@@ -17,16 +17,8 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
     /// <summary>
     /// The gps coordinate complete question.
     /// </summary>
-    public sealed class GpsCoordinateCompleteQuestion : AbstractCompleteQuestion, IGpsCoordinatesQuestion
+    public sealed class GpsCoordinateCompleteQuestion : AbstractCompleteQuestion, IGpsCoordinatesQuestion, ICompelteValueQuestion<string>
     {
-        #region Fields
-
-        /// <summary>
-        /// The _answer.
-        /// </summary>
-        private string _answer;
-
-        #endregion
 
         #region Constructors and Destructors
 
@@ -177,7 +169,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override object GetAnswerObject()
         {
-            return this._answer;
+            return this.Answer;
         }
 
         /// <summary>
@@ -188,7 +180,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override string GetAnswerString()
         {
-            return this._answer;
+            return this.Answer;
         }
 
         /// <summary>
@@ -217,7 +209,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
                 throw new CompositeException();
             }
 
-            this._answer = null;
+            this.Answer = null;
         }
 
         /// <summary>
@@ -231,8 +223,14 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </param>
         public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            this._answer = answerValue;
+            this.Answer = answerValue;
         }
+
+        #endregion
+
+        #region Implementation of ICompelteValueQuestion<string>
+
+        public string Answer { get; set; }
 
         #endregion
     }

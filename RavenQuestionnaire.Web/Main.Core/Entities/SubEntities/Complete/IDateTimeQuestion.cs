@@ -14,7 +14,7 @@ namespace Main.Core.Entities.SubEntities.Complete
     /// <summary>
     /// The DateTimeQuestion interface.
     /// </summary>
-    public interface IDateTimeQuestion
+    public interface IDateTimeQuestion 
     {
         #region Public Properties
 

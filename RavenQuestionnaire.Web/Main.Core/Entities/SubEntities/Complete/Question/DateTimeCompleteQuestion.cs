@@ -18,14 +18,10 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
     /// <summary>
     /// The date time complete question.
     /// </summary>
-    public sealed class DateTimeCompleteQuestion : AbstractCompleteQuestion, IDateTimeQuestion
+    public sealed class DateTimeCompleteQuestion : AbstractCompleteQuestion, IDateTimeQuestion, ICompelteValueQuestion<DateTime?>
     {
         #region Fields
 
-        /// <summary>
-        /// The _answer.
-        /// </summary>
-        private DateTime? _answer;
 
         #endregion
 
@@ -178,7 +174,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override object GetAnswerObject()
         {
-            return this._answer;
+            return this.Answer;
         }
 
         /// <summary>
@@ -189,8 +185,8 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override string GetAnswerString()
         {
-            return this._answer.HasValue
-                       ? Convert.ToString(this._answer.Value, CultureInfo.InvariantCulture)
+            return this.Answer.HasValue
+                       ? Convert.ToString(this.Answer.Value, CultureInfo.InvariantCulture)
                        : string.Empty;
         }
 
@@ -220,7 +216,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
                 throw new CompositeException();
             }
 
-            this._answer = null;
+            this.Answer = null;
         }
 
         /// <summary>
@@ -234,8 +230,14 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </param>
         public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            this._answer = Convert.ToDateTime(answerValue, CultureInfo.InvariantCulture);
+            this.Answer = Convert.ToDateTime(answerValue, CultureInfo.InvariantCulture);
         }
+
+        #endregion
+
+        #region Implementation of ICompelteValueQuestion<DateTime>
+
+        public DateTime? Answer { get; set; }
 
         #endregion
     }
