@@ -6,14 +6,16 @@
 //   The file browse view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Denormalizers;
+using Main.Core.View;
+
 namespace RavenQuestionnaire.Core.Views.Event.File
 {
     using System.Collections.Generic;
     using System.Linq;
 
     using Main.Core.Documents;
-
-    using RavenQuestionnaire.Core.Denormalizers;
 
     /// <summary>
     /// The file browse view factory.
