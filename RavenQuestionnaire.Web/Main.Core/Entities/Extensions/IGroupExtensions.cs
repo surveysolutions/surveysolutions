@@ -40,14 +40,15 @@ namespace Main.Core.Entities.Extensions
         /// <returns>
         /// The System.Boolean.
         /// </returns>
-        public static bool MoveItem(this IComposite root, Guid itemPublicKey, Guid? groupKey, Guid? after)
+        public static bool MoveItem(this IComposite root, Guid itemPublicKey, Guid? groupKey, Guid? after, IComposite parent)
         {
-            if (root.Move(root.Children, itemPublicKey, groupKey, after))
+
+            if (root.Move(root.Children, itemPublicKey, groupKey, after, parent))
             {
                 return true;
             }
 
-            return root.Children.Any(@group => MoveItem(group, itemPublicKey, groupKey, after));
+            return root.Children.Any(@group => MoveItem(group, itemPublicKey, groupKey, after, parent));
         }
 
         #endregion
@@ -78,7 +79,7 @@ namespace Main.Core.Entities.Extensions
         /// <exception cref="ArgumentException">
         /// </exception>
         private static bool Move(
-            this IComposite root, List<IComposite> groups, Guid itemPublicKey, Guid? groupKey, Guid? after)
+            this IComposite root, List<IComposite> groups, Guid itemPublicKey, Guid? groupKey, Guid? after, IComposite parent)
         {
             IComposite moveble = groups.FirstOrDefault(g => g.PublicKey == itemPublicKey);
             if (moveble == null)
@@ -88,7 +89,8 @@ namespace Main.Core.Entities.Extensions
 
             if (groupKey.HasValue)
             {
-                var moveToGroup = root.Find<Group>((Guid)groupKey);
+                //var moveToGroup = root.Find<Group>((Guid)groupKey);
+                var moveToGroup = parent.Find<Group>((Guid)groupKey);
                 if (moveToGroup != null)
                 {
                     groups.Remove(moveble);

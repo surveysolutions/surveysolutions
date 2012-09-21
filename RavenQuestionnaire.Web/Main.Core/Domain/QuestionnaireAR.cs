@@ -657,7 +657,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
         {
-            this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
+            this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey, this.innerDocument);
         }
 
         /// <summary>
