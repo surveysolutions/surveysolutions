@@ -5,14 +5,10 @@
 <div data-role="panel" data-id="main" id="dashboard-page">
     <!-- Start of second page -->
     <div data-role="page" id="main" class="page">
-        @*  <div data-role="header" data-theme="b">
-            <h1>
-                Dashboard
-            </h1>
-            <a href="@Url.Action("LogOff", "Account")" data-corners="false" rel = "external" data-ajax="false"  data-theme = "a"  data-role = "button">
-                Log off</a>
-        </div>*@
-        <div data-role="content" data-iscroll="true" style="bottom: 0px">
+        <div data-role="header" data-theme="b">
+            <h1>@User.Identity.Name</h1>
+        </div>
+        <div data-role="content" data-iscroll="true">
             <div id="scroll">
                 <ul class="dashboard-list" data-inset="true" data-role="listview" data-split-icon="plus">
                     @{
@@ -46,41 +42,41 @@
                             style="visibility: hidden">@group.TotalCount</span> </li>
 
 
-                                                  foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
-                                                  {
+                            foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
+                            {
                         <li>@* <h1>@survey.Status.Name</h1>*@
                             @{
-                                                      string style = string.Empty;
-                                                      if (survey.Status.PublicId == SurveyStatus.Error.PublicId)
-                                                      {
-                                                          style = "color:red";
-                                                      }
-                                                      else if (survey.Status.PublicId == SurveyStatus.Complete.PublicId)
-                                                      {
-                                                          style = "color:green";
-                                                      }
+                                string style = string.Empty;
+                                if (survey.Status.PublicId == SurveyStatus.Error.PublicId)
+                                {
+                                    style = "color:red";
+                                }
+                                else if (survey.Status.PublicId == SurveyStatus.Complete.PublicId)
+                                {
+                                    style = "color:green";
+                                }
                             }
                             @Html.ActionLink(" " + string.Concat(survey.FeaturedQuestions.Select(f => f.QuestionText + " " + f.AnswerText + " ")), "Index", "Survey", new { id = survey.CompleteQuestionnaireId }, new
-                                                                                                                                                                                                 {
-                                                                                                                                                                                                     data_theme = "b",
-                                                                                                                                                                                                     rel = "external",
-                                                                                                                                                                                                     style = style
-                                                                                                                                                                                                 })
+                                            {
+                                                data_theme = "b",
+                                                rel = "external",
+                                                style = style
+                                            })
                             @*<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@survey.AnsweredQuestionCount/@survey.TotalQuestionCount</span>*@
                         </li>
-                                                  }
+                            }
                         }
 
                     }
                     @if (isDashboardEmpty)
                     {
                         <li>
-                            <h1>
-                                No assignments was found.</h1>
+                            <h1>No assignments was found.</h1>
                         </li>
                     }
                 </ul>
             </div>
+
         </div>
     </div>
     <div id="dialogContainer">

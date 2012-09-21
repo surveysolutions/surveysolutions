@@ -1,5 +1,4 @@
-﻿
-/*.ui-loader{border:none;background:transparent; color:#fff;font-weight: normal;}​*/
+﻿/*.ui-loader{border:none;background:transparent; color:#fff;font-weight: normal;}​*/
 /*comment*/
 textarea{ resize: none;}
 .ui-loader .ui-icon {background-color:transparent;border:none;display: block;height: 66px;margin: 0;padding: 0px;width: 66px;background-size: 66px 66px;}
@@ -270,10 +269,10 @@ body.ui-mobile-viewport, div.ui-mobile-viewport {
 	padding-bottom: 5px;
 	padding-top: 4px;
 }
-#dashboard-page .page .ui-content {
+/*#dashboard-page .page .ui-content {
 	bottom: 0 !important;
 	top: 0 !important;
-}
+}*/
 
 .iscroll-wrapper {
     min-height: 0;
