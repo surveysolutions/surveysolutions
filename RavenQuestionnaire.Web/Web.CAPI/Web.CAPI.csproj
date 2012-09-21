@@ -131,6 +131,7 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\SynchronizationsController.cs" />
@@ -329,6 +330,7 @@
     <Content Include="Views\Survey\Complete\_Answered.cshtml" />
     <Content Include="Views\Survey\Complete\_Invalid.cshtml" />
     <Content Include="Views\Survey\Complete\_Unanswered.cshtml" />
+    <Content Include="Views\Error\InternalServerError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
