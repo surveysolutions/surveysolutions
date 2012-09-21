@@ -198,6 +198,16 @@ RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot.test/obj/*
 RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot/bin/*
 RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot/obj/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/Bin/*
+RavenQuestionnaire.Web/Web.Headquarter/Web.Headquarter.csproj.user
+Synchronization/DataEntryClient/DataEntryClient.csproj.user
+RavenQuestionnaire.Web/Web.Supervisor.Tests/Web.Supervisor.Tests.csproj.user
+RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/Web.CAPI.Tests.csproj.user
+RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot/Ncqrs.Restoring.EventStapshoot.csproj.user
+RavenQuestionnaire.Web/Ncqrs.Restoring.EventStapshoot.test/Ncqrs.Restoring.EventStapshoot.test.csproj.user
+RavenQuestionnaire.Web/Main.Core/Main.Core.csproj.user
+Installation/SupervisorInstallProj/Setup.wixproj.user
+Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB/Ncqrs.Eventing.Storage.RavenDB.csproj.user
+Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB.Tests/Ncqrs.Eventing.Storage.RavenDB.Tests.csproj.user
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
