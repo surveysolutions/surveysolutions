@@ -6,6 +6,10 @@
 //   The binded complete question view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.View.Answer;
+using Main.Core.View.Question;
+
 namespace RavenQuestionnaire.Core.Views.Question
 {
     using System;
@@ -14,8 +18,6 @@ namespace RavenQuestionnaire.Core.Views.Question
 
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities.Complete;
-
-    using RavenQuestionnaire.Core.Views.Answer;
 
     /// <summary>
     /// The binded complete question view.
