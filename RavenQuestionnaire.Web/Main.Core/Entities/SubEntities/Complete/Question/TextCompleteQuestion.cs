@@ -183,7 +183,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override string GetAnswerString()
         {
-            return this._answer;
+            return this._answer ?? string.Empty;
         }
 
         /// <summary>

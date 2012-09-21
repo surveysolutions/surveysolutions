@@ -40,7 +40,12 @@ namespace Main.Core.Entities.Extensions
         /// <returns>
         /// The System.Boolean.
         /// </returns>
-        public static bool MoveItem(this IComposite root, Guid itemPublicKey, Guid? groupKey, Guid? after, IComposite parent)
+        public static bool MoveItem(this IComposite root, Guid itemPublicKey, Guid? groupKey, Guid? after)
+        {
+
+            return MoveItem(root, itemPublicKey, groupKey, after, root);
+        }
+        private static bool MoveItem(this IComposite root, Guid itemPublicKey, Guid? groupKey, Guid? after, IComposite parent)
         {
 
             if (root.Move(root.Children, itemPublicKey, groupKey, after, parent))
@@ -50,7 +55,6 @@ namespace Main.Core.Entities.Extensions
 
             return root.Children.Any(@group => MoveItem(group, itemPublicKey, groupKey, after, parent));
         }
-
         #endregion
 
         #region Methods
