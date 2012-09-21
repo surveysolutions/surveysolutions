@@ -87,7 +87,6 @@
     <Compile Include="Domain\Configuration.cs" />
     <Compile Include="Entities\CompleteGroupTest.cs" />
     <Compile Include="Entities\GroupTest.cs" />
-    <Compile Include="Entities\Iterators\QuestionnaireScreenIteratorTest.cs" />
     <Compile Include="Entities\QuestionTest.cs" />
     <Compile Include="Entities\SubEntities\DateTimeCompleteQuestionTest.cs" />
     <Compile Include="Entities\SubEntities\NumericCompleteQuestionTest.cs" />

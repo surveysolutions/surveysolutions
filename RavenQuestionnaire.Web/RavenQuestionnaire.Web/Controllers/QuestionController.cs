@@ -1,4 +1,8 @@
-﻿using Ncqrs;
+﻿using Main.Core.View;
+using Main.Core.View.Answer;
+using Main.Core.View.Card;
+using Main.Core.View.Question;
+using Ncqrs;
 using System;
 using System.IO;
 using System.Web;
@@ -12,8 +16,6 @@ using Main.Core.Commands.File;
 using RavenQuestionnaire.Web.Models;
 using Questionnaire.Core.Web.Security;
 using Main.Core.Commands;
-using RavenQuestionnaire.Core.Views.Card;
-using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Question;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Commands.Questionnaire;

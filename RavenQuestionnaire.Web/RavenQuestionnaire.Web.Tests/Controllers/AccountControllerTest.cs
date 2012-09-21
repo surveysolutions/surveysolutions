@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Security;
+using Main.Core.View;
+using Main.Core.View.User;
 using Moq;
 using NUnit.Framework;
 using Ninject;
@@ -12,7 +14,6 @@ using RavenQuestionnaire.Core;
 using Main.Core.Commands;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Views.User;
 using RavenQuestionnaire.Web.Controllers;
 using RavenQuestionnaire.Web.Models;
 

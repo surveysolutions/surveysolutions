@@ -30,6 +30,7 @@ namespace Main.Core.Domain
     /// </summary>
     public class QuestionnaireAR : SnapshootableAggregateRoot<QuestionnaireDocument>
     {
+
         #region Fields
 
         /// <summary>
@@ -76,6 +77,10 @@ namespace Main.Core.Domain
         // Event handler for the NewQuestionnaireCreated event. This method
         // is automaticly wired as event handler based on convension.
         #region Public Methods and Operators
+        public void UpdateQuestionnaire(string title)
+        {
+            this.ApplyEvent(new QuestionnaireUpdated() {PublicKey = this.EventSourceId, Title = title});
+        }
 
         /// <summary>
         /// The add group.
@@ -476,6 +481,10 @@ namespace Main.Core.Domain
         #endregion
 
         #region Methods
+        protected void OnQuestionnaireUpdated(QuestionnaireUpdated e)
+        {
+            this.innerDocument.Title = e.Title;
+        }
 
         /// <summary>
         /// The on group deleted.

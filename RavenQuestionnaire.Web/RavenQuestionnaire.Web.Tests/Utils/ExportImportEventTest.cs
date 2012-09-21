@@ -1,4 +1,5 @@
 ﻿using Ionic.Zip;
+using Main.Core.View;
 using Moq;
 using System;
 using Newtonsoft.Json;

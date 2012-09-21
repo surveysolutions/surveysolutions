@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.View;
+using Main.Core.View.User;
+
 namespace Questionnaire.Core.Web.Security
 {
     using System;
@@ -22,9 +25,6 @@ namespace Questionnaire.Core.Web.Security
     using Ninject;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using RavenQuestionnaire.Core;
-    using RavenQuestionnaire.Core.Views.User;
 
     /// <summary>
     /// The questionnaire role provider.

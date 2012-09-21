@@ -4,7 +4,7 @@
 {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Id)
+            @Html.DisplayFor(modelItem => item.CompleteQuestionnaireId)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.QuestionnaireTitle)
@@ -17,9 +17,9 @@
             @Html.HiddenFor(modelItem => item.Status.PublicId)
         </td>
         <td class="buttons">
-            @Html.ActionLink("Details", "Result", new { id = item.Id }, new {@class = "btn"})
+            @Html.ActionLink("Details", "Result", new { id = item.CompleteQuestionnaireId }, new { @class = "btn" })
 
-            @Html.ActionLink("Edit", "QuestionHtml5", "CompleteQuestionnaire", new { id = item.Id }, new {@class = "btn"})
+            @Html.ActionLink("Edit", "QuestionHtml5", "CompleteQuestionnaire", new { id = item.CompleteQuestionnaireId }, new { @class = "btn" })
         </td>
     </tr>
 }

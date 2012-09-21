@@ -1,8 +1,8 @@
-﻿@using Questionnaire.Core.Web.Helpers
+﻿@using Main.Core.View.Group
+@using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.CompleteQuestionnaire
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
 @using RavenQuestionnaire.Core.Views.Question
-@model CompleteGroupMobileView
+@model Main.Core.View.Group.CompleteGroupMobileView
 
 <ul data-role="listview" data-inset="true" data-split-icon="gear" data-split-theme="d" id="propagate-list-@(Model.PublicKey)">
 @for (int i = 0; i < Model.Children.Count; i++)

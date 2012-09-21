@@ -1,6 +1,6 @@
 ﻿@using RavenQuestionnaire.Web.Utils
 @using RavenQuestionnaire.Core.Views.Question
-@model CompleteQuestionView
+@model Main.Core.View.Question.CompleteQuestionView
 @{
     ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
     var questionClass = "";
@@ -49,14 +49,14 @@
                     <ul class="thumbs noscript">
                         @foreach (var card in Model.Cards)
                         {
-                            <li>
+                          @*  <li>
                                 <a class="thumb" _width="@((int)((362f * card.Width) / card.Height))" _height="362" href="@Url.Action("Images", "Resource", new { id = card.Original })" title="@card.Title">
                                     <img height="40" width="@(((int)((40f * card.ThumbWidth) / card.ThumbHeight)))" src="@Url.Action("Images", "Resource", new { id = card.Thumb })" alt="@card.Title" />
                                 </a>
                                 <div class="caption">
                                     @card.Title
                                 </div>
-                            </li>
+                            </li>*@
                         }
                     </ul>
                 </div>

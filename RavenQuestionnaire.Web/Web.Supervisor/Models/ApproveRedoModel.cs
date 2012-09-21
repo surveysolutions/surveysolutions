@@ -7,10 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.View.CompleteQuestionnaire.Statistics;
+
 namespace Web.Supervisor.Models
 {
     using System;
-    using RavenQuestionnaire.Core.Views.Statistics;
 
     /// <summary>
     /// Define Approve model

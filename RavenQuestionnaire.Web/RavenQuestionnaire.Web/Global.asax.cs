@@ -2,6 +2,7 @@
 using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Main.Core;
 using Ninject;
 using Questionnaire.Core.Web.Helpers;
 using Raven.Client.Document;

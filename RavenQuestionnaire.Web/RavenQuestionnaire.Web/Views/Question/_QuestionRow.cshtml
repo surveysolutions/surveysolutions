@@ -2,7 +2,7 @@
 @using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Question
 
-@model QuestionView
+@model Main.Core.View.Question.QuestionView
 @{ var currentRowId = ClientIdHelper.GetUniqueIdByEntityName(EntityNames.Question, Model.PublicKey.ToString()); }
 <div id="@currentRowId" class="display-question">
 <input type="checkbox" id="@Model.PublicKey.ToString()" style="position: absolute; z-index: -999; right: 50px;"/>

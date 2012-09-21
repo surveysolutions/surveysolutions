@@ -6,11 +6,13 @@
 //   The questionnaire view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Denormalizers;
+using Main.Core.View;
+
 namespace RavenQuestionnaire.Core.Views.Questionnaire
 {
     using Main.Core.Documents;
-
-    using RavenQuestionnaire.Core.Denormalizers;
 
     /// <summary>
     /// The questionnaire view factory.
