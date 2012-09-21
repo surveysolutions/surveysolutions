@@ -1,4 +1,5 @@
 ﻿@using Questionnaire.Core.Web.Helpers
+@using Main.Core.Entities.SubEntities
 @using RavenQuestionnaire.Core.Views.Group
 
 @model GroupView
@@ -22,7 +23,10 @@
         <h3>@Html.DisplayFor(modelItem => Model.Title)</h3>
         <div class="btn-group">
             @Html.ActionLink("Add Question", "Create", "Question", new { id = Model.QuestionnaireKey, groupPublicKey = Model.PublicKey }, new { @class = "btn btn-success btn-mini" })
-            @Html.ActionLink("Add Group", "Create", "Group", new { id = Model.QuestionnaireKey, parentGroup = Model.PublicKey }, new { @class = "btn btn-success btn-mini" })
+            @if (@Model.Propagated == Propagate.None)
+            {
+                <text>@Html.ActionLink("Add Group", "Create", "Group", new { id = Model.QuestionnaireKey, parentGroup = Model.PublicKey }, new { @class = "btn btn-success btn-mini" })</text>
+            }
             @Html.ActionLink("Edit", "Edit", "Group", new { publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-success btn-mini" })
             @Html.ActionLink("Delete", "Delete", "Group", new { publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-success btn-mini" })
             @Html.ActionLink("Move", "Move", "Group", new { PublicKeyGroup = Model.PublicKey, QuestionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-success btn-mini" })            
