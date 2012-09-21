@@ -70,7 +70,10 @@ namespace Core.CAPI.EventHandlers
 
         public void Handle(IPublishedEvent<ProcessEnded> evnt)
         {
-            this.denormalizer.Remove(evnt.EventSourceId);
+            var process = this.denormalizer.GetByGuid(evnt.EventSourceId);
+            if (process == null)
+                return;
+            process.Handled = evnt.Payload.Status;
         }
 
         #endregion

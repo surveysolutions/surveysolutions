@@ -3,11 +3,13 @@ using System.ServiceModel;
 using System.Threading;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using Main.Core;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using Raven.Client;
 using RavenQuestionnaire.Core;
+using RavenQuestionnaire.Web.Injections;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(Web.Headquarter.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(Web.Headquarter.App_Start.NinjectWebCommon), "Stop")]
@@ -58,7 +60,7 @@ namespace Web.Headquarter.App_Start
                 storePath = WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"];
             else
                 storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
-            var kernel = new StandardKernel(new CoreRegistry(storePath, isEmbeded));
+            var kernel = new StandardKernel(new HQCoreRegistry(storePath, isEmbeded));
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
             KernelLocator.SetKernel(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
@@ -81,7 +83,6 @@ namespace Web.Headquarter.App_Start
             //kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).When(b => HttpContext.Current == null && OperationContext.Current == null).InScope(o => Thread.CurrentThread);
 
             kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
-            kernel.Bind<IBagManager>().To<ViewBagManager>();
             kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
         }        
     }

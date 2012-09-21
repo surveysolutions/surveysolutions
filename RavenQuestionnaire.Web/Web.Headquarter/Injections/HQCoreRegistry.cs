@@ -13,9 +13,10 @@ namespace RavenQuestionnaire.Web.Injections
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class MainCoreRegistry : CoreRegistry
+    public class HQCoreRegistry : CoreRegistry
     {
-        public MainCoreRegistry(string repositoryPath, bool isEmbeded) : base(repositoryPath, isEmbeded)
+        public HQCoreRegistry(string repositoryPath, bool isEmbeded)
+            : base(repositoryPath, isEmbeded)
         {
         }
         public override void Load()

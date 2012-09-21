@@ -1,13 +1,8 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ncqrs;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.Storage;
 using Main.Core.Events;
-using Raven.Client.Document;
 
-namespace RavenQuestionnaire.Web.Synchronization
+namespace Core.HQ.Synchronization
 {
     public class HQEventSync : AbstractEventSync
     {

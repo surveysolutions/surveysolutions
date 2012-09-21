@@ -12,7 +12,6 @@ using Raven.Client.Document;
 using RavenQuestionnaire.Core;
 using Main.Core.Events;
 using RavenQuestionnaire.Web.Injections;
-using RavenQuestionnaire.Web.Synchronization;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(RavenQuestionnaire.Web.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(RavenQuestionnaire.Web.App_Start.NinjectWebCommon), "Stop")]

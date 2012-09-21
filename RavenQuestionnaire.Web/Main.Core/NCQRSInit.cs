@@ -139,7 +139,7 @@ namespace Main.Core
             var mapper = new AttributeBasedCommandMapper();
             var service = new ConcurrencyResolveCommandService();
 
-            foreach (Type type in service.GetType().Assembly.GetTypes().Where(ImplementsAtLeastOneICommand))
+            foreach (Type type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()).Where(ImplementsAtLeastOneICommand))
             {
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
@@ -202,8 +202,8 @@ namespace Main.Core
         /// </param>
         private static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
         {
-            foreach (
-                Type type in typeof (NCQRSInit).Assembly.GetTypes().Where(ImplementsAtLeastOneIEventHandlerInterface))
+
+            foreach (Type type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()).Where(ImplementsAtLeastOneIEventHandlerInterface))
             {
                 foreach (Type handlerInterfaceType in type.GetInterfaces().Where(IsIEventHandlerInterface))
                 {
