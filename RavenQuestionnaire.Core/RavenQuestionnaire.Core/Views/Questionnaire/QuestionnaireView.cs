@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         /// <summary>
         /// The public key.
         /// </summary>
-        public Guid PublicKey;
+        public Guid PublicKey { get; set; }
 
         #endregion
 
