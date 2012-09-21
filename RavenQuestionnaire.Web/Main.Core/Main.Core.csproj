@@ -180,12 +180,14 @@
     <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\Extensions\GroupHash.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
+    <Compile Include="Entities\Extensions\ICompleteQuestionExtensions.cs" />
     <Compile Include="Entities\Extensions\IGroupExtensions.cs" />
     <Compile Include="Entities\Observers\ITriggerable.cs" />
     <Compile Include="Entities\OrderDirection.cs" />
     <Compile Include="Entities\OrderRequestItem.cs" />
     <Compile Include="Entities\SubEntities\AbstractQuestion.cs" />
     <Compile Include="Entities\SubEntities\Answer.cs" />
+    <Compile Include="Entities\SubEntities\Complete\ICompelteValueQuestion.cs" />
     <Compile Include="Entities\SubEntities\Order.cs" />
     <Compile Include="Entities\SubEntities\AnswerType.cs" />
     <Compile Include="Entities\SubEntities\BindedQuestion.cs" />

@@ -17,16 +17,8 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
     /// <summary>
     /// The auto propagate complete question.
     /// </summary>
-    public sealed class AutoPropagateCompleteQuestion : AbstractCompleteQuestion, IAutoPropagate
+    public sealed class AutoPropagateCompleteQuestion : AbstractCompleteQuestion, IAutoPropagate, ICompelteValueQuestion<int?>
     {
-        #region Fields
-
-        /// <summary>
-        /// The _answer.
-        /// </summary>
-        private int? _answer;
-
-        #endregion
 
         #region Constructors and Destructors
 
@@ -187,7 +179,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override object GetAnswerObject()
         {
-            return this._answer;
+            return this.Answer;
         }
 
         /// <summary>
@@ -198,7 +190,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override string GetAnswerString()
         {
-            return this._answer.HasValue ? this._answer.Value.ToString() : string.Empty;
+            return this.Answer.HasValue ? this.Answer.Value.ToString() : string.Empty;
         }
 
         /// <summary>
@@ -227,7 +219,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
                 throw new CompositeException();
             }
 
-            this._answer = null;
+            this.Answer = null;
         }
 
         /// <summary>
@@ -241,8 +233,14 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </param>
         public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            this._answer = Convert.ToInt32(answerValue);
+            this.Answer = Convert.ToInt32(answerValue);
         }
+
+        #endregion
+
+        #region Implementation of ICompelteValueQuestion<int>
+
+        public int? Answer { get; set; }
 
         #endregion
     }

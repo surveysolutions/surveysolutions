@@ -12,7 +12,7 @@ namespace Main.Core.Entities.SubEntities.Complete
     /// <summary>
     /// The NumericQuestion interface.
     /// </summary>
-    public interface INumericQuestion
+    public interface INumericQuestion 
     {
         #region Public Properties
 
@@ -25,6 +25,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// Gets or sets the int attr.
         /// </summary>
         int IntAttr { get; set; }
+
 
         #endregion
     }
