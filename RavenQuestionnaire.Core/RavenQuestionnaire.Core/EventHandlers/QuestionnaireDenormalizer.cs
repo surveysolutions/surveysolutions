@@ -94,6 +94,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
             if (document == null)
                 return;
             this.documentStorage.Store(document, document.PublicKey);
+            //this.documentStorage.Store(
+            //    (CompleteQuestionnaireStoreDocument) document, document.PublicKey);
         }
 
         /// <summary>
