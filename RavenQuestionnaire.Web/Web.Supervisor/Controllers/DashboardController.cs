@@ -33,7 +33,7 @@ namespace Web.Supervisor.Controllers
         private IViewRepository viewRepository;
 
         #endregion
-
+        
         #region Constructor
 
         /// <summary>
