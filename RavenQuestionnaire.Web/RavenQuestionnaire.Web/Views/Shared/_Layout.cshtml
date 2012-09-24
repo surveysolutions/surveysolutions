@@ -21,8 +21,8 @@
     @{
         Html.RequiresCss("jquery.ui.theme.css", "Base", 1);
         Html.RequiresCss("Bootstrap/bootstrap.css", "Content", 2);
-        Html.RequiresCss("main.css", "Content", 3);
-        Html.RequiresCss("main.css", "Content", 3);
+        Html.RequiresCss("Bootstrap/bootstrap-responsive.min.css", "Content", 3);
+        Html.RequiresCss("main.css", "Content", 4);
         <link href="../../Scripts/Plugins/wijmo/jquery.wijmo-open.1.5.0.css" rel="stylesheet"
             type="text/css" />
 
@@ -49,7 +49,7 @@
         
     }
 </head>
-<body>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
     <!--[if IE]>
   <link rel="stylesheet" type="text/css" href="../../Content/themes/custom-theme/jquery.ui.1.8.16.ie.css"/>
   <![endif]-->
@@ -81,7 +81,7 @@
             </div>
         </div>
     </div>
-    <div id="page" class="container-fluid">
+    <div id="page" >
         <div id="main">
             @RenderBody()
         </div>

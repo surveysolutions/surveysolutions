@@ -3,17 +3,17 @@ using System.ServiceModel;
 using System.Threading;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using Core.CAPI.Synchronization;
 using DataEntryClient.WcfInfrastructure;
+using Main.Core;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using Raven.Client;
 using Raven.Client.Document;
-using RavenQuestionnaire.Core;
 using Main.Core.Events;
-
-using Web.CAPI.Synchronization;
+using Web.CAPI.Injections;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(Web.CAPI.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(Web.CAPI.App_Start.NinjectWebCommon), "Stop")]
@@ -64,7 +64,7 @@ namespace Web.CAPI.App_Start
                 storePath = WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"];
             else
                 storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
-            var kernel = new StandardKernel(new CoreRegistry(storePath, isEmbeded));
+            var kernel = new StandardKernel(new CAPICoreRegistry(storePath, isEmbeded));
 
             //   RegisterServices(kernel);
 
@@ -74,9 +74,7 @@ namespace Web.CAPI.App_Start
             KernelLocator.SetKernel(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            kernel.Bind<IExportImport>().To<ExportImportEvent>();
             kernel.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
-            kernel.Bind<IEventSync>().To<ClientEventSync>();
             RegisterServices(kernel);
             NCQRSInit.Init(/*System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"], */kernel);
             return kernel;
@@ -101,9 +99,6 @@ namespace Web.CAPI.App_Start
              context => context.Kernel.Get<DocumentStore>().OpenSession()).When(
                  b => OperationContext.Current != null).InScope(o => OperationContext.Current);
 
-            kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
-            kernel.Bind<IBagManager>().To<ViewBagManager>();
-            kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
         }
 
         private static ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>();

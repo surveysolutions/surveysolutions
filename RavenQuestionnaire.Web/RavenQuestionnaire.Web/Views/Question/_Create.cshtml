@@ -1,7 +1,7 @@
 ﻿@using RavenQuestionnaire.Web.Utils
 @using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Question
-@model QuestionView
+@model Main.Core.View.Question.QuestionView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -46,12 +46,12 @@ else
     using (Html.BeginCollectionItem("question", Model.PublicKey))
     {
     <div class="row-fluid">
-        <div class="span5 form-horizontal">
+        <div class="span5">
             @Html.BootstrapValidationSummary("")
             <div class="control-group">
                 @Html.LabelFor(model => model.Title, new { @class = "control-label" })
                 <div class="controls">
-                    @Html.TextAreaFor(model => model.Title, new { placeholder = ViewData.ModelMetadata.Watermark })
+                    @Html.TextAreaFor(model => model.Title, 7, 10, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
                     @Html.ValidationMessageFor(model => model.Title)
                 </div>
             </div>
@@ -80,7 +80,7 @@ else
             <div class="control-group">
                 @Html.LabelFor(model => model.StataExportCaption, new { @class = "control-label" })
                 <div class="controls">
-                    @Html.EditorFor(model => model.StataExportCaption, new { placeholder = ViewData.ModelMetadata.Watermark })
+                    @Html.TextBoxFor(model => model.StataExportCaption, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
                     @Html.ValidationMessageFor(model => model.StataExportCaption)
                 </div>
             </div>
@@ -91,6 +91,7 @@ else
                     @{
         IDictionary<string, object> html = new Dictionary<string, object>();
         html.Add("customName", "questionName");
+        html.Add("class", "span12");
                         @Html.EnumDropDownListFor(model => Model.QuestionType, html)
                     }
                 </div>
@@ -99,34 +100,34 @@ else
                 <label class="control-label">
                     Answer order</label>
                 <div class="controls">
-                    @Html.EnumDropDownListFor(model => Model.AnswerOrder)
+                    @Html.EnumDropDownListFor(model => Model.AnswerOrder, new Dictionary<string, object>(){ { "class","span12"}} )
                 </div>
             </div>
             <div class="control-group">
                 @Html.LabelFor(model => model.ConditionExpression, new { @class = "control-label" })
                 <div class="controls">
-                    @Html.EditorFor(model => Model.ConditionExpression, new { placeholder = ViewData.ModelMetadata.Watermark })
+                    @Html.TextAreaFor(model => Model.ConditionExpression, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
                     @Html.ValidationMessageFor(model => model.ConditionExpression)
                 </div>
             </div>
             <div class="control-group">
                 @Html.LabelFor(model => model.ValidationExpression, new { @class = "control-label" })
                 <div class="controls">
-                    @Html.EditorFor(model => Model.ValidationExpression, new { placeholder = ViewData.ModelMetadata.Watermark })
+                    @Html.TextAreaFor(model => Model.ValidationExpression, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
                     @Html.ValidationMessageFor(model => model.ValidationExpression)
                 </div>
             </div>
             <div class="control-group">
                 @Html.LabelFor(model => model.ValidationMessage, new { @class = "control-label" })
                 <div class="controls">
-                    @Html.EditorFor(model => Model.ValidationMessage, new { placeholder = ViewData.ModelMetadata.Watermark })
+                    @Html.TextBoxFor(model => Model.ValidationMessage, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
                     @Html.ValidationMessageFor(model => model.ValidationMessage)
                 </div>
             </div>
             <div class="control-group">
                 @Html.LabelFor(model => model.Instructions, new { @class = "control-label" })
                 <div class="controls">
-                    @Html.TextAreaFor(model => model.Instructions, new { placeholder = ViewData.ModelMetadata.Watermark })
+                    @Html.TextAreaFor(model => model.Instructions, 7, 10, new { placeholder = ViewData.ModelMetadata.Watermark, @class="span12" })
                     @Html.ValidationMessageFor(model => model.Instructions)
                 </div>
             </div>

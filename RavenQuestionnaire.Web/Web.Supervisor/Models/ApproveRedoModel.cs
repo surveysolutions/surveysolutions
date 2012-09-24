@@ -7,10 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.View.CompleteQuestionnaire.Statistics;
+
 namespace Web.Supervisor.Models
 {
     using System;
-    using RavenQuestionnaire.Core.Views.Statistics;
 
     /// <summary>
     /// Define Approve model
@@ -38,7 +39,7 @@ namespace Web.Supervisor.Models
         public CompleteQuestionnaireStatisticView Statistic { get; set; }
 
         /// <summary>
-        /// Gets or sets StatusId.
+        /// Gets or sets Statuses.
         /// </summary>
         public Guid StatusId { get; set; }
     }

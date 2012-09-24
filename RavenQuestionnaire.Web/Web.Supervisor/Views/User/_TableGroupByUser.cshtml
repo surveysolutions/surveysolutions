@@ -1,12 +1,12 @@
-﻿@using RavenQuestionnaire.Core.Views.User
-@model RavenQuestionnaire.Core.Views.Interviewer.InterviewerGroupView
+﻿
+@model Core.Supervisor.Views.Interviewer.InterviewerGroupView
 
     @foreach (var item in Model.Items)
     {
         <tr>            
             @foreach (var question in item.FeaturedQuestions)
             {
-                <td>@question.AnswerValue</td>
+                <td>@question.Answer</td>
             }
             <td>
                 @Html.DisplayFor(modelItem => item.Status.Name)

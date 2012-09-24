@@ -3,9 +3,10 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using Main.Core.View;
+using Main.Core.View.Answer;
 using RavenQuestionnaire.Core;
 using Questionnaire.Core.Web.Security;
-using RavenQuestionnaire.Core.Views.Answer;
 using RavenQuestionnaire.Core.Views.Collection;
 using Main.Core.Entities.SubEntities;
 using RavenQuestionnaire.Core.Views.CollectionItem;

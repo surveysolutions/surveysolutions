@@ -1,8 +1,9 @@
-﻿@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.Question
+﻿@using Main.Core.View.Group
+@using Main.Core.View.Question
+@using Questionnaire.Core.Web.Helpers
+
 @using Main.Core.Entities.SubEntities
-@using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile
-@model CompleteGroupMobileView
+@model Main.Core.View.Group.CompleteGroupMobileView
 @using (var enumerator = Model.Children.GetEnumerator())
 {
     if (enumerator.MoveNext())

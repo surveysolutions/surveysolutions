@@ -227,7 +227,7 @@ namespace Main.Core.Domain
 
             ////it's not a great idea to build here answer text
             string answerString;
-            if (completeAnswers == null)
+            if (question.IsValueQuestion())
             {
                 answerString = completeAnswerValue;
             }

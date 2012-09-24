@@ -1,37 +1,51 @@
-﻿@using RavenQuestionnaire.Core.Views.Interviewer
-@using RavenQuestionnaire.Core.Views.User
-@model RavenQuestionnaire.Core.Views.Interviewer.InterviewersView
-
-        @foreach (InterviewersItem item in Model.Items)
-        {
-            <tr>
-                <td>
-                    <a href="@Url.Action("Statistics", "User", new {id = item.Id })">@item.Login</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreationDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Total)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Completed)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.InProcess)
-                </td>                                
-                <td>
-                    @if (item.IsLocked)
-                    {
-                        <a class="btn btn-primary" href="@Url.Action("UnlockUser", "User", new {id = item.Id})"><i class="icon icon-lock icon-white"></i>Unlock</a>
-                    }
-                    else
-                    {
-                        <a  class="btn btn-primary" href="@Url.Action("LockUser", "User", new {id = item.Id})"><i class="icon icon-lock icon-white"></i>Lock</a>
-                    }
-                </td>
-            </tr>
-        }
+﻿@using Core.Supervisor.Views.Interviewer
+@using Main.Core.Entities.SubEntities
+@model InterviewersView
+@foreach (InterviewersItem item in Model.Items)
+{
+    <tr>
+        <td>
+            <a href="@Url.Action("Statistics", "User", new { id = item.Id })">@item.Login</a>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Total)
+        </td>
+        <td>
+            @if (item.Completed != 0)
+            {
+                @Html.ActionLink(item.Completed.ToString(), "Assigments", "Survey", new { id = item.Id, status = SurveyStatus.Complete.PublicId }, null)
+            }
+            else
+            {
+                <text>@item.Completed</text>
+            }
+        </td>
+        <td>
+            @*@{
+                var statuses = "?" + string.Join("&", new[] { SurveyStatus.Initial.PublicId.ToString(), SurveyStatus.Redo.PublicId.ToString(), SurveyStatus.Error.PublicId.ToString() }.Select(x => "status=" + x));
+            }
+            <a href="@(Url.Action("Assigments", "Survey", new { id = item.Id }) + statuses)">
+                @item.InProcess
+            </a>*@
+            @Html.DisplayFor(modelItem => item.InProcess)
+        </td>
+        <td>
+            @if (item.IsLocked)
+            {
+                <a class="btn btn-primary" href="@Url.Action("UnlockUser", "User", new { id = item.Id })">
+                    <i class="icon icon-lock icon-white"></i>Unlock</a>
+            }
+            else
+            {
+                <a  class="btn btn-primary" href="@Url.Action("LockUser", "User", new { id = item.Id })">
+                    <i class="icon icon-lock icon-white"></i>Lock</a>
+            }
+        </td>
+    </tr>
+}

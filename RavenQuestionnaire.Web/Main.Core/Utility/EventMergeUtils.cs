@@ -46,8 +46,13 @@ namespace Main.Core.Utility
             }
 
             long dvergentPoint = stream.FindDivergentSequenceNumber(baseStream);
-
-            UncommittedEventStream uncommitedStream = CreateUncommittedEventStream(stream, baseStream, dvergentPoint);
+            Guid? devergentGuid = null;
+            if (dvergentPoint > 0)
+                devergentGuid = baseStream.FirstOrDefault(
+                    e =>
+                    e.EventSequence == dvergentPoint)
+                    .EventIdentifier;
+            UncommittedEventStream uncommitedStream = CreateUncommittedEventStream(stream, baseStream, devergentGuid);
             return uncommitedStream;
         }
 
@@ -67,7 +72,7 @@ namespace Main.Core.Utility
         /// The Ncqrs.Eventing.UncommittedEventStream.
         /// </returns>
         public static UncommittedEventStream CreateUncommittedEventStream(
-            this IEnumerable<AggregateRootEvent> stream, CommittedEventStream baseStream, long dvergentPoint)
+            this IEnumerable<AggregateRootEvent> stream, CommittedEventStream baseStream, Guid? dvergentEventId)
         {
             var uncommitedStream = new UncommittedEventStream(Guid.NewGuid());
 
@@ -82,11 +87,15 @@ namespace Main.Core.Utility
                 lastSequenceNumber = baseStream.Last().EventSequence + 1;
             }
 
-            IEnumerable<AggregateRootEvent> mergedStream =
-                stream.SkipWhile(e => e.EventSequence <= dvergentPoint).Where(
-                    e =>
-                    !baseStream.SkipWhile(c => c.EventSequence <= dvergentPoint).Any(
-                        c => c.EventIdentifier == e.EventIdentifier));
+            IEnumerable<AggregateRootEvent> mergedStream;
+            if (dvergentEventId.HasValue)
+                mergedStream =
+                    stream.SkipWhile(e => e.EventIdentifier != dvergentEventId).Where(
+                        e =>
+                        baseStream.SkipWhile(c => c.EventIdentifier != dvergentEventId).All(
+                            c => c.EventIdentifier != e.EventIdentifier));
+            else
+                mergedStream = stream;
 
             /*.Join(
                     baseStream.SkipWhile(e => e.EventSequence <= dvergentPoint),
@@ -130,17 +139,19 @@ namespace Main.Core.Utility
                 return 0;
             }
 
-            long startPoint = Math.Min(baseStream.Last().EventSequence, stream.Last().EventSequence);
-            IEnumerable<CommittedEvent> croppedBase = baseStream.TakeWhile(e => e.EventSequence <= startPoint);
-            IEnumerable<AggregateRootEvent> croppedNewStream = stream.TakeWhile(e => e.EventSequence <= startPoint);
+            long startPoint = Math.Min(baseStream.Count(), stream.Count());
+            IEnumerable<CommittedEvent> croppedBase = baseStream.TakeWhile((e, i) => i < startPoint);
+            IEnumerable<AggregateRootEvent> croppedNewStream = stream.TakeWhile((e, i) => i < startPoint);
 
             if (!croppedNewStream.Any())
                 return baseStream.Last().EventSequence;
-            while (startPoint > 0 && (croppedBase.Last().EventIdentifier != croppedNewStream.Last().EventIdentifier))
+            while (croppedBase.Last().EventIdentifier != croppedNewStream.Last().EventIdentifier)
             {
                 startPoint--;
-                croppedBase = baseStream.TakeWhile(e => e.EventSequence <= startPoint);
-                croppedNewStream = stream.TakeWhile(e => e.EventSequence <= startPoint);
+                if (startPoint == 0)
+                    return 0;
+                croppedBase = baseStream.TakeWhile((e, i) => i < startPoint);
+                croppedNewStream = stream.TakeWhile((e, i) => i < startPoint);
                 if (!croppedNewStream.Any())
                     return baseStream.Last().EventSequence;
             }

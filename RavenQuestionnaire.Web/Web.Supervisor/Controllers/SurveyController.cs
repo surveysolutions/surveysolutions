@@ -13,20 +13,25 @@ namespace Web.Supervisor.Controllers
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using Main.Core.Commands.Questionnaire.Completed;   
+
+    using Core.Supervisor.Views.Assign;
+    using Core.Supervisor.Views.Interviewer;
+    using Core.Supervisor.Views.Survey;
+
+    using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Entities.SubEntities;
+    using Main.Core.View;
+    using Main.Core.View.CompleteQuestionnaire;
+    using Main.Core.View.CompleteQuestionnaire.Statistics;
+    using Main.Core.View.Group;
+    using Main.Core.View.Question;
+    using Main.Core.View.User;
+
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
+
     using Questionnaire.Core.Web.Helpers;
-    using RavenQuestionnaire.Core;
-    using RavenQuestionnaire.Core.Views.Assign;
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile;
-    using RavenQuestionnaire.Core.Views.Interviewer;
-    using RavenQuestionnaire.Core.Views.Question;
-    using RavenQuestionnaire.Core.Views.Statistics;
-    using RavenQuestionnaire.Core.Views.Survey;
-    using RavenQuestionnaire.Core.Views.User;
+
     using Web.Supervisor.Models;
 
     /// <summary>
@@ -94,7 +99,7 @@ namespace Web.Supervisor.Controllers
         /// <param name="input">
         /// The input.
         /// </param>
-        /// <param name="statusId">
+        /// <param name="status">
         /// The status.
         /// </param>
         /// <param name="isNotAssigned">
@@ -103,10 +108,10 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Return Assigments page
         /// </returns>
-        public ActionResult Assigments(Guid id, SurveyGroupInputModel input, string status, bool? isNotAssigned)
+        public ActionResult Assigments(Guid id, SurveyGroupInputModel input, ICollection<string> status, bool? isNotAssigned)
         {
             var inputModel = input == null
-                                 ? new SurveyGroupInputModel() { Id = id, StatusId = status }
+                                 ? new SurveyGroupInputModel() { Id = id, Statuses = status }
                                  : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders, status, isNotAssigned ?? false);
             var user = this.globalInfo.GetCurrentUser();
             var model = this.viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(inputModel);
@@ -371,7 +376,8 @@ namespace Web.Supervisor.Controllers
                             {
                                 Page = data.Pager.Page,
                                 PageSize = data.Pager.PageSize,
-                                Orders = data.SortOrder
+                                Orders = data.SortOrder,
+                                UserId = data.UserId
                             };
             var model = this.viewRepository.Load<SurveyViewInputModel, SurveyBrowseView>(input);
             return this.PartialView("_Table", model);

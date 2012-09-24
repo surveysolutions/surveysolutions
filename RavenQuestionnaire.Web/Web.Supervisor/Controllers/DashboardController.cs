@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.View;
+using Main.Core.View.Questionnaire;
+
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -14,9 +17,7 @@ namespace Web.Supervisor.Controllers
     using System.Web.Mvc;
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
-    using RavenQuestionnaire.Core;
     using Main.Core.Commands.Questionnaire.Completed;
-    using RavenQuestionnaire.Core.Views.Questionnaire;
 
     /// <summary>
     /// Show Statistics
@@ -32,7 +33,7 @@ namespace Web.Supervisor.Controllers
         private IViewRepository viewRepository;
 
         #endregion
-
+        
         #region Constructor
 
         /// <summary>

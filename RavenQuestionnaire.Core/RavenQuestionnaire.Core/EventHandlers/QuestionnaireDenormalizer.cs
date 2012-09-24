@@ -94,6 +94,8 @@ namespace RavenQuestionnaire.Core.EventHandlers
             if (document == null)
                 return;
             this.documentStorage.Store(document, document.PublicKey);
+            //this.documentStorage.Store(
+            //    (CompleteQuestionnaireStoreDocument) document, document.PublicKey);
         }
 
         /// <summary>
@@ -125,7 +127,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.Payload.QuestionnaireId);
 
             // var questionnaire = new Questionnaire(item);
-            item.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.AfterItemKey);
+            item.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.AfterItemKey, item);
         }
 
         /// <summary>
