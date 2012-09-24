@@ -2,37 +2,38 @@
 @model Main.Core.View.Question.CompleteQuestionView
 @{
     ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
- 
-  
+
+
     var questionId = "question" + Model.PublicKey;
 }
 <div class=" question" id="@questionId">
-    <a href="#error-@(Model.PublicKey)" class="error"  data-inline="true" data-iconpos="notext" data-icon="alert" data-theme="a" data-role="button" data-inline="true"  data-rel="popup"></a>
+    
+    <a href="#error-@(Model.PublicKey)" class="error"  data-inline="true" data-iconpos="notext" data-icon="alert" 
+        data-theme="a" data-role="button" data-inline="true"  data-rel="popup"></a>
+    
     <div data-role="popup" id="error-@(Model.PublicKey)" class="instructions">
-           
-        @if(Model.Mandatory)
+
+        @if (Model.Mandatory)
         {
-            <p> Answer is mandatory</p>
+            <p>Answer is mandatory</p>
         }
         <p>
-            
             @Model.ValidationMessage
         </p>
-	</div>
-    @Html.Hidden("QuestionType", Model.QuestionType)  
-    @{ Html.RenderPartial(string.Format("~/Views/Survey/Answer/AnswerList/_{0}.cshtml", Model.QuestionType), Model); }       
+    </div>
+    
+    
+
+    @Html.Hidden("QuestionType", Model.QuestionType)
+
+    @{ Html.RenderPartial(string.Format("~/Views/Survey/Answer/AnswerList/_{0}.cshtml", Model.QuestionType), Model); }
+
     @Html.ValidationMessage("AnswerValue")
+
     @Html.Hidden("PublicKey", Model.PublicKey)
-      <p class="question-comment">
-                    @if (!string.IsNullOrEmpty(Model.Comments))
-                    {
-                        string idComment = "comments" + @Model.PublicKey;
-                        <span id="@idComment">Comments : @Model.Comments</span>
-                    }
-                    else
-                    {
-                        string idComment = "comments" + @Model.PublicKey;
-                        <span id="@idComment"></span>
-                    }
-                </p>
+
+    <p class="question-comment">
+        <span id="comments+@Model.PublicKey"> @Model.Comments</span>
+    </p>
+
 </div>
