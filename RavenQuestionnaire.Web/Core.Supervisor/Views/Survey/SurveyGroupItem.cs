@@ -7,14 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Entities.SubEntities;
-using Main.Core.View.CompleteQuestionnaire;
-
 namespace Core.Supervisor.Views.Survey
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.View.CompleteQuestionnaire;
+
     /// <summary>
     /// The survey group item.
     /// </summary>
@@ -49,7 +50,7 @@ namespace Core.Supervisor.Views.Survey
             foreach (var header in headers)
             {
                 var question = it.FeaturedQuestions.FirstOrDefault(t => t.PublicKey == header.Key);
-                this.FeatureadValue.Add(header.Key, question.Answer.ToString());
+                this.FeatureadValue.Add(header.Key, question != null ? question.Answer.ToString() : string.Empty);
             }
         }
         

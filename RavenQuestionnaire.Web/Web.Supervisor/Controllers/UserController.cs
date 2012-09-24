@@ -13,6 +13,8 @@ using Main.Core.View;
 namespace Web.Supervisor.Controllers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Web;
     using System.Web.Mvc;
     using Main.Core.Commands.User;
@@ -21,7 +23,7 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
     using Questionnaire.Core.Web.Helpers;
     using Web.Supervisor.Models;
-    
+
 
     /// <summary>
     /// User controller responsible for dispay users, lock/unlock users, counting statistics
@@ -91,7 +93,7 @@ namespace Web.Supervisor.Controllers
         {
             return this.SetUserLock(id, true);
         }
-        
+
 
         /// <summary>
         /// Display user's statistics grouped by surveys and statuses
@@ -107,13 +109,13 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Statistics(Guid id, InterviewerStatisticsInputModel input)
         {
-            var inputModel = input == null 
-                ? new InterviewerStatisticsInputModel() { UserId = id } 
+            var inputModel = input == null
+                ? new InterviewerStatisticsInputModel() { UserId = id }
                 : new InterviewerStatisticsInputModel()
                                  {
-                                     Order = input.Order, 
+                                     Order = input.Order,
                                      Orders = input.Orders,
-                                     PageSize = input.PageSize, 
+                                     PageSize = input.PageSize,
                                      Page = input.Page,
                                      UserId = id,
                                      UserName = input.UserName
@@ -208,6 +210,20 @@ namespace Web.Supervisor.Controllers
             return this.PartialView("_UserStatistics", model);
         }
 
+        /// <summary>
+        /// Uses to filter grids by user
+        /// </summary>
+        /// <returns>
+        /// List of all  supervisor's users
+        /// </returns>
+        public ActionResult UsersJson()
+        {
+            var user = this.globalInfo.GetCurrentUser();
+            var input = new InterviewersInputModel { PageSize = int.MaxValue, Supervisor = user };
+            var model = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
+            return this.Json(model.Items.ToDictionary(item => item.Id.ToString(), item => item.Login), JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #region Private
@@ -230,7 +246,7 @@ namespace Web.Supervisor.Controllers
         private ActionResult SetUserLock(string id, bool status)
         {
             Guid key;
-            if (!Guid.TryParse(id, out key)) 
+            if (!Guid.TryParse(id, out key))
                 throw new HttpException("404");
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new ChangeUserStatusCommand(key, status));

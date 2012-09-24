@@ -72,14 +72,14 @@ namespace Core.Supervisor.Views.Survey
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
-        /// /// <param name="statusId">
+        /// /// <param name="statuses">
         /// The statistic filter.
         /// </param>
-        public SurveyGroupInputModel(Guid id, Guid questionnaireId, string statusId)
+        public SurveyGroupInputModel(Guid id, Guid questionnaireId, ICollection<string> statuses)
         {
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
-            this.StatusId = statusId;
+            this.Statuses = statuses;
         }
 
         /// <summary>
@@ -97,19 +97,19 @@ namespace Core.Supervisor.Views.Survey
         /// <param name="orders">
         /// The orders.
         /// </param>
-        /// /// <param name="statusId">
-        /// The statusId.
+        /// /// <param name="statuses">
+        /// The statuses.
         /// </param>
         /// <param name="isNotAssigned">
         /// The isNotAssigned.
         /// </param>
-        public SurveyGroupInputModel(Guid id, int page, int pageSize, List<OrderRequestItem> orders, string statusId, bool isNotAssigned)
+        public SurveyGroupInputModel(Guid id, int page, int pageSize, List<OrderRequestItem> orders, ICollection<string> statuses, bool isNotAssigned)
         {
             this.Id = id;
             this.Page = page;
             this.PageSize = pageSize;
             this.Orders = orders;
-            this.StatusId = statusId;
+            this.Statuses = statuses;
             this.IsNotAssigned = isNotAssigned;
         }
 
@@ -226,9 +226,9 @@ namespace Core.Supervisor.Views.Survey
         public Guid QuestionnaireId { get; set; }
 
         /// <summary>
-        /// Gets or sets StatusId.
+        /// Gets or sets Statuses.
         /// </summary>
-        public string StatusId { get; set; }
+        public ICollection<string> Statuses { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether IsNotAssigned.

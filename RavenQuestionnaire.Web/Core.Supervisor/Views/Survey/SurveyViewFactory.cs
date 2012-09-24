@@ -7,17 +7,19 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Denormalizers;
-using Main.Core.Entities;
-using Main.Core.Entities.SubEntities;
-using Main.Core.View;
-using Main.Core.View.CompleteQuestionnaire;
-using Main.Core.Utility;
 namespace Core.Supervisor.Views.Survey
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Main.Core.Denormalizers;
+    using Main.Core.Entities;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Utility;
+    using Main.Core.View;
+    using Main.Core.View.CompleteQuestionnaire;
+
     /// <summary>
     /// The survey view factory.
     /// </summary>
@@ -71,9 +73,11 @@ namespace Core.Supervisor.Views.Survey
             query = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
             return new SurveyBrowseView(input.Page, input.PageSize, count, query);*/
             var questionnairesGroupedByTemplate =
-              BuildItems(
-                  this.documentItemSession.Query().GroupBy(
-                      x => x.TemplateId)).AsQueryable();
+                BuildItems(
+                (input.UserId == Guid.Empty
+                     ? this.documentItemSession.Query()
+                     : this.documentItemSession.Query().Where(x => x.Responsible.Id == input.UserId)).GroupBy(
+                         x => x.TemplateId)).AsQueryable();
 
             var retval = new SurveyBrowseView(input.Page, input.PageSize, 0, new List<SurveyBrowseItem>());
             if (input.Orders.Count > 0)
@@ -88,6 +92,16 @@ namespace Core.Supervisor.Views.Survey
                 questionnairesGroupedByTemplate.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
             return retval;
         }
+
+        /// <summary>
+        /// Builds items
+        /// </summary>
+        /// <param name="grouped">
+        /// The grouped.
+        /// </param>
+        /// <returns>
+        /// List of survey browse items
+        /// </returns>
         protected IEnumerable<SurveyBrowseItem> BuildItems(IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> grouped)
         {
             foreach (var templateGroup in grouped)

@@ -7,12 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using Main.Core.Entities;
-using Main.Core.Entities.SubEntities;
-
 namespace Core.Supervisor.Views.Survey
 {
+    using System.Collections.Generic;
+
+    using Main.Core.Entities;
+    using Main.Core.Entities.SubEntities;
+
     /// <summary>
     /// The survey browse view.
     /// </summary>

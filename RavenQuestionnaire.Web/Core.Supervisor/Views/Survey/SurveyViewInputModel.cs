@@ -7,12 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using Main.Core.Entities;
-using Main.Core.Utility;
-
 namespace Core.Supervisor.Views.Survey
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Main.Core.Entities;
+    using Main.Core.Utility;
+
     /// <summary>
     /// The survey view input model.
     /// </summary>
@@ -107,6 +109,11 @@ namespace Core.Supervisor.Views.Survey
         /// Gets or sets statistic filtres.
         /// </summary>
         public string Status { get; set; }
+
+        /// <summary>
+        /// Gets or sets filter by user guid
+        /// </summary>
+        public Guid UserId { get; set; }
         
         #endregion
     }
