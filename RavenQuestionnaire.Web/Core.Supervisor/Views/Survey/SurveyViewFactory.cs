@@ -76,8 +76,9 @@ namespace Core.Supervisor.Views.Survey
                 BuildItems(
                 (input.UserId == Guid.Empty
                      ? this.documentItemSession.Query()
-                     : this.documentItemSession.Query().Where(x => x.Responsible.Id == input.UserId)).GroupBy(
-                         x => x.TemplateId)).AsQueryable();
+                     : this.documentItemSession.Query().Where(
+                         x => x.Responsible != null && (x.Responsible.Id == input.UserId))).GroupBy(x => x.TemplateId)).
+                    AsQueryable();
 
             var retval = new SurveyBrowseView(input.Page, input.PageSize, 0, new List<SurveyBrowseItem>());
             if (input.Orders.Count > 0)
