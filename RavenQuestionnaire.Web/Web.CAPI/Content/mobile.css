@@ -286,7 +286,7 @@ body.ui-mobile-viewport, div.ui-mobile-viewport {
 	background: -moz-linear-gradient(#444444, #222222) repeat scroll 0 0 #222222
 }
 
-.question-frame{position: relative;}
+.question-frame{position: relative; margin-bottom: 15px;}
 .question-frame .question-main-content{float: left; width: 90%;  min-height: 90px;overflow: visible;}
 .question-frame .question-arrow{width: 6%; border: 1px solid #aaa; position: absolute; right: 0; top: 0;bottom: 0;z-index: 100;}
 .ui-disabled-opacity{ opacity: 1;}
