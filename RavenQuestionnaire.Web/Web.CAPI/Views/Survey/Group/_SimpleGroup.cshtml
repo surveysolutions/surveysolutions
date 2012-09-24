@@ -49,7 +49,7 @@
                     }
                      
                     <div class="question-frame">
-                        <div class="ui-body ui-body-c question-main-content  @bodyClass" id="elem-@(question.PublicKey)">
+                        <div class="ui-body ui-body-c question-main-content  @bodyClass" id="elem-@(question.PublicKey)" >
                             <div class="question-content">
                                 @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions))
                                 {
@@ -116,12 +116,13 @@
                         else
                         {
                             string enabled = !@group.Enabled ? "ui-disabled" : string.Empty;
-                            
-                            <div class="@enabled ui-body ui-body-c" id="@group.PublicKey">
+    
+                                                    
+                            <div class="@enabled ui-body ui-body-c" id="@group.PublicKey" style="margin-bottom:15px;">
                                 <div class="group-anchor">
                                     <a id="screen-ref-@(@group.PublicKey)" class="nav-link" 
                                        href="@Url.Action("Screen", new { Id = @group.QuestionnairePublicKey, group = @group.PublicKey })" 
-                                        data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
+                                       data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@(@group.Title)</a>
                                     <script type="text/javascript">
                                         $('#screen-ref-@(@group.PublicKey)').click(function () {
                                             $('.scrollHere').removeClass('scrollHere');
@@ -131,6 +132,7 @@
                                     <input type="checkbox" disabled="disabled" style="display: none;" />
                                 </div>
                             </div>
+    
     
                             @*<div class="ui-body">&nbsp;</div>*@
                         }
