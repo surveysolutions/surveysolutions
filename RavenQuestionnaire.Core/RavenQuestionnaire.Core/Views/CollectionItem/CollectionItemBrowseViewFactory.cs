@@ -6,6 +6,9 @@
 //   The collection item browse view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.View;
+
 namespace RavenQuestionnaire.Core.Views.CollectionItem
 {
     using System.Collections.Generic;

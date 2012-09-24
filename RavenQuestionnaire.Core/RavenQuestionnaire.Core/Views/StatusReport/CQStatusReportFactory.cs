@@ -7,7 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Denormalizers;
 using Main.Core.Documents;
+using Main.Core.View;
+using Main.Core.View.CompleteQuestionnaire;
 
 namespace RavenQuestionnaire.Core.Views.StatusReport
 {
@@ -15,8 +18,6 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
     using System.Linq;
 
     using Main.Core.Entities.SubEntities;
-
-    using RavenQuestionnaire.Core.Denormalizers;
     using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
 
     /// <summary>

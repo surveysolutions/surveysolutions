@@ -6,6 +6,11 @@
 //   The complete questionnaire enumerable view factory.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Denormalizers;
+using Main.Core.View;
+using Main.Core.View.CompleteQuestionnaire;
+
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     using System;
@@ -14,8 +19,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
     using Main.Core.AbstractFactories;
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities.Complete;
-
-    using RavenQuestionnaire.Core.Denormalizers;
 
     /// <summary>
     /// The complete questionnaire enumerable view factory.

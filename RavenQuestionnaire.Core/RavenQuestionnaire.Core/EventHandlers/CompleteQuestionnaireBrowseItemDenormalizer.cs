@@ -72,6 +72,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
         {
             HandleNewQuestionnaire(evnt.Payload.Questionnaire);
         }
+
         public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
         {
             var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
@@ -124,7 +125,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
                     featuredQuestions.Add(currentFeatured);
                 }
 
-                currentFeatured.AnswerValue = currentFeatured.AnswerText = evnt.Payload.AnswerString;
+                currentFeatured.AnswerValue = currentFeatured.AnswerText = evnt.Payload.AnswerString = evnt.Payload.AnswerValue;
 
                 item.FeaturedQuestions = featuredQuestions.ToArray();
             }
@@ -198,7 +199,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
             Guid? gropPropagationPublicKey, 
             Guid screenPublicKey)
         {
-            foreach (ICompleteQuestion completeQuestion in questions)
+            foreach (ICompleteQuestion completeQuestion in questions.ToList())
             {
                 if (completeQuestion.Featured)
                 {
