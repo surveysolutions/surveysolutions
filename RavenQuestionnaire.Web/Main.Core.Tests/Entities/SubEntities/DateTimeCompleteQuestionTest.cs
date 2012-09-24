@@ -60,7 +60,6 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
             completeQuestion.QuestionType = QuestionType.DateTime;
             completeQuestion.StataExportCaption = "some stata export caption";
             completeQuestion.ValidationExpression = "some validation expression";
-            completeQuestion.Triggers = new List<Guid> { Guid.NewGuid() };
             Assert.AreEqual(completeQuestion.AnswerDate, DateTime.Today);
             Assert.AreEqual(completeQuestion.AnswerOrder, Order.MaxMin);
             Assert.AreEqual(completeQuestion.Cards.Count, 1);
@@ -72,7 +71,6 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
             Assert.AreEqual(completeQuestion.QuestionType, QuestionType.DateTime);
             Assert.AreEqual(completeQuestion.StataExportCaption, "some stata export caption");
             Assert.AreEqual(completeQuestion.ValidationExpression, "some validation expression");
-            Assert.AreEqual(completeQuestion.Triggers.Count, 1);
         }
 
         #endregion

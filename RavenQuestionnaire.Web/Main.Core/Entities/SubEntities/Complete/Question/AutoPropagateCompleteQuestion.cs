@@ -27,6 +27,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </summary>
         public AutoPropagateCompleteQuestion()
         {
+            this.Triggers = new List<Guid>();
         }
 
         /// <summary>
@@ -38,6 +39,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public AutoPropagateCompleteQuestion(string text)
             : base(text)
         {
+            this.Triggers = new List<Guid>();
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </param>
         public AutoPropagateCompleteQuestion(IAutoPropagate template)
         {
-            this.TargetGroupKey = template.TargetGroupKey;
+            this.Triggers = template.Triggers;
         }
 
         #endregion
@@ -241,6 +243,12 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         #region Implementation of ICompelteValueQuestion<int>
 
         public int? Answer { get; set; }
+
+        #endregion
+
+        #region Implementation of ITriggerable
+
+        public List<Guid> Triggers { get; set; }
 
         #endregion
     }

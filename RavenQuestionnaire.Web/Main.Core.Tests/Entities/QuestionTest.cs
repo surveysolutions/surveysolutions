@@ -40,14 +40,12 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             // List<IGroup> groups = new List<IGroup>() { new Group("test") };
             var answers = new List<IComposite> { new Answer(), new Answer(), new Answer() };
 
-            var triggers = new List<Guid> { Guid.NewGuid() };
             var question = new SingleQuestion(Guid.NewGuid(), "test")
                 {
                     ConditionExpression = "expr", 
                     Instructions = "instructions", 
                     AnswerOrder = Order.Random, 
                     StataExportCaption = "stata", 
-                    Triggers = triggers, 
                     Children = answers
                 };
             var target = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
