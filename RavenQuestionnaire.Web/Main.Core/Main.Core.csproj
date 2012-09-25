@@ -325,6 +325,7 @@
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewFactory.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\QuestionStatisticView.cs" />
+    <Compile Include="View\Group\AbstractGroupMobileView.cs" />
     <Compile Include="View\Group\CompleteGroupHeaders.cs" />
     <Compile Include="View\Group\CompleteGroupMobileView.cs" />
     <Compile Include="View\Group\Counter.cs" />

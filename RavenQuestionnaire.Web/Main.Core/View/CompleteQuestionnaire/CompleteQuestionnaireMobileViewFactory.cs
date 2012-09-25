@@ -1,21 +1,21 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireMobileViewFactory.cs" company="">
-// TODO: Update copyright text.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CompleteQuestionnaireMobileViewFactory.cs" company="The World Bank">
+//   2012
 // </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.Denormalizers;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.View.Group;
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Main.Core.View.CompleteQuestionnaire
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
+    using Main.Core.Denormalizers;
+    using Main.Core.Documents;
+    using Main.Core.Entities.Extensions;
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.ExpressionExecutors;
+    using Main.Core.View.Group;
 
     /// <summary>
     /// The complete questionnaire mobile view factory.
@@ -23,7 +23,7 @@ namespace Main.Core.View.CompleteQuestionnaire
     public class CompleteQuestionnaireMobileViewFactory :
         IViewFactory<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>
     {
-        #region Fields
+        #region Constants and Fields
 
         /// <summary>
         /// The store.
@@ -63,6 +63,7 @@ namespace Main.Core.View.CompleteQuestionnaire
             if (input.CompleteQuestionnaireId != Guid.Empty)
             {
                 CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.CompleteQuestionnaireId);
+                var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
                 ICompleteGroup group = null;
                 var rout = new List<NodeWithLevel>();
                 if (input.CurrentGroupPublicKey.HasValue)
@@ -94,10 +95,10 @@ namespace Main.Core.View.CompleteQuestionnaire
 
                 if (input.PropagationKey.HasValue)
                 {
-                    return new PropagatedGroupMobileView(doc, group, this.CompileNavigation(rout, group));
+                    return new PropagatedGroupMobileView(doc, group, this.CompileNavigation(rout, group, executor));
                 }
 
-                return new CompleteGroupMobileView(doc, (CompleteGroup) group, this.CompileNavigation(rout, group));
+                return new CompleteGroupMobileView(doc, (CompleteGroup)group, this.CompileNavigation(rout, group, executor));
             }
 
             return null;
@@ -116,10 +117,13 @@ namespace Main.Core.View.CompleteQuestionnaire
         /// <param name="group">
         /// The group.
         /// </param>
+        /// <param name="executor">
+        /// The executor.
+        /// </param>
         /// <returns>
         /// The RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile.ScreenNavigation.
         /// </returns>
-        protected ScreenNavigation CompileNavigation(List<NodeWithLevel> rout, ICompleteGroup group)
+        protected ScreenNavigation CompileNavigation(List<NodeWithLevel> rout, ICompleteGroup group, CompleteQuestionnaireConditionExecutor executor)
         {
             var navigation = new ScreenNavigation();
             navigation.PublicKey = group.PublicKey;
@@ -134,12 +138,24 @@ namespace Main.Core.View.CompleteQuestionnaire
                 groupNeighbors =
                     parent.Group.Children.OfType<ICompleteGroup>().Where(
                         g => g.PublicKey == group.PublicKey && g.PropogationPublicKey.HasValue).ToList();
+                foreach (var groupNeighbor in groupNeighbors)
+                {
+                    groupNeighbor.Enabled = executor.Execute(groupNeighbor);
+                }
+
+                groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
                 indexOfTarget = groupNeighbors.FindIndex(0, g => g.PropogationPublicKey == group.PropogationPublicKey);
             }
             else
             {
                 groupNeighbors =
                     parent.Group.Children.OfType<ICompleteGroup>().Where(g => !g.PropogationPublicKey.HasValue).ToList();
+                foreach (var groupNeighbor in groupNeighbors)
+                {
+                    groupNeighbor.Enabled = executor.Execute(groupNeighbor);
+                }
+
+                groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
                 indexOfTarget = groupNeighbors.FindIndex(0, g => g.PublicKey == group.PublicKey);
             }
 

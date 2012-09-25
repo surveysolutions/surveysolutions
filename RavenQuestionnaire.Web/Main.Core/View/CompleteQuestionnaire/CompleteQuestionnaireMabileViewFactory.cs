@@ -17,6 +17,9 @@ using Main.Core.View.Group;
 
 namespace Main.Core.View.CompleteQuestionnaire
 {
+    using Main.Core.Entities.Extensions;
+    using Main.Core.ExpressionExecutors;
+
     /// <summary>
     /// The complete questionnaire mabile view factory.
     /// </summary>
@@ -63,6 +66,8 @@ namespace Main.Core.View.CompleteQuestionnaire
             if (input.CompleteQuestionnaireId != Guid.Empty)
             {
                 CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.CompleteQuestionnaireId);
+                var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
+
                 this.UpdateInputData(doc, input);
                 ICompleteGroup group = null;
 
@@ -97,12 +102,13 @@ namespace Main.Core.View.CompleteQuestionnaire
                     this.UpdateNavigation(rout, new NodeWithLevel(group, 1));
                 }
 
-                ScreenNavigation navigation = this.CompileNavigation(rout, group);
+
+                ScreenNavigation navigation = this.CompileNavigation(rout, group, executor);
                 Guid currentScreen = navigation.BreadCumbs.Count > 1
                                          ? navigation.BreadCumbs[1].PublicKey
                                          : group.PublicKey;
                 return new CompleteQuestionnaireMobileView(
-                    doc, currentScreen, group, this.CompileNavigation(rout, group));
+                    doc, currentScreen, group, this.CompileNavigation(rout, group, executor));
             }
 
             return null;
@@ -121,10 +127,13 @@ namespace Main.Core.View.CompleteQuestionnaire
         /// <param name="group">
         /// The group.
         /// </param>
+        /// <param name="executor">
+        /// The executor.
+        /// </param>
         /// <returns>
         /// The RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile.ScreenNavigation.
         /// </returns>
-        protected ScreenNavigation CompileNavigation(List<NodeWithLevel> rout, ICompleteGroup group)
+        protected ScreenNavigation CompileNavigation(List<NodeWithLevel> rout, ICompleteGroup group, CompleteQuestionnaireConditionExecutor executor)
         {
             var navigation = new ScreenNavigation();
             navigation.PublicKey = group.PublicKey;
@@ -139,12 +148,24 @@ namespace Main.Core.View.CompleteQuestionnaire
                 groupNeighbors =
                     parent.Group.Children.OfType<ICompleteGroup>().Where(
                         g => g.PublicKey == group.PublicKey && g.PropogationPublicKey.HasValue).ToList();
+                foreach (var groupNeighbor in groupNeighbors)
+                {
+                    groupNeighbor.Enabled = executor.Execute(groupNeighbor);
+                }
+
+                groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
                 indexOfTarget = groupNeighbors.FindIndex(0, g => g.PropogationPublicKey == group.PropogationPublicKey);
             }
             else
             {
                 groupNeighbors =
                     parent.Group.Children.OfType<ICompleteGroup>().Where(g => !g.PropogationPublicKey.HasValue).ToList();
+                foreach (var groupNeighbor in groupNeighbors)
+                {
+                    groupNeighbor.Enabled = executor.Execute(groupNeighbor);
+                }
+
+                groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
                 indexOfTarget = groupNeighbors.FindIndex(0, g => g.PublicKey == group.PublicKey);
             }
 
