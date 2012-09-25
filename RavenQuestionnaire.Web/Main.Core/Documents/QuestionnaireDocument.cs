@@ -43,7 +43,6 @@ namespace Main.Core.Documents
             this.PublicKey = Guid.NewGuid();
             this.Children = new List<IComposite>();
             this.ConditionExpression = string.Empty;
-            this.Description = string.Empty;
         }
 
         #endregion
@@ -66,11 +65,6 @@ namespace Main.Core.Documents
         /// Gets or sets the condition expression.
         /// </summary>
         public string ConditionExpression { get; set; }
-
-        /// <summary>
-        /// Gets or sets Description.
-        /// </summary>
-        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the creation date.
@@ -127,6 +121,11 @@ namespace Main.Core.Documents
         /// Gets or sets the title.
         /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the triggers.

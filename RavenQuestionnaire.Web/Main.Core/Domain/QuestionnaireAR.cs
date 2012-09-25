@@ -424,6 +424,7 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new GroupUpdated
                     {
+                        QuestionnaireId = this.innerDocument.PublicKey.ToString(),
                         GroupPublicKey = groupPublicKey, 
                         GroupText = groupText, 
                         Propagateble = propagateble, 

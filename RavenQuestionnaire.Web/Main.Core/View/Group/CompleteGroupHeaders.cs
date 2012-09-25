@@ -30,6 +30,7 @@ namespace Main.Core.View.Group
             this.PublicKey = group.PublicKey;
             this.GroupText = group.Title;
             this.PropagationKey = group.PropogationPublicKey;
+            this.Description = group.Description;
         }
 
         /// <summary>
@@ -72,6 +73,11 @@ namespace Main.Core.View.Group
         /// Gets or sets the totals.
         /// </summary>
         public Counter Totals { get; set; }
+
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
 
         #endregion
 
