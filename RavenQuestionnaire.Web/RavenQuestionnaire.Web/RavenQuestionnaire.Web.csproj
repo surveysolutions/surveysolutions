@@ -227,12 +227,9 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\CollectionController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
-    <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
-    <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Injections\MainCoreRegistry.cs" />
     <Compile Include="Models\FlowGraph.cs" />
     <Compile Include="Models\GridDataRequest.cs" />
@@ -537,7 +534,6 @@
     <Content Include="Views\Answer\AnswerListView\_DropDownList.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Select.cshtml" />
-    <Content Include="Views\Questionnaire\ItemList.cshtml" />
     <Content Include="Views\Questionnaire\Export.cshtml" />
     <Content Include="Views\Question\_GetAnswers.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_CompleteGroup.cshtml" />
@@ -613,7 +609,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Questionnaire\DetailsOld.cshtml" />
-    <Content Include="Views\Shared\_Layout1.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
