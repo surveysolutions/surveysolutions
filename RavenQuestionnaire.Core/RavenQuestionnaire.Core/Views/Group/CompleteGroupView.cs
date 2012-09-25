@@ -50,6 +50,7 @@ namespace RavenQuestionnaire.Core.Views.Group
             CompleteQuestionnaireStoreDocument doc, ICompleteGroup group, ICompleteGroupFactory groupFactory)
             : base(doc, group)
         {
+            this.Description = group.Description;
             this.ConditionExpression = doc.ConditionExpression;
             this.Questions =
                 group.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionView(doc, q)).ToArray();
