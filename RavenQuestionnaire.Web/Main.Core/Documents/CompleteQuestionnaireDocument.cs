@@ -94,6 +94,11 @@ namespace Main.Core.Documents
         public DateTime LastEntryDate { get; set; }
 
         /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets or sets the last visited group.
         /// </summary>
         public VisitedGroup LastVisitedGroup { get; set; }
@@ -229,7 +234,8 @@ namespace Main.Core.Documents
                     TemplateId = doc.PublicKey, 
                     Title = doc.Title, 
                     Triggers = doc.Triggers, 
-                    ConditionExpression = doc.ConditionExpression
+                    ConditionExpression = doc.ConditionExpression, 
+                    Description = doc.Description
                 };
             foreach (IComposite child in doc.Children)
             {

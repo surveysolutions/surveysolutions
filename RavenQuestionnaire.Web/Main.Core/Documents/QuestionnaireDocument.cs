@@ -123,6 +123,11 @@ namespace Main.Core.Documents
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets or sets the triggers.
         /// </summary>
         public List<Guid> Triggers

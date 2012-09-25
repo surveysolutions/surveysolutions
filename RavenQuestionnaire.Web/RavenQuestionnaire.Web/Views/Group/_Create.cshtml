@@ -15,7 +15,14 @@
              @Html.ValidationMessageFor(model => model.Title)
          </div>
      </div>
-    if (Model.Parent.HasValue)
+    <div class="control-group">
+         @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+         <div class="controls">
+             @Html.TextAreaFor(model => model.Description)
+             @Html.ValidationMessageFor(model => model.Description)
+         </div>
+     </div>
+     if (Model.Parent.HasValue)
      {
          <div class="control-group">
              <label class="control-label">Is Group propagateble?</label>
@@ -27,9 +34,9 @@
 
 
      if (Model.PublicKey != Guid.Empty)
-    {
+     {
         @Html.HiddenFor(model => model.PublicKey)
-    }
+     }
     <div class="control-group">
          @Html.LabelFor(model => model.ConditionExpression, new { @class = "control-label" })
          <div class="controls">
