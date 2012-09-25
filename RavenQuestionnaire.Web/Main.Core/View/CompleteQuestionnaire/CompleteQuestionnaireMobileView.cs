@@ -41,7 +41,7 @@ namespace Main.Core.View.CompleteQuestionnaire
             this.LastEntryDate = doc.LastEntryDate;
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
-
+            
             // CollectAll(doc, screenPublicKey, currentGroup as CompleteGroup, navigation);
         }
 
@@ -150,7 +150,7 @@ namespace Main.Core.View.CompleteQuestionnaire
 
                 this.Groups[0] = new CompleteGroupHeaders
                     {
-                       PublicKey = Guid.Empty, GroupText = "Main", Totals = this.CountQuestions(questions) 
+                       PublicKey = Guid.Empty, GroupText = "Main", Totals = this.CountQuestions(questions), Description = string.Empty
                     };
                 for (int i = 1; i <= groups.Count; i++)
                 {
@@ -158,7 +158,8 @@ namespace Main.Core.View.CompleteQuestionnaire
                         {
                             PublicKey = groups[i - 1].PublicKey, 
                             GroupText = groups[i - 1].Title, 
-                            Enabled = executor.Execute(groups[i - 1])
+                            Enabled = executor.Execute(groups[i - 1]),
+                            Description = groups[i - 1].Description
                         };
                     this.Groups[i].Totals = this.CalcProgress(groups[i - 1]);
                 }
@@ -172,7 +173,8 @@ namespace Main.Core.View.CompleteQuestionnaire
                         {
                             PublicKey = groups[i].PublicKey, 
                             GroupText = groups[i].Title, 
-                            Enabled = executor.Execute(groups[i])
+                            Enabled = executor.Execute(groups[i]),
+                            Description = groups[i].Description
                         };
                     this.Groups[i].Totals = this.CalcProgress(groups[i]);
                 }

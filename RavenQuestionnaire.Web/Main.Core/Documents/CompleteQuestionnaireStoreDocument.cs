@@ -204,6 +204,11 @@ namespace Main.Core.Documents
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets or sets the triggers.
         /// </summary>
         public List<Guid> Triggers
@@ -240,7 +245,8 @@ namespace Main.Core.Documents
                     TemplateId = doc.PublicKey, 
                     Title = doc.Title, 
                     Triggers = doc.Triggers, 
-                    ConditionExpression = doc.ConditionExpression
+                    ConditionExpression = doc.ConditionExpression,
+                    Description = doc.Description
                 };
             foreach (IComposite child in doc.Children)
             {
@@ -296,6 +302,7 @@ namespace Main.Core.Documents
                     Responsible = doc.Responsible, 
                     StatusChangeComment = doc.StatusChangeComment, 
                     PropogationPublicKey = doc.PropogationPublicKey, 
+                    Description = doc.Description
                 };
 
             result.Children.AddRange(doc.Children);

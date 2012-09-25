@@ -163,20 +163,17 @@ namespace RavenQuestionnaire.Web.Controllers
                     if (model.PublicKey == Guid.Empty)
                     {
                         Guid newItemKey = Guid.NewGuid();
-                        this.commandService.Execute(
-                            new AddGroupCommand(
-                                model.QuestionnaireKey, newItemKey, model.Title, model.Parent, model.ConditionExpression));
+                        this.commandService.Execute(new AddGroupCommand(model.QuestionnaireKey, newItemKey,
+                            model.Title, model.Parent, model.ConditionExpression, model.Description));
+
+
                     }
                     else
                     {
-                        this.commandService.Execute(
-                            new UpdateGroupCommand(
-                                model.Title, 
-                                model.Propagated, 
-                                model.QuestionnaireKey, 
-                                model.PublicKey, 
-                                GlobalInfo.GetCurrentUser(), 
-                                model.ConditionExpression));
+                        commandService.Execute(new UpdateGroupCommand(model.Title, model.Propagated,
+                             model.QuestionnaireKey, model.PublicKey, GlobalInfo.GetCurrentUser(), 
+                             model.ConditionExpression, model.Description));
+
                     }
                 }
                 catch (Exception e)

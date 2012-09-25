@@ -42,6 +42,7 @@ namespace Main.Core.View.Group
             this.AutoPropagate = group.Propagated == Propagate.AutoPropagated;
             this.PropogationKey = group.PropogationPublicKey ?? Guid.Empty;
             this.IsQuestionnaireActive = !SurveyStatus.IsStatusAllowCapiSync(doc.Status);
+            this.Description = group.Description;
             this.Children =
                 group.Children.OfType<ICompleteQuestion>().Select(
                     q => new CompleteQuestionView(doc, q) as ICompositeView).ToList();

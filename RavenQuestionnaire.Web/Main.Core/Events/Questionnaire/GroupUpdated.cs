@@ -54,6 +54,11 @@ namespace Main.Core.Events.Questionnaire
         /// </summary>
         public string QuestionnaireId { get; set; }
 
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
+
         #endregion
     }
 }

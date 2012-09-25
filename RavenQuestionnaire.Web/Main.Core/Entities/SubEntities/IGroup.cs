@@ -34,6 +34,11 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         string Title { get; set; }
 
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        string Description { get; set; }
+
         #endregion
 
         // bool Enabled { get; set; }

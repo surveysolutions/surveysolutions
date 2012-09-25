@@ -52,7 +52,8 @@ namespace Main.Core.Commands.Questionnaire.Group
             Guid questionnaireId, 
             Guid groupPublicKey, 
             UserLight executor, 
-            string conditionExpression)
+            string conditionExpression,
+            string description)
         {
             this.QuestionnaireId = questionnaireId;
             this.GroupText = groupText;
@@ -60,6 +61,7 @@ namespace Main.Core.Commands.Questionnaire.Group
             this.GroupPublicKey = groupPublicKey;
             this.ConditionExpression = conditionExpression;
             this.Executor = executor;
+            this.Description = description;
         }
 
         #endregion
@@ -96,6 +98,11 @@ namespace Main.Core.Commands.Questionnaire.Group
         /// </summary>
         [AggregateRootId]
         public Guid QuestionnaireId { get; set; }
+
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
 
         #endregion
     }

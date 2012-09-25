@@ -66,7 +66,7 @@ namespace Main.Core.Entities.SubEntities.Complete
             this.Propagated = group.Propagated;
             this.PublicKey = group.PublicKey;
             this.ConditionExpression = group.ConditionExpression;
-
+            this.Description = group.Description;
             for (int i = 0; i < group.Children.Count; i++)
             {
                 var question = group.Children[i] as ICompleteQuestion;
@@ -129,6 +129,11 @@ namespace Main.Core.Entities.SubEntities.Complete
         public bool Enabled { get; set; }
 
         /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets the parent.
         /// </summary>
         /// <exception cref="NotImplementedException">
@@ -189,7 +194,8 @@ namespace Main.Core.Entities.SubEntities.Complete
                     Title = doc.Title, 
                     Propagated = doc.Propagated, 
                     Triggers = doc.Triggers, 
-                    ConditionExpression = doc.ConditionExpression
+                    ConditionExpression = doc.ConditionExpression,
+                    Description = doc.Description
                 };
 
             /* foreach (IComposite question in doc.Children)

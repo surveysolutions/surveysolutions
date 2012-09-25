@@ -32,6 +32,7 @@ namespace Main.Core.Entities.SubEntities
             this.Children = new List<IComposite>();
             this.Triggers = new List<Guid>();
             this.ConditionExpression = string.Empty;
+            this.Description = string.Empty;
         }
 
         /// <summary>
@@ -64,6 +65,11 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets a value indicating whether enabled.
         /// </summary>
         public bool Enabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets the parent.

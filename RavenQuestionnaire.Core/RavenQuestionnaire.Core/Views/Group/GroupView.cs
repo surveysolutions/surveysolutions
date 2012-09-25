@@ -117,6 +117,11 @@ namespace RavenQuestionnaire.Core.Views.Group
         /// </summary>
         public string Trigger { get; set; }
 
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
+
         #endregion
     }
 
@@ -393,6 +398,7 @@ namespace RavenQuestionnaire.Core.Views.Group
             this.Questions = group.Children.OfType<IQuestion>().Select(q => new QuestionView(doc, q)).ToArray();
             this.Groups = group.Children.OfType<IGroup>().Select(g => new GroupView(doc, g)).ToArray();
             this.ConditionExpression = group.ConditionExpression;
+            this.Description = group.Description;
         }
 
         #endregion

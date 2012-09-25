@@ -20,6 +20,10 @@ using Ncqrs.Restoring.EventStapshoot;
 
 namespace Main.Core.EventHandlers
 {
+    using System;
+
+    using Main.Core.Events.Questionnaire;
+
     /// <summary>
     /// The complete questionnaire denormalizer.
     /// </summary>
