@@ -66,6 +66,11 @@ namespace Browsing.Common.Containers
             OnLoginClicked(sender, e);
         }
 
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            OnExitClicked(sender, e);
+        }
+
         protected virtual void OnSynchronizationClicked(object sender, System.EventArgs e)
         {
             this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is Synchronization));
@@ -95,6 +100,11 @@ namespace Browsing.Common.Containers
         {
             var settings = this.Holder.LoadedScreens.FirstOrDefault(s => s is Settings) as Settings;
             this.Holder.Redirect(settings);
+        }
+
+        protected virtual void OnExitClicked(object sender, EventArgs e)
+        {
+            System.Windows.Forms.Application.Exit();
         }
 
         protected override void OnParentChanged(EventArgs e)

@@ -34,10 +34,7 @@ namespace Common
             _process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
             //_process.OutputDataReceived += Write;
-
             _process.Start();
-
-
         }
 
         /* private void Write(object sender, DataReceivedEventArgs e)
