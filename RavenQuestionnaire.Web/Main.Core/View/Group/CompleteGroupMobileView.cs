@@ -2,9 +2,6 @@
 // <copyright file="CompleteGroupMobileView.cs" company="The World Bank">
 //   2012
 // </copyright>
-// <summary>
-//   The abstract group mobile view.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Main.Core.View.Group
@@ -17,11 +14,6 @@ namespace Main.Core.View.Group
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.View.Question;
-
-        /// <summary>
-        /// Gets or sets Description.
-        /// </summary>
-        public string Description { get; set; }
 
     /// <summary>
     /// The complete group mobile view.
@@ -102,6 +94,11 @@ namespace Main.Core.View.Group
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
 
         /// <summary>
         /// get or set questionnaire active status - active if allow to edit, not error or completed
