@@ -21,11 +21,12 @@
                         {
                             isDashboardEmpty = false;
 
-                        <li data-role="list-divider" data-theme="b" name="@group.SurveyId" class="divider"><a>
-                            @group.SurveyTitle's assigments <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
-                            @* @Html.ActionLink("New", "Participate", "Survey", new { id = group.SurveyId, mode = "Html5" }, new
+                            <li data-role="list-divider" data-theme="b" name="@group.SurveyId" class="divider">
+                                
+                                @*temporary opened for testing perpose*@
+                            @Html.ActionLink("1", "Participate", "Survey", new { id = group.SurveyId, mode = "Html5" }, new
                                                                                                         {
-                                                                                                            @class = "splited-button",
+                                                                                                            @class = "ui-link",
                                                                                                             data_inline = "true",
                                                                                                             data_icon = "plus",
                                                                                                             data_iconpos = "left",
@@ -34,9 +35,16 @@
                                                                                                             data_mini="true",
                                                                                                             rel = "external",
                                                                                                             disable_after_click = "true"
-                                                                                                        })*@
-                            @*  <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>*@
-                        </li>
+                                                                                                        })
+                                
+
+                                
+                                @group.SurveyTitle<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>
+                            
+                           
+
+                                @*  <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>*@
+                            </li>
 
 
                         <li data-theme="c" class="grid-header"><span class="ui-li-count ui-btn-up-c ui-btn-corner-all"

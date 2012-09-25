@@ -1,13 +1,11 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireAR.cs" company="">
-//   
+// <copyright file="QuestionnaireAR.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   Questionnaire Aggregate Root.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using Ncqrs.Restoring.EventStapshoot;
 
 namespace Main.Core.Domain
 {
@@ -22,8 +20,7 @@ namespace Main.Core.Domain
     using Main.Core.Events.Questionnaire;
 
     using Ncqrs;
-    using Ncqrs.Domain;
-    using Ncqrs.Eventing.Sourcing.Snapshotting;
+    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// Questionnaire Aggregate Root.
@@ -77,9 +74,16 @@ namespace Main.Core.Domain
         // Event handler for the NewQuestionnaireCreated event. This method
         // is automaticly wired as event handler based on convension.
         #region Public Methods and Operators
+
+        /// <summary>
+        /// The update questionnaire.
+        /// </summary>
+        /// <param name="title">
+        /// The title.
+        /// </param>
         public void UpdateQuestionnaire(string title)
         {
-            this.ApplyEvent(new QuestionnaireUpdated() {PublicKey = this.EventSourceId, Title = title});
+            this.ApplyEvent(new QuestionnaireUpdated() { PublicKey = this.EventSourceId, Title = title });
         }
 
         /// <summary>
@@ -125,39 +129,49 @@ namespace Main.Core.Domain
         // is automaticly wired as event handler based on convension.
 
         /// <summary>
-        /// Handler method for adding question.
+        /// The add question.
         /// </summary>
         /// <param name="publicKey">
-        /// The public Key.
+        /// The public key.
         /// </param>
         /// <param name="questionText">
+        /// The question text.
         /// </param>
         /// <param name="stataExportCaption">
+        /// The stata export caption.
         /// </param>
         /// <param name="questionType">
+        /// The question type.
         /// </param>
         /// <param name="conditionExpression">
+        /// The condition expression.
         /// </param>
         /// <param name="validationExpression">
+        /// The validation expression.
         /// </param>
         /// <param name="validationMessage">
-        /// The validation Message.
+        /// The validation message.
         /// </param>
         /// <param name="featured">
+        /// The featured.
         /// </param>
         /// <param name="mandatory">
         /// The mandatory.
         /// </param>
         /// <param name="answerOrder">
+        /// The answer order.
         /// </param>
         /// <param name="instructions">
+        /// The instructions.
         /// </param>
         /// <param name="groupPublicKey">
+        /// The group public key.
         /// </param>
         /// <param name="targetGroupKey">
-        /// The Target Group Key.
+        /// The target group key.
         /// </param>
         /// <param name="answers">
+        /// The answers.
         /// </param>
         public void AddQuestion(
             Guid publicKey, 
@@ -481,6 +495,13 @@ namespace Main.Core.Domain
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// The on questionnaire updated.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         protected void OnQuestionnaireUpdated(QuestionnaireUpdated e)
         {
             this.innerDocument.Title = e.Title;
@@ -617,6 +638,7 @@ namespace Main.Core.Domain
             this.innerDocument.Title = e.Title;
             this.innerDocument.PublicKey = e.PublicKey;
             this.innerDocument.CreationDate = e.CreationDate;
+            this.innerDocument.LastEntryDate = e.CreationDate;
         }
 
         /// <summary>
