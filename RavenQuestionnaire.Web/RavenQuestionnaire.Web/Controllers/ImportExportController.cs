@@ -128,10 +128,14 @@ namespace RavenQuestionnaire.Web.Controllers
             return this.RedirectToAction("Index", "Dashboard");
         }
 
-        public void DownloadAsync(Guid id)
+        /// <summary>
+        /// Started download templates
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        public void DownloadAsync(Guid? id)
         {
-            if (id == Guid.Empty)
-                throw new HttpException(404, "Invalid query string parameters.");
             AsyncManager.OutstandingOperations.Increment();
             AsyncQuestionnaireUpdater.Update(() =>
             {
@@ -143,13 +147,23 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     AsyncManager.Parameters["result"] = null;
                 }
+
                 AsyncManager.OutstandingOperations.Decrement();
             });
         }
-       
+
+        /// <summary>
+        /// finish download template
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// return file with templates
+        /// </returns>
         public FileResult DownloadCompleted(byte[] result)
         {
-            return File(result, "application/zip", "template.zip");
+            return this.File(result, "application/zip", "template.zip");
         }
 
 
