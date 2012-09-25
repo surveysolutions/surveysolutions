@@ -66,6 +66,31 @@ namespace RavenQuestionnaire.Web.Controllers
             return File(result, "application/zip", string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
         }
 
+        public void DownloadAsync(Guid id)
+        {
+            if (id == Guid.Empty)
+                throw new HttpException(404, "Invalid query string parameters.");
+            AsyncManager.OutstandingOperations.Increment();
+            AsyncQuestionnaireUpdater.Update(() =>
+            {
+                try
+                {
+                    AsyncManager.Parameters["result"] = exportimportEvents.ExportTemplate(id);
+                }
+                catch
+                {
+                    AsyncManager.Parameters["result"] = null;
+                }
+                AsyncManager.OutstandingOperations.Decrement();
+            });
+        }
+       
+        public FileResult DownloadCompleted(byte[] result)
+        {
+            return File(result, "application/zip", "template.zip");
+        }
+
+
         #endregion
     }
 }

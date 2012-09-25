@@ -94,6 +94,11 @@ namespace Main.Core.View.Group
         /// </summary>
         public Guid UniqueKey { get; set; }
 
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
+
         #endregion
     }
 
@@ -135,6 +140,7 @@ namespace Main.Core.View.Group
             this.Title = currentGroup.Title;
             this.Propagated = currentGroup.Propagated;
             this.Enabled = currentGroup.Enabled;
+            this.Description = currentGroup.Description;
             this.IsQuestionnaireActive = !SurveyStatus.IsStatusAllowCapiSync(doc.Status);
             if (currentGroup.Propagated != Propagate.None)
             {
