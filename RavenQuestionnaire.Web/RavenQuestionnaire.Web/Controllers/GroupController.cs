@@ -163,8 +163,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     if (model.PublicKey == Guid.Empty)
                     {
                         Guid newItemKey = Guid.NewGuid();
-                        this.commandService.Execute(
- commandService.Execute(new AddGroupCommand(model.QuestionnaireKey, newItemKey,
+                        this.commandService.Execute(new AddGroupCommand(model.QuestionnaireKey, newItemKey,
                             model.Title, model.Parent, model.ConditionExpression, model.Description));
 
 
@@ -172,9 +171,6 @@ namespace RavenQuestionnaire.Web.Controllers
                     else
                     {
                         commandService.Execute(new UpdateGroupCommand(model.Title, model.Propagated,
-                             model.QuestionnaireKey, model.PublicKey, GlobalInfo.GetCurrentUser(), 
-                             model.ConditionExpression, model.Description));
-
                              model.QuestionnaireKey, model.PublicKey, GlobalInfo.GetCurrentUser(), 
                              model.ConditionExpression, model.Description));
 
