@@ -45,6 +45,8 @@ namespace Main.Core.EventHandlers
         /// </summary>
         private readonly IDenormalizerStorage<QuestionnaireDocument> documentStorage;
 
+        private readonly ICompleteQuestionFactory questionFactory;
+
         #endregion
 
         #region Constructors and Destructors
@@ -55,9 +57,10 @@ namespace Main.Core.EventHandlers
         /// <param name="documentStorage">
         /// The document storage.
         /// </param>
-        public QuestionnaireDenormalizer(IDenormalizerStorage<QuestionnaireDocument> documentStorage)
+        public QuestionnaireDenormalizer(IDenormalizerStorage<QuestionnaireDocument> documentStorage, ICompleteQuestionFactory questionFactory)
         {
             this.documentStorage = documentStorage;
+            this.questionFactory = questionFactory;
         }
 
         #endregion
@@ -150,19 +153,8 @@ namespace Main.Core.EventHandlers
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
 
             AbstractQuestion result = new CompleteQuestionFactory().Create(evnt.Payload.QuestionType);
-            result.QuestionType = evnt.Payload.QuestionType;
-            result.QuestionText = evnt.Payload.QuestionText;
-            result.StataExportCaption = evnt.Payload.StataExportCaption;
-            result.ConditionExpression = evnt.Payload.ConditionExpression;
-            result.ValidationExpression = evnt.Payload.ValidationExpression;
-            result.ValidationMessage = evnt.Payload.ValidationMessage;
-            result.AnswerOrder = evnt.Payload.AnswerOrder;
-            result.Featured = evnt.Payload.Featured;
-            result.Mandatory = evnt.Payload.Mandatory;
-            result.Instructions = evnt.Payload.Instructions;
             result.PublicKey = evnt.Payload.PublicKey;
-            result.Triggers.Add(evnt.Payload.TargetGroupKey);
-            this.UpdateAnswerList(evnt.Payload.Answers, result);
+            this.questionFactory.UpdateQuestionByEvent(result,evnt.Payload);
 
             item.Add(result, evnt.Payload.GroupPublicKey);
         }
@@ -185,18 +177,7 @@ namespace Main.Core.EventHandlers
                 return;
             }
 
-            question.QuestionText = evnt.Payload.QuestionText;
-            question.StataExportCaption = evnt.Payload.StataExportCaption;
-            question.QuestionType = evnt.Payload.QuestionType;
-            this.UpdateAnswerList(evnt.Payload.Answers, question);
-            question.ConditionExpression = evnt.Payload.ConditionExpression;
-            question.ValidationExpression = evnt.Payload.ValidationExpression;
-            question.ValidationMessage = evnt.Payload.ValidationMessage;
-            question.Instructions = evnt.Payload.Instructions;
-            question.Featured = evnt.Payload.Featured;
-            question.Mandatory = evnt.Payload.Mandatory;
-            question.Triggers.Add(evnt.Payload.TargetGroupKey);
-            question.AnswerOrder = evnt.Payload.AnswerOrder;
+            this.questionFactory.UpdateQuestionByEvent(question, evnt.Payload);
         }
 
         /// <summary>
@@ -282,31 +263,6 @@ namespace Main.Core.EventHandlers
 
         #endregion
 
-        #region Methods
-
-        /// <summary>
-        /// The update answer list.
-        /// </summary>
-        /// <param name="answers">
-        /// The answers.
-        /// </param>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        protected void UpdateAnswerList(IEnumerable<Answer> answers, AbstractQuestion question)
-        {
-            List<Answer> enumerable = answers as List<Answer> ?? answers.ToList();
-            if (answers != null && enumerable.Any())
-            {
-                question.Children.Clear();
-                foreach (Answer answer in enumerable)
-                {
-                    question.Add(answer, question.PublicKey);
-                }
-            }
-        }
-
-        #endregion
 
         #region Implementation of IEventHandler<in QuestionnaireUpdated>
 

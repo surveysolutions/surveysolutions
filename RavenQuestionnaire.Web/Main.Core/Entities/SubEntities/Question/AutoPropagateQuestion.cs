@@ -26,6 +26,7 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </summary>
         public AutoPropagateQuestion()
         {
+            this.Triggers = new List<Guid>();
         }
 
         /// <summary>
@@ -37,6 +38,7 @@ namespace Main.Core.Entities.SubEntities.Question
         public AutoPropagateQuestion(string text)
             : base(text)
         {
+            this.Triggers = new List<Guid>();
         }
 
         #endregion
@@ -67,11 +69,6 @@ namespace Main.Core.Entities.SubEntities.Question
         /// Gets or sets the int attr.
         /// </summary>
         public int IntAttr { get; set; }
-
-        /// <summary>
-        /// Gets or sets the target group key.
-        /// </summary>
-        public Guid TargetGroupKey { get; set; }
 
         #endregion
 
@@ -166,6 +163,12 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             throw new CompositeException();
         }
+
+        #endregion
+
+        #region Implementation of ITriggerable
+
+        public List<Guid> Triggers { get; set; }
 
         #endregion
     }

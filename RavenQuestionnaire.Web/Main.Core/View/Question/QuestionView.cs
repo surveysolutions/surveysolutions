@@ -13,6 +13,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.Answer;
 using Main.Core.View.Card;
 
@@ -73,9 +74,10 @@ namespace Main.Core.View.Question
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
             this.Mandatory = doc.Mandatory;
-            if (doc.Triggers.Count > 0)
+            var autoQuestion = doc as IAutoPropagate;
+            if (autoQuestion != null)
             {
-                this.TargetGroupKey = doc.Triggers.First();
+                this.TargetGroupKey = autoQuestion.Triggers.First();
             }
         }
 

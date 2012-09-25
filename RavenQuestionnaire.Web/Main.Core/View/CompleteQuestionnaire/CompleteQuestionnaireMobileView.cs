@@ -194,9 +194,11 @@ namespace Main.Core.View.CompleteQuestionnaire
         private Counter CalcProgress(ICompleteGroup @group)
         {
             var total = new Counter();
+            List<ICompleteGroup> gruoSubGroup = @group.Children.OfType<ICompleteGroup>().ToList();
+            List<ICompleteQuestion> gruoSubQuestions = @group.Children.OfType<ICompleteQuestion>().ToList();
             if (@group.PropogationPublicKey.HasValue)
             {
-                total = total + this.CountQuestions(@group.Children.Select(q => q as ICompleteQuestion).ToList());
+                total = total + this.CountQuestions(gruoSubQuestions);
                 return total;
             }
 
@@ -206,8 +208,7 @@ namespace Main.Core.View.CompleteQuestionnaire
                 return total;
             }
 
-            List<ICompleteGroup> gruoSubGroup = @group.Children.OfType<ICompleteGroup>().ToList();
-            List<ICompleteQuestion> gruoSubQuestions = @group.Children.OfType<ICompleteQuestion>().ToList();
+           
             total = total + this.CountQuestions(gruoSubQuestions);
 
             foreach (ICompleteGroup g in gruoSubGroup)

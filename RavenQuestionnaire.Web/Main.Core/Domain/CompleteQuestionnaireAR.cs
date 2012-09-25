@@ -324,7 +324,8 @@ namespace Main.Core.Domain
         /// </exception>
         protected void AddRemovePropagatedGroup(ICompleteQuestion question, int count)
         {
-            if (!(question is IAutoPropagate))
+            var autoQuestion = question as IAutoPropagate;
+            if (autoQuestion==null)
             {
                 return;
             }
@@ -334,7 +335,7 @@ namespace Main.Core.Domain
                 throw new InvalidOperationException("count can't be bellow zero");
             }
 
-            foreach (Guid trigger in question.Triggers)
+            foreach (Guid trigger in autoQuestion.Triggers)
             {
                 this.MultiplyGroup(trigger, count);
             }

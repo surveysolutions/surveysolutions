@@ -6,6 +6,11 @@
 //   Defines the CompleteQuestionFactory type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System;
+using System.Linq;
+using Main.Core.Events.Questionnaire;
+
 namespace Main.Core.AbstractFactories
 {
     using System.Collections.Generic;
@@ -76,22 +81,14 @@ namespace Main.Core.AbstractFactories
             {
                 completeQuestion = new TextCompleteQuestion();
             }
-
+            
             completeQuestion.PublicKey = question.PublicKey;
-            completeQuestion.ConditionExpression = question.ConditionExpression;
-            completeQuestion.QuestionText = question.QuestionText;
-            completeQuestion.QuestionType = question.QuestionType;
-            completeQuestion.StataExportCaption = question.StataExportCaption;
-            completeQuestion.Instructions = question.Instructions;
+            UpdateQuestion(completeQuestion, question.QuestionType, question.QuestionText, question.StataExportCaption,
+                           question.ConditionExpression, question.ValidationExpression, question.ValidationMessage,
+                           question.AnswerOrder, question.Featured, question.Mandatory, question.Capital, question.Instructions,
+                           null);
             completeQuestion.Comments = question.Comments;
-            completeQuestion.Triggers = question.Triggers;
-            completeQuestion.ValidationExpression = question.ValidationExpression;
-            completeQuestion.ValidationMessage = question.ValidationMessage;
-            completeQuestion.AnswerOrder = question.AnswerOrder;
             completeQuestion.Valid = true;
-            completeQuestion.Featured = question.Featured;
-            completeQuestion.Capital = question.Capital;
-            completeQuestion.Mandatory = question.Mandatory;
 
             IEnumerable<IComposite> ansersToCopy =
                 new OrderStrategyFactory().Get(completeQuestion.AnswerOrder).Reorder(question.Children);
@@ -161,6 +158,66 @@ namespace Main.Core.AbstractFactories
             return new TextQuestion();
         }
 
+        public void UpdateQuestionByEvent(IQuestion question, NewQuestionAdded e)
+        {
+            UpdateQuestion(question, e.QuestionType, question.QuestionText, e.StataExportCaption, e.ConditionExpression,
+                          e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory,false,
+                          e.Instructions, new[] { e.TargetGroupKey });
+            this.UpdateAnswerList(e.Answers, question);
+        }
+
+        public void UpdateQuestionByEvent(IQuestion question, QuestionChanged e)
+        {
+            UpdateQuestion(question, e.QuestionType, question.QuestionText, e.StataExportCaption, e.ConditionExpression,
+                           e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory,false,
+                           e.Instructions, new[]{e.TargetGroupKey});
+            this.UpdateAnswerList(e.Answers, question);
+        }
+
         #endregion
+
+        protected void UpdateQuestion(IQuestion question, QuestionType questionType, string questionText,
+            string stataExportCaption, string conditionExpression, string validationExpression,
+            string validationMessage, Order answerOrder, bool featured, bool mandatory, bool capital, string instructions,  IEnumerable<Guid> triggers)
+        {
+            question.QuestionType = questionType;
+            question.QuestionText = questionText;
+            question.StataExportCaption = stataExportCaption;
+            question.ConditionExpression = conditionExpression;
+            question.ValidationExpression = validationExpression;
+            question.ValidationMessage = validationMessage;
+            question.AnswerOrder = answerOrder;
+            question.Featured = featured;
+            question.Mandatory = mandatory;
+            question.Instructions = instructions;
+            question.Capital = capital;
+           
+            var autoQuestion = question as IAutoPropagate;
+            if (autoQuestion != null && triggers!=null)
+                autoQuestion.Triggers = triggers.ToList();
+        }
+
+        /// <summary>
+        /// The update answer list.
+        /// </summary>
+        /// <param name="answers">
+        /// The answers.
+        /// </param>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        protected void UpdateAnswerList(IEnumerable<Answer> answers, IQuestion question)
+        {
+            List<Answer> enumerable = (answers?? new List<Answer>()).ToList();
+            if (answers != null && enumerable.Any())
+            {
+                question.Children.Clear();
+                foreach (Answer answer in enumerable)
+                {
+                    question.Add(answer, question.PublicKey);
+                }
+            }
+        }
+
     }
 }

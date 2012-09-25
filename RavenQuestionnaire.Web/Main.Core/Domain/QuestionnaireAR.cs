@@ -37,7 +37,7 @@ namespace Main.Core.Domain
         /// The _inner document.
         /// </summary>
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-
+        private readonly ICompleteQuestionFactory questionFactory;
         #endregion
 
         #region Constructors and Destructors
@@ -47,6 +47,7 @@ namespace Main.Core.Domain
         /// </summary>
         public QuestionnaireAR()
         {
+            questionFactory = new CompleteQuestionFactory();
         }
 
 
@@ -63,7 +64,7 @@ namespace Main.Core.Domain
             : base(questionnaireId)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
-
+            questionFactory=new CompleteQuestionFactory();
             // Apply a NewQuestionnaireCreated event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
@@ -589,19 +590,9 @@ namespace Main.Core.Domain
         protected void OnNewQuestionAdded(NewQuestionAdded e)
         {
             AbstractQuestion result = new CompleteQuestionFactory().Create(e.QuestionType);
-            result.QuestionType = e.QuestionType;
-            result.QuestionText = e.QuestionText;
-            result.StataExportCaption = e.StataExportCaption;
-            result.ConditionExpression = e.ConditionExpression;
-            result.ValidationExpression = e.ValidationExpression;
-            result.ValidationMessage = e.ValidationMessage;
-            result.AnswerOrder = e.AnswerOrder;
-            result.Featured = e.Featured;
-            result.Mandatory = e.Mandatory;
-            result.Instructions = e.Instructions;
+          
             result.PublicKey = e.PublicKey;
-            result.Triggers.Add(e.TargetGroupKey);
-            this.UpdateAnswerList(e.Answers, result);
+            this.questionFactory.UpdateQuestionByEvent(result, e);
 
             this.innerDocument.Add(result, e.GroupPublicKey);
         }
@@ -632,19 +623,7 @@ namespace Main.Core.Domain
             {
                 return;
             }
-
-            question.QuestionText = e.QuestionText;
-            question.StataExportCaption = e.StataExportCaption;
-            question.QuestionType = e.QuestionType;
-            this.UpdateAnswerList(e.Answers, question);
-            question.ConditionExpression = e.ConditionExpression;
-            question.ValidationExpression = e.ValidationExpression;
-            question.ValidationMessage = e.ValidationMessage;
-            question.Instructions = e.Instructions;
-            question.Featured = e.Featured;
-            question.Mandatory = e.Mandatory;
-            question.Triggers.Add(e.TargetGroupKey);
-            question.AnswerOrder = e.AnswerOrder;
+            this.questionFactory.UpdateQuestionByEvent(question, e);
         }
 
         /// <summary>
@@ -667,28 +646,6 @@ namespace Main.Core.Domain
         protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
         {
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
-        }
-
-        /// <summary>
-        /// The update answer list.
-        /// </summary>
-        /// <param name="answers">
-        /// The answers.
-        /// </param>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        protected void UpdateAnswerList(IEnumerable<Answer> answers, AbstractQuestion question)
-        {
-            //// List<Answer> enumerable = answers as List<Answer> ?? answers.ToList();
-            if (answers != null && answers.Any())
-            {
-                question.Children.Clear();
-                foreach (Answer answer in answers)
-                {
-                    question.Add(answer, question.PublicKey);
-                }
-            }
         }
 
         #endregion

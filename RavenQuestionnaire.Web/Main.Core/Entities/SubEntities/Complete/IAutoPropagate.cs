@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Entities.Observers;
+
 namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;
@@ -14,15 +16,7 @@ namespace Main.Core.Entities.SubEntities.Complete
     /// <summary>
     /// The AutoPropagate interface.
     /// </summary>
-    public interface IAutoPropagate
+    public interface IAutoPropagate : ITriggerable
     {
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the target group key.
-        /// </summary>
-        Guid TargetGroupKey { get; set; }
-
-        #endregion
     }
 }
