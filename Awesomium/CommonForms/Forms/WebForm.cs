@@ -73,7 +73,6 @@ namespace Browsing.Common.Forms
                 {
                     MessageBox.Show("Error on Engine Run. " + ex.Message);
                 }
-
             }
 
             //engine warm up
