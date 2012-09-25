@@ -228,6 +228,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CollectionController.cs" />
+    <Compile Include="Controllers\FileBrowseItemClient.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Injections\MainCoreRegistry.cs" />
@@ -283,6 +284,7 @@
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.client.js" />
+    <Compile Include="Models\ViewDataUploadFilesResult.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
