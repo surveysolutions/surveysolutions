@@ -18,7 +18,10 @@ namespace Questionnaire.Core.Web.Export
     using Ionic.Zip;
     using Ionic.Zlib;
 
+    using Main.Core.Documents;
     using Main.Core.Events;
+
+    using Ncqrs.Restoring.EventStapshoot;
 
     using Newtonsoft.Json;
 
@@ -55,7 +58,7 @@ namespace Questionnaire.Core.Web.Export
         /// </param>
         /// <returns>
         /// </returns>
-        byte[] ExportTemplate(Guid id);
+        byte[] ExportTemplate(Guid? id);
 
         #endregion
     }
@@ -114,7 +117,7 @@ namespace Questionnaire.Core.Web.Export
         /// <returns>
         /// Zip archive contains all event connected with template questionnaire
         /// </returns>
-        public byte[] ExportTemplate(Guid templateGuid)
+        public byte[] ExportTemplate(Guid? templateGuid)
         {
             return this.ExportTemplateInternal(templateGuid);
         }
@@ -168,9 +171,7 @@ namespace Questionnaire.Core.Web.Export
         protected byte[] ExportInternal(Guid clientGuid, Func<IEnumerable<AggregateRootEvent>> action)
         {
             var data = new ZipFileData { ClientGuid = clientGuid, Events = action() };
-
             var outputStream = new MemoryStream();
-
             using (var zip = new ZipFile())
             {
                 var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
@@ -180,20 +181,27 @@ namespace Questionnaire.Core.Web.Export
             }
 
             outputStream.Seek(0, SeekOrigin.Begin);
-
             return outputStream.ToArray();
         }
 
-        protected byte[] ExportTemplateInternal(Guid templateGuid)
+        protected byte[] ExportTemplateInternal(Guid? templateGuid)
         {
-            var events = this.synchronizer.ReadEvents().Where(t => t.EventSourceId == templateGuid).ToList();
-            
+            var archive = new List<AggregateRootEvent>();
+            var events = this.synchronizer.ReadEvents().ToList();
+            if (templateGuid != null)
+                archive.Add(events.Where(t =>
+                    {
+                        var payload = ((t.Payload as SnapshootLoaded).Template).Payload;
+                        return payload != null && (payload as QuestionnaireDocument).PublicKey == templateGuid;
+                    }).FirstOrDefault());
+            else archive = events;
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {
                 var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
                 zip.CompressionLevel = CompressionLevel.None;
-                zip.AddEntry("template.txt", JsonConvert.SerializeObject(events, Formatting.Indented, settings));
+                string name = string.Format("template{0}.txt", templateGuid == null ? "s" : string.Empty);
+                zip.AddEntry(name, JsonConvert.SerializeObject(archive, Formatting.Indented, settings));
                 zip.Save(outputStream);
             }
             outputStream.Seek(0, SeekOrigin.Begin);
