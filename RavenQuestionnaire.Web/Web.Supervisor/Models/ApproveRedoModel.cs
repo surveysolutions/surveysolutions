@@ -39,7 +39,7 @@ namespace Web.Supervisor.Models
         public CompleteQuestionnaireStatisticView Statistic { get; set; }
 
         /// <summary>
-        /// Gets or sets StatusId.
+        /// Gets or sets Statuses.
         /// </summary>
         public Guid StatusId { get; set; }
     }

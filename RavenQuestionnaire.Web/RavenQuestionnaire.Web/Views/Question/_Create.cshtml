@@ -6,7 +6,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script charset="utf-8" type="text/javascript" language="javascript">
+
+
     $(function () {
+       
         var questionType = $("[customName=questionName] option:selected").text();
         if (questionType == "SingleOption" || questionType == "DropDownList" || questionType == "MultyOption") {
             $("#fromDB").removeAttr('style');
@@ -17,8 +20,10 @@
             if (questionType == "SingleOption" || questionType == "DropDownList" || questionType == "MultyOption") {
                 $("#fromDB").removeAttr('style');
             }
+           
             else
                 $("#fromDB").css('display', 'none');
+            if (questionType == "AutoPropagate") $("#apguid").show(); else $("#apguid").hide();
         });
     });
 </script>
@@ -57,7 +62,7 @@ else
             </div>
             @if (Model.PublicKey == Guid.Empty || Model.TargetGroupKey!=Guid.Empty) 
             {
-            <div class="control-group">
+            <div class="control-group" id="apguid" style="display: none;">
                 <label class="control-label"> Propagateble GUID</label>
                 <div class="controls">
                     @Html.EditorFor(model => Model.TargetGroupKey)

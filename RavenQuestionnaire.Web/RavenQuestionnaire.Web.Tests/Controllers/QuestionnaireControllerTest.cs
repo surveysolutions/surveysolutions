@@ -153,21 +153,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Assert.AreEqual(output, result.ViewData.Model);
         }
 
-        /// <summary>
-        /// The when_ get questionnaire is executed model is returned.
-        /// </summary>
-        [Test]
-        public void When_GetQuestionnaireIsExecutedModelIsReturned()
-        {
-            var input = new QuestionnaireBrowseInputModel();
-            var output = new QuestionnaireBrowseView(0, 10, 0, new QuestionnaireBrowseItem[0], string.Empty);
-            this.ViewRepositoryMock.Setup(x => x.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input)).
-                Returns(output);
-
-            ViewResult result = this.Controller.ItemList(input);
-            Assert.AreEqual(output, result.ViewData.Model);
-        }
-
         #endregion
     }
 }

@@ -46,9 +46,9 @@ namespace Browsing.Common.Containers
             // 
             this.tableLayoutPanel1.ColumnCount = 5;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.00001F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 205F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.99999F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 205F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanel1.Controls.Add(this.pnlHolder, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.btnSyncronization, 1, 3);
@@ -71,9 +71,9 @@ namespace Browsing.Common.Containers
             this.pnlHolder.Controls.Add(this.btnLogout);
             this.pnlHolder.Controls.Add(this.btnLogin);
             this.pnlHolder.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlHolder.Location = new System.Drawing.Point(190, 56);
+            this.pnlHolder.Location = new System.Drawing.Point(187, 56);
             this.pnlHolder.Name = "pnlHolder";
-            this.pnlHolder.Size = new System.Drawing.Size(194, 214);
+            this.pnlHolder.Size = new System.Drawing.Size(199, 214);
             this.pnlHolder.TabIndex = 0;
             // 
             // btnLogout
@@ -87,7 +87,7 @@ namespace Browsing.Common.Containers
             this.btnLogout.Margin = new System.Windows.Forms.Padding(0);
             this.btnLogout.Name = "btnLogout";
             this.btnLogout.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.btnLogout.Size = new System.Drawing.Size(194, 214);
+            this.btnLogout.Size = new System.Drawing.Size(199, 214);
             this.btnLogout.TabIndex = 4;
             this.btnLogout.Text = "Logout";
             this.btnLogout.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -106,7 +106,7 @@ namespace Browsing.Common.Containers
             this.btnLogin.Margin = new System.Windows.Forms.Padding(0);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.btnLogin.Size = new System.Drawing.Size(194, 214);
+            this.btnLogin.Size = new System.Drawing.Size(199, 214);
             this.btnLogin.TabIndex = 0;
             this.btnLogin.Text = "Login";
             this.btnLogin.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -120,11 +120,11 @@ namespace Browsing.Common.Containers
             this.btnSyncronization.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSyncronization.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSyncronization.Image = ((System.Drawing.Image)(resources.GetObject("btnSyncronization.Image")));
-            this.btnSyncronization.Location = new System.Drawing.Point(187, 326);
+            this.btnSyncronization.Location = new System.Drawing.Point(184, 326);
             this.btnSyncronization.Margin = new System.Windows.Forms.Padding(0);
             this.btnSyncronization.Name = "btnSyncronization";
             this.btnSyncronization.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.btnSyncronization.Size = new System.Drawing.Size(200, 220);
+            this.btnSyncronization.Size = new System.Drawing.Size(205, 220);
             this.btnSyncronization.TabIndex = 2;
             this.btnSyncronization.Text = "Synchronization";
             this.btnSyncronization.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -138,11 +138,11 @@ namespace Browsing.Common.Containers
             this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSettings.Image = ((System.Drawing.Image)(resources.GetObject("btnSettings.Image")));
-            this.btnSettings.Location = new System.Drawing.Point(636, 326);
+            this.btnSettings.Location = new System.Drawing.Point(634, 326);
             this.btnSettings.Margin = new System.Windows.Forms.Padding(0);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.btnSettings.Size = new System.Drawing.Size(200, 220);
+            this.btnSettings.Size = new System.Drawing.Size(205, 220);
             this.btnSettings.TabIndex = 3;
             this.btnSettings.Text = "Settings";
             this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -156,11 +156,11 @@ namespace Browsing.Common.Containers
             this.btnDashboard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDashboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDashboard.Image = ((System.Drawing.Image)(resources.GetObject("btnDashboard.Image")));
-            this.btnDashboard.Location = new System.Drawing.Point(636, 53);
+            this.btnDashboard.Location = new System.Drawing.Point(634, 53);
             this.btnDashboard.Margin = new System.Windows.Forms.Padding(0);
             this.btnDashboard.Name = "btnDashboard";
             this.btnDashboard.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.btnDashboard.Size = new System.Drawing.Size(200, 220);
+            this.btnDashboard.Size = new System.Drawing.Size(205, 220);
             this.btnDashboard.TabIndex = 1;
             this.btnDashboard.Text = "Dashboard";
             this.btnDashboard.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -169,7 +169,7 @@ namespace Browsing.Common.Containers
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(0);

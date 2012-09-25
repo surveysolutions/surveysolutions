@@ -11,22 +11,33 @@
         {
 
             var status = SurveyStatus.IsValidStatus(it.Value);
+            var value = Model.Headers.GetItemValue(collect, it.Key);
 
             if (status != null)
             {
+                
             <td>
-                @Html.ActionLink(Model.Headers.GetItemValue(collect, it.Key), "Assigments",
-                                       new
-                                           {
-                                               id = collect.Id,
-                                               status = status.PublicId
-                                           })
+                @if (value != "0")
+                {
+                    @Html.ActionLink(value, "Assigments", new { id = collect.Id, status = status.PublicId })
+                }
+                else
+                {
+                    <text>@value</text>
+                }
             </td>
             }
             else
             {
             <td>
-                @Html.ActionLink(Model.Headers.GetItemValue(collect, it.Key), "Assigments", new { id = collect.Id, isNotAssigned = it.Key == "Total" ? string.Empty : "true" })
+                @if (value != "0")
+                {
+                    @Html.ActionLink(value, "Assigments", new { id = collect.Id, isNotAssigned = it.Key == "Total" ? string.Empty : "true" })
+                }
+                else
+                {
+                    <text>@value</text>
+                }
             </td>
             }
 
