@@ -246,6 +246,15 @@ namespace Main.Core.Domain
                 answerString = string.Join(", ", answerList.ToArray());
             }
 
+            ////try to fix empty fields
+            if (question is IAutoPropagate)
+            {
+                if (string.IsNullOrWhiteSpace(completeAnswerValue))
+                {
+                    completeAnswerValue = "0";
+                }
+            }
+
             // Apply a NewGroupAdded event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
