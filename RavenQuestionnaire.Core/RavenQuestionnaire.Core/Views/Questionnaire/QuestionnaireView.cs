@@ -110,7 +110,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         /// <param name="doc">
         /// The doc.
         /// </param>
-        public AbstractQuestionnaireView(IQuestionnaireDocument doc)
+        public AbstractQuestionnaireView(IQuestionnaireDocument doc) : base(doc)
         {
             this.Children = new List<ICompositeView>();
             this.Questions = new TQuestion[0];
