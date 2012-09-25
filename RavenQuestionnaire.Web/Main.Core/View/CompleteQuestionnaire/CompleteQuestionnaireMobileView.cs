@@ -41,7 +41,7 @@ namespace Main.Core.View.CompleteQuestionnaire
             this.LastEntryDate = doc.LastEntryDate;
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
-
+            
             // CollectAll(doc, screenPublicKey, currentGroup as CompleteGroup, navigation);
         }
 
@@ -150,7 +150,7 @@ namespace Main.Core.View.CompleteQuestionnaire
 
                 this.Groups[0] = new CompleteGroupHeaders
                     {
-                       PublicKey = Guid.Empty, GroupText = "Main", Totals = this.CountQuestions(questions) 
+                       PublicKey = Guid.Empty, GroupText = "Main", Totals = this.CountQuestions(questions)
                     };
                 for (int i = 1; i <= groups.Count; i++)
                 {

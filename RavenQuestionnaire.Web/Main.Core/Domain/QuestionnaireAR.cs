@@ -101,7 +101,7 @@ namespace Main.Core.Domain
         /// The condition expression.
         /// </param>
         public void AddGroup(
-            Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression)
+            Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression, string description)
         {
             //// performe checka before event raising
 
@@ -117,7 +117,8 @@ namespace Main.Core.Domain
                         GroupText = text, 
                         ParentGroupPublicKey = parentGroupKey, 
                         Paropagateble = propagateble, 
-                        ConditionExpression = conditionExpression
+                        ConditionExpression = conditionExpression,
+                        Description = description
                     });
         }
 
@@ -411,7 +412,8 @@ namespace Main.Core.Domain
             Propagate propagateble, 
             Guid groupPublicKey, 
             UserLight executor, 
-            string conditionExpression)
+            string conditionExpression,
+            string description)
         {
             var group = this.innerDocument.Find<Group>(groupPublicKey);
             if (group == null)
@@ -426,7 +428,8 @@ namespace Main.Core.Domain
                         GroupText = groupText, 
                         Propagateble = propagateble, 
                         Executor = executor, 
-                        ConditionExpression = conditionExpression
+                        ConditionExpression = conditionExpression,
+                        Description = description
                     });
         }
 
@@ -513,6 +516,7 @@ namespace Main.Core.Domain
                 //// if(e.Triggers!=null)
                 // group.Triggers = e.Triggers;
                 group.ConditionExpression = e.ConditionExpression;
+                group.Description = e.Description;
                 group.Update(e.GroupText);
             }
         }
@@ -576,6 +580,7 @@ namespace Main.Core.Domain
             group.Title = e.GroupText;
             group.Propagated = e.Paropagateble;
             group.PublicKey = e.PublicKey;
+            group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
             this.innerDocument.Add(group, e.ParentGroupPublicKey);
         }

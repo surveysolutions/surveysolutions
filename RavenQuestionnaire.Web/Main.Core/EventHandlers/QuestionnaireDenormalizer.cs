@@ -110,6 +110,7 @@ namespace Main.Core.EventHandlers
             group.Propagated = evnt.Payload.Paropagateble;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
+            group.Description = evnt.Payload.Description;
             item.Add(group, evnt.Payload.ParentGroupPublicKey);
         }
 
@@ -275,6 +276,7 @@ namespace Main.Core.EventHandlers
 
                 ////if(e.Triggers!=null)
                 // group.Triggers = e.Triggers;
+                group.Description = evnt.Payload.Description;
                 group.ConditionExpression = evnt.Payload.ConditionExpression;
                 group.Update(evnt.Payload.GroupText);
             }

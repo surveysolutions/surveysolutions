@@ -20,7 +20,12 @@
 <div id="group-@(Model.PublicKey)" class="display-group">
 <input type="checkbox" id="@Model.PublicKey.ToString()" style="position: absolute; z-index: -999; right: 50px;"/>
     <div class="group-header"  data-toggle="collapse" data-target=".group-body-@(Model.PublicKey)" >
-        <h3>@Html.DisplayFor(modelItem => Model.Title)</h3>
+        <h3>@Html.DisplayFor(modelItem => Model.Title)            
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <div>Description: @Model.Description</div>
+                }            
+        </h3>
         <div class="btn-group">
             @Html.ActionLink("Add Question", "Create", "Question", new { id = Model.QuestionnaireKey, groupPublicKey = Model.PublicKey }, new { @class = "btn btn-success btn-mini" })
             @if (@Model.Propagated == Propagate.None)

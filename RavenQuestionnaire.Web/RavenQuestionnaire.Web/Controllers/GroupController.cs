@@ -53,13 +53,13 @@ namespace RavenQuestionnaire.Web.Controllers
                     {
                         var newItemKey = Guid.NewGuid();
                         commandService.Execute(new AddGroupCommand(model.QuestionnaireKey, newItemKey,
-                            model.Title, model.Parent, model.ConditionExpression));
+                            model.Title, model.Parent, model.ConditionExpression, model.Description));
                     }
                     else
                     {
                         commandService.Execute(new UpdateGroupCommand(model.Title, model.Propagated,
-                                                                      model.QuestionnaireKey,
-                                                                      model.PublicKey, GlobalInfo.GetCurrentUser(), model.ConditionExpression));
+                             model.QuestionnaireKey, model.PublicKey, GlobalInfo.GetCurrentUser(), 
+                             model.ConditionExpression, model.Description));
                     }
                 }
                 catch (Exception e)

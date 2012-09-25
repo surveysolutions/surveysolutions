@@ -11,6 +11,7 @@ namespace Questionnaire.Core.Web.Export
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using System.Web;
 
@@ -46,6 +47,15 @@ namespace Questionnaire.Core.Web.Export
         /// The upload file.
         /// </param>
         void Import(HttpPostedFileBase uploadFile);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        byte[] ExportTemplate(Guid id);
 
         #endregion
     }
@@ -93,6 +103,20 @@ namespace Questionnaire.Core.Web.Export
         public byte[] Export(Guid clientGuid)
         {
             return this.ExportInternal(clientGuid, this.synchronizer.ReadEvents);
+        }
+
+        /// <summary>
+        /// Export template
+        /// </summary>
+        /// <param name="templateGuid">
+        /// The template guid.
+        /// </param>
+        /// <returns>
+        /// Zip archive contains all event connected with template questionnaire
+        /// </returns>
+        public byte[] ExportTemplate(Guid templateGuid)
+        {
+            return this.ExportTemplateInternal(templateGuid);
         }
 
         /// <summary>
@@ -157,6 +181,22 @@ namespace Questionnaire.Core.Web.Export
 
             outputStream.Seek(0, SeekOrigin.Begin);
 
+            return outputStream.ToArray();
+        }
+
+        protected byte[] ExportTemplateInternal(Guid templateGuid)
+        {
+            var events = this.synchronizer.ReadEvents().Where(t => t.EventSourceId == templateGuid).ToList();
+            
+            var outputStream = new MemoryStream();
+            using (var zip = new ZipFile())
+            {
+                var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+                zip.CompressionLevel = CompressionLevel.None;
+                zip.AddEntry("template.txt", JsonConvert.SerializeObject(events, Formatting.Indented, settings));
+                zip.Save(outputStream);
+            }
+            outputStream.Seek(0, SeekOrigin.Begin);
             return outputStream.ToArray();
         }
 

@@ -43,14 +43,18 @@ namespace Main.Core.Commands.Questionnaire.Group
         /// <param name="conditionExpression">
         /// The condition expression.
         /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
         public AddGroupCommand(
-            Guid questionnaireId, Guid publicKey, string text, Guid? parentGroupKey, string conditionExpression)
+            Guid questionnaireId, Guid publicKey, string text, Guid? parentGroupKey, string conditionExpression, string description)
         {
             this.QuestionnaireId = questionnaireId;
             this.PublicKey = publicKey;
             this.Text = text;
             this.ConditionExpression = conditionExpression;
             this.ParentGroupKey = parentGroupKey;
+            this.Description = description;
         }
 
         #endregion
@@ -87,6 +91,11 @@ namespace Main.Core.Commands.Questionnaire.Group
         /// Gets or sets the text.
         /// </summary>
         public string Text { get; set; }
+
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
 
         #endregion
     }
