@@ -143,7 +143,6 @@ namespace Main.Core.View.CompleteQuestionnaire
         {
             List<ICompleteQuestion> questions = doc.Children.OfType<ICompleteQuestion>().ToList();
             List<ICompleteGroup> groups = doc.Children.OfType<ICompleteGroup>().ToList();
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
             if (questions.Count > 0)
             {
                 this.Groups = new CompleteGroupHeaders[groups.Count + 1];
@@ -158,7 +157,7 @@ namespace Main.Core.View.CompleteQuestionnaire
                         {
                             PublicKey = groups[i - 1].PublicKey, 
                             GroupText = groups[i - 1].Title, 
-                            Enabled = executor.Execute(groups[i - 1]),
+                            Enabled = true,
                             Description = groups[i - 1].Description
                         };
                     this.Groups[i].Totals = this.CalcProgress(groups[i - 1]);
@@ -172,8 +171,8 @@ namespace Main.Core.View.CompleteQuestionnaire
                     this.Groups[i] = new CompleteGroupHeaders
                         {
                             PublicKey = groups[i].PublicKey, 
-                            GroupText = groups[i].Title, 
-                            Enabled = executor.Execute(groups[i]),
+                            GroupText = groups[i].Title,
+                            Enabled = true,
                             Description = groups[i].Description
                         };
                     this.Groups[i].Totals = this.CalcProgress(groups[i]);

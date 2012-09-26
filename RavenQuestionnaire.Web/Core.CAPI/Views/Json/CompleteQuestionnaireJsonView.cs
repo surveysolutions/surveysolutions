@@ -124,14 +124,13 @@ namespace Core.CAPI.Views.Json
             List<ICompleteGroup> groups = doc.Children.OfType<ICompleteGroup>().ToList();
 
             this.Menu = new CompleteGroupHeaders[groups.Count];
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
             for (int i = 0; i < groups.Count; i++)
             {
                 this.Menu[i] = new CompleteGroupHeaders
                     {
                         PublicKey = groups[i].PublicKey, 
                         GroupText = groups[i].Title, 
-                        Enabled = executor.Execute(groups[i])
+                        Enabled = true
                     };
                 this.Menu[i].Totals = this.CalcProgress(groups[i]);
             }
