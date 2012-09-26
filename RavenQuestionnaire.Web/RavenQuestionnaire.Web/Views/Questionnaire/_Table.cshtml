@@ -23,7 +23,7 @@
             @Html.ActionLink("Export", "Export", new { id = item.Id }, new { @class = "btn small btn-primary" })
         </td>
         <td class="buttons">    
-            @Html.ActionLink("Download", "Download", "ImportExport", new { id = item.Id }, new { @class = "btn small btn-primary" })
+            @Html.ActionLink("Download", "Download", "ImportExport", new { id = item.Id, clientGuid = "00000000-0000-0000-0000-000000000000" }, new { @class = "btn small btn-primary" })
         </td>
     </tr>
 }

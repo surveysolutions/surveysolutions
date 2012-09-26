@@ -58,7 +58,7 @@ namespace Questionnaire.Core.Web.Export
         /// </param>
         /// <returns>
         /// </returns>
-        byte[] ExportTemplate(Guid? id);
+        byte[] ExportTemplate(Guid? id, Guid clientGuid);
 
         #endregion
     }
@@ -117,9 +117,9 @@ namespace Questionnaire.Core.Web.Export
         /// <returns>
         /// Zip archive contains all event connected with template questionnaire
         /// </returns>
-        public byte[] ExportTemplate(Guid? templateGuid)
+        public byte[] ExportTemplate(Guid? templateGuid, Guid clientGuid)
         {
-            return this.ExportTemplateInternal(templateGuid);
+            return this.ExportTemplateInternal(templateGuid, clientGuid);
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace Questionnaire.Core.Web.Export
             return outputStream.ToArray();
         }
 
-        protected byte[] ExportTemplateInternal(Guid? templateGuid)
+        protected byte[] ExportTemplateInternal(Guid? templateGuid, Guid clientGuid)
         {
             var archive = new List<AggregateRootEvent>();
             var events = this.synchronizer.ReadEvents().ToList();
@@ -195,13 +195,14 @@ namespace Questionnaire.Core.Web.Export
                         return payload != null && (payload as QuestionnaireDocument).PublicKey == templateGuid;
                     }).FirstOrDefault());
             else archive = events;
+            var data = new ZipFileData { ClientGuid = clientGuid, Events = archive };
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {
                 var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
                 zip.CompressionLevel = CompressionLevel.None;
                 string name = string.Format("template{0}.txt", templateGuid == null ? "s" : string.Empty);
-                zip.AddEntry(name, JsonConvert.SerializeObject(archive, Formatting.Indented, settings));
+                zip.AddEntry(name, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
                 zip.Save(outputStream);
             }
             outputStream.Seek(0, SeekOrigin.Begin);
