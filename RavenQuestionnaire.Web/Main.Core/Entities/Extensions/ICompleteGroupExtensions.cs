@@ -22,6 +22,10 @@ namespace Main.Core.Entities.Extensions
     public static class ICompleteGroupExtensions
     {
         #region Public Methods and Operators
+        public static bool IsGroupPropagationTemplate(this ICompleteGroup entity)
+        {
+            return entity.Propagated != Propagate.None && !entity.PropogationPublicKey.HasValue;
+        }
 
         /// <summary>
         /// The find group by key.

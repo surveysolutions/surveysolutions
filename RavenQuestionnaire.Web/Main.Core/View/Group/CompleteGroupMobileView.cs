@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Entities.Extensions;
+
 namespace Main.Core.View.Group
 {
     using System.Collections.Generic;
@@ -72,7 +74,7 @@ namespace Main.Core.View.Group
                     else
                     {
                         var g = composite as CompleteGroup;
-                        if (g.Propagated == Propagate.None || !g.PropogationPublicKey.HasValue)
+                        if (g.IsGroupPropagationTemplate())
                         {
                             this.Children.Add(new CompleteGroupMobileView(doc, g, new ScreenNavigation()));
                         }

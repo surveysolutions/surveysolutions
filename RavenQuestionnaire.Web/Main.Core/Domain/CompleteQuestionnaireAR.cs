@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Entities.SubEntities.Complete.Question;
+
 namespace Main.Core.Domain
 {
     using System;
@@ -242,16 +244,32 @@ namespace Main.Core.Domain
 
                 answerString = string.Join(", ", answerList.ToArray());
             }
-
-            ////try to fix empty fields
+            ////handle group propagation
+            ////to store events with guids
             if (question is IAutoPropagate)
             {
-                if (string.IsNullOrWhiteSpace(completeAnswerValue))
+                int count;
+                if (!int.TryParse(completeAnswerValue, out count))
                 {
-                    completeAnswerValue = "0";
+                    return;
                 }
-            }
 
+                ////try to fix empty fields
+                if (question is IAutoPropagate)
+                {
+                    if (string.IsNullOrWhiteSpace(completeAnswerValue))
+                    {
+                        completeAnswerValue = "0";
+                    }
+                }
+
+                if (count < 0)
+                {
+                    throw new InvalidOperationException("count can't be bellow zero");
+                }
+
+                this.AddRemovePropagatedGroup(question, count);
+            }
             // Apply a NewGroupAdded event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
@@ -270,23 +288,7 @@ namespace Main.Core.Domain
                         AnswerString = answerString
                     });
 
-            ////handle group propagation
-            ////to store events with guids
-            if (question is IAutoPropagate)
-            {
-                int count;
-                if (!int.TryParse(completeAnswerValue, out count))
-                {
-                    return;
-                }
-
-                if (count < 0)
-                {
-                    throw new InvalidOperationException("count can't be bellow zero");
-                }
-
-                this.AddRemovePropagatedGroup(question, count);
-            }
+           
         }
 
         /// <summary>
@@ -330,8 +332,9 @@ namespace Main.Core.Domain
         /// </exception>
         protected void AddRemovePropagatedGroup(ICompleteQuestion question, int count)
         {
-            var autoQuestion = question as IAutoPropagate;
-            if (autoQuestion==null)
+            var autoQuestion = question as AutoPropagateCompleteQuestion;
+            var currentAnswer = autoQuestion.Answer ?? 0;
+            if (autoQuestion == null)
             {
                 return;
             }
@@ -341,9 +344,49 @@ namespace Main.Core.Domain
                 throw new InvalidOperationException("count can't be bellow zero");
             }
 
-            foreach (Guid trigger in autoQuestion.Triggers)
+            if (currentAnswer == count)
             {
-                this.MultiplyGroup(trigger, count);
+                return;
+            }
+
+            if (currentAnswer < count)
+            {
+                for (int i = 0; i < count - currentAnswer; i++)
+                {
+                    var propagationKey = Guid.NewGuid();
+                    foreach (Guid trigger in autoQuestion.Triggers)
+                    {
+                        this.ApplyEvent(
+                            new PropagatableGroupAdded
+                                {
+                                    CompletedQuestionnaireId = this.doc.PublicKey,
+                                    PublicKey = trigger,
+                                    PropagationKey = propagationKey
+                                });
+                    }
+                }
+            }
+            else
+            {
+                for (int i = count; i < currentAnswer; i++)
+                {
+                    foreach (Guid trigger in autoQuestion.Triggers)
+                    {
+                        Guid trigger1 = trigger;
+                        var lastGroup =
+                            this.doc.Find<ICompleteGroup>(
+                                g => g.PublicKey == trigger1 && g.PropogationPublicKey.HasValue).LastOrDefault();
+                        if (lastGroup == null)
+                            break;
+                        this.ApplyEvent(
+                            new PropagatableGroupDeleted
+                                {
+                                    CompletedQuestionnaireId = this.doc.PublicKey,
+                                    PublicKey = trigger,
+                                    PropagationKey = lastGroup.PropogationPublicKey.Value
+                                });
+                    }
+                }
             }
         }
 
@@ -378,58 +421,7 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new QuestionnaireStatusChanged { CompletedQuestionnaireId = this.doc.PublicKey, Status = status });
         }
-
-        /// <summary>
-        /// The multiply group.
-        /// </summary>
-        /// <param name="groupKey">
-        /// The group key.
-        /// </param>
-        /// <param name="count">
-        /// The count.
-        /// </param>
-        protected void MultiplyGroup(Guid groupKey, int count)
-        {
-            List<ICompleteGroup> groups =
-                this.doc.Find<ICompleteGroup>(g => g.PublicKey == groupKey && g.PropogationPublicKey.HasValue).ToList();
-
-            if (groups.Count == count)
-            {
-                return;
-            }
-
-            if (groups.Count < count)
-            {
-                for (int i = 0; i < count - groups.Count; i++)
-                {
-                    this.ApplyEvent(
-                        new PropagatableGroupAdded
-                            {
-                                CompletedQuestionnaireId = this.doc.PublicKey, 
-                                PublicKey = groupKey, 
-                                PropagationKey = Guid.NewGuid()
-                            });
-                }
-            }
-            else
-            {
-                for (int i = count; i < groups.Count; i++)
-                {
-                    if (!groups[i].PropogationPublicKey.HasValue)
-                    {
-                        continue;
-                    }
-
-                    this.ApplyEvent(
-                        new PropagatableGroupDeleted
-                            {
-                                CompletedQuestionnaireId = this.doc.PublicKey, 
-                                PublicKey = groupKey, 
-                                PropagationKey = groups[i].PropogationPublicKey.Value
-                            });
-                }
-            }
-        }
+        
 
         // Event handler for the AnswerSet event. This method
         // is automaticly wired as event handler based on convension.

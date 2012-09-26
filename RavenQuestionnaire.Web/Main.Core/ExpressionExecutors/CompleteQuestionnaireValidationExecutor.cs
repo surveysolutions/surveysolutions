@@ -119,8 +119,13 @@ namespace Main.Core.ExpressionExecutors
                     }
 
                     Guid? propagationKey = question.PropogationPublicKey;
-                    object value = this.hash[nameGuid, propagationKey].GetAnswerObject();
-                    args.Result = value;
+                    var targetQuestion = this.hash[nameGuid, propagationKey];
+                    if (!targetQuestion.Enabled)
+                    {
+                        args.Result = null;
+                        return;
+                    }
+                    args.Result = this.hash[nameGuid, propagationKey].GetAnswerObject();
                 };
             bool result = false;
             try

@@ -60,10 +60,10 @@ namespace Main.Core.View.CompleteQuestionnaire
         /// </returns>
         public CompleteGroupMobileView Load(CompleteQuestionnaireViewInputModel input)
         {
+            CompleteGroupMobileView result = null;
             if (input.CompleteQuestionnaireId != Guid.Empty)
             {
                 CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.CompleteQuestionnaireId);
-                var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
                 ICompleteGroup group = null;
                 var rout = new List<NodeWithLevel>();
                 if (input.CurrentGroupPublicKey.HasValue)
@@ -92,16 +92,23 @@ namespace Main.Core.View.CompleteQuestionnaire
                 {
                     group = doc.Children.OfType<ICompleteGroup>().First();
                 }
-
+                var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
+                executor.Execute(group);
+                var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
+                validator.Execute(group);
                 if (input.PropagationKey.HasValue)
                 {
-                    return new PropagatedGroupMobileView(doc, group, this.CompileNavigation(rout, group, executor));
+                    result = new PropagatedGroupMobileView(doc, group, this.CompileNavigation(rout, group));
                 }
+                else
+                {
 
-                return new CompleteGroupMobileView(doc, (CompleteGroup)group, this.CompileNavigation(rout, group, executor));
+                    result = new CompleteGroupMobileView(doc, (CompleteGroup) group, this.CompileNavigation(rout, group));
+                }
+              
             }
-
-            return null;
+           
+            return result;
         }
 
         #endregion
@@ -123,7 +130,7 @@ namespace Main.Core.View.CompleteQuestionnaire
         /// <returns>
         /// The RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile.ScreenNavigation.
         /// </returns>
-        protected ScreenNavigation CompileNavigation(List<NodeWithLevel> rout, ICompleteGroup group, CompleteQuestionnaireConditionExecutor executor)
+        protected ScreenNavigation CompileNavigation(List<NodeWithLevel> rout, ICompleteGroup group)
         {
             var navigation = new ScreenNavigation();
             navigation.PublicKey = group.PublicKey;
@@ -138,10 +145,7 @@ namespace Main.Core.View.CompleteQuestionnaire
                 groupNeighbors =
                     parent.Group.Children.OfType<ICompleteGroup>().Where(
                         g => g.PublicKey == group.PublicKey && g.PropogationPublicKey.HasValue).ToList();
-                foreach (var groupNeighbor in groupNeighbors)
-                {
-                    groupNeighbor.Enabled = executor.Execute(groupNeighbor);
-                }
+               
 
                 groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
                 indexOfTarget = groupNeighbors.FindIndex(0, g => g.PropogationPublicKey == group.PropogationPublicKey);
@@ -150,10 +154,7 @@ namespace Main.Core.View.CompleteQuestionnaire
             {
                 groupNeighbors =
                     parent.Group.Children.OfType<ICompleteGroup>().Where(g => !g.PropogationPublicKey.HasValue).ToList();
-                foreach (var groupNeighbor in groupNeighbors)
-                {
-                    groupNeighbor.Enabled = executor.Execute(groupNeighbor);
-                }
+               
 
                 groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
                 indexOfTarget = groupNeighbors.FindIndex(0, g => g.PublicKey == group.PublicKey);
