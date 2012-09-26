@@ -75,7 +75,7 @@ namespace Main.Core.View.Question
             this.Featured = doc.Featured;
             this.Mandatory = doc.Mandatory;
             var autoQuestion = doc as IAutoPropagate;
-            if (autoQuestion != null)
+            if (autoQuestion != null && autoQuestion.Triggers.Any())
             {
                 this.TargetGroupKey = autoQuestion.Triggers.First();
             }
