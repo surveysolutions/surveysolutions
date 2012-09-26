@@ -37,6 +37,7 @@ namespace Main.Core.View.Group
             /* if (!group.PropogationPublicKey.HasValue)
                  throw new ArgumentException("Group is not propagated");*/
             this.PublicKey = group.PublicKey;
+            this.Enabled = group.Enabled;
             this.QuestionnairePublicKey = doc.PublicKey;
             this.Title = group.Title;
             this.AutoPropagate = group.Propagated == Propagate.AutoPropagated;

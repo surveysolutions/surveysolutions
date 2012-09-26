@@ -68,8 +68,13 @@ namespace Main.Core.ExpressionExecutors
                 {
                     Guid nameGuid = Guid.Parse(name);
                     Guid? propagationKey = question.PropogationPublicKey;
-                    object value = this.hash[nameGuid, propagationKey].GetAnswerObject();
-                    args.Result = value;
+                    var targetQuestion = this.hash[nameGuid, propagationKey];
+                    if(!targetQuestion.Enabled)
+                    {
+                        args.Result = null;
+                        return;
+                    }
+                    args.Result = targetQuestion.GetAnswerObject();
                 };
             bool result = false;
             try
@@ -160,7 +165,7 @@ namespace Main.Core.ExpressionExecutors
                 }
 
                 var gr = child as ICompleteGroup;
-                if (gr != null)
+                if (gr != null && !gr.IsGroupPropagationTemplate())
                 {
                     gr.Enabled = result && Execute(gr);
                 }

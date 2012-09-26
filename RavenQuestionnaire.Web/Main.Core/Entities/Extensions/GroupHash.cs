@@ -291,7 +291,7 @@ namespace Main.Core.Entities.Extensions
             if (question == null)
             {
                 var group = node.Node as ICompleteGroup;
-                if (group.Propagated != Propagate.None && !group.PropogationPublicKey.HasValue)
+                if (group.IsGroupPropagationTemplate())
                 {
                     return;
                 }

@@ -188,7 +188,7 @@ namespace Core.CAPI.Views.Json
             while (queue.Count != 0)
             {
                 ICompleteGroup item = queue.Dequeue();
-                if (!item.PropogationPublicKey.HasValue && item.Propagated == Propagate.Propagated)
+                if (item.IsGroupPropagationTemplate())
                 {
                     continue;
                 }

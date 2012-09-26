@@ -92,7 +92,10 @@ namespace Main.Core.View.CompleteQuestionnaire
                 {
                     group = doc.Children.OfType<ICompleteGroup>().First();
                 }
-
+                var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
+                executor.Execute(group);
+                var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
+                validator.Execute(group);
                 if (input.PropagationKey.HasValue)
                 {
                     result = new PropagatedGroupMobileView(doc, group, this.CompileNavigation(rout, group));
@@ -102,10 +105,7 @@ namespace Main.Core.View.CompleteQuestionnaire
 
                     result = new CompleteGroupMobileView(doc, (CompleteGroup) group, this.CompileNavigation(rout, group));
                 }
-                var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
-                executor.Execute(group);
-                var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
-                validator.Execute(group);
+              
             }
            
             return result;
