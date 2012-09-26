@@ -254,14 +254,14 @@ namespace Main.Core.Domain
                     return;
                 }
 
-            ////try to fix empty fields
-            if (question is IAutoPropagate)
-            {
-                if (string.IsNullOrWhiteSpace(completeAnswerValue))
+                ////try to fix empty fields
+                if (question is IAutoPropagate)
                 {
-                    completeAnswerValue = "0";
+                    if (string.IsNullOrWhiteSpace(completeAnswerValue))
+                    {
+                        completeAnswerValue = "0";
+                    }
                 }
-            }
 
                 if (count < 0)
                 {
@@ -333,6 +333,7 @@ namespace Main.Core.Domain
         protected void AddRemovePropagatedGroup(ICompleteQuestion question, int count)
         {
             var autoQuestion = question as AutoPropagateCompleteQuestion;
+            var currentAnswer = autoQuestion.Answer ?? 0;
             if (autoQuestion == null)
             {
                 return;
@@ -343,14 +344,14 @@ namespace Main.Core.Domain
                 throw new InvalidOperationException("count can't be bellow zero");
             }
 
-            if (autoQuestion.Answer == count)
+            if (currentAnswer == count)
             {
                 return;
             }
 
-            if (autoQuestion.Answer < count)
+            if (currentAnswer < count)
             {
-                for (int i = 0; i < count - autoQuestion.Answer; i++)
+                for (int i = 0; i < count - currentAnswer; i++)
                 {
                     var propagationKey = Guid.NewGuid();
                     foreach (Guid trigger in autoQuestion.Triggers)
@@ -367,7 +368,7 @@ namespace Main.Core.Domain
             }
             else
             {
-                for (int i = count; i < autoQuestion.Answer; i++)
+                for (int i = count; i < currentAnswer; i++)
                 {
                     foreach (Guid trigger in autoQuestion.Triggers)
                     {
