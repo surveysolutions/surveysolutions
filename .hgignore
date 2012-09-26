@@ -219,6 +219,26 @@ RavenQuestionnaire.Web/Core.Supervisor/obj/*
 RavenQuestionnaire.Web/Core.HQ/bin/*
 RavenQuestionnaire.Web/Core.HQ/obj/*
 RavenQuestionnaire.Web/HQ.Core/obj/*
+Externals/Framework/src/Ncqrs.Tests/obj/*
+Mono/_ReSharper*
+Mono/AndroidApp/bin/*
+Mono/AndroidApp/obj/*
+Mono/AndroidAntlr3.Runtime/bin/*
+Mono/AndroidAntlr3.Runtime/obj/*
+Mono/AndroidNcalc.Tests/bin/*
+Mono/AndroidNcalc.Tests/obj/*
+Mono/AndroidNCalc/bin/*
+Mono/AndroidNCalc/obj/*
+Mono/Antlr3.Runtime/_ReSharper*
+Mono/Antlr3.Runtime/bin/*
+Mono/Antlr3.Runtime/obj/*
+*.suo
+Mono/NUnitLite.MonoDroid.Example/bin/*
+Mono/NUnitLite.MonoDroid.Example/obj/*
+Mono/NUnitLite.MonoDroid.Runner/bin/*
+Mono/NUnitLite.MonoDroid.Runner/obj/*
+Mono/NUnitLite.MonoDroid/bin/*
+Mono/NUnitLite.MonoDroid/obj/*
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
