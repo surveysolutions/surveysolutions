@@ -20,7 +20,7 @@
                 href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = Model.PublicKey, propagationKey=Model.PropogationKey })">
                     <i class="icon-chevron-right"></i>
                     <span>@ViewBag.GroupIndex)</span> @Model.Title
-                    <p  id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
+                    <p  id="featured-title-@(Model.PropogationKey)"></p>
                 </a>
             </div>
             <div class="ui-block-b">
@@ -44,7 +44,7 @@ else
     <li data-role="fieldcontain" id="@groupKey" ><a  id="screen-ref-@(Model.PropogationKey)" class="nav-link propagated-screen-link" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = Model.PublicKey, propagationKey=Model.PropogationKey })">
                                                     <i class="icon-chevron-right"></i>
                                                     <span>@ViewBag.GroupIndex)</span> @Model.Title
-                                                     <p id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
+                                                     <p id="featured-title-@(Model.PropogationKey)"></p>
                                                  </a>
         <script type="text/javascript">
          $('#screen-ref-@(Model.PropogationKey)').click(function() {
