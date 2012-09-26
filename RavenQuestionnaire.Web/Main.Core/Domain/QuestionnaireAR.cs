@@ -1,13 +1,11 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireAR.cs" company="">
-//   
+// <copyright file="QuestionnaireAR.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   Questionnaire Aggregate Root.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using Ncqrs.Restoring.EventStapshoot;
 
 namespace Main.Core.Domain
 {
@@ -22,8 +20,7 @@ namespace Main.Core.Domain
     using Main.Core.Events.Questionnaire;
 
     using Ncqrs;
-    using Ncqrs.Domain;
-    using Ncqrs.Eventing.Sourcing.Snapshotting;
+    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// Questionnaire Aggregate Root.
@@ -37,7 +34,7 @@ namespace Main.Core.Domain
         /// The _inner document.
         /// </summary>
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-
+        private readonly ICompleteQuestionFactory questionFactory;
         #endregion
 
         #region Constructors and Destructors
@@ -47,6 +44,7 @@ namespace Main.Core.Domain
         /// </summary>
         public QuestionnaireAR()
         {
+            questionFactory = new CompleteQuestionFactory();
         }
 
 
@@ -63,7 +61,7 @@ namespace Main.Core.Domain
             : base(questionnaireId)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
-
+            questionFactory=new CompleteQuestionFactory();
             // Apply a NewQuestionnaireCreated event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
@@ -77,9 +75,16 @@ namespace Main.Core.Domain
         // Event handler for the NewQuestionnaireCreated event. This method
         // is automaticly wired as event handler based on convension.
         #region Public Methods and Operators
+
+        /// <summary>
+        /// The update questionnaire.
+        /// </summary>
+        /// <param name="title">
+        /// The title.
+        /// </param>
         public void UpdateQuestionnaire(string title)
         {
-            this.ApplyEvent(new QuestionnaireUpdated() {PublicKey = this.EventSourceId, Title = title});
+            this.ApplyEvent(new QuestionnaireUpdated() { PublicKey = this.EventSourceId, Title = title });
         }
 
         /// <summary>
@@ -126,39 +131,49 @@ namespace Main.Core.Domain
         // is automaticly wired as event handler based on convension.
 
         /// <summary>
-        /// Handler method for adding question.
+        /// The add question.
         /// </summary>
         /// <param name="publicKey">
-        /// The public Key.
+        /// The public key.
         /// </param>
         /// <param name="questionText">
+        /// The question text.
         /// </param>
         /// <param name="stataExportCaption">
+        /// The stata export caption.
         /// </param>
         /// <param name="questionType">
+        /// The question type.
         /// </param>
         /// <param name="conditionExpression">
+        /// The condition expression.
         /// </param>
         /// <param name="validationExpression">
+        /// The validation expression.
         /// </param>
         /// <param name="validationMessage">
-        /// The validation Message.
+        /// The validation message.
         /// </param>
         /// <param name="featured">
+        /// The featured.
         /// </param>
         /// <param name="mandatory">
         /// The mandatory.
         /// </param>
         /// <param name="answerOrder">
+        /// The answer order.
         /// </param>
         /// <param name="instructions">
+        /// The instructions.
         /// </param>
         /// <param name="groupPublicKey">
+        /// The group public key.
         /// </param>
         /// <param name="targetGroupKey">
-        /// The Target Group Key.
+        /// The target group key.
         /// </param>
         /// <param name="answers">
+        /// The answers.
         /// </param>
         public void AddQuestion(
             Guid publicKey, 
@@ -485,6 +500,13 @@ namespace Main.Core.Domain
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// The on questionnaire updated.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         protected void OnQuestionnaireUpdated(QuestionnaireUpdated e)
         {
             this.innerDocument.Title = e.Title;
@@ -595,19 +617,9 @@ namespace Main.Core.Domain
         protected void OnNewQuestionAdded(NewQuestionAdded e)
         {
             AbstractQuestion result = new CompleteQuestionFactory().Create(e.QuestionType);
-            result.QuestionType = e.QuestionType;
-            result.QuestionText = e.QuestionText;
-            result.StataExportCaption = e.StataExportCaption;
-            result.ConditionExpression = e.ConditionExpression;
-            result.ValidationExpression = e.ValidationExpression;
-            result.ValidationMessage = e.ValidationMessage;
-            result.AnswerOrder = e.AnswerOrder;
-            result.Featured = e.Featured;
-            result.Mandatory = e.Mandatory;
-            result.Instructions = e.Instructions;
+          
             result.PublicKey = e.PublicKey;
-            result.Triggers.Add(e.TargetGroupKey);
-            this.UpdateAnswerList(e.Answers, result);
+            this.questionFactory.UpdateQuestionByEvent(result, e);
 
             this.innerDocument.Add(result, e.GroupPublicKey);
         }
@@ -623,6 +635,7 @@ namespace Main.Core.Domain
             this.innerDocument.Title = e.Title;
             this.innerDocument.PublicKey = e.PublicKey;
             this.innerDocument.CreationDate = e.CreationDate;
+            this.innerDocument.LastEntryDate = e.CreationDate;
         }
 
         /// <summary>
@@ -638,19 +651,7 @@ namespace Main.Core.Domain
             {
                 return;
             }
-
-            question.QuestionText = e.QuestionText;
-            question.StataExportCaption = e.StataExportCaption;
-            question.QuestionType = e.QuestionType;
-            this.UpdateAnswerList(e.Answers, question);
-            question.ConditionExpression = e.ConditionExpression;
-            question.ValidationExpression = e.ValidationExpression;
-            question.ValidationMessage = e.ValidationMessage;
-            question.Instructions = e.Instructions;
-            question.Featured = e.Featured;
-            question.Mandatory = e.Mandatory;
-            question.Triggers.Add(e.TargetGroupKey);
-            question.AnswerOrder = e.AnswerOrder;
+            this.questionFactory.UpdateQuestionByEvent(question, e);
         }
 
         /// <summary>
@@ -673,28 +674,6 @@ namespace Main.Core.Domain
         protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
         {
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
-        }
-
-        /// <summary>
-        /// The update answer list.
-        /// </summary>
-        /// <param name="answers">
-        /// The answers.
-        /// </param>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        protected void UpdateAnswerList(IEnumerable<Answer> answers, AbstractQuestion question)
-        {
-            //// List<Answer> enumerable = answers as List<Answer> ?? answers.ToList();
-            if (answers != null && answers.Any())
-            {
-                question.Children.Clear();
-                foreach (Answer answer in answers)
-                {
-                    question.Add(answer, question.PublicKey);
-                }
-            }
         }
 
         #endregion

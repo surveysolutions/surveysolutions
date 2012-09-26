@@ -50,7 +50,7 @@ namespace Core.Supervisor.Views.Survey
             foreach (var header in headers)
             {
                 var question = it.FeaturedQuestions.FirstOrDefault(t => t.PublicKey == header.Key);
-                this.FeatureadValue.Add(header.Key, question != null ? question.Answer.ToString() : string.Empty);
+                this.FeatureadValue.Add(header.Key, question == null ? string.Empty : question.Answer.ToString());
             }
         }
         

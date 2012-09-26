@@ -31,7 +31,6 @@ namespace Main.Core.Entities.SubEntities.Complete
             this.Enabled = true;
             this.Valid = true;
             this.Cards = new List<Image>();
-            this.Triggers = new List<Guid>();
             this.AnswerDate = DateTime.Now;
         }
 
@@ -144,11 +143,6 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// Gets or sets the stata export caption.
         /// </summary>
         public string StataExportCaption { get; set; }
-
-        /// <summary>
-        /// Gets or sets the triggers.
-        /// </summary>
-        public List<Guid> Triggers { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether valid.

@@ -6,6 +6,9 @@
 //   Defines the ICompleteQuestionFactory type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Events.Questionnaire;
+
 namespace Main.Core.AbstractFactories
 {
     using Main.Core.Entities.SubEntities;
@@ -39,6 +42,9 @@ namespace Main.Core.AbstractFactories
         /// The Main.Core.Entities.SubEntities.AbstractQuestion.
         /// </returns>
         AbstractQuestion Create(QuestionType type);
+
+        void UpdateQuestionByEvent(IQuestion question, NewQuestionAdded e);
+        void UpdateQuestionByEvent(IQuestion question, QuestionChanged e);
 
         #endregion
 

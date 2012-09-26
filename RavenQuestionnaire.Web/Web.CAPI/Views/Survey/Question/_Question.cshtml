@@ -2,11 +2,8 @@
 @model Main.Core.View.Question.CompleteQuestionView
 @{
     ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
-
-
-    var questionId = "question" + Model.PublicKey;
 }
-<div class=" question" id="@questionId">
+<div class=" question" id="q[@(Model.PublicKey)]">
     
     <a href="#error-@(Model.PublicKey)" class="error"  data-inline="true" data-iconpos="notext" data-icon="alert" 
         data-theme="a" data-role="button" data-inline="true"  data-rel="popup"></a>

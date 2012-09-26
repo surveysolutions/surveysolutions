@@ -16,7 +16,7 @@ namespace Main.Core.Entities.SubEntities
     /// <summary>
     /// The Question interface.
     /// </summary>
-    public interface IQuestion : IComposite, ITriggerable
+    public interface IQuestion : IComposite
     {
         #region Public Properties
 

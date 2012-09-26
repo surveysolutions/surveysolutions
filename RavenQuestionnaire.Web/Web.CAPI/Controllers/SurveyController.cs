@@ -349,6 +349,11 @@ namespace Web.CAPI.Controllers
             Guid newQuestionnairePublicKey = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
+
+            //asssign to executor
+            commandService.Execute(
+                new ChangeAssignmentCommand(newQuestionnairePublicKey, this._globalProvider.GetCurrentUser()));
+            
             return this.RedirectToAction("Index", new { id = newQuestionnairePublicKey });
         }
 

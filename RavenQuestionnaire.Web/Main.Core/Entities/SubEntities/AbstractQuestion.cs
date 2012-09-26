@@ -22,19 +22,6 @@ namespace Main.Core.Entities.SubEntities
     /// </summary>
     public abstract class AbstractQuestion : IQuestion
     {
-        #region Fields
-
-        /// <summary>
-        /// The parser.
-        /// </summary>
-        private readonly QuestionnaireParametersParser parser = new QuestionnaireParametersParser();
-
-        /// <summary>
-        /// The condition expression.
-        /// </summary>
-        private string conditionExpression;
-
-        #endregion
 
         #region Constructors and Destructors
 
@@ -45,7 +32,6 @@ namespace Main.Core.Entities.SubEntities
         {
             // PublicKey = Guid.NewGuid();
             this.Cards = new List<Image>();
-            this.Triggers = new List<Guid>();
         }
 
         /// <summary>
@@ -92,19 +78,7 @@ namespace Main.Core.Entities.SubEntities
         /// <summary>
         /// Gets or sets the condition expression.
         /// </summary>
-        public string ConditionExpression
-        {
-            get
-            {
-                return this.conditionExpression;
-            }
-
-            set
-            {
-                this.conditionExpression = value;
-                this.Triggers = this.parser.Execute(value);
-            }
-        }
+        public string ConditionExpression { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether featured.
@@ -154,11 +128,6 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the stata export caption.
         /// </summary>
         public string StataExportCaption { get; set; }
-
-        /// <summary>
-        /// Gets or sets the triggers.
-        /// </summary>
-        public List<Guid> Triggers { get; set; }
 
         /// <summary>
         /// Gets or sets the validation expression.

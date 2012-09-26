@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Ncqrs.Restoring.EventStapshoot;
-
 namespace Main.Core.Domain
 {
     using System;
@@ -23,8 +21,7 @@ namespace Main.Core.Domain
     using Main.Core.Events.Questionnaire.Completed;
 
     using Ncqrs;
-    using Ncqrs.Domain;
-    using Ncqrs.Eventing.Sourcing.Snapshotting;
+    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// CompleteQuestionnaire Aggregate Root.
@@ -246,6 +243,15 @@ namespace Main.Core.Domain
                 answerString = string.Join(", ", answerList.ToArray());
             }
 
+            ////try to fix empty fields
+            if (question is IAutoPropagate)
+            {
+                if (string.IsNullOrWhiteSpace(completeAnswerValue))
+                {
+                    completeAnswerValue = "0";
+                }
+            }
+
             // Apply a NewGroupAdded event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
@@ -324,7 +330,8 @@ namespace Main.Core.Domain
         /// </exception>
         protected void AddRemovePropagatedGroup(ICompleteQuestion question, int count)
         {
-            if (!(question is IAutoPropagate))
+            var autoQuestion = question as IAutoPropagate;
+            if (autoQuestion==null)
             {
                 return;
             }
@@ -334,7 +341,7 @@ namespace Main.Core.Domain
                 throw new InvalidOperationException("count can't be bellow zero");
             }
 
-            foreach (Guid trigger in question.Triggers)
+            foreach (Guid trigger in autoQuestion.Triggers)
             {
                 this.MultiplyGroup(trigger, count);
             }
@@ -426,6 +433,7 @@ namespace Main.Core.Domain
 
         // Event handler for the AnswerSet event. This method
         // is automaticly wired as event handler based on convension.
+
         /// <summary>
         /// The on answer set.
         /// </summary>
@@ -439,7 +447,7 @@ namespace Main.Core.Domain
             ICompleteQuestion question = questionWrapper.Question;
             if (question == null)
             {
-                return;
+                return; ////is it good or exception is better decision
             }
 
             question.SetAnswer(e.AnswerKeys, e.AnswerValue);
@@ -495,10 +503,10 @@ namespace Main.Core.Domain
         }
 
         /// <summary>
-        /// On Propagatable Group Added.
+        /// The on propagatable group added.
         /// </summary>
-        /// The e.
         /// <param name="e">
+        /// The e.
         /// </param>
         protected void OnPropagatableGroupAdded(PropagatableGroupAdded e)
         {
