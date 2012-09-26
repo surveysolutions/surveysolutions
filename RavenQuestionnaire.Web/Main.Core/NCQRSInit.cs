@@ -21,11 +21,11 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-using Ncqrs.Eventing.Storage.RavenDB;
-using Ncqrs.Restoring.EventStapshoot;
-using Ncqrs.Restoring.EventStapshoot.EventStores.RavenDB;
+//using Ncqrs.Eventing.Storage.RavenDB;
+//using Ncqrs.Restoring.EventStapshoot;
+//using Ncqrs.Restoring.EventStapshoot.EventStores.RavenDB;
 using Ninject;
-using Raven.Client.Document;
+//using Raven.Client.Document;
 
 namespace Main.Core
 {
@@ -44,7 +44,7 @@ namespace Main.Core
         /// </param>
         public static void Init(IKernel kernel)
         {
-            NcqrsEnvironment.SetDefault(InitializeEventStore(kernel.Get<DocumentStore>()));
+            //NcqrsEnvironment.SetDefault(InitializeEventStore(kernel.Get<DocumentStore>()));
 
             NcqrsEnvironment.SetDefault(InitializeCommandService());
 
@@ -64,37 +64,37 @@ namespace Main.Core
         /// </summary>
         /// <exception cref="Exception">
         /// </exception>
-        public static void RebuildReadLayer(DocumentStore store)
-        {
-            var myEventBus = NcqrsEnvironment.Get<IEventBus>();
-            if (myEventBus == null)
-            {
-                throw new Exception("IEventBus is not properly initialized.");
-            }
+		//public static void RebuildReadLayer(DocumentStore store)
+		//{
+		//    var myEventBus = NcqrsEnvironment.Get<IEventBus>();
+		//    if (myEventBus == null)
+		//    {
+		//        throw new Exception("IEventBus is not properly initialized.");
+		//    }
 
-            var myEventStore = NcqrsEnvironment.Get<IEventStore>() as RavenDBEventStore; // as MsSqlServerEventStore;
+		//    var myEventStore = NcqrsEnvironment.Get<IEventStore>() as RavenDBEventStore; // as MsSqlServerEventStore;
 
-            if (myEventStore == null)
-            {
-                throw new Exception("IEventStore is not correct.");
-            }
-            store.CreateIndex();
-            var myEvents = store.GetAllEvents();
-            myEventBus.Publish(myEvents);
-            /* foreach (IGrouping<Guid, CommittedEvent> eventsByAggregateRoot in myEvents.GroupBy(x => x.EventSourceId))
-        {
-            myEventBus.Publish(ExcludeHistoryBefaourSnapshoot(eventsByAggregateRoot));
-        }*/
-        }
-        private static IEnumerable<CommittedEvent> ExcludeHistoryBefaourSnapshoot(IEnumerable<CommittedEvent> events)
-        {
-            var lastSnapshoot = events.LastOrDefault(x => x.Payload is SnapshootLoaded);
-            if (lastSnapshoot == null)
-                return events;
-            else
-                return events.SkipWhile(x => x != lastSnapshoot);
+		//    if (myEventStore == null)
+		//    {
+		//        throw new Exception("IEventStore is not correct.");
+		//    }
+		//    store.CreateIndex();
+		//    var myEvents = store.GetAllEvents();
+		//    myEventBus.Publish(myEvents);
+		//    /* foreach (IGrouping<Guid, CommittedEvent> eventsByAggregateRoot in myEvents.GroupBy(x => x.EventSourceId))
+		//{
+		//    myEventBus.Publish(ExcludeHistoryBefaourSnapshoot(eventsByAggregateRoot));
+		//}*/
+		//}
+		//private static IEnumerable<CommittedEvent> ExcludeHistoryBefaourSnapshoot(IEnumerable<CommittedEvent> events)
+		//{
+		//    var lastSnapshoot = events.LastOrDefault(x => x.Payload is SnapshootLoaded);
+		//    if (lastSnapshoot == null)
+		//        return events;
+		//    else
+		//        return events.SkipWhile(x => x != lastSnapshoot);
 
-        }
+		//}
 
         #endregion
 
@@ -157,11 +157,11 @@ namespace Main.Core
         /// <returns>
         /// The Ncqrs.Eventing.Storage.IEventStore.
         /// </returns>
-        private static IEventStore InitializeEventStore(DocumentStore store)
-        {
-            var eventStore = new RavenDBEventStore(store);
-            return eventStore;
-        }
+		//private static IEventStore InitializeEventStore(DocumentStore store)
+		//{
+		//    var eventStore = new RavenDBEventStore(store);
+		//    return eventStore;
+		//}
 
         /// <summary>
         /// The is i command interface.

@@ -8,3 +8,11 @@ C:\Temp\NCQRS_1\ncqrs-ncqrs-ed26668\Framework\src\Ncqrs.Tests\obj\Debug\Ncqrs.Te
 C:\Temp\NCQRS_1\ncqrs-ncqrs-ed26668\Framework\src\Ncqrs.Tests\obj\Debug\Ncqrs.Tests.pdb
 C:\Work\WB\MIS-DEV-clone\Externals\Framework\src\Ncqrs.Tests\obj\Debug\Ncqrs.Tests.csprojResolveAssemblyReference.cache
 C:\Work\WB\MIS-DEV-clone\Externals\Framework\src\Ncqrs.Tests\obj\Debug\Ncqrs.Tests.dll
+D:\washington\sources\Externals\lib\Debug\Ncqrs.Tests\CodeContracts\Ncqrs.Tests.noReferenceAssembly
+D:\washington\sources\Externals\lib\Debug\Ncqrs.Tests\Ncqrs.Tests.dll.config
+D:\washington\sources\Externals\lib\Debug\Ncqrs.Tests\Ncqrs.Tests.dll
+D:\washington\sources\Externals\lib\Debug\Ncqrs.Tests\Ncqrs.Tests.pdb
+D:\washington\sources\Externals\Framework\src\Ncqrs.Tests\obj\Debug\ResolveAssemblyReference.cache
+D:\washington\sources\Externals\Framework\src\Ncqrs.Tests\obj\Debug\Ncqrs.Tests.rewritten
+D:\washington\sources\Externals\Framework\src\Ncqrs.Tests\obj\Debug\Ncqrs.Tests.dll
+D:\washington\sources\Externals\Framework\src\Ncqrs.Tests\obj\Debug\Ncqrs.Tests.pdb
