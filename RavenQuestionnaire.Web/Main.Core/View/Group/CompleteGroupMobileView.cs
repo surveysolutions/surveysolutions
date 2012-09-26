@@ -74,7 +74,7 @@ namespace Main.Core.View.Group
                     else
                     {
                         var g = composite as CompleteGroup;
-                        if (g.IsGroupPropagationTemplate())
+                        if (!g.PropogationPublicKey.HasValue)
                         {
                             this.Children.Add(new CompleteGroupMobileView(doc, g, new ScreenNavigation()));
                         }
