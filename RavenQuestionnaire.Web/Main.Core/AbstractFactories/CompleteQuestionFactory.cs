@@ -1,25 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionFactory.cs" company="">
-//   
+// <copyright file="CompleteQuestionFactory.cs" company="The World Bank">
+//   2012
 // </copyright>
-// <summary>
-//   Defines the CompleteQuestionFactory type.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using System;
-using System.Linq;
-using Main.Core.Events.Questionnaire;
 
 namespace Main.Core.AbstractFactories
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Entities.SubEntities.Complete.Question;
     using Main.Core.Entities.SubEntities.Question;
+    using Main.Core.Events.Questionnaire;
     using Main.Core.Utility.OrderStrategy;
 
     /// <summary>
@@ -81,12 +77,22 @@ namespace Main.Core.AbstractFactories
             {
                 completeQuestion = new TextCompleteQuestion();
             }
-            
+
             completeQuestion.PublicKey = question.PublicKey;
-            UpdateQuestion(completeQuestion, question.QuestionType, question.QuestionText, question.StataExportCaption,
-                           question.ConditionExpression, question.ValidationExpression, question.ValidationMessage,
-                           question.AnswerOrder, question.Featured, question.Mandatory, question.Capital, question.Instructions,
-                           null);
+            this.UpdateQuestion(
+                completeQuestion, 
+                question.QuestionType, 
+                question.QuestionText, 
+                question.StataExportCaption, 
+                question.ConditionExpression, 
+                question.ValidationExpression, 
+                question.ValidationMessage, 
+                question.AnswerOrder, 
+                question.Featured, 
+                question.Mandatory, 
+                question.Capital, 
+                question.Instructions, 
+                null);
             completeQuestion.Comments = question.Comments;
             completeQuestion.Valid = true;
 
@@ -158,44 +164,65 @@ namespace Main.Core.AbstractFactories
             return new TextQuestion();
         }
 
+        /// <summary>
+        /// The update question by event.
+        /// </summary>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         public void UpdateQuestionByEvent(IQuestion question, NewQuestionAdded e)
         {
-            UpdateQuestion(question, e.QuestionType, question.QuestionText, e.StataExportCaption, e.ConditionExpression,
-                          e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory,false,
-                          e.Instructions, new[] { e.TargetGroupKey });
+            this.UpdateQuestion(
+                question, 
+                e.QuestionType, 
+                e.QuestionText, 
+                e.StataExportCaption, 
+                e.ConditionExpression, 
+                e.ValidationExpression, 
+                e.ValidationMessage, 
+                e.AnswerOrder, 
+                e.Featured, 
+                e.Mandatory, 
+                false, 
+                e.Instructions, 
+                new[] { e.TargetGroupKey });
             this.UpdateAnswerList(e.Answers, question);
         }
 
+        /// <summary>
+        /// The update question by event.
+        /// </summary>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         public void UpdateQuestionByEvent(IQuestion question, QuestionChanged e)
         {
-            UpdateQuestion(question, e.QuestionType, question.QuestionText, e.StataExportCaption, e.ConditionExpression,
-                           e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory,false,
-                           e.Instructions, new[]{e.TargetGroupKey});
+            this.UpdateQuestion(
+                question, 
+                e.QuestionType, 
+                e.QuestionText, 
+                e.StataExportCaption, 
+                e.ConditionExpression, 
+                e.ValidationExpression, 
+                e.ValidationMessage, 
+                e.AnswerOrder, 
+                e.Featured, 
+                e.Mandatory, 
+                false, 
+                e.Instructions, 
+                new[] { e.TargetGroupKey });
             this.UpdateAnswerList(e.Answers, question);
         }
 
         #endregion
 
-        protected void UpdateQuestion(IQuestion question, QuestionType questionType, string questionText,
-            string stataExportCaption, string conditionExpression, string validationExpression,
-            string validationMessage, Order answerOrder, bool featured, bool mandatory, bool capital, string instructions,  IEnumerable<Guid> triggers)
-        {
-            question.QuestionType = questionType;
-            question.QuestionText = questionText;
-            question.StataExportCaption = stataExportCaption;
-            question.ConditionExpression = conditionExpression;
-            question.ValidationExpression = validationExpression;
-            question.ValidationMessage = validationMessage;
-            question.AnswerOrder = answerOrder;
-            question.Featured = featured;
-            question.Mandatory = mandatory;
-            question.Instructions = instructions;
-            question.Capital = capital;
-           
-            var autoQuestion = question as IAutoPropagate;
-            if (autoQuestion != null && triggers!=null)
-                autoQuestion.Triggers = triggers.ToList();
-        }
+        #region Methods
 
         /// <summary>
         /// The update answer list.
@@ -208,7 +235,7 @@ namespace Main.Core.AbstractFactories
         /// </param>
         protected void UpdateAnswerList(IEnumerable<Answer> answers, IQuestion question)
         {
-            List<Answer> enumerable = (answers?? new List<Answer>()).ToList();
+            List<Answer> enumerable = (answers ?? new List<Answer>()).ToList();
             if (answers != null && enumerable.Any())
             {
                 question.Children.Clear();
@@ -219,5 +246,82 @@ namespace Main.Core.AbstractFactories
             }
         }
 
+        /// <summary>
+        /// The update question.
+        /// </summary>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        /// <param name="questionType">
+        /// The question type.
+        /// </param>
+        /// <param name="questionText">
+        /// The question text.
+        /// </param>
+        /// <param name="stataExportCaption">
+        /// The stata export caption.
+        /// </param>
+        /// <param name="conditionExpression">
+        /// The condition expression.
+        /// </param>
+        /// <param name="validationExpression">
+        /// The validation expression.
+        /// </param>
+        /// <param name="validationMessage">
+        /// The validation message.
+        /// </param>
+        /// <param name="answerOrder">
+        /// The answer order.
+        /// </param>
+        /// <param name="featured">
+        /// The featured.
+        /// </param>
+        /// <param name="mandatory">
+        /// The mandatory.
+        /// </param>
+        /// <param name="capital">
+        /// The capital.
+        /// </param>
+        /// <param name="instructions">
+        /// The instructions.
+        /// </param>
+        /// <param name="triggers">
+        /// The triggers.
+        /// </param>
+        protected void UpdateQuestion(
+            IQuestion question, 
+            QuestionType questionType, 
+            string questionText, 
+            string stataExportCaption, 
+            string conditionExpression, 
+            string validationExpression, 
+            string validationMessage, 
+            Order answerOrder, 
+            bool featured, 
+            bool mandatory, 
+            bool capital, 
+            string instructions, 
+            IEnumerable<Guid> triggers)
+        {
+            question.QuestionType = questionType;
+            question.QuestionText = questionText;
+            question.StataExportCaption = stataExportCaption;
+            question.ConditionExpression = conditionExpression;
+            question.ValidationExpression = validationExpression;
+            question.ValidationMessage = validationMessage;
+            question.AnswerOrder = answerOrder;
+            question.Featured = featured;
+            question.Mandatory = mandatory;
+            question.Instructions = instructions;
+            question.Capital = capital;
+
+            var autoQuestion = question as IAutoPropagate;
+            if (autoQuestion != null && triggers != null)
+            {
+                autoQuestion.Triggers = triggers.ToList();
+            }
+        }
+
+        #endregion
     }
 }
