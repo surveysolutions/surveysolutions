@@ -164,6 +164,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ApproveRedoModel.cs" />
     <Compile Include="Models\AssigmentModel.cs" />
+    <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
@@ -399,6 +400,7 @@
     <Content Include="Views\Survey\Comments.cshtml" />
     <Content Include="Views\Survey\AssignPerson.cshtml" />
     <Content Include="Views\Survey\Redo.cshtml" />
+    <Content Include="Views\Survey\ChangeState.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

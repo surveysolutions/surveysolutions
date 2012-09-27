@@ -1,0 +1,18 @@
+﻿@using Core.Supervisor.Views.Survey
+@using Questionnaire.Core.Web.Helpers
+
+@model Web.Supervisor.Models.ChangeStateModel
+
+<h2>Change State</h2>
+<p><a href="@Url.Action("Assigments", new {id = Model.TemplateId, input = new SurveyGroupInputModel()})">Back to list</a></p>
+@using (Html.BeginForm("ChangeState", "Survey"))
+{
+    @Html.Hidden("CqId", Model.Id)
+    @Html.Hidden("TmptId", Model.TemplateId)
+    <label class="control-label">State</label>
+    <select name="state">
+      <option value="1">Reddo</option>
+      <option value="2">Approve</option>
+    </select> 
+    <input name="Save" class="btn btn-primary" type="submit" value="Save" />
+}

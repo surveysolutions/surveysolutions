@@ -136,6 +136,72 @@ namespace Web.Supervisor.Controllers
         }
 
         /// <summary>
+        /// Display change state
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="template">
+        /// The template.
+        /// </param>
+        /// <returns>
+        /// Return Approve Page
+        /// </returns>
+        public ActionResult ChangeState(Guid id, string template)
+        {
+
+            return this.View(new ChangeStateModel(){Id = id, TemplateId = template});
+        }
+
+        /// <summary>
+        /// Save change state in database
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// Return view
+        /// </returns>
+        [HttpPost]
+        public ActionResult ChangeState(Guid CqId, string TmptId, int state)
+        {
+            if (state == 2)
+            {
+                var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                   new CompleteQuestionnaireStatisticViewInputModel(CqId.ToString()));
+                var model = new ApproveRedoModel() { Id = CqId, Statistic = stat, TemplateId = TmptId };
+                if (ModelState.IsValid)
+                {
+                    var commandService = NcqrsEnvironment.Get<ICommandService>();
+                    var status = SurveyStatus.Approve;
+                    status.ChangeComment = model.Comment;
+                    commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status });
+                    return this.RedirectToAction("Assigments", new { id = model.TemplateId });
+                }
+                
+                return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
+            }
+            else
+            {
+                var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                       new CompleteQuestionnaireStatisticViewInputModel(CqId.ToString()));
+                var model = new ApproveRedoModel() {Id = CqId, Statistic = stat, TemplateId = TmptId};
+                 if (ModelState.IsValid)
+                {
+                    var commandService = NcqrsEnvironment.Get<ICommandService>();
+                    var status = SurveyStatus.Redo;
+                    status.ChangeComment = model.Comment;
+                    commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status });
+                    return this.RedirectToAction("Assigments", new { id = model.TemplateId });
+                }
+
+               
+                return this.View(model);
+            }
+        }
+
+
+        /// <summary>
         /// Display assign form
         /// </summary>
         /// <param name="id">
