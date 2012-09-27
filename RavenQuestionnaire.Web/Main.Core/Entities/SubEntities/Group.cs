@@ -237,7 +237,7 @@ namespace Main.Core.Entities.SubEntities
                 }
                 else
                 {
-                    this.Children.Add(c);
+                    this.Children.Insert(0, c);
                     return;
                 }
             }
