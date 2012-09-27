@@ -137,13 +137,13 @@ namespace Browsing.Common.Containers
 
                 FlatButton item = new FlatButton()
                 {
-                    Text = drive.Name.Trim(new char[]{'/','\\'}),
+                    Text = drive.Name.Trim(new char[] { '/', '\\' }),
                     Tag = drive,
 
                     Image = this.usbImageList.Images[imageIndex],
-                    Font = new Font(this.tableLayoutPanel2.Font, FontStyle.Italic | FontStyle.Bold | FontStyle.Underline),
+                    Font = new Font(this.tableLayoutPanel2.Font.FontFamily, this.tableLayoutPanel2.Font.Size * 0.8f, FontStyle.Italic | FontStyle.Bold | FontStyle.Italic),
                     ImageAlign = ContentAlignment.TopCenter,
-                    TextAlign = ContentAlignment.TopCenter,
+                    TextAlign = ContentAlignment.BottomCenter,
                 };
 
                 item.Click += UsbChoosen;
