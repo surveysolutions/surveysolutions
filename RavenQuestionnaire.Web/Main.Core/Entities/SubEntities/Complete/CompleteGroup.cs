@@ -32,7 +32,7 @@ namespace Main.Core.Entities.SubEntities.Complete
             this.Children = new List<IComposite>();
             this.PublicKey = Guid.NewGuid();
             this.Triggers = new List<Guid>();
-
+            this.Enabled = true;
             // this.iteratorContainer = new IteratorContainer();
         }
 

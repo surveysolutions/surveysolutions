@@ -19,7 +19,7 @@
                 <a id="screen-ref-@(Model.PropogationKey)"  data-panel="main" class="propagated-screen-link-@(Model.PublicKey)" 
                 href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = Model.PublicKey, propagationKey=Model.PropogationKey })">
                     <h3><span>@ViewBag.GroupIndex)</span> @Model.Title</h3>
-                    <p  id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
+                    <p  id="featured-title-@(Model.PropogationKey)"></p>
                 </a>
             </div>
             <div class="ui-block-b">
@@ -43,7 +43,7 @@ else
     string enabled = !Model.Enabled ? "ui-disabled" : string.Empty;
     <li data-role="fieldcontain" id="@groupKey" class="@enabled"><a  id="screen-ref-@(Model.PropogationKey)" class="propagated-screen-link" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = Model.PublicKey, propagationKey=Model.PropogationKey })">
                                                      <h3><span>@ViewBag.GroupIndex)</span> @Model.Title</h3>
-                                                     <p id="featured-title-@(Model.PropogationKey)">@Model.FeaturedTitle</p>
+                                                     <p id="featured-title-@(Model.PropogationKey)"></p>
                                                  </a>
         <script type="text/javascript">
          $('#screen-ref-@(Model.PropogationKey)').click(function() {
