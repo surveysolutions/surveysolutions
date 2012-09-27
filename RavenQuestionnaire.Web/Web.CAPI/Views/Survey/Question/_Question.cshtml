@@ -5,9 +5,15 @@
 }
 <div class=" question" id="q[@(Model.PublicKey)]">
     
-    <a href="#error-@(Model.PublicKey)" class="error"  data-inline="true" data-iconpos="notext" data-icon="alert" 
+    <a id="popup-@(Model.PublicKey)" href="#error-@(Model.PublicKey)" class="error"  data-inline="true" data-iconpos="notext" data-icon="alert" 
         data-theme="a" data-role="button" data-inline="true"  data-rel="popup"></a>
-    
+    <script type="">
+        $('#popup-@(Model.PublicKey)').click(function (e) {
+            $('.ui-keyboard').hide();
+            $($(this).attr('href')).popup("open", { positionTo: "origin" });
+            e.stopPropagation();
+        })
+    </script>
     <div data-role="popup" id="error-@(Model.PublicKey)" class="instructions">
 
         @if (Model.Mandatory)
