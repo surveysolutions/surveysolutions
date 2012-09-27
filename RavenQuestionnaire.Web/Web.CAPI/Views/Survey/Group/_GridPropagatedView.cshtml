@@ -1,0 +1,75 @@
+﻿@using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems
+@using Main.Core.View.Group
+@using Questionnaire.Core.Web.Helpers
+@model Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.PropagatedGroupsContainer
+@{ int step = 3;
+   int skipped = 0;
+   string[] letter = new string[] { "a", "b", "c", "d" };
+}
+<div data-role="panel" data-id="main" id="content_container">
+    <div data-role="page" class="page" data-footer-theme="b" data-content-theme="c">
+        <!-- /header -->
+        <div data-role="content">
+            @while (Model.Columns.Skip(skipped).Any())
+            {
+
+                <div class="ui-grid-c" data-theme="e">
+                    <div class="ui-block-a">
+                        <div style="height: 80px" class="ui-bar ui-bar-b">
+                            &nbsp;</div>
+                    </div>
+                    @for (int i = 0; i < Math.Min(step, Model.Columns.Count - skipped); i++)
+                    {
+                        <div class="ui-block-@letter[i + 1]">
+                            <div style="height: 80px" class="ui-bar ui-bar-b">
+                                @Model.Columns[i + skipped].Title</div>
+                        </div>
+                    }
+                </div>
+                    foreach (var row in Model.Row)
+                    {
+                <div class="ui-grid-c">
+                    <div class="ui-block-a">
+                        <div class="ui-bar ui-bar-c" style="height: 50px">
+                            @row.Title
+                        </div>
+                    </div>
+                    @for (int i = 0; i < Math.Min(step, Model.Columns.Count - skipped); i++)
+                    {
+                        var question = Model.Columns[i + skipped] as QuestionColumnItem;
+                        question.Answer = null;
+                        <div class="ui-block-@letter[i + 1]">
+                            @if (row.Answers.ContainsKey(Model.Columns[i + skipped].ItemPublicKey))
+                            {
+                                question.Answer = row.Answers[Model.Columns[i + skipped].ItemPublicKey];
+                            }
+                            <div class="ui-bar ui-bar-c" style="height: 50px">@*@row.Answers[Model.Columns[i + skipped].ItemPublicKey] &nbsp;*@
+                                @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions))
+                                {
+                                    using (Html.BeginCollectionItem("questions", true, question.ItemPublicKey))
+                                    {
+                                        Html.RenderPartial("~/Views/Survey/Question/_GridQuestion.cshtml", question);
+                                    }
+                                    using (Html.BeginCollectionItem("settings", true, question.ItemPublicKey))
+                                    {
+
+
+                                    @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
+
+                                    @Html.Hidden("PropogationPublicKey", row.PropagationKey)
+
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+               
+
+                    }
+                <br />
+                    skipped += step;
+            }
+        </div>
+    </div>
+</div>

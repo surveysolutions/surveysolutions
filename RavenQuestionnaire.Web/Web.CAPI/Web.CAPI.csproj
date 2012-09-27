@@ -337,6 +337,8 @@
     <Content Include="Views\Survey\Complete\_Invalid.cshtml" />
     <Content Include="Views\Survey\Complete\_Unanswered.cshtml" />
     <Content Include="Views\Error\InternalServerError.cshtml" />
+    <Content Include="Views\Survey\Group\_GridPropagatedView.cshtml" />
+    <Content Include="Views\Survey\Question\_GridQuestion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
