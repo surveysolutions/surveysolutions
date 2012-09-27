@@ -40,7 +40,7 @@
     <div class="control-group">
          @Html.LabelFor(model => model.ConditionExpression, new { @class = "control-label" })
          <div class="controls">
-             @Html.EditorFor(model => model.ConditionExpression)
+             @Html.TextAreaFor(model => model.ConditionExpression)
              @Html.ValidationMessageFor(model => model.ConditionExpression)
          </div>
      </div>
