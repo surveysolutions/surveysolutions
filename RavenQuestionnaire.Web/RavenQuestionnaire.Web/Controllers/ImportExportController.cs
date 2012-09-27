@@ -134,7 +134,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="id">
         /// The id.
         /// </param>
-        public void DownloadAsync(Guid? id, Guid clientGuid)
+        public void DownloadAsync(Guid? id, Guid? clientGuid)
         {
             AsyncManager.OutstandingOperations.Increment();
             AsyncQuestionnaireUpdater.Update(() =>
