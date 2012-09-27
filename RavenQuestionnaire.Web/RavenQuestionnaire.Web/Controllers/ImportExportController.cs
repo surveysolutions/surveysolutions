@@ -125,7 +125,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// </returns>
         public ActionResult ImportCompleted()
         {
-            return this.RedirectToAction("Index", "Dashboard");
+            return this.RedirectToAction("Index", "Questionnaire");
         }
 
         /// <summary>
@@ -134,14 +134,14 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="id">
         /// The id.
         /// </param>
-        public void DownloadAsync(Guid? id)
+        public void DownloadAsync(Guid? id, Guid clientGuid)
         {
             AsyncManager.OutstandingOperations.Increment();
             AsyncQuestionnaireUpdater.Update(() =>
             {
                 try
                 {
-                    AsyncManager.Parameters["result"] = exportimportEvents.ExportTemplate(id);
+                    AsyncManager.Parameters["result"] = exportimportEvents.ExportTemplate(id, clientGuid);
                 }
                 catch
                 {

@@ -29,7 +29,7 @@
 <h2>Surveys</h2>
 <p>
     @Html.ActionLink("Create New", "Create", null, new { @class = "btn small btn-primary" })
-    @Html.ActionLink("Download", "Download", "ImportExport", null, new { @class = "btn small btn-primary" })    
+    @Html.ActionLink("Download", "Download", "ImportExport", new { clientGuid = "00000000-0000-0000-0000-000000000000" }, new { @class = "btn small btn-primary" })    
 </p>
 <table id="questionnaireTable" class="table table-striped table-bordered table-condensed">
     <thead>

@@ -91,6 +91,7 @@ namespace Web.CAPI.Controllers
                                                      {
                                                          AsyncManager.Parameters["result"] = null;
                                                      }
+
                                                      AsyncManager.OutstandingOperations.Decrement();
                                                  });
         }
@@ -100,6 +101,7 @@ namespace Web.CAPI.Controllers
             return File(result, "application/zip",
                         string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
         }
+
         #endregion
 
         #region import

@@ -45,6 +45,7 @@ namespace Main.Core.Entities.Extensions
 
             return MoveItem(root, itemPublicKey, groupKey, after, root);
         }
+
         private static bool MoveItem(this IComposite root, Guid itemPublicKey, Guid? groupKey, Guid? after, IComposite parent)
         {
 
@@ -55,6 +56,7 @@ namespace Main.Core.Entities.Extensions
 
             return root.Children.Any(@group => MoveItem(group, itemPublicKey, groupKey, after, parent));
         }
+
         #endregion
 
         #region Methods
@@ -98,7 +100,14 @@ namespace Main.Core.Entities.Extensions
                 if (moveToGroup != null)
                 {
                     groups.Remove(moveble);
-                    moveToGroup.Insert(moveble, after);
+                    if (moveble is IGroup && after == null)
+                    {
+                        int index = groups.FindIndex(
+                            0, groups.Count - 1, t => t.PublicKey == moveToGroup.PublicKey);
+                        groups.Insert(index + 1, moveble);
+                    }
+                    else
+                        moveToGroup.Insert(moveble, after);
                     return true;
                 }
             }
