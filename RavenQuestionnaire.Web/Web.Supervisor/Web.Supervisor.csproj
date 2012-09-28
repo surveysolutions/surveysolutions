@@ -297,9 +297,6 @@
     <Content Include="Views\User\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\User\Details.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -375,9 +372,6 @@
     <Content Include="Views\User\_Table.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\User\_TableGroupByUser.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Survey\Approve.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -395,8 +389,6 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Views\User\Statistics.cshtml" />
-    <Content Include="Views\User\_UserStatistics.cshtml" />
     <Content Include="Views\Survey\Comments.cshtml" />
     <Content Include="Views\Survey\AssignPerson.cshtml" />
     <Content Include="Views\Survey\Redo.cshtml" />

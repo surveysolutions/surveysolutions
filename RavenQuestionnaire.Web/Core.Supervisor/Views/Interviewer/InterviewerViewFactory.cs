@@ -7,17 +7,19 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Denormalizers;
-using Main.Core.Documents;
-using Main.Core.Entities;
-using Main.Core.View;
-using Main.Core.View.CompleteQuestionnaire;
-using Main.Core.Utility;
 namespace Core.Supervisor.Views.Interviewer
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Main.Core.Denormalizers;
+    using Main.Core.Documents;
+    using Main.Core.Entities;
+    using Main.Core.Utility;
+    using Main.Core.View;
+    using Main.Core.View.CompleteQuestionnaire;
+
     /// <summary>
     /// The interviewer view factory.
     /// </summary>
