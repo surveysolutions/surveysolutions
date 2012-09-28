@@ -105,7 +105,7 @@ namespace Questionnaire.Core.Web.Export
         /// </returns>
         public byte[] Export(Guid clientGuid)
         {
-            return this.ExportInternal(clientGuid, this.synchronizer.ReadEvents);
+            return this.ExportInternal(clientGuid, this.synchronizer.ReadEvents(), "backup.txt");
         }
 
         /// <summary>
@@ -119,7 +119,8 @@ namespace Questionnaire.Core.Web.Export
         /// </returns>
         public byte[] ExportTemplate(Guid? templateGuid, Guid? clientGuid)
         {
-            return this.ExportTemplateInternal(templateGuid, clientGuid);
+            return this.ExportInternal(clientGuid, GetTemplate(templateGuid, clientGuid), string.Format("template{0}.txt", templateGuid == null ? "s" : string.Empty));
+            //  return this.ExportTemplateInternal(templateGuid, clientGuid);
         }
 
         /// <summary>
@@ -151,6 +152,19 @@ namespace Questionnaire.Core.Web.Export
                 }
             }
         }
+        
+        protected IEnumerable<AggregateRootEvent> GetTemplate(Guid? templateGuid, Guid clientGuid)
+        {
+            var archive = new List<AggregateRootEvent>();
+            var events = this.synchronizer.ReadEvents().ToList();
+            if (templateGuid != null)
+                archive.Add(events.Where(t =>
+                    {
+                        var payload = ((t.Payload as SnapshootLoaded).Template).Payload;
+                        return payload != null && (payload as QuestionnaireDocument).PublicKey == templateGuid;
+                    }).FirstOrDefault());
+            return archive;
+        }
 
         #endregion
 
@@ -168,15 +182,15 @@ namespace Questionnaire.Core.Web.Export
         /// <returns>
         /// Zip file as array of bytes
         /// </returns>
-        protected byte[] ExportInternal(Guid clientGuid, Func<IEnumerable<AggregateRootEvent>> action)
+        protected byte[] ExportInternal(Guid clientGuid, IEnumerable<AggregateRootEvent> events, string fileName)
         {
-            var data = new ZipFileData { ClientGuid = clientGuid, Events = action() };
+            var data = new ZipFileData { ClientGuid = clientGuid, Events = events };
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {
                 var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
                 zip.CompressionLevel = CompressionLevel.None;
-                zip.AddEntry("backup.txt", JsonConvert.SerializeObject(data, Formatting.Indented, settings));
+                zip.AddEntry(fileName, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
                 zip.Save(outputStream);
             }
 
@@ -184,31 +198,6 @@ namespace Questionnaire.Core.Web.Export
             return outputStream.ToArray();
         }
 
-        protected byte[] ExportTemplateInternal(Guid? templateGuid, Guid? clientGuid)
-        {
-            var archive = new List<AggregateRootEvent>();
-            var events = this.synchronizer.ReadEvents().ToList();
-            if (templateGuid != null)
-                archive.Add(events.Where(t =>
-                    {
-                        var payload = ((t.Payload as SnapshootLoaded).Template).Payload;
-                        return payload != null && (payload as QuestionnaireDocument).PublicKey == templateGuid;
-                    }).FirstOrDefault());
-            else archive = events;
-            var data = new ZipFileData { ClientGuid = clientGuid ?? Guid.Empty, Events = archive };
-            var outputStream = new MemoryStream();
-            using (var zip = new ZipFile())
-            {
-                var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-                zip.CompressionLevel = CompressionLevel.BestCompression;
-                string name = string.Format("template{0}.txt", templateGuid == null ? "s" : string.Empty);
-                zip.AddEntry(name, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
-                zip.Save(outputStream);
-            }
-
-            outputStream.Seek(0, SeekOrigin.Begin);
-            return outputStream.ToArray();
-        }
 
         #endregion
     }
