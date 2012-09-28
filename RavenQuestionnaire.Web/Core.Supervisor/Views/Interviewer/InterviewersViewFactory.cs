@@ -7,16 +7,17 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Linq;
-using Main.Core.Denormalizers;
-using Main.Core.Documents;
-using Main.Core.Entities;
-using Main.Core.Entities.SubEntities;
-using Main.Core.View;
-using Main.Core.View.CompleteQuestionnaire;
-using Main.Core.Utility;
 namespace Core.Supervisor.Views.Interviewer
 {
+    using System.Linq;
+
+    using Main.Core.Denormalizers;
+    using Main.Core.Documents;
+    using Main.Core.Entities;
+    using Main.Core.Utility;
+    using Main.Core.View;
+    using Main.Core.View.CompleteQuestionnaire;
+
     /// <summary>
     /// The interviewers view factory.
     /// </summary>
@@ -85,8 +86,6 @@ namespace Core.Supervisor.Views.Interviewer
 
             IQueryable<UserDocument> query =
                 this.users.Query().Where(u => u.Supervisor != null).Where(u => u.Supervisor.Id == input.Supervisor.Id);
-            IQueryable<CompleteQuestionnaireBrowseItem> questionnaire =
-                this.documentItemSession.Query().Where(t => t.Responsible != null);
             IQueryable<InterviewersItem> items =
                 query.Select(
                     x =>
@@ -95,12 +94,7 @@ namespace Core.Supervisor.Views.Interviewer
                         x.UserName, 
                         x.Email, 
                         x.CreationDate, 
-                        x.IsLocked, 
-                        questionnaire.Count(t => t.Responsible.Id == x.PublicKey), 
-                        questionnaire.Where(t => t.Responsible.Id == x.PublicKey).Count(
-                            t => t.Status.PublicId == SurveyStatus.Complete.PublicId), 
-                        questionnaire.Where(t => t.Responsible.Id == x.PublicKey).Count(
-                            t => t.Status.PublicId != SurveyStatus.Complete.PublicId)));
+                        x.IsLocked));
             if (input.Orders.Count > 0)
             {
                 items = input.Orders[0].Direction == OrderDirection.Asc

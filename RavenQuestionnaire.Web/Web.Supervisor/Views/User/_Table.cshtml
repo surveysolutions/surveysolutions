@@ -5,35 +5,13 @@
 {
     <tr>
         <td>
-            <a href="@Url.Action("Statistics", "User", new { id = item.Id })">@item.Login</a>
+            <a href="@Url.Action("Index", "Survey", new { UserId = item.Id })">@item.Login</a>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CreationDate)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Total)
-        </td>
-        <td>
-            @if (item.Completed != 0)
-            {
-                @Html.ActionLink(item.Completed.ToString(), "Assigments", "Survey", new { id = item.Id, status = SurveyStatus.Complete.PublicId }, null)
-            }
-            else
-            {
-                <text>@item.Completed</text>
-            }
-        </td>
-        <td>
-            @*@{
-                var statuses = "?" + string.Join("&", new[] { SurveyStatus.Initial.PublicId.ToString(), SurveyStatus.Redo.PublicId.ToString(), SurveyStatus.Error.PublicId.ToString() }.Select(x => "status=" + x));
-            }
-            <a href="@(Url.Action("Assigments", "Survey", new { id = item.Id }) + statuses)">
-                @item.InProcess
-            </a>*@
-            @Html.DisplayFor(modelItem => item.InProcess)
         </td>
         <td>
             @if (item.IsLocked)

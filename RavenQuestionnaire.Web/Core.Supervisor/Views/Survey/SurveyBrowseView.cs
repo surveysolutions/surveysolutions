@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyBrowseView.cs" company="The World Bank">
-//   2012
+// <copyright file="SurveyBrowseView.cs" company="">
+//   
 // </copyright>
 // <summary>
 //   The survey browse view.
@@ -9,8 +9,10 @@
 
 namespace Core.Supervisor.Views.Survey
 {
+    using System;
     using System.Collections.Generic;
 
+    using Main.Core.Documents;
     using Main.Core.Entities;
     using Main.Core.Entities.SubEntities;
 
@@ -19,7 +21,7 @@ namespace Core.Supervisor.Views.Survey
     /// </summary>
     public class SurveyBrowseView
     {
-        #region Fields
+        #region Constants and Fields
 
         /// <summary>
         /// The _order.
@@ -58,35 +60,29 @@ namespace Core.Supervisor.Views.Survey
         /// <param name="items">
         /// The items.
         /// </param>
-        public SurveyBrowseView(int page, int pageSize, int totalCount, IEnumerable<SurveyBrowseItem> items)
+        /// <param name="user">
+        /// The user.
+        /// </param>
+        public SurveyBrowseView(
+            int page, int pageSize, int totalCount, IEnumerable<SurveyBrowseItem> items, UserDocument user)
             : this()
         {
+            this.User = user == null ? new UserLight(Guid.Empty, "All") : new UserLight(user.PublicKey, user.UserName);
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
-            this.Headers = new SurveyGroupedByStatusHeader(new Dictionary<string, string>
-                                                               {
-                                                                   {"Total", "Total"},
-                                                                   {"Unassigned", "Unassigned"},
-                                                                   {
-                                                                       "Initial",
-                                                                       SurveyStatus.Initial.Name
-                                                                       },
-                                                                   {
-                                                                       "Error",
-                                                                       SurveyStatus.Error.Name
-                                                                       },
-                                                                   {
-                                                                       "Complete",
-                                                                       SurveyStatus.Complete.Name
-                                                                       },
-                                                                   {
-                                                                       "Approve",
-                                                                       SurveyStatus.Approve.Name
-                                                                       },
-                                                                        { "Redo", SurveyStatus.Redo.Name }
-
-                                                               });
+            this.Headers =
+                new SurveyGroupedByStatusHeader(
+                    new Dictionary<string, string>
+                        {
+                            { "Total", "Total" },
+                            { "Unassigned", "Unassigned" },
+                            { "Complete", SurveyStatus.Complete.Name },
+                            { "Approve", SurveyStatus.Approve.Name },
+                            { "Initial", SurveyStatus.Initial.Name },
+                            { "Error", SurveyStatus.Error.Name },
+                            { "Redo", SurveyStatus.Redo.Name }
+                        });
 
             foreach (SurveyBrowseItem item in items)
             {
@@ -94,9 +90,13 @@ namespace Core.Supervisor.Views.Survey
                     new SurveyBrowseItem(
                         item.Id,
                         item.Title,
-                        item.Unassigned, item.Total, item.Initial, item.Error, item.Complete, item.Approve,
+                        item.Unassigned,
+                        item.Total,
+                        item.Initial,
+                        item.Error,
+                        item.Complete,
+                        item.Approve,
                         item.Redo));
-
             }
         }
 
@@ -160,6 +160,16 @@ namespace Core.Supervisor.Views.Survey
         /// Gets the total count.
         /// </summary>
         public int TotalCount { get; private set; }
+
+        /// <summary>
+        /// Gets User.
+        /// </summary>
+        public UserLight User { get; private set; }
+
+        /// <summary>
+        /// Gets or sets Summary.
+        /// </summary>
+        public SurveyBrowseItem Summary { get; set; }
 
         #endregion
     }

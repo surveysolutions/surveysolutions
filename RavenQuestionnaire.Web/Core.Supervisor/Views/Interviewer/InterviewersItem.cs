@@ -7,10 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-
 namespace Core.Supervisor.Views.Interviewer
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+
     /// <summary>
     /// The interviewers item.
     /// </summary>
@@ -36,38 +37,23 @@ namespace Core.Supervisor.Views.Interviewer
         /// <param name="isLocked">
         /// The is locked.
         /// </param>
-        /// <param name="total">
-        /// The total.
-        /// </param>
-        /// <param name="completed">
-        /// The completed.
-        /// </param>
-        /// <param name="inProcess">
-        /// The in process.
-        /// </param>
-        public InterviewersItem(
-            Guid id, 
-            string name, 
-            string email, 
-            DateTime creationDate, 
-            bool isLocked, 
-            int total, 
-            int completed, 
-            int inProcess)
+        public InterviewersItem(Guid id, string name, string email, DateTime creationDate, bool isLocked)
         {
             this.Id = id;
             this.Login = name;
             this.Email = email;
             this.CreationDate = creationDate;
             this.IsLocked = isLocked;
-            this.Total = total;
-            this.Completed = completed;
-            this.InProcess = inProcess;
         }
 
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets a value indicatios user is locked or not.
+        /// </summary>
+        public bool IsLocked { get; private set; }
 
         /// <summary>
         /// Gets the completed.
@@ -90,24 +76,9 @@ namespace Core.Supervisor.Views.Interviewer
         public Guid Id { get; private set; }
 
         /// <summary>
-        /// Gets the in process.
-        /// </summary>
-        public int InProcess { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether is locked.
-        /// </summary>
-        public bool IsLocked { get; private set; }
-
-        /// <summary>
         /// Gets the login.
         /// </summary>
         public string Login { get; private set; }
-
-        /// <summary>
-        /// Gets the total.
-        /// </summary>
-        public int Total { get; private set; }
 
         #endregion
     }
