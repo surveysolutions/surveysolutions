@@ -40,8 +40,16 @@
                 }
             </td>
             }
-
-
         }
     </tr>
 }
+<tr>
+    <th>Summary</th>
+    <th></th>
+    @foreach (var it in Model.Headers)
+    {
+        <th>
+            @Model.Headers.GetItemValue(Model.Summary, it.Key)
+        </th>
+    }
+</tr>
