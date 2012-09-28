@@ -502,5 +502,24 @@ namespace NUnit.Framework
         }
 
         #endregion
-    }
+
+		#region Throws
+
+		public static TException Throws<TException>(Action action) where TException : Exception
+		{
+			try
+			{
+				action();
+			}
+			catch (Exception e)
+			{
+				if (!e.GetType().IsAssignableFrom(typeof(TException))) throw;
+				return (TException)e;
+			}
+			var message = string.Format("Expected exception of type {0} was not thrown", typeof (TException));
+			throw new Exception(message);
+		}
+
+		#endregion
+	}
 }

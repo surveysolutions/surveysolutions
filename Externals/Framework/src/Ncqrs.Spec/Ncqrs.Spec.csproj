@@ -78,9 +78,6 @@
     <CodeContractsContainerAnalysis>False</CodeContractsContainerAnalysis>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\..\..\..\RavenQuestionnaire.Web\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\RavenQuestionnaire.Web\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -97,25 +94,61 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AggregateRootTestFixture.cs" />
-    <Compile Include="AndAttribute.cs" />
-    <Compile Include="AutoMappedCommandTestFixture.cs" />
-    <Compile Include="BaseTestFixture.cs" />
-    <Compile Include="DomainTestFixture.cs" />
-    <Compile Include="JsonEventSerializationFixture.cs" />
-    <Compile Include="CommandTestFixture.cs" />
-    <Compile Include="BigBangTestFixture.cs" />
-    <Compile Include="EventSerializationFixture.cs" />
-    <Compile Include="ExceptionTestFixture.cs" />
-    <Compile Include="OneEventTestFixture.cs" />
-    <Compile Include="EventContext.cs" />
-    <Compile Include="Fakes\EnvironmentConfigurationWrapper.cs" />
-    <Compile Include="Fakes\FrozenClock.cs" />
-    <Compile Include="GivenAttribute.cs" />
-    <Compile Include="Prepare.cs" />
+    <Compile Include="AggregateRootTestFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AndAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AutoMappedCommandTestFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BaseTestFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BigBangTestFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CommandTestFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DomainTestFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EventContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EventSerializationFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExceptionTestFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Fakes\EnvironmentConfigurationWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Fakes\FrozenClock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GivenAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="JsonEventSerializationFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OneEventTestFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Prepare.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpecificationAttribute.cs" />
-    <Compile Include="ThenAttribute.cs" />
+    <Compile Include="SpecificationAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ThenAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ncqrs\Ncqrs.csproj">

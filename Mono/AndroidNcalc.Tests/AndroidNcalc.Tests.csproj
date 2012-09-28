@@ -70,6 +70,10 @@
     <AndroidResource Include="Resources\Drawable\Icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
+      <Project>{667B05AE-CF79-4A4B-B9F8-DCC0999A729B}</Project>
+      <Name>AndroidFluentAssertions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
       <Project>{F0476C33-6F4F-4524-9CEA-37E87D55E67E}</Project>
       <Name>AndroidNCalc</Name>

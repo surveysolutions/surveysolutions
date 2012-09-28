@@ -23,6 +23,8 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 
@@ -39,7 +41,7 @@ namespace NUnitLite
 
         private IDictionary properties = new Hashtable();
 
-        private ArrayList tests = new ArrayList(10);
+        private List<ITest> tests = new List<ITest>(10);
         #endregion
 
         #region Constructors
@@ -71,18 +73,33 @@ namespace NUnitLite
                 {
                     if (TestCase.IsTestMethod(method))
                         this.AddTest(new TestCase(method));
-                    //{
-                    //    ITest test = TestCase.HasValidSignature(method)
-                    //        ? (ITest)new TestCase(method)
-                    //        : (ITest)new InvalidTestCase(method.Name,
-                    //            "Test methods must have signature void MethodName()");
+                    
+					if (TestSuite.IsFixtureSetupMethod(method))
+					{
+						
+					}
 
-                    //    this.AddTest(test);
-                    //}
+					if (TestSuite.IsFixtureTearDownMethod(method))
+					{
+						
+					}
                 }
             }
         }
-        #endregion
+
+	    private static bool IsFixtureTearDownMethod(MethodInfo method)
+	    {
+		    return false;
+		    //return Reflect.HasAttribute(method, typeof(TestAttribute));
+	    }
+
+	    private static bool IsFixtureSetupMethod(MethodInfo method)
+	    {
+		    return false;
+		    //return Reflect.HasAttribute(method, typeof(TestAttribute));
+	    }
+
+	    #endregion
 
         #region Properties
         public string Name
@@ -114,10 +131,7 @@ namespace NUnitLite
         {
             get
             {
-                int count = 0;
-                foreach (ITest test in this.tests)
-                    count += test.TestCaseCount;
-                return count;
+	            return this.tests.Sum(test => test.TestCaseCount);
             }
         }
 

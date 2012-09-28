@@ -71,8 +71,7 @@ namespace Ncqrs.Spec
 
             var unindexedProps = props.Except(indexedProps);
 
-            TestItems(
-                unindexedProps,
+            TestItems(unindexedProps.Select(p => (MemberInfo)p).ToList() ,
                 (p, obj) => ((PropertyInfo)p).GetValue(obj, new object[0]),
                 p => ((PropertyInfo)p).PropertyType,
                 inconclusiveItems);
