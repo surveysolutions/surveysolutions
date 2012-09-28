@@ -1,27 +1,12 @@
-﻿@model Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems.QuestionColumnItem
-@{
-    ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
-}
+﻿@using Main.Core.Entities.SubEntities
+@using Questionnaire.Core.Web.Helpers
+@model Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems.QuestionColumnItem
 <div data-role="popup" id="grid-popup-@(Model.ItemPublicKey)">
-    <div class=" question" id="q[@(Model.ItemPublicKey)]">
-        <a href="#error-@(Model.ItemPublicKey)" class="error"  data-inline="true" data-iconpos="notext" data-icon="alert" 
-        data-theme="a" data-role="button" data-inline="true"  data-rel="popup"></a>
-        <div data-role="popup" id="error-@(Model.ItemPublicKey)" class="instructions">
-            @if (Model.Mandatory)
-            {
-                <p>
-                    Answer is mandatory</p>
-            }
-            <p>
-                @Model.ValidationMessage
-            </p>
-        </div>
-        @Html.Hidden("QuestionType", Model.QuestionType)
-        @{ Html.RenderPartial(string.Format("~/Views/Survey/Answer/GridAnswerList/_{0}.cshtml", Model.QuestionType), Model); }
-        @Html.ValidationMessage("AnswerValue")
-        @Html.Hidden("PublicKey", Model.ItemPublicKey)
-        <p class="question-comment">
-            <span id="comments+@Model.ItemPublicKey">@Model.Comments</span>
-        </p>
-    </div>
+      @using (Ajax.BeginGridFormHtml5("SaveGroupAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions, Model.QuestionnaireId, Model.ItemPublicKey, QuestionType.MultyOption))
+      {
+          @Html.Hidden("ParentGroupPublicKey", Model.ParentGroupPublicKey)
+          
+          Html.RenderPartial(string.Format("~/Views/Survey/Answer/GridAnswerList/_{0}.cshtml", QuestionType.MultyOption), Model);
+          
+      }
 </div>

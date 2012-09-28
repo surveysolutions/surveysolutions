@@ -108,6 +108,7 @@
     <Compile Include="Helpers\EntityNames.cs" />
     <Compile Include="Helpers\GlobalInfo.cs" />
     <Compile Include="Helpers\GlobalInfoProvider.cs" />
+    <Compile Include="Helpers\GridFormExtensions.cs" />
     <Compile Include="Helpers\Html5Extensions.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IGlobalInfoProvider.cs" />

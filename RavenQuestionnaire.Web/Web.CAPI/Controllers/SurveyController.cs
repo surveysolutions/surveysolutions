@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView;
+using Main.Core.View.Answer;
 
 namespace Web.CAPI.Controllers
 {
@@ -477,6 +478,76 @@ namespace Web.CAPI.Controllers
                 this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
                     new CompleteQuestionnaireViewInputModel(
                         settings[0].QuestionnaireId, settings[0].ParentGroupPublicKey, settings[0].PropogationPublicKey));
+            return this.Json(model);
+        }
+        /// <summary>
+        /// The save answer.
+        /// </summary>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
+        /// <param name="questions">
+        /// The questions.
+        /// </param>
+        /// <returns>
+        /// The System.Web.Mvc.JsonResult.
+        /// </returns>
+        public JsonResult SaveGroupAnswer(Guid questionnaireId,
+            Guid publicKey,
+            Guid propogationPublicKey,
+            Guid parentGroupPublicKey,
+            QuestionType questionType,
+            CompleteAnswerView[] answers)
+        {
+            //  CompleteQuestionView question = questions[0];
+
+            List<Guid> answersGuid = new List<Guid>();
+            string completeAnswerValue = null;
+
+            try
+            {
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+
+                if (questionType == QuestionType.DropDownList ||
+                    questionType == QuestionType.SingleOption ||
+                    questionType == QuestionType.YesNo ||
+                    questionType == QuestionType.MultyOption)
+                {
+                    if (answers != null && answers.Length > 0)
+                    {
+                        for (int i = 0; i < answers.Length; i++)
+                        {
+                            if (answers[i].Selected)
+                            {
+                                answersGuid.Add(answers[i].PublicKey);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    completeAnswerValue = answers[0].AnswerValue;
+                }
+
+
+                commandService.Execute(
+                    new SetAnswerCommand(
+                        questionnaireId,
+                        publicKey,
+                        answersGuid,
+                        completeAnswerValue,
+                        propogationPublicKey));
+            }
+            catch (Exception e)
+            {
+                this.logger.Fatal(e);
+                return
+                    this.Json(new {questionPublicKey = publicKey, error = e.Message});
+            }
+
+            PropagatedGroupsContainer model =
+                this.viewRepository.Load<PropagatedGridViewInputModel, PropagatedGroupsContainer>(
+                    new PropagatedGridViewInputModel(questionnaireId, parentGroupPublicKey));
             return this.Json(model);
         }
 

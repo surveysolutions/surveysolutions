@@ -16,5 +16,6 @@
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
     @Html.Hidden("Parent", Model.ItemPublicKey)
-    @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, "", new { draw_key_board = "true", type = "num", @required }, new { @class = "calculator key_grid" }, new { @class = "bold" })
+    <p>here have to be number</p>
+  @*  @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, "", new { draw_key_board = "true", type = "num", @required }, new { @class = "calculator key_grid" }, new { @class = "bold" })*@
 }

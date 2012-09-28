@@ -25,11 +25,11 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
             this.QuestionnairePublicKey = questionnairePublicKey;
             this.GroupPublicKey = groupTemplate.PublicKey;
             this.GroupName = groupTemplate.Title;
-            this.PopulateHeader(groupTemplate);
+            this.PopulateHeader(groupTemplate, questionnairePublicKey);
             this.Row = new List<PropagatedGroupRowItem>();
         }
 
-        protected void PopulateHeader(ICompleteGroup groupTemplate)
+        protected void PopulateHeader(ICompleteGroup groupTemplate, Guid questionnairePublicKey)
         {
             this.Columns = new List<PropagatedGroupColumnItem>();
             foreach (IComposite composite in groupTemplate.Children)
@@ -43,7 +43,7 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
                 var question = composite as ICompleteQuestion;
                 if (question != null)
                 {
-                    this.Columns.Add(new QuestionColumnItem(question));
+                    this.Columns.Add(new QuestionColumnItem(question, questionnairePublicKey, groupTemplate.PublicKey));
                     continue;
 
                 }

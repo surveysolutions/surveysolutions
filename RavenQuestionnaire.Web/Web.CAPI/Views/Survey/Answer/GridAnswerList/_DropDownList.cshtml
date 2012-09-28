@@ -1,10 +1,10 @@
 ﻿@using Main.Core.View.Answer
 @using Questionnaire.Core.Web.Helpers
 
-@model Main.Core.View.Question.CompleteQuestionView
-@using (Html.BeginCollectionItem("Answers", true, Model.PublicKey))
+@model Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems.QuestionColumnItem
+@using (Html.BeginCollectionItem("Answers", true, Model.ItemPublicKey))
 {
-    var settings = ((IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings);
+    var settings = new Dictionary<string, object>();
     Guid selected = Guid.Empty;
     CompleteAnswerView answer = Model.Answers.FirstOrDefault(a => (a).Selected);
     if (answer != null)
@@ -14,10 +14,6 @@
     settings.Add("onchange", "$(this.form).submit();");
     settings.Add("data-native-menu", "false");
     @Html.Hidden("Selected", true)
-    @Html.Hidden("Parent", Model.PublicKey)
-    <label for="@ViewData.TemplateInfo.GetFullHtmlFieldId("PublicKey")">
-        @Html.Raw(Model.Title) 
-        @if (Model.Mandatory) { <span style="color: red; font-size:25px;">*</span> }
-    </label>
+    @Html.Hidden("Parent", Model.ItemPublicKey)
     @Html.DropDownList("PublicKey", new SelectList(Model.Answers, "PublicKey", "Title", selected), "Select answer", settings)
 }

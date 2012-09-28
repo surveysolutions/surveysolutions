@@ -20,18 +20,16 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems
     /// </summary>
     public class QuestionColumnItem : PropagatedGroupColumnItem
     {
-        public QuestionColumnItem(ICompleteQuestion question)
+        public QuestionColumnItem(ICompleteQuestion question, Guid questionnaireId, Guid parentGroupPublicKey)
         {
             this.Title = question.QuestionText;
             this.ItemPublicKey = question.PublicKey;
-            this.Answer = question.GetAnswerObject();
-            this.Enabled = question.Enabled;
-            this.Valid = question.Valid;
             this.ValidationMessage = question.ValidationMessage;
-            this.Comments = question.Comments;
             this.Instructions = question.Instructions;
             this.Mandatory = question.Mandatory;
             this.QuestionType = question.QuestionType;
+            this.QuestionnaireId = questionnaireId;
+            this.ParentGroupPublicKey = parentGroupPublicKey;
             this.Answers =
                 question.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(question.PublicKey, a)).ToList();
         }
@@ -63,36 +61,13 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems
             }
         }
         private List<CompleteAnswerView> _answers;
-        /// <summary>
-        /// Gets or sets the answer.
-        /// </summary>
-        public object Answer { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether answered.
-        /// </summary>
-        public bool Answered
-        {
-            get { return this.Answer == null; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether enabled.
-        /// </summary>
-        public bool Enabled { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether valid.
-        /// </summary>
-        public bool Valid { get; set; }
+      
         /// <summary>
         /// Gets or sets the validation message.
         /// </summary>
         public string ValidationMessage { get; set; }
-        /// <summary>
-        /// Gets or sets the comments.
-        /// </summary>
-        public string Comments { get; set; }
+      
         /// <summary>
         /// Gets or sets the instructions.
         /// </summary>
@@ -106,6 +81,10 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems
         /// Gets or sets the question type.
         /// </summary>
         public QuestionType QuestionType { get; set; }
+
+        public Guid QuestionnaireId { get; set; }
+        public Guid ParentGroupPublicKey { get; set; }
+
         #endregion
     }
 }

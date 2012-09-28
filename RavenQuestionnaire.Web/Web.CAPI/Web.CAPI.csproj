@@ -232,6 +232,7 @@
     <Content Include="Content\themes\jquerymobile\jquery.ui.datepicker.mobile.css" />
     <Content Include="Content\themes\jquerymobile\keyboard.css" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\capi.answerform.js" />
     <Content Include="Scripts\capi.keyboard.js" />
     <Content Include="Scripts\code.photoswipe.jquery-3.0.4.min.js" />
     <Content Include="Scripts\jqmIScroll\iscroll.js" />

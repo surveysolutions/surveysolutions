@@ -37,16 +37,17 @@
                     </div>
                     @for (int i = 0; i < Math.Min(step, Model.Columns.Count - skipped); i++)
                     {
+                        var questionId = Model.Columns[i + skipped].ItemPublicKey.ToString();
                         <div class="ui-block-@letter[i + 1]">
                             @{
-                                        var answer = "Set Answer";
-                                        if (row.Answers.ContainsKey(Model.Columns[i + skipped].ItemPublicKey))
+                                        var answer = "";
+                                        if (row.Answers.ContainsKey(questionId))
                                         {
-                                            answer = (row.Answers[Model.Columns[i + skipped].ItemPublicKey] ?? answer).ToString();
+                                            answer+= row.Answers[questionId].AnswerString;
                                         }
                             }
                             <div class="ui-bar ui-bar-c" style="height: 50px">
-                                <a href="#grid-popup-@(Model.Columns[i + skipped].ItemPublicKey)" data-inline="true" data-rel="popup">@answer</a>
+                                <a href="#grid-popup-@(questionId)" data-inline="true" data-rel="popup" question-item="@questionId" question-propagation-key="@row.PropagationKey" question-answer-key="@row.Answers[questionId].AnswerPublicKey">&nbsp;@answer</a>
                             </div>
                         </div>
                     }

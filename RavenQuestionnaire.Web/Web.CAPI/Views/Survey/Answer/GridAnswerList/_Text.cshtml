@@ -11,5 +11,6 @@
     @Html.Hidden("Selected", true)
     var required = string.Empty;
     if (Model.Mandatory) { required = "true"; }
-    @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, "", new { draw_key_board = "true", @required }, new { @class = "keyboard key_grid" }, new { @class = "bold" })
+    <p>here have to be text</p>
+  @*  @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, "", new { draw_key_board = "true", @required }, new { @class = "keyboard key_grid" }, new { @class = "bold" })*@
 }
