@@ -2,11 +2,11 @@
 @using Questionnaire.Core.Web.Helpers
 @model Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems.QuestionColumnItem
 <div data-role="popup" id="grid-popup-@(Model.ItemPublicKey)">
-      @using (Ajax.BeginGridFormHtml5("SaveGroupAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions, Model.QuestionnaireId, Model.ItemPublicKey, QuestionType.MultyOption))
+      @using (Ajax.BeginGridFormHtml5("SaveGroupAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions, Model.QuestionnaireId, Model.ItemPublicKey, Model.QuestionType))
       {
           @Html.Hidden("ParentGroupPublicKey", Model.ParentGroupPublicKey)
           
-          Html.RenderPartial(string.Format("~/Views/Survey/Answer/GridAnswerList/_{0}.cshtml", QuestionType.MultyOption), Model);
+          Html.RenderPartial(string.Format("~/Views/Survey/Answer/GridAnswerList/_{0}.cshtml", Model.QuestionType), Model);
           
       }
 </div>

@@ -1,61 +1,152 @@
 ﻿(function ($) {
-    $.answerForm = function (el, options) {
+    $.gridCell = function (el, options) {
         var base = this, o;
         base.$el = $(el);
         base.el = el;
         base.targetForm = null;
+        base.propagationKey = null;
+        base.questionId = null;
+        // Add a reverse reference to the DOM object
+        base.$el.data("gridCell", base);
+        base.init = function () {
+            base.options = o = $.extend(true, {}, {}, options);
+            base.questionId = base.$el.attr('question-item');
+            base.propagationKey = base.$el.attr('question-propagation-key');
+            var jTargetForm = $('[answer-form=' + base.questionId + ']');
+            if (!jTargetForm || jTargetForm.length == 0)
+                return;
+
+            base.targetForm = jTargetForm.getAnswerForm();
+            if (!base.targetForm) {
+                base.targetForm = jTargetForm.answerForm().getAnswerForm();
+            }
+            base.$el.parent().click(function (e) {
+                base.targetForm.open(e, base);
+            });
+
+        };
+        base.init();
+    };
+    $.answerForm = function (el, options) {
+        var base = this, o;
+        base.$el = $(el);
+        base.el = el;
+        base.questionId = null;
         // Add a reverse reference to the DOM object
         base.$el.data("answerForm", base);
         base.init = function () {
-            base.options = o = $.extend(true, {}, $.keyboard.defaultOptions, options);
-            var questionId = base.$el.attr('question-item');
-            base.targetForm = $('[answer-form=' + questionId + ']');
-            if (!base.targetForm || base.targetForm.length == 0)
-                return;
-            base.$el.click(function () {
-                var hidden = base.targetForm.find('input[name=PropogationPublicKey]');
-                var formType = base.targetForm.find('input[name=QuestionType]').val();
-                var propagationKey = base.$el.attr('question-propagation-key');
-                hidden.attr('value', propagationKey);
-                base[formType]();
+            base.questionId = base.$el.find('input[name=PublicKey]').val();
+            base.options = o = $.extend(true, {}, {}, options);
+            //    if (!base.targetForm.data("answerFormInit")) {
+            base.$el.ajaxSuccess(function (e, xhr, settings) {
+                if (e.target === base.el)
+                    base.AjaxSuccess(jQuery.parseJSON(xhr.responseText), getParameterByName('PropogationPublicKey', settings.data));
+            });
+            /*    base.targetForm.data("answerFormInit", true);
+            }*/
 
 
+        };
+        base.open = function (e, target) {
+            var hidden = base.$el.find('input[name=PropogationPublicKey]');
+            var formType = base.$el.find('input[name=QuestionType]').val();
+            hidden.val(target.propagationKey);
+            base[formType](e, target);
+        };
+        function getParameterByName(name, settings) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(settings);
+            if (results == null)
+                return "";
+            else
+                return decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+        base.AjaxSuccess = function (data, rowKey) {
+            $.each(data.Row, function (index, value) {
+                if (value.PropagationKey != rowKey)
+                    return;
+                $.each(value.Answers, function (answerIndex, answerValue) {
+                    var target = $('[question-propagation-key=' + rowKey + '][question-item=' + answerValue.PublicKey + ']');
+                    var targetPanel = target.parent();
+                    target.text(answerValue.AnswerString);
+                    target.attr('question-answer-key', answerValue.AnswerPublicKey);
+                    if (answerValue.Enabled) {
+                        targetPanel.removeClass('ui-disabled');
+                    } else {
+                        targetPanel.addClass('ui-disabled');
+                    }
+                    if (answerValue.Answered) {
+                        targetPanel.addClass('answered');
+                    }else {
+                        targetPanel.removeClass('answered');
+                    }
+                    if (answerValue.Valid) {
+                        targetPanel.removeClass('error_block');
+                    } else {
+                        targetPanel.addClass('error_block');
+                    }
+                });
             });
         };
-        base.SingleOption = function () {
-            var questionAnswer = base.$el.attr('question-answer-key');
-            $("input[type='radio']").attr('checked', false).checkboxradio("refresh");
-            var inputForSelect = base.targetForm.find('input[value=' + questionAnswer + ']');
+        base.openDialog = function () {
+            $('#grid-popup-' + base.questionId).popup('open');
+        };
+        base.SingleOption = function (e, target) {
+            var questionAnswer = target.$el.attr('question-answer-key');
+            base.$el.find("input[type='radio']").attr('checked', false).checkboxradio("refresh");
+            var inputForSelect = base.$el.find('input[value=' + questionAnswer + ']');
             inputForSelect.attr('checked', true).checkboxradio("refresh");
+            base.openDialog();
         };
-        base.YesNo = function () {
-            base.SingleOption();
+
+        base.YesNo = function (e, target) {
+            base.SingleOption(e, target);
         };
-        base.DropDownList = function () {
-            var questionAnswer = base.$el.attr('question-answer-key');
-            var inputForSelect = base.targetForm.find('option[value=' + questionAnswer + ']');
+        base.DropDownList = function (e, target) {
+            var questionAnswer = target.$el.attr('question-answer-key');
+            var inputForSelect = base.$el.find('option[value=' + questionAnswer + ']');
             inputForSelect.attr('selected', true);
             inputForSelect.parent().selectmenu("refresh");
+            base.openDialog();
         };
-        base.MultyOption = function () {
-            var questionAnswers = base.$el.attr('question-answer-key').split(';');
-            $("input[type='checkbox']").removeAttr('checked').checkboxradio("refresh");
+        base.MultyOption = function (e, target) {
+            var questionAnswers = target.$el.attr('question-answer-key').split(';');
+            base.$el.find("input[type='checkbox']").removeAttr('checked').checkboxradio("refresh");
             $.each(questionAnswers, function (index, value) {
-                var inputForSelect = base.targetForm.find("input[name='Answers[" + value + "].Selected']");
+                var inputForSelect = base.$el.find("input[name='Answers[" + value + "].Selected']");
                 inputForSelect.attr('checked', true).checkboxradio("refresh");
             });
+            base.openDialog();
         };
-        base.Numeric = function () {
+        base.Numeric = function (e, target) {
+            var questionAnswer = $.trim(target.$el.text());
+
+            var targetInput = base.$el.find("input[type='num']");
+
+            targetInput.val(questionAnswer);
+            targetInput.click();
         };
-        base.DateTime = function () {
+        base.DateTime = function (e, target) {
+            var questionAnswer = $.trim(target.$el.text());
+            var targetInput = base.targetForm.find("input[type='text']");
+
+            targetInput.val(questionAnswer);
+            targetInput.click();
         };
-        base.GpsCoordinates = function () {
+        base.GpsCoordinates = function (e, target) {
         };
-        base.Text = function () {
+        base.Text = function (e, target) {
+            var questionAnswer = $.trim(target.$el.text());
+            var targetInput = base.$el.find("input[type='text']");
+            targetInput.val(questionAnswer);
+            targetInput.click();
         };
-        base.Percentage = function () {
+        base.Percentage = function (e, target) {
         };
-        base.AutoPropagate = function () {
+        base.AutoPropagate = function (e, target) {
+            base.Numeric(e, target);
         };
         // Run initializer
         base.init();
@@ -67,6 +158,16 @@
         return this.each(function () {
             if (!$(this).data('answerForm')) {
                 (new $.answerForm(this, options));
+            }
+        });
+    };
+    $.fn.getGridCell = function () {
+        return this.data("gridCell");
+    };
+    $.fn.gridCell = function (options) {
+        return this.each(function () {
+            if (!$(this).data('gridCell')) {
+                (new $.gridCell(this, options));
             }
         });
     };
@@ -84,5 +185,5 @@ jQuery(document).bind("pagecreate", function (e) {
     // _create() function for each member of the array.
     // If the array is of zero length, then no _create() fucntion is called.
     var elements = jQuery(e.target).find("[question-item]");
-    elements.answerForm();
+    elements.gridCell();
 });

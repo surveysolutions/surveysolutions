@@ -57,7 +57,7 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
         /// </summary>
         public bool Answered
         {
-            get { return this.Answer == null; }
+            get { return this.Answer != null; }
         }
 
     }

@@ -9,8 +9,6 @@
     @Html.Hidden("Parent", Model.ItemPublicKey)
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
-    var required = string.Empty;
-    if (Model.Mandatory) { required = "true"; }
-    <p>here have to be text</p>
+    @Html.TextBox("AnswerValue", string.Empty, new { draw_key_board = "true" })
   @*  @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, "", new { draw_key_board = "true", @required }, new { @class = "keyboard key_grid" }, new { @class = "bold" })*@
 }

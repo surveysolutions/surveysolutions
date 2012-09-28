@@ -6,16 +6,8 @@
 }
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {
-    //var viewBag = (IDictionary<string, object>) ViewBag.EnabledRadioBoxSettings;
-    //viewBag.Add("name", Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName("AnswerValue"));
-    //string id = Html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue");
-    //viewBag.Add("id", id);
-    //viewBag.Add("draw-key-board", "true");
-    var required = string.Empty;
-    if (Model.Mandatory) { required = "true"; }
+    @Html.Hidden("Parent", Model.ItemPublicKey)
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
-    @Html.Hidden("Parent", Model.ItemPublicKey)
-    <p>here have to be number</p>
-  @*  @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, "", new { draw_key_board = "true", type = "num", @required }, new { @class = "calculator key_grid" }, new { @class = "bold" })*@
+    @Html.TextBox("AnswerValue", string.Empty, new { draw_key_board = "true", type = "num" })
 }
