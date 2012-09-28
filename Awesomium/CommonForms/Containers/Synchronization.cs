@@ -126,6 +126,15 @@ namespace Browsing.Common.Containers
                     this.isPushPossible = false;
 
                     status += "\n" + ex.Message;
+                    ex = issues.FirstOrDefault<SynchronizationException>(x => x is UsbUnaccebleException);
+                    if (ex != null)
+                    {
+                        this.isPullPossible = false;
+                        status +="\n" + ex.Message;
+                        this.syncPanel.ShowError(status);
+
+                        return; // fatal
+                    }
                 }
 
                 this.syncPanel.ShowError(status);
