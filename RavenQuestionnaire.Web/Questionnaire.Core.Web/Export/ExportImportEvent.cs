@@ -153,7 +153,7 @@ namespace Questionnaire.Core.Web.Export
             }
         }
         
-        protected IEnumerable<AggregateRootEvent> GetTemplate(Guid? templateGuid, Guid clientGuid)
+        protected IEnumerable<AggregateRootEvent> GetTemplate(Guid? templateGuid, Guid? clientGuid)
         {
             var archive = new List<AggregateRootEvent>();
             var events = this.synchronizer.ReadEvents().ToList();
@@ -163,6 +163,7 @@ namespace Questionnaire.Core.Web.Export
                         var payload = ((t.Payload as SnapshootLoaded).Template).Payload;
                         return payload != null && (payload as QuestionnaireDocument).PublicKey == templateGuid;
                     }).FirstOrDefault());
+
             return archive;
         }
 
@@ -182,9 +183,9 @@ namespace Questionnaire.Core.Web.Export
         /// <returns>
         /// Zip file as array of bytes
         /// </returns>
-        protected byte[] ExportInternal(Guid clientGuid, IEnumerable<AggregateRootEvent> events, string fileName)
+        protected byte[] ExportInternal(Guid? clientGuid, IEnumerable<AggregateRootEvent> events, string fileName)
         {
-            var data = new ZipFileData { ClientGuid = clientGuid, Events = events };
+            var data = new ZipFileData { ClientGuid = clientGuid == null ? Guid.Empty : clientGuid.Value, Events = events };
             var outputStream = new MemoryStream();
             using (var zip = new ZipFile())
             {
