@@ -24,6 +24,7 @@
                             <div style="height: 80px" class="ui-bar ui-bar-b">
                                 @Model.Columns[i + skipped].Title</div>
                         </div>
+                        Html.RenderPartial("~/Views/Survey/Question/_GridQuestion.cshtml", (@Model.Columns[i + skipped] as QuestionColumnItem));
                     }
                 </div>
                     foreach (var row in Model.Row)
@@ -36,30 +37,16 @@
                     </div>
                     @for (int i = 0; i < Math.Min(step, Model.Columns.Count - skipped); i++)
                     {
-                        var question = Model.Columns[i + skipped] as QuestionColumnItem;
-                        question.Answer = null;
                         <div class="ui-block-@letter[i + 1]">
-                            @if (row.Answers.ContainsKey(Model.Columns[i + skipped].ItemPublicKey))
-                            {
-                                question.Answer = row.Answers[Model.Columns[i + skipped].ItemPublicKey];
+                            @{
+                                        var answer = "Set Answer";
+                                        if (row.Answers.ContainsKey(Model.Columns[i + skipped].ItemPublicKey))
+                                        {
+                                            answer = (row.Answers[Model.Columns[i + skipped].ItemPublicKey] ?? answer).ToString();
+                                        }
                             }
-                            <div class="ui-bar ui-bar-c" style="height: 50px">@*@row.Answers[Model.Columns[i + skipped].ItemPublicKey] &nbsp;*@
-                                @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions))
-                                {
-                                    using (Html.BeginCollectionItem("questions", true, question.ItemPublicKey))
-                                    {
-                                        Html.RenderPartial("~/Views/Survey/Question/_GridQuestion.cshtml", question);
-                                    }
-                                    using (Html.BeginCollectionItem("settings", true, question.ItemPublicKey))
-                                    {
-
-
-                                    @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
-
-                                    @Html.Hidden("PropogationPublicKey", row.PropagationKey)
-
-                                    }
-                                }
+                            <div class="ui-bar ui-bar-c" style="height: 50px">
+                                <a href="#grid-popup-@(Model.Columns[i + skipped].ItemPublicKey)" data-inline="true" data-rel="popup">@answer</a>
                             </div>
                         </div>
                     }

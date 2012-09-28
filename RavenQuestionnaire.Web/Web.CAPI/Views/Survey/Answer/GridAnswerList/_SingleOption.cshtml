@@ -6,15 +6,12 @@
     var settings = new Dictionary<string, object>();
     settings.Add("onclick", "$(this.form).submit();");
 }
-<a href="#grid-popup-@(Model.ItemPublicKey)" data-inline="true" data-rel="popup">@(Model.Answer ?? "Set Answer")</a>
 @using (Html.BeginCollectionItem("Answers", true, Model.ItemPublicKey))
 {
     @Html.Hidden("Parent", Model.ItemPublicKey)
    
     
     
-    
-    <div data-role="popup" id="grid-popup-@(Model.ItemPublicKey)">
         <fieldset data-role="controlgroup">
             @foreach (CompleteAnswerView item in Model.Answers)
             {
@@ -29,5 +26,5 @@
                 </label>
             }
         </fieldset>
-    </div>
+   
 }
