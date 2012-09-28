@@ -239,6 +239,20 @@ Mono/NUnitLite.MonoDroid.Runner/bin/*
 Mono/NUnitLite.MonoDroid.Runner/obj/*
 Mono/NUnitLite.MonoDroid/bin/*
 Mono/NUnitLite.MonoDroid/obj/*
+*.user
+Mono/AndroidFluentAssertions/bin/*
+Mono/AndroidFluentAssertions/obj/*
+Mono/AndroidNcqrs.Restoring.EventStapshoot.test/bin/*
+Mono/AndroidNcqrs.Restoring.EventStapshoot.test/obj/*
+Mono/AndroidNcqrs.Restoring.EventStapshoot/bin/*
+Mono/AndroidNcqrs.Restoring.EventStapshoot/obj/*
+Mono/AndroidNcqrs.Spec/bin/*
+Mono/AndroidNcqrs.Spec/obj/*
+Mono/AndroidNcqrs.Tests/obj/*
+Mono/AndroidNCQRS/obj/*
+Mono/Newtonsoft.Json/bin/*
+Mono/Newtonsoft.Json/obj/*
+*.userprefs
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
