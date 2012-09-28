@@ -10,6 +10,7 @@
 namespace RavenQuestionnaire.Web.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -33,6 +34,8 @@ namespace RavenQuestionnaire.Web.Controllers
     using Questionnaire.Core.Web.Security;
 
     using RavenQuestionnaire.Core.Views.Event.File;
+    using RavenQuestionnaire.Core.Views.Group;
+    using RavenQuestionnaire.Core.Views.Questionnaire;
     using RavenQuestionnaire.Web.Models;
 
     /// <summary>
@@ -107,7 +110,9 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult Create(string id, Guid? groupPublicKey)
         {
             this.LoadImages();
-            return this.View("_Create", new QuestionView(id, groupPublicKey));
+            var question = new QuestionView(id, groupPublicKey);
+            this.LoadGroups(question.QuestionnaireKey, question.PublicKey);
+            return this.View("_Create", question);
         }
 
         /// <summary>
@@ -291,7 +296,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <returns>
         /// </returns>
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Save(QuestionView[] question, AnswerView[] answers)
+        public ActionResult Save(QuestionView[] question, AnswerView[] answers, List<Guid> triggers)
         {
             QuestionView model = question[0];
             if (this.ModelState.IsValid)
@@ -472,6 +477,16 @@ namespace RavenQuestionnaire.Web.Controllers
                 "_GetAnswers", new QuestionConditionModel { Source = source, TargetPublicKey = targetPublicKey });
         }
 
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ActionResult CreatePropagateGroup(Guid questionPublicKey, Guid questionnaireId)
+        {
+            this.LoadGroups(questionnaireId, questionPublicKey);
+            return this.PartialView(
+                "_AutoPropagateRow", new QuestionView { Parent = questionPublicKey, PublicKey = Guid.NewGuid() });
+        }
+
+
         #endregion
 
         #region Methods
@@ -518,6 +533,42 @@ namespace RavenQuestionnaire.Web.Controllers
                 this.ViewBag.Images = imagesList;
             }
         }
+
+        /// <summary>
+        /// LoadAllGroups
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        private void LoadGroups(Guid questionnaireId, Guid questionPublicKey)
+        {
+            QuestionnaireView model =
+                this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
+                    new QuestionnaireViewInputModel(questionnaireId));
+            var groups = new Dictionary<string, Guid>();
+            foreach (var group in model.Groups)
+                this.SelectAll(group, groups);
+            this.ViewBag.Groups = groups;
+        }
+
+        /// <summary>
+        /// Select all groups
+        /// </summary>
+        /// <param name="currentGroup">
+        /// The current group.
+        /// </param>
+        /// <param name="groups">
+        /// The groups.
+        /// </param>
+        private void SelectAll(GroupView currentGroup, Dictionary<string, Guid> groups)
+        {
+            groups.Add(string.Format("{0}-{1}", currentGroup.Title, currentGroup.PublicKey), currentGroup.PublicKey);
+                if (currentGroup.Groups.Count() > 0) 
+                    foreach (var childGroup in currentGroup.Groups) 
+                        this.SelectAll(childGroup, groups);
+        }
+
+
 
         /// <summary>
         /// The resize image.

@@ -77,7 +77,7 @@ namespace Main.Core.View.Question
             var autoQuestion = doc as IAutoPropagate;
             if (autoQuestion != null && autoQuestion.Triggers.Any())
             {
-                this.TargetGroupKey = autoQuestion.Triggers.First();
+                this.Triggers = autoQuestion.Triggers;
             }
         }
 
@@ -169,6 +169,11 @@ namespace Main.Core.View.Question
         /// Gets or sets the validation message.
         /// </summary>
         public string ValidationMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets Triggers.
+        /// </summary>
+        public List<Guid> Triggers { get; set; }
 
         #endregion
     }

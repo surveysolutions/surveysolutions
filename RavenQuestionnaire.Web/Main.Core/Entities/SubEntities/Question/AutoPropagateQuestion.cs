@@ -168,6 +168,9 @@ namespace Main.Core.Entities.SubEntities.Question
 
         #region Implementation of ITriggerable
 
+        /// <summary>
+        /// Gets or sets Triggers.
+        /// </summary>
         public List<Guid> Triggers { get; set; }
 
         #endregion

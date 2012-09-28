@@ -14,6 +14,7 @@ using Main.Core.View.Question;
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Web.Mvc;
 
     using Main.Core.Commands.Questionnaire.Question;
@@ -88,7 +89,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     It.Is<QuestionnaireViewInputModel>(v => v.QuestionnaireId.Equals(innerDocument.PublicKey)))).Returns
                 (new QuestionnaireView(innerDocument));
 
-            this.Controller.Save(new[] { questionView }, questionView.Answers);
+            this.Controller.Save(new[] { questionView }, questionView.Answers, questionView.Triggers);
             this.CommandServiceMock.Verify(x => x.Execute(It.IsAny<ChangeQuestionCommand>()), Times.Once());
         }
 
@@ -108,7 +109,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 (new QuestionnaireView(innerDocument));
             this.Controller.Save(
                 new[] { new QuestionView { Title = "test", QuestionnaireKey = innerDocument.PublicKey } }, 
-                new AnswerView[0]);
+                new AnswerView[0],
+                new List<Guid>());
             this.CommandServiceMock.Verify(x => x.Execute(It.IsAny<AddQuestionCommand>()), Times.Once());
         }
 

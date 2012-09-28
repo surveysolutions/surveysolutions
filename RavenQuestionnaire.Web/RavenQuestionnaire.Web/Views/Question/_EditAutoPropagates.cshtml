@@ -1,0 +1,15 @@
+﻿@model Main.Core.View.Question.QuestionView
+
+
+<div id="apguid" style="display: none;">            
+    <label class="control-label"> Propagateble GUID</label>
+    <div class="controls">
+        @Html.Partial("_AutoPropagateRow", Model)
+    </div>
+    <div id="divNewPropagateGroup"></div>
+    @Ajax.ActionLink("Add new propagate group", "CreatePropagateGroup", "Question", new { questionPublicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey }, new AjaxOptions
+                                                                                                {
+                                                                                                    UpdateTargetId = "divNewPropagateGroup",
+                                                                                                    InsertionMode = InsertionMode.InsertAfter
+                                                                                                })
+</div>
