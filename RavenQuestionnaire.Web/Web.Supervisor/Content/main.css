@@ -2,6 +2,13 @@
 	padding-top: 40px;
 }
 
+.pull-right #menu{
+    width: 300px;
+}
+
+.pull-right #menu li {
+    float: right;
+}
 .assignment-form {
 	display: none;
 }
