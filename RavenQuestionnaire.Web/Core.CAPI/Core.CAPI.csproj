@@ -66,6 +66,13 @@
     <Compile Include="Views\Json\CompleteQuestionnaireJsonView.cs" />
     <Compile Include="Views\Json\CompleteQuestionnaireJsonViewFactory.cs" />
     <Compile Include="Views\Json\CompleteQuestionView.cs" />
+    <Compile Include="Views\PropagatedGroupViews\QuestionItemView\ColumnItems\PropagatedGroupColumnItem.cs" />
+    <Compile Include="Views\PropagatedGroupViews\QuestionItemView\ColumnItems\QuestionColumnItem.cs" />
+    <Compile Include="Views\PropagatedGroupViews\QuestionItemView\ColumnItems\SubGroupColumnItem.cs" />
+    <Compile Include="Views\PropagatedGroupViews\QuestionItemView\PropagatedGridViewFactory.cs" />
+    <Compile Include="Views\PropagatedGroupViews\QuestionItemView\PropagatedGridViewInputModel.cs" />
+    <Compile Include="Views\PropagatedGroupViews\QuestionItemView\PropagatedGroupRowItem.cs" />
+    <Compile Include="Views\PropagatedGroupViews\QuestionItemView\PropagatedGroupsContainer.cs" />
     <Compile Include="Views\Synchronization\SyncProgressFactory.cs" />
     <Compile Include="Views\Synchronization\SyncProgressInputModel.cs" />
     <Compile Include="Views\Synchronization\SyncProgressView.cs" />

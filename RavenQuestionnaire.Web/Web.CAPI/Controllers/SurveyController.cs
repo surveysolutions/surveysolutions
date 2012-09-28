@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView;
+
 namespace Web.CAPI.Controllers
 {
     using System;
@@ -554,6 +556,18 @@ namespace Web.CAPI.Controllers
             this.ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             this.ViewBag.PagePrefix = string.Empty;
             return this.PartialView("_SurveyContent", model);
+        }
+        public ActionResult PropagatedGrid(Guid id, Guid group)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new HttpException(404, "Invalid query string parameters");
+            }
+            PropagatedGroupsContainer model =
+              this.viewRepository.Load<PropagatedGridViewInputModel, PropagatedGroupsContainer>(
+                  new PropagatedGridViewInputModel(id, group));
+            
+            return View("Group/_GridPropagatedView", model);
         }
 
         /// <summary>

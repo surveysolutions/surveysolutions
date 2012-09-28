@@ -1,0 +1,62 @@
+﻿@using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems
+@using Main.Core.View.Group
+@using Questionnaire.Core.Web.Helpers
+@model Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.PropagatedGroupsContainer
+@{ int step = 3;
+   int skipped = 0;
+   string[] letter = new string[] { "a", "b", "c", "d" };
+}
+<div data-role="panel" data-id="main" id="content_container">
+    <div data-role="page" class="page" data-footer-theme="b" data-content-theme="c">
+        <!-- /header -->
+        <div data-role="content">
+            @while (Model.Columns.Skip(skipped).Any())
+            {
+
+                <div class="ui-grid-c" data-theme="e">
+                    <div class="ui-block-a">
+                        <div style="height: 80px" class="ui-bar ui-bar-b">
+                            &nbsp;</div>
+                    </div>
+                    @for (int i = 0; i < Math.Min(step, Model.Columns.Count - skipped); i++)
+                    {
+                        <div class="ui-block-@letter[i + 1]">
+                            <div style="height: 80px" class="ui-bar ui-bar-b">
+                                @Model.Columns[i + skipped].Title</div>
+                        </div>
+                        Html.RenderPartial("~/Views/Survey/Question/_GridQuestion.cshtml", (@Model.Columns[i + skipped] as QuestionColumnItem));
+                    }
+                </div>
+                    foreach (var row in Model.Row)
+                    {
+                <div class="ui-grid-c">
+                    <div class="ui-block-a">
+                        <div class="ui-bar ui-bar-c" style="height: 50px">
+                            @row.Title
+                        </div>
+                    </div>
+                    @for (int i = 0; i < Math.Min(step, Model.Columns.Count - skipped); i++)
+                    {
+                        <div class="ui-block-@letter[i + 1]">
+                            @{
+                                        var answer = "Set Answer";
+                                        if (row.Answers.ContainsKey(Model.Columns[i + skipped].ItemPublicKey))
+                                        {
+                                            answer = (row.Answers[Model.Columns[i + skipped].ItemPublicKey] ?? answer).ToString();
+                                        }
+                            }
+                            <div class="ui-bar ui-bar-c" style="height: 50px">
+                                <a href="#grid-popup-@(Model.Columns[i + skipped].ItemPublicKey)" data-inline="true" data-rel="popup">@answer</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+               
+
+                    }
+                <br />
+                    skipped += step;
+            }
+        </div>
+    </div>
+</div>
