@@ -111,7 +111,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             this.LoadImages();
             var question = new QuestionView(id, groupPublicKey);
-            this.LoadGroups(question.QuestionnaireKey, question.PublicKey);
+            this.LoadGroups(question.QuestionnaireKey, groupPublicKey);
             return this.View("_Create", question);
         }
 
@@ -186,6 +186,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
 
             this.LoadImages();
+            this.LoadGroups(questionnaireKey.Value, publicKey.Value);
             QuestionView model =
                 this.viewRepository.Load<QuestionViewInputModel, QuestionView>(
                     new QuestionViewInputModel(publicKey.Value, questionnaireKey.Value));
@@ -296,7 +297,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <returns>
         /// </returns>
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Save(QuestionView[] question, AnswerView[] answers, List<Guid> triggers)
+        public ActionResult Save(QuestionView[] question, AnswerView[] answers, ICollection<Guid> triggers)
         {
             QuestionView model = question[0];
             if (this.ModelState.IsValid)
@@ -316,7 +317,8 @@ namespace RavenQuestionnaire.Web.Controllers
 
                         // new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
-                        if (model.TargetGroupKey == Guid.Empty)
+                        
+                        if (triggers.ToList().Count == 0)
                         {
                             commandService.Execute(
                                 new AddQuestionCommand(
@@ -342,7 +344,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.QuestionnaireKey, 
                                     newItemKey, 
                                     model.Title, 
-                                    model.TargetGroupKey, 
+                                    triggers.Distinct().ToList(), 
                                     model.StataExportCaption, 
                                     model.QuestionType, 
                                     model.Parent, 
@@ -360,7 +362,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     {
                         // new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
-                        if (model.TargetGroupKey == Guid.Empty)
+                        if (triggers.ToList().Count == 0)
                         {
                             commandService.Execute(
                                 new ChangeQuestionCommand(
@@ -385,7 +387,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.QuestionnaireKey, 
                                     model.PublicKey, 
                                     model.Title, 
-                                    model.TargetGroupKey, 
+                                    triggers.Distinct().ToList(), 
                                     model.StataExportCaption, 
                                     model.QuestionType, 
                                     model.ConditionExpression, 
@@ -403,6 +405,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     this.ModelState.AddModelError(
                         string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
+                    this.LoadGroups(model.QuestionnaireKey, model.PublicKey);
                     return this.PartialView("_Create", model);
                 }
 
@@ -479,9 +482,9 @@ namespace RavenQuestionnaire.Web.Controllers
 
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult CreatePropagateGroup(Guid questionPublicKey, Guid questionnaireId)
+        public ActionResult CreatePropagateGroup(Guid questionPublicKey, Guid groupPublicKey, Guid questionnaireId)
         {
-            this.LoadGroups(questionnaireId, questionPublicKey);
+            this.LoadGroups(questionnaireId, groupPublicKey);
             return this.PartialView(
                 "_AutoPropagateRow", new QuestionView { Parent = questionPublicKey, PublicKey = Guid.NewGuid() });
         }
@@ -540,14 +543,14 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
-        private void LoadGroups(Guid questionnaireId, Guid questionPublicKey)
+        private void LoadGroups(Guid questionnaireId, Guid? groupPublicKey)
         {
             QuestionnaireView model =
                 this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                     new QuestionnaireViewInputModel(questionnaireId));
             var groups = new Dictionary<string, Guid>();
             foreach (var group in model.Groups)
-                this.SelectAll(group, groups);
+                this.SelectAll(group, groups, groupPublicKey);
             this.ViewBag.Groups = groups;
         }
 
@@ -560,12 +563,16 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="groups">
         /// The groups.
         /// </param>
-        private void SelectAll(GroupView currentGroup, Dictionary<string, Guid> groups)
+        /// <param name="groupPublicKey">
+        /// The group Public Key.
+        /// </param>
+        private void SelectAll(GroupView currentGroup, Dictionary<string, Guid> groups, Guid? groupPublicKey)
         {
-            groups.Add(string.Format("{0}-{1}", currentGroup.Title, currentGroup.PublicKey), currentGroup.PublicKey);
+            if (groupPublicKey == null || groupPublicKey != currentGroup.PublicKey)
+                groups.Add(string.Format("{0}-{1}", currentGroup.Title, currentGroup.PublicKey), currentGroup.PublicKey);
                 if (currentGroup.Groups.Count() > 0) 
                     foreach (var childGroup in currentGroup.Groups) 
-                        this.SelectAll(childGroup, groups);
+                        this.SelectAll(childGroup, groups, groupPublicKey);
         }
 
 

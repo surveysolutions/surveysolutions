@@ -187,8 +187,8 @@ namespace Main.Core.Domain
             bool mandatory, 
             Order answerOrder, 
             string instructions, 
-            Guid? groupPublicKey, 
-            Guid targetGroupKey, 
+            Guid? groupPublicKey,
+            List<Guid> triggers, 
             Answer[] answers)
         {
             //// performe checks before event raising
@@ -211,7 +211,7 @@ namespace Main.Core.Domain
                         Mandatory = mandatory, 
                         AnswerOrder = answerOrder, 
                         GroupPublicKey = groupPublicKey, 
-                        TargetGroupKey = targetGroupKey, 
+                        Triggers = triggers,
                         Answers = answers, 
                         Instructions = instructions
                     });
@@ -265,7 +265,7 @@ namespace Main.Core.Domain
         public void ChangeQuestion(
             Guid publicKey, 
             string questionText, 
-            Guid targetGroupKey, 
+            List<Guid> triggers, 
             string stataExportCaption, 
             string instructions, 
             QuestionType questionType, 
@@ -282,7 +282,7 @@ namespace Main.Core.Domain
                 new QuestionChanged
                     {
                         QuestionText = questionText, 
-                        TargetGroupKey = targetGroupKey, 
+                        Triggers = triggers, 
                         StataExportCaption = stataExportCaption, 
                         QuestionType = questionType, 
                         ConditionExpression = conditionExpression, 

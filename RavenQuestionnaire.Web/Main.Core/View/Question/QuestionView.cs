@@ -204,6 +204,7 @@ namespace Main.Core.View.Question
         {
             this.Answers = new T[0];
             this.Cards = new CardView[0];
+            this.Triggers = new List<Guid>();
         }
 
         /// <summary>
@@ -236,6 +237,7 @@ namespace Main.Core.View.Question
         {
             this.Answers = new T[0];
             this.Cards = new CardView[0];
+            this.Triggers = new List<Guid>();
         }
 
         #endregion
@@ -442,6 +444,11 @@ namespace Main.Core.View.Question
             {
                 this.Cards =
                     doc.Cards.Select(c => new CardView(doc.PublicKey, c)).OrderBy(a => Guid.NewGuid()).ToArray();
+            }
+
+            if (doc.Triggers != null)
+            {
+                this.Triggers = doc.Triggers.ToList();
             }
         }
 

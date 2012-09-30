@@ -1,13 +1,33 @@
-﻿@model Main.Core.View.Question.QuestionView
+﻿@using Main.Core.Entities.SubEntities
+@model Main.Core.View.Question.QuestionView
 
+@{ 
+    var currentRowId = string.Format("divEditAutoPropagatable{0}", Model.PublicKey == Guid.Empty ? Guid.NewGuid().ToString() : Model.PublicKey.ToString());
+    var displayStyle = Model.QuestionType == QuestionType.AutoPropagate ? "block" : "none";
+ }
 
-<div id="apguid" style="display: none;">            
-    <label class="control-label"> Propagateble GUID</label>
-    <div class="controls">
-        @Html.Partial("_AutoPropagateRow", Model)
-    </div>
-    <div id="divNewPropagateGroup"></div>
-    @Ajax.ActionLink("Add new propagate group", "CreatePropagateGroup", "Question", new { questionPublicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey }, new AjaxOptions
+<div id="apguid" style="display:@displayStyle; ">            
+    <label class="control-label"> Propagateble GUID</label>       
+    <div id="divNewPropagateGroup">      
+     @foreach (var item in Model.Triggers)
+     {
+         var list = new SelectList(new List<Guid>(), string.Empty);
+         var current = string.Empty;
+         if (ViewBag.Groups != null)
+         {
+             var allGroups = this.ViewBag.Groups as Dictionary<string, Guid>;
+             current = allGroups.Where(gr => gr.Value == item).FirstOrDefault().Key;
+             list = new SelectList(allGroups.Where(t=>t.Key != current), "Value", "Key");
+             
+         }
+        <div id="@currentRowId" class="display-answer">   
+        @Html.DropDownList("triggers", list, current)
+        <a href="javascript:void(0)" onclick="$('#@currentRowId').remove()" class="btn btn-danger btn-mini">
+            <i class="icon-remove icon-white"></i>Delete</a>            
+        </div>
+    }
+    </div>     
+    @Ajax.ActionLink("Add new propagate group", "CreatePropagateGroup", "Question", new { questionPublicKey = Model.PublicKey, groupPublicKey = Model.Parent, questionnaireId = Model.QuestionnaireKey }, new AjaxOptions
                                                                                                 {
                                                                                                     UpdateTargetId = "divNewPropagateGroup",
                                                                                                     InsertionMode = InsertionMode.InsertAfter

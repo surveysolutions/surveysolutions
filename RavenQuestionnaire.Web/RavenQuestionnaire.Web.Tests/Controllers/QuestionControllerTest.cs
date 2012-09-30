@@ -110,7 +110,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             this.Controller.Save(
                 new[] { new QuestionView { Title = "test", QuestionnaireKey = innerDocument.PublicKey } }, 
                 new AnswerView[0],
-                new List<Guid>());
+                new Guid[0]);
             this.CommandServiceMock.Verify(x => x.Execute(It.IsAny<AddQuestionCommand>()), Times.Once());
         }
 
