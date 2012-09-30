@@ -111,7 +111,6 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             this.LoadImages();
             var question = new QuestionView(id, groupPublicKey);
-            this.LoadGroups(question.QuestionnaireKey, groupPublicKey);
             return this.View("_Create", question);
         }
 
@@ -318,7 +317,7 @@ namespace RavenQuestionnaire.Web.Controllers
                         // new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
                         
-                        if (triggers.ToList().Count == 0)
+                        if (triggers == null || triggers.ToList().Count == 0)
                         {
                             commandService.Execute(
                                 new AddQuestionCommand(
@@ -362,7 +361,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     {
                         // new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
-                        if (triggers.ToList().Count == 0)
+                        if (triggers == null || triggers.ToList().Count == 0)
                         {
                             commandService.Execute(
                                 new ChangeQuestionCommand(
