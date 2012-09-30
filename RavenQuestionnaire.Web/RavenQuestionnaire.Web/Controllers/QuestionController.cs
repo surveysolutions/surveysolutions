@@ -548,8 +548,9 @@ namespace RavenQuestionnaire.Web.Controllers
                 this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                     new QuestionnaireViewInputModel(questionnaireId));
             var groups = new Dictionary<string, Guid>();
-            foreach (var group in model.Groups)
-                this.SelectAll(group, groups, groupPublicKey);
+            if (model != null) 
+                foreach (var group in model.Groups) 
+                    this.SelectAll(group, groups, groupPublicKey);
             this.ViewBag.Groups = groups;
         }
 
