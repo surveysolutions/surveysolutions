@@ -159,6 +159,12 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </summary>
         public string ValidationMessage { get; set; }
 
+        /// <summary>
+        /// Gets or sets Triggers.
+        /// </summary>
+        public List<Guid> Triggers { get; set; }
+
+
         #endregion
 
         #region Public Methods and Operators

@@ -611,6 +611,8 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Questionnaire\DetailsOld.cshtml" />
+    <Content Include="Views\Question\_AutoPropagateRow.cshtml" />
+    <Content Include="Views\Question\_EditAutoPropagates.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

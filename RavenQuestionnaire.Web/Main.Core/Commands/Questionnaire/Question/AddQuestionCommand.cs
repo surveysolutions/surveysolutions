@@ -9,6 +9,7 @@
 namespace Main.Core.Commands.Questionnaire.Question
 {
     using System;
+    using System.Collections.Generic;
 
     using Main.Core.Domain;
     using Main.Core.Entities.SubEntities;
@@ -114,8 +115,8 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// <param name="questionText">
         /// The question text.
         /// </param>
-        /// <param name="TargetGroupKey">
-        /// The target group key.
+        /// <param name="triggers">
+        /// The List of guids for autopropogated groups
         /// </param>
         /// <param name="stataExportCaption">
         /// The stata export caption.
@@ -153,8 +154,8 @@ namespace Main.Core.Commands.Questionnaire.Question
         public AddQuestionCommand(
             Guid questionnaireId, 
             Guid publicKey, 
-            string questionText, 
-            Guid TargetGroupKey, 
+            string questionText,
+            List<Guid> triggers, 
             string stataExportCaption, 
             QuestionType questionType, 
             Guid? groupPublicKey, 
@@ -169,7 +170,7 @@ namespace Main.Core.Commands.Questionnaire.Question
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionText = questionText;
-            this.TargetGroupKey = TargetGroupKey;
+            this.Triggers = triggers;
             this.StataExportCaption = stataExportCaption;
             this.QuestionType = questionType;
             this.ConditionExpression = conditionExpression;
@@ -183,6 +184,8 @@ namespace Main.Core.Commands.Questionnaire.Question
             this.Answers = answers;
             this.PublicKey = publicKey;
         }
+
+
 
         #endregion
 
@@ -249,10 +252,15 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// </summary>
         public string StataExportCaption { get; set; }
 
+        ///// <summary>
+        ///// Gets or sets the target group key.
+        ///// </summary>
+        //public Guid TargetGroupKey { get; set; }
+
         /// <summary>
-        /// Gets or sets the target group key.
+        /// Gets or sets Triggers.
         /// </summary>
-        public Guid TargetGroupKey { get; set; }
+        public List<Guid> Triggers { get; set; }
 
         /// <summary>
         /// Gets or sets the validation expression.
