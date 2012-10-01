@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireConditionExecutor.cs" company="">
-//   
+// <copyright file="CompleteQuestionnaireConditionExecutor.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The complete questionnaire condition executor.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.ExpressionExecutors
 {
     using System;
@@ -47,6 +48,50 @@ namespace Main.Core.ExpressionExecutors
 
         #region Public Methods and Operators
 
+
+
+        /*/// <summary>
+        /// The execute.
+        /// </summary>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        public bool Execute(<T> executable)
+        {
+            if (string.IsNullOrEmpty(question.ConditionExpression))
+            {
+                return true;
+            }
+
+            var expression = new Expression(question.ConditionExpression);
+            expression.EvaluateParameter += (name, args) =>
+            {
+                Guid nameGuid = Guid.Parse(name);
+                Guid? propagationKey = question.PropogationPublicKey;
+                var targetQuestion = this.hash[nameGuid, propagationKey];
+                if (!targetQuestion.Enabled)
+                {
+                    args.Result = null;
+                    return;
+                }
+                args.Result = targetQuestion.GetAnswerObject();
+            };
+            bool result = false;
+            try
+            {
+                result = (bool)expression.Evaluate();
+            }
+            catch (Exception)
+            {
+            }
+
+            return result;
+        }
+*/
+
         /// <summary>
         /// The execute.
         /// </summary>
@@ -63,8 +108,8 @@ namespace Main.Core.ExpressionExecutors
                 return true;
             }
 
-            var e = new Expression(question.ConditionExpression);
-            e.EvaluateParameter += (name, args) =>
+            var expression = new Expression(question.ConditionExpression);
+            expression.EvaluateParameter += (name, args) =>
                 {
                     Guid nameGuid = Guid.Parse(name);
                     Guid? propagationKey = question.PropogationPublicKey;
@@ -79,7 +124,7 @@ namespace Main.Core.ExpressionExecutors
             bool result = false;
             try
             {
-                result = (bool)e.Evaluate();
+                result = (bool)expression.Evaluate();
             }
             catch (Exception)
             {
@@ -124,8 +169,8 @@ namespace Main.Core.ExpressionExecutors
                 return true;
             }
 
-            var e = new Expression(group.ConditionExpression);
-            e.EvaluateParameter += (name, args) =>
+            var expression = new Expression(group.ConditionExpression);
+            expression.EvaluateParameter += (name, args) =>
                 {
                     Guid nameGuid = Guid.Parse(name);
                     Guid? propagationKey = group.PropogationPublicKey;
@@ -135,7 +180,7 @@ namespace Main.Core.ExpressionExecutors
             bool result = false;
             try
             {
-                result = (bool)e.Evaluate();
+                result = (bool)expression.Evaluate();
             }
             catch (Exception)
             {
@@ -157,17 +202,19 @@ namespace Main.Core.ExpressionExecutors
         {
             foreach (IComposite child in group.Children)
             {
+
                 var question = child as ICompleteQuestion;
                 if (question != null)
                 {
-                    question.Enabled = result && Execute(question);
+                    
+                    question.Enabled = result && this.Execute(question); ////method could not be executed if result is false
                     continue;
                 }
 
                 var gr = child as ICompleteGroup;
                 if (gr != null && !gr.IsGroupPropagationTemplate())
                 {
-                    gr.Enabled = result && Execute(gr);
+                    gr.Enabled = result && this.Execute(gr); ////method could not be executed if result is false
                 }
             }
         }

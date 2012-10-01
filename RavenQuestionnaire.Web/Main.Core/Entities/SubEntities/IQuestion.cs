@@ -1,22 +1,23 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IQuestion.cs" company="">
-//   
+// <copyright file="IQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The Question interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities
 {
     using System.Collections.Generic;
 
     using Main.Core.Entities.Composite;
-    using Main.Core.Entities.Observers;
+    
 
     /// <summary>
     /// The Question interface.
     /// </summary>
-    public interface IQuestion : IComposite
+    public interface IQuestion : IComposite, IConditional
     {
         #region Public Properties
 
@@ -39,12 +40,7 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the comments.
         /// </summary>
         string Comments { get; set; }
-
-        /// <summary>
-        /// Gets or sets the condition expression.
-        /// </summary>
-        string ConditionExpression { get; set; }
-
+        
         /// <summary>
         /// Gets or sets a value indicating whether featured.
         /// </summary>
