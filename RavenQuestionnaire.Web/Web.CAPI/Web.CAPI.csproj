@@ -232,6 +232,8 @@
     <Content Include="Content\themes\jquerymobile\jquery.ui.datepicker.mobile.css" />
     <Content Include="Content\themes\jquerymobile\keyboard.css" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\capi.answerform.js" />
+    <Content Include="Scripts\capi.keyboard.js" />
     <Content Include="Scripts\code.photoswipe.jquery-3.0.4.min.js" />
     <Content Include="Scripts\jqmIScroll\iscroll.js" />
     <Content Include="Scripts\jqmIScroll\jquery.mobile.iscrollview.js" />
@@ -337,6 +339,18 @@
     <Content Include="Views\Survey\Complete\_Invalid.cshtml" />
     <Content Include="Views\Survey\Complete\_Unanswered.cshtml" />
     <Content Include="Views\Error\InternalServerError.cshtml" />
+    <Content Include="Views\Survey\Group\_GridPropagatedView.cshtml" />
+    <Content Include="Views\Survey\Question\_GridQuestion.cshtml" />
+    <Content Include="Views\Survey\Answer\GridAnswerList\_AutoPropagate.cshtml" />
+    <Content Include="Views\Survey\Answer\GridAnswerList\_DateTime.cshtml" />
+    <Content Include="Views\Survey\Answer\GridAnswerList\_DropDownList.cshtml" />
+    <Content Include="Views\Survey\Answer\GridAnswerList\_GpsCoordinates.cshtml" />
+    <Content Include="Views\Survey\Answer\GridAnswerList\_MultyOption.cshtml" />
+    <Content Include="Views\Survey\Answer\GridAnswerList\_Numeric.cshtml" />
+    <Content Include="Views\Survey\Answer\GridAnswerList\_Percentage.cshtml" />
+    <Content Include="Views\Survey\Answer\GridAnswerList\_SingleOption.cshtml" />
+    <Content Include="Views\Survey\Answer\GridAnswerList\_Text.cshtml" />
+    <Content Include="Views\Survey\Answer\GridAnswerList\_YesNo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
