@@ -14,29 +14,20 @@ namespace Main.Core.Entities.SubEntities.Complete
     /// <summary>
     /// The CompleteQuestion interface.
     /// </summary>
-    public interface ICompleteQuestion : IQuestion
+    public interface ICompleteQuestion : IQuestion, ICompleteItem
     {
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether valid.
+        /// </summary>
+        bool Valid { get; set; }
 
         /// <summary>
         /// Gets or sets the answer date.
         /// </summary>
         DateTime? AnswerDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether enabled.
-        /// </summary>
-        bool Enabled { get; set; }
-
-        /// <summary>
-        /// Gets or sets the propogation public key.
-        /// </summary>
-        Guid? PropogationPublicKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether valid.
-        /// </summary>
-        bool Valid { get; set; }
 
         #endregion
 
