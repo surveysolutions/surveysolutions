@@ -247,6 +247,7 @@
     <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="Events\AbstractEventSync.cs" />
+    <Compile Include="Events\AbstractSnapshotableEventSync.cs" />
     <Compile Include="Events\AggregateRootEvent.cs" />
     <Compile Include="Events\AggregateRootEventStream.cs" />
     <Compile Include="Events\Collection\CollectionItemRemoved.cs" />

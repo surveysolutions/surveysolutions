@@ -79,6 +79,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
             Assert.AreEqual(result.First().EventSequence, 2);
             Assert.AreEqual(result.Last().EventSequence, 3);
         }
+
         [Test]
         public void CreateUncommittedEventStream_RemoteStreamDontHaveAllHistoryOnlyLastEventFromBaseStreamOnFirstPalce_EverithingAfterFirstEventIsCopiedInTail()
         {
