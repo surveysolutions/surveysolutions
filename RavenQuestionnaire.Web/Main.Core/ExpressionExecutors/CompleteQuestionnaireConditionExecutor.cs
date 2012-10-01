@@ -126,8 +126,9 @@ namespace Main.Core.ExpressionExecutors
             {
                 result = (bool)expression.Evaluate();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+
             }
 
             return result;
