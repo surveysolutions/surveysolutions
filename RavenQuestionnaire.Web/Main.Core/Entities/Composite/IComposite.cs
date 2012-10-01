@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IComposite.cs" company="">
-//   
+// <copyright file="IComposite.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The Composite interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.Composite
 {
     using System;

@@ -188,6 +188,8 @@
     <Compile Include="Entities\SubEntities\AbstractQuestion.cs" />
     <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompelteValueQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Complete\ICompleteItem.cs" />
+    <Compile Include="Entities\SubEntities\IConditional.cs" />
     <Compile Include="Entities\SubEntities\Order.cs" />
     <Compile Include="Entities\SubEntities\AnswerType.cs" />
     <Compile Include="Entities\SubEntities\BindedQuestion.cs" />
@@ -292,7 +294,6 @@
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />
-    <Compile Include="ExpressionExecutors\StatusProcessorExecutor.cs" />
     <Compile Include="NCQRSInit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
