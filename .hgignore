@@ -253,6 +253,12 @@ Mono/AndroidNCQRS/obj/*
 Mono/Newtonsoft.Json/bin/*
 Mono/Newtonsoft.Json/obj/*
 *.userprefs
+Mono/AndroidMocks/bin/*
+Mono/AndroidMocks/obj/*
+Mono/AndroidNcqrs.Tests.Runner/bin/*
+Mono/AndroidNcqrs.Tests.Runner/obj/*
+Mono/AndroidNcqrs.Tests/bin/*
+Mono/AndroidNCQRS/bin/*
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
