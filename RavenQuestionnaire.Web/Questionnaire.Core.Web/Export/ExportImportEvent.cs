@@ -11,17 +11,13 @@ namespace Questionnaire.Core.Web.Export
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Text;
     using System.Web;
 
     using Ionic.Zip;
     using Ionic.Zlib;
 
-    using Main.Core.Documents;
     using Main.Core.Events;
-
-    using Ncqrs.Restoring.EventStapshoot;
 
     using Newtonsoft.Json;
 
@@ -50,15 +46,6 @@ namespace Questionnaire.Core.Web.Export
         /// The upload file.
         /// </param>
         void Import(HttpPostedFileBase uploadFile);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        byte[] ExportTemplate(Guid? id, Guid? clientGuid);
 
         #endregion
     }
@@ -108,20 +95,6 @@ namespace Questionnaire.Core.Web.Export
             return this.ExportInternal(clientGuid, this.synchronizer.ReadEvents(), "backup.txt");
         }
 
-        /// <summary>
-        /// Export template
-        /// </summary>
-        /// <param name="templateGuid">
-        /// The template guid.
-        /// </param>
-        /// <returns>
-        /// Zip archive contains all event connected with template questionnaire
-        /// </returns>
-        public byte[] ExportTemplate(Guid? templateGuid, Guid? clientGuid)
-        {
-            return this.ExportInternal(clientGuid, GetTemplate(templateGuid, clientGuid), string.Format("template{0}.txt", templateGuid == null ? "s" : string.Empty));
-            //  return this.ExportTemplateInternal(templateGuid, clientGuid);
-        }
 
         /// <summary>
         /// Import data from *.capi file
@@ -151,20 +124,6 @@ namespace Questionnaire.Core.Web.Export
                     this.synchronizer.WriteEvents(result.Events);
                 }
             }
-        }
-        
-        protected IEnumerable<AggregateRootEvent> GetTemplate(Guid? templateGuid, Guid? clientGuid)
-        {
-            var archive = new List<AggregateRootEvent>();
-            var events = this.synchronizer.ReadEvents().ToList();
-            if (templateGuid != null)
-                archive.Add(events.Where(t =>
-                    {
-                        var payload = ((t.Payload as SnapshootLoaded).Template).Payload;
-                        return payload != null && (payload as QuestionnaireDocument).PublicKey == templateGuid;
-                    }).FirstOrDefault());
-
-            return archive;
         }
 
         #endregion

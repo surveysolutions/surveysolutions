@@ -28,6 +28,11 @@ namespace RavenQuestionnaire.Web.Controllers
         /// </summary>
         private readonly IExportImport exportimportEvents;
 
+        /// <summary>
+        /// exporter templates
+        /// </summary>
+        private readonly ITemplateExporter exporterTemplates;
+
         #endregion
 
         #region Constructors and Destructors
@@ -38,9 +43,13 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="exportImport">
         /// The export import.
         /// </param>
-        public ImportExportController(IExportImport exportImport)
+        /// <param name="exporterTemplates">
+        /// The exporter Templates.
+        /// </param>
+        public ImportExportController(IExportImport exportImport, ITemplateExporter exporterTemplates)
         {
             this.exportimportEvents = exportImport;
+            this.exporterTemplates = exporterTemplates;
         }
 
         #endregion
@@ -141,7 +150,7 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 try
                 {
-                    AsyncManager.Parameters["result"] = exportimportEvents.ExportTemplate(id, clientGuid);
+                    AsyncManager.Parameters["result"] = exporterTemplates.ExportTemplate(id, clientGuid);
                 }
                 catch
                 {

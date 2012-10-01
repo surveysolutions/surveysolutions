@@ -22,15 +22,12 @@ namespace Core.Supervisor.Synchronization
 
     using Ncqrs;
     using Ncqrs.Domain;
-    using Ncqrs.Eventing;
-    using Ncqrs.Eventing.Sourcing.Snapshotting;
     using Ncqrs.Eventing.Storage;
-    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// Responsible for supervisor synchronization
     /// </summary>
-    public class SupervisorEventSync : AbstractEventSync
+    public class SupervisorEventSync : AbstractSnapshotableEventSync
     {
         #region Constants and Fields
 
@@ -76,93 +73,7 @@ namespace Core.Supervisor.Synchronization
         #endregion
 
         #region Public Methods and Operators
-        /// <summary>
-        /// Responsible for reaching eventstream by id
-        /// </summary>
-        /// <param name="aggregateRootId">
-        /// The aggregate root id.
-        /// </param>
-        /// <param name="arType">
-        /// The ar type.
-        /// </param>
-        /// <returns>
-        /// List of aggregate root event
-        /// </returns>
-        public List<AggregateRootEvent> GetEventStreamById(Guid aggregateRootId, Type arType)
-        {
-            CommittedEventStream events = this.myEventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);
-
-            if (!events.Any())
-            {
-                return new List<AggregateRootEvent>(0);
-            }
-
-            IEnumerable<Type> snapshotables = from i in arType.GetInterfaces()
-                                              where
-                                                  i.IsGenericType
-                                                  && i.GetGenericTypeDefinition() == typeof(ISnapshotable<>)
-                                              select i;
-            if (!snapshotables.Any())
-            {
-                return this.BuildEventStream(events);
-            }
-
-            if (
-                !typeof(SnapshootableAggregateRoot<>).MakeGenericType(
-                    snapshotables.FirstOrDefault().GetGenericArguments()[0]).IsAssignableFrom(arType))
-            {
-                return this.BuildEventStream(events);
-            }
-
-            if (events.Last().Payload is SnapshootLoaded)
-            {
-                return new List<AggregateRootEvent> { new AggregateRootEvent(events.Last()) };
-            }
-
-            AggregateRoot aggregateRoot;
-            using (IUnitOfWorkContext unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork(Guid.NewGuid()))
-            {
-                if (unitOfWork == null)
-                {
-                    return this.BuildEventStream(events);
-                }
-
-                aggregateRoot = unitOfWork.GetById(arType, aggregateRootId, null);
-                if (aggregateRoot == null)
-                {
-                    return this.BuildEventStream(events);
-                }
-            }
-
-            object snapshoot = arType.GetMethod("CreateSnapshot").Invoke(aggregateRoot, new object[0]);
-            var eventSnapshoot = new SnapshootLoaded { Template = new Snapshot(aggregateRootId, 1, snapshoot) };
-            Guid commitId = Guid.NewGuid();
-            Guid eventId = Guid.NewGuid();
-            var uncommitedStream = new UncommittedEventStream(commitId);
-            uncommitedStream.Append(
-                new UncommittedEvent(
-                    eventId, 
-                    aggregateRootId, 
-                    aggregateRoot.Version + 1, 
-                    aggregateRoot.InitialVersion, 
-                    DateTime.Now, 
-                    eventSnapshoot, 
-                    events.Last().GetType().Assembly.GetName().Version));
-            this.myEventStore.Store(uncommitedStream);
-            return new List<AggregateRootEvent>
-                {
-                    new AggregateRootEvent(
-                        new CommittedEvent(
-                        commitId, 
-                        eventId, 
-                        aggregateRootId, 
-                        1, 
-                        DateTime.Now, 
-                        eventSnapshoot, 
-                        events.Last().GetType().Assembly.GetName().Version))
-                };
-        }
-
+        
         /// <summary>
         /// Responsible for read events from database
         /// </summary>
@@ -201,7 +112,7 @@ namespace Core.Supervisor.Synchronization
                     continue;
                 }
 
-                retval.AddRange(this.GetEventStreamById(item.CompleteQuestionnaireId, typeof(CompleteQuestionnaireAR)));
+                retval.AddRange(base.GetEventStreamById(item.CompleteQuestionnaireId, typeof(CompleteQuestionnaireAR)));
             }
         }
 
@@ -216,7 +127,7 @@ namespace Core.Supervisor.Synchronization
             IQueryable<FileDescription> model = this.denormalizer.Query<FileDescription>();
             foreach (FileDescription item in model)
             {
-                retval.AddRange(this.GetEventStreamById(Guid.Parse(item.PublicKey), typeof(FileAR)));
+                retval.AddRange(base.GetEventStreamById(Guid.Parse(item.PublicKey), typeof(FileAR)));
             }
         }
 
@@ -232,7 +143,7 @@ namespace Core.Supervisor.Synchronization
 
             foreach (QuestionnaireDocument item in model)
             {
-                retval.AddRange(this.GetEventStreamById(item.PublicKey, typeof(QuestionnaireAR)));
+                retval.AddRange(base.GetEventStreamById(item.PublicKey, typeof(QuestionnaireAR)));
             }
         }
 
@@ -247,23 +158,11 @@ namespace Core.Supervisor.Synchronization
             IQueryable<UserDocument> model = this.denormalizer.Query<UserDocument>();
             foreach (UserDocument item in model)
             {
-                retval.AddRange(this.GetEventStreamById(item.PublicKey, typeof(UserAR)));
+                retval.AddRange(base.GetEventStreamById(item.PublicKey, typeof(UserAR)));
             }
         }
 
-        /// <summary>
-        /// The build event stream.
-        /// </summary>
-        /// <param name="events">
-        /// The events.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        private List<AggregateRootEvent> BuildEventStream(IEnumerable<CommittedEvent> events)
-        {
-            return events.Select(e => new AggregateRootEvent(e)).ToList();
-        }
-
         #endregion
+
     }
 }
