@@ -15,15 +15,10 @@ namespace Main.Core.Entities.SubEntities
     /// <summary>
     /// The Group interface.
     /// </summary>
-    public interface IGroup : IComposite, ITriggerable
+    public interface IGroup : IComposite, ITriggerable, IConditional
     {
         #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the condition expression.
-        /// </summary>
-        string ConditionExpression { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the propagated.
         /// </summary>

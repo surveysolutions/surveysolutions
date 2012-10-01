@@ -13,20 +13,9 @@ namespace Main.Core.Entities.SubEntities.Complete
     /// <summary>
     /// The CompleteGroup interface.
     /// </summary>
-    public interface ICompleteGroup : IGroup
+    public interface ICompleteGroup : IGroup, ICompleteItem
     {
-        #region Public Properties
 
-        /// <summary>
-        /// Gets or sets a value indicating whether enabled.
-        /// </summary>
-        bool Enabled { get; set; }
 
-        /// <summary>
-        /// Gets or sets the propogation public key.
-        /// </summary>
-        Guid? PropogationPublicKey { get; set; }
-
-        #endregion
     }
 }
