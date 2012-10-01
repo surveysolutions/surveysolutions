@@ -1,21 +1,20 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using Main.Core.Events;
+using Moq;
+using NUnit.Framework;
+using RavenQuestionnaire.Web.Export;
 
-namespace Questionnaire.Core.Web.Tests
+namespace RavenQuestionnaire.Web.Tests
 {
-    using Moq;
-
     //using NUnit.Framework;
-    using Main.Core.Events;
-    using Questionnaire.Core.Web.Export;
-    
+
     /// <summary>
     /// Summary description for ExportTest
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class ExportTest
     {
-        [TestMethod]
+        [Test]
         public void When_TemplatesExport()
         {
             var synchronizer = new Mock<IEventSync>();

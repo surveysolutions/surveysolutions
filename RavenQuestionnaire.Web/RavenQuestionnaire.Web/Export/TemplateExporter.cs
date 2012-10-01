@@ -1,20 +1,19 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="TemplateExporter.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Questionnaire.Core.Web.Export
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Documents;
+using Main.Core.Events;
+using Ncqrs.Restoring.EventStapshoot;
+using Questionnaire.Core.Web.Export;
+
+namespace RavenQuestionnaire.Web.Export
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Documents;
-    using Main.Core.Events;
-
-    using Ncqrs.Restoring.EventStapshoot;
-
     /// <summary>
     /// Interface for exportTempaltes
     /// </summary>
