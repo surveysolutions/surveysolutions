@@ -45,13 +45,13 @@ namespace Main.Core.Utility
                 throw new ArgumentException("EventSequence is empty");
             }
 
-            long dvergentPoint = stream.FindDivergentSequenceNumber(baseStream);
-            Guid? devergentGuid = null;
+            Guid? devergentGuid = stream.FindDivergentEventGuid(baseStream);
+         /*   Guid? devergentGuid = null;
             if (dvergentPoint > 0)
                 devergentGuid = baseStream.FirstOrDefault(
                     e =>
                     e.EventSequence == dvergentPoint)
-                    .EventIdentifier;
+                    .EventIdentifier;*/
             UncommittedEventStream uncommitedStream = CreateUncommittedEventStream(stream, baseStream, devergentGuid);
             return uncommitedStream;
         }
@@ -124,39 +124,62 @@ namespace Main.Core.Utility
         /// </returns>
         /// <exception cref="ArgumentException">
         /// </exception>
-        public static long FindDivergentSequenceNumber(
+        public static Guid? FindDivergentEventGuid(
             this IEnumerable<AggregateRootEvent> stream, CommittedEventStream baseStream)
         {
             if (!stream.Any())
             {
                 throw new ArgumentException("event stream is empty");
             }
-
-            // var aggregateRootId = stream.First().EventSourceId;
-            // var currentStream = eventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);
+            
             if (baseStream.IsEmpty)
             {
-                return 0;
+                return null;
             }
+            IEnumerable<CommittedEvent> croppedBase = baseStream;
+            IEnumerable<AggregateRootEvent> croppedNewStream = stream;
+            //if basestream and remote stream aren't started  from the same event
+            if (baseStream.First().EventIdentifier != stream.First().EventIdentifier)
+            {
+                // if base stream and remote stream aren't crossed at all
+                if (!baseStream.Any(e => e.EventIdentifier == stream.First().EventIdentifier))
+                    return null;
+                //make base stream and remote stream starting from same event
+                croppedBase = baseStream.SkipWhile(e => e.EventIdentifier != stream.First().EventIdentifier);
 
-            long startPoint = Math.Min(baseStream.Count(), stream.Count());
-            IEnumerable<CommittedEvent> croppedBase = baseStream.TakeWhile((e, i) => i < startPoint);
-            IEnumerable<AggregateRootEvent> croppedNewStream = stream.TakeWhile((e, i) => i < startPoint);
+            }
+            long startPoint = Math.Min(croppedBase.Count(), croppedNewStream.Count());
+            while (true)
+            {
+                croppedBase = croppedBase.TakeWhile((e, i) => i < startPoint);
+                croppedNewStream = croppedNewStream.TakeWhile((e, i) => i < startPoint);
+                if (!croppedNewStream.Any())
+                    return baseStream.Last().EventIdentifier;
+                if (croppedBase.Last().EventIdentifier == croppedNewStream.Last().EventIdentifier)
+                {
+                    return croppedBase.Last().EventIdentifier;
+                }
+                startPoint--;
+                if (startPoint == 0)
+                    throw new InvalidOperationException("that is impossible they have to cross at least at first event");
+            }
+            /*    croppedBase = baseStream.TakeWhile((e, i) => i < startPoint);
+            croppedNewStream = stream.TakeWhile((e, i) => i < startPoint);
 
             if (!croppedNewStream.Any())
-                return baseStream.Last().EventSequence;
+                return baseStream.Last().EventIdentifier;
             while (croppedBase.Last().EventIdentifier != croppedNewStream.Last().EventIdentifier)
             {
                 startPoint--;
                 if (startPoint == 0)
-                    return 0;
+                    return null;
                 croppedBase = baseStream.TakeWhile((e, i) => i < startPoint);
                 croppedNewStream = stream.TakeWhile((e, i) => i < startPoint);
                 if (!croppedNewStream.Any())
-                    return baseStream.Last().EventSequence;
+                    return baseStream.Last().EventIdentifier;
             }
 
-            return startPoint;
+            throw new InvalidOperationException("that is impossible they have to cross at least at first event");*/
         }
 
         #endregion
