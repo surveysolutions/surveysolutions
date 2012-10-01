@@ -4,7 +4,6 @@ using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Storage.NoDB.Tests.Fakes;
 using Ncqrs.Spec;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Ncqrs.Eventing.Storage.NoDB.Tests.EventStoreTests
 {

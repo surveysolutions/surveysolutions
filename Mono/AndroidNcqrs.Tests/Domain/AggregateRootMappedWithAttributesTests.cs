@@ -7,7 +7,7 @@ using FluentAssertions;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Mapping;
 using NUnit.Framework;
-using Rhino.Mocks;
+using AndroidMocks;
 
 namespace Ncqrs.Tests.Domain
 {
@@ -17,8 +17,8 @@ namespace Ncqrs.Tests.Domain
         [Test]
         public void Initializing_one_should_set_the_mapping_strategy_to_attributed_based()
         {
-            var aggregateRoot = MockRepository.GenerateMock<AggregateRootMappedWithAttributes>();
-            var field = aggregateRoot.GetType().BaseType.BaseType.GetField("_mappingStrategy", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField);
+            var aggregateRoot = new DynamicMock<AggregateRootMappedWithAttributes>();
+            var field = aggregateRoot.Instance.GetType().BaseType.BaseType.GetField("_mappingStrategy", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField);
             
             var theStrategy = field.GetValue(aggregateRoot);
             theStrategy.Should().BeOfType<AttributeBasedEventHandlerMappingStrategy>();

@@ -6,7 +6,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
-using Rhino.Mocks;
+using AndroidMocks;
 
 namespace Ncqrs.Tests.Domain
 {
@@ -17,16 +17,27 @@ namespace Ncqrs.Tests.Domain
         public void Accepting_unit_of_work_stores_and_publishes_the_events()
         {
             var commandId = Guid.NewGuid();
-            var store = MockRepository.GenerateMock<IEventStore>();
-            var bus = MockRepository.GenerateMock<IEventBus>();
-            var domainRepository = MockRepository.GenerateMock<IDomainRepository>();
-            var snapshotStore = MockRepository.GenerateMock<ISnapshotStore>();
+            var store = new DynamicMock<IEventStore>();
+
+            var bus = new DynamicMock<IEventBus>();
+
+            var domainRepository = new DynamicMock<IDomainRepository>();
+
+            var snapshotStore = new DynamicMock<ISnapshotStore>();
+
             var snapshottingPolicy = new NoSnapshottingPolicy();
 
-            store.Expect(s => s.Store(null)).IgnoreArguments();
-            bus.Expect(b => b.Publish((IEnumerable<IPublishableEvent>) null)).IgnoreArguments();
+            store.Expect(s => s.Store(null));
 
-            var sut = new UnitOfWork(commandId, domainRepository, store, snapshotStore, bus, snapshottingPolicy);
+	        bus.Expect(b => b.Publish((IEnumerable<IPublishableEvent>) null));
+
+            var sut = new UnitOfWork(commandId, 
+				domainRepository.Instance, 
+				store.Instance, 
+				snapshotStore.Instance, 
+				bus.Instance, 
+				snapshottingPolicy);
+
             sut.Accept();
 
             bus.VerifyAllExpectations();

@@ -1,10 +1,10 @@
 ﻿using System;
+using AndroidMocks;
 using FluentAssertions;
 using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Domain;
 using NUnit.Framework;
 using Ncqrs.Commanding;
-using Rhino.Mocks;
 
 namespace Ncqrs.Tests.Commanding
 {
@@ -47,13 +47,14 @@ namespace Ncqrs.Tests.Commanding
         [Test]
         public void Executing_one_with_a_custom_factory_should_give_context_created_with_that_factory()
         {
-            var factory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+            var factory = new DynamicMock<IUnitOfWorkFactory>();
+			factory.Stub(f => f.CreateUnitOfWork(Guid.NewGuid()), null);
 
             var aCommand = new FooCommand()
                                {
                                    CommandIdentifier = Guid.NewGuid()
                                };
-            var executor = new FooCommandExecutor(factory);
+            var executor = new FooCommandExecutor(factory.Instance);
             executor.Execute(aCommand);
 
             factory.AssertWasCalled(f => f.CreateUnitOfWork(aCommand.CommandIdentifier));
@@ -62,12 +63,12 @@ namespace Ncqrs.Tests.Commanding
         [Test]
         public void Executing_should_call_ExecuteInContext_with_context_from_factory()
         {            
-            var context = MockRepository.GenerateMock<IUnitOfWorkContext>();
-            var factory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            factory.Stub(f => f.CreateUnitOfWork(Guid.NewGuid())).Return(context).IgnoreArguments();
+            var context = new DynamicMock<IUnitOfWorkContext>();
+            var factory = new DynamicMock<IUnitOfWorkFactory>();
+            factory.Stub(f => f.CreateUnitOfWork(Guid.NewGuid()), context.Instance);;
 
             var aCommand = new FooCommand();
-            var executor = new FooCommandExecutor(factory);
+            var executor = new FooCommandExecutor(factory.Instance);
             executor.Execute(aCommand);
 
             executor.LastGivenContext.Should().Be(context);
@@ -77,9 +78,10 @@ namespace Ncqrs.Tests.Commanding
         public void Executing_should_call_ExecuteInContext_with_given_command()
         {
             var theCommand = new FooCommand();
-            var factory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+            var factory = new DynamicMock<IUnitOfWorkFactory>();
+			factory.Stub(f => f.CreateUnitOfWork(Guid.NewGuid()), null);
 
-            var executor = new FooCommandExecutor(factory);
+            var executor = new FooCommandExecutor(factory.Instance);
             executor.Execute(theCommand);
 
             executor.LastGivenCommand.Should().Be(theCommand);

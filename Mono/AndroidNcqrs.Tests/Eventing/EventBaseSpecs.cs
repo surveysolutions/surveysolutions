@@ -2,20 +2,24 @@
 using FluentAssertions;
 using Ncqrs.Eventing;
 using NUnit.Framework;
-using Rhino.Mocks;
+using AndroidMocks;
 
 namespace Ncqrs.Tests.Eventing
 {
     [TestFixture]
     public class EventBaseSpecs
     {
+		class FakeEvent : Event { }
+
         [Test]
         public void Constructing_a_new_event_base_it_should_call_the_GenerateNewId_method_from_the_generator_that_has_been_set_in_the_environment()
         {
-            var generator = MockRepository.GenerateMock<IUniqueIdentifierGenerator>();
-            NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator);
+            var generator = new DynamicMock<IUniqueIdentifierGenerator>();
+            generator.Expect(g => g.GenerateNewId(), Guid.NewGuid());
 
-            var mock = MockRepository.GenerateStub<Event>();
+			NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator.Instance);
+
+	        var mock = new FakeEvent();
 
             generator.AssertWasCalled(g=>g.GenerateNewId());
         }
@@ -25,12 +29,12 @@ namespace Ncqrs.Tests.Eventing
         {
             var identiefier = Guid.NewGuid();
 
-            var generator = MockRepository.GenerateStrictMock<IUniqueIdentifierGenerator>();
-            generator.Stub(g => g.GenerateNewId()).Return(identiefier);
+            var generator = new DynamicMock<IUniqueIdentifierGenerator>();
+	        generator.Stub(g => g.GenerateNewId(), identiefier);
 
-            NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator);
+            NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator.Instance);
 
-            var mock = MockRepository.GenerateStub<Event>();
+	        var mock = new FakeEvent();
             mock.EventIdentifier.Should().Be(identiefier);
         }
 
@@ -39,12 +43,12 @@ namespace Ncqrs.Tests.Eventing
         {
             var theTimeStamp = new DateTime(2000, 1, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
-            var clock = MockRepository.GenerateStrictMock<IClock>();
-            clock.Stub(c => c.UtcNow()).Return(theTimeStamp);
+            var clock = new DynamicMock<IClock>();
+	        clock.Stub(c => c.UtcNow(), theTimeStamp);
 
-            NcqrsEnvironment.SetDefault<IClock>(clock);
+            NcqrsEnvironment.SetDefault<IClock>(clock.Instance);
 
-            var eventBase = MockRepository.GenerateStub<Event>();
+	        var eventBase = new FakeEvent();
             eventBase.EventTimeStamp.Should().Be(theTimeStamp);
         }
     }

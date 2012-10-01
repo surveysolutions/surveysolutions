@@ -520,6 +520,12 @@ namespace NUnit.Framework
 			throw new Exception(message);
 		}
 
+		public static void DoesNotThrow(Action action)
+		{
+			action();
+		}
 		#endregion
-	}
+
+	    
+    }
 }

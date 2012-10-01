@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.Remoting.Proxies;
+using AndroidMocks;
 using FluentAssertions;
 using Java.Lang;
 using NCalc;
@@ -34,95 +36,63 @@ namespace AndroidNcalc.Tests
 		}
 
 		[Test]
-		public void ProxyTest()
+		public void MockTests()
 		{
-			var moq =(IInterface) (new Moq().GetTransparentProxy());
+			var mock = new DynamicMock<IInterface>();
 
-			Assert.That(moq.ReturnInt(), Is.EqualTo(7));
+			mock.Expect(x => x.ReturnInt(), 7);
+			mock.Expect(x => x.DoNothing());
+
+			var interfaceInstance = mock.Instance;
+
+			interfaceInstance.DoNothing();
+
+			Assert.That(interfaceInstance.ReturnInt(), Is.EqualTo(7));
+
+			mock.VerifyAllExpectations();
+		}
+
+		[Test]
+		public void DerivedTypesTest()
+		{
+			var type = typeof (DerivedClass);
+
+			var method = type.GetMethods().First(m => m.Name == "PrintEntity");
+
+			Assert.NotNull(method);
+
+			Assert.That(method.ReflectedType, Is.EqualTo(typeof(DerivedClass)));
+
+			var constuctor = method.ReflectedType.GetConstructor(new Type[0]);
+
+			Assert.NotNull(constuctor);
 		}
 	}
 
 	public interface IInterface
 	{
 		int ReturnInt();
+
+		void DoNothing();
 	}
 
-	public class Moq : RealProxy
+	public abstract class AbstarctClass<T>
 	{
-		public Moq() : base(typeof(IInterface))
-		{
-		}
+		public abstract T GetEntity();
 
-		public override IMessage Invoke(IMessage msg)
+		public void PrintEntity()
 		{
-			var mcm = (IMethodCallMessage)msg;
-			try
-			{
-				//var ret = this.callHandler.Call(mcm.MethodName, mcm.Args);
-				object ret = 7;
-				if (ret == null)
-				{
-					var methodBase = mcm.MethodBase as MethodInfo;
-					Type returnType = methodBase.ReturnType;
-					if (returnType == typeof(bool))
-					{
-						ret = false;
-					}
-					if (returnType == typeof(byte))
-					{
-						ret = (byte)0;
-					}
-					if (returnType == typeof(sbyte))
-					{
-						ret = (sbyte)0;
-					}
-					if (returnType == typeof(decimal))
-					{
-						ret = 0M;
-					}
-					if (returnType == typeof(double))
-					{
-						ret = 0.0;
-					}
-					if (returnType == typeof(float))
-					{
-						ret = 0f;
-					}
-					if (returnType == typeof(int))
-					{
-						ret = 0;
-					}
-					if (returnType == typeof(uint))
-					{
-						ret = 0;
-					}
-					if (returnType == typeof(long))
-					{
-						ret = 0L;
-					}
-					if (returnType == typeof(ulong))
-					{
-						ret = (ulong)0L;
-					}
-					if (returnType == typeof(short))
-					{
-						ret = (short)0;
-					}
-					if (returnType == typeof(ushort))
-					{
-						ret = (ushort)0;
-					}
-					if (returnType == typeof(char))
-					{
-						ret = '?';
-					}
-				}
-				return new ReturnMessage(ret, null, 0, null, mcm);
-			}
-			catch (System.Exception exception)
-			{
-				return new ReturnMessage(exception, mcm);
-			}
+			var entity = GetEntity();
+
+			//do some printing
+		}
+	}
+
+	public class DerivedClass : AbstarctClass<int>
+	{
+		public override int GetEntity()
+		{
+			return 42;
 		}
 	}
 }

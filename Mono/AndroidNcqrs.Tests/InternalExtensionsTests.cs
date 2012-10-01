@@ -15,7 +15,7 @@ namespace Ncqrs.Tests
             var target = new object[0];
             var isEmpty = InternalExtensions.IsEmpty(target);
 
-            Assert.IsTrue(isEmpty);
+            Assert.True(isEmpty);
         }
 
         [Test]
@@ -24,7 +24,7 @@ namespace Ncqrs.Tests
             var target = new List<object>(0);
             var isEmpty = InternalExtensions.IsEmpty(target);
 
-            Assert.IsTrue(isEmpty);
+            Assert.True(isEmpty);
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace Ncqrs.Tests
             var target = new object[1];
             var isEmpty = InternalExtensions.IsEmpty(target);
 
-            Assert.IsFalse(isEmpty);
+            Assert.False(isEmpty);
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace Ncqrs.Tests
             target.Add(new object());
             var isEmpty = InternalExtensions.IsEmpty(target);
 
-            Assert.IsFalse(isEmpty);
+            Assert.False(isEmpty);
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace Ncqrs.Tests
             var source = new List<object>();
             var clone = InternalExtensions.Clone(source);
 
-            Assert.AreNotSame(source, clone);
+            Assert.That(source, Is.Not.EqualTo(clone));
         }
 
         [Test]

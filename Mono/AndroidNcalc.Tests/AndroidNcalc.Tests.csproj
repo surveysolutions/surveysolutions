@@ -15,7 +15,7 @@
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.1</TargetFrameworkVersion>
     <AndroidSupportedAbis>armeabi%3bx86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
@@ -73,6 +73,10 @@
     <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
       <Project>{667B05AE-CF79-4A4B-B9F8-DCC0999A729B}</Project>
       <Name>AndroidFluentAssertions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidMocks\AndroidMocks.csproj">
+      <Project>{F031C01E-7159-4ABC-A77C-0CE3930BE187}</Project>
+      <Name>AndroidMocks</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
       <Project>{F0476C33-6F4F-4524-9CEA-37E87D55E67E}</Project>

@@ -1,6 +1,6 @@
 ﻿using System;
+using AndroidMocks;
 using FluentAssertions;
-using Rhino.Mocks;
 using Ncqrs.Commanding.ServiceModel;
 using NUnit.Framework;
 using Ncqrs.Commanding.CommandExecution;
@@ -11,7 +11,11 @@ namespace Ncqrs.Tests.Commanding.ServiceModel
     [TestFixture]
     public class CommandServiceBaseTests
     {
-        public class CommandWithExecutor : CommandBase
+	    private DynamicMock<ICommandServiceInterceptor> _interceptor1Mock;
+	    private DynamicMock<ICommandServiceInterceptor> _interceptor2Mock;
+	    private DynamicMock<ICommandExecutor<CommandWithExecutor>> _executorForCommandWithExecutorMock;
+
+	    public class CommandWithExecutor : CommandBase
         {}
 
         public class CommandWithoutExecutor : CommandBase
@@ -44,13 +48,23 @@ namespace Ncqrs.Tests.Commanding.ServiceModel
         public void Setup()
         {
             var service = new CommandService();
-            ExecutorForCommandWithExecutor = MockRepository.GenerateMock<ICommandExecutor<CommandWithExecutor>>();
-            ExecutorForCommandWithExecutorThatThrowsException = MockRepository.GenerateMock<ICommandExecutor<CommandWithExecutorThatThrowsException>>();
+			_executorForCommandWithExecutorMock = new DynamicMock<ICommandExecutor<CommandWithExecutor>>();
+	        ExecutorForCommandWithExecutor = _executorForCommandWithExecutorMock.Instance;
 
-            Interceptor1 = MockRepository.GenerateMock<ICommandServiceInterceptor>();
-            Interceptor2 = MockRepository.GenerateMock<ICommandServiceInterceptor>();
+			var executorForCommandWithExecutorThatThrowsExceptionMock = new DynamicMock<ICommandExecutor<CommandWithExecutorThatThrowsException>>();
+	        ExecutorForCommandWithExecutorThatThrowsException =executorForCommandWithExecutorThatThrowsExceptionMock.Instance;
 
-            ExecutorForCommandWithExecutorThatThrowsException.Stub(e=>e.Execute(null)).IgnoreArguments().Throw(new Exception());
+	        _interceptor1Mock = new DynamicMock<ICommandServiceInterceptor>();
+	        _interceptor2Mock = new DynamicMock<ICommandServiceInterceptor>();
+			_interceptor1Mock.Expect(i => i.OnBeforeExecution(null));
+			_interceptor2Mock.Expect(i => i.OnBeforeExecution(null));
+			_interceptor1Mock.Expect(i => i.OnAfterExecution(null));
+			_interceptor2Mock.Expect(i => i.OnAfterExecution(null));
+
+            Interceptor1 = _interceptor1Mock.Instance;
+	        Interceptor2 = _interceptor2Mock.Instance;
+
+            executorForCommandWithExecutorThatThrowsExceptionMock.StubAndThrow<Exception>(e=>e.Execute(null));
 
             service.RegisterExecutor(ExecutorForCommandWithExecutor);
             service.RegisterExecutor(ExecutorForCommandWithExecutorThatThrowsException);
@@ -64,23 +78,25 @@ namespace Ncqrs.Tests.Commanding.ServiceModel
         [Test]
         public void All_interceptors_should_be_called_before_execution()
         {
-            Interceptor1.Replay();
-            Interceptor2.Replay();
+            _interceptor1Mock.Reset();
+            _interceptor2Mock.Reset();
+
             TheService.Execute(new CommandWithExecutor());
 
-            Interceptor1.AssertWasCalled(i => i.OnBeforeExecution(null), options => options.IgnoreArguments());
-            Interceptor2.AssertWasCalled(i => i.OnBeforeExecution(null), options => options.IgnoreArguments());
+            _interceptor1Mock.AssertWasCalled(i => i.OnBeforeExecution(null));
+            _interceptor2Mock.AssertWasCalled(i => i.OnBeforeExecution(null));
         }
 
         [Test]
         public void All_interceptors_should_be_called_after_execution()
         {
-            Interceptor1.Replay();
-            Interceptor2.Replay();
+            _interceptor1Mock.Reset();
+            _interceptor2Mock.Reset();
+
             TheService.Execute(new CommandWithExecutor());
 
-            Interceptor1.AssertWasCalled(i => i.OnAfterExecution(null), options => options.IgnoreArguments());
-            Interceptor2.AssertWasCalled(i => i.OnAfterExecution(null), options => options.IgnoreArguments());
+			_interceptor1Mock.AssertWasCalled(i => i.OnAfterExecution(null));
+			_interceptor2Mock.AssertWasCalled(i => i.OnAfterExecution(null));
         }
 
         [Test]
@@ -95,10 +111,10 @@ namespace Ncqrs.Tests.Commanding.ServiceModel
         {
             var theCommand = new CommandWithExecutor();
 
-            ExecutorForCommandWithExecutor.Replay();
+            _executorForCommandWithExecutorMock.Reset();
             TheService.Execute(theCommand);
 
-            ExecutorForCommandWithExecutor.AssertWasCalled(e => e.Execute(theCommand));
+            _executorForCommandWithExecutorMock.AssertWasCalled(e => e.Execute(theCommand));
         }
     }
 }

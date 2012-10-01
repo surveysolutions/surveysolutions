@@ -100,6 +100,8 @@
     <Compile Include="Framework\TearDownAttribute.cs" />
     <Compile Include="Framework\TestAttribute.cs" />
     <Compile Include="Framework\TestFixtureAttribute.cs" />
+    <Compile Include="Framework\TestFixtureSetUpAttribute.cs" />
+    <Compile Include="Framework\TestFixtureTearDownAttribute.cs" />
     <Compile Include="Framework\TextMessageWriter.cs" />
     <Compile Include="Framework\Throws.cs" />
     <Compile Include="ITest.cs" />

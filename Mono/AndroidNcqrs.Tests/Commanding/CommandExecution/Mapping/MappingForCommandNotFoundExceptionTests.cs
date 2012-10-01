@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using AndroidMocks;
 using FluentAssertions;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping
 {
@@ -16,9 +16,9 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping
         public void Constructing_an_instance_should_initialize_the_message()
         {
             String message = "Hello world";
-            ICommand aCommand = MockRepository.GenerateMock<ICommand>();
+            var aCommand = new DynamicMock<ICommand>();
 
-            var target = new MappingNotFoundException(message, aCommand);
+            var target = new MappingNotFoundException(message, aCommand.Instance);
 
             target.Message.Should().Be(message);
         }
@@ -27,9 +27,9 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping
         public void Constructing_an_instance_should_initialize_the_command()
         {
             String aMessage = "Hello world";
-            ICommand theCommand = MockRepository.GenerateMock<ICommand>();
+            var theCommand = new DynamicMock<ICommand>();
 
-            var target = new MappingNotFoundException(aMessage, theCommand);
+            var target = new MappingNotFoundException(aMessage, theCommand.Instance);
 
             target.Command.Should().Be(theCommand);
         }
@@ -38,10 +38,10 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping
         public void Constructing_an_instance_should_initialize_the_inner_exception()
         {
             String aMessage = "Hello world";
-            ICommand theCommand = MockRepository.GenerateMock<ICommand>();            
+            var theCommand = new DynamicMock<ICommand>();
             var theInnerException = new Exception();
 
-            var target = new MappingNotFoundException(aMessage, theCommand, theInnerException);
+            var target = new MappingNotFoundException(aMessage, theCommand.Instance, theInnerException);
 
             target.InnerException.Should().Be(theInnerException);
         }
@@ -50,8 +50,8 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping
         public void It_should_be_serializable()
         {
             var aMessage = "Hello world";
-            ICommand aCommand = MockRepository.GenerateMock<ICommand>();
-            var theException = new MappingNotFoundException(aMessage, aCommand);
+            var aCommand = new DynamicMock<ICommand>();
+            var theException = new MappingNotFoundException(aMessage, aCommand.Instance);
             MappingNotFoundException deserializedException = null;
 
             using (var buffer = new MemoryStream())

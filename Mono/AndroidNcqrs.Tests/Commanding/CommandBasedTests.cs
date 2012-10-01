@@ -1,6 +1,6 @@
 ﻿using System;
+using AndroidMocks;
 using FluentAssertions;
-using Rhino.Mocks;
 using Ncqrs.Commanding;
 using NUnit.Framework;
 
@@ -29,10 +29,10 @@ namespace Ncqrs.Tests.Commanding
         public void Constructing_without_any_parameters_should_use_IUniqueIdentifierGenerator_to_generate_id()
         {
             var generatedId = Guid.NewGuid();
-            var generator = MockRepository.GenerateMock<IUniqueIdentifierGenerator>();
-            generator.Stub(t => t.GenerateNewId()).Return(generatedId);
+            var generator = new DynamicMock<IUniqueIdentifierGenerator>();
+            generator.Expect(t => t.GenerateNewId(), generatedId);
 
-            NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator);
+            NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator.Instance);
 
             var command = new FooCommand();
 
@@ -46,10 +46,10 @@ namespace Ncqrs.Tests.Commanding
         public void Constructing_with_custom_generator_should_it_to_generate_id()
         {
             var identifier = Guid.NewGuid();
-            var generator = MockRepository.GenerateMock<IUniqueIdentifierGenerator>();
-            generator.Expect(t => t.GenerateNewId()).Return(identifier);
+            var generator = new DynamicMock<IUniqueIdentifierGenerator>();
+            generator.Expect(t => t.GenerateNewId(), identifier);
 
-            var command = new FooCommand(generator);
+            var command = new FooCommand(generator.Instance);
 
             generator.VerifyAllExpectations();
             command.CommandIdentifier.Should().Be(identifier);

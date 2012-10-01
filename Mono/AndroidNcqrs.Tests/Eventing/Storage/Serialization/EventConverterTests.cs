@@ -4,33 +4,32 @@ using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.Serialization;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
+using AndroidMocks;
 
 namespace Ncqrs.Tests.Eventing.Storage.Serialization
 {
     [TestFixture]
     public class EventConverterTests
     {
-        private IEventTypeResolver _typeResolver;
-        private IEventConverter _childConverter = new NullEventConverter();
+        //private IEventTypeResolver _typeResolver;
+        private DynamicMock<IEventTypeResolver> _typeResolverMock;
+        //private IEventConverter _childConverter = new NullEventConverter();
+        private DynamicMock<IEventConverter> _childConverterMock;
         private const string EventName = "bob";
 
         [SetUp]
         public void SetUp()
         {
-            _typeResolver = MockRepository.GenerateStub<IEventTypeResolver>();
-            _typeResolver
-                .Stub(x => x.EventNameFor(typeof(AnEvent)))
-                .TentativeReturn()
-                .Return(EventName);
+            _typeResolverMock = new DynamicMock<IEventTypeResolver>();
+	        _typeResolverMock.Stub(x => x.EventNameFor(typeof (AnEvent)), EventName);
 
-            _childConverter = MockRepository.GenerateStub<IEventConverter>();
+	        _childConverterMock = new DynamicMock<IEventConverter>();
         }
 
         [Test]
         public void Ctor()
         {
-            Assert.DoesNotThrow(() => new EventConverter(_typeResolver));
+            Assert.DoesNotThrow(() => new EventConverter(_typeResolverMock.Instance));
         }
 
         [Test]
@@ -45,12 +44,17 @@ namespace Ncqrs.Tests.Eventing.Storage.Serialization
         {
             var event1 = CreateEvent("foo");
             var event2 = CreateEvent("bar");
-            var fooConverter = MockRepository.GenerateStub<IEventConverter>();
-            var barConverter = MockRepository.GenerateStub<IEventConverter>();
 
-            var converter = new EventConverter(_typeResolver);
-            converter.AddConverter("foo", fooConverter);
-            converter.AddConverter("bar", barConverter);
+            var fooConverter = new DynamicMock<IEventConverter>();
+			fooConverter.Expect(c => c.Upgrade(null));
+
+            var barConverter = new DynamicMock<IEventConverter>();
+			barConverter.Expect(c => c.Upgrade(null));
+
+
+            var converter = new EventConverter(_typeResolverMock.Instance);
+            converter.AddConverter("foo", fooConverter.Instance);
+            converter.AddConverter("bar", barConverter.Instance);
 
             converter.Upgrade(event1);
             converter.Upgrade(event2);
@@ -62,14 +66,14 @@ namespace Ncqrs.Tests.Eventing.Storage.Serialization
         [Test]
         public void Upgrade_unknown_event()
         {
-            var converter = new EventConverter(_typeResolver);
+            var converter = new EventConverter(_typeResolverMock.Instance);
             Assert.DoesNotThrow(() => converter.Upgrade(CreateEvent()));
         }
 
         [Test]
         public void Upgrade_theEvent_null()
         {
-            var converter = new EventConverter(_typeResolver);
+            var converter = new EventConverter(_typeResolverMock.Instance);
             var ex = Assert.Throws<ArgumentNullException>(() => converter.Upgrade(null));
             ex.ParamName.Should().Be("theEvent");
         }
@@ -78,26 +82,26 @@ namespace Ncqrs.Tests.Eventing.Storage.Serialization
         public void AddConverter_ByType()
         {
             var anEvent = CreateEvent();
-            var converter = new EventConverter(_typeResolver);
-            converter.AddConverter(typeof(AnEvent), _childConverter);
+            var converter = new EventConverter(_typeResolverMock.Instance);
+            converter.AddConverter(typeof(AnEvent), _childConverterMock.Instance);
 
             converter.Upgrade(anEvent);
 
-            _childConverter.AssertWasCalled(x => x.Upgrade(anEvent));
+            _childConverterMock.AssertWasCalled(x => x.Upgrade(anEvent));
         }
 
         [Test]
         public void AddConverter_ByType_eventType_null()
         {
-            var converter = new EventConverter(_typeResolver);
-            var ex = Assert.Throws<ArgumentNullException>(() => converter.AddConverter((Type) null, _childConverter));
+            var converter = new EventConverter(_typeResolverMock.Instance);
+            var ex = Assert.Throws<ArgumentNullException>(() => converter.AddConverter((Type) null, _childConverterMock.Instance));
             ex.ParamName.Should().Be("eventType");
         }
 
         [Test]
         public void AddConverter_ByType_converter_null()
         {
-            var converter = new EventConverter(_typeResolver);
+            var converter = new EventConverter(_typeResolverMock.Instance);
             var ex = Assert.Throws<ArgumentNullException>(() => converter.AddConverter(typeof(AnEvent), null));
             ex.ParamName.Should().Be("converter");
         }
@@ -106,26 +110,26 @@ namespace Ncqrs.Tests.Eventing.Storage.Serialization
         public void AddConverter_ByName()
         {
             var anEvent = CreateEvent();
-            var converter = new EventConverter(_typeResolver);
-            converter.AddConverter(EventName, _childConverter);
+            var converter = new EventConverter(_typeResolverMock.Instance);
+            converter.AddConverter(EventName, _childConverterMock.Instance);
 
             converter.Upgrade(anEvent);
 
-            _childConverter.AssertWasCalled(x => x.Upgrade(anEvent));
+            _childConverterMock.AssertWasCalled(x => x.Upgrade(anEvent));
         }
 
         [Test]
         public void AddConverter_ByName_eventName_null()
         {
-            var converter = new EventConverter(_typeResolver);
-            var ex = Assert.Throws<ArgumentNullException>(() => converter.AddConverter((string) null, _childConverter));
+            var converter = new EventConverter(_typeResolverMock.Instance);
+            var ex = Assert.Throws<ArgumentNullException>(() => converter.AddConverter((string) null, _childConverterMock.Instance));
             ex.ParamName.Should().Be("eventName");
         }
 
         [Test]
         public void AddConverter_ByName_converter_null()
         {
-            var converter = new EventConverter(_typeResolver);
+            var converter = new EventConverter(_typeResolverMock.Instance);
             var ex = Assert.Throws<ArgumentNullException>(() => converter.AddConverter(EventName, null));
             ex.ParamName.Should().Be("converter");
         }
@@ -133,10 +137,10 @@ namespace Ncqrs.Tests.Eventing.Storage.Serialization
         [Test]
         public void AddConverter_duplicate_name()
         {
-            var converter = new EventConverter(_typeResolver);
-            converter.AddConverter(EventName, _childConverter);
+            var converter = new EventConverter(_typeResolverMock.Instance);
+            converter.AddConverter(EventName, _childConverterMock.Instance);
 
-            var ex = Assert.Throws<ArgumentException>(() => converter.AddConverter(EventName, _childConverter));
+            var ex = Assert.Throws<ArgumentException>(() => converter.AddConverter(EventName, _childConverterMock.Instance));
             ex.ParamName.Should().Be("eventName");
             ex.Message.Should().StartWith("There is already a converter for event 'bob'.");
         }

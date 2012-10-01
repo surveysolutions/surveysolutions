@@ -1,9 +1,6 @@
-﻿using System;
-using FluentAssertions;
+﻿using AndroidMocks;
 using Ncqrs.Commanding.CommandExecution;
-using Rhino.Mocks;
 using Ncqrs.Commanding;
-//using System.Transactions;
 using NUnit.Framework;
 
 namespace Ncqrs.Tests.Commanding.CommandExecution
@@ -19,12 +16,14 @@ namespace Ncqrs.Tests.Commanding.CommandExecution
         public void When_executing_it_it_should_call_the_executor_given_via_ctor()
         {
             var theCommand = new DummyCommand();
-            var theExecutor = MockRepository.GenerateMock<ICommandExecutor<DummyCommand>>();
-            var theWrapper = new TransactionalCommandExecutorWrapper<DummyCommand>(theExecutor);
+            var theExecutor = new DynamicMock<ICommandExecutor<DummyCommand>>();
+			theExecutor.Stub(e => e.Execute(null));
+
+            var theWrapper = new TransactionalCommandExecutorWrapper<DummyCommand>(theExecutor.Instance);
 
             theWrapper.Execute(theCommand);
 
-            theExecutor.AssertWasCalled((e) => e.Execute(theCommand));
+            theExecutor.AssertWasCalled(e => e.Execute(null));
         }
     }
 }

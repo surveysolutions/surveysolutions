@@ -11,7 +11,7 @@ namespace Ncqrs.Tests.Eventing
         public void When_empty_should_indicate_a_single_source()
         {
             var sut = new UncommittedEventStream(Guid.NewGuid());
-            Assert.IsTrue(sut.HasSingleSource);
+            Assert.True(sut.HasSingleSource);
         }
 
         [Test]
@@ -19,7 +19,7 @@ namespace Ncqrs.Tests.Eventing
         {
             var sut = new UncommittedEventStream(Guid.NewGuid());
             sut.Append(new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 0, 0, DateTime.UtcNow, new object(), new Version(1,0)));
-            Assert.IsTrue(sut.HasSingleSource);
+            Assert.True(sut.HasSingleSource);
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace Ncqrs.Tests.Eventing
             var eventSourceId = Guid.NewGuid();
             sut.Append(CreateEvent(eventSourceId));
             sut.Append(CreateEvent(eventSourceId));
-            Assert.IsTrue(sut.HasSingleSource);
+            Assert.True(sut.HasSingleSource);
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace Ncqrs.Tests.Eventing
             var sut = new UncommittedEventStream(Guid.NewGuid());
             sut.Append(CreateEvent(Guid.NewGuid()));
             sut.Append(CreateEvent(Guid.NewGuid()));
-            Assert.IsFalse(sut.HasSingleSource);
+            Assert.False(sut.HasSingleSource);
         }
 
         private static UncommittedEvent CreateEvent(Guid eventSourceId)

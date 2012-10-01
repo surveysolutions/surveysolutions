@@ -14,6 +14,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
+[assembly: InternalsVisibleTo("AndroidNcqrs.Tests")]
+[assembly: InternalsVisibleTo("AndroidNcqrs.Spec")]
 
 // Version information for an assembly consists of the following four values:
 //

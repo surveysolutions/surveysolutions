@@ -113,6 +113,10 @@
       <Project>{667B05AE-CF79-4A4B-B9F8-DCC0999A729B}</Project>
       <Name>AndroidFluentAssertions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidMocks\AndroidMocks.csproj">
+      <Project>{F031C01E-7159-4ABC-A77C-0CE3930BE187}</Project>
+      <Name>AndroidMocks</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Spec\AndroidNcqrs.Spec.csproj">
       <Project>{C500A144-E8B6-41C1-8776-DC468E1D4889}</Project>
       <Name>AndroidNcqrs.Spec</Name>
