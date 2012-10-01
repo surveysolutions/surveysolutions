@@ -134,7 +134,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="id">
         /// The id.
         /// </param>
-        public void DownloadAsync(Guid? id, Guid? clientGuid)
+        public void ExportTemplatesAsync(Guid? id, Guid? clientGuid)
         {
             AsyncManager.OutstandingOperations.Increment();
             AsyncQuestionnaireUpdater.Update(() =>
@@ -161,7 +161,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <returns>
         /// return file with templates
         /// </returns>
-        public FileResult DownloadCompleted(byte[] result)
+        public FileResult ExportTemplatesCompleted(byte[] result)
         {
             return this.File(result, "application/zip", "template.zip");
         }

@@ -1,0 +1,17 @@
+﻿@model Main.Core.View.Question.QuestionView
+
+@{ 
+    var currentRowId = string.Format("divEditAutoPropagatable{0}", Model.PublicKey == Guid.Empty ? Guid.NewGuid().ToString() : Model.PublicKey.ToString());
+    var list = new SelectList(new List<Guid>(), string.Empty);
+    if (ViewBag.Groups != null)
+    {
+        var allGroups = this.ViewBag.Groups as Dictionary<string, Guid>;
+        list = new SelectList(allGroups, "Value", "Key");
+
+    }
+}
+    <div id="@currentRowId" class="display-answer">                 
+        @Html.DropDownList("triggers", list)
+        <a href="javascript:void(0)" onclick="$('#@currentRowId').remove()" class="btn btn-danger btn-mini">
+            <i class="icon-remove icon-white"></i>Delete</a>
+    </div>

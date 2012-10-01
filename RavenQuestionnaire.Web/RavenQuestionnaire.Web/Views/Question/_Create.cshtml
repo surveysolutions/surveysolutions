@@ -1,6 +1,5 @@
 ﻿@using RavenQuestionnaire.Web.Utils
 @using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.Question
 @model Main.Core.View.Question.QuestionView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -60,15 +59,6 @@ else
                     @Html.ValidationMessageFor(model => model.Title)
                 </div>
             </div>
-            @if (Model.PublicKey == Guid.Empty || Model.TargetGroupKey!=Guid.Empty) 
-            {
-            <div class="control-group" id="apguid" style="display: none;">
-                <label class="control-label"> Propagateble GUID</label>
-                <div class="controls">
-                    @Html.EditorFor(model => Model.TargetGroupKey)
-                </div>
-            </div>
-            }
             <div class="control-group">
                 @Html.LabelFor(model => model.Featured, new { @class = "control-label" })
                 <div class="controls">
@@ -94,16 +84,18 @@ else
                     Type</label>
                 <div class="controls">
                     @{
-        IDictionary<string, object> html = new Dictionary<string, object>();
-        html.Add("customName", "questionName");
-        html.Add("class", "span12");
+                        IDictionary<string, object> html = new Dictionary<string, object>();
+                        html.Add("customName", "questionName");
+                        html.Add("class", "span12");
                         @Html.EnumDropDownListFor(model => Model.QuestionType, html)
                     }
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">
-                    Answer order</label>
+                @Html.Partial("_EditAutoPropagates", Model)
+            </div>
+            <div class="control-group">
+                <label class="control-label">Answer order</label>
                 <div class="controls">
                     @Html.EnumDropDownListFor(model => Model.AnswerOrder, new Dictionary<string, object>(){ { "class","span12"}} )
                 </div>
@@ -156,9 +148,6 @@ else
             @Html.Partial("~/Views/Answer/_EditAnswers.cshtml", Model)
         </div>
     </div>
-    
-        
-
     }
     <div class="form-actions">
         <input type="submit" value="Save" class="btn btn-primary btn-large" />

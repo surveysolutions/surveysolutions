@@ -12,7 +12,7 @@
         }
         <td id="row-@fitem.Id">
             <div class="assignment-view">
-                <a id="link-@fitem.Id" href="@Url.Action("Statistics", "User", new { id = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
+                <a id="link-@fitem.Id" href="@Url.Action("Index", "Survey", new { UserId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
             </div>
             <div class="assignment-form">
                 @using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions { OnComplete = "HideForm" }))

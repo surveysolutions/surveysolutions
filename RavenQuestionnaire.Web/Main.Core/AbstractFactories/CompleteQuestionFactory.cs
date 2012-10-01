@@ -188,7 +188,7 @@ namespace Main.Core.AbstractFactories
                 e.Mandatory, 
                 false, 
                 e.Instructions, 
-                new[] { e.TargetGroupKey });
+                e.Triggers);
             this.UpdateAnswerList(e.Answers, question);
         }
 
@@ -216,7 +216,7 @@ namespace Main.Core.AbstractFactories
                 e.Mandatory, 
                 false, 
                 e.Instructions, 
-                new[] { e.TargetGroupKey });
+                e.Triggers);
             this.UpdateAnswerList(e.Answers, question);
         }
 
@@ -318,7 +318,9 @@ namespace Main.Core.AbstractFactories
             var autoQuestion = question as IAutoPropagate;
             if (autoQuestion != null && triggers != null)
             {
-                autoQuestion.Triggers = triggers.ToList();
+                question.Triggers = new List<Guid>();
+                foreach (var guid in triggers)
+                    question.Triggers.Add(guid);
             }
         }
 

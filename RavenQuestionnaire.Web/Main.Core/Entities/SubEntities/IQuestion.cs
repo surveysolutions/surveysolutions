@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.Entities.SubEntities
 {
+    using System;
     using System.Collections.Generic;
 
     using Main.Core.Entities.Composite;
@@ -84,6 +85,11 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the validation message.
         /// </summary>
         string ValidationMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets Triggers.
+        /// </summary>
+        List<Guid> Triggers { get; set; }
 
         #endregion
     }

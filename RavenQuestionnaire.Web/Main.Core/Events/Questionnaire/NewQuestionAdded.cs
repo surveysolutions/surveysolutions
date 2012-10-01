@@ -9,6 +9,7 @@
 namespace Main.Core.Events.Questionnaire
 {
     using System;
+    using System.Collections.Generic;
 
     using Main.Core.Entities.SubEntities;
 
@@ -92,6 +93,11 @@ namespace Main.Core.Events.Questionnaire
         /// Gets or sets the validation message.
         /// </summary>
         public string ValidationMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets Triggers.
+        /// </summary>
+        public List<Guid> Triggers { get; set; }
 
         #endregion
     }

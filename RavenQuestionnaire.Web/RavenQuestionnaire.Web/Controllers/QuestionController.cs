@@ -10,6 +10,7 @@
 namespace RavenQuestionnaire.Web.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -33,6 +34,8 @@ namespace RavenQuestionnaire.Web.Controllers
     using Questionnaire.Core.Web.Security;
 
     using RavenQuestionnaire.Core.Views.Event.File;
+    using RavenQuestionnaire.Core.Views.Group;
+    using RavenQuestionnaire.Core.Views.Questionnaire;
     using RavenQuestionnaire.Web.Models;
 
     /// <summary>
@@ -107,7 +110,8 @@ namespace RavenQuestionnaire.Web.Controllers
         public ActionResult Create(string id, Guid? groupPublicKey)
         {
             this.LoadImages();
-            return this.View("_Create", new QuestionView(id, groupPublicKey));
+            var question = new QuestionView(id, groupPublicKey);
+            return this.View("_Create", question);
         }
 
         /// <summary>
@@ -181,6 +185,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
 
             this.LoadImages();
+            this.LoadGroups(questionnaireKey.Value, publicKey.Value);
             QuestionView model =
                 this.viewRepository.Load<QuestionViewInputModel, QuestionView>(
                     new QuestionViewInputModel(publicKey.Value, questionnaireKey.Value));
@@ -291,7 +296,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <returns>
         /// </returns>
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Save(QuestionView[] question, AnswerView[] answers)
+        public ActionResult Save(QuestionView[] question, AnswerView[] answers, ICollection<Guid> triggers)
         {
             QuestionView model = question[0];
             if (this.ModelState.IsValid)
@@ -311,7 +316,8 @@ namespace RavenQuestionnaire.Web.Controllers
 
                         // new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
-                        if (model.TargetGroupKey == Guid.Empty)
+                        
+                        if (triggers == null || triggers.ToList().Count == 0)
                         {
                             commandService.Execute(
                                 new AddQuestionCommand(
@@ -337,7 +343,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.QuestionnaireKey, 
                                     newItemKey, 
                                     model.Title, 
-                                    model.TargetGroupKey, 
+                                    triggers.Distinct().ToList(), 
                                     model.StataExportCaption, 
                                     model.QuestionType, 
                                     model.Parent, 
@@ -355,7 +361,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     {
                         // new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
-                        if (model.TargetGroupKey == Guid.Empty)
+                        if (triggers == null || triggers.ToList().Count == 0)
                         {
                             commandService.Execute(
                                 new ChangeQuestionCommand(
@@ -380,7 +386,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.QuestionnaireKey, 
                                     model.PublicKey, 
                                     model.Title, 
-                                    model.TargetGroupKey, 
+                                    triggers.Distinct().ToList(), 
                                     model.StataExportCaption, 
                                     model.QuestionType, 
                                     model.ConditionExpression, 
@@ -398,6 +404,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     this.ModelState.AddModelError(
                         string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
+                    this.LoadGroups(model.QuestionnaireKey, model.PublicKey);
                     return this.PartialView("_Create", model);
                 }
 
@@ -472,6 +479,16 @@ namespace RavenQuestionnaire.Web.Controllers
                 "_GetAnswers", new QuestionConditionModel { Source = source, TargetPublicKey = targetPublicKey });
         }
 
+
+        [QuestionnaireAuthorize(UserRoles.Administrator)]
+        public ActionResult CreatePropagateGroup(Guid questionPublicKey, Guid groupPublicKey, Guid questionnaireId)
+        {
+            this.LoadGroups(questionnaireId, groupPublicKey);
+            return this.PartialView(
+                "_AutoPropagateRow", new QuestionView { Parent = questionPublicKey, PublicKey = Guid.NewGuid() });
+        }
+
+
         #endregion
 
         #region Methods
@@ -518,6 +535,47 @@ namespace RavenQuestionnaire.Web.Controllers
                 this.ViewBag.Images = imagesList;
             }
         }
+
+        /// <summary>
+        /// LoadAllGroups
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        private void LoadGroups(Guid questionnaireId, Guid? groupPublicKey)
+        {
+            QuestionnaireView model =
+                this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
+                    new QuestionnaireViewInputModel(questionnaireId));
+            var groups = new Dictionary<string, Guid>();
+            if (model != null) 
+                foreach (var group in model.Groups) 
+                    this.SelectAll(group, groups, groupPublicKey);
+            this.ViewBag.Groups = groups;
+        }
+
+        /// <summary>
+        /// Select all groups
+        /// </summary>
+        /// <param name="currentGroup">
+        /// The current group.
+        /// </param>
+        /// <param name="groups">
+        /// The groups.
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// The group Public Key.
+        /// </param>
+        private void SelectAll(GroupView currentGroup, Dictionary<string, Guid> groups, Guid? groupPublicKey)
+        {
+            if (groupPublicKey == null || groupPublicKey != currentGroup.PublicKey)
+                groups.Add(string.Format("{0}-{1}", currentGroup.Title, currentGroup.PublicKey), currentGroup.PublicKey);
+                if (currentGroup.Groups.Count() > 0) 
+                    foreach (var childGroup in currentGroup.Groups) 
+                        this.SelectAll(childGroup, groups, groupPublicKey);
+        }
+
+
 
         /// <summary>
         /// The resize image.
