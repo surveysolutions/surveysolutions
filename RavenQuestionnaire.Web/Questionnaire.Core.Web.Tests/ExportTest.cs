@@ -1,20 +1,21 @@
 ﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Questionnaire.Core.Web.Tests
 {
     using Moq;
 
-    using NUnit.Framework;
+    //using NUnit.Framework;
     using Main.Core.Events;
     using Questionnaire.Core.Web.Export;
     
     /// <summary>
     /// Summary description for ExportTest
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class ExportTest
     {
-        [Test]
+        [TestMethod]
         public void When_TemplatesExport()
         {
             var synchronizer = new Mock<IEventSync>();
