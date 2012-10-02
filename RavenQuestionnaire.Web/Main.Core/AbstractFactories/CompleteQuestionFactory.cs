@@ -161,7 +161,7 @@ namespace Main.Core.AbstractFactories
                     return new GpsCoordinateQuestion();
             }
 
-            return new TextQuestion();
+            return null;
         }
 
         /// <summary>
@@ -320,7 +320,9 @@ namespace Main.Core.AbstractFactories
             {
                 question.Triggers = new List<Guid>();
                 foreach (var guid in triggers)
+                {
                     question.Triggers.Add(guid);
+                }
             }
         }
 
