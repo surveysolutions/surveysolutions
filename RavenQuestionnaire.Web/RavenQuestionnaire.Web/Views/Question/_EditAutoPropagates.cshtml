@@ -12,11 +12,10 @@
         {
             var list = new SelectList(new List<Guid>(), string.Empty);
             var current = string.Empty;
-            if (ViewBag.Groups != null)
+            if (Model.Groups != null)
             {
-                var allGroups = this.ViewBag.Groups as Dictionary<string, Guid>;
-                current = allGroups.Where(gr => gr.Value == item).FirstOrDefault().Key;
-                list = new SelectList(allGroups.Where(t => t.Key != current), "Value", "Key");
+                current = Model.Groups.Where(gr => gr.Value == item).FirstOrDefault().Key;
+                list = new SelectList(Model.Groups.Where(t => t.Key != current), "Value", "Key");
 
             }
             <div id="@currentRowId" class="display-answer">
@@ -26,7 +25,7 @@
             </div>
         }
     </div>
-    @Ajax.ActionLink("Add new propagate group", "CreatePropagateGroup", "Question", new { questionPublicKey = Model.PublicKey, groupPublicKey = Model.Parent, questionnaireId = Model.QuestionnaireKey }, new AjaxOptions
+    @Ajax.ActionLink("Add new propagate group", "CreatePropagateGroup", "Question", new { questionPublicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey }, new AjaxOptions
                                                                                                 {
                                                                                                     UpdateTargetId = "divNewPropagateGroup",
                                                                                                     InsertionMode = InsertionMode.InsertAfter
