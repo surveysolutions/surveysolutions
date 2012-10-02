@@ -178,7 +178,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets Groups.
         /// </summary>
-        public Dictionary<Guid, string> Groups { get; set; }
+        public Dictionary<string, Guid> Groups { get; set; }
 
         #endregion
     }
@@ -210,7 +210,7 @@ namespace Main.Core.View.Question
             this.Answers = new T[0];
             this.Cards = new CardView[0];
             this.Triggers = new List<Guid>();
-            this.Groups = new Dictionary<Guid, string>();
+            this.Groups = new Dictionary<string, Guid>();
         }
 
         /// <summary>
@@ -244,7 +244,7 @@ namespace Main.Core.View.Question
             this.Answers = new T[0];
             this.Cards = new CardView[0];
             this.Triggers = new List<Guid>();
-            this.Groups = new Dictionary<Guid, string>();
+            this.Groups = new Dictionary<string, Guid>();
         }
 
         #endregion
@@ -402,6 +402,42 @@ namespace Main.Core.View.Question
             throw new ArgumentException("group does not exist");
         }
 
+        /// <summary>
+        /// LoadAllGroups
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        protected Dictionary<string, Guid> LoadGroups(IQuestionnaireDocument questionnaire, Guid? groupPublicKey)
+        {
+            var groups = new Dictionary<string, Guid>();
+            if (questionnaire != null)
+                foreach (var group in questionnaire.Children.Where(t=>t is IGroup))
+                    this.SelectAll(group, groups, groupPublicKey);
+            return groups;
+        }
+
+        /// <summary>
+        /// Select all groups
+        /// </summary>
+        /// <param name="currentGroup">
+        /// The current group.
+        /// </param>
+        /// <param name="groups">
+        /// The groups.
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// The group Public Key.
+        /// </param>
+        private void SelectAll(IComposite currentGroup, Dictionary<string, Guid> groups, Guid? groupPublicKey)
+        {
+            if (groupPublicKey == null || groupPublicKey != currentGroup.PublicKey)
+                groups.Add(string.Format("{0}-{1}", (currentGroup as IGroup).Title, currentGroup.PublicKey), currentGroup.PublicKey);
+            if (currentGroup.Children.Where(t=>t is IGroup).Count() > 0)
+                foreach (var childGroup in currentGroup.Children.Where(t => t is IGroup))
+                    this.SelectAll(childGroup, groups, groupPublicKey);
+        }
+
         #endregion
     }
 
@@ -457,7 +493,9 @@ namespace Main.Core.View.Question
             {
                 this.Triggers = doc.Triggers.ToList();
             }
-            this.Parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
+
+            var currentGroup = this.GetQuestionGroup(questionnaire, doc.PublicKey);
+            this.Groups = this.LoadGroups(questionnaire, currentGroup);
         }
 
         #endregion
