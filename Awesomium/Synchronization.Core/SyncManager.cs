@@ -205,9 +205,6 @@ namespace Synchronization.Core
 
             foreach (var synchronizer in this.synchronizerChain)
             {
-                if (!synchronizer.IsActive)
-                    continue;
-
                 IList<SynchronizationException> sErrors = synchronizer.CheckSyncIssues(syncType, direction);
                 if (sErrors == null || sErrors.Count == 0)
                     continue;

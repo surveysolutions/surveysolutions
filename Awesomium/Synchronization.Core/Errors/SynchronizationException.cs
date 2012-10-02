@@ -36,9 +36,9 @@ namespace Synchronization.Core.Errors
         }
     }
 
-    public class UsbUnaccebleException : SynchronizationException
+    public class UsbUnacceptableException : SynchronizationException
     {
-        public UsbUnaccebleException(string message)
+        public UsbUnacceptableException(string message)
             : base(message)
         {
         }
@@ -48,6 +48,14 @@ namespace Synchronization.Core.Errors
     {
         public LocalHosUnreachableException()
             : base("There is no connection to local host")
+        {
+        }
+    }
+
+    public class InactiveNetSynchronizerException : SynchronizationException
+    {
+        public InactiveNetSynchronizerException()
+            : base("Network synchronization endpoint is not set")
         {
         }
     }

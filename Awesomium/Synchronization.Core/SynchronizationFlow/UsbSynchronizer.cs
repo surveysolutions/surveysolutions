@@ -235,7 +235,7 @@ namespace Synchronization.Core.SynchronizationFlow
             }
             catch (Exception ex)
             {
-                return new List<SynchronizationException>() { new UsbUnaccebleException(ex.Message) };
+                return new List<SynchronizationException>() { new UsbUnacceptableException(ex.Message) };
             }
         }
 
@@ -259,9 +259,9 @@ namespace Synchronization.Core.SynchronizationFlow
 
             if (drive == null)
                 if (this.usbProvider.IsAnyAvailable)
-                    throw new UsbUnaccebleException("Usb flush memory device has not been choozen");
+                    throw new UsbUnacceptableException("Usb flush memory device has not been choozen");
                 else
-                    throw new UsbUnaccebleException("Usb flush memory device has not been plugged");
+                    throw new UsbUnacceptableException("Usb flush memory device has not been plugged");
 
             return drive;
         }
