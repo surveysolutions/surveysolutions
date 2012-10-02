@@ -68,7 +68,7 @@ namespace FluentAssertions.Frameworks
 
         private static ITestFramework AttemptToDetectUsingAppSetting()
         {
-	        string frameworkName = "nunitlight";
+			string frameworkName = "nunitlight";
 
             if (!string.IsNullOrEmpty(frameworkName) && frameworks.ContainsKey(frameworkName.ToLower()))
             {

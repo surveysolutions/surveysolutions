@@ -48,7 +48,7 @@ namespace Ncqrs.Tests.Commanding
         public void Executing_one_with_a_custom_factory_should_give_context_created_with_that_factory()
         {
             var factory = new DynamicMock<IUnitOfWorkFactory>();
-			factory.Stub(f => f.CreateUnitOfWork(Guid.NewGuid()), null);
+			factory.Expect(f => f.CreateUnitOfWork(Guid.NewGuid()), null);
 
             var aCommand = new FooCommand()
                                {
@@ -64,27 +64,32 @@ namespace Ncqrs.Tests.Commanding
         public void Executing_should_call_ExecuteInContext_with_context_from_factory()
         {            
             var context = new DynamicMock<IUnitOfWorkContext>();
+			context.Stub(c => c.Dispose());
+
             var factory = new DynamicMock<IUnitOfWorkFactory>();
-            factory.Stub(f => f.CreateUnitOfWork(Guid.NewGuid()), context.Instance);;
+            factory.Stub(f => f.CreateUnitOfWork(Guid.NewGuid()), context.Instance);
 
             var aCommand = new FooCommand();
             var executor = new FooCommandExecutor(factory.Instance);
             executor.Execute(aCommand);
 
-            executor.LastGivenContext.Should().Be(context);
+            Assert.True(executor.LastGivenContext == context.Instance);
         }
 
         [Test]
         public void Executing_should_call_ExecuteInContext_with_given_command()
         {
-            var theCommand = new FooCommand();
-            var factory = new DynamicMock<IUnitOfWorkFactory>();
-			factory.Stub(f => f.CreateUnitOfWork(Guid.NewGuid()), null);
+			var context = new DynamicMock<IUnitOfWorkContext>();
+			context.Stub(c => c.Dispose());
 
-            var executor = new FooCommandExecutor(factory.Instance);
-            executor.Execute(theCommand);
+			var factory = new DynamicMock<IUnitOfWorkFactory>();
+			factory.Stub(f => f.CreateUnitOfWork(Guid.NewGuid()), context.Instance);
 
-            executor.LastGivenCommand.Should().Be(theCommand);
+			var theCommand = new FooCommand();
+			var executor = new FooCommandExecutor(factory.Instance);
+			executor.Execute(theCommand);
+
+			executor.LastGivenCommand.Should().Be(theCommand);
         }
     }
 }

@@ -4,7 +4,7 @@
 	{
 		protected override string AssemblyName
 		{
-			get { return "NUnitLite.dll"; }
+			get { return "NUnitLite"; }
 		}
 
 		protected override string ExceptionFullName

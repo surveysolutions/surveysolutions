@@ -1,26 +1,3 @@
-// ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
-//
-// Permission is hereby granted, free of charge, to any person obtaining
-// a copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so, subject to
-// the following conditions:
-// 
-// The above copyright notice and this permission notice shall be
-// included in all copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-// ***********************************************************************
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,189 +7,164 @@ using NUnit.Framework;
 
 namespace NUnitLite
 {
-    public class TestSuite : ITest
-    {
-        #region Instance Variables
-        private string name;
-        private string fullName;
+	public class TestSuite : ITest
+	{
+		#region Instance Variables
 
-        private RunState runState = RunState.Runnable;
-        private string ignoreReason;
+		private readonly List<TestCase> _testCases = new List<TestCase>(10);
 
-        private IDictionary properties = new Hashtable();
+		private readonly Type _fixtureType;
 
-        private List<ITest> tests = new List<ITest>(10);
-        #endregion
+		private object _fixtureObject;
 
-        #region Constructors
-        public TestSuite(string name)
-        {
-            this.name = name;
-        }
+		private RunState _runState;
 
-        public TestSuite(Type type)
-        {
-            this.name = type.Name;
-            this.fullName = type.FullName;
+		private string _ignoreReason;
 
-            object[] attrs = type.GetCustomAttributes( typeof(PropertyAttribute), true);
-            foreach (PropertyAttribute attr in attrs)
-                foreach( DictionaryEntry entry in attr.Properties )
-                    this.Properties[entry.Key] = entry.Value;
+		#endregion
 
-            IgnoreAttribute ignore = (IgnoreAttribute)Reflect.GetAttribute(type, typeof(IgnoreAttribute));
-            if (ignore != null)
-            {
-                this.runState = RunState.Ignored;
-                this.ignoreReason = ignore.Reason;
-            }
+		#region Constructors
 
-            if ( !InvalidTestSuite(type) )
-            {
-                foreach (MethodInfo method in type.GetMethods())
-                {
-                    if (TestCase.IsTestMethod(method))
-                        this.AddTest(new TestCase(method));
-                    
-					if (TestSuite.IsFixtureSetupMethod(method))
+		public TestSuite(Type type)
+		{
+			Properties = new Hashtable();
+			_runState = RunState.Runnable;
+
+			_fixtureType = type;
+
+			object[] attrs = type.GetCustomAttributes(typeof (PropertyAttribute), true);
+			foreach (PropertyAttribute attr in attrs)
+				foreach (DictionaryEntry entry in attr.Properties)
+					this.Properties[entry.Key] = entry.Value;
+
+			var ignore = (IgnoreAttribute) Reflect.GetAttribute(type, typeof (IgnoreAttribute));
+			if (ignore != null)
+			{
+				_runState = RunState.Ignored;
+				_ignoreReason = ignore.Reason;
+			}
+
+			if (InvalidTestSuite(type)) return;
+
+			foreach (MethodInfo method in type.GetMethods())
+			{
+				if (TestCase.IsTestMethod(method))
+					_testCases.Add(new TestCase(method));
+			}
+		}
+
+		#endregion
+
+		#region Properties
+
+		public string Name
+		{
+			get { return _fixtureType.Name; }
+		}
+
+		public string FullName 
+		{
+			get { return _fixtureType.FullName; }
+		}
+
+		public IDictionary Properties { get; private set; }
+
+		public int TestCaseCount
+		{
+			get { return this._testCases.Sum(test => test.TestCaseCount); }
+		}
+
+		#endregion
+
+		#region Public Methods
+
+		public TestResult Run(ITestListener listener)
+		{
+			int count = 0, failures = 0, errors = 0;
+			listener.TestStarted(this);
+			TestResult result = new TestResult(this);
+
+			switch (_runState)
+			{
+				case RunState.NotRunnable:
+					result.Error(_ignoreReason);
+					break;
+
+				case RunState.Ignored:
+					result.NotRun(_ignoreReason);
+					break;
+
+				case RunState.Runnable:
+					_fixtureObject = CreateFextureObject();
+					RunFixtureSetupIfNeeded();
+					foreach (var test in _testCases)
 					{
-						
+						++count;
+						TestResult r = test.Run(listener, _fixtureObject);
+						result.AddResult(r);
+						switch (r.ResultState)
+						{
+							case ResultState.Error:
+								++errors;
+								break;
+							case ResultState.Failure:
+								++failures;
+								break;
+						}
 					}
+					RunFixtureTeardownIfNeeded();
+					if (count == 0)
+						result.NotRun("Class has no tests");
+					else if (errors > 0 || failures > 0)
+						result.Failure("One or more component tests failed");
+					else
+						result.Success();
+					break;
+			}
 
-					if (TestSuite.IsFixtureTearDownMethod(method))
-					{
-						
-					}
-                }
-            }
-        }
+			listener.TestFinished(result);
+			return result;
+		}
 
-	    private static bool IsFixtureTearDownMethod(MethodInfo method)
-	    {
-		    return false;
-		    //return Reflect.HasAttribute(method, typeof(TestAttribute));
-	    }
+		#endregion
 
-	    private static bool IsFixtureSetupMethod(MethodInfo method)
-	    {
-		    return false;
-		    //return Reflect.HasAttribute(method, typeof(TestAttribute));
-	    }
+		#region Private Methods
 
-	    #endregion
+		private void RunFixtureSetupIfNeeded()
+		{
+			var fixtureSetUp = _fixtureType.GetMethods()
+				.FirstOrDefault(m => Reflect.HasAttribute(m, typeof (TestFixtureSetUpAttribute)));
 
-        #region Properties
-        public string Name
-        {
-            get { return name; }
-        }
+			if (fixtureSetUp != null) 
+				Reflect.InvokeMethod(fixtureSetUp, _fixtureObject);
+		}
 
-        public string FullName
-        {
-            get { return fullName; }
-        }
+		private void RunFixtureTeardownIfNeeded()
+		{
+			var fixtureTearDown = _fixtureType.GetMethods()
+				.FirstOrDefault(m => Reflect.HasAttribute(m, typeof(TestFixtureTearDownAttribute)));
 
-        public RunState RunState
-        {
-            get { return runState; }
-        }
+			if (fixtureTearDown != null)
+				Reflect.InvokeMethod(fixtureTearDown, _fixtureObject);
+		}
 
-        public string IgnoreReason
-        {
-            get { return ignoreReason; }
-        }
+		private object CreateFextureObject()
+		{
+			return Reflect.Construct(_fixtureType);
+		}
 
-        public IDictionary Properties
-        {
-            get { return properties; }
-        }
+		private bool InvalidTestSuite(Type type)
+		{
+			if (!Reflect.HasConstructor(type))
+			{
+				_runState = RunState.NotRunnable;
+				_ignoreReason = string.Format("Class {0} has no default constructor", type.Name);
+				return true;
+			}
 
-        public int TestCaseCount
-        {
-            get
-            {
-	            return this.tests.Sum(test => test.TestCaseCount);
-            }
-        }
+			return false;
+		}
 
-        public IList Tests
-        {
-            get { return tests; }
-        }
-        #endregion
-
-        #region Public Methods
-        public TestResult Run()
-        {
-            return Run(new NullListener());
-        }
-
-        public TestResult Run(ITestListener listener)
-        {
-            int count = 0, failures = 0, errors = 0;
-            listener.TestStarted(this);
-            TestResult result = new TestResult(this);
-
-            switch (this.RunState)
-            {
-                case RunState.NotRunnable:
-                    result.Error(this.IgnoreReason);
-                    break;
-
-                case RunState.Ignored:
-                    result.NotRun(this.IgnoreReason);
-                    break;
-
-                case RunState.Runnable:
-                    foreach (ITest test in tests)
-                    {
-                        ++count;
-                        TestResult r = test.Run(listener);
-                        result.AddResult(r);
-                        switch (r.ResultState)
-                        {
-                            case ResultState.Error:
-                                ++errors;
-                                break;
-                            case ResultState.Failure:
-                                ++failures;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-
-                    if (count == 0)
-                        result.NotRun("Class has no tests");
-                    else if (errors > 0 || failures > 0)
-                        result.Failure("One or more component tests failed");
-                    else
-                        result.Success();
-                    break;
-            }
-
-            listener.TestFinished(result);
-            return result;
-        }
-
-        public void AddTest(ITest test)
-        {
-            tests.Add(test);
-        }
-        #endregion
-
-        #region Private Methods
-        private bool InvalidTestSuite(Type type)
-        {
-            if (!Reflect.HasConstructor(type))
-            {
-                this.runState = RunState.NotRunnable;
-                this.ignoreReason = string.Format( "Class {0} has no default constructor", type.Name);
-                return true;
-            }
-
-            return false;
-        }
-        #endregion
-    }
+		#endregion
+	}
 }

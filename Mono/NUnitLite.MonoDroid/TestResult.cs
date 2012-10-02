@@ -119,8 +119,6 @@ namespace NUnitLite
                 case ResultState.Failure:
                     this.Failure("Component test failure");
                     break;
-                default:
-                    break;
             }
         }
 

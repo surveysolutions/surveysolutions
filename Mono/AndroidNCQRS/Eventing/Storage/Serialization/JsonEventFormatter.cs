@@ -24,6 +24,8 @@ namespace Ncqrs.Eventing.Storage.Serialization
         public JsonEventFormatter(IEventTypeResolver typeResolver)
         {
             //Contract.Requires<ArgumentNullException>(typeResolver != null, "typeResolver");
+			if (typeResolver == null)
+				throw new ArgumentNullException("typeResolver");
 
             _typeResolver = typeResolver;
             _serializer = new JsonSerializer();

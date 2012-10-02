@@ -129,20 +129,20 @@ namespace Ncqrs.Tests
 		//    result.Should().Be(returnValue);
 		//}
 
-        [Test]
-        public void When_get_is_called_but_the_source_did_not_return_an_intance_an_exception_should_be_thrown()
-        {
-            NcqrsEnvironment.Deconfigure();
+		//[Test]
+		//public void When_get_is_called_but_the_source_did_not_return_an_intance_an_exception_should_be_thrown()
+		//{
+		//    NcqrsEnvironment.Deconfigure();
 
-            // Arrange
-	        var mock = new DynamicMock<IEnvironmentConfiguration>();
-            NcqrsEnvironment.Configure(mock.Instance);
+		//    // Arrange
+		//    var mock = new DynamicMock<IEnvironmentConfiguration>();
+		//    NcqrsEnvironment.Configure(mock.Instance);
 
-            // Act
-            Action act = () => NcqrsEnvironment.Get<IBar>();
+		//    // Act
+		//    Action act = () => NcqrsEnvironment.Get<IBar>();
 
-            // Assert
-            act.ShouldThrow<InstanceNotFoundInEnvironmentConfigurationException>();
-        }
+		//    // Assert
+		//    act.ShouldThrow<InstanceNotFoundInEnvironmentConfigurationException>();
+		//}
     }
 }

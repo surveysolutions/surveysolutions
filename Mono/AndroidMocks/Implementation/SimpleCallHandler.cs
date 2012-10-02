@@ -10,6 +10,11 @@ namespace AndroidMocks.Implementation
 		private Dictionary<string, IExpectedCall> _expectedCalls = new Dictionary<string, IExpectedCall>();
 		private Dictionary<string, IThrowExceptionCall> _throwExceptionsCalls = new Dictionary<string, IThrowExceptionCall>();
 
+		public SimpleCallHandler()
+		{
+			
+		}
+
 		private Dictionary<string, IMethodCall> _allCalls = new Dictionary<string, IMethodCall>();
 
 		public object Call(string methodName, object[] args)
@@ -46,12 +51,6 @@ namespace AndroidMocks.Implementation
 			if (_expectedCalls.Any(p => !p.Value.WasExecuted))
 				throw new ExpectationException();
 		}
-
-		//public void AssertWasCalled(string actionName)
-		//{
-		//    if (!_expectedCalls[actionName].WasExecuted)
-		//        throw new ExpectationException();
-		//}
 
 		public void AssertWasCalled(string actionName, int times)
 		{

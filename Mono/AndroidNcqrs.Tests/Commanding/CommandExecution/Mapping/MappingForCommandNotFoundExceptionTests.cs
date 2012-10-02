@@ -31,7 +31,7 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping
 
             var target = new MappingNotFoundException(aMessage, theCommand.Instance);
 
-            target.Command.Should().Be(theCommand);
+	        Assert.True(target.Command == theCommand.Instance);
         }
 
         [Test]

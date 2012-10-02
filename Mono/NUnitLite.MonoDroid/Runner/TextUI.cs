@@ -92,74 +92,74 @@ namespace NUnitLite.Runner
         /// from Main.
         /// </summary>
         /// <param name="args">An array of arguments</param>
-        public bool Execute(string[] args)
-        {
-            var success = true;
+		//public bool Execute(string[] args)
+		//{
+		//    var success = true;
 
-            // NOTE: This must be directly called from the
-            // test assembly in order for the mechanism to work.
-            var callingAssembly = Assembly.GetEntryAssembly();
+		//    // NOTE: This must be directly called from the
+		//    // test assembly in order for the mechanism to work.
+		//    var callingAssembly = Assembly.GetEntryAssembly();
 
-            options = ProcessArguments( args );
+		//    options = ProcessArguments(args);
 
-            if (!options.Help && !options.Error)
-            {
-                if (options.Wait && !(this is ConsoleUI))
-                    writer.WriteLine("Ignoring /wait option - only valid for Console");
+		//    if (!options.Help && !options.Error)
+		//    {
+		//        if (options.Wait && !(this is ConsoleUI))
+		//            writer.WriteLine("Ignoring /wait option - only valid for Console");
 
-                try
-                {
-                    foreach (string name in options.Parameters) assemblies.Add(Assembly.Load(name));
+		//        try
+		//        {
+		//            foreach (string name in options.Parameters) assemblies.Add(Assembly.Load(name));
 
-                    if (assemblies.Count == 0) assemblies.Add(callingAssembly);
+		//            if (assemblies.Count == 0) assemblies.Add(callingAssembly);
 
-                    foreach (Assembly assembly in assemblies)
-                    {
-                        var thisRunSuccess = true;
+		//            foreach (Assembly assembly in assemblies)
+		//            {
+		//                var thisRunSuccess = true;
 
-                        if (options.TestCount == 0) thisRunSuccess = Run(assembly);
-                        else thisRunSuccess = Run(assembly, options.Tests);
+		//                if (options.TestCount == 0) thisRunSuccess = Run(assembly);
+		//                else thisRunSuccess = Run(assembly, options.Tests);
 
-                        if (!thisRunSuccess) success = false;
-                    }
-                }
-                catch (TestRunnerException ex)
-                {
-                    writer.WriteLine(ex.Message);
-                    success = false;
-                }
-                catch (FileNotFoundException ex)
-                {
-                    writer.WriteLine(ex.Message);
-                    success = false;
-                }
-                catch (Exception ex)
-                {
-                    writer.WriteLine(ex.ToString());
-                    success = false;
-                }
-                finally
-                {
-                    if (options.Wait && this is ConsoleUI)
-                    {
-                        Console.WriteLine("Press Enter key to continue . . .");
-                        Console.ReadLine();
-                    }
-                }
-            }
+		//                if (!thisRunSuccess) success = false;
+		//            }
+		//        }
+		//        catch (TestRunnerException ex)
+		//        {
+		//            writer.WriteLine(ex.Message);
+		//            success = false;
+		//        }
+		//        catch (FileNotFoundException ex)
+		//        {
+		//            writer.WriteLine(ex.Message);
+		//            success = false;
+		//        }
+		//        catch (Exception ex)
+		//        {
+		//            writer.WriteLine(ex.ToString());
+		//            success = false;
+		//        }
+		//        finally
+		//        {
+		//            if (options.Wait && this is ConsoleUI)
+		//            {
+		//                Console.WriteLine("Press Enter key to continue . . .");
+		//                Console.ReadLine();
+		//            }
+		//        }
+		//    }
 
-            return success;
-        }
+		//    return success;
+		//}
 
         private bool Run(Assembly assembly)
         {
             return ReportResults( runner.Run(assembly) );
         }
 
-        private bool Run(Assembly assembly, string[] tests)
-        {
-            return ReportResults( runner.Run(assembly, tests) );
-        }
+		//private bool Run(Assembly assembly, string[] tests)
+		//{
+		//    return ReportResults( runner.Run(assembly, tests) );
+		//}
 
         private bool ReportResults( TestResult result )
         {

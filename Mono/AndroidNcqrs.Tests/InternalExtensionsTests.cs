@@ -82,7 +82,7 @@ namespace Ncqrs.Tests
             var source = new List<object>();
             var clone = InternalExtensions.Clone(source);
 
-            Assert.That(source, Is.Not.EqualTo(clone));
+            Assert.False(source == clone);
         }
 
         [Test]

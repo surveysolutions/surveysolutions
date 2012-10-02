@@ -13,10 +13,14 @@ namespace Ncqrs.Eventing.Storage.NoDB.Tests.EventStoreTests
         protected object[] Events;
         protected Guid EventSourceId;
 
+	    private string _baseDirectoryPath;
+
         [TestFixtureSetUp]
         public void BaseSetup()
         {
-            EventStore = new NoDBEventStore("./NoDBTests/"+GetType().Name);
+	        _baseDirectoryPath = Path.Combine(Path.GetTempPath(), GetType().Name);
+
+            EventStore = new NoDBEventStore(_baseDirectoryPath);
             EventSourceId = Guid.NewGuid();
             Guid entityId = Guid.NewGuid();
             Events = new object[] {new AccountTitleChangedEvent("Title")};
@@ -33,7 +37,8 @@ namespace Ncqrs.Eventing.Storage.NoDB.Tests.EventStoreTests
 
         protected string GetPath()
         {
-            return "./NoDBTests/" + GetType().Name+"/"+EventSourceId.ToString().Substring(0, 2);
+            //return "./NoDBTests/" + GetType().Name+"/"+EventSourceId.ToString().Substring(0, 2);
+	        return _baseDirectoryPath;
         }
     }
 }

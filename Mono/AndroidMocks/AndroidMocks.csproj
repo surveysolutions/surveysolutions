@@ -44,6 +44,8 @@
     <Compile Include="ICallHandler.cs" />
     <Compile Include="IMethodCall.cs" />
     <Compile Include="ExpectationException.cs" />
+    <Compile Include="Implementation\DefaultValuesCallHandler.cs" />
+    <Compile Include="Implementation\ObjectMethodCallHandler.cs" />
     <Compile Include="Implementation\SimpleMethodCall.cs" />
     <Compile Include="Implementation\SimpleThrowExceptionCall.cs" />
     <Compile Include="IThrowExceptionCall.cs" />

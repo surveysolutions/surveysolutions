@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace AndroidNcalc.Tests
 {
-    [TestFixture, Ignore]
+    [TestFixture]
     public class Fixtures
     {
         [Test]

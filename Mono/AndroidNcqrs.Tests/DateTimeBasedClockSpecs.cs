@@ -7,6 +7,8 @@ namespace Ncqrs.Tests
     [TestFixture]
     public class DateTimeBasedClockSpecs
     {
+	    private TimeSpan _epsilon = TimeSpan.FromMilliseconds(100);
+
         [Test]
         public void When_getting_the_current_time_it_should_be_a_utc_kind()
         {
@@ -24,7 +26,7 @@ namespace Ncqrs.Tests
             var currentClockTime = clock.UtcNow();
             var currentDateTimeTime = DateTime.UtcNow;
 
-            currentClockTime.Should().Be(currentDateTimeTime);
+	        (currentClockTime - currentDateTimeTime).Should().BeLessOrEqualTo(_epsilon);
         }
     }
 }

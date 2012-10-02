@@ -11,7 +11,7 @@ namespace Ncqrs.Tests
         [Test]
         public void Calling_generate_multiple_times_should_return_unique_results()
         {
-            int count = 1000000;
+            int count = 100;
             var generator = new GuidCombGenerator();
 
             var results = new List<Guid>();

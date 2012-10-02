@@ -104,6 +104,9 @@ namespace Ncqrs.Eventing.Sourcing
         public virtual void InitializeFromHistory(CommittedEventStream history)
         {
             //Contract.Requires<ArgumentNullException>(history != null, "The history cannot be null.");
+			if (history == null)
+				throw new ArgumentNullException("history");
+
             if (_initialVersion != Version)
             {
                 throw new InvalidOperationException("Cannot apply history when instance has uncommitted changes.");

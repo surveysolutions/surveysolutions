@@ -12,7 +12,7 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
     [TestFixture]
     public class AttributeCommandMappingTests
     {
-        [MapsToAggregateRootMethod("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+AggregateRootTarget, Ncqrs.Tests", "UpdateTitle")]
+        [MapsToAggregateRootMethod("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+AggregateRootTarget, AndroidNcqrs.Tests", "UpdateTitle")]
         public class AggregateRootTargetUpdateTitleCommand : CommandBase
         {
             public string Title
@@ -23,7 +23,7 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
             { get; set; }
         }
 
-        [MapsToAggregateRootMethodOrConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+AggregateRootTarget, Ncqrs.Tests", "UpdateTitle")]
+        [MapsToAggregateRootMethodOrConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+AggregateRootTarget, AndroidNcqrs.Tests", "UpdateTitle")]
         public class AggregateRootTargetCreateOrUpdateTitleCommand : CommandBase
         {
             public string Title
@@ -35,7 +35,7 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
         }
 
         [Transactional]
-        [MapsToAggregateRootMethod("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+AggregateRootTarget, Ncqrs.Tests", "UpdateTitle")]
+        [MapsToAggregateRootMethod("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+AggregateRootTarget, AndroidNcqrs.Tests", "UpdateTitle")]
         public class TransactionalAggregateRootTargetUpdateTitleCommand : CommandBase
         {
             public string Title
@@ -47,7 +47,7 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
         }
 
         [Transactional]
-        [MapsToAggregateRootMethodOrConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+AggregateRootTarget, Ncqrs.Tests", "UpdateTitle")]
+        [MapsToAggregateRootMethodOrConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+AggregateRootTarget, AndroidNcqrs.Tests", "UpdateTitle")]
         public class TransactionalAggregateRootTargetCreateOrUpdateTitleCommand : CommandBase
         {
             public string Title
@@ -68,7 +68,7 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
             { get; set; }
         }
 
-        [MapsToAggregateRootConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+AggregateRootTarget, Ncqrs.Tests")]
+        [MapsToAggregateRootConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+AggregateRootTarget, AndroidNcqrs.Tests")]
         public class AggregateRootTargetCreateNewCommand : CommandBase
         {
             public string Title
@@ -80,7 +80,7 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
         }
 
         [Transactional]
-        [MapsToAggregateRootConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+AggregateRootTarget, Ncqrs.Tests")]
+        [MapsToAggregateRootConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+AggregateRootTarget, AndroidNcqrs.Tests")]
         public class TransactionalAggregateRootTargetCreateNewCommand : CommandBase
         {
             public string Title
@@ -140,7 +140,7 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
             }
         }
 
-        [MapsToAggregateRootConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+ComplexAggregateRootTarget, Ncqrs.Tests")]
+        [MapsToAggregateRootConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+ComplexAggregateRootTarget, AndroidNcqrs.Tests")]
         public class ComplexAggregateRootTargetCreateNewCommand1 : CommandBase
         {
             [Parameter(1)]
@@ -152,7 +152,7 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
             { get; set; }
         }
 
-        [MapsToAggregateRootConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+ComplexAggregateRootTarget, Ncqrs.Tests")]
+        [MapsToAggregateRootConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+ComplexAggregateRootTarget, AndroidNcqrs.Tests")]
         public class ComplexAggregateRootTargetCreateNewCommand2 : CommandBase
         {
             [Parameter("title")]
@@ -164,7 +164,7 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
             { get; set; }
         }
 
-        [MapsToAggregateRootConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+ComplexAggregateRootTarget, Ncqrs.Tests")]
+        [MapsToAggregateRootConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+ComplexAggregateRootTarget, AndroidNcqrs.Tests")]
         public class ComplexAggregateRootTargetCreateNewCommand3 : CommandBase
         {
             [Parameter("title")]
@@ -176,7 +176,7 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
             { get; set; }
         }
 
-        [MapsToAggregateRootConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+ComplexAggregateRootTarget, Ncqrs.Tests")]
+        [MapsToAggregateRootConstructor("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+ComplexAggregateRootTarget, AndroidNcqrs.Tests")]
         public class ComplexAggregateRootTargetCreateNewCommand4 : CommandBase
         {
             [Parameter]

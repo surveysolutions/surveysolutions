@@ -19,7 +19,7 @@ namespace Ncqrs.Eventing.Storage.NoDB
             _formatter = new JsonEventFormatter(new SimpleEventTypeResolver());
         }
 
-        #region IEventStore Members
+	    #region IEventStore Members
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {

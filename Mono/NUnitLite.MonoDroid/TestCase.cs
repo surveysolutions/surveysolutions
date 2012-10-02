@@ -1,26 +1,3 @@
-// ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
-//
-// Permission is hereby granted, free of charge, to any person obtaining
-// a copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so, subject to
-// the following conditions:
-// 
-// The above copyright notice and this permission notice shall be
-// included in all copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-// ***********************************************************************
-
 using System;
 using System.Reflection;
 using System.Collections;
@@ -28,284 +5,261 @@ using NUnit.Framework;
 
 namespace NUnitLite
 {
-    public class TestCase : ITest
-    {
-        #region Instance Variables
-        private string name;
-        private string fullName;
+	public class TestCase : ITest
+	{
+		#region Instance Variables
 
-        private object fixture;
-        private MethodInfo method;
+		private object _fixture;
+		private MethodInfo _method;
 
-        private MethodInfo setup;
-        private MethodInfo teardown;
+		private MethodInfo _setup;
+		private MethodInfo _teardown;
 
-        private RunState runState = RunState.Runnable;
-        private string ignoreReason;
+		private IDictionary _properties;
 
-        private IDictionary properties;
-        #endregion
+		#endregion
 
-        #region Constructors
-        public TestCase(string name)
-        {
-            this.name = this.fullName = name;
-        }
+		#region Constructors
 
-        public TestCase(MethodInfo method)
-        {
-            Initialize(method, null);
-        }
+		public TestCase(MethodInfo method)
+		{
+			RunState = RunState.Runnable;
+			Initialize(method);
+		}
 
-        public TestCase(string name, object fixture)
-        {
-            Initialize(fixture.GetType().GetMethod(name), fixture);
-        }
+		private void Initialize(MethodInfo method)
+		{
+			Name = method.Name;
+			_method = method;
+			FullName = method.ReflectedType.FullName + "." + Name;
 
-        private void Initialize(MethodInfo method, object fixture)
-        {
-            this.name = method.Name;
-            this.method = method;
-            this.fullName = method.ReflectedType.FullName + "." + name;
-            this.fixture = fixture;
-            if ( fixture == null )
-                this.fixture = Reflect.Construct(method.ReflectedType, null);
+			if (!HasValidSignature(method))
+			{
+				RunState = RunState.NotRunnable;
+				IgnoreReason = "Test methods must have signature void MethodName()";
+			}
+			else
+			{
+				var ignore = (IgnoreAttribute) Reflect.GetAttribute(this._method, typeof (IgnoreAttribute));
+				if (ignore != null)
+				{
+					RunState = RunState.Ignored;
+					IgnoreReason = ignore.Reason;
+				}
+			}
 
-            if (!HasValidSignature(method))
-            {
-                this.runState = RunState.NotRunnable;
-                this.ignoreReason = "Test methods must have signature void MethodName()";
-            }
-            else
-            {
-                IgnoreAttribute ignore = (IgnoreAttribute)Reflect.GetAttribute(this.method, typeof(IgnoreAttribute));
-                if (ignore != null)
-                {
-                    this.runState = RunState.Ignored;
-                    this.ignoreReason = ignore.Reason;
-                }
-            }
+			foreach (MethodInfo m in method.ReflectedType.GetMethods())
+			{
+				if (Reflect.HasAttribute(m, typeof (SetUpAttribute)))
+					this._setup = m;
 
-            foreach (MethodInfo m in method.ReflectedType.GetMethods())
-            {
-                if (Reflect.HasAttribute(m, typeof(SetUpAttribute)))
-                    this.setup = m;
+				if (Reflect.HasAttribute(m, typeof (TearDownAttribute)))
+					this._teardown = m;
+			}
+		}
 
-                if (Reflect.HasAttribute(m, typeof(TearDownAttribute)))
-                    this.teardown = m;
-            }
-        }
-        #endregion
+		#endregion
 
-        #region Properties
-        public string Name
-        {
-            get { return name; }
-        }
+		#region Properties
 
-        public string FullName
-        {
-            get { return fullName; }
-        }
+		public string Name { get; private set; }
 
-        public RunState RunState
-        {
-            get { return runState; }
-        }
+		public string FullName { get; private set; }
 
-        public string IgnoreReason
-        {
-            get { return ignoreReason; }
-        }
+		public RunState RunState { get; private set; }
 
-        public System.Collections.IDictionary Properties
-        {
-            get 
-            {
-                if (properties == null)
-                {
-                    properties = new Hashtable();
+		public string IgnoreReason { get; private set; }
 
-                    object[] attrs = this.method.GetCustomAttributes(typeof(PropertyAttribute), true);
-                    foreach (PropertyAttribute attr in attrs)
-                        foreach( DictionaryEntry entry in attr.Properties )
-                            this.Properties[entry.Key] = entry.Value;
-                }
+		public IDictionary Properties
+		{
+			get
+			{
+				if (_properties == null)
+				{
+					_properties = new Hashtable();
 
-                return properties; 
-            }
-        }
+					var attrs = this._method.GetCustomAttributes(typeof (PropertyAttribute), true);
+					foreach (PropertyAttribute attr in attrs)
+						foreach (DictionaryEntry entry in attr.Properties)
+							this.Properties[entry.Key] = entry.Value;
+				}
 
-        public int TestCaseCount
-        {
-            get { return 1; }
-        }
-        #endregion
+				return _properties;
+			}
+		}
 
-        #region Public Methods
-        public static bool IsTestMethod(MethodInfo method)
-        {
-            return Reflect.HasAttribute(method, typeof(TestAttribute));
-        }
+		public int TestCaseCount
+		{
+			get { return 1; }
+		}
 
-        public TestResult Run()
-        {
-            return Run( new NullListener() );
-        }
+		#endregion
 
-        public TestResult Run(ITestListener listener)
-        {
-            listener.TestStarted(this);
+		#region Public Methods
 
-            TestResult result = new TestResult(this);
-            Run(result, listener);
+		public static bool IsTestMethod(MethodInfo method)
+		{
+			return Reflect.HasAttribute(method, typeof (TestAttribute));
+		}
 
-            listener.TestFinished(result);
+		public TestResult Run(ITestListener listener, object objectFixture)
+		{
+			_fixture = objectFixture;
 
-            return result;
-        }
-        #endregion
+			listener.TestStarted(this);
 
-        #region Protected Methods
-        protected virtual void SetUp() 
-        {
-            if (setup != null)
-            {
-                Assert.That(HasValidSetUpTearDownSignature(setup), "Invalid SetUp method: must return void and have no arguments");
-                InvokeMethod(setup);
-            }
-        }
+			var result = new TestResult(this);
 
-        protected virtual void TearDown() 
-        {
-            if (teardown != null)
-            {
-                Assert.That(HasValidSetUpTearDownSignature(teardown), "Invalid TearDown method: must return void and have no arguments");
-                InvokeMethod(teardown);
-            }
-        }
+			Run(result, listener);
 
-        protected virtual void Run(TestResult result, ITestListener listener)
-        {
-            IgnoreAttribute ignore = (IgnoreAttribute)Reflect.GetAttribute(method, typeof(IgnoreAttribute));
-            if (this.RunState == RunState.NotRunnable)
-                result.Failure(this.ignoreReason);
-            else if ( ignore != null )
-                result.NotRun(ignore.Reason);
-            else
-            {
-                try
-                {
-                    RunBare();
-                    result.Success();
-                }
-                catch (NUnitLiteException nex)
-                {
-                    result.RecordException(nex.InnerException);
-                }
+			listener.TestFinished(result);
+
+			return result;
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		private void SetUp()
+		{
+			if (_setup == null) return;
+
+			Assert.That(HasValidSetUpTearDownSignature(_setup), "Invalid SetUp method: must return void and have no arguments");
+			InvokeMethod(_setup);
+		}
+
+		private void TearDown()
+		{
+			if (_teardown == null) return;
+
+			Assert.That(HasValidSetUpTearDownSignature(_teardown),
+			            "Invalid TearDown method: must return void and have no arguments");
+			InvokeMethod(_teardown);
+		}
+
+		private void Run(TestResult result, ITestListener listener)
+		{
+			var ignore = (IgnoreAttribute) Reflect.GetAttribute(_method, typeof (IgnoreAttribute));
+			if (this.RunState == RunState.NotRunnable)
+				result.Failure(this.IgnoreReason);
+			else if (ignore != null)
+				result.NotRun(ignore.Reason);
+			else
+			{
+				try
+				{
+					RunBare();
+					result.Success();
+				}
+				catch (NUnitLiteException nex)
+				{
+					result.RecordException(nex.InnerException);
+				}
 #if !NETCF_1_0
-                catch (System.Threading.ThreadAbortException)
-                {
-                    throw;
-                }
+				catch (System.Threading.ThreadAbortException)
+				{
+					throw;
+				}
 #endif
-                catch (Exception ex)
-                {
-                    result.RecordException(ex);
-                }
-            }
-        }
+				catch (Exception ex)
+				{
+					result.RecordException(ex);
+				}
+			}
+		}
 
-        protected void RunBare()
-        {
-            SetUp();
-            try
-            {
-                RunTest();
-            }
-            finally
-            {
-                TearDown();
-            }
-        }
+		private void RunTest()
+		{
+			try
+			{
+				InvokeMethod(_method);
+				ProcessNoException(_method);
+			}
+			catch (NUnitLiteException ex)
+			{
+				ProcessException(_method, ex.InnerException);
+			}
+		}
 
-        protected virtual void RunTest()
-        {
-            try
-            {
-                InvokeMethod( this.method );
-                ProcessNoException(this.method);
-            }
-            catch (NUnitLiteException ex)
-            {
-                ProcessException(this.method, ex.InnerException);
-            }
-        }
+		private void InvokeMethod(MethodInfo method, params object[] args)
+		{
+			Reflect.InvokeMethod(method, _fixture, args);
+		}
 
-        protected void InvokeMethod(MethodInfo method, params object[] args)
-        {
-            Reflect.InvokeMethod(method, this.fixture, args);
-        }
-        #endregion
+		private static bool HasValidSignature(MethodInfo method)
+		{
+			return method != null
+			       && method.ReturnType == typeof (void)
+			       && method.GetParameters().Length == 0;
+		}
 
-        #region Private Methods       
-        public static bool HasValidSignature(MethodInfo method)
-        {
-            return method != null
-                && method.ReturnType == typeof(void)
-                && method.GetParameters().Length == 0; ;
-        }
+		private void RunBare()
+		{
+			SetUp();
+			try
+			{
+				RunTest();
+			}
+			finally
+			{
+				TearDown();
+			}
+		}
 
-        private static bool HasValidSetUpTearDownSignature(MethodInfo method)
-        {
-            return method.ReturnType == typeof(void)
-                && method.GetParameters().Length == 0; ;
-        }
+		private static bool HasValidSetUpTearDownSignature(MethodInfo method)
+		{
+			return method.ReturnType == typeof (void)
+			       && method.GetParameters().Length == 0;
+		}
 
-        private static void ProcessNoException(MethodInfo method)
-        {
-            ExpectedExceptionAttribute exceptionAttribute =
-                (ExpectedExceptionAttribute)Reflect.GetAttribute(method, typeof(ExpectedExceptionAttribute));
+		private static void ProcessNoException(MethodInfo method)
+		{
+			var exceptionAttribute =
+				(ExpectedExceptionAttribute) Reflect.GetAttribute(method, typeof (ExpectedExceptionAttribute));
 
-            if (exceptionAttribute != null)
-                Assert.Fail("Expected Exception of type <{0}>, but none was thrown", exceptionAttribute.ExceptionType);
-        }
+			if (exceptionAttribute != null)
+				Assert.Fail("Expected Exception of type <{0}>, but none was thrown", exceptionAttribute.ExceptionType);
+		}
 
-        private void ProcessException(MethodInfo method, Exception caughtException)
-        {
-            ExpectedExceptionAttribute exceptionAttribute =
-                (ExpectedExceptionAttribute)Reflect.GetAttribute(method, typeof(ExpectedExceptionAttribute));
+		private void ProcessException(MethodInfo method, Exception caughtException)
+		{
+			var exceptionAttribute =
+				(ExpectedExceptionAttribute) Reflect.GetAttribute(method, typeof (ExpectedExceptionAttribute));
 
-            if (exceptionAttribute == null)
-                throw new NUnitLiteException("", caughtException);
+			if (exceptionAttribute == null)
+				throw new NUnitLiteException("", caughtException);
 
-            Type expectedType = exceptionAttribute.ExceptionType;
-            if ( expectedType != null && expectedType != caughtException.GetType() )
-                Assert.Fail("Expected Exception of type <{0}>, but was <{1}>", exceptionAttribute.ExceptionType, caughtException.GetType());
+			var expectedType = exceptionAttribute.ExceptionType;
+			if (expectedType != null && expectedType != caughtException.GetType())
+				Assert.Fail("Expected Exception of type <{0}>, but was <{1}>", exceptionAttribute.ExceptionType,
+				            caughtException.GetType());
 
-            MethodInfo handler = GetExceptionHandler(method.ReflectedType, exceptionAttribute.Handler);
+			var handler = GetExceptionHandler(method.ReflectedType, exceptionAttribute.Handler);
 
-            if (handler != null)
-                InvokeMethod( handler, caughtException );
-        }
+			if (handler != null)
+				InvokeMethod(handler, caughtException);
+		}
 
-        private MethodInfo GetExceptionHandler(Type type, string handlerName)
-        {
-            if (handlerName == null && Reflect.HasInterface( type, typeof(IExpectException) ) )
-                handlerName = "HandleException";
+		private MethodInfo GetExceptionHandler(Type type, string handlerName)
+		{
+			if (handlerName == null && Reflect.HasInterface(type, typeof (IExpectException)))
+				handlerName = "HandleException";
 
-            if (handlerName == null)
-                return null;
+			if (handlerName == null)
+				return null;
 
-            MethodInfo handler = Reflect.GetMethod( type, handlerName,
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
-                new Type[] { typeof(Exception) });
+			var handler = Reflect.GetMethod(type, handlerName,
+			                                       BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
+			                                       BindingFlags.Static,
+			                                       new Type[] {typeof (Exception)});
 
-            if (handler == null)
-                Assert.Fail("The specified exception handler {0} was not found", handlerName);
+			if (handler == null)
+				Assert.Fail("The specified exception handler {0} was not found", handlerName);
 
-            return handler;
-        }
-        #endregion
-    }
+			return handler;
+		}
+
+		#endregion
+	}
 }

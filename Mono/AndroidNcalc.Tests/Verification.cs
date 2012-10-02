@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
@@ -15,57 +17,82 @@ namespace AndroidNcalc.Tests
 	[TestFixture]
 	public class Verification
 	{
-		[Test]
-		public void MathTest()
-		{
-			Assert.That(Math.Round(22.5,0, MidpointRounding.ToEven), Is.EqualTo(22));
-			Assert.That(Math.Round(22.5,0, MidpointRounding.AwayFromZero), Is.EqualTo(22));
-		}
+		//[Test]
+		//public void MathTest()
+		//{
+		//    Assert.That(Math.Round(22.5,0, MidpointRounding.ToEven), Is.EqualTo(22));
+		//    Assert.That(Math.Round(22.5,0, MidpointRounding.AwayFromZero), Is.EqualTo(22));
+		//}
+
+		//[Test]
+		//public void AssertTypeIdentification()
+		//{
+		//    Assert.That(2.0f.GetType(), Is.EqualTo(typeof(float)));
+		//}
+
+		//[Test]
+		//public void FluentAssertionsTest()
+		//{
+		//    var x = 3;
+		//    x.Should().Be(3);
+		//}
+
+		//[Test]
+		//public void MockTests()
+		//{
+		//    var mock = new DynamicMock<IInterface>();
+
+		//    mock.Expect(x => x.ReturnInt(), 7);
+		//    mock.Expect(x => x.DoNothing());
+
+		//    var interfaceInstance = mock.Instance;
+
+		//    interfaceInstance.DoNothing();
+
+		//    Assert.That(interfaceInstance.ReturnInt(), Is.EqualTo(7));
+
+		//    mock.VerifyAllExpectations();
+		//}
+
+		//[Test]
+		//public void DerivedTypesTest()
+		//{
+		//    var type = typeof (DerivedClass);
+
+		//    var method = type.GetMethods().First(m => m.Name == "PrintEntity");
+
+		//    Assert.NotNull(method);
+
+		//    Assert.That(method.ReflectedType, Is.EqualTo(typeof(DerivedClass)));
+
+		//    var constuctor = method.ReflectedType.GetConstructor(new Type[0]);
+
+		//    Assert.Null(constuctor);
+		//}
+
+		//[Test]
+		//public void FileCreationTest()
+		//{
+		//    var tempPath = Path.GetTempPath();
+
+		//    var fileInfo = new FileInfo(Path.Combine(tempPath, "Test", "Subpath"));
+
+		//    if (!fileInfo.Exists) fileInfo.Create();
+		//}
 
 		[Test]
-		public void AssertTypeIdentification()
+		public void CollectionTest()
 		{
-			Assert.That(2.0f.GetType(), Is.EqualTo(typeof(float)));
-		}
+			List<IInterface> list = new List<IInterface>();
 
-		[Test]
-		public void FluentAssertionsTest()
-		{
-			var x = 3;
-			x.Should().Be(3);
-		}
+			var firstInstance = new DynamicMock<IInterface>().Instance;
+			var secondInstance = new DynamicMock<IInterface>().Instance;
 
-		[Test]
-		public void MockTests()
-		{
-			var mock = new DynamicMock<IInterface>();
+			if (!list.Contains(firstInstance))
+				list.Add(firstInstance);
 
-			mock.Expect(x => x.ReturnInt(), 7);
-			mock.Expect(x => x.DoNothing());
-
-			var interfaceInstance = mock.Instance;
-
-			interfaceInstance.DoNothing();
-
-			Assert.That(interfaceInstance.ReturnInt(), Is.EqualTo(7));
-
-			mock.VerifyAllExpectations();
-		}
-
-		[Test]
-		public void DerivedTypesTest()
-		{
-			var type = typeof (DerivedClass);
-
-			var method = type.GetMethods().First(m => m.Name == "PrintEntity");
-
-			Assert.NotNull(method);
-
-			Assert.That(method.ReflectedType, Is.EqualTo(typeof(DerivedClass)));
-
-			var constuctor = method.ReflectedType.GetConstructor(new Type[0]);
-
-			Assert.NotNull(constuctor);
+			if (!list.Contains(secondInstance))
+				list.Add(secondInstance);
 		}
 	}
 
@@ -74,6 +101,19 @@ namespace AndroidNcalc.Tests
 		int ReturnInt();
 
 		void DoNothing();
+	}
+
+	public class MyClass : IInterface
+	{
+		public int ReturnInt()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void DoNothing()
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 	public abstract class AbstarctClass<T>

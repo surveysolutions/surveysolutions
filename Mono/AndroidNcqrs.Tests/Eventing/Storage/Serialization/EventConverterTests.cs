@@ -24,6 +24,7 @@ namespace Ncqrs.Tests.Eventing.Storage.Serialization
 	        _typeResolverMock.Stub(x => x.EventNameFor(typeof (AnEvent)), EventName);
 
 	        _childConverterMock = new DynamicMock<IEventConverter>();
+			_childConverterMock.Expect(c => c.Upgrade(null));
         }
 
         [Test]
