@@ -179,9 +179,12 @@ namespace Browsing.Common.Forms
 
                     if (n == DBT_DEVICEARRIVAL || n == DBT_DEVICEREMOVECOMPLETE)
                     {
-                        var syncScreen = Holder.LoadedScreens.FirstOrDefault(s => s is Containers.Synchronization);
+                        var syncScreen = Holder.LoadedScreens.Where(s => s is Containers.Synchronization);
                         if (syncScreen != null)
-                            (syncScreen as Containers.Synchronization).UpdateUsbList();
+                        {
+                            foreach(var screen in syncScreen)
+                                (screen as Containers.Synchronization).UpdateUsbList();
+                        }
                     }
 
                     break;
