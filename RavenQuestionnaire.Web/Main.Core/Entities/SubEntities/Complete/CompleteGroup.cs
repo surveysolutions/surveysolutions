@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteGroup.cs" company="">
-//   
+// <copyright file="CompleteGroup.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The complete group.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;
@@ -223,7 +224,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                     continue;
                 }
 
-                throw new InvalidOperationException("unknown children type");
+                throw new InvalidOperationException("Unknown child type.");
             }
 
             return result;
