@@ -212,32 +212,6 @@ namespace Web.CAPI.Controllers
         }
 
         /// <summary>
-        /// The import async.
-        /// </summary>
-        /// <param name="myfile">
-        /// The myfile.
-        /// </param>
-        [AcceptVerbs(HttpVerbs.Post)]
-        public void ImportAsync(HttpPostedFileBase myfile)
-        {
-            if (myfile == null && this.Request.Files.Count > 0)
-            {
-                myfile = this.Request.Files[0];
-            }
-
-            if (myfile != null && myfile.ContentLength != 0)
-            {
-                this.AsyncManager.OutstandingOperations.Increment();
-                AsyncQuestionnaireUpdater.Update(
-                    () =>
-                        {
-                            this.exportimportEvents.Import(myfile);
-                            this.AsyncManager.OutstandingOperations.Decrement();
-                        });
-            }
-        }
-
-        /// <summary>
         /// The import completed.
         /// </summary>
         /// <returns>
@@ -257,9 +231,7 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public ActionResult Progress(Guid id)
         {
-            return
-                this.View(
-                    this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+            return this.View(this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
         }
 
         /// <summary>
@@ -273,8 +245,7 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public int ProgressInPersentage(Guid id)
         {
-            SyncProgressView stat =
-                this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
+            SyncProgressView stat = this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
             if (stat == null)
             {
                 return -1;
@@ -329,6 +300,36 @@ namespace Web.CAPI.Controllers
                 };
             ThreadPool.QueueUserWorkItem(callback, syncProcess);
             return syncProcess;
+        }
+
+        /// <summary>
+        /// The import async.
+        /// </summary>
+        /// <param name="myfile">
+        /// The myfile.
+        /// </param>
+        [AcceptVerbs(HttpVerbs.Post)]
+        public void ImportAsync(HttpPostedFileBase myfile)
+        {
+            if (myfile == null && this.Request.Files.Count > 0)
+            {
+                myfile = this.Request.Files[0];
+            }
+
+            if (myfile != null && myfile.ContentLength != 0)
+            {
+                Guid syncProcess = Guid.NewGuid();
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
+
+                this.AsyncManager.OutstandingOperations.Increment();
+                AsyncQuestionnaireUpdater.Update(
+                    () =>
+                    {
+                        this.exportimportEvents.Import(myfile);
+                        this.AsyncManager.OutstandingOperations.Decrement();
+                    });
+            }
         }
 
         /// <summary>

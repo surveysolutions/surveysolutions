@@ -32,6 +32,7 @@ namespace RavenQuestionnaire.Web.Injections
         public override void Load()
         {
             base.Load();
+            this.Unbind<IEventSync>();
             this.Bind<IEventSync>().To<HQEventSync>();
             this.Unbind<IExportImport>();
             this.Bind<IExportImport>().To<TemplateExporter>();

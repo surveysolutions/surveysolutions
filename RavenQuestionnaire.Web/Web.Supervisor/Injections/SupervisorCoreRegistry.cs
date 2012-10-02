@@ -13,6 +13,8 @@ using Questionnaire.Core.Web.Security;
 
 namespace Web.Supervisor.Injections
 {
+    using Questionnaire.Core.Web.Export;
+
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
@@ -30,7 +32,10 @@ namespace Web.Supervisor.Injections
         public override void Load()
         {
             base.Load();
+            this.Unbind<IEventSync>();
             this.Bind<IEventSync>().To<SupervisorEventSync>();
+            this.Unbind<IExportImport>();
+            this.Bind<IExportImport>().To<ExportImportEvent>();
         }
     }
 }

@@ -93,14 +93,8 @@ namespace Main.Core.Events
                 {
                     continue;
                 }
-
-                try
-                {
-                    this.eventStore.Store(uncommittedEventStream);
-                }catch(ConcurrencyException ex)
-                {
-                    
-                }
+                
+                this.eventStore.Store(uncommittedEventStream);
                 myEventBus.Publish(uncommittedEventStream);
             }
         }

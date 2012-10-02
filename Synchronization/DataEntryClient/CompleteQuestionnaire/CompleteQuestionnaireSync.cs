@@ -19,12 +19,12 @@ namespace DataEntryClient.CompleteQuestionnaire
     using Main.Core.Documents;
     using Main.Core.Events;
 
-    using NLog;
-
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
     using Ninject;
+
+    using NLog;
 
     using SynchronizationMessages.CompleteQuestionnaire;
     using SynchronizationMessages.Handshake;
@@ -48,7 +48,6 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// </summary>
         private readonly IChanelFactoryWrapper chanelFactoryWrapper;
 
-        // private IClientSettingsProvider clientSettingsProvider;
         /// <summary>
         /// The event store.
         /// </summary>
@@ -84,7 +83,6 @@ namespace DataEntryClient.CompleteQuestionnaire
         {
             this.chanelFactoryWrapper = kernel.Get<IChanelFactoryWrapper>();
 
-            // this.clientSettingsProvider = kernel.Get<IClientSettingsProvider>();
             this.eventStore = kernel.Get<IEventSync>();
             this.invoker = NcqrsEnvironment.Get<ICommandService>();
             this.processGuid = processGuid;
@@ -168,12 +166,9 @@ namespace DataEntryClient.CompleteQuestionnaire
                                         continue;
                                     }
 
-                                    AggregateRootEvent[] stream =
-                                        client.Process(root.EventKeys.First(), root.EventKeys.Count).EventStream;
+                                    AggregateRootEvent[] stream = client.Process(root.EventKeys.First(), root.EventKeys.Count).EventStream;
                                     events.AddRange(stream);
-                                    this.invoker.Execute(
-                                        new ChangeEventStatusCommand(
-                                            this.processGuid, root.EventChunckPublicKey, EventState.Completed));
+                                    this.invoker.Execute(new ChangeEventStatusCommand(this.processGuid, root.EventChunckPublicKey, EventState.Completed));
                                 }
                                 catch (Exception ex)
                                 {
@@ -181,9 +176,7 @@ namespace DataEntryClient.CompleteQuestionnaire
                                     logger.Fatal("Import error", ex);
 
                                     events = null;
-                                    this.invoker.Execute(
-                                        new ChangeEventStatusCommand(
-                                            this.processGuid, root.EventChunckPublicKey, EventState.Error));
+                                    this.invoker.Execute(new ChangeEventStatusCommand(this.processGuid, root.EventChunckPublicKey, EventState.Error));
                                 }
                             }
                         });
