@@ -102,12 +102,12 @@ namespace Browsing.Common.Containers
                 }
 
                 string status = string.Empty;
-                ex = issues.FirstOrDefault<SynchronizationException>(x => x is NetUnreachableException);
+                ex = issues.FirstOrDefault<SynchronizationException>(x => x is NetUnreachableException || x is InactiveNetSynchronizerException);
                 if (ex != null)
                 {
                     status = ex.Message;
 
-                    ex = issues.FirstOrDefault<SynchronizationException>(x => x is UsbUnaccebleException);
+                    ex = issues.FirstOrDefault<SynchronizationException>(x => x is UsbUnacceptableException);
                     if (ex != null)
                     {
                         this.isPullPossible = false;
@@ -126,15 +126,6 @@ namespace Browsing.Common.Containers
                     this.isPushPossible = false;
 
                     status += "\n" + ex.Message;
-                    ex = issues.FirstOrDefault<SynchronizationException>(x => x is UsbUnaccebleException);
-                    if (ex != null)
-                    {
-                        this.isPullPossible = false;
-                        status +="\n" + ex.Message;
-                        this.syncPanel.ShowError(status);
-
-                        return; // fatal
-                    }
                 }
 
                 this.syncPanel.ShowError(status);

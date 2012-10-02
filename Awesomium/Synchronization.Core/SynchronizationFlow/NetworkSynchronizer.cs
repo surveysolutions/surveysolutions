@@ -69,9 +69,11 @@ namespace Synchronization.Core.SynchronizationFlow
             SynchronizationException e = null;
             try
             {
+                var netEndPoint = this._urlUtils.GetEnpointUrl();
+
                 // test if there is connection to synchronization endpoint
-                if (this._requestProcessor.Process<string>(this._urlUtils.GetEnpointUrl(), "False") == "False")
-                    e = new NetUnreachableException(this._urlUtils.GetEnpointUrl());
+                if (this._requestProcessor.Process<string>(netEndPoint, "False") == "False")
+                    e = new NetUnreachableException(netEndPoint);
             }
             catch(Exception ex)
             {
@@ -84,6 +86,14 @@ namespace Synchronization.Core.SynchronizationFlow
         protected override bool OnUpdateStatus()
         {
             return !string.IsNullOrEmpty(this._urlUtils.GetEnpointUrl());
+        }
+
+        protected override IList<SynchronizationException> OnGetInactiveErrors()
+        {
+            var errors = base.OnGetInactiveErrors();
+            errors.Add(new InactiveNetSynchronizerException());
+
+            return errors;
         }
 
         public override string GetSuccessMessage(SyncType syncAction, SyncDirection direction)
