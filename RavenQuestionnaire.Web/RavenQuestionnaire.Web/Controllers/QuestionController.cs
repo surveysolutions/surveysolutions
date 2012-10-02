@@ -22,6 +22,7 @@ namespace RavenQuestionnaire.Web.Controllers
     using Main.Core.Commands.File;
     using Main.Core.Commands.Questionnaire;
     using Main.Core.Commands.Questionnaire.Question;
+    using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
     using Main.Core.View.Answer;
@@ -185,10 +186,10 @@ namespace RavenQuestionnaire.Web.Controllers
             }
 
             this.LoadImages();
-            this.LoadGroups(questionnaireKey.Value, publicKey.Value);
             QuestionView model =
                 this.viewRepository.Load<QuestionViewInputModel, QuestionView>(
                     new QuestionViewInputModel(publicKey.Value, questionnaireKey.Value));
+            this.LoadGroups(questionnaireKey.Value, model.Parent);
             return this.PartialView("_Create", model);
         }
 
@@ -404,7 +405,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     this.ModelState.AddModelError(
                         string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
-                    this.LoadGroups(model.QuestionnaireKey, model.PublicKey);
+                    this.LoadGroups(model.QuestionnaireKey, model.Parent);
                     return this.PartialView("_Create", model);
                 }
 

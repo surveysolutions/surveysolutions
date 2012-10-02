@@ -175,6 +175,11 @@ namespace Main.Core.View.Question
         /// </summary>
         public List<Guid> Triggers { get; set; }
 
+        /// <summary>
+        /// Gets or sets Groups.
+        /// </summary>
+        public Dictionary<Guid, string> Groups { get; set; }
+
         #endregion
     }
 
@@ -205,6 +210,7 @@ namespace Main.Core.View.Question
             this.Answers = new T[0];
             this.Cards = new CardView[0];
             this.Triggers = new List<Guid>();
+            this.Groups = new Dictionary<Guid, string>();
         }
 
         /// <summary>
@@ -238,6 +244,7 @@ namespace Main.Core.View.Question
             this.Answers = new T[0];
             this.Cards = new CardView[0];
             this.Triggers = new List<Guid>();
+            this.Groups = new Dictionary<Guid, string>();
         }
 
         #endregion
@@ -450,6 +457,7 @@ namespace Main.Core.View.Question
             {
                 this.Triggers = doc.Triggers.ToList();
             }
+            this.Parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
         }
 
         #endregion
