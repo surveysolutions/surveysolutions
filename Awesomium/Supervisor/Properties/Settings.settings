@@ -17,9 +17,6 @@
     <Setting Name="LoginPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/LogOn</Value>
     </Setting>
-    <Setting Name="RunClient" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="UsbImportPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">ImportExport/Import</Value>
     </Setting>
@@ -34,6 +31,9 @@
     </Setting>
     <Setting Name="DefaultPort" Type="System.String" Scope="User">
       <Value Profile="(Default)">9089</Value>
+    </Setting>
+    <Setting Name="RunClient" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>
