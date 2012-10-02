@@ -85,18 +85,6 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool RunClient {
-            get {
-                return ((bool)(this["RunClient"]));
-            }
-            set {
-                this["RunClient"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("ImportExport/Import")]
         public string UsbImportPath {
             get {
@@ -152,6 +140,18 @@ namespace Browsing.Supervisor.Properties {
             }
             set {
                 this["DefaultPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RunClient {
+            get {
+                return ((bool)(this["RunClient"]));
+            }
+            set {
+                this["RunClient"] = value;
             }
         }
     }
