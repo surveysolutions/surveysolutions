@@ -408,13 +408,19 @@ namespace Main.Core.View.Question
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
-        protected Dictionary<string, Guid> LoadGroups(IQuestionnaireDocument questionnaire, Guid? groupPublicKey)
+        protected Dictionary<string, Guid> LoadGroups(IQuestionnaireDocument questionnaire, Guid questionPublicKey)
         {
-            var groups = new Dictionary<string, Guid>();
-            if (questionnaire != null)
-                foreach (var group in questionnaire.Children.Where(t=>t is IGroup))
-                    this.SelectAll(group, groups, groupPublicKey);
-            return groups;
+            try
+            {
+                var groupPublicKey = this.GetQuestionGroup(questionnaire, questionPublicKey);
+                var groups = new Dictionary<string, Guid>();
+                if (questionnaire != null) foreach (var group in questionnaire.Children.Where(t => t is IGroup)) this.SelectAll(group, groups, groupPublicKey);
+                return groups;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -493,9 +499,8 @@ namespace Main.Core.View.Question
             {
                 this.Triggers = doc.Triggers.ToList();
             }
-
-            var currentGroup = this.GetQuestionGroup(questionnaire, doc.PublicKey);
-            this.Groups = this.LoadGroups(questionnaire, currentGroup);
+            
+            this.Groups = this.LoadGroups(questionnaire, doc.PublicKey);
         }
 
         #endregion
