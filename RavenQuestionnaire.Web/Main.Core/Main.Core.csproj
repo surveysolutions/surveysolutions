@@ -287,6 +287,7 @@
     <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs" />
     <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs" />
     <Compile Include="Events\Synchronization\ProcessEnded.cs" />
+    <Compile Include="Events\UserEventSync.cs" />
     <Compile Include="Events\User\NewUserCreated.cs" />
     <Compile Include="Events\User\UserChanged.cs" />
     <Compile Include="Events\User\UserStatusChanged.cs" />
