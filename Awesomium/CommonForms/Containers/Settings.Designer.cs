@@ -55,8 +55,8 @@
             this.tableLayoutPanel1.Controls.Add(this.labelEndPoint, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.textEndPoint, 1,4);
             this.tableLayoutPanel1.SetColumnSpan(this.textEndPoint,2);
-            this.tableLayoutPanel1.Controls.Add(this.btnCancel, 1, 5);
-            this.tableLayoutPanel1.SetColumnSpan(this.btnCancel, 2);
+            this.tableLayoutPanel1.Controls.Add(this.btnCancel, 2, 5);
+            //this.tableLayoutPanel1.SetColumnSpan(this.btnCancel, 1);
             this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -173,16 +173,16 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Right));
             this.btnCancel.FlatAppearance.BorderSize = 0;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
             this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
-            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.btnCancel.Location = new System.Drawing.Point(242, 366);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(0);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(260, 55);
+            this.btnCancel.Size = new System.Drawing.Size(55, 55);
             this.btnCancel.TabIndex = 2;
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
