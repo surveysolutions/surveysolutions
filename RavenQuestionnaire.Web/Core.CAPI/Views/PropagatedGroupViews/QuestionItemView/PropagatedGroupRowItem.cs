@@ -22,6 +22,7 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
             this.PropagationKey = group.PropogationPublicKey.Value;
             this.Title = title;
             this.Answers = new Dictionary<string, QuestionCellItem>();
+            this.Enabled = group.Enabled;
             foreach (ICompleteQuestion question in group.Children.OfType<ICompleteQuestion>())
             {
                 this.Answers.Add(question.PublicKey.ToString(), new QuestionCellItem(question));
@@ -30,6 +31,7 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
 
         public Guid PropagationKey { get; set; }
         public string Title { get; set; }
+        public bool Enabled { get; set; }
         public Dictionary<string, QuestionCellItem> Answers { get; set; }
     }
 }

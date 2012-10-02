@@ -550,7 +550,34 @@ namespace Web.CAPI.Controllers
                     new PropagatedGridViewInputModel(questionnaireId, parentGroupPublicKey));
             return this.Json(model);
         }
+        public JsonResult SaveGroupComment(Guid questionnaireId,
+            Guid publicKey,
+            Guid propogationPublicKey,
+            Guid parentGroupPublicKey, string comment)
+        {
+            try
+            {
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                Guid questionnaireKey = questionnaireId;
+                commandService.Execute(
+                    new SetCommentCommand(
+                        questionnaireKey,
+                        publicKey,
+                        comment,
+                        propogationPublicKey));
+            }
+            catch (Exception e)
+            {
+                Logger logger = LogManager.GetCurrentClassLogger();
+                logger.Fatal(e);
+                return this.Json(new { question = publicKey, error = e.Message });
+            }
 
+            PropagatedGroupsContainer model =
+               this.viewRepository.Load<PropagatedGridViewInputModel, PropagatedGroupsContainer>(
+                   new PropagatedGridViewInputModel(questionnaireId, parentGroupPublicKey));
+            return this.Json(model);
+        }
         /// <summary>
         /// The save comments.
         /// </summary>

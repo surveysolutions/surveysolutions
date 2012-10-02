@@ -9,6 +9,7 @@ using System.Reflection;
 using Core.HQ.Synchronization;
 using Main.Core;
 using Main.Core.Events;
+using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Security;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 
@@ -31,6 +32,9 @@ namespace RavenQuestionnaire.Web.Injections
         {
             base.Load();
             this.Bind<IEventSync>().To<HQEventSync>();
+            this.Unbind<IExportImport>();
+            this.Bind<IExportImport>().To<ExportImportEvent>();
+            this.Bind<ITemplateExporter>().To<TemplateExporter>();
         }
     }
 }

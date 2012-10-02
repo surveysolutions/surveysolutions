@@ -6,13 +6,22 @@
         base.targetForm = null;
         base.propagationKey = null;
         base.questionId = null;
+        base.activeEvent = "click";
+        base.formName = "answer-form";
         // Add a reverse reference to the DOM object
         base.$el.data("gridCell", base);
         base.init = function () {
             base.options = o = $.extend(true, {}, {}, options);
             base.questionId = base.$el.attr('question-item');
             base.propagationKey = base.$el.attr('question-propagation-key');
-            var jTargetForm = $('[answer-form=' + base.questionId + ']');
+            var eventName = base.$el.attr('event-name');
+            if (eventName && base.$el.parent()[eventName])
+                base.activeEvent = eventName;
+            var formName = base.$el.attr('form-name');
+            if (formName && formName != '') {
+                base.formName = formName;
+            }
+            var jTargetForm = $('[' + base.formName + '=' + base.questionId + ']');
             if (!jTargetForm || jTargetForm.length == 0)
                 return;
 
@@ -20,7 +29,7 @@
             if (!base.targetForm) {
                 base.targetForm = jTargetForm.answerForm().getAnswerForm();
             }
-            base.$el.parent().click(function (e) {
+            base.$el.parent().bind(base.activeEvent, function (e) {
                 base.targetForm.open(e, base);
             });
 
@@ -68,10 +77,13 @@
                 if (value.PropagationKey != rowKey)
                     return;
                 $.each(value.Answers, function (answerIndex, answerValue) {
-                    var target = $('[question-propagation-key=' + rowKey + '][question-item=' + answerValue.PublicKey + ']');
+                    var target = $('div [question-propagation-key=' + rowKey + '][question-item=' + answerValue.PublicKey + ']');
                     var targetPanel = target.parent();
-                    target.text(answerValue.AnswerString);
-                    target.attr('question-answer-key', answerValue.AnswerPublicKey);
+                    var containers = target.find('span');
+                    $(containers[0]).text(answerValue.AnswerString);
+                    $(containers[1]).text(answerValue.Comments);
+                    target.attr('question-answer-value', answerValue.Comments);
+                    target.find('p').attr('question-answer-key', answerValue.AnswerPublicKey);
                     if (answerValue.Enabled) {
                         targetPanel.removeClass('ui-disabled');
                     } else {
@@ -79,7 +91,7 @@
                     }
                     if (answerValue.Answered) {
                         targetPanel.addClass('answered');
-                    }else {
+                    } else {
                         targetPanel.removeClass('answered');
                     }
                     if (answerValue.Valid) {
@@ -121,7 +133,7 @@
             base.openDialog();
         };
         base.Numeric = function (e, target) {
-            var questionAnswer = $.trim(target.$el.text());
+            var questionAnswer = $.trim(target.$el.attr('question-answer-value'));
 
             var targetInput = base.$el.find("input[type='num']");
 
@@ -129,7 +141,7 @@
             targetInput.click();
         };
         base.DateTime = function (e, target) {
-            var questionAnswer = $.trim(target.$el.text());
+            var questionAnswer = $.trim(target.$el.attr('question-answer-value'));
             var targetInput = base.targetForm.find("input[type='text']");
 
             targetInput.val(questionAnswer);
@@ -138,7 +150,7 @@
         base.GpsCoordinates = function (e, target) {
         };
         base.Text = function (e, target) {
-            var questionAnswer = $.trim(target.$el.text());
+            var questionAnswer = $.trim(target.$el.attr('question-answer-value'));
             var targetInput = base.$el.find("input[type='text']");
             targetInput.val(questionAnswer);
             targetInput.click();

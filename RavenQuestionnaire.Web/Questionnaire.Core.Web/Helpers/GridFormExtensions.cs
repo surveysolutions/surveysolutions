@@ -180,7 +180,13 @@ namespace Questionnaire.Core.Web.Helpers
             return BeginGridFormHtml5(
                 ajaxHelper, actionName, controllerName, null /* values */, ajaxOptions, null /* htmlAttributes */, questionnaireid, questionId, questionType);
         }
-
+        public static MvcForm BeginGridFormHtml5(
+            this AjaxHelper ajaxHelper, string actionName, string controllerName, AjaxOptions ajaxOptions, Guid questionnaireid, Guid questionId, string formName)
+        {
+            return BeginGridFormHtml5(
+                ajaxHelper, actionName, controllerName, null /* values */, ajaxOptions, null /* htmlAttributes */,
+                questionnaireid, questionId, QuestionType.Text, formName);
+        }
         /// <summary>
         /// The begin form html 5.
         /// </summary>
@@ -248,7 +254,7 @@ namespace Questionnaire.Core.Web.Helpers
             var newValues = new RouteValueDictionary(routeValues);
             RouteValueDictionary newAttributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
             return BeginGridFormHtml5(
-                ajaxHelper, actionName, controllerName, newValues, ajaxOptions, newAttributes, questionnaireid, questionId, questionType);
+                ajaxHelper, actionName, controllerName, newValues, ajaxOptions, newAttributes, questionnaireid, questionId, questionType,null);
 
         }
 
@@ -278,11 +284,12 @@ namespace Questionnaire.Core.Web.Helpers
             string actionName,
             string controllerName,
             RouteValueDictionary routeValues,
-            AjaxOptions ajaxOptions, Guid questionnaireid, Guid questionId, QuestionType questionType)
+            AjaxOptions ajaxOptions, Guid questionnaireid, Guid questionId, QuestionType questionType, string formName)
         {
 
             return BeginGridFormHtml5(
-                ajaxHelper, actionName, controllerName, routeValues, ajaxOptions, null, questionnaireid, questionId, questionType);
+                ajaxHelper, actionName, controllerName, routeValues, ajaxOptions, null, questionnaireid, questionId,
+                questionType, null);
         }
 
         public static MvcForm BeginGridFormHtml5(
@@ -291,11 +298,11 @@ namespace Questionnaire.Core.Web.Helpers
             string controllerName,
             RouteValueDictionary routeValues,
             AjaxOptions ajaxOptions,
-            IDictionary<string, object> htmlAttributes, Guid questionnaireid, Guid questionId, QuestionType questionType)
+            IDictionary<string, object> htmlAttributes, Guid questionnaireid, Guid questionId, QuestionType questionType, string formName)
         {
             if (htmlAttributes == null)
                 htmlAttributes = new Dictionary<string, object>();
-            htmlAttributes.Add("answer-form", questionId);
+            htmlAttributes.Add(string.IsNullOrEmpty(formName) ? "answer-form" : formName, questionId);
             var result = Html5Extensions.BeginFormHtml5(
                 ajaxHelper, actionName, controllerName, routeValues, ajaxOptions, htmlAttributes);
 
