@@ -7,18 +7,18 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Denormalizers;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.View.Group;
-
 namespace Main.Core.View.CompleteQuestionnaire
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Main.Core.Denormalizers;
+    using Main.Core.Documents;
     using Main.Core.Entities.Extensions;
+    using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.ExpressionExecutors;
+    using Main.Core.View.Group;
 
     /// <summary>
     /// The complete questionnaire mabile view factory.
@@ -144,8 +144,7 @@ namespace Main.Core.View.CompleteQuestionnaire
             int indexOfTarget;
             if (group.PropogationPublicKey.HasValue)
             {
-                groupNeighbors =
-                    parent.Group.Children.OfType<ICompleteGroup>().Where(
+                groupNeighbors = parent.Group.Children.OfType<ICompleteGroup>().Where(
                         g => g.PublicKey == group.PublicKey && g.PropogationPublicKey.HasValue).ToList();
               
 

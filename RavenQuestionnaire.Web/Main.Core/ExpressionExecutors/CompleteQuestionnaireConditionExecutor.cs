@@ -160,14 +160,14 @@ namespace Main.Core.ExpressionExecutors
                 var question = child as ICompleteQuestion;
                 if (question != null)
                 {
-                    question.Enabled = result && Execute(question);
+                    question.Enabled = result && this.Execute(question);
                     continue;
                 }
 
                 var gr = child as ICompleteGroup;
                 if (gr != null && !gr.IsGroupPropagationTemplate())
                 {
-                    gr.Enabled = result && Execute(gr);
+                    gr.Enabled = result && this.Execute(gr);
                 }
             }
         }
