@@ -31,17 +31,19 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyncPanel));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel2GroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.resultLabel = new System.Windows.Forms.Label();
             this.statusLabel = new System.Windows.Forms.Label();
             this.labelAvlUsb = new System.Windows.Forms.Label();
             this.usbStrip = new System.Windows.Forms.ToolStrip();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.usbImageList = new System.Windows.Forms.ImageList(this.components);
             this.pullButton = new Browsing.Common.Controls.FlatButton();
             this.cancelButton = new Browsing.Common.Controls.FlatButton();
             this.pushButton = new Browsing.Common.Controls.FlatButton();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.usbImageList = new System.Windows.Forms.ImageList(this.components);
             this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel2GroupBox.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,7 +55,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 267F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 33F));
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2GroupBox, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.pullButton, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.cancelButton, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.pushButton, 3, 1);
@@ -68,14 +70,27 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1053, 615);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1058, 682);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // tableLayoutPanel2GroupBox
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel2GroupBox, 3);
+            this.tableLayoutPanel2GroupBox.Controls.Add(this.tableLayoutPanel2);
+            this.tableLayoutPanel2GroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2GroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tableLayoutPanel2GroupBox.Location = new System.Drawing.Point(37, 345);
+            this.tableLayoutPanel2GroupBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 20);
+            this.tableLayoutPanel2GroupBox.Name = "tableLayoutPanel2GroupBox";
+            this.tableLayoutPanel2GroupBox.Size = new System.Drawing.Size(984, 317);
+            this.tableLayoutPanel2GroupBox.TabIndex = 6;
+            this.tableLayoutPanel2GroupBox.TabStop = false;
+            this.tableLayoutPanel2GroupBox.Text = "Current status";
             // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel2, 3);
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 272F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27F));
@@ -85,7 +100,7 @@
             this.tableLayoutPanel2.Controls.Add(this.usbStrip, 1, 3);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(37, 345);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 23);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 5;
@@ -94,7 +109,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(979, 268);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(978, 291);
             this.tableLayoutPanel2.TabIndex = 6;
             // 
             // resultLabel
@@ -105,7 +120,7 @@
             this.resultLabel.Location = new System.Drawing.Point(4, 41);
             this.resultLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.resultLabel.Name = "resultLabel";
-            this.resultLabel.Size = new System.Drawing.Size(971, 29);
+            this.resultLabel.Size = new System.Drawing.Size(970, 29);
             this.resultLabel.TabIndex = 2;
             this.resultLabel.Text = "result";
             this.resultLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -119,7 +134,7 @@
             this.statusLabel.Location = new System.Drawing.Point(4, 0);
             this.statusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(971, 29);
+            this.statusLabel.Size = new System.Drawing.Size(970, 29);
             this.statusLabel.TabIndex = 3;
             this.statusLabel.Text = "status";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -151,24 +166,6 @@
             this.usbStrip.TabIndex = 4;
             this.usbStrip.Text = "toolStrip1";
             // 
-            // progressBar
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.progressBar, 3);
-            this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.progressBar.Location = new System.Drawing.Point(37, 295);
-            this.progressBar.Margin = new System.Windows.Forms.Padding(4);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(979, 30);
-            this.progressBar.TabIndex = 5;
-            this.progressBar.Visible = false;
-            // 
-            // usbImageList
-            // 
-            this.usbImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("usbImageList.ImageStream")));
-            this.usbImageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.usbImageList.Images.SetKeyName(0, "USB green_6486.png");
-            this.usbImageList.Images.SetKeyName(1, "USB red_6486.png");
-            // 
             // pullButton
             // 
             this.pullButton.Dock = System.Windows.Forms.DockStyle.Top;
@@ -195,7 +192,7 @@
             this.cancelButton.Location = new System.Drawing.Point(304, 29);
             this.cancelButton.Margin = new System.Windows.Forms.Padding(4);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(445, 246);
+            this.cancelButton.Size = new System.Drawing.Size(450, 246);
             this.cancelButton.TabIndex = 1;
             this.cancelButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -208,7 +205,7 @@
             this.pushButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pushButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.pushButton.Image = ((System.Drawing.Image)(resources.GetObject("pushButton.Image")));
-            this.pushButton.Location = new System.Drawing.Point(757, 29);
+            this.pushButton.Location = new System.Drawing.Point(762, 29);
             this.pushButton.Margin = new System.Windows.Forms.Padding(4);
             this.pushButton.Name = "pushButton";
             this.pushButton.Size = new System.Drawing.Size(259, 246);
@@ -218,6 +215,24 @@
             this.pushButton.UseVisualStyleBackColor = true;
             this.pushButton.Click += new System.EventHandler(this.pushButton_Click);
             // 
+            // progressBar
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.progressBar, 3);
+            this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBar.Location = new System.Drawing.Point(37, 295);
+            this.progressBar.Margin = new System.Windows.Forms.Padding(4);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(984, 30);
+            this.progressBar.TabIndex = 5;
+            this.progressBar.Visible = false;
+            // 
+            // usbImageList
+            // 
+            this.usbImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("usbImageList.ImageStream")));
+            this.usbImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.usbImageList.Images.SetKeyName(0, "USB green_6486.png");
+            this.usbImageList.Images.SetKeyName(1, "USB red_6486.png");
+            // 
             // SyncPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -225,8 +240,9 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "SyncPanel";
-            this.Size = new System.Drawing.Size(1053, 615);
+            this.Size = new System.Drawing.Size(1058, 682);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel2GroupBox.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             this.ResumeLayout(false);
@@ -241,6 +257,7 @@
         private Controls.FlatButton pushButton;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.GroupBox tableLayoutPanel2GroupBox;
         private System.Windows.Forms.Label labelAvlUsb;
         private System.Windows.Forms.Label resultLabel;
         private System.Windows.Forms.Label statusLabel;
