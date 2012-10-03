@@ -56,7 +56,7 @@ namespace Core.CAPI.Views.Json
             CompleteAnswerView[] answers =
                 doc.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(doc.PublicKey, a)).ToArray();
             this.Answer = doc.GetAnswerString();
-            this.Answered = doc.GetAnswerObject() != null;
+            this.Answered = doc.IsAnswered();
         }
 
         #endregion

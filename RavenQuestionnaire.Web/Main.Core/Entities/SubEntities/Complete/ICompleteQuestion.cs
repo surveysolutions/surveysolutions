@@ -22,7 +22,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// Gets or sets a value indicating whether valid.
         /// </summary>
         bool Valid { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the answer date.
         /// </summary>
@@ -40,6 +40,14 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// The System.Object.
         /// </returns>
         object GetAnswerObject();
+
+        /// <summary>
+        /// The is answered.
+        /// </summary>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        bool IsAnswered();
 
         /// <summary>
         /// The get answer string.

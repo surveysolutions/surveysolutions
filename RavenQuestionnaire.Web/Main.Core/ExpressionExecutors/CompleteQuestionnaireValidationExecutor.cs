@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireValidationExecutor.cs" company="">
-//   
+// <copyright file="CompleteQuestionnaireValidationExecutor.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The complete questionnaire validation executor.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.ExpressionExecutors
 {
     using System;
@@ -95,7 +96,7 @@ namespace Main.Core.ExpressionExecutors
                 return true;
             }
 
-            if (question.GetAnswerObject() == null)
+            if (!question.IsAnswered())
             {
                 return !question.Mandatory;
             }
@@ -108,15 +109,7 @@ namespace Main.Core.ExpressionExecutors
             var e = new Expression(question.ValidationExpression);
             e.EvaluateParameter += (name, args) =>
                 {
-                    Guid nameGuid;
-                    if (string.Compare("this", name, true) == 0)
-                    {
-                        nameGuid = question.PublicKey;
-                    }
-                    else
-                    {
-                        nameGuid = Guid.Parse(name);
-                    }
+                    Guid nameGuid = string.Compare("this", name, System.StringComparison.OrdinalIgnoreCase) == 0 ? question.PublicKey : Guid.Parse(name);
 
                     Guid? propagationKey = question.PropogationPublicKey;
                     var targetQuestion = this.hash[nameGuid, propagationKey];

@@ -239,8 +239,8 @@ namespace Core.CAPI.Views.Json
             var total = new Counter
                 {
                     Total = questions.Count, 
-                    Enablad = enabled.Count(), 
-                    Answered = enabled.Count(question => question.GetAnswerObject() != null)
+                    Enablad = enabled.Count(),
+                    Answered = enabled.Count(question => question.IsAnswered())
                 };
             return total;
         }

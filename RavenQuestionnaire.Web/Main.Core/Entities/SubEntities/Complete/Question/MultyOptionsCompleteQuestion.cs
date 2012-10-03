@@ -181,9 +181,22 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override object GetAnswerObject()
         {
-            // return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText);
-            IEnumerable<Guid> answers = this.CollectAnswers();
+            IEnumerable<object> answers = this.Children.Where(c => ((ICompleteAnswer)c).Selected).Select(
+                    c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).ToArray();
+
             return !answers.Any() ? null : answers;
+
+        }
+
+        /// <summary>
+        /// The is answered.
+        /// </summary>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        public override bool IsAnswered()
+        {
+            return this.Children.Any(c => ((ICompleteAnswer)c).Selected);
         }
 
         /// <summary>
@@ -288,22 +301,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             }
 
             throw new CompositeException("answer wasn't found");
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The collect answers.
-        /// </summary>
-        /// <returns>
-        /// The System.Collections.Generic.IEnumerable`1[T -&gt; System.Guid].
-        /// </returns>
-        private IEnumerable<Guid> CollectAnswers()
-        {
-            // return (this.Children.Where(c => ((ICompleteAnswer)c).Selected)).Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).FirstOrDefault(); 
-            return this.Children.Where(c => ((ICompleteAnswer)c).Selected).Select(c => c.PublicKey);
         }
 
         #endregion
