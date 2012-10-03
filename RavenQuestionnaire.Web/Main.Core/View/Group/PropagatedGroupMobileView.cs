@@ -55,27 +55,6 @@ namespace Main.Core.View.Group
 
                 
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PropagatedGroupMobileView"/> class.
-        /// </summary>
-        /// <param name="doc">
-        /// The doc.
-        /// </param>
-        /// <param name="group">
-        /// The group.
-        /// </param>
-        /// <param name="navigation">
-        /// The navigation.
-        /// </param>
-        public PropagatedGroupMobileView(
-            CompleteQuestionnaireStoreDocument doc, ICompleteGroup group, ScreenNavigation navigation)
-            : this(doc, group)
-        {
-            this.Navigation = navigation;
-            this.Navigation.CurrentScreenTitle = this.Title;
-        }
-
         #endregion
 
         #region Public Properties

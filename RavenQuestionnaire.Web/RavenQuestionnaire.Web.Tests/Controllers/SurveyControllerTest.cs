@@ -3,6 +3,8 @@ using Core.CAPI.Views.Grouped;
 using Main.Core.View;
 using Main.Core.View.Answer;
 using Main.Core.View.CompleteQuestionnaire;
+using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
+using Main.Core.View.Group;
 using Main.Core.View.Question;
 using Moq;
 using NUnit.Framework;
@@ -62,12 +64,12 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             innerDoc.LastEntryDate = DateTime.Now;
             innerDoc.Status = new SurveyStatus(Guid.NewGuid(), "dummyStatus");
             innerDoc.Responsible = new UserLight(Guid.NewGuid(), "dummyUser");
-            var output = new CompleteQuestionnaireMobileView(innerDoc);
+            var output = new ScreenGroupView(innerDoc, new CompleteGroup(),new ScreenNavigation() );
             var input = new CompleteQuestionnaireViewInputModel(innerDoc.PublicKey);
 
             ViewRepositoryMock.Setup(
                 x =>
-                x.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+                x.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
                     It.Is<CompleteQuestionnaireViewInputModel>(v => v.CompleteQuestionnaireId.Equals(input.CompleteQuestionnaireId))))
                 .Returns(output);
 
@@ -101,15 +103,15 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             QuestionnaireDocument innerDoc = new QuestionnaireDocument();
             innerDoc.PublicKey = Guid.NewGuid();
-            CompleteQuestionnaireMobileView template = new CompleteQuestionnaireMobileView((CompleteQuestionnaireStoreDocument)innerDoc);
+            ScreenGroupView template = new ScreenGroupView((CompleteQuestionnaireStoreDocument)innerDoc, new CompleteGroup(), new ScreenNavigation());
             var input = new CompleteQuestionnaireViewInputModel(innerDoc.PublicKey, Guid.NewGuid(), null);
             ViewRepositoryMock.Setup(
                x =>
-               x.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+               x.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
                    It.Is<CompleteQuestionnaireViewInputModel>(v => v.CompleteQuestionnaireId.Equals(input.CompleteQuestionnaireId))))
                .Returns(template);
             var result = Controller.Index(innerDoc.PublicKey, null, null, null);
-            Assert.AreEqual(result.ViewData.Model.GetType(), typeof(CompleteQuestionnaireMobileView));
+            Assert.AreEqual(result.ViewData.Model.GetType(), typeof(ScreenGroupView));
             Assert.AreEqual(result.ViewData.Model, template);
         }
 

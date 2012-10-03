@@ -6,6 +6,11 @@
 //   The i complete group extensions.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Documents;
+using Main.Core.View.CompleteQuestionnaire;
+using Main.Core.View.Group;
+
 namespace Main.Core.Entities.Extensions
 {
     using System;
@@ -22,6 +27,7 @@ namespace Main.Core.Entities.Extensions
     public static class ICompleteGroupExtensions
     {
         #region Public Methods and Operators
+
         public static bool IsGroupPropagationTemplate(this ICompleteGroup entity)
         {
             return entity.Propagated != Propagate.None && !entity.PropogationPublicKey.HasValue;
@@ -201,6 +207,10 @@ namespace Main.Core.Entities.Extensions
             return dependency;
         }
 
+
+        
         #endregion
     }
+
+   
 }

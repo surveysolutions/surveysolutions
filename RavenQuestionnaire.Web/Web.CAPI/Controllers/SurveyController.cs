@@ -7,6 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView;
+using Main.Core.View.Answer;
+using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
+
 namespace Web.CAPI.Controllers
 {
     using System;
@@ -272,8 +276,8 @@ namespace Web.CAPI.Controllers
                 throw new HttpException(404, "Invalid query string parameters");
             }
 
-            CompleteQuestionnaireMobileView model =
-                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+            ScreenGroupView model =
+                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
                     new CompleteQuestionnaireViewInputModel(id)
                         {
                            CurrentGroupPublicKey = group, PropagationKey = propagationKey 
@@ -477,7 +481,104 @@ namespace Web.CAPI.Controllers
                         settings[0].QuestionnaireId, settings[0].ParentGroupPublicKey, settings[0].PropogationPublicKey));
             return this.Json(model);
         }
+        /// <summary>
+        /// The save answer.
+        /// </summary>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
+        /// <param name="questions">
+        /// The questions.
+        /// </param>
+        /// <returns>
+        /// The System.Web.Mvc.JsonResult.
+        /// </returns>
+        public JsonResult SaveGroupAnswer(Guid questionnaireId,
+            Guid publicKey,
+            Guid propogationPublicKey,
+            Guid parentGroupPublicKey,
+            QuestionType questionType,
+            CompleteAnswerView[] answers)
+        {
+            //  CompleteQuestionView question = questions[0];
 
+            List<Guid> answersGuid = new List<Guid>();
+            string completeAnswerValue = null;
+
+            try
+            {
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+
+                if (questionType == QuestionType.DropDownList ||
+                    questionType == QuestionType.SingleOption ||
+                    questionType == QuestionType.YesNo ||
+                    questionType == QuestionType.MultyOption)
+                {
+                    if (answers != null && answers.Length > 0)
+                    {
+                        for (int i = 0; i < answers.Length; i++)
+                        {
+                            if (answers[i].Selected)
+                            {
+                                answersGuid.Add(answers[i].PublicKey);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    completeAnswerValue = answers[0].AnswerValue;
+                }
+
+
+                commandService.Execute(
+                    new SetAnswerCommand(
+                        questionnaireId,
+                        publicKey,
+                        answersGuid,
+                        completeAnswerValue,
+                        propogationPublicKey));
+            }
+            catch (Exception e)
+            {
+                this.logger.Fatal(e);
+                return
+                    this.Json(new {questionPublicKey = publicKey, error = e.Message});
+            }
+
+            PropagatedGroupGridContainer model =
+                this.viewRepository.Load<PropagatedGridViewInputModel, PropagatedGroupGridContainer>(
+                    new PropagatedGridViewInputModel(questionnaireId, parentGroupPublicKey));
+            return this.Json(model);
+        }
+        public JsonResult SaveGroupComment(Guid questionnaireId,
+            Guid publicKey,
+            Guid propogationPublicKey,
+            Guid parentGroupPublicKey, string comment)
+        {
+            try
+            {
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                Guid questionnaireKey = questionnaireId;
+                commandService.Execute(
+                    new SetCommentCommand(
+                        questionnaireKey,
+                        publicKey,
+                        comment,
+                        propogationPublicKey));
+            }
+            catch (Exception e)
+            {
+                Logger logger = LogManager.GetCurrentClassLogger();
+                logger.Fatal(e);
+                return this.Json(new { question = publicKey, error = e.Message });
+            }
+
+            PropagatedGroupGridContainer model =
+               this.viewRepository.Load<PropagatedGridViewInputModel, PropagatedGroupGridContainer>(
+                   new PropagatedGridViewInputModel(questionnaireId, parentGroupPublicKey));
+            return this.Json(model);
+        }
         /// <summary>
         /// The save comments.
         /// </summary>
@@ -548,8 +649,8 @@ namespace Web.CAPI.Controllers
                 throw new HttpException(404, "Invalid query string parameters");
             }
 
-            CompleteGroupMobileView model =
-                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>(
+            ScreenGroupView model =
+                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
                     new CompleteQuestionnaireViewInputModel(id, group, propagationKey));
             this.ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             this.ViewBag.PagePrefix = string.Empty;
@@ -597,38 +698,6 @@ namespace Web.CAPI.Controllers
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                         new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
             return this.PartialView("Complete/_Unanswered", stat);
-        }
-
-        /// <summary>
-        /// The _ survey content.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="group">
-        /// The group.
-        /// </param>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <returns>
-        /// The System.Web.Mvc.PartialViewResult.
-        /// </returns>
-        /// <exception cref="HttpException">
-        /// </exception>
-        [HttpPost]
-        public PartialViewResult _SurveyContent(Guid id, Guid? group, Guid? question)
-        {
-            if (Guid.Empty == id)
-            {
-                throw new HttpException(404, "Invalid query string parameters");
-            }
-
-            CompleteQuestionnaireMobileView model =
-                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
-                    new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
-            this.ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
-            return this.PartialView("_SurveyContent", model);
         }
 
         #endregion
