@@ -172,13 +172,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override object GetAnswerObject()
         {
-            /*return (
-                this.Children.Where(c => ((ICompleteAnswer)c).Selected))
-                .Select(c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).FirstOrDefault();
-
-*/
-            IEnumerable<object> answers =
-                this.Children.Where(c => ((ICompleteAnswer)c).Selected).Select(
+            IEnumerable<object> answers = this.Children.Where(c => ((ICompleteAnswer)c).Selected).Select(
                     c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText);
             if (answers.Any())
             {
@@ -186,6 +180,17 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// The is answered.
+        /// </summary>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        public override bool IsAnswered()
+        {
+            return this.Children.Any(c => ((ICompleteAnswer)c).Selected);
         }
 
         /// <summary>

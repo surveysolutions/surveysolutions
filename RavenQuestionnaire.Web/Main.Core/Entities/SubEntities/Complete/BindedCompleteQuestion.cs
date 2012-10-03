@@ -376,6 +376,17 @@ namespace Main.Core.Entities.SubEntities.Complete
         }
 
         /// <summary>
+        /// The is answered.
+        /// </summary>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        public bool IsAnswered()
+        {
+            return this.Answer != null;
+        }
+
+        /// <summary>
         /// The get answer string.
         /// </summary>
         /// <returns>

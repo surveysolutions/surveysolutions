@@ -273,7 +273,7 @@ namespace Main.Core.View.CompleteQuestionnaire
                 {
                     Total = questions.Count, 
                     Enablad = enabled.Count(), 
-                    Answered = enabled.Count(question => question.GetAnswerObject() != null)
+                    Answered = enabled.Count(question => question.IsAnswered())
                 };
             return total;
         }

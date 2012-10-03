@@ -229,6 +229,14 @@ namespace Main.Core.Entities.SubEntities.Complete
         public abstract object GetAnswerObject();
 
         /// <summary>
+        /// The is answered.
+        /// </summary>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        public abstract bool IsAnswered();
+
+        /// <summary>
         /// The get answer string.
         /// </summary>
         /// <returns>

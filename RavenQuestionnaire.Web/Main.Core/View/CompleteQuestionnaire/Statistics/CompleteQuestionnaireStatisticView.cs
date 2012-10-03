@@ -208,7 +208,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
                 this.InvalidQuestions.Add(statItem);
             }
 
-            if (question.GetAnswerObject() != null)
+            if (question.IsAnswered())
             {
                 this.AnsweredQuestions.Add(statItem);
             }

@@ -43,9 +43,8 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
                 this.IsQuestionFromPropGroup = true;
             }
 
-            if (doc.GetAnswerObject() != null)
+            if (doc.IsAnswered())
             {
-                // AnswerValue = answer.AnswerText?? answer.AnswerValue;
                 this.AnswerDate = doc.AnswerDate;
                 this.AnswerValue = this.AnswerText = doc.GetAnswerString();
             }

@@ -105,7 +105,7 @@ namespace Ncqrs.Restoring.EventStapshoot.EventStores.RavenDB
                     IQueryable<StoredEvent> chunk =
                         session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(page * maxPageSize)
                             .Take(maxPageSize).Where(
-                                e => e.EventSourceId == aggreagateRootId && e.EventSequence >= lastSnapshot);
+                                e => e.EventSourceId == aggreagateRootId && e.EventSequence >= lastSnapshot).OrderBy(e => e.EventSequence);
                     if (!chunk.Any())
                     {
                         break;
