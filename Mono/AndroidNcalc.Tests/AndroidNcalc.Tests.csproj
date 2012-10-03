@@ -70,6 +70,10 @@
     <AndroidResource Include="Resources\Drawable\Icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AndroidAntlr3.Runtime\AndroidAntlr3.Runtime.csproj">
+      <Project>{8237C4D5-6F0E-4DE4-B145-F471D49EBAAC}</Project>
+      <Name>AndroidAntlr3.Runtime</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
       <Project>{667B05AE-CF79-4A4B-B9F8-DCC0999A729B}</Project>
       <Name>AndroidFluentAssertions</Name>

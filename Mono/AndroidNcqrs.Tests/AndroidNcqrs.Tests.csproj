@@ -113,6 +113,10 @@
       <Project>{667B05AE-CF79-4A4B-B9F8-DCC0999A729B}</Project>
       <Name>AndroidFluentAssertions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidLogger\AndroidLogger.csproj">
+      <Project>{2DA6C60D-CB06-40B4-91AF-A903451E3DB4}</Project>
+      <Name>AndroidLogger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidMocks\AndroidMocks.csproj">
       <Project>{F031C01E-7159-4ABC-A77C-0CE3930BE187}</Project>
       <Name>AndroidMocks</Name>

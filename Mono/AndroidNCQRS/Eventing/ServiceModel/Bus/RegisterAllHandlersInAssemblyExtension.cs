@@ -2,6 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+using AndroidLogger;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {

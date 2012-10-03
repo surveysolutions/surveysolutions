@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+using AndroidLogger;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
 namespace Ncqrs.Commanding.CommandExecution.Mapping

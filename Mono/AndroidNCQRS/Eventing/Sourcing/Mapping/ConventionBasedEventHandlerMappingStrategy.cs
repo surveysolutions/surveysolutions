@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using AndroidLogger;
 
 namespace Ncqrs.Eventing.Sourcing.Mapping
 {

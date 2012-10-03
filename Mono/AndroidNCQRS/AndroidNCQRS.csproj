@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AndroidLogger.cs" />
     <Compile Include="BasicGuidGenerator.cs" />
     <Compile Include="Commanding\AllCommandsInAppDomainEnumerator.cs" />
     <Compile Include="Commanding\CommandBase.cs" />
@@ -187,16 +186,18 @@
     <Compile Include="Eventing\UncommittedEventStream.cs" />
     <Compile Include="GuidCombGenerator.cs" />
     <Compile Include="IClock.cs" />
-    <Compile Include="ILog.cs" />
     <Compile Include="InternalExtensions.cs" />
     <Compile Include="IUniqueIdentifierGenerator.cs" />
-    <Compile Include="LogManager.cs" />
     <Compile Include="NamespaceDoc.cs" />
     <Compile Include="NcqrsEnvironment.cs" />
     <Compile Include="NcqrsEnvironmentException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AndroidLogger\AndroidLogger.csproj">
+      <Project>{2DA6C60D-CB06-40B4-91AF-A903451E3DB4}</Project>
+      <Name>AndroidLogger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Newtonsoft.Json\Newtonsoft.Json.MonoDroid.csproj">
       <Project>{E6C3413C-919B-486D-8B6C-225CBD921B98}</Project>
       <Name>Newtonsoft.Json.MonoDroid</Name>

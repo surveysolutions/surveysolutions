@@ -2,6 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Threading;
+using AndroidLogger;
 using Ncqrs.Eventing;
 
 namespace Ncqrs.Domain

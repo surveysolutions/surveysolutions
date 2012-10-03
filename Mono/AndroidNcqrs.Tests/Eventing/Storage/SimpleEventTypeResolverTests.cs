@@ -1,3 +1,4 @@
+using AndroidLogger;
 using FluentAssertions;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;

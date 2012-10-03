@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using AndroidLogger;
 using Ncqrs.Commanding.CommandExecution;
 
 namespace Ncqrs.Commanding.ServiceModel

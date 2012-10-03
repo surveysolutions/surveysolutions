@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+using AndroidLogger;
+
 //using System.Transactions;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus

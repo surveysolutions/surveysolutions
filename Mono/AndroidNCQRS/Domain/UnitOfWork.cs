@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using AndroidLogger;
 using Ncqrs.Commanding;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;

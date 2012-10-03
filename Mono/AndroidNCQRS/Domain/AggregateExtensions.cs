@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using AndroidLogger;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 namespace Ncqrs.Domain
