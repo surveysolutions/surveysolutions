@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.CompleteQuestionnaire;
 using Main.Core.View.Group;
@@ -17,9 +18,15 @@ namespace Main.Core.Utility
 
     public class GroupWithRout
     {
+        public GroupWithRout(IEnumerable<NodeWithLevel> currentRout, ICompleteGroup group)
+        {
+            this.CurrentRout = currentRout;
+            this.Group = group;
+        }
+
         public GroupWithRout(ICompleteGroup doc, Guid? publicKey, Guid? propagationKey)
         {
-
+           
             var rout = new List<NodeWithLevel>();
             ICompleteGroup group = null;
             if (publicKey.HasValue)
@@ -53,10 +60,9 @@ namespace Main.Core.Utility
                 group = doc.Children.OfType<ICompleteGroup>().First();
                 rout.Add(new NodeWithLevel(group, 1));
             }
-            currentRout = rout;
+            CurrentRout = rout;
             Group = group;
         }
-
         /// <summary>
         /// The proceed group.
         /// </summary>
@@ -109,11 +115,11 @@ namespace Main.Core.Utility
         /// </returns>
         protected ScreenNavigation CompileNavigation()
         {
-            var navigation = new ScreenNavigation();
-            navigation.PublicKey = this.Group.PublicKey;
-            navigation.CurrentScreenTitle = this.Group.Title;
-            var rout = this.currentRout.Take(this.currentRout.Count() - 1).ToList();
-            navigation.BreadCumbs = rout.Select(n => new CompleteGroupHeaders(n.Group)).ToList();
+            var temtNavigation = new ScreenNavigation();
+            temtNavigation.PublicKey = this.Group.PublicKey;
+            temtNavigation.CurrentScreenTitle = this.Group.Title;
+            var rout = this.CurrentRout.Take(this.CurrentRout.Count() - 1).ToList();
+            temtNavigation.BreadCumbs = rout.Select(n => new CompleteGroupHeaders(n.Group)).ToList();
             NodeWithLevel parent = rout.Last();
             List<ICompleteGroup> groupNeighbors;
             int indexOfTarget;
@@ -136,18 +142,19 @@ namespace Main.Core.Utility
                 groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
                 indexOfTarget = groupNeighbors.FindIndex(0, g => g.PublicKey == this.Group.PublicKey);
             }
-
+            if (indexOfTarget < 0)
+                throw new InvalidOperationException("groups wasn't founded");
             if (indexOfTarget > 0)
             {
-                navigation.PrevScreen = new CompleteGroupHeaders(groupNeighbors[indexOfTarget - 1]);
+                temtNavigation.PrevScreen = new CompleteGroupHeaders(groupNeighbors[indexOfTarget - 1]);
             }
 
             if (indexOfTarget < groupNeighbors.Count - 1)
-            {
-                navigation.NextScreen = new CompleteGroupHeaders(groupNeighbors[indexOfTarget + 1]);
+            { 
+                temtNavigation.NextScreen = new CompleteGroupHeaders(groupNeighbors[indexOfTarget + 1]);
             }
 
-            return navigation;
+            return temtNavigation;
         }
 
         public ScreenNavigation Navigation
@@ -160,7 +167,7 @@ namespace Main.Core.Utility
             }
         }
 
-        protected IEnumerable<NodeWithLevel> currentRout;
+        public IEnumerable<NodeWithLevel> CurrentRout { get; private set; }
         private ScreenNavigation navigation;
         public ICompleteGroup Group { get; private set; }
     }
