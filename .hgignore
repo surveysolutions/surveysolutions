@@ -259,6 +259,15 @@ Mono/AndroidNcqrs.Tests.Runner/bin/*
 Mono/AndroidNcqrs.Tests.Runner/obj/*
 Mono/AndroidNcqrs.Tests/bin/*
 Mono/AndroidNCQRS/bin/*
+Mono/AndroidCore.Capi/bin/*
+Mono/AndroidCore.Capi/obj/*
+Mono/AndroidLogger/bin/*
+Mono/AndroidLogger/obj/*
+Mono/AndroidMain.Core/bin/*
+Mono/AndroidMain.Core/obj/*
+Mono/AndroidNinject.Extensions.Conventions/bin/*
+Mono/AndroidNinject/obj/*
+Mono/AndroidNinject.Extensions.Factory/bin/*
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
