@@ -321,10 +321,10 @@
     <Compile Include="View\Card\CardViewInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
-    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireMabileViewFactory.cs" />
-    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireMobileView.cs" />
-    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireMobileViewFactory.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
+    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\ScreenGroupView.cs" />
+    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\ScreenGroupViewFactory.cs" />
+    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\ScreenNavigationView.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticView.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewFactory.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />

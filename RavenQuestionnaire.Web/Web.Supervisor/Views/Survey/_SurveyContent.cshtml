@@ -1,7 +1,7 @@
 ﻿@using Main.Core.View.Card
 @using Main.Core.View.Group
 @using Main.Core.View.Question
-@model Main.Core.View.Group.CompleteGroupMobileView
+@model Main.Core.View.CompleteQuestionnaire.ScreenGroup.ScreenGroupView
 @{
     var questionKey = (Guid)ViewBag.CurrentQuestion;
     ViewBag.CurrentQuestion = questionKey;
@@ -13,42 +13,24 @@
     };
     ViewBag.CurrentGroupPublicKey = Model.PublicKey;
     ViewBag.QuestionnaireId = Model.QuestionnairePublicKey;
-    var propagatedGroup = Model as PropagatedGroupMobileView;
 }
 <!-- Start of second page -->
-<div data-role="page" id="screen-@(Model.PublicKey + (propagatedGroup==null?"":"-"+propagatedGroup.PropogationKey))" class="@(ViewBag.PagePrefix) page">
-    @RenderNavigation(Model.Navigation)
+<div data-role="page" id="screen-@Model.PublicKey" class="@(ViewBag.PagePrefix) page">
+    @RenderNavigation(Model.Navigation.NavigationContent)
     <!-- /header -->
     <div data-role="content" class="dummy-scroll">
         <div class="scroller-@(Model.PublicKey)" id="scroller">
             <div>           
-                @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model)
+                @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model.Group)
                  <div style="width: 100%; height: 50px;text-align: center"><strong>End of Section</strong></div>
             </div>
         </div>
     </div>    
-    @RenderFooter(Model.Navigation)
+    @RenderFooter(Model.Navigation.NavigationContent)
     <!-- /content -->
 </div>
 <!-- /page -->
 <!-- other main panel pages here -->
-@foreach (CompleteQuestionView question in Model.QuestionsWithCards)
-{
-    <div data-role="page" data-add-back-btn="true" id="gallery-@(question.PublicKey)" class="gallery-page">
-        <div data-role="header">
-            <h1>Question cards</h1>
-        </div>
-        <div data-role="content">
-            <ul class="gallery">
-                @foreach (CardView card in question.Cards)
-                {
-                    <li><a href="@Url.Action("Images", "Resource", new { id = card.PublicKey })" rel="external">
-                        <img src="@Url.Action("Thumb", "Resource", new { id = card.PublicKey })" alt="@card.Title" /></a></li>
-                }
-            </ul>
-        </div>
-    </div>
-}
 @helper RenderNavigation(ScreenNavigation screen)
     {
         List<CompleteGroupHeaders> crumbs = screen.BreadCumbs.Skip(1).ToList();
@@ -93,7 +75,7 @@
         @if (screen.NextScreen != null)
         {
            
-            <li><a class="next nav-link ui-btn-right " href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.NextScreen.PublicKey, propagationKey=screen.NextScreen.PropagationKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false" >
+            <li><a class="next nav-link ui-btn-right " href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.NextScreen.PublicKey, propagationKey = screen.NextScreen.PropagationKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false" >
                 Next Group &rarr;</a></li>
             
         }

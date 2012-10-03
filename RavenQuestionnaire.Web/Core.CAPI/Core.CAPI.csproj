@@ -59,9 +59,6 @@
     <Compile Include="EventHandlers\SyncProcessDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Synchronization\ClientEventSync.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\ScreenGroupView.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\ScreenGroupViewFactory.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\ScreenNavigationView.cs" />
     <Compile Include="Views\Grouped\CQGroupedBrowseFactory.cs" />
     <Compile Include="Views\Grouped\CQGroupedBrowseInputModel.cs" />
     <Compile Include="Views\Grouped\CQGroupedBrowseView.cs" />
@@ -78,8 +75,6 @@
     <Compile Include="Views\PropagatedGroupViews\QuestionItemView\PropagatedGridViewInputModel.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\PropagatedGroupViews\QuestionItemView\PropagatedGroupContainer.cs" />
-    <Compile Include="Views\PropagatedGroupViews\QuestionItemView\PropagatedGroupNestedContainer.cs" />
     <Compile Include="Views\PropagatedGroupViews\QuestionItemView\PropagatedGroupRowItem.cs" />
     <Compile Include="Views\PropagatedGroupViews\QuestionItemView\PropagatedGroupGridContainer.cs" />
     <Compile Include="Views\PropagatedGroupViews\QuestionItemView\QuestionCellItem.cs" />

@@ -1,18 +1,15 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="ScreenNavigationView.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Linq;
 using Main.Core.View.Group;
 
-namespace Core.CAPI.Views.CompleteQuestionnaire
+namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

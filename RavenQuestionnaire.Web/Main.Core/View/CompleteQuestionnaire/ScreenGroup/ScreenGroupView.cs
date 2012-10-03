@@ -1,25 +1,20 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="ScreenGroupView.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView;
+using System;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.View;
 using Main.Core.View.Group;
 using Main.Core.View.Question;
 
-namespace Core.CAPI.Views.CompleteQuestionnaire
+namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
@@ -44,17 +39,16 @@ namespace Core.CAPI.Views.CompleteQuestionnaire
             CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup,ScreenNavigation navigation)
         {
             this.QuestionnairePublicKey = doc.PublicKey;
-              this.PublicKey = currentGroup.PublicKey;
-            /*this.Title = currentGroup.Title;
-            this.Propagated = currentGroup.Propagated;
-            this.Visualization = currentGroup.Visualization;
-            this.Enabled = currentGroup.Enabled;
-            this.Description = currentGroup.Description;*/
+            this.PublicKey = currentGroup.PublicKey;
+            this.Title = currentGroup.Title;
+            this.Status = doc.Status;
+            /*this.Visualization = currentGroup.Visualization;
+            this.Enabled = currentGroup.Enabled;*/
+            this.Description = currentGroup.Description;
             this.Navigation =
                 new ScreenNavigationView(
                     doc.Children.OfType<ICompleteGroup>().Select(g => new CompleteGroupHeaders(g)), navigation);
-            this.IsQuestionnaireActive = !SurveyStatus.IsStatusAllowCapiSync(doc.Status);
-            if (currentGroup.Propagated != Propagate.None && !currentGroup.PropogationPublicKey.HasValue)
+          /*  if (currentGroup.Propagated != Propagate.None && !currentGroup.PropogationPublicKey.HasValue)
             {
                 this.Grid = new PropagatedGroupGridContainer(doc, currentGroup);
                 foreach (
@@ -66,7 +60,7 @@ namespace Core.CAPI.Views.CompleteQuestionnaire
                     this.Grid.AddRow(doc, completeGroup);
                 }
                 return;
-            }
+            }*/
             if (currentGroup.PropogationPublicKey.HasValue)
             {
                 this.Group = new PropagatedGroupMobileView(doc, currentGroup);
@@ -126,19 +120,25 @@ namespace Core.CAPI.Views.CompleteQuestionnaire
 
         #endregion
 
-        public PropagatedGroupGridContainer Grid { get; set; }
+        //public PropagatedGroupGridContainer Grid { get; set; }
 
         public CompleteGroupMobileView Group { get; set; }
         /// <summary>
         /// get or set questionnaire active status - active if allow to edit, not error or completed
         /// </summary>
-        public bool IsQuestionnaireActive { get; set; }
+        public bool IsQuestionnaireActive
+        {
+            get { return !SurveyStatus.IsStatusAllowCapiSync(Status); }
+        }
 
         /// <summary>
         /// Gets or sets the questionnaire public key.
         /// </summary>
         public Guid QuestionnairePublicKey { get; set; }
         public Guid PublicKey { get; set; }
+        public string Description { get; set; }
+        public string Title { get; set; }
+        public SurveyStatus Status { get; set; }
         public ScreenNavigationView Navigation { get; set; }
     }
 }

@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Core.CAPI.Views.CompleteQuestionnaire;
 using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView;
 using Main.Core.View.Answer;
+using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
 
 namespace Web.CAPI.Controllers
 {

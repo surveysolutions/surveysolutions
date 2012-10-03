@@ -1,26 +1,17 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="ScreenGroupViewFactory.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
 using Main.Core.Denormalizers;
 using Main.Core.Documents;
-using Main.Core.Entities.Extensions;
-using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.ExpressionExecutors;
 using Main.Core.Utility;
-using Main.Core.View;
-using Main.Core.View.CompleteQuestionnaire;
-using Main.Core.View.Group;
 
-namespace Core.CAPI.Views.CompleteQuestionnaire
+namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

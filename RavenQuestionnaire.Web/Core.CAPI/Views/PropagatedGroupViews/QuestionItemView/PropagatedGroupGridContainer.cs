@@ -8,6 +8,7 @@ using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.Extensions;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 
 namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
@@ -20,11 +21,17 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class PropagatedGroupGridContainer : PropagatedGroupContainer<PropagatedGroupRowItem>
+    public class PropagatedGroupGridContainer
     {
         public PropagatedGroupGridContainer(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group)
-            : base(doc, group)
         {
+            this.PublicKey = group.PublicKey;
+            this.Enabled = group.Enabled;
+            this.QuestionnairePublicKey = doc.PublicKey;
+            this.Title = group.Title;
+            this.AutoPropagate = group.Propagated == Propagate.AutoPropagated;
+            this.Row = new List<PropagatedGroupRowItem>();
+            this.Description = group.Description;
             this.PopulateHeader(group, doc.PublicKey);
         }
 
@@ -52,20 +59,39 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
 
         public void AddRow(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group)
         {
-            if(!group.PropogationPublicKey.HasValue)
+            if (!group.PropogationPublicKey.HasValue)
                 throw new ArgumentException("group have to be propagated");
-            base.AddRow(new PropagatedGroupRowItem(group,
-                                                   string.Concat(doc.GetPropagatedGroupsByKey(
-                                                       group.PropogationPublicKey.Value).
-                                                                     SelectMany(q => q.Children).
-                                                                     OfType
-                                                                     <ICompleteQuestion>().Where(q => q.Capital).Select(
-                                                                         q => q.GetAnswerString() + " "))));
+            AddRow(new PropagatedGroupRowItem(group,
+                                              string.Concat(doc.GetPropagatedGroupsByKey(
+                                                  group.PropogationPublicKey.Value).
+                                                                SelectMany(q => q.Children).
+                                                                OfType
+                                                                <ICompleteQuestion>().Where(q => q.Capital).Select(
+                                                                    q => q.GetAnswerString() + " "))));
         }
+
+        public void AddRow(PropagatedGroupRowItem row)
+        {
+            this.Row.Add(row);
+        }
+
+        public string Description { get; set; }
+        public bool Enabled { get; set; }
+        public Guid QuestionnairePublicKey { get; set; }
+        public List<PropagatedGroupRowItem> Row { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether auto propagate.
+        /// </summary>
+        public bool AutoPropagate { get; private set; }
+
+        #region Implementation of ICompositeView
+
+        public Guid PublicKey { get; set; }
+        public string Title { get; set; }
+
+        #endregion
 
         public List<PropagatedGroupColumnItem> Columns { get; set; }
     }
-
-
-
 }
