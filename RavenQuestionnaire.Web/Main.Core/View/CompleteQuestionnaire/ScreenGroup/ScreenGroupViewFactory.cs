@@ -57,22 +57,50 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// </returns>
         public ScreenGroupView Load(CompleteQuestionnaireViewInputModel input)
         {
-            ScreenGroupView result = null;
-            if (input.CompleteQuestionnaireId != Guid.Empty)
+            if (input.CompleteQuestionnaireId == Guid.Empty)
             {
-                CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.CompleteQuestionnaireId);
-                GroupWithRout rout = new GroupWithRout(doc,input.CurrentGroupPublicKey, input.PropagationKey);
-
-
-                var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
-                executor.Execute(rout.Group);
-                var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
-                validator.Execute(rout.Group);
-                result = this.sreenViewSupplier.BuildView(doc, rout.Group, rout.Navigation);
+                return null;
             }
-            return result;
+            CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.CompleteQuestionnaireId);
+            UpdateInputData(doc, input);
+
+            GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
+
+
+            var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
+            executor.Execute(rout.Group);
+            var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
+            validator.Execute(rout.Group);
+            return this.sreenViewSupplier.BuildView(doc, rout.Group, rout.Navigation);
         }
 
         #endregion
+
+        /// <summary>
+        /// The update input data.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        protected void UpdateInputData(
+            CompleteQuestionnaireStoreDocument doc, CompleteQuestionnaireViewInputModel input)
+        {
+            if (input.CurrentGroupPublicKey.HasValue)
+            {
+                return;
+            }
+
+            if (doc.LastVisitedGroup == null)
+            {
+                return;
+            }
+
+            input.CurrentGroupPublicKey = doc.LastVisitedGroup.GroupKey;
+            input.PropagationKey = doc.LastVisitedGroup.PropagationKey;
+        }
+
     }
 }
