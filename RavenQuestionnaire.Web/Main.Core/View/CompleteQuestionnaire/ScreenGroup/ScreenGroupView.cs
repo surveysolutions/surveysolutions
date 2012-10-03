@@ -21,7 +21,16 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
     public class ScreenGroupView
     {
        #region Constructors and Destructors
-
+        protected ScreenGroupView(
+            CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigationView navigation)
+        {
+            this.QuestionnairePublicKey = doc.PublicKey;
+            this.PublicKey = currentGroup.PublicKey;
+            this.Title = currentGroup.Title;
+            this.Status = doc.Status;
+            this.Description = currentGroup.Description;
+            this.Navigation = navigation;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompleteGroupMobileView"/> class.
@@ -36,46 +45,33 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// The navigation.
         /// </param>
         public ScreenGroupView(
-            CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup,ScreenNavigation navigation)
-        {
-            this.QuestionnairePublicKey = doc.PublicKey;
-            this.PublicKey = currentGroup.PublicKey;
-            this.Title = currentGroup.Title;
-            this.Status = doc.Status;
-            /*this.Visualization = currentGroup.Visualization;
-            this.Enabled = currentGroup.Enabled;*/
-            this.Description = currentGroup.Description;
-            this.Navigation =
+            CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigation navigation)
+            : this(doc, currentGroup,
                 new ScreenNavigationView(
-                    doc.Children.OfType<ICompleteGroup>().Select(g => new CompleteGroupHeaders(g)), navigation);
-          /*  if (currentGroup.Propagated != Propagate.None && !currentGroup.PropogationPublicKey.HasValue)
-            {
-                this.Grid = new PropagatedGroupGridContainer(doc, currentGroup);
-                foreach (
-                    ICompleteGroup completeGroup in
-                        doc.Find<ICompleteGroup>(
-                            g => g.PublicKey == currentGroup.PublicKey && g.PropogationPublicKey.HasValue)
-                    )
-                {
-                    this.Grid.AddRow(doc, completeGroup);
-                }
-                return;
-            }*/
+                doc.Children.OfType<ICompleteGroup>().Select(g => new CompleteGroupHeaders(g)), navigation))
+        {
+
+            BuildScreenContent(doc, currentGroup);
+
+        }
+
+        protected void BuildScreenContent(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup)
+        {
             if (currentGroup.PropogationPublicKey.HasValue)
             {
                 this.Group = new PropagatedGroupMobileView(doc, currentGroup);
                 return;
             }
             this.Group = new CompleteGroupMobileView()
-                {
-                    PublicKey = currentGroup.PublicKey,
-                    Title = currentGroup.Title,
-                    Propagated = currentGroup.Propagated,
-                    Visualization = currentGroup.Visualization,
-                    Enabled = currentGroup.Enabled,
-                    Description = currentGroup.Description,
-                    QuestionnairePublicKey = doc.PublicKey
-                };
+            {
+                PublicKey = currentGroup.PublicKey,
+                Title = currentGroup.Title,
+                Propagated = currentGroup.Propagated,
+                Visualization = currentGroup.Visualization,
+                Enabled = currentGroup.Enabled,
+                Description = currentGroup.Description,
+                QuestionnairePublicKey = doc.PublicKey
+            };
             foreach (IComposite composite in currentGroup.Children)
             {
                 if ((composite as ICompleteQuestion) != null)
@@ -95,33 +91,21 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                     {
                         var propagatedGroup = new CompleteGroupMobileView(doc, g);
                         this.Group.Children.Add(propagatedGroup);
-                        if (g.Visualization == GroupVisualization.Nested)
+                        var subGroups = currentGroup.Children.OfType<ICompleteGroup>().Where(
+                            p =>
+                            p.PublicKey == g.PublicKey && p.PropogationPublicKey.HasValue);
+                        foreach (
+                            ICompleteGroup completeGroup in subGroups)
                         {
-                            var subGroups = currentGroup.Children.OfType<ICompleteGroup>().Where(
-                                p =>
-                                p.PublicKey == g.PublicKey && p.PropogationPublicKey.HasValue);
-                            foreach (
-                                ICompleteGroup completeGroup in subGroups)
-                            {
-                                propagatedGroup.Children.Add(new PropagatedGroupMobileView(doc, completeGroup));
-                            }
-
+                            propagatedGroup.Children.Add(new PropagatedGroupMobileView(doc, completeGroup));
                         }
-                        else
-                        {
-                            propagatedGroup.Propagated = Propagate.None;
 
-                        }
-                        this.Group.Children.Add(propagatedGroup);
                     }
                 }
             }
         }
 
         #endregion
-
-        //public PropagatedGroupGridContainer Grid { get; set; }
-
         public CompleteGroupMobileView Group { get; set; }
         /// <summary>
         /// get or set questionnaire active status - active if allow to edit, not error or completed

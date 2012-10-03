@@ -7,8 +7,10 @@
 using System.Linq;
 using System.Reflection;
 using Core.CAPI.Synchronization;
+using Core.CAPI.Views;
 using Main.Core;
 using Main.Core.Events;
+using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
 using Questionnaire.Core.Web.Security;
 
 namespace Web.CAPI.Injections
@@ -31,6 +33,8 @@ namespace Web.CAPI.Injections
         {
             base.Load();
             this.Bind<IEventSync>().To<ClientEventSync>();
+            this.Unbind<IScreenViewSupplier>();
+            this.Bind<IScreenViewSupplier>().To<CapiScreenViewSupplier>();
         }
     }
 }

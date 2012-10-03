@@ -1,4 +1,5 @@
-﻿@using Main.Core.Entities.SubEntities
+﻿@using Core.CAPI.Views
+@using Main.Core.Entities.SubEntities
 @using Main.Core.View.Card
 @using Main.Core.View.Group
 @using Main.Core.View.Question
@@ -16,6 +17,7 @@
     };
     ViewBag.CurrentGroupPublicKey = Model.PublicKey;
     ViewBag.QuestionnaireId = Model.QuestionnairePublicKey;
+    var capiScreen = Model as CapiScreenGroupView;
 }
 <!-- Start of second page -->
 <div data-role="page" id="screen-@Model.PublicKey" class="@(ViewBag.PagePrefix) page" data-header-theme="@(Model.IsQuestionnaireActive ? "b" : "e")" data-footer-theme="b" data-content-theme="c">
@@ -29,14 +31,15 @@
                <div style="width: 100%; height: 50px; text-align: center">
                     <strong>@Model.Description</strong></div>
            }
-           @if (Model.Grid == null)
+           
+           @if (capiScreen==null)
            {
                 @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model.Group)
 
            }
            else
            {
-               @Html.Partial("~/Views/Survey/Group/_GridPropagatedView.cshtml", Model.Grid)
+               @Html.Partial("~/Views/Survey/Group/_GridPropagatedView.cshtml", capiScreen.Grid)
            }
                 <div style="width: 100%; height: 50px; text-align: center">
                     <strong>End of Section</strong></div>

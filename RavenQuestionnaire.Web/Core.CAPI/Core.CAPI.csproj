@@ -59,6 +59,8 @@
     <Compile Include="EventHandlers\SyncProcessDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Synchronization\ClientEventSync.cs" />
+    <Compile Include="Views\CapiScreenGroupView.cs" />
+    <Compile Include="Views\CapiScreenViewSupplier.cs" />
     <Compile Include="Views\Grouped\CQGroupedBrowseFactory.cs" />
     <Compile Include="Views\Grouped\CQGroupedBrowseInputModel.cs" />
     <Compile Include="Views\Grouped\CQGroupedBrowseView.cs" />

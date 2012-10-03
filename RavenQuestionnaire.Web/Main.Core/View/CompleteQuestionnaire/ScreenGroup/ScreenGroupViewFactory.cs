@@ -25,6 +25,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
 
+        private readonly IScreenViewSupplier sreenViewSupplier;
         #endregion
 
         #region Constructors and Destructors
@@ -35,9 +36,10 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <param name="store">
         /// The store.
         /// </param>
-        public ScreenGroupViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
+        public ScreenGroupViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store, IScreenViewSupplier sreenViewSupplier)
         {
             this.store = store;
+            this.sreenViewSupplier = sreenViewSupplier;
         }
 
         #endregion
@@ -66,7 +68,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                 executor.Execute(rout.Group);
                 var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
                 validator.Execute(rout.Group);
-                result = new ScreenGroupView(doc, rout.Group, rout.Navigation);
+                result = this.sreenViewSupplier.BuildView(doc, rout.Group, rout.Navigation);
             }
             return result;
         }
