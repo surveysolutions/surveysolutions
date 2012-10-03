@@ -4,8 +4,7 @@
 @if (Model.Propagated != Propagate.None)
 {
     <div>
-     @*   @Html.Partial("~/Views/Survey/Group/_PropagatebleGroup.cshtml", Model)*@
-
+        @Html.Partial("~/Views/Survey/Group/_PropagatebleGroup.cshtml", Model)
         @if (Model.Propagated != Propagate.AutoPropagated)
         {
             var requestParams = new
@@ -20,26 +19,14 @@
 
             using (Ajax.BeginFormHtml5("PropagateGroup", "Survey", requestParams, new AjaxOptions { HttpMethod = "POST", OnComplete = "PropagatedGroup" }))
             {
-                <input value="@Model.Title" type="submit" data-role = "button" data-icon = "plus" data-theme = "a"/>
-                @Html.ValidationMessage("PublicKey")
+            <input value="@Model.Title" type="submit" data-role = "button" data-icon = "plus" data-theme = "a"/>
+            @Html.ValidationMessage("PublicKey")
             }
 
             <script id="@templateId"  type="text/x-jsrender">
                 @Html.Partial("~/Views/Survey/Group/_PropagatedGrooup.cshtml", Model.PropagateTemplate)
             </script>
             
-        }
-        else
-        {
-            
-            
-            <div class="ui-body ui-body-c" id="@Model.PublicKey" style="margin-bottom:15px;">
-                <div class="group-anchor">
-                    <a id="screen-ref-@(@Model.PublicKey)" class="nav-link" 
-                                       href="@Url.Action("PropagatedGrid", new { Id = @Model.QuestionnairePublicKey, group = @Model.PublicKey })" 
-                                       data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@Model.Title</a>
-                </div>
-            </div>
         }
     </div>
 }

@@ -5,7 +5,9 @@
 // -----------------------------------------------------------------------
 
 using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems;
+using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities.Complete;
 
 namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
@@ -18,15 +20,12 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class PropagatedGroupsContainer
+    public class PropagatedGroupGridContainer : PropagatedGroupContainer<PropagatedGroupRowItem>
     {
-        public PropagatedGroupsContainer(ICompleteGroup groupTemplate, Guid questionnairePublicKey)
+        public PropagatedGroupGridContainer(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group)
+            : base(doc, group)
         {
-            this.QuestionnairePublicKey = questionnairePublicKey;
-            this.GroupPublicKey = groupTemplate.PublicKey;
-            this.GroupName = groupTemplate.Title;
-            this.PopulateHeader(groupTemplate, questionnairePublicKey);
-            this.Row = new List<PropagatedGroupRowItem>();
+            this.PopulateHeader(group, doc.PublicKey);
         }
 
         protected void PopulateHeader(ICompleteGroup groupTemplate, Guid questionnairePublicKey)
@@ -51,16 +50,20 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
             }
         }
 
-        public void AddRow(ICompleteGroup group, string title)
+        public void AddRow(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group)
         {
-            this.Row.Add(new PropagatedGroupRowItem(group, title));
+            if(!group.PropogationPublicKey.HasValue)
+                throw new ArgumentException("group have to be propagated");
+            base.AddRow(new PropagatedGroupRowItem(group,
+                                                   string.Concat(doc.GetPropagatedGroupsByKey(
+                                                       group.PropogationPublicKey.Value).
+                                                                     SelectMany(q => q.Children).
+                                                                     OfType
+                                                                     <ICompleteQuestion>().Where(q => q.Capital).Select(
+                                                                         q => q.GetAnswerString() + " "))));
         }
 
-        public Guid GroupPublicKey { get; set; }
-        public string GroupName { get; set; }
         public List<PropagatedGroupColumnItem> Columns { get; set; }
-        public List<PropagatedGroupRowItem> Row { get; set; }
-        public Guid QuestionnairePublicKey { get; set; }
     }
 
 

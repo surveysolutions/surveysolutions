@@ -241,6 +241,7 @@
     <Compile Include="Entities\SubEntities\UserLight.cs" />
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
     <Compile Include="Entities\SubEntities\VisitedGroup.cs" />
+    <Compile Include="Entities\SubEntities\GroupVisualization.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
@@ -299,8 +300,10 @@
     <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="Utility\EnumerableExtensions.cs" />
     <Compile Include="Utility\EventMergeUtils.cs" />
+    <Compile Include="Utility\GroupWithRout.cs" />
     <Compile Include="Utility\IdUtil.cs" />
     <Compile Include="Utility\LINQExtensions.cs" />
+    <Compile Include="Utility\NodeWithLevel.cs" />
     <Compile Include="Utility\OrderStrategy\AsIsStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\AZStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\IOrderStrategy.cs" />

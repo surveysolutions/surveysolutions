@@ -96,6 +96,8 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         public Propagate Propagated { get; set; }
 
+        public GroupVisualization Visualization { get; set; }
+
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>

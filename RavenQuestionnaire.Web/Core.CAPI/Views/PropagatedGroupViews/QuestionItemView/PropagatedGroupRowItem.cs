@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.View;
 
 namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
 {
@@ -13,7 +14,7 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
     using System.Linq;
     using System.Text;
 
-    public class PropagatedGroupRowItem
+    public class PropagatedGroupRowItem : ICompositeView
     {
         public PropagatedGroupRowItem(ICompleteGroup group, string title)
         {
@@ -23,11 +24,17 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
             this.Title = title;
             this.Answers = new Dictionary<string, QuestionCellItem>();
             this.Enabled = group.Enabled;
+            this.PublicKey = group.PublicKey;
             foreach (ICompleteQuestion question in group.Children.OfType<ICompleteQuestion>())
             {
                 this.Answers.Add(question.PublicKey.ToString(), new QuestionCellItem(question));
             }
         }
+
+       
+        public List<ICompositeView> Children { get; set; }
+        public Guid? Parent { get; set; }
+        public Guid PublicKey { get; set; }
 
         public Guid PropagationKey { get; set; }
         public string Title { get; set; }

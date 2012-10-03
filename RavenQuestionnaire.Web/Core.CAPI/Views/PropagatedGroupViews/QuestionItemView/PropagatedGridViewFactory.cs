@@ -20,7 +20,7 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class PropagatedGridViewFactory:IViewFactory<PropagatedGridViewInputModel, PropagatedGroupsContainer>
+    public class PropagatedGridViewFactory : IViewFactory<PropagatedGridViewInputModel, PropagatedGroupGridContainer>
     {
         #region Constants and Fields
 
@@ -38,31 +38,28 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
 
         #region Implementation of IViewFactory<PropagatedGridViewInputModel,PropagatedGroupsContainer>
 
-        public PropagatedGroupsContainer Load(PropagatedGridViewInputModel input)
+        public PropagatedGroupGridContainer Load(PropagatedGridViewInputModel input)
         {
             CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.CompelteQuestionnairePublicKey);
             if (doc == null)
                 return null;
             var groupTemplate =
-                doc.Find<ICompleteGroup>(g => g.PublicKey == input.GroupPublicKey && !g.PropogationPublicKey.HasValue).FirstOrDefault();
+                doc.Find<ICompleteGroup>(g => g.PublicKey == input.GroupPublicKey && !g.PropogationPublicKey.HasValue).
+                    FirstOrDefault();
             if (groupTemplate == null)
                 return null;
-            PropagatedGroupsContainer result = new PropagatedGroupsContainer(groupTemplate, doc.PublicKey);
+            PropagatedGroupGridContainer result = new PropagatedGroupGridContainer(doc, groupTemplate);
             foreach (
                 ICompleteGroup completeGroup in
                     doc.Find<ICompleteGroup>(g => g.PublicKey == input.GroupPublicKey && g.PropogationPublicKey.HasValue)
                 )
             {
-                result.AddRow(completeGroup,
-                              string.Concat(doc.GetPropagatedGroupsByKey(completeGroup.PropogationPublicKey.Value).
-                                                SelectMany(q => q.Children).
-                                                OfType
-                                                <ICompleteQuestion>().Where(q => q.Capital).Select(
-                                                    q => q.GetAnswerString() + " ")));
+                result.AddRow(doc, completeGroup);
             }
             return result;
         }
+    
 
-        #endregion
+    #endregion
     }
 }

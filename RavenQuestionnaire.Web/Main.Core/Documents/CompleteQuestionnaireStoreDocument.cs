@@ -141,6 +141,12 @@ namespace Main.Core.Documents
             }
         }
 
+        public GroupVisualization Visualization
+        {
+            get { return GroupVisualization.Nested; }
+            set { }
+        }
+
         /// <summary>
         /// Gets or sets the propogation public key.
         /// </summary>

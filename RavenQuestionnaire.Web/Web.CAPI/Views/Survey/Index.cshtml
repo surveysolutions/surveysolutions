@@ -1,7 +1,7 @@
 ﻿@using Main.Core.Entities.SubEntities
 @using Main.Core.View.Group
 
-@model Main.Core.View.CompleteQuestionnaire.CompleteQuestionnaireMobileView
+@model Core.CAPI.Views.CompleteQuestionnaire.ScreenGroupView
 <script type="text/javascript">
     $(document).ready(function () {
         highlight();
@@ -58,13 +58,13 @@
         <!-- /header -->
         <div data-role="content" class="with-footer" data-iscroll="">
             <ul data-role="listview" data-theme="c" data-dividertheme="d">
-                @foreach (CompleteGroupHeaders gh in Model.Groups)
+                @foreach (CompleteGroupHeaders gh in Model.Navigation.Menu)
                 {
                     var activ = @gh.Enabled ? "" : "ui-disabled";
                     activ += gh.IsCurrent ? "ui-btn-active" : "";
                     <li class="@activ" id="@gh.PublicKey" onclick="$(this).siblings().removeClass('ui-btn-active');">
                      
-                        <a  id="ref-link-@(gh.PublicKey)" data-panel="main" href="@Url.Action("Screen", new { Id = Model.PublicKey, group = gh.PublicKey })"> @gh.GroupText
+                        <a  id="ref-link-@(gh.PublicKey)" data-panel="main" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = gh.PublicKey })"> @gh.GroupText
                             <span id="counter-@(gh.PublicKey)" 
                                   class="ui-li-count @(gh.Totals.Answered == gh.Totals.Enablad ? "complete" : "")" data-role="none">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a>@*}*@
                             
@@ -72,14 +72,14 @@
                     </li>
                 }
                 <li onclick="$(this).siblings().removeClass('ui-btn-active');">
-                     @if (SurveyStatus.IsStatusAllowCapiSync(Model.Status))
+                     @if (!Model.IsQuestionnaireActive)
                         {
-                            <a id="ref-link-complete"  data-panel="main" href="@Url.Action("CompleteSummary", new { Id = Model.PublicKey })">
+                            <a id="ref-link-complete"  data-panel="main" href="@Url.Action("CompleteSummary", new { Id = Model.QuestionnairePublicKey })">
                                 Summary</a>
                         }
                         else
                         {
-                              <a  id="ref-link-complete" data-panel="main" href="@Url.Action("CompleteSummary", new { Id = Model.PublicKey })">Complete</a>
+                              <a  id="ref-link-complete" data-panel="main" href="@Url.Action("CompleteSummary", new { Id = Model.QuestionnairePublicKey })">Complete</a>
                         }
                   
                 </li>
@@ -88,7 +88,7 @@
     </div>
 </div>
 <div data-role="panel" data-id="main" id="content_container">
-    @Html.Partial("_SurveyContent", Model.CurrentScreen)
+    @Html.Partial("_SurveyContent", Model)
 </div>
 <script type="text/javascript">
     $("div.ui-block-a").click(function () {

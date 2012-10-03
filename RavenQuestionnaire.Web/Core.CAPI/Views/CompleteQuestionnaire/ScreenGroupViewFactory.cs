@@ -1,31 +1,33 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireMobileViewFactory.cs" company="The World Bank">
-//   2012
+﻿// -----------------------------------------------------------------------
+// <copyright file="ScreenGroupViewFactory.cs" company="">
+// TODO: Update copyright text.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------
 
+using Main.Core.Denormalizers;
+using Main.Core.Documents;
+using Main.Core.Entities.Extensions;
+using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.ExpressionExecutors;
 using Main.Core.Utility;
+using Main.Core.View;
+using Main.Core.View.CompleteQuestionnaire;
+using Main.Core.View.Group;
 
-namespace Main.Core.View.CompleteQuestionnaire
+namespace Core.CAPI.Views.CompleteQuestionnaire
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using Main.Core.Denormalizers;
-    using Main.Core.Documents;
-    using Main.Core.Entities.Extensions;
-    using Main.Core.Entities.SubEntities.Complete;
-    using Main.Core.ExpressionExecutors;
-    using Main.Core.View.Group;
+    using System.Text;
 
     /// <summary>
-    /// The complete questionnaire mobile view factory.
+    /// TODO: Update summary.
     /// </summary>
-    public class CompleteQuestionnaireMobileViewFactory :
-        IViewFactory<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>
+    public class ScreenGroupViewFactory: 
+        IViewFactory<CompleteQuestionnaireViewInputModel, ScreenGroupView>
     {
-        #region Constants and Fields
+         #region Constants and Fields
 
         /// <summary>
         /// The store.
@@ -42,7 +44,7 @@ namespace Main.Core.View.CompleteQuestionnaire
         /// <param name="store">
         /// The store.
         /// </param>
-        public CompleteQuestionnaireMobileViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
+        public ScreenGroupViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
         {
             this.store = store;
         }
@@ -60,30 +62,20 @@ namespace Main.Core.View.CompleteQuestionnaire
         /// <returns>
         /// The RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile.CompleteGroupMobileView.
         /// </returns>
-        public CompleteGroupMobileView Load(CompleteQuestionnaireViewInputModel input)
+        public ScreenGroupView Load(CompleteQuestionnaireViewInputModel input)
         {
-            CompleteGroupMobileView result = null;
+            ScreenGroupView result = null;
             if (input.CompleteQuestionnaireId != Guid.Empty)
             {
                 CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.CompleteQuestionnaireId);
-                GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
-               
+                GroupWithRout rout = new GroupWithRout(doc,input.CurrentGroupPublicKey, input.PropagationKey);
+
+
                 var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
                 executor.Execute(rout.Group);
                 var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
                 validator.Execute(rout.Group);
-
-                if (input.PropagationKey.HasValue)
-                {
-
-                    result = new PropagatedGroupMobileView(doc, rout.Group);
-                }
-                else
-                {
-
-                    result = new CompleteGroupMobileView(doc, (CompleteGroup)rout.Group);
-                }
-
+                result = new ScreenGroupView(doc, rout.Group, rout.Navigation);
             }
             return result;
         }

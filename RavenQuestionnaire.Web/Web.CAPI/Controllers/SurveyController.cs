@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Core.CAPI.Views.CompleteQuestionnaire;
 using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView;
 using Main.Core.View.Answer;
 
@@ -275,8 +276,8 @@ namespace Web.CAPI.Controllers
                 throw new HttpException(404, "Invalid query string parameters");
             }
 
-            CompleteQuestionnaireMobileView model =
-                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+            ScreenGroupView model =
+                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
                     new CompleteQuestionnaireViewInputModel(id)
                         {
                            CurrentGroupPublicKey = group, PropagationKey = propagationKey 
@@ -545,8 +546,8 @@ namespace Web.CAPI.Controllers
                     this.Json(new {questionPublicKey = publicKey, error = e.Message});
             }
 
-            PropagatedGroupsContainer model =
-                this.viewRepository.Load<PropagatedGridViewInputModel, PropagatedGroupsContainer>(
+            PropagatedGroupGridContainer model =
+                this.viewRepository.Load<PropagatedGridViewInputModel, PropagatedGroupGridContainer>(
                     new PropagatedGridViewInputModel(questionnaireId, parentGroupPublicKey));
             return this.Json(model);
         }
@@ -573,8 +574,8 @@ namespace Web.CAPI.Controllers
                 return this.Json(new { question = publicKey, error = e.Message });
             }
 
-            PropagatedGroupsContainer model =
-               this.viewRepository.Load<PropagatedGridViewInputModel, PropagatedGroupsContainer>(
+            PropagatedGroupGridContainer model =
+               this.viewRepository.Load<PropagatedGridViewInputModel, PropagatedGroupGridContainer>(
                    new PropagatedGridViewInputModel(questionnaireId, parentGroupPublicKey));
             return this.Json(model);
         }
@@ -648,24 +649,12 @@ namespace Web.CAPI.Controllers
                 throw new HttpException(404, "Invalid query string parameters");
             }
 
-            CompleteGroupMobileView model =
-                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>(
+            ScreenGroupView model =
+                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
                     new CompleteQuestionnaireViewInputModel(id, group, propagationKey));
             this.ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             this.ViewBag.PagePrefix = string.Empty;
             return this.PartialView("_SurveyContent", model);
-        }
-        public ActionResult PropagatedGrid(Guid id, Guid group)
-        {
-            if (id == Guid.Empty)
-            {
-                throw new HttpException(404, "Invalid query string parameters");
-            }
-            PropagatedGroupsContainer model =
-              this.viewRepository.Load<PropagatedGridViewInputModel, PropagatedGroupsContainer>(
-                  new PropagatedGridViewInputModel(id, group));
-            
-            return View("Group/_GridPropagatedView", model);
         }
 
         /// <summary>
@@ -709,38 +698,6 @@ namespace Web.CAPI.Controllers
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                         new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
             return this.PartialView("Complete/_Unanswered", stat);
-        }
-
-        /// <summary>
-        /// The _ survey content.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="group">
-        /// The group.
-        /// </param>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <returns>
-        /// The System.Web.Mvc.PartialViewResult.
-        /// </returns>
-        /// <exception cref="HttpException">
-        /// </exception>
-        [HttpPost]
-        public PartialViewResult _SurveyContent(Guid id, Guid? group, Guid? question)
-        {
-            if (Guid.Empty == id)
-            {
-                throw new HttpException(404, "Invalid query string parameters");
-            }
-
-            CompleteQuestionnaireMobileView model =
-                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
-                    new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group });
-            this.ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
-            return this.PartialView("_SurveyContent", model);
         }
 
         #endregion
