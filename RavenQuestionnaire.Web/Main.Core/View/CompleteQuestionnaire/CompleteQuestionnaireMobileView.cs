@@ -243,7 +243,7 @@ namespace Main.Core.View.CompleteQuestionnaire
         {
             var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
             executor.Execute(group);
-            var currentGroup = new CompleteGroupMobileView(doc, group, navigation);
+            var currentGroup = new CompleteGroupMobileView(doc, group);
             this.InitGroups(doc, screenPublicKey);
             this.Totals = this.CalcProgress(doc);
             this.CurrentScreen = currentGroup.Propagated != Propagate.None

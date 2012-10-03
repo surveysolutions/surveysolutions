@@ -561,7 +561,6 @@
     <Content Include="Views\Resource\Upload.cshtml" />
     <Content Include="Views\Resource\Index.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Image.cshtml" />
-    <Content Include="Views\CompleteQuestionnaire\QuestionHtml5.cshtml" />
     <Content Include="Views\Group\_ScreenHtml5.cshtml" />
     <Content Include="Views\Shared\_LayputHtml5.cshtml" />
     <Content Include="Views\Question\_TakeRowHtml5.cshtml" />
@@ -582,7 +581,6 @@
     <Content Include="Views\Group\Mobile\_SimpleGroup.cshtml" />
     <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
     <Content Include="Views\Answer\_EditCollectionItem.cshtml" />
-    <Content Include="Views\Shared\MobileGroupNavigation.cshtml" />
     <Content Include="Views\Shared\MobileProgressBar.cshtml" />
     <Content Include="Views\Collection\Index.cshtml" />
     <Content Include="Views\Collection\Edit.cshtml" />
