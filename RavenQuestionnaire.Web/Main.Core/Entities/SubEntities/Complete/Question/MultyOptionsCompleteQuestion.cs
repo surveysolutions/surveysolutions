@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MultyOptionsCompleteQuestion.cs" company="">
-//   
+// <copyright file="MultyOptionsCompleteQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The multy options complete question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
@@ -184,7 +185,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             IEnumerable<object> answers = this.Children.Where(c => ((ICompleteAnswer)c).Selected).Select(
                     c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).ToArray();
 
-            return !answers.Any() ? null : answers;
+            return answers.Any() ? answers : null;
 
         }
 
@@ -207,15 +208,8 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override string GetAnswerString()
         {
-            IEnumerable<ICompleteAnswer> answers = this.Find<ICompleteAnswer>(a => a.Selected);
-            if (!answers.Any())
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return string.Join(", ", answers.Select(a => a.AnswerText));
-            }
+            IEnumerable<ICompleteAnswer> answers = this.Find<ICompleteAnswer>(a => a.Selected).ToArray();
+            return answers.Any() ? string.Join(", ", answers.Select(a => a.AnswerText)) : string.Empty;
         }
 
         /// <summary>

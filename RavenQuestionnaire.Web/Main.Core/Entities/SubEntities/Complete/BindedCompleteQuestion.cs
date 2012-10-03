@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BindedCompleteQuestion.cs" company="">
-//   
+// <copyright file="BindedCompleteQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The binded complete question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;

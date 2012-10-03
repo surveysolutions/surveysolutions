@@ -14,6 +14,7 @@ namespace Main.Core.ExpressionExecutors
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.ExpressionExecutors.ExpressionExtentions;
 
     using NCalc;
 
@@ -114,13 +115,16 @@ namespace Main.Core.ExpressionExecutors
                     Guid nameGuid = Guid.Parse(name);
                     Guid? propagationKey = question.PropogationPublicKey;
                     var targetQuestion = this.hash[nameGuid, propagationKey];
-                    if(!targetQuestion.Enabled)
+                    if (targetQuestion == null || !targetQuestion.Enabled)
                     {
                         args.Result = null;
                         return;
                     }
                     args.Result = targetQuestion.GetAnswerObject();
                 };
+
+            expression.EvaluateFunction += ExtentionFunctions.EvaluateFunctionContains; ////support for multioption
+
             bool result = false;
             try
             {

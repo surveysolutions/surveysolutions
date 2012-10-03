@@ -293,6 +293,7 @@
     <Compile Include="Events\User\UserStatusChanged.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
+    <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs" />
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />
     <Compile Include="NCQRSInit.cs" />
