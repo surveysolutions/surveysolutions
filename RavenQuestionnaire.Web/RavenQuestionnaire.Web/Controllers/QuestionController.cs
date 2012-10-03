@@ -189,7 +189,6 @@ namespace RavenQuestionnaire.Web.Controllers
             QuestionView model =
                 this.viewRepository.Load<QuestionViewInputModel, QuestionView>(
                     new QuestionViewInputModel(publicKey.Value, questionnaireKey.Value));
-            this.LoadGroups(questionnaireKey.Value, model.Parent);
             return this.PartialView("_Create", model);
         }
 
@@ -405,7 +404,6 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     this.ModelState.AddModelError(
                         string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
-                    this.LoadGroups(model.QuestionnaireKey, model.Parent);
                     return this.PartialView("_Create", model);
                 }
 
@@ -482,11 +480,12 @@ namespace RavenQuestionnaire.Web.Controllers
 
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult CreatePropagateGroup(Guid questionPublicKey, Guid groupPublicKey, Guid questionnaireId)
+        public ActionResult CreatePropagateGroup(Guid questionPublicKey, Guid questionnaireId)
         {
-            this.LoadGroups(questionnaireId, groupPublicKey);
-            return this.PartialView(
-                "_AutoPropagateRow", new QuestionView { Parent = questionPublicKey, PublicKey = Guid.NewGuid() });
+            QuestionView source =
+                this.viewRepository.Load<QuestionViewInputModel, QuestionView>(
+                    new QuestionViewInputModel(questionPublicKey, questionnaireId));
+            return this.PartialView("_AutoPropagateRow", source);
         }
 
 
@@ -536,47 +535,6 @@ namespace RavenQuestionnaire.Web.Controllers
                 this.ViewBag.Images = imagesList;
             }
         }
-
-        /// <summary>
-        /// LoadAllGroups
-        /// </summary>
-        /// <param name="questionnaireId">
-        /// The questionnaire id.
-        /// </param>
-        private void LoadGroups(Guid questionnaireId, Guid? groupPublicKey)
-        {
-            QuestionnaireView model =
-                this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                    new QuestionnaireViewInputModel(questionnaireId));
-            var groups = new Dictionary<string, Guid>();
-            if (model != null) 
-                foreach (var group in model.Groups) 
-                    this.SelectAll(group, groups, groupPublicKey);
-            this.ViewBag.Groups = groups;
-        }
-
-        /// <summary>
-        /// Select all groups
-        /// </summary>
-        /// <param name="currentGroup">
-        /// The current group.
-        /// </param>
-        /// <param name="groups">
-        /// The groups.
-        /// </param>
-        /// <param name="groupPublicKey">
-        /// The group Public Key.
-        /// </param>
-        private void SelectAll(GroupView currentGroup, Dictionary<string, Guid> groups, Guid? groupPublicKey)
-        {
-            if (groupPublicKey == null || groupPublicKey != currentGroup.PublicKey)
-                groups.Add(string.Format("{0}-{1}", currentGroup.Title, currentGroup.PublicKey), currentGroup.PublicKey);
-                if (currentGroup.Groups.Count() > 0) 
-                    foreach (var childGroup in currentGroup.Groups) 
-                        this.SelectAll(childGroup, groups, groupPublicKey);
-        }
-
-
 
         /// <summary>
         /// The resize image.
