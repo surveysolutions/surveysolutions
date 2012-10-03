@@ -1,0 +1,17 @@
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\obj\Debug\ResolveAssemblyReference.cache
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\bin\Debug\AndroidCNinject.Extensions.Conventions.dll
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\bin\Debug\AndroidCNinject.Extensions.Conventions.pdb
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\bin\Debug\AndroidCNinject.Extensions.Conventions.dll.mdb
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\bin\Debug\AndroidCNinject.Extensions.Conventions.apk
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\bin\Debug\AndroidCNinject.Extensions.Conventions-Signed.apk
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\bin\Debug\AndroidNinject.dll
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\bin\Debug\AndroidNinject.Extensions.Factory.dll
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\bin\Debug\AndroidNinject.pdb
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\bin\Debug\AndroidNinject.dll.mdb
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\bin\Debug\AndroidNinject.Extensions.Factory.pdb
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\bin\Debug\AndroidNinject.Extensions.Factory.dll.mdb
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\obj\Debug\AndroidCNinject.Extensions.Conventions.dll
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\obj\Debug\AndroidCNinject.Extensions.Conventions.pdb
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\obj\Debug\android\bin\AndroidCNinject.Extensions.Conventions.apk
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\obj\Debug\R.cs.flag
+D:\washington\ninject-ninject.extensions.conventions-c2273dc\src\AndroidCNinject.Extensions.Conventions\obj\Debug\uploadflags.txt
