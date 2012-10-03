@@ -32,7 +32,7 @@ namespace Core.CAPI.Views
                 return new CapiScreenGroupView(doc, currentGroup, navigation);
             }
             var baseResult = base.BuildView(doc, currentGroup, navigation);
-            foreach (CompleteGroupMobileView completeGroupMobileView in baseResult.Group.Children.OfType<CompleteGroupMobileView>().Where(g => g.Propagated != Propagate.None).ToList())
+            foreach (CompleteGroupMobileView completeGroupMobileView in baseResult.Group.Children.OfType<CompleteGroupMobileView>().Where(g => g.Propagated != Propagate.None && g.Visualization == GroupVisualization.Grid).ToList())
             {
                 completeGroupMobileView.Children.Clear();
                 completeGroupMobileView.Propagated = Propagate.None;
