@@ -76,6 +76,14 @@
       <Project>{9268D360-154C-46C9-9B56-924DE80306A6}</Project>
       <Name>AndroidMain.Core.Tests</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidNCalc.Tests\AndroidNCalc.Tests.csproj">
+      <Project>{9F3A0A7A-471A-43CC-8E12-F465B413623D}</Project>
+      <Name>AndroidNCalc.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot.Test\AndroidNcqrs.Restoring.EventStapshoot.Test.csproj">
+      <Project>{7D58D343-D618-4FD2-A4C5-CFA90D533229}</Project>
+      <Name>AndroidNcqrs.Restoring.EventStapshoot.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Tests\AndroidNcqrs.Tests.csproj">
       <Project>{B1AA86AF-1FFA-4D20-B612-D7C119635438}</Project>
       <Name>AndroidNcqrs.Tests</Name>

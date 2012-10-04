@@ -276,6 +276,7 @@ Mono/AndroidMain.Core.Tests/bin/*
 Mono/AndroidMain.Core.Tests/obj/*
 Mono/AndroidMoq/bin/*
 Mono/AndroidMoq/obj/*
+*.cache
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*

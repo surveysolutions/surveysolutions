@@ -13,6 +13,8 @@ namespace AndroidNcqrs.Tests.Runner
 		{
 			//yield return typeof (NcqrsEnvironmentSpecs).Assembly;
 			//yield return typeof(Core.CAPI.Tests.Synchronization.ClientEventSyncTests).Assembly;
+			//yield return typeof(AndroidNcalc.Tests.Fixtures).Assembly;
+			//yield return typeof(Ncqrs.Restoring.EventStapshoot.test.SnapshootableAggregateRootTests).Assembly;
 			yield return typeof(RavenQuestionnaire.Core.Tests.Entities.QuestionTest).Assembly;
 		}
 
