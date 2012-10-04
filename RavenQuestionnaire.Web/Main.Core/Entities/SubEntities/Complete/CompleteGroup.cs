@@ -153,6 +153,8 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </summary>
         public Propagate Propagated { get; set; }
 
+        public GroupVisualization Visualization { get; set; }
+
         /// <summary>
         /// Gets or sets the propogation public key.
         /// </summary>
@@ -194,6 +196,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                     PublicKey = doc.PublicKey, 
                     Title = doc.Title, 
                     Propagated = doc.Propagated, 
+                    Visualization = doc.Visualization,
                     Triggers = doc.Triggers, 
                     ConditionExpression = doc.ConditionExpression,
                     Description = doc.Description
@@ -253,7 +256,12 @@ namespace Main.Core.Entities.SubEntities.Complete
                     IComposite group = this.Children.FirstOrDefault(g => g.PublicKey == propogateGroup.PublicKey);
                     if (group != null)
                     {
-                        this.Children.Add(propogateGroup);
+                        if (
+                            !this.Children.OfType<ICompleteGroup>().Any(
+                                g =>
+                                g.PublicKey == propogateGroup.PublicKey &&
+                                g.PropogationPublicKey == propogateGroup.PropogationPublicKey))
+                            this.Children.Add(propogateGroup);
                         return;
                     }
                 }

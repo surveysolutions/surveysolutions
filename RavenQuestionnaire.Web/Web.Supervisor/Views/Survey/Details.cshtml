@@ -1,6 +1,6 @@
 ﻿@using Main.Core.Entities.SubEntities
 @using Main.Core.View.Group
-@model Main.Core.View.CompleteQuestionnaire.CompleteQuestionnaireMobileView
+@model Main.Core.View.CompleteQuestionnaire.ScreenGroup.ScreenGroupView
  <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type = "text/javascript"> </script>
  <script type="text/javascript">
      $(document).ready(function () {
@@ -52,7 +52,7 @@
             <a href="@Url.Action("Assigments", new { id = ViewBag.TemplateId })">Back to list</a>
             @if (Model.Status.PublicId == SurveyStatus.Complete.PublicId || Model.Status.PublicId == SurveyStatus.Error.PublicId)
             {
-                <a href="@Url.Action("ShowComments", new { id = Model.PublicKey, template = ViewBag.TemplateId })" style="float: right;">Read comments</a>
+                <a href="@Url.Action("ShowComments", new { id = Model.QuestionnairePublicKey, template = ViewBag.TemplateId })" style="float: right;">Read comments</a>
             }
         </p>
     </div>
@@ -65,10 +65,10 @@
                 <!-- /header -->
                 <div data-role="content" class="well with-footer dummy-scroll">
                     <ul class="nav nav-list" data-role="listview" data-theme="c" data-dividertheme="d" data-counttheme="e">
-                        @foreach (CompleteGroupHeaders gh in Model.Groups)
+                        @foreach (CompleteGroupHeaders gh in Model.Navigation.Menu)
                         {
                             var activ = @gh.Enabled ? "" : "ui-disabled";
-                            <li class="@activ" id="@gh.PublicKey"><a class="nav-link" id="ref-link-@(gh.PublicKey)"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.PublicKey, group = gh.PublicKey })" >@gh.GroupText
+                            <li class="@activ" id="@gh.PublicKey"><a class="nav-link" id="ref-link-@(gh.PublicKey)"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = gh.PublicKey })" >@gh.GroupText
                                 <span id="counter-@(gh.PublicKey)" class="badge badge-info ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                         }
                     </ul>
@@ -78,7 +78,7 @@
     </div>
     <div class="span9">
         <div data-role="panel" data-id="main" id="content_container" class='@((Model.Status.PublicId == SurveyStatus.Complete.PublicId) ? "ui-disabled" : "")'>
-            @Html.Partial("_SurveyContent", Model.CurrentScreen)
+            @Html.Partial("_SurveyContent", Model)
         </div>
     </div>
 </div>
