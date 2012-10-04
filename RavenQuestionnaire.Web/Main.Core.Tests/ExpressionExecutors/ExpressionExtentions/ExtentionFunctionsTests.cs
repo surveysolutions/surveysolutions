@@ -45,14 +45,20 @@ namespace Main.Core.Tests.ExpressionExecutors.ExpressionExtentions
             answer1.AnswerValue = "2";
             answer1.Selected = true;
 
+            var answer2 = new CompleteAnswer(new Answer() { });
+            answer2.AnswerValue = "3";
+            answer2.Selected = true;
+
             var doc = new CompleteQuestionnaireDocument();
             var question = new MultyOptionsCompleteQuestion(string.Empty);
 
             question.ConditionExpression = "contains([" + question.PublicKey + "],1)";
-            question.ValidationExpression = "contains([" + question.PublicKey + "],2)";
+            question.ValidationExpression = "contains([" + question.PublicKey + "],3)" + " and " + "contains([" + question.PublicKey + "],2)";
+            
             doc.Children.Add(question);
             question.Children.Add(answer);
             question.Children.Add(answer1);
+            question.Children.Add(answer2);
 
             var executorC = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
             bool result = executorC.Execute(question);
