@@ -92,7 +92,7 @@
     <Compile Include="CompleteQuestionnaire\JsonSerrializer.cs" />
     <Compile Include="CompleteQuestionnaire\ListOfAggregateRootsForImportMessage.cs" />
     <Compile Include="Discover\ISpotSync.cs" />
-    <Compile Include="Handshake\IGetLastSyncEvent.cs" />
+    <Compile Include="Synchronization\IGetLastSyncEvent.cs" />
     <Compile Include="Synchronization\FormatHelper.cs" />
     <Compile Include="Synchronization\ICustomSerializable.cs" />
   </ItemGroup>
@@ -107,6 +107,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Handshake\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
