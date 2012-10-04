@@ -39,18 +39,9 @@
                     }
                     @Html.Hidden("PublicKey", pquestion.PublicKey)
                 } 
-                <p class="question-comment">
-                    @if (!string.IsNullOrEmpty(pquestion.Comments))
-                    {
-                        string idComment = "comments" + @pquestion.PublicKey;
-                       <span id="@idComment">Comments : @pquestion.Comments</span>
-                    }
-                    else
-                    {
-                        string idComment = "comments" + @pquestion.PublicKey;
-                       <span id="@idComment"></span>
-                    }
-                 </p>           
+            <p class="question-comment">
+                <span id="comments-@Model.PublicKey"> @pquestion.Comments</span>
+            </p>           
         </li>
     }
 </ul>

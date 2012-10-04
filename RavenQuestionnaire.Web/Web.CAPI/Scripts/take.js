@@ -71,10 +71,10 @@ function UpdateComments(data) {
 function UpdateCommentInGroup(group) {
     for (var j = 0; j < group.Questions.length; j++) {
         var key = group.Questions[j].PublicKey;
-        var id = "#comments" + key;
+        var id = "#comments-" + key;
         var commentscontent = group.Questions[j].Comments;
         if (commentscontent != null) {
-            $(id).html('Comments: ' + commentscontent);
+            $(id).html(commentscontent);
         }
         else {
             $(id).html('');
