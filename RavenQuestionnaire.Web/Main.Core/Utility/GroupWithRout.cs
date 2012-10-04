@@ -142,8 +142,8 @@ namespace Main.Core.Utility
                 groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
                 indexOfTarget = groupNeighbors.FindIndex(0, g => g.PublicKey == this.Group.PublicKey);
             }
-            if (indexOfTarget < 0)
-                throw new InvalidOperationException("groups wasn't founded");
+          /*  if (indexOfTarget < 0)
+                throw new InvalidOperationException("groups wasn't founded");*/
             if (indexOfTarget > 0)
             {
                 temtNavigation.PrevScreen = new CompleteGroupHeaders(groupNeighbors[indexOfTarget - 1]);

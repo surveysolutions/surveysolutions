@@ -10,6 +10,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.ExpressionExecutors;
 using Main.Core.View.Group;
 using Main.Core.View.Question;
 
@@ -50,7 +51,10 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                 new ScreenNavigationView(
                 doc.Children.OfType<ICompleteGroup>().Select(g => new CompleteGroupHeaders(g)), navigation))
         {
-
+            var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
+            executor.Execute(currentGroup);
+            var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
+            validator.Execute(currentGroup);
             BuildScreenContent(doc, currentGroup);
 
         }

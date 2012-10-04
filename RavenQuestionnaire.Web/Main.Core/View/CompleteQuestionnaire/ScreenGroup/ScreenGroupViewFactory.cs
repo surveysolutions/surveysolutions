@@ -67,10 +67,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
             GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
 
 
-            var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
-            executor.Execute(rout.Group);
-            var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
-            validator.Execute(rout.Group);
+          
             return this.sreenViewSupplier.BuildView(doc, rout.Group, rout.Navigation);
         }
 
