@@ -5,20 +5,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{15F83817-1405-42FE-B0B4-9A663851CC98}</ProjectGuid>
+    <ProjectGuid>{18843DE6-BA3F-4964-BB63-99635C3CAEDA}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AndroidNcqrs.Tests.Runner</RootNamespace>
-    <AssemblyName>AndroidNcqrs.Tests.Runner</AssemblyName>
+    <RootNamespace>AndroidCore.CAPI.Tests</RootNamespace>
+    <AssemblyName>AndroidCore.CAPI.Tests</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <AndroidApplication>true</AndroidApplication>
-    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <AndroidSupportedAbis>armeabi%3bx86</AndroidSupportedAbis>
-    <AndroidStoreUncompressedFileExtensions />
-    <MandroidI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,8 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
-    <AndroidLinkMode>None</AndroidLinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,11 +30,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,31 +39,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainActivity.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Synchronization\ClientEventSyncTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\AboutResources.txt" />
-    <None Include="Assets\AboutAssets.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Layout\Main.axml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Values\Strings.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AndroidNcqrs.Tests\AndroidNcqrs.Tests.csproj">
-      <Project>{B1AA86AF-1FFA-4D20-B612-D7C119635438}</Project>
-      <Name>AndroidNcqrs.Tests</Name>
+    <ProjectReference Include="..\AndroidCore.Capi\AndroidCore.Capi.csproj">
+      <Project>{ED790AED-465E-4787-A9A3-8380229E0470}</Project>
+      <Name>AndroidCore.Capi</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NUnitLite.MonoDroid.Runner\NUnitLite.MonoDroid.Runner.csproj">
-      <Project>{7E10B3F0-F646-43E1-A301-04FB8FE7B81B}</Project>
-      <Name>NUnitLite.MonoDroid.Runner</Name>
+    <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
+      <Project>{6B9B6AB7-8858-49A3-A44A-4B56EE31C12C}</Project>
+      <Name>AndroidMain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidMoq\AndroidMoq.csproj">
+      <Project>{B1606F2F-DA6A-400D-9313-F7822D326931}</Project>
+      <Name>AndroidMoq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
+      <Project>{1B9537F5-8650-467A-A280-DF6EA396D6C5}</Project>
+      <Name>AndroidNCQRS</Name>
     </ProjectReference>
     <ProjectReference Include="..\NUnitLite.MonoDroid\NUnitLite.MonoDroid.csproj">
       <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>
@@ -83,7 +66,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-     Other similar extension points exist, see Microsoft.Common.targets.
+       Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">

@@ -113,7 +113,10 @@ namespace Ninject
             Components.Add<ICachePruner, GarbageCollectionCachePruner>();
 
             #if !NO_ASSEMBLY_SCANNING
-            Components.Add<IModuleLoader, ModuleLoader>();
+			// AppDomain in monodroid works defferently then in standart .NET,
+			// that is why I replaced IModuleLoader implementation
+			//Components.Add<IModuleLoader, ModuleLoader>(); 
+			Components.Add<IModuleLoader, AndroidModuleLoader>();
             Components.Add<IModuleLoaderPlugin, CompiledModuleLoaderPlugin>();
             Components.Add<IAssemblyNameRetriever, AssemblyNameRetriever>();
             #endif

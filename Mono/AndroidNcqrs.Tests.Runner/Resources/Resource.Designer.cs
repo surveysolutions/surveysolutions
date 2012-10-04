@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AndroidNcqrs.Tests.Runner
+namespace Android.Tests.Runner
 {
 	
 	

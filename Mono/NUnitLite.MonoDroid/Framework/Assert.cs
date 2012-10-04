@@ -526,6 +526,22 @@ namespace NUnit.Framework
 		}
 		#endregion
 
-	    
+
+		#region Assert Aliases
+		public static void AreEqual(object expected, object actual)
+	    {
+		    Assert.That(expected, Is.EqualTo(actual));
+	    }
+
+		public static void IsNotNull(object anObject)
+	    {
+		    Assert.NotNull(anObject);
+		}
+
+		public static void IsTrue(bool statement)
+		{
+			Assert.True(statement);
+		}
+		#endregion
     }
 }

@@ -77,7 +77,7 @@ namespace Ninject.Modules
         private static IEnumerable<string> GetBaseDirectories()
         {
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            var searchPath = AppDomain.CurrentDomain.RelativeSearchPath;
+			var searchPath = AppDomain.CurrentDomain.RelativeSearchPath;
 
             return String.IsNullOrEmpty(searchPath) 
                 ? new[] {baseDirectory} 

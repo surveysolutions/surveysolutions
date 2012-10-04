@@ -66,7 +66,7 @@ namespace Ninject
         /// </summary>
         public string[] ExtensionSearchPatterns
         {
-            get { return Get("ExtensionSearchPatterns", new [] { "Ninject.Extensions.*.dll", "Ninject.Web*.dll" }); }
+            get { return Get("ExtensionSearchPatterns", new [] { "AndroidNinject.Extensions.*.dll", "AndroidNinject.Web*.dll" }); }
             set { Set("ExtensionSearchPatterns", value); }
         }
         #endif //!NO_ASSEMBLY_SCANNING

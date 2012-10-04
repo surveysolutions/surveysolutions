@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -112,6 +112,7 @@
     <Compile Include="Injection\ReflectionInjectorFactory.cs" />
     <Compile Include="IStartable.cs" />
     <Compile Include="KernelBase.cs" />
+    <Compile Include="Modules\AndroidModuleLoader.cs" />
     <Compile Include="Modules\AssemblyNameRetriever.cs" />
     <Compile Include="Modules\CompiledModuleLoaderPlugin.cs" />
     <Compile Include="Modules\IAssemblyNameRetriever.cs" />

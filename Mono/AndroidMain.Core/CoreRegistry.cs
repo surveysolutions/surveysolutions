@@ -31,12 +31,12 @@ namespace Main.Core
         /// <summary>
         /// The _is embeded.
         /// </summary>
-        private readonly bool isEmbeded;
+		//private readonly bool isEmbeded;
 
         /// <summary>
         /// The _repository path.
         /// </summary>
-        private readonly string repositoryPath;
+		//private readonly string repositoryPath;
 
         #endregion
 
@@ -52,10 +52,10 @@ namespace Main.Core
         /// <param name="isEmbeded">
         /// The is embeded.
         /// </param>
-        public CoreRegistry(string repositoryPath, bool isEmbeded)
+        public CoreRegistry()
         {
-            this.repositoryPath = repositoryPath;
-            this.isEmbeded = isEmbeded;
+			//this.repositoryPath = repositoryPath;
+			//this.isEmbeded = isEmbeded;
 
             // _isWeb = isWeb;
         }
