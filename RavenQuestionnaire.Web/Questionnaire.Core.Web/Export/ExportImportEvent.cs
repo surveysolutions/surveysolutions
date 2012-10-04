@@ -149,7 +149,7 @@ namespace Questionnaire.Core.Web.Export
             using (var zip = new ZipFile())
             {
                 var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-                zip.CompressionLevel = CompressionLevel.None;
+                zip.CompressionLevel = CompressionLevel.BestCompression;
                 zip.AddEntry(fileName, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
                 zip.Save(outputStream);
             }
