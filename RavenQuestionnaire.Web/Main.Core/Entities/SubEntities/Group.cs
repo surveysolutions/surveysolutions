@@ -33,6 +33,7 @@ namespace Main.Core.Entities.SubEntities
             this.Triggers = new List<Guid>();
             this.ConditionExpression = string.Empty;
             this.Description = string.Empty;
+            this.Enabled = true;
         }
 
         /// <summary>

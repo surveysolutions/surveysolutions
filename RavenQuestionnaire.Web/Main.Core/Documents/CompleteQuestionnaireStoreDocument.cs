@@ -311,7 +311,7 @@ namespace Main.Core.Documents
                     Description = doc.Description
                 };
 
-            result.Children.AddRange(doc.Children.ToList());
+            result.Children.AddRange(doc.Children);
             return result;
         }
 

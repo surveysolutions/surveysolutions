@@ -256,7 +256,12 @@ namespace Main.Core.Entities.SubEntities.Complete
                     IComposite group = this.Children.FirstOrDefault(g => g.PublicKey == propogateGroup.PublicKey);
                     if (group != null)
                     {
-                        this.Children.Add(propogateGroup);
+                        if (
+                            !this.Children.OfType<ICompleteGroup>().Any(
+                                g =>
+                                g.PublicKey == propogateGroup.PublicKey &&
+                                g.PropogationPublicKey == propogateGroup.PropogationPublicKey))
+                            this.Children.Add(propogateGroup);
                         return;
                     }
                 }
