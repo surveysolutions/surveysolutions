@@ -14,7 +14,7 @@
             var current = string.Empty;
             if (Model.Groups != null)
             {
-                current = Model.Groups.Where(gr => gr.Value == item).FirstOrDefault().Key;
+                current = this.Model.Groups.FirstOrDefault(gr => gr.Value == item).Key;
                 list = new SelectList(Model.Groups.Where(t => t.Key != current), "Value", "Key");
 
             }
