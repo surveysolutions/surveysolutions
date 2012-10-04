@@ -95,6 +95,7 @@
     <Compile Include="Events\EventSyncExtensionsTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutorTests.cs" />
+    <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctionsTests.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParserTest.cs" />
     <Compile Include="Domain\when_creating_a_new_questionnaire.cs" />
     <Compile Include="Domain\when_serializing_NewGroupAdded.cs" />
