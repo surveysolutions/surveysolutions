@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SingleCompleteQuestion.cs" company="">
-//   
+// <copyright file="SingleCompleteQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The single complete question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
@@ -109,13 +110,14 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// The public key.
         /// </param>
         /// <typeparam name="T">
+        /// T type.
         /// </typeparam>
         /// <returns>
         /// The T.
         /// </returns>
         public override T Find<T>(Guid publicKey)
         {
-            if (typeof(T).IsAssignableFrom(this.GetType()))
+            if (this is T)
             {
                 if (this.PublicKey.Equals(publicKey))
                 {
@@ -173,13 +175,9 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public override object GetAnswerObject()
         {
             IEnumerable<object> answers = this.Children.Where(c => ((ICompleteAnswer)c).Selected).Select(
-                    c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText);
-            if (answers.Any())
-            {
-                return answers.First();
-            }
-
-            return null;
+                    c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).ToArray();
+            
+            return answers.Any() ? answers.First() : null;
         }
 
         /// <summary>
@@ -202,14 +200,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public override string GetAnswerString()
         {
             ICompleteAnswer answer = this.Find<ICompleteAnswer>(a => a.Selected).FirstOrDefault();
-            if (answer == null)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return answer.AnswerText;
-            }
+            return answer == null ? string.Empty : answer.AnswerText;
         }
 
         /// <summary>
@@ -289,7 +280,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
                 return;
             }
 
-            throw new CompositeException("answer wasn't found");
+            throw new CompositeException("Answer wasn't found.");
         }
 
         #endregion

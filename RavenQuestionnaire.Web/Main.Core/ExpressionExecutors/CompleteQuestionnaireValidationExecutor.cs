@@ -10,10 +10,12 @@
 namespace Main.Core.ExpressionExecutors
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.ExpressionExecutors.ExpressionExtentions;
 
     using NCalc;
 
@@ -113,19 +115,23 @@ namespace Main.Core.ExpressionExecutors
 
                     Guid? propagationKey = question.PropogationPublicKey;
                     var targetQuestion = this.hash[nameGuid, propagationKey];
-                    if (!targetQuestion.Enabled)
+                    if (targetQuestion == null || !targetQuestion.Enabled)
                     {
                         args.Result = null;
                         return;
                     }
-                    args.Result = this.hash[nameGuid, propagationKey].GetAnswerObject();
+                    args.Result = targetQuestion.GetAnswerObject();
                 };
+
+            e.EvaluateFunction += ExtentionFunctions.EvaluateFunctionContains; ////support for multioption
+
+
             bool result = false;
             try
             {
                 result = (bool)e.Evaluate();
             }
-            catch (Exception)
+            catch (Exception exc)
             {
             }
 
