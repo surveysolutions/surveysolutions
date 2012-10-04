@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DataEntryClient.CompleteQuestionnaire.AbstractSyncProcess">
+    <Position X="3.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAABAAAACAAIAICAABIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompleteQuestionnaire\AbstractSyncProcess.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DataEntryClient.CompleteQuestionnaire.CompleteQuestionnaireSync">
+    <Position X="2" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAEBAAAAAAAAAACAABAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>CompleteQuestionnaire\CompleteQuestionnaireSync.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataEntryClient.CompleteQuestionnaire.UsbCompleteQuestionnaireSync">
+    <Position X="5.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAABAAAAAAAAIICAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompleteQuestionnaire\UsbCompleteQuestionnaireSync.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="DataEntryClient.CompleteQuestionnaire.ICompleteQuestionnaireSync">
+    <Position X="5.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAABAAAAAAAAAIAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompleteQuestionnaire\ICompleteQuestionnaireSync.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

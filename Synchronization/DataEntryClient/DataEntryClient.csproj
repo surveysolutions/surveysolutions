@@ -54,6 +54,12 @@
     <OutputPath>bin\Deploy-dev\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\..\ExternalLibs\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\RavenQuestionnaire.Web\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
@@ -63,14 +69,19 @@
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Discovery" />
+    <Reference Include="System.Web.Abstractions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompleteQuestionnaire\CompleteQuestionnaireSync.cs" />
+    <Compile Include="CompleteQuestionnaire\EventPipeCollector.cs" />
+    <Compile Include="CompleteQuestionnaire\WirelessSyncProcess.cs" />
+    <Compile Include="CompleteQuestionnaire\AbstractSyncProcess.cs" />
+    <Compile Include="CompleteQuestionnaire\UsbSyncProcess.cs" />
     <Compile Include="CompleteQuestionnaire\ICompleteQuestionnaireSync.cs" />
     <Compile Include="WcfInfrastructure\IChanelFactoryWrapper.cs" />
     <Compile Include="WcfInfrastructure\ServiceDiscover.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CompleteQuestionnaire\SyncProcess.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +96,10 @@
     <ProjectReference Include="..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
+      <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
+      <Name>Questionnaire.Core.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
