@@ -30,30 +30,34 @@ function GetCheck(i, j) {
 function JsonResults(data, status, xhr) {
 
     var group = jQuery.parseJSON(data.responseText);
+
     if (!group.error) {
-        UpdateInnerGroup(group);
-        UpdateCurrentGroup(group);
+        //  UpdateInnerGroup(group.Navigation.Menu);
+
         var allListElements = $('ul.ui-listview').find('li');
-        allListElements.each(function () {
+        allListElements.each(function() {
             var el = null;
-            for (var i = 0; i < group.Menu.length; i++) {
-                if (group.Menu[i].PublicKey == this.id) {
-                    el = group.Menu[i];
+            for (var i = 0; i < group.Navigation.Menu.length; i++) {
+                if (group.Navigation.Menu[i].PublicKey == this.id) {
+                    el = group.Navigation.Menu[i];
                     break;
                 }
             }
             if (el != null) {
                 if (el.Enabled && $(this).is('.ui-disabled')) {
                     $(this).removeClass('ui-disabled');
-                }
-                else {
+                } else {
                     if (!el.Enabled && !($(this).is('.ui-disabled')))
-                    $(this).addClass('ui-disabled');
+                        $(this).addClass('ui-disabled');
                 }
             }
         });
-    }
-    else
+
+
+        UpdateCurrentGroup(group);
+
+
+    } else
         SetErrorToQuestion(group.question, group.settings.PropogationPublicKey, group.error);
 
 }
@@ -83,19 +87,19 @@ function UpdateCommentInGroup(group) {
 }
 
 function UpdateInnerGroup(group) {
-    for (var i = 0; i < group.InnerGroups.length; i++) {
-        var groupElement = $("#"+group.InnerGroups[i].PublicKey);
+   // for (var i = 0; i < group.InnerGroups.length; i++) {
+        var groupElement = $("#"+group.PublicKey);
         groupElement.removeClass("ui-disabled");
-        if (!group.InnerGroups[i].Enabled) {
+        if (!group.Enabled) {
             groupElement.addClass("ui-disabled");
         }
-    }
+  //  }
 }
 
 function UpdateCurrentGroup(group) {
-    for (var j = 0; j < group.Menu.length; j++) {
-        var total = group.Menu[j].Totals;
-        var counterElement = $("#counter-" + group.Menu[j].PublicKey);
+    for (var j = 0; j < group.Navigation.Menu.length; j++) {
+        var total = group.Navigation.Menu[j].Totals;
+        var counterElement = $("#counter-" + group.Navigation.Menu[j].PublicKey);
         counterElement.html(total.Answered + "/" + total.Enablad);
         if (total.Answered == total.Enablad)
             counterElement.addClass('complete');
@@ -103,8 +107,14 @@ function UpdateCurrentGroup(group) {
             counterElement.removeClass('complete');
 
     }
-    for (var j = 0; j < group.Questions.length; j++) {
-        UpdateQuestion(group.Questions[j], group.Questions[j].GroupPublicKey);
+    if (group.Group) {
+        for (var i = 0; i < group.Group.Children.length; i++) {
+            if (group.Group.Children[i].QuestionType)
+                UpdateQuestion(group.Group.Children[i], group.Group.Children[i].GroupPublicKey);
+            else {
+                UpdateInnerGroup(group.Group.Children[i]);
+            }
+        }
     }
 }
 function UpdateQuestion(question) {

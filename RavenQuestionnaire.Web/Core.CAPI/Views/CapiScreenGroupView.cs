@@ -38,7 +38,7 @@ namespace Core.CAPI.Views
 
         protected void BuildGridContent(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup)
         {
-            if (currentGroup.Propagated != Propagate.None && !currentGroup.PropogationPublicKey.HasValue)
+            if (currentGroup.Propagated != Propagate.None/* && !currentGroup.PropogationPublicKey.HasValue*/)
             {
                 this.Grid = new PropagatedGroupGridContainer(doc, currentGroup);
                 foreach (

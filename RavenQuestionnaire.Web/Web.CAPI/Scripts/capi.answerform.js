@@ -48,8 +48,11 @@
             base.options = o = $.extend(true, {}, {}, options);
             //    if (!base.targetForm.data("answerFormInit")) {
             base.$el.ajaxSuccess(function (e, xhr, settings) {
-                if (e.target === base.el)
-                    base.AjaxSuccess(jQuery.parseJSON(xhr.responseText), getParameterByName('PropogationPublicKey', settings.data));
+                if ($.inArray('json', settings.dataTypes) < 0)
+                    return;
+                if (e.target !== base.el)
+                    return;
+                base.AjaxSuccess(jQuery.parseJSON(xhr.responseText).Grid, getParameterByName('PropogationPublicKey', settings.data));
             });
             /*    base.targetForm.data("answerFormInit", true);
             }*/

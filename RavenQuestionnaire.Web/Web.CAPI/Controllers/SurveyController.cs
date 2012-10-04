@@ -248,6 +248,17 @@ namespace Web.CAPI.Controllers
                 new DeletePropagatableGroupCommand(Guid.Parse(questionnaireId), propagationKey, publicKey));
             return this.Json(new { propagationKey });
         }
+        protected ScreenGroupView GetGroup(Guid questionnaireId, Guid? groupid, Guid? propagationKey)
+        {
+            return
+                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
+                    new CompleteQuestionnaireViewInputModel(questionnaireId)
+                        {
+                            CurrentGroupPublicKey = groupid,
+                            PropagationKey = propagationKey
+                        });
+
+        }
 
         /// <summary>
         /// The index.
@@ -276,12 +287,7 @@ namespace Web.CAPI.Controllers
                 throw new HttpException(404, "Invalid query string parameters");
             }
 
-            ScreenGroupView model =
-                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
-                    new CompleteQuestionnaireViewInputModel(id)
-                        {
-                           CurrentGroupPublicKey = group, PropagationKey = propagationKey 
-                        });
+            ScreenGroupView model = GetGroup(id, group, propagationKey);
             this.ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             this.ViewBag.PagePrefix = "page-to-delete";
             return View(model);
@@ -312,23 +318,6 @@ namespace Web.CAPI.Controllers
             return this.PartialView("Complete/_Invalid", stat);
         }
 
-        // move out of there!!
-        /*private SurveyStatus GetStatus(string id)
-        {
-            var statusView = viewRepository.Load<StatusItemViewInputModel, StatusItemView>(new StatusItemViewInputModel(id, true));
-            SurveyStatus status = new SurveyStatus();
-            if (statusView == null)
-            {
-                status.PublicId = new Guid("{A90E95AC-95E7-4ADC-B070-FDE36952769B}");
-                status.Name = "[Unknown]";
-            }
-            else
-            {
-                status.PublicId = statusView.PublicKey;
-                status.Name = statusView.Title;
-            }
-            return status;
-        }*/
 
         /// <summary>
         /// The participate.
@@ -475,10 +464,7 @@ namespace Web.CAPI.Controllers
                     this.Json(new { questionPublicKey = question.PublicKey, settings = settings[0], error = e.Message });
             }
 
-            CompleteQuestionnaireJsonView model =
-                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
-                    new CompleteQuestionnaireViewInputModel(
-                        settings[0].QuestionnaireId, settings[0].ParentGroupPublicKey, settings[0].PropogationPublicKey));
+            var model = GetGroup(settings[0].QuestionnaireId, settings[0].ParentGroupPublicKey, settings[0].PropogationPublicKey);
             return this.Json(model);
         }
         /// <summary>
@@ -546,9 +532,7 @@ namespace Web.CAPI.Controllers
                     this.Json(new {questionPublicKey = publicKey, error = e.Message});
             }
 
-            PropagatedGroupGridContainer model =
-                this.viewRepository.Load<PropagatedGridViewInputModel, PropagatedGroupGridContainer>(
-                    new PropagatedGridViewInputModel(questionnaireId, parentGroupPublicKey));
+            var model = GetGroup(questionnaireId, parentGroupPublicKey, propogationPublicKey);
             return this.Json(model);
         }
         public JsonResult SaveGroupComment(Guid questionnaireId,
@@ -574,9 +558,7 @@ namespace Web.CAPI.Controllers
                 return this.Json(new { question = publicKey, error = e.Message });
             }
 
-            PropagatedGroupGridContainer model =
-               this.viewRepository.Load<PropagatedGridViewInputModel, PropagatedGroupGridContainer>(
-                   new PropagatedGridViewInputModel(questionnaireId, parentGroupPublicKey));
+            var model = GetGroup(questionnaireId, parentGroupPublicKey, propogationPublicKey);
             return this.Json(model);
         }
         /// <summary>
@@ -613,12 +595,7 @@ namespace Web.CAPI.Controllers
                 return this.Json(new { question = questions[0], settings = settings[0], error = e.Message });
             }
 
-            CompleteQuestionnaireJsonView model =
-                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireJsonView>(
-                    new CompleteQuestionnaireViewInputModel(settings[0].QuestionnaireId)
-                        {
-                           CurrentGroupPublicKey = settings[0].ParentGroupPublicKey 
-                        });
+            var model = GetGroup(settings[0].QuestionnaireId, settings[0].ParentGroupPublicKey, settings[0].PropogationPublicKey);
             return this.Json(model);
         }
 
@@ -649,9 +626,7 @@ namespace Web.CAPI.Controllers
                 throw new HttpException(404, "Invalid query string parameters");
             }
 
-            ScreenGroupView model =
-                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
-                    new CompleteQuestionnaireViewInputModel(id, group, propagationKey));
+            ScreenGroupView model = GetGroup(id, group, propagationKey);
             this.ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             this.ViewBag.PagePrefix = string.Empty;
             return this.PartialView("_SurveyContent", model);
