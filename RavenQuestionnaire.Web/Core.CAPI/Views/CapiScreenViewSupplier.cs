@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using Main.Core.Documents;
+using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
@@ -42,9 +43,13 @@ namespace Core.CAPI.Views
                 completeGroupMobileView.Propagated = Propagate.None;
             }
             if (currentGroup.PropogationPublicKey.HasValue)
+            {
                 baseResult.Navigation.NavigationContent.BreadCumbs.Insert(
                     baseResult.Navigation.NavigationContent.BreadCumbs.Count,
                     new CompleteGroupHeaders() {GroupText = currentGroup.Title, PublicKey = currentGroup.PublicKey});
+                baseResult.Navigation.NavigationContent.CurrentScreenTitle =
+                    doc.GetGroupTitle(currentGroup.PropogationPublicKey.Value);
+            }
             return baseResult;
         }
 

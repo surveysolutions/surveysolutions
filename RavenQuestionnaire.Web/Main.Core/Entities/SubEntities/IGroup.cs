@@ -24,7 +24,6 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         Propagate Propagated { get; set; }
 
-        GroupVisualization Visualization { get; set; }
 
         /// <summary>
         /// Gets or sets the title.

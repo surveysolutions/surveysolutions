@@ -61,13 +61,7 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
         {
             if (!group.PropogationPublicKey.HasValue)
                 throw new ArgumentException("group have to be propagated");
-            AddRow(new PropagatedGroupRowItem(group,
-                                              string.Concat(doc.GetPropagatedGroupsByKey(
-                                                  group.PropogationPublicKey.Value).
-                                                                SelectMany(q => q.Children).
-                                                                OfType
-                                                                <ICompleteQuestion>().Where(q => q.Capital).Select(
-                                                                    q => q.GetAnswerString() + " "))));
+            AddRow(new PropagatedGroupRowItem(group, doc.GetGroupTitle(group.PropogationPublicKey.Value)));
         }
 
         public void AddRow(PropagatedGroupRowItem row)

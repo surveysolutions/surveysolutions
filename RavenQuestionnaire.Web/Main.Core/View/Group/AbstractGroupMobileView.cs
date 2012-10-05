@@ -61,10 +61,6 @@ namespace Main.Core.View.Group
         /// </summary>
         public Propagate Propagated { get; set; }
         /// <summary>
-        /// Gets or sets the propagated.
-        /// </summary>
-        public GroupVisualization Visualization { get; set; }
-        /// <summary>
         /// Gets or sets the public key.
         /// </summary>
         public Guid PublicKey { get; set; }

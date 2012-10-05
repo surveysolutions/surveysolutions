@@ -153,8 +153,6 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </summary>
         public Propagate Propagated { get; set; }
 
-        public GroupVisualization Visualization { get; set; }
-
         /// <summary>
         /// Gets or sets the propogation public key.
         /// </summary>
@@ -196,7 +194,6 @@ namespace Main.Core.Entities.SubEntities.Complete
                     PublicKey = doc.PublicKey, 
                     Title = doc.Title, 
                     Propagated = doc.Propagated, 
-                    Visualization = doc.Visualization,
                     Triggers = doc.Triggers, 
                     ConditionExpression = doc.ConditionExpression,
                     Description = doc.Description

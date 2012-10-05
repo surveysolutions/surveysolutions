@@ -71,7 +71,6 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                 PublicKey = currentGroup.PublicKey,
                 Title = currentGroup.Title,
                 Propagated = currentGroup.Propagated,
-                Visualization = currentGroup.Visualization,
                 Enabled = currentGroup.Enabled,
                 Description = currentGroup.Description,
                 QuestionnairePublicKey = doc.PublicKey

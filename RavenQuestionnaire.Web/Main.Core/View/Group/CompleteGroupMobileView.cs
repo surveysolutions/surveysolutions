@@ -52,7 +52,6 @@ namespace Main.Core.View.Group
             this.PublicKey = currentGroup.PublicKey;
             this.Title = currentGroup.Title;
             this.Propagated = currentGroup.Propagated;
-            this.Visualization = currentGroup.Visualization;
             this.Enabled = currentGroup.Enabled;
             this.Description = currentGroup.Description;
             this.IsQuestionnaireActive = !SurveyStatus.IsStatusAllowCapiSync(doc.Status);

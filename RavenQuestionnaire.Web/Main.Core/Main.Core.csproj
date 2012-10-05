@@ -243,7 +243,6 @@
     <Compile Include="Entities\SubEntities\UserLight.cs" />
     <Compile Include="Entities\SubEntities\UserRoles.cs" />
     <Compile Include="Entities\SubEntities\VisitedGroup.cs" />
-    <Compile Include="Entities\SubEntities\GroupVisualization.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
