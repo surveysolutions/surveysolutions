@@ -532,7 +532,7 @@ namespace Web.CAPI.Controllers
                     this.Json(new {questionPublicKey = publicKey, error = e.Message});
             }
 
-            var model = GetGroup(questionnaireId, parentGroupPublicKey, propogationPublicKey);
+            var model = GetGroup(questionnaireId, parentGroupPublicKey, null);
             return this.Json(model);
         }
         public JsonResult SaveGroupComment(Guid questionnaireId,
@@ -558,7 +558,7 @@ namespace Web.CAPI.Controllers
                 return this.Json(new { question = publicKey, error = e.Message });
             }
 
-            var model = GetGroup(questionnaireId, parentGroupPublicKey, propogationPublicKey);
+            var model = GetGroup(questionnaireId, parentGroupPublicKey, null);
             return this.Json(model);
         }
         /// <summary>

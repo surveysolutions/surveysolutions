@@ -12,8 +12,8 @@
 
     <div class="ui-grid-b" data-theme="e">
         <div class="ui-block-a">
-            <div style="height: 80px" class="ui-bar ui-bar-b">
-                &nbsp;</div>
+            <div style="height: 80px" class="ui-bar ui-bar-e">
+           Group Name</div>
         </div>
         @for (int i = 0; i < Math.Min(step, Model.Columns.Count - skipped); i++)
         {
@@ -34,7 +34,7 @@
     <div class="ui-grid-b">
         <div class="ui-block-a">
             <div class="ui-bar ui-bar-c" style="height: 50px">
-                @row.Title
+                <a href="@Url.Action("Screen", "Survey", new { id = Model.QuestionnairePublicKey, group = Model.PublicKey, question = Model.Columns[skipped].ItemPublicKey, propagationKey = row.PropagationKey })" data-corners="false">@row.Title&nbsp;</a>
             </div>
         </div>
         @for (int i = 0; i < Math.Min(step, Model.Columns.Count - skipped); i++)

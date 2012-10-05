@@ -30,6 +30,7 @@
                 base.targetForm = jTargetForm.answerForm().getAnswerForm();
             }
             base.$el.parent().bind(base.activeEvent, function (e) {
+                //    base.$el.parent().addClass('ui-bar-e');
                 base.targetForm.open(e, base);
             });
 
@@ -51,6 +52,9 @@
                 if ($.inArray('json', settings.dataTypes) < 0)
                     return;
                 if (e.target !== base.el)
+                    return;
+                var jsonResponse = jQuery.parseJSON(xhr.responseText);
+                if (!jsonResponse.Grid)
                     return;
                 base.AjaxSuccess(jQuery.parseJSON(xhr.responseText).Grid, getParameterByName('PropogationPublicKey', settings.data));
             });
@@ -81,7 +85,7 @@
                     return;
                 $.each(value.Answers, function (answerIndex, answerValue) {
                     var target = $('div[question-propagation-key=' + rowKey + '][question-item=' + answerValue.PublicKey + ']');
-             //       var targetPanel = target.parent();
+                    //       var targetPanel = target.parent();
                     var containers = target.find('span');
                     $(containers[0]).text(answerValue.AnswerString);
                     $(containers[1]).text(answerValue.Comments);
@@ -106,15 +110,15 @@
                 });
             });
         };
-        base.openDialog = function () {
-            $('#grid-popup-' + base.questionId).popup('open');
+        base.openDialog = function (x, y) {
+            $('#grid-popup-' + base.questionId).popup('open', x, y);
         };
         base.SingleOption = function (e, target) {
             var questionAnswer = target.$el.attr('question-answer-key');
             base.$el.find("input[type='radio']").attr('checked', false).checkboxradio("refresh");
             var inputForSelect = base.$el.find('input[value=' + questionAnswer + ']');
-            inputForSelect.attr('checked', true).checkboxradio("refresh");
-            base.openDialog();
+            inputForSelect.attr('checked', true).checkboxradio("refresh"); /*target.$el.offset().top + 'px'*/
+            base.openDialog(target.$el.offset().left, target.$el.offset().top);
         };
 
         base.YesNo = function (e, target) {
