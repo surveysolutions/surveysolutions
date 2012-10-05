@@ -46,25 +46,28 @@ namespace Main.Core.View.Group
         /// </summary>
         public bool Enabled { get; set; }
 
-        /// <summary>
-        /// Gets or sets the navigation.
-        /// </summary>
-        public ScreenNavigation Navigation { get; set; }
 
         /// <summary>
         /// Gets or sets the parent.
         /// </summary>
         public Guid? Parent { get; set; }
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the propagated.
         /// </summary>
         public Propagate Propagated { get; set; }
-
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
         public Guid PublicKey { get; set; }
+        /// <summary>
+        /// get or set questionnaire active status - active if allow to edit, not error or completed
+        /// </summary>
+        public bool IsQuestionnaireActive { get; set; }
 
         /// <summary>
         /// Gets or sets the questionnaire public key.

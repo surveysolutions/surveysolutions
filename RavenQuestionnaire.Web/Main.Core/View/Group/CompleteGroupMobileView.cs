@@ -30,7 +30,6 @@ namespace Main.Core.View.Group
         public CompleteGroupMobileView()
         {
             this.Propagated = Propagate.None;
-            this.Navigation = new ScreenNavigation();
         }
 
         /// <summary>
@@ -46,11 +45,10 @@ namespace Main.Core.View.Group
         /// The navigation.
         /// </param>
         public CompleteGroupMobileView(
-            CompleteQuestionnaireStoreDocument doc, CompleteGroup currentGroup, ScreenNavigation navigation)
+            CompleteQuestionnaireStoreDocument doc, CompleteGroup currentGroup)
             : this()
         {
             this.QuestionnairePublicKey = doc.PublicKey;
-            this.Navigation = navigation;
             this.PublicKey = currentGroup.PublicKey;
             this.Title = currentGroup.Title;
             this.Propagated = currentGroup.Propagated;
@@ -59,7 +57,7 @@ namespace Main.Core.View.Group
             this.IsQuestionnaireActive = !SurveyStatus.IsStatusAllowCapiSync(doc.Status);
             if (currentGroup.Propagated != Propagate.None)
             {
-                this.PropagateTemplate = new PropagatedGroupMobileView(doc, currentGroup, navigation);
+                this.PropagateTemplate = new PropagatedGroupMobileView(doc, currentGroup);
             }
             else
             {
@@ -76,7 +74,7 @@ namespace Main.Core.View.Group
                         var g = composite as CompleteGroup;
                         if (g.Propagated == Propagate.None || !g.PropogationPublicKey.HasValue)
                         {
-                            this.Children.Add(new CompleteGroupMobileView(doc, g, new ScreenNavigation()));
+                            this.Children.Add(new CompleteGroupMobileView(doc, g));
                         }
                         else
                         {
@@ -97,16 +95,9 @@ namespace Main.Core.View.Group
 
         #region Public Properties
 
-        /// <summary>
-        /// Gets or sets Description.
-        /// </summary>
-        public string Description { get; set; }
+        
 
-        /// <summary>
-        /// get or set questionnaire active status - active if allow to edit, not error or completed
-        /// </summary>
-        public bool IsQuestionnaireActive { get; set; }
-
+     
         /// <summary>
         /// Gets or sets the propagate template.
         /// </summary>

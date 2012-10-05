@@ -150,6 +150,7 @@ namespace Main.Core.ExpressionExecutors
         public bool Execute(ICompleteGroup group)
         {
             bool result = this.ExecuteGroup(group);
+            group.Enabled = result;
             this.UpdateAllChildElementsInGroup(group, result);
             return result;
         }

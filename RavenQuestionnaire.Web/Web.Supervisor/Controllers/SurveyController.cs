@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
+
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -299,7 +301,7 @@ namespace Web.Supervisor.Controllers
         {
             //if (id)
             //    throw new HttpException(404, "Invalid query string parameters");
-            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
                 new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             ViewBag.TemplateId = template;
@@ -325,7 +327,7 @@ namespace Web.Supervisor.Controllers
         {
             //if (string.IsNullOrEmpty(id))
             //    throw new HttpException(404, "Invalid query string parameters");
-            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>(
+            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
                 new CompleteQuestionnaireViewInputModel(id, group, propagationKey));
             ViewBag.CurrentQuestion = new Guid();
             ViewBag.PagePrefix = "";
@@ -485,7 +487,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult ShowComments(Guid id, string template)
         {
-            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
                 new CompleteQuestionnaireViewInputModel(id));
             ViewBag.TemplateId = template;
             return this.View("Comments", model);

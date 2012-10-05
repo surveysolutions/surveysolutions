@@ -302,8 +302,10 @@
     <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="Utility\EnumerableExtensions.cs" />
     <Compile Include="Utility\EventMergeUtils.cs" />
+    <Compile Include="Utility\GroupWithRout.cs" />
     <Compile Include="Utility\IdUtil.cs" />
     <Compile Include="Utility\LINQExtensions.cs" />
+    <Compile Include="Utility\NodeWithLevel.cs" />
     <Compile Include="Utility\OrderStrategy\AsIsStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\AZStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\IOrderStrategy.cs" />
@@ -321,10 +323,12 @@
     <Compile Include="View\Card\CardViewInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
-    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireMabileViewFactory.cs" />
-    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireMobileView.cs" />
-    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireMobileViewFactory.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
+    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\DefaultScreenViewSupplier.cs" />
+    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\IScreenViewSupplier.cs" />
+    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\ScreenGroupView.cs" />
+    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\ScreenGroupViewFactory.cs" />
+    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\ScreenNavigationView.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticView.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewFactory.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />

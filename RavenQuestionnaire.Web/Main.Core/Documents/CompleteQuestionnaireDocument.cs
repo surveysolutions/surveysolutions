@@ -130,6 +130,7 @@ namespace Main.Core.Documents
             }
         }
 
+
         /// <summary>
         /// Gets or sets the propogation public key.
         /// </summary>

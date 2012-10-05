@@ -14,10 +14,10 @@ namespace Web.CAPI.Injections
     using System.Reflection;
 
     using Core.CAPI.Synchronization;
-
+using Core.CAPI.Views;
     using Main.Core;
     using Main.Core.Events;
-
+using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
     using Questionnaire.Core.Web.Export;
     using Questionnaire.Core.Web.Security;
 
@@ -64,10 +64,9 @@ namespace Web.CAPI.Injections
         public override void Load()
         {
             base.Load();
-            this.Unbind<IEventSync>();
-            this.Bind<IEventSync>().To<ClientEventSync>();
-            this.Unbind<IExportImport>();
-            this.Bind<IExportImport>().To<ExportImportEvent>();
+    
+            this.Unbind<IScreenViewSupplier>();
+            this.Bind<IScreenViewSupplier>().To<CapiScreenViewSupplier>();
         }
 
         #endregion

@@ -10,6 +10,7 @@ textarea{ resize: none;}
 .ui-header.bradcrumbs h1{ position: absolute;top: 0px;}
 .answered{ border-color: green;border-width: 2px;}
 .answered.error_block{ border-color: red;}
+.key_grid{ top: 0 !important;left: auto !important;right: 0 !important;}
 .ui-no-corners .ui-btn-corner-all
 {
 	border-radius: 0;

@@ -24,6 +24,7 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         Propagate Propagated { get; set; }
 
+
         /// <summary>
         /// Gets or sets the title.
         /// </summary>
