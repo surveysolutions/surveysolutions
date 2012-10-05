@@ -20,6 +20,8 @@ namespace Web.CAPI.Controllers
 
     using DataEntryClient.CompleteQuestionnaire;
 
+    using Ionic.Zip;
+
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
@@ -86,9 +88,9 @@ namespace Web.CAPI.Controllers
         /// The synchronizer.
         /// </param>
         public SynchronizationsController(
-            IViewRepository viewRepository, 
-            IGlobalInfoProvider globalProvider, 
-            IExportImport exportImport, 
+            IViewRepository viewRepository,
+            IGlobalInfoProvider globalProvider,
+            IExportImport exportImport,
             IEventSync synchronizer)
         {
             this.exportimportEvents = exportImport;
@@ -121,18 +123,18 @@ namespace Web.CAPI.Controllers
             UserLight user = this._globalProvider.GetCurrentUser();
             AsyncQuestionnaireUpdater.Update(
                 () =>
+                {
+                    try
                     {
-                        try
-                        {
-                            this.AsyncManager.Parameters["result"] = new ServiceDiscover().DiscoverChannels();
-                        }
-                        catch
-                        {
-                            this.AsyncManager.Parameters["result"] = null;
-                        }
+                        this.AsyncManager.Parameters["result"] = new ServiceDiscover().DiscoverChannels();
+                    }
+                    catch
+                    {
+                        this.AsyncManager.Parameters["result"] = null;
+                    }
 
-                        this.AsyncManager.OutstandingOperations.Decrement();
-                    });
+                    this.AsyncManager.OutstandingOperations.Decrement();
+                });
         }
 
         /// <summary>
@@ -166,23 +168,33 @@ namespace Web.CAPI.Controllers
         /// <param name="syncKey">
         /// The sync key.
         /// </param>
-        public void ExportAsync(Guid syncKey)
+        /// <returns>
+        /// The export async key.
+        /// </returns>
+        public Guid? ExportAsync(Guid syncKey)
         {
+            Guid syncProcess = Guid.NewGuid();
             this.AsyncManager.OutstandingOperations.Increment();
             AsyncQuestionnaireUpdater.Update(
                 () =>
+                {
+                    byte[] file;
+                    try
                     {
-                        try
-                        {
-                            this.AsyncManager.Parameters["result"] = this.exportimportEvents.Export(syncKey);
-                        }
-                        catch
-                        {
-                            this.AsyncManager.Parameters["result"] = null;
-                        }
+                        var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
+                        file = process.Export(syncKey);
+                    }
+                    catch (Exception e)
+                    {
+                        file = null;
+                        Logger logger = LogManager.GetCurrentClassLogger();
+                        logger.Fatal(e);
+                    }
 
-                        this.AsyncManager.OutstandingOperations.Decrement();
-                    });
+                    this.AsyncManager.Parameters["result"] = file;
+                    this.AsyncManager.OutstandingOperations.Decrement();
+                });
+            return syncProcess;
         }
 
         /// <summary>
@@ -265,7 +277,7 @@ namespace Web.CAPI.Controllers
         public ActionResult ProgressPartial(Guid id)
         {
             return this.PartialView(
-                "_ProgressContent", 
+                "_ProgressContent",
                 this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
         }
 
@@ -279,6 +291,7 @@ namespace Web.CAPI.Controllers
         /// The sync key.
         /// </param>
         /// <returns>
+        /// Process guid
         /// </returns>
         public Guid Pull(string url, Guid syncKey)
         {
@@ -289,7 +302,7 @@ namespace Web.CAPI.Controllers
                 {
                     try
                     {
-                        var process = new CompleteQuestionnaireSync(KernelLocator.Kernel, syncProcess, url);
+                        var process = new WirelessSyncProcess(KernelLocator.Kernel, syncProcess, url);
                         process.Import(syncKey);
                     }
                     catch (Exception e)
@@ -305,31 +318,53 @@ namespace Web.CAPI.Controllers
         /// <summary>
         /// The import async.
         /// </summary>
-        /// <param name="myfile">
-        /// The myfile.
+        /// <param name="uploadFile">
+        /// Uploaded file
         /// </param>
+        /// <returns>
+        /// The import async.
+        /// </returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public void ImportAsync(HttpPostedFileBase myfile)
+        public Guid? ImportAsync(HttpPostedFileBase uploadFile)
         {
-            if (myfile == null && this.Request.Files.Count > 0)
+            if (uploadFile == null && this.Request.Files.Count > 0)
             {
-                myfile = this.Request.Files[0];
+                uploadFile = this.Request.Files[0];
             }
 
-            if (myfile != null && myfile.ContentLength != 0)
+            if (uploadFile == null || uploadFile.ContentLength == 0)
             {
-                Guid syncProcess = Guid.NewGuid();
-                var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
+                return null;
+            }
 
-                this.AsyncManager.OutstandingOperations.Increment();
-                AsyncQuestionnaireUpdater.Update(
-                    () =>
+            if (!ZipFile.IsZipFile(uploadFile.InputStream, false))
+            {
+                return null;
+            }
+
+            uploadFile.InputStream.Position = 0;
+
+            var zip = ZipFile.Read(uploadFile.InputStream);
+
+            Guid syncProcess = Guid.NewGuid();
+            this.AsyncManager.OutstandingOperations.Increment();
+            AsyncQuestionnaireUpdater.Update(
+                () =>
+                {
+                    try
                     {
-                        this.exportimportEvents.Import(myfile);
-                        this.AsyncManager.OutstandingOperations.Decrement();
-                    });
-            }
+                        var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
+                        process.Import(new Guid(), zip);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger logger = LogManager.GetCurrentClassLogger();
+                        logger.Fatal("Error on import ", e);
+                    }
+
+                    this.AsyncManager.OutstandingOperations.Decrement();
+                });
+            return syncProcess;
         }
 
         /// <summary>
@@ -342,18 +377,17 @@ namespace Web.CAPI.Controllers
         /// The sync key.
         /// </param>
         /// <returns>
+        /// Process guid
         /// </returns>
         public Guid? Push(string url, Guid syncKey)
         {
             Guid syncProcess = Guid.NewGuid();
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Push));
 
             WaitCallback callback = (state) =>
                 {
                     try
                     {
-                        var process = new CompleteQuestionnaireSync(KernelLocator.Kernel, syncProcess, url);
+                        var process = new WirelessSyncProcess(KernelLocator.Kernel, syncProcess, url);
                         process.Export(syncKey);
                     }
                     catch (Exception e)

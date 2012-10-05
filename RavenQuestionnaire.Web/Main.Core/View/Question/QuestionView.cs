@@ -385,10 +385,8 @@ namespace Main.Core.View.Question
                 IComposite queueItem = group.Dequeue();
                 if (queueItem.Children != null)
                 {
-                    if (queueItem.Children.Any(q => q.PublicKey.Equals(questionKey)))
-                    {
+                    if (queueItem.Children.Any(child => child.PublicKey == questionKey)) 
                         return queueItem.PublicKey;
-                    }
 
                     foreach (IComposite child in queueItem.Children)
                     {
@@ -412,9 +410,19 @@ namespace Main.Core.View.Question
         {
             try
             {
+                var excludedGroups = new List<Guid>();
                 var groupPublicKey = this.GetQuestionGroup(questionnaire, questionPublicKey);
+                if (groupPublicKey != null)
+                    excludedGroups.Add(groupPublicKey.Value);
+                foreach (
+                    IGroup @group in
+                        questionnaire.Children.OfType<IGroup>().Where(
+                            @group => excludedGroups.Where(t => t == @group.PublicKey).FirstOrDefault() == Guid.Empty)) 
+                            excludedGroups.Add(@group.PublicKey);
                 var groups = new Dictionary<string, Guid>();
-                if (questionnaire != null) foreach (var group in questionnaire.Children.Where(t => t is IGroup)) this.SelectAll(group, groups, groupPublicKey);
+                if (questionnaire != null) 
+                    foreach (var group in questionnaire.Children.Where(t => t is IGroup)) 
+                        this.SelectAll(group, groups, excludedGroups);
                 return groups;
             }
             catch (Exception e)
@@ -435,13 +443,14 @@ namespace Main.Core.View.Question
         /// <param name="groupPublicKey">
         /// The group Public Key.
         /// </param>
-        private void SelectAll(IComposite currentGroup, Dictionary<string, Guid> groups, Guid? groupPublicKey)
+        private void SelectAll(IComposite currentGroup, Dictionary<string, Guid> groups, List<Guid> excludedGroups)
         {
-            if (groupPublicKey == null || groupPublicKey != currentGroup.PublicKey)
+            var s = excludedGroups.Where(t => t == currentGroup.PublicKey).FirstOrDefault();
+            if (excludedGroups.Count > 0 && s == Guid.Empty)
                 groups.Add(string.Format("{0}-{1}", (currentGroup as IGroup).Title, currentGroup.PublicKey), currentGroup.PublicKey);
             if (currentGroup.Children.Where(t=>t is IGroup).Count() > 0)
                 foreach (var childGroup in currentGroup.Children.Where(t => t is IGroup))
-                    this.SelectAll(childGroup, groups, groupPublicKey);
+                    this.SelectAll(childGroup, groups, excludedGroups);
         }
 
         #endregion
@@ -481,6 +490,20 @@ namespace Main.Core.View.Question
         /// <param name="questionnaire">
         /// The questionnaire.
         /// </param>
+        /// <param name="groupPublicKey">
+        /// The group public key.
+        /// </param>
+        public QuestionView(IQuestionnaireDocument questionnaire, Guid groupPublicKey)
+        {
+            this.Groups = this.LoadGroups(questionnaire, groupPublicKey);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionView"/> class.
+        /// </summary>
+        /// <param name="questionnaire">
+        /// The questionnaire.
+        /// </param>
         /// <param name="doc">
         /// The doc.
         /// </param>
@@ -499,7 +522,8 @@ namespace Main.Core.View.Question
             {
                 this.Triggers = doc.Triggers.ToList();
             }
-            
+
+            //this.Parent = doc.Parent != null ? doc.Parent.PublicKey : Guid.Empty;
             this.Groups = this.LoadGroups(questionnaire, doc.PublicKey);
         }
 
