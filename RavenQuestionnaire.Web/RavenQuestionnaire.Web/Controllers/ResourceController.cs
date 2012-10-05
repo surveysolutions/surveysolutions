@@ -20,6 +20,7 @@ namespace RavenQuestionnaire.Web.Controllers
     using Kaliko.ImageLibrary.Filters;
 
     using Main.Core.Commands.File;
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Services;
     using Main.Core.View;
 
@@ -27,6 +28,8 @@ namespace RavenQuestionnaire.Web.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using NLog;
+
+    using Questionnaire.Core.Web.Security;
 
     using RavenQuestionnaire.Core.Views.Event.File;
     using RavenQuestionnaire.Web.Models;
@@ -36,6 +39,7 @@ namespace RavenQuestionnaire.Web.Controllers
     /// <summary>
     /// The resource controller.
     /// </summary>
+    [QuestionnaireAuthorize(UserRoles.Administrator)]
     public class ResourceController : Controller
     {
         #region Constants and Fields

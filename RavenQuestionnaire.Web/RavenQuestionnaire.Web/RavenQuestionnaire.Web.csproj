@@ -228,7 +228,8 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CollectionController.cs" />
-    <Compile Include="Controllers\FileBrowseItemClient.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Models\FileBrowseItemClient.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Export\TemplateExporter.cs" />
@@ -618,6 +619,8 @@
     <Content Include="Views\Questionnaire\DetailsOld.cshtml" />
     <Content Include="Views\Question\_AutoPropagateRow.cshtml" />
     <Content Include="Views\Question\_EditAutoPropagates.cshtml" />
+    <Content Include="Views\Error\Http403.cshtml" />
+    <Content Include="Views\Error\General.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

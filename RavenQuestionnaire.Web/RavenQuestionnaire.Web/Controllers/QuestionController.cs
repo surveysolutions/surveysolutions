@@ -44,6 +44,7 @@ namespace RavenQuestionnaire.Web.Controllers
     /// </summary>
     [Authorize]
     [ValidateInput(false)]
+    [QuestionnaireAuthorize(UserRoles.Administrator)]
     public class QuestionController : Controller
     {
         #region Constants and Fields

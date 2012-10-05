@@ -13,6 +13,7 @@ namespace RavenQuestionnaire.Web.Controllers
     using System.Web.Mvc;
     using System.Web.Security;
 
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Utility;
 
     using Questionnaire.Core.Web.Security;
@@ -161,18 +162,15 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 if (Membership.ValidateUser(model.UserName, SimpleHash.ComputeHash(model.Password)))
                 {
-                    this.authentication.SignIn(model.UserName, false);
-
-                    /*   if (returnUrl.Length > 1 && returnUrl.StartsWith("/")
-                        && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+                    if (Roles.IsUserInRole(model.UserName, UserRoles.Administrator.ToString()))
                     {
-                        return Redirect(returnUrl);
+                        this.authentication.SignIn(model.UserName, false);
+                        return this.Redirect("~/");
                     }
                     else
-                    {*/
-                    return this.Redirect("~/");
-
-                    // }
+                    {
+                        this.ModelState.AddModelError(string.Empty, "You have no access to this site. Contact your administrator, please");
+                    }
                 }
                 else
                 {

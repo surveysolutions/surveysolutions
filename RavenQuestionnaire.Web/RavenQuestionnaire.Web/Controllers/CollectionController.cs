@@ -21,6 +21,8 @@ namespace RavenQuestionnaire.Web.Controllers
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
+    using Questionnaire.Core.Web.Security;
+
     using RavenQuestionnaire.Core.Views.Collection;
     using RavenQuestionnaire.Core.Views.CollectionItem;
 
@@ -28,6 +30,7 @@ namespace RavenQuestionnaire.Web.Controllers
     /// The collection controller.
     /// </summary>
     [Authorize]
+    [QuestionnaireAuthorize(UserRoles.Administrator)]
     public class CollectionController : Controller
     {
         #region Constants and Fields
