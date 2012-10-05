@@ -185,7 +185,7 @@ namespace Questionnaire.Core.Web.Helpers
         {
             return BeginGridFormHtml5(
                 ajaxHelper, actionName, controllerName, null /* values */, ajaxOptions, null /* htmlAttributes */,
-                questionnaireid, questionId, QuestionType.Text, formName);
+                questionnaireid, questionId, "Comments", formName);
         }
         /// <summary>
         /// The begin form html 5.
@@ -254,7 +254,7 @@ namespace Questionnaire.Core.Web.Helpers
             var newValues = new RouteValueDictionary(routeValues);
             RouteValueDictionary newAttributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
             return BeginGridFormHtml5(
-                ajaxHelper, actionName, controllerName, newValues, ajaxOptions, newAttributes, questionnaireid, questionId, questionType,null);
+                ajaxHelper, actionName, controllerName, newValues, ajaxOptions, newAttributes, questionnaireid, questionId, questionType.ToString(), null);
 
         }
 
@@ -289,7 +289,7 @@ namespace Questionnaire.Core.Web.Helpers
 
             return BeginGridFormHtml5(
                 ajaxHelper, actionName, controllerName, routeValues, ajaxOptions, null, questionnaireid, questionId,
-                questionType, null);
+                questionType.ToString(), null);
         }
 
         public static MvcForm BeginGridFormHtml5(
@@ -298,7 +298,7 @@ namespace Questionnaire.Core.Web.Helpers
             string controllerName,
             RouteValueDictionary routeValues,
             AjaxOptions ajaxOptions,
-            IDictionary<string, object> htmlAttributes, Guid questionnaireid, Guid questionId, QuestionType questionType, string formName)
+            IDictionary<string, object> htmlAttributes, Guid questionnaireid, Guid questionId, string handlerType, string formName)
         {
             if (htmlAttributes == null)
                 htmlAttributes = new Dictionary<string, object>();
@@ -311,7 +311,7 @@ namespace Questionnaire.Core.Web.Helpers
             ajaxHelper.ViewContext.Writer.Write(
                 string.Format("<input type='hidden' value='{0}' name='PublicKey' />", questionId));
             ajaxHelper.ViewContext.Writer.Write(
-                string.Format("<input type='hidden' value='{0}' name='QuestionType' />", questionType));
+                string.Format("<input type='hidden' value='{0}' name='QuestionType' />", handlerType));
 
             ajaxHelper.ViewContext.Writer.Write("<input type='hidden' value='' name='PropogationPublicKey' />");
             return result;

@@ -47,9 +47,9 @@
 
                 }
                 <div class="ui-bar ui-bar-c @(questionDetails.Enabled ? "" : "ui-disabled") @(questionDetails.Answered ? "answered" : "") @(questionDetails.Valid ? "" : "error_block")" style="height: 50px"
-                                         question-item="@questionId" question-propagation-key="@row.PropagationKey" question-answer-key="@questionDetails.AnswerPublicKey" event-name="contextmenu" form-name="comment-form"
-                                         question-answer-value="@questionDetails.Comments">
-                    <p data-role="none" question-item="@questionId" question-propagation-key="@row.PropagationKey" question-answer-key="@questionDetails.AnswerPublicKey" question-answer-value="@questionDetails.AnswerString">
+                                         question-item="@questionId" question-propagation-key="@row.PropagationKey" question-answer-key="@questionDetails.AnswerPublicKey" @*event-name="contextmenu" form-name="comment-form"*@
+                                         question-comment-value="@questionDetails.Comments" question-answer-value="@questionDetails.AnswerString">
+                    <p data-role="none">
                         <span>@questionDetails.AnswerString</span> <span class="question-comment">
                             @questionDetails.Comments
                         </span>

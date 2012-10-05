@@ -3,36 +3,50 @@
         var base = this, o;
         base.$el = $(el);
         base.el = el;
-        base.targetForm = null;
+        //     base.targetForm = null;
         base.propagationKey = null;
         base.questionId = null;
-        base.activeEvent = "click";
-        base.formName = "answer-form";
+        base.answerForm = null;
+        base.commentForm = null;
         // Add a reverse reference to the DOM object
         base.$el.data("gridCell", base);
         base.init = function () {
             base.options = o = $.extend(true, {}, {}, options);
             base.questionId = base.$el.attr('question-item');
             base.propagationKey = base.$el.attr('question-propagation-key');
-            var eventName = base.$el.attr('event-name');
+            /* var eventName = base.$el.attr('event-name');
             if (eventName && base.$el.parent()[eventName])
-                base.activeEvent = eventName;
-            var formName = base.$el.attr('form-name');
+            base.activeEvent = eventName;*/
+            /* var formName = base.$el.attr('form-name');
             if (formName && formName != '') {
-                base.formName = formName;
-            }
-            var jTargetForm = $('[' + base.formName + '=' + base.questionId + ']');
-            if (!jTargetForm || jTargetForm.length == 0)
-                return;
+            base.formName = formName;
+            }*/
+            var jTargetCommentForm = $('[comment-form=' + base.questionId + ']');
+            if (jTargetCommentForm && jTargetCommentForm.length > 0) {
+                jTargetCommentForm.answerForm();
+                base.commentForm = jTargetCommentForm.getAnswerForm();
+                if (base.commentForm) {
 
-            base.targetForm = jTargetForm.getAnswerForm();
-            if (!base.targetForm) {
-                base.targetForm = jTargetForm.answerForm().getAnswerForm();
+                    // base.commentForm = base.commentForm.getAnswerForm();
+
+                    base.$el.bind("contextmenu", function (e) {
+                        base.commentForm.open(e, base);
+                    });
+                }
             }
-            base.$el.parent().bind(base.activeEvent, function (e) {
-                //    base.$el.parent().addClass('ui-bar-e');
-                base.targetForm.open(e, base);
-            });
+
+            var jTargetAnswerForm = $('[answer-form=' + base.questionId + ']');
+            if (jTargetAnswerForm && jTargetAnswerForm.length > 0) {
+                jTargetAnswerForm.answerForm();
+                base.answerForm = jTargetAnswerForm.getAnswerForm();
+                if (base.answerForm) {
+                    // base.answerForm = base.answerForm.getAnswerForm();
+
+                    base.$el.bind("click", function (e) {
+                        base.answerForm.open(e, base);
+                    });
+                }
+            }
 
         };
         base.init();
@@ -67,6 +81,7 @@
             var hidden = base.$el.find('input[name=PropogationPublicKey]');
             var formType = base.$el.find('input[name=QuestionType]').val();
             hidden.val(target.propagationKey);
+            target.$el.addClass('ui-bar-e');
             base[formType](e, target);
         };
         function getParameterByName(name, settings) {
@@ -84,14 +99,15 @@
                 if (value.PropagationKey != rowKey)
                     return;
                 $.each(value.Answers, function (answerIndex, answerValue) {
-                    var target = $('div[question-propagation-key=' + rowKey + '][question-item=' + answerValue.PublicKey + ']');
+                    var target = $('[question-propagation-key=' + rowKey + '][question-item=' + answerValue.PublicKey + ']');
                     //       var targetPanel = target.parent();
+                    target.removeClass('ui-bar-e');
                     var containers = target.find('span');
                     $(containers[0]).text(answerValue.AnswerString);
                     $(containers[1]).text(answerValue.Comments);
-                    target.attr('question-answer-value', answerValue.Comments);
-                    target.find('p').attr('question-answer-key', answerValue.AnswerPublicKey);
-                    target.find('p').attr('question-answer-value', answerValue.AnswerString);
+                    target.attr('question-comment-value', answerValue.Comments);
+                    target.attr('question-answer-key', answerValue.AnswerPublicKey);
+                    target.attr('question-answer-value', answerValue.AnswerString);
                     if (answerValue.Enabled) {
                         target.removeClass('ui-disabled');
                     } else {
@@ -159,6 +175,12 @@
         };
         base.Text = function (e, target) {
             var questionAnswer = $.trim(target.$el.attr('question-answer-value'));
+            var targetInput = base.$el.find("input[type='text']");
+            targetInput.val(questionAnswer);
+            targetInput.click();
+        };
+        base.Comments = function (e, target) {
+            var questionAnswer = $.trim(target.$el.attr('question-comment-value'));
             var targetInput = base.$el.find("input[type='text']");
             targetInput.val(questionAnswer);
             targetInput.click();
