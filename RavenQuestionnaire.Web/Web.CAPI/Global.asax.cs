@@ -14,7 +14,7 @@ namespace Web.CAPI
     using System.Web.Configuration;
     using System.Web.Mvc;
     using System.Web.Routing;
-using Main.Core;
+    using Main.Core;
     using Ninject;
 
     using NLog;
@@ -27,7 +27,7 @@ using Main.Core;
     // visit http://go.microsoft.com/?LinkId=9394801
 
     /// <summary>
-    /// The mvc application.
+    /// The MVC application.
     /// </summary>
     public class MvcApplication : HttpApplication
     {
@@ -65,10 +65,10 @@ using Main.Core;
 
             routes.MapRoute(
                 "Default", 
-                // Route name
+                //// Route name
                 "{controller}/{action}/{id}", 
-                // URL with parameters
-                new { controller = "Survey", action = "Dashboard", id = UrlParameter.Optional } // Parameter defaults
+                //// URL with parameters
+                new { controller = "Survey", action = "Dashboard", id = UrlParameter.Optional } //// Parameter defaults
                 );
         }
 

@@ -7,26 +7,26 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using Ninject.Activation;
-using Raven.Client.Document;
-using Raven.Client.Embedded;
-
 namespace Main.Core
 {
-    // ref to dll
+    using System;
+
+    using Ninject.Activation;
+
+    using Raven.Client.Document;
+    using Raven.Client.Embedded;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// The document store provider.
     /// </summary>
     public class DocumentStoreProvider : Provider<DocumentStore>
     {
         #region Fields
 
         /// <summary>
-        /// The _is embeded.
+        /// The is embedded.
         /// </summary>
-        private readonly bool isEmbeded;
+        private readonly bool isEmbedded;
 
         /// <summary>
         /// The _storage.
@@ -43,13 +43,13 @@ namespace Main.Core
         /// <param name="storage">
         /// The storage.
         /// </param>
-        /// <param name="isEmbeded">
-        /// The is embeded.
+        /// <param name="isEmbedded">
+        /// The is embedded.
         /// </param>
-        public DocumentStoreProvider(string storage, bool isEmbeded)
+        public DocumentStoreProvider(string storage, bool isEmbedded)
         {
             this.storage = storage;
-            this.isEmbeded = isEmbeded;
+            this.isEmbedded = isEmbedded;
         }
 
         #endregion
@@ -67,17 +67,12 @@ namespace Main.Core
         /// </returns>
         protected override DocumentStore CreateInstance(IContext context)
         {
-            DocumentStore store = null;
+            DocumentStore store;
             try
             {
-                if (this.isEmbeded)
-                {
-                    store = new EmbeddableDocumentStore { DataDirectory = this.storage };
-                }
-                else
-                {
-                    store = new DocumentStore { Url = this.storage };
-                }
+                store = this.isEmbedded ? 
+                    new EmbeddableDocumentStore { DataDirectory = this.storage, UseEmbeddedHttpServer = false } : 
+                    new DocumentStore { Url = this.storage };
 
                 store.Initialize();
             }
