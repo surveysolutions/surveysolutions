@@ -14,7 +14,7 @@
         <div style="display: none">
         @Html.Hidden("ParentGroupPublicKey", Model.ParentGroupPublicKey)
           
-        @Html.TextBox("Comment", string.Empty, new { draw_key_board = "true" })
+        @Html.TextBox("Comment", string.Empty, new { draw_key_board = "true", id="Comment"+Model.ItemPublicKey })
         </div>
     }
 </div>

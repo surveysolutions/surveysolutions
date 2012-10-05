@@ -14,21 +14,11 @@
             base.options = o = $.extend(true, {}, {}, options);
             base.questionId = base.$el.attr('question-item');
             base.propagationKey = base.$el.attr('question-propagation-key');
-            /* var eventName = base.$el.attr('event-name');
-            if (eventName && base.$el.parent()[eventName])
-            base.activeEvent = eventName;*/
-            /* var formName = base.$el.attr('form-name');
-            if (formName && formName != '') {
-            base.formName = formName;
-            }*/
             var jTargetCommentForm = $('[comment-form=' + base.questionId + ']');
             if (jTargetCommentForm && jTargetCommentForm.length > 0) {
                 jTargetCommentForm.answerForm();
                 base.commentForm = jTargetCommentForm.getAnswerForm();
                 if (base.commentForm) {
-
-                    // base.commentForm = base.commentForm.getAnswerForm();
-
                     base.$el.bind("contextmenu", function (e) {
                         base.commentForm.open(e, base);
                     });
@@ -40,8 +30,6 @@
                 jTargetAnswerForm.answerForm();
                 base.answerForm = jTargetAnswerForm.getAnswerForm();
                 if (base.answerForm) {
-                    // base.answerForm = base.answerForm.getAnswerForm();
-
                     base.$el.bind("click", function (e) {
                         base.answerForm.open(e, base);
                     });
@@ -72,8 +60,6 @@
                     return;
                 base.AjaxSuccess(jQuery.parseJSON(xhr.responseText).Grid, getParameterByName('PropogationPublicKey', settings.data));
             });
-            /*    base.targetForm.data("answerFormInit", true);
-            }*/
 
 
         };
@@ -101,7 +87,7 @@
                 $.each(value.Answers, function (answerIndex, answerValue) {
                     var target = $('[question-propagation-key=' + rowKey + '][question-item=' + answerValue.PublicKey + ']');
                     //       var targetPanel = target.parent();
-                    target.removeClass('ui-bar-e');
+                    base.endEdit(target, answerValue.PublicKey);
                     var containers = target.find('span');
                     $(containers[0]).text(answerValue.AnswerString);
                     $(containers[1]).text(answerValue.Comments);
@@ -123,18 +109,31 @@
                     } else {
                         target.addClass('error_block');
                     }
+                    
                 });
             });
         };
-        base.openDialog = function (x, y) {
-            $('#grid-popup-' + base.questionId).popup('open', x, y);
+        base.openDialog = function (target) {
+            var targetPopup = $('#grid-popup-' + base.questionId);
+            targetPopup.popup('open', target.offset().left, target.offset().top);
+           targetPopup.bind(
+                'closed',
+                function (event, ui) {
+                    target.removeClass('ui-bar-e');
+
+                });
+        };
+        base.endEdit = function (target, questionId) {
+            var targetPopup = $('#grid-popup-' + questionId);
+            targetPopup.popup('close');
+            target.removeClass('ui-bar-e');
         };
         base.SingleOption = function (e, target) {
             var questionAnswer = target.$el.attr('question-answer-key');
             base.$el.find("input[type='radio']").attr('checked', false).checkboxradio("refresh");
             var inputForSelect = base.$el.find('input[value=' + questionAnswer + ']');
             inputForSelect.attr('checked', true).checkboxradio("refresh"); /*target.$el.offset().top + 'px'*/
-            base.openDialog(target.$el.offset().left, target.$el.offset().top);
+            base.openDialog(target.$el);
         };
 
         base.YesNo = function (e, target) {
@@ -145,7 +144,7 @@
             var inputForSelect = base.$el.find('option[value=' + questionAnswer + ']');
             inputForSelect.attr('selected', true);
             inputForSelect.parent().selectmenu("refresh");
-            base.openDialog();
+            base.openDialog(target.$el);
         };
         base.MultyOption = function (e, target) {
             var questionAnswers = target.$el.attr('question-answer-key').split(';');
@@ -154,7 +153,7 @@
                 var inputForSelect = base.$el.find("input[name='Answers[" + value + "].Selected']");
                 inputForSelect.attr('checked', true).checkboxradio("refresh");
             });
-            base.openDialog();
+            base.openDialog(target.$el);
         };
         base.Numeric = function (e, target) {
             var questionAnswer = $.trim(target.$el.attr('question-answer-value'));
