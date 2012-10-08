@@ -1,10 +1,11 @@
-﻿@using Main.Core.Entities.SubEntities
+﻿@using Core.CAPI.Views
+@using Main.Core.Entities.SubEntities
 @using Main.Core.View.Card
 @using Main.Core.View.Group
 @using Main.Core.View.Question
 
 
-@model Main.Core.View.Group.CompleteGroupMobileView
+@model Main.Core.View.CompleteQuestionnaire.ScreenGroup.ScreenGroupView
 @{
     var questionKey = (Guid)ViewBag.CurrentQuestion;
     ViewBag.CurrentQuestion = questionKey;
@@ -16,11 +17,11 @@
     };
     ViewBag.CurrentGroupPublicKey = Model.PublicKey;
     ViewBag.QuestionnaireId = Model.QuestionnairePublicKey;
-    var propagatedGroup = Model as PropagatedGroupMobileView;
+    var capiScreen = Model as CapiScreenGroupView;
 }
 <!-- Start of second page -->
-<div data-role="page" id="screen-@(Model.PublicKey + (propagatedGroup == null ? "" : "-" + propagatedGroup.PropogationKey))" class="@(ViewBag.PagePrefix) page" data-header-theme="@(Model.IsQuestionnaireActive ? "b" : "e")" data-footer-theme="b" data-content-theme="c">
-    @RenderNavigation(Model.Navigation)
+<div data-role="page" id="screen-@Model.PublicKey" class="@(ViewBag.PagePrefix) page" data-header-theme="@(Model.IsQuestionnaireActive ? "b" : "e")" data-footer-theme="b" data-content-theme="c">
+    @RenderNavigation(Model.Navigation.NavigationContent)
     <!-- /header -->
     <div data-role="content" data-iscroll="">
         <div class="scroller-@(Model.PublicKey)" id="scroller">
@@ -30,7 +31,16 @@
                <div style="width: 100%; height: 50px; text-align: center">
                     <strong>@Model.Description</strong></div>
            }
-                @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model)
+           
+           @if (capiScreen==null)
+           {
+                @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model.Group)
+
+           }
+           else
+           {
+               @Html.Partial("~/Views/Survey/Group/_GridPropagatedView.cshtml", capiScreen.Grid)
+           }
                 <div style="width: 100%; height: 50px; text-align: center">
                     <strong>End of Section</strong></div>
             </div>
@@ -45,29 +55,9 @@
                 There are unanswered questions in this questionnaire. Please, check answers!</p>
         </div>
     </div>
-    @RenderFooter(Model.Navigation)
+    @RenderFooter(Model.Navigation.NavigationContent)
     <!-- /content -->
 </div>
-<!-- /page -->
-<!-- other main panel pages here -->
-@foreach (CompleteQuestionView question in Model.QuestionsWithCards)
-{
-    <div data-role="page" data-add-back-btn="true" id="gallery-@(question.PublicKey)" class="gallery-page">
-        <div data-role="header">
-            <h1>
-                Question cards</h1>
-        </div>
-        <div data-role="content">
-            <ul class="gallery">
-                @foreach (CardView card in question.Cards)
-                {
-                    <li><a href="@Url.Action("Images", "Resource", new { id = card.PublicKey })" rel="external">
-                        <img src="@Url.Action("Thumb", "Resource", new { id = card.PublicKey })" alt="@card.Title" /></a></li>
-                }
-            </ul>
-        </div>
-    </div>
-}
 @helper RenderNavigation(ScreenNavigation screen)
     {
         List<CompleteGroupHeaders> crumbs = screen.BreadCumbs.Skip(1).ToList();
@@ -119,7 +109,7 @@
         }
         else
         {
-            if (Model.Navigation.BreadCumbs.Count < 2)
+            if (Model.Navigation.NavigationContent.BreadCumbs.Count < 2)
             {
                   <a class="next-screen ui-btn-right  nav-link" href="@Url.Action("CompleteSummary", new { Id = Model.QuestionnairePublicKey })" data-icon="arrow-r" data-iconpos="right" 
                      data-theme="b" data-corners="false">Next Group</a>
@@ -134,7 +124,7 @@
 
 
         }
-        @if (Model.Navigation.BreadCumbs.Count < 2)
+        @if (Model.Navigation.NavigationContent.BreadCumbs.Count < 2)
         {
             <script>
                 var target = $('#ref-link-@Model.PublicKey').parents('li');

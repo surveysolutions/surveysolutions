@@ -130,12 +130,13 @@ namespace Main.Core.EventHandlers
 
             question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerValue);
 
-            ICompleteGroup group = item.FindGroupByKey(questionWrapper.GroupKey, question.PropogationPublicKey);
+
+            /*ICompleteGroup group = item.FindGroupByKey(questionWrapper.GroupKey, question.PropogationPublicKey);
             var executor = new CompleteQuestionnaireConditionExecutor(item.QuestionHash);
             executor.Execute(group);
 
             var validator = new CompleteQuestionnaireValidationExecutor(item.QuestionHash);
-            validator.Execute(group);
+            validator.Execute(group);*/
 
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
         }

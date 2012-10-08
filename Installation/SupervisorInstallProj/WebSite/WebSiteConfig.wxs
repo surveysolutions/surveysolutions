@@ -13,7 +13,8 @@
 				<iis:WebAppPool Id="MyWebSite_AppPool" 
 								Name="SupervisorApplicationPool" 
 								RecycleMinutes="0"
-								ManagedRuntimeVersion="v4.0" 
+								ManagedRuntimeVersion="v4.0"
+                                ManagedPipelineMode="integrated"
 								IdleTimeout="0" 
 								Identity="networkService" /> 
 				<!--User="MyWebSite_AppPoolUser"-->

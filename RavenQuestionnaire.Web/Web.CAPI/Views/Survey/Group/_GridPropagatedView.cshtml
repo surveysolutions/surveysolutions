@@ -1,0 +1,67 @@
+﻿@using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems
+@using Main.Core.Entities.SubEntities
+@using Main.Core.View.Group
+@using Questionnaire.Core.Web.Helpers
+@model Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.PropagatedGroupGridContainer
+@{ int step = 2;
+   int skipped = 0;
+   string[] letter = new string[] { "a", "b", "c", "d" };
+}
+@while (Model.Columns.Skip(skipped).Any())
+{
+
+    <div class="ui-grid-b" data-theme="e">
+        <div class="ui-block-a">
+            <div style="height: 80px" class="ui-bar ui-bar-c">
+           Group Name</div>
+        </div>
+        @for (int i = 0; i < Math.Min(step, Model.Columns.Count - skipped); i++)
+        {
+            <div class="ui-block-@letter[i + 1]">
+                <div style="height: 80px" class="ui-bar ui-bar-b">
+                    @Model.Columns[i + skipped].Title</div>
+            </div>
+               Html.RenderPartial("~/Views/Survey/Question/_GridQuestion.cshtml", (@Model.Columns[i + skipped] as QuestionColumnItem));
+
+
+        }
+    </div>
+        foreach (var row in Model.Row)
+        {
+            if (row.Enabled)
+            {
+
+    <div class="ui-grid-b">
+        <div class="ui-block-a">
+            <div class="ui-bar ui-bar-c" style="height: 50px">
+                <a href="@Url.Action("Screen", "Survey", new { id = Model.QuestionnairePublicKey, group = Model.PublicKey, question = Model.Columns[skipped].ItemPublicKey, propagationKey = row.PropagationKey })" data-corners="false">@row.Title&nbsp;</a>
+            </div>
+        </div>
+        @for (int i = 0; i < Math.Min(step, Model.Columns.Count - skipped); i++)
+        {
+
+            var questionId = Model.Columns[i + skipped].ItemPublicKey.ToString();
+            <div class="ui-block-@letter[i + 1]">
+                @{
+                            var questionDetails = row.Answers[questionId];
+
+                }
+                <div class="ui-bar ui-bar-c @(questionDetails.Enabled ? "" : "ui-disabled") @(questionDetails.Answered ? "answered" : "") @(questionDetails.Valid ? "" : "error_block")" style="height: 50px"
+                                         question-item="@questionId" question-propagation-key="@row.PropagationKey" question-answer-key="@questionDetails.AnswerPublicKey" @*event-name="contextmenu" form-name="comment-form"*@
+                                         question-comment-value="@questionDetails.Comments" question-answer-value="@questionDetails.AnswerString">
+                    <p data-role="none">
+                        <span>@questionDetails.AnswerString</span> <span class="question-comment">
+                            @questionDetails.Comments
+                        </span>
+                </div>
+            </div>
+
+        }
+    </div>
+
+
+            }
+        }
+    <br />
+        skipped += step;
+}

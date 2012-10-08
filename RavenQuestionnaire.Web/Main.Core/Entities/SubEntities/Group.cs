@@ -33,6 +33,7 @@ namespace Main.Core.Entities.SubEntities
             this.Triggers = new List<Guid>();
             this.ConditionExpression = string.Empty;
             this.Description = string.Empty;
+            this.Enabled = true;
         }
 
         /// <summary>
@@ -95,6 +96,7 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the propagated.
         /// </summary>
         public Propagate Propagated { get; set; }
+
 
         /// <summary>
         /// Gets or sets the public key.

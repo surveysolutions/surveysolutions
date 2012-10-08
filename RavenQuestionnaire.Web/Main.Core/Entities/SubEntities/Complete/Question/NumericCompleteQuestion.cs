@@ -238,7 +238,11 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </param>
         public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            this.Answer = Convert.ToInt32(answerValue);
+            int value;
+            if (int.TryParse((answerValue ?? string.Empty).Trim(), out value))
+            {
+                this.Answer = value;
+            }
         }
 
         #endregion

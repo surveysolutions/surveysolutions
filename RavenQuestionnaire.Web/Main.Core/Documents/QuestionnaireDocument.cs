@@ -112,6 +112,7 @@ namespace Main.Core.Documents
             }
         }
 
+
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
