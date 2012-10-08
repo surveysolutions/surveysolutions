@@ -88,7 +88,7 @@
                     var target = $('[question-propagation-key=' + rowKey + '][question-item=' + answerValue.PublicKey + ']');
                     //       var targetPanel = target.parent();
                     base.endEdit(target, answerValue.PublicKey);
-                    var containers = target.find('span');
+                    var containers = target.find('p');
                     $(containers[0]).text(answerValue.AnswerString);
                     $(containers[1]).text(answerValue.Comments);
                     target.attr('question-comment-value', answerValue.Comments);
@@ -227,4 +227,20 @@ jQuery(document).bind("pagecreate", function (e) {
     // If the array is of zero length, then no _create() fucntion is called.
     var elements = jQuery(e.target).find("[question-item]");
     elements.gridCell();
+
+  
+    //  if (ellipsisElements.ellipsis)
+    //  ellipsisElements.ellipsis();
+});
+jQuery(document).bind("pageshow", function (e) {
+    var ellipsisElements = jQuery(e.target).find("[ellipsis]");
+    ellipsisElements.each(function () {
+        var p = $(this).find('p');
+        var divh = $(this).height();
+        while (p.outerHeight() > divh) {
+            p.text(function (index, text) {
+                return text.replace(/\W*\s(\S)*$/, '...');
+            });
+        }
+    });
 });

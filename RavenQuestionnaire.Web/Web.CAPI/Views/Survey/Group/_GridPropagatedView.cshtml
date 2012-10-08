@@ -18,10 +18,13 @@
         @for (int i = 0; i < Math.Min(step, Model.Columns.Count - skipped); i++)
         {
             <div class="ui-block-@letter[i + 1]">
-                <div style="height: 80px" class="ui-bar ui-bar-b">
-                    @Model.Columns[i + skipped].Title</div>
+                <div class="ui-bar ui-bar-b" ellipsis="true" style="height: 80px;overflow: hidden; ">
+                    <p style="margin: 0; ">
+                        @Model.Columns[i + skipped].Title</p>
+                    
+                </div>
             </div>
-               Html.RenderPartial("~/Views/Survey/Question/_GridQuestion.cshtml", (@Model.Columns[i + skipped] as QuestionColumnItem));
+                   Html.RenderPartial("~/Views/Survey/Question/_GridQuestion.cshtml", (@Model.Columns[i + skipped] as QuestionColumnItem));
 
 
         }
@@ -49,10 +52,12 @@
                 <div class="ui-bar ui-bar-c @(questionDetails.Enabled ? "" : "ui-disabled") @(questionDetails.Answered ? "answered" : "") @(questionDetails.Valid ? "" : "error_block")" style="height: 50px"
                                          question-item="@questionId" question-propagation-key="@row.PropagationKey" question-answer-key="@questionDetails.AnswerPublicKey" @*event-name="contextmenu" form-name="comment-form"*@
                                          question-comment-value="@questionDetails.Comments" question-answer-value="@questionDetails.AnswerString">
-                    <p data-role="none">
-                        <span>@questionDetails.AnswerString</span> <span class="question-comment">
-                            @questionDetails.Comments
-                        </span>
+                    <p data-role="none" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; margin: 0px;">
+                        @questionDetails.AnswerString</p>
+                    <p data-role="none" class="question-comment" style="text-overflow: ellipsis; white-space: nowrap;
+                        overflow: hidden; margin: 0px;">
+                        @questionDetails.Comments
+                    </p>
                 </div>
             </div>
 
