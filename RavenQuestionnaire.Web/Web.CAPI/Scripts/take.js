@@ -109,7 +109,7 @@ function UpdateCurrentGroup(group) {
     }
     if (group.Group) {
         for (var i = 0; i < group.Group.Children.length; i++) {
-            if (group.Group.Children[i].QuestionType)
+            if (group.Group.Children[i].QuestionType !== "undefined") 
                 UpdateQuestion(group.Group.Children[i], group.Group.Children[i].GroupPublicKey);
             else {
                 UpdateInnerGroup(group.Group.Children[i]);
