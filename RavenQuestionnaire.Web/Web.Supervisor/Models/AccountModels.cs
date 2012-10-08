@@ -62,12 +62,7 @@ namespace Web.Supervisor.Models
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether RememberMe.
-        /// </summary>
-        [Display(Name = "Remember me?")]
-        public bool RememberMe { get; set; }
+        
     }
 
     /// <summary>

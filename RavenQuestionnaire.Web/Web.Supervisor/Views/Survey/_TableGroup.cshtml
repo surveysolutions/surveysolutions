@@ -43,22 +43,25 @@
         <td>
             <a class="btn btn-small" href="@Url.Action("Details", new { id = fitem.Id, template = fitem.TemplateId })">
                 <i class="icon-list"></i>Details</a>
-            @if (fitem.Responsible == null)
+            @if (fitem.Status.PublicId == SurveyStatus.Initial.PublicId || fitem.Status.PublicId == SurveyStatus.Redo.PublicId)
             {
-                <a class="btn btn-small" href="@Url.Action("Assign", new { id = fitem.Id })"><i class="icon-user">
-                </i>Assign</a>    
-            }
-            else
-            {
-                <a class="btn btn-small" id="ref-@fitem.Id" href="#" ><i class="icon-random"></i>Change</a>
-                <script type="text/javascript">
-                    $('#ref-@(fitem.Id)').click(function () {
+                if (fitem.Responsible == null)
+                 {
+                     <a class="btn btn-small" href="@Url.Action("Assign", new { id = fitem.Id })"><i class="icon-user">
+                                                                                                  </i>Assign</a>
+                 }
+                 else
+                 {
+                     <a class="btn btn-small" id="ref-@fitem.Id" href="#" ><i class="icon-random"></i>Change</a>
+                     <script type="text/javascript">
+                    $('#ref-@(fitem.Id)').click(function() {
                         $('#row-@(fitem.Id)').addClass("showForm");
                     });
-                    $('#canc-@(fitem.Id)').click(function () {
+                    $('#canc-@(fitem.Id)').click(function() {
                         $('#row-@(fitem.Id)').removeClass("showForm");
                     });
                 </script>
+                 }
             }
             @if (fitem.Status.PublicId == SurveyStatus.Complete.PublicId || fitem.Status.PublicId == SurveyStatus.Error.PublicId)
             {
