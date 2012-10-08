@@ -107,7 +107,8 @@
                 var keyboard = input.getkeyboard();
                 keyboard.$preview.val(target.val());
                 //        alert(input.val());
-                keyboard.$preview.caretToEnd();
+               // keyboard.$preview.caretToEnd();
+                keyboard.$preview[0].select();
             });
             inputs.click(function () {
                 /*   if(input.attr('target-input') && input.attr('target-input')!='')
