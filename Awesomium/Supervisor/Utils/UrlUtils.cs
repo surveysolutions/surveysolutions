@@ -21,6 +21,11 @@ namespace Browsing.Supervisor.Utils
             return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.AuthentificationCheckPath);
         }
 
+        public string GetLoginCapabilitiesCheckUrl()
+        {
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.LoginCapabilitiesCheckPath);
+        }
+
         public string GetEnpointUrl()
         {
             return Settings.Default.EndpointExportPath;

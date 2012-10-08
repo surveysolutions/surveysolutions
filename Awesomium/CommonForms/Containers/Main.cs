@@ -17,6 +17,7 @@ namespace Browsing.Common.Containers
             this.requestProcessor = requestProcessor;
             this.urlUtils = urlUtils;
             RefreshAuthentificationInfo();
+            RefreshLoginCapability();
         }
         protected void RefreshAuthentificationInfo()
         {
@@ -25,9 +26,16 @@ namespace Browsing.Common.Containers
             this.btnLogin.Visible = !IsUserLoggedIn;
         }
 
+        protected void RefreshLoginCapability()
+        {
+            isUsersInBase = null;
+            this.btnLogin.Enabled = IsUsersInBase;
+        }
+
         private ISettingsProvider clientSettings;
         private IRequesProcessor requestProcessor;
         private bool? isUserLoggedIn;
+        private bool? isUsersInBase;
         private IUrlUtils urlUtils;
 
         protected bool IsUserLoggedIn
@@ -41,6 +49,16 @@ namespace Browsing.Common.Containers
             }
         }
 
+        protected bool IsUsersInBase
+        {
+            get
+            {
+                if (isUsersInBase.HasValue)
+                    return isUsersInBase.Value;
+                isUsersInBase = this.requestProcessor.Process<bool>(urlUtils.GetLoginCapabilitiesCheckUrl(), "GET", false, false);
+                return isUsersInBase.Value;
+            }
+        }
         void btnSettings_Click(object sender, System.EventArgs e)
         {
             OnSettingsClicked(sender, e);

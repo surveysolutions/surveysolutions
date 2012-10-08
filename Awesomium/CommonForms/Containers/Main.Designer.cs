@@ -201,6 +201,7 @@ namespace Browsing.Common.Containers
             this.tableLayoutPanel1.ResumeLayout(false);
             this.pnlHolder.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.btnLogin.Enabled = false;
 
         }
 
