@@ -9,5 +9,5 @@
     @Html.Hidden("Parent", Model.ItemPublicKey)
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
-    @Html.TextBox("AnswerValue", string.Empty, new { draw_key_board = "true", type = "num" })
+    @Html.TextBox("AnswerValue", string.Empty, new { draw_key_board = "true", type = "num", question_text=Model.Title })
 }

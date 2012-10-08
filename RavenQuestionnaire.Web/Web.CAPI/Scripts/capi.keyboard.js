@@ -27,7 +27,12 @@
             ]
         }
     }),
-
+     $.fn.getNumericKeyboard = function () {
+         return this.find('#dummyNumericKeyBoard').getkeyboard();
+     };
+    $.fn.getTextKeyboard = function () {
+        return this.find('#dummyTxtKeyBoard').getkeyboard();
+    };
     $.fn.createKeyBoard = function (layout) {
 
 
@@ -100,6 +105,8 @@
                 target.change();
                 if (target.attr('submit-form') != 'false')
                     target.closest("form").submit();
+
+               
             });
             input.bind('visible.keyboard', function (event) {
                 // var jInput = $(this);
@@ -107,8 +114,15 @@
                 var keyboard = input.getkeyboard();
                 keyboard.$preview.val(target.val());
                 //        alert(input.val());
-               // keyboard.$preview.caretToEnd();
+                // keyboard.$preview.caretToEnd();
                 keyboard.$preview[0].select();
+
+                var popupKeyboard = keyboard.$preview.parent();
+                popupKeyboard.find('[additional-comments="true"]').remove();
+                var title = target.attr('question-text');
+                
+                if (title && title.length > 0)
+                    popupKeyboard.prepend($('<p additional-comments="true">' + title + '</p>'));
             });
             inputs.click(function () {
                 /*   if(input.attr('target-input') && input.attr('target-input')!='')

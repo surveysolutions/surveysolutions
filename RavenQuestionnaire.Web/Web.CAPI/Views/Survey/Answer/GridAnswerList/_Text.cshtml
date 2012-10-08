@@ -9,6 +9,6 @@
     @Html.Hidden("Parent", Model.ItemPublicKey)
     @Html.Hidden("PublicKey", answerGuid)
     @Html.Hidden("Selected", true)
-    @Html.TextBox("AnswerValue", string.Empty, new { draw_key_board = "true" })
+    @Html.TextBox("AnswerValue", string.Empty, new { draw_key_board = "true" , question_text=Model.Title })
   @*  @Html.IconInput("AnswerValue", Model.Answer ?? string.Empty, "", new { draw_key_board = "true", @required }, new { @class = "keyboard key_grid" }, new { @class = "bold" })*@
 }
