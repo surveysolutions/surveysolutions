@@ -64,7 +64,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Controller.LogOn(new LogOnModel()
             {
                 Password = "1234",
-                RememberMe = false,
                 UserName = "test"
             }, "~/");
             Authentication.Verify(x => x.SignIn("test", false), Times.Once());

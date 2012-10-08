@@ -121,7 +121,7 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9089/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8084/")]
         public string DefaultUrl {
             get {
                 return ((string)(this["DefaultUrl"]));
@@ -133,7 +133,7 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("9089")]
+        [global::System.Configuration.DefaultSettingValueAttribute("8084")]
         public string DefaultPort {
             get {
                 return ((string)(this["DefaultPort"]));
@@ -152,6 +152,18 @@ namespace Browsing.Supervisor.Properties {
             }
             set {
                 this["RunClient"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Account/IsUserInBase")]
+        public string LoginCapabilitiesCheckPath {
+            get {
+                return ((string)(this["LoginCapabilitiesCheckPath"]));
+            }
+            set {
+                this["LoginCapabilitiesCheckPath"] = value;
             }
         }
     }

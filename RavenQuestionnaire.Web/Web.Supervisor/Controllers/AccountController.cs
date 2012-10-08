@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Linq;
+using Main.Core.Events;
+
 namespace Web.Supervisor.Controllers
 {
     using System.Web.Mvc;
@@ -34,6 +37,10 @@ namespace Web.Supervisor.Controllers
         /// </summary>
         private readonly IGlobalInfoProvider globalProvider;
 
+        /// <summary>
+        /// Users info
+        /// </summary>
+        private IUserEventSync _userEventSync;
         #endregion
 
         #region Constructror
@@ -47,10 +54,11 @@ namespace Web.Supervisor.Controllers
         /// <param name="globalProvider">
         /// The global provider.
         /// </param>
-        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider)
+        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IUserEventSync userEventSync)
         {
             this.authentication = auth;
             this.globalProvider = globalProvider;
+            this._userEventSync = userEventSync;
         }
 
         #endregion
@@ -124,7 +132,17 @@ namespace Web.Supervisor.Controllers
             this.authentication.SignOut();
             return this.Redirect("~/");
         }
+        /// <summary>
+        /// Count of available users in database
+        /// </summary>
+        /// <returns>whether users</returns>
+        public bool IsUserInBase()
+        {
+            var count = _userEventSync.GetUsers(null);
+            if (count == null) return false;
+            return count.ToList().Count > 0;
 
+        }
         #endregion
     }
 }

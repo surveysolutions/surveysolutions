@@ -27,13 +27,16 @@
       <Value Profile="(Default)">Account/IsLoggedIn</Value>
     </Setting>
     <Setting Name="DefaultUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost:9089/</Value>
+      <Value Profile="(Default)">http://localhost:8084/</Value>
     </Setting>
     <Setting Name="DefaultPort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">9089</Value>
+      <Value Profile="(Default)">8084</Value>
     </Setting>
     <Setting Name="RunClient" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="LoginCapabilitiesCheckPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Account/IsUserInBase</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -7,6 +7,7 @@ namespace Common.Utils
         string GetDefaultUrl();
         string GetLoginUrl();
         string GetAuthentificationCheckUrl();
+        string GetLoginCapabilitiesCheckUrl();
         string GetPushUrl(Guid clientId);
         string GetPullUrl(Guid clientId);
         string GetPushCheckStateUrl(Guid processid);
