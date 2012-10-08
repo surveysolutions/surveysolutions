@@ -15,6 +15,7 @@ namespace RavenQuestionnaire.Web.Controllers
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+    using System.Xml;
 
     using Kaliko.ImageLibrary;
     using Kaliko.ImageLibrary.Filters;

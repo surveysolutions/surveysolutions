@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -19,6 +20,8 @@ using Main.Core.View.Card;
 
 namespace Main.Core.View.Question
 {
+    using System.Diagnostics.CodeAnalysis;
+
     /// <summary>
     /// The abstract question view.
     /// </summary>
@@ -385,8 +388,10 @@ namespace Main.Core.View.Question
                 IComposite queueItem = group.Dequeue();
                 if (queueItem.Children != null)
                 {
-                    if (queueItem.Children.Any(child => child.PublicKey == questionKey)) 
+                    if (queueItem.Children.Any(child => child.PublicKey == questionKey))
+                    {
                         return queueItem.PublicKey;
+                    }
 
                     foreach (IComposite child in queueItem.Children)
                     {
@@ -403,9 +408,15 @@ namespace Main.Core.View.Question
         /// <summary>
         /// LoadAllGroups
         /// </summary>
-        /// <param name="questionnaireId">
-        /// The questionnaire id.
+        /// <param name="questionnaire">
+        /// The questionnaire.
         /// </param>
+        /// <param name="questionPublicKey">
+        /// The question Public Key.
+        /// </param>
+        /// <returns>
+        /// The load groups.
+        /// </returns>
         protected Dictionary<string, Guid> LoadGroups(IQuestionnaireDocument questionnaire, Guid questionPublicKey)
         {
             try
@@ -413,16 +424,19 @@ namespace Main.Core.View.Question
                 var excludedGroups = new List<Guid>();
                 var groupPublicKey = this.GetQuestionGroup(questionnaire, questionPublicKey);
                 if (groupPublicKey != null)
+                {
                     excludedGroups.Add(groupPublicKey.Value);
-                foreach (
-                    IGroup @group in
-                        questionnaire.Children.OfType<IGroup>().Where(
-                            @group => excludedGroups.Where(t => t == @group.PublicKey).FirstOrDefault() == Guid.Empty)) 
-                            excludedGroups.Add(@group.PublicKey);
+                }
+
                 var groups = new Dictionary<string, Guid>();
-                if (questionnaire != null) 
-                    foreach (var group in questionnaire.Children.Where(t => t is IGroup)) 
+                if (questionnaire != null)
+                {
+                    foreach (var group in questionnaire.Children.Where(t => t is IGroup))
+                    {
                         this.SelectAll(group, groups, excludedGroups);
+                    }
+                }
+
                 return groups;
             }
             catch (Exception e)
@@ -440,17 +454,27 @@ namespace Main.Core.View.Question
         /// <param name="groups">
         /// The groups.
         /// </param>
-        /// <param name="groupPublicKey">
-        /// The group Public Key.
+        /// <param name="excludedGroups">
+        /// The excluded Groups.
         /// </param>
         private void SelectAll(IComposite currentGroup, Dictionary<string, Guid> groups, List<Guid> excludedGroups)
         {
             var s = excludedGroups.Where(t => t == currentGroup.PublicKey).FirstOrDefault();
-            if (excludedGroups.Count > 0 && s == Guid.Empty)
-                groups.Add(string.Format("{0}-{1}", (currentGroup as IGroup).Title, currentGroup.PublicKey), currentGroup.PublicKey);
-            if (currentGroup.Children.Where(t=>t is IGroup).Count() > 0)
+            if (excludedGroups.Count > 0 && s == Guid.Empty
+                && (currentGroup as IGroup).Propagated == Propagate.AutoPropagated)
+            {
+                groups.Add(
+                    string.Format("{0}-{1}", (currentGroup as IGroup).Title, currentGroup.PublicKey),
+                    currentGroup.PublicKey);
+            }
+
+            if (currentGroup.Children.Where(t => t is IGroup).Count() > 0)
+            {
                 foreach (var childGroup in currentGroup.Children.Where(t => t is IGroup))
+                {
                     this.SelectAll(childGroup, groups, excludedGroups);
+                }
+            }
         }
 
         #endregion
