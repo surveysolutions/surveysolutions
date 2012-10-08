@@ -283,6 +283,9 @@ Mono/AndroidNcqrs.Eventing.Storage.SQLite.Tests/bin/*
 Mono/AndroidNcqrs.Eventing.Storage.SQLite.Tests/obj/*
 Mono/AndroidNcqrs.Eventing.Storage.SQLite/bin/*
 Mono/AndroidNcqrs.Eventing.Storage.SQLite/obj/*
+Mono/AndroidNinject.Extensions.Conventions/obj/*
+Mono/AndroidNinject.Extensions.Factory/obj/*
+Mono/AndroidNinject/bin/*
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
