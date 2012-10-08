@@ -82,10 +82,10 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         string ValidationMessage { get; set; }
 
-        /// <summary>
+        /*/// <summary>
         /// Gets or sets Triggers.
         /// </summary>
-        List<Guid> Triggers { get; set; }
+        List<Guid> Triggers { get; set; }*/
 
         #endregion
     }
