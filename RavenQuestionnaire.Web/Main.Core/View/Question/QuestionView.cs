@@ -417,15 +417,14 @@ namespace Main.Core.View.Question
         /// <returns>
         /// The load groups.
         /// </returns>
-        protected Dictionary<string, Guid> LoadGroups(IQuestionnaireDocument questionnaire, Guid questionPublicKey)
+        protected Dictionary<string, Guid> LoadGroups(IQuestionnaireDocument questionnaire, Guid groupPublicKey)
         {
             try
             {
                 var excludedGroups = new List<Guid>();
-                var groupPublicKey = this.GetQuestionGroup(questionnaire, questionPublicKey);
-                if (groupPublicKey != null)
+                if (groupPublicKey != Guid.Empty)
                 {
-                    excludedGroups.Add(groupPublicKey.Value);
+                    excludedGroups.Add(groupPublicKey);
                 }
 
                 var groups = new Dictionary<string, Guid>();
@@ -548,7 +547,8 @@ namespace Main.Core.View.Question
             }
 
             //this.Parent = doc.Parent != null ? doc.Parent.PublicKey : Guid.Empty;
-            this.Groups = this.LoadGroups(questionnaire, doc.PublicKey);
+            var groupPublicKey = this.GetQuestionGroup(questionnaire, doc.PublicKey);
+            this.Groups = this.LoadGroups(questionnaire, groupPublicKey.Value);
         }
 
         #endregion
