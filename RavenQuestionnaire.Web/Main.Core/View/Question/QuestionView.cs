@@ -495,10 +495,19 @@ namespace Main.Core.View.Question
                     doc.Cards.Select(c => new CardView(doc.PublicKey, c)).OrderBy(a => Guid.NewGuid()).ToArray();
             }
 
+
+            var autoQuestion = doc as IAutoPropagate;
+            if (autoQuestion != null && autoQuestion.Triggers != null)
+            {
+                this.Triggers = autoQuestion.Triggers.ToList();
+            }
+
+/*
             if (doc.Triggers != null)
             {
                 this.Triggers = doc.Triggers.ToList();
             }
+*/
             
             this.Groups = this.LoadGroups(questionnaire, doc.PublicKey);
         }

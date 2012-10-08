@@ -259,7 +259,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
 
         #region Implementation of ITriggerable
 
-        public List<Guid> Triggers { get; set; }
+        ////public List<Guid> Triggers { get; set; }
 
         #endregion
     }

@@ -318,10 +318,10 @@ namespace Main.Core.AbstractFactories
             var autoQuestion = question as IAutoPropagate;
             if (autoQuestion != null && triggers != null)
             {
-                question.Triggers = new List<Guid>();
+                autoQuestion.Triggers = new List<Guid>();
                 foreach (var guid in triggers)
                 {
-                    question.Triggers.Add(guid);
+                    autoQuestion.Triggers.Add(guid);
                 }
             }
         }

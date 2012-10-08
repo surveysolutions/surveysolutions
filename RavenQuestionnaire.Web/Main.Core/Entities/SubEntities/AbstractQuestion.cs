@@ -139,10 +139,10 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         public string ValidationMessage { get; set; }
 
-        /// <summary>
+        /*/// <summary>
         /// Gets or sets Triggers.
         /// </summary>
-        public List<Guid> Triggers { get; set; }
+        public List<Guid> Triggers { get; set; }*/
 
         #endregion
 
