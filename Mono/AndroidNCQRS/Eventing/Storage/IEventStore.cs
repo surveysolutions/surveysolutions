@@ -8,7 +8,7 @@ namespace Ncqrs.Eventing.Storage
     /// <summary>
     /// An event store. Can store and load events from an <see cref="IEventSource"/>.
     /// </summary>
-    [ContractClass(typeof(IEventStoreContracts))]
+    //[ContractClass(typeof(IEventStoreContracts))]
     public interface IEventStore
     {
         /// <summary>
@@ -31,21 +31,21 @@ namespace Ncqrs.Eventing.Storage
         void Store(UncommittedEventStream eventStream);
     }
 
-    [ContractClassFor(typeof(IEventStore))]
-    internal abstract class IEventStoreContracts : IEventStore
-    {
-        public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
-        {
-            //Contract.Ensures(//Contract.Result<CommittedEventStream>().SourceId == id);
-            //Contract.Ensures(//Contract.Result<CommittedEventStream>().CurrentSourceVersion <= maxVersion);
-            return default(CommittedEventStream);
-        }
+	//[ContractClassFor(typeof(IEventStore))]
+	//internal abstract class IEventStoreContracts : IEventStore
+	//{
+	//    public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
+	//    {
+	//        //Contract.Ensures(//Contract.Result<CommittedEventStream>().SourceId == id);
+	//        //Contract.Ensures(//Contract.Result<CommittedEventStream>().CurrentSourceVersion <= maxVersion);
+	//        return default(CommittedEventStream);
+	//    }
 
-        public void Store(UncommittedEventStream eventStream)
-        {
-            //Contract.Requires<ArgumentNullException>(eventStream != null, "The stream cannot be null.");
-        }
+	//    public void Store(UncommittedEventStream eventStream)
+	//    {
+	//        //Contract.Requires<ArgumentNullException>(eventStream != null, "The stream cannot be null.");
+	//    }
 
 
-    }
+	//}
 }

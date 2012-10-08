@@ -22,6 +22,8 @@ namespace NUnitLite.Runner
     {
         private IList listeners = new ArrayList();
 
+
+
         /// <summary>
         /// Runs all tests in the specified assembly.
         /// </summary>
@@ -47,7 +49,7 @@ namespace NUnitLite.Runner
         /// Runs the specified test.
         /// </summary>
         /// <param name="test">The test.</param>
-        public virtual TestResult Run(TestAssembly test)
+		protected virtual TestResult Run(TestAssembly test)
         {
             return test.Run(this);
         }

@@ -277,6 +277,12 @@ Mono/AndroidMain.Core.Tests/obj/*
 Mono/AndroidMoq/bin/*
 Mono/AndroidMoq/obj/*
 *.cache
+Mono/Android.Tests.Runner/bin/*
+Mono/Android.Tests.Runner/obj/*
+Mono/AndroidNcqrs.Eventing.Storage.SQLite.Tests/bin/*
+Mono/AndroidNcqrs.Eventing.Storage.SQLite.Tests/obj/*
+Mono/AndroidNcqrs.Eventing.Storage.SQLite/bin/*
+Mono/AndroidNcqrs.Eventing.Storage.SQLite/obj/*
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*

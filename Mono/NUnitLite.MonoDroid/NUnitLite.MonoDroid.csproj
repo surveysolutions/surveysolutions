@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -111,6 +112,7 @@
     <Compile Include="Runner\CommandLineOptions.cs" />
     <Compile Include="Runner\ConsoleWriter.cs" />
     <Compile Include="Runner\DebugWriter.cs" />
+    <Compile Include="Runner\IApplicationContextProvider.cs" />
     <Compile Include="Runner\ResultSummary.cs" />
     <Compile Include="Runner\TcpWriter.cs" />
     <Compile Include="Runner\TestLoader.cs" />

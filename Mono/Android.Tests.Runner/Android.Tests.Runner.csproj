@@ -53,6 +53,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestsContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -79,6 +80,10 @@
     <ProjectReference Include="..\AndroidNCalc.Tests\AndroidNCalc.Tests.csproj">
       <Project>{9F3A0A7A-471A-43CC-8E12-F465B413623D}</Project>
       <Name>AndroidNCalc.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite.Tests\AndroidNcqrs.Eventing.Storage.SQLite.Tests.csproj">
+      <Project>{5DEEE833-95C4-4D28-AAA7-E281FF1569D8}</Project>
+      <Name>AndroidNcqrs.Eventing.Storage.SQLite.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot.Test\AndroidNcqrs.Restoring.EventStapshoot.Test.csproj">
       <Project>{7D58D343-D618-4FD2-A4C5-CFA90D533229}</Project>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Android.App;
 using NUnitLite.MonoDroid;
+using Ncqrs.Eventing.Storage.SQLite.Tests;
 
 namespace AndroidNcqrs.Tests.Runner
 {
@@ -15,7 +16,8 @@ namespace AndroidNcqrs.Tests.Runner
 			//yield return typeof(Core.CAPI.Tests.Synchronization.ClientEventSyncTests).Assembly;
 			//yield return typeof(AndroidNcalc.Tests.Fixtures).Assembly;
 			//yield return typeof(Ncqrs.Restoring.EventStapshoot.test.SnapshootableAggregateRootTests).Assembly;
-			yield return typeof(RavenQuestionnaire.Core.Tests.Entities.QuestionTest).Assembly;
+			//yield return typeof(RavenQuestionnaire.Core.Tests.Entities.QuestionTest).Assembly;
+			yield return typeof(SQLiteEventStoreTests).Assembly;
 		}
 
 		protected override Type GetDetailsActivityType
