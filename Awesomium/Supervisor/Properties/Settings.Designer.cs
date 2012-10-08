@@ -121,7 +121,7 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8084/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:9089/")]
         public string DefaultUrl {
             get {
                 return ((string)(this["DefaultUrl"]));
@@ -133,7 +133,7 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8084")]
+        [global::System.Configuration.DefaultSettingValueAttribute("9089")]
         public string DefaultPort {
             get {
                 return ((string)(this["DefaultPort"]));
