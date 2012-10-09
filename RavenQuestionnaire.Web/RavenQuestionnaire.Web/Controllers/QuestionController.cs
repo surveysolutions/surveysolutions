@@ -111,8 +111,21 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Create(string id, Guid? groupPublicKey)
         {
+            if (!groupPublicKey.HasValue || groupPublicKey == Guid.Empty)
+            {
+                throw new HttpException(404, "Invalid query string parameters");
+            }
+
+            Guid questionnaireKey;
+            if (!Guid.TryParse(id, out questionnaireKey))
+            {
+                throw new HttpException(404, "Invalid query string parameters");
+            }
+
+            GroupView group = this.viewRepository.Load<GroupViewInputModel, GroupView>(
+                    new GroupViewInputModel(groupPublicKey.Value, questionnaireKey));
             this.LoadImages();
-            var question = new QuestionView(id, groupPublicKey);
+            var question = new QuestionView(id, groupPublicKey) { Parent = group.PublicKey, GroupTitle = group.Title };
             return this.View("_Create", question);
         }
 

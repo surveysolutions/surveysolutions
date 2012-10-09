@@ -42,7 +42,7 @@ else
 {
     <h3>
         <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey})" class="btn">
-            <i class="icon-arrow-left"></i></a>Edit Question</h3> 
+            <i class="icon-arrow-left"></i></a>Edit Question  in @Model.GroupTitle</h3> 
 }
 @using (Html.BeginForm("Save", "Question"))
 {
