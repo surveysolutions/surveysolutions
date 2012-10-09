@@ -75,6 +75,15 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\packages\RavenDB.Client.1.0.960\lib\net40\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Embedded">
+      <HintPath>..\packages\RavenDB.Embedded.1.0.960\lib\net40\Raven.Client.Embedded.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\packages\RavenDB.Client.1.0.960\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -227,6 +236,7 @@
     <Compile Include="Denormalizers\IDenormalizerStorage.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DocumentStoreProvider.cs" />
     <Compile Include="Documents\AbstractDocument.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -669,6 +679,7 @@
     <Compile Include="Services\IFileStorageService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Utility\CollectionExtensions.cs" />
     <Compile Include="Utility\EnumerableExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -833,6 +844,10 @@
     <ProjectReference Include="..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
       <Project>{5F014003-50D8-49E0-8AFE-91D38DCCC97C}</Project>
       <Name>NCalc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
+      <Project>{EA93A91D-7BC9-4EC0-8A22-8A772AFD76C3}</Project>
+      <Name>Ncqrs.Eventing.Storage.RavenDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>

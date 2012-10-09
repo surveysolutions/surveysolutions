@@ -32,6 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AndroidFluentAssertions">
+      <HintPath>..\LibrariesPortedToAndroid\Bin\AndroidFluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="AndroidMoq">
+      <HintPath>..\LibrariesPortedToAndroid\Bin\AndroidMoq.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -45,14 +51,6 @@
     <Compile Include="Verification.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
-      <Project>{667B05AE-CF79-4A4B-B9F8-DCC0999A729B}</Project>
-      <Name>AndroidFluentAssertions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidMocks\AndroidMocks.csproj">
-      <Project>{F031C01E-7159-4ABC-A77C-0CE3930BE187}</Project>
-      <Name>AndroidMocks</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
       <Project>{F0476C33-6F4F-4524-9CEA-37E87D55E67E}</Project>
       <Name>AndroidNCalc</Name>

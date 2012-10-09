@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reflection;
+using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using NUnit.Framework;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using AndroidMocks;
 using Ncqrs.Domain;
 
 namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
@@ -24,16 +24,17 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         [Test]
         public void When_a_catch_all_handler_is_register_it_should_be_called_for_all_events()
         {
-            var catchAllEventHandler = new DynamicMock<IEventHandler<object>>();
+            var catchAllEventHandler = new Mock<IEventHandler<object>>();
 			catchAllEventHandler.Expect(h => h.Handle(null));
 
             var bus = new InProcessEventBus();
-            bus.RegisterHandler(catchAllEventHandler.Instance);
+            bus.RegisterHandler(catchAllEventHandler.Object);
 
             bus.Publish(CreateADomainEvent());
             bus.Publish(CreateAEvent());
 
-            catchAllEventHandler.AssertWasCalled(h => h.Handle(null), times: 2);
+	        catchAllEventHandler.Verify(h => h.Handle(It.IsAny<IPublishedEvent<object>>()), 
+				Times.Exactly(2));
         }
         
         private static IPublishableEvent CreateAEvent()
@@ -50,12 +51,12 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         public void When_multiple_messages_are_published_at_once_they_all_should_be_published()
         {
 
-            var catchAllEventHandler = new DynamicMock<IEventHandler<object>>();
-			catchAllEventHandler.Expect(h => h.Handle(null));
+            var catchAllEventHandler = new Mock<IEventHandler<object>>();
+			catchAllEventHandler.Setup(h => h.Handle(It.IsAny<IPublishedEvent<object>>()));
 
             var bus = new InProcessEventBus();
             
-			bus.RegisterHandler(catchAllEventHandler.Instance);
+			bus.RegisterHandler(catchAllEventHandler.Object);
 
             var events = new[]
                              {
@@ -65,18 +66,19 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
 
             bus.Publish(events);
 
-            catchAllEventHandler.AssertWasCalled(h => h.Handle(null), times: events.Length);
+            catchAllEventHandler.Verify(h => h.Handle(It.IsAny<IPublishedEvent<object>>()), 
+			Times.Exactly(events.Length));
         }
 
         [Test]
         public void Registering_handler_via_generic_overload_should_also_add_the_handler()
         {
-            var aDomainEventHandler = new DynamicMock<IEventHandler<ADomainEvent>>();
-			aDomainEventHandler.Expect(h => h.Handle(null));
+            var aDomainEventHandler = new Mock<IEventHandler<ADomainEvent>>();
+			aDomainEventHandler.Setup(h => h.Handle(It.IsAny<IPublishedEvent<ADomainEvent>>()));
 
             var bus = new InProcessEventBus();
 
-            bus.RegisterHandler(aDomainEventHandler.Instance);
+            bus.RegisterHandler(aDomainEventHandler.Object);
 
             var events = new IPublishableEvent[]
                              {
@@ -86,18 +88,19 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
 
             bus.Publish(events);
 
-            aDomainEventHandler.AssertWasCalled(h => h.Handle(null), times: 6);
+            aDomainEventHandler.Verify(h => h.Handle(It.IsAny<IPublishedEvent<ADomainEvent>>()), 
+			Times.Exactly(6));
         }
 
 
         [Test]
         public void When_multiple_messages_are_published_and_a_specific_handler_is_register_oply_the_matching_events_should_be_received_at_the_handler()
         {
-            var aDomainEventHandler = new DynamicMock<IEventHandler<ADomainEvent>>();
-			aDomainEventHandler.Expect(h => h.Handle(null));
+            var aDomainEventHandler = new Mock<IEventHandler<ADomainEvent>>();
+			aDomainEventHandler.Setup(h => h.Handle(It.IsAny<IPublishedEvent<ADomainEvent>>()));
 
             var bus = new InProcessEventBus();
-            bus.RegisterHandler(aDomainEventHandler.Instance);
+            bus.RegisterHandler(aDomainEventHandler.Object);
 
             var events = new IPublishableEvent[]
                              {
@@ -107,17 +110,18 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
 
             bus.Publish(events);
 
-            aDomainEventHandler.AssertWasCalled(h => h.Handle(null), times: 6);
+            aDomainEventHandler.Verify(h => h.Handle(It.IsAny<IPublishedEvent<ADomainEvent>>()),
+				Times.Exactly(6));
         }
 
         [Test]
         public void When_a_handler_is_registered_for_a_specific_type_it_should_not_receive_other_events()
         {
-            var aDomainEventEventHandler = new DynamicMock<IEventHandler<ADomainEvent>>();
-			aDomainEventEventHandler.Expect(h => h.Handle(null));
+            var aDomainEventEventHandler = new Mock<IEventHandler<ADomainEvent>>();
+			aDomainEventEventHandler.Setup(h => h.Handle(It.IsAny<IPublishedEvent<ADomainEvent>>()));
 
             var bus = new InProcessEventBus();
-            bus.RegisterHandler(aDomainEventEventHandler.Instance);
+            bus.RegisterHandler(aDomainEventEventHandler.Object);
 
             bus.Publish(CreateADomainEvent());
             bus.Publish(CreateAEvent());
@@ -127,25 +131,26 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
             bus.Publish(CreateAEvent());
             bus.Publish(CreateAEvent());
 
-            aDomainEventEventHandler.AssertWasCalled(h => h.Handle(null), times: 2);
+            aDomainEventEventHandler.Verify(h => h.Handle(It.IsAny<IPublishedEvent<ADomainEvent>>()),
+				Times.Exactly(2));
         }
 
         [Test]
         public void When_a_multiple_catch_all_handler_are_registered_for_they_should_all_been_called()
         {
-            var catchAllEventHandler1 = new DynamicMock<IEventHandler<object>>();
-			catchAllEventHandler1.Expect(h => h.Handle(null));
+            var catchAllEventHandler1 = new Mock<IEventHandler<object>>();
+			catchAllEventHandler1.Setup(h => h.Handle(It.IsAny<IPublishedEvent<object>>()));
 
-            var catchAllEventHandler2 = new DynamicMock<IEventHandler<object>>();
-			catchAllEventHandler2.Expect(h => h.Handle(null));
+            var catchAllEventHandler2 = new Mock<IEventHandler<object>>();
+			catchAllEventHandler2.Setup(h => h.Handle(It.IsAny<IPublishedEvent<object>>()));
 
-            var catchAllEventHandler3 = new DynamicMock<IEventHandler<object>>();
-			catchAllEventHandler3.Expect(h => h.Handle(null));
+            var catchAllEventHandler3 = new Mock<IEventHandler<object>>();
+			catchAllEventHandler3.Setup(h => h.Handle(It.IsAny<IPublishedEvent<object>>()));
 
             var bus = new InProcessEventBus();
-            bus.RegisterHandler(catchAllEventHandler1.Instance);
-            bus.RegisterHandler(catchAllEventHandler2.Instance);
-            bus.RegisterHandler(catchAllEventHandler3.Instance);
+            bus.RegisterHandler(catchAllEventHandler1.Object);
+            bus.RegisterHandler(catchAllEventHandler2.Object);
+            bus.RegisterHandler(catchAllEventHandler3.Object);
 
             bus.Publish(CreateADomainEvent());
             bus.Publish(CreateAEvent());
@@ -155,27 +160,30 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
             bus.Publish(CreateAEvent());
             bus.Publish(CreateAEvent());
 
-            catchAllEventHandler1.AssertWasCalled(h => h.Handle(null), times : 7);
-            catchAllEventHandler2.AssertWasCalled(h => h.Handle(null), times : 7);
-            catchAllEventHandler3.AssertWasCalled(h => h.Handle(null), times : 7);
+			catchAllEventHandler1.Verify(h => h.Handle(It.IsAny<IPublishedEvent<object>>()),
+				Times.Exactly(7));
+			catchAllEventHandler2.Verify(h => h.Handle(It.IsAny<IPublishedEvent<object>>()),
+				Times.Exactly(7));
+			catchAllEventHandler3.Verify(h => h.Handle(It.IsAny<IPublishedEvent<object>>()),
+				Times.Exactly(7));
         }
 
         [Test]
         public void When_a_multiple_specific_handlers_are_register_they_all_should_be_called_when_the_specific_event_is_published()
         {
-			var specificEventHandler1 = new DynamicMock<IEventHandler<ADomainEvent>>();
-			specificEventHandler1.Expect(h => h.Handle(null));
+			var specificEventHandler1 = new Mock<IEventHandler<ADomainEvent>>();
+			specificEventHandler1.Setup(h => h.Handle(It.IsAny<IPublishedEvent<ADomainEvent>>()));
 
-			var specificEventHandler2 = new DynamicMock<IEventHandler<ADomainEvent>>();
-			specificEventHandler2.Expect(h => h.Handle(null));
+			var specificEventHandler2 = new Mock<IEventHandler<ADomainEvent>>();
+			specificEventHandler2.Setup(h => h.Handle(It.IsAny<IPublishedEvent<ADomainEvent>>()));
 
-			var specificEventHandler3 = new DynamicMock<IEventHandler<ADomainEvent>>();
-			specificEventHandler3.Expect(h => h.Handle(null));
+			var specificEventHandler3 = new Mock<IEventHandler<ADomainEvent>>();
+			specificEventHandler3.Setup(h => h.Handle(It.IsAny<IPublishedEvent<ADomainEvent>>()));
 
             var bus = new InProcessEventBus();
-            bus.RegisterHandler(specificEventHandler1.Instance);
-            bus.RegisterHandler(specificEventHandler2.Instance);
-            bus.RegisterHandler(specificEventHandler3.Instance);
+            bus.RegisterHandler(specificEventHandler1.Object);
+            bus.RegisterHandler(specificEventHandler2.Object);
+            bus.RegisterHandler(specificEventHandler3.Object);
 
             bus.Publish(CreateADomainEvent());
             bus.Publish(CreateAEvent());
@@ -185,9 +193,12 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
             bus.Publish(CreateAEvent());
             bus.Publish(CreateAEvent());
 
-            specificEventHandler1.AssertWasCalled(h => h.Handle(null), times : 2);
-            specificEventHandler2.AssertWasCalled(h => h.Handle(null), times : 2);
-            specificEventHandler3.AssertWasCalled(h => h.Handle(null), times : 2);
+			specificEventHandler1.Verify(h => h.Handle(It.IsAny<IPublishedEvent<ADomainEvent>>()),
+				Times.Exactly(2));
+			specificEventHandler2.Verify(h => h.Handle(It.IsAny<IPublishedEvent<ADomainEvent>>()),
+				Times.Exactly(2));
+			specificEventHandler3.Verify(h => h.Handle(It.IsAny<IPublishedEvent<ADomainEvent>>()),
+				Times.Exactly(2));
         }
     }
 }

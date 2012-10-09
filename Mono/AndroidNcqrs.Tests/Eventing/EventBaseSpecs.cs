@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Ncqrs.Eventing;
 using NUnit.Framework;
-using AndroidMocks;
+using Moq;
 
 namespace Ncqrs.Tests.Eventing
 {
@@ -14,14 +14,14 @@ namespace Ncqrs.Tests.Eventing
         [Test]
         public void Constructing_a_new_event_base_it_should_call_the_GenerateNewId_method_from_the_generator_that_has_been_set_in_the_environment()
         {
-            var generator = new DynamicMock<IUniqueIdentifierGenerator>();
-            generator.Expect(g => g.GenerateNewId(), Guid.NewGuid());
+            var generator = new Mock<IUniqueIdentifierGenerator>();
+            generator.Setup(g => g.GenerateNewId()).Returns(Guid.NewGuid());
 
-			NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator.Instance);
+			NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator.Object);
 
 	        var mock = new FakeEvent();
 
-            generator.AssertWasCalled(g=>g.GenerateNewId());
+            generator.Verify(g=>g.GenerateNewId());
         }
 
         [Test]
@@ -29,10 +29,10 @@ namespace Ncqrs.Tests.Eventing
         {
             var identiefier = Guid.NewGuid();
 
-            var generator = new DynamicMock<IUniqueIdentifierGenerator>();
-	        generator.Stub(g => g.GenerateNewId(), identiefier);
+            var generator = new Mock<IUniqueIdentifierGenerator>();
+	        generator.Setup(g => g.GenerateNewId()).Returns(identiefier);
 
-            NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator.Instance);
+            NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator.Object);
 
 	        var mock = new FakeEvent();
             mock.EventIdentifier.Should().Be(identiefier);
@@ -43,10 +43,10 @@ namespace Ncqrs.Tests.Eventing
         {
             var theTimeStamp = new DateTime(2000, 1, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
-            var clock = new DynamicMock<IClock>();
-	        clock.Stub(c => c.UtcNow(), theTimeStamp);
+            var clock = new Mock<IClock>();
+	        clock.Setup(c => c.UtcNow()).Returns(theTimeStamp);
 
-            NcqrsEnvironment.SetDefault<IClock>(clock.Instance);
+            NcqrsEnvironment.SetDefault<IClock>(clock.Object);
 
 	        var eventBase = new FakeEvent();
             eventBase.EventTimeStamp.Should().Be(theTimeStamp);

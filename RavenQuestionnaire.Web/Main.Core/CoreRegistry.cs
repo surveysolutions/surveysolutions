@@ -17,7 +17,11 @@ using Main.Core.View;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
-//using Raven.Client.Document;
+
+#if !MONODROID
+using Raven.Client;
+using Raven.Client.Document;
+#endif
 
 namespace Main.Core
 {
@@ -75,11 +79,13 @@ namespace Main.Core
         /// </summary>
         public override void Load()
         {
-			//var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.isEmbeded);
-			//this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
-			//this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
+#if !MONODROID
+			var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.isEmbeded);
+			this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
+			this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
 
-            // Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
+			Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
+#endif
            this.Kernel.Bind(
                 x =>
                 x.From(GetAssweblysForRegister()).SelectAllClasses().BindWith(

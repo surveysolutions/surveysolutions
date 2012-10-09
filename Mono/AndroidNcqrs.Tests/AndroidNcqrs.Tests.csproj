@@ -32,7 +32,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AndroidFluentAssertions">
+      <HintPath>..\LibrariesPortedToAndroid\Bin\AndroidFluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="AndroidMoq">
+      <HintPath>..\LibrariesPortedToAndroid\Bin\AndroidMoq.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json.MonoDroid">
+      <HintPath>..\LibrariesPortedToAndroid\Bin\Newtonsoft.Json.MonoDroid.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -109,17 +118,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
-      <Project>{667B05AE-CF79-4A4B-B9F8-DCC0999A729B}</Project>
-      <Name>AndroidFluentAssertions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidLogger\AndroidLogger.csproj">
       <Project>{2DA6C60D-CB06-40B4-91AF-A903451E3DB4}</Project>
       <Name>AndroidLogger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidMocks\AndroidMocks.csproj">
-      <Project>{F031C01E-7159-4ABC-A77C-0CE3930BE187}</Project>
-      <Name>AndroidMocks</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Spec\AndroidNcqrs.Spec.csproj">
       <Project>{C500A144-E8B6-41C1-8776-DC468E1D4889}</Project>
@@ -128,10 +129,6 @@
     <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
       <Project>{1B9537F5-8650-467A-A280-DF6EA396D6C5}</Project>
       <Name>AndroidNCQRS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Newtonsoft.Json\Newtonsoft.Json.MonoDroid.csproj">
-      <Project>{E6C3413C-919B-486D-8B6C-225CBD921B98}</Project>
-      <Name>Newtonsoft.Json.MonoDroid</Name>
     </ProjectReference>
     <ProjectReference Include="..\NUnitLite.MonoDroid\NUnitLite.MonoDroid.csproj">
       <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>

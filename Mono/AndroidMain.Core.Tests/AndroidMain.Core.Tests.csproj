@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;MONODROID</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -32,45 +32,87 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AndroidMoq">
+      <HintPath>..\LibrariesPortedToAndroid\Bin\AndroidMoq.dll</HintPath>
+    </Reference>
+    <Reference Include="AndroidNinject, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\LibrariesPortedToAndroid\Bin\AndroidNinject.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json.MonoDroid">
+      <HintPath>..\LibrariesPortedToAndroid\Bin\Newtonsoft.Json.MonoDroid.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommonTests\CommonInfrastuctureTests.cs" />
-    <Compile Include="CommonTests\StoredEvent.cs" />
-    <Compile Include="Domain\Configuration.cs" />
-    <Compile Include="Domain\when_creating_a_new_questionnaire.cs" />
-    <Compile Include="Domain\when_serializing_NewGroupAdded.cs" />
-    <Compile Include="Domain\when_updating_image.cs" />
-    <Compile Include="Domain\when_uploading_new_image.cs" />
-    <Compile Include="Entities\CompleteGroupTest.cs" />
-    <Compile Include="Entities\GroupTest.cs" />
-    <Compile Include="Entities\QuestionTest.cs" />
-    <Compile Include="Entities\SubEntities\DateTimeCompleteQuestionTest.cs" />
-    <Compile Include="Entities\SubEntities\NumericCompleteQuestionTest.cs" />
-    <Compile Include="Entities\SubEntities\SingleCompleteQuestionTest.cs" />
-    <Compile Include="Events\EventMergeUtilsTest.cs" />
-    <Compile Include="Events\EventSyncExtensionsTests.cs" />
-    <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs" />
-    <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutorTests.cs" />
-    <Compile Include="ExpressionExecutors\QuestionnaireParametersParserTest.cs" />
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\Configuration.cs">
+      <Link>Domain\Configuration.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\when_creating_a_new_questionnaire.cs">
+      <Link>Domain\when_creating_a_new_questionnaire.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\when_serializing_NewGroupAdded.cs">
+      <Link>Domain\when_serializing_NewGroupAdded.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\when_updating_image.cs">
+      <Link>Domain\when_updating_image.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\when_uploading_new_image.cs">
+      <Link>Domain\when_uploading_new_image.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Entities\CompleteGroupTest.cs">
+      <Link>Entities\CompleteGroupTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Entities\GroupTest.cs">
+      <Link>Entities\GroupTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Entities\QuestionTest.cs">
+      <Link>Entities\QuestionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Entities\SubEntities\DateTimeCompleteQuestionTest.cs">
+      <Link>Entities\SubEntities\DateTimeCompleteQuestionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Entities\SubEntities\NumericCompleteQuestionTest.cs">
+      <Link>Entities\SubEntities\NumericCompleteQuestionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Entities\SubEntities\SingleCompleteQuestionTest.cs">
+      <Link>Entities\SubEntities\SingleCompleteQuestionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Events\EventMergeUtilsTest.cs">
+      <Link>Events\EventMergeUtilsTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Events\EventSyncExtensionsTests.cs">
+      <Link>Events\EventSyncExtensionsTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs">
+      <Link>ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\ExpressionExecutors\CompleteQuestionnaireValidationExecutorTests.cs">
+      <Link>ExpressionExecutors\CompleteQuestionnaireValidationExecutorTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\ExpressionExecutors\QuestionnaireParametersParserTest.cs">
+      <Link>ExpressionExecutors\QuestionnaireParametersParserTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Utils\RavenMockUtils.cs">
+      <Link>Utils\RavenMockUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Utils\ReflectionUtils.cs">
+      <Link>Utils\ReflectionUtils.cs</Link>
+    </Compile>
+    <Compile Include="AndroidSpecificTests\CommonInfrastuctureTests.cs" />
+    <Compile Include="AndroidSpecificTests\StoredEvent.cs" />
+    <Compile Include="AndroidSpecificTests\TestsContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestsContext.cs" />
-    <Compile Include="Utils\NinjectMappingsSmokeTest.cs" />
-    <Compile Include="Utils\ReflectionUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6B9B6AB7-8858-49A3-A44A-4B56EE31C12C}</Project>
       <Name>AndroidMain.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidMoq\AndroidMoq.csproj">
-      <Project>{B1606F2F-DA6A-400D-9313-F7822D326931}</Project>
-      <Name>AndroidMoq</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{F9A0B560-A8BF-4914-88FB-7D98DF4242EF}</Project>
@@ -88,20 +130,18 @@
       <Project>{1B9537F5-8650-467A-A280-DF6EA396D6C5}</Project>
       <Name>AndroidNCQRS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
-      <Project>{DC128FDF-0F94-4B63-B79E-DDD02E5E1F0F}</Project>
-      <Name>AndroidNinject</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Newtonsoft.Json\Newtonsoft.Json.MonoDroid.csproj">
-      <Project>{E6C3413C-919B-486D-8B6C-225CBD921B98}</Project>
-      <Name>Newtonsoft.Json.MonoDroid</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NUnitLite.MonoDroid\NUnitLite.MonoDroid.csproj">
       <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>
       <Name>NUnitLite.MonoDroid</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="abd380d9-b4f3-410f-af37-3635b6c5449c" />
+    </VisualStudio>
+  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

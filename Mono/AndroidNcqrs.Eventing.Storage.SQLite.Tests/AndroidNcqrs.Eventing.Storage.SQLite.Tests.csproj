@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AndroidFluentAssertions">
+      <HintPath>..\LibrariesPortedToAndroid\Bin\AndroidFluentAssertions.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -45,13 +48,9 @@
     <Compile Include="Fakes\CustomerNameChanged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLiteEventStoreTests.cs" />
-    <Compile Include="TestsContext.cs" />
+    <Compile Include="SqliteTestsContext.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
-      <Project>{667B05AE-CF79-4A4B-B9F8-DCC0999A729B}</Project>
-      <Name>AndroidFluentAssertions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{F9A0B560-A8BF-4914-88FB-7D98DF4242EF}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>

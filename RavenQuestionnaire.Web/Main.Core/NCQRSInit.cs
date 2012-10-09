@@ -21,11 +21,17 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
+
+#if MONODROID
+using AndroidNcqrs.Eventing.Storage.SQLite;
+#else
 //using Ncqrs.Eventing.Storage.RavenDB;
 //using Ncqrs.Restoring.EventStapshoot;
 //using Ncqrs.Restoring.EventStapshoot.EventStores.RavenDB;
-using Ninject;
 //using Raven.Client.Document;
+#endif
+
+using Ninject;
 
 namespace Main.Core
 {
@@ -44,10 +50,13 @@ namespace Main.Core
         /// </param>
         public static void Init(IKernel kernel)
         {
+#if MONODROID
+			NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
+#else
             //NcqrsEnvironment.SetDefault(InitializeEventStore(kernel.Get<DocumentStore>()));
+#endif
 
             NcqrsEnvironment.SetDefault(InitializeCommandService());
-
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
             // key param for storing im memory
@@ -59,6 +68,7 @@ namespace Main.Core
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
 
+#if !MONODROID
         /// <summary>
         /// The rebuild read layer.
         /// </summary>
@@ -86,6 +96,7 @@ namespace Main.Core
 		//    myEventBus.Publish(ExcludeHistoryBefaourSnapshoot(eventsByAggregateRoot));
 		//}*/
 		//}
+
 		//private static IEnumerable<CommittedEvent> ExcludeHistoryBefaourSnapshoot(IEnumerable<CommittedEvent> events)
 		//{
 		//    var lastSnapshoot = events.LastOrDefault(x => x.Payload is SnapshootLoaded);
@@ -95,12 +106,38 @@ namespace Main.Core
 		//        return events.SkipWhile(x => x != lastSnapshoot);
 
 		//}
+#else
+		public static void RebuildReadLayer()
+		{
+			var myEventBus = NcqrsEnvironment.Get<IEventBus>();
+			if (myEventBus == null)
+			{
+				throw new Exception("IEventBus is not properly initialized.");
+			}
 
-        #endregion
+			var myEventStore = NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore; // as MsSqlServerEventStore;
 
-        #region Methods
+			if (myEventStore == null)
+			{
+				throw new Exception("IEventStore is not correct.");
+			}
 
-        /// <summary>
+			var myEvents = myEventStore.GetAllEvents();
+			myEventBus.Publish(myEvents
+				.Select(evt => evt as IPublishableEvent)
+				.ToList());
+			/* foreach (IGrouping<Guid, CommittedEvent> eventsByAggregateRoot in myEvents.GroupBy(x => x.EventSourceId))
+		{
+			myEventBus.Publish(ExcludeHistoryBefaourSnapshoot(eventsByAggregateRoot));
+		}*/
+		}
+#endif
+
+		#endregion
+
+		#region Methods
+
+		/// <summary>
         /// The implements at least one i command.
         /// </summary>
         /// <param name="type">
@@ -147,7 +184,7 @@ namespace Main.Core
             return service;
         }
 
-
+#if !MONODROID
         /// <summary>
         /// The initialize event store.
         /// </summary>
@@ -162,6 +199,7 @@ namespace Main.Core
 		//    var eventStore = new RavenDBEventStore(store);
 		//    return eventStore;
 		//}
+#endif
 
         /// <summary>
         /// The is i command interface.

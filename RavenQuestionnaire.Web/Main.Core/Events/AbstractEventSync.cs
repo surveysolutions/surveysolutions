@@ -95,7 +95,11 @@ namespace Main.Core.Events
                 }
 
                 this.eventStore.Store(uncommittedEventStream);
+#if MONODROID
+				myEventBus.Publish(uncommittedEventStream.ToBaseCollection<UncommittedEvent, IPublishableEvent>());
+#else
                 myEventBus.Publish(uncommittedEventStream);
+#endif
             }
         }
 

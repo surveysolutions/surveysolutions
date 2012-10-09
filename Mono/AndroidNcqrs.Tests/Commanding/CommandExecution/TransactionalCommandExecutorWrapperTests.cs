@@ -1,7 +1,7 @@
-﻿using AndroidMocks;
-using Ncqrs.Commanding.CommandExecution;
+﻿using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Commanding;
 using NUnit.Framework;
+using Moq;
 
 namespace Ncqrs.Tests.Commanding.CommandExecution
 {
@@ -16,14 +16,15 @@ namespace Ncqrs.Tests.Commanding.CommandExecution
         public void When_executing_it_it_should_call_the_executor_given_via_ctor()
         {
             var theCommand = new DummyCommand();
-            var theExecutor = new DynamicMock<ICommandExecutor<DummyCommand>>();
+            //var theExecutor = new DynamicMock<ICommandExecutor<DummyCommand>>();
+	        var theExecutor = new Mock<ICommandExecutor<DummyCommand>>();
 			theExecutor.Expect(e => e.Execute(null));
 
-            var theWrapper = new TransactionalCommandExecutorWrapper<DummyCommand>(theExecutor.Instance);
+            var theWrapper = new TransactionalCommandExecutorWrapper<DummyCommand>(theExecutor.Object);
 
             theWrapper.Execute(theCommand);
 
-            theExecutor.AssertWasCalled(e => e.Execute(null));
+            theExecutor.Verify(x => x.Execute(It.IsAny<DummyCommand>()));
         }
     }
 }

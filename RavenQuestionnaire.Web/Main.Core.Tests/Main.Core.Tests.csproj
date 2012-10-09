@@ -84,25 +84,61 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\Configuration.cs" />
-    <Compile Include="Entities\CompleteGroupTest.cs" />
-    <Compile Include="Entities\GroupTest.cs" />
-    <Compile Include="Entities\QuestionTest.cs" />
-    <Compile Include="Entities\SubEntities\DateTimeCompleteQuestionTest.cs" />
-    <Compile Include="Entities\SubEntities\NumericCompleteQuestionTest.cs" />
-    <Compile Include="Entities\SubEntities\SingleCompleteQuestionTest.cs" />
-    <Compile Include="Events\EventMergeUtilsTest.cs" />
-    <Compile Include="Events\EventSyncExtensionsTests.cs" />
-    <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs" />
-    <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutorTests.cs" />
-    <Compile Include="ExpressionExecutors\QuestionnaireParametersParserTest.cs" />
-    <Compile Include="Domain\when_creating_a_new_questionnaire.cs" />
-    <Compile Include="Domain\when_serializing_NewGroupAdded.cs" />
-    <Compile Include="Domain\when_updating_image.cs" />
-    <Compile Include="Domain\when_uploading_new_image.cs" />
+    <Compile Include="Domain\Configuration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\when_creating_a_new_questionnaire.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\when_serializing_NewGroupAdded.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\when_updating_image.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\when_uploading_new_image.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\CompleteGroupTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\GroupTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\QuestionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\SubEntities\DateTimeCompleteQuestionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\SubEntities\NumericCompleteQuestionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\SubEntities\SingleCompleteQuestionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\EventMergeUtilsTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\EventSyncExtensionsTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutorTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExpressionExecutors\QuestionnaireParametersParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\RavenMockUtils.cs" />
-    <Compile Include="Utils\ReflectionUtils.cs" />
+    <Compile Include="Utils\RavenMockUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utils\ReflectionUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Spec\Ncqrs.Spec.csproj">

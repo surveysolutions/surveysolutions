@@ -1,5 +1,5 @@
 ﻿using System;
-using AndroidMocks;
+using Moq;
 using FluentAssertions;
 using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Domain;
@@ -47,46 +47,44 @@ namespace Ncqrs.Tests.Commanding
         [Test]
         public void Executing_one_with_a_custom_factory_should_give_context_created_with_that_factory()
         {
-            var factory = new DynamicMock<IUnitOfWorkFactory>();
-			factory.Expect(f => f.CreateUnitOfWork(Guid.NewGuid()), null);
+	        var factory = new Mock<IUnitOfWorkFactory>();
+	        factory.Setup(f => f.CreateUnitOfWork(Guid.NewGuid()));
 
             var aCommand = new FooCommand()
                                {
                                    CommandIdentifier = Guid.NewGuid()
                                };
-            var executor = new FooCommandExecutor(factory.Instance);
+            var executor = new FooCommandExecutor(factory.Object);
             executor.Execute(aCommand);
 
-            factory.AssertWasCalled(f => f.CreateUnitOfWork(aCommand.CommandIdentifier));
+            factory.Verify(f => f.CreateUnitOfWork(It.IsAny<Guid>()));
         }
 
         [Test]
         public void Executing_should_call_ExecuteInContext_with_context_from_factory()
         {            
-            var context = new DynamicMock<IUnitOfWorkContext>();
-			context.Stub(c => c.Dispose());
+            var context = new Mock<IUnitOfWorkContext>();
 
-            var factory = new DynamicMock<IUnitOfWorkFactory>();
-            factory.Stub(f => f.CreateUnitOfWork(Guid.NewGuid()), context.Instance);
+            var factory = new Mock<IUnitOfWorkFactory>();
+			factory.Setup(f => f.CreateUnitOfWork(It.IsAny<Guid>())).Returns(context.Object);
 
             var aCommand = new FooCommand();
-            var executor = new FooCommandExecutor(factory.Instance);
+            var executor = new FooCommandExecutor(factory.Object);
             executor.Execute(aCommand);
 
-            Assert.True(executor.LastGivenContext == context.Instance);
+            Assert.True(executor.LastGivenContext == context.Object);
         }
 
         [Test]
         public void Executing_should_call_ExecuteInContext_with_given_command()
         {
-			var context = new DynamicMock<IUnitOfWorkContext>();
-			context.Stub(c => c.Dispose());
+			var context = new Mock<IUnitOfWorkContext>();
 
-			var factory = new DynamicMock<IUnitOfWorkFactory>();
-			factory.Stub(f => f.CreateUnitOfWork(Guid.NewGuid()), context.Instance);
+			var factory = new Mock<IUnitOfWorkFactory>();
+	        factory.Setup(f => f.CreateUnitOfWork(Guid.NewGuid())).Returns(context.Object);
 
 			var theCommand = new FooCommand();
-			var executor = new FooCommandExecutor(factory.Instance);
+			var executor = new FooCommandExecutor(factory.Object);
 			executor.Execute(theCommand);
 
 			executor.LastGivenCommand.Should().Be(theCommand);

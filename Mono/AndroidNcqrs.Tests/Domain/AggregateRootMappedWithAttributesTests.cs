@@ -7,22 +7,21 @@ using FluentAssertions;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Mapping;
 using NUnit.Framework;
-using AndroidMocks;
+using Moq;
 
 namespace Ncqrs.Tests.Domain
 {
-	// todo: fix correct version of Mock framefork
-	//[TestFixture]
-	//public class AggregateRootMappedWithAttributesTests
-	//{
-	//    [Test]
-	//    public void Initializing_one_should_set_the_mapping_strategy_to_attributed_based()
-	//    {
-	//        var aggregateRoot = new DynamicMock<AggregateRootMappedWithAttributes>();
-	//        var field = aggregateRoot.Instance.GetType().BaseType.BaseType.GetField("_mappingStrategy", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField);
-            
-	//        var theStrategy = field.GetValue(aggregateRoot);
-	//        theStrategy.Should().BeOfType<AttributeBasedEventHandlerMappingStrategy>();
-	//    }
-	//}
+	[TestFixture]
+	public class AggregateRootMappedWithAttributesTests
+	{
+		[Test]
+		public void Initializing_one_should_set_the_mapping_strategy_to_attributed_based()
+		{
+			var aggregateRoot = new Mock<AggregateRootMappedWithAttributes>();
+			var field = aggregateRoot.Object.GetType().BaseType.BaseType.GetField("_mappingStrategy", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField);
+
+			var theStrategy = field.GetValue(aggregateRoot.Object);
+			theStrategy.Should().BeOfType<AttributeBasedEventHandlerMappingStrategy>();
+		}
+	}
 }

@@ -5,6 +5,7 @@ using AndroidMain.Core.Tests.CommonTests;
 using NUnitLite;
 using NUnitLite.MonoDroid;
 using Ncqrs.Eventing.Storage.SQLite.Tests;
+using Ncqrs.Tests;
 
 namespace Android.Tests.Runner
 {
@@ -13,12 +14,34 @@ namespace Android.Tests.Runner
 	{
 		protected override IEnumerable<TestAssemblyInfo> GetAssembliesForTest()
 		{
-			//yield return typeof (NcqrsEnvironmentSpecs).Assembly;
-			//yield return typeof(Core.CAPI.Tests.Synchronization.ClientEventSyncTests).Assembly;
-			//yield return typeof(AndroidNcalc.Tests.Fixtures).Assembly;
-			//yield return typeof(Ncqrs.Restoring.EventStapshoot.test.SnapshootableAggregateRootTests).Assembly;
-			yield return MainCoreTests();
+			yield return NcqrsTests();
+			//yield return CapiTests();
+			//yield return NcalcTests();
+			//yield return StepshootTests();
+			//yield return MainCoreTests();
 			//yield return SQliteEventStoreTests();
+		}
+
+		#region TestAssemblyInfos
+		private TestAssemblyInfo StepshootTests()
+		{
+			var assembly = typeof (Ncqrs.Restoring.EventStapshoot.test.SnapshootableAggregateRootTests).Assembly;
+
+			return new TestAssemblyInfo(assembly);
+		}
+
+		private TestAssemblyInfo NcalcTests()
+		{
+			var assembly = typeof (AndroidNcalc.Tests.Fixtures).Assembly;
+
+			return new TestAssemblyInfo(assembly);
+		}
+
+		private TestAssemblyInfo CapiTests()
+		{
+			var assembly = typeof (Core.CAPI.Tests.Synchronization.ClientEventSyncTests).Assembly;
+
+			return new TestAssemblyInfo(assembly);
 		}
 
 		private TestAssemblyInfo SQliteEventStoreTests()
@@ -28,16 +51,24 @@ namespace Android.Tests.Runner
 			return new TestAssemblyInfo(assembly);
 		}
 
-		protected override Type GetDetailsActivityType
-		{
-			get { return typeof(DefaultTestDetailsActivity); }
-		}
-
 		private TestAssemblyInfo MainCoreTests()
 		{
 			var assembly = typeof(RavenQuestionnaire.Core.Tests.Entities.QuestionTest).Assembly;
 
-			return new TestAssemblyInfo(assembly, typeof(CommonInfrastuctureTests));
+			return new TestAssemblyInfo(assembly/*, typeof(CommonInfrastuctureTests)*/);
+		}
+
+		private TestAssemblyInfo NcqrsTests()
+		{
+			var assembly = typeof (NcqrsEnvironmentSpecs).Assembly;
+
+			return new TestAssemblyInfo(assembly);
+		}
+		#endregion
+
+		protected override Type GetDetailsActivityType
+		{
+			get { return typeof(DefaultTestDetailsActivity); }
 		}
 	}
 }

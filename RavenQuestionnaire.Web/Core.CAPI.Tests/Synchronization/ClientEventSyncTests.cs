@@ -10,7 +10,6 @@ using Core.CAPI.Synchronization;
 using Main.Core.Denormalizers;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
 using Main.Core.View.CompleteQuestionnaire;
 using Moq;
 using NUnit.Framework;

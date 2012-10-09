@@ -6,7 +6,7 @@ using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Spec;
-using AndroidMocks;
+using Moq;
 using NUnit.Framework;
 
 namespace Ncqrs.Tests.Domain
@@ -68,14 +68,14 @@ namespace Ncqrs.Tests.Domain
         [Test]
         public void It_should_initialize_with_a_new_id_given_by_the_generator_from_the_environment()
         {
-            var generator = new DynamicMock<IUniqueIdentifierGenerator>();
-			generator.Expect(g => g.GenerateNewId(), Guid.NewGuid());
+            var generator = new Mock<IUniqueIdentifierGenerator>();
+	        generator.Setup(g => g.GenerateNewId()).Returns(Guid.NewGuid);
 
-            NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator.Instance);
+            NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator.Object);
 
             var theAggregate = new MyAggregateRoot();
 
-            generator.AssertWasCalled(g => g.GenerateNewId());
+            generator.Verify(g => g.GenerateNewId());
         }
 
         [Test]

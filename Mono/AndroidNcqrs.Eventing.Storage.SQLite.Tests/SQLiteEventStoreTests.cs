@@ -16,14 +16,14 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 		[SetUp]
 		public void Setup()
 		{
-			TestsContext.Context.DeleteDatabase(DataBaseHelper.DATABASE_NAME);
-			_store = new SQLiteEventStore(TestsContext.CurrentContext);
+			SqliteTestsContext.Context.DeleteDatabase(DataBaseHelper.DATABASE_NAME);
+			_store = new SQLiteEventStore(SqliteTestsContext.CurrentContext);
 		}
 
 		[TearDown]
 		public void Teardown()
 		{
-			TestsContext.Context.DeleteDatabase(DataBaseHelper.DATABASE_NAME);
+			SqliteTestsContext.Context.DeleteDatabase(DataBaseHelper.DATABASE_NAME);
 		}
 
 		private SQLiteEventStore _store;
