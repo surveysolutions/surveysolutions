@@ -408,13 +408,27 @@ namespace Main.Core.View.Question
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
-        protected Dictionary<string, Guid> LoadGroups(IQuestionnaireDocument questionnaire, Guid questionPublicKey)
+        protected Dictionary<string, Guid> LoadGroups(IQuestionnaireDocument questionnaire, Guid? questionPublicKey, Guid? groupPublicKey)
         {
             try
             {
-                var groupPublicKey = this.GetQuestionGroup(questionnaire, questionPublicKey);
+                var excludedGroups = new List<Guid>();
+                if (questionPublicKey != null)
+                    groupPublicKey = this.GetQuestionGroup(questionnaire, questionPublicKey.Value);
+                if (groupPublicKey != null)
+                {
+                    excludedGroups.Add(groupPublicKey.Value);
+                }
+
                 var groups = new Dictionary<string, Guid>();
-                if (questionnaire != null) foreach (var group in questionnaire.Children.Where(t => t is IGroup)) this.SelectAll(group, groups, groupPublicKey);
+                if (questionnaire != null)
+                {
+                    foreach (var group in questionnaire.Children.Where(t => t is IGroup))
+                    {
+                        this.SelectAll(group, groups, excludedGroups);
+                    }
+                }
+
                 return groups;
             }
             catch (Exception e)
@@ -422,6 +436,7 @@ namespace Main.Core.View.Question
                 return null;
             }
         }
+
 
         /// <summary>
         /// Select all groups
@@ -432,16 +447,27 @@ namespace Main.Core.View.Question
         /// <param name="groups">
         /// The groups.
         /// </param>
-        /// <param name="groupPublicKey">
-        /// The group Public Key.
+        /// <param name="excludedGroups">
+        /// The excluded Groups.
         /// </param>
-        private void SelectAll(IComposite currentGroup, Dictionary<string, Guid> groups, Guid? groupPublicKey)
+        private void SelectAll(IComposite currentGroup, Dictionary<string, Guid> groups, List<Guid> excludedGroups)
         {
-            if (groupPublicKey == null || groupPublicKey != currentGroup.PublicKey)
-                groups.Add(string.Format("{0}-{1}", (currentGroup as IGroup).Title, currentGroup.PublicKey), currentGroup.PublicKey);
-            if (currentGroup.Children.Where(t=>t is IGroup).Count() > 0)
+            var s = excludedGroups.Where(t => t == currentGroup.PublicKey).FirstOrDefault();
+            if (excludedGroups.Count > 0 && s == Guid.Empty
+                && (currentGroup as IGroup).Propagated == Propagate.AutoPropagated)
+            {
+                groups.Add(
+                    string.Format("{0}-{1}", (currentGroup as IGroup).Title, currentGroup.PublicKey),
+                    currentGroup.PublicKey);
+            }
+
+            if (currentGroup.Children.Where(t => t is IGroup).Count() > 0)
+            {
                 foreach (var childGroup in currentGroup.Children.Where(t => t is IGroup))
-                    this.SelectAll(childGroup, groups, groupPublicKey);
+                {
+                    this.SelectAll(childGroup, groups, excludedGroups);
+                }
+            }
         }
 
         #endregion
@@ -473,6 +499,11 @@ namespace Main.Core.View.Question
         public QuestionView(string questionnaireId, Guid? groupPublicKey)
             : base(questionnaireId, groupPublicKey)
         {
+        }
+
+        public QuestionView(IQuestionnaireDocument questionnaire, Guid? groupPublicKey)
+        {
+            this.Groups = this.LoadGroups(questionnaire, null, groupPublicKey);
         }
 
         /// <summary>
@@ -509,7 +540,7 @@ namespace Main.Core.View.Question
             }
 */
             
-            this.Groups = this.LoadGroups(questionnaire, doc.PublicKey);
+            this.Groups = this.LoadGroups(questionnaire, doc.PublicKey, null);
         }
 
         #endregion
