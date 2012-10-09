@@ -180,6 +180,11 @@ namespace Main.Core.View.Question
         /// </summary>
         public Dictionary<string, Guid> Groups { get; set; }
 
+        /// <summary>
+        /// Gets or sets parent group title.
+        /// </summary>
+        public string GroupTitle { get; set; }
+
         #endregion
     }
 
@@ -245,8 +250,59 @@ namespace Main.Core.View.Question
             this.Cards = new CardView[0];
             this.Triggers = new List<Guid>();
             this.Groups = new Dictionary<string, Guid>();
+            var parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
+            this.Parent = parent.PublicKey;
+            this.GroupTitle = parent.Title;
         }
 
+        /// <summary>
+        /// The get question group.
+        /// </summary>
+        /// <param name="questionnaire">
+        /// The questionnaire.
+        /// </param>
+        /// <param name="questionKey">
+        /// The question key.
+        /// </param>
+        /// <returns>
+        /// Parent group
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// </exception>
+        protected IGroup GetQuestionGroup(IQuestionnaireDocument questionnaire, Guid questionKey)
+        {
+            if (questionnaire.Children.Any(q => q.PublicKey.Equals(questionKey)))
+            {
+                return null;
+            }
+
+            var group = new Queue<IComposite>();
+            foreach (IComposite child in questionnaire.Children)
+            {
+                group.Enqueue(child);
+            }
+
+            while (group.Count != 0)
+            {
+                IComposite queueItem = group.Dequeue();
+                if (queueItem.Children != null)
+                {
+                    if (queueItem.Children.Any(q => q.PublicKey.Equals(questionKey)))
+                    {
+                        return queueItem as IGroup;
+                    }
+
+                    foreach (IComposite child in queueItem.Children)
+                    {
+                        /* var childWithQuestion = child as IGroup<IGroup, TQuestion>;
+                         if(childWithQuestion!=null)*/
+                        group.Enqueue(child);
+                    }
+                }
+            }
+
+            throw new ArgumentException("group does not exist");
+        }
         #endregion
 
         #region Public Properties
@@ -332,7 +388,6 @@ namespace Main.Core.View.Question
         public QuestionView(IQuestionnaireDocument questionnaire, TQuestion doc)
             : base(questionnaire, doc)
         {
-            this.Parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
         }
 
         /// <summary>
@@ -354,55 +409,6 @@ namespace Main.Core.View.Question
         #region Methods
 
         /// <summary>
-        /// The get question group.
-        /// </summary>
-        /// <param name="questionnaire">
-        /// The questionnaire.
-        /// </param>
-        /// <param name="questionKey">
-        /// The question key.
-        /// </param>
-        /// <returns>
-        /// The System.Nullable`1[T -&gt; System.Guid].
-        /// </returns>
-        /// <exception cref="ArgumentException">
-        /// </exception>
-        protected Guid? GetQuestionGroup(IQuestionnaireDocument questionnaire, Guid questionKey)
-        {
-            if (questionnaire.Children.Any(q => q.PublicKey.Equals(questionKey)))
-            {
-                return null;
-            }
-
-            var group = new Queue<IComposite>();
-            foreach (IComposite child in questionnaire.Children)
-            {
-                group.Enqueue(child);
-            }
-
-            while (group.Count != 0)
-            {
-                IComposite queueItem = group.Dequeue();
-                if (queueItem.Children != null)
-                {
-                    if (queueItem.Children.Any(q => q.PublicKey.Equals(questionKey)))
-                    {
-                        return queueItem.PublicKey;
-                    }
-
-                    foreach (IComposite child in queueItem.Children)
-                    {
-                        /* var childWithQuestion = child as IGroup<IGroup, TQuestion>;
-                         if(childWithQuestion!=null)*/
-                        group.Enqueue(child);
-                    }
-                }
-            }
-
-            throw new ArgumentException("group does not exist");
-        }
-
-        /// <summary>
         /// LoadAllGroups
         /// </summary>
         /// <param name="questionnaireId">
@@ -412,7 +418,9 @@ namespace Main.Core.View.Question
         {
             try
             {
-                var groupPublicKey = this.GetQuestionGroup(questionnaire, questionPublicKey);
+                var parent = this.GetQuestionGroup(questionnaire, questionPublicKey);
+                var groupPublicKey = parent.PublicKey;
+
                 var groups = new Dictionary<string, Guid>();
                 if (questionnaire != null) foreach (var group in questionnaire.Children.Where(t => t is IGroup)) this.SelectAll(group, groups, groupPublicKey);
                 return groups;
@@ -445,7 +453,7 @@ namespace Main.Core.View.Question
         }
 
         #endregion
-    }
+   }
 
     /// <summary>
     /// The question view.

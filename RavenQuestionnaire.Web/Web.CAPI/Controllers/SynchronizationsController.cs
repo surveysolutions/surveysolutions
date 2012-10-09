@@ -54,11 +54,6 @@ namespace Web.CAPI.Controllers
         private readonly IGlobalInfoProvider _globalProvider;
 
         /// <summary>
-        /// The exportimport events.
-        /// </summary>
-        private readonly IExportImport exportimportEvents;
-
-        /// <summary>
         /// The synchronizer.
         /// </summary>
         private readonly IEventSync synchronizer;
@@ -81,19 +76,14 @@ namespace Web.CAPI.Controllers
         /// <param name="globalProvider">
         /// The global provider.
         /// </param>
-        /// <param name="exportImport">
-        /// The export import.
-        /// </param>
         /// <param name="synchronizer">
         /// The synchronizer.
         /// </param>
         public SynchronizationsController(
             IViewRepository viewRepository,
             IGlobalInfoProvider globalProvider,
-            IExportImport exportImport,
             IEventSync synchronizer)
         {
-            this.exportimportEvents = exportImport;
             this.viewRepository = viewRepository;
             this._globalProvider = globalProvider;
             this.synchronizer = synchronizer;
