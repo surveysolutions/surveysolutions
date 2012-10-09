@@ -187,8 +187,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
 
             this.LoadImages();
-            QuestionView model =
-                this.viewRepository.Load<QuestionViewInputModel, QuestionView>(
+            QuestionView model = this.viewRepository.Load<QuestionViewInputModel, QuestionView>(
                     new QuestionViewInputModel(publicKey.Value, questionnaireKey.Value));
             this.ViewBag.Group = model.Groups;
             this.ViewBag.CurrentGroup = model.Parent;
@@ -212,9 +211,7 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult EditCard(Guid publicKey, string questionnaireId, Guid imageKey)
         {
-            CardView source =
-                this.viewRepository.Load<CardViewInputModel, CardView>(
-                    new CardViewInputModel(publicKey, questionnaireId, imageKey));
+            CardView source = this.viewRepository.Load<CardViewInputModel, CardView>(new CardViewInputModel(publicKey, questionnaireId, imageKey));
             return this.View(
                 "_EditCard", 
                 new ImageNewViewModel
