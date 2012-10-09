@@ -53,6 +53,7 @@
     <Reference Include="Ionic.Zip">
       <HintPath>..\..\ExternalLibs\Ionic.Zip.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
@@ -86,7 +87,7 @@
     <Compile Include="Controllers\QuestionControllerTest.cs" />
     <Compile Include="Controllers\QuestionnaireControllerTest.cs" />
     <Compile Include="Controllers\SurveyControllerTest.cs" />
-    <Compile Include="ExportTest.cs" />
+    <Compile Include="Export\ExportTest.cs" />
     <Compile Include="Membership\QuestionnaireMembershipProviderTests.cs" />
     <Compile Include="Membership\QuestionnaireRoleProviderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -110,6 +111,10 @@
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
+      <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
+      <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
     <ProjectReference Include="..\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
