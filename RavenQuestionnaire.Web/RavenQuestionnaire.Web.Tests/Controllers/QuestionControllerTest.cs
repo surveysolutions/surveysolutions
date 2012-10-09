@@ -7,19 +7,17 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.View;
-using Main.Core.View.Answer;
-using Main.Core.View.Question;
-
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Web.Mvc;
 
     using Main.Core.Commands.Questionnaire.Question;
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities.Question;
+    using Main.Core.View;
+    using Main.Core.View.Answer;
+    using Main.Core.View.Question;
 
     using Moq;
 
@@ -28,8 +26,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
     using NUnit.Framework;
 
-    using Main.Core;
-    using Core.CAPI.Views.Question;
     using RavenQuestionnaire.Core.Views.Questionnaire;
     using RavenQuestionnaire.Web.Controllers;
 

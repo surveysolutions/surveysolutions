@@ -8,9 +8,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.View;
-using Main.Core.View.Questionnaire;
-
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     using System;
@@ -19,6 +16,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
     using Main.Core.Commands.Questionnaire;
     using Main.Core.Documents;
+    using Main.Core.View;
 
     using Moq;
 
@@ -27,14 +25,13 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
     using NUnit.Framework;
 
-    using Main.Core;
-    using Core.CAPI.Views.Questionnaire;
+    using RavenQuestionnaire.Core.Views.Questionnaire;
     using RavenQuestionnaire.Web.Controllers;
 
     /// <summary>
-    ///This is a test class for QuestionnaireControllerTest and is intended
-    ///to contain all QuestionnaireControllerTest Unit Tests
-    ///</summary>
+    /// This is a test class for QuestionnaireControllerTest and is intended
+    /// to contain all QuestionnaireControllerTest Unit Tests
+    /// </summary>
     [TestFixture]
     public class QuestionnaireControllerTest
     {
