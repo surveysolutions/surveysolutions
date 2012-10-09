@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyBrowseView.cs" company="">
+// <copyright file="IndexView.cs" company="">
 //   
 // </copyright>
 // <summary>
@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Core.Supervisor.Views.Survey
+namespace Core.Supervisor.Views.Index
 {
     using System;
     using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace Core.Supervisor.Views.Survey
     /// <summary>
     /// The survey browse view.
     /// </summary>
-    public class SurveyBrowseView
+    public class IndexView
     {
         #region Constants and Fields
 
@@ -38,15 +38,15 @@ namespace Core.Supervisor.Views.Survey
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyBrowseView"/> class.
+        /// Initializes a new instance of the <see cref="IndexView"/> class.
         /// </summary>
-        public SurveyBrowseView()
+        public IndexView()
         {
-            this.Items = new List<SurveyBrowseItem>();
+            this.Items = new List<IndexViewItem>();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyBrowseView"/> class.
+        /// Initializes a new instance of the <see cref="IndexView"/> class.
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -63,8 +63,8 @@ namespace Core.Supervisor.Views.Survey
         /// <param name="user">
         /// The user.
         /// </param>
-        public SurveyBrowseView(
-            int page, int pageSize, int totalCount, IEnumerable<SurveyBrowseItem> items, UserDocument user)
+        public IndexView(
+            int page, int pageSize, int totalCount, IEnumerable<IndexViewItem> items, UserDocument user)
             : this()
         {
             this.User = user == null ? new UserLight(Guid.Empty, "All") : new UserLight(user.PublicKey, user.UserName);
@@ -84,10 +84,10 @@ namespace Core.Supervisor.Views.Survey
                             { "Redo", SurveyStatus.Redo.Name }
                         });
 
-            foreach (SurveyBrowseItem item in items)
+            foreach (IndexViewItem item in items)
             {
                 this.Items.Add(
-                    new SurveyBrowseItem(
+                    new IndexViewItem(
                         item.Id,
                         item.Title,
                         item.Unassigned,
@@ -112,7 +112,7 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// Gets or sets the items.
         /// </summary>
-        public List<SurveyBrowseItem> Items { get; set; }
+        public List<IndexViewItem> Items { get; set; }
 
         /// <summary>
         /// Gets or sets the order.
@@ -157,9 +157,9 @@ namespace Core.Supervisor.Views.Survey
         public int PageSize { get; private set; }
 
         /// <summary>
-        /// Gets the total count.
+        /// Gets and sets the total count.
         /// </summary>
-        public int TotalCount { get; private set; }
+        public int TotalCount { get; set; }
 
         /// <summary>
         /// Gets User.
@@ -169,7 +169,7 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// Gets or sets Summary.
         /// </summary>
-        public SurveyBrowseItem Summary { get; set; }
+        public IndexViewItem Summary { get; set; }
 
         #endregion
     }

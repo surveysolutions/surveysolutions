@@ -388,10 +388,8 @@ namespace Main.Core.View.Question
                 IComposite queueItem = group.Dequeue();
                 if (queueItem.Children != null)
                 {
-                    if (queueItem.Children.Any(child => child.PublicKey == questionKey))
-                    {
+                    if (queueItem.Children.Any(child => child.PublicKey == questionKey)) 
                         return queueItem.PublicKey;
-                    }
 
                     foreach (IComposite child in queueItem.Children)
                     {
@@ -428,8 +426,11 @@ namespace Main.Core.View.Question
                 {
                     excludedGroups.Add(groupPublicKey.Value);
                 }
+             
+
 
                 var groups = new Dictionary<string, Guid>();
+             
                 if (questionnaire != null)
                 {
                     foreach (var group in questionnaire.Children.Where(t => t is IGroup))
@@ -461,7 +462,7 @@ namespace Main.Core.View.Question
         private void SelectAll(IComposite currentGroup, Dictionary<string, Guid> groups, List<Guid> excludedGroups)
         {
             var s = excludedGroups.Where(t => t == currentGroup.PublicKey).FirstOrDefault();
-            if (excludedGroups.Count > 0 && s == Guid.Empty
+            if (excludedGroups.Count > 0 && s == Guid.Empty)
                 && (currentGroup as IGroup).Propagated == Propagate.AutoPropagated)
             {
                 groups.Add(
@@ -472,7 +473,7 @@ namespace Main.Core.View.Question
             if (currentGroup.Children.Where(t => t is IGroup).Count() > 0)
             {
                 foreach (var childGroup in currentGroup.Children.Where(t => t is IGroup))
-                {
+                    this.SelectAll(childGroup, groups, excludedGroups);
                     this.SelectAll(childGroup, groups, excludedGroups);
                 }
             }
@@ -520,7 +521,7 @@ namespace Main.Core.View.Question
         /// </param>
         public QuestionView(IQuestionnaireDocument questionnaire, Guid groupPublicKey)
         {
-            this.Groups = this.LoadGroups(questionnaire, null,  groupPublicKey);
+            this.Groups = this.LoadGroups(questionnaire, groupPublicKey);
         }
 
         /// <summary>

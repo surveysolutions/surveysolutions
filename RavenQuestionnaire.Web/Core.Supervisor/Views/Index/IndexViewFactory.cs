@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyViewFactory.cs" company="The World Bank">
+// <copyright file="IndexViewFactory.cs" company="The World Bank">
 //   2012
 // </copyright>
 // <summary>
@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Core.Supervisor.Views.Survey
+namespace Core.Supervisor.Views.Index
 {
     using System;
     using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace Core.Supervisor.Views.Survey
     /// <summary>
     /// The survey view factory.
     /// </summary>
-    public class SurveyViewFactory : IViewFactory<SurveyViewInputModel, SurveyBrowseView>
+    public class IndexViewFactory : IViewFactory<IndexInputModel, IndexView>
     {
         #region Fields
 
@@ -43,12 +43,12 @@ namespace Core.Supervisor.Views.Survey
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyViewFactory"/> class.
+        /// Initializes a new instance of the <see cref="IndexViewFactory"/> class.
         /// </summary>
         /// <param name="documentItemSession">
         /// The document item session.
         /// </param>
-        public SurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession,
+        public IndexViewFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession,
             IDenormalizerStorage<UserDocument> users)
         {
             this.documentItemSession = documentItemSession;
@@ -66,9 +66,9 @@ namespace Core.Supervisor.Views.Survey
         /// The input.
         /// </param>
         /// <returns>
-        /// The RavenQuestionnaire.Core.Views.Survey.SurveyBrowseView.
+        /// The RavenQuestionnaire.Core.Views.Survey.IndexView.
         /// </returns>
-        public SurveyBrowseView Load(SurveyViewInputModel input)
+        public IndexView Load(IndexInputModel input)
         {
             UserDocument user = null;
             if (input.UserId != Guid.Empty)
@@ -82,7 +82,7 @@ namespace Core.Supervisor.Views.Survey
                          x => x.Responsible != null && (x.Responsible.Id == input.UserId))).GroupBy(x => x.TemplateId)).
                     AsQueryable();
 
-            var retval = new SurveyBrowseView(input.Page, input.PageSize, 0, new List<SurveyBrowseItem>(), user);
+            var retval = new IndexView(input.Page, input.PageSize, 0, new List<IndexViewItem>(), user);
             if (input.Orders.Count > 0)
             {
                 items = input.Orders[0].Direction == OrderDirection.Asc
@@ -90,7 +90,7 @@ namespace Core.Supervisor.Views.Survey
                                                       : items.OrderByDescending(
                                                           input.Orders[0].Field);
             }
-            retval.Summary = new SurveyBrowseItem(
+            retval.Summary = new IndexViewItem(
                 Guid.Empty,
                 "Summary",
                 items.Sum(x => x.Unassigned),
@@ -100,6 +100,9 @@ namespace Core.Supervisor.Views.Survey
                 items.Sum(x => x.Complete),
                 items.Sum(x => x.Approve),
                 items.Sum(x => x.Redo));
+
+            retval.TotalCount = items.Count();
+
             retval.Items =
                 items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
             return retval;
@@ -114,12 +117,12 @@ namespace Core.Supervisor.Views.Survey
         /// <returns>
         /// List of survey browse items
         /// </returns>
-        protected IEnumerable<SurveyBrowseItem> BuildItems(IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> grouped)
+        protected IEnumerable<IndexViewItem> BuildItems(IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> grouped)
         {
             foreach (var templateGroup in grouped)
             {
                 yield
-                    return new SurveyBrowseItem(templateGroup.Key,
+                    return new IndexViewItem(templateGroup.Key,
                                                 templateGroup.FirstOrDefault().QuestionnaireTitle,
                                                 templateGroup.Count(
                                                     q =>

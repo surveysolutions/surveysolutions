@@ -4,12 +4,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace Core.Supervisor.Views.Survey
+namespace Core.Supervisor.Views.Index
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

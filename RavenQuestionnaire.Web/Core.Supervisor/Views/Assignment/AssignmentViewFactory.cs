@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyGroupViewFactory.cs" company="">
+// <copyright file="AssignmentViewFactory.cs" company="">
 //   
 // </copyright>
 // <summary>
@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Core.Supervisor.Views.Survey
+namespace Core.Supervisor.Views.Assignment
 {
     using System;
     using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace Core.Supervisor.Views.Survey
     /// <summary>
     /// The survey group view factory.
     /// </summary>
-    public class SurveyGroupViewFactory : IViewFactory<SurveyGroupInputModel, SurveyGroupView>
+    public class AssignmentViewFactory : IViewFactory<AssignmentInputModel, AssignmentView>
     {
         #region Constants and Fields
 
@@ -36,12 +36,12 @@ namespace Core.Supervisor.Views.Survey
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyGroupViewFactory"/> class.
+        /// Initializes a new instance of the <see cref="AssignmentViewFactory"/> class.
         /// </summary>
         /// <param name="documentItemSession">
         /// The document item session.
         /// </param>
-        public SurveyGroupViewFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
+        public AssignmentViewFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }
@@ -57,11 +57,12 @@ namespace Core.Supervisor.Views.Survey
         /// The input.
         /// </param>
         /// <returns>
-        /// The RavenQuestionnaire.Core.Views.Survey.SurveyGroupView.
+        /// The RavenQuestionnaire.Core.Views.Survey.AssignmentView.
         /// </returns>
-        public SurveyGroupView Load(SurveyGroupInputModel input)
+        public AssignmentView Load(AssignmentInputModel input)
         {
-            int count = this.documentItemSession.Query().Count(x => x.TemplateId == input.Id);
+            int count;
+
             string title = string.Empty;
             CompleteQuestionnaireBrowseItem template =
                 this.documentItemSession.Query().Where(v => v.TemplateId == input.Id).FirstOrDefault();
@@ -69,23 +70,22 @@ namespace Core.Supervisor.Views.Survey
             {
                 title = template.QuestionnaireTitle;
             }
-
-            if (count == 0)
-            {
-                return new SurveyGroupView(
-                    input.Page, input.PageSize, title, 0, new CompleteQuestionnaireBrowseItem[0], input.Id);
-            }
+            
             var statuses = input.Statuses == null
                                ? new List<Guid>()
                                : input.Statuses.Select(Guid.Parse).ToList();
             IQueryable<CompleteQuestionnaireBrowseItem> items =
                 statuses.Count == 0
-                ? this.documentItemSession.Query().Where(v => v.TemplateId == input.Id)
-                : this.documentItemSession.Query().Where(v => v.TemplateId == input.Id)
+                ? this.documentItemSession.Query().Where(x => (x.TemplateId == input.Id))
+                : this.documentItemSession.Query().Where(x => (x.TemplateId == input.Id))
                                                   .Where(v => statuses.Contains(v.Status.PublicId));
             if (input.IsNotAssigned)
             {
                 items = items.Where(t => t.Responsible == null);
+            }
+            else if (input.UserId.HasValue)
+            {
+                items = items.Where(t => t.Responsible != null).Where(x => x.Responsible.Id == input.UserId.Value);
             }
 
             if (input.QuestionnaireId != Guid.Empty)
@@ -93,13 +93,20 @@ namespace Core.Supervisor.Views.Survey
                 items = items.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
             }
 
+            count = items.Count();
+            if (count == 0)
+            {
+                return new AssignmentView(
+                    input.Page, input.PageSize, title, 0, new CompleteQuestionnaireBrowseItem[0], input.Id);
+            }
+
             if (input.Orders.Count > 0)
             {
                 items = this.DefineOrderBy(items, input);
             }
-
+            
             items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-            return new SurveyGroupView(input.Page, input.PageSize, title, count, items, input.Id);
+            return new AssignmentView(input.Page, input.PageSize, title, count, items, input.Id);
         }
 
         #endregion
@@ -119,7 +126,7 @@ namespace Core.Supervisor.Views.Survey
         /// The System.Linq.IQueryable`1[T -&gt; RavenQuestionnaire.Core.Views.CompleteQuestionnaire.CompleteQuestionnaireBrowseItem].
         /// </returns>
         private IQueryable<CompleteQuestionnaireBrowseItem> DefineOrderBy(
-            IQueryable<CompleteQuestionnaireBrowseItem> query, SurveyGroupInputModel input)
+            IQueryable<CompleteQuestionnaireBrowseItem> query, AssignmentInputModel input)
         {
             List<string> o = query.SelectMany(t => t.FeaturedQuestions).Select(y => y.Title).Distinct().ToList();
             if (o.Contains(input.Orders[0].Field))

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RavenQuestionnaire.Web.Controllers
+namespace RavenQuestionnaire.Web.Models
 {
     /// <summary>
     /// The file browse item client.

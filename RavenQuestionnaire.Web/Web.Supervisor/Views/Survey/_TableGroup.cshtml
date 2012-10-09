@@ -1,7 +1,7 @@
-﻿@using Core.Supervisor.Views.Survey
-@using Main.Core.Entities.SubEntities
-@model Core.Supervisor.Views.Survey.SurveyGroupView
-@foreach (SurveyGroupItem fitem in Model.Items)
+﻿@using Main.Core.Entities.SubEntities
+@using Core.Supervisor.Views.Assignment
+@model AssignmentView
+@foreach (AssignmentViewItem fitem in Model.Items)
 {
     <tr id="responsible-@(fitem.Id)">
         @foreach (var item in fitem.FeatureadValue)
