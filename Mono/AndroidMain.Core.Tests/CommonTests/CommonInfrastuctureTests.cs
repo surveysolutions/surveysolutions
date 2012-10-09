@@ -3,10 +3,12 @@ using System.Linq;
 using Android.Content;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using Main.Core;
+using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Documents;
 using Main.Core.Services;
 using NUnit.Framework;
 using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Ninject;
@@ -57,7 +59,9 @@ namespace AndroidMain.Core.Tests.CommonTests
 		{
 			var storedEvent = StoredEvent.GetCreateTemplateEvent();
 
-			var store = NcqrsEnvironment.Get<IEventStore>();
+			var sourceId = storedEvent.EventSourceId;
+
+			var store = NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore;
 
 			Assert.NotNull(store);
 
@@ -65,15 +69,28 @@ namespace AndroidMain.Core.Tests.CommonTests
 
 			store.Store(eventStream);
 
-			var storedEvents = store.ReadFrom(storedEvent.EventSourceId, long.MinValue, long.MinValue);
+			var storedEvents = store.ReadFrom(sourceId, long.MinValue, long.MaxValue);
 			
 			Assert.That(storedEvents.Count(), Is.EqualTo(1));
+
+			var newTemplateGuid = Guid.NewGuid();
+			var command = new CreateCompleteQuestionnaireCommand(newTemplateGuid, sourceId);
+			
+			var commandService = NcqrsEnvironment.Get<ICommandService>();
+			commandService.Execute(command);
+
+			var allEvents = store.GetAllEvents();
+			
+			Assert.That(allEvents.Count(),Is.EqualTo(2));
+			
+			var newStoredEvents = store.ReadFrom(newTemplateGuid, long.MinValue, long.MaxValue);
+			Assert.That(newStoredEvents.Count(), Is.EqualTo(1));
 		}
 
 		private UncommittedEventStream GetStream(StoredEvent storedEvent)
 		{
 			var @event = new UncommittedEvent(storedEvent.EventIdentifier,
-			                                  storedEvent.EventSourceId, storedEvent.EventSequence, 1,
+			                                  storedEvent.EventSourceId, storedEvent.EventSequence, 0,
 			                                  storedEvent.EventTimeStamp, storedEvent.Data, new Version(1, 0));
 
 			var result = new UncommittedEventStream(storedEvent.EventSourceId);

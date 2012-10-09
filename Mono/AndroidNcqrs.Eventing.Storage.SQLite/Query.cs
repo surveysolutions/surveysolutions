@@ -40,7 +40,7 @@ EventSourceId TEXT NOT NULL,
 EventId TEXT  NOT NULL,
 Sequence INTEGER  NOT NULL,
 TimeStamp INTEGER NOT NULL,
-Data BLOB NOT NULL,
+Data TEXT NOT NULL,
 Name TEXT  NOT NULL)";
 		}
 

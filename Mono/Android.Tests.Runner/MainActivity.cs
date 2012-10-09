@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Android.App;
 using AndroidMain.Core.Tests.CommonTests;
 using NUnitLite;
 using NUnitLite.MonoDroid;
 using Ncqrs.Eventing.Storage.SQLite.Tests;
 
-namespace AndroidNcqrs.Tests.Runner
+namespace Android.Tests.Runner
 {
 	[Activity(Label = "Android.Tests.Runner", MainLauncher = true, Icon = "@drawable/icon")]
 	public class MainActivity : TestRunnerActivity
@@ -19,7 +18,14 @@ namespace AndroidNcqrs.Tests.Runner
 			//yield return typeof(AndroidNcalc.Tests.Fixtures).Assembly;
 			//yield return typeof(Ncqrs.Restoring.EventStapshoot.test.SnapshootableAggregateRootTests).Assembly;
 			yield return MainCoreTests();
-			//yield return typeof(SQLiteEventStoreTests).Assembly;
+			//yield return SQliteEventStoreTests();
+		}
+
+		private TestAssemblyInfo SQliteEventStoreTests()
+		{
+			var assembly = typeof (SQLiteEventStoreTests).Assembly;
+
+			return new TestAssemblyInfo(assembly);
 		}
 
 		protected override Type GetDetailsActivityType

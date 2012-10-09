@@ -5,6 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Android.Content;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using Newtonsoft.Json;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
@@ -13,7 +14,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 		private readonly Context _context;
 		private readonly SQLiteContext _sqLiteContext;
 		private readonly DataBaseHelper _databaseHelper;
-		private readonly IPropertyBagConverter _propertyBagConverter;
+		//private readonly IPropertyBagConverter _propertyBagConverter;
 
 		public SQLiteEventStore(Context context)
 		{
@@ -23,7 +24,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 
 			_sqLiteContext = new SQLiteContext(_databaseHelper);
 
-			_propertyBagConverter = new PropertyBagConverter();
+			//_propertyBagConverter = new PropertyBagConverter();
 		}
 
 		#region Public methods
@@ -45,7 +46,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 				var eventId = Guid.Parse(cursor.GetString(eventIdIndex));
 				var sequenceId = cursor.GetLong(sequenceIndex);
 				var eventTimeStamp = DateTime.FromBinary(cursor.GetLong(timestampIndex));
-				var data = GetObject(cursor.GetBlob(dataIndex));
+				var data = GetObject(cursor.GetString(dataIndex));
 
 				var @event = new CommittedEvent(Guid.Empty,
 				                                eventId,
@@ -85,7 +86,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 				var eventId = Guid.Parse(cursor.GetString(eventIdIndex));
 				var sequenceId = cursor.GetLong(sequenceIndex);
 				var eventTimeStamp = DateTime.FromBinary(cursor.GetLong(timestampIndex));
-				var data = GetObject(cursor.GetBlob(dataIndex));
+				var data = GetObject(cursor.GetString(dataIndex));
 
 				var @event = new CommittedEvent(Guid.Empty,
 												eventId,
@@ -106,7 +107,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 		{
 			foreach (var @event in events)
 			{
-				var data = GetBinaryData(@event.Payload);
+				var data = GetJsonData(@event.Payload);
 
 				var values = new ContentValues();
 				values.Put("EventSourceId", @event.EventSourceId.ToString());
@@ -120,27 +121,43 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 			}
 		}
 
-		private byte[] GetBinaryData(object payload)
+		#region DataConverter
+
+		private string GetJsonData(object payload)
 		{
-			var bag = _propertyBagConverter.Convert(payload);
-			using (var stream = new MemoryStream())
-			{
-				var formatter = new BinaryFormatter();
-				formatter.Serialize(stream, bag);
-				stream.Position = 0;
-				return stream.ToArray();
-			}
+			return JsonConvert.SerializeObject(payload, Formatting.None, 
+				new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects});
 		}
 
-		private object GetObject(byte[] data)
+		private object GetObject(string json)
 		{
-			using (var stream = new MemoryStream(data))
-			{
-				var formatter = new BinaryFormatter();
-				var bag = (PropertyBag)formatter.Deserialize(stream);
-				return _propertyBagConverter.Convert(bag);
-			}
+			return JsonConvert.DeserializeObject(json,
+				new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects});
 		}
+
+		//private byte[] GetBinaryData(object payload)
+		//{
+		//    var bag = _propertyBagConverter.Convert(payload);
+		//    using (var stream = new MemoryStream())
+		//    {
+		//        var formatter = new BinaryFormatter();
+		//        formatter.Serialize(stream, bag);
+		//        stream.Position = 0;
+		//        return stream.ToArray();
+		//    }
+		//}
+
+		//private object GetObject(byte[] data)
+		//{
+		//    using (var stream = new MemoryStream(data))
+		//    {
+		//        var formatter = new BinaryFormatter();
+		//        var bag = (PropertyBag)formatter.Deserialize(stream);
+		//        return _propertyBagConverter.Convert(bag);
+		//    }
+		//}
+		#endregion
+
 		#endregion
 	}
 }

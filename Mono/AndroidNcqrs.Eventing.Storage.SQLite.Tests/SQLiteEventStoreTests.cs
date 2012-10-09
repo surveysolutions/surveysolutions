@@ -147,5 +147,27 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 			allEvents.GroupBy(e => e.EventSourceId)
 				.Count().Should().Be(3);
 		}
+
+		[Test]
+		public void store_should_retriev_events_by_source_and_version()
+		{
+			var firstId = Guid.NewGuid();
+			var firstStream = GetUncommiteEventStream(firstId);
+			_store.Store(firstStream);
+
+			var secondId = Guid.NewGuid();
+			var secondStream = GetUncommiteEventStream(secondId);
+			_store.Store(secondStream);
+
+			var thirdId = Guid.NewGuid();
+			var thirdStream = GetUncommiteEventStream(thirdId);
+			_store.Store(thirdStream);
+
+			var events = _store.ReadFrom(secondId, minVersion: 0, maxVersion: 1);
+
+			Assert.That(events.Count(), Is.EqualTo(2));
+
+			events.First().EventSourceId.Should().Be(secondId);
+		}
 	}
 }
