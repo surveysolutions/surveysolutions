@@ -169,18 +169,6 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:7089/")]
-        public string DefaultUrl {
-            get {
-                return ((string)(this["DefaultUrl"]));
-            }
-            set {
-                this["DefaultUrl"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string EndpointExportPath {
             get {
@@ -193,6 +181,18 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:7089/")]
+        public string DefaultUrl {
+            get {
+                return ((string)(this["DefaultUrl"]));
+            }
+            set {
+                this["DefaultUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("7089")]
         public string DefaultPort {
             get {
@@ -200,6 +200,18 @@ namespace Browsing.CAPI.Properties {
             }
             set {
                 this["DefaultPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Account/IsUserInBase")]
+        public string LoginCapabilitiesCheckPath {
+            get {
+                return ((string)(this["LoginCapabilitiesCheckPath"]));
+            }
+            set {
+                this["LoginCapabilitiesCheckPath"] = value;
             }
         }
     }

@@ -1,5 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using System.Web.Security;
+using Main.Core.Events;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using Main.Core.Utility;
@@ -11,11 +15,13 @@ namespace Web.CAPI.Controllers
     {
         private readonly IGlobalInfoProvider _globalProvider;
         private IFormsAuthentication authentication;
+        private IUserEventSync _userEventSync;
 
-        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider)
+        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IUserEventSync userEventSync)
         {
             authentication = auth;
             _globalProvider = globalProvider;
+            _userEventSync = userEventSync;
         }
 
         //
@@ -52,6 +58,12 @@ namespace Web.CAPI.Controllers
             authentication.SignOut();
 
             return Redirect("~/");
+        }
+        public bool IsUserInBase()
+        {
+            var count = _userEventSync.GetUsers(null);
+            if (count == null) return false;
+            return count.ToList().Count > 0;
         }
     }
 }

@@ -113,6 +113,7 @@ namespace Browsing.Common.Containers
             this.btnLogin.Size = new System.Drawing.Size(209, 214);
             this.btnLogin.TabIndex = 0;
             this.btnLogin.Text = "Login";
+            this.btnLogin.Enabled = false;
             this.btnLogin.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
@@ -201,6 +202,7 @@ namespace Browsing.Common.Containers
             this.tableLayoutPanel1.ResumeLayout(false);
             this.pnlHolder.ResumeLayout(false);
             this.ResumeLayout(false);
+            
 
         }
 

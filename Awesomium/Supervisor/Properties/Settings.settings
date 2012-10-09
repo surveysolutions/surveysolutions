@@ -35,5 +35,8 @@
     <Setting Name="RunClient" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="LoginCapabilitiesCheckPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Account/IsUserInBase</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

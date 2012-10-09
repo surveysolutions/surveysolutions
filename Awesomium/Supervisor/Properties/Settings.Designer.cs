@@ -154,5 +154,17 @@ namespace Browsing.Supervisor.Properties {
                 this["RunClient"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Account/IsUserInBase")]
+        public string LoginCapabilitiesCheckPath {
+            get {
+                return ((string)(this["LoginCapabilitiesCheckPath"]));
+            }
+            set {
+                this["LoginCapabilitiesCheckPath"] = value;
+            }
+        }
     }
 }
