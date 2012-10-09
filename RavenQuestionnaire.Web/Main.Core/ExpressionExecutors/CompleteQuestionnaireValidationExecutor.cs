@@ -10,7 +10,6 @@
 namespace Main.Core.ExpressionExecutors
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     using Main.Core.Entities.Extensions;
@@ -60,7 +59,7 @@ namespace Main.Core.ExpressionExecutors
         {
             foreach (ICompleteQuestion completeQuestion in group.Children.Where(c => c is ICompleteQuestion))
             {
-                completeQuestion.Valid = Execute(completeQuestion);
+                completeQuestion.Valid = this.Execute(completeQuestion);
             }
         }
 
@@ -75,7 +74,7 @@ namespace Main.Core.ExpressionExecutors
             bool isValid = true;
             foreach (ICompleteQuestion completeQuestion in this.hash.Questions)
             {
-                completeQuestion.Valid = Execute(completeQuestion);
+                completeQuestion.Valid = this.Execute(completeQuestion);
                 isValid = isValid && completeQuestion.Valid;
             }
 
@@ -111,7 +110,7 @@ namespace Main.Core.ExpressionExecutors
             var e = new Expression(question.ValidationExpression);
             e.EvaluateParameter += (name, args) =>
                 {
-                    Guid nameGuid = string.Compare("this", name, System.StringComparison.OrdinalIgnoreCase) == 0 ? question.PublicKey : Guid.Parse(name);
+                    Guid nameGuid = string.Compare("this", name, StringComparison.OrdinalIgnoreCase) == 0 ? question.PublicKey : Guid.Parse(name);
 
                     Guid? propagationKey = question.PropogationPublicKey;
                     var targetQuestion = this.hash[nameGuid, propagationKey];
@@ -120,11 +119,11 @@ namespace Main.Core.ExpressionExecutors
                         args.Result = null;
                         return;
                     }
+                    
                     args.Result = targetQuestion.GetAnswerObject();
                 };
 
             e.EvaluateFunction += ExtentionFunctions.EvaluateFunctionContains; ////support for multioption
-
 
             bool result = false;
             try
