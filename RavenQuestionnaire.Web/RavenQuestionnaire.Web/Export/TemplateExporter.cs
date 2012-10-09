@@ -1,19 +1,22 @@
 // -----------------------------------------------------------------------
-// <copyright file="TemplateExporter.cs" company="">
-// TODO: Update copyright text.
+// <copyright file="TemplateExporter.cs" company="WorldBank">
+// 2012
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Documents;
-using Main.Core.Events;
-using Ncqrs.Restoring.EventStapshoot;
-using Questionnaire.Core.Web.Export;
-
 namespace RavenQuestionnaire.Web.Export
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Main.Core.Documents;
+    using Main.Core.Events;
+
+    using Ncqrs.Restoring.EventStapshoot;
+
+    using Questionnaire.Core.Web.Export;
+
     /// <summary>
     /// Interface for exportTempaltes
     /// </summary>
@@ -90,11 +93,11 @@ namespace RavenQuestionnaire.Web.Export
             if (templateGuid != null)
                 archive.Add(events.Where(t =>
                 {
-                    var payload = ((t.Payload as SnapshootLoaded).Template).Payload;
-                    return payload != null && (payload as QuestionnaireDocument).PublicKey == templateGuid;
+                    var payload = ((t.Payload as SnapshootLoaded).Template).Payload as QuestionnaireDocument;
+                    return payload != null && payload.PublicKey == templateGuid;
                 }).FirstOrDefault());
-            else
-                archive = events;
+            else 
+                archive.AddRange(events.Where(aggregateRootEvent => ((SnapshootLoaded)(aggregateRootEvent.Payload)).Template.Payload is QuestionnaireDocument));
             return archive;
         }
 

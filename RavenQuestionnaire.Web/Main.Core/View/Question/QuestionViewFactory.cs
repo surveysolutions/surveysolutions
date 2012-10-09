@@ -13,6 +13,8 @@ using Main.Core.Entities.SubEntities;
 
 namespace Main.Core.View.Question
 {
+    using System;
+
     /// <summary>
     /// The question view factory.
     /// </summary>
@@ -60,6 +62,8 @@ namespace Main.Core.View.Question
             var question = doc.Find<IQuestion>(input.PublicKey);
             if (question == null)
             {
+                if (input.GroupPublicKey != null)
+                    return new QuestionView(doc, input.GroupPublicKey);
                 return null;
             }
 
