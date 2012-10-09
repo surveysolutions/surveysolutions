@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyGroupInputModel.cs" company="The World Bank">
+// <copyright file="AssignmentInputModel.cs" company="The World Bank">
 //   2012
 // </copyright>
 // <summary>
@@ -7,18 +7,19 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using Main.Core.Entities;
-using Main.Core.Utility;
-using Main.Core.View.CompleteQuestionnaire;
-
-namespace Core.Supervisor.Views.Survey
+namespace Core.Supervisor.Views.Assignment
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Main.Core.Entities;
+    using Main.Core.Utility;
+    using Main.Core.View.CompleteQuestionnaire;
+
     /// <summary>
     /// The survey group input model.
     /// </summary>
-    public class SurveyGroupInputModel
+    public class AssignmentInputModel
     {
         #region Fields
 
@@ -42,14 +43,14 @@ namespace Core.Supervisor.Views.Survey
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyGroupInputModel"/> class.
+        /// Initializes a new instance of the <see cref="AssignmentInputModel"/> class.
         /// </summary>
-        public SurveyGroupInputModel()
+        public AssignmentInputModel()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyGroupInputModel"/> class.
+        /// Initializes a new instance of the <see cref="AssignmentInputModel"/> class.
         /// </summary>
         /// <param name="id">
         /// The id.
@@ -57,36 +58,45 @@ namespace Core.Supervisor.Views.Survey
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
-        public SurveyGroupInputModel(Guid id, Guid questionnaireId)
+        public AssignmentInputModel(Guid id, Guid questionnaireId)
         {
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyGroupInputModel"/> class.
+        /// Initializes a new instance of the <see cref="AssignmentInputModel"/> class.
         /// </summary>
         /// <param name="id">
         /// The id.
         /// </param>
+        /// <param name="userId">
+        /// The user Id.
+        /// </param>
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
-        /// /// <param name="statuses">
+        /// <param name="statuses">
         /// The statistic filter.
         /// </param>
-        public SurveyGroupInputModel(Guid id, Guid questionnaireId, ICollection<string> statuses)
+        public AssignmentInputModel(Guid id, Guid? userId, Guid questionnaireId, ICollection<string> statuses)
         {
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
             this.Statuses = statuses;
+            this.UserId = userId;
         }
 
+
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyGroupInputModel"/> class.
+        /// Initializes a new instance of the <see cref="AssignmentInputModel"/> class.
         /// </summary>
         /// <param name="id">
         /// The id.
+        /// </param>
+        /// <param name="userId">
+        /// The user Id.
         /// </param>
         /// <param name="page">
         /// The page.
@@ -97,13 +107,13 @@ namespace Core.Supervisor.Views.Survey
         /// <param name="orders">
         /// The orders.
         /// </param>
-        /// /// <param name="statuses">
+        /// <param name="statuses">
         /// The statuses.
         /// </param>
         /// <param name="isNotAssigned">
         /// The isNotAssigned.
         /// </param>
-        public SurveyGroupInputModel(Guid id, int page, int pageSize, List<OrderRequestItem> orders, ICollection<string> statuses, bool isNotAssigned)
+        public AssignmentInputModel(Guid id, Guid? userId, int page, int pageSize, List<OrderRequestItem> orders, ICollection<string> statuses, bool isNotAssigned)
         {
             this.Id = id;
             this.Page = page;
@@ -111,13 +121,17 @@ namespace Core.Supervisor.Views.Survey
             this.Orders = orders;
             this.Statuses = statuses;
             this.IsNotAssigned = isNotAssigned;
+            this.UserId = userId;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyGroupInputModel"/> class.
+        /// Initializes a new instance of the <see cref="AssignmentInputModel"/> class.
         /// </summary>
         /// <param name="id">
         /// The id.
+        /// </param>
+        /// <param name="userId">
+        /// The user Id.
         /// </param>
         /// <param name="page">
         /// The page.
@@ -128,12 +142,13 @@ namespace Core.Supervisor.Views.Survey
         /// <param name="orders">
         /// The orders.
         /// </param>
-        public SurveyGroupInputModel(Guid id, int page, int pageSize, List<OrderRequestItem> orders)
+        public AssignmentInputModel(Guid id, Guid? userId, int page, int pageSize, List<OrderRequestItem> orders)
         {
             this.Id = id;
             this.Page = page;
             this.PageSize = pageSize;
             this.Orders = orders;
+            this.UserId = userId;
         }
 
         #endregion
@@ -155,6 +170,11 @@ namespace Core.Supervisor.Views.Survey
         /// Gets or sets the id.
         /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets UserId.
+        /// </summary>
+        public Guid? UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the order.

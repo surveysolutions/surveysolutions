@@ -63,16 +63,15 @@
     <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
     <Compile Include="Views\Interviewer\InterviewerView.cs" />
     <Compile Include="Views\Interviewer\InterviewerViewFactory.cs" />
-    <Compile Include="Views\Survey\SurveyBrowseItem.cs" />
-    <Compile Include="Views\Survey\SurveyBrowseView.cs" />
-    <Compile Include="Views\Survey\SurveyGroupedByStatusHeader.cs" />
-    <Compile Include="Views\Survey\SurveyGroupInputModel.cs" />
-    <Compile Include="Views\Survey\SurveyGroupItem.cs" />
-    <Compile Include="Views\Survey\SurveyGroupView.cs" />
-    <Compile Include="Views\Survey\SurveyGroupViewFactory.cs" />
-    <Compile Include="Views\Survey\SurveyItem.cs" />
-    <Compile Include="Views\Survey\SurveyViewFactory.cs" />
-    <Compile Include="Views\Survey\SurveyViewInputModel.cs" />
+    <Compile Include="Views\Index\IndexViewItem.cs" />
+    <Compile Include="Views\Index\IndexView.cs" />
+    <Compile Include="Views\Index\SurveyGroupedByStatusHeader.cs" />
+    <Compile Include="Views\Assignment\AssignmentInputModel.cs" />
+    <Compile Include="Views\Assignment\AssignmentViewItem.cs" />
+    <Compile Include="Views\Assignment\AssignmentView.cs" />
+    <Compile Include="Views\Assignment\AssignmentViewFactory.cs" />
+    <Compile Include="Views\Index\IndexViewFactory.cs" />
+    <Compile Include="Views\Index\IndexInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

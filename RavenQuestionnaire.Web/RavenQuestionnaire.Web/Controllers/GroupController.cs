@@ -29,7 +29,6 @@ namespace RavenQuestionnaire.Web.Controllers
     /// <summary>
     /// The group controller.
     /// </summary>
-    [QuestionnaireAuthorize(UserRoles.Administrator)]
     public class GroupController : Controller
     {
         #region Constants and Fields

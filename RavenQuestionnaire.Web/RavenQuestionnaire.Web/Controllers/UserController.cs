@@ -29,7 +29,6 @@ namespace RavenQuestionnaire.Web.Controllers
     /// <summary>
     /// The user controller.
     /// </summary>
-    [QuestionnaireAuthorize(UserRoles.Administrator)]
     public class UserController : Controller
     {
         #region Constants and Fields

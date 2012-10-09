@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyBrowseItem.cs" company="The World Bank">
+// <copyright file="IndexViewItem.cs" company="The World Bank">
 //   2012
 // </copyright>
 // <summary>
@@ -7,26 +7,26 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-
-namespace Core.Supervisor.Views.Survey
+namespace Core.Supervisor.Views.Index
 {
+    using System;
+
     /// <summary>
     /// The survey browse item.
     /// </summary>
-    public class SurveyBrowseItem
+    public class IndexViewItem
     {
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyBrowseItem"/> class.
+        /// Initializes a new instance of the <see cref="IndexViewItem"/> class.
         /// </summary>
-        public SurveyBrowseItem()
+        public IndexViewItem()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyBrowseItem"/> class.
+        /// Initializes a new instance of the <see cref="IndexViewItem"/> class.
         /// </summary>
         /// <param name="id">
         /// The id.
@@ -52,7 +52,7 @@ namespace Core.Supervisor.Views.Survey
         /// <param name="approve">
         /// The approve.
         /// </param>
-        public SurveyBrowseItem(
+        public IndexViewItem(
             Guid id, 
             string title, 
             int unassigment, 

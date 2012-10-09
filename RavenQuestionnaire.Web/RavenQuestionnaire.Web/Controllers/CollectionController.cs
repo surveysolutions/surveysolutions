@@ -30,7 +30,6 @@ namespace RavenQuestionnaire.Web.Controllers
     /// The collection controller.
     /// </summary>
     [Authorize]
-    [QuestionnaireAuthorize(UserRoles.Administrator)]
     public class CollectionController : Controller
     {
         #region Constants and Fields

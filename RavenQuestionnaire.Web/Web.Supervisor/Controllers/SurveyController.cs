@@ -15,8 +15,9 @@ namespace Web.Supervisor.Controllers
     using System.Web.Mvc;
 
     using Core.Supervisor.Views.Assign;
+    using Core.Supervisor.Views.Assignment;
+    using Core.Supervisor.Views.Index;
     using Core.Supervisor.Views.Interviewer;
-    using Core.Supervisor.Views.Survey;
 
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Entities.SubEntities;
@@ -84,9 +85,9 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Return index page
         /// </returns>
-        public ActionResult Index(SurveyViewInputModel input)
+        public ActionResult Index(IndexInputModel input)
         {
-            var model = this.viewRepository.Load<SurveyViewInputModel, SurveyBrowseView>(input);
+            var model = this.viewRepository.Load<IndexInputModel, IndexView>(input);
             return this.View(model);
         }
 
@@ -95,6 +96,9 @@ namespace Web.Supervisor.Controllers
         /// </summary>
         /// <param name="id">
         /// The id.
+        /// </param>
+        /// <param name="UserId">
+        /// The User Id.
         /// </param>
         /// <param name="input">
         /// The input.
@@ -108,13 +112,13 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Return Assigments page
         /// </returns>
-        public ActionResult Assigments(Guid id, SurveyGroupInputModel input, ICollection<string> status, bool? isNotAssigned)
+        public ActionResult Assigments(Guid id, Guid? userId, AssignmentInputModel input, ICollection<string> status, bool? isNotAssigned)
         {
             var inputModel = input == null
-                                 ? new SurveyGroupInputModel() { Id = id, Statuses = status }
-                                 : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders, status, isNotAssigned ?? false);
+                                 ? new AssignmentInputModel() { Id = id, Statuses = status, UserId = userId }
+                                 : new AssignmentInputModel(id, userId, input.Page, input.PageSize, input.Orders, status, isNotAssigned ?? false);
             var user = this.globalInfo.GetCurrentUser();
-            var model = this.viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(inputModel);
+            var model = this.viewRepository.Load<AssignmentInputModel, AssignmentView>(inputModel);
             var users = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             return this.View(model);
@@ -441,14 +445,14 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult TableData(GridDataRequestModel data)
         {
-            var input = new SurveyViewInputModel
+            var input = new IndexInputModel
                             {
                                 Page = data.Pager.Page,
                                 PageSize = data.Pager.PageSize,
                                 Orders = data.SortOrder,
                                 UserId = data.UserId
                             };
-            var model = this.viewRepository.Load<SurveyViewInputModel, SurveyBrowseView>(input);
+            var model = this.viewRepository.Load<IndexInputModel, IndexView>(input);
             return this.PartialView("_Table", model);
         }
 
@@ -466,8 +470,8 @@ namespace Web.Supervisor.Controllers
             var user = this.globalInfo.GetCurrentUser();
             var users = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
-            var input = new SurveyGroupInputModel(data.Id, data.Pager.Page, data.Pager.PageSize, data.SortOrder);
-            var model = this.viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(input);
+            var input = new AssignmentInputModel(data.Id, null, data.Pager.Page, data.Pager.PageSize, data.SortOrder);
+            var model = this.viewRepository.Load<AssignmentInputModel, AssignmentView>(input);
             return this.PartialView("_TableGroup", model);
         }
 

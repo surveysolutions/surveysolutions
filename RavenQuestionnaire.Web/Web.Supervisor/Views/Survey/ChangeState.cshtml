@@ -1,10 +1,10 @@
-﻿@using Core.Supervisor.Views.Survey
-@using Questionnaire.Core.Web.Helpers
+﻿@using Questionnaire.Core.Web.Helpers
+@using Core.Supervisor.Views.Assignment
 
 @model Web.Supervisor.Models.ChangeStateModel
 
 <h2>Change State</h2>
-<p><a href="@Url.Action("Assigments", new {id = Model.TemplateId, input = new SurveyGroupInputModel()})">Back to list</a></p>
+<p><a href="@Url.Action("Assigments", new {id = Model.TemplateId, input = new AssignmentInputModel()})">Back to list</a></p>
 @using (Html.BeginForm("ChangeState", "Survey"))
 {
     @Html.Hidden("CqId", Model.Id)
