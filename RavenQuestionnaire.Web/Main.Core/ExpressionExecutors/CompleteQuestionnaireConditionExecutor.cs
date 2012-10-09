@@ -208,11 +208,9 @@ namespace Main.Core.ExpressionExecutors
         {
             foreach (IComposite child in group.Children)
             {
-
                 var question = child as ICompleteQuestion;
                 if (question != null)
                 {
-                    
                     question.Enabled = result && this.Execute(question); ////method could not be executed if result is false
                     continue;
                 }

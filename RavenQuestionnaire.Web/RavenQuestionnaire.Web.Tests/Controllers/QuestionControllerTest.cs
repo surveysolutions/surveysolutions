@@ -28,8 +28,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
     using NUnit.Framework;
 
-    using RavenQuestionnaire.Core;
-    using RavenQuestionnaire.Core.Views.Question;
+    using Main.Core;
+    using Core.CAPI.Views.Question;
     using RavenQuestionnaire.Core.Views.Questionnaire;
     using RavenQuestionnaire.Web.Controllers;
 
