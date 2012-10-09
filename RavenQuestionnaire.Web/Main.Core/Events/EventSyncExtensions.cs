@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventSyncExtensions.cs" company="">
-//   
+// <copyright file="EventSyncExtensions.cs" company="World bank">
+//   2012 
 // </copyright>
 // <summary>
 //   The event sync extensions.

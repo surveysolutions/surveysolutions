@@ -1,7 +1,7 @@
-﻿@using Core.Supervisor.Views.Survey
-@using Main.Core.Entities.SubEntities
-@model Core.Supervisor.Views.Survey.SurveyGroupView
-@foreach (SurveyGroupItem fitem in Model.Items)
+﻿@using Main.Core.Entities.SubEntities
+@using Core.Supervisor.Views.Assignment
+@model AssignmentView
+@foreach (AssignmentViewItem fitem in Model.Items)
 {
     <tr id="responsible-@(fitem.Id)">
         @foreach (var item in fitem.FeatureadValue)
@@ -10,7 +10,7 @@
                 @(string.IsNullOrEmpty(item.Value) ? string.Empty : item.Value)
             </td>
         }
-        <td id="row-@fitem.Id">
+        <td id="row-@fitem.Id" style="width: 10%;">
             <div class="assignment-view">
                 <a id="link-@fitem.Id" href="@Url.Action("Index", "Survey", new { UserId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
             </div>
@@ -38,27 +38,30 @@
                 }
             </div>
         </td>
-        <td>@fitem.Status.Name
+        <td style="width: 10%;">@fitem.Status.Name
         </td>
-        <td>
+        <td style="width: 20%;">
             <a class="btn btn-small" href="@Url.Action("Details", new { id = fitem.Id, template = fitem.TemplateId })">
                 <i class="icon-list"></i>Details</a>
-            @if (fitem.Responsible == null)
+            @if (fitem.Status.PublicId == SurveyStatus.Initial.PublicId || fitem.Status.PublicId == SurveyStatus.Redo.PublicId)
             {
-                <a class="btn btn-small" href="@Url.Action("Assign", new { id = fitem.Id })"><i class="icon-user">
-                </i>Assign</a>    
-            }
-            else
-            {
-                <a class="btn btn-small" id="ref-@fitem.Id" href="#" ><i class="icon-random"></i>Change</a>
-                <script type="text/javascript">
-                    $('#ref-@(fitem.Id)').click(function () {
+                if (fitem.Responsible == null)
+                 {
+                     <a class="btn btn-small" href="@Url.Action("Assign", new { id = fitem.Id })"><i class="icon-user">
+                                                                                                  </i>Assign</a>
+                 }
+                 else
+                 {
+                     <a class="btn btn-small" id="ref-@fitem.Id" href="#" ><i class="icon-random"></i>Change</a>
+                     <script type="text/javascript">
+                    $('#ref-@(fitem.Id)').click(function() {
                         $('#row-@(fitem.Id)').addClass("showForm");
                     });
-                    $('#canc-@(fitem.Id)').click(function () {
+                    $('#canc-@(fitem.Id)').click(function() {
                         $('#row-@(fitem.Id)').removeClass("showForm");
                     });
                 </script>
+                 }
             }
             @if (fitem.Status.PublicId == SurveyStatus.Complete.PublicId || fitem.Status.PublicId == SurveyStatus.Error.PublicId)
             {

@@ -15,6 +15,7 @@ namespace RavenQuestionnaire.Web.Controllers
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+    using System.Xml;
 
     using Kaliko.ImageLibrary;
     using Kaliko.ImageLibrary.Filters;
@@ -189,6 +190,8 @@ namespace RavenQuestionnaire.Web.Controllers
             QuestionView model =
                 this.viewRepository.Load<QuestionViewInputModel, QuestionView>(
                     new QuestionViewInputModel(publicKey.Value, questionnaireKey.Value));
+            this.ViewBag.Group = model.Groups;
+            this.ViewBag.CurrentGroup = model.Parent;
             return this.PartialView("_Create", model);
         }
 
@@ -296,7 +299,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <returns>
         /// </returns>
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Save(QuestionView[] question, AnswerView[] answers, ICollection<Guid> triggers)
+        public ActionResult Save(QuestionView[] question, AnswerView[] answers, IEnumerable<Guid> triggers)
         {
             QuestionView model = question[0];
             if (this.ModelState.IsValid)
@@ -343,7 +346,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.QuestionnaireKey, 
                                     newItemKey, 
                                     model.Title, 
-                                    triggers.Distinct().ToList(), 
+                                    triggers.Where(t => t != Guid.Empty).Distinct().ToList(), 
                                     model.StataExportCaption, 
                                     model.QuestionType, 
                                     model.Parent, 
@@ -386,7 +389,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.QuestionnaireKey, 
                                     model.PublicKey, 
                                     model.Title, 
-                                    triggers.Distinct().ToList(), 
+                                    triggers.Where(t => t != Guid.Empty).Distinct().ToList(), 
                                     model.StataExportCaption, 
                                     model.QuestionType, 
                                     model.ConditionExpression, 
@@ -480,12 +483,15 @@ namespace RavenQuestionnaire.Web.Controllers
 
 
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult CreatePropagateGroup(Guid questionPublicKey, Guid questionnaireId)
+        public ActionResult CreatePropagateGroup(Guid questionPublicKey, Guid questionnaireId, Guid? groupPublicKey)
         {
-            QuestionView source =
-                this.viewRepository.Load<QuestionViewInputModel, QuestionView>(
-                    new QuestionViewInputModel(questionPublicKey, questionnaireId));
-            return this.PartialView("_AutoPropagateRow", source);
+            var input = questionPublicKey == Guid.Empty 
+                ? new QuestionViewInputModel(questionPublicKey, questionnaireId, groupPublicKey) 
+                : new QuestionViewInputModel(questionPublicKey, questionnaireId);
+            var source =
+                this.viewRepository.Load<QuestionViewInputModel, QuestionView>(input);
+            this.ViewBag.Group = source.Groups;
+            return this.PartialView("_AutoPropagateRow", Guid.NewGuid());
         }
 
 

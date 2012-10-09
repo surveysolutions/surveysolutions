@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyGroupItem.cs" company="The World Bank">
+// <copyright file="AssignmentViewItem.cs" company="The World Bank">
 //   2012
 // </copyright>
 // <summary>
@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Core.Supervisor.Views.Survey
+namespace Core.Supervisor.Views.Assignment
 {
     using System;
     using System.Collections.Generic;
@@ -19,20 +19,20 @@ namespace Core.Supervisor.Views.Survey
     /// <summary>
     /// The survey group item.
     /// </summary>
-    public class SurveyGroupItem
+    public class AssignmentViewItem
     {
         #region Constructors and Destructors
 
         /// <summary>
-        /// Prevents a default instance of the <see cref="SurveyGroupItem"/> class from being created.
+        /// Prevents a default instance of the <see cref="AssignmentViewItem"/> class from being created.
         /// </summary>
-        private SurveyGroupItem()
+        private AssignmentViewItem()
         {
             this.FeatureadValue = new Dictionary<Guid, string>();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyGroupItem"/> class.
+        /// Initializes a new instance of the <see cref="AssignmentViewItem"/> class.
         /// </summary>
         /// <param name="it">
         /// The it.
@@ -40,7 +40,7 @@ namespace Core.Supervisor.Views.Survey
         /// <param name="headers">
         /// The headers.
         /// </param>
-        public SurveyGroupItem(CompleteQuestionnaireBrowseItem it, Dictionary<Guid, string> headers) : this()
+        public AssignmentViewItem(CompleteQuestionnaireBrowseItem it, Dictionary<Guid, string> headers) : this()
         {
             this.Title = it.QuestionnaireTitle;
             this.Id = it.CompleteQuestionnaireId;

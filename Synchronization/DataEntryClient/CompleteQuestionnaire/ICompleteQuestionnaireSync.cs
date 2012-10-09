@@ -3,7 +3,7 @@
 //   
 // </copyright>
 // <summary>
-//   The CompleteQuestionnaireSync interface.
+//   The WirelessSyncProcess interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ namespace DataEntryClient.CompleteQuestionnaire
     using System;
 
     /// <summary>
-    /// The CompleteQuestionnaireSync interface.
+    /// The WirelessSyncProcess interface.
     /// </summary>
     public interface ICompleteQuestionnaireSync
     {
@@ -27,34 +27,12 @@ namespace DataEntryClient.CompleteQuestionnaire
         void Export(Guid syncKey);
 
         /// <summary>
-        /// The get last sync event guid.
-        /// </summary>
-        /// <param name="clientKey">
-        /// The client key.
-        /// </param>
-        /// <returns>
-        /// The System.Nullable`1[T -&gt; System.Guid].
-        /// </returns>
-        Guid? GetLastSyncEventGuid(Guid clientKey);
-
-        /// <summary>
         /// The import.
         /// </summary>
         /// <param name="syncKey">
         /// The sync key.
         /// </param>
         void Import(Guid syncKey);
-
-        /// <summary>
-        /// The upload events.
-        /// </summary>
-        /// <param name="clientKey">
-        /// The client key.
-        /// </param>
-        /// <param name="lastSyncEvent">
-        /// The last sync event.
-        /// </param>
-        void UploadEvents(Guid clientKey, Guid? lastSyncEvent);
 
         #endregion
     }

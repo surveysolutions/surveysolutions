@@ -24,7 +24,8 @@ namespace RavenQuestionnaire.Web.Controllers
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
-    // [QuestionnaireAuthorize(UserRoles.Administrator)]
+    using Questionnaire.Core.Web.Security;
+
     /// <summary>
     /// The user controller.
     /// </summary>

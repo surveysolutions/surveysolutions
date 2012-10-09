@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyGroupView.cs" company="The World Bank">
+// <copyright file="AssignmentView.cs" company="The World Bank">
 //   2012
 // </copyright>
 // <summary>
@@ -7,17 +7,18 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.View.CompleteQuestionnaire;
-
-namespace Core.Supervisor.Views.Survey
+namespace Core.Supervisor.Views.Assignment
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Main.Core.View.CompleteQuestionnaire;
+
     /// <summary>
     /// The survey group view.
     /// </summary>
-    public class SurveyGroupView
+    public class AssignmentView
     {
         #region Fields
 
@@ -31,7 +32,7 @@ namespace Core.Supervisor.Views.Survey
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyGroupView"/> class.
+        /// Initializes a new instance of the <see cref="AssignmentView"/> class.
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -51,13 +52,13 @@ namespace Core.Supervisor.Views.Survey
         /// <param name="templateId">
         /// The template id.
         /// </param>
-        public SurveyGroupView(int page, int pageSize, string surveyTitle, int totalCount, IEnumerable<CompleteQuestionnaireBrowseItem> items, Guid templateId)
+        public AssignmentView(int page, int pageSize, string surveyTitle, int totalCount, IEnumerable<CompleteQuestionnaireBrowseItem> items, Guid templateId)
         {
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
             this.TemplateId = templateId;
-            this.Items = new List<SurveyGroupItem>();
+            this.Items = new List<AssignmentViewItem>();
             this.Headers = new Dictionary<Guid, string>();
             if (items != null)
             {
@@ -69,7 +70,7 @@ namespace Core.Supervisor.Views.Survey
                     this.Headers.Add(question.PublicKey, question.Title);
                 }
                 foreach (CompleteQuestionnaireBrowseItem it in items) 
-                    this.Items.Add(new SurveyGroupItem(it, this.Headers));
+                    this.Items.Add(new AssignmentViewItem(it, this.Headers));
             }
             this.SurveyTitle = surveyTitle;
         }
@@ -86,7 +87,7 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// Gets or sets the items.
         /// </summary>
-        public List<SurveyGroupItem> Items { get; set; }
+        public List<AssignmentViewItem> Items { get; set; }
 
         /// <summary>
         /// Gets or sets the order.

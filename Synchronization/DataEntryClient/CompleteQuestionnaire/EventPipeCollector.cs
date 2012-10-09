@@ -1,49 +1,43 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventPipeService.svc.cs" company="World bank">
+// <copyright file="EventPipeCollector.cs" company="World bank">
 //   2012
 // </copyright>
 // <summary>
-//   The event pipe service.
+//   TODO: Update summary.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Web.Supervisor.WCF
+namespace DataEntryClient.CompleteQuestionnaire
 {
     using System;
-    using System.ServiceModel.Activation;
+    using System.Collections.Generic;
 
     using Main.Core.Events;
-
-    using Ninject;
 
     using SynchronizationMessages.CompleteQuestionnaire;
 
     /// <summary>
-    /// The event pipe service.
+    /// Event collector for usb syncronization
     /// </summary>
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
-    public class EventPipeService : IEventPipe
+    public class EventPipeCollector : IEventPipe
     {
         #region Constants and Fields
 
         /// <summary>
-        /// The kernel.
+        /// List of event streams
         /// </summary>
-        private readonly IKernel kernel;
+        private readonly List<AggregateRootEvent> list;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventPipeService"/> class.
+        /// Initializes a new instance of the <see cref="EventPipeCollector"/> class.
         /// </summary>
-        /// <param name="kernel">
-        /// The kernel.
-        /// </param>
-        public EventPipeService(IKernel kernel)
+        public EventPipeCollector()
         {
-            this.kernel = kernel;
+            this.list = new List<AggregateRootEvent>();
         }
 
         #endregion
@@ -63,9 +57,7 @@ namespace Web.Supervisor.WCF
         {
             try
             {
-                // kernel.Get<ICommandInvoker>().Execute(request.Command, request.CommandKey, request.SynchronizationKey);
-                var eventStore = this.kernel.Get<IEventSync>();
-                eventStore.WriteEvents(request.Command);
+                this.list.AddRange(request.Command);
                 return ErrorCodes.None;
             }
             catch (Exception)
@@ -75,5 +67,16 @@ namespace Web.Supervisor.WCF
         }
 
         #endregion
+
+        /// <summary>
+        /// Gets list of events
+        /// </summary>
+        /// <returns>
+        /// Return list of events
+        /// </returns>
+        public IEnumerable<AggregateRootEvent> GetEventList()
+        {
+            return this.list;
+        }
     }
 }

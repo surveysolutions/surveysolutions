@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyViewInputModel.cs" company="The World Bank">
+// <copyright file="IndexInputModel.cs" company="The World Bank">
 //   2012
 // </copyright>
 // <summary>
@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Core.Supervisor.Views.Survey
+namespace Core.Supervisor.Views.Index
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace Core.Supervisor.Views.Survey
     /// <summary>
     /// The survey view input model.
     /// </summary>
-    public class SurveyViewInputModel
+    public class IndexInputModel
     {
         #region Fields
 
@@ -35,7 +35,7 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// The _page size.
         /// </summary>
-        private int _pageSize = 20;
+        private int _pageSize = 2;
 
         #endregion
 
@@ -69,7 +69,7 @@ namespace Core.Supervisor.Views.Survey
 
             set
             {
-                this._orders = value;
+                this._orders = value ?? new List<OrderRequestItem>();
             }
         }
 

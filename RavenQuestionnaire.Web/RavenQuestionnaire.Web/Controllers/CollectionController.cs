@@ -21,6 +21,8 @@ namespace RavenQuestionnaire.Web.Controllers
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
+    using Questionnaire.Core.Web.Security;
+
     using RavenQuestionnaire.Core.Views.Collection;
     using RavenQuestionnaire.Core.Views.CollectionItem;
 

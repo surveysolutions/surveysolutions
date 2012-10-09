@@ -54,7 +54,7 @@ namespace Main.Core.Events
 
         #endregion
 
-        #region PublicMethods
+        #region Methods
 
         public IEnumerable<AggregateRootEvent> GetUsers(UserRoles? role)
         {
