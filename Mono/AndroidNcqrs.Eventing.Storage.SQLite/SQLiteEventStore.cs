@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using Android.Content;
-using Android.Database.Sqlite;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 
@@ -30,11 +26,12 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 			_propertyBagConverter = new PropertyBagConverter();
 		}
 
+		#region Public methods
 		public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
 		{
 			var cursor = _databaseHelper
 				.ReadableDatabase
-				.RawQuery(Query.SelectAllEventsFromQuery(id, minVersion, maxVersion), null);
+				.RawQuery(Query.SelectAllEventsByGuidQuery(id, minVersion, maxVersion), null);
 
 			var events = new List<CommittedEvent>();
 
@@ -68,6 +65,43 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 			_sqLiteContext.ExecuteWithTransaction(() => SaveEvents(events));
 		}
 
+		public IEnumerable<CommittedEvent> GetAllEvents()
+		{
+			var cursor = _databaseHelper
+				.ReadableDatabase
+				.RawQuery(Query.SelectAllEventsQuery(), null);
+
+			var events = new List<CommittedEvent>();
+
+			var eventIdIndex = cursor.GetColumnIndex("EventId");
+			var eventSourceIndex = cursor.GetColumnIndex("EventSourceId");
+			var sequenceIndex = cursor.GetColumnIndex("Sequence");
+			var timestampIndex = cursor.GetColumnIndex("TimeStamp");
+			var dataIndex = cursor.GetColumnIndex("Data");
+
+			while (cursor.MoveToNext())
+			{
+				var eventSourceId = Guid.Parse(cursor.GetString(eventSourceIndex));
+				var eventId = Guid.Parse(cursor.GetString(eventIdIndex));
+				var sequenceId = cursor.GetLong(sequenceIndex);
+				var eventTimeStamp = DateTime.FromBinary(cursor.GetLong(timestampIndex));
+				var data = GetObject(cursor.GetBlob(dataIndex));
+
+				var @event = new CommittedEvent(Guid.Empty,
+												eventId,
+												eventSourceId,
+												sequenceId,
+												eventTimeStamp,
+												data,
+												new Version(1, 0));
+
+				events.Add(@event);
+			}
+			return @events;
+		}
+		#endregion
+
+		#region Private methods
 		private void SaveEvents(UncommittedEventStream events)
 		{
 			foreach (var @event in events)
@@ -107,5 +141,6 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 				return _propertyBagConverter.Convert(bag);
 			}
 		}
+		#endregion
 	}
 }

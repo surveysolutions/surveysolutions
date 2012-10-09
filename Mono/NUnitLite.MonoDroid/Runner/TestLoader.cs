@@ -5,7 +5,7 @@
 // *****************************************************
 
 using System;
-using System.Reflection;
+using System.Linq;
 using NUnit.Framework;
 
 namespace NUnitLite.Runner
@@ -17,20 +17,29 @@ namespace NUnitLite.Runner
         /// </summary>
         /// <param name="assembly">The assembly to be loaded</param>
         /// <returns>A Test containing all fixtures found</returns>
-        public static TestAssembly Load(Assembly assembly)
+        public static TestAssembly Load(TestAssemblyInfo assemblyInfo)
         {
+	        var assembly = assemblyInfo.AssemblyToLoad;
+
             var testAssembly = new TestAssembly(assembly.GetName().Name);
 
             foreach (Type type in assembly.GetTypes())
             {
-                if (IsTestFixture(type))
+                if (IsTestFixture(type) && ShouldBeTested(type, assemblyInfo.TypesToTest))
                     testAssembly.AddTest(new TestSuite(type));
             }
 
             return testAssembly;
         }
 
-        private static bool IsTestFixture(Type type)
+	    private static bool ShouldBeTested(Type type, Type[] typesToTest)
+	    {
+			if (typesToTest == null || typesToTest.Length == 0)
+				return true;
+		    return typesToTest.Contains(type);
+	    }
+
+	    private static bool IsTestFixture(Type type)
         {
             return Reflect.HasAttribute(type, typeof(TestFixtureAttribute));
         }

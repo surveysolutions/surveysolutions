@@ -31,38 +31,36 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 		[Test]
 		public void Save_SmokeTest()
 		{
-			var sequenceCounter = 0;
 			var id = Guid.NewGuid();
-			var stream = new UncommittedEventStream(Guid.NewGuid());
-			stream.Append(
-				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerCreatedEvent("Foo", 35),
-				                     new Version(1, 0)));
-			stream.Append(
-				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow,
-				                     new CustomerNameChanged("Name" + sequenceCounter), new Version(1, 0)));
-			stream.Append(
-				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow,
-				                     new CustomerNameChanged("Name" + sequenceCounter), new Version(1, 0)));
+
+			var stream = GetUncommiteEventStream(id);
 
 			_store.Store(stream);
+		}
+
+		private UncommittedEventStream GetUncommiteEventStream(Guid id)
+		{
+			var stream = new UncommittedEventStream(Guid.NewGuid());
+			var sequenceCounter = 0;
+			stream.Append(
+				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerCreatedEvent("Foo", 35),
+									 new Version(1, 0)));
+			stream.Append(
+				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow,
+									 new CustomerNameChanged("Name" + sequenceCounter), new Version(1, 0)));
+			stream.Append(
+				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow,
+									 new CustomerNameChanged("Name" + sequenceCounter), new Version(1, 0)));
+
+			return stream;
 		}
 
 		[Test]
 		public void Retrieving_all_events_should_return_the_same_as_added()
 		{
 			var id = Guid.NewGuid();
-			var sequenceCounter = 0;
 
-			var stream = new UncommittedEventStream(Guid.NewGuid());
-			stream.Append(
-				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerCreatedEvent("Foo", 35),
-				                     new Version(1, 0)));
-			stream.Append(
-				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow,
-				                     new CustomerNameChanged("Name" + sequenceCounter), new Version(1, 0)));
-			stream.Append(
-				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow,
-				                     new CustomerNameChanged("Name" + sequenceCounter), new Version(1, 0)));
+			var stream = GetUncommiteEventStream(id);
 
 			_store.Store(stream);
 
@@ -94,7 +92,7 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 		public void Retrieved_event_should_having_identical_timestamp_as_persisted()
 		{
 			var id = Guid.NewGuid();
-			var utcNow = DateTime.UtcNow.Date.AddHours(9).AddTicks(-1);
+			var utcNow = DateTime.UtcNow; //.Date.AddHours(9).AddTicks(-1);
 
 			var stream = new UncommittedEventStream(Guid.NewGuid());
 			stream.Append(
@@ -119,22 +117,35 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 			var id = Guid.NewGuid();
 			var sequenceCounter = 0;
 
-			var stream = new UncommittedEventStream(Guid.NewGuid());
-			stream.Append(
-				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerCreatedEvent("Foo", 35),
-									 new Version(1, 0)));
-			stream.Append(
-				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow,
-									 new CustomerNameChanged("Name" + sequenceCounter), new Version(1, 0)));
-			stream.Append(
-				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow,
-									 new CustomerNameChanged("Name" + sequenceCounter), new Version(1, 0)));
+			var stream = GetUncommiteEventStream(id);
 
 			_store.Store(stream);
 
 			var commitedEvents = _store.ReadFrom(id, 2, 3);
 
 			commitedEvents.Count().Should().Be(1);
+		}
+
+		[Test]
+		public void store_should_return_all_events_from_all_sources()
+		{
+			var firstId = Guid.NewGuid();
+			var firstStream = GetUncommiteEventStream(firstId);
+			_store.Store(firstStream);
+
+			var secondId = Guid.NewGuid();
+			var secondStream = GetUncommiteEventStream(secondId);
+			_store.Store(secondStream);
+
+			var thirdId = Guid.NewGuid();
+			var thirdStream = GetUncommiteEventStream(thirdId);
+			_store.Store(thirdStream);
+
+			var allEvents = _store.GetAllEvents();
+			allEvents.Count().Should().Be(9);
+
+			allEvents.GroupBy(e => e.EventSourceId)
+				.Count().Should().Be(3);
 		}
 	}
 }

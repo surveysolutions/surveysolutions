@@ -8,7 +8,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 	public class DataBaseHelper : SQLiteOpenHelper
 	{
 		public const string DATABASE_NAME = "EventStore";
-		public const int DATABASE_VERSION = 3;
+		public const int DATABASE_VERSION = 1;
 
 		public DataBaseHelper(Context context) 
 			: base(context, DATABASE_NAME, null, DATABASE_VERSION)

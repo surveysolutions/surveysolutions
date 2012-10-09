@@ -10,6 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Android.Content;
+using AndroidNcqrs.Eventing.Storage.SQLite;
 using Main.Core.Commands;
 using Main.Core.Services;
 using Ncqrs;
@@ -21,11 +23,8 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-//using Ncqrs.Eventing.Storage.RavenDB;
-//using Ncqrs.Restoring.EventStapshoot;
-//using Ncqrs.Restoring.EventStapshoot.EventStores.RavenDB;
+using Ncqrs.Restoring.EventStapshoot;
 using Ninject;
-//using Raven.Client.Document;
 
 namespace Main.Core
 {
@@ -44,7 +43,7 @@ namespace Main.Core
         /// </param>
         public static void Init(IKernel kernel)
         {
-            //NcqrsEnvironment.SetDefault(InitializeEventStore(kernel.Get<DocumentStore>()));
+            NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
 
             NcqrsEnvironment.SetDefault(InitializeCommandService());
 
@@ -64,37 +63,39 @@ namespace Main.Core
         /// </summary>
         /// <exception cref="Exception">
         /// </exception>
-		//public static void RebuildReadLayer(DocumentStore store)
-		//{
-		//    var myEventBus = NcqrsEnvironment.Get<IEventBus>();
-		//    if (myEventBus == null)
-		//    {
-		//        throw new Exception("IEventBus is not properly initialized.");
-		//    }
+		public static void RebuildReadLayer()
+		{
+			var myEventBus = NcqrsEnvironment.Get<IEventBus>();
+			if (myEventBus == null)
+			{
+				throw new Exception("IEventBus is not properly initialized.");
+			}
 
-		//    var myEventStore = NcqrsEnvironment.Get<IEventStore>() as RavenDBEventStore; // as MsSqlServerEventStore;
+			var myEventStore = NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore; // as MsSqlServerEventStore;
 
-		//    if (myEventStore == null)
-		//    {
-		//        throw new Exception("IEventStore is not correct.");
-		//    }
-		//    store.CreateIndex();
-		//    var myEvents = store.GetAllEvents();
-		//    myEventBus.Publish(myEvents);
-		//    /* foreach (IGrouping<Guid, CommittedEvent> eventsByAggregateRoot in myEvents.GroupBy(x => x.EventSourceId))
-		//{
-		//    myEventBus.Publish(ExcludeHistoryBefaourSnapshoot(eventsByAggregateRoot));
-		//}*/
-		//}
-		//private static IEnumerable<CommittedEvent> ExcludeHistoryBefaourSnapshoot(IEnumerable<CommittedEvent> events)
-		//{
-		//    var lastSnapshoot = events.LastOrDefault(x => x.Payload is SnapshootLoaded);
-		//    if (lastSnapshoot == null)
-		//        return events;
-		//    else
-		//        return events.SkipWhile(x => x != lastSnapshoot);
+			if (myEventStore == null)
+			{
+				throw new Exception("IEventStore is not correct.");
+			}
 
-		//}
+	        var myEvents = myEventStore.GetAllEvents();
+			myEventBus.Publish(myEvents
+				.Select(evt => evt as IPublishableEvent)
+				.ToList());
+			/* foreach (IGrouping<Guid, CommittedEvent> eventsByAggregateRoot in myEvents.GroupBy(x => x.EventSourceId))
+		{
+			myEventBus.Publish(ExcludeHistoryBefaourSnapshoot(eventsByAggregateRoot));
+		}*/
+		}
+		private static IEnumerable<CommittedEvent> ExcludeHistoryBefaourSnapshoot(IEnumerable<CommittedEvent> events)
+		{
+			var lastSnapshoot = events.LastOrDefault(x => x.Payload is SnapshootLoaded);
+			if (lastSnapshoot == null)
+				return events;
+			else
+				return events.SkipWhile(x => x != lastSnapshoot);
+
+		}
 
         #endregion
 
@@ -157,9 +158,9 @@ namespace Main.Core
         /// <returns>
         /// The Ncqrs.Eventing.Storage.IEventStore.
         /// </returns>
-		//private static IEventStore InitializeEventStore(DocumentStore store)
+		//private static IEventStore InitializeEventStore(Context applicationContext)
 		//{
-		//    var eventStore = new RavenDBEventStore(store);
+		//    var eventStore = new SQLiteEventStore(applicationContext);
 		//    return eventStore;
 		//}
 

@@ -12,7 +12,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 VALUES (?, ?, ?, ?, ?, ?)";
 		}
 
-		internal static string SelectAllEventsFromQuery(Guid id, long minVersion, long maxVersion)
+		internal static string SelectAllEventsByGuidQuery(Guid id, long minVersion, long maxVersion)
 		{
 			var template = 
 @"SELECT TimeStamp, EventId, Data, Sequence
@@ -25,8 +25,13 @@ ORDER BY Sequence";
 			return string.Format(template, id, minVersion, maxVersion);
 		}
 
-
-
+		internal static string SelectAllEventsQuery()
+		{
+			return
+@"SELECT EventSourceId, EventId, TimeStamp, Data, Sequence
+FROM Events";
+		}
+		
 		internal static string CreateTables()
 		{
 			return 

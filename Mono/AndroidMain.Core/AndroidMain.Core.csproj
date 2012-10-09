@@ -9,8 +9,8 @@
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AndroidMain.Core</RootNamespace>
-    <AssemblyName>AndroidMain.Core</AssemblyName>
+    <RootNamespace>Main.Core</RootNamespace>
+    <AssemblyName>Main.Core</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -298,6 +299,10 @@
     <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
       <Project>{F0476C33-6F4F-4524-9CEA-37E87D55E67E}</Project>
       <Name>AndroidNCalc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
+      <Project>{F9A0B560-A8BF-4914-88FB-7D98DF4242EF}</Project>
+      <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot\AndroidNcqrs.Restoring.EventStapshoot.csproj">
       <Project>{30BE60C9-980F-40E1-A8FD-C2A5959827D3}</Project>

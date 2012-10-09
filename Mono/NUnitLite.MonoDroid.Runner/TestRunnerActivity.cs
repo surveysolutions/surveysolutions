@@ -89,7 +89,7 @@ namespace NUnitLite.MonoDroid
         /// Retrieves a list of assemblies that contain test cases to execute using the test runner activity.
         /// </summary>
         /// <returns>Returns the list of assemblies to test</returns>
-        protected abstract IEnumerable<Assembly> GetAssembliesForTest();
+        protected abstract IEnumerable<TestAssemblyInfo> GetAssembliesForTest();
 
         /// <summary>
         /// Gets the type of activity to use for displaying test details

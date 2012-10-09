@@ -29,7 +29,7 @@ namespace NUnitLite.Runner
         /// </summary>
         /// <param name="assembly">The assembly for which tests are to be run.</param>
         /// <returns>TestResult representing the result of the run</returns>
-		public virtual TestResult Run(Assembly assembly)
+		public virtual TestResult Run(TestAssemblyInfo assembly)
 		{
 			return Run(TestLoader.Load(assembly));
 		}

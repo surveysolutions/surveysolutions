@@ -20,6 +20,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// The questionnaire document.
     /// </summary>
+    [Serializable]
     public class QuestionnaireDocument : IQuestionnaireDocument
     {
         #region Fields

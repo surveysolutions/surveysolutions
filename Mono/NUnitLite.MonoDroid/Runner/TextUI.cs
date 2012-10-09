@@ -151,7 +151,7 @@ namespace NUnitLite.Runner
 		//    return success;
 		//}
 
-        private bool Run(Assembly assembly)
+        private bool Run(TestAssemblyInfo assembly)
         {
             return ReportResults( runner.Run(assembly) );
         }

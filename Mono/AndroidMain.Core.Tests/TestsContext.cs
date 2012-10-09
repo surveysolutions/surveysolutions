@@ -5,9 +5,9 @@ using Android.App;
 using Android.Content;
 using Android.Runtime;
 
-namespace Ncqrs.Eventing.Storage.SQLite.Tests
+namespace Tests
 {
-	//[Application]
+	[Application]
 	public class TestsContext : Application
 	{
 		public static Context CurrentContext { get; set; }
