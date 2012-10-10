@@ -30,7 +30,7 @@ namespace Main.Core.Entities.Extensions
 
         public static bool IsGroupPropagationTemplate(this ICompleteGroup entity)
         {
-            return entity.Propagated != Propagate.None && !entity.PropogationPublicKey.HasValue;
+            return entity.Propagated != Propagate.None && !entity.PropagationPublicKey.HasValue;
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Main.Core.Entities.Extensions
         public static IEnumerable<ICompleteGroup> GetPropagatedGroupsByKey(
             this ICompleteGroup entity, Guid propagationKey)
         {
-            return entity.Find<ICompleteGroup>(g => g.PropogationPublicKey.Equals(propagationKey));
+            return entity.Find<ICompleteGroup>(g => g.PropagationPublicKey.Equals(propagationKey));
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace Main.Core.Entities.Extensions
         {
             var dependency =
                 entity.FirstOrDefault<ICompleteQuestion>(
-                    q => q.PublicKey.Equals(target) && !q.PropogationPublicKey.HasValue);
+                    q => q.PublicKey.Equals(target) && !q.PropagationPublicKey.HasValue);
             return dependency;
         }
 

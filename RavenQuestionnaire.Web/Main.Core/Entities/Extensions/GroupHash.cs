@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GroupHash.cs" company="">
-//   
+// <copyright file="GroupHash.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The group hash.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.Extensions
 {
     using System;
@@ -13,7 +14,6 @@ namespace Main.Core.Entities.Extensions
     using System.Linq;
 
     using Main.Core.Entities.Composite;
-    using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
 
     /// <summary>
@@ -26,7 +26,7 @@ namespace Main.Core.Entities.Extensions
         /// <summary>
         /// The _hash.
         /// </summary>
-        private readonly IDictionary<string, CompleteQuestionWrapper> _hash;
+        private readonly IDictionary<string, CompleteQuestionWrapper> hash;
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace Main.Core.Entities.Extensions
         /// </summary>
         public GroupHash()
         {
-            this._hash = new Dictionary<string, CompleteQuestionWrapper>();
+            this.hash = new Dictionary<string, CompleteQuestionWrapper>();
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Main.Core.Entities.Extensions
         {
             get
             {
-                return this._hash.Values.Select(v => v.Question);
+                return this.hash.Values.Select(v => v.Question);
             }
         }
 
@@ -80,7 +80,7 @@ namespace Main.Core.Entities.Extensions
         {
             get
             {
-                return this._hash.Values;
+                return this.hash.Values;
             }
         }
 
@@ -139,7 +139,7 @@ namespace Main.Core.Entities.Extensions
         /// </exception>
         public void AddGroup(ICompleteGroup group)
         {
-            if (!group.PropogationPublicKey.HasValue)
+            if (!group.PropagationPublicKey.HasValue)
             {
                 throw new ArgumentException("only propagated group can uppdate hash");
             }
@@ -161,13 +161,13 @@ namespace Main.Core.Entities.Extensions
         /// </returns>
         public CompleteQuestionWrapper GetQuestion(Guid publicKey, Guid? propagationKey)
         {
-            if (this._hash.ContainsKey(this.GetQuestionKey(publicKey, null))
-                && !this._hash.ContainsKey(this.GetQuestionKey(publicKey, propagationKey)))
+            if (this.hash.ContainsKey(this.GetQuestionKey(publicKey, null))
+                && !this.hash.ContainsKey(this.GetQuestionKey(publicKey, propagationKey)))
             {
-                return this._hash[this.GetQuestionKey(publicKey, null)];
+                return this.hash[this.GetQuestionKey(publicKey, null)];
             }
 
-            return this._hash[this.GetQuestionKey(publicKey, propagationKey)];
+            return this.hash[this.GetQuestionKey(publicKey, propagationKey)];
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace Main.Core.Entities.Extensions
         /// The propagation key.
         /// </param>
         /// <returns>
-        /// The System.Guid.
+        /// The <see cref="Guid"/>.
         /// </returns>
         public Guid GetQuestionScreen(Guid publicKey, Guid? propagationKey)
         {
@@ -197,16 +197,16 @@ namespace Main.Core.Entities.Extensions
         /// </exception>
         public void RemoveGroup(ICompleteGroup group)
         {
-            if (!group.PropogationPublicKey.HasValue)
+            if (!group.PropagationPublicKey.HasValue)
             {
                 throw new ArgumentException("only propagated group can uppdate hash");
             }
 
-            foreach (string key in this._hash.Keys.ToArray())
+            foreach (string key in this.hash.Keys.ToArray())
             {
-                if (key.EndsWith(group.PropogationPublicKey.ToString()))
+                if (key.EndsWith(group.PropagationPublicKey.ToString()))
                 {
-                    this._hash.Remove(key);
+                    this.hash.Remove(key);
                 }
             }
         }
@@ -226,13 +226,13 @@ namespace Main.Core.Entities.Extensions
         /// </returns>
         protected CompleteQuestionWrapper GetQuestion(ICompleteQuestion index)
         {
-            if (this._hash.ContainsKey(this.GetQuestionKey(index.PublicKey, null))
-                && !this._hash.ContainsKey(this.GetQuestionKey(index.PublicKey, index.PropogationPublicKey)))
+            if (this.hash.ContainsKey(this.GetQuestionKey(index.PublicKey, null))
+                && !this.hash.ContainsKey(this.GetQuestionKey(index.PublicKey, index.PropagationPublicKey)))
             {
-                return this._hash[this.GetQuestionKey(index.PublicKey, null)];
+                return this.hash[this.GetQuestionKey(index.PublicKey, null)];
             }
 
-            return this._hash[this.GetQuestionKey(index.PublicKey, index.PropogationPublicKey)];
+            return this.hash[this.GetQuestionKey(index.PublicKey, index.PropagationPublicKey)];
         }
 
         /// <summary>
@@ -246,7 +246,7 @@ namespace Main.Core.Entities.Extensions
         /// </returns>
         private string GetQuestionKey(ICompleteQuestion question)
         {
-            return this.GetQuestionKey(question.PublicKey, question.PropogationPublicKey);
+            return this.GetQuestionKey(question.PublicKey, question.PropagationPublicKey);
         }
 
         /// <summary>
@@ -305,9 +305,9 @@ namespace Main.Core.Entities.Extensions
             }
 
             string questionKey = this.GetQuestionKey(question);
-            if (!this._hash.ContainsKey(questionKey))
+            if (!this.hash.ContainsKey(questionKey))
             {
-                this._hash.Add(questionKey, new CompleteQuestionWrapper(question, node.ParentKey.Value));
+                this.hash.Add(questionKey, new CompleteQuestionWrapper(question, node.ParentKey.Value));
             }
         }
 

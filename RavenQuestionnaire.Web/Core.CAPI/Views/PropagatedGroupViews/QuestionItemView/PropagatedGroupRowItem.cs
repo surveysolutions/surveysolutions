@@ -18,9 +18,9 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
     {
         public PropagatedGroupRowItem(ICompleteGroup group, string title)
         {
-            if (!group.PropogationPublicKey.HasValue)
+            if (!group.PropagationPublicKey.HasValue)
                 throw new ArgumentException("group is not propagateble");
-            this.PropagationKey = group.PropogationPublicKey.Value;
+            this.PropagationKey = group.PropagationPublicKey.Value;
             this.Title = title;
             this.Answers = new Dictionary<string, QuestionCellItem>();
             this.Enabled = group.Enabled;

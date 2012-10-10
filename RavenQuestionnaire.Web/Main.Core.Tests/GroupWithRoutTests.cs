@@ -68,9 +68,9 @@ namespace Main.Core.Tests
         {
             CompleteGroup doc = new CompleteGroup("test");
             doc.Children.Add(new CompleteGroup("sub1"));
-            var groupForReturn = new CompleteGroup("sub2") {PropogationPublicKey = Guid.NewGuid()};
+            var groupForReturn = new CompleteGroup("sub2") {PropagationPublicKey = Guid.NewGuid()};
             doc.Children.Add(groupForReturn);
-            GroupWithRout target = new GroupWithRout(doc, groupForReturn.PublicKey, groupForReturn.PropogationPublicKey);
+            GroupWithRout target = new GroupWithRout(doc, groupForReturn.PublicKey, groupForReturn.PropagationPublicKey);
             Assert.IsTrue(target.Group == groupForReturn);
         }
 
@@ -79,7 +79,7 @@ namespace Main.Core.Tests
         {
             CompleteGroup doc = new CompleteGroup("test");
             doc.Children.Add(new CompleteGroup("sub1"));
-            var groupForReturn = new CompleteGroup("sub2") {PropogationPublicKey = Guid.NewGuid()};
+            var groupForReturn = new CompleteGroup("sub2") {PropagationPublicKey = Guid.NewGuid()};
             doc.Children.Add(groupForReturn);
             GroupWithRout target = new GroupWithRout(doc, groupForReturn.PublicKey, Guid.NewGuid());
             Assert.IsTrue(target.Group == doc.Children[0]);
@@ -88,7 +88,7 @@ namespace Main.Core.Tests
         [Test]
         public void CompileNavigation_ForPropagatedGroupSingleGroup_NextAndPrevAreEmpty()
         {
-            CompleteGroup doc = new CompleteGroup("test") {PropogationPublicKey = Guid.NewGuid()};
+            CompleteGroup doc = new CompleteGroup("test") {PropagationPublicKey = Guid.NewGuid()};
             CompleteGroup parent = new CompleteGroup("top");
             parent.Children.Add(doc);
             List<NodeWithLevel> rout = new List<NodeWithLevel>();
@@ -101,10 +101,10 @@ namespace Main.Core.Tests
         [Test]
         public void CompileNavigation_ForPropagatedGroupLeftGroup_PrevIsEmpty()
         {
-            CompleteGroup doc = new CompleteGroup("test") { PropogationPublicKey = Guid.NewGuid() };
+            CompleteGroup doc = new CompleteGroup("test") { PropagationPublicKey = Guid.NewGuid() };
             CompleteGroup parent = new CompleteGroup("top");
             parent.Children.Add(doc);
-            parent.Children.Add(new CompleteGroup("test") { PropogationPublicKey = Guid.NewGuid(), PublicKey = doc.PublicKey });
+            parent.Children.Add(new CompleteGroup("test") { PropagationPublicKey = Guid.NewGuid(), PublicKey = doc.PublicKey });
             List<NodeWithLevel> rout = new List<NodeWithLevel>();
             rout.Add(new NodeWithLevel(parent, 0));
             rout.Add(new NodeWithLevel(doc, 1));
@@ -115,10 +115,10 @@ namespace Main.Core.Tests
         [Test]
         public void CompileNavigation_ForPropagatedGroupLeftGroupRightGroupIsDisabled_NextAndPrevAreEmpty()
         {
-            CompleteGroup doc = new CompleteGroup("test") { PropogationPublicKey = Guid.NewGuid() };
+            CompleteGroup doc = new CompleteGroup("test") { PropagationPublicKey = Guid.NewGuid() };
             CompleteGroup parent = new CompleteGroup("top");
             parent.Children.Add(doc);
-            parent.Children.Add(new CompleteGroup("test") { PropogationPublicKey = Guid.NewGuid(), PublicKey = doc.PublicKey, Enabled = false});
+            parent.Children.Add(new CompleteGroup("test") { PropagationPublicKey = Guid.NewGuid(), PublicKey = doc.PublicKey, Enabled = false});
             List<NodeWithLevel> rout = new List<NodeWithLevel>();
             rout.Add(new NodeWithLevel(parent, 0));
             rout.Add(new NodeWithLevel(doc, 1));
@@ -129,10 +129,10 @@ namespace Main.Core.Tests
         [Test]
         public void CompileNavigation_ForPropagatedGroupRightGroup_NextIsEmpty()
         {
-            CompleteGroup doc = new CompleteGroup("test") { PropogationPublicKey = Guid.NewGuid() };
+            CompleteGroup doc = new CompleteGroup("test") { PropagationPublicKey = Guid.NewGuid() };
             CompleteGroup parent = new CompleteGroup("top");
             
-            parent.Children.Add(new CompleteGroup("test") { PropogationPublicKey = Guid.NewGuid(), PublicKey = doc.PublicKey });
+            parent.Children.Add(new CompleteGroup("test") { PropagationPublicKey = Guid.NewGuid(), PublicKey = doc.PublicKey });
             parent.Children.Add(doc);
             List<NodeWithLevel> rout = new List<NodeWithLevel>();
             rout.Add(new NodeWithLevel(parent, 0));

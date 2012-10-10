@@ -22,8 +22,8 @@ namespace Main.Core.Entities.SubEntities.Complete
         bool Enabled { get; set; }
 
         /// <summary>
-        /// Gets or sets the propogation public key.
+        /// Gets or sets the propagation public key.
         /// </summary>
-        Guid? PropogationPublicKey { get; set; }
+        Guid? PropagationPublicKey { get; set; }
     }
 }

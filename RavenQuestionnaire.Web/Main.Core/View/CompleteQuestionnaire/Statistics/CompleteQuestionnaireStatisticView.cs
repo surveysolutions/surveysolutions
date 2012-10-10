@@ -58,6 +58,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
             this.Creator = doc.Creator;
             this.Status = doc.Status;
             this.LastScreenPublicKey = doc.Children.OfType<ICompleteGroup>().Last().PublicKey;
+
             this.HandleQuestionTree(doc);
         }
 
@@ -169,6 +170,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
             this.AnsweredQuestions = new List<QuestionStatisticView>();
             this.FeaturedQuestions = new List<QuestionStatisticView>();
             this.UnansweredQuestions = new List<QuestionStatisticView>();
+
             foreach (var question in target.QuestionHash.WrapedQuestions)
             {
                 this.ProccessQuestions(question.Question, question.GroupKey);
@@ -188,7 +190,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// </param>
         protected void ProccessQuestions(ICompleteQuestion question, Guid gropPublicKey)
         {
-            question.Enabled = this.executor.Execute(question);
+            question.Enabled = this.executor.Execute(question) ?? true;
 
             if (!question.Enabled)
             {

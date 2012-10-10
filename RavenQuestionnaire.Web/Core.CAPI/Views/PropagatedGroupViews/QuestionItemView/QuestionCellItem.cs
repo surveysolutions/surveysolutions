@@ -20,10 +20,10 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
     {
         public QuestionCellItem(ICompleteQuestion question)
         {
-            if (!question.PropogationPublicKey.HasValue)
+            if (!question.PropagationPublicKey.HasValue)
                 throw new ArgumentException("question have to be propagated");
             PublicKey = question.PublicKey;
-            PropagationKey = question.PropogationPublicKey.Value;
+            PropagationKey = question.PropagationPublicKey.Value;
             Answer = question.GetAnswerObject();
             AnswerString = question.GetAnswerString();
             var firstAnswer = question.Children.OfType<ICompleteAnswer>().FirstOrDefault(a => a.Selected);

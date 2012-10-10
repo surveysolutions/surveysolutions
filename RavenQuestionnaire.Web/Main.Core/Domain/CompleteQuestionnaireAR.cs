@@ -375,7 +375,7 @@ namespace Main.Core.Domain
                         Guid trigger1 = trigger;
                         var lastGroup =
                             this.doc.Find<ICompleteGroup>(
-                                g => g.PublicKey == trigger1 && g.PropogationPublicKey.HasValue).LastOrDefault();
+                                g => g.PublicKey == trigger1 && g.PropagationPublicKey.HasValue).LastOrDefault();
                         if (lastGroup == null)
                             break;
                         this.ApplyEvent(
@@ -383,7 +383,7 @@ namespace Main.Core.Domain
                                 {
                                     CompletedQuestionnaireId = this.doc.PublicKey,
                                     PublicKey = trigger,
-                                    PropagationKey = lastGroup.PropogationPublicKey.Value
+                                    PropagationKey = lastGroup.PropagationPublicKey.Value
                                 });
                     }
                 }

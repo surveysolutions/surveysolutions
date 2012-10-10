@@ -32,7 +32,7 @@ namespace Main.Core.View.Group
         {
             this.PublicKey = group.PublicKey;
             this.GroupText = group.Title;
-            this.PropagationKey = group.PropogationPublicKey;
+            this.PropagationKey = group.PropagationPublicKey;
             this.Enabled = group.Enabled;
             this.Description = group.Description;
             this.Totals = this.CalcProgress(group);
@@ -115,7 +115,7 @@ namespace Main.Core.View.Group
             var total = new Counter();
             List<ICompleteGroup> gruoSubGroup = @group.Children.OfType<ICompleteGroup>().ToList();
             List<ICompleteQuestion> gruoSubQuestions = @group.Children.OfType<ICompleteQuestion>().ToList();
-            if (@group.PropogationPublicKey.HasValue)
+            if (@group.PropagationPublicKey.HasValue)
             {
                 total = total + this.CountQuestions(gruoSubQuestions);
                 return total;

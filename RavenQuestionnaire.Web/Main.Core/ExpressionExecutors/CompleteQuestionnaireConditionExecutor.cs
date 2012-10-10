@@ -13,6 +13,7 @@ namespace Main.Core.ExpressionExecutors
 
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.Extensions;
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.ExpressionExecutors.ExpressionExtentions;
 
@@ -24,6 +25,11 @@ namespace Main.Core.ExpressionExecutors
     public class CompleteQuestionnaireConditionExecutor
     {
         #region Fields
+
+        /// <summary>
+        /// The stack depth limit.
+        /// </summary>
+        private const int StackDepthLimit = 0x64; //// temporary stackoverflow insurance
 
         /// <summary>
         /// The hash.
@@ -44,14 +50,13 @@ namespace Main.Core.ExpressionExecutors
         {
             this.hash = hash;
         }
+               
 
         #endregion
 
         #region Public Methods and Operators
-
-
-
-        /*/// <summary>
+ 
+        /// <summary>
         /// The execute.
         /// </summary>
         /// <param name="question">
@@ -60,165 +65,119 @@ namespace Main.Core.ExpressionExecutors
         /// <returns>
         /// The System.Boolean.
         /// </returns>
-        public bool Execute(<T> executable)
+        public bool? Execute(IConditional question)
         {
             if (string.IsNullOrEmpty(question.ConditionExpression))
             {
                 return true;
+            }
+
+            int stackDepth = 1;
+            return this.ExecuteAndChangeInternal(question, stackDepth);
+        }
+
+        /// <summary>
+        /// The execute.
+        /// </summary>
+        /// <param name="group">
+        /// The group.
+        /// </param>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        public bool? Execute(ICompleteGroup group)
+        {
+            return this.Execute(group as IConditional);
+        }
+
+        /// <summary>
+        /// The execute intternal.
+        /// </summary>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool?"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// </exception>
+        private bool? ExecuteAndChangeInternal(IConditional question, int currentStack)
+        {
+            if (currentStack++ >= StackDepthLimit)
+            {
+                throw new Exception("Unsupported depth of expression call.");
             }
 
             var expression = new Expression(question.ConditionExpression);
             expression.EvaluateParameter += (name, args) =>
             {
                 Guid nameGuid = Guid.Parse(name);
-                Guid? propagationKey = question.PropogationPublicKey;
+
+                var item = question as ICompleteItem;
+                Guid? propagationKey = item != null ? item.PropagationPublicKey : null;
                 var targetQuestion = this.hash[nameGuid, propagationKey];
-                if (!targetQuestion.Enabled)
+
+                if (targetQuestion != null && !string.IsNullOrWhiteSpace(targetQuestion.ConditionExpression))
+                {
+                    bool? value = this.ExecuteAndChangeInternal(targetQuestion, currentStack);
+                    targetQuestion.Enabled = value ?? true;
+                }
+
+                if (targetQuestion == null || !targetQuestion.Enabled)
                 {
                     args.Result = null;
                     return;
                 }
+
                 args.Result = targetQuestion.GetAnswerObject();
             };
-            bool result = false;
-            try
-            {
-                result = (bool)expression.Evaluate();
-            }
-            catch (Exception)
-            {
-            }
-
-            return result;
-        }
-*/
-
-        /// <summary>
-        /// The execute.
-        /// </summary>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <returns>
-        /// The System.Boolean.
-        /// </returns>
-        public bool Execute(ICompleteQuestion question)
-        {
-            if (string.IsNullOrEmpty(question.ConditionExpression))
-            {
-                return true;
-            }
-
-            var expression = new Expression(question.ConditionExpression);
-            expression.EvaluateParameter += (name, args) =>
-                {
-                    Guid nameGuid = Guid.Parse(name);
-                    Guid? propagationKey = question.PropogationPublicKey;
-                    var targetQuestion = this.hash[nameGuid, propagationKey];
-                    if (targetQuestion == null || !targetQuestion.Enabled)
-                    {
-                        args.Result = null;
-                        return;
-                    }
-                    args.Result = targetQuestion.GetAnswerObject();
-                };
 
             expression.EvaluateFunction += ExtentionFunctions.EvaluateFunctionContains; ////support for multioption
 
-            bool result = false;
+            //// if condition is failed to execute question or group have to be active to avoid impossible to complete syrvey 
+            //// we could treat null as success
+            bool? result = null; 
             try
             {
                 result = (bool)expression.Evaluate();
             }
             catch (Exception ex)
             {
-
             }
 
             return result;
         }
-
-        /// <summary>
-        /// The execute.
-        /// </summary>
-        /// <param name="group">
-        /// The group.
-        /// </param>
-        /// <returns>
-        /// The System.Boolean.
-        /// </returns>
-        public bool Execute(ICompleteGroup group)
-        {
-            bool result = this.ExecuteGroup(group);
-            group.Enabled = result;
-            this.UpdateAllChildElementsInGroup(group, result);
-            return result;
-        }
-
         #endregion
 
         #region Methods
 
         /// <summary>
-        /// The execute group.
+        /// The execute and change state.
         /// </summary>
         /// <param name="group">
         /// The group.
         /// </param>
-        /// <returns>
-        /// The System.Boolean.
-        /// </returns>
-        private bool ExecuteGroup(ICompleteGroup group)
+        public void ExecuteAndChangeStateRecursive(ICompleteGroup group)
         {
-            if (string.IsNullOrEmpty(group.ConditionExpression))
-            {
-                return true;
-            }
 
-            var expression = new Expression(group.ConditionExpression);
-            expression.EvaluateParameter += (name, args) =>
-                {
-                    Guid nameGuid = Guid.Parse(name);
-                    Guid? propagationKey = group.PropogationPublicKey;
-                    object value = this.hash[nameGuid, propagationKey].GetAnswerObject();
-                    args.Result = value ?? string.Empty;
-                };
-            bool result = false;
-            try
-            {
-                result = (bool)expression.Evaluate();
-            }
-            catch (Exception)
-            {
-            }
+            bool? value = this.Execute(group);
+            bool result = value ?? true; //// treat null as success 
 
-            return result;
-        }
-
-        /// <summary>
-        /// The update all child elements in group.
-        /// </summary>
-        /// <param name="group">
-        /// The group.
-        /// </param>
-        /// <param name="result">
-        /// The result.
-        /// </param>
-        private void UpdateAllChildElementsInGroup(ICompleteGroup group, bool result)
-        {
             foreach (IComposite child in group.Children)
             {
                 var question = child as ICompleteQuestion;
                 if (question != null)
                 {
-                    question.Enabled = result && this.Execute(question); ////method could not be executed if result is false
+                    question.Enabled = result && (this.ExecuteAndChangeInternal(question, 1) ?? true); ////method could not be executed if result is false
                     continue;
                 }
 
                 var gr = child as ICompleteGroup;
                 if (gr != null && !gr.IsGroupPropagationTemplate())
                 {
-                    gr.Enabled = result && this.Execute(gr); ////method could not be executed if result is false
+
+                    this.ExecuteAndChangeStateRecursive(gr);
+                    ////gr.Enabled = result && (this.Execute(gr) ?? true); ////method could not be executed if result is false
                 }
             }
         }

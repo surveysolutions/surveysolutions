@@ -28,7 +28,7 @@ namespace Core.CAPI.Views
         public override ScreenGroupView BuildView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup,
                                          ScreenNavigation navigation)
         {
-            if (currentGroup.Propagated != Propagate.None && !currentGroup.PropogationPublicKey.HasValue)
+            if (currentGroup.Propagated != Propagate.None && !currentGroup.PropagationPublicKey.HasValue)
             {
                 return new CapiScreenGroupView(doc, currentGroup, navigation);
             }
@@ -42,13 +42,13 @@ namespace Core.CAPI.Views
                 completeGroupMobileView.Children.Clear();
                 completeGroupMobileView.Propagated = Propagate.None;
             }
-            if (currentGroup.PropogationPublicKey.HasValue)
+            if (currentGroup.PropagationPublicKey.HasValue)
             {
                 baseResult.Navigation.NavigationContent.BreadCumbs.Insert(
                     baseResult.Navigation.NavigationContent.BreadCumbs.Count,
                     new CompleteGroupHeaders() {GroupText = currentGroup.Title, PublicKey = currentGroup.PublicKey});
                 baseResult.Navigation.NavigationContent.CurrentScreenTitle =
-                    doc.GetGroupTitle(currentGroup.PropogationPublicKey.Value);
+                    doc.GetGroupTitle(currentGroup.PropagationPublicKey.Value);
             }
             return baseResult;
         }

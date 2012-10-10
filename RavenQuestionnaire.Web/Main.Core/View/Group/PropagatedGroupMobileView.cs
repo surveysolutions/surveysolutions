@@ -38,7 +38,7 @@ namespace Main.Core.View.Group
             /* if (!group.PropogationPublicKey.HasValue)
                  throw new ArgumentException("Group is not propagated");*/
             this.PublicKey = group.PublicKey;
-            this.PropogationKey = group.PropogationPublicKey ?? Guid.Empty;
+            this.PropogationKey = group.PropagationPublicKey ?? Guid.Empty;
             this.Enabled = group.Enabled;
             this.QuestionnairePublicKey = doc.PublicKey;
             this.Title = string.Concat(doc.GetPropagatedGroupsByKey(this.PropogationKey).SelectMany(q => q.Children).

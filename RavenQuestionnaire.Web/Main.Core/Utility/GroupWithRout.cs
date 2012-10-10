@@ -1,21 +1,24 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="GroupWithRout.cs" company="">
-// TODO: Update copyright text.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="GroupWithRout.cs" company="The World Bank">
+//   2012
 // </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.View.CompleteQuestionnaire;
-using Main.Core.View.Group;
+// <summary>
+//   
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Main.Core.Utility
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.View.Group;
+
+    /// <summary>
+    /// The group with rout.
+    /// </summary>
     public class GroupWithRout
     {
         public GroupWithRout(IEnumerable<NodeWithLevel> currentRout, ICompleteGroup group)
@@ -63,6 +66,8 @@ namespace Main.Core.Utility
             CurrentRout = rout;
             Group = group;
         }
+
+
         /// <summary>
         /// The proceed group.
         /// </summary>
@@ -85,7 +90,7 @@ namespace Main.Core.Utility
                 return null;
             }
 
-            if (propagationKey.HasValue && node.PropogationPublicKey != propagationKey.Value)
+            if (propagationKey.HasValue && node.PropagationPublicKey != propagationKey.Value)
             {
                 return null;
             }
@@ -107,11 +112,12 @@ namespace Main.Core.Utility
             navigations.RemoveAll(n => n.Level >= node.Level);
             navigations.Add(node);
         }
+
         /// <summary>
         /// The compile navigation.
         /// </summary>
         /// <returns>
-        /// The RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile.ScreenNavigation.
+        /// The <see cref="ScreenNavigation"/>.
         /// </returns>
         protected ScreenNavigation CompileNavigation()
         {
@@ -123,20 +129,20 @@ namespace Main.Core.Utility
             NodeWithLevel parent = rout.Last();
             List<ICompleteGroup> groupNeighbors;
             int indexOfTarget;
-            if (this.Group.PropogationPublicKey.HasValue)
+            if (this.Group.PropagationPublicKey.HasValue)
             {
                 groupNeighbors =
                     parent.Group.Children.OfType<ICompleteGroup>().Where(
-                        g => g.PublicKey == this.Group.PublicKey && g.PropogationPublicKey.HasValue).ToList();
+                        g => g.PublicKey == this.Group.PublicKey && g.PropagationPublicKey.HasValue).ToList();
 
 
                 groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
-                indexOfTarget = groupNeighbors.FindIndex(0, g => g.PropogationPublicKey == this.Group.PropogationPublicKey);
+                indexOfTarget = groupNeighbors.FindIndex(0, g => g.PropagationPublicKey == this.Group.PropagationPublicKey);
             }
             else
             {
                 groupNeighbors =
-                    parent.Group.Children.OfType<ICompleteGroup>().Where(g => !g.PropogationPublicKey.HasValue).ToList();
+                    parent.Group.Children.OfType<ICompleteGroup>().Where(g => !g.PropagationPublicKey.HasValue).ToList();
 
 
                 groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
@@ -157,6 +163,9 @@ namespace Main.Core.Utility
             return temtNavigation;
         }
 
+        /// <summary>
+        /// Gets the navigation.
+        /// </summary>
         public ScreenNavigation Navigation
         {
             get
@@ -167,8 +176,19 @@ namespace Main.Core.Utility
             }
         }
 
+        /// <summary>
+        /// Gets the current rout.
+        /// </summary>
         public IEnumerable<NodeWithLevel> CurrentRout { get; private set; }
+
+        /// <summary>
+        /// The navigation.
+        /// </summary>
         private ScreenNavigation navigation;
+
+        /// <summary>
+        /// Gets the group.
+        /// </summary>
         public ICompleteGroup Group { get; private set; }
     }
 }

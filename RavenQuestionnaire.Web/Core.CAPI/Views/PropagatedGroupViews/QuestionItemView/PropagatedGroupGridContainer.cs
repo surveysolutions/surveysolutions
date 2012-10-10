@@ -59,9 +59,9 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
 
         public void AddRow(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group)
         {
-            if (!group.PropogationPublicKey.HasValue)
+            if (!group.PropagationPublicKey.HasValue)
                 throw new ArgumentException("group have to be propagated");
-            AddRow(new PropagatedGroupRowItem(group, doc.GetGroupTitle(group.PropogationPublicKey.Value)));
+            AddRow(new PropagatedGroupRowItem(group, doc.GetGroupTitle(group.PropagationPublicKey.Value)));
         }
 
         public void AddRow(PropagatedGroupRowItem row)

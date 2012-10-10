@@ -72,7 +72,7 @@ namespace Main.Core.View.Group
                     else
                     {
                         var g = composite as CompleteGroup;
-                        if (g.Propagated == Propagate.None || !g.PropogationPublicKey.HasValue)
+                        if (g.Propagated == Propagate.None || !g.PropagationPublicKey.HasValue)
                         {
                             this.Children.Add(new CompleteGroupMobileView(doc, g));
                         }

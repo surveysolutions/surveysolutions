@@ -193,7 +193,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <summary>
         /// Gets or sets the propogation public key.
         /// </summary>
-        public Guid? PropogationPublicKey
+        public Guid? PropagationPublicKey
         {
             get
             {
