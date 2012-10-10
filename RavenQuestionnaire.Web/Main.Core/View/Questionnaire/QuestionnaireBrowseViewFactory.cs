@@ -10,8 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Denormalizers;
 using Main.Core.Documents;
+using Main.DenormalizerStorage;
 
 namespace Main.Core.View.Questionnaire
 {

@@ -4,11 +4,11 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Main.Core.Denormalizers;
 using Main.Core.Documents;
 using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View;
+using Main.DenormalizerStorage;
 
 namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
 {

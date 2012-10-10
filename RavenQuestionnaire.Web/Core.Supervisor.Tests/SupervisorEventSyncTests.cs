@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Core.Supervisor.Synchronization;
-using Main.Core.Denormalizers;
 using Main.Core.View;
 using Moq;
 using NUnit.Framework;
@@ -11,7 +10,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Restoring.EventStapshoot;
-
+using Main.DenormalizerStorage;
 namespace Core.Supervisor.Tests
 {
     [TestFixture]
