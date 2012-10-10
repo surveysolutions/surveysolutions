@@ -6,6 +6,9 @@
 //   Defines the CompleteQuestionnaireStoreDocument type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.DenormalizerStorage;
+
 namespace Main.Core.Documents
 {
     using System;
@@ -25,6 +28,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// The complete questionnaire store document.
     /// </summary>
+    [SmartDenormalizer]
     public class CompleteQuestionnaireStoreDocument : ICompleteQuestionnaireDocument
     {
         #region Fields

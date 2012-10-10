@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.DenormalizerStorage;
+
 namespace Core.CAPI.Synchronization
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using Main.Core.Denormalizers;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Events;
     using Main.Core.View.CompleteQuestionnaire;

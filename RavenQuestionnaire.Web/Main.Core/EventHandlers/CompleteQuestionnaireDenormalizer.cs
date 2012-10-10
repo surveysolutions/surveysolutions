@@ -7,7 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.Denormalizers;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.Extensions;
@@ -15,6 +14,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.ExpressionExecutors;
+using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Restoring.EventStapshoot;
 

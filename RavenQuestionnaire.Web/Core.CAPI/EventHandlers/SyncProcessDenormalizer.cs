@@ -4,9 +4,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Main.Core.Denormalizers;
 using Main.Core.Documents;
 using Main.Core.Events.Synchronization;
+using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace Core.CAPI.EventHandlers

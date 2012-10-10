@@ -9,9 +9,9 @@
 
 using System;
 using System.Linq;
-using Main.Core.Denormalizers;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.DenormalizerStorage;
 
 namespace Main.Core.View.Card
 {
