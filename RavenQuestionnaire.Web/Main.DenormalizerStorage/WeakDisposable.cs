@@ -39,9 +39,7 @@ namespace Main.DenormalizerStorage
          // finalizer simply calls Dispose(false)
         ~WeakDisposable()
         {
-            var handler = this.BefoureFinalize;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
+           
             Dispose(false);
         }
 
@@ -49,6 +47,9 @@ namespace Main.DenormalizerStorage
         {
             if (!this.disposed)
             {
+                var handler = this.BefoureFinalize;
+                if (handler != null)
+                    handler(this, EventArgs.Empty);
                 // if this is a dispose call dispose on all state you
                 // hold, and take yourself off the Finalization queue.
                 if (disposing)

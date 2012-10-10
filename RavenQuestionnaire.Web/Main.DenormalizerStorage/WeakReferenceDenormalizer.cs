@@ -26,7 +26,7 @@ namespace Main.DenormalizerStorage
         private readonly ConcurrentDictionary<Guid, WeakReference> _hash;
 
         private readonly List<Guid> _bag;
-        private readonly IPersistentStorage<T> _storage;
+        private readonly IPersistentStorage _storage;
         private readonly object _locker=new object();
         #endregion
 
@@ -35,7 +35,7 @@ namespace Main.DenormalizerStorage
         /// <summary>
         /// Initializes a new instance of the <see cref="InMemoryDenormalizer{T}"/> class.
         /// </summary>
-        public WeakReferenceDenormalizer(IPersistentStorage<T> storage)
+        public WeakReferenceDenormalizer(IPersistentStorage storage)
         {
             this._hash = new ConcurrentDictionary<Guid, WeakReference>();
             this._bag = new List<Guid>();
@@ -82,9 +82,9 @@ namespace Main.DenormalizerStorage
                     // object from the cache of 
                     // of weak reference objects.
                     T retval;
-                    if (!this._hash.ContainsKey(key))
+                    if (!this._hash.ContainsKey(key) || this._hash[key].Target == null)
                     {
-                        retval = this._storage.GetByGuid(key);
+                        retval = this._storage.GetByGuid<T>(key);
                         if (retval == null)
                             throw new InvalidOperationException(
                                 "key was present in bag but objects is missing in both caches");
@@ -92,7 +92,7 @@ namespace Main.DenormalizerStorage
                         weekDisposable.BefoureFinalize += new EventHandler(weekDisposable_BefoureFinalize);
                         var data = new WeakReference(weekDisposable, false);
 
-                        this._hash.TryAdd(key, data);
+                        this._hash.AddOrUpdate(key, data, (k, oldValue) => data);
                     }
                     else
                     {
@@ -143,7 +143,7 @@ namespace Main.DenormalizerStorage
                         WeakReference val;
                         this._hash.TryRemove(key, out val);
                     }
-                    this._storage.Remove(key);
+                    this._storage.Remove<T>(key);
                 }
             }
             finally
@@ -169,11 +169,11 @@ namespace Main.DenormalizerStorage
             {
                 Monitor.Enter(temp, ref lockWasTaken);
                 {
-                    if (this._bag.Contains(key))
+                    if (!this._bag.Contains(key))
                     {
-                        throw new ArgumentException("key dublication");
+                        this._bag.Add(key);
                     }
-                    this._bag.Add(key);
+
                     this._storage.Store(denormalizer, key);
                 }
             }

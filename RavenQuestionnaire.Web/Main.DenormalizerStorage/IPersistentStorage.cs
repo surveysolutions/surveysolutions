@@ -14,8 +14,8 @@ namespace Main.DenormalizerStorage
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public interface IPersistentStorage<T>
-        where T : class
+    public interface IPersistentStorage
+        
     {
         /// <summary>
         /// The get by guid.
@@ -26,14 +26,14 @@ namespace Main.DenormalizerStorage
         /// <returns>
         /// The T.
         /// </returns>
-        T GetByGuid(Guid key);
+        T GetByGuid<T>(Guid key) where T : class;
         /// <summary>
         /// The remove.
         /// </summary>
         /// <param name="key">
         /// The key.
         /// </param>
-        void Remove(Guid key);
+        void Remove<T>(Guid key) where T : class;
         /// <summary>
         /// The store.
         /// </summary>
@@ -43,6 +43,6 @@ namespace Main.DenormalizerStorage
         /// <param name="key">
         /// The key.
         /// </param>
-        void Store(T denormalizer, Guid key);
+        void Store<T>(T denormalizer, Guid key) where T : class;
     }
 }
