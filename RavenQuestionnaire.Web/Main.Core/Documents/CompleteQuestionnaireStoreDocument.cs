@@ -144,7 +144,7 @@ namespace Main.Core.Documents
         /// <summary>
         /// Gets or sets the propogation public key.
         /// </summary>
-        public Guid? PropogationPublicKey
+        public Guid? PropagationPublicKey
         {
             get
             {
@@ -301,7 +301,7 @@ namespace Main.Core.Documents
                     Creator = doc.Creator, 
                     Responsible = doc.Responsible, 
                     StatusChangeComment = doc.StatusChangeComment, 
-                    PropogationPublicKey = doc.PropogationPublicKey, 
+                    PropagationPublicKey = doc.PropagationPublicKey, 
                     Description = doc.Description
                 };
 
@@ -325,7 +325,7 @@ namespace Main.Core.Documents
         /// </exception>
         public virtual void Add(IComposite c, Guid? parent)
         {
-            if (c is ICompleteGroup && ((ICompleteGroup)c).PropogationPublicKey.HasValue && !parent.HasValue)
+            if (c is ICompleteGroup && ((ICompleteGroup)c).PropagationPublicKey.HasValue && !parent.HasValue)
             {
                 if (this.Children.Count(g => g.PublicKey.Equals(c.PublicKey)) > 0)
                 {
@@ -422,14 +422,14 @@ namespace Main.Core.Documents
         public void Remove(IComposite c)
         {
             var propogate = c as ICompleteGroup;
-            if (propogate != null && propogate.PropogationPublicKey.HasValue)
+            if (propogate != null && propogate.PropagationPublicKey.HasValue)
             {
                 bool isremoved = false;
                 List<IComposite> propagatedGroups =
                     this.Children.Where(
                         g =>
                         g.PublicKey.Equals(propogate.PublicKey)
-                        && ((ICompleteGroup)g).PropogationPublicKey == propogate.PropogationPublicKey).ToList();
+                        && ((ICompleteGroup)g).PropagationPublicKey == propogate.PropagationPublicKey).ToList();
                 foreach (ICompleteGroup propagatableCompleteGroup in propagatedGroups)
                 {
                     this.Children.Remove(propagatableCompleteGroup);
@@ -470,7 +470,7 @@ namespace Main.Core.Documents
         {
             IComposite forRemove = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
             if (forRemove != null && forRemove is ICompleteGroup
-                && ((ICompleteGroup)forRemove).PropogationPublicKey.HasValue)
+                && ((ICompleteGroup)forRemove).PropagationPublicKey.HasValue)
             {
                 this.Children.Remove(forRemove);
                 return;

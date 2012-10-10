@@ -52,7 +52,8 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                 doc.Children.OfType<ICompleteGroup>().Select(g => new CompleteGroupHeaders(g)), navigation))
         {
             var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
-            executor.Execute(currentGroup);
+            executor.ExecuteAndChangeStateRecursive(currentGroup);
+
             var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
             validator.Execute(currentGroup);
             BuildScreenContent(doc, currentGroup);
@@ -61,7 +62,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 
         protected void BuildScreenContent(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup)
         {
-            if (currentGroup.PropogationPublicKey.HasValue)
+            if (currentGroup.PropagationPublicKey.HasValue)
             {
                 this.Group = new PropagatedGroupMobileView(doc, currentGroup);
                 return;
@@ -90,13 +91,13 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                     {
                         this.Group.Children.Add(new CompleteGroupMobileView(doc, g));
                     }
-                    else if (!g.PropogationPublicKey.HasValue)
+                    else if (!g.PropagationPublicKey.HasValue)
                     {
                         var propagatedGroup = new CompleteGroupMobileView(doc, g);
                         this.Group.Children.Add(propagatedGroup);
                         var subGroups = currentGroup.Children.OfType<ICompleteGroup>().Where(
                             p =>
-                            p.PublicKey == g.PublicKey && p.PropogationPublicKey.HasValue);
+                            p.PublicKey == g.PublicKey && p.PropagationPublicKey.HasValue);
                         foreach (
                             ICompleteGroup completeGroup in subGroups)
                         {

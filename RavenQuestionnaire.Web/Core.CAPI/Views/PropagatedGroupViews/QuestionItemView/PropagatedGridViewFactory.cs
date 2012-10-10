@@ -44,14 +44,14 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
             if (doc == null)
                 return null;
             var groupTemplate =
-                doc.Find<ICompleteGroup>(g => g.PublicKey == input.GroupPublicKey && !g.PropogationPublicKey.HasValue).
+                doc.Find<ICompleteGroup>(g => g.PublicKey == input.GroupPublicKey && !g.PropagationPublicKey.HasValue).
                     FirstOrDefault();
             if (groupTemplate == null)
                 return null;
             PropagatedGroupGridContainer result = new PropagatedGroupGridContainer(doc, groupTemplate);
             foreach (
                 ICompleteGroup completeGroup in
-                    doc.Find<ICompleteGroup>(g => g.PublicKey == input.GroupPublicKey && g.PropogationPublicKey.HasValue)
+                    doc.Find<ICompleteGroup>(g => g.PublicKey == input.GroupPublicKey && g.PropagationPublicKey.HasValue)
                 )
             {
                 result.AddRow(doc, completeGroup);

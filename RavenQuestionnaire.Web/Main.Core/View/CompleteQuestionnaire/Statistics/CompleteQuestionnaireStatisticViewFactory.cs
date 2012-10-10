@@ -7,12 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using Main.Core.Denormalizers;
-using Main.Core.Documents;
-
 namespace Main.Core.View.CompleteQuestionnaire.Statistics
 {
+    using System;
+
+    using Main.Core.Denormalizers;
+    using Main.Core.Documents;
+
     /// <summary>
     /// The complete questionnaire statistic view factory.
     /// </summary>

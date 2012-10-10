@@ -61,11 +61,11 @@ namespace Main.Core.Tests.ExpressionExecutors.ExpressionExtentions
             question.Children.Add(answer2);
 
             var executorC = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
-            bool result = executorC.Execute(question);
+            bool? result = executorC.Execute(question);
             Assert.AreEqual(result, false);
 
             var executorE = new CompleteQuestionnaireValidationExecutor(new GroupHash(doc));
-            bool result1 = executorE.Execute(question);
+            bool? result1 = executorE.Execute(question);
             Assert.AreEqual(result1, true);
         }
     }

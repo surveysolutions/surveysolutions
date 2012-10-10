@@ -4,20 +4,18 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.ExpressionExecutors;
-using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
-using Main.Core.View.Group;
-
 namespace Core.CAPI.Views
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
+
+    using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView;
+
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.ExpressionExecutors;
+    using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
+    using Main.Core.View.Group;
 
     /// <summary>
     /// TODO: Update summary.
@@ -42,19 +40,19 @@ namespace Core.CAPI.Views
             if (currentGroup.Propagated != Propagate.None /* && !currentGroup.PropogationPublicKey.HasValue*/)
             {
                 var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
+
                 var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
+
                 this.Grid = new PropagatedGroupGridContainer(doc, currentGroup);
-                foreach (
-                    ICompleteGroup completeGroup in
-                        doc.Find<ICompleteGroup>(
-                            g => g.PublicKey == currentGroup.PublicKey && g.PropogationPublicKey.HasValue)
-                    )
+                
+                foreach (ICompleteGroup completeGroup in doc.Find<ICompleteGroup>(g => g.PublicKey == currentGroup.PublicKey && g.PropagationPublicKey.HasValue))
                 {
-                    executor.Execute(completeGroup);
+                    executor.ExecuteAndChangeStateRecursive(completeGroup);
 
                     validator.Execute(completeGroup);
                     this.Grid.AddRow(doc, completeGroup);
                 }
+
                 return;
             }
         }

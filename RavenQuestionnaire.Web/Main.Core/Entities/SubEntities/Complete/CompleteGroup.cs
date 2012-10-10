@@ -74,7 +74,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                 if (question != null)
                 {
                     ICompleteQuestion newQuestion = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
-                    newQuestion.PropogationPublicKey = propogationPublicKey;
+                    newQuestion.PropagationPublicKey = propogationPublicKey;
                     if (!(newQuestion is IBinded))
                     {
                         foreach (ICompleteAnswer completeAnswer in newQuestion.Children)
@@ -107,7 +107,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                     this.Groups.Add(new PropagatableCompleteGroup(groupWithQuestion.Groups[i], propogationPublicKey));
                    
                 }*/
-            this.PropogationPublicKey = propogationPublicKey;
+            this.PropagationPublicKey = propogationPublicKey;
         }
 
         #endregion
@@ -156,7 +156,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <summary>
         /// Gets or sets the propogation public key.
         /// </summary>
-        public Guid? PropogationPublicKey { get; set; }
+        public Guid? PropagationPublicKey { get; set; }
 
         /// <summary>
         /// Gets or sets the public key.
@@ -248,7 +248,7 @@ namespace Main.Core.Entities.SubEntities.Complete
             if (!parent.HasValue || parent.Value == this.PublicKey)
             {
                 var propogateGroup = c as ICompleteGroup;
-                if (propogateGroup != null && propogateGroup.PropogationPublicKey.HasValue)
+                if (propogateGroup != null && propogateGroup.PropagationPublicKey.HasValue)
                 {
                     IComposite group = this.Children.FirstOrDefault(g => g.PublicKey == propogateGroup.PublicKey);
                     if (group != null)
@@ -257,7 +257,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                             !this.Children.OfType<ICompleteGroup>().Any(
                                 g =>
                                 g.PublicKey == propogateGroup.PublicKey &&
-                                g.PropogationPublicKey == propogateGroup.PropogationPublicKey))
+                                g.PropagationPublicKey == propogateGroup.PropagationPublicKey))
                             this.Children.Add(propogateGroup);
                         return;
                     }
@@ -355,14 +355,14 @@ namespace Main.Core.Entities.SubEntities.Complete
         public virtual void Remove(IComposite c)
         {
             var propogate = c as ICompleteGroup;
-            if (propogate != null && propogate.PropogationPublicKey.HasValue)
+            if (propogate != null && propogate.PropagationPublicKey.HasValue)
             {
                 bool isremoved = false;
                 List<IComposite> propagatedGroups =
                     this.Children.Where(
                         g =>
                         g.PublicKey == propogate.PublicKey && g is ICompleteGroup
-                        && ((ICompleteGroup)g).PropogationPublicKey == propogate.PropogationPublicKey).ToList();
+                        && ((ICompleteGroup)g).PropagationPublicKey == propogate.PropagationPublicKey).ToList();
                 foreach (ICompleteGroup propagatableCompleteGroup in propagatedGroups)
                 {
                     this.Children.Remove(propagatableCompleteGroup);
@@ -401,7 +401,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         {
             IComposite forRemove = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
             if (forRemove != null && forRemove is ICompleteGroup
-                && ((ICompleteGroup)forRemove).PropogationPublicKey.HasValue)
+                && ((ICompleteGroup)forRemove).PropagationPublicKey.HasValue)
             {
                 this.Children.Remove(forRemove);
                 return;

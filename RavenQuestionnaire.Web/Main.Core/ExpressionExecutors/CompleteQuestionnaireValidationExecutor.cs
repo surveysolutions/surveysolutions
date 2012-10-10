@@ -112,7 +112,7 @@ namespace Main.Core.ExpressionExecutors
                 {
                     Guid nameGuid = string.Compare("this", name, StringComparison.OrdinalIgnoreCase) == 0 ? question.PublicKey : Guid.Parse(name);
 
-                    Guid? propagationKey = question.PropogationPublicKey;
+                    Guid? propagationKey = question.PropagationPublicKey;
                     var targetQuestion = this.hash[nameGuid, propagationKey];
                     if (targetQuestion == null || !targetQuestion.Enabled)
                     {

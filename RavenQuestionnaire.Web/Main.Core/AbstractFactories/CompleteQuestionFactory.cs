@@ -106,7 +106,7 @@ namespace Main.Core.AbstractFactories
                     if (question is ICompleteQuestion)
                     {
                         newAnswer = new CompleteAnswer(
-                            composite as CompleteAnswer, ((ICompleteQuestion)question).PropogationPublicKey);
+                            composite as CompleteAnswer, ((ICompleteQuestion)question).PropagationPublicKey);
                     }
                     else
                     {

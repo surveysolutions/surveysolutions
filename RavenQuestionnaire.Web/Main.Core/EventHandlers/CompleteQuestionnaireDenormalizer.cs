@@ -96,7 +96,7 @@ namespace Main.Core.EventHandlers
             }
 
             question.SetComments(evnt.Payload.Comments);
-            item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
+            item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace Main.Core.EventHandlers
             var validator = new CompleteQuestionnaireValidationExecutor(item.QuestionHash);
             validator.Execute(group);*/
 
-            item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
+            item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
         }
 
         /// <summary>

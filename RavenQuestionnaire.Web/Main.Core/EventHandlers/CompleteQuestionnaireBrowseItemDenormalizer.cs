@@ -215,7 +215,7 @@ namespace Main.Core.EventHandlers
                     featuredQuestions, 
                     @group.Children.OfType<ICompleteQuestion>(), 
                     group.PublicKey, 
-                    group.PropogationPublicKey, 
+                    group.PropagationPublicKey, 
                     key);
                 foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
                 {
@@ -232,7 +232,7 @@ namespace Main.Core.EventHandlers
                     featuredQuestions, 
                     group.Children.OfType<ICompleteQuestion>(), 
                     group.PublicKey, 
-                    group.PropogationPublicKey, 
+                    group.PropagationPublicKey, 
                     key);
                 foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
                 {

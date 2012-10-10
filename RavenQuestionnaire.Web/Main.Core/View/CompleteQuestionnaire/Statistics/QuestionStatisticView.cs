@@ -36,9 +36,9 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
             // this.AnswerValue = doc.GetAnswerString();
             // this.ApproximateTime = doc.ApproximateTime;
             this.GroupPublicKey = gropPublicKey;
-            this.GroupPropagationPublicKey = doc.PropogationPublicKey;
+            this.GroupPropagationPublicKey = doc.PropagationPublicKey;
             this.ErrorMessage = doc.ValidationMessage;
-            if (doc.PropogationPublicKey.HasValue)
+            if (doc.PropagationPublicKey.HasValue)
             {
                 this.IsQuestionFromPropGroup = true;
             }

@@ -151,9 +151,9 @@ namespace Core.CAPI.Views.Json
 
                 Guid parentKey = item.PublicKey;
                 bool propagatable = false;
-                if (item.PropogationPublicKey.HasValue)
+                if (item.PropagationPublicKey.HasValue)
                 {
-                    parentKey = item.PropogationPublicKey.Value;
+                    parentKey = item.PropagationPublicKey.Value;
                     propagatable = true;
                 }
 

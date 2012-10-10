@@ -81,7 +81,7 @@ namespace RavenQuestionnaire.Core.Views.Group
             CompleteQuestionnaireStoreDocument doc, ICompleteGroup group, ICompleteGroupFactory groupFactory)
         {
             //// PropagatableCompleteGroup propagatableGroup = group as PropagatableCompleteGroup;
-            if (group.PropogationPublicKey.HasValue)
+            if (group.PropagationPublicKey.HasValue)
             {
                 return new PropagatableCompleteGroupView(doc, group, groupFactory);
             }

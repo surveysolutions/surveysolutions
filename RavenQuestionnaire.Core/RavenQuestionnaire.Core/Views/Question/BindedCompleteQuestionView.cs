@@ -56,14 +56,14 @@ namespace RavenQuestionnaire.Core.Views.Question
             if (templates.Count() > 1)
             {
                 // IPropogate propagatebleGroup = group as IPropogate;
-                if (!group.PropogationPublicKey.HasValue)
+                if (!group.PropagationPublicKey.HasValue)
                 {
                     return;
                 }
 
                 // var questionnaire = new Main.Core.Entities.CompleteQuestionnaire(doc);
                 template =
-                    doc.Find<ICompleteGroup>(g => g.PropogationPublicKey == group.PropogationPublicKey.Value).SelectMany
+                    doc.Find<ICompleteGroup>(g => g.PropagationPublicKey == group.PropagationPublicKey.Value).SelectMany
                         (g => g.Find<AbstractCompleteQuestion>(q => q.PublicKey.Equals(bindedQuestion.ParentPublicKey)))
                         .FirstOrDefault();
                 if (template == null)
