@@ -141,7 +141,7 @@ namespace Main.Core.Entities.Extensions
         {
             if (!group.PropagationPublicKey.HasValue)
             {
-                throw new ArgumentException("only propagated group can uppdate hash");
+                throw new ArgumentException("Only propagated group can uppdate hash.");
             }
 
             this.ProcessTree(group);
@@ -199,7 +199,7 @@ namespace Main.Core.Entities.Extensions
         {
             if (!group.PropagationPublicKey.HasValue)
             {
-                throw new ArgumentException("only propagated group can uppdate hash");
+                throw new ArgumentException("Only propagated group can uppdate hash.");
             }
 
             foreach (string key in this.hash.Keys.ToArray())
@@ -283,10 +283,7 @@ namespace Main.Core.Entities.Extensions
         private void ProcessIComposite(CompositeWrapper node, Queue<CompositeWrapper> nodes)
         {
             var question = node.Node as ICompleteQuestion;
-            if (node is IBinded)
-            {
-                return;
-            }
+            
 
             if (question == null)
             {
@@ -333,83 +330,5 @@ namespace Main.Core.Entities.Extensions
         }
 
         #endregion
-
-        /// <summary>
-        /// The complete question wrapper.
-        /// </summary>
-        public class CompleteQuestionWrapper
-        {
-            #region Constructors and Destructors
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="CompleteQuestionWrapper"/> class.
-            /// </summary>
-            /// <param name="question">
-            /// The question.
-            /// </param>
-            /// <param name="screenGuid">
-            /// The screen guid.
-            /// </param>
-            public CompleteQuestionWrapper(ICompleteQuestion question, Guid screenGuid)
-            {
-                this.Question = question;
-                this.GroupKey = screenGuid;
-            }
-
-            #endregion
-
-            #region Public Properties
-
-            /// <summary>
-            /// Gets the group key.
-            /// </summary>
-            public Guid GroupKey { get; private set; }
-
-            /// <summary>
-            /// Gets the question.
-            /// </summary>
-            public ICompleteQuestion Question { get; private set; }
-
-            #endregion
-        }
-
-        /// <summary>
-        /// The composite wrapper.
-        /// </summary>
-        protected class CompositeWrapper
-        {
-            #region Constructors and Destructors
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="CompositeWrapper"/> class.
-            /// </summary>
-            /// <param name="node">
-            /// The node.
-            /// </param>
-            /// <param name="parentKey">
-            /// The parent key.
-            /// </param>
-            public CompositeWrapper(IComposite node, Guid? parentKey)
-            {
-                this.Node = node;
-                this.ParentKey = parentKey;
-            }
-
-            #endregion
-
-            #region Public Properties
-
-            /// <summary>
-            /// Gets the node.
-            /// </summary>
-            public IComposite Node { get; private set; }
-
-            /// <summary>
-            /// Gets the parent key.
-            /// </summary>
-            public Guid? ParentKey { get; private set; }
-
-            #endregion
-        }
     }
 }

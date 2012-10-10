@@ -87,7 +87,7 @@ namespace Main.Core.EventHandlers
             CompleteQuestionnaireStoreDocument item =
                 this._documentStorage.GetByGuid(evnt.Payload.CompleteQuestionnaireId);
 
-            GroupHash.CompleteQuestionWrapper questionWrapper =
+            CompleteQuestionWrapper questionWrapper =
                 item.QuestionHash.GetQuestion(evnt.Payload.QuestionPublickey, evnt.Payload.PropogationPublicKey);
             ICompleteQuestion question = questionWrapper.Question;
             if (question == null)
@@ -120,7 +120,7 @@ namespace Main.Core.EventHandlers
         {
             CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.EventSourceId);
 
-            GroupHash.CompleteQuestionWrapper questionWrapper =
+            CompleteQuestionWrapper questionWrapper =
                 item.QuestionHash.GetQuestion(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey);
             ICompleteQuestion question = questionWrapper.Question;
             if (question == null)

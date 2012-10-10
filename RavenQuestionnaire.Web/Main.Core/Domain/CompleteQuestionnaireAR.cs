@@ -434,7 +434,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnAnswerSet(AnswerSet e)
         {
-            GroupHash.CompleteQuestionWrapper questionWrapper = this.doc.QuestionHash.GetQuestion(
+            CompleteQuestionWrapper questionWrapper = this.doc.QuestionHash.GetQuestion(
                 e.QuestionPublicKey, e.PropogationPublicKey);
             ICompleteQuestion question = questionWrapper.Question;
             if (question == null)
@@ -537,7 +537,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnSetCommentCommand(CommentSeted e)
         {
-            GroupHash.CompleteQuestionWrapper questionWrapper = this.doc.QuestionHash.GetQuestion(
+            CompleteQuestionWrapper questionWrapper = this.doc.QuestionHash.GetQuestion(
                 e.QuestionPublickey, e.PropogationPublicKey);
             ICompleteQuestion question = questionWrapper.Question;
             if (question == null)

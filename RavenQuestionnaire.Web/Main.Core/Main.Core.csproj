@@ -178,6 +178,8 @@
     <Compile Include="Domain\UserAR.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
+    <Compile Include="Entities\Extensions\CompleteQuestionWrapper.cs" />
+    <Compile Include="Entities\Extensions\CompositeWrapper.cs" />
     <Compile Include="Entities\Extensions\GroupHash.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\Extensions\ICompleteQuestionExtensions.cs" />
