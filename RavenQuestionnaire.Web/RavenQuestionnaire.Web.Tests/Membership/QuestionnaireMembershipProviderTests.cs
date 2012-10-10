@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Ninject;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
-using RavenQuestionnaire.Core;
+using Main.Core;
 using Main.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Web.Tests.Membership

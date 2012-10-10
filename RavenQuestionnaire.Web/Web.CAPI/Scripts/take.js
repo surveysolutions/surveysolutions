@@ -66,21 +66,23 @@ function UpdateComments(data) {
 
     var group = jQuery.parseJSON(data.responseText);
     if (!group.error) {
-        UpdateCommentInGroup(group);
+        UpdateCommentInGroup(group.Group);
     }
     else
         SetErrorToQuestion(group.question, group.settings.PropogationPublicKey, group.error);
 }
 
 function UpdateCommentInGroup(group) {
-    for (var j = 0; j < group.Questions.length; j++) {
-        var key = group.Questions[j].PublicKey;
+    for (var j = 0; j < group.Children.length; j++) {
+        if (group.Children[j].QuestionType === "undefined") {
+            continue;
+        }
+        var key = group.Children[j].PublicKey;
         var id = "#comments-" + key;
-        var commentscontent = group.Questions[j].Comments;
+        var commentscontent = group.Children[j].Comments;
         if (commentscontent != null) {
             $(id).html(commentscontent);
-        }
-        else {
+        } else {
             $(id).html('');
         }
     }

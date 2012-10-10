@@ -89,7 +89,6 @@
     <Compile Include="Controllers\SurveyControllerTest.cs" />
     <Compile Include="Export\ExportTest.cs" />
     <Compile Include="Membership\QuestionnaireMembershipProviderTests.cs" />
-    <Compile Include="Membership\QuestionnaireRoleProviderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs\TestMembershipProvider.cs" />
     <Compile Include="Stubs\TestRoleProvider.cs" />
