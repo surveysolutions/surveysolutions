@@ -13,6 +13,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
 
     using Main.Core.Denormalizers;
     using Main.Core.Documents;
+using Main.DenormalizerStorage;
 
     /// <summary>
     /// The complete questionnaire statistic view factory.
