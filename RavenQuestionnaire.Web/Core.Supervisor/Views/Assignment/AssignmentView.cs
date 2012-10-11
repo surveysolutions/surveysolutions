@@ -35,25 +35,27 @@ namespace Core.Supervisor.Views.Assignment
         /// Initializes a new instance of the <see cref="AssignmentView"/> class.
         /// </summary>
         /// <param name="page">
-        /// The page.
+        ///   The page.
         /// </param>
         /// <param name="pageSize">
-        /// The page size.
+        ///   The page size.
         /// </param>
         /// <param name="surveyTitle">
-        /// The survey title.
+        ///   The survey title.
         /// </param>
         /// <param name="totalCount">
-        /// The total count.
+        ///   The total count.
         /// </param>
         /// <param name="items">
-        /// The items.
+        ///   The items.
         /// </param>
         /// <param name="templateId">
-        /// The template id.
+        ///   The template id.
         /// </param>
-        public AssignmentView(int page, int pageSize, string surveyTitle, int totalCount, IEnumerable<CompleteQuestionnaireBrowseItem> items, Guid templateId)
+        /// <param name="userId"></param>
+        public AssignmentView(int page, int pageSize, string surveyTitle, int totalCount, IEnumerable<CompleteQuestionnaireBrowseItem> items, Guid templateId, Guid? userId)
         {
+            this.UserId = userId;
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
@@ -74,6 +76,11 @@ namespace Core.Supervisor.Views.Assignment
             }
             this.SurveyTitle = surveyTitle;
         }
+
+        /// <summary>
+        /// Gets or sets UserId.
+        /// </summary>
+        public Guid? UserId { get; set; }
 
         #endregion
 

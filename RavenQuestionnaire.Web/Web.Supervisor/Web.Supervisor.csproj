@@ -198,10 +198,12 @@
     <Content Include="Content\img\sort_both.png" />
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
+    <Content Include="Content\jquery.jgrowl.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-editable.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\grid.js" />
     <Content Include="Scripts\excanvas.js" />
     <Content Include="Scripts\exporting.js" />
     <Content Include="Scripts\highcharts.js" />
@@ -212,6 +214,7 @@
     <Content Include="Scripts\jquery-latest.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.min.js" />
+    <Content Include="Scripts\jquery.jgrowl.min.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
