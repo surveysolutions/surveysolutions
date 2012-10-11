@@ -106,7 +106,7 @@ namespace Core.Supervisor.Views.Assignment
             }
             
             items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-            return new AssignmentView(input.Page, input.PageSize, title, count, items, input.Id);
+            return new AssignmentView(input.Page, input.PageSize, title, count, items.OrderByDescending(t => t.CreationDate), input.Id);
         }
 
         #endregion
