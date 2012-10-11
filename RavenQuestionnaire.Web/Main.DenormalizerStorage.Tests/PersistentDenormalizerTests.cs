@@ -20,14 +20,14 @@ namespace Main.DenormalizerStorage.Tests
     /// TODO: Update summary.
     /// </summary>
     [TestFixture]
-    public class WeakReferenceDenormalizerTests
+    public class PersistentDenormalizerTests
     {
         [Test]
         public void SmokeTest()
         {
             Mock<IPersistentStorage> storageMock=new Mock<IPersistentStorage>();
             var cache = new MemoryCache("WeakReferenceDenormalizer");
-            WeakReferenceDenormalizer<object> target = new WeakReferenceDenormalizer<object>(cache, storageMock.Object, new List<Guid>());
+            PersistentDenormalizer<object> target = new PersistentDenormalizer<object>(cache, storageMock.Object, new List<Guid>());
             var key = Guid.NewGuid();
             var objectToStore = new object();
             target.Store(objectToStore, key);
@@ -57,7 +57,7 @@ namespace Main.DenormalizerStorage.Tests
         {
             Mock<IPersistentStorage> storageMock = new Mock<IPersistentStorage>();
             var cache = new MemoryCache("WeakReferenceDenormalizer");
-            WeakReferenceDenormalizer<TestObjectDump> target = new WeakReferenceDenormalizer<TestObjectDump>(cache, storageMock.Object, new List<Guid>());
+            PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageMock.Object, new List<Guid>());
             var key = Guid.NewGuid();
             var objectToStore = new TestObjectDump("test", key);
 
@@ -78,7 +78,7 @@ namespace Main.DenormalizerStorage.Tests
             PersistentStorageStub storageStub = new PersistentStorageStub(objectToStore);
             var cache = new MemoryCache("WeakReferenceDenormalizer");
             var bag = new List<Guid>();
-            WeakReferenceDenormalizer<TestObjectDump> target = new WeakReferenceDenormalizer<TestObjectDump>(cache, storageStub, bag);
+            PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageStub, bag);
            
 
             bag.Add(key);

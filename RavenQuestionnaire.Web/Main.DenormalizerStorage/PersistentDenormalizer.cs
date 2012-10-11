@@ -16,7 +16,7 @@ namespace Main.DenormalizerStorage
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class WeakReferenceDenormalizer<T> : IDenormalizerStorage<T>, IDisposable
+    public class PersistentDenormalizer<T> : IDenormalizerStorage<T>, IDisposable
         where T : class
     {
         #region Fields
@@ -36,11 +36,11 @@ namespace Main.DenormalizerStorage
         /// <summary>
         /// Initializes a new instance of the <see cref="InMemoryDenormalizer{T}"/> class.
         /// </summary>
-        public WeakReferenceDenormalizer(IPersistentStorage storage)
-            : this(new MemoryCache("WeakReferenceDenormalizer"), storage, new List<Guid>())
+        public PersistentDenormalizer(IPersistentStorage storage)
+            : this(new MemoryCache("PersistentDenormalizer"), storage, new List<Guid>())
         {
         }
-        public WeakReferenceDenormalizer(MemoryCache hash, IPersistentStorage storage, List<Guid> bag)
+        public PersistentDenormalizer(MemoryCache hash, IPersistentStorage storage, List<Guid> bag)
         {
             this._hash = hash;
             this._bag = bag;

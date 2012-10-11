@@ -28,7 +28,7 @@ namespace Main.Core
             try
             {
                 if (GetWeekBinding())
-                    result = context.Kernel.Get<WeakReferenceDenormalizer<T>>();
+                    result = context.Kernel.Get<PersistentDenormalizer<T>>();
                 else
                 {
                     result = context.Kernel.Get<InMemoryDenormalizer<T>>();

@@ -61,7 +61,7 @@
     <Compile Include="StoredObject.cs" />
     <Compile Include="IPersistentStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WeakReferenceDenormalizer.cs">
+    <Compile Include="PersistentDenormalizer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WeakReferenceSnapshotStore.cs" />

@@ -19,9 +19,9 @@ namespace Main.DenormalizerStorage
     /// </summary>
     public class WeakReferenceSnapshotStore : ISnapshotStore
     {
-        private readonly WeakReferenceDenormalizer<Snapshot> storage;
+        private readonly PersistentDenormalizer<Snapshot> storage;
 
-        public WeakReferenceSnapshotStore(WeakReferenceDenormalizer<Snapshot> storage)
+        public WeakReferenceSnapshotStore(PersistentDenormalizer<Snapshot> storage)
         {
             this.storage = storage;
         }
