@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Runtime.Caching;
 using System.Threading;
 using Moq;
 using NUnit.Framework;
@@ -25,7 +26,8 @@ namespace Main.DenormalizerStorage.Tests
         public void SmokeTest()
         {
             Mock<IPersistentStorage> storageMock=new Mock<IPersistentStorage>();
-            WeakReferenceDenormalizer<object> target = new WeakReferenceDenormalizer<object>(storageMock.Object);
+            var cache = new MemoryCache("WeakReferenceDenormalizer");
+            WeakReferenceDenormalizer<object> target = new WeakReferenceDenormalizer<object>(cache, storageMock.Object);
             var key = Guid.NewGuid();
             var objectToStore = new object();
             target.Store(objectToStore, key);
@@ -42,13 +44,11 @@ namespace Main.DenormalizerStorage.Tests
             //still once!
             storageMock.Verify(x => x.GetByGuid<object>(key), Times.Once());
 
-            result = objectToStore = null;
+        //    result = objectToStore = null;
             //befoure collect once
             storageMock.Verify(x => x.Store(It.IsAny<object>(), key), Times.Once());
-            GC.Collect();
-            //wait for garbage collector
-            //if test will fail implemented properly mock object with inner assertion
-            Thread.Sleep(1000);
+            cache.Remove(key.ToString());
+           
             //after collect twice
             storageMock.Verify(x => x.Store(It.IsAny<object>(), key), Times.Exactly(2));
         }
@@ -56,18 +56,18 @@ namespace Main.DenormalizerStorage.Tests
         public void Store_WhenObjectWasChangedAndGCCollectiongId_ObjectWillDumpTheLatestVersion()
         {
             Mock<IPersistentStorage> storageMock = new Mock<IPersistentStorage>();
-            WeakReferenceDenormalizer<TestObjectDump> target = new WeakReferenceDenormalizer<TestObjectDump>(storageMock.Object);
+            var cache = new MemoryCache("WeakReferenceDenormalizer");
+            WeakReferenceDenormalizer<TestObjectDump> target = new WeakReferenceDenormalizer<TestObjectDump>(cache, storageMock.Object);
             var key = Guid.NewGuid();
-            var objectToStore = new TestObjectDump("test", Guid.NewGuid());
+            var objectToStore = new TestObjectDump("test", key);
 
             target.Store(objectToStore, key);
-
-            storageMock.Setup(x => x.GetByGuid<TestObjectDump>(key)).Returns(new TestObjectDump("test", Guid.NewGuid()));
+            storageMock.Setup(x => x.GetByGuid<TestObjectDump>(key)).Returns(objectToStore);
             var result = target.GetByGuid(key);
             result.Name = "hello world";
 
            // objectToStore = null;
-            GC.Collect();
+            cache.Remove(key.ToString());
             storageMock.Verify(x => x.Store(It.Is<TestObjectDump>(o => o.Name == "hello world"), key), Times.Once());
         }
     }

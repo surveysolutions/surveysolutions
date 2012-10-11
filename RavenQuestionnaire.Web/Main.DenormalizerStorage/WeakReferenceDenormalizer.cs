@@ -8,6 +8,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Threading;
 
 namespace Main.DenormalizerStorage
@@ -15,7 +16,7 @@ namespace Main.DenormalizerStorage
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class WeakReferenceDenormalizer<T> : IDenormalizerStorage<T>
+    public class WeakReferenceDenormalizer<T> : IDenormalizerStorage<T>, IDisposable
         where T : class
     {
         #region Fields
@@ -23,7 +24,7 @@ namespace Main.DenormalizerStorage
         /// <summary>
         /// The _hash.
         /// </summary>
-        private readonly ConcurrentDictionary<Guid, WeakReference> _hash;
+        private readonly MemoryCache _hash;
 
         private readonly List<Guid> _bag;
         private readonly IPersistentStorage _storage;
@@ -36,8 +37,12 @@ namespace Main.DenormalizerStorage
         /// Initializes a new instance of the <see cref="InMemoryDenormalizer{T}"/> class.
         /// </summary>
         public WeakReferenceDenormalizer(IPersistentStorage storage)
+            : this(new MemoryCache("WeakReferenceDenormalizer"),storage)
         {
-            this._hash = new ConcurrentDictionary<Guid, WeakReference>();
+        }
+        public WeakReferenceDenormalizer(MemoryCache hash, IPersistentStorage storage)
+        {
+            this._hash = hash;
             this._bag = new List<Guid>();
             this._storage = storage;
         }
@@ -82,21 +87,26 @@ namespace Main.DenormalizerStorage
                     // object from the cache of 
                     // of weak reference objects.
                     T retval;
-                    if (!this._hash.ContainsKey(key) || this._hash[key].Target == null)
+                    if (!this._hash.Contains(key.ToString()))
                     {
                         retval = this._storage.GetByGuid<T>(key);
                         if (retval == null)
                             throw new InvalidOperationException(
                                 "key was present in bag but objects is missing in both caches");
-                        var weekDisposable = new WeakDisposable<T>(retval, key);
+                      /*  var weekDisposable = new WeakDisposable<T>(retval, key);
                         weekDisposable.BefoureFinalize += new EventHandler(weekDisposable_BefoureFinalize);
-                        var data = new WeakReference(weekDisposable, false);
+                        var data = new WeakReference(weekDisposable, false);*/
 
-                        this._hash.AddOrUpdate(key, data, (k, oldValue) => data);
+                        //this._hash.AddOrUpdate(key, data, (k, oldValue) => data);
+                        var policy = new CacheItemPolicy();
+                        policy.RemovedCallback += weekDisposable_CacheEntryRemoved;
+                        policy.SlidingExpiration = TimeSpan.FromMinutes(3);
+                        this._hash.Add(key.ToString(), retval, policy);
                     }
                     else
                     {
-                        retval = (_hash[key].Target as WeakDisposable<T>).Data as T;
+                      //  retval = (_hash[key].Target as WeakDisposable<T>).Data as T;
+                        retval = _hash[key.ToString()] as T;
                     }
                     return retval;
                 }
@@ -138,10 +148,9 @@ namespace Main.DenormalizerStorage
                         return;
                     }
                     this._bag.Remove(key);
-                    if (this._hash.ContainsKey(key))
+                    if (this._hash.Contains(key.ToString()))
                     {
-                        WeakReference val;
-                        this._hash.TryRemove(key, out val);
+                        this._hash.Remove(key.ToString());
                     }
                     this._storage.Remove<T>(key);
                 }
@@ -186,11 +195,18 @@ namespace Main.DenormalizerStorage
         #endregion
 
 
-        void weekDisposable_BefoureFinalize(object sender, EventArgs e)
+        void weekDisposable_CacheEntryRemoved(CacheEntryRemovedArguments arguments)
         {
-            var data = sender as WeakDisposable<T>;
-
-            this._storage.Store(data.Data, data.Key);
+            this._storage.Store(arguments.CacheItem.Value, Guid.Parse(arguments.CacheItem.Key));
         }
+
+        #region Implementation of IDisposable
+
+        public void Dispose()
+        {
+            this._hash.Dispose();
+        }
+
+        #endregion
     }
 }

@@ -103,6 +103,8 @@ namespace Main.Core.ExpressionExecutors
         /// </exception>
         private bool? ExecuteAndChangeInternal(IConditional question, int currentStack)
         {
+            if (string.IsNullOrEmpty(question.ConditionExpression))
+                return true;
             if (currentStack++ >= StackDepthLimit)
             {
                 throw new Exception("Unsupported depth of expression call.");

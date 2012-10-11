@@ -57,7 +57,7 @@ namespace Main.DenormalizerStorage
                     this.Data = null;
                 }
 
-
+                 
                 this.disposed = true;
             }
         }
