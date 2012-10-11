@@ -129,6 +129,7 @@ namespace Browsing.Common.Containers
         {
             base.OnParentChanged(e);
             RefreshAuthentificationInfo();
+            RefreshLoginCapability();
         }
     }
 }
