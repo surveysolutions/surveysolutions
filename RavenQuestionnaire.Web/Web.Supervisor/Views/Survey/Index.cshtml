@@ -5,31 +5,26 @@
     this.ViewBag.Title = "Surveys";
 }
 <script type="text/javascript">
-    var tsortList = undefined;
     var sortData = undefined;
+    var pageSize = @Model.PageSize;
     
     $(document).ready(function() {
         document.filterUser = "";
         $('#filter').editable().on('update', function(e, editable) {
             document.filterUser = editable.value;
             sortData = [{ Field: "Title", Direction: "Asc" }];
-            tsortList=[[0, 1]];
             getTablePage(sortData, 1);
         });
 
-        makeSortable($, tsortList);
+        makeSortable();
         onPagingClick();
         
     });
 
-    function makeSortable($, list) {
-        if (list!== undefined) {
-            $.tablesorter.defaults.sortList =JSON.parse(JSON.stringify(list));
-        }
+    function makeSortable() {
         $("#questionnaireTable table").tablesorter({
                 send: function(data) {
-                    tsortList =JSON.parse(JSON.stringify(this.sortList));
-                    sortData = data;
+                    sortData = JSON.parse(JSON.stringify(data));
                     getTablePage(data, 1);
                 }
         });
@@ -46,7 +41,7 @@
         $.ajax({
                 type: "POST",
                 url: "@Url.Action("TableData", "Survey")",
-                data: JSON.stringify({ UserId: document.filterUser, SortOrder: data, Pager: { Page: page, PageSize: @Model.PageSize } }),
+                data: JSON.stringify({ UserId: document.filterUser, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {
                     200: function(response) {
@@ -69,7 +64,6 @@
         else
             return decodeURIComponent(results[1].replace( /\+/g , " "));
     }
-
 </script>
 <h2>Surveys by <a href="#" id="filter" 
                   data-placement="bottom" 

@@ -97,7 +97,7 @@ namespace Core.Supervisor.Views.Assignment
             if (count == 0)
             {
                 return new AssignmentView(
-                    input.Page, input.PageSize, title, 0, new CompleteQuestionnaireBrowseItem[0], input.Id);
+                    input.Page, input.PageSize, title, 0, new CompleteQuestionnaireBrowseItem[0], input.Id, input.UserId);
             }
 
             if (input.Orders.Count > 0)
@@ -106,7 +106,7 @@ namespace Core.Supervisor.Views.Assignment
             }
             
             items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-            return new AssignmentView(input.Page, input.PageSize, title, count, items, input.Id);
+            return new AssignmentView(input.Page, input.PageSize, title, count, items, input.Id, input.UserId);
         }
 
         #endregion

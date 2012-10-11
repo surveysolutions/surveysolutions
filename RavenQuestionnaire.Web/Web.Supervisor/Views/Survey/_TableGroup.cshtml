@@ -1,74 +1,93 @@
 ﻿@using Main.Core.Entities.SubEntities
 @using Core.Supervisor.Views.Assignment
+@using Web.Supervisor.Models
 @model AssignmentView
-@foreach (AssignmentViewItem fitem in Model.Items)
-{
-    <tr id="responsible-@(fitem.Id)">
-        @foreach (var item in fitem.FeatureadValue)
-        {
-            <td>
-                @(string.IsNullOrEmpty(item.Value) ? string.Empty : item.Value)
-            </td>
-        }
-        <td id="row-@fitem.Id" style="width: 10%;">
-            <div class="assignment-view">
-                <a id="link-@fitem.Id" href="@Url.Action("Index", "Survey", new { UserId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
-            </div>
-            <div class="assignment-form">
-                @using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions { OnComplete = "HideForm" }))
+<div>
+    <table id="table"  class="table table-striped table-bordered table-condensed">
+        <thead>
+            <tr>
+                @foreach (var header in Model.Headers)
                 {
-                    var id = fitem.Id + "";
-                    @Html.Hidden("CqId", id)
-                    @Html.Hidden("TmptId", fitem.TemplateId)
-                    var options = (ViewBag.Users as SelectList).Select(item => new SelectListItem
-                    {
-                        Value = item.Value,
-                        Text = item.Text,
-                        Selected = (fitem.Responsible != null && fitem.Responsible.Id.ToString() == item.Value)
-                    }).ToList();
-                    if (fitem.Responsible == null)
-                    {
-                        options.Add(new SelectListItem() { Selected = true, Text = string.Empty, Value = string.Empty });
-                    }
-                    <div>@Html.DropDownList("userId", options)</div>
-                    <div>
-                        <input class="btn btn-primary" name="Save" type="submit" value="Save" />
-                        <input class="btn btn-danger" id="canc-@fitem.Id" name="Cancel" type="button" value="Cancel" />
-                    </div>
+                    <th class="sorting" sorter='{"key":"@header.Value"}'>@header.Value</th>
                 }
-            </div>
-        </td>
-        <td style="width: 10%;">@fitem.Status.Name
-        </td>
-        <td style="width: 20%;">
-            <a class="btn btn-small" href="@Url.Action("Details", new { id = fitem.Id, template = fitem.TemplateId })">
-                <i class="icon-list"></i>Details</a>
-            @if (fitem.Status.PublicId == SurveyStatus.Initial.PublicId || fitem.Status.PublicId == SurveyStatus.Redo.PublicId)
-            {
-                if (fitem.Responsible == null)
-                 {
-                     <a class="btn btn-small" href="@Url.Action("Assign", new { id = fitem.Id })"><i class="icon-user">
-                                                                                                  </i>Assign</a>
-                 }
-                 else
-                 {
-                     <a class="btn btn-small" id="ref-@fitem.Id" href="#" ><i class="icon-random"></i>Change</a>
-                     <script type="text/javascript">
-                    $('#ref-@(fitem.Id)').click(function() {
-                        $('#row-@(fitem.Id)').addClass("showForm");
-                    });
-                    $('#canc-@(fitem.Id)').click(function() {
-                        $('#row-@(fitem.Id)').removeClass("showForm");
-                    });
-                </script>
-                 }
-            }
-            @if (fitem.Status.PublicId == SurveyStatus.Complete.PublicId || fitem.Status.PublicId == SurveyStatus.Error.PublicId)
-            {
-                <a class="btn  btn-small" href="@Url.Action("ChangeState", new { id = fitem.Id, template = fitem.TemplateId })">
-                    <i class="icon-ok-sign"></i>Change state</a>
-            }
-
-        </td>
-    </tr>
-}
+                <th class="sorting" sorter='{"key":"Responsible.Name"}'>Responsible</th>
+                <th class="sorting" sorter='{"key":"Status.Name"}'>Status</th>
+                <td>
+                </td>
+            </tr>
+        </thead>
+        @foreach (AssignmentViewItem fitem in Model.Items)
+        {
+            <tr id="responsible-@(fitem.Id)">
+                @foreach (var item in fitem.FeatureadValue)
+                {
+                    <td>
+                        @(string.IsNullOrEmpty(item.Value) ? string.Empty : item.Value)
+                    </td>
+                }
+                <td id="row-@fitem.Id" style="width: 10%;">
+                    <div class="assignment-view">
+                        <a id="link-@fitem.Id" href="@Url.Action("Index", "Survey", new { UserId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
+                    </div>
+                    <div class="assignment-form">
+                        @using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions { OnComplete = "HideForm" }))
+                        {
+                            var id = fitem.Id + "";
+                            @Html.Hidden("CqId", id)
+                            @Html.Hidden("TmptId", fitem.TemplateId)
+                            var options = (ViewBag.Users as SelectList).Select(item => new SelectListItem
+                            {
+                                Value = item.Value,
+                                Text = item.Text,
+                                Selected = (fitem.Responsible != null && fitem.Responsible.Id.ToString() == item.Value)
+                            }).ToList();
+                            if (fitem.Responsible == null)
+                            {
+                                options.Add(new SelectListItem() { Selected = true, Text = string.Empty, Value = string.Empty });
+                            }
+                            <div>@Html.DropDownList("userId", options)</div>
+                            <div>
+                                <input class="btn btn-primary" name="Save" type="submit" value="Save" />
+                                <input class="btn btn-danger" id="canc-@fitem.Id" name="Cancel" type="button" value="Cancel" />
+                            </div>
+                        }
+                    </div>
+                </td>
+                <td style="width: 10%;">@fitem.Status.Name
+                </td>
+                <td style="width: 20%;">
+                    <a class="btn btn-small" href="@Url.Action("Details", new { id = fitem.Id, template = fitem.TemplateId })">
+                        <i class="icon-list"></i>Details</a>
+                    @if (fitem.Status.PublicId == SurveyStatus.Initial.PublicId || fitem.Status.PublicId == SurveyStatus.Redo.PublicId)
+                    {
+                        if (fitem.Responsible == null)
+                        {
+                        <a class="btn btn-small" href="@Url.Action("Assign", new { id = fitem.Id })"><i class="icon-user">
+                        </i>Assign</a>
+                        }
+                        else
+                        {
+                        <a class="btn btn-small" id="ref-@fitem.Id" href="#" ><i class="icon-random"></i>Change</a>
+                        <script type="text/javascript">
+                            $('#ref-@(fitem.Id)').click(function () {
+                                $('#row-@(fitem.Id)').addClass("showForm");
+                            });
+                            $('#canc-@(fitem.Id)').click(function () {
+                                $('#row-@(fitem.Id)').removeClass("showForm");
+                            });
+                        </script>
+                        }
+                    }
+                    @if (fitem.Status.PublicId == SurveyStatus.Complete.PublicId || fitem.Status.PublicId == SurveyStatus.Error.PublicId)
+                    {
+                        <a class="btn  btn-small" href="@Url.Action("ChangeState", new { id = fitem.Id, template = fitem.TemplateId })">
+                            <i class="icon-ok-sign"></i>Change state</a>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+    <div class="pagination"  id="paging">
+        @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new { order = Model.Order })
+    </div>
+</div>
