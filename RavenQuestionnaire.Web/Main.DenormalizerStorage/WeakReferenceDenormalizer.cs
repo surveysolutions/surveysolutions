@@ -37,13 +37,13 @@ namespace Main.DenormalizerStorage
         /// Initializes a new instance of the <see cref="InMemoryDenormalizer{T}"/> class.
         /// </summary>
         public WeakReferenceDenormalizer(IPersistentStorage storage)
-            : this(new MemoryCache("WeakReferenceDenormalizer"),storage)
+            : this(new MemoryCache("WeakReferenceDenormalizer"), storage, new List<Guid>())
         {
         }
-        public WeakReferenceDenormalizer(MemoryCache hash, IPersistentStorage storage)
+        public WeakReferenceDenormalizer(MemoryCache hash, IPersistentStorage storage, List<Guid> bag)
         {
             this._hash = hash;
-            this._bag = new List<Guid>();
+            this._bag = bag;
             this._storage = storage;
         }
 
@@ -197,7 +197,9 @@ namespace Main.DenormalizerStorage
 
         void weekDisposable_CacheEntryRemoved(CacheEntryRemovedArguments arguments)
         {
-            this._storage.Store(arguments.CacheItem.Value, Guid.Parse(arguments.CacheItem.Key));
+            Guid key = Guid.Parse(arguments.CacheItem.Key);
+            if (this._bag.Contains(key))
+                this._storage.Store(arguments.CacheItem.Value, key);
         }
 
         #region Implementation of IDisposable

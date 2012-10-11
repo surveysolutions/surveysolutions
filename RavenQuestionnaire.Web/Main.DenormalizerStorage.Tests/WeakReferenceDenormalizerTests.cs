@@ -27,7 +27,7 @@ namespace Main.DenormalizerStorage.Tests
         {
             Mock<IPersistentStorage> storageMock=new Mock<IPersistentStorage>();
             var cache = new MemoryCache("WeakReferenceDenormalizer");
-            WeakReferenceDenormalizer<object> target = new WeakReferenceDenormalizer<object>(cache, storageMock.Object);
+            WeakReferenceDenormalizer<object> target = new WeakReferenceDenormalizer<object>(cache, storageMock.Object, new List<Guid>());
             var key = Guid.NewGuid();
             var objectToStore = new object();
             target.Store(objectToStore, key);
@@ -57,7 +57,7 @@ namespace Main.DenormalizerStorage.Tests
         {
             Mock<IPersistentStorage> storageMock = new Mock<IPersistentStorage>();
             var cache = new MemoryCache("WeakReferenceDenormalizer");
-            WeakReferenceDenormalizer<TestObjectDump> target = new WeakReferenceDenormalizer<TestObjectDump>(cache, storageMock.Object);
+            WeakReferenceDenormalizer<TestObjectDump> target = new WeakReferenceDenormalizer<TestObjectDump>(cache, storageMock.Object, new List<Guid>());
             var key = Guid.NewGuid();
             var objectToStore = new TestObjectDump("test", key);
 
@@ -69,6 +69,30 @@ namespace Main.DenormalizerStorage.Tests
            // objectToStore = null;
             cache.Remove(key.ToString());
             storageMock.Verify(x => x.Store(It.Is<TestObjectDump>(o => o.Name == "hello world"), key), Times.Once());
+        }
+        [Test]
+        public void Remove_WhenCachedObjectIsAllover_ObjectIsAbswentInAllStoreges()
+        {
+            var key = Guid.NewGuid();
+            var objectToStore = new TestObjectDump("test", key);
+            PersistentStorageStub storageStub = new PersistentStorageStub(objectToStore);
+            var cache = new MemoryCache("WeakReferenceDenormalizer");
+            var bag = new List<Guid>();
+            WeakReferenceDenormalizer<TestObjectDump> target = new WeakReferenceDenormalizer<TestObjectDump>(cache, storageStub, bag);
+           
+
+            bag.Add(key);
+           
+            var result = target.GetByGuid(key);
+
+            target.Remove(key);
+            Thread.Sleep(1000);
+            Assert.IsTrue(bag.Count==0);
+            Assert.IsTrue(cache[key.ToString()] == null);
+            Assert.IsTrue(storageStub.StoreCount == 0);
+            Assert.IsTrue(storageStub.DeleteCount == 1);
+            Assert.IsTrue(storageStub.GetCount == 1);
+
         }
     }
 
@@ -82,5 +106,38 @@ namespace Main.DenormalizerStorage.Tests
 
         public string Name { get; set; }
         public Guid Key { get; private set; }
+    }
+
+    public class PersistentStorageStub : IPersistentStorage
+    {
+        public int GetCount { get; private set; }
+        public int StoreCount { get; private set; }
+        public int DeleteCount { get; private set; }
+        protected object retObject;
+
+        public PersistentStorageStub(object retObject)
+        {
+            this.retObject = retObject;
+        }
+
+        #region Implementation of IPersistentStorage
+
+        public T GetByGuid<T>(Guid key) where T : class
+        {
+            GetCount++;
+            return retObject as T;
+        }
+
+        public void Remove<T>(Guid key) where T : class
+        {
+            DeleteCount++;
+        }
+
+        public void Store<T>(T denormalizer, Guid key) where T : class
+        {
+            StoreCount++;
+        }
+
+        #endregion
     }
 }
