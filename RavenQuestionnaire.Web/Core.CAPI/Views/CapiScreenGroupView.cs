@@ -39,9 +39,9 @@ namespace Core.CAPI.Views
         {
             if (currentGroup.Propagated != Propagate.None /* && !currentGroup.PropogationPublicKey.HasValue*/)
             {
-                var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
+                var executor = new CompleteQuestionnaireConditionExecutor(doc);
 
-                var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
+                var validator = new CompleteQuestionnaireValidationExecutor(doc);
 
                 this.Grid = new PropagatedGroupGridContainer(doc, currentGroup);
                 

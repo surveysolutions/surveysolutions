@@ -222,7 +222,7 @@ namespace Main.Core.Domain
             Guid questionPublicKey, Guid? propogationPublicKey, string completeAnswerValue, List<Guid> completeAnswers)
         {
             ////performe check before event raising!!
-            ICompleteQuestion question = this.doc.QuestionHash[questionPublicKey, propogationPublicKey];
+            ICompleteQuestion question = this.doc.GetQuestion(questionPublicKey, propogationPublicKey);
 
             ////it's not a great idea to build here answer text
             string answerString;
@@ -434,9 +434,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnAnswerSet(AnswerSet e)
         {
-            CompleteQuestionWrapper questionWrapper = this.doc.QuestionHash.GetQuestion(
-                e.QuestionPublicKey, e.PropogationPublicKey);
-            ICompleteQuestion question = questionWrapper.Question;
+            ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublicKey, e.PropogationPublicKey);
             if (question == null)
             {
                 return; ////is it good or exception is better decision
@@ -506,7 +504,6 @@ namespace Main.Core.Domain
 
             var newGroup = new CompleteGroup(template, e.PropagationKey);
             this.doc.Add(newGroup, null);
-            this.doc.QuestionHash.AddGroup(newGroup);
         }
 
         /// <summary>
@@ -521,7 +518,6 @@ namespace Main.Core.Domain
             try
             {
                 this.doc.Remove(group);
-                this.doc.QuestionHash.RemoveGroup(group);
             }
             catch (CompositeException)
             {
@@ -537,17 +533,13 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnSetCommentCommand(CommentSeted e)
         {
-            CompleteQuestionWrapper questionWrapper = this.doc.QuestionHash.GetQuestion(
-                e.QuestionPublickey, e.PropogationPublicKey);
-            ICompleteQuestion question = questionWrapper.Question;
+            ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublickey, e.PropogationPublicKey);
             if (question == null)
             {
                 return;
             }
 
             question.SetComments(e.Comments);
-
-            //// _doc.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
         }
 
         #endregion

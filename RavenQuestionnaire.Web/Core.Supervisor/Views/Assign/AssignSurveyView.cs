@@ -41,11 +41,10 @@ namespace Core.Supervisor.Views.Assign
             this.Status = completeQuestionnaire.Status;
             this.Responsible = completeQuestionnaire.Responsible;
             this.FeaturedQuestions = new List<CompleteQuestionView>();
-            foreach (ICompleteQuestion q in completeQuestionnaire.QuestionHash.Questions.Where(q => q.Featured))
+
+            foreach (ICompleteQuestion q in completeQuestionnaire.GetFeaturedQuestions())
             {
-                //     var question = completeQuestionnaire.Find<ICompleteQuestion>(q.PublicKey);
                 var questionView = new CompleteQuestionView(completeQuestionnaire, q);
-                //  questionView.ParentGroupPublicKey = q.GroupPublicKey;
                 this.FeaturedQuestions.Add(questionView);
             }
         }

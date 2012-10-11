@@ -18,7 +18,7 @@ namespace Main.Core.Documents
     /// </summary>
     public interface IQuestionnaireDocument : IGroup
     {
-        // string Id { get; set; }
+        
         #region Public Properties
 
         /// <summary>
