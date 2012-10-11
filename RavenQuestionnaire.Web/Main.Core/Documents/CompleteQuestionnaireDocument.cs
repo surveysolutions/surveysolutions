@@ -154,15 +154,13 @@ namespace Main.Core.Documents
         /// <summary>
         /// Gets the wrapped questions.
         /// </summary>
+        [JsonIgnore]
         public IEnumerable<CompleteQuestionWrapper> WrappedQuestions
         {
             get
             {
                 return this.QuestionHash.WrapedQuestions;
             }
-            private set
-            {
-            } 
         }
 
         /// <summary>
@@ -213,6 +211,7 @@ namespace Main.Core.Documents
         /// <summary>
         /// Gets the questions.
         /// </summary>
+        [JsonIgnore]
         public IEnumerable<ICompleteQuestion> Questions
         {
             get
