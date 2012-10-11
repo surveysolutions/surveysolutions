@@ -10,13 +10,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Denormalizers;
 using Main.Core.Documents;
 using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Main.Core.View.CompleteQuestionnaire;
 using Main.Core.Utility;
+using Main.DenormalizerStorage;
+
 namespace Core.Supervisor.Views.Interviewer
 {
     /// <summary>
