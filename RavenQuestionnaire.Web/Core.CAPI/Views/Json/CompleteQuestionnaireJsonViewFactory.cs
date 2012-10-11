@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.DenormalizerStorage;
+
 namespace Core.CAPI.Views.Json
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using Main.Core.Denormalizers;
     using Main.Core.Documents;
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities.Complete;
