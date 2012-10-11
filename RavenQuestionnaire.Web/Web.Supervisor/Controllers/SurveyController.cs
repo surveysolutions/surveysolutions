@@ -552,6 +552,26 @@ namespace Web.Supervisor.Controllers
             return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
         }
 
+        /// <summary>
+        /// Action for preparing data for visual chart
+        /// </summary>
+        /// <param name="view">
+        /// The view.
+        /// </param>
+        /// <returns>
+        /// return Partial View with visual chart
+        /// </returns>
+        public PartialViewResult Chart(IndexView view)
+        {
+            var data = new ChartDataModel("Chart");
+            if (view.Items.Count > 0)
+            {
+                foreach (var item in view.Items) 
+                    data.Data.Add(new ChartDataItem(item.Title, item.Total, item.Approve));
+            }
+
+            return this.PartialView(data);
+        }
 
         #endregion
     }

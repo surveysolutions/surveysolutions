@@ -28,7 +28,7 @@
         }
         $("#questionnaireTable table").tablesorter({
                 send: function(data) {
-                    tsortList =JSON.parse(JSON.stringify(this.sortList));
+                    tsortList = JSON.parse(JSON.stringify(this.sortList));
                     sortData = data;
                     getTablePage(data, 1);
                 }
@@ -80,3 +80,9 @@
 <div id="questionnaireTable">
     @this.Html.Partial("_Table", this.Model)
 </div>
+
+@this.Html.Action("Chart", Model)
+
+
+
+
