@@ -168,6 +168,8 @@ namespace Main.Core.ExpressionExecutors
 
             bool? value = this.Execute(group);
             bool result = value ?? true; //// treat null as success 
+            
+            group.Enabled = result;
 
             foreach (IComposite child in group.Children)
             {
