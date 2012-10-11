@@ -38,10 +38,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Guid key = Guid.NewGuid();
             innerDocument.PublicKey= key;
          //   Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = new SingleQuestion(Guid.NewGuid(),"question");
-            var questionView = new QuestionView(innerDocument, question);
-
-
+            
             ViewRepositoryMock.Setup(
                 x =>
                 x.Load<QuestionnaireViewInputModel, QuestionnaireView>(

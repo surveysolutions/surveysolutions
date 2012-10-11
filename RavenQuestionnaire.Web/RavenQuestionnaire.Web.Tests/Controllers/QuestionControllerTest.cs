@@ -14,6 +14,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
     using Main.Core.Commands.Questionnaire.Question;
     using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Question;
     using Main.Core.View;
     using Main.Core.View.Answer;
@@ -76,9 +77,12 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             var innerDocument = new QuestionnaireDocument();
             innerDocument.PublicKey = Guid.NewGuid();
+            var group = new Group("group");
+            innerDocument.Children.Add(group);
             var question = new SingleQuestion(Guid.NewGuid(), "question");
-
+            group.Add(question, null);
             var questionView = new QuestionView(innerDocument, question);
+            
             this.ViewRepositoryMock.Setup(
                 x =>
                 x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
@@ -133,7 +137,10 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             // var output = new QuestionnaireView("questionnairedocuments/qId", "test", DateTime.Now, DateTime.Now, new QuestionView[0]);
             var innerDocument = new QuestionnaireDocument();
+            var group = new Group("group");
+            innerDocument.Children.Add(group);
             var question = new SingleQuestion(Guid.NewGuid(), "question");
+            group.Add(question, null);
             var questionView = new QuestionView(innerDocument, question);
 
             var input = new QuestionViewInputModel(question.PublicKey, innerDocument.PublicKey);
