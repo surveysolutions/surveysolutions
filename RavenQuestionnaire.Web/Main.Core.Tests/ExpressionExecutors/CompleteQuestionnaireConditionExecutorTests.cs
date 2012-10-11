@@ -86,7 +86,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         {
             var executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireStoreDocument());
             bool? result = executor.Execute(new SingleCompleteQuestion { ConditionExpression = "" });
-            Assert.AreEqual(result, null);
+            Assert.AreEqual(result, true);
         }
 
         /// <summary>

@@ -184,7 +184,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             doc.Children.Add(mainGroup);
 
             var executor = new CompleteQuestionnaireValidationExecutor(doc);
-            executor.Execute();
+            executor.Execute(subGroup1);
             Assert.AreEqual(((ICompleteQuestion)subGroup1.Children[0]).Valid, false);
             Assert.AreEqual(((ICompleteQuestion)subGroup2.Children[0]).Valid, true);
         }
