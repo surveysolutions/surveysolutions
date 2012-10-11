@@ -198,7 +198,6 @@
     <Content Include="Content\img\sort_both.png" />
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
-    <Content Include="Content\jquery.jgrowl.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-editable.min.js" />
