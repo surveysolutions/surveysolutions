@@ -6,6 +6,9 @@
 //   The QuestionnaireDocument interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.DenormalizerStorage;
+
 namespace Main.Core.Documents
 {
     using System;
@@ -20,6 +23,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// The questionnaire document.
     /// </summary>
+    [SmartDenormalizer]
     public class QuestionnaireDocument : IQuestionnaireDocument
     {
         #region Fields
