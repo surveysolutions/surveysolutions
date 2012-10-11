@@ -222,6 +222,7 @@ RavenQuestionnaire.Web/HQ.Core/obj/*
 RavenQuestionnaire.Web/Main.Core/Events/ZipFileData.cs
 RavenQuestionnaire.Web/Main.Core/Events/ExportImportEvents.cs
 RavenQuestionnaire.Web/Core.Supervisor.Tests/StyleCop.Cache
+RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/Web.CAPI.Tests.csproj
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
