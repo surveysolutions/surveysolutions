@@ -13,7 +13,7 @@
     var xTitles = r.Serialize(@Model.Data.Select(t => t.Name).ToArray());
 }
 
-<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+<div id="container" style="min-width: 400px; height: 450px; margin: 0 auto"></div>
 
 <script type="text/javascript">
 $(function () {
@@ -24,15 +24,11 @@ $(function () {
                 renderTo: 'container',
                 type: 'column',
                 marginRight: 130,
-                marginBottom: 25
+                marginBottom: 70
             },
             title: {
                 text: '@Model.Title',
                 x: -20 
-            },
-            subtitle: {
-                text: '',
-                x: -20
             },
             xAxis: {
                 categories: @Html.Raw(xTitles) 
