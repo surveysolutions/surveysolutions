@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Windows.Forms;
 using Awesomium.Core;
 using Common.Utils;
 using Synchronization.Core.Interface;
@@ -9,6 +10,8 @@ namespace Browsing.Common.Containers
 {
     public partial class Main : Screen
     {
+        #region C-tor
+
         public Main(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
             : base(holder, false)
         {
@@ -16,49 +19,88 @@ namespace Browsing.Common.Containers
             this.clientSettings = clientSettings;
             this.requestProcessor = requestProcessor;
             this.urlUtils = urlUtils;
-            RefreshAuthentificationInfo();
-            RefreshLoginCapability();
+
+            IntitLogControls(false, false);
+            //RefreshAuthentificationInfo();
         }
-        protected void RefreshAuthentificationInfo()
+
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Assign access properties to Login, Logout and Dashboard buttons
+        /// </summary>
+        /// <param name="userIsLogged"></param>
+        /// <param name="loginIsPossible"></param>
+        private void IntitLogControls(bool userIsLoggedIn, bool loginIsPossible)
         {
+            this.btnDashboard.Enabled = this.btnLogout.Visible = userIsLoggedIn;
+            this.btnLogin.Visible = !userIsLoggedIn;
+            this.btnLogin.Enabled = loginIsPossible;
+        }
+
+        private void RefreshAuthentificationInfo()
+        {
+            isDatabaseContainsUsers = null;
             isUserLoggedIn = null;
-            this.btnDashboard.Enabled = btnLogout.Visible = IsUserLoggedIn;
-            this.btnLogin.Visible = !IsUserLoggedIn;
+
+            IntitLogControls(false, false);
+
+            new System.Threading.Thread(() => 
+                {
+                    if (this.IsDisposed)
+                        return;
+
+                    var userIsLoggedIn = IsUserLoggedIn;
+                    var loginIsPossible = userIsLoggedIn || IsDatabaseContainsUsers; // minimize web-application access
+
+                    this.Invoke(new MethodInvoker(() => IntitLogControls(userIsLoggedIn, loginIsPossible)));
+                });
         }
 
-        protected void RefreshLoginCapability()
-        {
-            isUsersInBase = null;
-            this.btnLogin.Enabled = IsUsersInBase;
-        }
+        #endregion
 
+        #region Private Members
+        
         private ISettingsProvider clientSettings;
         private IRequesProcessor requestProcessor;
         private bool? isUserLoggedIn;
-        private bool? isUsersInBase;
+        private bool? isDatabaseContainsUsers;
         private IUrlUtils urlUtils;
 
-        protected bool IsUserLoggedIn
+        #endregion
+
+        #region Helper Properties
+
+        private bool IsUserLoggedIn
         {
             get
             {
-                if (isUserLoggedIn.HasValue)
-                    return isUserLoggedIn.Value;
-                isUserLoggedIn = this.requestProcessor.Process<bool>(urlUtils.GetAuthentificationCheckUrl(), "GET", true, false);
+                if (this.isUserLoggedIn.HasValue)
+                    return this.isUserLoggedIn.Value;
+
+                this.isUserLoggedIn = this.requestProcessor.Process<bool>(urlUtils.GetAuthentificationCheckUrl(), "GET", true, false);
                 return isUserLoggedIn.Value;
             }
         }
 
-        protected bool IsUsersInBase
+        private bool IsDatabaseContainsUsers
         {
             get
             {
-                if (isUsersInBase.HasValue)
-                    return isUsersInBase.Value;
-                isUsersInBase = this.requestProcessor.Process<bool>(urlUtils.GetLoginCapabilitiesCheckUrl(), "GET", false, false);
-                return isUsersInBase.Value;
+                if (this.isDatabaseContainsUsers.HasValue)
+                    return this.isDatabaseContainsUsers.Value;
+
+                this.isDatabaseContainsUsers = this.requestProcessor.Process<bool>(urlUtils.GetLoginCapabilitiesCheckUrl(), "GET", false, false);
+                return this.isDatabaseContainsUsers.Value;
             }
         }
+
+        #endregion
+
+        #region Handlers
+
         void btnSettings_Click(object sender, System.EventArgs e)
         {
             OnSettingsClicked(sender, e);
@@ -88,6 +130,10 @@ namespace Browsing.Common.Containers
         {
             OnExitClicked(sender, e);
         }
+
+        #endregion
+
+        #region Virtual operations
 
         protected virtual void OnSynchronizationClicked(object sender, System.EventArgs e)
         {
@@ -125,11 +171,17 @@ namespace Browsing.Common.Containers
             System.Windows.Forms.Application.Exit();
         }
 
+        #endregion
+
+        #region Overloading
+
         protected override void OnParentChanged(EventArgs e)
         {
             base.OnParentChanged(e);
+
             RefreshAuthentificationInfo();
-            RefreshLoginCapability();
         }
+
+        #endregion
     }
 }
