@@ -9,6 +9,7 @@
 namespace Main.Core.Events.User
 {
     using System;
+    using System.Linq;
 
     using Main.Core.Entities.SubEntities;
 
@@ -19,7 +20,7 @@ namespace Main.Core.Events.User
     /// </summary>
     [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:UserChanged")]
-    public class UserChanged
+    public class UserChanged : UserBaseEvent
     {
         /* [AggregateRootId]
         public Guid PublicKey { get; set; }*/
@@ -31,16 +32,16 @@ namespace Main.Core.Events.User
         public string Email { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether is locked.
-        /// </summary>
-        public bool IsLocked { get; set; }
-
-        /// <summary>
         /// Gets or sets the roles.
         /// </summary>
         //// Is not propogated now
         public UserRoles[] Roles { get; set; }
 
         #endregion
+
+        protected override bool DoCheckIsAssignedRole(UserRoles role)
+        {
+            return Roles != null && Roles.Where(r => r == role).Count() > 0;
+        }
     }
 }

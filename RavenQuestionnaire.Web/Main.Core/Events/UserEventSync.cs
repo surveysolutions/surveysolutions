@@ -58,11 +58,16 @@ namespace Main.Core.Events
 
         public IEnumerable<AggregateRootEvent> GetUsers(UserRoles? role)
         {
-            var retval = new List<AggregateRootEvent>();
-            this.AddUsers(retval);
-            if (role != null)
+            var retval = ExtractUsers();
+            if (role.HasValue)
             {
-                return retval.Where(aggregateRootEvent => (aggregateRootEvent.Payload as NewUserCreated).Roles.Where(t => t == role).Count() > 0).ToList();
+                return retval.Where(aggregateRootEvent =>
+                        {
+                            return
+                                (aggregateRootEvent.Payload is UserBaseEvent) &&
+                                (aggregateRootEvent.Payload as UserBaseEvent).IsAssignedRole(role.Value);
+                        }
+                    ).ToList();
             }
             return retval.OrderBy(x => x.EventTimeStamp).ToList();
         }
@@ -73,13 +78,17 @@ namespace Main.Core.Events
         /// <param name="retval">
         /// The retval.
         /// </param>
-        protected void AddUsers(List<AggregateRootEvent> retval)
+        protected List<AggregateRootEvent> ExtractUsers()
         {
+            var usersList = new List<AggregateRootEvent>();
+
             IQueryable<UserDocument> model = this.denormalizer.Query<UserDocument>();
             foreach (UserDocument item in model)
             {
-                retval.AddRange(base.GetEventStreamById(item.PublicKey, typeof(UserAR)));
+                usersList.AddRange(base.GetEventStreamById(item.PublicKey, typeof(UserAR)));
             }
+
+            return usersList;
         }
 
         #endregion

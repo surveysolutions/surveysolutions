@@ -20,6 +20,7 @@ namespace Browsing.Common.Containers
             this.requestProcessor = requestProcessor;
             this.urlUtils = urlUtils;
 
+            WebCore.ClearCookies();
             IntitLogControls(false, false);
             //RefreshAuthentificationInfo();
         }
@@ -49,14 +50,14 @@ namespace Browsing.Common.Containers
 
             new System.Threading.Thread(() => 
                 {
-                    if (this.IsDisposed)
+                    if (this.IsDisposed || !this.IsHandleCreated)
                         return;
 
                     var userIsLoggedIn = IsUserLoggedIn;
                     var loginIsPossible = userIsLoggedIn || IsDatabaseContainsUsers; // minimize web-application access
 
                     this.Invoke(new MethodInvoker(() => IntitLogControls(userIsLoggedIn, loginIsPossible)));
-                });
+                }).Start();
         }
 
         #endregion
@@ -175,11 +176,23 @@ namespace Browsing.Common.Containers
 
         #region Overloading
 
+        protected override void OnValidateContent()
+        {
+            base.OnValidateContent();
+
+            RefreshAuthentificationInfo();
+        }
+
+        protected override void OnHomeButtonClick(object sender, EventArgs e)
+        {
+            base.OnHomeButtonClick(sender, e);
+        }
+
         protected override void OnParentChanged(EventArgs e)
         {
             base.OnParentChanged(e);
 
-            RefreshAuthentificationInfo();
+            //RefreshAuthentificationInfo();
         }
 
         #endregion

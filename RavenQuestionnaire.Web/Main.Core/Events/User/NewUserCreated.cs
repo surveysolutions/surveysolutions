@@ -9,6 +9,7 @@
 namespace Main.Core.Events.User
 {
     using System;
+    using System.Linq;
 
     using Main.Core.Entities.SubEntities;
 
@@ -19,7 +20,7 @@ namespace Main.Core.Events.User
     /// </summary>
     [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:UserCreated")]
-    public class NewUserCreated
+    public class NewUserCreated : UserBaseEvent
     {
         #region Public Properties
 
@@ -27,11 +28,6 @@ namespace Main.Core.Events.User
         /// Gets or sets the email.
         /// </summary>
         public string Email { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether is locked.
-        /// </summary>
-        public bool IsLocked { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -59,5 +55,11 @@ namespace Main.Core.Events.User
         public UserLight Supervisor { get; set; }
 
         #endregion
+
+        protected override bool DoCheckIsAssignedRole(UserRoles role)
+        {
+            return Roles != null && Roles.Where(r => r == role).Count() > 0;
+        }
+
     }
 }

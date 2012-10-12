@@ -30,9 +30,8 @@ namespace Common.Utils
                 var uri = new Uri(url);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
                 request.Method = method;
-                if (includeCookies)
+                /*if (includeCookies)
                 {
-
                     var cookies = WebCore.GetCookies(url, false);
                     request.CookieContainer = new CookieContainer();
                     foreach (string cookie in cookies.Split(';'))
@@ -43,7 +42,7 @@ namespace Common.Utils
                         string domain = uri.Host; //change to your domain name
                         request.CookieContainer.Add(new Cookie(name.Trim(), value.Trim(), path, domain));
                     }
-                }
+                }*/
                 // Get the response.
                 using (WebResponse response = request.GetResponse())
                 {

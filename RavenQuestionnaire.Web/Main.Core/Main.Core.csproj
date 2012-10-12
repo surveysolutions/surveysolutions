@@ -291,6 +291,7 @@
     <Compile Include="Events\Synchronization\ProcessEnded.cs" />
     <Compile Include="Events\UserEventSync.cs" />
     <Compile Include="Events\User\NewUserCreated.cs" />
+    <Compile Include="Events\User\UserBaseEvent.cs" />
     <Compile Include="Events\User\UserChanged.cs" />
     <Compile Include="Events\User\UserStatusChanged.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
