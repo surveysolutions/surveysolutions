@@ -78,8 +78,12 @@ namespace Browsing.Common.Containers
 
         private void CheckSync()
         {
+            string status = string.Empty;
+
             try
             {
+                this.syncPanel.ShowError("Looking for available data points ...");
+
                 // assume sync possibility by default
                 this.isPullPossible = true;
                 this.isPushPossible = true;
@@ -96,12 +100,11 @@ namespace Browsing.Common.Containers
                     this.isPullPossible = false;
                     this.isPushPossible = false;
 
-                    this.syncPanel.ShowError(ex.Message);
+                    status = ex.Message;
 
                     return; // fatal
                 }
 
-                string status = string.Empty;
                 ex = issues.FirstOrDefault<SynchronizationException>(x => x is NetUnreachableException || x is InactiveNetSynchronizerException);
                 if (ex != null)
                 {
@@ -113,7 +116,7 @@ namespace Browsing.Common.Containers
                         this.isPullPossible = false;
                         this.isPushPossible = false;
 
-                        this.syncPanel.ShowError(status + "\n" + ex.Message);
+                        status += "\n" + ex.Message;
 
                         return; // fatal
                     }
@@ -127,11 +130,11 @@ namespace Browsing.Common.Containers
 
                     status += "\n" + ex.Message;
                 }
-
-                this.syncPanel.ShowError(status);
             }
             finally
             {
+                this.syncPanel.ShowError(status);
+
                 EnablePull(this.isPullPossible);
                 EnablePush(this.isPushPossible);
             }

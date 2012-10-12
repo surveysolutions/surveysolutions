@@ -43,7 +43,7 @@ namespace Browsing.Common.Containers
         private void SetCheckingStatus(bool? checking)
         {
             this.statusLabel.Text = checking.HasValue ?
-                (checking.Value ? "Checking posibility to log in. Please, wait .." : "Please, synchronize your data to log in") 
+                (checking.Value ? "Checking possibility to log in. Please, wait .." : "Please, synchronize your data to log in") 
                 : string.Empty;
         }
 

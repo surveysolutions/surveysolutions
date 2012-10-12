@@ -284,7 +284,7 @@ namespace Browsing.Common.Containers
         public void SetBeginning(ISyncProgressStatus status)
         {
             SetProgress(0);
-            SetLabel(this.statusLabel, string.Format("{0} data is being processed. Plase wait...", status.ActionType == SyncType.Pull ? "Pulling" : "Pushing"));
+            SetLabel(this.statusLabel, string.Format("{0} data is being processed. Please wait...", status.ActionType == SyncType.Pull ? "Pulling" : "Pushing"));
             SetLabel(this.resultLabel, null);
 
             this.inactiveStatus.WaitOne(5000);
